@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "1092188854243",
+    "firebase_url": "https://oyespace-dc544.firebaseio.com",
+    "project_id": "oyespace-dc544",
+    "storage_bucket": "oyespace-dc544.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092188854243:android:ec2a8ab166e345d6",
+        "android_client_info": {
+          "package_name": "com.oyespace.oyesafe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7NpJAbUjRP0ETrdAI1_jfzY5jL2MupWY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092188854243-53kmtsn7tesa29sfaeh9qq8ll9kbo2g1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

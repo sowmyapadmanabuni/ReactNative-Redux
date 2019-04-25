@@ -1,0 +1,99 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'OyeSpace' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+  
+  # Pods for OyeSpace
+  pod 'React', :path => '../node_modules/react-native', :subspecs => [
+  'Core',
+  'RCTActionSheet',
+  'RCTAnimation',
+  'RCTGeolocation',
+  'RCTImage',
+  'RCTLinkingIOS',
+  'RCTNetwork',
+  'RCTSettings',
+  'RCTText',
+  'RCTVibration',
+  'RCTWebSocket',
+  'CxxBridge',
+  'DevSupport'
+  ]
+  pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
+  
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+  
+  pod 'Firebase/Core', '~> 5.15.0'
+  pod 'Firebase/Messaging', '~> 5.15.0'
+  
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+  
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+  
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+  
+  pod 'RNViewShot', :path => '../node_modules/react-native-view-shot'
+  
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  
+  
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  
+  pod 'Fabric'
+  pod 'Crashlytics'
+  
+  # Third party deps podspec link
+  #  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  
+
+  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+
+  target 'OyeSpaceTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+  
+end
+
+target 'OyeSpace-tvOS' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+  
+  # Pods for OyeSpace-tvOS
+  
+  target 'OyeSpace-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+  
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "React"
+      target.remove_from_project
+    end
+  end
+end
+
+# post_install do |installer|
+#   installer.pods_project.targets.each do |target|
+#
+#     # The following is needed to ensure the "archive" step works in XCode.
+#     # It removes React & Yoga from the Pods project, as it is already included in the main project.
+#     # Without this, you'd see errors when you archive like:
+#     # "Multiple commands produce ... libReact.a"
+#     # "Multiple commands produce ... libyoga.a"
+#
+#     targets_to_ignore = %w(React yoga)
+#
+#     if targets_to_ignore.include? target.name
+#       target.remove_from_project
+#     end
+#
+#   end
+# end
