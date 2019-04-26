@@ -52,7 +52,7 @@ export default class unitlist extends Component {
 
   renderItem = ({ item }) => {
     const { navigate } = this.props.navigation;
-  
+    const { params } = this.props.navigation.state;
     return (
       <View style={styles.rectangle}>
         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -74,57 +74,14 @@ export default class unitlist extends Component {
                 unitID:item.unUnitID,
                 associtionID:item.asAssnID,
                 blockID:item.blBlockID,
-                unitName: item.unUniName
+                unitName: item.unUniName,
+                associationName: params.associationName,
               })}>
               <Text style={styles.lighttext}> Register Me </Text>
             </TouchableOpacity>
           </View>
     
           <View style={{ backgroundColor: 'lightgrey', flexDirection: "column", width: 1, height:'80%' }}></View>
-        
-          
-          
-          {/*  {item.status }== 'Active'
-            ?
-            <TouchableOpacity
-              onPress={() => navigate('addmembersScreen', { user: item })}>
-              <View style={{ flex: 1, flexDirection: 'column' }}>
-                <Image source={require('../pages/assets/images/checkbox.png')}
-
-                  style={{ height: 40, width: 40, alignItems: "center" }} />
-                <Text style={styles.text}>Reserved</Text>
-              </View>
-            </TouchableOpacity>
-            : */}
-
-         {/*  <TouchableOpacity
-            onPress={() => navigate('addmembersScreen', { id: item.unUnitID })}>
-            <View style={{ flex: 1, flexDirection: 'column' }}>
-              <Image source={require('../pages/assets/images/homee.png')}
-                style={{ height: 40, width: 40, alignItems: "center" }} />
-              <Text style={styles.text}> Register Me </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigate('EditUnitsScreen', { asAssnID: item.asAssnID, unUnitID: item.unUnitID })}>
-            <View style={{ flex: 1, flexDirection: 'column' }}>
-              <Image source={require('../pages/assets/images/edit.png')}
-                style={{ height: 40, width: 40, alignItems: "center" }} />
-            </View>
-          </TouchableOpacity> */}
-          {/* <View style={{flex:0.3}}>
-
-          <TouchableOpacity style={{ margin: 5,flex:1 }}
-              onPress={() => Communications.phonecall(item.owner.uoMobile, true)}>
-        <Image  
-                 style={{margin:10, height:30, width:30}}
-                source={require('../pages/assets/images/call_answer_green.png')}  
-              
-                 />
-
-</TouchableOpacity>
-
-           </View>  */}
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
             <Text style={{ textAlign: 'center', fontSize: 13, color: 'green', flex: 1 }}> {item.unOwnStat}</Text>
@@ -239,7 +196,7 @@ export default class unitlist extends Component {
 
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
-    console.log('unitlist start ', params.id);
+    console.log('unitlist start ', params.associationName);
     return(
       <View style={{ backgroundColor: '#ffffff',height: '100%'  }}>
         <View style={{ backgroundColor: '#ffffff' }}>
@@ -346,7 +303,7 @@ export default class unitlist extends Component {
             keyExtractor={(item, index) => item.unUnitID}
             ItemSeparatorComponent={this.renderSeparator}
           />
-         {/*  <ActionButton style={{ flex: 1, }} buttonColor="rgba(250,153,23,1)" onPress={() => navigate('CreateUnitsScreen', { id: params.id })}  >
+         {/*  <ActionButton style={{ flex: 1, }} buttonColor="#fa9917" onPress={() => navigate('CreateUnitsScreen', { id: params.id })}  >
           </ActionButton> */}
         </View>}
       </View>

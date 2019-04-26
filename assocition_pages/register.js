@@ -279,14 +279,16 @@ class CreateWorker extends Component {
                         if(!(_.isEmpty(responseData_2))) {
                             let userID = global.MyAccountID;
                             let sbUnitID = this.props.navigation.state.params.unitID;
+                            let unitName = this.props.navigation.state.params.unitName;
                             let sbSubID = global.MyAccountID.toString() + this.props.navigation.state.params.associtionID.toString() + 'usernotif';
                             let sbRoleId = this.state.PickerValueHolder === '6' ? '2' : '3';
                             let sbMemID = responseData_2.meMemID;
                             let sbName = this.state.FirstName + " " + this.state.LastName;
                             let associationID = this.props.navigation.state.params.associtionID;
+                            let associationName = this.props.navigation.state.params.associationName;
                             let ntType = "Join";
-                            let ntTitle = 'Request to join';
-                            let ntDesc = sbName + ' ' + 'requested to join your association';
+                            let ntTitle = 'Request to join' + ' ' + associationName + ' ' + 'Association';
+                            let ntDesc = sbName + ' ' + 'requested to join' +  unitName + ' ' + 'unit in ' + associationName + ' ' + 'association';
 
                             console.log("userId", userID)
                             console.log("sbUnitID", sbUnitID)
@@ -305,11 +307,13 @@ class CreateWorker extends Component {
                             axios.post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
                                 userID: userID.toString(),
                                 sbUnitID: sbUnitID.toString(),
+                                unitName: unitName.toString(),
                                 sbSubID: sbSubID.toString(),
                                 sbRoleId: sbRoleId,
                                 sbMemID: sbMemID.toString(),
                                 sbName: sbName,
                                 associationID: associationID.toString(),
+                                associationName: associationName,
                                 ntType: ntType,
                                 ntTitle: ntTitle,
                                 ntDesc: ntDesc,
@@ -398,6 +402,7 @@ class CreateWorker extends Component {
 
     render() {
         const { navigate } = this.props.navigation;
+        console.log(this.props.navigation.state.params)
         // console.log(global)
         return (
 

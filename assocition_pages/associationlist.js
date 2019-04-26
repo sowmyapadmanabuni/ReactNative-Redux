@@ -171,7 +171,8 @@ export default class associationlist extends Component {
   renderItem = ({ item }) => {
     // console.log('associationlist renderItem', item.asAsnName + "," + item.asPinCode + "," + item.asNofBlks + "," + item.asNofUnit);
     const { navigate } = this.props.navigation;
-
+    // console.log("________-HEHR ____")
+    // console.log(item)
     return (
 
       <View style={styles.rectangle}>
@@ -185,7 +186,7 @@ export default class associationlist extends Component {
             </View>
             <TouchableOpacity
               style={styles.mybutton1}
-              onPress={() => navigate('Unit', { id: item.asAssnID })}  /*Products is navigation name*/>
+              onPress={() => navigate('Unit', { id: item.asAssnID, associationName: item.asAsnName })}  /*Products is navigation name*/>
               <Text style={styles.lighttext}> JOIN </Text>
             </TouchableOpacity>
             {/*Products is navigation name*/}

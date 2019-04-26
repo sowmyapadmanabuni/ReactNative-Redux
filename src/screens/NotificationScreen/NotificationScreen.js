@@ -50,7 +50,7 @@ class NotificationScreen extends Component {
             <View style={styles.container}>
                 <FlatList
                     keyExtractor={this.keyExtractor}
-                    data={notifications.notificationListByAssocAcctID}
+                    data={notifications.notificationListByAssocAcctID.reverse}
                     renderItem={this.renderItem}
                     extraData={this.props.notifications}
                     // onRefresh={() => this.onRefresh()}

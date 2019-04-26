@@ -35,7 +35,8 @@ class NotificationDetailScreen extends Component {
             axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                 sbSubID: item.sbSubID,
                 ntTitle: 'Request Approved',
-                ntDesc: 'Your request to join association has been approved',
+                ntDesc: 'Your request to join ' + item.unitName + ' unit in' + item.associationName + ' association has been approved'
+                // ntDesc: 'Your request to join association has been approved',
             })
             .then(() => {
                 this.setState({ loading: false })
@@ -83,6 +84,7 @@ class NotificationDetailScreen extends Component {
                     containerStyle={{ flex: 1}} 
                     type="solid"
                     title="Reject"
+                    onPress={() => this.props.navigation.navigate('ResDashBoard')}
                     icon={
                         <Icon
                         name="close"
