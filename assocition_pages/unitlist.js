@@ -16,6 +16,7 @@ export default class unitlist extends Component {
       color: '#fff',
     }
   };
+  
   constructor() {
     super()
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -44,11 +45,6 @@ export default class unitlist extends Component {
     });
     console.log('unitlist', 'constructor');
   }
-
-  // responseJson.data.unit[i].unUnitID,  responseJson.data.unit[i].asAssnID,
-  //responseJson.data.unit[i].unUniName, responseJson.data.unit[i].unUniType,
-  //responseJson.data.unit[i].flFloorID, responseJson.data.unit[i].unIsActive,
-  //responseJson.data.unit[i].parkingLotNumber
 
   renderItem = ({ item }) => {
     const { navigate } = this.props.navigation;
@@ -90,6 +86,7 @@ export default class unitlist extends Component {
       </View>
     )
   }
+  
   renderSeparator = () => {
     return (
       <View

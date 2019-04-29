@@ -302,7 +302,7 @@ class CreateWorker extends Component {
                             console.log("ntDesc", ntDesc)
 
                             firebase.messaging().subscribeToTopic(sbSubID);
-                            alert(sbSubID)
+                            // alert(sbSubID)
                             // Send a push notification to the admin here
                             axios.post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
                                 userID: userID.toString(),

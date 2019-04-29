@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Image, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { ListItem } from 'react-native-elements'
+import { ListItem, Header } from 'react-native-elements'
 import { onNotificationOpen } from '../../actions/NotificationAction';
 
 class NotificationScreen extends Component {
@@ -48,9 +48,24 @@ class NotificationScreen extends Component {
         const refresh = navigation.getParam('refresh', 'NO-ID');
         return (
             <View style={styles.container}>
+                <Header 
+                    leftComponent={{ 
+                        icon:'arrow-left', 
+                        color: '#ED8A19', 
+                        type: "material-community",
+                        onPress: () => navigation.pop()
+                    }}
+                    containerStyle={{ borderBottomColor: '#ED8A19', borderBottomWidth: 2 }}
+                    centerComponent={
+                        <Image 
+                            source={require('../../../pages/assets/images/OyeSpace.png')}
+                            style={{ height: 90, width: 90 }}
+                        />
+                    }
+                    backgroundColor="#fff"/>
                 <FlatList
                     keyExtractor={this.keyExtractor}
-                    data={notifications.notificationListByAssocAcctID.reverse}
+                    data={notifications.reverse()}
                     renderItem={this.renderItem}
                     extraData={this.props.notifications}
                     // onRefresh={() => this.onRefresh()}

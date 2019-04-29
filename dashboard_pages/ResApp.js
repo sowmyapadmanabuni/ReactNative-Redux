@@ -158,14 +158,14 @@ const NotificationStack = createStackNavigator({
     screen: NotificationScreen,
     navigationOptions: {
       title: 'Notifications',
-      // header:null
+      header:null
     },
   },
   NotificationDetailScreen:  {
     screen: NotificationDetailScreen,
     navigationOptions: {
       title: 'Notification Details',
-      // header:null
+      header:null
     },
   },
 })

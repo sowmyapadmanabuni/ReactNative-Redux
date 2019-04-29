@@ -76,7 +76,7 @@ class MainScreen extends Component {
             progressWithOnComplete: 0,
             progressCustomized: 0,
             progress1: 40,
-
+            foregroundNotif: null
         };
 
         increase = (key, value) => {
@@ -328,6 +328,28 @@ class MainScreen extends Component {
         })
     }
 
+    showLocalNotification = (notification) => {
+        console.log(notification)
+        const notificationBuild = new firebase.notifications.Notification()
+                .setTitle(notification._title)
+                .setBody(notification._body)
+                .setNotificationId(notification._notificationId)
+                .setSound('default')
+                .setData({
+                    ...notification._data,
+                    foreground: true
+                })
+                .android.setColor('#FF8C00')
+                .android.setLargeIcon('ic_notif')
+                .android.setAutoCancel(true)
+                .android.setSmallIcon('ic_stat_ic_notification')
+                .android.setChannelId('notification-action')
+                .android.setPriority(firebase.notifications.Android.Priority.Max)
+                // Display the notification
+            firebase.notifications().displayNotification(notificationBuild);
+            this.setState({ foregroundNotif: notification._data })
+    }
+
     listenForNotif = () => {
         let navigationInstance = this.props.navigation;
         // Display the notification
@@ -348,34 +370,33 @@ class MainScreen extends Component {
 
         this.notificationListener = firebase.notifications().onNotification((notification) => {
 
-            console.log('___________')
-            console.log(notification)
-            console.log('____________')
+            // console.log('___________')
+            // console.log(notification)
+            // console.log('____________')
 
             if(notification._data.associationID) {
                 this.props.createNotification(notification._data, navigationInstance, false)
             }  
 
-            // const notificationBuild = new firebase.notifications.Notification()
-            //     .setTitle(notification._title)
-            //     .setBody(notification._body)
-            //     .setNotificationId(notification._notificationId)
-            //     .setSound('default')
-            //     .android.setChannelId('notification-action')
-            //     .android.setPriority(firebase.notifications.Android.Priority.Max);
+            this.showLocalNotification(notification);
 
-            //     // Display the notification
-            // firebase.notifications().displayNotification(notificationBuild);
-                // Process your notification as required
         });
 
         firebase.notifications().onNotificationOpened((notificationOpen) => {
-            if(notificationOpen.action) {
-                this.props.newNotifInstance(notificationOpen.notification);
-                this.props.createNotification(notificationOpen.notification._data, navigationInstance, true)
-                // this.props.createNotification(notificationOpen.notification)
+            if(notificationOpen.notification._data.userID) {
+                if(notificationOpen.action) {
+                    this.props.newNotifInstance(notificationOpen.notification);
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true)
+                    // this.props.createNotification(notificationOpen.notification)
+                }
             }
-                // console.log(notificationOpen.notification)
+
+            if(notificationOpen.notification._data.userID) {
+                if(notificationOpen.notification._data.foreground) {
+                    this.props.newNotifInstance(notificationOpen.notification);
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true)
+                }
+            }
         });
         
     }

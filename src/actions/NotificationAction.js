@@ -48,12 +48,13 @@ export const createNotification = (data, navigation, navigate) => {
                     }
                 })
                 .then(response => {
+                    console.log(response.data)
                     let responseData = response.data.data;
                     if(response.data.success) {
                         console.log(response.data)
                         dispatch({ 
                             type: GET_NOTIFICATIONS_SUCCESS, 
-                            payload: responseData
+                            payload: responseData.notificationListByAssocAcctID
                         })
                     } else {
                         dispatch({ 
@@ -135,9 +136,13 @@ export const newNotifInstance = (data) => {
 }
 
 export const onNotificationOpen = (notif, index) => {
+    console.log(index)
     return (dispatch) => {
-        newNotif = Object.assign({}, notif);
-        newNotif.notificationListByAssocAcctID[index].ntIsActive = false;
+        newNotif = Object.assign([], notif);
+        newNotif[index].ntIsActive = false;
+        newNotif[index].ntIsActive = false;
+        console.log(newNotif[index].ntIsActive)
+        // newNotif.notificationListByAssocAcctID[index].ntIsActive = false;
 
         dispatch({
             type: ON_NOTIFICATION_OPEN,
