@@ -32,6 +32,7 @@ class NotificationDetailScreen extends Component {
         .then(response => {
             console.log('________RESPONSE___________')
             console.log(response.data);
+            
             axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                 sbSubID: item.sbSubID,
                 ntTitle: 'Request Approved',
