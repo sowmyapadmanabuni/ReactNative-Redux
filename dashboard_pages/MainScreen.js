@@ -375,7 +375,7 @@ class MainScreen extends Component {
             // console.log('____________')
 
             if(notification._data.associationID) {
-                this.props.createNotification(notification._data, navigationInstance, false)
+                // this.props.createNotification(notification._data, navigationInstance, false)
             }  
 
             this.showLocalNotification(notification);
@@ -405,7 +405,7 @@ class MainScreen extends Component {
         this.Admin();
         this.requestNotifPermission();
         this.getBlockList();
-        this.props.getNotifications(global.MyAccountID, 2, true)
+        // this.props.getNotifications(global.MyAccountID, 2, true)
 
         //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
         const url1 = 'http://' + global.oyeURL + '/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/' + global.SelectedAssociationID

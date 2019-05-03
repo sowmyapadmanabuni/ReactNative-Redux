@@ -13,8 +13,8 @@ const INITIAL_STATE = {
 notifications: [
 
 ],
-	isCreateLoading: false,
-	loading: false,
+	isCreateLoading: true,
+	loading: true,
 	refreshing: false,
 	newNotifInstance: null,
 	count: null

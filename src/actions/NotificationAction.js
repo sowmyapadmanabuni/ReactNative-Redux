@@ -12,9 +12,9 @@ import {
 
 export const createNotification = (data, navigation, navigate) => {
     return (dispatch) => {
-        console.log('_________')
-        console.log(data)
-        console.log(navigation)
+        // console.log('_________')
+        // console.log(data)
+        // console.log(navigation)
         dispatch({ type: CREATE_NEW_NOTIFICATION });
 
         let headers = {
@@ -77,7 +77,6 @@ export const createNotification = (data, navigation, navigate) => {
                 });
             }
             // dispatch({ type})
-
         })
         .catch(error => {
             console.log(error.message);

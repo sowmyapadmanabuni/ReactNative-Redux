@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Image, StyleSheet, FlatList } from 'react-native';
+import { View, Image, StyleSheet, FlatList, ActivityIndicator, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { ListItem, Header } from 'react-native-elements'
+import { ListItem, Header, Card } from 'react-native-elements'
 import { onNotificationOpen } from '../../actions/NotificationAction';
-
+import TimeAgo from 'react-native-timeago';
+import moment from 'moment';
 class NotificationScreen extends Component {
     keyExtractor = (item, index) => index.toString();
 
@@ -19,32 +20,61 @@ class NotificationScreen extends Component {
     }
 
     renderItem = ({ item, index }) => {
+        // // console.log(item)
+        console.log(moment(item.ntdUpdated).fromNow())
+        // console.log(moment().calendar(item.ntdUpdated))
         return (
-            <ListItem
-                onPress={() => this.onPress(item, index)}
-                bottomDivider
-                title={item.ntType === 'Join' ? 'Request to Join' : 'Test' }
-                subtitle={item.ntDesc}
-                leftIcon={{
-                    name:   item.ntIsActive ? 'ios-mail-unread' : 'mail-read',
-                    type:  item.ntIsActive ? 'ionicon' : 'octicon',
-                    color: '#ED8A19',
-                }}
-                containerStyle={item.ntIsActive ?
-                    { backgroundColor: '#eee'} :
-                    { backgroundColor: '#fff' }
-                }
-            />
+            <Card>
+                <ListItem
+                    onPress={() => this.onPress(item, index)}
+                    // bottomDivider
+                    title={item.ntType === 'Join' ? 'Request to Join' : 'Test' }
+                    subtitle={item.ntDesc}
+                    leftIcon={{
+                        name:   item.ntIsActive ? 'ios-mail-unread' : 'mail-read',
+                        type:  item.ntIsActive ? 'ionicon' : 'octicon',
+                        color: '#ED8A19',
+                    }}
+                    containerStyle={item.ntIsActive ?
+                        { backgroundColor: '#eee'} :
+                        { backgroundColor: '#fff' }
+                    }
+                />
+                <TimeAgo time={item.ntdUpdated} />
+                {/* <Text> {moment(item.ntdUpdated).fromNow()} </Text> */}
+            </Card>
     )}
 
     onRefresh = () => {
 
     }
 
+    renderComponent = () => {
+        const { loading, isCreateLoading, notifications } = this.props;
+        // console.log(loading)
+        // console.log(isCreateLoading)
+        if(loading) {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+                    <ActivityIndicator />
+                </View>
+            )
+        } else {
+            return (
+                <FlatList
+                    keyExtractor={this.keyExtractor}
+                    data={notifications.reverse()}
+                    renderItem={this.renderItem}
+                    extraData={this.props.notifications}
+                    // onRefresh={() => this.onRefresh()}
+                />
+            )
+        }
+    }
+
     render() {
         // console.log(global.MyAccountID)
-        const { navigation } = this.props;
-        const { notifications } = this.props;
+        const { navigation, notifications } = this.props;
         const refresh = navigation.getParam('refresh', 'NO-ID');
         return (
             <View style={styles.container}>
@@ -63,13 +93,7 @@ class NotificationScreen extends Component {
                         />
                     }
                     backgroundColor="#fff"/>
-                <FlatList
-                    keyExtractor={this.keyExtractor}
-                    data={notifications.reverse()}
-                    renderItem={this.renderItem}
-                    extraData={this.props.notifications}
-                    // onRefresh={() => this.onRefresh()}
-                />
+                {this.renderComponent()}
             </View>
         )
     }
@@ -77,13 +101,16 @@ class NotificationScreen extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        flex: 1,
     }
 })
 
 const mapStateToProps = state => {
     return {
-        notifications: state.NotificationReducer.notifications
+        notifications: state.NotificationReducer.notifications,
+        isCreateLoading: state.NotificationReducer.isCreateLoading,
+        loading: state.NotificationReducer.loading
     }
 }
 
