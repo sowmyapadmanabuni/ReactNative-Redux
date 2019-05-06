@@ -5470,6 +5470,11 @@ react-native-sms-verifycode@^2.4.0:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-sound@^0.10.12:
+  version "0.10.12"
+  resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.10.12.tgz#f912d6f9d6e9e2b42b391e0226787628d940f01a"
+  integrity sha512-lhvzZ+ekNSHW9s4FjmxxGAQmd7yDT9FnHgJNP824cMyHRrTES/LgHnSOxES/1FWVoaQ8FdfbEHkWd2rN0G/L9A==
+
 react-native-sqlite-storage@^3.3.10:
   version "3.3.10"
   resolved "https://registry.yarnpkg.com/react-native-sqlite-storage/-/react-native-sqlite-storage-3.3.10.tgz#b331de4ba61ec1f6223d28da4baff533bf4004cf"

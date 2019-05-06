@@ -38,7 +38,7 @@ class NotificationDetailScreen extends Component {
                 sbSubID: item.sbSubID,
                 ntTitle: 'Request Approved',
                 // ntDesc: 'Your request to join ' + item.unitName + ' unit in' + item.associationName + ' association has been approved'
-                ntDesc: 'Your request to join association has been approved',
+                // ntDesc: 'Your request to join association has been approved',
             })
             .then(() => {
                 this.setState({ loading: false })
@@ -53,6 +53,28 @@ class NotificationDetailScreen extends Component {
             this.setState({ loading: false })
         })
         // Alert.alert("***********",`${item.sbRoleID}`)
+    }
+
+    reject = (item) => {
+        console.log(item)
+        this.setState({ loading: true });
+
+        axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
+            sbSubID: item.sbSubID,
+            ntTitle: 'Request Declined',
+            // ntDesc: 'Your request to join ' + item.unitName + ' unit in' + item.associationName + ' association has been approved'
+            // ntDesc: 'Your request to join association has been approved',
+        })
+        .then(() => {
+            this.setState({ loading: false })
+            setTimeout(() => {
+                this.props.navigation.navigate('ResDashBoard')
+            }, 300)
+        })
+        .catch(error => {
+            alert(error.message)
+            this.setState({ loading: false })
+        })
     }
 
     renderButton = () => {
@@ -70,17 +92,10 @@ class NotificationDetailScreen extends Component {
             <View style={styles.buttonContainer}>
                 <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
                     <Avatar 
-                        onPress={() => this.props.navigation.navigate('ResDashBoard')}
+                        onPress={() => this.reject(details)}
                         overlayContainerStyle={{ backgroundColor: 'red'}}
                         rounded 
                         icon={{ name: 'close', type: 'font-awesome', size: 15, color: '#fff' }}
-                        // icon={
-                        //     <Icon
-                        //         name="close"
-                        //         size={15}
-                        //         color="white"
-                        //     />
-                        // } 
                     />
                     <Text style={{ color: 'red'}}> Reject </Text>
                 </View>
@@ -90,47 +105,13 @@ class NotificationDetailScreen extends Component {
                         overlayContainerStyle={{ backgroundColor: 'orange'}}
                         rounded  
                         icon={{ name: 'check', type: 'font-awesome', size: 15, color: '#fff' }}
-                        // icon={
-                        //     <Icon
-                        //         name="check"
-                        //         size={15}
-                        //         color="white"
-                        //     />
-                        // }
                     />
                     <Text style={{ color: 'orange'}}> Approve </Text>
                 </View>
-                {/* <Button
-                    containerStyle={{ flex: 1}} 
-                    onPress={() => this.approve(details)}
-                    type="solid"
-                    title="Approve" 
-                    icon={
-                        <Icon
-                        name="check"
-                        size={15}
-                        color="white"
-                        />
-                    }
-                    buttonStyle={{ backgroundColor: 'green', margin: 5  }}
-                /> */}
-                {/* <Button 
-                    containerStyle={{ flex: 1}} 
-                    type="solid"
-                    title="Reject"
-                    onPress={() => this.props.navigation.navigate('ResDashBoard')}
-                    icon={
-                        <Icon
-                        name="close"
-                        size={15}
-                        color="white"
-                        />
-                    }
-                    buttonStyle={{ backgroundColor: 'red', margin: 5 }}
-                />  */}
             </View>
         )
     }
+
     render() {
         const { navigation } = this.props;
         const details = navigation.getParam('details', 'NO-ID');

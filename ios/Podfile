@@ -52,6 +52,8 @@ target 'OyeSpace' do
 
   pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
 
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'OyeSpaceTests' do
     inherit! :search_paths
     # Pods for testing

@@ -5,9 +5,11 @@ import reducers from '../reducers';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
+// console.log(reducers)
 const persistConfig = {
+	timeout: 0,
 	key: 'root',
-	storage: AsyncStorage,
+	storage: AsyncStorage, 
 	whitelist: ['NotificationReducer'],
 };
 

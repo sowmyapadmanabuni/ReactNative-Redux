@@ -253,15 +253,6 @@ class MainScreen extends Component {
         });
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        // if (this.state.guard_tot_count == nextState.guard_tot_count) {
-        //     // alert('componentWillUpdate if');
-        // } else {
-        //     // alert('componentWillUpdate else');
-        // }
-        
-    }
-
     Admin = () => {
         //http://localhost:54400/champ/api/v1/Member/GetMemberListByAccountID/{AccountID}
         const urlUnitList = global.champBaseURL + 'Member/GetMemberListByAccountID/' +  global.MyAccountID
@@ -330,30 +321,35 @@ class MainScreen extends Component {
 
     showLocalNotification = (notification) => {
         console.log(notification)
-        const channel = new firebase.notifications.Android.Channel('notification-action', 'notification-action', firebase.notifications.Android.Importance.Max)
+        const channel = new firebase.notifications.Android.Channel('channel_id', 'Oyespace', firebase.notifications.Android.Importance.Max)
         .setDescription('Oyespace channel');
         channel.enableLights(true);
-        channel.enableVibration(true);
+        // channel.enableVibration(true);
         firebase.notifications().android.createChannel(channel);
 
-        const notificationBuild = new firebase.notifications.Notification()
-                .setTitle(notification._title)
-                .setBody(notification._body)
-                .setNotificationId(notification._notificationId)
-                // .setSound('default')
-                .setData({
-                    ...notification._data,
-                    foreground: true
-                })
-                .android.setColor('#FF8C00')
-                .android.setLargeIcon('ic_notif')
-                .android.setAutoCancel(true)
-                .android.setSmallIcon('ic_stat_ic_notification')
-                // .android.setChannelId('notification-action')
-                .android.setPriority(firebase.notifications.Android.Priority.Max)
-                // Display the notification
-            firebase.notifications().displayNotification(notificationBuild);
-            this.setState({ foregroundNotif: notification._data })
+        
+        const notificationBuild = new firebase.notifications.Notification({
+            sound: 'default',
+            show_in_foreground: true,
+        })
+        .setTitle(notification._title)
+        .setBody(notification._body)
+        .setNotificationId(notification._notificationId)
+        // .setSound('default')
+        .setData({
+            ...notification._data,
+            foreground: true
+        })
+        .android.setColor('#FF8C00')
+        .android.setLargeIcon('ic_notif')
+        .android.setAutoCancel(true)
+        .android.setSmallIcon('ic_stat_ic_notification')
+        .android.setChannelId('channel_id')
+        // .android.setChannelId('notification-action')
+        .android.setPriority(firebase.notifications.Android.Priority.Max)
+
+        firebase.notifications().displayNotification(notificationBuild);
+        this.setState({ foregroundNotif: notification._data })
     }
 
     listenForNotif = () => {

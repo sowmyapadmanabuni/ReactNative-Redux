@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import { 
             GET_NOTIFICATIONS, 
             NEW_NOTIF_INSTANCE, 
@@ -11,16 +12,19 @@ import {
         } from './types';
 
 export const createNotification = (data, navigation, navigate) => {
+    console.log(data)
     return (dispatch) => {
-        // console.log('_________')
-        // console.log(data)
-        // console.log(navigation)
         dispatch({ type: CREATE_NEW_NOTIFICATION });
 
         let headers = {
             "Content-Type": "application/json",
             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
         }
+
+        let date = moment();
+        let formatdate = date._d
+        console.log(formatdate)
+        // console.log(moment(datee).fromNow())
 
         axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
             ACAccntID: global.MyAccountID,
@@ -31,6 +35,10 @@ export const createNotification = (data, navigation, navigate) => {
             SBMemID: data.sbMemID,
             SBSubID: data.sbSubID,
             SBRoleID: data.sbRoleId,
+            ASAsnName: data.associationName,
+            MRRolName: data.roleName,
+            NTDCreated: formatdate,
+            NTDUpdated: formatdate,
         }, {
             headers: headers
         })

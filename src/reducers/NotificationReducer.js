@@ -10,9 +10,9 @@ import {
 } from "../actions/types";
 
 const INITIAL_STATE = {
-notifications: [
+	notifications: [
 
-],
+	],
 	isCreateLoading: true,
 	loading: true,
 	refreshing: false,
@@ -21,31 +21,32 @@ notifications: [
 }
 
 export default (state = INITIAL_STATE,  action) => {
-switch(action.type) {
-case NEW_NOTIF_INSTANCE:
-	return { ...state, newNotifInstance: action.payload };
+	switch(action.type) {
+		case NEW_NOTIF_INSTANCE:
+			return { ...state, newNotifInstance: action.payload };
 
-case CREATE_NEW_NOTIFICATION:
-	return { ...state, isCreateLoading: true };
+		case CREATE_NEW_NOTIFICATION:
+			return { ...state, isCreateLoading: true };
 
-case CREATE_NEW_NOTIFICATION_SUCCESS:
-	return { ...state, isCreateLoading: false };
+		case CREATE_NEW_NOTIFICATION_SUCCESS:
+			return { ...state, isCreateLoading: false };
 
-case CREATE_NEW_NOTIFICATION_FAILED:
-	return { ...state, isCreateLoading: false };
+		case CREATE_NEW_NOTIFICATION_FAILED:
+			return { ...state, isCreateLoading: false };
 
-case GET_NOTIFICATIONS:
-	return { ...state, loading: true }
+		case GET_NOTIFICATIONS:
+			return { ...state, loading: true }
 
-case GET_NOTIFICATIONS_FAILED:
-	return { ...state, loading: false }
+		case GET_NOTIFICATIONS_FAILED:
+			return { ...state, loading: false }
 
-case GET_NOTIFICATIONS_SUCCESS:
-	return { ...state, loading: false, notifications: action.payload }
+		case GET_NOTIFICATIONS_SUCCESS:
+			return { ...state, loading: false, notifications: action.payload }
 
-case ON_NOTIFICATION_OPEN:
-	return { ...state, notifications: action.payload }
-default:
-	return state;
-}
+		case ON_NOTIFICATION_OPEN:
+			return { ...state, notifications: action.payload }
+			
+		default:
+			return state;
+	}
 }

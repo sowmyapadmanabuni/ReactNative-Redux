@@ -289,6 +289,7 @@ class CreateWorker extends Component {
                             let ntType = "Join";
                             let ntTitle = 'Request to join' + ' ' + associationName + ' ' + 'Association';
                             let ntDesc = sbName + ' ' + 'requested to join' +  unitName + ' ' + 'unit in ' + associationName + ' ' + 'association';
+                            let roleName = this.state.PickerValueHolder === '6' ? 'Owner' : 'Tenant';
 
                             console.log("userId", userID)
                             console.log("sbUnitID", sbUnitID)
@@ -317,6 +318,7 @@ class CreateWorker extends Component {
                                 ntType: ntType,
                                 ntTitle: ntTitle,
                                 ntDesc: ntDesc,
+                                roleName: roleName
                             }).then(response_3 => {
                                 this.setState({ loading: false })
                                 console.log('*******')

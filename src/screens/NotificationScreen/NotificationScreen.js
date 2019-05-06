@@ -5,6 +5,7 @@ import { ListItem, Header, Card } from 'react-native-elements'
 import { onNotificationOpen } from '../../actions/NotificationAction';
 import TimeAgo from 'react-native-timeago';
 import moment from 'moment';
+
 class NotificationScreen extends Component {
     keyExtractor = (item, index) => index.toString();
 
@@ -15,13 +16,13 @@ class NotificationScreen extends Component {
                 details: item
             })
 
-            this.props.onNotificationOpen(notifications, index);
+            // this.props.onNotificationOpen(notifications, index);
         }
     }
 
     renderItem = ({ item, index }) => {
         // // console.log(item)
-        console.log(moment(item.ntdUpdated).fromNow())
+        // console.log(moment(item.ntdUpdated).fromNow())
         // console.log(moment().calendar(item.ntdUpdated))
         return (
             <Card>
