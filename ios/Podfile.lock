@@ -125,6 +125,8 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - rn-fetch-blob (0.10.6):
+    - React/Core
   - RNFS (2.13.3):
     - React
   - RNGestureHandler (1.1.0):
@@ -165,6 +167,7 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNShare (from `../node_modules/react-native-share`)
@@ -203,6 +206,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-orientation"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
@@ -239,6 +244,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
   react-native-orientation: 3d9a0a8273d18260f7528414093a6a36491382b6
   react-native-sqlite-storage: 848fb96c0b6d17b3f70e169ac41f84434cdad94c
+  rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
   RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
   RNGestureHandler: afde2addc517e85cc97a25bfe119acbee779a7ce
   RNShare: d875e8e37f3e5e8eb7a103ae01e06490af1796f6
@@ -247,6 +253,6 @@ SPEC CHECKSUMS:
   RNViewShot: fdf9a64f0621ebc4e7c3392a10d2ffb70a7faee4
   yoga: 0885622311729a02c2bc02dca97167787a51488b
 
-PODFILE CHECKSUM: 101962fbd772c13f46a0f408cddc93c1a09c8558
+PODFILE CHECKSUM: 735b2e49ac533c5fa785e899dacb035f4be39fad
 
 COCOAPODS: 1.5.3

@@ -1,15 +1,16 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { AsyncStorage } from 'react-native';
 import { persistReducer, persistStore } from 'redux-persist';
+import FilesystemStorage from 'redux-persist-filesystem-storage'
 import reducers from '../reducers';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 // console.log(reducers)
 const persistConfig = {
-	timeout: 0,
+	// timeout: 0,
 	key: 'root',
-	storage: AsyncStorage, 
+	storage: FilesystemStorage, 
 	whitelist: ['NotificationReducer'],
 };
 

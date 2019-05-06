@@ -36,7 +36,7 @@ export const createNotification = (data, navigation, navigate) => {
             SBSubID: data.sbSubID,
             SBRoleID: data.sbRoleId,
             ASAsnName: data.associationName,
-            MRRolName: data.roleName,
+            MRRolName: data.unitName,
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
         }, {
