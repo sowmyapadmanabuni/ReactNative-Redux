@@ -324,7 +324,8 @@ class MainScreen extends Component {
         const channel = new firebase.notifications.Android.Channel('channel_id', 'Oyespace', firebase.notifications.Android.Importance.Max)
         .setDescription('Oyespace channel');
         channel.enableLights(true);
-        // channel.enableVibration(true);
+        channel.enableVibration(true);
+        channel.vibrationPattern([500]);
         firebase.notifications().android.createChannel(channel);
 
         
@@ -345,6 +346,7 @@ class MainScreen extends Component {
         .android.setAutoCancel(true)
         .android.setSmallIcon('ic_stat_ic_notification')
         .android.setChannelId('channel_id')
+        .android.setVibrate("default")
         // .android.setChannelId('notification-action')
         .android.setPriority(firebase.notifications.Android.Priority.Max)
 
@@ -372,9 +374,9 @@ class MainScreen extends Component {
 
         this.notificationListener = firebase.notifications().onNotification((notification) => {
 
-            // console.log('___________')
-            // console.log(notification)
-            // console.log('____________')
+            console.log('___________')
+            console.log(notification)
+            console.log('____________')
 
             if(notification._data.associationID) {
                 // this.props.createNotification(notification._data, navigationInstance, false)
@@ -385,19 +387,25 @@ class MainScreen extends Component {
         });
 
         firebase.notifications().onNotificationOpened((notificationOpen) => {
-            if(notificationOpen.notification._data.userID) {
+            if(notificationOpen.notification._data.admin === 'true') {
                 if(notificationOpen.action) {
                     this.props.newNotifInstance(notificationOpen.notification);
-                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true)
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, true)
                     // this.props.createNotification(notificationOpen.notification)
                 }
+            } else {
+                // this.props.newNotifInstance(notificationOpen.notification);
+                // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             }
 
-            if(notificationOpen.notification._data.userID) {
+            if(notificationOpen.notification._data.admin === 'true') {
                 if(notificationOpen.notification._data.foreground) {
                     this.props.newNotifInstance(notificationOpen.notification);
-                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true)
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, true)
                 }
+            } else {
+                // this.props.newNotifInstance(notificationOpen.notification);
+                // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             }
         });
         

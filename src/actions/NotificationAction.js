@@ -11,7 +11,7 @@ import {
             ON_NOTIFICATION_OPEN
         } from './types';
 
-export const createNotification = (data, navigation, navigate) => {
+export const createNotification = (data, navigation, navigate, admin) => {
     console.log(data)
     return (dispatch) => {
         dispatch({ type: CREATE_NEW_NOTIFICATION });
@@ -26,7 +26,8 @@ export const createNotification = (data, navigation, navigate) => {
         console.log(formatdate)
         // console.log(moment(datee).fromNow())
 
-        axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
+        if(admin) {
+            axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
             ACAccntID: global.MyAccountID,
             ASAssnID: data.associationID,
             NTType: data.ntType,
@@ -39,57 +40,123 @@ export const createNotification = (data, navigation, navigate) => {
             MRRolName: data.unitName,
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
-        }, {
-            headers: headers
-        })
-        .then((response) => {
-            let responseData = response.data;
-            console.log(responseData)
-            dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
-            if(navigate) {
-                let ACAccntIDn = global.MyAccountID;
-                let ASAssnID = data.associationID;
-                axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-                    }
-                })
-                .then(response => {
-                    console.log(response.data)
-                    let responseData = response.data.data;
-                    if(response.data.success) {
+            }, {
+                headers: headers
+            })
+            .then((response) => {
+                let responseData = response.data;
+                console.log(responseData)
+                dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
+                if(navigate) {
+                    let ACAccntIDn = global.MyAccountID;
+                    let ASAssnID = data.associationID;
+                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                        }
+                    })
+                    .then(response => {
                         console.log(response.data)
-                        dispatch({ 
-                            type: GET_NOTIFICATIONS_SUCCESS, 
-                            payload: responseData.notificationListByAssocAcctID
-                        })
-                    } else {
-                        dispatch({ 
-                            type: GET_NOTIFICATIONS_FAILED, 
-                            payload: ''
-                        })
-                    }
-                })
-                .catch(error => {
-                console.log(error)
-                console.log(error.message)
-                dispatch({ 
-                    type: GET_NOTIFICATIONS_FAILED, 
-                    payload: ''
-                })
-                })  
-                console.log(navigation)
-                navigation.navigate('NotificationScreen', {
-                    refresh: true
-                });
-            }
-            // dispatch({ type})
-        })
-        .catch(error => {
-            console.log(error.message);
-            dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
-        })
+                        let responseData = response.data.data;
+                        if(response.data.success) {
+                            console.log(response.data)
+                            dispatch({ 
+                                type: GET_NOTIFICATIONS_SUCCESS, 
+                                payload: responseData.notificationListByAssocAcctID
+                            })
+                        } else {
+                            dispatch({ 
+                                type: GET_NOTIFICATIONS_FAILED, 
+                                payload: ''
+                            })
+                        }
+                    })
+                    .catch(error => {
+                    console.log(error)
+                    console.log(error.message)
+                    dispatch({ 
+                        type: GET_NOTIFICATIONS_FAILED, 
+                        payload: ''
+                    })
+                    })  
+                    console.log(navigation)
+                    navigation.navigate('NotificationScreen', {
+                        refresh: true
+                    });
+                }
+                // dispatch({ type})
+            })
+            .catch(error => {
+                console.log(error.message);
+                dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
+            })
+        } else if(!admin) {
+            axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
+                ACAccntID: global.MyAccountID,
+                ASAssnID: data.associationID,
+                NTType: data.ntType,
+                NTDesc: data.ntDesc,
+                SBUnitID: 'resident_user',
+                SBMemID: 'resident_user',
+                SBSubID: 'resident_user',
+                SBRoleID: 'resident_user',
+                ASAsnName: 'resident_user',
+                MRRolName: 'resident_user',
+                NTDCreated: formatdate,
+                NTDUpdated: formatdate,
+            }, {
+                headers: headers
+            })
+            .then((response) => {
+                let responseData = response.data;
+                console.log(responseData)
+                dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
+                if(navigate) {
+                    let ACAccntIDn = global.MyAccountID;
+                    let ASAssnID = data.associationID;
+                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                        }
+                    })
+                    .then(response => {
+                        console.log(response.data)
+                        let responseData = response.data.data;
+                        if(response.data.success) {
+                            console.log(response.data)
+                            dispatch({ 
+                                type: GET_NOTIFICATIONS_SUCCESS, 
+                                payload: responseData.notificationListByAssocAcctID
+                            })
+                        } else {
+                            dispatch({ 
+                                type: GET_NOTIFICATIONS_FAILED, 
+                                payload: ''
+                            })
+                        }
+                    })
+                    .catch(error => {
+                    console.log(error)
+                    console.log(error.message)
+                    dispatch({ 
+                        type: GET_NOTIFICATIONS_FAILED, 
+                        payload: ''
+                    })
+                    })  
+                    console.log(navigation)
+                    navigation.navigate('NotificationScreen', {
+                        refresh: true
+                    });
+                }
+                // dispatch({ type})
+            })
+            .catch(error => {
+                console.log(error.message);
+                dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
+            })
+        }
     }
 }
 
