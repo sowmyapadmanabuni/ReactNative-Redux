@@ -330,11 +330,17 @@ class MainScreen extends Component {
 
     showLocalNotification = (notification) => {
         console.log(notification)
+        const channel = new firebase.notifications.Android.Channel('notification-action', 'notification-action', firebase.notifications.Android.Importance.Max)
+        .setDescription('Oyespace channel');
+        channel.enableLights(true);
+        channel.enableVibration(true);
+        firebase.notifications().android.createChannel(channel);
+
         const notificationBuild = new firebase.notifications.Notification()
                 .setTitle(notification._title)
                 .setBody(notification._body)
                 .setNotificationId(notification._notificationId)
-                .setSound('default')
+                // .setSound('default')
                 .setData({
                     ...notification._data,
                     foreground: true
@@ -343,7 +349,7 @@ class MainScreen extends Component {
                 .android.setLargeIcon('ic_notif')
                 .android.setAutoCancel(true)
                 .android.setSmallIcon('ic_stat_ic_notification')
-                .android.setChannelId('notification-action')
+                // .android.setChannelId('notification-action')
                 .android.setPriority(firebase.notifications.Android.Priority.Max)
                 // Display the notification
             firebase.notifications().displayNotification(notificationBuild);
