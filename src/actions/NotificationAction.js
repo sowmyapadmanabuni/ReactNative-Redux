@@ -40,6 +40,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
             MRRolName: data.unitName,
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
+            // ntIsActive: false
             }, {
                 headers: headers
             })
@@ -105,6 +106,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 MRRolName: 'resident_user',
                 NTDCreated: formatdate,
                 NTDUpdated: formatdate,
+                // ntIsActive: false
             }, {
                 headers: headers
             })

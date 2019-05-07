@@ -1053,8 +1053,8 @@ class MainScreen extends Component {
             )
         }
     }
+    
     render() {
-        console.log(global)
         {/* <View style={styles.container}>
         <Text>Main</Text>
         <Button onPress={() => this.props.navigation.navigate("Detail")} title="Detail Page" />

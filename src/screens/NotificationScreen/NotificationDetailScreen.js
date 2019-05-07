@@ -10,73 +10,131 @@ class NotificationDetailScreen extends Component {
         loading: false
     }
 
-
     approve = (item) => {
-        this.setState({ loading: true });
+        if(!item.ntIsActive) {
+            Alert.alert(
+                'Oyespace',
+                'You have already approved this request!',
+                [
+                    {text: 'Ok', onPress: () => { }},
+                ],
+                {cancelable: false},
+            );
+        } else {
+            let MemberID = global.MyOYEMemberID;
+            this.setState({ loading: true });
 
-        const headers = {
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-            "Content-Type": "application/json"
-        }
+            const headers = {
+                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                "Content-Type": "application/json"
+            }
 
-        console.log('_____ITEM________')
-        console.log(item)
+            console.log('_____ITEM________')
+            console.log(item)
 
-        axios.post('http://apidev.oyespace.com/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate', {
-            MRMRoleID : item.sbRoleID,
-            MEMemID  : item.sbMemID,
-            UNUnitID : item.sbUnitID
-        }, {
-            headers: headers
-        })
-        .then(response => {
-            console.log('________RESPONSE___________')
-            console.log(response.data);
-            console.log(item.unitName)
-            console.log(item.associationName)
-            axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
-                sbSubID: item.sbSubID,
-                ntTitle: 'Request Approved',
-                ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been approved',
-                ntType: 'Join_Status',
-               
+            axios.post('http://apidev.oyespace.com/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate', {
+                MRMRoleID : item.sbRoleID,
+                MEMemID  : item.sbMemID,
+                UNUnitID : item.sbUnitID
+            }, {
+                headers: headers
             })
-            .then(() => {
-                this.setState({ loading: false })
+            .then(response => {
+                console.log('________RESPONSE___________')
+                console.log(response.data);
+                console.log(item.unitName)
+                console.log(item.associationName)
+
+                axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
+                    sbSubID: item.sbSubID,
+                    ntTitle: 'Request Approved',
+                    ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been approved',
+                    ntType: 'Join_Status',
+                
+                })
+                .then(() => {
+                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
+                        headers: {
+                            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(() => {
+                        this.setState({ loading: false })
+                    }).catch(error => {
+                        alert(error.message)
+                        this.setState({ loading: false })
+                    })
+                })
+                .catch(error => {
+                    alert(error.message)
+                    this.setState({ loading: false })
+                })
             })
             .catch(error => {
                 alert(error.message)
                 this.setState({ loading: false })
             })
-        })
-        .catch(error => {
-            alert(error.message)
-            this.setState({ loading: false })
-        })
+        }
         // Alert.alert("***********",`${item.sbRoleID}`)
     }
 
     reject = (item) => {
         console.log(item)
-        this.setState({ loading: true });
+        if(!item.ntIsActive) {
+            Alert.alert(
+                'Oyespace',
+                'You have already declined this request!',
+                [
+                    {text: 'Ok', onPress: () => { }},
+                ],
+                {cancelable: false},
+            );
+        } else {
+            this.setState({ loading: true });
 
-        axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
-            sbSubID: item.sbSubID,
-            ntTitle: 'Request Declined',
-            ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been declined',
-            ntType: 'Join_Status',
-            // ntDesc: 'Your request to join association has been approved',
-        })
-        .then(() => {
-            this.setState({ loading: false })
-            setTimeout(() => {
-                this.props.navigation.navigate('ResDashBoard')
-            }, 300)
-        })
-        .catch(error => {
-            alert(error.message)
-            this.setState({ loading: false })
-        })
+            const headers = {
+                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                "Content-Type": "application/json"
+            }
+
+            axios.get(`http://apidev.oyespace.com/oyeliving/api/v1/GetMemberListByMemberID/${item.sbMemID}`, {
+                headers: headers
+            })
+            .then(() => {
+                axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
+                    headers: {
+                        "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(() => {
+                    axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
+                        sbSubID: item.sbSubID,
+                        ntTitle: 'Request Declined',
+                        ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been declined',
+                        ntType: 'Join_Status',
+                    })
+                    .then(() => {
+                        this.setState({ loading: false })
+                        setTimeout(() => {
+                            this.props.navigation.navigate('ResDashBoard')
+                        }, 300)
+                    })
+                    .catch(error => {
+                        alert(error.message)
+                        this.setState({ loading: false })
+                    })
+                }).catch(error => {
+                    alert(error.message)
+                    this.setState({ loading: false })
+                })
+            })
+            .catch(error => {
+                alert(error.message)
+                this.setState({ loading: false })
+            })
+        }
     }
 
     renderButton = () => {
@@ -106,6 +164,7 @@ class NotificationDetailScreen extends Component {
                         onPress={() => this.approve(details)}
                         overlayContainerStyle={{ backgroundColor: 'orange'}}
                         rounded  
+                        
                         icon={{ name: 'check', type: 'font-awesome', size: 15, color: '#fff' }}
                     />
                     <Text style={{ color: 'orange'}}> Approve </Text>

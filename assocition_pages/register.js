@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator,
-    Platform, alertMessage, Image, Picker, Button, Alert, ScrollView
+    Platform, alertMessage, Image, Picker, Alert, ScrollView
 } from "react-native";
 import PhoneInput from "react-native-phone-input";
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -18,6 +18,7 @@ import CountryPicker, {
     getAllCountries
   } from 'react-native-country-picker-modal';
 import _ from 'lodash';
+import { Button } from 'react-native-elements';
 import { CLOUD_FUNCTION_URL } from '../constant';
 
 var db = openDatabase({ name: 'UserDatabase.db' });
@@ -76,7 +77,37 @@ class CreateWorker extends Component {
     }
 
     componentDidMount() {
-        
+        let MemberID = global.MyOYEMemberID;
+        console.log(MemberID)
+
+        let headers = {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+
+        axios.get(`http://apidev.oyespace.com/oyeliving/api/v1/GetMemberListByMemberID/${MemberID}`, {
+            headers: headers
+        })
+        .then(response => {
+            console.log(response.data)
+            this.setState({ memberList: response.data.data })
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    disabled = () => {
+        const { memberList } = this.state;
+        console.log(memberList);
+
+        if(!memberList) {
+            return false;
+        } else {
+            if(memberList.meJoinStat === 'accepted' || memberList.meJoinStat === 'rejected') {
+                return true;
+            } else return false;
+        }
     }
     //Function
     selectPhoto() {
@@ -538,7 +569,7 @@ alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
 
           </View>
           {this.state.PickerValueHolder=="2"?
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10 }}>
                                 <Text style={{ fontSize: 12, color: 'black', marginTop: 13, marginLeft: '2%' }}>Sold Date </Text>
                                 <TouchableOpacity style={{ height: 40, }} onPress={this.onDOBPress.bind(this)} >
                                     <View style={styles.datePickerBox}>
@@ -560,16 +591,28 @@ alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
                          </View>}
                             {this.state.loading ? 
                                 <ActivityIndicator /> :
-                                <TouchableOpacity style={styles.loginScreenButton}
-                                    onPress={this.submit.bind(this, 
+                                <Button
+                                    buttonStyle={{ backgroundColor: 'orange' }}
+                                    disabled={this.disabled()}
+                                    title="Request Admin"
+                                    onPress={
+                                        this.submit.bind(this, 
                                         this.state.FirstName,
                                         this.state.LastName,
                                         this.state.MobileNumber,
                                         this.state.EmailId,
-                                        this.state.PickerValueHolder)}>
+                                        this.state.PickerValueHolder)}
+                                />
+                                // <TouchableOpacity style={styles.loginScreenButton}
+                                //     onPress={this.submit.bind(this, 
+                                //         this.state.FirstName,
+                                //         this.state.LastName,
+                                //         this.state.MobileNumber,
+                                //         this.state.EmailId,
+                                //         this.state.PickerValueHolder)}>
 
-                                    <Text style={styles.loginScreenText}> Request Admin </Text>
-                                </TouchableOpacity>
+                                //     <Text style={styles.loginScreenText}> Request Admin </Text>
+                                // </TouchableOpacity>
                             }
                         </View>
                     </View>
