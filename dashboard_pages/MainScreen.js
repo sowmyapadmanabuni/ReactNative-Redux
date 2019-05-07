@@ -324,8 +324,8 @@ class MainScreen extends Component {
         const channel = new firebase.notifications.Android.Channel('channel_id', 'Oyespace', firebase.notifications.Android.Importance.Max)
         .setDescription('Oyespace channel');
         channel.enableLights(true);
-        channel.enableVibration(true);
-        channel.vibrationPattern([500]);
+        // channel.enableVibration(true);
+        // channel.vibrationPattern([500]);
         firebase.notifications().android.createChannel(channel);
 
         
@@ -1054,6 +1054,7 @@ class MainScreen extends Component {
         }
     }
     render() {
+        console.log(global)
         {/* <View style={styles.container}>
         <Text>Main</Text>
         <Button onPress={() => this.props.navigation.navigate("Detail")} title="Detail Page" />

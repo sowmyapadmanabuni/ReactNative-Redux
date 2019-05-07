@@ -37,8 +37,9 @@ class NotificationDetailScreen extends Component {
             axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                 sbSubID: item.sbSubID,
                 ntTitle: 'Request Approved',
-                ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been approved'
-                // ntDesc: 'Your request to join association has been approved',
+                ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been approved',
+                ntType: 'Join_Status',
+               
             })
             .then(() => {
                 this.setState({ loading: false })
