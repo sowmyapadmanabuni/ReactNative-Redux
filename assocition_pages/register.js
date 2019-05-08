@@ -20,6 +20,8 @@ import CountryPicker, {
 import _ from 'lodash';
 import { Button } from 'react-native-elements';
 import { CLOUD_FUNCTION_URL } from '../constant';
+import { connect } from 'react-redux';
+import { updateJoinedAssociation } from '../src/actions';
 
 var db = openDatabase({ name: 'UserDatabase.db' });
 
@@ -28,7 +30,7 @@ var date = new Date().getDate();
 var month = new Date().getMonth() + 1;
 var year = new Date().getFullYear();
 
-class CreateWorker extends Component {
+class Register extends Component {
 
     constructor(props) {
         super(props);
@@ -53,7 +55,7 @@ class CreateWorker extends Component {
             MobileNumber: global.MyMobileNumber,
             EmailId: global.MyEmail,
             loading: false,
-            memberList: null,
+            // memberList: null,
         };
 
         this.renderInfo = this.renderInfo.bind(this);
@@ -77,38 +79,46 @@ class CreateWorker extends Component {
     }
 
     componentDidMount() {
-        let MemberID = global.MyOYEMemberID;
-        console.log(global.MyOYEMemberID)
-        console.log(global)
+        // let MemberID = global.MyOYEMemberID;
+        // console.log(global.MyOYEMemberID)
+        // console.log(global)
 
-        let headers = {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-        }
+        // let headers = {
+        //     "Content-Type": "application/json",
+        //     "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        // }
 
-        axios.get(`http://apidev.oyespace.com/oyeliving/api/v1/GetMemberListByMemberID/${MemberID}`, {
-            headers: headers
-        })
-        .then(response => {
-            console.log(response.data)
-            this.setState({ memberList: response.data.data })
-        })
-        .catch(error => {
-            console.log(error)
-        })
+        // axios.get(`http://apidev.oyespace.com/oyeliving/api/v1/GetMemberListByMemberID/${MemberID}`, {
+        //     headers: headers
+        // })
+        // .then(response => {
+        //     console.log(response.data)
+        //     this.setState({ memberList: response.data.data })
+        // })
+        // .catch(error => {
+        //     console.log(error)
+        // })
     }
 
     disabled = () => {
-        const { memberList } = this.state;
-        console.log(memberList);
+        const { joinedAssociations, navigation } = this.props;
+        let unitId = navigation.state.params.unitID;
 
-        if(!memberList) {
-            return false;
-        } else {
-            if(memberList.meJoinStat === 'accepted' || memberList.meJoinStat === 'rejected') {
-                return true;
-            } else return false;
-        }
+        console.log(_.includes(joinedAssociations, unitId))
+        if(_.includes(joinedAssociations, unitId)) {
+            return true
+        } else return false
+       
+        // const { memberList } = this.state;
+        // console.log(memberList);
+
+        // if(!memberList) {
+        //     return false;
+        // } else {
+        //     if(memberList.meJoinStat === 'accepted' || memberList.meJoinStat === 'rejected') {
+        //         return true;
+        //     } else return false;
+        // }
     }
     //Function
     selectPhoto() {
@@ -356,15 +366,17 @@ class CreateWorker extends Component {
                                 console.log('*******')
                                 console.log('here_3 ')
                                 console.log('*******')
-                                let responseData_3 = response_3.data;
-                                console.log(responseData_3)
+                                // let responseData_3 = response_3.data;
+                                // console.log(responseData_3)
                                 this.props.navigation.navigate('SplashScreen');
-                                Alert.alert('Alert', 'Request Send to Admin Successfully',
-                                [
-                                    { text: 'Ok', onPress: () => { } },
-                                ],
-                                { cancelable: false }
+                                this.props.updateJoinedAssociation(this.props.joinedAssociations, this.props.navigation.state.params.unitID)
+                                Alert.alert('Oyespace', 'Request Send to Admin Successfully',
+                                    [
+                                        { text: 'Ok', onPress: () => { } },
+                                    ],
+                                    { cancelable: false }
                                 ); 
+                                
                             })
                         } else {
                             this.setState({ loading: false })
@@ -436,7 +448,7 @@ class CreateWorker extends Component {
 
     render() {
         const { navigate } = this.props.navigation;
-        // console.log(this.props.navigation.state.params)
+        console.log(this.props.navigation.state.params)
         // console.log(global)
         return (
 
@@ -689,4 +701,10 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CreateWorker;
+const mapStateToProps = state => {
+    return {
+        joinedAssociations: state.AppReducer.joinedAssociations,
+    }
+}
+
+export default connect(mapStateToProps, { updateJoinedAssociation })(Register);
