@@ -390,7 +390,7 @@ class MainScreen extends Component {
             if(notificationOpen.notification._data.admin === 'true') {
                 if(notificationOpen.action) {
                     this.props.newNotifInstance(notificationOpen.notification);
-                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, true)
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'true')
                     // this.props.createNotification(notificationOpen.notification)
                 }
             } else {
@@ -401,9 +401,11 @@ class MainScreen extends Component {
             if(notificationOpen.notification._data.admin === 'true') {
                 if(notificationOpen.notification._data.foreground) {
                     this.props.newNotifInstance(notificationOpen.notification);
-                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, true)
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'true')
                 }
-            } else {
+            } else if (notificationOpen.notification._data.admin === 'gate_app') {
+                    this.props.newNotifInstance(notificationOpen.notification);
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'gate_app')
                 // this.props.newNotifInstance(notificationOpen.notification);
                 // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             }

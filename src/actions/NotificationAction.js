@@ -11,6 +11,7 @@ import {
             ON_NOTIFICATION_OPEN
         } from './types';
 
+        
 export const createNotification = (data, navigation, navigate, admin) => {
     console.log(data)
     return (dispatch) => {
@@ -26,7 +27,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
         console.log(formatdate)
         // console.log(moment(datee).fromNow())
 
-        if(admin) {
+        if(admin === 'true') {
             axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
             ACAccntID: global.MyAccountID,
             ASAssnID: data.associationID,
@@ -92,7 +93,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 console.log(error.message);
                 dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
             })
-        } else if(!admin) {
+        } else if(admin === 'false') {
             axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
                 ACAccntID: global.MyAccountID,
                 ASAssnID: data.associationID,
@@ -158,9 +159,76 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 console.log(error.message);
                 dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
             })
+        } else if(admin === 'gate_app') {
+            axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
+                ACAccntID: global.MyAccountID,
+                ASAssnID: data.associationID,
+                NTType: data.ntType,
+                NTDesc: data.ntDesc,
+                SBUnitID: 'gate_app',
+                SBMemID: 'gate_app',
+                SBSubID: 'gate_app',
+                SBRoleID: 'gate_app',
+                ASAsnName: 'gate_app',
+                MRRolName: 'gate_app',
+                NTDCreated: formatdate,
+                NTDUpdated: formatdate,
+                // ntIsActive: false
+            }, {
+                headers: headers
+            })
+            .then((response) => {
+                let responseData = response.data;
+                console.log(responseData)
+                dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
+                if(navigate) {
+                    let ACAccntIDn = global.MyAccountID;
+                    let ASAssnID = data.associationID;
+                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                        }
+                    })
+                    .then(response => {
+                        console.log(response.data)
+                        let responseData = response.data.data;
+                        if(response.data.success) {
+                            console.log(response.data)
+                            dispatch({ 
+                                type: GET_NOTIFICATIONS_SUCCESS, 
+                                payload: responseData.notificationListByAssocAcctID
+                            })
+                        } else {
+                            dispatch({ 
+                                type: GET_NOTIFICATIONS_FAILED, 
+                                payload: ''
+                            })
+                        }
+                    })
+                    .catch(error => {
+                    console.log(error)
+                    console.log(error.message)
+                    dispatch({ 
+                        type: GET_NOTIFICATIONS_FAILED, 
+                        payload: ''
+                    })
+                    })  
+                    console.log(navigation)
+                    navigation.navigate('NotificationScreen', {
+                        refresh: true
+                    });
+                }
+                // dispatch({ type})
+            })
+            .catch(error => {
+                console.log(error.message);
+                dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
+            })
         }
     }
 }
+
 
 export const getNotifications = (accountId, associationID, admin) => {
     console.log(accountId, associationID, admin )
