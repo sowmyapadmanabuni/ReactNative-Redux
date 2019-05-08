@@ -78,7 +78,8 @@ class CreateWorker extends Component {
 
     componentDidMount() {
         let MemberID = global.MyOYEMemberID;
-        console.log(MemberID)
+        console.log(global.MyOYEMemberID)
+        console.log(global)
 
         let headers = {
             "Content-Type": "application/json",
@@ -435,7 +436,7 @@ class CreateWorker extends Component {
 
     render() {
         const { navigate } = this.props.navigation;
-        console.log(this.props.navigation.state.params)
+        // console.log(this.props.navigation.state.params)
         // console.log(global)
         return (
 

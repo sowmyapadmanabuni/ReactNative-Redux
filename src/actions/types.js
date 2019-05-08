@@ -9,3 +9,6 @@ export const CREATE_NEW_NOTIFICATION_SUCCESS = 'create_new_notification_success'
 export const ON_NOTIFICATION_OPEN = 'on_notification_open';
 // export const ON_NOTIFICATION_REFRESH = 'on_notification_refresh';
 
+// App Reducer
+export const JOIN_ASSOCIATION = 'join_association';
+
