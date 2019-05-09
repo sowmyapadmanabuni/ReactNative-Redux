@@ -73,6 +73,7 @@ class NotificationDetailScreen extends Component {
                             this.setState({ loading: false })
                         }).catch(error => {
                             alert(error.message)
+                            this.setState({ loading: false })
                         })
                         
                     }).catch(error => {
