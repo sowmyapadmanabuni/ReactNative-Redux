@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { BackHandler, AppRegistry, Platform, StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
+import { BackHandler, AppRegistry, Platform, StyleSheet, Text, View, FlatList, ActivityIndicator, TouchableOpacity, Image, SafeAreaView, Linking } from 'react-native';
 import ActionButton from 'react-native-action-button';
+import RNFetchBlob from 'rn-fetch-blob';
+import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
+import { Toast, Colors } from 'react-native-ui-lib';
+import FileViewer from 'react-native-file-viewer';
+import Papa from 'papaparse';
+import RNFS from 'react-native-fs';
+import { Button } from 'react-native-elements';
 import Communications from 'react-native-communications';
 import { Fonts } from '../pages/src/utils/Fonts'
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -16,6 +23,7 @@ export default class unitlist extends Component {
       color: '#fff',
     }
   };
+
   constructor() {
     super()
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -24,9 +32,15 @@ export default class unitlist extends Component {
       dataSource: [],
       isLoading: true,
       dataSourcelength:0,
-    NoofUnits:0,
-
+      NoofUnits:0,
+      path: '',
+      fileName: '',
+      toastVisible: false,
+      importMesssage: '',
+      importError: false,
+      importToast: false,
     }
+
     db.transaction(function (txn) {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='OyeUnit'",
@@ -239,23 +253,127 @@ export default class unitlist extends Component {
     });
   }
 
+  exportCsv = () => {
+    // const values = [
+    //     ['build', '2017-11-05T05:40:35.515Z'],
+    //     ['deploy', '2017-11-05T05:42:04.810Z']
+    // ];
+      
+    const headerString = 'Unit Name,Unit Type,Ownership Status,Occupancy Date,Sold Date,Unit Dimension,Unit Calculation Type,Unit Rate,BlockID,AssociationID,AccountID,UnitOwner First Name,UnitOwner Last Name,UnitOwner Mobile Number,UnitOwner Alternate Mobile,UnitOwner EmailID,UnitOwner Alternate EmailID,UnitTenant First Name,UnitTenant Last Name,UnitTenant Mobile Number,UnitTenant Alternate Mobile Number,UnitTenant EmailID,UnitTenant Alternate EmailID,Unit Bank Name,Unit Bank IFSC Code,Account Number,Account Type,Unit Parking Lot Number\n'
+//   const headerString = 'event,timestamp\n';
+    // const rowString = values.map(d => `${d[0]},${d[1]}\n`).join('');
+//   const csvString = `${headerString}${rowString}`;
+    const csvString = `${headerString}`;
+
+    let pathToWrite;
+
+    if(Platform.OS === 'android') {
+        pathToWrite = `${RNFetchBlob.fs.dirs.DownloadDir}/oyespace_unit.csv`;
+    } else {
+        pathToWrite = RNFS.DocumentDirectoryPath + '/oyespace_unit.csv';
+    }
+
+    console.log('pathToWrite', pathToWrite);
+
+    RNFS.writeFile(pathToWrite, csvString, 'utf8')
+    .then((success) => {
+        console.log(`wrote file ${pathToWrite}`);
+        this.setState({ toastVisible: true, path: pathToWrite })
+        // this.readCsv()
+        // console.log(success)
+    })
+    .catch((err) => {
+        alert(err.message);
+    });
+  }
+
+  readCsv = () => {
+      const pathToWrite = `${RNFetchBlob.fs.dirs.DownloadDir}/${this.state.fileName}`;
+
+      RNFS.readFile(this.state.path, 'utf8')
+      .then((data) => {
+          // console.log(data)
+          let json = Papa.parse(data);
+
+          console.log(json)
+          console.log(json.data[0].length)
+
+          if(json.data[1].length < 28 ) {
+              // alert('Import Failed! Please make sure you fill all the fields and try again.');
+              this.setState({ importToast: true, importMesssage: 'Import Failed! Please make sure you fill all the fields and try again.', importError: true })
+          } else {
+              // alert('Import Successful')
+              this.setState({ importToast: true, importMesssage: 'Import Successful', importError: false })
+          }
+      })
+      .catch(error => {
+          console.log(error)
+      })
+
+      // RNFetchBlob.fs.readFile(this.state.path, 'utf8')
+      //     .then((data) => {
+      //     let json = Papa.parse(data);
+
+      //     console.log(json)
+      //     console.log(json.data[0].length)
+
+      //     if(json.data[1].length < 28 ) {
+      //         this.setState({ importToast: true, importMesssage: 'All fields must be filled', importError: true })
+      //     } else {
+      //         this.setState({ importToast: true, importMesssage: 'Import Successful', importError: false })
+      //     }
+      // })
+  }
+
+  importCsv = () => {
+    DocumentPicker.show({
+        filetype: [DocumentPickerUtil.allFiles()],
+      },(error,res) => {
+
+        console.log(error)
+
+        if(error) {
+            // alert('Please import a ')
+        } else {
+            this.readCsv()
+            if(res.type !== 'text/comma-separated-values') {
+                alert('You can only import CSV files!')
+            } else {
+                this.setState({ path: res.uri, fileName: res.fileName })
+                this.readCsv()
+            }
+        }
+    });
+  }
+
   render() {
 
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
-    console.log('unitlist start ', params.id);
+    // console.log('unitlist start ', params.id);
+
+    const action =  [{label: 'Open csv', backgroundColor: Colors.red40, onPress: () => {
+      FileViewer.open(this.state.path)
+        .then(() => {
+            console.log('open')
+            this.setState({ toastVisible: false })
+        })
+        .catch(error => {
+            console.log(error)
+      });
+    }}]
     return(
-      <View style={{ backgroundColor: '#ffffff',height: '100%'  }}>
+      <SafeAreaView style={{ backgroundColor: '#ffffff',height: '100%'  }}>
         <View style={{ backgroundColor: '#ffffff' }}>
           <View
             style={{
               paddingTop: 2, paddingRight: 2, paddingLeft: 2, flexDirection: 'row', paddingBottom: 2,
-              borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:45,
+              borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:20,
             }}>
             <TouchableOpacity onPress={() => this.handleBackButtonClick()}
               style={{ flex: 1 }}>
               <Image source={require('../pages/assets/images/back.png')}
-                style={{ height: 25, width: 25, marginTop:'12%', justifyContent:'center',alignItems:'center' }} />
+                style={{ height: 25, width: 25, marginTop:'8%', justifyContent:'center',alignItems:'center' }} />
             </TouchableOpacity>
             {/* <Text style={{ flex: 1, paddingLeft: 5, fontSize: 14, color: 'black', alignContent: 'flex-start', alignSelf: 'center' }}> </Text> */}
             {/* <Text style={{ flex: 4, fontSize: 16, color: 'black',  alignSelf: 'center' }}>Units List</Text> */}
@@ -296,8 +414,34 @@ export default class unitlist extends Component {
                 <Text style={{ backgroundColor: 'white' }}>No Units Created</Text>
               </View>
               :
-          <View style={{ backgroundColor: '#ffffff' ,height:'90%'}}>
-          <Text style={{fontSize: 16, color: 'black',fontWeight:'bold', marginLeft:10 }}>Units List</Text>
+          <View style={{ backgroundColor: '#ffffff' ,height:'90%', marginTop: 7 }}>
+            <Text style={{fontSize: 16, color: 'black',fontWeight:'bold', marginLeft:10 }}>Units List</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 10 }}>
+            <Button
+                icon={{
+                  name: "file-export",
+                  size: 16,
+                  color: "white",
+                  type: "material-community"
+                }}
+                title="Export CSV"
+                titleStyle={{ fontSize: 14 }}
+                buttonStyle={{ backgroundColor: 'orange' }}
+                onPress={() => this.exportCsv()}
+              />
+              <Button
+                icon={{
+                  name: "file-import",
+                  size: 16,
+                  color: "white",
+                  type: "material-community"
+                }}
+                title="Import CSV"
+                titleStyle={{ fontSize: 14 }}
+                buttonStyle={{ backgroundColor: 'orange' }}
+                onPress={() => this.importCsv()}
+              />
+          </View>
             <FlatList
               //data={this.state.dataSource}
               style={{ marginBottom: 40,backgroundColor: '#ffffff' }}
@@ -310,7 +454,31 @@ export default class unitlist extends Component {
 <Text style={{color:'black',fontSize:15}}>You already created all units in this block</Text>:
           <ActionButton buttonColor="rgba(250,153,23,1)" onPress={() => navigate('CreateUnitsScreen', { id: params.id })}  >
           </ActionButton>}
-      </View>
+          <Toast
+            messageStyle={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', fontWeight: '700' }}
+            style={{ flex: 1, width: '100%' }}
+            visible={this.state.toastVisible}
+            position={'bottom'}
+            message='Exported Successfully'
+            autoDismiss={1500}
+            onDismiss={() => this.setState({toastVisible: false })}
+            // onDismiss={() => this.setState({showTopToast: false})}
+            // allowDismiss={showDismiss}
+            actions={action}
+        />
+        <Toast
+            messageStyle={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', fontWeight: '700' }}
+            style={{ flex: 1, width: '100%' }}
+            visible={this.state.importToast}
+            position={'bottom'}
+            backgroundColor={this.state.importError ? Colors.red40 : Colors.blue40 }
+            message={this.state.importMesssage}
+            autoDismiss={1500}
+            onDismiss={() => this.setState({importToast: false })}
+            // allowDismiss={showDismiss}
+            // actions={action}
+        />
+      </SafeAreaView>
     );
 
     return (
