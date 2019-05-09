@@ -4,17 +4,24 @@ import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import { CLOUD_FUNCTION_URL } from '../../../constant';
+import { connect } from 'react-redux';
+import { updateApproveAdmin } from '../../actions/AppAction';
+import _ from 'lodash';
 
 class NotificationDetailScreen extends Component {
     state = {
         loading: false
     }
 
-    approve = (item) => {
-        if(!item.ntIsActive) {
+    approve = (item, status) => {
+        // const { approvedAdmins } = this.props;
+        // let unitId = item.sbUnitID;
+        // let status = _.includes(approvedAdmins, unitId)
+
+        if(status) {
             Alert.alert(
                 'Oyespace',
-                'You have already approved this request!',
+                'You have already responded to this request!',
                 [
                     {text: 'Ok', onPress: () => { }},
                 ],
@@ -70,6 +77,7 @@ class NotificationDetailScreen extends Component {
                         {
                             headers: headers
                         }).then(() => {
+                            this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbUnitID)
                             this.setState({ loading: false })
                         }).catch(error => {
                             alert(error.message)
@@ -94,12 +102,15 @@ class NotificationDetailScreen extends Component {
         // Alert.alert("***********",`${item.sbRoleID}`)
     }
 
-    reject = (item) => {
-        console.log(item)
-        if(!item.ntIsActive) {
+    reject = (item, status) => {
+        // const { approvedAdmins } = this.props;
+        // let unitId = item.sbUnitID;
+        // let status = _.includes(approvedAdmins, unitId)
+
+        if(status) {
             Alert.alert(
                 'Oyespace',
-                'You have already declined this request!',
+                'You have already responded to this request!',
                 [
                     {text: 'Ok', onPress: () => { }},
                 ],
@@ -132,6 +143,7 @@ class NotificationDetailScreen extends Component {
                     })
                     .then(() => {
                         this.setState({ loading: false })
+                        this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbUnitID)
                         setTimeout(() => {
                             this.props.navigation.navigate('ResDashBoard')
                         }, 300)
@@ -153,9 +165,13 @@ class NotificationDetailScreen extends Component {
     }
 
     renderButton = () => {
+        
         const { loading } = this.state;
-        const { navigation } = this.props;
+        const { navigation, approvedAdmins } = this.props;
         const details = navigation.getParam('details', 'NO-ID');
+
+        let unitId = details.sbUnitID;
+        let status = _.includes(approvedAdmins, unitId)
 
         if(loading) {
             return (
@@ -167,7 +183,7 @@ class NotificationDetailScreen extends Component {
             <View style={styles.buttonContainer}>
                 <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
                     <Avatar 
-                        onPress={() => this.reject(details)}
+                        onPress={() => this.reject(details, status)}
                         overlayContainerStyle={{ backgroundColor: 'red'}}
                         rounded 
                         icon={{ name: 'close', type: 'font-awesome', size: 15, color: '#fff' }}
@@ -176,7 +192,7 @@ class NotificationDetailScreen extends Component {
                 </View>
                 <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
                     <Avatar 
-                        onPress={() => this.approve(details)}
+                        onPress={() => this.approve(details, status)}
                         overlayContainerStyle={{ backgroundColor: 'orange'}}
                         rounded  
                         
@@ -191,9 +207,9 @@ class NotificationDetailScreen extends Component {
     render() {
         const { navigation } = this.props;
         const details = navigation.getParam('details', 'NO-ID');
-        console.log('****************')
-        console.log(details)
-        console.log('****************')
+        // console.log('****************')
+        // console.log(details)
+        // console.log('****************')
         return (
             <View style={styles.container}>
                 <Header 
@@ -239,4 +255,9 @@ const styles = StyleSheet.create({
     }
 })
 
-export default NotificationDetailScreen
+const mapStateToProps = state => {
+    return {
+        approvedAdmins: state.AppReducer.approvedAdmins,
+    }
+}
+export default connect(mapStateToProps, { updateApproveAdmin })(NotificationDetailScreen)

@@ -107,18 +107,7 @@ class Register extends Component {
         console.log(_.includes(joinedAssociations, unitId))
         if(_.includes(joinedAssociations, unitId)) {
             return true
-        } else return false
-       
-        // const { memberList } = this.state;
-        // console.log(memberList);
-
-        // if(!memberList) {
-        //     return false;
-        // } else {
-        //     if(memberList.meJoinStat === 'accepted' || memberList.meJoinStat === 'rejected') {
-        //         return true;
-        //     } else return false;
-        // }
+        } else return false;
     }
     //Function
     selectPhoto() {
