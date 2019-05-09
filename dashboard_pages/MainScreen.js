@@ -341,7 +341,7 @@ class MainScreen extends Component {
             ...notification._data,
             foreground: true
         })
-        .android.setColor('#FF8C00')
+        .android.setColor('#FF9100') 
         .android.setLargeIcon('ic_notif')
         .android.setAutoCancel(true)
         .android.setSmallIcon('ic_stat_ic_notification')
