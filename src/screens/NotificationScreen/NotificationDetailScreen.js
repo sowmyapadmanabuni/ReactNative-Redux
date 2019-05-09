@@ -60,7 +60,7 @@ class NotificationDetailScreen extends Component {
                         }
                     })
                     .then(() => {
-                        axios.post(`http://apidev.oyespace.com/api/v1/UpdateUnitRoleStatusAndDate`,
+                        axios.post(`http://apidev.oyespace.com/oyeliving/api/v1/Unit/UpdateUnitRoleStatusAndDate`,
                         {
                             MemberID: item.sbMemID,
                             MemberRoleID: item.sbRoleID,
