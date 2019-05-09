@@ -41,9 +41,9 @@ class NotificationDetailScreen extends Component {
             })
             .then(response => {
                 console.log('________RESPONSE___________')
-                console.log(response.data);
-                console.log(item.unitName)
-                console.log(item.associationName)
+                // console.log(response.data);
+                // console.log(item.unitName)
+                // console.log(item.associationName)
 
                 axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                     sbSubID: item.sbSubID,
@@ -60,7 +60,21 @@ class NotificationDetailScreen extends Component {
                         }
                     })
                     .then(() => {
-                        this.setState({ loading: false })
+                        axios.post(`http://apidev.oyespace.com/api/v1/UpdateUnitRoleStatusAndDate`,
+                        {
+                            MemberID: item.sbMemID,
+                            MemberRoleID: item.sbRoleID,
+                            UnitID: item.sbUnitID,
+                            SoldDate: item.unSldDate,
+                        },
+                        {
+                            headers: headers
+                        }).then(() => {
+                            this.setState({ loading: false })
+                        }).catch(error => {
+                            alert(error.message)
+                        })
+                        
                     }).catch(error => {
                         alert(error.message)
                         this.setState({ loading: false })

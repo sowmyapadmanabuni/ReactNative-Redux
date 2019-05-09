@@ -332,6 +332,8 @@ class Register extends Component {
                             let ntTitle = 'Request to join' + ' ' + associationName + ' ' + 'Association';
                             let ntDesc = sbName + ' ' + 'requested to join' +  unitName + ' ' + 'unit in ' + associationName + ' ' + 'association';
                             let roleName = this.state.PickerValueHolder === '6' ? 'Owner' : 'Tenant';
+                            let soldDate = this.state.dobText;
+                            let occupancyDate = this.state.dobText;
 
                             console.log("userId", userID)
                             console.log("sbUnitID", sbUnitID)
@@ -360,7 +362,10 @@ class Register extends Component {
                                 ntType: ntType,
                                 ntTitle: ntTitle,
                                 ntDesc: ntDesc,
-                                roleName: roleName
+                                roleName: roleName,
+                                soldDate: soldDate,
+                                occupancyDate: occupancyDate
+                                
                             }).then(response_3 => {
                                 this.setState({ loading: false })
                                 console.log('*******')

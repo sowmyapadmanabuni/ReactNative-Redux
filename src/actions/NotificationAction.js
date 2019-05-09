@@ -41,6 +41,8 @@ export const createNotification = (data, navigation, navigate, admin) => {
             MRRolName: data.unitName,
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
+            UNOcSDate: data.occupancyDate,
+	        UNSldDate : data.soldDate,
             // ntIsActive: false
             }, {
                 headers: headers
@@ -107,6 +109,8 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 MRRolName: 'resident_user',
                 NTDCreated: formatdate,
                 NTDUpdated: formatdate,
+                UNOcSDate: 'resident_user',
+	            UNSldDate : 'resident_user',
                 // ntIsActive: false
             }, {
                 headers: headers
@@ -173,6 +177,8 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 MRRolName: 'gate_app',
                 NTDCreated: formatdate,
                 NTDUpdated: formatdate,
+                UNOcSDate: 'gate_app',
+	            UNSldDate : 'gate_app',
                 // ntIsActive: false
             }, {
                 headers: headers
