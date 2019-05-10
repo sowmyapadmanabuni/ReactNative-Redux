@@ -80,7 +80,7 @@ export default class unitlist extends Component {
           <View style={{ backgroundColor: 'lightgrey', flexDirection: "column", width: 1, height:'80%' }}></View>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
-            <Text style={{ textAlign: 'center', fontSize: 13, color: 'green', flex: 1 }}> {item.unOwnStat}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 5, color: 'green', flex: 1 }}>{item.unOcStat}</Text>
             <View style={{ flex: 7 }} />
         </View>    
       </View>
