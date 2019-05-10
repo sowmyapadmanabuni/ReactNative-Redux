@@ -311,7 +311,7 @@ class Register extends Component {
                             let userID = global.MyAccountID;
                             let sbUnitID = this.props.navigation.state.params.unitID;
                             let unitName = this.props.navigation.state.params.unitName;
-                            let sbSubID = global.MyAccountID.toString() + this.props.navigation.state.params.associtionID.toString() + 'usernotif';
+                            let sbSubID = global.MyAccountID.toString() + this.props.navigation.state.params.unitID.toString() + 'usernotif';
                             let sbRoleId = this.state.PickerValueHolder === '6' ? '2' : '3';
                             let sbMemID = responseData_2.meMemID;
                             let sbName = this.state.FirstName + " " + this.state.LastName;

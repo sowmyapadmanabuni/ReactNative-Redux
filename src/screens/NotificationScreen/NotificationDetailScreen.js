@@ -77,7 +77,7 @@ class NotificationDetailScreen extends Component {
                         {
                             headers: headers
                         }).then(() => {
-                            this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbUnitID)
+                            this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
                             this.setState({ loading: false })
                         }).catch(error => {
                             alert(error.message)
@@ -143,7 +143,7 @@ class NotificationDetailScreen extends Component {
                     })
                     .then(() => {
                         this.setState({ loading: false })
-                        this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbUnitID)
+                        this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
                         setTimeout(() => {
                             this.props.navigation.navigate('ResDashBoard')
                         }, 300)
@@ -170,8 +170,8 @@ class NotificationDetailScreen extends Component {
         const { navigation, approvedAdmins } = this.props;
         const details = navigation.getParam('details', 'NO-ID');
 
-        let unitId = details.sbUnitID;
-        let status = _.includes(approvedAdmins, unitId)
+        let subId = details.sbSubID;
+        let status = _.includes(approvedAdmins, subId)
 
         if(loading) {
             return (

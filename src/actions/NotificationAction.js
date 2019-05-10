@@ -8,7 +8,7 @@ import {
             CREATE_NEW_NOTIFICATION_FAILED, 
             GET_NOTIFICATIONS_SUCCESS,
             GET_NOTIFICATIONS_FAILED,
-            ON_NOTIFICATION_OPEN
+            ON_NOTIFICATION_OPEN,
         } from './types';
 
         
@@ -67,7 +67,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                             console.log(response.data)
                             dispatch({ 
                                 type: GET_NOTIFICATIONS_SUCCESS, 
-                                payload: responseData.notificationListByAssocAcctID
+                                payload: responseData.notificationListByAssocAcctID.reverse()
                             })
                         } else {
                             dispatch({ 
@@ -135,7 +135,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                             console.log(response.data)
                             dispatch({ 
                                 type: GET_NOTIFICATIONS_SUCCESS, 
-                                payload: responseData.notificationListByAssocAcctID
+                                payload: responseData.notificationListByAssocAcctID.reverse()
                             })
                         } else {
                             dispatch({ 
@@ -203,7 +203,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                             console.log(response.data)
                             dispatch({ 
                                 type: GET_NOTIFICATIONS_SUCCESS, 
-                                payload: responseData.notificationListByAssocAcctID
+                                payload: responseData.notificationListByAssocAcctID.reverse()
                             })
                         } else {
                             dispatch({ 
@@ -234,7 +234,6 @@ export const createNotification = (data, navigation, navigate, admin) => {
         }
     }
 }
-
 
 export const getNotifications = (accountId, associationID, admin) => {
     console.log(accountId, associationID, admin )
@@ -297,6 +296,15 @@ export const onNotificationOpen = (notif, index) => {
         dispatch({
             type: ON_NOTIFICATION_OPEN,
             payload: newNotif,
+        })
+    }
+}
+
+export const reverseNotification = (notification) => {
+    return (dispatch) => {
+        dispatch({
+            type: REVERSE_NOTIFICATION,
+            payload: notification.reverse()
         })
     }
 }
