@@ -50,8 +50,8 @@ export default class SplashScreen extends React.Component {
     global.constantMember=4;
 
 //9450041258
-  //  global.oyeURL = 'api.oyespace.com';
-    global.oyeURL = 'apidev.oyespace.com';
+   global.oyeURL = 'api.oyespace.com';
+    // global.oyeURL = 'apidev.oyespace.com';
     global.champBaseURL = 'https://' + global.oyeURL + '/oyeliving/api/v1/';
     global.oye247BaseURL = 'https://' + global.oyeURL + '/oye247/api/v1/';
     global.oyeBaseURL = 'mediaupload.oyespace.com';
