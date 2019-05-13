@@ -257,6 +257,7 @@ class MainScreen extends Component {
         //http://localhost:54400/champ/api/v1/Member/GetMemberListByAccountID/{AccountID}
         const urlUnitList = global.champBaseURL + 'Member/GetMemberListByAccountID/' +  global.MyAccountID
         // console.log(urlUnitList)
+        console.log(global.MyAccountID)
         fetch(urlUnitList, {
           method: 'GET',
           headers: {
@@ -303,7 +304,7 @@ class MainScreen extends Component {
         }
 
         let ACAccntID = global.MyAccountID;
-        axios.get(`http://apidev.oyespace.com/oyeliving/api/v1/GetAssociationListByAccountID/${ACAccntID}`, {
+        axios.get(`${global.champBaseURL}/GetAssociationListByAccountID/${ACAccntID}`, {
             headers: headers
         })
         .then(response => {
