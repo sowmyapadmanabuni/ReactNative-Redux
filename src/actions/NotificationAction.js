@@ -238,43 +238,31 @@ export const createNotification = (data, navigation, navigate, admin) => {
 }
 
 export const getNotifications = (accountId, associationID, admin) => {
-    console.log(accountId, associationID, admin )
-
     return(dispatch) => {
         dispatch({ type: GET_NOTIFICATIONS });
-        
-        if(admin) {
-            axios.get(`http://${global.oyeURL}/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
-            // axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${accountId}/${associationID}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-                }
+        fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+      , {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+        },
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+            // console.log(responseJson.data.notificationListByAcctID)
+            dispatch({ 
+                type: GET_NOTIFICATIONS_SUCCESS, 
+                payload: responseJson.data.notificationListByAcctID.reverse()
             })
-            .then(response => {
-                let responseData = response.data.data;
-                if(response.data.success) {
-                    console.log(response.data)
-                    dispatch({ 
-                        type: GET_NOTIFICATIONS_SUCCESS, 
-                        payload: responseData
-                    })
-                } else {
-                    dispatch({ 
-                        type: GET_NOTIFICATIONS_FAILED, 
-                        payload: ''
-                    })
-                }
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch({ 
+                type: GET_NOTIFICATIONS_FAILED, 
+                payload: ''
             })
-            .catch(error => {
-                console.log(error)
-                console.log(error.message)
-                dispatch({ 
-                    type: GET_NOTIFICATIONS_FAILED, 
-                    payload: ''
-                })
-            })
-        }
+        })
     }
 }
 

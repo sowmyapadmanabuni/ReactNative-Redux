@@ -51,7 +51,6 @@ class MainScreen extends Component {
 
       //  this.typographyRef = this.updateRef.bind(this, 'typography');
        // this.unitDrpDwnRef = this.updateRef.bind(this, 'unitDrpDwn');
-
         this.state = {
             typography: global.SelectedAssociationID,
             stSelectedUnitID:global.SelectedUnitID,
@@ -77,7 +76,6 @@ class MainScreen extends Component {
             progressCustomized: 0,
             progress1: 40,
             foregroundNotif: null,
-
             notification:""
         };
 
@@ -259,7 +257,6 @@ class MainScreen extends Component {
         //http://localhost:54400/champ/api/v1/Member/GetMemberListByAccountID/{AccountID}
         const urlUnitList = global.champBaseURL + 'Member/GetMemberListByAccountID/' +  global.MyAccountID
         // console.log(urlUnitList)
-        console.log(global.MyAccountID)
         fetch(urlUnitList, {
           method: 'GET',
           headers: {
@@ -269,6 +266,7 @@ class MainScreen extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
+        console.log(responseJson.data)
           this.setState({
             dataSource: responseJson.data.memberListByAccount,
             isLoading: false
@@ -421,7 +419,8 @@ class MainScreen extends Component {
         // console.log(global.oyeURL)
         this.requestNotifPermission();
         this.getBlockList();
-        this.getListOfNotifications();
+        // this.getListOfNotifications();
+        this.props.getNotifications()
         // this.props.updateJoinedAssociation(this.props.joinedAssociations, 'test')
         // this.props.getNotifications(global.MyAccountID, 2, true)
 
