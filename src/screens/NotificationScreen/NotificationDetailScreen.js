@@ -67,7 +67,8 @@ class NotificationDetailScreen extends Component {
                         }
                     })
                     .then(() => {
-                        axios.post(global.champBaseURL + `Unit/UpdateUnitRoleStatusAndDate`,
+                        console.log(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`)
+                        axios.post(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
                         {
                             MemberID: item.sbMemID,
                             MemberRoleID: item.sbRoleID,
@@ -81,10 +82,12 @@ class NotificationDetailScreen extends Component {
                             this.setState({ loading: false })
                         }).catch(error => {
                             alert(error.message)
+                            console.log("first", error)
                             this.setState({ loading: false })
                         })
                         
                     }).catch(error => {
+                        console.log('second', error)
                         alert(error.message)
                         this.setState({ loading: false })
                     })
@@ -95,6 +98,7 @@ class NotificationDetailScreen extends Component {
                 })
             })
             .catch(error => {
+                console.log('firebase', error)
                 alert(error.message)
                 this.setState({ loading: false })
             })
@@ -260,4 +264,5 @@ const mapStateToProps = state => {
         approvedAdmins: state.AppReducer.approvedAdmins,
     }
 }
+
 export default connect(mapStateToProps, { updateApproveAdmin })(NotificationDetailScreen)

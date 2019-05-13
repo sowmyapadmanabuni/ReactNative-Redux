@@ -1,8 +1,14 @@
-import { JOIN_ASSOCIATION, APPROVE_ADMIN } from "../actions/types";
+import { 
+	JOIN_ASSOCIATION, 
+	APPROVE_ADMIN, 
+	UPDATE_SAVED_NOTIFICATION,
+} from "../actions/types";
 
 const INITIAL_STATE = {
 	joinedAssociations: [],
-	approvedAdmins: []
+	approvedAdmins: [],
+	savedNoifId: [],
+
 }
 
 export default (state = INITIAL_STATE,  action) => {
@@ -12,6 +18,9 @@ export default (state = INITIAL_STATE,  action) => {
 			
 		case APPROVE_ADMIN:
 			return { ...state, approvedAdmins: action.payload };
+
+		case UPDATE_SAVED_NOTIFICATION:
+			return { ...state, savedNoifId: action.payload };
             
 		default:
 			return state;

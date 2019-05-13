@@ -12,4 +12,4 @@ export const ON_NOTIFICATION_OPEN = 'on_notification_open';
 // App Reducer
 export const JOIN_ASSOCIATION = 'join_association';
 export const APPROVE_ADMIN = 'approve_admin';
-
+export const UPDATE_SAVED_NOTIFICATION = 'update_saved_notification';

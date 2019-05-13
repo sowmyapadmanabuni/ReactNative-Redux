@@ -600,7 +600,7 @@ alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
                                 <ActivityIndicator /> :
                                 <Button
                                     buttonStyle={{ backgroundColor: 'orange' }}
-                                    disabled={this.disabled()}
+                                    // disabled={this.disabled()}
                                     title="Request Admin"
                                     onPress={
                                         this.submit.bind(this, 
