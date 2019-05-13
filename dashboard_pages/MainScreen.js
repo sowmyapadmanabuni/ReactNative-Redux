@@ -76,7 +76,9 @@ class MainScreen extends Component {
             progressWithOnComplete: 0,
             progressCustomized: 0,
             progress1: 40,
-            foregroundNotif: null
+            foregroundNotif: null,
+
+            notification:""
         };
 
         increase = (key, value) => {
@@ -419,6 +421,7 @@ class MainScreen extends Component {
         // console.log(global.oyeURL)
         this.requestNotifPermission();
         this.getBlockList();
+        this.getListOfNotifications();
         // this.props.updateJoinedAssociation(this.props.joinedAssociations, 'test')
         // this.props.getNotifications(global.MyAccountID, 2, true)
 
@@ -555,6 +558,24 @@ class MainScreen extends Component {
            
     }
 
+    getListOfNotifications = () => {
+        fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+      , {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+        },
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("Manas",responseJson)
+          this.setState({
+            notification: responseJson.data.notificationListByAcctID,
+          })
+        })
+        .catch( error => { console.log( error )})
+    }
     getBlockList = () =>{
         db.transaction(tx => {
         tx.executeSql('delete FROM Blocks where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
