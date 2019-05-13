@@ -18,8 +18,46 @@ class NotificationScreen extends Component {
                 details: item
             })
 
+            this.props.onNotificationOpen(notifications, index)
+            this.props.storeOpenedNotif(savedNoifId, item.ntid)
+        }
+    }
 
-           this.props.storeOpenedNotif(savedNoifId, item.ntid)
+    renderIcons = (type, item, index) => {
+        const { savedNoifId } = this.props;
+
+        let status = _.includes(savedNoifId, item.ntid)
+        if(index === 0) {
+            console.log('ststus', !status || item.read)
+            console.log('sat only', !status)
+            console.log('read', item.read)
+        }
+
+        
+        if(type === 'name') {
+            if(status || item.read) {
+                // console.log('here')
+                // return 'ios-mail-unread'
+                return 'mail-read'
+            } else {
+                // console.log('here2')
+                // return 'mail-read'
+                return 'ios-mail-unread'
+            }
+        } else if(type === 'type') {
+            if(status || item.read) {
+                return 'octicon'
+                // return 'ionicon'
+            } else {
+                // return 'octicon'
+                return 'ionicon'
+            }
+        } else if(type === 'style') {
+            if(status || item.read) {
+                return { backgroundColor: '#fff'}
+            } else {
+                return { backgroundColor: '#eee' }
+            }
         }
     }
 
@@ -29,8 +67,8 @@ class NotificationScreen extends Component {
         // console.log(item)
         // let subId = details.sbSubID;
         let status = _.includes(savedNoifId, item.ntid)
-        console.log(this.props)
-        console.log(status)
+        // console.log(this.props)
+        // console.log(status)
         return (
             <Card>
                 <ListItem
@@ -39,14 +77,17 @@ class NotificationScreen extends Component {
                     title={item.ntType === 'Join' ? 'Request to Join' : 'Test' }
                     subtitle={item.ntDesc}
                     leftIcon={{
-                        name:   !status ? 'ios-mail-unread' : 'mail-read',
-                        type:  !status ? 'ionicon' : 'octicon',
+                        // name:   (!item.read || !status) ? 'ios-mail-unread' : 'mail-read',
+                        name: this.renderIcons('name', item, index),
+                        // type:  (!item.read || !status) ? 'ionicon' : 'octicon',
+                        type: this.renderIcons('type', item, index),
                         color: '#ED8A19',
                     }}
-                    containerStyle={!status ?
-                        { backgroundColor: '#eee'} :
-                        { backgroundColor: '#fff' }
-                    }
+                    containerStyle={this.renderIcons('style', item, index)}
+                    // containerStyle={(!item.read || !status) ?
+                    //     { backgroundColor: '#eee'} :
+                    //     { backgroundColor: '#fff' }
+                    // }
                 />
                 <TimeAgo time={item.ntdUpdated} />
             </Card>
@@ -72,9 +113,7 @@ class NotificationScreen extends Component {
                     keyExtractor={this.keyExtractor}
                     data={notifications}
                     renderItem={this.renderItem}
-                    extraData={Map({
-                        savedNoifId: this.props.savedNoifId,
-                    })}
+                    extraData={this.props.notifications}
                 />
             )
         }

@@ -10,8 +10,8 @@ import {
             GET_NOTIFICATIONS_FAILED,
             ON_NOTIFICATION_OPEN,
         } from './types';
+import _ from 'lodash';
 
-        
 export const createNotification = (data, navigation, navigate, admin) => {
     // console.log(data)
     return (dispatch) => {
@@ -251,9 +251,21 @@ export const getNotifications = (accountId, associationID, admin) => {
         .then(response => response.json())
         .then(responseJson => {
             // console.log(responseJson.data.notificationListByAcctID)
+            let resData = responseJson.data.notificationListByAcctID.reverse();
+
+            let activeNotifications = [];
+
+            _.forEach(resData, function(value) {
+                activeNotifications.push({ ...value, read: false })
+            });
+
+            
+
+            console.log(activeNotifications)
+
             dispatch({ 
                 type: GET_NOTIFICATIONS_SUCCESS, 
-                payload: responseJson.data.notificationListByAcctID.reverse()
+                payload: activeNotifications
             })
         })
         .catch(error => {
@@ -279,9 +291,9 @@ export const onNotificationOpen = (notif, index) => {
     console.log(index)
     return (dispatch) => {
         newNotif = Object.assign([], notif);
-        newNotif[index].ntIsActive = false;
-        newNotif[index].ntIsActive = false;
-        console.log(newNotif[index].ntIsActive)
+        newNotif[index].read = true;
+        newNotif[index].read = true;
+        console.log(newNotif[index].read)
         // newNotif.notificationListByAssocAcctID[index].ntIsActive = false;
 
         dispatch({
