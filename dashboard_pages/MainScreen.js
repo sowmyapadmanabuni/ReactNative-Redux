@@ -415,6 +415,7 @@ class MainScreen extends Component {
     
     componentDidMount() {
         this.Admin();
+        // console.log(global.oyeURL)
         this.requestNotifPermission();
         this.getBlockList();
         // this.props.updateJoinedAssociation(this.props.joinedAssociations, 'test')

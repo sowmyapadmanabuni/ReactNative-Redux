@@ -21,9 +21,6 @@ class NotificationScreen extends Component {
     }
 
     renderItem = ({ item, index }) => {
-        // // console.log(item)
-        // console.log(moment(item.ntdUpdated).fromNow())
-        // console.log(moment().calendar(item.ntdUpdated))
         return (
             <Card>
                 <ListItem

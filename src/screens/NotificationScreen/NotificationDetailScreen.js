@@ -39,7 +39,7 @@ class NotificationDetailScreen extends Component {
             console.log('_____ITEM________')
             console.log(item)
 
-            axios.post('http://apidev.oyespace.com/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate', {
+            axios.post(global.champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate', {
                 MRMRoleID : item.sbRoleID,
                 MEMemID  : item.sbMemID,
                 UNUnitID : item.sbUnitID
@@ -60,14 +60,14 @@ class NotificationDetailScreen extends Component {
                 
                 })
                 .then(() => {
-                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
+                    axios.get(`http://${global.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
                         headers: {
                             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
                             "Content-Type": "application/json"
                         }
                     })
                     .then(() => {
-                        axios.post(`http://apidev.oyespace.com/oyeliving/api/v1/Unit/UpdateUnitRoleStatusAndDate`,
+                        axios.post(global.champBaseURL + `Unit/UpdateUnitRoleStatusAndDate`,
                         {
                             MemberID: item.sbMemID,
                             MemberRoleID: item.sbRoleID,
@@ -124,11 +124,11 @@ class NotificationDetailScreen extends Component {
                 "Content-Type": "application/json"
             }
 
-            axios.get(`http://apidev.oyespace.com/oyeliving/api/v1/GetMemberListByMemberID/${item.sbMemID}`, {
+            axios.get(global.champBaseURL + `GetMemberListByMemberID/${item.sbMemID}`, {
                 headers: headers
             })
             .then(() => {
-                axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
+                axios.get(`http://${global.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
                     headers: {
                         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
                         "Content-Type": "application/json"

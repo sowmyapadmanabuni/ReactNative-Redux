@@ -13,7 +13,7 @@ import {
 
         
 export const createNotification = (data, navigation, navigate, admin) => {
-    console.log(data)
+    // console.log(data)
     return (dispatch) => {
         dispatch({ type: CREATE_NEW_NOTIFICATION });
 
@@ -28,7 +28,8 @@ export const createNotification = (data, navigation, navigate, admin) => {
         // console.log(moment(datee).fromNow())
 
         if(admin === 'true') {
-            axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
+            axios.post(`http://${global.oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
+            // axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
             ACAccntID: global.MyAccountID,
             ASAssnID: data.associationID,
             NTType: data.ntType,
@@ -54,7 +55,8 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 if(navigate) {
                     let ACAccntIDn = global.MyAccountID;
                     let ASAssnID = data.associationID;
-                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+                    axios.get(`http://${global.oyeURL}/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+                    // axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
@@ -96,7 +98,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
             })
         } else if(admin === 'false') {
-            axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
+            axios.post(`http://${global.oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
                 ACAccntID: global.MyAccountID,
                 ASAssnID: data.associationID,
                 NTType: data.ntType,
@@ -122,7 +124,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 if(navigate) {
                     let ACAccntIDn = global.MyAccountID;
                     let ASAssnID = data.associationID;
-                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+                    axios.get(`http://${global.oyeURL}/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
@@ -164,7 +166,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
             })
         } else if(admin === 'gate_app') {
-            axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
+            axios.post(`http://${global.oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
                 ACAccntID: global.MyAccountID,
                 ASAssnID: data.associationID,
                 NTType: data.ntType,
@@ -190,7 +192,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 if(navigate) {
                     let ACAccntIDn = global.MyAccountID;
                     let ASAssnID = data.associationID;
-                    axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+                    axios.get(`http://${global.oyeURL}/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
                         headers: {
                             "Content-Type": "application/json",
                             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
@@ -242,7 +244,8 @@ export const getNotifications = (accountId, associationID, admin) => {
         dispatch({ type: GET_NOTIFICATIONS });
         
         if(admin) {
-            axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${accountId}/${associationID}`, {
+            axios.get(`http://${global.oyeURL}/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${ACAccntIDn}/${ASAssnID}`, {
+            // axios.get(`http://apidev.oyespace.com/oyesafe/api/v1/Notification/GetNotificationListByAssocAccntID/${accountId}/${associationID}`, {
                 headers: {
                     "Content-Type": "application/json",
                     "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
