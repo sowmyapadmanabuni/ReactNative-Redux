@@ -383,7 +383,7 @@ class MainScreen extends Component {
         firebase.notifications().onNotificationOpened((notificationOpen) => {
             // alert('opened')
             // console.log('**********')
-            console.log(notificationOpen.notification._data.admin)
+            // console.log(notificationOpen.notification._data.admin)
             if(notificationOpen.notification._data.admin === 'true') {
                 if(notificationOpen.action) {
                     this.props.newNotifInstance(notificationOpen.notification);
@@ -393,8 +393,8 @@ class MainScreen extends Component {
                 // this.props.newNotifInstance(notificationOpen.notification);
                 // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             } else if (notificationOpen.notification._data.admin === 'false') {
-                this.props.newNotifInstance(notificationOpen.notification);
-                this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
+                // this.props.newNotifInstance(notificationOpen.notification);
+                // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
             // this.props.newNotifInstance(notificationOpen.notification);
             // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             }

@@ -13,7 +13,7 @@ class NotificationScreen extends Component {
 
     onPress = (item, index) => {
         const { notifications, savedNoifId } = this.props;
-        if(item.ntType === 'Join' || item.ntType === 'Join_Status') {
+        if(item.ntType === 'Join' || item.ntType === 'Join_Status' || item.ntType === 'gate_app') {
             this.props.navigation.navigate('NotificationDetailScreen', {
                 details: item
             })
@@ -27,11 +27,11 @@ class NotificationScreen extends Component {
         const { savedNoifId } = this.props;
 
         let status = _.includes(savedNoifId, item.ntid)
-        if(index === 0) {
-            console.log('ststus', !status || item.read)
-            console.log('sat only', !status)
-            console.log('read', item.read)
-        }
+        // if(index === 0) {
+        //     console.log('ststus', !status || item.read)
+        //     console.log('sat only', !status)
+        //     console.log('read', item.read)
+        // }
 
         
         if(type === 'name') {
@@ -61,20 +61,25 @@ class NotificationScreen extends Component {
         }
     }
 
+    renderTitle = (type) => {
+        if(type === 'Join'){
+            return "Request to Join"
+        } else if(type === 'Join_Status') {
+            return "Request to Join Status"
+        } else if(type === 'gate_app') {
+            return "Request from Gate App"
+        }
+    }
+
     renderItem = ({ item, index }) => {
         const { savedNoifId } = this.props;
-
-        // console.log(item)
-        // let subId = details.sbSubID;
         let status = _.includes(savedNoifId, item.ntid)
-        // console.log(this.props)
-        // console.log(status)
         return (
             <Card>
                 <ListItem
                     onPress={() => this.onPress(item, index)}
                     // bottomDivider
-                    title={item.ntType === 'Join' ? 'Request to Join' : 'Test' }
+                    title={this.renderTitle(item.ntType, item)}
                     subtitle={item.ntDesc}
                     leftIcon={{
                         // name:   (!item.read || !status) ? 'ios-mail-unread' : 'mail-read',
