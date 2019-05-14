@@ -13,7 +13,7 @@ import {
 import _ from 'lodash';
 
 export const createNotification = (data, navigation, navigate, admin) => {
-    // console.log(data)
+    console.log(admin)
     return (dispatch) => {
         dispatch({ type: CREATE_NEW_NOTIFICATION });
 

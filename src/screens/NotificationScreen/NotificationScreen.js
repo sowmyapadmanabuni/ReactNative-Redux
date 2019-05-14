@@ -13,7 +13,7 @@ class NotificationScreen extends Component {
 
     onPress = (item, index) => {
         const { notifications, savedNoifId } = this.props;
-        if(item.ntType === 'Join') {
+        if(item.ntType === 'Join' || item.ntType === 'Join_Status') {
             this.props.navigation.navigate('NotificationDetailScreen', {
                 details: item
             })

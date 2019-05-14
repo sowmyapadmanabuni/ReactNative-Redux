@@ -183,29 +183,37 @@ class NotificationDetailScreen extends Component {
                     <ActivityIndicator />
                 </View>
             )
-        } else return (
-            <View style={styles.buttonContainer}>
-                <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                    <Avatar 
-                        onPress={() => this.reject(details, status)}
-                        overlayContainerStyle={{ backgroundColor: 'red'}}
-                        rounded 
-                        icon={{ name: 'close', type: 'font-awesome', size: 15, color: '#fff' }}
-                    />
-                    <Text style={{ color: 'red'}}> Reject </Text>
-                </View>
-                <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
-                    <Avatar 
-                        onPress={() => this.approve(details, status)}
-                        overlayContainerStyle={{ backgroundColor: 'orange'}}
-                        rounded  
-                        
-                        icon={{ name: 'check', type: 'font-awesome', size: 15, color: '#fff' }}
-                    />
-                    <Text style={{ color: 'orange'}}> Approve </Text>
-                </View>
-            </View>
-        )
+        } else {
+            if(details.ntType === 'Join_Status') {
+                return null
+            } else if(details.ntType === 'gate_app') {
+                return null
+            } else {
+                return (
+                    <View style={styles.buttonContainer}>
+                        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <Avatar 
+                                onPress={() => this.reject(details, status)}
+                                overlayContainerStyle={{ backgroundColor: 'red'}}
+                                rounded 
+                                icon={{ name: 'close', type: 'font-awesome', size: 15, color: '#fff' }}
+                            />
+                            <Text style={{ color: 'red'}}> Reject </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+                            <Avatar 
+                                onPress={() => this.approve(details, status)}
+                                overlayContainerStyle={{ backgroundColor: 'orange'}}
+                                rounded  
+                                
+                                icon={{ name: 'check', type: 'font-awesome', size: 15, color: '#fff' }}
+                            />
+                            <Text style={{ color: 'orange'}}> Approve </Text>
+                        </View>
+                    </View>
+                )
+            }
+        }
     }
 
     render() {
@@ -233,7 +241,8 @@ class NotificationDetailScreen extends Component {
                     backgroundColor="#fff"
                 />
                 <Text style={styles.titleStyle}> {details.ntDesc} </Text> 
-                {this.renderButton()}
+                {/* {this.renderButton()} */}
+                {details.ntType === 'Join_Status' ? null : this.renderButton()}
             </View>
         )
     }

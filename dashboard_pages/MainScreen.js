@@ -311,10 +311,10 @@ class MainScreen extends Component {
             let responseData = response.data.data;
 
             responseData.associationByAccount.map((association) => {
-                console.log('***********')
-                console.log(association.asAsnName)
-                console.log(association.asAssnID)
-                console.log('***********')
+                // console.log('***********')
+                // console.log(association.asAsnName)
+                // console.log(association.asAssnID)
+                // console.log('***********')
                 firebase.messaging().subscribeToTopic(association.asAssnID + 'admin')
             })
         })
@@ -357,13 +357,6 @@ class MainScreen extends Component {
 
     listenForNotif = () => {
         let navigationInstance = this.props.navigation;
-        // Display the notification
-        this.messageListener = firebase.messaging().onMessage((remoteMessage) => {
-            // Process your message as required
-            // console.log('___________')
-            // console.log(remoteMessage)
-            // console.log('___________')
-        });
 
         this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
             // console.log('___________')
@@ -375,9 +368,9 @@ class MainScreen extends Component {
 
         this.notificationListener = firebase.notifications().onNotification((notification) => {
 
-            console.log('___________')
-            console.log(notification)
-            console.log('____________')
+            // console.log('___________')
+            // console.log(notification)
+            // console.log('____________')
 
             if(notification._data.associationID) {
                 // this.props.createNotification(notification._data, navigationInstance, false)
@@ -388,15 +381,22 @@ class MainScreen extends Component {
         });
 
         firebase.notifications().onNotificationOpened((notificationOpen) => {
+            // alert('opened')
+            // console.log('**********')
+            console.log(notificationOpen.notification._data.admin)
             if(notificationOpen.notification._data.admin === 'true') {
                 if(notificationOpen.action) {
                     this.props.newNotifInstance(notificationOpen.notification);
                     this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'true')
                     // this.props.createNotification(notificationOpen.notification)
                 }
-            } else {
                 // this.props.newNotifInstance(notificationOpen.notification);
                 // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+            } else if (notificationOpen.notification._data.admin === 'false') {
+                this.props.newNotifInstance(notificationOpen.notification);
+                this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             }
 
             if(notificationOpen.notification._data.admin === 'true') {
@@ -409,6 +409,12 @@ class MainScreen extends Component {
                     this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'gate_app')
                 // this.props.newNotifInstance(notificationOpen.notification);
                 // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+            } else if (notificationOpen.notification._data.admin === 'false') {
+                // alert('clicked here')
+                this.props.newNotifInstance(notificationOpen.notification);
+                this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             }
         });
         
