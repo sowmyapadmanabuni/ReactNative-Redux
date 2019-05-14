@@ -66,10 +66,21 @@ export const createNotification = (data, navigation, navigate, admin) => {
                         console.log(response.data)
                         let responseData = response.data.data;
                         if(response.data.success) {
-                            console.log(response.data)
+                            // console.log(response.data)
+
+                            let resData = responseData.notificationListByAssocAcctID
+
+                            let activeNotifications = [];
+
+                            _.forEach(resData, function(value) {
+                                activeNotifications.push({ ...value, read: false })
+                            });
+
+                            const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
+
                             dispatch({ 
                                 type: GET_NOTIFICATIONS_SUCCESS, 
-                                payload: responseData.notificationListByAssocAcctID.reverse()
+                                payload: sorted
                             })
                         } else {
                             dispatch({ 
@@ -134,10 +145,20 @@ export const createNotification = (data, navigation, navigate, admin) => {
                         console.log(response.data)
                         let responseData = response.data.data;
                         if(response.data.success) {
-                            console.log(response.data)
+                            // console.log(response.data)
+                            let resData = responseData.notificationListByAssocAcctID
+
+                            let activeNotifications = [];
+
+                            _.forEach(resData, function(value) {
+                                activeNotifications.push({ ...value, read: false })
+                            });
+
+                            const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
+
                             dispatch({ 
                                 type: GET_NOTIFICATIONS_SUCCESS, 
-                                payload: responseData.notificationListByAssocAcctID.reverse()
+                                payload: sorted
                             })
                         } else {
                             dispatch({ 
@@ -202,10 +223,19 @@ export const createNotification = (data, navigation, navigate, admin) => {
                         console.log(response.data)
                         let responseData = response.data.data;
                         if(response.data.success) {
-                            console.log(response.data)
+                            let resData = responseData.notificationListByAssocAcctID
+
+                            let activeNotifications = [];
+
+                            _.forEach(resData, function(value) {
+                                activeNotifications.push({ ...value, read: false })
+                            });
+
+                            const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
+
                             dispatch({ 
                                 type: GET_NOTIFICATIONS_SUCCESS, 
-                                payload: responseData.notificationListByAssocAcctID.reverse()
+                                payload: sorted
                             })
                         } else {
                             dispatch({ 
@@ -251,7 +281,7 @@ export const getNotifications = (accountId, associationID, admin) => {
         .then(response => response.json())
         .then(responseJson => {
             // console.log(responseJson.data.notificationListByAcctID)
-            let resData = responseJson.data.notificationListByAcctID.reverse();
+            let resData = responseJson.data.notificationListByAcctID
 
             let activeNotifications = [];
 
@@ -259,13 +289,15 @@ export const getNotifications = (accountId, associationID, admin) => {
                 activeNotifications.push({ ...value, read: false })
             });
 
+            const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
+
             
 
-            console.log(activeNotifications)
+            console.log(sorted)
 
             dispatch({ 
                 type: GET_NOTIFICATIONS_SUCCESS, 
-                payload: activeNotifications
+                payload: sorted
             })
         })
         .catch(error => {
