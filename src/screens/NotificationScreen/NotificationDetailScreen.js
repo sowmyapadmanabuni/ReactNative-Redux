@@ -219,9 +219,6 @@ class NotificationDetailScreen extends Component {
     render() {
         const { navigation } = this.props;
         const details = navigation.getParam('details', 'NO-ID');
-        // console.log('****************')
-        // console.log(details)
-        // console.log('****************')
         return (
             <View style={styles.container}>
                 <Header 

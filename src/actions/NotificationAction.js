@@ -35,10 +35,7 @@ export const getNotifications = (accountId, associationID, admin) => {
             });
 
             const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
-            const unique = _.uniqBy(activeNotifications, 'sbSubID');
-            
-
-            console.log(sorted)
+            const unique = _.uniqBy(sorted, 'sbSubID');
 
             dispatch({ 
                 type: GET_NOTIFICATIONS_SUCCESS, 
@@ -119,10 +116,11 @@ export const createNotification = (data, navigation, navigate, admin) => {
                             });
 
                             const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
-
+                            const unique = _.uniqBy(sorted, 'sbSubID');
+            
                             dispatch({ 
                                 type: GET_NOTIFICATIONS_SUCCESS, 
-                                payload: sorted
+                                payload: unique
                             })
                         } else {
                             dispatch({ 
@@ -197,15 +195,15 @@ export const createNotification = (data, navigation, navigate, admin) => {
                         });
 
                         const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
-                        const unique = _.uniqBy(activeNotifications, 'sbSubID');
+                        const unique = _.uniqBy(sorted, 'sbSubID');
                         
 
-                        console.log(sorted)
-                        console.log(unique)
+                        // console.log(sorted)
+                        // console.log(unique)
 
                         dispatch({ 
                             type: GET_NOTIFICATIONS_SUCCESS, 
-                            payload: unique.reverse()
+                            payload: unique
                         })
                     })
                     .catch(error => {
@@ -272,7 +270,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                         });
 
                         const sorted = _.sortBy(activeNotifications, ['ntdCreated', 'ntdUpdated']).reverse();
-                        const unique = _.uniqBy(activeNotifications, 'sbSubID');
+                        const unique = _.uniqBy(sorted, 'sbSubID');
                         
 
                         console.log(sorted)
@@ -280,7 +278,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
 
                         dispatch({ 
                             type: GET_NOTIFICATIONS_SUCCESS, 
-                            payload: unique.reverse()
+                            payload: unique
                         })
                     })
                     .catch(error => {
