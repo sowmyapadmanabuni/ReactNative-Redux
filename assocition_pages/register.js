@@ -319,8 +319,8 @@ class Register extends Component {
                             let associationName = this.props.navigation.state.params.associationName;
                             let ntType = "Join";
                             let ntTitle = 'Request to join' + ' ' + associationName + ' ' + 'Association';
-                            let ntDesc = sbName + ' ' + 'requested to join' +  unitName + ' ' + 'unit in ' + associationName + ' ' + 'association';
                             let roleName = this.state.PickerValueHolder === '6' ? 'Owner' : 'Tenant';
+                            let ntDesc = sbName + ' ' + 'requested to join' +  unitName + ' ' + 'unit in ' + associationName + ' ' + 'association as ' + roleName ;
                             let soldDate = this.state.dobText;
                             let occupancyDate = this.state.dobText;
 
@@ -610,16 +610,6 @@ alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
                                         this.state.EmailId,
                                         this.state.PickerValueHolder)}
                                 />
-                                // <TouchableOpacity style={styles.loginScreenButton}
-                                //     onPress={this.submit.bind(this, 
-                                //         this.state.FirstName,
-                                //         this.state.LastName,
-                                //         this.state.MobileNumber,
-                                //         this.state.EmailId,
-                                //         this.state.PickerValueHolder)}>
-
-                                //     <Text style={styles.loginScreenText}> Request Admin </Text>
-                                // </TouchableOpacity>
                             }
                         </View>
                     </View>

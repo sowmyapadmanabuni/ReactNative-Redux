@@ -14,10 +14,6 @@ class NotificationDetailScreen extends Component {
     }
 
     approve = (item, status) => {
-        // const { approvedAdmins } = this.props;
-        // let unitId = item.sbUnitID;
-        // let status = _.includes(approvedAdmins, unitId)
-
         if(status) {
             Alert.alert(
                 'Oyespace',
@@ -47,15 +43,13 @@ class NotificationDetailScreen extends Component {
                 headers: headers
             })
             .then(response => {
-                console.log('________RESPONSE___________')
-                // console.log(response.data);
-                // console.log(item.unitName)
-                // console.log(item.associationName)
-
+                let roleName = item.sbRoleID === 1 ? 'Owner' : 'Tenant';
+                a
                 axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                     sbSubID: item.sbSubID,
                     ntTitle: 'Request Approved',
-                    ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been approved',
+                    ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association as ' + roleName +  ' has been approved',
+                    // ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + 'as ' + item.sbRoleID === 1 ? 'Owner' : 'Tenant' + ' association has been approved',
                     ntType: 'Join_Status',
                 
                 })
@@ -139,10 +133,11 @@ class NotificationDetailScreen extends Component {
                     }
                 })
                 .then(() => {
+                    let roleName = item.sbRoleID === 1 ? 'Owner' : 'Tenant';
                     axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                         sbSubID: item.sbSubID,
                         ntTitle: 'Request Declined',
-                        ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association has been declined',
+                        ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association as ' + roleName +  ' has been declined',
                         ntType: 'Join_Status',
                     })
                     .then(() => {
@@ -168,14 +163,14 @@ class NotificationDetailScreen extends Component {
         }
     }
 
-    renderButton = () => {
-        
+    renderButton = () => {  
         const { loading } = this.state;
         const { navigation, approvedAdmins } = this.props;
         const details = navigation.getParam('details', 'NO-ID');
 
         let subId = details.sbSubID;
         let status = _.includes(approvedAdmins, subId)
+        console.log(status)
 
         if(loading) {
             return (
@@ -189,29 +184,33 @@ class NotificationDetailScreen extends Component {
             } else if(details.ntType === 'gate_app') {
                 return null
             } else {
-                return (
-                    <View style={styles.buttonContainer}>
-                        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            <Avatar 
-                                onPress={() => this.reject(details, status)}
-                                overlayContainerStyle={{ backgroundColor: 'red'}}
-                                rounded 
-                                icon={{ name: 'close', type: 'font-awesome', size: 15, color: '#fff' }}
-                            />
-                            <Text style={{ color: 'red'}}> Reject </Text>
+                if(status === true) {
+                    return <Text> Approved on ....... By ......</Text>
+                } else {
+                    return (
+                        <View style={styles.buttonContainer}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                <Avatar 
+                                    onPress={() => this.reject(details, status)}
+                                    overlayContainerStyle={{ backgroundColor: 'red'}}
+                                    rounded 
+                                    icon={{ name: 'close', type: 'font-awesome', size: 15, color: '#fff' }}
+                                />
+                                <Text style={{ color: 'red'}}> Reject </Text>
+                            </View>
+                            <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+                                <Avatar 
+                                    onPress={() => this.approve(details, status)}
+                                    overlayContainerStyle={{ backgroundColor: 'orange'}}
+                                    rounded  
+                                    
+                                    icon={{ name: 'check', type: 'font-awesome', size: 15, color: '#fff' }}
+                                />
+                                <Text style={{ color: 'orange'}}> Approve </Text>
+                            </View>
                         </View>
-                        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
-                            <Avatar 
-                                onPress={() => this.approve(details, status)}
-                                overlayContainerStyle={{ backgroundColor: 'orange'}}
-                                rounded  
-                                
-                                icon={{ name: 'check', type: 'font-awesome', size: 15, color: '#fff' }}
-                            />
-                            <Text style={{ color: 'orange'}}> Approve </Text>
-                        </View>
-                    </View>
-                )
+                    )
+                }
             }
         }
     }
