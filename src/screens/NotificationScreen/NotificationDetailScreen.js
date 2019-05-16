@@ -10,7 +10,8 @@ import _ from 'lodash';
 
 class NotificationDetailScreen extends Component {
     state = {
-        loading: false
+        loading: false, 
+        date: ""
     }
 
     approve = (item, status) => {
@@ -34,6 +35,7 @@ class NotificationDetailScreen extends Component {
 
             console.log('_____ITEM________')
             console.log(item)
+            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",this.state.date)
 
             axios.post(global.champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate', {
                 MRMRoleID : item.sbRoleID,
@@ -44,7 +46,7 @@ class NotificationDetailScreen extends Component {
             })
             .then(response => {
                 let roleName = item.sbRoleID === 1 ? 'Owner' : 'Tenant';
-                a
+                
                 axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                     sbSubID: item.sbSubID,
                     ntTitle: 'Request Approved',
@@ -72,28 +74,49 @@ class NotificationDetailScreen extends Component {
                         {
                             headers: headers
                         }).then(() => {
-                            this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
-                            this.setState({ loading: false })
+                            
+                            axios.post(`http://${global.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`, {
+                                headers: {
+                                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                                    "Content-Type": "application/json"
+                                }
+                            },{
+                                "MEMemID"   : item.sbMemID,
+                                "UNUnitID"  : item.sbUnitID,
+                                "MRMRoleID" : item.sbRoleID
+                             })
+                             .then(responseData => {
+                                console.log('date', responseData)
+                                this.setState({
+                                    date: responseData.data.string
+                                })
+                                this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
+                                this.setState({ loading: false })
+                             })
+                            .catch(error=>console.log(error))
+
+                        }).then(()=> {
+                            
                         }).catch(error => {
-                            alert(error.message)
+                            Alert.alert("&&&&&&&",error.message)
                             console.log("first", error)
                             this.setState({ loading: false })
                         })
                         
                     }).catch(error => {
                         console.log('second', error)
-                        alert(error.message)
+                        Alert.alert("^^^^^^^^^^^^^^",error.message)
                         this.setState({ loading: false })
                     })
                 })
                 .catch(error => {
-                    alert(error.message)
+                    Alert.alert("*****************",error.message)
                     this.setState({ loading: false })
                 })
             })
             .catch(error => {
                 console.log('firebase', error)
-                alert(error.message)
+                Alert.alert("!!!!!!!!!!!!!!!!!!!",error.message)
                 this.setState({ loading: false })
             })
         }
@@ -148,16 +171,16 @@ class NotificationDetailScreen extends Component {
                         }, 300)
                     })
                     .catch(error => {
-                        alert(error.message)
+                        Alert.alert("@@@@@@@@@@@@@@@",error.message)
                         this.setState({ loading: false })
                     })
                 }).catch(error => {
-                    alert(error.message)
+                    Alert.alert("******************",error.message)
                     this.setState({ loading: false })
                 })
             })
             .catch(error => {
-                alert(error.message)
+                Alert.alert("#################",error.message)
                 this.setState({ loading: false })
             })
         }
@@ -185,7 +208,7 @@ class NotificationDetailScreen extends Component {
                 return null
             } else {
                 if(status === true) {
-                    return <Text> Approved on ....... By ......</Text>
+                    return <Text> Approved on {this.state.date}</Text>
                 } else {
                     return (
                         <View style={styles.buttonContainer}>
@@ -218,6 +241,7 @@ class NotificationDetailScreen extends Component {
     render() {
         const { navigation } = this.props;
         const details = navigation.getParam('details', 'NO-ID');
+        console.log(this.state)
         return (
             <View style={styles.container}>
                 <Header 
