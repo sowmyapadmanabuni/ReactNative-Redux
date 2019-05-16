@@ -61,7 +61,7 @@ class NotificationDetailScreen extends Component {
                         }
                     })
                     .then(() => {
-                        console.log(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`)
+                        // console.log(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`)
                         axios.post(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
                         {
                             MemberID: item.sbMemID,
