@@ -254,6 +254,7 @@ class MainScreen extends Component {
     }
 
     Admin = () => {
+        // console.log(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`)
         //http://localhost:54400/champ/api/v1/Member/GetMemberListByAccountID/{AccountID}
         const urlUnitList = global.champBaseURL + 'Member/GetMemberListByAccountID/' +  global.MyAccountID
         // console.log(urlUnitList)

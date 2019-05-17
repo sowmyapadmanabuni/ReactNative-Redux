@@ -27,15 +27,12 @@ class NotificationDetailScreen extends Component {
         } else {
             let MemberID = global.MyOYEMemberID;
             this.setState({ loading: true });
+            console.log(item)
 
             const headers = {
                 "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
                 "Content-Type": "application/json"
             }
-
-            console.log('_____ITEM________')
-            console.log(item)
-            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",this.state.date)
 
             axios.post(global.champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate', {
                 MRMRoleID : item.sbRoleID,
@@ -44,90 +41,106 @@ class NotificationDetailScreen extends Component {
             }, {
                 headers: headers
             })
-            .then(response => {
+            .then((response) => {
+
                 let roleName = item.sbRoleID === 1 ? 'Owner' : 'Tenant';
-                
+
                 axios.post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                     sbSubID: item.sbSubID,
                     ntTitle: 'Request Approved',
                     ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association as ' + roleName +  ' has been approved',
-                    // ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + 'as ' + item.sbRoleID === 1 ? 'Owner' : 'Tenant' + ' association has been approved',
                     ntType: 'Join_Status',
                 
-                })
-                .then(() => {
-                    axios.get(`http://${global.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
+                }).then(() => {
+
+                    DateUnit = {
+                        MemberID   : item.sbMemID,
+                        UnitID  : item.sbUnitID,
+                        MemberRoleID : item.sbRoleID,
+                        UNSldDate: item.unSldDate,
+                        UNOcSDate: item.unOcSDate,
+                    }
+
+                    UpdateTenant = {
+                        MEMemID   : item.sbMemID,
+                        UNUnitID  : item.sbUnitID,
+                        MRMRoleID : item.sbRoleID,
+                    }
+
+                    fetch(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`, {
+                        method: 'POST',
                         headers: {
-                            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
                             "Content-Type": "application/json"
-                        }
-                    })
-                    .then(() => {
-                        // console.log(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`)
-                        axios.post(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
-                        {
-                            MemberID: item.sbMemID,
-                            MemberRoleID: item.sbRoleID,
-                            UnitID: item.sbUnitID,
-                            SoldDate: item.unSldDate,
                         },
-                        {
-                            headers: headers
-                        }).then(() => {
-                            
-                            axios.post(`http://${global.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`, {
+                        body: JSON.stringify(DateUnit)
+                      })
+                        .then((response) => response.json())
+                        .then((responseJson) => {
+                            fetch(`http://${global.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`, {
+                                method: 'POST',
                                 headers: {
                                     "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
                                     "Content-Type": "application/json"
-                                }
-                            },{
-                                "MEMemID"   : item.sbMemID,
-                                "UNUnitID"  : item.sbUnitID,
-                                "MRMRoleID" : item.sbRoleID
-                             })
-                             .then(responseData => {
-                                console.log('date', responseData)
-                                this.setState({
-                                    date: responseData.data.string
-                                })
-                                this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
-                                this.setState({ loading: false })
-                             })
-                            .catch(error=>console.log(error))
+                                },
+                                body: JSON.stringify(UpdateTenant)
+                              })
+                                .then((response) => response.json())
+                                .then((responseJson) => {
+                                    console.log(responseJson)
+                                    console.log(`https://${global.oyeURL}/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`)
+                                    console.log(`https://apidev.oyespace.com/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`)
+                                    
+                                    StatusUpdate = {
+                                        NTID: item.ntid,
+	                                    NTStatDesc: responseJson.data.string
+                                    }
 
-                        }).then(()=> {
-                            
-                        }).catch(error => {
-                            Alert.alert("&&&&&&&",error.message)
-                            console.log("first", error)
-                            this.setState({ loading: false })
+                                    fetch(`http://${global.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`, {
+                                        method: 'POST',
+                                        headers: {
+                                            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify(StatusUpdate)
+                                    })
+                                        .then((response) => response.json())
+                                        .then((responseJson) => {
+                                            this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
+                                            this.setState({ loading: false, date: StatusUpdate.NTStatDesc })
+                                        })
+                                        .catch((error) => {
+                                            console.log('StatusUpdate', error)
+                                            Alert.alert("StatusUpdate",error.message)
+                                            this.setState({ loading: false })
+                                    })
+                                })
+                                .catch((error) => {
+                                    console.log('Update', error)
+                                    Alert.alert("Update",error.message)
+                                    this.setState({ loading: false })
+                            })
                         })
-                        
-                    }).catch(error => {
-                        console.log('second', error)
-                        Alert.alert("^^^^^^^^^^^^^^",error.message)
-                        this.setState({ loading: false })
+                        .catch((error) => {
+                            console.log('DateUnit', error)
+                            Alert.alert("DateUnit",error.message)
+                            this.setState({ loading: false })
                     })
-                })
-                .catch(error => {
-                    Alert.alert("*****************",error.message)
+                }).catch((error) => {
+                    console.log('firebase', error)
+                    Alert.alert("firebase",error.message)
                     this.setState({ loading: false })
                 })
             })
             .catch(error => {
-                console.log('firebase', error)
-                Alert.alert("!!!!!!!!!!!!!!!!!!!",error.message)
+                console.log('MemberRoleChange', error)
+                Alert.alert("MemberRoleChange",error.message)
                 this.setState({ loading: false })
             })
         }
-        // Alert.alert("***********",`${item.sbRoleID}`)
     }
 
     reject = (item, status) => {
-        // const { approvedAdmins } = this.props;
-        // let unitId = item.sbUnitID;
-        // let status = _.includes(approvedAdmins, unitId)
-
         if(status) {
             Alert.alert(
                 'Oyespace',
@@ -208,7 +221,7 @@ class NotificationDetailScreen extends Component {
                 return null
             } else {
                 if(status === true) {
-                    return <Text> Approved on {this.state.date}</Text>
+                    return <Text> {this.state.date || details.ntStatDesc }</Text>
                 } else {
                     return (
                         <View style={styles.buttonContainer}>
