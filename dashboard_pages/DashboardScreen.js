@@ -128,12 +128,6 @@ class MainScreen extends Component {
     }
 
     onChangeText(text) {
-       // [ 'typography']
-            // .map((name) => ({ name, ref: this[name] }))
-            // .filter(({ ref }) => ref && ref.isFocused())
-            // .forEach(({ name, ref }) => {
-              //  this.setState({ [name]: text });
-            // });
             this.setState({ typography: text });
             global.SelectedAssociationID = this.state.typography;
           //  global.AssociationName = this.state.dataSourceAssnPkr[index].AsnName;
@@ -154,10 +148,6 @@ class MainScreen extends Component {
             //  this.fnSet_After_Association_Selected();
 
     }
-
-    //updateRef(name, ref) {
-      //  this[name] = ref;
-    //}
 
     fnSet_After_Association_Selected() {
 
@@ -505,7 +495,7 @@ class MainScreen extends Component {
                 console.log(error)
             })
 
-        this.getAttendance_byAssociationID();
+            this.getAttendance_byAssociationID();
 
         navigator.geolocation.getCurrentPosition((position) => {
             lat = position.coords.latitude;
@@ -582,6 +572,7 @@ class MainScreen extends Component {
         })
         .catch( error => { console.log( error )})
     }
+
     getBlockList = () =>{
         db.transaction(tx => {
         tx.executeSql('delete FROM Blocks where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
@@ -797,12 +788,9 @@ class MainScreen extends Component {
                                 console.log("sucess==>");
                                 console.log(responseData._bodyText);
                                 console.log(responseData);
-                                //  alert("Image uploaded done! Image path=\nhttp://cohapi.careofhomes.com/Images/selfie.jpg")
-                                //  this.props.navigation.navigate('ViewIncidentList');
                             }).catch(err => {
                                 console.log("err==>");
                                 alert("Error with image upload!")
-                                //  this.props.navigation.navigate('GuardListScreen');
                                 console.log(err);
                             });
                         }
@@ -1031,21 +1019,6 @@ class MainScreen extends Component {
     }
 
     renderAdmin = () => {
-        // if(this.state.dataSource) {
-        //     if(this.state.dataSource[0].mrmRoleID === 3 && this.state.dataSource[0].asAssnID === global.SelectedAssociationID) {
-        //         return (
-        //             <View style={{flexDirection:'column',width:Dimensions.get('window').width/4,height:50,justifyContent:'center',alignItems:'center',}}>
-        //                 <TouchableOpacity style={{justifyContent:'center',alignItems:'center'}}
-        //                     onPress={() => this.props.navigation.navigate('AdminFunction')}>
-        //                     <Image source={require('../pages/assets/images/my_visitors_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
-        //                     <Text style={{ fontSize: 12, color: 'black'}}>Admin</Text>
-        //                 </TouchableOpacity>
-        //             </View>
-        //         )
-        //     } else {
-        //         return null
-        //     }
-        // } else return null
         return (
             <View style={{flexDirection:'column',width:Dimensions.get('window').width/4,height:50,justifyContent:'center',alignItems:'center',}}>
                 <TouchableOpacity style={{justifyContent:'center',alignItems:'center'}}

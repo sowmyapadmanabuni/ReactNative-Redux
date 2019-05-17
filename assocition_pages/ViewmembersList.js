@@ -1,360 +1,276 @@
+import React, { Component } from "react"
+import { StyleSheet, TouchableWithoutFeedback, View, Keyboard, FlatList, Text, Image,SafeAreaView,TouchableOpacity,Dimensions,Alert} from "react-native";
+import { Card, CardItem, Container, Left, Body, Right, Title, Row,Button } from 'native-base';
+import { TextInput } from "react-native-gesture-handler";
+import { NavigationEvents } from 'react-navigation';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { Dropdown } from 'react-native-material-dropdown'
 
-import React, { Component } from 'react';
-import {
-  Platform, Button, StyleSheet, TextInput, Image, Text, View, FlatList, ActivityIndicator,
-  TouchableOpacity
-} from 'react-native';
-import Communications from 'react-native-communications';
-import ActionButton from 'react-native-action-button';
-//import { Fonts } from '../pages/src/utils/Fonts'
-import { openDatabase } from 'react-native-sqlite-storage';
 
-var db = openDatabase({ name: global.DB_NAME });
+let data = [{
+  value:'Admin',id:1
+},
+{
+  value:'Owner',id:2
+}];
+var data1=[];
 
-export default class ViewmembersList extends Component {
-  constructor() {
-    super()
-    this.state = {
-      dataSource: [],
-      isLoading: true
-    }
-    console.log('ViewmembersList', 'constructor');
+class resident extends Component {
+  
+  state = {
+    fulldata:[],
+    query:'',
+    residentList:[],
+    dataSource:[],
+    selectedRoleData: 0
   }
+
   static navigationOptions = {
-    title: 'View MembersList',
-    headerStyle: {
-      backgroundColor: '#696969',
-    },
-    headerTitleStyle: {
-      color: '#fff',
+    title: 'resident',
+    header: null
+  }
+
+  residentialListGetMethod=()=>{
+    
+  }
+
+  changeRole = () => {
+    //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
+    const url = 'http://apidev.oyespace.com/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate';
+    
+    console.log(url)
+    requestBody = {
+      "ACMobile":this.state.selectedRoleData.uoMobile,
+      "UNUnitID": this.state.selectedRoleData.unitid,
+    "MRMRoleID" : this.state.selectedRoleData.selRolId,
+      // global.MyOYEMemberID 
     }
-  };
-
-  renderItem = ({ item }) => {
-    //OwnerFirstName, UO.OwnerLastName, UO.OwnerMobile, '+ ' A.UnitID, A.UnitName
-    console.log('ViewmembersList renderItem ', item.uofName + ', ' + item.uolName);
-    return (
-      <TouchableOpacity style={{ flex: 1, flexDirection: 'row', marginBottom: 3 }}
-        /* onPress={() => ToastAndroid.show(item.book_title,ToastAndroid.SHORT)}*/
-        onPress={() => alert(item.subject)}>
-        <View style={{ flex: 1, justifyContent: 'center', marginLeft: 5 }}>
-          <Text style={{ fontSize: 18, color: 'green', marginBottom: 15 }}>
-            {item.uofName} {item.uolName}{item.OwnerAssnID }{ item.AssociationID}
-          </Text>
-          <Text style={{ fontSize: 16, color: 'red' }}>
-            {item.uoMobile}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    )
-  }
-
-  renderSeparator = () => {
-    return (
-      <View
-        style={{ height: 1, width: '100%', backgroundColor: 'darkgrey' }}>
-      </View>
-    )
-  }
-
-  componentDidMount() {
-    console.log('ViewmembersList componentdidmount start ', global.SelectedAssociationID);
-    //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
-    const urlUnitList = global.champBaseURL + 'Unit/GetUnitListByAssocID/' + global.SelectedAssociationID
-    console.log(urlUnitList)
-    fetch(urlUnitList, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-      },
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log('ViewmembersList unitlist responseJson ', responseJson)
-
-        if (responseJson.success) {
-          console.log('responseJson count unit ', responseJson.data.unit.length);
-          db.transaction(tx => {
-            tx.executeSql('delete  FROM OyeUnit where AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-              console.log('Results OyeUnit delete ', results.rowsAffected);
-            });
-          });
-          for (let i = 0; i < responseJson.data.unit.length; ++i) {
-            //     temp.push(results.rows.item(i));
-            console.log('Results unit', responseJson.data.unit[i].unUniName + ' ' + responseJson.data.unit[i].unUnitID);
-
-            this.insert_units(responseJson.data.unit[i].unUnitID,
-              responseJson.data.unit[i].asAssnID,
-              responseJson.data.unit[i].unUniName, responseJson.data.unit[i].unUniType,
-              responseJson.data.unit[i].flFloorID, responseJson.data.unit[i].unIsActive,
-              responseJson.data.unit[i].parkingLotNumber);
-
-          }
-
-        } else {
-          console.log('failurre')
-        }
-      })
-      .catch((error) => {
-        console.log('unitlist err ', error);
-       
-      })
-    const url = global.champBaseURL + 'Member/GetMemUniOwnerTenantListByAssoc/' + global.SelectedAssociationID
-    console.log('ViewmembersList ', 'componentdidmount '+ url);
 
     fetch(url, {
-      method: 'GET',
+
+      method: 'POST',
+
       headers: {
+
         'Content-Type': 'application/json',
-        "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+
         "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+
       },
+      body: JSON.stringify(requestBody)
+     
+
     })
+    
       .then((response) => response.json())
+
       .then((responseJson) => {
-        console.log('ViewmembersList responseJson ', responseJson.data.members);
-        console.log('ViewmembersList responseJson ', responseJson.data.unitOwner);
-        for (let i = 0; i < responseJson.data.unitOwner.length; ++i) {
-          //     temp.push(results.rows.item(i));
-
-          console.log('Results UnitOwner ', responseJson.data.unitOwner[i].uofName + ' ' + responseJson.data.unitOwner[i].unUnitID);
-
-          //  "uoid": 20, "uofName": "Basava",  "uolName": "K", "uoMobile": "+919480107369", "uoMobile1": "",
-          //  "uoMobile2": "", "uoMobile3": "",  "uoMobile4": "", "uoEmail": "",  "uoEmail1": "",
-          //  "uoEmail2": "", "uoEmail3": "", "uoEmail4": "",  "uocdAmnt": 12.36,  "uoisdCode": null,
-          // "unUnitID": 46,  "asAssnID": 30,  "uodCreated": "2018-11-20T09:55:20",
-          //  "uodUpdated": "0001-01-01T00:00:00",  "uoIsActive": true
-
-          this.insert_unitOwners(responseJson.data.unitOwner[i].uoid,
-            responseJson.data.unitOwner[i].unUnitID, responseJson.data.unitOwner[i].asAssnID,
-            responseJson.data.unitOwner[i].uofName, responseJson.data.unitOwner[i].uolName,
-            responseJson.data.unitOwner[i].uoMobile, responseJson.data.unitOwner[i].uoEmail,
-            responseJson.data.unitOwner[i].uocdAmnt, responseJson.data.unitOwner[i].uodCreated,
-            responseJson.data.unitOwner[i].uodUpdated, responseJson.data.unitOwner[i].uoIsActive);
-        }
-        this.setState({
-          //          dataSource: responseJson.data.unitOwner,
-          isLoading: false
-        })
-
-        db.transaction(tx => {
-
-          tx.executeSql('SELECT Distinct UO.OwnerId , UO.OwnerFirstName, UO.OwnerLastName, UO.OwnerMobile, ' +
-            ' A.UnitID, A.UnitName ,UO.OwnerAssnID ,A.AssociationID  FROM OyeUnit A  left Join UnitOwner UO on UO.OwnerUnitID=A.UnitID ' +
-             ' where A.AssociationID='+global.SelectedAssociationID, [], (tx, results) => {
-              var temp = [];
-              for (let i = 0; i < results.rows.length; ++i) {
-                temp.push(results.rows.item(i));
-                console.log('dataSourceUnitPkr UnitID ' + i, results.rows.item(i).OwnerFirstName + ' ' + results.rows.item(i).UnitName + ' ' + results.rows.item(i).UnitID);
-              }
-              this.setState({
-                dataSource: temp,
-              });
-            });
-        });
+        console.log("%%%%%%%%%%", responseJson)
+        this.props.navigation.goBack()
+        
       })
       .catch((error) => {
-        console.log('responseJson err ' + error)
+        console.log('err ' + error)
+        Alert.alert("No Data for Selected");
       })
   }
 
-  insert_unitOwners(owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
-    owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active
-  ) {
-    db.transaction(function (tx) {
-      ////  'CREATE TABLE IF NOT EXISTS UnitOwner( OwnerId INTEGER,  OwnerFirstName VARCHAR(50) ,'
-      //  + ' OwnerLastName VARCHAR(50), OwnerMobile VARCHAR(50), OwnerEmail VARCHAR(50), OwnerDueAmnt double, '
-      //  + ' OwnerUnitID INTEGER, OwnerAssnID INTEGER , OwnerCreated VARCHAR(50), OwnerUpdated VARCHAR(50), OwnerIsActive boolean)',
+  selectRole = (item, index) => {
+    let sortedList = this.state.residentList.sort((a, b) => a.unit.localeCompare(b.unit));
+    // console.log(sortedList)
+    return (
+      <Dropdown
+        label='Select Role'
+        value= {data.value}
+        data={data}
+        containerStyle={20}
+        onChangeText={(val, vals) => {
+          // console.log(val, vals)
+          let currSel = sortedList[index];
+          let value = { ...currSel, selRolId: vals = vals+1, selRolName: val }
+          this.setState({ selectedRoleData: value })
+          // console.log("mobie",this.state.selectedRoleData.uoMobile)
+        }}
+      /> 
+    )
+    
+}
 
-      tx.executeSql(
-        'INSERT INTO UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
-        ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-        [owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
-          owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active],
-        (tx, results) => {
-          console.log('INSERT UnitOwner ', results.rowsAffected + ' ' + owner_id);
+  handleSearch = text => {
+    const { residentList } = this.state;
+    const {params} = this.props.navigation.state;
+    this.setState({ query:text });
 
-        }
-      );
-    });
+    let sortResident = params.data;
+
+    
+    this.setState({ residentList:  [ ...sortResident.filter(item => item.unit.includes(text) || item.name.includes(text) )  ]})
   }
-  insert_units(unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number
-    ) {
-      db.transaction(function (tx) {
-        //// OyeUnit(UnitID integer , " +
-        //" AssociationID integer , UnitName VARCHAR(20) ,  Type VARCHAR(20) , AdminAccountID integer , " +
-        //" CreatedDateTime VARCHAR(20),  ParkingSlotNumber VARCHAR(20) )
-        tx.executeSql(
-          'INSERT INTO OyeUnit (UnitID, AssociationID, UnitName, Type, AdminAccountID, CreatedDateTime,  ' +
-          '  ParkingSlotNumber ) VALUES (?,?,?,?,?,?,?)',
-          [unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number],
-          (tx, results) => {
-            console.log('Results oyeUnits ', results.rowsAffected + ' ' + association_id);
-  
-          }
-        );
-      });
-    }
-  render() {
-    const { navigate } = this.props.navigation;
-    //    //OwnerFirstName, UO.OwnerLastName, UO.OwnerMobile, '+ ' A.UnitID, A.UnitName
 
+  render() {
+    const {params} = this.props.navigation.state;
+    console.log(this.state.selectedRoleData)
+    
+    
     return (
 
-      <View style={{ backgroundColor: '#FFF', height: '100%' }}>
-        <View>
-        <View>
-        <View style={{flexDirection:'row',}}>
-                    <View style={{flex:1, marginTop:43,marginRight:0, justifyContent:'center',marginLeft:10}}>
-                        <TouchableOpacity onPress={() => navigate(('ResDashBoard'), { cat: '' })}
-                        >
-                        <Image source={require('../pages/assets/images/back.png')}
-                        style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                        </TouchableOpacity>
-                    </View>
-                    {/* <TouchableOpacity 
-                        style={{paddingTop: 2, paddingRight: 2, paddingLeft: 2, flex: 1, alignItems: 'center', flexDirection: 'row',
-                            paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:'6%'}}
-                            onPress={() => this.props.navigation.navigate('SideMenu')}>
-                        <Image source={require('../pages/assets/images/menu_button.png')}
-                            style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                    </TouchableOpacity> */}
-                    <View style={{ flex: 5, alignItems:'center', justifyContent:'center'}}>
-                    <Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
-                        style={{height: 40, width: 95, marginTop: 45,marginBottom:5}} />
-                    </View>  
-                    <View style={{flex:1,marginTop:45, marginRight:10, justifyContent:'center',}}>    
-                    </View>                 
-                </View> 
-
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-
-                <Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',margin:10 }}>Members List</Text>
-
-
-          </View>
-        </View>
-      {this.state.isLoading
-        ?
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#330066" animating />
-        </View>
-        :
-        <View style={{ backgroundColor: '#fff', flex: 5,  }}>
-        <View style={{ backgroundColor: '#fff',alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row', padding: 2 ,marginLeft:'2%'}}>
-                  <Text style={styles.text}>Unit</Text>
-                  <Text style={[styles.title,{alignItems:'center',marginLeft:50}]}>Name</Text>
-                  {/* <Text style={styles.status}>Status</Text> */}
-                  <Text style={styles.contact}>Contact</Text>
-                  {/* <TouchableOpacity style={{ flex: 1 }}    >
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                    </View>
-                  </TouchableOpacity> */}
+      <View style = {{flex:1, flexDirection: 'column' }}>
+        <NavigationEvents 
+          onDidFocus={payload => this.setState({ residentList: params.data })}
+        />
+      <SafeAreaView style={{backgroundColor:'orange'}}>
+            <View style={[styles.viewStyle1,{flexDirection:'row'}]}>
+                <View style={styles.viewDetails1}>
+                <TouchableOpacity onPress={()=> {this.props.navigation.navigate('ResDashBoard')}}>
+                <View style={{ height:hp("3%"),width:wp("5%"),alignItems:'center',justifyContent:'center'}}>
+                  <Image 
+                    resizeMode="contain" 
+                    source={require('../icons/back.png')} 
+                    style={styles.viewDetails2}
+                  />
                 </View>
+                    </TouchableOpacity>  
+                </View>
+                <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
+                    <Image style={[styles.image1]} source={require('../icons/OyeSpace.png')}/>
+                </View>
+                <View style={{flex:0.2, }}>
+                    {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                </View>
+            </View>
+            <View style={{borderWidth:1,borderColor:'orange'}}></View>
+        </SafeAreaView>
+        <View style={styles.textWrapper}>
+        <Text style={styles.residentialListTitle}> Resident List </Text>  
+        <View style={{flexDirection:'row'}}>
+        <View style={{ flex:0.8,height:hp("5.5%"),marginStart:hp("2%")}}>
+          <TextInput style={styles.viewDetails3} placeholder="  search...." round   onChangeText = {this.handleSearch}/>
         </View>
-        <View
-        style={{ height: 1,marginTop:2,marginBottom:2, width: '100%', backgroundColor: 'darkgrey' }}>
-      </View>
-          <FlatList
-            style={{ flex: 4 }}
-            data={this.state.dataSource}
-            renderItem={({ item }) =>
-              <View style={{ flex: 5, flexDirection: 'row', padding: 2 ,marginLeft:'2%'}}>
-                <View style={{ flex: 1,}}>
-                  <Text style={styles.text}>{item.UnitName}</Text>
+        <View style={{flex:0.3,height:hp("5.5%"),alignItems:'flex-end'}}>
+                <View style={{alignItems:'flex-end',marginEnd:hp("2%")}}>
+                {this.state.selectedRoleData.selRolId == 1 || this.state.selectedRoleData.selRolId == 2 ?  
+                <Button rounded warning style={{height:hp('5.5%'),width:wp('19%')}} onPress ={() => {this.changeRole()}}><Text style={{color:'white',paddingStart:hp(' 0.9%')}}>  Update</Text></Button>
+                : <Button rounded  style={styles.viewDetails4} ><Text style={{color:'white',paddingStart:hp('0.9%')}}>  Update</Text></Button> }
                 </View>
-                <View style={{ flex: 5,marginLeft:'15%'}}>
-                  <Text style={styles.title}>{item.OwnerFirstName} {item.OwnerLastName}</Text>
                 </View>
-                {/* <View style={{ flex: 5}}>
-                  <Text style={styles.title}>{item.unOcStat}</Text>
-                </View> */}
-                <View style={{ flex: 1,}}>
-                  <TouchableOpacity style={{ flex: 1 }}
-                      onPress={() => Communications.phonecall(item.OwnerMobile, true)}>
-                      <View style={{ flex: 1, flexDirection: 'row', }}>
-                        <Image
-                          source={require('../pages/assets/images/call_answer_green.png')}
-                          style={{ height: 20, width: 20, alignItems: 'flex-end' }} />
+                </View>
+          <View style={styles.viewDetails}>
+            
+              <View style={{flex:1}} >
+                <FlatList
+                    data={this.state.residentList.sort((a, b) => a.unit.localeCompare(b.unit))}
+                    keyExtractor={(item, index) => item.unit + index}
+                    extraData={this.state.residentList}
+                    renderItem={({ item, index }) =>
+                    <Card style={{height:hp("14%")}}>
+                      <View style={{height: 1, backgroundColor: 'lightgray'}}/>
+                      <View style={{flexDirection:'row',flex:1}}>
+                              <View style={{flex:1}}>
+                              <View Style={{flexDirection:'column'}}>
+                                  <Text style={styles.textDetails}>{`Name: ${item.name}`}</Text>
+                                  <Text style={styles.textDetails}>{`Unit: ${item.unit}`}</Text>
+                                  <Text style={styles.textDetails}>{`Role: ${item.role}`}</Text>
+                      
+                              </View>
+                              </View>
+                            
+                      <View style={{flex:0.5,marginRight:hp("3%")}}>
+                            {item.role == 'Owner' ? this.selectRole(item, index): <Text>       </Text> }
                       </View>
-                  </TouchableOpacity>
+                      </View>
+                      <View style={{height: 1, backgroundColor: 'lightgray'}}/>
+                    </Card>
+                    
+                }/>
                 </View>
-              </View>
-            }
-            keyExtractor={({ uoid }, index) => uoid}
-          />
-          {/* <View style={{ flex: 1, justifyContent: 'center', }}>
-            <ActionButton style={{ flex: 1, backgroundColor: '#fff' ,}} buttonColor="rgba(231,76,60,1)"
-              onPress={() => navigate('CreateWorkerScreen', { cat: ' ' })}  >
+                
 
-            </ActionButton>
-          </View> */}
-          {/* <ActionButton style={{ flex: 1, }} buttonColor="rgba(250,153,23,1)"
-            onPress={() => navigate('CreateUnitsScreen', { id: global.SelectedAssociationID })}  >
+            </View>
+          </View>
+         </View>
 
-          </ActionButton> */}
-        </View>}
-        </View>
-
-      // <View style = {{flex:1,flexDirection:'row', alignContent:'center',marginLeft:100,marginRight:40,marginBottom:100}}>
-      //                 <TouchableOpacity 
-      //                  style = {{backgroundColor:'white',paddingTop:8,
-      //                  paddingRight:12,paddingLeft:12,paddingBottom:5,marginTop:5,
-      //                  marginLeft:10,
-      //                  marginRight:10,}}              >
-      //                 <Text style = {{color:'orange',fontSize:14}}>Resend OTP </Text>
-      //                 </TouchableOpacity>
-      // <TimerCountdown style={styles.bottom}
-      //             initialSecondsRemaining={1000*30}
-      //             onTick={secondsRemaining => console.log('tick', secondsRemaining)}
-      //             onTimeElapsed={() => console.log('complete')}
-      //             allowFontScaling={true}
-      //         />
-
-      // </View >
-      // <View style={{flex:0.90,flexDirection:'column',width:'50%',}} >
-      // <Button title="ok"
-      //                  color='orange' width='100%' flexDirection='row' marginLeft='10'                        />
-      // </View>
-
-      //         {/* < Text style={mystyles.otp_p_text}>
-      //      Enter the OTP sent to
-      //      </Text>
-      //      <Text style={mystyles.editmobno}>
-      //     7353079645
-      //      </Text>
-      //  <Button style={mystyles.editbut} title="ee">
-      //  </Button>
-      //  <View style = {{flex:1,flexDirection:'row'}}>
-      //  <TextInput style={styles.input} >
-      //  </TextInput>
-      //  </View> */}
-      //        </View>
-
-    );
+    )
   }
 }
 
+export default resident
+
+
 const styles = StyleSheet.create({
-  
-  text: { fontSize: 14, color: 'black', flex: 1,},
-  title: { fontSize: 14,  color: 'black', flex: 2, },
-  status: { fontSize: 14,  color: 'black', flex: 2, },
-  contact: { fontSize: 14,  color: 'black', flex: 1, },
-  
-  bottom: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginBottom: 36,
-    fontSize: 14,
+  residentialListTitle: {
+    textAlign: 'center',
+    fontSize: hp("4%"),
+    fontWeight: 'bold',
+    marginTop: hp("2%"),
+    marginBottom:hp('1%')
   },
-  input: {
-    margin: 5,
-    height: 40,
-    borderBottomWidth: 1
+  viewDetails: {
+    flexDirection: 'column',
+    flex:1,
+    paddingTop:hp("0.2%"),
+    paddingLeft:hp("0.5%"),
+    paddingRight:hp("0.5%")
+  },
+  cardDetails: {
+    height:60
   },
   
-});
+  textDetails: {
+     
+    fontSize: hp("1.9%"),
+    paddingLeft: hp("5%"),
+    paddingTop: hp('0.9%'),
+    paddingBottom: hp('0.5%'),
+    fontWeight:'bold',
+    color:'black'
+    
+  },
+  viewStyle1: {
+    backgroundColor: '#fff',
+    height: hp("7%"),
+    width:Dimensions.get('screen').width,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: 'relative',
+},
+  image1: {
+    width:wp("17%"),
+    height:hp("12%"),
+    marginRight:hp("3%")
+},
+textWrapper: {
+  height: hp('85%'), // 70% of height device screen
+  width: wp('100%')   // 80% of width device screen
+},
+viewDetails1:{
+  flex:0.3,
+  flexDirection:'row',
+   justifyContent:'center',
+   alignItems:'center', 
+   marginLeft:3
+},
+viewDetails2:{
+  alignItems:'flex-start',
+  justifyContent:'center',
+  width: hp("3.5%"),
+  height:hp("3.5%"),
+  marginTop: 5
+  // marginLeft: 10
+},
+viewDetails3:{
+  height:hp("5.5%"),
+ backgroundColor:'#F5F5F5',
+ borderRadius:hp("7%"),
+ fontSize:hp("1.8%"),
+ paddingLeft: hp('2%')
+},
+viewDetails4:{
+  height:hp('5.5%'),
+  width:wp('19%'),
+  backgroundColor:'#DCDCDC',
+  alignContent:'center'
+,}
+})
+

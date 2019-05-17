@@ -1,11 +1,33 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity,Dimensions,Alert } from 'react-native';
-import {Card, CardItem} from 'native-base';
+import { 
+    Text, 
+    View, 
+    Image, 
+    TouchableOpacity,
+    Dimensions,
+    StyleSheet,
+    YellowBox
+} from 'react-native';
+import { Card, CardItem } from 'native-base';
 import Header from  '../components/Header';
 import { Dropdown } from 'react-native-material-dropdown'
 import { VictoryPie } from 'victory-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import SearchableDropdown from 'react-native-searchable-dropdown';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+// import all basic components
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { withBadge } from 'react-native-elements';
+import { DrawerNavigator, StackNavigator, createStackNavigator } from 'react-navigation';
+import Pie from 'react-native-pie';
+import { openDatabase } from 'react-native-sqlite-storage';
+import { Fonts } from '../pages/src/utils/Fonts';
+import { RemoteMessage, Notification } from 'react-native-firebase';
+import RNExitApp from 'react-native-exit-app';
+import moment from 'moment';
+import axios from 'axios';
+import firebase from 'react-native-firebase';
+import { newNotifInstance, createNotification, getNotifications, updateJoinedAssociation } from '../src/actions';
 
 var sold =100;
 var unsold=100;
@@ -14,105 +36,273 @@ var sold2=0;
 var unsold2=0;
 var Residentlist=[];
 
-export default class Dashboard extends React.Component {
-  static navigationOptions = {
+class Dashboard extends React.Component {
+    static navigationOptions = {
     title: 'Dashboard',
     header: null
-  }
-  constructor(props){
-    super(props);
-    this.state = {
-       datasource: null,
-       datasource1:[],
-       dropdown: [],
-       dropdown1:[],
-       datasource2:null,
-       data1:[],
-       value:null,
-       associationid : null,
-       ownername:"",
-       tenantname:"",
-       unitname:"",
-       unitid:"",
-       uoMobile:"",
     }
-  }
 
+    constructor(props){
+        super(props);
+        this.state = {
+        datasource: null,
+        datasource1:[],
+        dropdown: [],
+        dropdown1:[],
+        datasource2:null,
+        data1:[],
+        value:null,
+        associationid : null,
+        ownername:"",
+        tenantname:"",
+        unitname:"",
+        unitid:"",
+        uoMobile:"",
+        }
+    }
 
-  subscription=()=>{
-    // console.log('________')
-    // return(
-      fetch('http://apidev.oyespace.com/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/8'
-      , {
+    Admin = () => {
+        // console.log(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`)
+        //http://localhost:54400/champ/api/v1/Member/GetMemberListByAccountID/{AccountID}
+        const urlUnitList = global.champBaseURL + 'Member/GetMemberListByAccountID/' +  global.MyAccountID
+        // console.log(urlUnitList)
+        fetch(urlUnitList, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+            'Content-Type': 'application/json',
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
         },
-      })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+        console.log(responseJson.data)
+        this.setState({
+            dataSource: responseJson.data.memberListByAccount,
+            isLoading: false
+        });
+        })
+
+        .catch((error) => {
+        console.log(error)
+        })
+        
+    }
+
+    requestNotifPermission = () => {
+        firebase.messaging().hasPermission()
+            .then(enabled => {
+                if (enabled) {
+                    this.listenForNotif()
+                    // user has permissions
+                } else {
+                    firebase.messaging().requestPermission()
+                    .then(() => {
+                        this.listenForNotif()
+                            // User has authorised  
+                    })
+                    .catch(error => {
+                            // User has rejected permissions  
+                    });
+                    // user doesn't have permission
+                } 
+        });
+
+        var headers = {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+
+        let ACAccntID = global.MyAccountID;
+        axios.get(`${global.champBaseURL}/GetAssociationListByAccountID/${ACAccntID}`, {
+            headers: headers
+        })
+        .then(response => {
+            let responseData = response.data.data;
+
+            responseData.associationByAccount.map((association) => {
+                // console.log('***********')
+                // console.log(association.asAsnName)
+                // console.log(association.asAssnID)
+                // console.log('***********')
+                firebase.messaging().subscribeToTopic(association.asAssnID + 'admin')
+            })
+        })
+    }
+
+    showLocalNotification = (notification) => {
+        console.log(notification)
+        const channel = new firebase.notifications.Android.Channel('channel_id', 'Oyespace', firebase.notifications.Android.Importance.Max)
+        .setDescription('Oyespace channel');
+        channel.enableLights(true);
+        // channel.enableVibration(true);
+        // channel.vibrationPattern([500]);
+        firebase.notifications().android.createChannel(channel);
+
+        
+        const notificationBuild = new firebase.notifications.Notification({
+            sound: 'default',
+            show_in_foreground: true,
+        })
+        .setTitle(notification._title)
+        .setBody(notification._body)
+        .setNotificationId(notification._notificationId)
+        // .setSound('default')
+        .setData({
+            ...notification._data,
+            foreground: true
+        })
+        .android.setColor('#FF9100') 
+        .android.setLargeIcon('ic_notif')
+        .android.setAutoCancel(true)
+        .android.setSmallIcon('ic_stat_ic_notification')
+        .android.setChannelId('channel_id')
+        .android.setVibrate("default")
+        // .android.setChannelId('notification-action')
+        .android.setPriority(firebase.notifications.Android.Priority.Max)
+
+        firebase.notifications().displayNotification(notificationBuild);
+        this.setState({ foregroundNotif: notification._data })
+    }
+
+    listenForNotif = () => {
+        let navigationInstance = this.props.navigation;
+
+        this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
+            // console.log('___________')
+            // console.log(notification)
+            // console.log('____________') 
+            // Process your notification as required
+            // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+        });
+
+        this.notificationListener = firebase.notifications().onNotification((notification) => {
+
+            // console.log('___________')
+            // console.log(notification)
+            // console.log('____________')
+
+            if(notification._data.associationID) {
+                // this.props.createNotification(notification._data, navigationInstance, false)
+            }  
+
+            this.showLocalNotification(notification);
+
+        });
+
+        firebase.notifications().onNotificationOpened((notificationOpen) => {
+            // alert('opened')
+            // console.log('**********')
+            // console.log(notificationOpen.notification._data.admin)
+            if(notificationOpen.notification._data.admin === 'true') {
+                if(notificationOpen.action) {
+                    this.props.newNotifInstance(notificationOpen.notification);
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'true')
+                    // this.props.createNotification(notificationOpen.notification)
+                }
+                // this.props.newNotifInstance(notificationOpen.notification);
+                // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+            } else if (notificationOpen.notification._data.admin === 'false') {
+                // this.props.newNotifInstance(notificationOpen.notification);
+                // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+            }
+
+            if(notificationOpen.notification._data.admin === 'true') {
+                if(notificationOpen.notification._data.foreground) {
+                    this.props.newNotifInstance(notificationOpen.notification);
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'true')
+                }
+            } else if (notificationOpen.notification._data.admin === 'gate_app') {
+                    this.props.newNotifInstance(notificationOpen.notification);
+                    this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'gate_app')
+                // this.props.newNotifInstance(notificationOpen.notification);
+                // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+            } else if (notificationOpen.notification._data.admin === 'false') {
+                // alert('clicked here')
+                this.props.newNotifInstance(notificationOpen.notification);
+                this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+            }
+        });
+        
+    }
+
+    subscription=()=>{
+    // console.log('________')
+    // return(
+        fetch('http://apidev.oyespace.com/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/8'
+        , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+        },
+        })
         .then(response => response.json())
         .then(responseJson => {
-          // console.log(responseJson)
-          this.setState({
+            // console.log(responseJson)
+            this.setState({
             datasource: responseJson
-          })
+            })
         })
         .catch(error=>console.log(error))
     // )
-  }
+    }
 
-  association=()=>{
+    association=()=>{
     // console.log('________')
     // return(
-      fetch('http://apidev.oyespace.com/oyeliving/api/v1/GetAssociationListByAccountID/1'
-      , {
+        fetch('http://apidev.oyespace.com/oyeliving/api/v1/GetAssociationListByAccountID/1'
+        , {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+            'Content-Type': 'application/json',
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
         },
-      })
+        })
         .then(response => response.json())
         .then((responseJson) => {
-          var count = Object.keys(responseJson.data.associationByAccount).length;
-          let drop_down_data = [];
-          let associationid = [];
+            var count = Object.keys(responseJson.data.associationByAccount).length;
+            let drop_down_data = [];
+            let associationid = [];
 
-          for(var i=0;i<count;i++){
+            for(var i=0;i<count;i++){
             let associationName = responseJson.data.associationByAccount[i].asAsnName;
             // console.log(responseJson.data.associationByAccount[i].asAsnName) // I need to add 
             drop_down_data.push({ value: associationName, name: associationName, id:i }); // Create your array of data
             
             associationid.push({ id: responseJson.data.associationByAccount[i].asAssnID })
-           
-          }
-          this.setState({ dropdown: drop_down_data, associationid: associationid }); // Set the new state
+            
+            }
+            this.setState({ dropdown: drop_down_data, associationid: associationid }); // Set the new state
         })
         
         .catch(error => console.log(error))
     // )
-  }
+    }
 
-  unit=(unit)=>{
-   
-      fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
-      , {
+    unit=(unit)=>{
+
+        fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
+        , {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+            'Content-Type': 'application/json',
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
         },
-      })
+        })
         .then(response => response.json())
         .then((responseJson) => {
-          var count = Object.keys(responseJson.data.unit).length;
-          let sold_data = [];
-          let name=[];
-          var sold1=0;
-          var unsold1=0;
-          var totalunits=0;
-          Residentlist=name;
-          for(var i=0;i<count;i++){
+            var count = Object.keys(responseJson.data.unit).length;
+            let sold_data = [];
+            let name=[];
+            var sold1=0;
+            var unsold1=0;
+            var totalunits=0;
+            Residentlist=name;
+            for(var i=0;i<count;i++){
             // console.log("rohitbaba",responseJson.data.unit[i].unOcStat) // sold and unsold data 
             sold_data.push({ value: responseJson.data.unit[i].unOcStat });
             var count1=Object.keys(responseJson.data.unit[i].owner).length;
@@ -126,11 +316,11 @@ export default class Dashboard extends React.Component {
                 // console.log("ownerlist",this.state.ownername)
                 // console.log("unit",this.state.unitname)
                 Residentlist.push({
-                  name: this.state.ownername,
-                  unit: this.state.unitname,
-                  role: "Owner",
-                  unitid:this.state.unitid,
-                  uoMobile:this.state.uoMobile,
+                    name: this.state.ownername,
+                    unit: this.state.unitname,
+                    role: "Owner",
+                    unitid:this.state.unitid,
+                    uoMobile:this.state.uoMobile,
                 })
             }
             var count2=Object.keys(responseJson.data.unit[i].tenant).length;
@@ -143,73 +333,71 @@ export default class Dashboard extends React.Component {
                 // console.log("tenantlist",this.state.tenantname)
                 // console.log("unit",this.state.unitname)
                 Residentlist.push({
-                  name: this.state.tenantname,
-                  unit: this.state.unitname,
-                  role: "Tenant"
+                    name: this.state.tenantname,
+                    unit: this.state.unitname,
+                    role: "Tenant"
                 })
             }
-           
+            
                 
-          }
-          // console.log("unitname,and name",Residentlist)
-          // console.log("rohitpppppp",sold_data)
-          for(var j=0;j<=sold_data.length-1;j++)
-          {
+            }
+            // console.log("unitname,and name",Residentlist)
+            // console.log("rohitpppppp",sold_data)
+            for(var j=0;j<=sold_data.length-1;j++)
+            {
             if(sold_data[j].value =='Sold'|| sold_data[j].value =='SoldOwner Occupied Units' || sold_data[j].value =='Sold Tenant Occupied' || sold_data[j].value =='Sold Vacant' || sold_data[j].value=='All Sold Flats'|| sold_data[j].value =='All Occupied Units')
             {
-              sold1=sold1+1;
+                sold1=sold1+1;
             }
             else if (sold_data[j].value=='Unsold Vacant' || sold_data[j].value=='Unsold Tenant Occupied'||sold_data[j].value=='All Unsold Flats'||sold_data[j].value=='All Vacant Units' || sold_data[j].value=='')
             {
-              unsold1= unsold1+1;
+                unsold1= unsold1+1;
             }
             totalunits++;
-          }
-          sold=((sold1/totalunits)*100).toFixed(0);
-          unsold=((unsold1/totalunits)*100).toFixed(0);
-          totalunits1=totalunits;
-          sold2=sold1;
-          unsold2=unsold1;
+            }
+            sold=((sold1/totalunits)*100).toFixed(0);
+            unsold=((unsold1/totalunits)*100).toFixed(0);
+            totalunits1=totalunits;
+            sold2=sold1;
+            unsold2=unsold1;
 
 
-          // console.log("myfirst",sold)
-          // console.log("mysecond",unsold)
-          // console.log("mytotal",totalunits1)
-          // console.log(responseJson)
-          let units = [];
-          responseJson.data.unit.map((data, index) => {
+            // console.log("myfirst",sold)
+            // console.log("mysecond",unsold)
+            // console.log("mytotal",totalunits1)
+            // console.log(responseJson)
+            let units = [];
+            responseJson.data.unit.map((data, index) => {
             units.push({ value: data.unUniName, name: data.unUniName, id: index })
-          })
+            })
 
-          this.setState({ dropdown1: units })
+            this.setState({ dropdown1: units })
         })
         
         .catch(error=>console.log(error))
-  }
+    }
 
-  onChangeText=()=>{    
+    onChangeText=()=>{    
     // console.log("hhhhhhhhhhhhhh",this.state.data1)
-  }
+    }
 
-  componentDidMount() {
-    this.subscription()
-    this.association()
-  
-  }
+    componentDidMount() {
+        this.subscription();
+        this.association();
+        this.Admin();
+        this.requestNotifPermission();
+        // this.getBlockList();
+        this.props.getNotifications()
+    }
 
-  onAssociationChange = (value, index) => {
+    onAssociationChange = (value, index) => {
 
-  
+
     this.unit(this.state.associationid[index].id)
-  }
+    }
 
   render() {
-   
-    console.log(this.state.dropdown1)
- 
-   
     return (
-
       <View style={{flex:1}}>
         <Header/>
       <View style={styles.container}>
@@ -361,13 +549,14 @@ export default class Dashboard extends React.Component {
             </Card>
           </View>
           <View style={{height:hp('7%')}}>
-          <TouchableOpacity  onPress={()=> {this.props.navigation.navigate('resident' ,{
+          <TouchableOpacity  
+            // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
+            onPress={()=> {this.props.navigation.navigate('ViewmembersScreen' ,{
             data: Residentlist })}}>
-          <Card style={{height:hp('5%'),alignItems:'center',flexDirection:'row'}}>
-          
-          <Image source={require('../icons/eye.png')} style={styles.image4}/>
-            <Text style={{alignSelf:'center',color:'black'}}>View Resident List</Text>
-          </Card>
+            <Card style={{height:hp('5%'),alignItems:'center',flexDirection:'row'}}>
+                <Image source={require('../icons/eye.png')} style={styles.image4}/>
+                <Text style={{alignSelf:'center',color:'black'}}>View Resident List</Text>
+            </Card>
           </TouchableOpacity>
           </View>
         </View>
@@ -576,6 +765,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   }
 });
+
+const mapStateToProps = state => {
+    return {
+        isCreateLoading: state.NotificationReducer.isCreateLoading,
+        notificationCount: state.NotificationReducer.notificationCount,
+        joinedAssociations: state.AppReducer.joinedAssociations,
+    }
+}
+
+export default connect(mapStateToProps, { newNotifInstance, createNotification, getNotifications, updateJoinedAssociation })(Dashboard);
+
 
 
 
