@@ -6,6 +6,7 @@ import { onNotificationOpen, storeOpenedNotif } from '../../actions';
 import TimeAgo from 'react-native-timeago';
 import { Map } from 'immutable';
 import _ from 'lodash';
+// import console = require('console');
 
 class NotificationScreen extends Component {
     keyExtractor = (item, index) => index.toString();

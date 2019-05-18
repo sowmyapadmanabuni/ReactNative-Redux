@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import { CLOUD_FUNCTION_URL } from '../../../constant';
 import { connect } from 'react-redux';
-import { updateApproveAdmin } from '../../actions/AppAction';
+import { updateApproveAdmin, getNotifications } from '../../actions';
 import _ from 'lodash';
 
 class NotificationDetailScreen extends Component {
@@ -15,6 +15,7 @@ class NotificationDetailScreen extends Component {
     }
 
     approve = (item, status) => {
+        console.log(item.asAssnID)
         if(status) {
             Alert.alert(
                 'Oyespace',
@@ -50,7 +51,8 @@ class NotificationDetailScreen extends Component {
                     ntTitle: 'Request Approved',
                     ntDesc: 'Your request to join' + item.mrRolName + ' unit in ' + item.asAsnName + ' association as ' + roleName +  ' has been approved',
                     ntType: 'Join_Status',
-                
+                    associationID: item.asAssnID,
+                    
                 }).then(() => {
 
                     DateUnit = {
@@ -106,6 +108,7 @@ class NotificationDetailScreen extends Component {
                                     })
                                         .then((response) => response.json())
                                         .then((responseJson) => {
+                                            this.props.getNotifications()
                                             this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
                                             this.setState({ loading: false, date: StatusUpdate.NTStatDesc })
                                         })
@@ -307,4 +310,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { updateApproveAdmin })(NotificationDetailScreen)
+export default connect(mapStateToProps, { updateApproveAdmin, getNotifications })(NotificationDetailScreen)

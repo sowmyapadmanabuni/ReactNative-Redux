@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, SafeAreaView,Dimensions, Image } from 'react-native';
+import { Text, View, SafeAreaView,Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Header = (props) =>  {
@@ -13,9 +13,11 @@ const Header = (props) =>  {
                 <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
                     <Image style={[styles.image]} source={require('../icons/OyeSpace.png')}/>
                 </View>
-                <View style={{flex:0.2, }}>
-                    <Image source={require('../icons/notifications.png')} style={{width:wp("5%"), height:hp("5%"), justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/>
-                </View>
+                <TouchableWithoutFeedback onPress={() => props.navigate.navigate('NotificationScreen')}>
+                    <View style={{flex:0.2, }}>
+                        <Image source={require('../icons/notifications.png')} style={{width:wp("5%"), height:hp("5%"), justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/>
+                    </View>
+                </TouchableWithoutFeedback>
             </View>
             <View style={{borderWidth:1,borderColor:'orange'}}></View>
         </SafeAreaView>

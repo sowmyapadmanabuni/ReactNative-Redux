@@ -399,7 +399,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <View style={{flex:1}}>
-        <Header/>
+        <Header navigate={this.props.navigation}/>
       <View style={styles.container}>
         <View style={styles.textWrapper}>
         <SearchableDropdown
@@ -564,7 +564,7 @@ class Dashboard extends React.Component {
           <View style={{flexDirection:'column'}}>
             <Card style={styles.card}>
                 {/* <CardItem Style={styles.cardItem}> */}
-                  <TouchableOpacity >
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('InvitedGuestListScreen')}>
                     <View style={{flexDirection:'column'}} >
                       <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
                         <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/guests.png')}/>
@@ -582,7 +582,7 @@ class Dashboard extends React.Component {
           <View style={{flexDirection:'column'}}>
             <Card style={styles.card}>
               {/* <CardItem Style={styles.cardItem}> */}
-                <TouchableOpacity >
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('GuardListScreen')}>
                   <View style={{flexDirection:'column'}}>
                     <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
                       <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/guards.png')}/>
@@ -600,7 +600,7 @@ class Dashboard extends React.Component {
           <View style={{flexDirection:'column'}}>
             <Card style={styles.card}>
               {/* <CardItem Style={styles.cardItem}> */}
-                <TouchableOpacity >
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewVisitorsScreen')}>
                   <View style={{flexDirection:'column'}}>
                     <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
                       <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/deliveries.png')}/>
@@ -617,7 +617,7 @@ class Dashboard extends React.Component {
           <View style={{flexDirection:'column'}}>
             <Card style={styles.card}>
               {/* <CardItem Style={styles.cardItem}> */}
-                <TouchableOpacity onPress={()=>{this.props.navigation.navigate('admin' )}}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminFunction')}>
                   <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
                     <View style={{justifyContent:'center',alignItems:'center'}}>
                       <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/admin.png')}/>
