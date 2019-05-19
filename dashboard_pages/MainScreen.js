@@ -232,7 +232,7 @@ class Dashboard extends React.Component {
     subscription=()=>{
     // console.log('________')
     // return(
-        fetch('http://apidev.oyespace.com/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/8'
+        fetch(`http://${global.oyeURL}/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/${global.SelectedAssociationID}`
         , {
         method: 'GET',
         headers: {
@@ -254,7 +254,7 @@ class Dashboard extends React.Component {
     association=()=>{
     // console.log('________')
     // return(
-        fetch('http://apidev.oyespace.com/oyeliving/api/v1/GetAssociationListByAccountID/1'
+        fetch(`http://${global.oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${global.MyAccountID}`
         , {
         method: 'GET',
         headers: {
@@ -285,7 +285,7 @@ class Dashboard extends React.Component {
 
     unit=(unit)=>{
 
-        fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
+        fetch(`http://${global.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
         , {
         method: 'GET',
         headers: {
@@ -402,7 +402,7 @@ class Dashboard extends React.Component {
         <Header navigate={this.props.navigation}/>
       <View style={styles.container}>
         <View style={styles.textWrapper}>
-        <SearchableDropdown
+        {/* <SearchableDropdown
             onTextChange={text => console.log(text)}
             onItemSelect={item => console.log(item)}
             containerStyle={{ padding: 5 }}
@@ -455,7 +455,7 @@ class Dashboard extends React.Component {
             placeholder="Units"
             resetValue={false}
             underlineColorAndroid="transparent"
-          />
+          /> */}
         <View style={{flex:1, flexDirection:'column',height:hp('60%')}}>
           <View style={{flexDirection:'row',height:hp('12%')}}>
             <Card style={{flex:0.7}}>

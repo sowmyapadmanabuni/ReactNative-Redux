@@ -36,7 +36,7 @@ class resident extends Component {
 
   changeRole = () => {
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
-    const url = 'http://apidev.oyespace.com/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate';
+    const url = `http://${global.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
     
     console.log(url)
     requestBody = {

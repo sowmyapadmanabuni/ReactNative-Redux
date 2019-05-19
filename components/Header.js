@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, SafeAreaView,Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, SafeAreaView,Dimensions, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Header = (props) =>  {
@@ -7,8 +7,10 @@ const Header = (props) =>  {
         <SafeAreaView style={{backgroundColor:'orange'}}>
             <View style={[styles.viewStyle,{flexDirection:'row'}]}>
                 <View style={{flex:0.3,flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:16}}>
-                    <Image style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1,}} source={require('../icons/OyeSpace.png')}/>
-                    <Text style={{marginLeft:5}}>Manas</Text>
+                    <TouchableOpacity onPress={() => props.navigate.navigate('EditProfileScreen')}>
+                        <Image style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1,}} source={{ uri: global.viewImageURL + 'PERSON' + global.MyAccountID + '.jpg' }}/>
+                    </TouchableOpacity>
+                    <Text style={{marginLeft:5}}>{global.MyFirstName}</Text>
                 </View>
                 <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
                     <Image style={[styles.image]} source={require('../icons/OyeSpace.png')}/>
