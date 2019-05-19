@@ -97,7 +97,7 @@ export default class adminfunction extends Component {
                <Image source={require('../pages/assets/images/join_association_orange.png')}
                        style={{height:40,width:40}}
                />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Join Association (Feature to come)</Text>
+               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Join Association</Text>
                </TouchableOpacity>        
              </View>
              <View style={{flex:1,flexDirection:'row'}}>
@@ -107,7 +107,7 @@ export default class adminfunction extends Component {
                <Image source={require('../pages/assets/images/building.png')}
                        style={{height:40,width:40}}
                />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Create Association (Feature to come)</Text>
+               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Create Association</Text>
             </TouchableOpacity>            
              </View>
              <View style={{flex:1,flexDirection:'row'}}>
@@ -117,7 +117,7 @@ export default class adminfunction extends Component {
                <Image source={require('../pages/assets/images/building.png')}
                        style={{height:40,width:40}}
                />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Create Blocks and Units (Feature to come)</Text>
+               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Create Blocks and Units</Text>
             </TouchableOpacity>            
              </View>
              {/* <View style={{flex:1, flexDirection:'row'}}>

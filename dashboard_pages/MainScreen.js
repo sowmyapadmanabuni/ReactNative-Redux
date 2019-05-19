@@ -468,7 +468,7 @@ class Dashboard extends React.Component {
                     data={this.state.dropdown}
                     textColor="#000"
                     fontSize={hp("2%")}
-                    dropdownPosition={-5}
+                    dropdownPosition={-2}
                     onChangeText={(value, index) => this.onAssociationChange(value, index)}
                   />
             
@@ -484,7 +484,7 @@ class Dashboard extends React.Component {
                   data={this.state.dropdown1}
                   textColor="#000"
                   fontSize={hp('2%')}
-                  dropdownPosition={-2}
+                  dropdownPosition={-4}
                   
                 />
                
