@@ -230,7 +230,7 @@ class Dashboard extends React.Component {
     }
 
   render() {
-    const { dropdown, dropdown1, residentList, sold, unsold } = this.props;
+    const { dropdown, dropdown1, residentList, sold, unsold, datasource } = this.props;
     return (
       <View style={{flex:1}}>
         <Header navigate={this.props.navigation}/>
@@ -411,12 +411,19 @@ class Dashboard extends React.Component {
           </View>
       </View>
       <View style={{height:hp('5%')}}>
-      <Card style={styles.card1}>
-            <Text style={{alignSelf:'center',fontSize:hp("2%")}}>Subscription valid until:<Text style={{alignSelf:'center',color:'#ff4732',fontSize:hp("2%")}}>
-              {this.props.datasource ? this.props.datasource.data.subscription.sueDate : null}</Text>
-            </Text>
+        <Card style={styles.card1}>
+          {
+            (!global.SelectedAssociationID || !datasource) ? 
+              <Text style={{alignSelf:'center',fontSize:20}}>No Subscriptions Available</Text>
+            :
+              <Text style={{alignSelf:'center',fontSize:15}}>
+                Subscription valid until:{datasource? datasource.data.subscription.sueDate:null }
+              </Text>
+          }
+            {/* {this.renderSubscription()} */}
+            {/* <Text style={{alignSelf:'center',fontSize:hp("2%")}}>Subscription valid until:{this.state.datasource ? this.state.datasource.data.subscription.sueDate : null}</Text> */}
           </Card>
-        </View>
+      </View>
       </View>
       </View>
       </View>
