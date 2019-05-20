@@ -25,7 +25,7 @@ export const getNotifications = (accountId, associationID, admin) => {
       })
         .then(response => response.json())
         .then(responseJson => {
-            // console.log(responseJson.data.notificationListByAcctID)
+            console.log(responseJson.data.notificationListByAcctID)
             let resData = responseJson.data.notificationListByAcctID
 
             let activeNotifications = [];

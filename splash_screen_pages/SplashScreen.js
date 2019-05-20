@@ -4,13 +4,16 @@ import { View, NetInfo, StyleSheet, Button, Alert, Image, Text, AppState, Activi
 import { NavigationActions } from 'react-navigation';
 import { mystyles } from '../pages/styles';
 import { openDatabase } from 'react-native-sqlite-storage';
+import { connect } from 'react-redux';
 // import PushNotification from 'react-native-push-notification';
 // import NotifService from '../dashboard_pages/NotifService';
 import { TextField } from 'react-native-material-textfield';
+import { updateUserInfo } from '../src/actions';
 
 console.disableYellowBox = true;
 global.DB_NAME = 'UserDatabase1.db';
 var db = openDatabase({ name: global.DB_NAME });
+
 async function requestReadSmsPermission() {
   try {
     var granted = await PermissionsAndroid.request(
@@ -40,7 +43,7 @@ async function requestReadSmsPermission() {
   }
 }
 
-export default class SplashScreen extends React.Component {
+class SplashScreen extends React.Component {
   constructor(props) {
     super(props);
     // this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
@@ -94,6 +97,7 @@ export default class SplashScreen extends React.Component {
         }
       );
     });
+
     db.transaction(function (txn) {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='CheckPointList'",
@@ -316,6 +320,7 @@ export default class SplashScreen extends React.Component {
 
 
     });
+
     db.transaction(function (txn) {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='Blocks'", [],
@@ -497,18 +502,7 @@ export default class SplashScreen extends React.Component {
   };
 
   componentDidMount() {
-    
-    // PushNotification.addEventListener('notification', this._onRemoteNotification);
-    // PushNotification.onNotification((notification) => {
-      // console.log('in app notification', notification);
-      // required on iOS only (see fetchCompletionHandler docs: https://facebook.github.io/react-native/docs/pushnotificationios.html)
-      // notification.finish(PushNotificationIOS.FetchResult.NoData);
-    // });
 
-    // gets the registration token
-    // PushNotification.onRegister((token) => {
-    //   console.log('in app registration', token);
-    // });
     NetInfo.getConnectionInfo().then((connectionInfo) => {
       this.setState({ "netConnectionState": connectionInfo.type });
       console.log('Initial, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType
@@ -519,24 +513,9 @@ export default class SplashScreen extends React.Component {
       'connectionChange',
       this.handleFirstConnectivityChange.bind(this)
     );
-    console.log('SplashScreen ', ' bf ');
-    // setInterval(() => {
-    // console.log('SplashScreen ','in');
-    // }, 1000);
-    console.log('SplashScreen ', 'af');
-
-    // this.props.navigation.dispatch(StackActions.reset({
-    // index: 0,
-    // actions: [
-    //   NavigationActions.navigate({ routeName: 'ViewAll' })
-    // ],
-    //   }))
-    //this.navigateAfterFinish('ViewAll')
   }
 
   _onRemoteNotification(notification) {
-    // handle the notification
-    console.log('SplashScreen notification', 'af' + notification);
 
   }
 
@@ -611,3 +590,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 });
+
+const mapStateToProps = state => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, { updateUserInfo })(SplashScreen);

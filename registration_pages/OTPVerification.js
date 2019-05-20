@@ -8,7 +8,9 @@ import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
 import PhoneInput from "react-native-phone-input";
 import moment from 'moment';
-import SMSVerifyCode from 'react-native-sms-verifycode'
+import SMSVerifyCode from 'react-native-sms-verifycode';
+import { connect } from 'react-redux';
+import { updateUserInfo } from '../src/actions';
 //import SmsListener from "react-native-android-sms-listener";
 
 
@@ -16,7 +18,9 @@ import SMSVerifyCode from 'react-native-sms-verifycode'
 var db = openDatabase({ name: global.DB_NAME });
 var Otp_auto;
 console.disableYellowBox = true;
-export default class OTPVerification extends Component {
+
+
+class OTPVerification extends Component {
   constructor(props) {
     super(props);
    // this.SMSReadSubscription = {};
@@ -45,28 +49,19 @@ export default class OTPVerification extends Component {
 
     console.log('start screen OTPVerification ', global.MyISDCode + ' ' + global.MyMobileNumber);
   }
+
   componentDidMount() {
-    // requestReadSmsPermission();
-    // console.log("sup dude");
-    // this.SMSReadSubscription =SmsListener.addListener(message => {
-    //   console.log('Message',message.body.substring(26,32));
-    //   Otp_auto=message.body.substring(26,32);
-    //   console.log('otp number',Otp_auto);
-    //     otp_number = Otp_auto;
-    //     this.setState({
-    //       isLoading: true
-    //     })
-    //     this.verifyAutoOTP(otp_number)
-    // });
     this.interval = setInterval(
       () => this.setState((prevState) => ({ timer: prevState.timer - 1 })),
       1000
     );
   }
+
   componentWillUnmount() {
     //remove listener
    // this.SMSReadSubscription.remove();
   }
+  
   componentDidUpdate() {
     if (this.state.timer === 1) {
       clearInterval(this.interval);
@@ -81,6 +76,7 @@ export default class OTPVerification extends Component {
     dobTextDMY: '',
     loginTime: moment(new Date()).format('DD-MM-YYYY HH:mm:ss'),
   }
+
   static navigationOptions = {
     title: 'Registration',
     headerStyle: {
@@ -90,15 +86,17 @@ export default class OTPVerification extends Component {
       color: '#fff',
     }
   };
+
   handleMobile = (mobilenumber) => {
     this.setState({ Mobilenumber: mobilenumber })
   }
+  
   handleOTP = (otp) => {
     this.setState({ OTPNumber: otp })
   }
 
   verifyAutoOTP = (Auto_OTP_Number) => {
-
+    const { updateUserInfo } = this.props;
     //const reg = /^[0]?[789]\d{9}$/;
     console.log('ravii', Auto_OTP_Number.length+' '+' ');
       anu = {
@@ -130,13 +128,16 @@ export default class OTPVerification extends Component {
 
             if (responseJson.data == null) {
               this.props.navigation.navigate('RegistrationPageScreen');
-            } else {
-              console.log('hiii', 'bbbf');
 
-              this.insert_Accounts(responseJson.data.account.acAccntID,
+            } else {
+
+              this.insert_Accounts(
+                responseJson.data.account.acAccntID,
                 responseJson.data.account.acfName,
                 responseJson.data.account.aclName,
-                global.MyMobileNumber, global.MyISDCode,responseJson.data.account.acEmail);
+                global.MyMobileNumber, 
+                global.MyISDCode,
+                responseJson.data.account.acEmail);
               this.props.navigation.navigate('SplashScreen');
             }
           }  else {
@@ -346,7 +347,9 @@ export default class OTPVerification extends Component {
             alert('You are not a Registered User');
 
           } else {
-            console.log('Account Registered', responseJson.data);
+
+              console.log('Account Registered', responseJson.data);
+
             this.insert_Accounts(responseJson.data.accountByMobile[0].acAccntID,
               responseJson.data.accountByMobile[0].acfName,
               responseJson.data.accountByMobile[0].aclName,
@@ -536,7 +539,17 @@ export default class OTPVerification extends Component {
   }
 
   insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code,email) {
-    console.log('bf Account ',   ' ' + account_id);
+
+    const { updateUserInfo } = this.props;
+
+    updateUserInfo({ prop: 'MyAccountID', value: account_id })
+    updateUserInfo({ prop: 'MyEmail', value: email })
+    updateUserInfo({ prop: 'MyMobileNumber', value: mobile_number })
+    updateUserInfo({ prop: 'MyFirstName', value: first_name })
+    updateUserInfo({ prop: 'MyLastName', value: last_name })
+    updateUserInfo({ prop: 'MyISDCode', value: isd_code })
+
+    console.log('bf_account',   ' ' + account_id);
 
     db.transaction(function (tx) {
       //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
@@ -657,3 +670,5 @@ const styles = StyleSheet.create({
   }
 
 })
+
+export default connect(null , { updateUserInfo })(OTPVerification)

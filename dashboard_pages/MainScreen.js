@@ -27,7 +27,14 @@ import RNExitApp from 'react-native-exit-app';
 import moment from 'moment';
 import axios from 'axios';
 import firebase from 'react-native-firebase';
-import { newNotifInstance, createNotification, getNotifications, updateJoinedAssociation } from '../src/actions';
+import { 
+  newNotifInstance, 
+  createNotification, 
+  getNotifications, 
+  updateJoinedAssociation,
+  getDashSub,
+  getDashAssociation
+} from '../src/actions';
 
 var sold =100;
 var unsold=100;
@@ -45,47 +52,20 @@ class Dashboard extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-        datasource: null,
-        datasource1:[],
-        dropdown: [],
-        dropdown1:[],
-        datasource2:null,
-        data1:[],
-        value:null,
-        associationid : null,
-        ownername:"",
-        tenantname:"",
-        unitname:"",
-        unitid:"",
-        uoMobile:"",
+          datasource: null,
+          datasource1:[],
+          dropdown: [],
+          dropdown1:[],
+          datasource2:null,
+          data1:[],
+          value:null,
+          associationid : null,
+          ownername:"",
+          tenantname:"",
+          unitname:"",
+          unitid:"",
+          uoMobile:"",
         }
-    }
-
-    Admin = () => {
-        // console.log(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`)
-        //http://localhost:54400/champ/api/v1/Member/GetMemberListByAccountID/{AccountID}
-        const urlUnitList = global.champBaseURL + 'Member/GetMemberListByAccountID/' +  global.MyAccountID
-        // console.log(urlUnitList)
-        fetch(urlUnitList, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-        },
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-        console.log(responseJson.data)
-        this.setState({
-            dataSource: responseJson.data.memberListByAccount,
-            isLoading: false
-        });
-        })
-
-        .catch((error) => {
-        console.log(error)
-        })
-        
     }
 
     requestNotifPermission = () => {
@@ -229,60 +209,6 @@ class Dashboard extends React.Component {
         
     }
 
-    subscription=()=>{
-    // console.log('________')
-    // return(
-        fetch(`http://${global.oyeURL}/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/${global.SelectedAssociationID}`
-        , {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-        },
-        })
-        .then(response => response.json())
-        .then(responseJson => {
-            // console.log(responseJson)
-            this.setState({
-            datasource: responseJson
-            })
-        })
-        .catch(error=>console.log(error))
-    // )
-    }
-
-    association=()=>{
-    // console.log('________')
-    // return(
-        fetch(`http://${global.oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${global.MyAccountID}`
-        , {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-        },
-        })
-        .then(response => response.json())
-        .then((responseJson) => {
-            var count = Object.keys(responseJson.data.associationByAccount).length;
-            let drop_down_data = [];
-            let associationid = [];
-
-            for(var i=0;i<count;i++){
-            let associationName = responseJson.data.associationByAccount[i].asAsnName;
-            // console.log(responseJson.data.associationByAccount[i].asAsnName) // I need to add 
-            drop_down_data.push({ value: associationName, name: associationName, id:i }); // Create your array of data
-            
-            associationid.push({ id: responseJson.data.associationByAccount[i].asAssnID })
-            
-            }
-            this.setState({ dropdown: drop_down_data, associationid: associationid }); // Set the new state
-        })
-        
-        .catch(error => console.log(error))
-    // )
-    }
-
     unit=(unit)=>{
 
         fetch(`http://${global.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
@@ -382,18 +308,16 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        this.subscription();
-        this.association();
-        this.Admin();
+      const { getDashSub, getDashAssociation } = this.props;
+        getDashSub();
+        getDashAssociation();
         this.requestNotifPermission();
         // this.getBlockList();
-        this.props.getNotifications()
+        // this.props.getNotifications()
     }
 
     onAssociationChange = (value, index) => {
-
-
-    this.unit(this.state.associationid[index].id)
+      this.unit(this.state.associationid[index].id)
     }
 
   render() {
@@ -402,60 +326,6 @@ class Dashboard extends React.Component {
         <Header navigate={this.props.navigation}/>
       <View style={styles.container}>
         <View style={styles.textWrapper}>
-        {/* <SearchableDropdown
-            onTextChange={text => console.log(text)}
-            onItemSelect={item => console.log(item)}
-            containerStyle={{ padding: 5 }}
-            textInputStyle={{
-              padding: 12,
-              borderWidth: 1,
-              borderColor: '#ccc',
-              borderRadius: 5,
-            }}
-            itemStyle={{
-              padding: 10,
-              marginTop: 2,
-              backgroundColor: '#ddd',
-              borderColor: '#bbb',
-              borderWidth: 1,
-              borderRadius: 5,
-            }}
-            itemTextStyle={{ color: '#222' }}
-            itemsContainerStyle={{ maxHeight: 140 }}
-            // items={items}
-            items={this.state.dropdown}
-            defaultIndex={0}
-            placeholder="Building Complex Name"
-            resetValue={false}
-            underlineColorAndroid="transparent"
-          />
-          <SearchableDropdown
-            onTextChange={text => console.log(text)}
-            onItemSelect={item => console.log(item)}
-            containerStyle={{ padding: 5 }}
-            textInputStyle={{
-              padding: 12,
-              borderWidth: 1,
-              borderColor: '#ccc',
-              borderRadius: 5,
-            }}
-            itemStyle={{
-              padding: 10,
-              marginTop: 2,
-              backgroundColor: '#ddd',
-              borderColor: '#bbb',
-              borderWidth: 1,
-              borderRadius: 5,
-            }}
-            itemTextStyle={{ color: '#222' }}
-            itemsContainerStyle={{ maxHeight: 140 }}
-            // items={items}
-            items={this.state.dropdown1}
-            defaultIndex={0}
-            placeholder="Units"
-            resetValue={false}
-            underlineColorAndroid="transparent"
-          /> */}
         <View style={{flex:1, flexDirection:'column',height:hp('60%')}}>
           <View style={{flexDirection:'row',height:hp('12%')}}>
             <Card style={{flex:0.7}}>
@@ -635,7 +505,7 @@ class Dashboard extends React.Component {
       <View style={{height:hp('5%')}}>
       <Card style={styles.card1}>
             <Text style={{alignSelf:'center',fontSize:hp("2%")}}>Subscription valid until:<Text style={{alignSelf:'center',color:'#ff4732',fontSize:hp("2%")}}>
-              {this.state.datasource ? this.state.datasource.data.subscription.sueDate : null}</Text>
+              {this.props.datasource ? this.props.datasource.data.subscription.sueDate : null}</Text>
             </Text>
           </Card>
         </View>
@@ -771,10 +641,18 @@ const mapStateToProps = state => {
         isCreateLoading: state.NotificationReducer.isCreateLoading,
         notificationCount: state.NotificationReducer.notificationCount,
         joinedAssociations: state.AppReducer.joinedAssociations,
+        datasource: state.DashboardReducer.datasource
     }
 }
 
-export default connect(mapStateToProps, { newNotifInstance, createNotification, getNotifications, updateJoinedAssociation })(Dashboard);
+export default connect(mapStateToProps, { 
+  newNotifInstance, 
+  createNotification, 
+  getNotifications, 
+  updateJoinedAssociation,
+  getDashSub,
+  getDashAssociation
+})(Dashboard);
 
 
 

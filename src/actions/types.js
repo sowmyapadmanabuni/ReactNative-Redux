@@ -13,3 +13,10 @@ export const ON_NOTIFICATION_OPEN = 'on_notification_open';
 export const JOIN_ASSOCIATION = 'join_association';
 export const APPROVE_ADMIN = 'approve_admin';
 export const UPDATE_SAVED_NOTIFICATION = 'update_saved_notification';
+
+// Dashboard Reducer
+export const DASHBOARD_SUBSCRIPTION = 'dashboard_subscription';
+export const DASHBOARD_ASSOCIATION = 'dashboard_association';
+
+// User Reducer
+export const UPDATE_USER_INFO = 'update_user_info';
