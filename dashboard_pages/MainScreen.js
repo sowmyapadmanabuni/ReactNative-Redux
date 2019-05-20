@@ -33,7 +33,8 @@ import {
   getNotifications, 
   updateJoinedAssociation,
   getDashSub,
-  getDashAssociation
+  getDashAssociation,
+  getDashUnits
 } from '../src/actions';
 
 var sold =100;
@@ -41,7 +42,7 @@ var unsold=100;
 var totalunits1=0;
 var sold2=0;
 var unsold2=0;
-var Residentlist=[];
+// var Residentlist=[];
 
 class Dashboard extends React.Component {
     static navigationOptions = {
@@ -209,100 +210,6 @@ class Dashboard extends React.Component {
         
     }
 
-    unit=(unit)=>{
-
-        fetch(`http://${global.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
-        , {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-        },
-        })
-        .then(response => response.json())
-        .then((responseJson) => {
-            var count = Object.keys(responseJson.data.unit).length;
-            let sold_data = [];
-            let name=[];
-            var sold1=0;
-            var unsold1=0;
-            var totalunits=0;
-            Residentlist=name;
-            for(var i=0;i<count;i++){
-            // console.log("rohitbaba",responseJson.data.unit[i].unOcStat) // sold and unsold data 
-            sold_data.push({ value: responseJson.data.unit[i].unOcStat });
-            var count1=Object.keys(responseJson.data.unit[i].owner).length;
-            for(var j=0;j<count1;j++)
-            {
-                // console.log("owner",responseJson.data.unit[i].owner[j].uofName)//owner list
-                this.setState({ownername:responseJson.data.unit[i].owner[j].uofName})
-                this.setState({unitname:responseJson.data.unit[i].unUniName})
-                this.setState({unitid:responseJson.data.unit[i].unUnitID})
-                this.setState({uoMobile:responseJson.data.unit[i].owner[j].uoMobile})
-                // console.log("ownerlist",this.state.ownername)
-                // console.log("unit",this.state.unitname)
-                Residentlist.push({
-                    name: this.state.ownername,
-                    unit: this.state.unitname,
-                    role: "Owner",
-                    unitid:this.state.unitid,
-                    uoMobile:this.state.uoMobile,
-                })
-            }
-            var count2=Object.keys(responseJson.data.unit[i].tenant).length;
-            for(var k=0;k<count2;k++)
-            {
-                
-                // console.log("tenant",responseJson.data.unit[i].tenant[k].utfName)//tenat list
-                this.setState({tenantname:responseJson.data.unit[i].tenant[k].utfName})
-                this.setState({unitname:responseJson.data.unit[i].unUniName})
-                // console.log("tenantlist",this.state.tenantname)
-                // console.log("unit",this.state.unitname)
-                Residentlist.push({
-                    name: this.state.tenantname,
-                    unit: this.state.unitname,
-                    role: "Tenant"
-                })
-            }
-            
-                
-            }
-            // console.log("unitname,and name",Residentlist)
-            // console.log("rohitpppppp",sold_data)
-            for(var j=0;j<=sold_data.length-1;j++)
-            {
-            if(sold_data[j].value =='Sold'|| sold_data[j].value =='SoldOwner Occupied Units' || sold_data[j].value =='Sold Tenant Occupied' || sold_data[j].value =='Sold Vacant' || sold_data[j].value=='All Sold Flats'|| sold_data[j].value =='All Occupied Units')
-            {
-                sold1=sold1+1;
-            }
-            else if (sold_data[j].value=='Unsold Vacant' || sold_data[j].value=='Unsold Tenant Occupied'||sold_data[j].value=='All Unsold Flats'||sold_data[j].value=='All Vacant Units' || sold_data[j].value=='')
-            {
-                unsold1= unsold1+1;
-            }
-            totalunits++;
-            }
-            sold=((sold1/totalunits)*100).toFixed(0);
-            unsold=((unsold1/totalunits)*100).toFixed(0);
-            totalunits1=totalunits;
-            sold2=sold1;
-            unsold2=unsold1;
-
-
-            // console.log("myfirst",sold)
-            // console.log("mysecond",unsold)
-            // console.log("mytotal",totalunits1)
-            // console.log(responseJson)
-            let units = [];
-            responseJson.data.unit.map((data, index) => {
-            units.push({ value: data.unUniName, name: data.unUniName, id: index })
-            })
-
-            this.setState({ dropdown1: units })
-        })
-        
-        .catch(error=>console.log(error))
-    }
-
     onChangeText=()=>{    
     // console.log("hhhhhhhhhhhhhh",this.state.data1)
     }
@@ -317,10 +224,13 @@ class Dashboard extends React.Component {
     }
 
     onAssociationChange = (value, index) => {
-      this.unit(this.state.associationid[index].id)
+      const { associationid, getDashUnits } = this.props;
+      getDashUnits(associationid[index].id)
+      // this.unit(this.state.associationid[index].id)
     }
 
   render() {
+    const { dropdown, dropdown1, residentList, sold, unsold } = this.props;
     return (
       <View style={{flex:1}}>
         <Header navigate={this.props.navigation}/>
@@ -335,7 +245,7 @@ class Dashboard extends React.Component {
                     containerStyle={{ flex: 1, width: wp('10%')}}
                     label='Building Complex Name'
                     value="Building Complex Name"
-                    data={this.state.dropdown}
+                    data={dropdown}
                     textColor="#000"
                     fontSize={hp("2%")}
                     dropdownPosition={-2}
@@ -351,7 +261,7 @@ class Dashboard extends React.Component {
                   containerStyle={{ flex: 1, width: wp('10%')}}
                   label='Unit'
                   value="Unit"
-                  data={this.state.dropdown1}
+                  data={dropdown1}
                   textColor="#000"
                   fontSize={hp('2%')}
                   dropdownPosition={-4}
@@ -379,8 +289,8 @@ class Dashboard extends React.Component {
                               radius={hp('8.5%')}
                               data={[sold,unsold]}
                               width={wp('39%')}
-                             height={hp('22%')}
-                             labels={() => null}
+                              height={hp('22%')}
+                              labels={() => null}
                             />
                             
                             <View style={styles.gauge}>
@@ -400,15 +310,13 @@ class Dashboard extends React.Component {
                        </View>
                          <View>
                               <VictoryPie
-                              colorScale={[ "#45B591","#D0D0D0" ]}
-                              innerRadius={hp('6.5%')}
-                              radius={hp('8.5%')}
-                              data={[unsold,sold]}
-                              width={wp('39%')}
-                             height={hp('22%')}
-                             labels={() => null}
-
-                             
+                                colorScale={[ "#45B591","#D0D0D0" ]}
+                                innerRadius={hp('6.5%')}
+                                radius={hp('8.5%')}
+                                data={[unsold,sold]}
+                                width={wp('39%')}
+                                height={hp('22%')}
+                                labels={() => null}
                               />
                           <View style={styles.gauge}>
                             <Text style={[styles.gaugeText,{color:'#45B591'}]}>{unsold}%</Text>
@@ -422,7 +330,7 @@ class Dashboard extends React.Component {
           <TouchableOpacity  
             // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
             onPress={()=> {this.props.navigation.navigate('ViewmembersScreen' ,{
-            data: Residentlist })}}>
+            data: residentList })}}>
             <Card style={{height:hp('5%'),alignItems:'center',flexDirection:'row'}}>
                 <Image source={require('../icons/eye.png')} style={styles.image4}/>
                 <Text style={{alignSelf:'center',color:'black'}}>View Resident List</Text>
@@ -641,7 +549,13 @@ const mapStateToProps = state => {
         isCreateLoading: state.NotificationReducer.isCreateLoading,
         notificationCount: state.NotificationReducer.notificationCount,
         joinedAssociations: state.AppReducer.joinedAssociations,
-        datasource: state.DashboardReducer.datasource
+        datasource: state.DashboardReducer.datasource,
+        dropdown: state.DashboardReducer.dropdown,
+        dropdown1: state.DashboardReducer.dropdown1,
+        associationid: state.DashboardReducer.associationid,
+        residentList: state.DashboardReducer.residentList,
+        sold: state.DashboardReducer.sold,
+        unsold: state.DashboardReducer.unsold,
     }
 }
 
@@ -651,7 +565,8 @@ export default connect(mapStateToProps, {
   getNotifications, 
   updateJoinedAssociation,
   getDashSub,
-  getDashAssociation
+  getDashAssociation,
+  getDashUnits
 })(Dashboard);
 
 

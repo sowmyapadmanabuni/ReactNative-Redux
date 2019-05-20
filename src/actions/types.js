@@ -17,6 +17,9 @@ export const UPDATE_SAVED_NOTIFICATION = 'update_saved_notification';
 // Dashboard Reducer
 export const DASHBOARD_SUBSCRIPTION = 'dashboard_subscription';
 export const DASHBOARD_ASSOCIATION = 'dashboard_association';
+export const DASHBOARD_UNITS = 'dashboard_units';
+export const DASHBOARD_RESIDENT_LIST = 'dashboard_resident_list';
+export const DASHBOARD_PIE = 'dashboard_pie';
 
 // User Reducer
 export const UPDATE_USER_INFO = 'update_user_info';
