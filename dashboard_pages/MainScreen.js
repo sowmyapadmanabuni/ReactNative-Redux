@@ -229,6 +229,25 @@ class Dashboard extends React.Component {
       // this.unit(this.state.associationid[index].id)
     }
 
+    renderSubscription = () => {
+      const { datasource } = this.props; 
+
+      console.log(datasource)
+
+      if(!global.SelectedAssociationID) {
+        return <Text style={{alignSelf:'center',fontSize:20}}>No Subscriptions Available</Text>;
+
+      } else if(!datasource) {
+        return <Text style={{alignSelf:'center',fontSize:20}}>No Subscriptions Available</Text>;
+      } else {
+        return (
+          <Text style={{alignSelf:'center',fontSize:15}}>
+            Subscription valid until:{datasource? datasource.data.subscription.sueDate : null }
+          </Text>
+        )
+      }
+    }
+
   render() {
     const { dropdown, dropdown1, residentList, sold, unsold, datasource } = this.props;
     return (
@@ -412,15 +431,7 @@ class Dashboard extends React.Component {
       </View>
       <View style={{height:hp('5%')}}>
         <Card style={styles.card1}>
-          {
-            (!global.SelectedAssociationID || !datasource) ? 
-              <Text style={{alignSelf:'center',fontSize:20}}>No Subscriptions Available</Text>
-            :
-              <Text style={{alignSelf:'center',fontSize:15}}>
-                Subscription valid until:{datasource? datasource.data.subscription.sueDate:null }
-              </Text>
-          }
-            {/* {this.renderSubscription()} */}
+            {this.renderSubscription()}
             {/* <Text style={{alignSelf:'center',fontSize:hp("2%")}}>Subscription valid until:{this.state.datasource ? this.state.datasource.data.subscription.sueDate : null}</Text> */}
           </Card>
       </View>
