@@ -4,6 +4,8 @@ import {
 	DASHBOARD_UNITS,
 	DASHBOARD_RESIDENT_LIST,
 	DASHBOARD_PIE,
+	DASHBOARD_UNITS_START,
+	DASHBOARD_ASSOC_STOP
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -14,6 +16,7 @@ const INITIAL_STATE = {
 	residentList: [],
 	sold: 100,
 	unsold: 100,
+	isLoading: true,
 }
 
 export default (state = INITIAL_STATE,  action) => {
@@ -21,11 +24,17 @@ export default (state = INITIAL_STATE,  action) => {
 		case DASHBOARD_SUBSCRIPTION:
 			return { ...state, datasource: action.payload };
 
+		case DASHBOARD_ASSOC_STOP:
+			return { ...state, isLoading: false };
+
 		case DASHBOARD_ASSOCIATION:
-			return { ...state, dropdown:action.payload.dropdown,  associationid: action.payload.associationid };
+			return { ...state, dropdown:action.payload.dropdown,  associationid: action.payload.associationid, isLoading: false };
+
+		case DASHBOARD_UNITS_START:
+			return { ...state, isLoading: true };
 
 		case DASHBOARD_UNITS:
-			return { ...state, dropdown1: action.payload };
+			return { ...state, dropdown1: action.payload, isLoading: false };
 
 		case DASHBOARD_RESIDENT_LIST:
 			return { ...state, residentList: action.payload };

@@ -18,6 +18,8 @@ export const UPDATE_SAVED_NOTIFICATION = 'update_saved_notification';
 export const DASHBOARD_SUBSCRIPTION = 'dashboard_subscription';
 export const DASHBOARD_ASSOCIATION = 'dashboard_association';
 export const DASHBOARD_UNITS = 'dashboard_units';
+export const DASHBOARD_ASSOC_STOP = 'dashboard_assoc_stop';
+export const DASHBOARD_UNITS_START = 'dashboard_units_start';
 export const DASHBOARD_RESIDENT_LIST = 'dashboard_resident_list';
 export const DASHBOARD_PIE = 'dashboard_pie';
 

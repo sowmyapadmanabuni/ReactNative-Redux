@@ -9,6 +9,7 @@ const persistConfig = {
 	key: 'root',
 	storage: FilesystemStorage,
 	whitelist: ['NotificationReducer', 'AppReducer', 'UserReducer'],
+	blacklist: ['DashboardReducer']
 };
 
 const persistReducers = persistReducer(persistConfig, reducers);

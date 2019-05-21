@@ -5,7 +5,8 @@ import {
     TouchableOpacity,
     Dimensions,
     StyleSheet,
-    YellowBox
+    YellowBox,
+    ActivityIndicator
 } from 'react-native';
 import { Card, CardItem } from 'native-base';
 import Header from  '../components/Header';
@@ -249,7 +250,7 @@ class Dashboard extends React.Component {
     }
 
   render() {
-    const { dropdown, dropdown1, residentList, sold, unsold, datasource } = this.props;
+    const { dropdown, dropdown1, residentList, sold, unsold, datasource, isLoading } = this.props;
     return (
       <View style={{flex:1}}>
         <Header navigate={this.props.navigation}/>
@@ -292,6 +293,7 @@ class Dashboard extends React.Component {
           </View>
           
           <View style={{flexDirection:'row',height:hp('32%')}}>
+            {/* {isLoading ? <ActivityIndicator /> : null } */}
             <Card style={{flex:0.5}}>
               <CardItem style={{height:hp('27%')}}>
                 <View style={{flexDirection:'column'}}>
@@ -574,6 +576,7 @@ const mapStateToProps = state => {
         residentList: state.DashboardReducer.residentList,
         sold: state.DashboardReducer.sold,
         unsold: state.DashboardReducer.unsold,
+        isLoading: state.DashboardReducer.isLoading,
     }
 }
 

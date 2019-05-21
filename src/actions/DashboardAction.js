@@ -3,7 +3,9 @@ import {
     DASHBOARD_ASSOCIATION,
     DASHBOARD_UNITS,
     DASHBOARD_RESIDENT_LIST,
-    DASHBOARD_PIE
+    DASHBOARD_PIE,
+    DASHBOARD_UNITS_START,
+    DASHBOARD_ASSOC_STOP
 } from "./types";
 
 export const getDashSub = () => {
@@ -59,17 +61,21 @@ export const getDashAssociation = () => {
                     type: DASHBOARD_ASSOCIATION,
                     payload: { dropdown: drop_down_data, associationid }
                 })
+            } else {
+                dispatch({ type: DASHBOARD_ASSOC_STOP })
             }
         })
         
-        .catch(error => console.log(error))
+        .catch(error => {
+            dispatch({ type: DASHBOARD_ASSOC_STOP })
+            console.log(error)
+        })
     }
 }
 
 export const getDashUnits = (unit) => {
     console.log(unit)
     return (dispatch) => {
-
         let sold =100;
         let unsold=100;
         let totalunits1=0;
@@ -78,6 +84,9 @@ export const getDashUnits = (unit) => {
         let Residentlist=[];
 
         console.log(`http://${global.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`)
+
+        dispatch({ type: DASHBOARD_UNITS_START })
+
         fetch(`http://${global.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
         , {
             method: 'GET',
@@ -183,8 +192,13 @@ export const getDashUnits = (unit) => {
                     type: DASHBOARD_PIE,
                     payload: { prop: 'unsold', value: unsold }
                 })
+            } else {
+                dispatch({ type: DASHBOARD_UNITS_START })
             }
         })
-        .catch(error=>console.log(error))
+        .catch(error => {
+            console.log(error)
+            dispatch({ type: DASHBOARD_UNITS_START })
+        })
     }
 }
