@@ -13,14 +13,14 @@ const Header = (props) =>  {
                         </View>
                         {/* <Image style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1,}} source={{ uri: global.viewImageURL + 'PERSON' + global.MyAccountID + '.jpg' }}/> */}
                     </TouchableOpacity>
-                    <Text style={{marginLeft:5}}>{global.MyFirstName}</Text>
+                    <Text style={{marginLeft:5,fontWeight:'bold'}}>{global.MyFirstName}</Text>
                 </View>
                 <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
                     <Image style={[styles.image]} source={require('../icons/OyeSpace.png')}/>
                 </View>
                 <TouchableWithoutFeedback onPress={() => props.navigate.navigate('NotificationScreen')}>
-                    <View style={{flex:0.2, }}>
-                        <Image source={require('../icons/notifications.png')} style={{width:wp("5%"), height:hp("5%"), justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/>
+                    <View style={{flex:0.2, alignItems:'center',justifyContent:'center' }}>
+                        <Image source={require('../icons/notifications.png')} style={{width:hp("4.5%"), height:hp("4%"), justifyContent:'center',alignItems:'flex-end' }}/>
                     </View>
                 </TouchableWithoutFeedback>
             </View>
