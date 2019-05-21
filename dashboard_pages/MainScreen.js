@@ -258,7 +258,7 @@ class Dashboard extends React.Component {
         <View style={styles.container}>
           <View style={styles.textWrapper}>
           <View style={{flex:1, flexDirection:'column',height:hp('60%')}}>
-            <View style={{flexDirection:'row',height:hp('12%')}}>
+            <View style={{flexDirection:'row',height:hp('12%'),marginTop:hp('0.2%')}}>
               <Card style={{flex:0.7}}>
                 <CardItem style={{flexDirection:'row',height:hp('10%')}}>
                   <Image style={styles.image1} source={require('../icons/buil.png')}/>
@@ -278,6 +278,11 @@ class Dashboard extends React.Component {
               </Card>
               <Card style={{flex:0.3}}>
                 <CardItem style={{height:hp('10%')}}>
+                {isLoading ? 
+                          <View style={styles.progress}>
+                            <ActivityIndicator size="large" color="#fff"/>
+                          </View>
+                          :
                 <Dropdown
                     containerStyle={{ flex: 1, width: wp('10%')}}
                     label='Unit'
@@ -288,10 +293,11 @@ class Dashboard extends React.Component {
                     dropdownPosition={-3}
                     
                   />
-                 
+                }
                 </CardItem>
               </Card>
             </View>
+            
             
             <View style={{flexDirection:'row',height:hp('32%')}}>
               {/* {isLoading ? <ActivityIndicator /> : null } */}
@@ -363,6 +369,7 @@ class Dashboard extends React.Component {
                 </CardItem>
               </Card>
             </View>
+            
             <View style={{height:hp('7%')}}>
             <TouchableOpacity  
               // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
@@ -455,7 +462,6 @@ class Dashboard extends React.Component {
         </View>
         </View>
         </View>
-      {/* } */}
         </View>
       );
     
@@ -468,7 +474,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection:'column',
     backgroundColor: '#fff',
-    padding:hp('0.7%'),
+    paddingLeft:hp('0.7%'),
   },
   progress:{
     justifyContent:'center',
@@ -489,7 +495,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     height: hp('85%'), // 70% of height device screen
-    width: wp('95%')   // 80% of width device screen
+    width: wp('97%')   // 80% of width device screen
   },
   gaugeText: {
     backgroundColor: 'transparent',
@@ -503,8 +509,8 @@ const styles = StyleSheet.create({
     justifyContent:'space-between'
   },
   image2:{
-    height:15,
-    width:15,
+    height:hp("2%"),
+    width:hp("2%"),
     justifyContent:'flex-end',
     alignItems:'flex-end',
     marginBottom:hp('2.4%'),
@@ -541,7 +547,7 @@ const styles = StyleSheet.create({
     },
   image3:{
     height:hp("2%"),
-    width:wp("3.5%"),
+    width:hp("2%"),
     justifyContent:'flex-end',
     alignItems:'flex-end',
     marginBottom:hp('2.4%'),

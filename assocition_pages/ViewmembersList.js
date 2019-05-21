@@ -104,7 +104,7 @@ class resident extends Component {
     let sortResident = params.data;
 
     
-    this.setState({ residentList:  [ ...sortResident.filter(item => item.unit.includes(text) || item.name.includes(text) )  ]})
+    this.setState({ residentList:  [ ...sortResident.filter(item => item.unit.toUpperCase().includes(text) || item.name.toUpperCase().includes(text)  )  ]})
   }
 
   render() {
@@ -144,7 +144,7 @@ class resident extends Component {
         <Text style={styles.residentialListTitle}> Resident List </Text>  
         <View style={{flexDirection:'row'}}>
         <View style={{ flex:0.8,height:hp("5.5%"),marginStart:hp("2%")}}>
-          <TextInput style={styles.viewDetails3} placeholder="  search...." round   onChangeText = {this.handleSearch}/>
+          <TextInput style={styles.viewDetails3} placeholder="  search...." round autoCapitalize="characters"  onChangeText = {this.handleSearch}/>
         </View>
         <View style={{flex:0.3,height:hp("5.5%"),alignItems:'flex-end'}}>
                 <View style={{alignItems:'flex-end',marginEnd:hp("2%")}}>
