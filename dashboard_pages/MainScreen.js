@@ -250,19 +250,11 @@ class Dashboard extends React.Component {
     }
 
   render() {
-    const { dropdown, dropdown1, residentList, sold, unsold, datasource, isLoading } = this.props;
+    const { dropdown, dropdown1, residentList, sold, unsold,sold2,unsold2, datasource, isLoading } = this.props;
     
       return (
         <View style={{flex:1}}>
           <Header navigate={this.props.navigation}/>
-          {/* {isLoading ? 
-              <View style={styles.progress}>
-                <ActivityIndicator size="large" color="#F3B431"/>
-              </View>
-              : */}
-
-        
-          
         <View style={styles.container}>
           <View style={styles.textWrapper}>
           <View style={{flex:1, flexDirection:'column',height:hp('60%')}}>
@@ -301,6 +293,11 @@ class Dashboard extends React.Component {
               </Card>
             </View>
             
+            {isLoading ? 
+                          <View style={styles.progress}>
+                            <ActivityIndicator size="large" color="#F3B431"/>
+                          </View>
+                          :
             <View style={{flexDirection:'row',height:hp('32%')}}>
               {/* {isLoading ? <ActivityIndicator /> : null } */}
               
@@ -314,11 +311,7 @@ class Dashboard extends React.Component {
                           
                         </View>
                         
-                        {isLoading ? 
-                          <View style={styles.progress}>
-                            <ActivityIndicator size="large" color="#F3B431"/>
-                          </View>
-                          :
+                        
                         <View >
                               <VictoryPie
                                 colorScale={[ "#ff8c00","#D0D0D0" ]}
@@ -335,7 +328,7 @@ class Dashboard extends React.Component {
                             </View>
                           
                         </View>
-                        }
+                        
                       </View>
                 </CardItem>
               </Card>
@@ -371,6 +364,7 @@ class Dashboard extends React.Component {
                 </CardItem>
               </Card>
             </View>
+            }
             <View style={{height:hp('7%')}}>
             <TouchableOpacity  
               // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
@@ -463,7 +457,6 @@ class Dashboard extends React.Component {
         </View>
         </View>
         </View>
-      {/* } */}
         </View>
       );
     
