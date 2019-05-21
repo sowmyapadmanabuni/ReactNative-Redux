@@ -199,7 +199,17 @@ export const getDashUnits = (unit) => {
 
                 dispatch({
                     type: DASHBOARD_PIE,
+                    payload: { prop: 'sold2', value: sold2 }
+                })
+
+                dispatch({
+                    type: DASHBOARD_PIE,
                     payload: { prop: 'unsold', value: unsold }
+                })
+
+                dispatch({
+                    type: DASHBOARD_PIE,
+                    payload: { prop: 'unsold2', value: unsold2 }
                 })
             } else {
                 dispatch({ type: DASHBOARD_UNITS_START })

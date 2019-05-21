@@ -38,11 +38,11 @@ import {
   getDashUnits
 } from '../src/actions';
 
-var sold =100;
-var unsold=100;
-var totalunits1=0;
-var sold2=0;
-var unsold2=0;
+// var sold =100;
+// var unsold=100;
+// var totalunits1=0;
+// var sold2=0;
+// var unsold2=0;
 // var Residentlist=[];
 
 class Dashboard extends React.Component {
@@ -250,8 +250,8 @@ class Dashboard extends React.Component {
     }
 
   render() {
-    const { dropdown, dropdown1, residentList, sold, unsold,sold2,unsold2, datasource, isLoading } = this.props;
-    console.log("**************************",sold2)
+    const { dropdown, dropdown1, residentList, sold, unsold, isLoading, sold2, unsold2 } = this.props;
+    
       return (
         <View style={{flex:1}}>
           <Header navigate={this.props.navigation}/>
@@ -600,6 +600,8 @@ const mapStateToProps = state => {
         residentList: state.DashboardReducer.residentList,
         sold: state.DashboardReducer.sold,
         unsold: state.DashboardReducer.unsold,
+        sold2: state.DashboardReducer.sold2,
+        unsold2: state.DashboardReducer.unsold2,
         isLoading: state.DashboardReducer.isLoading,
     }
 }
