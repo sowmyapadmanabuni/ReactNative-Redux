@@ -74,7 +74,6 @@ export const getDashAssociation = () => {
 }
 
 export const getDashUnits = (unit) => {
-    console.log(unit)
     return (dispatch) => {
         let sold =100;
         let unsold=100;
