@@ -251,7 +251,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { dropdown, dropdown1, residentList, sold, unsold,sold2,unsold2, datasource, isLoading } = this.props;
-    
+    console.log("**************************",sold2)
       return (
         <View style={{flex:1}}>
           <Header navigate={this.props.navigation}/>
