@@ -255,11 +255,11 @@ class Dashboard extends React.Component {
       return (
         <View style={{flex:1}}>
           <Header navigate={this.props.navigation}/>
-          {isLoading ? 
+          {/* {isLoading ? 
               <View style={styles.progress}>
                 <ActivityIndicator size="large" color="#F3B431"/>
               </View>
-              :
+              : */}
 
         
           
@@ -301,8 +301,14 @@ class Dashboard extends React.Component {
               </Card>
             </View>
             
+            {isLoading ? 
+              <View style={styles.progress}>
+                <ActivityIndicator size="large" color="#F3B431"/>
+              </View>
+              :
             <View style={{flexDirection:'row',height:hp('32%')}}>
               {/* {isLoading ? <ActivityIndicator /> : null } */}
+              
               <Card style={{flex:0.5}}>
                 <CardItem style={{height:hp('27%')}}>
                   <View style={{flexDirection:'column'}}>
@@ -356,6 +362,7 @@ class Dashboard extends React.Component {
                 </CardItem>
               </Card>
             </View>
+            }
             <View style={{height:hp('7%')}}>
             <TouchableOpacity  
               // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
@@ -448,7 +455,7 @@ class Dashboard extends React.Component {
         </View>
         </View>
         </View>
-      }
+      {/* } */}
         </View>
       );
     
