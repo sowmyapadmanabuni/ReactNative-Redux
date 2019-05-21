@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection:'column',
     backgroundColor: '#fff',
-    padding:hp('0.7%'),
+    paddingLeft:hp('0.7%'),
   },
   progress:{
     justifyContent:'center',
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     height: hp('85%'), // 70% of height device screen
-    width: wp('95%')   // 80% of width device screen
+    width: wp('97%')   // 80% of width device screen
   },
   gaugeText: {
     backgroundColor: 'transparent',
