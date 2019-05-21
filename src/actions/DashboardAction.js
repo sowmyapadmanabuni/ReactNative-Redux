@@ -152,13 +152,13 @@ export const getDashUnits = (unit) => {
                     
                 }
 
-                for(var j=0;j<=sold_data.length-1;j++) {
-                    if(sold_data[j].value =='Sold'|| sold_data[j].value =='SoldOwner Occupied Units' || sold_data[j].value =='Sold Tenant Occupied' || sold_data[j].value =='Sold Vacant' || sold_data[j].value=='All Sold Flats'|| sold_data[j].value =='All Occupied Units'){
+                for(var j=0;j< sold_data.length;j++) {
+                    if(sold_data[j].value =='Sold'|| sold_data[j].value =='SoldOwner Occupied Units' || sold_data[j].value =='Sold Tenant Occupied' || sold_data[j].value =='Sold Vacant' || sold_data[j].value=='All Sold Flats'|| sold_data[j].value =='All Occupied Units'||sold_data[j].value =='Sold Tenant Occupied Unit' || sold_data[j].value =='Sold-Owner Occupied' || sold_data[j].value =='Sold-Vacant Units'|| sold_data[j].value == "Sold-Owner Occupied Units"||sold_data[j].value == 'SelfOccupied'|| sold_data[j].value =='Tenant Occupied'|| sold_data[j].value == "Occupied" ||sold_data[j].value=="Sold Owner Occupied Unit"||sold_data[j].value=="Sold Owner Occupied Unit") {
                         sold1=sold1+1;
-                    } else if (sold_data[j].value=='Unsold Vacant' || sold_data[j].value=='Unsold Tenant Occupied'||sold_data[j].value=='All Unsold Flats'||sold_data[j].value=='All Vacant Units' || sold_data[j].value=='')
-                    {
+                    } else if (sold_data[j].value=='Unsold Vacant' || sold_data[j].value=='Unsold Tenant Occupied'||sold_data[j].value=='All Unsold Flats'||sold_data[j].value=='All Vacant Units' || sold_data[j].value=='NULL'|| sold_data[j].value=='UnSold Vacant'|| sold_data[j].value==""|| sold_data[j].value =="Vacant") {
                         unsold1= unsold1+1;
-                    } totalunits++;
+                    }
+                    totalunits++;
                 }
 
                 sold=((sold1/totalunits)*100).toFixed(0);

@@ -251,196 +251,208 @@ class Dashboard extends React.Component {
 
   render() {
     const { dropdown, dropdown1, residentList, sold, unsold, datasource, isLoading } = this.props;
-    return (
-      <View style={{flex:1}}>
-        <Header navigate={this.props.navigation}/>
-      <View style={styles.container}>
-        <View style={styles.textWrapper}>
-        <View style={{flex:1, flexDirection:'column',height:hp('60%')}}>
-          <View style={{flexDirection:'row',height:hp('12%')}}>
-            <Card style={{flex:0.7}}>
-              <CardItem style={{flexDirection:'row',height:hp('10%')}}>
-                <Image style={styles.image1} source={require('../icons/buil.png')}/>
+    
+      return (
+        <View style={{flex:1}}>
+          <Header navigate={this.props.navigation}/>
+          {isLoading ? 
+              <View style={styles.progress}>
+                <ActivityIndicator size="large" color="#F3B431"/>
+              </View>
+              :
+
+        
+          
+        <View style={styles.container}>
+          <View style={styles.textWrapper}>
+          <View style={{flex:1, flexDirection:'column',height:hp('60%')}}>
+            <View style={{flexDirection:'row',height:hp('12%')}}>
+              <Card style={{flex:0.7}}>
+                <CardItem style={{flexDirection:'row',height:hp('10%')}}>
+                  <Image style={styles.image1} source={require('../icons/buil.png')}/>
+                  <Dropdown
+                      containerStyle={{ flex: 1, width: wp('10%')}}
+                      label='Building Complex Name'
+                      value="Building Complex Name"
+                      data={dropdown}
+                      textColor="#000"
+                      fontSize={hp("2%")}
+                      dropdownPosition={-2}
+                      onChangeText={(value, index) => this.onAssociationChange(value, index)}
+                    />
+              
+                    
+                </CardItem>
+              </Card>
+              <Card style={{flex:0.3}}>
+                <CardItem style={{height:hp('10%')}}>
                 <Dropdown
                     containerStyle={{ flex: 1, width: wp('10%')}}
-                    label='Building Complex Name'
-                    value="Building Complex Name"
-                    data={dropdown}
+                    label='Unit'
+                    value="Unit"
+                    data={dropdown1}
                     textColor="#000"
-                    fontSize={hp("2%")}
-                    dropdownPosition={-2}
-                    onChangeText={(value, index) => this.onAssociationChange(value, index)}
+                    fontSize={hp('2%')}
+                    dropdownPosition={-3}
+                    
                   />
+                 
+                </CardItem>
+              </Card>
+            </View>
             
-                  
-              </CardItem>
-            </Card>
-            <Card style={{flex:0.3}}>
-              <CardItem style={{height:hp('10%')}}>
-              <Dropdown
-                  containerStyle={{ flex: 1, width: wp('10%')}}
-                  label='Unit'
-                  value="Unit"
-                  data={dropdown1}
-                  textColor="#000"
-                  fontSize={hp('2%')}
-                  dropdownPosition={-4}
-                  
-                />
-               
-              </CardItem>
-            </Card>
-          </View>
-          
-          <View style={{flexDirection:'row',height:hp('32%')}}>
-            {/* {isLoading ? <ActivityIndicator /> : null } */}
-            <Card style={{flex:0.5}}>
-              <CardItem style={{height:hp('27%')}}>
-                <View style={{flexDirection:'column'}}>
-                      <View style={{flexDirection:'row'}}>
-                        <Text style={styles.text1}>Occupied</Text>
-                        <Text style={styles.text2}>{sold2}</Text>
-                        <Image style={styles.image2} source={require('../icons/ww.png')}/>
-                        
-                      </View>
-                      <View >
-                            <VictoryPie
-                              colorScale={[ "#ff8c00","#D0D0D0" ]}
-                              innerRadius={hp('6.5%')}
-                              radius={hp('8.5%')}
-                              data={[sold,unsold]}
-                              width={wp('39%')}
-                              height={hp('22%')}
-                              labels={() => null}
-                            />
-                            
-                            <View style={styles.gauge}>
-                            <Text style={[styles.gaugeText,{color:'#FF8C00'}]}>{sold}%</Text>
-                          </View>
-                      </View>
-                    </View>
-              </CardItem>
-            </Card>
-            <Card style={{flex:0.5}}>
-              <CardItem style={{height:hp('27%')}}>
-                <View style={{flexDirection:'column'}}>
-                    <View style={{flexDirection:'row'}}>
-                      <Text style={styles.text3}>Vacant</Text>
-                      <Text style={styles.text4}>{unsold2}</Text>
-                      <Image style={styles.image3} source={require('../icons/hhhh.png')}/>
-                       </View>
-                         <View>
+            <View style={{flexDirection:'row',height:hp('32%')}}>
+              {/* {isLoading ? <ActivityIndicator /> : null } */}
+              <Card style={{flex:0.5}}>
+                <CardItem style={{height:hp('27%')}}>
+                  <View style={{flexDirection:'column'}}>
+                        <View style={{flexDirection:'row'}}>
+                          <Text style={styles.text1}>Occupied</Text>
+                          <Text style={styles.text2}>{sold2}</Text>
+                          <Image style={styles.image2} source={require('../icons/ww.png')}/>
+                          
+                        </View>
+                        <View >
                               <VictoryPie
-                                colorScale={[ "#45B591","#D0D0D0" ]}
+                                colorScale={[ "#ff8c00","#D0D0D0" ]}
                                 innerRadius={hp('6.5%')}
                                 radius={hp('8.5%')}
-                                data={[unsold,sold]}
+                                data={[sold,unsold]}
                                 width={wp('39%')}
                                 height={hp('22%')}
                                 labels={() => null}
                               />
-                          <View style={styles.gauge}>
-                            <Text style={[styles.gaugeText,{color:'#45B591'}]}>{unsold}%</Text>
-                          </View>
+                              
+                              <View style={styles.gauge}>
+                              <Text style={[styles.gaugeText,{color:'#FF8C00'}]}>{sold}%</Text>
+                            </View>
+                        </View>
                       </View>
-                  </View>
-              </CardItem>
-            </Card>
+                </CardItem>
+              </Card>
+              <Card style={{flex:0.5}}>
+                <CardItem style={{height:hp('27%')}}>
+                  <View style={{flexDirection:'column'}}>
+                      <View style={{flexDirection:'row'}}>
+                        <Text style={styles.text3}>Vacant</Text>
+                        <Text style={styles.text4}>{unsold2}</Text>
+                        <Image style={styles.image3} source={require('../icons/hhhh.png')}/>
+                         </View>
+                           <View>
+                                <VictoryPie
+                                  colorScale={[ "#45B591","#D0D0D0" ]}
+                                  innerRadius={hp('6.5%')}
+                                  radius={hp('8.5%')}
+                                  data={[unsold,sold]}
+                                  width={wp('39%')}
+                                  height={hp('22%')}
+                                  labels={() => null}
+                                />
+                            <View style={styles.gauge}>
+                              <Text style={[styles.gaugeText,{color:'#45B591'}]}>{unsold}%</Text>
+                            </View>
+                        </View>
+                    </View>
+                </CardItem>
+              </Card>
+            </View>
+            <View style={{height:hp('7%')}}>
+            <TouchableOpacity  
+              // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
+              onPress={()=> {this.props.navigation.navigate('ViewmembersScreen' ,{
+              data: residentList })}}>
+              <Card style={{height:hp('5%'),alignItems:'center',flexDirection:'row'}}>
+                  <Image source={require('../icons/eye.png')} style={styles.image4}/>
+                  <Text style={{alignSelf:'center',color:'black'}}>View Resident List</Text>
+              </Card>
+            </TouchableOpacity>
+            </View>
           </View>
-          <View style={{height:hp('7%')}}>
-          <TouchableOpacity  
-            // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
-            onPress={()=> {this.props.navigation.navigate('ViewmembersScreen' ,{
-            data: residentList })}}>
-            <Card style={{height:hp('5%'),alignItems:'center',flexDirection:'row'}}>
-                <Image source={require('../icons/eye.png')} style={styles.image4}/>
-                <Text style={{alignSelf:'center',color:'black'}}>View Resident List</Text>
-            </Card>
-          </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.view1}>
-          <View style={{flexDirection:'column'}}>
-            <Card style={styles.card}>
+          <View style={styles.view1}>
+            <View style={{flexDirection:'column'}}>
+              <Card style={styles.card}>
+                  {/* <CardItem Style={styles.cardItem}> */}
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('InvitedGuestListScreen')}>
+                      <View style={{flexDirection:'column'}} >
+                        <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
+                          <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/guests.png')}/>
+                        </View>
+                        <View style={{justifyContent:'center',alignItems:'center'}}>
+                          <Text style={{fontSize:hp('1.5%')}}>Guests</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  {/* </CardItem> */}
+                  <View style={styles.view2}></View>
+                </Card>
+            </View>
+            
+            <View style={{flexDirection:'column'}}>
+              <Card style={styles.card}>
                 {/* <CardItem Style={styles.cardItem}> */}
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('InvitedGuestListScreen')}>
-                    <View style={{flexDirection:'column'}} >
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('GuardListScreen')}>
+                    <View style={{flexDirection:'column'}}>
                       <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
-                        <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/guests.png')}/>
+                        <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/guards.png')}/>
                       </View>
                       <View style={{justifyContent:'center',alignItems:'center'}}>
-                        <Text style={{fontSize:hp('1.5%')}}>Guests</Text>
+                        <Text style={{fontSize:hp('1.5%'),}}>Guards</Text>
                       </View>
                     </View>
-                  </TouchableOpacity>
-                {/* </CardItem> */}
-                <View style={styles.view2}></View>
+                    </TouchableOpacity>
+                  {/* </CardItem> */}
+                  <View style={styles.view2}></View>
               </Card>
-          </View>
-          
-          <View style={{flexDirection:'column'}}>
-            <Card style={styles.card}>
-              {/* <CardItem Style={styles.cardItem}> */}
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('GuardListScreen')}>
-                  <View style={{flexDirection:'column'}}>
+            </View>
+            
+            <View style={{flexDirection:'column'}}>
+              <Card style={styles.card}>
+                {/* <CardItem Style={styles.cardItem}> */}
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewVisitorsScreen')}>
+                    <View style={{flexDirection:'column'}}>
+                      <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
+                        <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/deliveries.png')}/>
+                      </View>
+                      <View style={{justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{fontSize:hp('1.5%')}}>Deliveries</Text>
+                      </View>
+                    </View>
+                    </TouchableOpacity>
+                  {/* </CardItem> */}
+                  <View style={styles.view2}></View>
+              </Card>
+            </View>
+            <View style={{flexDirection:'column'}}>
+              <Card style={styles.card}>
+                {/* <CardItem Style={styles.cardItem}> */}
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminFunction')}>
                     <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
-                      <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/guards.png')}/>
+                      <View style={{justifyContent:'center',alignItems:'center'}}>
+                        <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/admin.png')}/>
+                      </View>
+                      <View style={{justifyContent:'center',alignItems:'center'}}>
+                        <Text style={{fontSize:hp('1.5%'), }}>Admin</Text>
+                      </View>
                     </View>
-                    <View style={{justifyContent:'center',alignItems:'center'}}>
-                      <Text style={{fontSize:hp('1.5%'),}}>Guards</Text>
-                    </View>
-                  </View>
-                  </TouchableOpacity>
-                {/* </CardItem> */}
-                <View style={styles.view2}></View>
+                    </TouchableOpacity>
+                  {/* </CardItem> */}
+                  <View style={styles.view2}></View>
+              </Card>
+            </View>
+        </View>
+        <View style={{height:hp('5%')}}>
+          <Card style={styles.card1}>
+              {this.renderSubscription()}
+              {/* <Text style={{alignSelf:'center',fontSize:hp("2%")}}>Subscription valid until:{this.state.datasource ? this.state.datasource.data.subscription.sueDate : null}</Text> */}
             </Card>
-          </View>
-          
-          <View style={{flexDirection:'column'}}>
-            <Card style={styles.card}>
-              {/* <CardItem Style={styles.cardItem}> */}
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('ViewVisitorsScreen')}>
-                  <View style={{flexDirection:'column'}}>
-                    <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
-                      <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/deliveries.png')}/>
-                    </View>
-                    <View style={{justifyContent:'center',alignItems:'center'}}>
-                      <Text style={{fontSize:hp('1.5%')}}>Deliveries</Text>
-                    </View>
-                  </View>
-                  </TouchableOpacity>
-                {/* </CardItem> */}
-                <View style={styles.view2}></View>
-            </Card>
-          </View>
-          <View style={{flexDirection:'column'}}>
-            <Card style={styles.card}>
-              {/* <CardItem Style={styles.cardItem}> */}
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('AdminFunction')}>
-                  <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',marginTop:hp('2%')}}>
-                    <View style={{justifyContent:'center',alignItems:'center'}}>
-                      <Image style={{width:hp('4%'),height:hp('3.1%'),marginBottom:hp('0.55%')}} source={require('../icons/admin.png')}/>
-                    </View>
-                    <View style={{justifyContent:'center',alignItems:'center'}}>
-                      <Text style={{fontSize:hp('1.5%'), }}>Admin</Text>
-                    </View>
-                  </View>
-                  </TouchableOpacity>
-                {/* </CardItem> */}
-                <View style={styles.view2}></View>
-            </Card>
-          </View>
-      </View>
-      <View style={{height:hp('5%')}}>
-        <Card style={styles.card1}>
-            {this.renderSubscription()}
-            {/* <Text style={{alignSelf:'center',fontSize:hp("2%")}}>Subscription valid until:{this.state.datasource ? this.state.datasource.data.subscription.sueDate : null}</Text> */}
-          </Card>
-      </View>
-      </View>
-      </View>
-      </View>
-    );
+        </View>
+        </View>
+        </View>
+      }
+        </View>
+      );
+    
+  
   }
 }
 
@@ -450,6 +462,10 @@ const styles = StyleSheet.create({
     flexDirection:'column',
     backgroundColor: '#fff',
     padding:hp('0.7%'),
+  },
+  progress:{
+    justifyContent:'center',
+    alignItems:'center',
   },
   card:{
     borderBottomWidth:1,
