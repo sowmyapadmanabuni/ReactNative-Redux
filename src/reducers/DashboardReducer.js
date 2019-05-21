@@ -15,6 +15,8 @@ const INITIAL_STATE = {
 	associationid: null,
 	residentList: [],
 	sold: 100,
+	sold2: 100,
+	unsold2: 100,
 	unsold: 100,
 	isLoading: true,
 }
