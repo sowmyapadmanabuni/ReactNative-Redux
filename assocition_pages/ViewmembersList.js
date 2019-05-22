@@ -5,7 +5,8 @@ import { TextInput } from "react-native-gesture-handler";
 import { NavigationEvents } from 'react-navigation';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Dropdown } from 'react-native-material-dropdown'
-
+import axios from 'axios';
+import _ from 'lodash';
 
 let data = [{
   value:'Admin',id:1
@@ -13,7 +14,11 @@ let data = [{
 {
   value:'Owner',id:2
 }];
+
 var data1=[];
+var test = [];
+let without = [];
+const role = [];
 
 class resident extends Component {
   
@@ -22,7 +27,9 @@ class resident extends Component {
     query:'',
     residentList:[],
     dataSource:[],
-    selectedRoleData: 0
+    selectedRoleData: 0,
+    units: [],
+    memberList: [],
   }
 
   static navigationOptions = {
@@ -31,7 +38,107 @@ class resident extends Component {
   }
 
   residentialListGetMethod=()=>{
-    
+  }
+
+  componentDidMount() {
+    const { params } = this.props.navigation.state;
+    // const { units } = this.state;
+    let units = params.data.sort((a, b) => a.unit.localeCompare(b.unit));
+
+    const promises = [];
+
+    let completeList = [];
+    let comp = this;
+    let admins = _.map(units, (admin, index) => {
+      console.log(admin.admin)
+      if(admin.admin) {
+        // promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/2180`, {
+        promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${admin.admin}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+          },
+        })
+        .then((res) => {
+          if(res.data.success) {
+            let responseData = res.data.data;
+            return responseData;
+          }
+        })
+      }
+    })
+
+    Promise.all(promises)
+    .then(function(values, index) {
+      completeList = values;
+      console.log('values', values)
+
+      let indexValue = _.map(completeList, (value, index) => {
+        return { ...value, id: index };
+      });
+      
+      indexValue.map((data, index, allData) => {
+        // arr[index]; 
+        _.map(data, (mem, i, j) => {
+          // console.log('mem', mem)
+          // console.log('i', i)
+          // console.log('j', j)
+            let a = _.map(j.memberListByAccount, (sorted) => {
+              return { ...sorted, id: j.id }
+            })
+
+            test.push(a);
+          return mem
+        })
+
+      })
+
+      let filtered = test.filter(function (el) {
+        return el.length != 0;
+    })
+
+      // console.log('filtered', filtered);
+      
+        _.map(filtered, (value) => {
+        _.map(value, (data) => {
+
+          if(data.unUnitID === units[data.id].unitid && data.mrmRoleID === 1) {
+            role.push({ ...data, isAdmin: true });
+          } else {
+            // role.push({ ...data, isAdmin: false });
+          }
+
+        })
+      })
+
+      let freeDup = _.unionBy(role, 'acMobile');
+
+      console.log(freeDup);
+
+      // secUnits = units;
+
+      secUnits = _.map(units, (data, i) => {
+        return { ...data, isAdmin: false }
+      })
+
+      secArr = _.map(units, (data, i) => {
+        if(freeDup[i]) {
+          secUnits[freeDup[i].id].isAdmin = true
+          console.log(secUnits[freeDup[i].id].isAdmin)
+        } else {
+        }
+      })
+
+      console.log(secArr)
+      console.log(secUnits)
+      comp.setState({ residentList: secUnits });
+
+    })
+    .catch((error, index )=> {
+      console.log(error)
+      console.log(index)
+    })
+
   }
 
   changeRole = () => {
@@ -94,7 +201,7 @@ class resident extends Component {
       /> 
     )
     
-}
+  }
 
   handleSearch = text => {
     const { residentList } = this.state;
@@ -109,14 +216,15 @@ class resident extends Component {
 
   render() {
     const {params} = this.props.navigation.state;
-    console.log(this.state.selectedRoleData)
-    
-    
     return (
-
       <View style = {{flex:1, flexDirection: 'column' }}>
         <NavigationEvents 
-          onDidFocus={payload => this.setState({ residentList: params.data })}
+          onDidFocus={payload => {
+            residentList = params.data;
+            this.setState({ residentList});
+            residentList.sort((a, b) => a.unit.localeCompare(b.unit))
+            this.setState({ units: residentList })
+          }}
         />
       <SafeAreaView style={{backgroundColor:'orange'}}>
             <View style={[styles.viewStyle1,{flexDirection:'row'}]}>
@@ -176,6 +284,7 @@ class resident extends Component {
                             
                       <View style={{flex:0.5,marginRight:hp("3%")}}>
                             {item.role == 'Owner' ? this.selectRole(item, index): <Text>       </Text> }
+                            {item.isAdmin ?  <Text> is Admin  </Text> : <Text> Not Admin </Text> }
                       </View>
                       </View>
                       <View style={{height: 1, backgroundColor: 'lightgray'}}/>
