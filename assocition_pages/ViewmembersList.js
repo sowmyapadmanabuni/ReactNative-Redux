@@ -30,6 +30,7 @@ class resident extends Component {
     selectedRoleData: 0,
     units: [],
     memberList: [],
+    loading: true,
   }
 
   static navigationOptions = {
@@ -131,7 +132,8 @@ class resident extends Component {
 
       console.log(secArr)
       console.log(secUnits)
-      comp.setState({ residentList: secUnits });
+      let newData = [ ...secUnits ]
+      comp.setState({ residentList: newData, loading: false });
 
     })
     .catch((error, index )=> {
@@ -221,7 +223,7 @@ class resident extends Component {
         <NavigationEvents 
           onDidFocus={payload => {
             residentList = params.data;
-            this.setState({ residentList});
+            this.setState({ residentList: residentList.sort((a, b) => a.unit.localeCompare(b.unit)) });
             residentList.sort((a, b) => a.unit.localeCompare(b.unit))
             this.setState({ units: residentList })
           }}
@@ -265,8 +267,9 @@ class resident extends Component {
           <View style={styles.viewDetails}>
             
               <View style={{flex:1}} >
+                {this.state.loading ? <Text> Loding </Text> : 
                 <FlatList
-                    data={this.state.residentList.sort((a, b) => a.unit.localeCompare(b.unit))}
+                    data={this.state.residentList}
                     keyExtractor={(item, index) => item.unit + index}
                     extraData={this.state.residentList}
                     renderItem={({ item, index }) =>
@@ -291,6 +294,7 @@ class resident extends Component {
                     </Card>
                     
                 }/>
+              }
                 </View>
                 
 
