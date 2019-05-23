@@ -284,7 +284,7 @@ class resident extends Component {
                             
                       <View style={{flex:0.5,marginRight:hp("3%")}}>
                             {item.role == 'Owner' ? this.selectRole(item, index): <Text>       </Text> }
-                            {item.isAdmin ?  <Text> is Admin  </Text> : <Text> Not Admin </Text> }
+                            {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Not Admin </Text> }
                       </View>
                       </View>
                       <View style={{height: 1, backgroundColor: 'lightgray'}}/>

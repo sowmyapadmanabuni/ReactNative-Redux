@@ -70,8 +70,8 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.7.0)
-  - React (0.58.6):
-    - React/Core (= 0.58.6)
+  - React (0.59.8):
+    - React/Core (= 0.59.8)
   - react-native-document-picker (2.3.0):
     - React
   - react-native-image-picker (0.28.0):
@@ -80,50 +80,56 @@ PODS:
     - React
   - react-native-sqlite-storage (3.3.10):
     - React
-  - React/Core (0.58.6):
-    - yoga (= 0.58.6.React)
-  - React/CxxBridge (0.58.6):
+  - React/Core (0.59.8):
+    - yoga (= 0.59.8.React)
+  - React/CxxBridge (0.59.8):
     - Folly (= 2018.10.22.00)
     - React/Core
     - React/cxxreact
     - React/jsiexecutor
-  - React/cxxreact (0.58.6):
+  - React/cxxreact (0.59.8):
     - boost-for-react-native (= 1.63.0)
+    - DoubleConversion
     - Folly (= 2018.10.22.00)
+    - glog
     - React/jsinspector
-  - React/DevSupport (0.58.6):
+  - React/DevSupport (0.59.8):
     - React/Core
     - React/RCTWebSocket
-  - React/fishhook (0.58.6)
-  - React/jsi (0.58.6):
+  - React/fishhook (0.59.8)
+  - React/jsi (0.59.8):
+    - DoubleConversion
     - Folly (= 2018.10.22.00)
-  - React/jsiexecutor (0.58.6):
+    - glog
+  - React/jsiexecutor (0.59.8):
+    - DoubleConversion
     - Folly (= 2018.10.22.00)
+    - glog
     - React/cxxreact
     - React/jsi
-  - React/jsinspector (0.58.6)
-  - React/RCTActionSheet (0.58.6):
+  - React/jsinspector (0.59.8)
+  - React/RCTActionSheet (0.59.8):
     - React/Core
-  - React/RCTAnimation (0.58.6):
+  - React/RCTAnimation (0.59.8):
     - React/Core
-  - React/RCTBlob (0.58.6):
+  - React/RCTBlob (0.59.8):
     - React/Core
-  - React/RCTGeolocation (0.58.6):
+  - React/RCTGeolocation (0.59.8):
     - React/Core
-  - React/RCTImage (0.58.6):
+  - React/RCTImage (0.59.8):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.58.6):
+  - React/RCTLinkingIOS (0.59.8):
     - React/Core
-  - React/RCTNetwork (0.58.6):
+  - React/RCTNetwork (0.59.8):
     - React/Core
-  - React/RCTSettings (0.58.6):
+  - React/RCTSettings (0.59.8):
     - React/Core
-  - React/RCTText (0.58.6):
+  - React/RCTText (0.59.8):
     - React/Core
-  - React/RCTVibration (0.58.6):
+  - React/RCTVibration (0.59.8):
     - React/Core
-  - React/RCTWebSocket (0.58.6):
+  - React/RCTWebSocket (0.59.8):
     - React/Core
     - React/fishhook
     - React/RCTBlob
@@ -144,7 +150,7 @@ PODS:
     - React
   - RNViewShot (2.5.0):
     - React
-  - yoga (0.58.6.React)
+  - yoga (0.59.8.React)
 
 DEPENDENCIES:
   - Crashlytics
@@ -245,7 +251,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 6481e6318c5fcabaaa8513ef8120f329055d7c10
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
-  React: 130b87b2d5e2baac646954282cab87be986d98fc
+  React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-document-picker: 8508bfda34be6c24a2cbecbe515b15108658c183
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
   react-native-orientation: d4a97266b06ec8d45d74e626656a730ebbebbb6f
@@ -257,8 +263,8 @@ SPEC CHECKSUMS:
   RNSound: e157320f503bdd4f4ee6d8542e948d54f90c3c3a
   RNVectorIcons: 6607bd3a30291d0edb56f9bbe7ae411ee2b928b0
   RNViewShot: 5c5b4c5540046e5fb0de4a48a311571816c43c86
-  yoga: 32d7ef1081951e9a35a4c72a7be797598b138a48
+  yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
 PODFILE CHECKSUM: 9d91d334d80d6b7491dc023ca4b45a5e2ff931a7
 
-COCOAPODS: 1.6.0
+COCOAPODS: 1.6.2
