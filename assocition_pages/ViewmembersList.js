@@ -249,7 +249,7 @@ class Resident extends Component {
             <View style={[styles.viewStyle1,{flexDirection:'row'}]}>
                 <View style={styles.viewDetails1}>
                 <TouchableOpacity onPress={()=> {this.props.navigation.navigate('ResDashBoard')}}>
-                <View style={{ height:hp("3%"),width:wp("5%"),alignItems:'center',justifyContent:'center'}}>
+                <View style={{ height:hp("4%"),width:wp("15%"),alignItems:'center',justifyContent:'center'}}>
                   <Image 
                     resizeMode="contain" 
                     source={require('../icons/back.png')} 

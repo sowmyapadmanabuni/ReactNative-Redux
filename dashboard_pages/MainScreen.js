@@ -230,13 +230,13 @@ class Dashboard extends React.Component {
       console.log(datasource)
 
       if(!global.SelectedAssociationID) {
-        return <Text style={{alignSelf:'center',fontSize:20}}>No Subscriptions Available</Text>;
+        return <Text style={{alignSelf:'center',fontSize:hp('2%')}}>No Subscriptions Available</Text>;
 
       } else if(!datasource) {
-        return <Text style={{alignSelf:'center',fontSize:20}}>No Subscriptions Available</Text>;
+        return <Text style={{alignSelf:'center',fontSize:hp('2%')}}>No Subscriptions Available</Text>;
       } else {
         return (
-          <Text style={{alignSelf:'center',fontSize:15}}>
+          <Text style={{alignSelf:'center',fontSize:hp('2%')}}>
             Subscription valid until:{datasource? datasource.data.subscription.sueDate : null }
           </Text>
         )
@@ -292,7 +292,11 @@ class Dashboard extends React.Component {
               </Card>
             </View>
             
-            
+            {isLoading ? 
+                          <View style={styles.progress}>
+                            <ActivityIndicator size="large" color="#F3B431"/>
+                          </View>
+                          :
             <View style={{flexDirection:'row',height:hp('32%')}}>
               {/* {isLoading ? <ActivityIndicator /> : null } */}
               
@@ -306,11 +310,7 @@ class Dashboard extends React.Component {
                           
                         </View>
                         
-                        {isLoading ? 
-                          <View style={styles.progress}>
-                            <ActivityIndicator size="large" color="#F3B431"/>
-                          </View>
-                          :
+                        
                         <View >
                               <VictoryPie
                                 colorScale={[ "#ff8c00","#D0D0D0" ]}
@@ -327,7 +327,7 @@ class Dashboard extends React.Component {
                             </View>
                           
                         </View>
-                        }
+                        
                       </View>
                 </CardItem>
               </Card>
@@ -339,11 +339,7 @@ class Dashboard extends React.Component {
                         <Text style={styles.text4}>{unsold2}</Text>
                         <Image style={styles.image3} source={require('../icons/hhhh.png')}/>
                          </View>
-                         {isLoading ? 
-                          <View style={styles.progress}>
-                            <ActivityIndicator size="large" color="#F3B431"/>
-                          </View>
-                          :
+                         
                            <View>
                                 <VictoryPie
                                   colorScale={[ "#45B591","#D0D0D0" ]}
@@ -358,12 +354,12 @@ class Dashboard extends React.Component {
                               <Text style={[styles.gaugeText,{color:'#45B591'}]}>{unsold}%</Text>
                             </View>
                         </View>
-                         }
+                         
                     </View>
                 </CardItem>
               </Card>
             </View>
-            
+            }
             <View style={{height:hp('7%')}}>
             <TouchableOpacity  
               // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
