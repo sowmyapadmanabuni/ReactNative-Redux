@@ -159,7 +159,7 @@ const App = createSwitchNavigator({
       title: 'ResidentDashBoard Drawer ',
       headerStyle: { backgroundColor: '#f05555' },
       headerTintColor: '#ffffff',
-      header:null
+      // header:null
     },
   }, 
  /*  ViewmembersScreen: {
@@ -206,6 +206,8 @@ const App = createSwitchNavigator({
       // headerTintColor: '#ffffff',
     },
   }, 
+}, {
+  headerMode: 'none',
 });
 //export default App;
 const App2 = createAppContainer(App);

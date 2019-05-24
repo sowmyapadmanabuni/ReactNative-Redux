@@ -19,6 +19,7 @@ const INITIAL_STATE = {
 	unsold2: 100,
 	unsold: 100,
 	isLoading: true,
+	selectedAssociation: null,
 }
 
 export default (state = INITIAL_STATE,  action) => {
@@ -36,7 +37,7 @@ export default (state = INITIAL_STATE,  action) => {
 			return { ...state, isLoading: true };
 
 		case DASHBOARD_UNITS:
-			return { ...state, dropdown1: action.payload, isLoading: false };
+			return { ...state, dropdown1: action.payload, isLoading: false, selectedAssociation: action.association };
 
 		case DASHBOARD_RESIDENT_LIST:
 			return { ...state, residentList: action.payload };

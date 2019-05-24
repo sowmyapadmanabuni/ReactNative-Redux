@@ -231,7 +231,8 @@ export const getDashUnits = (unit) => {
                     
                     dispatch({
                         type: DASHBOARD_UNITS,
-                        payload: units
+                        payload: units,
+                        association: unit
                     })
 
                     dispatch({

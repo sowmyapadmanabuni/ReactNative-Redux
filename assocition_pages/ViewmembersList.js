@@ -8,6 +8,7 @@ import { Dropdown } from 'react-native-material-dropdown';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
+import { getDashUnits } from "../src/actions";
 
 let data = [{
   value:'Admin',id:1
@@ -150,16 +151,17 @@ class Resident extends Component {
   }
 
   changeRole = () => {
+    const { getDashUnits, selectedAssociation} = this.props;
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
     const url = `http://${global.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
-    
+    console.log(this.state)
     console.log(url)
-    requestBody = {
-      "ACMobile":this.state.selectedRoleData.uoMobile,
-      "UNUnitID": this.state.selectedRoleData.unitid,
-    "MRMRoleID" : this.state.selectedRoleData.selRolId,
-      // global.MyOYEMemberID 
-    }
+      requestBody = {
+        "ACMobile":this.state.selectedRoleData.uoMobile,
+        "UNUnitID": this.state.selectedRoleData.unitid,
+        "MRMRoleID" : this.state.selectedRoleData.selRolId,
+        // global.MyOYEMemberID 
+      }
 
     fetch(url, {
 
@@ -182,7 +184,7 @@ class Resident extends Component {
       .then((responseJson) => {
         console.log("%%%%%%%%%%", responseJson)
         this.props.navigation.goBack()
-        
+        getDashUnits(selectedAssociation)
       })
       .catch((error) => {
         console.log('err ' + error)
@@ -325,10 +327,11 @@ class Resident extends Component {
 const mapStateToProps = state => {
   return {
     associationid: state.DashboardReducer.associationid,
+    selectedAssociation: state.DashboardReducer.selectedAssociation,
   }
 }
 
-export default connect(mapStateToProps, { })(Resident)
+export default connect(mapStateToProps, { getDashUnits })(Resident)
 
 
 const styles = StyleSheet.create({

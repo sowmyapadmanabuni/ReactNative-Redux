@@ -44,6 +44,10 @@ async function requestReadSmsPermission() {
 }
 
 class SplashScreen extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
+
   constructor(props) {
     super(props);
     // this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));

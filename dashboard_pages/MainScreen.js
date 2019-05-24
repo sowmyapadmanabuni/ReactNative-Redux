@@ -41,8 +41,8 @@ import {
 
 class Dashboard extends React.Component {
     static navigationOptions = {
-    title: 'Dashboard',
-    header: null
+      title: 'Dashboard',
+      header: null,
     }
 
     constructor(props){
