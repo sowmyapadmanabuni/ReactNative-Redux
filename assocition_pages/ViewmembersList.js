@@ -4,7 +4,8 @@ import { Card, CardItem, Container, Left, Body, Right, Title, Row,Button } from 
 import { TextInput } from "react-native-gesture-handler";
 import { NavigationEvents } from 'react-navigation';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Dropdown } from 'react-native-material-dropdown'
+import { Dropdown } from 'react-native-material-dropdown';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import _ from 'lodash';
 
@@ -20,7 +21,7 @@ var test = [];
 let without = [];
 const role = [];
 
-class resident extends Component {
+class Resident extends Component {
   
   state = {
     fulldata:[],
@@ -41,105 +42,110 @@ class resident extends Component {
   residentialListGetMethod=()=>{
   }
 
-  componentDidMount() {
-    const { params } = this.props.navigation.state;
-    // const { units } = this.state;
-    let units = params.data.sort((a, b) => a.unit.localeCompare(b.unit));
+  // componentDidMount() {
+  //   const { params } = this.props.navigation.state;
+  //   // const { units } = this.state;
+  //   let units = params.data.sort((a, b) => a.unit.localeCompare(b.unit));
 
-    const promises = [];
+  //   const promises = [];
 
-    let completeList = [];
-    let comp = this;
-    let admins = _.map(units, (admin, index) => {
-      console.log(admin.admin)
-      if(admin.admin) {
-        // promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/2180`, {
-        promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${admin.admin}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-          },
-        })
-        .then((res) => {
-          if(res.data.success) {
-            let responseData = res.data.data;
-            return responseData;
-          }
-        })
-      }
-    })
+  //   let completeList = [];
+  //   let comp = this;
+  //   let admins = _.map(units, (admin, index) => {
+  //     console.log(admin.admin)
+  //     if(admin.admin) {
+  //       // promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/2180`, {
+  //       promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${admin.admin}`, {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+  //         },
+  //       })
+  //       .then((res) => {
+  //         if(res.data.success) {
+  //           let responseData = res.data.data;
+  //           console.log(responseData)
+  //           return responseData;
+  //         }
+  //       })
+  //     }
+  //   })
 
-    Promise.all(promises)
-    .then(function(values, index) {
-      completeList = values;
-      console.log('values', values)
+  //   Promise.all(promises)
+  //   .then(function(values, index) {
+  //     completeList = values;
+  //     console.log('values', values)
 
-      let indexValue = _.map(completeList, (value, index) => {
-        return { ...value, id: index };
-      });
+  //     let indexValue = _.map(completeList, (value, index) => {
+  //       return { ...value, id: index };
+  //     });
       
-      indexValue.map((data, index, allData) => {
-        // arr[index]; 
-        _.map(data, (mem, i, j) => {
-          // console.log('mem', mem)
-          // console.log('i', i)
-          // console.log('j', j)
-            let a = _.map(j.memberListByAccount, (sorted) => {
-              return { ...sorted, id: j.id }
-            })
+  //     indexValue.map((data, index, allData) => {
+  //       // arr[index]; 
+  //       _.map(data, (mem, i, j) => {
+  //         // console.log('mem', mem)
+  //         // console.log('i', i)
+  //         // console.log('j', j)
+  //           let a = _.map(j.memberListByAccount, (sorted) => {
+  //             return { ...sorted, id: j.id }
+  //           })
 
-            test.push(a);
-          return mem
-        })
+  //           test.push(a);
+  //         return mem
+  //       })
 
-      })
+  //     })
 
-      let filtered = test.filter(function (el) {
-        return el.length != 0;
-    })
+  //     let filtered = test.filter(function (el) {
+  //       return el.length != 0;
+  //   })
 
-      // console.log('filtered', filtered);
+  //     // console.log('filtered', filtered);
       
-        _.map(filtered, (value) => {
-        _.map(value, (data) => {
+  //       _.map(filtered, (value) => {
+  //       _.map(value, (data) => {
 
-          if(data.unUnitID === units[data.id].unitid && data.mrmRoleID === 1) {
-            role.push({ ...data, isAdmin: true });
-          } else {
-            // role.push({ ...data, isAdmin: false });
-          }
+  //         if(data.unUnitID === units[data.id].unitid && data.mrmRoleID === 1) {
+  //           role.push({ ...data, isAdmin: true });
+  //         } else {
+  //           // role.push({ ...data, isAdmin: false });
+  //         }
 
-        })
-      })
+  //       })
+  //     })
 
-      let freeDup = _.unionBy(role, 'acMobile');
+  //     let freeDup = _.unionBy(role, 'acMobile');
 
-      console.log(freeDup);
+  //     console.log(freeDup);
 
-      // secUnits = units;
+  //     // secUnits = units;
 
-      secUnits = _.map(units, (data, i) => {
-        return { ...data, isAdmin: false }
-      })
+  //     secUnits = _.map(units, (data, i) => {
+  //       return { ...data, isAdmin: false }
+  //     })
 
-      secArr = _.map(units, (data, i) => {
-        if(freeDup[i]) {
-          secUnits[freeDup[i].id].isAdmin = true
-          console.log(secUnits[freeDup[i].id].isAdmin)
-        } else {
-        }
-      })
+  //     secArr = _.map(units, (data, i) => {
+  //       if(freeDup[i]) {
+  //         secUnits[freeDup[i].id].isAdmin = true
+  //         console.log(secUnits[freeDup[i].id].isAdmin)
+  //       } else {
+  //       }
+  //     })
 
-      console.log(secArr)
-      console.log(secUnits)
-      let newData = [ ...secUnits ]
-      comp.setState({ residentList: newData, loading: false });
+  //     console.log(secArr)
+  //     console.log(secUnits)
+  //     let newData = [ ...secUnits ]
+  //     comp.setState({ residentList: newData, loading: false });
 
-    })
-    .catch((error, index )=> {
-      console.log(error)
-      console.log(index)
-    })
+  //   })
+  //   .catch((error, index )=> {
+  //     console.log(error)
+  //     console.log(index)
+  //   })
+
+  // }
+
+  componentDidMount = () => {
 
   }
 
@@ -216,8 +222,17 @@ class resident extends Component {
     this.setState({ residentList:  [ ...sortResident.filter(item => item.unit.toUpperCase().includes(text) || item.name.toUpperCase().includes(text)  )  ]})
   }
 
+  renderAdminStatus = (item) => {
+    console.log(item)
+    if(item.uoRoleID === 1) {
+      return <Text> Admin</Text>
+    } else return null;
+  }
+
   render() {
     const {params} = this.props.navigation.state;
+    // console.log(params)
+    // console.log(this.props.associationid)
     return (
       <View style = {{flex:1, flexDirection: 'column' }}>
         <NavigationEvents 
@@ -267,7 +282,7 @@ class resident extends Component {
           <View style={styles.viewDetails}>
             
               <View style={{flex:1}} >
-                {this.state.loading ? <Text> Loding </Text> : 
+                {/* {this.state.loading ? <Text> Loding </Text> :  */}
                 <FlatList
                     data={this.state.residentList}
                     keyExtractor={(item, index) => item.unit + index}
@@ -287,14 +302,15 @@ class resident extends Component {
                             
                       <View style={{flex:0.5,marginRight:hp("3%")}}>
                             {item.role == 'Owner' ? this.selectRole(item, index): <Text>       </Text> }
-                            {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Not Admin </Text> }
+                            {this.renderAdminStatus(item)}
+                            {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
                       </View>
                       </View>
                       <View style={{height: 1, backgroundColor: 'lightgray'}}/>
                     </Card>
                     
                 }/>
-              }
+              {/* } */}
                 </View>
                 
 
@@ -306,7 +322,13 @@ class resident extends Component {
   }
 }
 
-export default resident
+const mapStateToProps = state => {
+  return {
+    associationid: state.DashboardReducer.associationid,
+  }
+}
+
+export default connect(mapStateToProps, { })(Resident)
 
 
 const styles = StyleSheet.create({
