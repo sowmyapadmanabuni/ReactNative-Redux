@@ -5,6 +5,7 @@ import {
     DASHBOARD_RESIDENT_LIST,
     DASHBOARD_PIE,
     DASHBOARD_UNITS_START,
+    DASHBOARD_UNITS_STOP,
     DASHBOARD_ASSOC_STOP
 } from "./types";
 import axios from 'axios';
@@ -261,12 +262,12 @@ export const getDashUnits = (unit) => {
                     })
 
                 } else {
-                    dispatch({ type: DASHBOARD_UNITS_START })
+                    dispatch({ type: DASHBOARD_UNITS_STOP })
                 }
             })
             .catch(error => {
                 console.log(error)
-                dispatch({ type: DASHBOARD_UNITS_START })
+                dispatch({ type: DASHBOARD_UNITS_STOP })
             })
         })
     }

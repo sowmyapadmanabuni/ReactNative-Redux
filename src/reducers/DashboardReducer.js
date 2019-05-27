@@ -5,6 +5,7 @@ import {
 	DASHBOARD_RESIDENT_LIST,
 	DASHBOARD_PIE,
 	DASHBOARD_UNITS_START,
+	DASHBOARD_UNITS_STOP,
 	DASHBOARD_ASSOC_STOP
 } from "../actions/types";
 
@@ -35,6 +36,9 @@ export default (state = INITIAL_STATE,  action) => {
 
 		case DASHBOARD_UNITS_START:
 			return { ...state, isLoading: true };
+
+		case DASHBOARD_UNITS_STOP:
+			return { ...state, isLoading: false };
 
 		case DASHBOARD_UNITS:
 			return { ...state, dropdown1: action.payload, isLoading: false, selectedAssociation: action.association };
