@@ -49,7 +49,10 @@ export default (state = INITIAL_STATE, action) => {
         sold: 0,
         sold2: 0,
         unsold: 0,
-        unsold2: 0
+        unsold2: 0,
+        residentList: [],
+        dropdown1: [],
+        selectedAssociation: null
       };
 
     case DASHBOARD_UNITS:
