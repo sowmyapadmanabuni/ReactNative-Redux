@@ -58,6 +58,8 @@ target 'OyeSpace' do
 
   pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
 
+  pod 'react-native-version-number', :path => '../node_modules/react-native-version-number'
+
   target 'OyeSpaceTests' do
     inherit! :search_paths
     # Pods for testing

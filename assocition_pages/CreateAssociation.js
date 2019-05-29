@@ -812,7 +812,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
             this.createSelfUnit(responseJson.data.association.asAssnID, this.state.Unit_Name);
           } else {
             console.log('ravii else', responseJson);
-            Alert.alert(' Create Association Failed');
+            Alert.alert('Create Association Failed');
             // console.log('hiii',failed);
           }
         })

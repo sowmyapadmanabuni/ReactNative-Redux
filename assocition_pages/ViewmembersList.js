@@ -431,10 +431,11 @@ export default connect(
 const styles = StyleSheet.create({
   residentialListTitle: {
     textAlign: "center",
-    fontSize: hp("4%"),
+    fontSize: hp("2.8%"),
     fontWeight: "bold",
     marginTop: hp("2%"),
-    marginBottom: hp("1%")
+    marginBottom: hp("1%"),
+    color:'orange'
   },
   viewDetails: {
     flexDirection: "column",
@@ -484,8 +485,8 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
-    width: hp("3.5%"),
-    height: hp("3.5%"),
+    width: hp("3%"),
+    height: hp("3%"),
     marginTop: 5
     // marginLeft: 10
   },

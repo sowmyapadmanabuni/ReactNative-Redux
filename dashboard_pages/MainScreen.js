@@ -362,7 +362,7 @@ class Dashboard extends React.Component {
             </View>
             }
             <View style={{height:hp('7%')}}>
-            <TouchableOpacity  
+            {/* <TouchableOpacity  
               // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
               onPress={()=> {this.props.navigation.navigate('ViewmembersScreen' ,{
               data: residentList })}}>
@@ -370,7 +370,7 @@ class Dashboard extends React.Component {
                   <Image source={require('../icons/eye.png')} style={styles.image4}/>
                   <Text style={{alignSelf:'center',color:'black'}}>View Resident List</Text>
               </Card>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             </View>
           </View>
           <View style={styles.view1}>

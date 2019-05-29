@@ -166,10 +166,8 @@ export const getDashUnits = (unit) => {
                             sold1=sold1+1;
                         } else if (sold_data[j].value=='UnSold Vacant Units' 
                         || sold_data[j].value=='UnSold Tenant Occupied Units'
-                        ||sold_data[j].value=='All Sold Vacants'
                         || sold_data[j].value=='NULL'
-                        || sold_data[j].value==""
-                        || sold_data[j].value =="Vacant") {
+                        || sold_data[j].value=="") {
                             unsold1= unsold1+1;
                         }
                         totalunits++;
