@@ -36,7 +36,7 @@ import CreateWorker from '../assocition_pages/CreateWorker';
 import EditWorker from '../assocition_pages/EditWorker'; 
 
  import EditCheckPoint from '../assocition_pages/EditCheckPoint';
- import Subscription from '../assocition_pages/Subscription';
+//  import Subscription from '../assocition_pages/Subscription';
 // import EditCheckPointMap from '../assocition_pages/EditCheckPointMap';
 // import CreateCheckPointMap from '../assocition_pages/CheckPointMap';
 // import CreateCheckPointListMap from '../assocition_pages/CheckPointListMap';
@@ -210,16 +210,16 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff',
     },
   },
-  SubscriptionScreen:  {
-    screen: Subscription,
-    navigationOptions: {
-      title: 'Subscription',
-      header: null,
-      //title: 'ResidentDashBoard Drawer ',
-      headerStyle: { backgroundColor: '#FA9917' },
-      headerTintColor: '#ffffff',
-    },
-  },
+  // SubscriptionScreen:  {
+  //   screen: Subscription,
+  //   navigationOptions: {
+  //     title: 'Subscription',
+  //     header: null,
+  //     //title: 'ResidentDashBoard Drawer ',
+  //     headerStyle: { backgroundColor: '#FA9917' },
+  //     headerTintColor: '#ffffff',
+  //   },
+  // },
   ViewVisitorsScreen: {
     screen: ViewVisitorsList,
     navigationOptions: {

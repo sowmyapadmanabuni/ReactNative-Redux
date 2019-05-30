@@ -1,155 +1,264 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-  Platform, StyleSheet, Button, Text, View, TextInput,
-  FlatList, ActivityIndicator, TouchableOpacity, Image, Alert,
-  ScrollView
-} from 'react-native';
-import ActionButton from 'react-native-action-button';
-//import { Fonts } from '../pages/src/utils/Fonts';
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  Keyboard,
+  FlatList,
+  Text,
+  Image,
+  SafeAreaView,
+  TouchableOpacity,
+  Dimensions,
+  Alert
+} from "react-native";
+import {
+  Card,
+  CardItem,
+  Container,
+  Left,
+  Body,
+  Right,
+  Title,
+  Row,
+  Button
+} from "native-base";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
-export default class adminfunction extends Component {
-
+export default class admin extends React.Component {
+  static navigationOptions = {
+    title: "admin",
+    header: null
+  };
   render() {
-    const { navigate } = this.props.navigation;
     return (
-      <View style={{ backgroundColor: '#FFF', height: '100%' }}>
-
-        <View style={{flexDirection:'row',marginTop:45,}}>
-                    <View style={{flex:1,marginRight:0, justifyContent:'center',marginLeft:'2%'}}>
-                        <TouchableOpacity onPress={() => navigate(('ResDashBoard'), { cat: '' })}
-                        >
-                        <Image source={require('../pages/assets/images/back.png')}
-                        style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                        </TouchableOpacity>
-                    </View>
-                    {/* <TouchableOpacity 
-                        style={{paddingTop: 2, paddingRight: 2, paddingLeft: 2, flex: 1, alignItems: 'center', flexDirection: 'row',
-                            paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:'6%'}}
-                            onPress={() => this.props.navigation.navigate('SideMenu')}>
-                        <Image source={require('../pages/assets/images/menu_button.png')}
-                            style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                    </TouchableOpacity> */}
-                    <View style={{ flex: 6, alignItems:'center', justifyContent:'center',}}>
-                    <Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
-                        style={{height: 40, width: 95,marginBottom:5}} />
-                    </View>  
-                    <View style={{flex:1, marginRight:10, justifyContent:'center',}}>    
-                    </View>                 
-                </View> 
-
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-
-                <Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',margin:10 }}>Admin Functions</Text>
-         <ScrollView>
-
-
-             <View style={styles.rectangle}>
-             
-             {/* <View style={{flex:1,flexDirection:'row'}}>
-             <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%'}} onPress={()=>this.props.navigation.navigate('CreatePatrollingShift')}>
-               <Image source={require('../pages/assets/images/clock_orange.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1, alignSelf:'center',marginLeft:'4%'}}>Petrolling Shift Schedule</Text>
-               </TouchableOpacity >        
-             </View> */}
-             <View style={{flex:1,flexDirection:'row'}}>
-             <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%'}} 
-            //  onPress={()=>this.props.navigation.navigate('CheckPointListScreen')}
-             >
-               <Image source={require('../pages/assets/images/checkpoint_orange.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Patrolling Check Points (Features to come)</Text>
-               </TouchableOpacity>       
-             </View>
-             {/* <View style={{flex:1,flexDirection:'row'}}>
-             <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%'}} onPress={()=>this.props.navigation.navigate('SecurityDailyReportScreen')}>
-               <Image source={require('../pages/assets/images/attendance_report_orange.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Attendance Reports</Text>
-               </TouchableOpacity>        
-             </View> */}
-             <View style={{flex:1,flexDirection:'row'}}>
-             <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%'}} onPress={()=>this.props.navigation.navigate('ViewAllVisitorsScreen')}>
-               <Image source={require('../pages/assets/images/my_visitors_orange.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>View All Visitors</Text>
-               </TouchableOpacity>       
-             </View>
-             <View style={{flex:1,flexDirection:'row'}}>
-             <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%'}} 
-            //  onPress={()=>this.props.navigation.navigate('AdminSettingsScreen')}
+      <View style={{ flex: 1, flexDirection: "column" }}>
+        <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("ResDashBoard");
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("6%"),
+                    width: wp("20%"),
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignContent: "center"
+                  }}
+                >
+                  <Image
+                    source={require("../pages/assets/img/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
             >
-               <Image source={require('../pages/assets/images/admin_functions.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Admin Settings (Feature to come)</Text>
-               </TouchableOpacity>        
-             </View>
-             <View style={{flex:1,flexDirection:'row'}}>
-             <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%'}} 
-             onPress={()=>this.props.navigation.navigate('AssnListScreen')}
-            >
-               <Image source={require('../pages/assets/images/join_association_orange.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Join Association</Text>
-               </TouchableOpacity>        
-             </View>
-             <View style={{flex:1,flexDirection:'row'}}>
-            <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%',marginBottom:'3%'}} 
-            onPress={()=>this.props.navigation.navigate('CreateAssnScreen')}
-            >
-               <Image source={require('../pages/assets/images/building.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Create Association</Text>
-            </TouchableOpacity>            
-             </View>
-             <View style={{flex:1,flexDirection:'row'}}>
-            <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%',marginBottom:'3%'}} 
-            onPress={()=>this.props.navigation.navigate('CreateBlockScreen')}
-            >
-               <Image source={require('../pages/assets/images/building.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Create Blocks and Units</Text>
-            </TouchableOpacity>            
-             </View>
-             {/* <View style={{flex:1, flexDirection:'row'}}>
-             <TouchableOpacity style={{flex:1,flexDirection:'row',marginTop:'3%',marginBottom:'3%'}} onPress={()=>this.props.navigation.navigate('SubscriptionScreen')}>
-               <Image source={require('../pages/assets/images/building.png')}
-                       style={{height:40,width:40}}
-               />
-               <Text style={{flex:1,alignSelf:'center',marginLeft:'4%'}}>Subscriptions</Text>
-            </TouchableOpacity>
-             </View> */}
-             </View>
-       
-          </ScrollView>
-        
-         
+              <Image
+                style={[styles.image1]}
+                source={require("../pages/assets/img/OyeSpace.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+        <View style={styles.textWrapper}>
+          <Text style={styles.admin1}>Administration</Text>
+
+          <Card style={{ height: hp("68%") }}>
+            <View style={{ flexDirection: "column", marginTop: hp("1%") }}>
+              <View style={styles.view1}>
+                <View style={styles.view2}>
+                  <Image
+                    source={require("../pages/assets/img/petrolling.png")}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("CheckPointListScreen")
+                  }
+                >
+                  <View style={styles.view3}>
+                    <Text style={styles.text1}>Patrolling Check Points</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.borderline} />
+            </View>
+            <View style={{ flexDirection: "column" }}>
+              <View style={styles.view1}>
+                <View style={styles.view2}>
+                  <Image
+                    source={require("../pages/assets/img/view_all_visitors1.png")}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("ViewAllVisitorsScreen")
+                  }
+                >
+                  <View style={styles.view3}>
+                    <Text style={styles.text1}>View All Visitors</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.borderline} />
+            </View>
+            <View style={{ flexDirection: "column" }}>
+              <View style={styles.view1}>
+                <View style={styles.view2}>
+                  <Image source={require("../pages/assets/img/settings.png")} />
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("AdminSettingsScreen")
+                  }
+                >
+                  <View style={styles.view3}>
+                    <Text style={styles.text1}>Admin Settings</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.borderline} />
+            </View>
+            <View style={{ flexDirection: "column" }}>
+              <View style={styles.view1}>
+                <View style={styles.view2}>
+                  <Image
+                    source={require("../pages/assets/img/join_asso.png")}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("AssnListScreen")
+                  }
+                >
+                  <View style={styles.view3}>
+                    <Text style={styles.text1}>Join Association</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.borderline} />
+            </View>
+            <View style={{ flexDirection: "column" }}>
+              <View style={styles.view1}>
+                <View style={styles.view2}>
+                  <Image
+                    source={require("../pages/assets/img/create_association1.png")}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("CreateAssnScreen")
+                  }
+                >
+                  <View style={styles.view3}>
+                    <Text style={styles.text1}>Create Association</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.borderline} />
+            </View>
+            <View style={{ flexDirection: "column" }}>
+              <View style={styles.view1}>
+                <View style={styles.view2}>
+                  <Image
+                    source={require("../pages/assets/img/building2.png")}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate("CreateBlockScreen")
+                  }
+                >
+                  <View style={styles.view3}>
+                    <Text style={styles.text1}>Create Block and Units</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.borderline} />
+            </View>
+          </Card>
+        </View>
       </View>
-
     );
-
   }
-
-  
 }
-
 const styles = StyleSheet.create({
-
-  container: {  flex: 1, alignItems: 'center', backgroundColor: 'white' },
-
-  rectangle: { flex: 1, backgroundColor: 'white', padding: 10, borderColor: 'orange',
-    marginLeft: 5, marginRight: 5, marginTop: 5, borderRadius: 2, borderWidth: 1,
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
   },
-
-
-
+  image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("1%")
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: wp("6%"),
+    height: hp("2%"),
+    marginTop: hp("0.5%")
+  },
+  textWrapper: {
+    height: hp("85%"), // 70% of height device screen
+    width: wp("100%") // 80% of width device screen
+  },
+  admin1: {
+    textAlign: "center",
+    fontSize: hp("3%"),
+    fontWeight: "500",
+    marginTop: hp("2%"),
+    marginBottom: hp("6%"),
+    color: "#ff8c00"
+  },
+  borderline: {
+    borderWidth: hp("0.08%"),
+    borderColor: "#E8E8E8",
+    width: wp("93%"),
+    marginStart: hp("14%")
+  },
+  view1: {
+    flexDirection: "row",
+    height: hp("10%"),
+    width: wp("99%")
+  },
+  view2: {
+    alignContent: "flex-start",
+    justifyContent: "center",
+    marginLeft: hp("4%"),
+    height: hp("10%"),
+    width: wp("15%")
+  },
+  view3: {
+    justifyContent: "center",
+    marginLeft: hp("2%")
+  },
+  text1: {
+    fontSize: hp("2.5%"),
+    color: "#474749"
+  }
 });
