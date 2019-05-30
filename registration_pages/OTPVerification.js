@@ -135,7 +135,7 @@ class OTPVerification extends Component {
                 global.MyMobileNumber, 
                 global.MyISDCode,
                 responseJson.data.account.acEmail);
-              this.props.navigation.navigate('SplashScreen');
+              this.props.navigation.navigate('App');
             }
           }  else {
             console.log('hiii', 'failed'+anu);
@@ -545,6 +545,7 @@ class OTPVerification extends Component {
     updateUserInfo({ prop: 'MyFirstName', value: first_name })
     updateUserInfo({ prop: 'MyLastName', value: last_name })
     updateUserInfo({ prop: 'MyISDCode', value: isd_code })
+    updateUserInfo({ prop: 'signedIn', value: true })
 
     console.log('bf_account',   ' ' + account_id);
 
@@ -667,5 +668,6 @@ const styles = StyleSheet.create({
   }
 
 })
+
 
 export default connect(null , { updateUserInfo })(OTPVerification)
