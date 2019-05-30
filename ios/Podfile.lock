@@ -74,7 +74,7 @@ PODS:
     - React/Core (= 0.59.8)
   - react-native-document-picker (2.3.0):
     - React
-  - react-native-image-picker (0.28.0):
+  - react-native-image-picker (0.28.1):
     - React
   - react-native-orientation (3.1.3):
     - React
@@ -139,7 +139,7 @@ PODS:
     - React/Core
   - RNFS (2.13.3):
     - React
-  - RNGestureHandler (1.0.16):
+  - RNGestureHandler (1.1.0):
     - React
   - RNShare (1.1.3):
     - React
@@ -256,21 +256,21 @@ SPEC CHECKSUMS:
   GoogleUtilities: 6481e6318c5fcabaaa8513ef8120f329055d7c10
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
-  React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
-  react-native-document-picker: 8508bfda34be6c24a2cbecbe515b15108658c183
-  react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
-  react-native-orientation: d4a97266b06ec8d45d74e626656a730ebbebbb6f
-  react-native-sqlite-storage: e2514e75e65458cc2c6590d181bd1947ec6f4e3f
-  react-native-version-number: d4919bbe43b62039894c6a747633bb59a8a44df3
-  rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
-  RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
-  RNGestureHandler: 0438a761e8f29be3b809f9e7e43014f3aba4d7a6
-  RNShare: 4f206fa36e384e95a0cbf79f2a92490647e93127
-  RNSound: e157320f503bdd4f4ee6d8542e948d54f90c3c3a
-  RNVectorIcons: 6607bd3a30291d0edb56f9bbe7ae411ee2b928b0
-  RNViewShot: 5c5b4c5540046e5fb0de4a48a311571816c43c86
-  yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
+  React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
+  react-native-document-picker: e7934f6a3c898a1b62fa68b1f09371beef6ac51a
+  react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
+  react-native-orientation: 3d9a0a8273d18260f7528414093a6a36491382b6
+  react-native-sqlite-storage: 848fb96c0b6d17b3f70e169ac41f84434cdad94c
+  react-native-version-number: 36c0d8eb57a275a6239a860f8dbab3d18299b0e0
+  rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
+  RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
+  RNGestureHandler: afde2addc517e85cc97a25bfe119acbee779a7ce
+  RNShare: d875e8e37f3e5e8eb7a103ae01e06490af1796f6
+  RNSound: b360b3862d3118ed1c74bb9825696b5957686ac4
+  RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
+  RNViewShot: fdf9a64f0621ebc4e7c3392a10d2ffb70a7faee4
+  yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
 PODFILE CHECKSUM: b1308f7bda6e17825ac32241b09a00572bddb8c3
 
-COCOAPODS: 1.6.0
+COCOAPODS: 1.5.3
