@@ -97,6 +97,9 @@ export const getDashUnits = (unit) => {
             },
         })
         .then(response => {
+            // if(response){
+
+            // }
             let responseData = response.data.data;
             let unitOwner = responseData.unitOwner;
             let unitTenant = responseData.unitTenant;
