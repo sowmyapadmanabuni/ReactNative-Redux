@@ -82,14 +82,14 @@ const AuthStack = createStackNavigator(
 
 const DashStack = createStackNavigator(
   {
-    SplashScreen: {
-      screen: SplashScreen,
-      navigationOptions: {
-        title: "OYE SAFE",
-        headerStyle: { backgroundColor: "#f05555" },
-        headerTintColor: "#ffffff"
-      }
-    },
+    // SplashScreen: {
+    //   screen: SplashScreen,
+    //   navigationOptions: {
+    //     title: "OYE SAFE",
+    //     headerStyle: { backgroundColor: "#f05555" },
+    //     headerTintColor: "#ffffff"
+    //   }
+    // },
 
     AssnListScreen: {
       screen: associationlist,
@@ -207,7 +207,8 @@ const DashStack = createStackNavigator(
     }
   },
   {
-    headerMode: "none"
+    headerMode: "none",
+    initialRouteName: "ResDashBoard"
   }
 );
 

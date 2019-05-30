@@ -18,11 +18,13 @@ import PhoneInput from "react-native-phone-input";
 import { openDatabase } from "react-native-sqlite-storage";
 import { Fonts } from "../pages/src/utils/Fonts";
 import RNExitApp from "react-native-exit-app";
+import { updateUserInfo } from "../src/actions";
+import { connect } from "react-redux";
 
 console.disableYellowBox = true;
 var db = openDatabase({ name: global.DB_NAME });
 
-export default class AddRegularVisitor extends Component {
+class AddRegularVisitor extends Component {
   state = {
     FirstName: "",
     LastName: "",
@@ -31,6 +33,7 @@ export default class AddRegularVisitor extends Component {
   };
 
   Firstname = firstname => {
+    updateUserInfo;
     this.setState({ FirstName: firstname });
   };
 
@@ -141,7 +144,25 @@ export default class AddRegularVisitor extends Component {
                 }
               );
             });
-            this.props.navigation.navigate("SplashScreen");
+
+            const { updateUserInfo } = this.props;
+            const {
+              acAccntID,
+              acfName,
+              aclName,
+              acMobile,
+              acEmail,
+              acisdCode
+            } = responseJson.data.account;
+            updateUserInfo({ prop: "MyAccountID", value: acAccntID });
+            updateUserInfo({ prop: "MyEmail", value: acEmail });
+            updateUserInfo({ prop: "MyMobileNumber", value: acMobile });
+            updateUserInfo({ prop: "MyFirstName", value: acfName });
+            updateUserInfo({ prop: "MyLastName", value: aclName });
+            updateUserInfo({ prop: "MyISDCode", value: acisdCode });
+            updateUserInfo({ prop: "signedIn", value: true });
+
+            this.props.navigation.navigate("App");
           } else {
             console.log("hiii", "failed");
             alert("failed to add user !");
@@ -432,6 +453,11 @@ export default class AddRegularVisitor extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  { updateUserInfo }
+)(AddRegularVisitor);
 
 const styles = StyleSheet.create({
   container: {
