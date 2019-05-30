@@ -11,9 +11,6 @@ import moment from 'moment';
 import SMSVerifyCode from 'react-native-sms-verifycode';
 import { connect } from 'react-redux';
 import { updateUserInfo } from '../src/actions';
-//import SmsListener from "react-native-android-sms-listener";
-
-
 
 var db = openDatabase({ name: global.DB_NAME });
 var Otp_auto;
@@ -216,7 +213,7 @@ class OTPVerification extends Component {
                 console.log(date);
                     global.MyLoginTime = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
                           console.log('logintime',global.MyLoginTime);
-              this.props.navigation.navigate('SplashScreen');
+              this.props.navigation.navigate('App');
             }
           } else {
             console.log('hiii', 'failed' + anu);

@@ -59,9 +59,11 @@ export default class MobileValid extends Component {
       color: '#fff',
     }
   };
+  
   handleMobile = (mobilenumber) => {
     this.setState({ Mobilenumber: mobilenumber })
   }
+
   handleOTP = (otp) => {
     this.setState({ OTPNumber: otp })
   }

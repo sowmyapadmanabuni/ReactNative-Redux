@@ -341,111 +341,111 @@ class SplashScreen extends React.Component {
     //   );
     // });
 
-    db.transaction(tx1 => {
-      tx1.executeSql("SELECT * FROM Account", [], (tx1, results1) => {
-        console.log("Results Account ", results1.rows.length + " ");
-        //  AccountID, FirstName, LastName, MobileNumber, Email, ISDCode
+    // db.transaction(tx1 => {
+    //   tx1.executeSql("SELECT * FROM Account", [], (tx1, results1) => {
+    //     console.log("Results Account ", results1.rows.length + " ");
+    //     //  AccountID, FirstName, LastName, MobileNumber, Email, ISDCode
 
-        if (results1.rows.length > 0) {
-          console.log(
-            "Results Account",
-            results1.rows.item(0).AccountID +
-              " " +
-              results1.rows.item(0).FirstName +
-              " " +
-              results1.rows.item(0).FirstName +
-              " " +
-              results1.rows.item(0).LastName +
-              " " +
-              results1.rows.item(0).MobileNumber +
-              " " +
-              results1.rows.item(0).ISDCode +
-              " " +
-              results1.rows.item(0).Email
-          );
+    //     if (results1.rows.length > 0) {
+    //       console.log(
+    //         "Results Account",
+    //         results1.rows.item(0).AccountID +
+    //           " " +
+    //           results1.rows.item(0).FirstName +
+    //           " " +
+    //           results1.rows.item(0).FirstName +
+    //           " " +
+    //           results1.rows.item(0).LastName +
+    //           " " +
+    //           results1.rows.item(0).MobileNumber +
+    //           " " +
+    //           results1.rows.item(0).ISDCode +
+    //           " " +
+    //           results1.rows.item(0).Email
+    //       );
 
-          global.MyAccountID = results1.rows.item(0).AccountID;
-          global.MyFirstName = results1.rows.item(0).FirstName;
-          global.MyLastName = results1.rows.item(0).LastName;
-          global.MyEmail = results1.rows.item(0).Email;
-          global.MyMobileNumber = results1.rows.item(0).MobileNumber;
-          global.MyISDCode = results1.rows.item(0).ISDCode;
+    //       global.MyAccountID = results1.rows.item(0).AccountID;
+    //       global.MyFirstName = results1.rows.item(0).FirstName;
+    //       global.MyLastName = results1.rows.item(0).LastName;
+    //       global.MyEmail = results1.rows.item(0).Email;
+    //       global.MyMobileNumber = results1.rows.item(0).MobileNumber;
+    //       global.MyISDCode = results1.rows.item(0).ISDCode;
 
-          // PushNotification.subscribeToTopic('Phone' +global.MyMobileNumber);
-          //  PushNotification.subscribeToTopic('Phone' +global.MyISDCode.replace('+','')+global.MyMobileNumber);
+    //       // PushNotification.subscribeToTopic('Phone' +global.MyMobileNumber);
+    //       //  PushNotification.subscribeToTopic('Phone' +global.MyISDCode.replace('+','')+global.MyMobileNumber);
 
-          console.log(
-            "subscribeToTopic Phone ",
-            global.MyISDCode + global.MyMobileNumber + " "
-          );
+    //       console.log(
+    //         "subscribeToTopic Phone ",
+    //         global.MyISDCode + global.MyMobileNumber + " "
+    //       );
 
-          db.transaction(txMyMem => {
-            txMyMem.executeSql(
-              "SELECT * FROM MyMembership",
-              [],
-              (txMyMem, resultsMyMem) => {
-                console.log(
-                  "Results MyMembership ",
-                  resultsMyMem.rows.length + " "
-                );
-                //  tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on
-                // M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-                //   UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
-                //  ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive
+    //       db.transaction(txMyMem => {
+    //         txMyMem.executeSql(
+    //           "SELECT * FROM MyMembership",
+    //           [],
+    //           (txMyMem, resultsMyMem) => {
+    //             console.log(
+    //               "Results MyMembership ",
+    //               resultsMyMem.rows.length + " "
+    //             );
+    //             //  tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on
+    //             // M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
+    //             //   UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
+    //             //  ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive
 
-                if (resultsMyMem.rows.length > 0) {
-                  console.log(
-                    "Results MyMembership",
-                    resultsMyMem.rows.item(0).AssociationID +
-                      " " +
-                      resultsMyMem.rows.item(0).OYEUnitID +
-                      " " +
-                      resultsMyMem.rows.item(0).FirstName +
-                      " " +
-                      resultsMyMem.rows.item(0).LastName +
-                      " " +
-                      resultsMyMem.rows.item(0).MobileNumber +
-                      " " +
-                      resultsMyMem.rows.item(0).OYEMemberRoleID +
-                      " " +
-                      resultsMyMem.rows.item(0).Email
-                  );
-                  global.SelectedAssociationID = resultsMyMem.rows.item(
-                    0
-                  ).AssociationID;
-                  global.SelectedUnitID = resultsMyMem.rows.item(0).OYEUnitID;
-                  global.MyOYEMemberID = resultsMyMem.rows.item(0).OYEMemberID;
-                  global.SelectedRole = resultsMyMem.rows.item(
-                    0
-                  ).OYEMemberRoleID;
-                  global.SelectedMemberID = resultsMyMem.rows.item(
-                    0
-                  ).OYEMemberID;
+    //             if (resultsMyMem.rows.length > 0) {
+    //               console.log(
+    //                 "Results MyMembership",
+    //                 resultsMyMem.rows.item(0).AssociationID +
+    //                   " " +
+    //                   resultsMyMem.rows.item(0).OYEUnitID +
+    //                   " " +
+    //                   resultsMyMem.rows.item(0).FirstName +
+    //                   " " +
+    //                   resultsMyMem.rows.item(0).LastName +
+    //                   " " +
+    //                   resultsMyMem.rows.item(0).MobileNumber +
+    //                   " " +
+    //                   resultsMyMem.rows.item(0).OYEMemberRoleID +
+    //                   " " +
+    //                   resultsMyMem.rows.item(0).Email
+    //               );
+    //               global.SelectedAssociationID = resultsMyMem.rows.item(
+    //                 0
+    //               ).AssociationID;
+    //               global.SelectedUnitID = resultsMyMem.rows.item(0).OYEUnitID;
+    //               global.MyOYEMemberID = resultsMyMem.rows.item(0).OYEMemberID;
+    //               global.SelectedRole = resultsMyMem.rows.item(
+    //                 0
+    //               ).OYEMemberRoleID;
+    //               global.SelectedMemberID = resultsMyMem.rows.item(
+    //                 0
+    //               ).OYEMemberID;
 
-                  for (let i = 0; i < resultsMyMem.rows.length; ++i) {
-                    console.log(
-                      "Results UnitID",
-                      resultsMyMem.rows.item(i).OYEUnitID +
-                        " " +
-                        resultsMyMem.rows.item(i).OYEMemberID
-                    );
-                    //  this.innsert(results.rows.item(i).UnitID,results.rows.item(i).UnitName,results.rows.item(i).Type);
-                    // PushNotification.subscribeToTopic('Unit' + resultsMyMem.rows.item(i).OYEUnitID);
-                    // PushNotification.subscribeToTopic('Member' + resultsMyMem.rows.item(i).OYEMemberID);
-                    // PushNotification.subscribeToTopic('AllMember' + resultsMyMem.rows.item(i).AssociationID);
-                  }
-                  this.props.navigation.navigate("ResDashBoard");
-                } else {
-                  this.props.navigation.navigate("SelectMyRoleScreen");
-                }
-              }
-            );
-          });
-        } else {
-          this.props.navigation.navigate("MobileValid");
-        }
-      });
-    });
+    //               for (let i = 0; i < resultsMyMem.rows.length; ++i) {
+    //                 console.log(
+    //                   "Results UnitID",
+    //                   resultsMyMem.rows.item(i).OYEUnitID +
+    //                     " " +
+    //                     resultsMyMem.rows.item(i).OYEMemberID
+    //                 );
+    //                 //  this.innsert(results.rows.item(i).UnitID,results.rows.item(i).UnitName,results.rows.item(i).Type);
+    //                 // PushNotification.subscribeToTopic('Unit' + resultsMyMem.rows.item(i).OYEUnitID);
+    //                 // PushNotification.subscribeToTopic('Member' + resultsMyMem.rows.item(i).OYEMemberID);
+    //                 // PushNotification.subscribeToTopic('AllMember' + resultsMyMem.rows.item(i).AssociationID);
+    //               }
+    //               this.props.navigation.navigate("ResDashBoard");
+    //             } else {
+    //               this.props.navigation.navigate("SelectMyRoleScreen");
+    //             }
+    //           }
+    //         );
+    //       });
+    //     } else {
+    //       this.props.navigation.navigate("MobileValid");
+    //     }
+    //   });
+    // });
   }
 
   onRegister(token) {
@@ -461,6 +461,7 @@ class SplashScreen extends React.Component {
   handlePerm(perms) {
     Alert.alert("Permissions", JSON.stringify(perms));
   }
+
   state = {
     appState: AppState.currentState,
     netConnectionState: "start",
@@ -492,13 +493,13 @@ class SplashScreen extends React.Component {
 
   _onRemoteNotification(notification) {}
 
-  navigateAfterFinish = screen => {
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: screen })]
-    });
-    this.props.navigation.dispatch(resetAction);
-  };
+  // navigateAfterFinish = screen => {
+  //   const resetAction = NavigationActions.reset({
+  //     index: 0,
+  //     actions: [NavigationActions.navigate({ routeName: screen })]
+  //   });
+  //   this.props.navigation.dispatch(resetAction);
+  // };
 
   handleFirstConnectivityChange(connectionInfo) {
     this.setState({ netConnectionState: connectionInfo.type });
@@ -522,7 +523,7 @@ class SplashScreen extends React.Component {
   }
 
   render() {
-    var n = global.MyVar + " SQLite Example " + this.state.netConnectionState;
+    // var n = global.MyVar + " SQLite Example " + this.state.netConnectionState;
     return (
       <View
         style={{

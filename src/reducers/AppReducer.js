@@ -1,28 +1,27 @@
-import { 
-	JOIN_ASSOCIATION, 
-	APPROVE_ADMIN, 
-	UPDATE_SAVED_NOTIFICATION,
+import {
+  JOIN_ASSOCIATION,
+  APPROVE_ADMIN,
+  UPDATE_SAVED_NOTIFICATION
 } from "../actions/types";
 
 const INITIAL_STATE = {
-	joinedAssociations: [],
-	approvedAdmins: [],
-	savedNoifId: [],
+  joinedAssociations: [],
+  approvedAdmins: [],
+  savedNoifId: []
+};
 
-}
+export default (state = INITIAL_STATE, action) => {
+  switch (action.type) {
+    case JOIN_ASSOCIATION:
+      return { ...state, joinedAssociations: action.payload };
 
-export default (state = INITIAL_STATE,  action) => {
-	switch(action.type) {
-        case JOIN_ASSOCIATION:
-			return { ...state, joinedAssociations: action.payload };
-			
-		case APPROVE_ADMIN:
-			return { ...state, approvedAdmins: action.payload };
+    case APPROVE_ADMIN:
+      return { ...state, approvedAdmins: action.payload };
 
-		case UPDATE_SAVED_NOTIFICATION:
-			return { ...state, savedNoifId: action.payload };
-            
-		default:
-			return state;
-	}
-}
+    case UPDATE_SAVED_NOTIFICATION:
+      return { ...state, savedNoifId: action.payload };
+
+    default:
+      return state;
+  }
+};
