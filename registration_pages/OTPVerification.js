@@ -206,13 +206,13 @@ class OTPVerification extends Component {
                 this.insertLoginTime(login)
                 var today = new Date();
                 date=today.getDate() + "/"+ parseInt(today.getMonth()+1) +"/"+ today.getFullYear();
-                    AsyncStorage.setItem('userId', login);
-                    console.log('nanu',login);
+                    // AsyncStorage.setItem('userId', login);
+                    // console.log('nanu',login);
                    
              
-                console.log(date);
-                    global.MyLoginTime = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
-                          console.log('logintime',global.MyLoginTime);
+                // console.log(date);
+                    // global.MyLoginTime = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
+                          // console.log('logintime',global.MyLoginTime);
               this.props.navigation.navigate('App');
             }
           } else {
@@ -309,6 +309,7 @@ class OTPVerification extends Component {
 
 
   }
+
   getAcctDetails(cc, mobilenumber) {
     anu = {
       "ACISDCode": global.MyISDCode,
@@ -382,6 +383,69 @@ class OTPVerification extends Component {
         [mobile_number, isd_code,logon],
         (tx, results) => {
           console.log('INSERT OTPVerification ', results.rowsAffected + ' ' + mobile_number + ' ' + isd_code+' '+logon);
+        }
+      );
+    });
+  }
+
+  insertLoginTime(login_time) {
+    
+
+    db.transaction(function (tx) {
+      //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
+      //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
+      tx.executeSql(
+        'INSERT INTO LoginTime (Logintime) VALUES (?)',
+        [login_time],
+        (tx, results) => {
+          console.log('INSERT LoginTime ', results.rowsAffected + ' ' + login_time);
+
+        }
+      );
+    });
+  }
+
+  insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code,email) {
+
+    const { updateUserInfo } = this.props;
+
+    updateUserInfo({ prop: 'MyAccountID', value: account_id })
+    updateUserInfo({ prop: 'MyEmail', value: email })
+    updateUserInfo({ prop: 'MyMobileNumber', value: mobile_number })
+    updateUserInfo({ prop: 'MyFirstName', value: first_name })
+    updateUserInfo({ prop: 'MyLastName', value: last_name })
+    updateUserInfo({ prop: 'MyISDCode', value: isd_code })
+    updateUserInfo({ prop: 'signedIn', value: true })
+
+    // console.log('bf_account',   ' ' + account_id);
+
+    // db.transaction(function (tx) {
+    //   //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
+    //   //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
+    //   tx.executeSql(
+    //     'INSERT INTO Account (AccountID, FirstName, LastName, MobileNumber, ISDCode , Email  ' +
+    //     '  ) VALUES (?,?,?,?,?,?)',
+    //     [account_id, first_name, last_name, mobile_number, isd_code,email],
+    //     (tx, results) => {
+    //       console.log('INSERT Account ', results.rowsAffected + ' ' + account_id);
+
+    //     }
+    //   );
+    // });
+  }
+
+  insert_OTP(mobile_number, isd_code,logon) {
+
+    db.transaction(function (tx) {
+      //ID INTEGER,  OTPVerified boolean ,'
+      // + '  MobileNumber VARCHAR(20),   '+ ' ISDCode VARCHAR(20)
+      tx.executeSql(
+        'INSERT INTO OTPVerification ( MobileNumber, ISDCode,Time  ' +
+        '  ) VALUES (?,?,?)',
+        [mobile_number, isd_code,logon],
+        (tx, results) => {
+          console.log('INSERT OTPVerification ', results.rowsAffected + ' ' + mobile_number + ' ' + isd_code+logon);
+
         }
       );
     });
@@ -518,69 +582,6 @@ class OTPVerification extends Component {
 
     );
   }
-  insertLoginTime(login_time) {
-    
-
-    db.transaction(function (tx) {
-      //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
-      //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
-      tx.executeSql(
-        'INSERT INTO LoginTime (Logintime) VALUES (?)',
-        [login_time],
-        (tx, results) => {
-          console.log('INSERT LoginTime ', results.rowsAffected + ' ' + login_time);
-
-        }
-      );
-    });
-  }
-
-  insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code,email) {
-
-    const { updateUserInfo } = this.props;
-
-    updateUserInfo({ prop: 'MyAccountID', value: account_id })
-    updateUserInfo({ prop: 'MyEmail', value: email })
-    updateUserInfo({ prop: 'MyMobileNumber', value: mobile_number })
-    updateUserInfo({ prop: 'MyFirstName', value: first_name })
-    updateUserInfo({ prop: 'MyLastName', value: last_name })
-    updateUserInfo({ prop: 'MyISDCode', value: isd_code })
-    updateUserInfo({ prop: 'signedIn', value: true })
-
-    console.log('bf_account',   ' ' + account_id);
-
-    db.transaction(function (tx) {
-      //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
-      //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
-      tx.executeSql(
-        'INSERT INTO Account (AccountID, FirstName, LastName, MobileNumber, ISDCode , Email  ' +
-        '  ) VALUES (?,?,?,?,?,?)',
-        [account_id, first_name, last_name, mobile_number, isd_code,email],
-        (tx, results) => {
-          console.log('INSERT Account ', results.rowsAffected + ' ' + account_id);
-
-        }
-      );
-    });
-  }
-
-  insert_OTP(mobile_number, isd_code,logon) {
-
-    db.transaction(function (tx) {
-      //ID INTEGER,  OTPVerified boolean ,'
-      // + '  MobileNumber VARCHAR(20),   '+ ' ISDCode VARCHAR(20)
-      tx.executeSql(
-        'INSERT INTO OTPVerification ( MobileNumber, ISDCode,Time  ' +
-        '  ) VALUES (?,?,?)',
-        [mobile_number, isd_code,logon],
-        (tx, results) => {
-          console.log('INSERT OTPVerification ', results.rowsAffected + ' ' + mobile_number + ' ' + isd_code+logon);
-
-        }
-      );
-    });
-  }
-
 }
 const styles = StyleSheet.create({
   container: {

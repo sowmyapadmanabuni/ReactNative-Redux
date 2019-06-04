@@ -9,7 +9,7 @@ const Header = (props) =>  {
                 <View style={{flex:0.3,flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:16}}>
                     <TouchableOpacity onPress={() => props.navigate.navigate('EditProfileScreen')}>
                         <View style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1, justifyContent:'center',alignItems:'center'}}>
-                            <Text>{global.MyFirstName[0].toUpperCase()}</Text>
+                            <Text>{props.firstName.toUpperCase()}</Text>
                         </View>
                         {/* <Image style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1,}} source={{ uri: global.viewImageURL + 'PERSON' + global.MyAccountID + '.jpg' }}/> */}
                     </TouchableOpacity>

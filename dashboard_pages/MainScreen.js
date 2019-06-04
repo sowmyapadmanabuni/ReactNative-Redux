@@ -249,7 +249,7 @@ class Dashboard extends React.Component {
       console.log(dropdown)
       return (
         <View style={{flex:1}}>
-          <Header navigate={this.props.navigation}/>
+          <Header firstName={this.props.MyFirstName} navigate={this.props.navigation}/>
         <View style={styles.container}>
           <View style={styles.textWrapper}>
           <View style={{flex:1, flexDirection:'column',height:hp('60%')}}>
@@ -600,6 +600,7 @@ const mapStateToProps = state => {
         sold2: state.DashboardReducer.sold2,
         unsold2: state.DashboardReducer.unsold2,
         isLoading: state.DashboardReducer.isLoading,
+        MyFirstName: state.UserReducer.MyFirstName,
     }
 }
 

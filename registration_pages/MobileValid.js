@@ -24,21 +24,21 @@ export default class MobileValid extends Component {
     state = {
       checked:true,
     }
-    db.transaction(txMyMem => {
-      txMyMem.executeSql('SELECT * FROM OTPVerification', [], (txMyMem, resultsMyMem) => {
-        console.log('Results OTPVerification ', resultsMyMem.rows.length + ' ');
+    // db.transaction(txMyMem => {
+    //   txMyMem.executeSql('SELECT * FROM OTPVerification', [], (txMyMem, resultsMyMem) => {
+    //     console.log('Results OTPVerification ', resultsMyMem.rows.length + ' ');
 
-        if (resultsMyMem.rows.length > 0) {
-          console.log('Results OTPVerification', ' ');
-          global.MyMobileNumber = resultsMyMem.rows.item(0).MobileNumber;
-          global.MyISDCode = resultsMyMem.rows.item(0).ISDCode;
-          this.props.navigation.navigate('OTPVerificationScreen');
-        } else {
+    //     if (resultsMyMem.rows.length > 0) {
+    //       console.log('Results OTPVerification', ' ');
+    //       global.MyMobileNumber = resultsMyMem.rows.item(0).MobileNumber;
+    //       global.MyISDCode = resultsMyMem.rows.item(0).ISDCode;
+    //       this.props.navigation.navigate('OTPVerificationScreen');
+    //     } else {
 
-        }
+    //     }
 
-      });
-    });
+    //   });
+    // });
 
   }
 
