@@ -212,8 +212,11 @@ class Dashboard extends React.Component {
 
     componentDidMount() {
       const { getDashSub, getDashAssociation } = this.props;
-        getDashSub();
-        getDashAssociation();
+      const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+      const { oyeURL } = this.props.oyespaceReducer;
+
+        getDashSub(oyeURL, SelectedAssociationID);
+        getDashAssociation(oyeURL, MyAccountID );
         this.requestNotifPermission();
         // this.getBlockList();
         // this.props.getNotifications()
@@ -221,7 +224,10 @@ class Dashboard extends React.Component {
 
     onAssociationChange = (value, index) => {
       const { associationid, getDashUnits } = this.props;
-      getDashUnits(associationid[index].id)
+      const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+      const { oyeURL } = this.props.oyespaceReducer;
+
+      getDashUnits(associationid[index].id, oyeURL)
       // this.unit(this.state.associationid[index].id)
     }
 
@@ -246,7 +252,6 @@ class Dashboard extends React.Component {
 
   render() {
     const { dropdown, dropdown1, residentList, sold, unsold, isLoading, sold2, unsold2 } = this.props;
-      console.log(dropdown)
       return (
         <View style={{flex:1}}>
           <Header firstName={this.props.MyFirstName} navigate={this.props.navigation}/>
@@ -600,7 +605,11 @@ const mapStateToProps = state => {
         sold2: state.DashboardReducer.sold2,
         unsold2: state.DashboardReducer.unsold2,
         isLoading: state.DashboardReducer.isLoading,
+
+        // Oyespace variables and user variables
         MyFirstName: state.UserReducer.MyFirstName,
+        userReducer: state.UserReducer,
+        oyespaceReducer: state.OyespaceReducer,
     }
 }
 

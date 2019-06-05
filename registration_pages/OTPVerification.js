@@ -38,6 +38,7 @@ class OTPVerification extends Component {
         }
       );
     });
+
     db.transaction(txMyMem => {
       txMyMem.executeSql('SELECT * FROM OTPVerification', [], (txMyMem, resultsMyMem) => {
         console.log('Results OTPVerification ', resultsMyMem.rows.length + ' ');
@@ -64,7 +65,7 @@ class OTPVerification extends Component {
       clearInterval(this.interval);
     }
   }
-  // this.state ={ timer: 30}
+  
   state = {
     Mobilenumber: '',
     OTPNumber: '',
@@ -92,67 +93,6 @@ class OTPVerification extends Component {
     this.setState({ OTPNumber: otp })
   }
 
-  verifyAutoOTP = (Auto_OTP_Number) => {
-    const { updateUserInfo } = this.props;
-    //const reg = /^[0]?[789]\d{9}$/;
-    console.log('ravii', Auto_OTP_Number.length+' '+' ');
-      anu = {
-        "CountryCode"  : global.MyISDCode,
-        "MobileNumber" : global.MyMobileNumber,
-        "OTPnumber" : Auto_OTP_Number
-      }
-      
-      //http://122.166.168.160/champ/api/v1/account/verifyotp
-      url = global.champBaseURL +'account/verifyotp';
-      console.log('req verifyotp ', JSON.stringify(anu)+ ' '+url);
-      this.setState({
-        isLoading: true
-      })
-      fetch(url,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-          },
-          body: JSON.stringify(anu)
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log('raviiqq', responseJson);
-          console.log('hiii', 'bbbf33');
-          if (responseJson.success) {
-
-            if (responseJson.data == null) {
-              this.props.navigation.navigate('RegistrationPageScreen');
-
-            } else {
-
-              this.insert_Accounts(
-                responseJson.data.account.acAccntID,
-                responseJson.data.account.acfName,
-                responseJson.data.account.aclName,
-                global.MyMobileNumber, 
-                global.MyISDCode,
-                responseJson.data.account.acEmail);
-              this.props.navigation.navigate('App');
-            }
-          }  else {
-            console.log('hiii', 'failed'+anu);
-            alert('Invalid OTP, check Mobile Number and try again');
-          }
-
-          console.log('suvarna', 'hi');
-        })
-        .catch((error) => {
-          console.error('err '+error);
-          console.log('Verification', 'error '+error);
-          alert('OTP Verification failed');
-
-        });
-
-  }
-
   verifyOTP = (otp_number1) => {
     otp_number = this.state.OTPNumber;
 
@@ -165,13 +105,13 @@ class OTPVerification extends Component {
       return false;
     } else {
       anu = {
-        "CountryCode": global.MyISDCode,
-        "MobileNumber": global.MyMobileNumber,
+        "CountryCode": this.props.MyISDCode,
+        "MobileNumber": this.props.MyMobileNumber,
         "OTPnumber": otp_number
       }
 
       //http://122.166.168.160/champ/api/v1/account/verifyotp
-      url = global.champBaseURL + 'account/verifyotp';
+      url = this.props.champBaseURL + 'account/verifyotp';
       console.log('req verifyotp ', JSON.stringify(anu) + ' ' + url);
 
       fetch(url,
@@ -196,23 +136,11 @@ class OTPVerification extends Component {
               this.insert_Accounts(responseJson.data.account.acAccntID,
                 responseJson.data.account.acfName,
                 responseJson.data.account.aclName,
-                global.MyMobileNumber, global.MyISDCode,responseJson.data.account.acEmail);
-                db.transaction(tx => {
-                  tx.executeSql('delete  FROM LoginTime ', [], (tx, results) => {
-                    console.log('Results OTPVerification delete ', results.rowsAffected);
-                  });
-                });
-                const login=moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
-                this.insertLoginTime(login)
+                this.props.MyMobileNumber, this.props.MyISDCode,responseJson.data.account.acEmail);
+                
+                const login = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
                 var today = new Date();
                 date=today.getDate() + "/"+ parseInt(today.getMonth()+1) +"/"+ today.getFullYear();
-                    // AsyncStorage.setItem('userId', login);
-                    // console.log('nanu',login);
-                   
-             
-                // console.log(date);
-                    // global.MyLoginTime = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
-                          // console.log('logintime',global.MyLoginTime);
               this.props.navigation.navigate('App');
             }
           } else {
@@ -245,8 +173,8 @@ class OTPVerification extends Component {
     const reg = /^[0]?[6789]\d{9}$/;
 
     anu = {
-      "CountryCode": global.MyISDCode,
-      "MobileNumber": global.MyMobileNumber
+      "CountryCode": this.props.MyISDCode,
+      "MobileNumber": this.props.MyMobileNumber
 
     }
 
@@ -256,12 +184,12 @@ class OTPVerification extends Component {
        });
      }); */
 
-    url = global.champBaseURL + 'account/sendotp';
-    //  http://122.166.168.160/champ/api/v1/Account/GetAccountDetailsByMobileNumber
-    console.log('anu', url + ' ff' + global.MyISDCode + global.MyMobileNumber);
+    url = this.props.champBaseURL + 'account/sendotp';
+    // console.log('anu', url + ' ff' + global.MyISDCode + global.MyMobileNumber);
     this.setState({
       isLoading: true
     })
+    
     fetch(url,
       {
         method: 'POST',
@@ -282,7 +210,7 @@ class OTPVerification extends Component {
           //   loginTime : new Date()
           // })
           console.log('responseJson Account if', this.state.loginTime);
-          this.insert_OTP(mobilenumber, global.MyISDCode,'2019-02-03');
+          // this.insert_OTP(mobilenumber, global.MyISDCode,'2019-02-03');
     // this.setState({
     //   dobTextDMY:moment(new Date()).format('YYYY-MM-DD')
     // });
@@ -316,7 +244,7 @@ class OTPVerification extends Component {
       "ACMobile": mobilenumber
     }
 
-    url = global.champBaseURL + 'Account/GetAccountDetailsByMobileNumber';
+    url = this.props.champBaseURL + 'Account/GetAccountDetailsByMobileNumber';
     //  http://122.166.168.160/champ/api/v1/Account/GetAccountDetailsByMobileNumber
     console.log('anu', url + ' ff' + global.MyISDCode + mobilenumber);
     this.setState({
@@ -372,39 +300,6 @@ class OTPVerification extends Component {
       });
   }
 
-  insert_OTP(mobile_number, isd_code,logon) {
-    console.log('INSERT logon ', logon);
-    db.transaction(function (tx) {
-      //ID INTEGER,  OTPVerified boolean ,'
-      // + '  MobileNumber VARCHAR(20),   '+ ' ISDCode VARCHAR(20)
-      tx.executeSql(
-        'INSERT INTO OTPVerification ( MobileNumber, ISDCode, Time ' +
-        '  ) VALUES (?,?,?)',
-        [mobile_number, isd_code,logon],
-        (tx, results) => {
-          console.log('INSERT OTPVerification ', results.rowsAffected + ' ' + mobile_number + ' ' + isd_code+' '+logon);
-        }
-      );
-    });
-  }
-
-  insertLoginTime(login_time) {
-    
-
-    db.transaction(function (tx) {
-      //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
-      //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
-      tx.executeSql(
-        'INSERT INTO LoginTime (Logintime) VALUES (?)',
-        [login_time],
-        (tx, results) => {
-          console.log('INSERT LoginTime ', results.rowsAffected + ' ' + login_time);
-
-        }
-      );
-    });
-  }
-
   insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code,email) {
 
     const { updateUserInfo } = this.props;
@@ -432,23 +327,6 @@ class OTPVerification extends Component {
     //     }
     //   );
     // });
-  }
-
-  insert_OTP(mobile_number, isd_code,logon) {
-
-    db.transaction(function (tx) {
-      //ID INTEGER,  OTPVerified boolean ,'
-      // + '  MobileNumber VARCHAR(20),   '+ ' ISDCode VARCHAR(20)
-      tx.executeSql(
-        'INSERT INTO OTPVerification ( MobileNumber, ISDCode,Time  ' +
-        '  ) VALUES (?,?,?)',
-        [mobile_number, isd_code,logon],
-        (tx, results) => {
-          console.log('INSERT OTPVerification ', results.rowsAffected + ' ' + mobile_number + ' ' + isd_code+logon);
-
-        }
-      );
-    });
   }
 
   render() {
@@ -520,18 +398,7 @@ class OTPVerification extends Component {
           maxLength={6}
           returnKeyType="done"
           
-          keyboardType={'numeric'} /> 
-        {/* <SMSVerifyCode
-          style={{ marginTop: '3%' }}
-          verifyCodeLength={6}
-          returnKeyType="done"
-          containerPaddingVertical={10}
-          containerPaddingHorizontal={50}
-          onInputChangeText={this.handleOTP}
-          focusedCodeViewBorderColor={'orange'}
-          containerBackgroundColor={'white'}
-        /> */}
-        {/*  </TextInputLayout>  */}
+          keyboardType={'numeric'} />
         {this.state.OTPNumber.length == 6 ? <TouchableOpacity
           style={styles.mybutton}
           onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}>
@@ -541,16 +408,6 @@ class OTPVerification extends Component {
         >
             <Text style={styles.submitButtonText}>Verify OTP</Text>
           </TouchableOpacity>}
-        {/*  <TouchableOpacity
-          style={styles.mybutton}
-          onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}>
-          <Text style={styles.submitButtonText}>Verify OTP</Text>
-        </TouchableOpacity> */}
-        {/*  <TouchableOpacity
-          style={styles.mybutton}
-          onPress={this.changeNumber.bind(this, this.state.Mobilenumber)}>
-          <Text style={styles.submitButtonText}>Change Mobile Number</Text>
-        </TouchableOpacity> */}
         {this.state.timer == 1 ? <Text> </Text> :
           <Text style={{
             color: 'black',
@@ -559,7 +416,8 @@ class OTPVerification extends Component {
           }}>Resend OTP in {this.state.timer} seconds </Text>}
         {this.state.timer == 1 ? <TouchableOpacity
           style={styles.mybutton}
-          onPress={this.getOtp.bind(this, this.state.OTPNumber)}>
+          // onPress={this.getOtp.bind(this, this.state.OTPNumber)}>
+          onPress={() => this.getOtp(this.state.OTPNumber)}>
           <Text style={styles.submitButtonText}>Resend OTP</Text>
         </TouchableOpacity> : <TouchableOpacity
           style={styles.mybuttonDisable}
@@ -583,6 +441,7 @@ class OTPVerification extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     paddingTop: 23
@@ -670,5 +529,15 @@ const styles = StyleSheet.create({
 
 })
 
+const mapStateToProps = state => {
+  return {
+    oyeURL : state.OyespaceReducer.oyeURL,
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    oye247BaseURL: state.OyespaceReducer.oye247BaseURL,
+    oyeBaseURL : state.OyespaceReducer.oyeBaseURL,
+    MyISDCode: state.UserReducer.MyISDCode,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+  }
+}
 
-export default connect(null , { updateUserInfo })(OTPVerification)
+export default connect(mapStateToProps, { updateUserInfo })(OTPVerification)

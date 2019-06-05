@@ -11,9 +11,9 @@ import {
 import axios from 'axios';
 import _ from 'lodash';
 
-export const getDashSub = () => {
+export const getDashSub = (oyeURL, SelectedAssociationID) => {
     return (dispatch) => {
-        fetch(`http://${global.oyeURL}/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/${global.SelectedAssociationID}`
+        fetch(`http://${oyeURL}/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/${SelectedAssociationID}`
         , {
             method: 'GET',
             headers: {
@@ -34,11 +34,12 @@ export const getDashSub = () => {
     }
 }
 
-export const getDashAssociation = () => {
+export const getDashAssociation = (oyeURL, MyAccountID) => {
     return (dispatch) => {
-        console.log(`http://${global.oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${global.MyAccountID}`)
-        fetch(`http://${global.oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${global.MyAccountID}`
-        // fetch(`http://${global.oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/2`
+        console.log(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`)
+        // console.log(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`)
+        fetch(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`
+        // fetch(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/2`
         , {
             method: 'GET',
             headers: {
@@ -77,7 +78,7 @@ export const getDashAssociation = () => {
     }
 }
 
-export const getDashUnits = (unit) => {
+export const getDashUnits = (unit, oyeURL) => {
     return (dispatch) => {
         let sold =100;
         let unsold=100;
@@ -86,11 +87,11 @@ export const getDashUnits = (unit) => {
         let unsold2=0;
         let Residentlist=[];
 
-        // console.log(`http://${global.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`)
+        // console.log(`http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`)
 
         dispatch({ type: DASHBOARD_UNITS_START })
 
-        axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${unit}`, {
+        axios.get(`http://${oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${unit}`, {
             headers: {
                 'Content-Type': 'application/json',
                 "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
@@ -105,7 +106,7 @@ export const getDashUnits = (unit) => {
             let unitTenant = responseData.unitTenant;
             let residents = _.union(unitOwner, unitTenant);
 
-            fetch(`http://${global.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
+            fetch(`http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`
             , {
                 method: 'GET',
                 headers: {

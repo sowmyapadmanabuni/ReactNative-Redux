@@ -36,6 +36,8 @@ import unitlist from "./assocition_pages/unitlist";
 import CreateOrJoin from "./assocition_pages/CreateOrJoin";
 import addmembers from "./assocition_pages/addmembers";
 import CreateUnitsPotrait from "./assocition_pages/CreateUnitsPotrait";
+import store from "./src/store";
+import { persistStore } from "redux-persist";
 
 const AuthStack = createStackNavigator(
   {
@@ -218,11 +220,21 @@ class Loading extends Component {
     super(props);
   }
 
-  componentDidUpdate() {
-    const { signedIn } = this.props;
-    setTimeout(() => {
-      this.props.navigation.navigate(signedIn ? "App" : "Auth");
-    }, 2000);
+  // componentDidUpdate() {
+  //   const { signedIn } = this.props;
+  //   setTimeout(() => {
+  //     this.props.navigation.navigate(signedIn ? "App" : "Auth");
+  //   }, 2000);
+  // }
+
+  componentDidMount() {
+    persistStore(store, null, () => {
+       const { signedIn } = this.props;
+       this.props.navigation.navigate(signedIn ? "App" : "Auth");
+        // setTimeout(() => {
+        //   this.props.navigation.navigate(signedIn ? "App" : "Auth");
+        // }, 1000);
+    })
   }
 
   render() {
@@ -250,7 +262,7 @@ class Loading extends Component {
         <ActivityIndicator />
         <Text style={{ fontSize: 8, color: "black", alignSelf: "center" }}>
           {" "}
-          Data is loading..
+          Data is loading now..
         </Text>
 
         {/*         <Text style={mystyles.splashHeadline}> OYE SAFE</Text>*/}

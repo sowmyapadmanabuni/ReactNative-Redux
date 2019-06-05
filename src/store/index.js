@@ -22,6 +22,7 @@ const store = createStore(
 	)
 );
 
-persistStore(store);
+persistStore(store)
+// alert(JSON.stringify(persistor))
 
 export default store;

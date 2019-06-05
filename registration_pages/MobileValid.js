@@ -8,38 +8,20 @@ import CheckBox from 'react-native-check-box';
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
 import { TextField } from 'react-native-material-textfield';
+import { connect } from 'react-redux';
 import VersionNumber from 'react-native-version-number';
 import CountryPicker, {
   getAllCountries
 } from 'react-native-country-picker-modal'
-
+import { updateUserInfo } from '../src/actions';
 
 var db = openDatabase({ name: global.DB_NAME });
 console.disableYellowBox = true;
-export default class MobileValid extends Component {
+
+class MobileValid extends Component {
 
   constructor(props) {
     super(props);
-
-    state = {
-      checked:true,
-    }
-    // db.transaction(txMyMem => {
-    //   txMyMem.executeSql('SELECT * FROM OTPVerification', [], (txMyMem, resultsMyMem) => {
-    //     console.log('Results OTPVerification ', resultsMyMem.rows.length + ' ');
-
-    //     if (resultsMyMem.rows.length > 0) {
-    //       console.log('Results OTPVerification', ' ');
-    //       global.MyMobileNumber = resultsMyMem.rows.item(0).MobileNumber;
-    //       global.MyISDCode = resultsMyMem.rows.item(0).ISDCode;
-    //       this.props.navigation.navigate('OTPVerificationScreen');
-    //     } else {
-
-    //     }
-
-    //   });
-    // });
-
   }
 
   state = {
@@ -50,6 +32,7 @@ export default class MobileValid extends Component {
     isLoading: false,
     checked:true,
   }
+
   static navigationOptions = {
     title: 'Registration',
     headerStyle: {
@@ -163,12 +146,16 @@ export default class MobileValid extends Component {
         "MobileNumber": mobilenumber
       }
 
-      url = global.champBaseURL + 'account/sendotp';
+      url = this.props.champBaseURL + 'account/sendotp';
       //  http://api.oyespace.com/champ/api/v1/account/sendotp
       console.log('anu', url + ' ff' + countryCode + mobilenumber);
+
       this.setState({
         isLoading: true
       })
+
+      const { updateUserInfo } = this.props;
+      
       fetch(url,
         {
           method: 'POST',
@@ -186,8 +173,10 @@ export default class MobileValid extends Component {
           if (responseJson.success) {
             console.log('responseJson Account if', responseJson.data);
             this.insert_OTP(mobilenumber, countryCode);
-            global.MyMobileNumber = mobilenumber;
-            global.MyISDCode = countryCode;
+            updateUserInfo({ prop: 'MyMobileNumber', value: mobilenumber })
+            updateUserInfo({ prop: 'MyISDCode', value: countryCode })
+            // global.MyMobileNumber = mobilenumber;
+            // global.MyISDCode = countryCode;
             this.props.navigation.navigate('OTPVerificationScreen');
 
           } else {
@@ -316,18 +305,8 @@ export default class MobileValid extends Component {
             />
 
           </View>
-
-
-       
-          
         </View>
-      
-               {/* <TouchableOpacity
-          style={styles.mybutton}
-          onPress={this.mobilevalidate.bind(this, this.state.Mobilenumber)}>
-          <Text style={styles.submitButtonText}>Get OTP for Verification</Text>
-        </TouchableOpacity>   */}
-        
+
         </KeyboardAvoidingView>
         <View style={{
           height: '8%', flexDirection: 'row',
@@ -366,7 +345,7 @@ export default class MobileValid extends Component {
          <View style={{flex:1,}}>
          <TouchableOpacity
           style={styles.mybutton}
-          onPress={this.getOtp.bind(this, this.state.Mobilenumber)}>
+          onPress={() => this.getOtp(this.state.Mobilenumber)}>
           <Text style={styles.submitButtonText}>Get OTP</Text>
         </TouchableOpacity>
          </View>
@@ -735,17 +714,6 @@ export default class MobileValid extends Component {
 
 }
 
-const DismissKeyboardHOC = (Comp) => {
-  return ({ children, ...props }) => (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Comp {...props}>
-        {children}
-      </Comp>
-    </TouchableWithoutFeedback>
-  );
-};
-const DismissKeyboardView = DismissKeyboardHOC(View)
-
 const styles = StyleSheet.create({
   container: {
     paddingTop: 23
@@ -820,3 +788,14 @@ const styles = StyleSheet.create({
   }
 
 })
+
+const mapStateToProps = state => {
+  return {
+    oyeURL : state.OyespaceReducer.oyeURL,
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    oye247BaseURL: state.OyespaceReducer.oye247BaseURL,
+    oyeBaseURL : state.OyespaceReducer.oyeBaseURL,
+  }
+}
+
+export default connect(mapStateToProps, { updateUserInfo })(MobileValid)
