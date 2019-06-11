@@ -15,8 +15,7 @@ import {
     TextField
   } from
     'react-native-material-textfield';
-
-var db = openDatabase({ name: global.DB_NAME });
+import { connect } from 'react-redux';
 
 const options = {
     title: 'Select a Photo',
@@ -30,17 +29,30 @@ const options = {
     },
     };
 
-export default class AddFamilyMember extends Component {
+class AddFamilyMember extends Component {
+    constructor() {
+        super();
+        this.state = {
+          imageSource: null,
+          data: null,
+          valid: "",
+          type: "",
+          value: "",
+          isLoading: false,
+          PickerValueHolder: "",
+          cca2: "IN",
+          callingCode: "91",
+          isLoading: false,
+          FirstName: "",
+          LastName: "",
+          MobileNumber: "",
+          Relation: "",
+          imgPath: "",
+          OTPNumber: ""
+        };
 
-   state = {
-        FirstName: '',
-        LastName: '',
-        MobileNumber: '',
-        Relation: '',
-        imgPath: "",
-        OTPNumber: ''
+        this.renderInfo = this.renderInfo.bind(this);
     }
-    
 
     Firstname = (firstname) => {
         this.setState({ FirstName: firstname })
@@ -57,40 +69,6 @@ export default class AddFamilyMember extends Component {
     Relation = (relation) => {
         this.setState({ Relation: relation })
     }
-
-    constructor() {
-        super();
-        this.state = {
-            imageSource: null,
-            data: null,
-            valid: "",
-            type: "",
-            value: "",
-            isLoading: false,
-            PickerValueHolder: '',
-            cca2: 'IN',
-            callingCode: '91',
-            isLoading: false,
-        };
-
-        this.renderInfo = this.renderInfo.bind(this);
-
-        db.transaction(tx => {
-            //SELECT B.* From (select max(Time) Time, GuardID FROM RouteTracker group by GuardID ) " +
-            // " A inner join RouteTracker B using (Time,GuardID)
-            tx.executeSql('SELECT Distinct M.AssociationID, A.Name FROM MyMembership M inner Join Association A on M.AssociationID=A.AssociationID ', [], (tx, results) => {
-                var temp = [];
-                for (let i = 0; i < results.rows.length; ++i) {
-                    temp.push(results.rows.item(i));
-                    console.log('Results UnitID', results.rows.item(i).Name + ' ' + results.rows.item(i).AssociationID);
-                    // this.innsert(results.rows.item(i).UnitID,results.rows.item(i).UnitName,results.rows.item(i).Type);
-                }
-
-            });
-        });
-
-    }
-
     //Function
     selectPhoto() {
 
@@ -468,3 +446,15 @@ const styles = StyleSheet.create({
     submitButtonText: { color: '#FA9917' }
 
 })
+
+const mapStateToProps = state => {
+    return {
+      MyOYEMemberID,
+      SelectedUnitID,
+      SelectedAssociationID,
+      oye247BaseURL,
+      uploadImageURL
+    };
+}
+
+export default connect(mapStateToProps)(AddFamilyMember);
