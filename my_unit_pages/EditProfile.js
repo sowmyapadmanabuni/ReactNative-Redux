@@ -1,1017 +1,702 @@
-
-import React, { Component } from 'react';
-
+import React, { Component } from "react"
 import {
-  Platform, StyleSheet, Text, View,
-  TextInput, Alert, Button, Dimensions, FlatList, ScrollView, ActivityIndicator,
-  TouchableOpacity, ToastAndroid, Picker, Image, Card, Avatar, NetInfo, TouchableHighlight
-} from 'react-native';
-import ImagePicker from 'react-native-image-picker'
-import { NavigationActions } from 'react-navigation';
+  AppRegistry,
+  View,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableHighlight,
+  TouchableOpacity,
+  PixelRatio,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Alert,
+  Dimensions,
+  SafeAreaView
+} from "react-native"
+import { Card, Item, Input, Button } from "native-base"
+import { TextInput } from "react-native-gesture-handler"
+import ImagePicker from "react-native-image-picker"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import {
-  DatePickerDialog
-} from
-  'react-native-datepicker-dialog'
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen"
+import {connect} from 'react-redux';
 
-import {
-  openDatabase
-} from
-  'react-native-sqlite-storage';
-
-import {
-  TextField
-} from
-  'react-native-material-textfield';
-
-var db = openDatabase({   name: global.DB_NAME});
-
-import moment
-  from 'moment';
-
-
-
-const options = {
-
-  title: 'Select a Photo',
-
-  takePhotoButton:
-    'Take a Photo',
-
-  chooseFromLibraryButton:
-    'Choose From Gallery',
-
-  quality: 0.40,
-       maxWidth: 600,
-       maxHeight: 800,
-       storageOptions: {
-       skipBackup: true,
-  },
-
-};
-
-
-
-export default
-  class EditProfile
-  extends Component {
-
-  constructor() {
-
-    super()
-
+class EditProfile extends Component {
+  constructor(props) {
+    super(props)
     this.state = {
-
-      firstname: '',
-      lastname: '',
-      emailId: '',
-      AlternateEmailID: '',
-      isLoading: true,
-      imageSource:null,
-      data: null,
-      imgPath: "",
-      connection_Status: "",
-
+      FirstName: "",
+      LastName: "",
+      Email: "",
+      AlternateEmail: "",
+      Image: "",
+      ImageSource: "",
+      data1: []
     }
-
-    console.log('EditProfile ', 'constructor');
-
   }
 
+  FName = firstName => {
+    this.setState({ FirstName: firstName })
+  }
 
-  handlefname = (text) => {
+  LName = lastName => {
+    this.setState({ LastName: lastName })
+  }
 
-    let newText = '';
-    let numbers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxzyz ';
+  FEmail = fEmail => {
+    this.setState({ Email: fEmail })
+  }
 
-    for (var i = 0; i < text.length; i++) {
+  AEmail = aEmail => {
+    this.setState({ AlternateEmail: aEmail })
+  }
+  FImage = image => {
+    this.setState({ Image: image })
+  }
+  myEditProfile = () => {
+    firstname = this.state.FirstName
+    lastname = this.state.LastName
+    email = this.state.Email
+    alternateemail = this.state.AlternateEmail
+    fimage = this.state.Image
 
-      if (numbers.indexOf(text[i]) > -1) {
-        newText = newText + text[i];
-      } else {
-        // your call back function
-        alert("Please Remove Special Characters");
-      }
+    
+    const regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    const reg = /^[0]?[6789]\d{9}$/
+    const OyeFullName = /^[a-zA-Z ]+$/
 
+    if (firstname.length == 0) {
+      Alert.alert("First Name should not be empty")
+    } else if (OyeFullName.test(firstname) === false) {
+      alert("Enter valid First name")
+      return false
+    } else if (firstname.length < 3) {
+      Alert.alert("First name should be more than 3 Characters")
+    } else if (lastname.length == 0) {
+      Alert.alert("Last Name should not be empty")
+    } else if (OyeFullName.test(lastname) === false) {
+      alert("Enter valid Last name")
+      return false
+    } else if (lastname.length < 3) {
+      Alert.alert("Last Name should be more than 3 Characters")
+    } else if (regemail.test(email) === false)  {
+
+       Alert.alert("Enter valid  Email id")
     }
+    else if (regemail.test(alternateemail) == false && !alternateemail.length == "")  {
 
-    this.setState({
-      firstname: newText
-    })
+      Alert.alert("Enter valid  altEmail id")
+   }
+    // else if (alternateemail.length == 0) {
+    //   Alert.alert("Enter valid primary mail id");
+    // }
+    // else if (regemail.test(alternateemail) === false) {
+    //   Alert.alert("Enter valid alternative email id.");
+    // }
+    else {
+      fetch(
+        `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          },
+          body: JSON.stringify({
+            ACFName: firstname,
+            ACLName: lastname,
+            ACMobile: this.props.MyMobileNumber,
+            ACEmail: email,
+            ACISDCode:  this.props.MyISDCode,
+            ACMobile1: null,
+            ACISDCode1: null,
+            ACMobile2: null,
+            ACISDCode2: null,
+            ACMobile3: null,
+            ACISDCode3: null,
+            ACMobile4: null,
+            ACISDCode4: null,
+            ACEmail1: alternateemail,
+            ACEmail2: null,
+            ACEmail3: null,
+            ACEmail4: null,
+            ACImgName: fimage.length <= 0 ? this.state.ImageSource : fimage,
+            ACAccntID: this.props.MyAccountID
+          })
+        }
+      )
+        .then(responseData => responseData.json())
+        .then(responseJson => {
+          // Alert.alert("Saved");
+          this.props.navigation.goBack()
+          // this.setState({
+          //   datasource: responseJson
 
-  }
-
-  handlelname = (text) => {
-
-    let newText = '';
-    let numbers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxzyz ';
-
-    for (var i = 0; i < text.length; i++) {
-
-      if (numbers.indexOf(text[i]) > -1) {
-        newText = newText + text[i];
-      } else {
-        // your call back function
-        alert("Please Remove Special Characters");
-      }
-
-    }
-
-    this.setState({
-      lastname: newText
-    })
-
-  }
-
-  handleemail = (text) => {
-    this.setState({
-      emailId: text
-    })
-  }
-
-  handleAlternateEmailID = (text) => {
-    this.setState({
-      AlternateEmailID: text
-    })
-
-  }
-
-  componentDidMount() {
-
-    this.setState({
-
-      firstname: global.MyFirstName,
-      lastname: global.MyLastName,
-
-      emailId: global.MyEmail,
-      AlternateEmailID: ''
-    })
-
-    NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectivityChange);
-
-    NetInfo.isConnected.fetch().done((isConnected) => {
-
-      if (isConnected == true) {
-
-        this.setState({
-          connection_Status: "Online"
+          // })
         })
-
-      } else {
-        this.setState({
-          connection_Status: "Offline"
+        .catch(error => {
+          console.log(error)
+          Alert.alert("Upload Fail")
         })
-
-        Alert.alert('No Internet',
-          'Please Connect to the Internet. ',
-          [
-            {
-              text: 'Ok',
-              onPress: () => { this.props.navigation.navigate('ResDashBoard') }
-            },
-          ],
-          {
-            cancelable: false
-          }
-        );
-
-      }
-
-    });
-
-  }
-
-  componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectivityChange);
-  }
-
-  _handleConnectivityChange = (isConnected) => {
-
-    if (isConnected == true) {
-      this.setState({
-        connection_Status: "Online"
-      })
-    } else {
-      this.setState({
-        connection_Status: "Offline"
-      })
-      alert('You are offline...');
     }
-
-  };
-
-  selectPhoto() {
-    console.log('image bf ',global.viewImageURL+'PERSON'+global.MyAccountID+'.jpg '+this.state.imageSource+' l '+this.state.imageSource !=null);
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = {
-          uri: response.uri
-        };
-
-        this.setState({
-          imageSource: source,
-          imgPath: response.uri,
-          data: response.data
-        });
-
-      }
-
-    });
-    console.log('image af ', global.viewImageURL+'PERSON'+global.MyAccountID+'.jpg '+this.state.imageSource+' l '+this.state.imageSource !=null);
   }
 
   static navigationOptions = {
-    title: 'Edit Profile',
-    headerStyle: {
-      backgroundColor: '#696969',
-    },
-
-    headerTitleStyle: {
-      color: '#fff',
-    }
-
-  };
-
-  submit = () => {
-
-    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-    mfname = this.state.firstname;
-    mlname = this.state.lastname;
-    memail = this.state.emailId;
-    mAltEmailID = this.state.AlternateEmailID;
-
-    if (mfname == '' || mfname == undefined) {
-      alert('First Name should not be Empty');
-    } else if (global.oyeNonSpecialNameRegex.test(mfname) === true) {
-      alert('First Name should not contain Special Character');
-    } else if (mlname == '' || mlname == undefined) {
-      alert('Last Name should not be Empty');
-    } else if (global.oyeNonSpecialNameRegex.test(mlname) === true) {
-      alert('Last Name should not contain Special Character');
-    } else if (memail == '' || memail == undefined) {
-      alert('Email ID should not be Empty');
-    } else if (regemail.test(memail) === false || memail.length == 0) {
-      alert('Enter Valid Email ID');
-    } else if (memail == mAltEmailID) {
-      alert('Primary EmaiID and Alternative Email ID should not be Same');
-    }
-    // else if (regemail.test(mpno) ===
-    // false || mpno.length == 0) {
-    // Alert.alert('Alert', 'Enter valid alternative emailID',
-    // [
-    // { text: 'Ok', onPress: () => { } },
-    // ],
-    // { cancelable: false }
-    // );
-    // }
-    else {
-
-      // {
-      // "firstName" : "Sowmya",
-      // "lastName" : "Padmanabhuni",
-      // "email" : "Sowmya181992@gmail.com",
-      // "vehicleNumber" : "KA 03 MW 831",
-      // "mobileNumber" : "+919075437212"
-      // }
-
-      anu = {
-
-        "ACFName": mfname,
-        "ACLName": mlname,
-        "ACEmail": memail,
-        "ACMobile": global.MyMobileNumber,
-        "ACISDCode":  global.MyISDCode,
-        "ACMobile1": "",
-        "ACISDCode1": "",
-        "ACMobile2": "",
-        "ACISDCode2": "",
-        "ACMobile3": "",
-        "ACISDCode3": "",
-        "ACMobile4": "",
-        "ACISDCode4": "",
-        "ACEmail1": mAltEmailID,
-        "ACEmail2": "",
-        "ACEmail3": "",
-        "ACEmail4": "",
-        "ACAccntID": global.MyAccountID
-
+    title: "My Profile",
+    header: null
+  }
+  selectPhotoTapped() {
+    const options = {
+      quality: 1.0,
+      maxWidth: 250,
+      maxHeight: 250,
+      storageOptions: {
+        skipBackup: true
       }
+    }
+  }
 
-      console.log('anu', anu)
+  componentWillMount() {
+    this.setState({
+      FirstName: this.props.navigation.state.params.profileDataSourceFirstName
+        ? this.props.navigation.state.params.profileDataSourceFirstName
+        : ""
+    })
 
-      fetch(global.champBaseURL + 'AccountDetails/Update',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-          },
-          body: JSON.stringify(anu)
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log('logresponseupdate', responseJson);
-          if (responseJson.success) {
+    this.setState({
+      LastName: this.props.navigation.state.params.profileDataSourceLastName
+        ? this.props.navigation.state.params.profileDataSourceLastName
+        : ""
+    })
 
-            global.MyFirstName = mfname;
-            global.MyLastName = mlname;
-            global.MyEmail = memail;
-           global.MyalEmailID =  mAltEmailID;
+    this.setState({
+      Email: this.props.navigation.state.params.profileDataSourceEmail
+        ? this.props.navigation.state.params.profileDataSourceEmail
+        : ""
+    })
 
-            console.log('ramu', global.MyFirstName, global.MyalEmailID, global.MyEmail, global.MyLastName);
-            const imgName = 'PERSON' + global.MyAccountID + '.jpg';
-            console.log('ram', imgName);
+    this.setState({
+      AlternateEmail: this.props.navigation.state.params
+        .profileDataSourceAlternateEmail
+        ? this.props.navigation.state.params.profileDataSourceAlternateEmail
+        : ""
+    })
+  }
 
-            if (this.state.imgPath) {
-
-              var data = new FormData();
-
-              data.append('Test', { uri: this.state.imgPath, name: imgName, type: 'image/jpg' });
-
-              const config = {
-                method: 'POST',
-                headers: {
-                  "X-Champ-APIKey":
-                    "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1", "content-type":
-                    "multipart/form-data"
-                },
-                body: data
-              };
-
-              console.log("Config", config);
-
-              fetch(global.uploadImageURL, config).then(responseData => {
-                console.log("sucess==>");
-                console.log(responseData._bodyText);
-                console.log(responseData);
-                alert("Image uploaded done!")
-                this.props.navigation.navigate('ResDashBoard');
-
-              }).catch(err => {
-                console.log("err==>");
-                alert("Error with image upload!")
-                // this.props.navigation.navigate('GuardListScreen');
-                console.log(err);
-              });
-
-            }
-
-            //this.updateStatus();
-
-            db.transaction((tx) => {
-              tx.executeSql(
-                'UPDATE Account set FirstName=?, LastName=? , Email=? where AccountID=?',
-                [mfname, mlname, memail, global.MyAccountID],
-
-                (tx, results) => {
-
-                  console.log('Results', results.rowsAffected);
-                  if (results.rowsAffected > 0) {
-                    Alert.alert('Success',
-                      'Profile Updated Successfully',
-                      [
-                        {
-                          text: 'Ok',
-                          onPress: () => this.props.navigation.navigate('ResDashBoard')
-                        },
-                      ],
-                      {
-                        cancelable: false
-                      }
-                    );
-                  } else {
-                    alert('Updation Failed');
-                  }
-                }
-              );
-            });
-
-          } else {
-            console.log('hiii', failed);
-
-            Alert.alert('Failed',
-              'User Updation Failed',
-              [
-                {
-                  text: 'Ok', onPress: () => { }
-                },
-              ],
-              {
-                cancelable: false
-              }
-            );
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-
+  selectPhotoTapped() {
+    const options = {
+      quality: 1.0,
+      maxWidth: 250,
+      maxHeight: 250,
+      storageOptions: {
+        skipBackup: true
+      }
     }
 
+    //launch camera
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response)
+
+      if (response.didCancel) {
+        console.log("User cancelled photo picker")
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error)
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton)
+      } else {
+        let source = { uri: response.uri }
+
+        // You can also display the image using data:
+        // let source = { uri: "data:image/jpeg;base64," + response.data };
+
+        this.setState({
+          ImageSource: source
+        })
+      }
+    })
   }
 
   render() {
-    console.log('image ', global.viewImageURL + 'PERSON' +
-    global.MyAccountID +    '.jpg '+this.state.imageSource+ ' l '+this.state.imageSource !=null);
-    const { navigate } = this.props.navigation;
-    const { params } = this.props.navigation.state;
-
-    const MAGNIFYING_GLASS_ICON = require('../pages/assets/images/icons8-manager-50.png');
+    const { navigate } = this.props.navigation
 
     return (
-
-      <View style={styles.container}>
-        <View>
-        <View
-style={{
-paddingTop: 2, paddingRight: 2, paddingLeft: 2, flexDirection: 'row', paddingBottom: 2,
-borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:45,
-}}>
-<TouchableOpacity onPress={() => navigate(('ResDashBoard'), { cat: '' })}
-style={{ flex: 1 , alignSelf:'center'}}>
-<Image source={require('../pages/assets/images/back.png')}
-style={{ height: 25, width: 25,  }} />
-</TouchableOpacity>
-<Text style={{ flex: 2, paddingLeft: 5, fontSize: 14, color: 'black', alignContent: 'flex-start', alignSelf: 'center' }}> </Text>
-<View style={{ flex: 3, alignSelf: 'center' }}>
-<Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
-style={{
-height: 38, width: 95, margin: 5,
-alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
-}} />
-</View>
-<View style={{ flex: 3,alignSelf: 'flex-end',alignItems:'flex-end',justifyContent:'flex-end' }}>
-                         
-
-                        </View>
-
-
-</View>
-                    <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-<Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',justifyContent:'center',alignContent:'center',marginBottom:2,marginLeft:'3%' }}>Edit Profile</Text>
-  
-        </View>
-
-        <ScrollView>
-
-          <View
-            style={{
-              flexDirection:
-                'column', alignSelf:
-                'center',
-            }}>
-
-            <TouchableHighlight
-
-              style={[styles.profileImgContainer, {
-                borderColor: 'orange',
-                borderWidth: 1
-              }]}
-            >
-
-              <Image
-                style={styles.image}
-
-                source={this.state.imageSource !=
-                  null ? this.state.imageSource :
-
-                  {
-                    uri: global.viewImageURL + 'PERSON' +
-                      global.MyAccountID +
-                      '.jpg'+'?random_number=' +new Date().getTime(),
-                  }}
-
-                style={styles.profileImg}
-              />
-
-            </TouchableHighlight>
-
-          </View>
-
-          <TouchableOpacity
-            style={styles.loginScreenButton}
-            onPress={this.selectPhoto.bind(this)}>
-
-            <Text
-              style={{
-                fontSize: 12,
-                color: 'black', alignSelf: 'center'
-              }}>
-              Change Image </Text>
-
-          </TouchableOpacity>
-          <View
-
-            style={styles.rectangle}>
-
-            <View
-              style={styles.row}>
-
-              <View
-                style={styles.inputWrap}>
-
-                <TextField
-
-                  label='First Name'
-
-                  autoCapitalize='sentences'
-
-                  labelHeight={15}
-
-                  value={this.state.firstname}
-
-                  maxLength={30}
-
-                  activeLineWidth={0.5}
-
-                  fontSize={12}
-
-                  onChangeText={
-                    this.handlefname}
-
-                />
-
-              </View>
-
-              <View
-                style={styles.inputWrap}>
-
-                <TextField
-
-                  label='Last Name'
-
-                  autoCapitalize='sentences'
-
-                  value={this.state.lastname}
-
-                  labelHeight={15}
-
-                  maxLength={30}
-
-                  activeLineWidth={0.5}
-
-                  fontSize={12}
-
-                  onChangeText={
-                    this.handlelname
-                  }
-
-                />
-
-              </View>
-
-
-
-            </View>
-
-            <View
-              style={styles.row}>
-
-              <View
-                style={styles.inputWrap}>
-
-                <TextField
-
-                  label='Email ID'
-
-                  autoCapitalize='sentences'
-
-                  value={this.state.emailId}
-
-                  labelHeight={15}
-
-                  maxLength={50}
-
-                  activeLineWidth={0.5}
-
-                  fontSize={12}
-
-                  onChangeText={
-                    this.handleemail
-                  }
-
-                />
-
-              </View>
-
-
-            </View>
-
-
-            <View
-              style={styles.inputWrap}>
-
-              <TextField
-
-                label='Alternate Email ID'
-
-                autoCapitalize='sentences'
-
-                //value={this.state.emailId}
-
-                labelHeight={15}
-
-                maxLength={50}
-
-                activeLineWidth={0.5}
-
-                fontSize={12}
-
-                onChangeText={
-                  this.handleAlternateEmailID
-                }
-
-              />
-
-            </View>
-
-            <View
-              style={{
-                flexDirection:
-                  'row', alignSelf:
-                  'center'
-              }}>
-
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss()
+        }}
+      >
+        <View style={styles.mainViewStyle}>
+          {/* <Header /> */}
+          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
               <TouchableOpacity
-
-                style={styles.loginScreenButton}
-
-                onPress={() => navigate('AddVehiclesScreen')}>
-
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: 'black', alignSelf: 'center'
-                    }}>My Vehicles</Text>
-
-              </TouchableOpacity>
-
-              <TouchableOpacity
-
-                style={styles.loginScreenButton}
-
-                onPress={this.submit.bind(this)}>
-
-                <Text
+                onPress={() => {
+                  this.props.navigation.navigate("MyProfileScreen");
+                }}
+              >
+                <View
                   style={{
-                    fontSize: 12,
-                    color: 'black', alignSelf: 'center'
-                  }}>Update</Text>
-
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: 'flex-start',
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
               </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+        <KeyboardAwareScrollView>
+            <View style={styles.mainContainer}>
+              <View style={styles.textWrapper}>
+                <View style={styles.myProfileFlexStyle}>
+                  <View style={styles.emptyViewStyle} />
+                  <View style={styles.viewForMyProfileText}>
+                    <Text style={styles.myProfileTitleStyle}>Edit Profile</Text>
+                  </View>
+                  <View style={styles.emptyViewStyle} />
+                </View>
 
+                <ScrollView>
+                  <View style={styles.containerView_ForProfilePicViewStyle}>
+                    <TouchableOpacity
+                      onPress={this.selectPhotoTapped.bind(this)}
+                    >
+                      <View style={styles.viewForProfilePicImageStyle}>
+                        {this.state.ImageSource === null ? (
+                          <Image
+                            style={styles.profilePicImageStyle}
+                            source={require("../icons/camwithgradientbg.png")}
+                          />
+                        ) : (
+                          <Image
+                            style={styles.profilePicImageStyle}
+                            source={this.state.ImageSource}
+                          />
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={this.selectPhotoTapped.bind(this)}
+                    >
+                      <View style={styles.imagesmallCircle}>
+                        <Image
+                          style={[styles.smallImage]}
+                          source={require("../icons/cam_with_gray_bg.png")}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View>
+                    <Card style={styles.myProfileCardsStyle}>
+                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
+                      <Text style={styles.itemTextTitles}>First Name:</Text>
+                      {/* <View style={styles.underlineStyle}> */}
+                      <Input
+                        style={styles.itemTextValues}
+                        autoCorrect={false}
+                        autoCapitalize="words"
+                        multiline={false}
+                        maxLength={24}
+                        
+                        keyboardType="default"
+                        placeholder="Enter First Name Here"
+                        defaultValue={
+                          this.props.navigation.state.params
+                            .profileDataSourceFirstName
+                            ? this.props.navigation.state.params
+                                .profileDataSourceFirstName
+                            : ""
+                        }
+                        onChangeText={this.FName}
+                      />
+                      {/* </View> */}
+                      {/* </Item> */}
+                    </Card>
+                  </View>
+
+                  <View>
+                    <Card style={styles.myProfileCardsStyle}>
+                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
+                      <Text style={styles.itemTextTitles}>Last Name:</Text>
+                      <Input
+                        style={styles.itemTextValues}
+                        autoCorrect={false}
+                        autoCapitalize="words"
+                        multiline={false}
+                        maxLength={30}
+                        keyboardType="default"
+                        placeholder="Enter Last Name Here"
+                        defaultValue={
+                          this.props.navigation.state.params
+                            .profileDataSourceLastName
+                            ? this.props.navigation.state.params
+                                .profileDataSourceLastName
+                            : ""
+                        }
+                        onChangeText={this.LName}
+                      />
+                      {/* </Item> */}
+                    </Card>
+                  </View>
+
+                  <View>
+                    <Card style={styles.myProfileCardsStyle}>
+                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
+                      <Text style={styles.itemTextTitles}>Email:</Text>
+                      <Input
+                        style={styles.itemTextValues}
+                        autoCorrect={false}
+                        autoCapitalize="words"
+                        multiline={false}
+                        maxLength={30}
+                        keyboardType="email-address"
+                        placeholder="Enter Primary Email Here"
+                        defaultValue={
+                          this.props.navigation.state.params
+                            .profileDataSourceEmail
+                            ? this.props.navigation.state.params
+                                .profileDataSourceEmail
+                            : ""
+                        }
+                        onChangeText={this.FEmail}
+                      />
+                      {/* </Item> */}
+                    </Card>
+                  </View>
+
+                  <View>
+                    <Card style={styles.myProfileCardsStyle}>
+                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
+                      <Text style={styles.itemTextTitles}>
+                        Alternate Email:
+                      </Text>
+                      <Input
+                        style={styles.itemTextValues}
+                        autoCorrect={false}
+                        autoCapitalize="words"
+                        multiline={false}
+                        maxLength={30}
+                        keyboardType="email-address"
+                        placeholder="Enter Aternate Email here"
+                        defaultValue={
+                          this.props.navigation.state.params
+                            .profileDataSourceAlternateEmail
+                            ? this.props.navigation.state.params
+                                .profileDataSourceAlternateEmail
+                            : ""
+                        }
+                        onChangeText={this.AEmail}
+                      />
+                      {/* </Item> */}
+                    </Card>
+                  </View>
+                  {/* <View style={styles.viewForPaddingAboveAndBelowUpdateButtons}>
+                    <Button
+                      bordered
+                      warning
+                      style={styles.buttonUpdateStyle}
+                      onPress={() => this.myEditProfile()}
+                    >
+                      <Text style={styles.textInUpdateButtonStyle}>Update</Text>
+                    </Button>
+                  </View> */}
+                  <View style={styles.viewForPaddingAboveAndBelowButtons}>
+                    <Button
+                      bordered
+                      dark
+                      style={styles.buttonFamily}
+                      onPress={() => {
+                        this.props.navigation.goBack()
+                      }}
+                    >
+                      <Text style={styles.textFamilyVehicle}>Cancel</Text>
+                    </Button>
+                    <Button
+                      bordered
+                      dark
+                      style={styles.buttonVehicle}
+                      onPress={() => this.myEditProfile()}
+                    >
+                      <Text style={styles.textFamilyVehicle}>Update</Text>
+                    </Button>
+                  </View>
+                </ScrollView>
+              </View>
             </View>
 
-            <TouchableOpacity
-
-              title="Add Vehicles "
-
-              customClick={() => this.props.navigation.navigate('AddVehiclesScreen')}
-            />
-
-          </View>
-
-        </ScrollView>
-
-      </View>
-
+            {/* </View> */}
+          </KeyboardAwareScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     )
-
   }
-
-
-
 }
 
-const styles =
-  StyleSheet.create({
+const styles = StyleSheet.create({
+    image1: {
+        width: wp("17%"),
+        height: hp("12%"),
+        marginRight: hp("3%")
+      },
+    viewDetails2: {
+        alignItems: "flex-start",
+        justifyContent: "center",
+        width: hp("3%"),
+        height: hp("3%"),
+        marginTop: 5
+        // marginLeft: 10
+      },
+    viewStyle1: {
+        backgroundColor: "#fff",
+        height: hp("7%"),
+        width: Dimensions.get("screen").width,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        elevation: 2,
+        position: "relative"
+      },
+      viewDetails1: {
+        flex: 0.3,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        marginLeft: 3
+      },
+  textWrapper: {
+    height: hp("85%"),
+    width: wp("95%")
+  },
+  viewStyle: {
+    backgroundColor: "#fff",
+    height: hp("8%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  image: {
+    width: wp("24%"),
+    height: hp("10%")
+  },
+  emptyViewStyle: {
+    flex: 1
+  },
+  mainViewStyle: {
+    flex: 1
+  },
+  mainContainer: {
+    flex: 1,
+    marginTop: 0,
+    paddingHorizontal: hp("1.4%"),
+    // paddingBottom: 10,
+    backgroundColor: "#fff",
+    flexDirection: "column"
+  },
+
+  myProfileFlexStyle: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: hp("2%"),
+    marginBottom: 0
+  },
+  emptyViewStyle: {
+    flex: 1
+  },
+  viewForMyProfileText: {
+    flex: 4,
+    justifyContent: "center",
+    alignSelf: "center"
+  },
+  myProfileTitleStyle: {
+    textAlign: "center",
+    fontSize: hp("2.5%"),
+    fontWeight: "500"
+  },
+  editButtonViewStyle: {
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "center"
+  },
+  editButtonImageStyle: {
+    width: wp("4.5%"),
+    height: hp("4.5%")
+  },
+  containerView_ForProfilePicViewStyle: {
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "white",
+    alignSelf: "center",
+    flexDirection: "row",
+    borderColor: "orange"
+  },
+  viewForProfilePicImageStyle: {
+    width: wp("15%"),
+    height: hp("15%"),
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: hp("4%"),
+    marginBottom: hp("8%"),
+    marginLeft: hp("4%")
+  },
+  profilePicImageStyle: {
+    width: 110,
+    height: 110,
+    borderColor: "orange",
+    borderRadius: 55,
+    borderWidth: hp("0.2%") / PixelRatio.get()
+  },
+  myProfileCardsStyle: {
+    marginTop: hp("0.5%"),
+    paddingHorizontal: hp("2%"),
+    paddingVertical: hp("0.3%"),
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    height: hp("7%")
+  },
+  cardItemsStyle: {
+    alignItems: "flex-start",
+    justifyContent: "flex-start"
+  },
+  itemTextTitles: {
+    fontSize: hp("1.6%"),
+    fontWeight: "300",
+    // fontStyle: "italic",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    color: "#909091",
+    paddingLeft: hp("0.8%")
+  },
+  itemTextValues: {
+    
+    fontSize: hp("2%"),
+    fontWeight: "300",
+    paddingTop: hp("0.3%"),
+    paddingHorizontal: hp("0.5%"),
+    paddingBottom: hp("0.2%"),
+    width:wp('90%'),
+    // alignItems: "flex-start",
+    // justifyContent: "flex-start",
+    color: "#474749"
+  },
+
+//   underlineStyle: {
+//       flex:1,
+//       marginLeft:hp('2%')
+//   },
+  viewForPaddingAboveAndBelowUpdateButtons: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: hp("4%"),
+    marginBottom: hp("2%"),
+    marginHorizontal: hp("2%")
+  },
+  buttonUpdateStyle: {
+    width: wp("28%"),
+    height: hp("5%"),
+    borderRadius: hp("2.5%"),
+    borderWidth: hp("0.2%"),
+    borderColor: "orange",
+    backgroundColor: "orange",
+    justifyContent: "center"
+  },
+  textInUpdateButtonStyle: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: hp("2%")
+  },
+  imagesmallCircle: {
+    alignItems: "flex-end",
+    justifyContent: "flex-start",
+    width: 10,
+    height: 10,
+    marginTop: hp("5%"),
+    marginLeft: hp("2%"),
+    borderRadius: 5
+  },
+  smallImage: {
+    width: wp("8%"),
+    height: hp("4%"),
+    justifyContent: "flex-start",
+    alignItems: "flex-end"
+    //alignItems: center
+  },
+  viewForPaddingAboveAndBelowButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: hp("4%"),
+    marginBottom: hp("2%"),
+    marginHorizontal: hp("2%")
+  },
+  buttonFamily: {
+    width: wp("32%"),
+    height: hp("5%"),
+    borderRadius: hp("2.5%"),
+    borderWidth: hp("0.2%"),
+    borderColor: "#C3C3C3",
+    backgroundColor: "#C3C3C3",
+    justifyContent: "center"
+  },
+  textFamilyVehicle: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: hp("2%")
+  },
+  buttonVehicle: {
+    width: wp("32%"),
+    height: hp("5%"),
+    borderRadius: hp("2.5%"),
+    borderWidth: hp("0.2%"),
+    borderColor: "orange",
+    backgroundColor: "orange",
+    justifyContent: "center"
+  }
+})
+
+const mapStateToProps = state => {
+  return {
+      oyeURL: state.OyespaceReducer.oyeURL,
+      MyAccountID: state.UserReducer.MyAccountID,
+      MyMobileNumber: state.UserReducer.MyMobileNumber,
+      MyISDCode: state.UserReducer.MyISDCode,
+      // viewImageURL: state.OyespaceReducer.viewImageURL
+  }
+}
+
+export default connect(mapStateToProps)(EditProfile);
 
-    container: {
-
-      justifyContent:
-        'flex-start',
-
-      backgroundColor:
-        "#fff",
-
-      height: '100%',
-
-      width: '100%',
-
-    },
-
-    input: {
-
-      marginLeft:
-        20, marginRight:
-        15, marginTop:
-        5, marginBottom:
-        5,
-
-      height: 40,
-      borderColor: '#F2F2F2',
-      backgroundColor:
-        '#F2F2F2', borderWidth:
-        1.5, borderRadius:
-        2,
-
-    },
-
-
-
-    submitButton: {
-
-      backgroundColor:
-        '#ff8c00',
-
-      padding:
-        10,
-
-      margin: 15,
-
-      height: 40,
-
-      color: 'white'
-
-    },
-
-    mybutton: {
-
-      backgroundColor:
-        'white',
-
-      marginTop:
-        5,
-
-      height: 40,
-
-      borderColor:
-        'orange',
-
-      borderRadius:
-        0,
-
-      borderWidth:
-        2,
-
-      textAlign:
-        'center',
-
-
-
-    },
-
-    rectangle: {
-
-      backgroundColor:
-        'white', padding:
-        10, borderColor:
-        'orange',
-
-      marginLeft: 5,
-      marginRight: 5, marginTop:
-        5, borderRadius:
-        2, borderWidth:
-        1,
-
-    },
-
-
-
-    textInput: {
-
-      fontSize:
-        10,
-
-      height: 25
-
-    },
-
-    datePickerBox: {
-
-      marginBottom:
-        32,
-
-      marginLeft:
-        60,
-
-      borderColor:
-        '#ABABAB',
-
-      borderWidth:
-        0.5,
-
-      padding:
-        0,
-
-      borderTopLeftRadius:
-        4,
-
-      borderTopRightRadius:
-        4,
-
-      borderBottomLeftRadius:
-        4,
-
-      borderBottomRightRadius:
-        4,
-
-      height: 25,
-
-      justifyContent:
-        'center'
-
-    },
-
-    profileImgContainer: {
-
-      marginTop:
-        5,
-
-      height: 100,
-
-      width: 100,
-
-      borderRadius:
-        50,
-
-    },
-
-    profileImg: {
-
-      height: 100,
-
-      width: 100,
-
-      borderRadius:
-        50,
-
-
-    },
-
-    loginScreenButton: {
-
-      alignSelf: 'center',
-
-      width: '40%',
-
-      marginLeft: 10,
-
-      marginTop: 5,
-
-      paddingTop: 2,
-
-      paddingBottom: 2,
-
-      backgroundColor: 'white',
-
-      borderRadius: 5,
-
-      borderWidth:
-        1,
-
-      borderColor:
-        'orange'
-
-    },
-
-    datePickerText: {
-
-      fontSize:
-        14,
-
-      marginLeft:
-        5,
-
-      borderWidth:
-        0,
-
-      color: '#121212',
-
-    },
-
-    imagee: {
-
-      height: 14,
-
-      width: 14,
-
-      margin: 10,
-
-    },
-
-    row: {
-
-      flex: 1,
-
-      flexDirection:
-        "row",
-
-    },
-
-    inputWrap: {
-
-      flex: 1,
-
-      marginLeft: 15,
-
-      paddingRight: 15
-
-    },
-
-
-
-    ImageStyle: {
-
-      padding:
-        10,
-
-      margin: 5,
-
-      height: 25,
-
-      width: 25,
-
-      resizeMode:
-        'stretch',
-
-      alignItems:
-        'center'
-
-    },
-
-    SectionStyle: {
-
-      flexDirection:
-        'row',
-
-      backgroundColor:
-        '#fff',
-
-      borderWidth:
-        .5,
-
-      borderColor:
-        '#000',
-
-      height: 40,
-
-      borderRadius:
-        5,
-
-      margin: 10
-
-    },
-
-    inputLayout: {
-
-      marginTop:
-        5,
-
-      marginLeft:
-        10,
-
-      marginRight:
-        10,
-
-    },
-
-    image: {
-
-      width: 100,
-
-      height: 100,
-
-      marginTop:
-        10,
-
-      borderColor:
-        'orange',
-
-      borderRadius:
-        2,
-
-      borderRadius:
-        100 / 2,
-
-      alignSelf:
-        'center',
-
-      justifyContent:
-        'center',
-
-      alignItems:
-        'center',
-
-    },
-
-
-
-  })

@@ -46,15 +46,15 @@ export default class admin extends React.Component {
               >
                 <View
                   style={{
-                    height: hp("6%"),
-                    width: wp("20%"),
-                    alignItems: "center",
-                    justifyContent: "center",
-                    alignContent: "center"
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: 'flex-start',
+                    justifyContent: "center"
                   }}
                 >
                   <Image
-                    source={require("../pages/assets/img/back.png")}
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
                     style={styles.viewDetails2}
                   />
                 </View>
@@ -69,7 +69,7 @@ export default class admin extends React.Component {
             >
               <Image
                 style={[styles.image1]}
-                source={require("../pages/assets/img/OyeSpace.png")}
+                source={require("../icons/OyeSpace.png")}
               />
             </View>
             <View style={{ flex: 0.2 }}>
@@ -78,6 +78,8 @@ export default class admin extends React.Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+       
+        
         <View style={styles.textWrapper}>
           <Text style={styles.admin1}>Administration</Text>
 
@@ -89,16 +91,18 @@ export default class admin extends React.Component {
                     source={require("../pages/assets/img/petrolling.png")}
                   />
                 </View>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("CheckPointListScreen")
-                  }
-                >
                   <View style={styles.view3}>
-                    <Text style={styles.text1}>Patrolling Check Points</Text>
+                    <TouchableOpacity
+                        onPress={() =>
+                          this.props.navigation.navigate("CheckPointListScreen")
+                        }
+                      >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>Patrolling Check Points</Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
-              </View>
+                </View>
               <View style={styles.borderline} />
             </View>
             <View style={{ flexDirection: "column" }}>
@@ -108,15 +112,18 @@ export default class admin extends React.Component {
                     source={require("../pages/assets/img/view_all_visitors1.png")}
                   />
                 </View>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("ViewAllVisitorsScreen")
-                  }
-                >
-                  <View style={styles.view3}>
-                    <Text style={styles.text1}>View All Visitors</Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.view3}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate("ViewAllVisitorsScreen")
+                      }
+                    >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>View All Visitors</Text>
+                      </View>
+                    </TouchableOpacity>
+                </View>
+                
               </View>
               <View style={styles.borderline} />
             </View>
@@ -125,16 +132,19 @@ export default class admin extends React.Component {
                 <View style={styles.view2}>
                   <Image source={require("../pages/assets/img/settings.png")} />
                 </View>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("AdminSettingsScreen")
-                  }
-                >
-                  <View style={styles.view3}>
-                    <Text style={styles.text1}>Admin Settings</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View style={styles.view3}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("AdminSettingsScreen")
+                    }
+                  >
+                    <View style={styles.view3}>
+                      <Text style={styles.text1}>Admin Settings</Text>
+                    </View>
+                  </TouchableOpacity>
+              
+                </View>
+                </View>
               <View style={styles.borderline} />
             </View>
             <View style={{ flexDirection: "column" }}>
@@ -144,15 +154,18 @@ export default class admin extends React.Component {
                     source={require("../pages/assets/img/join_asso.png")}
                   />
                 </View>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("AssnListScreen")
-                  }
-                >
-                  <View style={styles.view3}>
-                    <Text style={styles.text1}>Join Association</Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.view3}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate("AssnListScreen")
+                      }
+                    >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>Join Association</Text>
+                      </View>
+                    </TouchableOpacity>
+                </View>
+                
               </View>
               <View style={styles.borderline} />
             </View>
@@ -163,6 +176,7 @@ export default class admin extends React.Component {
                     source={require("../pages/assets/img/create_association1.png")}
                   />
                 </View>
+                <View style={styles.view3}>
                 <TouchableOpacity
                   onPress={() =>
                     this.props.navigation.navigate("CreateAssnScreen")
@@ -172,6 +186,8 @@ export default class admin extends React.Component {
                     <Text style={styles.text1}>Create Association</Text>
                   </View>
                 </TouchableOpacity>
+                </View>
+                
               </View>
               <View style={styles.borderline} />
             </View>
@@ -182,15 +198,18 @@ export default class admin extends React.Component {
                     source={require("../pages/assets/img/building2.png")}
                   />
                 </View>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("CreateBlockScreen")
-                  }
-                >
-                  <View style={styles.view3}>
-                    <Text style={styles.text1}>Create Block and Units</Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.view3}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate("CreateBlockScreen")
+                      }
+                    >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>Create Block and Units</Text>
+                      </View>
+                    </TouchableOpacity>
+                </View>
+                
               </View>
               <View style={styles.borderline} />
             </View>
@@ -211,17 +230,25 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
   image1: {
-    width: wp("22%"),
+    width: wp("17%"),
     height: hp("12%"),
-    marginRight: hp("1%")
+    marginRight: hp("3%")
   },
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
-    width: wp("6%"),
-    height: hp("2%"),
-    marginTop: hp("0.5%")
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
   },
   textWrapper: {
     height: hp("85%"), // 70% of height device screen

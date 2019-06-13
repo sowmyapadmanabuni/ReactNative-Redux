@@ -179,7 +179,7 @@ class Resident extends Component {
     const { getDashUnits, selectedAssociation } = this.props;
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
     const url = `http://${
-      global.oyeURL
+      this.props.oyeURL
     }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
     console.log(this.state);
     console.log(url);
@@ -419,7 +419,8 @@ class Resident extends Component {
 const mapStateToProps = state => {
   return {
     associationid: state.DashboardReducer.associationid,
-    selectedAssociation: state.DashboardReducer.selectedAssociation
+    selectedAssociation: state.DashboardReducer.selectedAssociation,
+    oyeURL: state.OyespaceReducer.oyeURL
   };
 };
 

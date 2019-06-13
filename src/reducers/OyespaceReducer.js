@@ -1,6 +1,11 @@
 import { UPDATE_USER_INFO } from "../actions/types";
 
+// global.oyeURL = "apidev.oyespace.com";
+    // global.oyeURL = 'apiuat.oyespace.com';
+    //  global.oyeURL = 'api.oyespace.com';
 const oyeURL = "apidev.oyespace.com";
+// const oyeURL = "apiuat.oyespace.com";
+// const oyeURL = "api.oyespace.com";
 const oyeBaseURL = "https://" + oyeURL + "/oye247/api/v1/";
 
 const INITIAL_STATE = {

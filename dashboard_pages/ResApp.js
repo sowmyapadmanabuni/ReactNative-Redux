@@ -64,7 +64,10 @@ import ViewFamilyMembersList from '../resident_pages/ViewFamilyMembersList';
  import InvitedGuestList from '../my_unit_pages/InvitedGuestList';
 
  import EditFamilyMember from '../my_unit_pages/EditFamilyMember';
+ 
+ import MyProfile from '../my_unit_pages/MyProfile.js';
  import EditProfile from '../my_unit_pages/EditProfile';
+
  import AddRegularVisitor from '../my_unit_pages/AddRegularVisitor';
  import ViewRegularVisitor from '../my_unit_pages/ViewRegularVisitor';
  import EditRegularVisitor from '../my_unit_pages/EditRegularVisitor';
@@ -180,10 +183,19 @@ const ResApp = createStackNavigator({
         },
       },
 
+      MyProfileScreen: {
+        screen: MyProfile,
+        navigationOptions: {
+          title: 'My Profile',
+          header:null
+           //headerStyle: { backgroundColor: '#FA9917' },
+          // headerTintColor: '#ffffff',
+        },
+      },
   EditProfileScreen: {
     screen: EditProfile,
     navigationOptions: {
-      title: 'My Profile',
+      title: 'Edit Profile',
       header:null
        //headerStyle: { backgroundColor: '#FA9917' },
       // headerTintColor: '#ffffff',
