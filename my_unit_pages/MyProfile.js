@@ -291,7 +291,7 @@ class MyProfile extends Component {
                 </View>
 
                 <View style={styles.viewForPaddingAboveAndBelowButtons}>
-                  <Button bordered dark style={styles.buttonFamily} onPress={()=> this.props.navigation.navigate('VehicleListScreen')}>
+                  <Button bordered dark style={styles.buttonFamily} onPress={()=> this.props.navigation.navigate('MyVehicleListScreen')}>
                     <Text style={styles.textFamilyVehicle}>My Vehicles</Text>
                   </Button>
                   <Button bordered dark style={styles.buttonVehicle}>

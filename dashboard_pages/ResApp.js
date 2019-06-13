@@ -50,7 +50,6 @@ import EditWorker from '../assocition_pages/EditWorker';
 
 import ViewIncidentList from '../resident_pages/ViewIncidentList';
 import ViewFamilyMembersList from '../resident_pages/ViewFamilyMembersList';
- import AddVehicles from '../resident_pages/AddVehicles';
  import QRCodeGeneration from '../resident_pages/QRCodeGeneration';
  import AdminSettings from '../resident_pages/AdminSettings';
  import AddFamilyMember from '../resident_pages/AddFamilyMember';
@@ -91,6 +90,10 @@ import RegisterToUnit from '../assocition_pages/register'
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
 import NotificationScreen from '../src/screens/NotificationScreen/NotificationScreen';
 import NotificationDetailScreen from '../src/screens/NotificationScreen/NotificationDetailScreen';
+
+import MyVehicleListScreen from '../resident_pages/MyVehicleListScreen.js';
+import AddVehicles from '../resident_pages/AddVehicles';
+import EditVehicles from '../resident_pages/EditVehicles';
 
 // import BottomNavigation from '../my_unit_pages/BottomNavigation';
 // import UploadImage from '../my_unit_pages/UploadImage';
@@ -361,6 +364,8 @@ ViewRegularVisitorScreen: {
   },
 },
 
+
+
 Register: {
   screen: RegisterUser,
   navigationOptions: {
@@ -438,6 +443,16 @@ Unit: { screen: unitlist ,
       headerTintColor: '#ffffff',
     },
   },
+  MyVehicleListScreen: {
+    screen: MyVehicleListScreen,
+    navigationOptions: {
+      title: 'My Vehicle',
+      header:null,
+      // headerStyle: { backgroundColor: '#FA9917' },
+      // headerTintColor: '#ffffff',
+    },
+  },
+
   AddVehiclesScreen: {
     screen: AddVehicles,
     navigationOptions: {
@@ -447,6 +462,16 @@ Unit: { screen: unitlist ,
       // headerTintColor: '#ffffff',
     },
   },
+  EditVehiclesScreen: {
+    screen: EditVehicles,
+    navigationOptions: {
+      title: 'Edit Vehicle',
+      header:null,
+      // headerStyle: { backgroundColor: '#FA9917' },
+      // headerTintColor: '#ffffff',
+    },
+  },
+
   EditBlockScreen: {
     screen: EditBlock,
     navigationOptions: {
