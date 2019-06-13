@@ -11,11 +11,11 @@ const INITIAL_STATE = {
   viewImageURL: "http://" + oyeBaseURL + "/Images/",
   uploadImageURL:
     "http://" + oyeBaseURL + "/oyeliving/api/v1/association/upload",
-  oyeMobileRegex: "/^[0]?[456789]d{9}$/",
-  oyeNonSpecialRegex: "/[^0-9A-Za-z ,]/",
-  oyeNonSpecialNameRegex: "/[^0-9A-Za-z .]/",
-  oyeEmailRegex: "/^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,10})+$/",
-  OyeFullName: "/^[a-zA-Z ]+$/"
+  oyeMobileRegex: /^[0]?[456789]d{9}$/,
+  oyeNonSpecialRegex: /[^0-9A-Za-z ,]/,
+  oyeNonSpecialNameRegex: /[^0-9A-Za-z .]/,
+  oyeEmailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  OyeFullName: /^[a-zA-Z ]+$/
 };
 
 export default (state = INITIAL_STATE, action) => {

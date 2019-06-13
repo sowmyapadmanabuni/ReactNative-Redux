@@ -70,13 +70,12 @@ class AddRegularVisitor extends Component {
          }); */
 
     var result = this.Validate(first, last, email);
+
     if (result === true) {
-      // let number = this.phone.getValue() + mobile;
-      //global.MyISDCode ,global.MyMobileNumber
       member = {
         ACFName: first,
         ACLName: last,
-        ACMobile: global.MyMobileNumber,
+        ACMobile: this.props.MyMobileNumber,
         ACMobile1: "",
         ACMobile2: "",
         ACMobile3: "",
@@ -86,7 +85,7 @@ class AddRegularVisitor extends Component {
         ACEmail2: "",
         ACEmail3: "",
         ACEmail4: "",
-        ACISDCode: global.MyISDCode,
+        ACISDCode: this.props.MyISDCode,
         ACISDCode1: "",
         ACISDCode2: "",
         ACISDCode3: "",
@@ -98,7 +97,7 @@ class AddRegularVisitor extends Component {
 	"ACMobile4" : "",	"ACEmail" : "basavarajeshk86@gmail.com",	"ACEmail1" : "",	"ACEmail2" : "",	"ACEmail3" : "",
 	"ACEmail4": "",	"ACISDCode" : "+91",	"ACISDCode1" : "",	"ACISDCode2" : "",	"ACISDCode3" : "",	"ACISDCode4" : ""
 }*/
-      const url = global.champBaseURL + "account/signup";
+      const url = this.props.champBaseURL + "account/signup";
       //  const url = 'http://122.166.168.160/champ/api/v1/account/signup'
 
       console.log("member", JSON.stringify(member));
@@ -116,35 +115,6 @@ class AddRegularVisitor extends Component {
           console.log("response", responseJson);
 
           if (responseJson.success) {
-            //   { data: { account: { acAccntID: 3131, acfName: 'Basava', aclName: 'T', acMobile: '9876543234',
-            //  acMobile1: '',  acMobile2: '', acMobile3: '', acMobile4: '', acEmail: 'bassba@fgjjj.hhh',
-            //   acEmail1: '', acEmail2: '',  acEmail3: '',  acEmail4: '',  acmVfied: true, acM1Vfied: false,  acM2Vfied: false,
-            // acM3Vfied: false, acM4Vfied: false, aceVfied: true,   acE1Vfied: false, acE2Vfied: false,  acE3Vfied: false,
-            //   acE4Vfied: false,  acisdCode: '+91',  acisdCode1: '',  acisdCode2: '',  acisdCode3: '', acisdCode4: '',
-            //   acdCreated: '2018-11-25T11:58:25',  acdUpdated: '2018-11-25T11:58:25',   acIsActive: true },
-            db.transaction(function(tx) {
-              //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
-              //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
-              tx.executeSql(
-                "INSERT INTO Account (AccountID, FirstName, LastName, MobileNumber, Email, ISDCode  " +
-                  "  ) VALUES (?,?,?,?,?,?)",
-                [
-                  responseJson.data.account.acAccntID,
-                  responseJson.data.account.acfName,
-                  responseJson.data.account.aclName,
-                  responseJson.data.account.acMobile,
-                  responseJson.data.account.acEmail,
-                  responseJson.data.account.acisdCode
-                ],
-                (tx, results) => {
-                  console.log(
-                    "INSERT Account ",
-                    results.rowsAffected + " " + association_id
-                  );
-                }
-              );
-            });
-
             const { updateUserInfo } = this.props;
             const {
               acAccntID,
@@ -186,13 +156,13 @@ class AddRegularVisitor extends Component {
     } else if (first.length < 3) {
       alert("Enter Minimum 3 Characters");
       return false;
-    } else if (global.oyeNonSpecialNameRegex.test(first) === true) {
+    } else if (this.props.oyeNonSpecialNameRegex.test(first) === true) {
       alert(" First Name should not contain Special Character");
       return false;
     } else if (last == "" || last == undefined) {
       alert("Enter Last Name");
       return false;
-    } else if (global.oyeNonSpecialNameRegex.test(last) === true) {
+    } else if (this.props.oyeNonSpecialNameRegex.test(last) === true) {
       alert("Last Name should not contain Special Character");
       return false;
       //   } else if (reg.test(mobile) === false || first == undefined) {
@@ -201,7 +171,7 @@ class AddRegularVisitor extends Component {
     } else if (email == "" || email == undefined) {
       alert("Enter Email ID");
       return false;
-    } else if (global.oyeEmailRegex.test(email) === false) {
+    } else if (this.props.oyeEmailRegex.test(email) === false) {
       alert("Invalid Email ID ");
       return false;
     }
@@ -452,10 +422,24 @@ class AddRegularVisitor extends Component {
       </View>
     );
   }
+
+  componentDidMount() {
+    console.log("testing", this.props.oyeNonSpecialNameRegex.test("email"));
+  }
 }
 
+const mapStateToProps = state => {
+  return {
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    MyISDCode: state.UserReducer.MyISDCode,
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    oyeNonSpecialNameRegex: state.OyespaceReducer.oyeNonSpecialNameRegex,
+    oyeEmailRegex: state.OyespaceReducer.oyeEmailRegex
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { updateUserInfo }
 )(AddRegularVisitor);
 
