@@ -51,7 +51,7 @@ import {connect} from 'react-redux';
             onWillBlur={payload => this.myProfile()}
           />
             <View style={[styles.viewStyle,{flexDirection:'row'}]}>
-                <View style={{flex:0.3,flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:20}}>
+                <View style={{flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:8}}>
                     <TouchableOpacity onPress={() => this.props.navigate.navigate('MyProfileScreen')}>
                         <View style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1, justifyContent:'center',alignItems:'center'}}>
                             {this.state.ImageSource != null ?
@@ -69,15 +69,17 @@ import {connect} from 'react-redux';
                             <Text>{this.props.MyFirstName[0].toUpperCase()}</Text> 
                             }
                             
-                            {/* <Text>{this.props.MyFirstName[0].toUpperCase()}</Text> */}
                         </View>
-                        {/* <Image style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1,}} source={{ uri: this.props.viewImageURL + 'PERSON' + this.props.MyAccountID + '.jpg' }}/> */}
                     </TouchableOpacity>
-                    <Text style={{marginLeft:5,fontWeight:'bold'}}>
-                    {this.state.myFirstName}
+                   
+                </View>
+                <View style={{justifyContent:'center',alignItems:'center',marginLeft:hp('1%')}}>
+                    <Text style={{fontWeight:'bold'}}>
+                        {this.state.myFirstName}
                     </Text>
                 </View>
-                <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
+                
+                <View style={{flex:2,justifyContent: 'center',alignItems: 'center'}}>
                     <Image style={[styles.image]} source={require('../icons/OyeSpace.png')}/>
                 </View>
                 <TouchableWithoutFeedback onPress={() => this.props.navigate.navigate('NotificationScreen')}>
