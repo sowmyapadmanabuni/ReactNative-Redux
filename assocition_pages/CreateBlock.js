@@ -3,6 +3,8 @@ import { Text, View, TouchableOpacity, StyleSheet,Image,FlatList,ScrollView,Aler
 import { TextField } from 'react-native-material-textfield';
 import { Fonts } from '../pages/src/utils/Fonts';
 import { Dropdown } from 'react-native-material-dropdown';
+import {connect} from 'react-redux';
+
 class List extends Component {
     constructor() {
 
@@ -93,7 +95,7 @@ class List extends Component {
       const { } = this.props.navigation.state;
       console.log('ff')
       console.log('componentdidmount')
-      const url = global.champBaseURL+'Block/GetBlockListByAssocID/'+global.SelectedAssociationID;
+      const url = this.props.champBaseURL+'Block/GetBlockListByAssocID/'+this.props.SelectedAssociationID;
 
       console.log(url)
       fetch(url, {
@@ -139,7 +141,7 @@ class List extends Component {
         const { } = this.props.navigation.state;
         console.log('ff')
         console.log('componentdidmount')
-        const url = global.champBaseURL+'association/getAssociationList/'+global.SelectedAssociationID;
+        const url = this.props.champBaseURL+'association/getAssociationList/'+this.props.SelectedAssociationID;
 
         console.log(url)
         fetch(url, {
@@ -214,8 +216,8 @@ class List extends Component {
     
           anu = {
     
-            "ASAssnID": global.SelectedAssociationID,
-            "ACAccntID": global.MyAccountID,
+            "ASAssnID": this.props.SelectedAssociationID,
+            "ACAccntID": this.props.MyAccountID,
             "blocks": [
                 {
                     "BLBlkName"  : Bname,
@@ -230,8 +232,8 @@ class List extends Component {
     
           }
           // anu = {
-          //   "ASAssnID" :global.SelectedAssociationID,
-          //   "ACAccntID"     :  global.MyAccountID,
+          //   "ASAssnID" :this.props.SelectedAssociationID,
+          //   "ACAccntID"     :  this.props.MyAccountID,
           //   "blocks" :[
           //   {
           //   "BLBlkName"     : Bname,
@@ -267,7 +269,7 @@ class List extends Component {
     
           console.log('anu', anu)
     
-          fetch(global.champBaseURL + 'Block/create',
+          fetch(this.props.champBaseURL + 'Block/create',
             {
               method: 'POST',
               headers: {
@@ -443,7 +445,17 @@ paddingRight: 15 }}>
       )
    }
 }
-export default List
+
+const mapStateToProps = state => {
+  return {
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    MyAccountID: state.UserReducer.MyAccountID,
+
+  };
+};
+
+export default connect(mapStateToProps)(List);
 
 const styles = StyleSheet.create ({
    container: {

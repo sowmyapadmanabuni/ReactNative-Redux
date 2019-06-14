@@ -11,9 +11,11 @@ import { Button } from 'react-native-elements';
 import Communications from 'react-native-communications';
 import { Fonts } from '../pages/src/utils/Fonts'
 import { openDatabase } from 'react-native-sqlite-storage';
+import {connect} from 'react-redux';
+
 var db = openDatabase({ name: global.DB_NAME });
 
-export default class unitlist extends Component {
+class unitlist extends Component {
   static navigationOptions = {
     title: 'My Unit',
     headerStyle: {
@@ -180,7 +182,7 @@ export default class unitlist extends Component {
     const { params } = this.props.navigation.state;
     console.log('unitlist componentdidmount start ', params.id);
     //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
-    const url = global.champBaseURL +'Unit/GetUnitListByAssocID/' + params.id
+    const url = this.props.champBaseURL +'Unit/GetUnitListByAssocID/' + params.id
     console.log(url)
     fetch(url, {
       method: 'GET',
@@ -370,7 +372,7 @@ export default class unitlist extends Component {
               paddingTop: 2, paddingRight: 2, paddingLeft: 2, flexDirection: 'row', paddingBottom: 2,
               borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:20,
             }}>
-            <TouchableOpacity onPress={() => this.handleBackButtonClick()}
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}
               style={{ flex: 1 }}>
               <Image source={require('../pages/assets/images/back.png')}
                 style={{ height: 25, width: 25, marginTop:'8%', justifyContent:'center',alignItems:'center' }} />
@@ -539,5 +541,13 @@ const styles = StyleSheet.create({
  title: { fontSize: 15,color : 'black', marginBottom:2,fontWeight:'bold'},
 
 });
+
+const mapStateToProps = state => {
+  return {
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+  };
+};
+
+export default connect(mapStateToProps)(unitlist);
 
 AppRegistry.registerComponent('unitlist', () => unitlist);
