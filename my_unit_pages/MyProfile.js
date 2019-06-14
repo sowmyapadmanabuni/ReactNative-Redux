@@ -290,14 +290,14 @@ class MyProfile extends Component {
                   </Card>
                 </View>
 
-                <View style={styles.viewForPaddingAboveAndBelowButtons}>
+                {/* <View style={styles.viewForPaddingAboveAndBelowButtons}>
                   <Button bordered dark style={styles.buttonFamily} onPress={()=> this.props.navigation.navigate('MyVehicleListScreen')}>
                     <Text style={styles.textFamilyVehicle}>My Vehicles</Text>
                   </Button>
                   <Button bordered dark style={styles.buttonVehicle}>
                     <Text style={styles.textFamilyVehicle}>My Family</Text>
                   </Button>
-                </View>
+                </View> */}
               </ScrollView>
             </View>
           </View>

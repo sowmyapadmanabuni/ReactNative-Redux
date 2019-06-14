@@ -2,7 +2,11 @@ import React from 'react';
 import { Text, View, SafeAreaView,Dimensions, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { State } from 'react-native-gesture-handler';
+import { NavigationEvents } from "react-navigation";
+
 import {connect} from 'react-redux';
+
+
 
 
 
@@ -10,12 +14,44 @@ import {connect} from 'react-redux';
     state = {
         ImageSource: null,
         datasource:null,
+        myFirstName:null,
     }
+
+    componentDidMount() {
+        this.myProfile()
+    }
+    myProfile = () => {
+        console.log("________\n before fetch");
+        fetch(
+          `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${this.props.MyAccountID}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log(responseJson);
+            this.setState({
+              datasource: responseJson,
+              myFirstName: responseJson.data.account[0].acfName
+            });
+          })
+          .catch(error => console.log(error));
+        // )
+      };
       render() {
     return (
         <SafeAreaView style={{backgroundColor:'orange'}}>
+            <NavigationEvents
+            onDidFocus={payload => this.myProfile()}
+            onWillBlur={payload => this.myProfile()}
+          />
             <View style={[styles.viewStyle,{flexDirection:'row'}]}>
-                <View style={{flex:0.3,flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:16}}>
+                <View style={{flex:0.3,flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:20}}>
                     <TouchableOpacity onPress={() => this.props.navigate.navigate('MyProfileScreen')}>
                         <View style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1, justifyContent:'center',alignItems:'center'}}>
                             {this.state.ImageSource != null ?
@@ -38,7 +74,7 @@ import {connect} from 'react-redux';
                         {/* <Image style={{width:30,height:30, borderRadius:15, borderColor:'orange',borderWidth:1,}} source={{ uri: this.props.viewImageURL + 'PERSON' + this.props.MyAccountID + '.jpg' }}/> */}
                     </TouchableOpacity>
                     <Text style={{marginLeft:5,fontWeight:'bold'}}>
-                        {this.props.MyFirstName.toUpperCase()}
+                    {this.state.myFirstName}
                     </Text>
                 </View>
                 <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>

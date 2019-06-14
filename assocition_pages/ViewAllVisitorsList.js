@@ -20,6 +20,7 @@ import moment from "moment";
 import { DatePickerDialog } from "react-native-datepicker-dialog";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 //import Share from 'react-native-share';
+import ZoomImage from "react-native-zoom-image";
 import {connect} from 'react-redux';
 
 
@@ -175,12 +176,32 @@ class ViewAllVisitorsList extends Component {
         <View style={styles.lineForCellView} />
         <View style={styles.cellView}>
           <View style={styles.containerImageView}>
-            <Image
+            {/* <Image
               style={styles.mainCardItemImage}
               source={{
                 uri: "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
               }}
-              />
+              /> */}
+               {item.vlEntryImg == "" ? (
+             <ZoomImage
+               source={require("../icons/placeholderImg.png")}
+               imgStyle={styles.mainCardItemImage}
+               duration={300}
+               enableScaling={true}
+               easingFunc={Easing.bounce}
+             />
+           ) : (
+             <ZoomImage
+               source={{
+                 uri:
+                   "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+               }}
+               imgStyle={styles.mainCardItemImage}
+               duration={300}
+               enableScaling={true}
+               easingFunc={Easing.bounce}
+             />
+           )}
           </View>
           <View style={styles.textViewContainer}>
             <Text style={styles.nameTextStyle}>
