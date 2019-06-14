@@ -7,10 +7,11 @@ import {
 import { openDatabase } from 'react-native-sqlite-storage';
 import MyHeader from "../components/MyHeader";
 //import { Fonts } from '../pages/src/utils/Fonts';
+import {connect} from 'react-redux';
 
 var db = openDatabase({ name: global.DB_NAME });
 
-export default class associationlist extends Component {
+class associationlist extends Component {
 
 
   constructor() {
@@ -231,7 +232,7 @@ export default class associationlist extends Component {
   componentDidMount() {
 
     console.log('associationlist componentdidmount')
-    const url = global.champBaseURL + 'association/getassociationlist'
+    const url = this.props.champBaseURL + 'association/getassociationlist'
     fetch(url, {
       method: 'GET',
       headers: {
@@ -387,5 +388,13 @@ const styles = StyleSheet.create({
   },
   lighttext: { fontSize: 13,  color: 'white', },
 });
+
+const mapStateToProps = state => {
+  return {
+    champBaseURL:state.OyespaceReducer.champBaseURL
+  };
+};
+
+export default connect(mapStateToProps)(associationlist);
 
 AppRegistry.registerComponent('associationlist', () => associationlist);

@@ -50,10 +50,10 @@ class Register extends Component {
             endDate: moment(new Date()).format('YYYY-MM-DD'),
             cca2: 'IN',
             callingCode: '91',
-            FirstName: global.MyFirstName,
-            LastName: global.MyLastName,
-            MobileNumber: global.MyMobileNumber,
-            EmailId: global.MyEmail,
+            FirstName: this.props.MyFirstName,
+            LastName: this.props.MyLastName,
+            MobileNumber: this.props.MyMobileNumber,
+            EmailId: this.props.MyEmail,
             loading: false,
             // memberList: null,
         };
@@ -259,7 +259,7 @@ class Register extends Component {
                 "OccupancyDate": this.state.dobText,
             }
 
-            let champBaseURL = global.champBaseURL;
+            let champBaseURL = this.props.champBaseURL;
             console.log(champBaseURL)
 
             axios.post(`${champBaseURL}/association/join`, {
@@ -292,9 +292,9 @@ class Register extends Component {
                         "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
                     }
                     
-                    let mobileNo = '+91' + global.MyMobileNumber;
+                    let mobileNo = '+91' + this.props.MyMobileNumber;
                     console.log(mobileNo)
-                    axios.post('http://'+ global.oyeURL +'/oyeliving/api/v1/Member/GetRequestorDetails', {
+                    axios.post('http://'+ this.props.oyeURL +'/oyeliving/api/v1/Member/GetRequestorDetails', {
                         ACMobile : mobileNo,
                         ASAssnID : this.props.navigation.state.params.associtionID,
                         UNUnitID : this.props.navigation.state.params.unitID,
@@ -308,10 +308,10 @@ class Register extends Component {
                         console.log('here_2 ', responseData_2)
 
                         if(!(_.isEmpty(responseData_2))) {
-                            let userID = global.MyAccountID;
+                            let userID = this.props.MyAccountID;
                             let sbUnitID = this.props.navigation.state.params.unitID;
                             let unitName = this.props.navigation.state.params.unitName;
-                            let sbSubID = global.MyAccountID.toString() + this.props.navigation.state.params.unitID.toString() + 'usernotif';
+                            let sbSubID = this.props.MyAccountID.toString() + this.props.navigation.state.params.unitID.toString() + 'usernotif';
                             let sbRoleId = this.state.PickerValueHolder === '6' ? '2' : '3';
                             let sbMemID = responseData_2.meMemID;
                             let sbName = this.state.FirstName + " " + this.state.LastName;
@@ -443,7 +443,6 @@ class Register extends Component {
     render() {
         const { navigate } = this.props.navigation;
         console.log(this.props.navigation.state.params)
-        // console.log(global)
         return (
 
             <View style={styles.container}>
@@ -688,6 +687,15 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         joinedAssociations: state.AppReducer.joinedAssociations,
+        MyFirstName: state.UserReducer.MyFirstName,
+        MyLastName: state.UserReducer.MyLastName,
+        MyMobileNumber: state.UserReducer.MyMobileNumber,
+        MyEmail:state.UserReducer.MyEmail,
+        champBaseURL: state.OyespaceReducer.champBaseURL,
+        MyMobileNumber: state.UserReducer.MyMobileNumber,
+        oyeURL: state.OyespaceReducer.oyeURL,
+        MyAccountID: state.UserReducer.MyAccountID,
+
     }
 }
 

@@ -13,6 +13,7 @@ import {
   Alert,
   ActivityIndicator,
   TextInput,Dimensions,SafeAreaView
+  ,Easing
 } from "react-native";
 // import Header from "./components/common/Header.js";
 import { Card, CardItem, Button } from "native-base";

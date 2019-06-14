@@ -14,7 +14,7 @@ import {connect} from 'react-redux';
     state = {
         ImageSource: null,
         datasource:null,
-        myFirstName:null,
+        myFirstName:"",
     }
 
     componentDidMount() {
@@ -77,8 +77,12 @@ import {connect} from 'react-redux';
                 
                 <View style={{flex:20,height:hp('7%'),width:100, flexDirection:'row',justifyContent: 'center',alignItems: 'center',}}>
                     <View style={{justifyContent:'center',alignItems:'center',marginLeft:hp('1%')}}>
+                        
                         <Text style={{fontWeight:'bold'}}>
-                            {this.state.myFirstName}
+                            {this.state.myFirstName.length.toString() >= 6? 
+                            this.state.myFirstName.substring(0, 6):
+                            this.state.myFirstName
+                            }
                         </Text>
                     </View>
                     <View style={{flex:2,height:hp('7%'), justifyContent: 'center',alignItems: 'center'}}>
