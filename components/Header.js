@@ -73,20 +73,27 @@ import {connect} from 'react-redux';
                     </TouchableOpacity>
                    
                 </View>
-                <View style={{justifyContent:'center',alignItems:'center',marginLeft:hp('1%')}}>
-                    <Text style={{fontWeight:'bold'}}>
-                        {this.state.myFirstName}
-                    </Text>
+                
+                
+                <View style={{flex:20,height:hp('7%'),width:100, flexDirection:'row',justifyContent: 'center',alignItems: 'center',}}>
+                    <View style={{justifyContent:'center',alignItems:'center',marginLeft:hp('1%')}}>
+                        <Text style={{fontWeight:'bold'}}>
+                            {this.state.myFirstName}
+                        </Text>
+                    </View>
+                    <View style={{flex:2,height:hp('7%'), justifyContent: 'center',alignItems: 'center'}}>
+                        <Image style={[styles.image]} source={require('../icons/OyeSpace.png')}/>
+                    </View>
                 </View>
                 
-                <View style={{flex:2,justifyContent: 'center',alignItems: 'center'}}>
-                    <Image style={[styles.image]} source={require('../icons/OyeSpace.png')}/>
+                <View style={{justifyContent: 'center',alignItems: 'center',marginRight:8}}>
+                    <TouchableWithoutFeedback onPress={() => this.props.navigate.navigate('NotificationScreen')}>
+                        <View style={{flex:0.2, alignItems:'center',justifyContent:'center' }}>
+                            <Image source={require('../icons/notifications.png')} style={{width:hp("4.5%"), height:hp("4%"), justifyContent:'center',alignItems:'flex-end' }}/>
+                        </View>
+                    </TouchableWithoutFeedback>
                 </View>
-                <TouchableWithoutFeedback onPress={() => this.props.navigate.navigate('NotificationScreen')}>
-                    <View style={{flex:0.2, alignItems:'center',justifyContent:'center' }}>
-                        <Image source={require('../icons/notifications.png')} style={{width:hp("4.5%"), height:hp("4%"), justifyContent:'center',alignItems:'flex-end' }}/>
-                    </View>
-                </TouchableWithoutFeedback>
+                
             </View>
             <View style={{borderWidth:1,borderColor:'orange'}}></View>
         </SafeAreaView>
