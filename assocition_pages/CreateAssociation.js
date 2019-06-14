@@ -14,10 +14,11 @@ import CountryPicker, {
   getAllCountries
 } from 'react-native-country-picker-modal';
 import firebase from 'react-native-firebase';
+import {connect} from 'react-redux';
 
 var db = openDatabase({ name: global.DB_NAME});
 
-export default class CreateAssociation extends Component {
+class CreateAssociation extends Component {
 
   constructor(props) {
     super(props);
@@ -66,7 +67,7 @@ export default class CreateAssociation extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
   componentDidMount(){
-  const urlAsn = global.champBaseURL +'association/getassociationlist'
+  const urlAsn = this.props.champBaseURL +'association/getassociationlist'
 
   fetch(urlAsn, {
     method: 'GET',
@@ -168,7 +169,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
       txMyMem.executeSql('SELECT * FROM MyMembership', [], (txMyMem, resultsMyMem) => {
         console.log('CreateAssociation Results MyMembership ', resultsMyMem.rows.length + ' ');
         //  tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on
-        // M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
+        // M.OYEUnitID=A.UnitID and M.AssociationID=' + this.props.SelectedAssociationID, [], (tx, results) => {
         //   UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
         //  ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive
 
@@ -357,7 +358,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
    
     if (assname.length == 0) {
       alert("Association name Cannot be Empty");
-    } else if (global.oyeNonSpecialRegex.test(assname) === true) {
+    } else if (this.props.oyeNonSpecialRegex.test(assname) === true) {
       alert(" Association name should not contain Special Character");
       this.setState({
         mobilevalidate: false,
@@ -369,7 +370,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
       alert("Association name should be more than 3 Characters");
     } else if (mpropName.length == 0) {
       alert("property name cannot be empty");
-    } else if (global.oyeNonSpecialRegex.test(mpropName) === true) {
+    } else if (this.props.oyeNonSpecialRegex.test(mpropName) === true) {
       alert(" Property name should not contain Special Character");
       this.setState({
         mobilevalidate: false,
@@ -393,7 +394,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
       alert(" Pan Number already Exist");
     } else if (mstate.length == 0) {
       alert("State cannot be Empty");
-    } else if (global.oyeNonSpecialRegex.test(mstate) === true) {
+    } else if (this.props.oyeNonSpecialRegex.test(mstate) === true) {
       alert(" State should not contain Special Character");
       this.setState({
         mobilevalidate: false,
@@ -402,7 +403,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
       return false;
     } else if (mCity.length == 0) {
       alert("City cannot be Empty");
-    } else if (global.oyeNonSpecialRegex.test(mCity) === true ) {
+    } else if (this.props.oyeNonSpecialRegex.test(mCity) === true ) {
       alert(" City should not contain Special Character");
       this.setState({
         mobilevalidate: false,
@@ -411,7 +412,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
 
       return false;
     } 
-    else if(global.OyeFullName.test(mCity) === false){
+    else if(this.props.OyeFullName.test(mCity) === false){
       alert(" City should only contains alpha characters.");
       this.setState({
         mobilevalidate: false,
@@ -422,7 +423,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
     }
      else if (mAdress.length == 0) {
       alert("Address cannot be Empty");
-    } else if (global.oyeNonSpecialRegex.test(mAdress) === true) {
+    } else if (this.props.oyeNonSpecialRegex.test(mAdress) === true) {
       alert(" Adress should not contain Special Character");
       this.setState({
         mobilevalidate: false,
@@ -460,7 +461,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
 
     // else if (mManager_Name.length == 0) {
     //   alert(" Manager Name cannot be Empty");
-    // } else if (global.oyeNonSpecialRegex.test(mManager_Name) === true) {
+    // } else if (this.props.oyeNonSpecialRegex.test(mManager_Name) === true) {
     //   alert(" Manager Name should not contain Special Character");
     //   this.setState({
     //     mobilevalidate: false,
@@ -498,7 +499,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
     else if (mUnitName.length == 0) {
       alert(" Unit Name cannot be Empty");
     } 
-    // else if (global.oyeNonSpecialRegex.test(mUnitName) === true) {
+    // else if (this.props.oyeNonSpecialRegex.test(mUnitName) === true) {
     //   alert(" Manager Name should not contain Special Character");
     //   this.setState({
     //     mobilevalidate: false,
@@ -507,7 +508,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
     //   return false;
    
     // } 
-    // else if (global.oyeNonSpecialRegex.test(mBank_name) === true) {
+    // else if (this.props.oyeNonSpecialRegex.test(mBank_name) === true) {
     //   alert(" Manager Name should not contain Special Character");
     //   this.setState({
     //     mobilevalidate: false,
@@ -646,7 +647,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
 
 
 
-        "ACAccntID" : global.MyAccountID,
+        "ACAccntID" : this.props.MyAccountID,
         "association" :{
                 "ASAddress" : mAdress,
                 "ASCountry" : "India",
@@ -680,7 +681,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
                     "NoofAmenities"    : 2
                   }]
 
-        // "ACAccntID" : global.MyAccountID,
+        // "ACAccntID" : this.props.MyAccountID,
         // "association" :{
         // "asAssnID": global.assnID,
         //     "asPrpCode": null,
@@ -719,7 +720,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
 
         }
 
-          // "ACAccntID" : global.MyAccountID,
+          // "ACAccntID" : this.props.MyAccountID,
           // "association" :{
           // "ASAddress" : mAdress,
           // "ASCountry" : "India",
@@ -791,7 +792,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
       }
 
       console.log('CreateAssociation request', responseObj);
-      fetch(global.champBaseURL +'association/create',
+      fetch(this.props.champBaseURL +'association/create',
         {
           method: 'POST',
           headers: {
@@ -879,7 +880,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
   createSelfUnit(assnID, unit_name) {
     anu = {
       "ASAssnID": assnID,
-      "AcAccntID":global.MyAccountID,
+      "AcAccntID":this.props.MyAccountID,
       "units": [
         {
           "UNUniName": unit_name,
@@ -895,15 +896,15 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
           "FLFloorID": 1,
           "BLBlockID": 1,
           "Owner": {
-            "UOFName": global.MyFirstName,
-            "UOLName": global.MyLastName,
-            "UOMobile": global.MyMobileNumber,
-            "UOISDCode": global.MyISDCode,
+            "UOFName": this.props.MyFirstName,
+            "UOLName": this.props.MyLastName,
+            "UOMobile": this.props.MyMobileNumber,
+            "UOISDCode": this.props.MyISDCode,
             "UOMobile1": "",
             "UOMobile2": "",
             "UOMobile3": "",
             "UOMobile4": "",
-            "UOEmail": global.MyEmail,
+            "UOEmail": this.props.MyEmail,
             "UOEmail1": "",
             "UOEmail2": "",
             "UOEmail3": "",
@@ -925,7 +926,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
             [
               {
                 "UPLNum": unit_name,
-                "MEMemID": global.MyOYEMemberID==undefined?0:global.MyOYEMemberID,//2,
+                "MEMemID": this.props.MyOYEMemberID==undefined?0:this.props.MyOYEMemberID,//2,
                 "UPGPSPnt": ""
               }
             ]
@@ -933,7 +934,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
       ]
     }
     console.log('unit req', anu);
-    fetch(global.champBaseURL +'unit/create',
+    fetch(this.props.champBaseURL +'unit/create',
       {
         method: 'POST',
         headers: {
@@ -1050,8 +1051,6 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
     
     ];
    const { navigate } = this.props.navigation;
-  //  const { params } = this.props.navigation.state;
-    // console.log('SelectedAssociationID ', global.SelectedAssociationID);
 
     return (
 <View><View style={{backgroundColor: 'white' }}>
@@ -1597,6 +1596,24 @@ const styles = StyleSheet.create({
   marginLeft:5, marginRight:5, marginTop:5, borderRadius: 2, borderWidth: 1, },
 })
 
+const mapStateToProps = state => {
+  return {
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    MyOYEMemberID: state.UserReducer.MyOYEMemberID,
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyLastName: state.UserReducer.MyLastName,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    MyISDCode: state.UserReducer.MyISDCode,
+    MyEmail: state.UserReducer.MyEmail,
+    MyAccountID: state.UserReducer.MyAccountID,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    oyeNonSpecialRegex: state.OyespaceReducer.oyeNonSpecialRegex,
+    OyeFullName: state.OyespaceReducer.OyeFullName
+
+  };
+};
+
+export default connect(mapStateToProps)(CreateAssociation);
 
 
 
@@ -1717,7 +1734,7 @@ const styles = StyleSheet.create({
 //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 //   }
 //   componentDidMount(){
-//   const urlAsn = global.champBaseURL +'association/getassociationlist'
+//   const urlAsn = this.props.champBaseURL +'association/getassociationlist'
 
 //   fetch(urlAsn, {
 //     method: 'GET',
@@ -1819,7 +1836,7 @@ const styles = StyleSheet.create({
 //       txMyMem.executeSql('SELECT * FROM MyMembership', [], (txMyMem, resultsMyMem) => {
 //         console.log('CreateAssociation Results MyMembership ', resultsMyMem.rows.length + ' ');
 //         //  tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on
-//         // M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
+//         // M.OYEUnitID=A.UnitID and M.AssociationID=' + this.props.SelectedAssociationID, [], (tx, results) => {
 //         //   UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
 //         //  ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive
 
@@ -1996,7 +2013,7 @@ const styles = StyleSheet.create({
 
 //     if (assname.length == 0) {
 //       alert("Association name Cannot be Empty");
-//     } else if (global.oyeNonSpecialRegex.test(assname) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(assname) === true) {
 //       alert(" Association name should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2008,7 +2025,7 @@ const styles = StyleSheet.create({
 //       alert("Association name should be more than 3 Characters");
 //     } else if (mpropName.length == 0) {
 //       alert("property name cannot be empty");
-//     } else if (global.oyeNonSpecialRegex.test(mpropName) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(mpropName) === true) {
 //       alert(" Property name should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2032,7 +2049,7 @@ const styles = StyleSheet.create({
 //       alert(" Pan Number already Exist");
 //     } else if (mstate.length == 0) {
 //       alert("State cannot be Empty");
-//     } else if (global.oyeNonSpecialRegex.test(mstate) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(mstate) === true) {
 //       alert(" State should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2041,7 +2058,7 @@ const styles = StyleSheet.create({
 //       return false;
 //     } else if (mCity.length == 0) {
 //       alert("City cannot be Empty");
-//     } else if (global.oyeNonSpecialRegex.test(mCity) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(mCity) === true) {
 //       alert(" City should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2058,7 +2075,7 @@ const styles = StyleSheet.create({
 //     return false;
 //     } else if (mAdress.length == 0) {
 //       alert("Address cannot be Empty");
-//     } else if (global.oyeNonSpecialRegex.test(mAdress) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(mAdress) === true) {
 //       alert(" Adress should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2096,7 +2113,7 @@ const styles = StyleSheet.create({
 
 //     else if (mManager_Name.length == 0) {
 //       alert(" Manager Name cannot be Empty");
-//     } else if (global.oyeNonSpecialRegex.test(mManager_Name) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(mManager_Name) === true) {
 //       alert(" Manager Name should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2132,7 +2149,7 @@ const styles = StyleSheet.create({
 //       return false;
 //     } else if (mUnitName.length == 0) {
 //       alert(" Unit Name cannot be Empty");
-//     } else if (global.oyeNonSpecialRegex.test(mUnitName) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(mUnitName) === true) {
 //       alert(" Manager Name should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2140,7 +2157,7 @@ const styles = StyleSheet.create({
 //       });
 //       return false;
    
-//     } else if (global.oyeNonSpecialRegex.test(mBank_name) === true) {
+//     } else if (this.props.oyeNonSpecialRegex.test(mBank_name) === true) {
 //       alert(" Manager Name should not contain Special Character");
 //       this.setState({
 //         mobilevalidate: false,
@@ -2255,7 +2272,7 @@ const styles = StyleSheet.create({
 //       return false;
 //     } else if (mUnitName.length == 0) {
 //       alert(" Unit Name cannot be Empty");
-//     }else if (mAccount_Number.length != 0 && global.oyeNonSpecialRegex.test(mAccount_Number)
+//     }else if (mAccount_Number.length != 0 && this.props.oyeNonSpecialRegex.test(mAccount_Number)
 //     === true) {
    
 //    alert(" Account no should not contain Special Character");
@@ -2271,13 +2288,13 @@ const styles = StyleSheet.create({
 //    });
    
 //    return false;
-//   }else if (mIFSc.length != 0 && global.oyeNonSpecialRegex.test(mIFSc)
+//   }else if (mIFSc.length != 0 && this.props.oyeNonSpecialRegex.test(mIFSc)
 //   === true) {
  
 //  alert("IFSC Code should not contain Special Character");
  
 //  return false;
-// } else if (mAccount_Number.length != 0 && global.oyeNonSpecialRegex.test(mAccount_Number)
+// } else if (mAccount_Number.length != 0 && this.props.oyeNonSpecialRegex.test(mAccount_Number)
 // === true) {
 //   alert(" Enter Valid Account Number");
 //    /*  } else if (mBank_name.length == 0) {
@@ -2301,7 +2318,7 @@ const styles = StyleSheet.create({
 //       Alert.alert(' Accopunt Balence cannot be zero'); */
 //     } else {
 //       responseObj = {
-//         "ACAccntID": global.MyAccountID,
+//         "ACAccntID": this.props.MyAccountID,
 //         "association":
 //         {
 //           "ASAddress": mAdress,
@@ -2348,7 +2365,7 @@ const styles = StyleSheet.create({
 //       }
 
 //       console.log('CreateAssociation request', responseObj);
-//       fetch(global.champBaseURL +'association/create',
+//       fetch(this.props.champBaseURL +'association/create',
 //         {
 //           method: 'POST',
 //           headers: {
@@ -2434,7 +2451,7 @@ const styles = StyleSheet.create({
 //   createSelfUnit(assnID, unit_name) {
 //     anu = {
 //       "ASAssnID": assnID,
-//       "AcAccntID":global.MyAccountID,
+//       "AcAccntID":this.props.MyAccountID,
 //       "units": [
 //         {
 //           "UNUniName": unit_name,
@@ -2450,15 +2467,15 @@ const styles = StyleSheet.create({
 //           "FLFloorID": 1,
 //           "BLBlockID": 1,
 //           "Owner": {
-//             "UOFName": global.MyFirstName,
-//             "UOLName": global.MyLastName,
-//             "UOMobile": global.MyMobileNumber,
-//             "UOISDCode": global.MyISDCode,
+//             "UOFName": this.props.MyFirstName,
+//             "UOLName": this.props.MyLastName,
+//             "UOMobile": this.props.MyMobileNumber,
+//             "UOISDCode": this.props.MyISDCode,
 //             "UOMobile1": "",
 //             "UOMobile2": "",
 //             "UOMobile3": "",
 //             "UOMobile4": "",
-//             "UOEmail": global.MyEmail,
+//             "UOEmail": this.props.MyEmail,
 //             "UOEmail1": "",
 //             "UOEmail2": "",
 //             "UOEmail3": "",
@@ -2480,7 +2497,7 @@ const styles = StyleSheet.create({
 //             [
 //               {
 //                 "UPLNum": unit_name,
-//                 "MEMemID": global.MyOYEMemberID==undefined?0:global.MyOYEMemberID,//2,
+//                 "MEMemID": this.props.MyOYEMemberID==undefined?0:this.props.MyOYEMemberID,//2,
 //                 "UPGPSPnt": ""
 //               }
 //             ]
@@ -2488,7 +2505,7 @@ const styles = StyleSheet.create({
 //       ]
 //     }
 //     console.log('unit req', anu);
-//     fetch(global.champBaseURL +'unit/create',
+//     fetch(this.props.champBaseURL +'unit/create',
 //       {
 //         method: 'POST',
 //         headers: {
@@ -2606,7 +2623,7 @@ const styles = StyleSheet.create({
 //     ];
 // //    const { navigate } = this.props.navigation;
 //   //  const { params } = this.props.navigation.state;
-//     // console.log('SelectedAssociationID ', global.SelectedAssociationID);
+//     // console.log('SelectedAssociationID ', this.props.SelectedAssociationID);
 
 //     return (
 // <View><View style={{backgroundColor: 'white' }}>
