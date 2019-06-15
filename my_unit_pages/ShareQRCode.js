@@ -130,7 +130,7 @@ export default class QRCodeGeneration extends Component {
                    </TouchableOpacity>
                </View>
                <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
-                   <Image style={[styles.image1]} source={require('./src/components/images/headerLogo.png')}/>
+                   <Image style={[styles.image1]} source={require('../icons/headerLogo.png')}/>
                </View>
                <View style={{flex:0.2, }}>
                    
@@ -145,7 +145,7 @@ export default class QRCodeGeneration extends Component {
         <Text style={styles.titleOfScreen}>Share QR Code</Text>
         <Text>{this.state.qrShare}</Text>
         <View style={{justifyContent:'center',alignItems:'center',paddingHorizontal:hp('3%')}}>
-            <QRCode style={{ justifyContent:'center',alignItems:'center',borderRadius:hp('10%'),borderWidth:hp('2%') }} logo={require('./src/components/images/headerLogo.png')} logoSize={80}  content={this.state.qrText} codeStyle='square' outerEyeStyle='square' innerEyeStyle='square' />
+            <QRCode style={{ justifyContent:'center',alignItems:'center',borderRadius:hp('10%'),borderWidth:hp('2%') }} logo={require('../icons/headerLogo.png')} logoSize={80}  content={this.state.qrText} codeStyle='square' outerEyeStyle='square' innerEyeStyle='square' />
         </View>
         <View style={{justifyContent:'center',alignItems:'center',paddingHorizontal:20, marginTop:10,flexDirection:'column'}}>
         <TouchableOpacity onPress={()=>{
