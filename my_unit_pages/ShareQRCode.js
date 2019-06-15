@@ -29,8 +29,9 @@ import { captureScreen } from "react-native-view-shot";
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import { Fonts } from '../pages/src/utils/Fonts'
+import {connect} from 'react-redux';
 
-export default class ShareQRCode extends Component {
+class ShareQRCode extends Component {
 
     constructor(props) {
         super(props);
@@ -69,7 +70,7 @@ export default class ShareQRCode extends Component {
             Entrydate: EntryDateFormat
         })
         this.qrGeneration(params.Name + "," + "" + "," + params.MobileNo + "," + params.invitationID + "," +
-            global.SelectedUnitID + "," + EntryDateFormat + "," + params.EntryTimeDate.substring(11, 16) + "," + params.Vehicleno + "," + params.VisitorCount + "," +
+            this.props.SelectedUnitID + "," + EntryDateFormat + "," + params.EntryTimeDate.substring(11, 16) + "," + params.Vehicleno + "," + params.VisitorCount + "," +
             ExitDateFormat + "," + params.invitationID + "," + 66 + ',', params.invitationID);
 
         NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectivityChange);
@@ -129,21 +130,21 @@ export default class ShareQRCode extends Component {
 
     onSharePress = () => Share.share({
         title: 'Invitation',
-        message: global.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+        message: this.props.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
             global.AssociationName + ' for ' + this.state.textmsg + ' on ' + this.state.dobText + ' at ' +
-            this.state.datetime + '  ' + 'http://122.166.168.160/Images/Invitation' + global.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg'
+            this.state.datetime + '  ' + 'http://122.166.168.160/Images/Invitation' + this.props.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg'
         , // Note that according to the documentation at least one of "message" or "url" fields is required
-        url: 'http://122.166.168.160/Images/Invitation' + global.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
+        url: 'http://122.166.168.160/Images/Invitation' + this.props.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
         subject: 'Welcome'
     });
 
     onSharePressOnlyTxt = () => Share.share({
         title: 'Invitation',
-        message: global.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+        message: this.props.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
             global.AssociationName + ' for ' + this.state.textmsg + ' on ' + this.state.dobText + ' at ' +
             this.state.datetime + '  '
         , // Note that according to the documentation at least one of "message" or "url" fields is required
-        url: 'http://122.166.168.160/Images/Invitation' + global.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
+        url: 'http://122.166.168.160/Images/Invitation' + this.props.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
         subject: 'Welcome'
     });
 
@@ -163,7 +164,7 @@ export default class ShareQRCode extends Component {
                         this.setState({ dataBase64: data });
                         let shareImageBase64 = {
                             title: "Invitation",
-                            message: global.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+                            message: this.props.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
                                 global.AssociationName + ' for ' + params.InvitationPurpose + ' on ' + this.state.Entrydate + ' at ' +
                                 params.EntryTimeDate.substring(11, 16) + '  ',
                             url: 'data:image/png;base64,' + this.state.dataBase64,
@@ -246,3 +247,13 @@ const styles = StyleSheet.create({
         borderRadius: 2, borderWidth: 1,
     },
 })
+
+const mapStateToProps = state => {
+    return {
+        SelectedUnitID: state.UserReducer.SelectedUnitID,
+        MyFirstName: state.UserReducer.MyFirstName,
+        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    };
+  };
+  
+export default connect(mapStateToProps)(ShareQRCode);

@@ -29,6 +29,7 @@ import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import { Fonts } from '../pages/src/utils/Fonts'
 import SwitchExample from '../registration_pages/SwitchExample.js';
+import {connect} from 'react-redux';
 
 var doNotDisturb = "FALSE";
 
@@ -44,7 +45,7 @@ const options = {
     },
 };
 
-export default class CreateCheckPoint extends Component {
+class CreateCheckPoint extends Component {
 
     constructor(props) {
         super(props);
@@ -343,21 +344,21 @@ export default class CreateCheckPoint extends Component {
     }
     onSharePress = () => Share.share({
         title: 'Invitation',
-        message: global.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+        message: this.props.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
          global.AssociationName + ' for ' + this.state.textmsg + ' on ' + this.state.dobText + ' at ' +
-          this.state.datetime + '  '+'http://122.166.168.160/Images/Invitation' + global.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg'
+          this.state.datetime + '  '+'http://122.166.168.160/Images/Invitation' + this.props.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg'
           , // Note that according to the documentation at least one of "message" or "url" fields is required
-        url: 'http://122.166.168.160/Images/Invitation' + global.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
+        url: 'http://122.166.168.160/Images/Invitation' + this.props.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
         subject: 'Welcome'
     });
 
     onSharePressOnlyTxt = () => Share.share({
         title: 'Invitation',
-        message: global.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+        message: this.props.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
          global.AssociationName + ' for ' + this.state.textmsg + ' on ' + this.state.dobText + ' at ' +
           this.state.datetime + '  '
           , // Note that according to the documentation at least one of "message" or "url" fields is required
-          url: 'http://122.166.168.160/Images/Invitation' + global.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
+          url: 'http://122.166.168.160/Images/Invitation' + this.props.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg',
           subject: 'Welcome'
     });
 
@@ -379,7 +380,7 @@ export default class CreateCheckPoint extends Component {
         if (mname.length == 0) {
             alert('Enter Name');
             return false;
-        } else if (global.OyeFullName.test(mname) === false) {
+        } else if (this.props.OyeFullName.test(mname) === false) {
             alert('Name should not contain special characters or numbers ');
             return false;
 
@@ -417,8 +418,8 @@ export default class CreateCheckPoint extends Component {
         else {
 
             anu = {
-                "MeMemID": global.MyOYEMemberID,
-                "UnUnitID": global.SelectedUnitID,
+                "MeMemID": this.props.MyOYEMemberID,
+                "UnUnitID": this.props.SelectedUnitID,
                 "INFName": mname,
                 "INLName": "",
                 "INMobile": '+' + ccp + mphone,
@@ -430,14 +431,14 @@ export default class CreateCheckPoint extends Component {
                 "INEDate": endDate,
                 "INPOfInv": "",
                 "INMultiEy": "true",
-                "ASAssnID": global.SelectedAssociationID
+                "ASAssnID": this.props.SelectedAssociationID
             }
 
             console.log('anu', anu)
             alert('Data created',anu)
-            const url = global.champBaseURL + 'Invitation/create'
+            const url = this.props.champBaseURL + 'Invitation/create'
             console.log('url', url)
-            fetch('http://' + global.oyeURL + '/oye247/api/v1/Invitation/create',
+            fetch('http://' + this.props.oyeURL + '/oye247/api/v1/Invitation/create',
                 {
                     method: 'POST',
                     headers: {
@@ -454,7 +455,7 @@ export default class CreateCheckPoint extends Component {
                     if (responseJson.success) {
                         // PERSON + "Association" + prefManager.getAssociationId() + INVITED +
                         // dataObj.getInt("invitationID") + ".jpg";
-                        const imgName = 'PERSON' + 'Association' + global.SelectedAssociationID + 'INVITED' + responseJson.data.invitation.inInvtID + '.jpg';
+                        const imgName = 'PERSON' + 'Association' + this.props.SelectedAssociationID + 'INVITED' + responseJson.data.invitation.inInvtID + '.jpg';
                         console.log('ram', imgName);
                         if (this.state.imgPath) {
                             var data = new FormData();
@@ -466,7 +467,7 @@ export default class CreateCheckPoint extends Component {
                             };
 
                             console.log("Config", config);
-                            fetch(global.uploadImageURL, config).then(responseData => {
+                            fetch(this.props.uploadImageURL, config).then(responseData => {
 
                                 console.log("sucess==>");
                                 console.log(responseData._bodyText);
@@ -484,8 +485,8 @@ export default class CreateCheckPoint extends Component {
                         }
                        
                         this.qrGeneration(mname + "," + "" + "," + '+' + ccp + mphone + "," + responseJson.data.invitation.inInvtID + "," +
-                         global.SelectedUnitID + "," +this.state.dobTextDMY + "," + this.state.datetime + "," + vno + "," + nop + "," +
-                         this.state.endDateDMY + "," + responseJson.data.invitation.inInvtID + "," + global.SelectedAssociationID + ',', responseJson.data.invitation.inInvtID);
+                         this.props.SelectedUnitID + "," +this.state.dobTextDMY + "," + this.state.datetime + "," + vno + "," + nop + "," +
+                         this.state.endDateDMY + "," + responseJson.data.invitation.inInvtID + "," + this.props.SelectedAssociationID + ',', responseJson.data.invitation.inInvtID);
 
                     }
                     else {
@@ -540,7 +541,7 @@ export default class CreateCheckPoint extends Component {
             this.setState({ dataBase64 : data });
             let shareImageBase64 = {
                 title: "Invitation",
-                message: global.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+                message: this.props.MyFirstName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
                 global.AssociationName + ' for ' + this.state.textmsg + ' on ' + this.state.dobText + ' at ' +
                  this.state.datetime + '  ',
                 url: 'data:image/png;base64,'+this.state.dataBase64,
@@ -563,7 +564,7 @@ export default class CreateCheckPoint extends Component {
         //   alert('Guard Added Successfully!');
         console.log('WorkersLis uploadImage ', this.state.stInvitionID)
     
-        const imgName = 'Invitation' + global.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg';
+        const imgName = 'Invitation' + this.props.SelectedAssociationID + 'QR' + this.state.stInvitionID + '.jpg';
         //      String imgName = PERSON + "Association" + prefManager.getAssociationId() + GUARD + movie.getGuardID() + ".jpg";
         console.log('WorkersLis uploadImage  '+imgName+' '+this.state.imageURI);
     
@@ -576,7 +577,7 @@ export default class CreateCheckPoint extends Component {
                 body: data
             };
             console.log("Config", config);
-            fetch(global.uploadImageURL, config).then(responseData => {
+            fetch(this.props.uploadImageURL, config).then(responseData => {
                 console.log("sucess==>");
                 console.log(responseData._bodyText);
                 console.log(responseData);
@@ -968,3 +969,22 @@ const styles = StyleSheet.create({
         borderRadius: 100 / 2
     },
 })
+
+const mapStateToProps = state => {
+    return {
+        MyFirstName: state.UserReducer.MyFirstName,
+        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        SelectedUnitID: state.UserReducer.SelectedUnitID,
+        MyOYEMemberID: state.UserReducer.MyOYEMemberID,
+
+        uploadImageURL: state.OyespaceReducer.uploadImageURL,
+        oyeURL: state.OyespaceReducer.oyeURL,
+        champBaseURL: state.OyespaceReducer.champBaseURL,
+        OyeFullName: state.OyespaceReducer.OyeFullName,
+
+
+
+    };
+  };
+  
+export default connect(mapStateToProps)(CreateCheckPoint);

@@ -17,8 +17,10 @@ import Communications from 'react-native-communications';
 import PTRView from 'react-native-pull-to-refresh';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import MyHeader from "../components/MyHeader";
+import {connect} from 'react-redux';
 
-export default class InvitedGuest extends Component {
+
+class InvitedGuest extends Component {
 
   ShowCurrentDate = () => {
 
@@ -281,7 +283,7 @@ style={{width: 40, height: 40,resizeMode : 'stretch'}} /> */}
 
     const { } = this.props.navigation.state;
     console.log('componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/Invitation/GetInvitationListByAssocID/' + global.SelectedAssociationID
+    const url = 'http://' + this.props.oyeURL + '/oye247/api/v1/Invitation/GetInvitationListByAssocID/' + this.props.SelectedAssociationID
     console.log(url)
     fetch(url, {
       method: 'GET',
@@ -295,7 +297,7 @@ style={{width: 40, height: 40,resizeMode : 'stretch'}} /> */}
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
-          dataSource: responseJson.data.invitation.filter(x => x.asAssnID == global.SelectedAssociationID),
+          dataSource: responseJson.data.invitation.filter(x => x.asAssnID == this.props.SelectedAssociationID),
           dataSource: responseJson.data.invitation.sort((a, b) => Date.parse(b.indCreated) - Date.parse(a.indCreated)),
           isLoading: false
         });
@@ -652,8 +654,7 @@ style={styles.FloatingButtonStyle} />
 
 
 
-const
-  styles = StyleSheet.create({
+const styles = StyleSheet.create({
 
     container: {
 
@@ -863,7 +864,14 @@ const
 
   });
 
-
+  const mapStateToProps = state => {
+    return {
+      oyeURL: state.OyespaceReducer.oyeURL,
+      SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    };
+  };
+  
+export default connect(mapStateToProps)(InvitedGuest);
 
 
 
