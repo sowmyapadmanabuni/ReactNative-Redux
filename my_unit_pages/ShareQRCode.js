@@ -126,7 +126,7 @@ export default class QRCodeGeneration extends Component {
            <View style={[styles.viewStyle1,{flexDirection:'row'}]}>
                <View style={{flex:0.3,flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:3}}>
                <TouchableOpacity onPress={()=> {this.props.navigation.navigate('MyGuests')}}>
-               <Image source={require('./src/Images/arrowBack.png')} style={{alignItems:'flex-start',justifyContent:'center',width:25,height:15}}/>
+               <Image source={require('../icons/arrowBack.png')} style={{alignItems:'flex-start',justifyContent:'center',width:25,height:15}}/>
                    </TouchableOpacity>
                </View>
                <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
