@@ -121,7 +121,7 @@ class MyGuests extends Component {
             <Card style={{ paddingTop: 0, }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("QRCodeGeneration", {
+                  this.props.navigation.navigate("ShareQRCode", {
                     value: this.state.dataSource[index]
                   });
                 }}
@@ -207,6 +207,10 @@ class MyGuests extends Component {
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
        
+        <NavigationEvents
+          onDidFocus={payload => this.getInvitationList()}
+          onWillBlur={payload => this.getInvitationList()}
+        />
           <Text style={styles.titleOfScreen}>My Guests</Text>
 
           <View style={styles.progress}>
