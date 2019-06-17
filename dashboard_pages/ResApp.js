@@ -75,6 +75,7 @@ import WorkerShiftDetails from '../workers_pages/WorkerShiftDetails';
 import CreateWorkerShift from '../workers_pages/CreateWorkerShift';
 import Communications from 'react-native-communications';
 import VersionNumber from 'react-native-version-number';
+import BlockDetail from '../assocition_pages/BlockDetail';
 import CreateBlock from '../assocition_pages/CreateBlock';
 import CreateOrJoin from '../assocition_pages/CreateOrJoin';
 import EditBlock from '../assocition_pages/EditBlock.js';
@@ -287,11 +288,18 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff',
     },
   },
-
+//BlockDetail
+BlockDetailScreen:{
+  screen:BlockDetail,
+  navigationOptions:{
+  title: 'Block Detail',
+  header:null,
+  },
+  },
   CreateBlockScreen:{
     screen:CreateBlock,
     navigationOptions:{
-    title: 'Admin Functions',
+    title: 'Create Block',
     header:null,
     },
     },

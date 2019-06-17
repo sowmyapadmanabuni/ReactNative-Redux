@@ -8,12 +8,13 @@ import moment from 'moment';
 import Communications from 'react-native-communications';
 import ImageLoad from 'react-native-image-placeholder';
 //import { Fonts } from '../pages/src/utils/Fonts';
+import {connect} from 'react-redux';
 
 var date = new Date().getDate();
 var month = new Date().getMonth() + 1;
 var year = new Date().getFullYear();
 
-export default class ViewVisitorsList extends Component {
+class ViewVisitorsList extends Component {
   static navigationOptions = {
     tabBarLabel: 'ViewVisitorsList',
     drawerIcon: ({tintColor}) => {
@@ -66,7 +67,7 @@ export default class ViewVisitorsList extends Component {
     }
     console.log('member', member);
     //http://122.166.168.160/oyesafe/api/v1/VisitorCommentAndFMID/Update
-    fetch('http://' + global.oyeURL + '/oyesafe/api/v1/VisitorCommentAndFMID/Update',
+    fetch('http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorCommentAndFMID/Update',
       {
         method: 'POST',
         headers: {
@@ -84,10 +85,10 @@ export default class ViewVisitorsList extends Component {
           fcmMsg = {
             "data": {
               "activt": "childExitApproved",
-              "name": global.MyFirstName + " " + global.MyLastName,
+              "name": this.props.MyFirstName + " " + this.props.MyLastName,
               "nr_id": visitorId,
               "entry_type": peermissionStatus,
-              "mobile": global.MyMobileNumber,
+              "mobile": this.props.MyMobileNumber,
             },
             "to": "/topics/AllGuards" + assnID,
           }
@@ -172,7 +173,7 @@ export default class ViewVisitorsList extends Component {
 
   renderItem = ({ item }) => {
 
-    console.log('renderitem ' + global.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg');
+    console.log('renderitem ' + this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg');
 
     const { navigate } = this.props.navigation;
     const timeMessage = <View style={{ flexDirection: 'row' }}>
@@ -233,19 +234,19 @@ export default class ViewVisitorsList extends Component {
                 style={{ width: 100, height: 100, marginRight: 10 }}
                 style={styles.profileImg}
                 loadingStyle={{ size: 'large', color: 'blue' }}
-                source={{ uri: global.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'STAFF' + item.reRgVisID + '.jpg' }} />
+                source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'STAFF' + item.reRgVisID + '.jpg' }} />
                 :
                 <ImageLoad
                 style={{ width: 100, height: 100, marginRight: 10 }}
                 style={styles.profileImg}
                 loadingStyle={{ size: 'large', color: 'blue' }}
-                source={{ uri: global.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} />
+                source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} />
                 }
               {/* <ImageLoad
                 style={{ width: 70, height: 70, marginRight: 10 }}
                 style={styles.profileImg}
                 loadingStyle={{ size: 'large', color: 'blue' }}
-                source={{ uri: global.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} /> */}
+                source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} /> */}
 
             </TouchableHighlight>
             <TouchableHighlight style={[styles.vehicleNum, {width:100}]}
@@ -331,7 +332,7 @@ export default class ViewVisitorsList extends Component {
     console.log('ff')
     console.log('componentdidmount')
     // http://api.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/1/2018-11-26
-    const url = 'http://' + global.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/' + global.SelectedAssociationID + '/' + this.state.dobText;
+    const url = 'http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/' + this.props.SelectedAssociationID + '/' + this.state.dobText;
     console.log(url)
     fetch(url, {
       method: 'GET',
@@ -344,7 +345,7 @@ export default class ViewVisitorsList extends Component {
       .then((responseJson) => {
         console.log('vievisitorlist ', responseJson);
         this.setState({
-          dataSource: responseJson.data.visitorlogbydate.filter(x => x.unUnitID == global.SelectedUnitID && x.vlVisType === 'Delivery' ),
+          dataSource: responseJson.data.visitorlogbydate.filter(x => x.unUnitID == this.props.SelectedUnitID && x.vlVisType === 'Delivery' ),
        // dataSource: responseJson.data.visitorlogbydate,
           isLoading: false
         })
@@ -501,3 +502,18 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('createassociation', () => createassociation);
+
+const mapStateToProps = state => {
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyLastName: state.UserReducer.MyLastName,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedUnitID: state.UserReducer.SelectedUnitID
+
+  };
+};
+
+export default connect(mapStateToProps)(ViewVisitorsList);

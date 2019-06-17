@@ -294,7 +294,7 @@ class Resident extends Component {
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: "center",
+                    alignItems: 'flex-start',
                     justifyContent: "center"
                   }}
                 >
