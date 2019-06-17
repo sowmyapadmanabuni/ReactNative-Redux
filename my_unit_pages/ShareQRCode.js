@@ -9,8 +9,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import RNFS from 'react-native-fs';
+import { captureScreen } from "react-native-view-shot";
+import {connect} from'react-redux';
 
-export default class QRCodeGeneration extends Component {
+class QRCodeGeneration extends Component {
   static navigationOptions = {
     title: "QRCodeGeneration",
     header: null
@@ -20,7 +23,11 @@ export default class QRCodeGeneration extends Component {
     this.state = {
         qrText:'initial_qr',
         visible: false,
-        qrShare:"initial_share"
+        qrShare:"initial_share",
+        imageURI:"",
+        dataBase64:"",
+
+
     }
   }
 
@@ -35,18 +42,57 @@ export default class QRCodeGeneration extends Component {
 
   qrGeneration = () => {
     const {params} = this.props.navigation.state;
-    let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
-      +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
-
-    let txt1 = "You are invited to " + params.value.infName + "'s home @ " + params.value.unUnitID + " " + params.value.insDate;   
+    // let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
+    //   +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inpOfInv +params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
+    let txt = params.value.infName + ',' + params.value.inMobile.substring(0,3) + ',' + params.value.inMobile.substring(3,13) + ',' + params.value.inInvtID 
+              ','+params.value.unUnitID+',' + ','+ params.value.insDate.substring(0,10)+','+ params.value.insDate.substring(11,15)+',,'
+              + params.value.inVisCnt+','+ params.value.insDate.substring(0,10)+','+params.value.asAssnID+','+params.value.inIsActive;
+    // let txt1 = "You are invited to " + params.value.infName + "'s home @ " + params.value.unUnitID + " " + params.value.insDate;   
+    let txt1 = params.value.infName + ',' + params.value.inMobile.substring(0,3) + ',' + params.value.inMobile.substring(3,13) + ',' + params.value.inInvtID 
+    ','+params.value.unUnitID+',' + ','+ params.value.insDate.substring(0,10)+','+ params.value.insDate.substring(11,15)+',,'
+    + params.value.inVisCnt+','+ params.value.insDate.substring(0,10)+','+params.value.asAssnID+','+params.value.inIsActive;
       this.setState({
         qrText:txt,
         qrShare:txt1
       })
-
       console.log(txt)
   }
 
+  takeScreenShot = () => {
+    const {params} = this.props.navigation.state;
+    captureScreen({
+        format: "jpg",
+        quality: 0.8
+    })
+        .then(
+            //callback function to get the result URL of the screnshot
+            uri => {
+                this.setState({ imageURI: uri }),
+                RNFS.readFile(this.state.imageURI, "base64").then(data => {
+                    // binary data
+                    console.log('data base64 ' + data);
+                    this.setState({ dataBase64: data });
+                    let shareImagesBase64 = {
+                        title: "Invitation",
+                        message: params.value.infName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+                        params.value.asAssnID + ' for ' + params.value.inpOfInv + ' on ' + params.value.insDate.substring(0,10) + ' at ' +
+                            params.EntryTimeDate.substring(11, 16) + '  ',
+                        url: 'data:image/png;base64,' + this.state.dataBase64,
+                        subject: "Share Invitation" //  for email
+                    };
+                    Share.open(shareImagesBase64);
+                });
+
+            },
+            error => {
+                console.error("Oops, Something Went Wrong", error),
+                console.log('error uploadImage ', error)
+            }
+        );
+    // this.uploadImage();
+
+
+}
 
   render() {
     let shareOptions = {
@@ -72,7 +118,7 @@ export default class QRCodeGeneration extends Component {
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
+                  this.props.navigation.goBack();
                 }}
               >
                 <View
@@ -122,22 +168,51 @@ export default class QRCodeGeneration extends Component {
       
       <View style = {{flex:1 }}>
         {/* <Header/> */}
-        <SafeAreaView style={{backgroundColor:'orange'}}>
-           <View style={[styles.viewStyle1,{flexDirection:'row'}]}>
-               <View style={{flex:0.3,flexDirection:'row', justifyContent:'center',alignItems:'center', marginLeft:3}}>
-               <TouchableOpacity onPress={()=> {this.props.navigation.navigate('MyGuests')}}>
-               <Image source={require('../icons/arrowBack.png')} style={{alignItems:'flex-start',justifyContent:'center',width:25,height:15}}/>
-                   </TouchableOpacity>
-               </View>
-               <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
-                   <Image style={[styles.image1]} source={require('../icons/headerLogo.png')}/>
-               </View>
-               <View style={{flex:0.2, }}>
-                   
-               </View>
-           </View>
-           <View style={{borderWidth:1,borderColor:'orange'}}></View>
-       </SafeAreaView>
+        
+        <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: 'flex-start',
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+       
+
         <NavigationEvents
           onWillFocus={payload => this.qrGeneration()}
           // onWillBlur={payload => this.getInvitationList()}
@@ -157,7 +232,8 @@ export default class QRCodeGeneration extends Component {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={()=>{
-          Share.open(shareOptions);
+          // Share.open(shareOptions);
+          this.takeScreenShot()
         }}>
           <View style={{borderRadius:hp('1%'),borderWidth:hp('0.1%'),width:wp('80%'),height:hp('6%'),justifyContent:'center',alignItems:'center',marginTop:hp('10%'),borderColor:'#797979' }}>
             <Text style={{fontSize:hp('2.5%'),color:'#797979',fontWeight:'700'}}>Share QR Code</Text>
@@ -178,17 +254,25 @@ export default class QRCodeGeneration extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    MyOYEMemberID: state.UserReducer.MyOYEMemberID,
+    SelectedMemberID: state.UserReducer.SelectedMemberID,
+  };
+};
+
+export default connect(mapStateToProps)(QRCodeGeneration);
+
 const styles = StyleSheet.create({
   contaianer:{
     flex:1,
     backgroundColor: '#fff',
     flexDirection: 'column'
   },
-  image1: {
-    width:120,
-    height:55,
-    
-  },
+
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
