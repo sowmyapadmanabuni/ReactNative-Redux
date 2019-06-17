@@ -35,6 +35,7 @@ import RNExitApp from "react-native-exit-app";
 import moment from "moment";
 import axios from "axios";
 import firebase from "react-native-firebase";
+import _ from "lodash";
 import {
   newNotifInstance,
   createNotification,
@@ -43,7 +44,8 @@ import {
   getDashSub,
   getDashAssociation,
   getDashUnits,
-  updateUserInfo
+  updateUserInfo,
+  getAssoMembers
 } from "../src/actions";
 
 class Dashboard extends React.Component {
@@ -246,25 +248,40 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    const { getDashSub, getDashAssociation } = this.props;
+    const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
     getDashSub(oyeURL, SelectedAssociationID);
     getDashAssociation(oyeURL, MyAccountID);
+    getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
     // this.props.getNotifications()
   }
 
   onAssociationChange = (value, index) => {
-    const { associationid, getDashUnits, updateUserInfo } = this.props;
+    const {
+      associationid,
+      getDashUnits,
+      updateUserInfo,
+      memberList
+    } = this.props;
     // const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
     updateUserInfo({
       prop: "SelectedAssociationID",
       value: associationid[index].id
+    });
+
+    let memId = _.find(memberList, function(o) {
+      return o.asAssnID === associationid[index].id;
+    });
+    console.log("memId", memId);
+    updateUserInfo({
+      prop: "MyOYEMemberID",
+      value: memId.meMemID
     });
     getDashUnits(associationid[index].id, oyeURL);
     // this.unit(this.state.associationid[index].id)
@@ -806,6 +823,7 @@ const mapStateToProps = state => {
     sold2: state.DashboardReducer.sold2,
     unsold2: state.DashboardReducer.unsold2,
     isLoading: state.DashboardReducer.isLoading,
+    memberList: state.DashboardReducer.memberList,
 
     // Oyespace variables and user variables
     MyFirstName: state.UserReducer.MyFirstName,
@@ -829,6 +847,7 @@ export default connect(
     getDashSub,
     getDashAssociation,
     getDashUnits,
-    updateUserInfo
+    updateUserInfo,
+    getAssoMembers
   }
 )(Dashboard);

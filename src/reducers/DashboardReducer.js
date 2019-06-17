@@ -6,7 +6,9 @@ import {
   DASHBOARD_PIE,
   DASHBOARD_UNITS_START,
   DASHBOARD_UNITS_STOP,
-  DASHBOARD_ASSOC_STOP
+  DASHBOARD_ASSOC_STOP,
+  GET_MEMBERLIST_SUCCESS,
+  GET_MEMBERLIST_FAILED
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -20,7 +22,8 @@ const INITIAL_STATE = {
   unsold2: 0,
   unsold: 0,
   isLoading: true,
-  selectedAssociation: null
+  selectedAssociation: null,
+  memberList: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -68,6 +71,12 @@ export default (state = INITIAL_STATE, action) => {
 
     case DASHBOARD_PIE:
       return { ...state, [action.payload.prop]: action.payload.value };
+
+    case GET_MEMBERLIST_SUCCESS:
+      return { ...state, memberList: action.payload };
+
+    case GET_MEMBERLIST_FAILED:
+      return { ...state, memberList: [] };
 
     default:
       return state;

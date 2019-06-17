@@ -6,7 +6,9 @@ import {
   DASHBOARD_PIE,
   DASHBOARD_UNITS_START,
   DASHBOARD_UNITS_STOP,
-  DASHBOARD_ASSOC_STOP
+  DASHBOARD_ASSOC_STOP,
+  GET_MEMBERLIST_SUCCESS,
+  GET_MEMBERLIST_FAILED
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
@@ -38,10 +40,6 @@ export const getDashSub = (oyeURL, SelectedAssociationID) => {
 
 export const getDashAssociation = (oyeURL, MyAccountID) => {
   return dispatch => {
-    console.log(
-      `http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`
-    );
-    // console.log(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`)
     fetch(
       `http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`,
       // fetch(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/2`
@@ -300,6 +298,33 @@ export const getDashUnits = (unit, oyeURL) => {
             console.log(error);
             dispatch({ type: DASHBOARD_UNITS_STOP });
           });
+      });
+  };
+};
+
+export const getAssoMembers = (oyeURL, id) => {
+  return dispatch => {
+    axios
+      .get(
+        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          }
+        }
+      )
+      .then(response => {
+        let resData = response.data.data.memberListByAccount;
+        dispatch({
+          type: GET_MEMBERLIST_SUCCESS,
+          payload: resData
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: GET_MEMBERLIST_FAILED
+        });
       });
   };
 };
