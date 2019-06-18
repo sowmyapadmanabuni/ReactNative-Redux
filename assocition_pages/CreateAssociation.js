@@ -645,114 +645,86 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
     } else {
       responseObj = {
 
-
-
         "ACAccntID" : this.props.MyAccountID,
         "association" :{
-                "ASAddress" : mAdress,
-                "ASCountry" : "India",
-                "ASCity"    : mCity,
-                "ASState"   : mstate,
-                "ASPinCode" : mPinCode,
-                "ASAsnLogo" : "Images/Robo.jpeg",
-                "ASAsnName" : assname,
-                "ASPrpName" : mpropName,
-                "ASPrpType" : spinner,
-                "ASRegrNum" : "",
-                "ASWebURL"  : "www.spectra.com",
-                "ASPANStat" : "False",
-                "ASPANNum"  : mpannumber,
-                "ASPANDoc"  : "",
-                "ASNofBlks" : mnum_block,
-                "ASNofUnit" : mnum_units,
-                "ASGSTNo"   : "",
-                "ASTrnsCur" : "Rupees",
-                "ASRefCode" : "",
-                "ASOTPStat" : "ON",
-                "ASOPStat"  : "ON",
-                "ASONStat"  : "ON",
-                "ASOMStat"  : "ON",
-                "ASOLOStat" : "ON",
-                "ASGPSPnt"  : "",
-                "ASFaceDet" : "", "ASAsnEmail" :"",
-                "Amenities":
-                [{
-                    "AMType"            : "ClubHouse",
-                    "NoofAmenities"    : 2
-                  }]
+        "ASAddress": mAdress,
+          "ASCountry": "India",
+          "ASBToggle": "True",
+          "ASAVPymnt": "False",
+          "ASCity": mCity,
+          "ASState": mstate,
+          "ASPinCode": mPinCode,
+          "ASAsnLogo": "Images/Robo.jpeg",
+          "ASAsnName": assname,
+          "ASPrpName": mpropName,
+          "ASPrpType": spinner,
+          "ASRegrNum": "",
+          "ASWebURL": "www.spectra.com",
+          "ASMgrName": "mManager_Name",
+          "ASMgrMobile": "mMobileNumber",
+          "ASMgrEmail": "this.state.Manager_Email",
+          "ASAsnEmail": mMail,
+          "ASPANStat": "True",
+          "ASPANNum": mpannumber,
+          "ASNofBlks": mnum_block,
+          "ASNofUnit": mnum_units,
+          "ASONStat": "True",
+          "ASOMStat": "False",
+          "BankDetails":
+            [
+              {
+                "BABName": "mBank_name",
+                "BAActType": "acc_type",
+                "BAActNo": "mAccount_Number",
+                "BAIFSC": "mIFSc",
+                "BAActBal": "mbal"
+              }
+            ],"Amenities":
+            [{
+              "AMType"            : "ClubHouse",
+              "NoofAmenities"    : 2
+            }]
+          }
 
         // "ACAccntID" : this.props.MyAccountID,
         // "association" :{
-        // "asAssnID": global.assnID,
-        //     "asPrpCode": null,
-        //     "asAddress": mAdress,
-        //     "asCountry": "India",
-        //     "asCity": mCity,
-        //     "asState": mstate,
-        //     "asPinCode": mPinCode,
-        //     "asAsnLogo": "Images/Robo.jpeg",
-        //     "asAsnName": assname,
-        //     "asPrpName": mpropName,
-        //     "asPrpType": spinner,
-        //     "asRegrNum": "",
-        //     "asWebURL": "",
-        //     "asAsnEmail": null,
-        //     "aspanStat": "True",
-        //     "aspanNum": mpannumber,
-        //     "aspanDoc": "",
-        //     "asNofBlks": mnum_block,
-        //     "asNofUnit": mnum_units,
-        //     "asgstNo": "",
-        //     "asTrnsCur": "Rupees",
-        //     "asRefCode": "",
-        //     "asotpStat": "ON",
-        //     "asopStat": "ON",
-        //     "asonStat": "ON",
-        //     "asomStat": "OM",
-        //     "asoloStat": "ON",
-        //     "asgpsPnt": "",
-        //     "asdCreated": "0001-01-01T00:00:00",
-        //     "asdUpdated": "0001-01-01T00:00:00",
-        //     "asIsActive": false,
-        //     "acAccntID": 0,
-        //     "asFaceDet": "False",
-        //     "amenities": null,
+        //         "ASAddress" : mAdress,
+        //         "ASCountry" : "India",
+        //         "ASCity"    : mCity,
+        //         "ASState"   : mstate,
+        //         "ASPinCode" : mPinCode,
+        //         "ASAsnLogo" : "Images/Robo.jpeg",
+        //         "ASAsnName" : assname,
+        //         "ASPrpName" : mpropName,
+        //         "ASPrpType" : spinner,
+        //         "ASRegrNum" : "",
+        //         "ASWebURL"  : "www.spectra.com",
+        //         "ASPANStat" : "False",
+        //         "ASPANNum"  : mpannumber,
+        //         "ASPANDoc"  : "",
+        //         "ASNofBlks" : mnum_block,
+        //         "ASNofUnit" : mnum_units,
+        //         "ASGSTNo"   : "",
+        //         "ASTrnsCur" : "Rupees",
+        //         "ASRefCode" : "",
+        //         "ASOTPStat" : "ON",
+        //         "ASOPStat"  : "ON",
+        //         "ASONStat"  : "ON",
+        //         "ASOMStat"  : "ON",
+        //         "ASOLOStat" : "ON",
+        //         "ASGPSPnt"  : "",
+        //         "ASFaceDet" : "", "ASAsnEmail" :"",
+        //         "Amenities":
+        //         [{
+        //             "AMType"            : "ClubHouse",
+        //             "NoofAmenities"    : 2
+        //           }]
+
+        
 
         }
 
-          // "ACAccntID" : this.props.MyAccountID,
-          // "association" :{
-          // "ASAddress" : mAdress,
-          // "ASCountry" : "India",
-          // "ASCity"    : mCity,
-          // "ASState"   : mstate,
-          // "ASPinCode" : mPinCode,
-          // "ASAsnLogo" : "Images/Robo.jpeg",
-          // "ASAsnName" : assname,
-          // "ASPrpName" : mpropName,
-          // "ASPrpType" : spinner,
-          // "ASRegrNum" : "",
-          // "ASWebURL"  : "",
-          // "ASPANStat" : "True",
-          // "ASPANNum"  : mpannumber,
-          // "ASPANDoc"  : "",
-          // "ASNofBlks" : mnum_block,
-          // "ASNofUnit" : mnum_units,
-          // "ASGSTNo"   : "",
-          // "ASTrnsCur" : "Rupees",
-          // "ASRefCode" : "",
-          // "ASOTPStat" : "ON",
-          // "ASOPStat"  : "ON",
-          // "ASONStat"  : "ON",
-          // "ASOMStat"  : "ON",
-          // "ASOLOStat" : "ON",
-          // "ASGPSPnt"  : "",
-          // "ASFaceDet" : "",
-          // "Amenities":
-          // [{
-          // "AMType"     : "ClubHouse",
-          // "NoofAmenities"            : 2
-          // }]
+         
 
           
           // "ASAddress": mAdress,
@@ -789,7 +761,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
           //     }
           //   ]
         // }
-      }
+      
 
       console.log('CreateAssociation request', responseObj);
       fetch(this.props.champBaseURL +'association/create',
@@ -813,7 +785,7 @@ insert_associations(association_id, name, country, city, pan_number, pin_code, g
             this.createSelfUnit(responseJson.data.association.asAssnID, this.state.Unit_Name);
           } else {
             console.log('ravii else', responseJson);
-            Alert.alert('Create Association Failed');
+            Alert.alert('Create Association Failed', error);
             // console.log('hiii',failed);
           }
         })

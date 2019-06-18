@@ -35,7 +35,7 @@ class SplashScreen extends React.Component {
     global.constantMember = 4;
 
     //9450041258
-    global.oyeURL = "apidev.oyespace.com";
+    // global.oyeURL = "apidev.oyespace.com";
     // global.oyeURL = 'apiuat.oyespace.com';
     //  global.oyeURL = 'api.oyespace.com';
     //apiuat.oyespace.com

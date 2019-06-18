@@ -125,7 +125,6 @@ class NotificationScreen extends Component {
     }
 
     render() {
-        // console.log(global.MyAccountID)
         const { navigation, notifications } = this.props;
         const refresh = navigation.getParam('refresh', 'NO-ID');
         return (

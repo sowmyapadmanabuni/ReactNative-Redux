@@ -7,6 +7,7 @@ import { CLOUD_FUNCTION_URL } from '../../../constant';
 import { connect } from 'react-redux';
 import { updateApproveAdmin, getNotifications } from '../../actions';
 import _ from 'lodash';
+// import {connect} from 'react-redux';
 
 class NotificationDetailScreen extends Component {
     state = {
@@ -35,7 +36,7 @@ class NotificationDetailScreen extends Component {
                 "Content-Type": "application/json"
             }
 
-            axios.post(global.champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate', {
+            axios.post(this.props.champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate', {
                 MRMRoleID : item.sbRoleID,
                 MEMemID  : item.sbMemID,
                 UNUnitID : item.sbUnitID
@@ -69,7 +70,7 @@ class NotificationDetailScreen extends Component {
                         MRMRoleID : item.sbRoleID,
                     }
 
-                    fetch(`${global.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`, {
+                    fetch(`${this.props.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`, {
                         method: 'POST',
                         headers: {
                             "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
@@ -79,7 +80,7 @@ class NotificationDetailScreen extends Component {
                       })
                         .then((response) => response.json())
                         .then((responseJson) => {
-                            fetch(`http://${global.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`, {
+                            fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`, {
                                 method: 'POST',
                                 headers: {
                                     "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
@@ -90,7 +91,7 @@ class NotificationDetailScreen extends Component {
                                 .then((response) => response.json())
                                 .then((responseJson) => {
                                     console.log(responseJson)
-                                    console.log(`https://${global.oyeURL}/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`)
+                                    console.log(`https://${this.props.oyeURL}/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`)
                                     console.log(`https://apidev.oyespace.com/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`)
                                     
                                     StatusUpdate = {
@@ -98,7 +99,7 @@ class NotificationDetailScreen extends Component {
 	                                    NTStatDesc: responseJson.data.string
                                     }
 
-                                    fetch(`http://${global.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`, {
+                                    fetch(`http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`, {
                                         method: 'POST',
                                         headers: {
                                             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
@@ -108,7 +109,7 @@ class NotificationDetailScreen extends Component {
                                     })
                                         .then((response) => response.json())
                                         .then((responseJson) => {
-                                            this.props.getNotifications()
+                                            this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID)
                                             this.props.updateApproveAdmin(this.props.approvedAdmins, item.sbSubID)
                                             this.setState({ loading: false, date: StatusUpdate.NTStatDesc })
                                         })
@@ -161,11 +162,11 @@ class NotificationDetailScreen extends Component {
                 "Content-Type": "application/json"
             }
 
-            axios.get(global.champBaseURL + `GetMemberListByMemberID/${item.sbMemID}`, {
+            axios.get(this.props.champBaseURL + `GetMemberListByMemberID/${item.sbMemID}`, {
                 headers: headers
             })
             .then(() => {
-                axios.get(`http://${global.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
+                axios.get(`http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`, {
                     headers: {
                         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
                         "Content-Type": "application/json"
@@ -307,6 +308,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         approvedAdmins: state.AppReducer.approvedAdmins,
+        champBaseURL: state.OyespaceReducer.champBaseURL,
+        oyeURL: state.OyespaceReducer.oyeURL,
+        MyAccountID: state.UserReducer.MyAccountID
     }
 }
 

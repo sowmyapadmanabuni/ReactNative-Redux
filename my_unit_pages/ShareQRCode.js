@@ -58,43 +58,44 @@ class QRCodeGeneration extends Component {
       console.log(txt)
   }
 
-  takeScreenShot = () => {
-    const {params} = this.props.navigation.state;
-    captureScreen({
-        format: "jpg",
-        quality: 0.8
-    })
-        .then(
-            //callback function to get the result URL of the screnshot
-            uri => {
-                this.setState({ imageURI: uri }),
-                RNFS.readFile(this.state.imageURI, "base64").then(data => {
-                    // binary data
-                    console.log('data base64 ' + data);
-                    this.setState({ dataBase64: data });
-                    let shareImagesBase64 = {
-                        title: "Invitation",
-                        message: params.value.infName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
-                        params.value.asAssnID + ' for ' + params.value.inpOfInv + ' on ' + params.value.insDate.substring(0,10) + ' at ' +
-                            params.EntryTimeDate.substring(11, 16) + '  ',
-                        url: 'data:image/png;base64,' + this.state.dataBase64,
-                        subject: "Share Invitation" //  for email
-                    };
-                    Share.open(shareImagesBase64);
-                });
+//   takeScreenShot = () => {
+//     const {params} = this.props.navigation.state;
+//     captureScreen({
+//         format: "jpg",
+//         quality: 0.8
+//     })
+//         .then(
+//             //callback function to get the result URL of the screnshot
+//             uri => {
+//                 this.setState({ imageURI: uri }),
+//                 RNFS.readFile(this.state.imageURI, "base64").then(data => {
+//                     // binary data
+//                     console.log('data base64 ' + data);
+//                     this.setState({ dataBase64: data });
+//                     let shareImagesBase64 = {
+//                         title: "Invitation",
+//                         message: params.value.infName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+//                         params.value.asAssnID + ' for ' + params.value.inpOfInv + ' on ' + params.value.insDate.substring(0,10) + ' at ' +
+//                             params.EntryTimeDate.substring(11, 16) + '  ',
+//                         url: 'data:image/png;base64,' + this.state.dataBase64,
+//                         subject: "Share Invitation" //  for email
+//                     };
+//                     Share.open(shareImagesBase64);
+//                 });
 
-            },
-            error => {
-                console.error("Oops, Something Went Wrong", error),
-                console.log('error uploadImage ', error)
-            }
-        );
-    // this.uploadImage();
+//             },
+//             error => {
+//                 console.error("Oops, Something Went Wrong", error),
+//                 console.log('error uploadImage ', error)
+//             }
+//         );
+//     // this.uploadImage();
 
 
-}
+// }
 
   render() {
+    const {params} = this.props.navigation.state;
     let shareOptions = {
         title: "Invitation",
         message: this.state.qrShare,
@@ -102,11 +103,17 @@ class QRCodeGeneration extends Component {
         subject: "Welcome" //  for email
       };
   
+      let wholeData = (params.value.infName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+                      params.value.asAssnID + ' for ' + params.value.inpOfInv + ' on ' + params.value.insDate.substring(0,10) + ' at ' +
+                      params.value.insDate.substring(11, 16));
+      // this.setState({dataBase64: wholeData})
       let shareImageBase64 = {
-        title: "React Native",
-        message: "Hola mundo",
-        url: REACT_ICON,
-        subject: "Share Link" //  for email
+        title: "Invitation",
+        message: params.value.infName + ' invites you to ' + //global.AssociationUnitName + ' in ' +
+        params.value.asAssnID + ' for ' + params.value.inpOfInv + ' on ' + params.value.insDate.substring(0,10) + ' at ' +
+            params.value.insDate.substring(11, 16) + '  ',
+        url: 'data:image/png;base64,',
+        subject: "Share Invitation" //  for email
       };
 
     if(this.state.isLoading) {
@@ -223,17 +230,17 @@ class QRCodeGeneration extends Component {
             <QRCode style={{ justifyContent:'center',alignItems:'center',borderRadius:hp('10%'),borderWidth:hp('2%') }} logo={require('../icons/headerLogo.png')} logoSize={80}  content={this.state.qrText} codeStyle='square' outerEyeStyle='square' innerEyeStyle='square' />
         </View>
         <View style={{justifyContent:'center',alignItems:'center',paddingHorizontal:20, marginTop:10,flexDirection:'column'}}>
-        <TouchableOpacity onPress={()=>{
+        {/* <TouchableOpacity onPress={()=>{
           Share.open(shareImageBase64);
         }}>
           <View style={styles.instructions}>
             <Text>Simple Share Image Base 64</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity onPress={()=>{
-          // Share.open(shareOptions);
-          this.takeScreenShot()
+          Share.open(shareImageBase64);
+          // this.takeScreenShot
         }}>
           <View style={{borderRadius:hp('1%'),borderWidth:hp('0.1%'),width:wp('80%'),height:hp('6%'),justifyContent:'center',alignItems:'center',marginTop:hp('10%'),borderColor:'#797979' }}>
             <Text style={{fontSize:hp('2.5%'),color:'#797979',fontWeight:'700'}}>Share QR Code</Text>

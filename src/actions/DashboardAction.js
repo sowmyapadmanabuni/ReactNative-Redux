@@ -13,6 +13,7 @@ import _ from "lodash";
 
 export const getDashSub = (oyeURL, SelectedAssociationID) => {
   return dispatch => {
+    console.log("oyeURL", oyeURL)
     fetch(
       `http://${oyeURL}/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/${SelectedAssociationID}`,
       {
@@ -183,17 +184,33 @@ export const getDashUnits = (unit, oyeURL) => {
                 }
               }
 
+              // Sold Owner Occupied
+              // Sold Tenant Occupied
+              // Sold Vacant
+              // All Sold Flats
+
+              // Unsold Vacant
+              // Unsold Tenant Occupied
+              
+              
+              // All Unsold Flats
+              // All Units
+              // Single Unit
+              // All Vacant Units
+              // All Occupied Units
+
               for (var j = 0; j < sold_data.length; j++) {
                 if (
-                  sold_data[j].value == "All Sold Units" ||
-                  sold_data[j].value == "All Sold Owner Occupied Units" ||
-                  sold_data[j].value == "All Sold Tenant Occupied Units" ||
-                  sold_data[j].value == "All Sold Vacant Units"
+                  sold_data[j].value == "All Sold Flats" ||
+                  sold_data[j].value == "Sold Owner Occupied" ||
+                  sold_data[j].value == "Sold Tenant Occupied" ||
+                  sold_data[j].value == "Sold Vacant"
                 ) {
+                   
                   sold1 = sold1 + 1;
                 } else if (
-                  sold_data[j].value == "UnSold Vacant Units" ||
-                  sold_data[j].value == "UnSold Tenant Occupied Units" ||
+                  sold_data[j].value == "Unsold Vacant" ||
+                  sold_data[j].value == "Unsold Tenant Occupied" ||
                   sold_data[j].value == "NULL" ||
                   sold_data[j].value == ""
                 ) {

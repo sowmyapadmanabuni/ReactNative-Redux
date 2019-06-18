@@ -91,7 +91,7 @@ class EditProfile extends Component {
     }
     else if (regemail.test(alternateemail) == false && !alternateemail.length == "")  {
 
-      Alert.alert("Enter valid  altEmail id")
+      Alert.alert("Enter valid Alternate Email id")
    }
     // else if (alternateemail.length == 0) {
     //   Alert.alert("Enter valid primary mail id");

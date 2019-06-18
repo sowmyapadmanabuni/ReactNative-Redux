@@ -92,15 +92,15 @@ export default class admin extends React.Component {
                   />
                 </View>
                   <View style={styles.view3}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() =>
                           this.props.navigation.navigate("CheckPointListScreen")
                         }
-                      >
+                      > */}
                       <View style={styles.view3}>
                         <Text style={styles.text1}>Patrolling Check Points</Text>
                       </View>
-                    </TouchableOpacity>
+                    {/* </TouchableOpacity> */}
                   </View>
                 </View>
               <View style={styles.borderline} />
@@ -133,15 +133,15 @@ export default class admin extends React.Component {
                   <Image source={require("../pages/assets/img/settings.png")} />
                 </View>
                 <View style={styles.view3}>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() =>
                       this.props.navigation.navigate("AdminSettingsScreen")
                     }
-                  >
+                  > */}
                     <View style={styles.view3}>
                       <Text style={styles.text1}>Admin Settings</Text>
                     </View>
-                  </TouchableOpacity>
+                  {/* </TouchableOpacity> */}
               
                 </View>
                 </View>
