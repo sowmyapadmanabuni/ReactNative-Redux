@@ -195,7 +195,9 @@ class Dashboard extends React.Component {
             notificationOpen.notification._data,
             navigationInstance,
             true,
-            "true"
+            "true",
+            this.props.oyeURL,
+            this.props.MyAccountID
           );
           // this.props.createNotification(notificationOpen.notification)
         }
@@ -215,7 +217,10 @@ class Dashboard extends React.Component {
             notificationOpen.notification._data,
             navigationInstance,
             true,
-            "true"
+            "true",
+            "true",
+            this.props.oyeURL,
+            this.props.MyAccountID
           );
         }
       } else if (notificationOpen.notification._data.admin === "gate_app") {
@@ -224,7 +229,10 @@ class Dashboard extends React.Component {
           notificationOpen.notification._data,
           navigationInstance,
           true,
-          "gate_app"
+          "gate_app",
+          "true",
+            this.props.oyeURL,
+            this.props.MyAccountID
         );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
@@ -235,7 +243,10 @@ class Dashboard extends React.Component {
           notificationOpen.notification._data,
           navigationInstance,
           true,
-          "false"
+          "false",
+          "true",
+            this.props.oyeURL,
+            this.props.MyAccountID
         );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
@@ -832,6 +843,7 @@ const mapStateToProps = state => {
     userReducer: state.UserReducer,
 
     // Oyespace urls
+    oyeURL: state.OyespaceReducer.oyeURL,
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyespaceReducer: state.OyespaceReducer
   };

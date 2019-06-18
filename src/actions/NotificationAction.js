@@ -11,11 +11,12 @@ import {
             ON_NOTIFICATION_OPEN,
         } from './types';
 import _ from 'lodash';
+import {connect} from 'react-redux';
 
-export const getNotifications = (accountId, associationID, admin) => {
+export const getNotifications = (oyeURL, MyAccountID) => {
     return(dispatch) => {
         dispatch({ type: GET_NOTIFICATIONS });
-        fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+        fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
       , {
         method: 'GET',
         headers: {
@@ -53,7 +54,7 @@ export const getNotifications = (accountId, associationID, admin) => {
     }
 }
 
-export const createNotification = (data, navigation, navigate, admin) => {
+export const createNotification = (data, navigation, navigate, admin, oyeURL, MyAccountID) => {
     return (dispatch) => {
         dispatch({ type: CREATE_NEW_NOTIFICATION });
 
@@ -69,9 +70,9 @@ export const createNotification = (data, navigation, navigate, admin) => {
         // console.log(moment(datee).fromNow())
 
         if(admin === 'true') {
-            axios.post(`http://${global.oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
+            axios.post(`http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
             // axios.post('http://apidev.oyespace.com/oyesafe/api/v1/Notification/Notificationcreate',{
-            ACAccntID: global.MyAccountID,
+            ACAccntID: MyAccountID,
             ASAssnID: data.associationID,
             NTType: data.ntType,
             NTDesc: data.ntDesc,
@@ -94,7 +95,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 console.log(responseData)
                 dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
                 if(navigate) {
-                    fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+                    fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
                 , {
                     method: 'GET',
                     headers: {
@@ -145,9 +146,9 @@ export const createNotification = (data, navigation, navigate, admin) => {
             })
         } else if(admin === 'false') {
             console.log(data)
-            console.log(`http://${global.oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`)
-            axios.post(`http://${global.oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
-                ACAccntID: global.MyAccountID,
+            console.log(`http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`)
+            axios.post(`http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
+                ACAccntID: MyAccountID,
                 ASAssnID: data.associationID,
                 NTType: data.ntType,
                 NTDesc: data.ntDesc,
@@ -172,7 +173,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 if(navigate) {
 
                     // dispatch({ type: GET_NOTIFICATIONS });
-                    fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+                    fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
                 , {
                     method: 'GET',
                     headers: {
@@ -221,8 +222,8 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
             })
         } else if(admin === 'gate_app') {
-            axios.post(`http://${global.oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
-                ACAccntID: global.MyAccountID,
+            axios.post(`http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
+                ACAccntID: MyAccountID,
                 ASAssnID: data.associationID,
                 NTType: data.ntType,
                 NTDesc: data.ntDesc,
@@ -246,7 +247,7 @@ export const createNotification = (data, navigation, navigate, admin) => {
                 dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
                 if(navigate) {
                     
-                    fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+                    fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
                 , {
                     method: 'GET',
                     headers: {

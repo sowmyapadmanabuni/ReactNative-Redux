@@ -265,6 +265,7 @@ class Resident extends Component {
   };
 
   render() {
+    console.log("$$$$$$$$$$#%#%@#%#^$#^&%&%^&%^*^%*%^&$%^$",this.props.oyeURL)
     const { params } = this.props.navigation.state;
     // console.log(params)
     // console.log(this.props.associationid)
