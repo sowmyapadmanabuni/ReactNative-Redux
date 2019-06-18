@@ -199,15 +199,15 @@ export default class admin extends React.Component {
                   />
                 </View>
                 <View style={styles.view3}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       onPress={() =>
                         this.props.navigation.navigate("CreateBlockScreen")
                       }
-                    >
+                    > */}
                       <View style={styles.view3}>
                         <Text style={styles.text1}>Create Block and Units</Text>
                       </View>
-                    </TouchableOpacity>
+                    {/* </TouchableOpacity> */}
                 </View>
                 
               </View>
