@@ -15,7 +15,7 @@ import _ from "lodash";
 
 export const getDashSub = (oyeURL, SelectedAssociationID) => {
   return dispatch => {
-    console.log("oyeURL", oyeURL)
+    console.log("oyeURL", oyeURL);
     fetch(
       `http://${oyeURL}/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/${SelectedAssociationID}`,
       {
@@ -41,8 +41,10 @@ export const getDashSub = (oyeURL, SelectedAssociationID) => {
 
 export const getDashAssociation = (oyeURL, MyAccountID) => {
   return dispatch => {
+    //  ("http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/1");
     fetch(
-      `http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`,
+      `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
+      // `http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`,
       // fetch(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/2`
       {
         method: "GET",
@@ -54,39 +56,74 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        // console.log(responseJson)
-
+        console.log(responseJson);
         if (responseJson.success) {
-          var count = Object.keys(responseJson.data.associationByAccount)
-            .length;
-          let drop_down_data = [];
-          let associationid = [];
+          let associations = responseJson.data.memberListByAccount;
 
-          for (var i = 0; i < count; i++) {
-            let associationName =
-              responseJson.data.associationByAccount[i].asAsnName;
+          let associationIds = [];
+          let drop_down_data = [];
+
+          associations.map((data, index) => {
+            associationIds.push({ id: data.asAssnID });
+          });
+
+          associations.map((data, index) => {
             drop_down_data.push({
-              value: associationName,
-              name: associationName,
-              id: i,
-              associationId: responseJson.data.associationByAccount[i].asAssnID
+              value: data.asAsnName,
+              name: data.asAsnName,
+              id: index,
+              associationId: data.asAssnID
             });
-            associationid.push({
-              id: responseJson.data.associationByAccount[i].asAssnID
-            });
-          }
+          });
 
           dispatch({
             type: DASHBOARD_ASSOCIATION,
-            payload: { dropdown: drop_down_data, associationid }
+            payload: {
+              dropdown: drop_down_data,
+              associationid: associationIds
+            }
           });
+          // if (responseJson.success) {
+          //   let associations = responseJson.data.memberListByAccount;
+
+          //   let associationIds = [];
+          //   var count = Object.keys(responseJson.data.associationByAccount)
+          //     .length;
+          //   let drop_down_data = [];
+          //   let associationid = [];
+
+          //   for (var i = 0; i < count; i++) {
+          //     let associationName =
+          //       responseJson.data.associationByAccount[i].asAsnName;
+          //     drop_down_data.push({
+          //       value: associationName,
+          //       name: associationName,
+          //       id: i,
+          //       associationId: responseJson.data.associationByAccount[i].asAssnID
+          //     });
+          //     associationid.push({
+          //       id: responseJson.data.associationByAccount[i].asAssnID
+          //     });
+          //   }
+
+          // dispatch({
+          //   type: DASHBOARD_ASSOCIATION,
+          //   payload: {
+          //     dropdown: drop_down_data,
+          //     associationid
+          //   }
+          // });
         } else {
-          dispatch({ type: DASHBOARD_ASSOC_STOP });
+          dispatch({
+            type: DASHBOARD_ASSOC_STOP
+          });
         }
       })
 
       .catch(error => {
-        dispatch({ type: DASHBOARD_ASSOC_STOP });
+        dispatch({
+          type: DASHBOARD_ASSOC_STOP
+        });
         console.log(error);
       });
   };
@@ -189,8 +226,7 @@ export const getDashUnits = (unit, oyeURL) => {
 
               // Unsold Vacant
               // Unsold Tenant Occupied
-              
-              
+
               // All Unsold Flats
               // All Units
               // Single Unit
@@ -204,7 +240,6 @@ export const getDashUnits = (unit, oyeURL) => {
                   sold_data[j].value == "Sold Tenant Occupied" ||
                   sold_data[j].value == "Sold Vacant"
                 ) {
-                   
                   sold1 = sold1 + 1;
                 } else if (
                   sold_data[j].value == "Unsold Vacant" ||
