@@ -373,6 +373,9 @@ class Dashboard extends React.Component {
                       textColor="#000"
                       fontSize={hp("2%")}
                       dropdownPosition={-2}
+                      // labelHeight={hp("1%")}
+                      labelPadding={hp("1%")}
+                      labelSize={hp("1%")}
                       onChangeText={(value, index) =>
                         this.onAssociationChange(value, index)
                       }
