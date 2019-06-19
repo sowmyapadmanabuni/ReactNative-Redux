@@ -231,8 +231,8 @@ class Dashboard extends React.Component {
           true,
           "gate_app",
           "true",
-            this.props.oyeURL,
-            this.props.MyAccountID
+          this.props.oyeURL,
+          this.props.MyAccountID
         );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
@@ -245,8 +245,8 @@ class Dashboard extends React.Component {
           true,
           "false",
           "true",
-            this.props.oyeURL,
-            this.props.MyAccountID
+          this.props.oyeURL,
+          this.props.MyAccountID
         );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
@@ -268,7 +268,7 @@ class Dashboard extends React.Component {
     getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
-    // this.props.getNotifications()
+    this.props.getNotifications(oyeURL, MyAccountID);
   }
 
   onAssociationChange = (value, index) => {
