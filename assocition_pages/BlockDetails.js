@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import {
   StyleSheet,
   View,
@@ -7,44 +7,42 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions,
-  SafeAreaView
-} from "react-native";
-import { Button } from "native-base";
-// import Header from "../components/common/Header";
+  Dimensions,SafeAreaView
+} from "react-native"
+import { Button } from "native-base"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-import { NavigationEvents } from "react-navigation";
+} from "react-native-responsive-screen"
+import { NavigationEvents } from "react-navigation"
 import {connect} from 'react-redux';
 
 class BlockDetail extends React.Component {
   static navigationOptions = {
     title: "BlockDetail",
     header: null
-  };
+  }
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: true,
       dataSource: [],
 
       loading: false,
       error: null
-    };
-    this.arrayholder = [];
+    }
+    this.arrayholder = []
   }
 
   componentDidMount() {
-    this.myBlockDetailListGetData();
+    this.myBlockDetailListGetData()
   }
 
   myBlockDetailListGetData = () => {
     // console.log("________")
-    this.setState({ loading: true });
+    this.setState({ loading: true })
 
-    fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Block/GetBlockList`, {
+    fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Block/GetBlockListByAssocID/${this.props.SelectedAssociationID}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,41 +51,36 @@ class BlockDetail extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson, "8888888888888888888888888888888888888");
+        console.log(responseJson, "8888888888888888888888888888888888888")
         this.setState({
           isLoading: false,
-          dataSource: responseJson.data.blocks,
+          dataSource: responseJson.data.blocksByAssoc,
           error: responseJson.error || null,
           loading: false
-        });
-        this.arrayholder = responseJson.data.blocks;
+        })
+        this.arrayholder = responseJson.data.blocksByAssoc
         console.log(
           this.state.dataSource,
           "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-        );
+        )
       })
       .catch(error => {
-        this.setState({ error, loading: false });
-        console.log(error, "77777777777777777777777777777");
-      });
-  };
-
-  // onPressImage() {
-  //   this.setState({})
-  // }
+        this.setState({ error, loading: false })
+        console.log(error, "77777777777777777777777777777")
+      })
+  }
 
   renderItem = ({ item }) => {
-    // console.log(item)
 
     return (
       <View style={styles.tableView}>
         <View style={styles.cellView}>
           <View style={styles.cellDataInColumn}>
             <View style={styles.blockNameFlexStyle}>
-              {/* <Image
+              <Image
                 style={styles.memberDetailIconImageStyle}
-                source={require("../components/images/building.png")}
-              /> */}
+                source={require("../icons/building.png")}
+              />
               <Text style={styles.blockNameTextStyle}>{item.blBlkName}</Text>
             </View>
             <View style={styles.blockTypeFlexStyle}>
@@ -109,11 +102,8 @@ class BlockDetail extends React.Component {
               <View style={styles.editButtonViewStyle}>
                 <TouchableOpacity
                   onPress={() => {
-                    // console.log(item)
-                    console.log(item, "kjhgfhiljkhgfdsghjkhgfg");
-
-                    this.props.navigation.navigate("EditBlock", {
-                      // blockDetails: item
+                    
+                    this.props.navigation.navigate("EditBlockScreen", {
                       MyBlockName: item.blBlkName.toString(),
                       MyBlockType: item.blBlkType.toString(),
                       MyBlockNoOfUnits: item.blNofUnit.toString(),
@@ -130,16 +120,20 @@ class BlockDetail extends React.Component {
                       MyBlockLatePaymentCharge: item.aslpChrg.toString(),
                       MyBlockStartsFrom: item.aslpsDate.toString(),
                       MyBlockId: item.blBlockID.toString()
-                    });
+                    })
                   }}
                 >
-                  {/* <Image
+                  <Image
                     style={styles.pencilBtnStyle}
-                    source={require("../components/images/pencil120.png")}
-                  /> */}
+                    source={require("../icons/pencil120.png")}
+                  />
                 </TouchableOpacity>
                 <View style={{ marginLeft: hp("1%") }}>
-                  <Button bordered dark style={styles.addUnitButton}>
+                  <Button bordered dark style={styles.addUnitButton}
+                    onPress={() => this.props.navigation.navigate("BlockWiseUnitListScreen",{
+                      unitid: item.blBlockID
+                    })}
+                  >
                     <Text style={styles.addUnitText}>Add Unit</Text>
                   </Button>
                 </View>
@@ -149,28 +143,26 @@ class BlockDetail extends React.Component {
         </View>
         <View style={styles.lineAboveAndBelowFlatList} />
       </View>
-    );
-  };
+    )
+  }
 
   render() {
-    const { navigate } = this.props.navigation;
+    const { navigate } = this.props.navigation
     if (this.state.isLoading) {
       return (
         <View style={styles.progressViewStyle}>
           <ActivityIndicator size="large" color="#01CBC6" />
         </View>
-      );
+      )
     }
     return (
       <View style={styles.mainView}>
-        {/* <Header /> */}
-
         <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
+                  this.props.navigation.goBack();
                 }}
               >
                 <View
@@ -227,7 +219,7 @@ class BlockDetail extends React.Component {
 
           <TouchableOpacity
             style={[styles.floatButton]}
-            onPress={() => this.props.navigation.navigate("AddBlock")}
+            onPress={() => this.props.navigation.navigate("CreateBlockScreen")}
           >
             <View
               style={{
@@ -247,7 +239,7 @@ class BlockDetail extends React.Component {
           </TouchableOpacity>
         </View>
       </View>
-    );
+    )
   }
 }
 
@@ -285,6 +277,7 @@ const styles = StyleSheet.create({
     height: hp("12%"),
     marginRight: hp("3%")
   },
+
   editButtonViewStyle: {
     // backgroundColor: "yellow",
     marginRight: hp("3%"),
@@ -299,7 +292,7 @@ const styles = StyleSheet.create({
   },
   progressViewStyle: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "center",
     alignItems: "center"
   },
   mainView: {
@@ -393,9 +386,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: Dimensions.get("window").width
-
-    // alignSelf: "flex-start",
-    // marginVertical: hp("0.4%")
   },
   memberDetailIconImageStyle: {
     width: wp("5%"),
@@ -439,12 +429,16 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: hp("1.6%")
   }
-});
+})
 
 const mapStateToProps = state => {
     return {
-      oyeURL: state.OyespaceReducer.oyeURL,  
+      champBaseURL: state.OyespaceReducer.champBaseURL,
+      SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+      MyAccountID: state.UserReducer.MyAccountID,
+      oyeURL: state.OyespaceReducer.oyeURL  
     };
   };
   
   export default connect(mapStateToProps)(BlockDetail);
+  
