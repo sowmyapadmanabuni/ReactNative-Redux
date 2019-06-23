@@ -63,7 +63,7 @@ class NotificationDetailScreen extends Component {
                         UNSldDate: item.unSldDate,
                         UNOcSDate: item.unOcSDate,
                     }
-
+                    
                     UpdateTenant = {
                         MEMemID   : item.sbMemID,
                         UNUnitID  : item.sbUnitID,

@@ -215,7 +215,7 @@ class Dashboard extends React.Component {
           this.props.newNotifInstance(notificationOpen.notification);
           this.props.createNotification(
             notificationOpen.notification._data,
-            navigationInstance,
+            "navigationInstance",
             true,
             "true",
             "true",
@@ -227,7 +227,7 @@ class Dashboard extends React.Component {
         this.props.newNotifInstance(notificationOpen.notification);
         this.props.createNotification(
           notificationOpen.notification._data,
-          navigationInstance,
+          "navigationInstance",
           true,
           "gate_app",
           "true",
@@ -241,7 +241,7 @@ class Dashboard extends React.Component {
         this.props.newNotifInstance(notificationOpen.notification);
         this.props.createNotification(
           notificationOpen.notification._data,
-          navigationInstance,
+          "navigationInstance",
           true,
           "false",
           "true",
