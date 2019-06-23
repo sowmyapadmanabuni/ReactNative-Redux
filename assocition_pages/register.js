@@ -27,6 +27,7 @@ class RegisterMe extends Component {
     title: "Register Me",
     header: null
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +73,7 @@ class RegisterMe extends Component {
         ASAssnID: id,
         BLBlockID: this.props.navigation.state.params.blockID,
         UNUnitID: unitList.unUnitID,
-        MRMRoleID: parseInt(this.state.PickerValueHolder),
+        MRMRoleID: parseInt("6"),
         FirstName: this.props.FirstName,
         MobileNumber: this.props.MobileNumber,
         ISDCode: this.props.MyISDCode,
@@ -92,7 +93,7 @@ class RegisterMe extends Component {
             ASAssnID: id,
             BLBlockID: this.props.navigation.state.params.blockID,
             UNUnitID: unitList.unUnitID,
-            MRMRoleID: parseInt(this.state.PickerValueHolder),
+            MRMRoleID: parseInt("6"),
             FirstName: this.state.FirstName,
             MobileNumber: this.state.MobileNumber,
             ISDCode: this.props.MyISDCode,
@@ -130,7 +131,7 @@ class RegisterMe extends Component {
                   ACMobile: mobileNo,
                   ASAssnID: id,
                   UNUnitID: unitList.unUnitID,
-                  MRMRoleID: parseInt(this.state.PickerValueHolder)
+                  MRMRoleID: parseInt("6")
                 },
                 {
                   headers: headers_2
@@ -149,8 +150,7 @@ class RegisterMe extends Component {
                     this.props.MyAccountID.toString() +
                     unitList.unUnitID.toString() +
                     "usernotif";
-                  let sbRoleId =
-                    this.state.PickerValueHolder === "6" ? "2" : "3";
+                  let sbRoleId = "2";
                   let sbMemID = responseData_2.meMemID;
                   let sbName = this.props.FirstName + " " + this.props.LastName;
                   let associationID = this.props.navigation.state.params.id;
@@ -163,8 +163,7 @@ class RegisterMe extends Component {
                     associationName +
                     " " +
                     "Association";
-                  let roleName =
-                    this.state.PickerValueHolder === "6" ? "Owner" : "Tenant";
+                  let roleName = "Owner";
                   let ntDesc =
                     sbName +
                     " " +
@@ -283,7 +282,7 @@ class RegisterMe extends Component {
         ASAssnID: id,
         BLBlockID: this.props.navigation.state.params.blockID,
         UNUnitID: unitList.unUnitID,
-        MRMRoleID: parseInt(this.state.PickerValueHolder),
+        MRMRoleID: parseInt("7"),
         FirstName: this.props.FirstName,
         MobileNumber: this.props.MobileNumber,
         ISDCode: this.props.MyISDCode,
@@ -303,7 +302,7 @@ class RegisterMe extends Component {
             ASAssnID: id,
             BLBlockID: this.props.navigation.state.params.blockID,
             UNUnitID: unitList.unUnitID,
-            MRMRoleID: parseInt(this.state.PickerValueHolder),
+            MRMRoleID: parseInt("7"),
             FirstName: this.props.FirstName,
             MobileNumber: this.props.MobileNumber,
             ISDCode: this.props.MyISDCode,
@@ -341,7 +340,7 @@ class RegisterMe extends Component {
                   ACMobile: mobileNo,
                   ASAssnID: id,
                   UNUnitID: unitList.unUnitID,
-                  MRMRoleID: parseInt(this.state.PickerValueHolder)
+                  MRMRoleID: parseInt("7")
                 },
                 {
                   headers: headers_2
@@ -360,8 +359,7 @@ class RegisterMe extends Component {
                     this.props.MyAccountID.toString() +
                     unitList.unUnitID.toString() +
                     "usernotif";
-                  let sbRoleId =
-                    this.state.PickerValueHolder === "6" ? "2" : "3";
+                  let sbRoleId = "2";
                   let sbMemID = responseData_2.meMemID;
                   let sbName = this.props.FirstName + " " + this.props.LastName;
                   let associationID = this.props.navigation.state.params.id;
@@ -374,8 +372,7 @@ class RegisterMe extends Component {
                     associationName +
                     " " +
                     "Association";
-                  let roleName =
-                    this.state.PickerValueHolder === "6" ? "Owner" : "Tenant";
+                  let roleName = "Tenant";
                   let ntDesc =
                     sbName +
                     " " +

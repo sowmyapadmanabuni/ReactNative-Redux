@@ -5403,7 +5403,7 @@ react-native-action-button@^2.8.5:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-animatable@>=1.3.x, react-native-animatable@^1.1.0, react-native-animatable@^1.2.4:
+react-native-animatable@>=1.3.x, react-native-animatable@^1.1.0, react-native-animatable@^1.2.4, react-native-animatable@^1.3.1:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.2.tgz#4783ee1a73dc98815aef234ce6b819f80bfe7d80"
   integrity sha512-rmah3KQ63ft8DxkzFUwJSuZeq+oSYwldoGF4DTOR5WM2WR5wiWLgBAtrAHlI3Di3by323uOR21s+MlqPcHz2Kw==
@@ -5678,6 +5678,14 @@ react-native-modal-filter-picker@1.3.4:
   resolved "https://registry.yarnpkg.com/react-native-modal-filter-picker/-/react-native-modal-filter-picker-1.3.4.tgz#c33ae2ca7b0b5adae8671a6b417a6f5d263d9813"
   integrity sha512-+Pe8Y3s6lh9mNupRRpjL8bSj1C0/vxUTRYjMenLHh2XBz4fSfMsa11MsY5T35V9n8Q7evns7hsmoYoGvXsJAVg==
 
+react-native-modal@^11.0.2:
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-11.0.2.tgz#bd2e16901b23d5ac4762c7a5ec03192138805236"
+  integrity sha512-FLXSdzUJx30oVnet6nheT+/+90QYwqBiTmFmsL27ZGdEPpgc5QaMJsS7kIhs5xhmgPvW5+Gw8z7I9DIkc7z+HQ==
+  dependencies:
+    prop-types "^15.6.2"
+    react-native-animatable "^1.3.1"
+
 react-native-modal@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-9.0.0.tgz#0bfd0770361a2e5c6e0072bfdb0f1277f9662dba"
@@ -5890,6 +5898,11 @@ react-native-tab-view@^1.4.1:
   dependencies:
     prop-types "^15.6.1"
 
+react-native-table-component@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-table-component/-/react-native-table-component-1.2.0.tgz#d4dff88abb58648086ba52a801ba9a1ab1825c03"
+  integrity sha512-j9AEryfGSStJ9vbcfj63uaMxL8Ek+Xn0+rIA4o2Dvovo7C9fAGMEJxJiL57jmNIX65jRtWNwko9GqeaXXzjJVw==
+
 react-native-text-size@^2.0.4:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-native-text-size/-/react-native-text-size-2.1.1.tgz#e26823c4504576964acc258db44009df81189332"
@@ -5942,10 +5955,10 @@ react-native-version-number@^0.3.5:
   resolved "https://registry.yarnpkg.com/react-native-version-number/-/react-native-version-number-0.3.5.tgz#90f1b49bcb5e72f801bdc22ed6bad6c7cbbc2222"
   integrity sha512-iANHQrYyDSe5Yts2qVjAjFXpK5EHkJGSFAqnVa3Bu/UKBRUjhnMqvskc3EH+IIvvJH9N2Qpidm1KCq42BWa6jQ==
 
-react-native-view-shot@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-2.5.0.tgz#428a997f470d3148d0067c5b46abd988ef1aa4c0"
-  integrity sha512-xFJA+N7wh8Ik/17I4QB24e0a0L3atg1ScVehvtYR5UBTgHdzTFA0ZylvXp9gkZt7V+AT5Pni0H3NQItpqSKFoQ==
+react-native-view-shot@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-2.6.0.tgz#3b23675826f67658366352c4b97b59a6aded2f43"
+  integrity sha512-yO9vWi/11m2hEJl8FrW1SMeVzFfPtMKh20MUInGqlsL0H8Ya2JGGlFfrBzx1KiFR2hFb5OdsTLYNtcVZtJ6pLQ==
 
 react-native-zoom-image@^0.1.2:
   version "0.1.2"
