@@ -349,8 +349,10 @@ class AddUnit extends Component {
     // console.log(unitParkingLot);
     // console.log(uniqData);
     const {
-        unitid,
+        unit
       } = this.props.navigation.state.params
+
+      // console.log('123812638961289368912638912693',unit)
     fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/unit/create`, {
       method: "POST",
       headers: {
@@ -372,7 +374,7 @@ class AddUnit extends Component {
             UNRate: UnitRate1,
             UNCalType: CalculationType1,
             FLFloorID: 14,
-            BLBlockID: unitid,
+            BLBlockID: unit,
             Owner: [
               {
                 UOFName: Unitofname1,
@@ -409,7 +411,7 @@ class AddUnit extends Component {
               UBActNo: "SBI23ejnhgf43434",
               UBActType: "Savings",
               UBActBal: 12.3,
-              BLBlockID: unitid
+              BLBlockID: unit
             },
 
             UnitParkingLot: uniqData
@@ -421,7 +423,7 @@ class AddUnit extends Component {
       .then(responseJson => {
         console.log("unit added ###############", responseJson);
         alert("Unit Created");
-        this.props.navigation.navigate("UnitDetails");
+        this.props.navigation.goBack();
       })
 
       .catch(error => {
@@ -521,9 +523,10 @@ class AddUnit extends Component {
     let mobRegex = /^[0]?[456789]d{9}$/;
 
     //let validation = [] ={ UnitNum1,UnitType1,UnitRate1,CalculationType1,OccupancyStatus1,UnitDimention1 }
-    if (selectblock1.length === 0) {
-      Alert.alert("Select Block ");
-    } else if (UnitNum1.length === 0) {
+    // if (selectblock1.length === 0) {
+    //   Alert.alert("Select Block ");
+    // } 
+    if (UnitNum1.length === 0) {
       Alert.alert("Unit Number Cannot be Empty");
     } else if (UnitType1.length === 0) {
       Alert.alert("Select Unit type");
@@ -533,9 +536,11 @@ class AddUnit extends Component {
       Alert.alert(" Select Calculation Type");
     } else if (UnitDimention1.length === 0) {
       Alert.alert("Unit Dimention Cannot be Empty");
-    } else if (selectblock1.length === 0) {
-      Alert.alert("Select Block ");
-    } else if (OccupancyStatus1.length === 0) {
+     } 
+    //else if (selectblock1.length === 0) {
+    //   Alert.alert("Select Block ");
+    // } 
+    else if (OccupancyStatus1.length === 0) {
       Alert.alert("Select Occupancy Status");
     } else if (
       OccupancyStatus1 === "Unsold Vacant Unit" ||
