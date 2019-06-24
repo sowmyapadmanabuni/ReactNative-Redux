@@ -22,6 +22,7 @@ import { connect } from "react-redux";
 import { updateJoinedAssociation } from "../src/actions";
 import _ from "lodash";
 import { CLOUD_FUNCTION_URL } from "../constant";
+import firebase from "react-native-firebase";
 import unitlist from "./unitlist";
 
 class RegisterMe extends Component {
@@ -152,10 +153,10 @@ class RegisterMe extends Component {
                     "usernotif";
                   let sbRoleId = "2";
                   let sbMemID = responseData_2.meMemID;
-                  let sbName = this.props.FirstName + " " + this.props.LastName;
-                  let associationID = this.props.navigation.state.params.AssnId;
-                  let associationName = this.props.navigation.state.params
-                    .associationName;
+                  let sbName =
+                    this.props.MyFirstName + " " + this.props.MyLastName;
+                  let associationID = AssnId;
+                  // let associationName = associationName;
                   let ntType = "Join";
                   let ntTitle =
                     "Request to join" +
@@ -279,10 +280,10 @@ class RegisterMe extends Component {
       alert("Select Date of Occupancy");
     } else {
       anu = {
-        ASAssnID: AssnId,
-        BLBlockID: this.props.navigation.state.params.blockID,
+        ASAssnID: unitList.asAssnID,
+        BLBlockID: unitList.blBlockID,
         UNUnitID: unitList.unUnitID,
-        MRMRoleID: parseInt("6"),
+        MRMRoleID: parseInt("7"),
         FirstName: this.props.MyFirstName,
         MobileNumber: this.props.MyMobileNumber,
         ISDCode: this.props.MyISDCode,
@@ -299,10 +300,10 @@ class RegisterMe extends Component {
         .post(
           `${champBaseURL}/association/join`,
           {
-            ASAssnID: AssnId,
-            BLBlockID: this.props.navigation.state.params.blockID,
+            ASAssnID: unitList.asAssnID,
+            BLBlockID: unitList.blBlockID,
             UNUnitID: unitList.unUnitID,
-            MRMRoleID: parseInt("6"),
+            MRMRoleID: parseInt("7"),
             FirstName: this.props.MyFirstName,
             MobileNumber: this.props.MyMobileNumber,
             ISDCode: this.props.MyISDCode,
@@ -359,12 +360,11 @@ class RegisterMe extends Component {
                     this.props.MyAccountID.toString() +
                     unitList.unUnitID.toString() +
                     "usernotif";
-                  let sbRoleId = "2";
+                  let sbRoleId = "3";
                   let sbMemID = responseData_2.meMemID;
-                  let sbName = this.props.FirstName + " " + this.props.LastName;
-                  let associationID = this.props.navigation.state.params.AssnId;
-                  let associationName = this.props.navigation.state.params
-                    .associationName;
+                  let sbName =
+                    this.props.MyFirstName + " " + this.props.MyLastName;
+                  let associationID = AssnId;
                   let ntType = "Join";
                   let ntTitle =
                     "Request to join" +
@@ -482,6 +482,7 @@ class RegisterMe extends Component {
     const { unitList, AssnId } = this.props.navigation.state.params;
     console.log("#!@$@$!@$!@$!@", unitList.unUnitID, AssnId);
     console.log("$$$$$$$$@$@!$!@$@%#^#$%&%^&%$", unitList.unOcStat);
+    console.log(this.props);
     //   console.log('$$$$$$$$@$@!$!@$@%#^#$%&%^&%$', unitList.owner[0].uofName)
     console.log("$$$$$$$$$$$$$$$$$$", unitList.owner.length.toString());
     return (

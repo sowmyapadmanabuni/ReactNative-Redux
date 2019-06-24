@@ -123,6 +123,7 @@ class Dashboard extends React.Component {
             firebase
               .messaging()
               .subscribeToTopic(association.asAssnID + "admin");
+            console.log(association.asAssnID);
           } else if (!receiveNotifications) {
             firebase
               .messaging()
