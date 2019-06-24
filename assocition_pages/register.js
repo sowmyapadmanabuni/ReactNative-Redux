@@ -6,7 +6,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
-  SafeAreaView
+  SafeAreaView,
+  Alert
 } from "react-native";
 import { Button, Card, CardItem } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -21,6 +22,7 @@ import { connect } from "react-redux";
 import { updateJoinedAssociation } from "../src/actions";
 import _ from "lodash";
 import { CLOUD_FUNCTION_URL } from "../constant";
+import unitlist from "./unitlist";
 
 class RegisterMe extends Component {
   static navigationOptions = {
@@ -70,35 +72,34 @@ class RegisterMe extends Component {
       alert("Select Date of Occupancy");
     } else {
       anu = {
-        ASAssnID: id,
-        BLBlockID: this.props.navigation.state.params.blockID,
+        ASAssnID: unitList.asAssnID,
+        BLBlockID: unitList.blBlockID,
         UNUnitID: unitList.unUnitID,
         MRMRoleID: parseInt("6"),
-        FirstName: this.props.FirstName,
-        MobileNumber: this.props.MobileNumber,
+        FirstName: this.props.MyFirstName,
+        MobileNumber: this.props.MyMobileNumber,
         ISDCode: this.props.MyISDCode,
-        LastName: this.props.LastName,
-        Email: this.props.EmailId,
+        LastName: this.props.MyLastName,
+        Email: this.props.MyEmail,
         SoldDate: this.state.dobText,
         OccupancyDate: this.state.dobText
       };
 
       let champBaseURL = this.props.champBaseURL;
-      console.log(champBaseURL);
 
       axios
         .post(
           `${champBaseURL}/association/join`,
           {
-            ASAssnID: id,
-            BLBlockID: this.props.navigation.state.params.blockID,
+            ASAssnID: unitList.asAssnID,
+            BLBlockID: unitList.blBlockID,
             UNUnitID: unitList.unUnitID,
             MRMRoleID: parseInt("6"),
-            FirstName: this.state.FirstName,
-            MobileNumber: this.state.MobileNumber,
+            FirstName: this.props.MyFirstName,
+            MobileNumber: this.props.MyMobileNumber,
             ISDCode: this.props.MyISDCode,
-            LastName: this.state.LastName,
-            Email: this.state.EmailId,
+            LastName: this.props.MyLastName,
+            Email: this.props.MyEmail,
             SoldDate: this.state.dobText,
             OccupancyDate: this.state.dobText
           },
@@ -119,7 +120,6 @@ class RegisterMe extends Component {
               "Content-Type": "application/json",
               "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
             };
-
             let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
             console.log(mobileNo);
             axios
@@ -129,7 +129,7 @@ class RegisterMe extends Component {
                   "/oyeliving/api/v1/Member/GetRequestorDetails",
                 {
                   ACMobile: mobileNo,
-                  ASAssnID: id,
+                  ASAssnID: unitList.asAssnID,
                   UNUnitID: unitList.unUnitID,
                   MRMRoleID: parseInt("6")
                 },
@@ -152,8 +152,9 @@ class RegisterMe extends Component {
                     "usernotif";
                   let sbRoleId = "2";
                   let sbMemID = responseData_2.meMemID;
-                  let sbName = this.props.FirstName + " " + this.props.LastName;
-                  let associationID = this.props.navigation.state.params.id;
+                  let sbName =
+                    this.props.MyFirstName + " " + this.props.MyLastName;
+                  let associationID = unitList.asAssnID;
                   let associationName = this.props.navigation.state.params
                     .associationName;
                   let ntType = "Join";
@@ -279,15 +280,15 @@ class RegisterMe extends Component {
       alert("Select Date of Occupancy");
     } else {
       anu = {
-        ASAssnID: id,
-        BLBlockID: this.props.navigation.state.params.blockID,
+        ASAssnID: unitList.asAssnID,
+        BLBlockID: unitList.blBlockID,
         UNUnitID: unitList.unUnitID,
-        MRMRoleID: parseInt("7"),
-        FirstName: this.props.FirstName,
-        MobileNumber: this.props.MobileNumber,
+        MRMRoleID: parseInt("6"),
+        FirstName: this.props.MyFirstName,
+        MobileNumber: this.props.MyMobileNumber,
         ISDCode: this.props.MyISDCode,
-        LastName: this.props.LastName,
-        Email: this.props.EmailId,
+        LastName: this.props.MyLastName,
+        Email: this.props.MyEmail,
         SoldDate: this.state.dobText,
         OccupancyDate: this.state.dobText
       };
@@ -299,17 +300,17 @@ class RegisterMe extends Component {
         .post(
           `${champBaseURL}/association/join`,
           {
-            ASAssnID: id,
-            BLBlockID: this.props.navigation.state.params.blockID,
+            ASAssnID: unitList.asAssnID,
+            BLBlockID: unitList.blBlockID,
             UNUnitID: unitList.unUnitID,
-            MRMRoleID: parseInt("7"),
-            FirstName: this.props.FirstName,
-            MobileNumber: this.props.MobileNumber,
+            MRMRoleID: parseInt("6"),
+            FirstName: this.props.MyFirstName,
+            MobileNumber: this.props.MyMobileNumber,
             ISDCode: this.props.MyISDCode,
-            LastName: this.props.LastName,
-            Email: this.props.EmailId,
-            SoldDate: this.props.dobText,
-            OccupancyDate: this.props.dobText
+            LastName: this.props.MyLastName,
+            Email: this.props.MyEmail,
+            SoldDate: this.state.dobText,
+            OccupancyDate: this.state.dobText
           },
           {
             headers: {
@@ -479,9 +480,10 @@ class RegisterMe extends Component {
 
   render() {
     const { unitList } = this.props.navigation.state.params;
-    console.log("$$$$$$$$@$@!$!@$@%#^#$%&%^&%$", unitList.unOcStat);
-    //   console.log('$$$$$$$$@$@!$!@$@%#^#$%&%^&%$', unitList.owner[0].uofName)
-    console.log("$$$$$$$$$$$$$$$$$$", unitList.owner.length.toString());
+    console.log(this.props.navigation.state.params);
+    // console.log("$$$$$$$$@$@!$!@$@%#^#$%&%^&%$", unitList.unOcStat);
+    // //   console.log('$$$$$$$$@$@!$!@$@%#^#$%&%^&%$', unitList.owner[0].uofName)
+    // console.log("$$$$$$$$$$$$$$$$$$", unitList.owner.length.toString());
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: "orange" }}>
@@ -714,4 +716,3 @@ export default connect(
   mapStateToProps,
   { updateJoinedAssociation }
 )(RegisterMe);
-

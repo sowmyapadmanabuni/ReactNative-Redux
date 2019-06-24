@@ -44,6 +44,7 @@ class UnitList extends Component {
   componentDidMount() {
     this.getUnitList();
   }
+
   searchFilterFunction = text => {
     const newData = this.arrayholder.filter(item => {
       const itemData = `${item.unUniName.toUpperCase()}`;
@@ -55,6 +56,7 @@ class UnitList extends Component {
       dataSource: newData
     });
   };
+
   getUnitList = () => {
     const { id, associationName } = this.props.navigation.state.params;
     fetch(
