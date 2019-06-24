@@ -92,6 +92,7 @@ class UnitDetails extends Component {
     const {
       unitid,
     } = this.props.navigation.state.params
+
 console.log("2424298749812749712947912",unitid)
     // this.setState({ isLoading1: true });
 
@@ -304,7 +305,8 @@ console.log("2424298749812749712947912",unitid)
   // }
 
   render() {
-    const {blockName} = this.props.navigation.state.params; 
+    const {blockName, unitid} = this.props.navigation.state.params; 
+    console.log('!@#!@#@$@#%#%@#$!@$@', blockName, unitid)
     if (this.state.isLoading1) {
       return (
         <View style={{ flex: 1, flexDirection: "column" }}>
@@ -479,7 +481,8 @@ console.log("2424298749812749712947912",unitid)
                 <TouchableOpacity
                   style={[styles.floatButton]}
                   onPress={() => this.props.navigation.navigate("AddUnit", {
-                    blockname: blockName
+                    blockname: blockName,
+                    unit:  unitid
                   })}
                 >
                   <View
