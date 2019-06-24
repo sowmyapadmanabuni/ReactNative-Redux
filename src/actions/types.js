@@ -8,6 +8,7 @@ export const CREATE_NEW_NOTIFICATION_FAILED = "create_new_notification_failed";
 export const CREATE_NEW_NOTIFICATION_SUCCESS =
   "create_new_notification_success";
 export const ON_NOTIFICATION_OPEN = "on_notification_open";
+export const TOGGLE_ADMIN_NOTIFICATION = "toggle_admin_notification";
 // export const ON_NOTIFICATION_REFRESH = 'on_notification_refresh';
 
 // App Reducer

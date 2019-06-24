@@ -5884,6 +5884,12 @@ react-native-swipeout@^2.3.6:
     prop-types "^15.5.10"
     react-tween-state "^0.1.5"
 
+react-native-switch@shahen94/react-native-switch#master:
+  version "1.5.0"
+  resolved "https://codeload.github.com/shahen94/react-native-switch/tar.gz/852ccfcfa00e7aa2f915126e3fc434bcda08e926"
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-tab-view@^1.2.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-1.3.4.tgz#63fc3eb09652651d0ea0e016cff0f3a5e535f4de"
