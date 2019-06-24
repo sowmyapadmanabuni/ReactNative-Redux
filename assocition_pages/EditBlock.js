@@ -125,16 +125,16 @@ class EditBlock extends Component {
       flash: +91,
 
       dobText: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
-      dobDate: null,
+      dobDate: "",
 
       dobText2: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,// hh:mm:ss
-      dobDate2: null,
+      dobDate2: "",
 
       dobText3: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
-      dobDate3: null,
+      dobDate3: "",
 
       dobText4: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
-      dobDate4: null,
+      dobDate4: "",
 
       checked: true,
       checked2: true
@@ -264,7 +264,7 @@ class EditBlock extends Component {
 
     if (blockName.length == 0) {
       Alert.alert("Block name Cannot be Empty")
-    } else if (regTextOnly.test(blockName) === false) {
+    } else if (oyeNonSpecialRegex.test(blockName) === true) {
       Alert.alert("Block name should not contain Special Character")
     } else if (blockName < 3) {
       alert("Block name should be more than 3 Characters")

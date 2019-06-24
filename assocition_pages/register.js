@@ -714,3 +714,4 @@ export default connect(
   mapStateToProps,
   { updateJoinedAssociation }
 )(RegisterMe);
+

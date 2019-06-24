@@ -36,6 +36,11 @@ class BlockDetail extends React.Component {
 
   componentDidMount() {
     this.myBlockDetailListGetData()
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 3000);
   }
 
   myBlockDetailListGetData = () => {
@@ -131,7 +136,8 @@ class BlockDetail extends React.Component {
                 <View style={{ marginLeft: hp("1%") }}>
                   <Button bordered dark style={styles.addUnitButton}
                     onPress={() => this.props.navigation.navigate("BlockWiseUnitListScreen",{
-                      unitid: item.blBlockID
+                      unitid: item.blBlockID,
+                      blockName: item.blBlkName
                     })}
                   >
                     <Text style={styles.addUnitText}>Add Unit</Text>
@@ -150,8 +156,62 @@ class BlockDetail extends React.Component {
     const { navigate } = this.props.navigation
     if (this.state.isLoading) {
       return (
-        <View style={styles.progressViewStyle}>
-          <ActivityIndicator size="large" color="#01CBC6" />
+        <View style={{ flex: 1, flexDirection: "column" }}>
+          <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.goBack();
+                  }}
+                >
+                  <View
+                    style={{
+                      height: hp("6%"),
+                      width: wp("20%"),
+                      alignItems: "center",
+                      justifyContent: "center",
+                      alignContent: "center"
+                    }}
+                  >
+                    <Image
+                      source={require("../icons/backBtn.png")}
+                      style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Image
+                  style={[styles.image1]}
+                  source={require("../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
+          <Text style={styles.residentialListTitle}>Block Details</Text>
+          <View style={styles.progress}>
+            <ActivityIndicator size="large" color="#F3B431" />
+            <View
+              style={{
+                alignItems: "flex-start",
+                justifyContent: "center",
+                position: "absolute"
+              }}
+            >
+              <Text>Please Wait</Text>
+            </View>
+          </View>
         </View>
       )
     }
@@ -257,6 +317,19 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
+  residentialListTitle: {
+    textAlign: "center",
+    fontSize: hp("2.5%"),
+    fontWeight: "bold",
+    marginTop: hp("2%"),
+    marginBottom: hp("1%"),
+    color: "#ff8c00"
+  },
+  progress: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1
+  },
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
@@ -267,15 +340,13 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
-    width: hp("3%"),
-    height: hp("3%"),
-    marginTop: 5
-    // marginLeft: 10
+    width: wp("6%"),
+    height: hp("2%")
   },
   image1: {
-    width: wp("17%"),
+    width: wp("22%"),
     height: hp("12%"),
-    marginRight: hp("3%")
+    marginRight: hp("1%")
   },
 
   editButtonViewStyle: {
