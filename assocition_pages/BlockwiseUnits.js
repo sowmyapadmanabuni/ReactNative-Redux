@@ -93,7 +93,7 @@ class UnitDetails extends Component {
       unitid,
     } = this.props.navigation.state.params
 console.log("2424298749812749712947912",unitid)
-    this.setState({ isLoading1: true });
+    // this.setState({ isLoading1: true });
 
     fetch(
       `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByBlockID/${unitid}`,
@@ -304,6 +304,7 @@ console.log("2424298749812749712947912",unitid)
   // }
 
   render() {
+    const {blockName} = this.props.navigation.state.params; 
     if (this.state.isLoading1) {
       return (
         <View style={{ flex: 1, flexDirection: "column" }}>
@@ -477,7 +478,9 @@ console.log("2424298749812749712947912",unitid)
               <View style={{ flex: 0.15, justifyContent: "flex-end" }}>
                 <TouchableOpacity
                   style={[styles.floatButton]}
-                  onPress={() => this.props.navigation.navigate("AddUnit")}
+                  onPress={() => this.props.navigation.navigate("AddUnit", {
+                    blockname: blockName
+                  })}
                 >
                   <View
                     style={{

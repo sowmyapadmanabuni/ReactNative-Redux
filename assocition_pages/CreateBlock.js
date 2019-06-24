@@ -260,7 +260,7 @@ class AddBlock extends Component {
 
     if (blockName.length == 0) {
       Alert.alert("Block name Cannot be Empty")
-    } else if (regTextOnly.test(blockName) === false) {
+    } else if (oyeNonSpecialRegex.test(blockName) === true) {
       Alert.alert("Block name should not contain Special Character")
     } else if (blockName < 3) {
       alert("Block name should be more than 3 Characters")
@@ -587,7 +587,7 @@ class AddBlock extends Component {
                 <View style={styles.fillAssociationDetailline} />
               </View>
               <Card />
-              <Card style={{ height: 800 }}>
+              <Card style={{ height: 900 }}>
                 <Text
                   style={{
                     color: "#696969",

@@ -115,7 +115,7 @@ class BlockDetail extends React.Component {
                   alignContent: "flex-end"
                 }}
               >
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     // console.log(item)
                     console.log(item, "kjhgfhiljkhgfdsghjkhgfg");
@@ -130,7 +130,7 @@ class BlockDetail extends React.Component {
                     style={styles.pencilBtnStyle}
                     source={require("../icons/pencil120.png")}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
             <View style={styles.blockTypeFlexStyle}>
@@ -312,7 +312,7 @@ class BlockDetail extends React.Component {
             keyExtractor={(item, index) => item.asAssnID.toString()}
           />
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[styles.floatButton]}
             //onPress={() => this.props.navigation.navigate("CreateAssociation")}
           >
@@ -331,7 +331,7 @@ class BlockDetail extends React.Component {
                 +
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     );

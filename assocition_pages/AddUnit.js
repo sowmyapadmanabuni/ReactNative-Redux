@@ -572,7 +572,7 @@ class AddUnit extends Component {
         </View>
       </TouchableOpacity>
     );
-
+    const {blockname} = this.props.navigation.state.params; 
     return (
       // <TouchableWithoutFeedback
       //     onPress={() => {
@@ -626,20 +626,9 @@ class AddUnit extends Component {
         <KeyboardAwareScrollView>
           <View style={styles.textWrapper}>
             <Text style={styles.titleText}>Add Unit</Text>
-            <View>
-              <Dropdown
-                containerStyle={styles.box1}
-                // ref={this.typographyRef}
-                onChangeText={value => this.setState({ selectblock: value })}
-                // label='Select Block'
-                data={select_block}
-                fontSize={hp("1.8%")}
-                labelHeight={hp(".8%")}
-                labelPadding={hp("0.5%")}
-                labelSize={hp("1%")}
-                value={"Select Block*"}
-              />
-            </View>
+            <View style={styles.associationDetailsView}>
+                <Text style={styles.titleChildText}>{this.props.navigation.state.params.blockname}</Text>
+              </View>
             <ScrollView>
               <View style={styles.associationDetailsView}>
                 <Text style={styles.titleChildText}>Unit Information</Text>
@@ -1145,58 +1134,7 @@ class AddUnit extends Component {
                   tableHead={this.state.tableHead}
                 />
               </View>
-              {/* <View style={{ height: hp("15%") }}>
-                    <ScrollView horizontal={true}>
-                      <View>
-                        <Table borderStyle={{ borderColor: "#C1C0B9" }}>
-                          <Row
-                            data={this.state.tableHead}
-                            style={styles.head}
-                            textStyle={styles.text}
-                          />
-                          {state.tableData.map((rowData, index) => (
-                            <TableWrapper
-                              key={index}
-                              style={styles.rowStyle}
-                            >
-                              {rowData.map((cellData, cellIndex) => (
-                                <Cell
-                                  key={cellIndex}
-                                  data={
-                                    cellIndex === 3
-                                      ? element(cellData, index)
-                                      : cellData
-                                  }
-                                  textStyle={styles.text}
-                                />
-                              ))}
-                            </TableWrapper>
-                          ))}
-                        </Table>
-                        <ScrollView style={styles.dataWrapper}>
-                          <Table
-                            borderStyle={{ borderColor: "#C1C0B9" }}
-                          >
-                            {this.state.tableData.map(
-                              (tableData1, index) => (
-                                <Row
-                                  key={index}
-                                  data={tableData1}
-                                  style={[
-                                    styles.row,
-                                    index % 2 && {
-                                      backgroundColor: "#F7F6E7"
-                                    }
-                                  ]}
-                                  textStyle={styles.text}
-                                />
-                              )
-                            )}
-                          </Table>
-                        </ScrollView>
-                      </View>
-                    </ScrollView>
-                  </View> */}
+              
 
               <View
                 style={{
@@ -1437,7 +1375,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     textAlign: "center",
-    color: "orange",
+    color: "#ff8c00",
     marginLeft: hp("1.5%")
   },
   fillAssociationDetailline: {

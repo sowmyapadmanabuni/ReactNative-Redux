@@ -198,7 +198,7 @@ class UnitList extends Component {
       <View style={styles.container}>
         <NavigationEvents
           onDidFocus={payload => this.getUnitList()}
-          onWillBlur={payload => this.getUnitList()}
+          // onWillBlur={payload => this.getUnitList()}
         />
         <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
