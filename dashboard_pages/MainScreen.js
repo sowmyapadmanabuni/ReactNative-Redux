@@ -74,19 +74,25 @@ class Dashboard extends React.Component {
   }
 
   requestNotifPermission = () => {
+    const { MyAccountID, champBaseURL, receiveNotifications } = this.props;
+
     firebase
       .messaging()
       .hasPermission()
       .then(enabled => {
         if (enabled) {
-          this.listenForNotif();
+          if (receiveNotifications) {
+            this.listenForNotif();
+          }
           // user has permissions
         } else {
           firebase
             .messaging()
             .requestPermission()
             .then(() => {
-              this.listenForNotif();
+              if (receiveNotifications) {
+                this.listenForNotif();
+              }
               // User has authorised
             })
             .catch(error => {
@@ -101,8 +107,6 @@ class Dashboard extends React.Component {
       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
     };
 
-    const { MyAccountID, champBaseURL } = this.props;
-
     axios
       .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
         headers: headers
@@ -115,7 +119,15 @@ class Dashboard extends React.Component {
           // console.log(association.asAsnName)
           // console.log(association.asAssnID)
           // console.log('***********')
-          firebase.messaging().subscribeToTopic(association.asAssnID + "admin");
+          if (receiveNotifications) {
+            firebase
+              .messaging()
+              .subscribeToTopic(association.asAssnID + "admin");
+          } else if (!receiveNotifications) {
+            firebase
+              .messaging()
+              .unsubscribeFromTopic(association.asAssnID + "admin");
+          }
         });
       });
   };
@@ -848,7 +860,8 @@ const mapStateToProps = state => {
     // Oyespace urls
     oyeURL: state.OyespaceReducer.oyeURL,
     champBaseURL: state.OyespaceReducer.champBaseURL,
-    oyespaceReducer: state.OyespaceReducer
+    oyespaceReducer: state.OyespaceReducer,
+    receiveNotifications: state.NotificationReducer.receiveNotifications
   };
 };
 

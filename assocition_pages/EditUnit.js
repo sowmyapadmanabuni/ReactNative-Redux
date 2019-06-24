@@ -78,6 +78,7 @@ class EditUnit extends Component {
         title: "Edit Unit",
         header: null
     }
+
     constructor(props) {
         super(props)
         this.state = {
@@ -135,6 +136,7 @@ class EditUnit extends Component {
       dobText: moment(date).format("YYYY-MM-DD")
     });
   };
+
   onDOBPress1 = () => {
     let dobDate = this.state.Osdate;
     if (!dobDate || dobDate == null) {
@@ -155,9 +157,11 @@ class EditUnit extends Component {
       dobText1: moment(date).format("YYYY-MM-DD")
     });
   };
+
     toggleModal = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });
       };
+      
       createUnitPostData = () => {
         UnitType1 = this.state.UnitType;
         UnitRate1 = this.state.UnitRate;
@@ -477,6 +481,7 @@ console.log("###############3",this.state.Ocdate)
     render() {
 console.log(this.props.navigation.state.params)
 console.log(this.state.CalType)
+console.log('Edit Unit')
     const element = (data, index) => (
             <TouchableOpacity onPress={() => this._alertIndex(index)}>
               <View style={styles.btn}>
