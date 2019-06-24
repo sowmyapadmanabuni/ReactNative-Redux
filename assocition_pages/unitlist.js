@@ -121,7 +121,9 @@ class UnitList extends Component {
                     style={styles.addUnitButton}
                     onPress={() =>
                       this.props.navigation.navigate("RegisterUser", {
-                        unitList: item
+                        unitList: item,
+                        AssnId: this.props.navigation.state.params.id,
+                        associationName: this.props.navigation.state.params.associationName
                       })
                     }
                   >
