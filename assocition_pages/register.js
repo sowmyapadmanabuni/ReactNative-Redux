@@ -63,11 +63,11 @@ class RegisterMe extends Component {
 
   submitForOwnwer = () => {
     const {
-      id,
+      AssnId,
       associationName,
       unitList
     } = this.props.navigation.state.params;
-
+    console.log("#!@$@$!@$!@$!@", unitList.unUnitID);
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
     } else {
@@ -152,9 +152,8 @@ class RegisterMe extends Component {
                     "usernotif";
                   let sbRoleId = "2";
                   let sbMemID = responseData_2.meMemID;
-                  let sbName =
-                    this.props.MyFirstName + " " + this.props.MyLastName;
-                  let associationID = unitList.asAssnID;
+                  let sbName = this.props.FirstName + " " + this.props.LastName;
+                  let associationID = this.props.navigation.state.params.AssnId;
                   let associationName = this.props.navigation.state.params
                     .associationName;
                   let ntType = "Join";
@@ -202,7 +201,7 @@ class RegisterMe extends Component {
                       sbRoleId: sbRoleId,
                       sbMemID: sbMemID.toString(),
                       sbName: sbName,
-                      associationID: associationID.toString(),
+                      associationID: AssnId.toString(),
                       associationName: associationName,
                       ntType: ntType,
                       ntTitle: ntTitle,
@@ -271,7 +270,7 @@ class RegisterMe extends Component {
 
   submitForTenant = () => {
     const {
-      id,
+      AssnId,
       associationName,
       unitList
     } = this.props.navigation.state.params;
@@ -280,8 +279,8 @@ class RegisterMe extends Component {
       alert("Select Date of Occupancy");
     } else {
       anu = {
-        ASAssnID: unitList.asAssnID,
-        BLBlockID: unitList.blBlockID,
+        ASAssnID: AssnId,
+        BLBlockID: this.props.navigation.state.params.blockID,
         UNUnitID: unitList.unUnitID,
         MRMRoleID: parseInt("6"),
         FirstName: this.props.MyFirstName,
@@ -300,8 +299,8 @@ class RegisterMe extends Component {
         .post(
           `${champBaseURL}/association/join`,
           {
-            ASAssnID: unitList.asAssnID,
-            BLBlockID: unitList.blBlockID,
+            ASAssnID: AssnId,
+            BLBlockID: this.props.navigation.state.params.blockID,
             UNUnitID: unitList.unUnitID,
             MRMRoleID: parseInt("6"),
             FirstName: this.props.MyFirstName,
@@ -339,7 +338,7 @@ class RegisterMe extends Component {
                   "/oyeliving/api/v1/Member/GetRequestorDetails",
                 {
                   ACMobile: mobileNo,
-                  ASAssnID: id,
+                  ASAssnID: this.props.navigation.state.params.AssnId,
                   UNUnitID: unitList.unUnitID,
                   MRMRoleID: parseInt("7")
                 },
@@ -363,7 +362,7 @@ class RegisterMe extends Component {
                   let sbRoleId = "2";
                   let sbMemID = responseData_2.meMemID;
                   let sbName = this.props.FirstName + " " + this.props.LastName;
-                  let associationID = this.props.navigation.state.params.id;
+                  let associationID = this.props.navigation.state.params.AssnId;
                   let associationName = this.props.navigation.state.params
                     .associationName;
                   let ntType = "Join";
@@ -411,8 +410,9 @@ class RegisterMe extends Component {
                       sbRoleId: sbRoleId,
                       sbMemID: sbMemID.toString(),
                       sbName: sbName,
-                      associationID: associationID.toString(),
-                      associationName: associationName,
+                      associationID: this.props.navigation.state.params.AssnId.toString(),
+                      associationName: this.props.navigation.state.params
+                        .associationName,
                       ntType: ntType,
                       ntTitle: ntTitle,
                       ntDesc: ntDesc,
@@ -479,11 +479,11 @@ class RegisterMe extends Component {
   };
 
   render() {
-    const { unitList } = this.props.navigation.state.params;
-    console.log(this.props.navigation.state.params);
-    // console.log("$$$$$$$$@$@!$!@$@%#^#$%&%^&%$", unitList.unOcStat);
-    // //   console.log('$$$$$$$$@$@!$!@$@%#^#$%&%^&%$', unitList.owner[0].uofName)
-    // console.log("$$$$$$$$$$$$$$$$$$", unitList.owner.length.toString());
+    const { unitList, AssnId } = this.props.navigation.state.params;
+    console.log("#!@$@$!@$!@$!@", unitList.unUnitID, AssnId);
+    console.log("$$$$$$$$@$@!$!@$@%#^#$%&%^&%$", unitList.unOcStat);
+    //   console.log('$$$$$$$$@$@!$!@$@%#^#$%&%^&%$', unitList.owner[0].uofName)
+    console.log("$$$$$$$$$$$$$$$$$$", unitList.owner.length.toString());
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: "orange" }}>

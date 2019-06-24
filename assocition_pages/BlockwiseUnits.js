@@ -602,7 +602,8 @@ console.log("2424298749812749712947912",unitid)
                                 tMobile: item.tMobile,
                                 tEmail: item.tEmail,
                                 Ocdate: item.Ocdate,
-                                Osdate: item.Osdate
+                                Osdate: item.Osdate,
+                                blockId: this.props.navigation.state.params.unitid
                               });
                             }}
                           >
