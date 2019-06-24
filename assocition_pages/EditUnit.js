@@ -380,7 +380,7 @@ class EditUnit extends Component {
         } = this.state;
 
         const {
-            unitid,
+            unitid,blockId
           } = this.props.navigation.state.params
 
           fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Unit/UpdateUnitOwnerTenantDetails`, {
@@ -401,7 +401,7 @@ class EditUnit extends Component {
                 "UNCalType"	: CalType, // Make sure you change this
                 "UNRate"    : UnitRate,
                 "FLFloorID" : 1,
-                "BLBlockID" : unitid,
+                "BLBlockID" : blockId,
                 "UNUnitID"  : this.props.navigation.state.params.UnitId,
                 "owner":[{
                             "UOFName":Unitofname,

@@ -528,22 +528,13 @@ class AddUnit extends Component {
     // } 
     if (UnitNum1.length === 0) {
       Alert.alert("Unit Number Cannot be Empty");
-    } else if (UnitType1.length === 0) {
-      Alert.alert("Select Unit type");
-    } else if (UnitRate1.length === 0) {
-      Alert.alert("Unit Rate Cannot be Empty");
-    } else if (CalculationType1.length === 0) {
-      Alert.alert(" Select Calculation Type");
-    } else if (UnitDimention1.length === 0) {
-      Alert.alert("Unit Dimention Cannot be Empty");
-     } 
+    }   
     //else if (selectblock1.length === 0) {
     //   Alert.alert("Select Block ");
     // } 
     else if (OccupancyStatus1.length === 0) {
       Alert.alert("Select Occupancy Status");
     } else if (
-      OccupancyStatus1 === "Unsold Vacant Unit" ||
       OccupancyStatus1 === "Unsold Tenant Occupied Unit" 
     ) {
       // alert("unSold");
@@ -558,6 +549,10 @@ class AddUnit extends Component {
     )
     {
       this.validateOwner();
+      return;
+    }
+    else if (OccupancyStatus1 == "Unsold Vacant Unit"){
+      this.createUnit();
       return;
     }
   };
@@ -579,68 +574,265 @@ class AddUnit extends Component {
     );
     const {blockname} = this.props.navigation.state.params; 
     return (
-      // <TouchableWithoutFeedback
-      //     onPress={() => {
-      //         Keyboard.dismiss()
-      //     }}
-      // >
+     
+
       <View style={{ flex: 1 }}>
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("6%"),
-                    width: wp("20%"),
-                    alignItems: "center",
-                    justifyContent: "center",
-                    alignContent: "center"
-                  }}
-                >
-                  <Image
-                    source={require("../icons/backBtn.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
+      <SafeAreaView style={{ backgroundColor: "orange" }}>
+        <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+          <View style={styles.viewDetails1}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("UnitDetails");
               }}
             >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/headerLogo.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
+              <View
+                style={{
+                  height: hp("6%"),
+                  width: wp("20%"),
+                  alignItems: "center",
+                  justifyContent: "center",
+                  alignContent: "center"
+                }}
+              >
+                <Image
+                  source={require("../icons/backBtn.png")}
+                  style={styles.viewDetails2}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Image
+              style={[styles.image1]}
+              source={require("../icons/headerLogo.png")}
+            />
+          </View>
+          <View style={{ flex: 0.2 }}>
+            {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+          </View>
+        </View>
+        <View style={{ borderWidth: 1, borderColor: "orange" }} />
+      </SafeAreaView>
 
-        <KeyboardAwareScrollView>
-          <View style={styles.textWrapper}>
-            <Text style={styles.titleText}>Add Unit</Text>
-            <View style={styles.associationDetailsView}>
+      <KeyboardAwareScrollView>
+        <View style={styles.textWrapper}>
+          <Text style={styles.titleText}>Add Unit</Text>
+          <View style={styles.associationDetailsView}>
                 <Text style={styles.titleChildText}>{this.props.navigation.state.params.blockname}</Text>
+          </View>
+          <ScrollView>
+            <View style={styles.associationDetailsView}>
+              <Text style={styles.titleChildText}>Unit Information</Text>
+              <View style={styles.fillAssociationDetailline} />
+            </View>
+            <Card style={{ height: hp("23%"), marginTop: hp("0") }}>
+              <View style={{ flexDirection: "column" }}>
+                <View
+                  style={{
+                    height: hp("10%"),
+                    marginTop: hp("1%")
+                  }}
+                >
+                  <Text style={styles.text1}>
+                    Unit ID./Flat No./Site No./Door No.
+                    <Text style={styles.imp}>*</Text>
+                  </Text>
+                  <Item style={styles.bankDetailLine}>
+                    <Input
+                      style={styles.box}
+                      placeholder="Unit Number"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="characters"
+                      keyboardType="default"
+                      onChangeText={UnitNumber =>
+                        this.setState({ UnitNumber: UnitNumber })
+                      }
+                    />
+                  </Item>
+                </View>
+                <View
+                  style={{
+                    height: hp("10%"),
+                    marginTop: hp("1%")
+                  }}
+                >
+                  <View style={{ flex: 1, height: hp("10%") }}>
+                    <Text style={styles.text1}>
+                      Occupancy Status & Ownership Status
+                      <Text style={styles.imp}>*</Text>
+                    </Text>
+                    <Dropdown
+                      containerStyle={[styles.box2]}
+                      // ref={this.typographyRef}
+                      onChangeText={value =>
+                        this.setState({ OccupancyStatus: value })
+                      }
+                      // label='Select Unit'
+                      value={"Occupancy Status"}
+                      data={Occupancy_Status}
+                      fontSize={hp("1.8%")}
+                      labelHeight={hp("0.7%")}
+                      labelPadding={hp("0.5%")}
+                    />
+                  </View>
+                </View>
               </View>
-            <ScrollView>
-              <View style={styles.associationDetailsView}>
-                <Text style={styles.titleChildText}>Unit Information</Text>
-                <View style={styles.fillAssociationDetailline} />
-              </View>
-              <Card style={{ height: hp("45%"), marginTop: hp("0") }}>
+            </Card>
+
+            {this.state.OccupancyStatus == "Sold Owner Occupied Unit" ||
+            this.state.OccupancyStatus == "Sold Tenant Occupied Unit" ||
+            this.state.OccupancyStatus == "Sold Vacant Unit" ? (
+              <View>
+                <View style={styles.associationDetailsView}>
+                  <Text style={styles.titleChildText}>
+                    Unit Owner Information
+                  </Text>
+                  <View style={styles.fillAssociationDetailline} />
+                </View>
+                <Card
+                  style={{
+                    height: hp("55%"),
+                    marginTop: hp("0")
+                  }}
+                >
+                  
+                    {this.state.OccupancyStatus == "Sold Owner Occupied Unit" ? (
+              <View style={{ height: hp("10%")}}>
                 <View style={{ flexDirection: "column" }}>
+                  <View
+                    style={{
+                      height: hp("7%"),
+                      marginTop: hp("1%")
+                    }}
+                  >
+                    <View style={{ height: hp("10%") }}>
+                      <Text style={styles.text1}>
+                        Unit Owner Occupied Date
+                        <Text style={styles.imp}>*</Text>
+                      </Text>
+                      <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                        <View style={styles.datePickerBox}>
+                          <Text style={styles.datePickerText}>
+                            {this.state.dobText}{" "}
+                          </Text>
+                          <DatePickerDialog
+                            ref="dobDialog"
+                            onDatePicked={this.onDOBDatePicked.bind(this)}
+                          />
+                          <Image
+                            style={styles.viewDatePickerImageStyle}
+                            source={require("../icons/calender.png")}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <Text />
+            )}
+                  <View
+                    style={{
+                      height: hp("10%"),
+                      flexDirection: "row"
+                    }}
+                  >
+                    <View
+                      style={{
+                        flex: 0.5,
+                        height: hp("8.7%"),
+                      
+                      }}
+                    >
+                      <Text style={styles.text1}>
+                        Owner First Name<Text style={styles.imp}>*</Text>
+                      </Text>
+                      <Input
+                        style={styles.box5}
+                        placeholder="First Name"
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize='words'
+                        keyboardType="default"
+                        onChangeText={Unitofname =>
+                          this.setState({
+                            Unitofname: Unitofname
+                          })
+                        }
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flex: 0.5,
+                        height: hp("8.7%"),
+                      }}
+                    >
+                      <Text style={styles.text1}>
+                        Owner Last Name<Text style={styles.imp}>*</Text>
+                      </Text>
+                      <Input
+                        style={styles.box5}
+                        placeholder="Last Name"
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize='words'
+                        keyboardType="default"
+                        onChangeText={Unitolname =>
+                          this.setState({
+                            Unitolname: Unitolname
+                          })
+                        }
+                      />
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      height: hp("10%"),
+                      flexDirection: "row",
+                      marginTop: hp("2%")
+                    }}
+                  >
+                    <View style={{ flex: 0.5, height: hp("8.7%") }}>
+                      <Text style={styles.text1}>
+                        Owner Mobile Number<Text style={styles.imp}>*</Text>
+                      </Text>
+                      <Input
+                        style={styles.box5}
+                        placeholder="Mobile Number"
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize="characters"
+                        keyboardType='number-pad'
+                        onChangeText={Unitomnum =>
+                          this.setState({ Unitomnum: Unitomnum })
+                        }
+                      />
+                    </View>
+                    <View style={{ flex: 0.5, height: hp("8.7%") }}>
+                      <Text style={styles.text1}>
+                        Alternate Mobile Number
+                      </Text>
+                      <Input
+                        style={styles.box5}
+                        placeholder="Mobile Number"
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize="characters"
+                        keyboardType='number-pad'
+                        onChangeText={UnitoAnum =>
+                          this.setState({ UnitoAnum: UnitoAnum })
+                        }
+                      />
+                    </View>
+                  </View>
                   <View
                     style={{
                       height: hp("10%"),
@@ -648,19 +840,18 @@ class AddUnit extends Component {
                     }}
                   >
                     <Text style={styles.text1}>
-                      Unit ID./Flat No./Site No./Door No.
-                      <Text style={styles.imp}>*</Text>
+                      Owner Email ID<Text style={styles.imp}>*</Text>
                     </Text>
                     <Item style={styles.bankDetailLine}>
                       <Input
                         style={styles.box}
-                        placeholder="Unit Number"
+                        placeholder="Email ID"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        autoCapitalize="characters"
+                        autoCapitalize='none'
                         keyboardType="default"
-                        onChangeText={UnitNumber =>
-                          this.setState({ UnitNumber: UnitNumber })
+                        onChangeText={Unitoeid =>
+                          this.setState({ Unitoeid: Unitoeid })
                         }
                       />
                     </Item>
@@ -668,83 +859,123 @@ class AddUnit extends Component {
                   <View
                     style={{
                       height: hp("10%"),
-                      flexDirection: "row",
                       marginTop: hp("1%")
                     }}
                   >
-                    <View style={{ flex: 0.5, height: hp("8.7%") }}>
-                      <Text style={styles.text1}>
-                        Unit Type<Text style={styles.imp}>*</Text>
-                      </Text>
-                      <Dropdown
-                        containerStyle={styles.box2}
-                        // ref={this.typographyRef}
-                        onChangeText={value =>
-                          this.setState({ UnitType: value })
-                        }
-                        // label='Unit Type'
-                        data={Unit_Type}
-                        fontSize={hp("1.8%")}
-                        value={"Unit Type"}
-                        labelHeight={hp("0.7%")}
-                        labelPadding={hp("0.5%")}
-                        labelSize={hp("1%")}
-                      />
-                    </View>
-                    <View style={{ flex: 0.5, height: hp("8.5%") }}>
-                      <Text style={styles.text1}>
-                        Unit Rate<Text style={styles.imp}>*</Text>
-                      </Text>
+                    <Text style={styles.text1}>Owner Alternate Email ID</Text>
+                    <Item style={styles.bankDetailLine}>
                       <Input
-                        style={styles.box5}
-                        placeholder="Unit Rate"
+                        style={styles.box}
+                        placeholder="Email ID"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        keyboardType='number-pad'
-                        onChangeText={UnitRate =>
-                          this.setState({ UnitRate: UnitRate })
+                        autoCapitalize="none"
+                        keyboardType="default"
+                        onChangeText={UnitNumbe =>
+                          this.setState({
+                            Unitoaeid: UnitNumbe
+                          })
                         }
                       />
-                    </View>
+                    </Item>
                   </View>
+                </Card>
+              </View>
+            ) : (
+              <Text />
+            )}
+            {
+            this.state.OccupancyStatus == "Sold Tenant Occupied Unit" ||
+            this.state.OccupancyStatus == "Unsold Tenant Occupied Unit" ? (
+              <View>
+                <View style={styles.associationDetailsView}>
+                  <Text style={styles.titleChildText}>
+                    Unit Tenant Information
+                  </Text>
+                  <View style={styles.fillAssociationDetailline} />
+                </View>
+                <Card
+                  style={{
+                    height: hp("45%"),
+                    marginTop: hp("0")
+                  }}
+                >
+                  {this.state.OccupancyStatus == "Sold Tenant Occupied Unit" ? (
+              <View style={{ height: hp("10%"), marginTop: hp("1%") }}>
+                <View style={{ flexDirection: "column" }}>
                   <View
                     style={{
-                      height: hp("8%"),
+                      height: hp("7%"),
+                      marginTop: hp("0%")
+                    }}
+                  >
+                    <View style={{ height: hp("10%") }}>
+                      <Text style={styles.text1}>
+                        Unit Tenant Occupied Date
+                        <Text style={styles.imp}>*</Text>
+                      </Text>
+                      <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                        <View style={styles.datePickerBox}>
+                          <Text style={styles.datePickerText}>
+                            {this.state.dobText1}{" "}
+                          </Text>
+                          <DatePickerDialog
+                            ref="dobDialog1"
+                            onDatePicked={this.onDOBDatePicked1.bind(this)}
+                          />
+                          <Image
+                            style={styles.viewDatePickerImageStyle}
+                            source={require("../icons/calender.png")}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <Text />
+            )}
+                  <View
+                    style={{
+                      height: hp("10%"),
                       flexDirection: "row",
-                      marginTop: hp("1%")
+                      // marginTop: hp("2%")
                     }}
                   >
                     <View style={{ flex: 0.5, height: hp("8.7%") }}>
                       <Text style={styles.text1}>
-                        Calculation Type<Text style={styles.imp}>*</Text>
-                      </Text>
-                      <Dropdown
-                        containerStyle={styles.box2}
-                        // ref={}
-                        onChangeText={value =>
-                          this.setState({ CalculationType: value })
-                        }
-                        // label='Unit Type'
-                        data={Calculation_Type}
-                        fontSize={hp("1.8%")}
-                        labelHeight={hp("0.8%")}
-                        labelPadding={hp("2%")}
-                        labelSize={hp("1%")}
-                        value={"Calculation Type"}
-                      />
-                    </View>
-                    <View style={{ flex: 0.5, height: hp("8.5%") }}>
-                      <Text style={styles.text1}>
-                        Unit Dimension<Text style={styles.imp}>*</Text>
+                        Tenant First Name<Text style={styles.imp}>*</Text>
                       </Text>
                       <Input
                         style={styles.box5}
-                        placeholder="Unit Dimension"
+                        placeholder="First Name"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        keyboardType="number-pad"
-                        onChangeText={vehName =>
-                          this.setState({ UnitDimention: vehName })
+                        autoCapitalize='words'
+                        keyboardType="default"
+                        onChangeText={Unittfname =>
+                          this.setState({
+                            Unittfname: Unittfname
+                          })
+                        }
+                      />
+                    </View>
+                    <View style={{ flex: 0.5, height: hp("8.7%") }}>
+                      <Text style={styles.text1}>
+                        Tenant Last Name<Text style={styles.imp}>*</Text>
+                      </Text>
+                      <Input
+                        style={styles.box5}
+                        placeholder="Last Name"
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize='words'
+                        keyboardType="default"
+                        onChangeText={Unittlname =>
+                          this.setState({
+                            Unittlname: Unittlname
+                          })
                         }
                       />
                     </View>
@@ -752,599 +983,367 @@ class AddUnit extends Component {
                   <View
                     style={{
                       height: hp("10%"),
-                      marginTop: hp("3%")
+                      marginTop: hp("1%")
                     }}
                   >
-                    <View style={{ flex: 1, height: hp("10%") }}>
-                      <Text style={styles.text1}>
-                        Occupancy Status & Ownership Status
-                        <Text style={styles.imp}>*</Text>
-                      </Text>
-                      <Dropdown
-                        containerStyle={[styles.box2]}
-                        // ref={this.typographyRef}
-                        onChangeText={value =>
-                          this.setState({ OccupancyStatus: value })
+                    <Text style={styles.text1}>
+                      Tenant Mobile Number<Text style={styles.imp}>*</Text>
+                    </Text>
+                    <Item style={styles.bankDetailLine}>
+                      <Input
+                        style={styles.box}
+                        placeholder="Mobile Number"
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        
+                        keyboardType='number-pad'
+                        onChangeText={Unittmnum =>
+                          this.setState({ Unittmnum: Unittmnum })
                         }
-                        // label='Select Unit'
-                        value={"Occupancy Status"}
-                        data={Occupancy_Status}
-                        fontSize={hp("1.8%")}
-                        labelHeight={hp("0.7%")}
-                        labelPadding={hp("0.5%")}
                       />
-                    </View>
+                    </Item>
                   </View>
-                </View>
-              </Card>
-
-              {this.state.OccupancyStatus == "Sold Owner Occupied Unit" ? (
-                <Card style={{ height: hp("10%"), marginTop: hp("0") }}>
-                  <View style={{ flexDirection: "column" }}>
-                    <View
-                      style={{
-                        height: hp("7%"),
-                        marginTop: hp("1%")
-                      }}
-                    >
-                      <View style={{ height: hp("10%") }}>
-                        <Text style={styles.text1}>
-                          Unit Owner Occupied Date
-                          <Text style={styles.imp}>*</Text>
-                        </Text>
-                        <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                          <View style={styles.datePickerBox}>
-                            <Text style={styles.datePickerText}>
-                              {this.state.dobText}{" "}
-                            </Text>
-                            <DatePickerDialog
-                              ref="dobDialog"
-                              onDatePicked={this.onDOBDatePicked.bind(this)}
-                            />
-                            <Image
-                              style={styles.viewDatePickerImageStyle}
-                              source={require("../icons/calender.png")}
-                            />
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </Card>
-              ) : (
-                <Text />
-              )}
-
-              {this.state.OccupancyStatus == "Sold Tenant Occupied Unit" ? (
-                <Card style={{ height: hp("10%"), marginTop: hp("0") }}>
-                  <View style={{ flexDirection: "column" }}>
-                    <View
-                      style={{
-                        height: hp("7%"),
-                        marginTop: hp("0%")
-                      }}
-                    >
-                      <View style={{ height: hp("10%") }}>
-                        <Text style={styles.text1}>
-                          Unit Tenant Occupied Date
-                          <Text style={styles.imp}>*</Text>
-                        </Text>
-                        <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                          <View style={styles.datePickerBox}>
-                            <Text style={styles.datePickerText}>
-                              {this.state.dobText1}{" "}
-                            </Text>
-                            <DatePickerDialog
-                              ref="dobDialog1"
-                              onDatePicked={this.onDOBDatePicked1.bind(this)}
-                            />
-                            <Image
-                              style={styles.viewDatePickerImageStyle}
-                              source={require("../icons/calender.png")}
-                            />
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </Card>
-              ) : (
-                <Text />
-              )}
-
-              {this.state.OccupancyStatus == "Sold Owner Occupied Unit" ||
-              this.state.OccupancyStatus == "Sold Tenant Occupied Unit" ||
-              this.state.OccupancyStatus == "Sold Vacant Unit" ? (
-                <View>
-                  <View style={styles.associationDetailsView}>
-                    <Text style={styles.titleChildText}>
-                      Unit Owner Information
-                    </Text>
-                    <View style={styles.fillAssociationDetailline} />
-                  </View>
-                  <Card
+                  <View
                     style={{
-                      height: hp("45%"),
-                      marginTop: hp("0")
+                      height: hp("10%"),
+                      marginTop: hp("1%")
                     }}
                   >
-                    <View
-                      style={{
-                        height: hp("10%"),
-                        flexDirection: "row"
-                      }}
-                    >
-                      <View
-                        style={{
-                          flex: 0.5,
-                          height: hp("8.7%"),
-                          marginTop: hp("1.5%")
-                        }}
-                      >
-                        <Text style={styles.text1}>
-                          Owner First Name<Text style={styles.imp}>*</Text>
-                        </Text>
-                        <Input
-                          style={styles.box5}
-                          placeholder="First Name"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize='words'
-                          keyboardType="default"
-                          onChangeText={Unitofname =>
-                            this.setState({
-                              Unitofname: Unitofname
-                            })
-                          }
-                        />
-                      </View>
-                      <View
-                        style={{
-                          flex: 0.5,
-                          height: hp("8.7%"),
-                          marginTop: hp("1.5%")
-                        }}
-                      >
-                        <Text style={styles.text1}>
-                          Owner Last Name<Text style={styles.imp}>*</Text>
-                        </Text>
-                        <Input
-                          style={styles.box5}
-                          placeholder="Last Name"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize='words'
-                          keyboardType="default"
-                          onChangeText={Unitolname =>
-                            this.setState({
-                              Unitolname: Unitolname
-                            })
-                          }
-                        />
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        height: hp("10%"),
-                        flexDirection: "row",
-                        marginTop: hp("2%")
-                      }}
-                    >
-                      <View style={{ flex: 0.5, height: hp("8.7%") }}>
-                        <Text style={styles.text1}>
-                          Owner Mobile Number<Text style={styles.imp}>*</Text>
-                        </Text>
-                        <Input
-                          style={styles.box5}
-                          placeholder="Mobile Number"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize="characters"
-                          keyboardType='number-pad'
-                          onChangeText={Unitomnum =>
-                            this.setState({ Unitomnum: Unitomnum })
-                          }
-                        />
-                      </View>
-                      <View style={{ flex: 0.5, height: hp("8.7%") }}>
-                        <Text style={styles.text1}>
-                          Alternate Mobile Number
-                        </Text>
-                        <Input
-                          style={styles.box5}
-                          placeholder="Mobile Number"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize="characters"
-                          keyboardType='number-pad'
-                          onChangeText={UnitoAnum =>
-                            this.setState({ UnitoAnum: UnitoAnum })
-                          }
-                        />
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        height: hp("10%"),
-                        marginTop: hp("1%")
-                      }}
-                    >
-                      <Text style={styles.text1}>
-                        Owner Email ID<Text style={styles.imp}>*</Text>
-                      </Text>
-                      <Item style={styles.bankDetailLine}>
-                        <Input
-                          style={styles.box}
-                          placeholder="Email ID"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize='none'
-                          keyboardType="default"
-                          onChangeText={Unitoeid =>
-                            this.setState({ Unitoeid: Unitoeid })
-                          }
-                        />
-                      </Item>
-                    </View>
-                    <View
-                      style={{
-                        height: hp("10%"),
-                        marginTop: hp("1%")
-                      }}
-                    >
-                      <Text style={styles.text1}>Owner Alternate Email ID</Text>
-                      <Item style={styles.bankDetailLine}>
-                        <Input
-                          style={styles.box}
-                          placeholder="Email ID"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize="none"
-                          keyboardType="default"
-                          onChangeText={UnitNumbe =>
-                            this.setState({
-                              Unitoaeid: UnitNumbe
-                            })
-                          }
-                        />
-                      </Item>
-                    </View>
-                  </Card>
-                </View>
-              ) : (
-                <Text />
-              )}
-              {this.state.OccupancyStatus == "Unsold Vacant Unit" ||
-              this.state.OccupancyStatus == "Sold Tenant Occupied Unit" ||
-              this.state.OccupancyStatus == "Unsold Tenant Occupied Unit" ? (
-                <View>
-                  <View style={styles.associationDetailsView}>
-                    <Text style={styles.titleChildText}>
-                      Unit Tenant Information
+                    <Text style={styles.text1}>
+                      Tenant Email ID<Text style={styles.imp}>*</Text>
                     </Text>
-                    <View style={styles.fillAssociationDetailline} />
+                    <Item style={styles.bankDetailLine}>
+                      <Input
+                        style={styles.box}
+                        placeholder="Email ID"
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize='none'
+                        keyboardType="default"
+                        onChangeText={Unitteid =>
+                          this.setState({ Unitteid: Unitteid })
+                        }
+                      />
+                    </Item>
                   </View>
-                  <Card
-                    style={{
-                      height: hp("35%"),
-                      marginTop: hp("0")
-                    }}
-                  >
-                    <View
-                      style={{
-                        height: hp("10%"),
-                        flexDirection: "row",
-                        marginTop: hp("2%")
-                      }}
-                    >
-                      <View style={{ flex: 0.5, height: hp("8.7%") }}>
-                        <Text style={styles.text1}>
-                          Tenant First Name<Text style={styles.imp}>*</Text>
-                        </Text>
-                        <Input
-                          style={styles.box5}
-                          placeholder="First Name"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize='words'
-                          keyboardType="default"
-                          onChangeText={Unittfname =>
-                            this.setState({
-                              Unittfname: Unittfname
-                            })
-                          }
-                        />
-                      </View>
-                      <View style={{ flex: 0.5, height: hp("8.7%") }}>
-                        <Text style={styles.text1}>
-                          Tenant Last Name<Text style={styles.imp}>*</Text>
-                        </Text>
-                        <Input
-                          style={styles.box5}
-                          placeholder="Last Name"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize='words'
-                          keyboardType="default"
-                          onChangeText={Unittlname =>
-                            this.setState({
-                              Unittlname: Unittlname
-                            })
-                          }
-                        />
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        height: hp("10%"),
-                        marginTop: hp("1%")
-                      }}
-                    >
-                      <Text style={styles.text1}>
-                        Tenant Mobile Number<Text style={styles.imp}>*</Text>
-                      </Text>
-                      <Item style={styles.bankDetailLine}>
-                        <Input
-                          style={styles.box}
-                          placeholder="Mobile Number"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          
-                          keyboardType='number-pad'
-                          onChangeText={Unittmnum =>
-                            this.setState({ Unittmnum: Unittmnum })
-                          }
-                        />
-                      </Item>
-                    </View>
-                    <View
-                      style={{
-                        height: hp("10%"),
-                        marginTop: hp("1%")
-                      }}
-                    >
-                      <Text style={styles.text1}>
-                        Tenant Email ID<Text style={styles.imp}>*</Text>
-                      </Text>
-                      <Item style={styles.bankDetailLine}>
-                        <Input
-                          style={styles.box}
-                          placeholder="Email ID"
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize='none'
-                          keyboardType="default"
-                          onChangeText={Unitteid =>
-                            this.setState({ Unitteid: Unitteid })
-                          }
-                        />
-                      </Item>
-                    </View>
-                  </Card>
-                </View>
-              ) : (
-                <Text />
-              )}
+                </Card>
+              </View>
+            ) : (
+              <Text />
+            )}
 
               <View style={styles.associationDetailsView}>
-                <Text style={styles.titleChildText}>
-                  Unit Vehicle Information
-                </Text>
-                <View style={styles.fillAssociationDetailline} />
-              </View>
-              <View style={{ height: hp("30%") }}>
-                <VehicleRow
-                  tableData={this.state.tableData}
-                  removeVehicle={this.removeVehicle}
-                  tableHead={this.state.tableHead}
-                />
-              </View>
-              
+              <Text style={styles.titleChildText}>Unit Maintenance Details</Text>
+              <View style={styles.fillAssociationDetailline} />
+            </View>
+            <Card style={{ height: hp("23%"), marginTop: hp("0") }}>
+              <View style={{ flexDirection: "column" }}>
+              <View
+                  style={{
+                    height: hp("10%"),
+                    flexDirection: "row",
+                    marginTop: hp("1%")
+                  }}
+                >
+                  <View style={{ flex: 0.5, height: hp("8.7%") }}>
+                    <Text style={styles.text1}>
+                      Select Unit Type</Text>
+                    <Dropdown
+                      containerStyle={styles.box2}
+                      // ref={this.typographyRef}
+                      onChangeText={value =>
+                        this.setState({ UnitType: value })
+                      }
+                      // label='Unit Type'
+                      data={Unit_Type}
+                      fontSize={hp("1.8%")}
+                      value={"Unit Type"}
+                      labelHeight={hp("0.7%")}
+                      labelPadding={hp("0.5%")}
+                      labelSize={hp("1%")}
+                    />
+                  </View>
+                  <View style={{ flex: 0.5, height: hp("8.5%") }}>
+                    <Text style={styles.text1}>
+                      Unit Rate
+                    </Text>
+                    <Input
+                      style={styles.box5}
+                      placeholder="Unit Rate"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      keyboardType='number-pad'
+                      onChangeText={UnitRate =>
+                        this.setState({ UnitRate: UnitRate })
+                      }
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    height: hp("8%"),
+                    flexDirection: "row",
+                    marginTop: hp("1%")
+                  }}
+                >
+                  <View style={{ flex: 0.5, height: hp("8.7%") }}>
+                    <Text style={styles.text1}>
+                      Select Maintenance Calculation Type
+                    </Text>
+                    <Dropdown
+                      containerStyle={styles.box2}
+                      // ref={}
+                      onChangeText={value =>
+                        this.setState({ CalculationType: value })
+                      }
+                      // label='Unit Type'
+                      data={Calculation_Type}
+                      fontSize={hp("1.8%")}
+                      labelHeight={hp("0.8%")}
+                      labelPadding={hp("2%")}
+                      labelSize={hp("1%")}
+                      value={"Calculation Type"}
+                    />
+                  </View>
+                  <View style={{ flex: 0.5, height: hp("8.5%") }}>
+                    <Text style={styles.text1}>
+                      Unit Dimension
+                    </Text>
+                    <Input
+                      style={styles.box5}
+                      placeholder="Unit Dimension"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      keyboardType="number-pad"
+                      onChangeText={vehName =>
+                        this.setState({ UnitDimention: vehName })
+                      }
+                    />
+                  </View>
+                </View>
 
+
+              </View>
+              </Card>
+            <View style={styles.associationDetailsView}>
+              <Text style={styles.titleChildText}>
+                Unit Vehicle Information
+              </Text>
+              <View style={styles.fillAssociationDetailline} />
+            </View>
+            <View style={{ height: hp("30%") }}>
+              <VehicleRow
+                tableData={this.state.tableData}
+                removeVehicle={this.removeVehicle}
+                tableHead={this.state.tableHead}
+              />
+            </View>
+            
+            <View
+              style={{
+                height: hp("5%"),
+                justifyContent: "center",
+                alignItems: "flex-end"
+              }}
+            >
               <View
                 style={{
                   height: hp("5%"),
-                  justifyContent: "center",
-                  alignItems: "flex-end"
+                  width: hp("20%")
                 }}
+              >
+                <TouchableOpacity onPress={() => this.toggleModal()}>
+                  <Text
+                    style={{
+                      fontSize: hp("2.5%"),
+                      color: "#00bfff"
+                    }}
+                  >
+                    +Add Vehicle
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <Modal
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                isVisible={this.state.isModalVisible}
               >
                 <View
                   style={{
-                    height: hp("5%"),
-                    width: hp("20%")
+                    width: wp("60%"),
+                    height: hp("50%"),
+                    backgroundColor: "#fff"
                   }}
                 >
-                  <TouchableOpacity onPress={() => this.toggleModal()}>
-                    <Text
-                      style={{
-                        fontSize: hp("2.5%"),
-                        color: "#00bfff"
-                      }}
-                    >
-                      +Add Vehicle
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <Modal
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "center"
-                  }}
-                  isVisible={this.state.isModalVisible}
-                >
-                  <View
-                    style={{
-                      width: wp("60%"),
-                      height: hp("50%"),
-                      backgroundColor: "#fff"
-                    }}
-                  >
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={styles.titleText}>Add Vehicle</Text>
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={styles.titleText}>Add Vehicle</Text>
 
-                      <Item style={styles.bankDetailLine}>
-                        <Input
-                          style={styles.box}
-                          placeholder="Parking Lot No."
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize="characters"
-                          keyboardType="default"
-                          onChangeText={tableData1 =>
+                    <Item style={styles.bankDetailLine}>
+                      <Input
+                        style={styles.box}
+                        placeholder="Parking Lot No."
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize="characters"
+                        keyboardType="default"
+                        onChangeText={tableData1 =>
+                          this.setState({
+                            parkinglot: tableData1
+                          })
+                        }
+                      />
+                    </Item>
+                    <Item style={styles.bankDetailLine}>
+                      <Input
+                        style={styles.box}
+                        placeholder="Vehicle No."
+                        // underlineColorAndroid="orange"
+                        autoCorrect={false}
+                        autoCapitalize="characters"
+                        keyboardType="default"
+                        onChangeText={tableData2 =>
+                          this.setState({ Vehicleno: tableData2 })
+                        }
+                      />
+                    </Item>
+                    <View style={{ flexDirection: "row" }}>
+                      <View
+                        style={{
+                          alignSelf: "center",
+                          marginTop: hp("2%"),
+                          flex: 0.5,
+                          marginLeft: hp("3%")
+                        }}
+                      >
+                        <Button
+                          onPress={() => this.props.navigation.goBack()}
+                          style={{
+                            width: wp("20%"),
+                            height: hp("5.5%"),
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "#ff8c00"
+                          }}
+                          rounded
+                        >
+                          <Text
+                            style={{
+                              color: "white",
+                              fontSize: hp("2%")
+                            }}
+                          >
+                            Cancel
+                          </Text>
+                        </Button>
+                      </View>
+                      <View
+                        style={{
+                          alignSelf: "center",
+                          marginTop: hp("2%"),
+                          flex: 0.5,
+                          marginRight: hp("2%")
+                        }}
+                      >
+                        <Button
+                          style={{
+                            width: wp("20%"),
+                            height: hp("5.5%"),
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "#ff8c00"
+                          }}
+                          rounded
+                          onPress={() => {
+                            this.toggleModal();
+                            const prevData = this.state.tableData;
+                            let newData = [];
+                            newData.push(this.state.parkinglot);
+                            newData.push(this.state.Vehicleno);
+                            newData.push(4);
+                            prevData.push(newData);
+
                             this.setState({
-                              parkinglot: tableData1
-                            })
-                          }
-                        />
-                      </Item>
-                      <Item style={styles.bankDetailLine}>
-                        <Input
-                          style={styles.box}
-                          placeholder="Vehicle No."
-                          // underlineColorAndroid="orange"
-                          autoCorrect={false}
-                          autoCapitalize="characters"
-                          keyboardType="default"
-                          onChangeText={tableData2 =>
-                            this.setState({ Vehicleno: tableData2 })
-                          }
-                        />
-                      </Item>
-                      <View style={{ flexDirection: "row" }}>
-                        <View
-                          style={{
-                            alignSelf: "center",
-                            marginTop: hp("2%"),
-                            flex: 0.5,
-                            marginLeft: hp("3%")
+                              tableData: prevData
+                            });
+                            console.log(this.state.tableData);
                           }}
                         >
-                          <Button
-                            onPress={() => this.props.navigation.goBack()}
+                          <Text
                             style={{
-                              width: wp("20%"),
-                              height: hp("5.5%"),
-                              justifyContent: "center",
-                              alignItems: "center",
-                              backgroundColor: "#ff8c00"
-                            }}
-                            rounded
-                          >
-                            <Text
-                              style={{
-                                color: "white",
-                                fontSize: hp("2%")
-                              }}
-                            >
-                              Cancel
-                            </Text>
-                          </Button>
-                        </View>
-                        <View
-                          style={{
-                            alignSelf: "center",
-                            marginTop: hp("2%"),
-                            flex: 0.5,
-                            marginRight: hp("2%")
-                          }}
-                        >
-                          <Button
-                            style={{
-                              width: wp("20%"),
-                              height: hp("5.5%"),
-                              justifyContent: "center",
-                              alignItems: "center",
-                              backgroundColor: "#ff8c00"
-                            }}
-                            rounded
-                            onPress={() => {
-                              this.toggleModal();
-                              const prevData = this.state.tableData;
-                              let newData = [];
-                              newData.push(this.state.parkinglot);
-                              newData.push(this.state.Vehicleno);
-                              newData.push(4);
-                              prevData.push(newData);
-
-                              this.setState({
-                                tableData: prevData
-                              });
-                              console.log(this.state.tableData);
+                              color: "white",
+                              fontSize: hp("2%")
                             }}
                           >
-                            <Text
-                              style={{
-                                color: "white",
-                                fontSize: hp("2%")
-                              }}
-                            >
-                              Add
-                            </Text>
-                          </Button>
-                        </View>
+                            Add
+                          </Text>
+                        </Button>
                       </View>
                     </View>
                   </View>
-                </Modal>
-              </View>
-
-              <View style={{ flexDirection: "row" }}>
-                <View
-                  style={{
-                    alignSelf: "center",
-                    marginTop: hp("2%"),
-                    flex: 0.5,
-                    marginLeft: hp("3%")
-                  }}
-                >
-                  <Button
-                    onPress={() => this.props.navigation.goBack()}
-                    style={{
-                      width: wp("40%"),
-                      height: hp("5.5%"),
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "#ff8c00"
-                    }}
-                    rounded
-                  >
-                    <Text style={{ color: "white", fontSize: hp("2%") }}>
-                      Cancel
-                    </Text>
-                  </Button>
                 </View>
-                <View
-                  style={{
-                    alignSelf: "center",
-                    marginTop: hp("2%"),
-                    flex: 0.5,
-                    marginRight: hp("2%")
-                  }}
-                >
-                  <Button
-                    onPress={() => this.createUnitPostData()}
-                    style={{
-                      width: wp("40%"),
-                      height: hp("5.5%"),
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "#ff8c00"
-                    }}
-                    rounded
-                  >
-                    <Text style={{ color: "white", fontSize: hp("2%") }}>
-                      Add Unit
-                    </Text>
-                  </Button>
-                </View>
-              </View>
-            </ScrollView>
-          </View>
-        </KeyboardAwareScrollView>
-      </View>
+              </Modal>
+            </View>
 
-      //    </TouchableWithoutFeedback>
-    );
+            <View style={{ flexDirection: "row" }}>
+              <View
+                style={{
+                  alignSelf: "center",
+                  marginTop: hp("2%"),
+                  flex: 0.5,
+                  marginLeft: hp("3%")
+                }}
+              >
+                <Button
+                  onPress={() => this.props.navigation.goBack()}
+                  style={{
+                    width: wp("40%"),
+                    height: hp("5.5%"),
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#ff8c00"
+                  }}
+                  rounded
+                >
+                  <Text style={{ color: "white", fontSize: hp("2%") }}>
+                    Cancel
+                  </Text>
+                </Button>
+              </View>
+              <View
+                style={{
+                  alignSelf: "center",
+                  marginTop: hp("2%"),
+                  flex: 0.5,
+                  marginRight: hp("2%")
+                }}
+              >
+                <Button
+                  onPress={() => this.createUnitPostData()}
+                  style={{
+                    width: wp("40%"),
+                    height: hp("5.5%"),
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#ff8c00"
+                  }}
+                  rounded
+                >
+                  <Text style={{ color: "white", fontSize: hp("2%") }}>
+                    Add Unit
+                  </Text>
+                </Button>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      </KeyboardAwareScrollView>
+    </View>
+
+
+
+      );
   }
 }
 
