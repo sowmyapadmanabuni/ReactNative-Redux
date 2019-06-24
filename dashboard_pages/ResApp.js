@@ -75,7 +75,7 @@ import WorkerShiftDetails from '../workers_pages/WorkerShiftDetails';
 import CreateWorkerShift from '../workers_pages/CreateWorkerShift';
 import Communications from 'react-native-communications';
 import VersionNumber from 'react-native-version-number';
-import BlockDetail from '../assocition_pages/BlockDetail';
+import BlockDetail from '../assocition_pages/BlockDetails';
 import CreateBlock from '../assocition_pages/CreateBlock';
 import CreateOrJoin from '../assocition_pages/CreateOrJoin';
 import EditBlock from '../assocition_pages/EditBlock.js';
@@ -107,6 +107,9 @@ import adminfunction from '../dashboard_pages/adminfunction.js';
 import CreatePatrollingShift from '../assocition_pages/CreatePatrollingShift.js';
 import Securityattendance from '../assocition_pages/Securityattendance';
 import Blockwise from '../assocition_pages/BlockwiseUnits';
+import AddUnit from '../assocition_pages/AddUnit.js';
+import EditUnit from '../assocition_pages/EditUnit.js';
+
 /* 
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
 
@@ -288,7 +291,7 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff',
     },
   },
-//BlockDetail
+
 BlockDetailScreen:{
   screen:BlockDetail,
   navigationOptions:{
@@ -533,6 +536,24 @@ Unit: { screen: unitlist ,
     screen: Blockwise,
     navigationOptions: {
       title: 'Association List',
+      header:null,
+      headerStyle: { backgroundColor: '#FA9917' },
+      headerTintColor: '#ffffff',
+    },
+  },
+  AddUnit: {
+    screen: AddUnit,
+    navigationOptions: {
+      title: 'Edit Unit',
+      header:null,
+      headerStyle: { backgroundColor: '#FA9917' },
+      headerTintColor: '#ffffff',
+    },
+  },
+  EditUnit: {
+    screen: EditUnit,
+    navigationOptions: {
+      title: 'Edit Unit',
       header:null,
       headerStyle: { backgroundColor: '#FA9917' },
       headerTintColor: '#ffffff',

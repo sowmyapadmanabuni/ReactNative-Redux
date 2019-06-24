@@ -1,10 +1,17 @@
 import { UPDATE_USER_INFO } from "../actions/types";
 
 
+<<<<<<< HEAD
 // const oyeURL = "apidev.oyespace.com";
 const oyeURL = "apiuat.oyespace.com";
 // const oyeURL = "OyeLivingApi.oyespace.com";
 const oyeBaseURL = "https://" + oyeURL + "/oye247/OyeLivingApi/v1/";
+=======
+const oyeURL = "apidev.oyespace.com";
+// const oyeURL = "apiuat.oyespace.com";
+// const oyeURL = "api.oyespace.com";
+const oyeBaseURL = "https://" + oyeURL + "/oye247/api/v1/";
+>>>>>>> d333328e5be6c6d80ebc45f75d2dbd266ce06957
 
 const INITIAL_STATE = {
   oyeURL,
