@@ -85,7 +85,7 @@ export default class EditFamilyMember extends Component {
         console.log('fmid start ', params.id)
         console.log('componentdidmount')
         //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
-        const url = 'http://' + global.oyeURL + '/oye247/api/v1/FamilyMember/GetFamilyMemberListByFMemID/' + params.id
+        const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/FamilyMember/GetFamilyMemberListByFMemID/' + params.id
         console.log(url)
         fetch(url, {
             method: 'GET',
@@ -189,7 +189,7 @@ export default class EditFamilyMember extends Component {
                 ""FMImgName""	: ""Somujpeg"",  ""MEMemID""	: ""2"",
                 ""UNUnitID""	: ""1"",  ""FMRltn""	: ""Sister"",   ""ASAssnID""	: 6
             }" */
-            const url = 'http://' + global.oyeURL + '/oye247/api/v1/FamilyMemberDetails/update'
+            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/FamilyMemberDetails/update'
             //  const url = 'http://192.168.1.254:27/oye247/api/v1/FamilyMemberDetails/update'
 
             console.log('member', JSON.stringify(member));

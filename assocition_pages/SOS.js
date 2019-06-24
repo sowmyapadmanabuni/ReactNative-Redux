@@ -114,7 +114,7 @@ createEmergency = () => {
         }
         //"WKWorkID": 614,
         console.log('createEmergency ', anu)
-        fetch('http://' + global.oyeURL + '/oye247/api/v1/Ticketing/Create',
+        fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Ticketing/Create',
             {
                 method: 'POST',
                 headers: {

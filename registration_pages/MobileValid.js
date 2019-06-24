@@ -14,8 +14,9 @@ import CountryPicker, {
   getAllCountries
 } from 'react-native-country-picker-modal'
 import { updateUserInfo } from '../src/actions';
+import base from '../src/base'
 
-var db = openDatabase({ name: global.DB_NAME });
+let db = openDatabase({ name: global.DB_NAME });
 console.disableYellowBox = true;
 
 class MobileValid extends Component {

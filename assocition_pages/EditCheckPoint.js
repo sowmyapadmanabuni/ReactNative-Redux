@@ -87,7 +87,7 @@ export default class CreateCheckPoint extends Component {
       //   "CreatedDate":'2018-10-11 03:14:37'
       // }
 
-      const url = 'http://' + global.oyeURL + '/oye247/api/v1/CheckPointGPS/Update'
+      const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/CheckPointGPS/Update'
       console.log('anu', url)
       fetch(url,
         {

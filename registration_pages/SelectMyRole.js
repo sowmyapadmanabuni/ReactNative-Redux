@@ -383,8 +383,8 @@ export default class SelectMyRole extends Component {
   syncWorkers(assnID) {
     console.log('GetWorkersList componentdidmount ', assnID)
     
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/GetWorkerListByAssocID/' + assnID
-    //const url = 'http://' + global.oyeURL + '/oye247/api/v1/GetWorkersList'
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/GetWorkerListByAssocID/' + assnID
+    //const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/GetWorkersList'
 
     console.log(url)
     fetch(url, {

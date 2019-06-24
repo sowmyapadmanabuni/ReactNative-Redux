@@ -113,7 +113,7 @@ export default class ViewFamilyMembersList extends Component{
                 "fmIsActive": true */    
 
                /*  global.viewImageURL = 'http://'+global.oyeURL +'/Images/';
-    global.uploadImageURL = 'http://'+global.oyeURL +'/oyeliving/api/v1/';
+    global.uploadImageURL = 'http://'+global.oyeURL +'/oyeliving/OyeLivingApi/v1/';
     //http://122.166.168.160/Images/assigned_task_orange.png
     //http://122.166.168.160/oyeliving/api/V1/association/upload */
   render() {

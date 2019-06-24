@@ -294,7 +294,7 @@ class Register extends Component {
                     
                     let mobileNo = '+91' + this.props.MyMobileNumber;
                     console.log(mobileNo)
-                    axios.post('http://'+ this.props.oyeURL +'/oyeliving/api/v1/Member/GetRequestorDetails', {
+                    axios.post('http://'+ this.props.oyeURL +'/oyeliving/OyeLivingApi/v1/Member/GetRequestorDetails', {
                         ACMobile : mobileNo,
                         ASAssnID : this.props.navigation.state.params.associtionID,
                         UNUnitID : this.props.navigation.state.params.unitID,

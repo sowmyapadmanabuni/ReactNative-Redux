@@ -118,7 +118,7 @@ export default class DailyHelpList extends Component {
     const { params } = this.props.navigation.state;
     console.log(params.id)
     console.log('componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/OYERegularVisitorLog/GetOYERegularVisitorLogListByDate/'+global.SelectedAssociationID+'/' + this.state.dobText.toString()
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/OYERegularVisitorLog/GetOYERegularVisitorLogListByDate/'+global.SelectedAssociationID+'/' + this.state.dobText.toString()
     console.log(url)
     fetch(url, {
       method: 'GET',

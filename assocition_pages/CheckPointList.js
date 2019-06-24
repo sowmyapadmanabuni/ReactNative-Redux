@@ -49,7 +49,7 @@ export default class CheckPointList extends Component {
   }
 
   componentDidMount() {
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/CheckPoint/GetCheckPointByAssocID/' + global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/CheckPoint/GetCheckPointByAssocID/' + global.SelectedAssociationID
     console.log('CheckPointList componentdidmount', '' + url)
 
     fetch(url, {
@@ -100,7 +100,7 @@ insert_Guards(cpChkPntID, cpCkPName, cpgpsPnt, asAssnID) {
   }
   componentDidUpdate() {
 
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/CheckPoint/GetCheckPointByAssocID/' + global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/CheckPoint/GetCheckPointByAssocID/' + global.SelectedAssociationID
     // console.log('CheckPointList componentDidUpdate', '' + url)
     fetch(url, {
       method: 'GET',

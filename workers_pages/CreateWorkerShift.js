@@ -207,7 +207,7 @@ export default class CreateCheckPoint extends Component {
             }
 
             console.log('anu', anu)
-            fetch('http://' + global.oyeURL + '/oye247/api/v1/WorkerShiftTiming/Create',
+            fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/WorkerShiftTiming/Create',
                 {
                     method: 'POST',
                     headers: {

@@ -37,14 +37,14 @@ class SplashScreen extends React.Component {
     //9450041258
     // global.oyeURL = "apidev.oyespace.com";
     // global.oyeURL = 'apiuat.oyespace.com';
-    //  global.oyeURL = 'api.oyespace.com';
+    //  global.oyeURL = 'OyeLivingApi.oyespace.com';
     //apiuat.oyespace.com
-    global.champBaseURL = "https://" + global.oyeURL + "/oyeliving/api/v1/";
-    global.oye247BaseURL = "https://" + global.oyeURL + "/oye247/api/v1/";
+    global.champBaseURL = "https://" + global.oyeURL + "/oyeliving/OyeLivingApi/v1/";
+    global.oye247BaseURL = "https://" + global.oyeURL + "/oye247/OyeLivingApi/v1/";
     global.oyeBaseURL = "mediaupload.oyespace.com";
     global.viewImageURL = "http://" + global.oyeBaseURL + "/Images/";
     global.uploadImageURL =
-      "http://" + global.oyeBaseURL + "/oyeliving/api/v1/association/upload";
+      "http://" + global.oyeBaseURL + "/oyeliving/OyeLivingApi/v1/association/upload";
     //http://122.166.168.160/Images/assigned_task_orange.png
     //http://122.166.168.160/oyeliving/api/V1/association/upload
     //192.168.0.188:80 & 81

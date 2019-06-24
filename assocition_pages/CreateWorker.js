@@ -226,7 +226,7 @@ export default class CreateWorker extends Component {
             this.setState({ isLoading: false });
             console.log('member', member);
             //const url = 'http://192.168.1.39:80/oye247/api/v1/Worker/Create'
-            const url = 'http://' + global.oyeURL + '/oye247/api/v1/Worker/Create'
+            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Worker/Create'
             fetch(url,
                 {
                     method: 'POST',
@@ -278,7 +278,7 @@ export default class CreateWorker extends Component {
         }
 
         console.log('anu', anu)
-        fetch('http://' + global.oyeURL + '/oye247/api/v1/WorkerShiftTiming/Create',
+        fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/WorkerShiftTiming/Create',
             {
                 method: 'POST',
                 headers: {
