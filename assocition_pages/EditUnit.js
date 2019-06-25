@@ -199,15 +199,7 @@ class EditUnit extends Component {
         // let mobRegex = /^[0]?[456789]d{9}$/;
     
         //let validation = [] ={ UnitNum1,UnitType1,UnitRate1,CalculationType1,OccupancyStatus1,UnitDimention1 }
-         if (UnitType1.length === 0) {
-          Alert.alert("Select Unit type");
-        } else if (UnitRate1.length === 0) {
-          Alert.alert("Unit Rate Cannot be Empty");
-        } else if (CalculationType1.length === 0) {
-          Alert.alert(" Select Calculation Type");
-        } else if (UnitDimention1.length === 0) {
-          Alert.alert("Unit Dimention Cannot be Empty");
-        } else if (OccupancyStatus1.length === 0) {
+          if (OccupancyStatus1.length === 0) {
           Alert.alert("Select Occupancy Status");
         } else if (
           OccupancyStatus1 === "Unsold Vacant Unit" ||
@@ -225,6 +217,10 @@ class EditUnit extends Component {
         )
         {
           this.validateOwner();
+          return;
+        }
+        else if (OccupancyStatus1 == "Unsold Vacant Unit") {
+          this.createUnit();
           return;
         }
       };
@@ -432,7 +428,7 @@ class EditUnit extends Component {
             .then(responseJson => {
               console.log("My Family Details ###############", responseJson)
               alert("Unit Updated")
-              this.props.navigation.navigate("UnitDetails");;
+              this.props.navigation.goBack();
             })
     
             .catch(error => {
@@ -492,442 +488,445 @@ console.log('Edit Unit')
       
         return (
 
-                <View>
-        <SafeAreaView style={{backgroundColor:'orange'}}>
-           <View style={[styles.viewStyle1,{flexDirection:'row'}]}>
-               <View style={styles.viewDetails1}>
-               <TouchableOpacity onPress={()=> {this.props.navigation.goBack()}}>
-               <View style={{ height:hp("6%"),width:wp("20%"),alignItems:'center',justifyContent:'center',alignContent:'center'}}>
-               <Image source={require('../icons/backBtn.png')} style={styles.viewDetails2}/>
-               </View>
-                   </TouchableOpacity>
-               </View>
-               <View style={{flex:1,justifyContent: 'center',alignItems: 'center'}}>
-                   <Image style={[styles.image1]} source={require('../icons/headerLogo.png')}/>
-               </View>
-               <View style={{flex:0.2, }}>
-                   {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-               </View>
-           </View>
-           <View style={{borderWidth:1,borderColor:'orange'}}></View>
-       </SafeAreaView>
-
-
-                    <KeyboardAwareScrollView>
-                        <View style={styles.textWrapper}>
-
-                            <Text style={styles.titleText}>Edit Unit</Text>
-                            {/* <View >
-                                <Dropdown
-                                    containerStyle={styles.box1}
-                                    // ref={this.typographyRef}
-                                    onChangeText={(value)=> this.setState({ selectblock :value })}
-                                    // label='Select Block'
-                                    data={select_block}
-                                    fontSize={hp("1.8%")}
-                                    labelHeight={hp(".8%")}
-                                    labelPadding={hp('0.5%')}
-                                    labelSize={hp("1%")}
-                                    value={"Select Block"}
-                                    inputContainerStyle={{ borderBottomColor: 'transparent' }}
-                                    
-                                    
-                                />
-                            </View> */}
-                            <ScrollView>
-                          
-
-                                <View style={styles.associationDetailsView}>
-                                    <Text style={styles.titleChildText}>Unit Information</Text>
-                                    <View style={styles.fillAssociationDetailline} />
-                                </View>
-                                <Card style={{ height:hp('45%') ,marginTop:hp('0')}}>
-                                    <View style={{flexDirection:'column'}}>
-
-                                        <View style={{ height: hp('10%'),marginTop:hp('1%')}}>
-                                            <Text style={styles.text1}>Unit ID./Flat No./Site No./Door No.<Text style={styles.imp}>*</Text></Text>
-                                            <Item style={styles.bankDetailLine}>
-                                                <Text
-                                                    style={styles.box8}
-                                                    
-                                                    // defaultValue={this.props.navigation.state.params.UnitName ? this.props.navigation.state.params.UnitName : ""}
-                                                    // onChangeText={UnitNumber=> this.setState({ UnitNumber: UnitNumber })}
-                                                > {this.props.navigation.state.params.UnitName ? this.props.navigation.state.params.UnitName : ""} </Text>
-                                            </Item>
-                                        </View>
-                                        <View style={{ height: hp('10%'),flexDirection:'row',marginTop:hp('1%')}}>
-                                            <View style={{flex:0.5,height:hp('8.7%')}}>
-                                            <Text style={styles.text1}>Unit Type<Text style={styles.imp}>*</Text></Text>
-                                            <Dropdown
-                                                containerStyle={styles.box2}
-                                                // ref={this.typographyRef}
-                                                onChangeText={(value)=> this.setState({ UnitType :value })}
-                                                // label='Unit Type'
-                                                data={Unit_Type}
-                                                fontSize={hp("1.8%")}
-                                                value={this.state.UnitType }
-                                                labelHeight={hp("0.7%")}
-                                                labelPadding={hp('0.5%')}
-                                                labelSize={hp("1%")}
-                                                
-                                            
+     
         
-                                            />
-                                            </View>
-                                            <View style={{flex:0.5,height:hp('8.5%')}}>
-                                            <Text style={styles.text1}>Unit Rate<Text style={styles.imp}>*</Text></Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                    placeholder="Unit Rate"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    // defaultValue={this.state.UnitRate}
-                                                    // autoCapitalize="characters"
-                                                    keyboardType="number-pad"
-                                                    onChangeText={UnitRate => this.setState({ UnitRate: UnitRate })}
-                                                    defaultValue={this.props.navigation.state.params.Rate ? this.props.navigation.state.params.Rate.toString():""}
-                                                />
-                                            </View>
-                    
-
-                                        </View>
-                                        <View style={{ height: hp('8%'),flexDirection:'row',marginTop:hp('1%')}}>
-                                            <View style={{flex:0.5,height:hp('8.7%')}}>
-                                            <Text style={styles.text1}>Calculation Type<Text style={styles.imp}>*</Text></Text>
-                                            <Dropdown
-                                                containerStyle={styles.box2}
-                                                // ref={}
-                                                onChangeText={(value)=> this.setState({ CalType :value })}
-                                                // label='Unit Type'
-                                                data={Calculation_Type}
-                                                fontSize={hp("1.8%")}
-                                                labelHeight={hp("0.8%")}
-                                                labelPadding={hp('2%')}
-                                                labelSize={hp("1%")}
-                                                    // Why are you using two different states for one element? bcz one is to set another one is for new update 
-                                                    // Its wrong, one element should use one state, you can't be passing one this as the value and one thins as another
-                                                    // You are setting the value of this to an empty string, hence the error
-                                                    // can you show me one in this so i can try my self 
-
-                                                value={this.state.CalType} //here where using 
-                                               
-                                            />
-                                            </View>
-                                            <View style={{flex:0.5,height:hp('8.5%')}}>
-                                            <Text style={styles.text1}>Unit Dimension<Text style={styles.imp}>*</Text></Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                
-                                                    placeholder="Unit Dimension"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                   
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    onChangeText={vehName => this.setState({UnitDimention: vehName })}
-                                                    defaultValue={this.state.UnitDimention.toString()}
-                                                />
-                                                
-                                            </View>
-                                            
-                                            
-
-                                        </View>
-                                        <View style={{ height: hp('10%'),marginTop:hp('3%')}}>
-                                            <View style={{flex:1,height:hp('10%')}}>
-                                            <Text style={styles.text1}>Occupancy Status & Ownership Status<Text style={styles.imp}>*</Text></Text>
-                                            <Dropdown
-                                                containerStyle={[styles.box2]}
-                                                // ref={this.typographyRef}
-                                                onChangeText={(value)=> this.setState({ OccupancyStatus :value })}
-                                                // label='Select Unit'
-                                                value={this.state.OccupancyStatus}
-                                                data={Occupancy_Status}
-                                                fontSize={hp("1.8%")}
-                                                labelHeight={hp("0.7%")}
-                                                labelPadding={hp('0.5%')} 
-                                                // inputContainerStyle={{ borderBottomColor: 'transparent' }} 
-                                                    
-                                            />
-                                            
-                                        
-                                        </View>
-                                        </View>
-                                        </View>
-                                    
-                                </Card>
-                               
-                                            { this.props.navigation.state.params.UnitStatus === 'Sold Owner Occupied Unit' || this.state.OccupancyStatus === 'Sold Owner Occupied Unit'? 
-                                             <Card style={{ height:hp('10%') ,marginTop:hp('0')}}>
-                                             <View style={{flexDirection:'column'}}>
-                                                 <View style={{ height: hp('7%'),marginTop:hp('0%')}}> 
-                                           <View style={{ height: hp('10%')}}>
-                                           <Text style={styles.text1}>Unit Owner Occupied Date<Text style={styles.imp}>*</Text></Text>
-                                           <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                                                <View style={styles.datePickerBox}>
-                                                <Text style={styles.datePickerText}>{this.state.Ocdate.toString()} </Text>
-                                                <DatePickerDialog
-                                                    ref="dobDialog"
-                                                    onDatePicked={this.onDOBDatePicked.bind(this)}
-                                                />
-                                                <Image
-                                                style={styles.viewDatePickerImageStyle}
-                                                source={require("../icons/calender.png")}
-                                            />
-                                                </View>
-                                            </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                        </View>
-                                    
-                                </Card>
-                                            :<Text></Text>}
-                                            { this.props.navigation.state.params.UnitStatus === 'Sold Tenant Occupied Unit' || this.state.OccupancyStatus==='Sold Tenant Occupied Unit' ? 
-                                            <Card style={{ height:hp('10%')}}>
-                                            <View style={{flexDirection:'column'}}>
-                                                <View style={{ height: hp('7%')}}> 
-                                           <View style={{ height: hp('10%')}}>
-                                           <Text style={styles.text1}>Unit Tenant Occupied Date<Text style={styles.imp}>*</Text></Text>
-                                           <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                                                <View style={styles.datePickerBox}>
-                                                <Text style={styles.datePickerText}>{this.state.Osdate.toString()} </Text>
-                                                <DatePickerDialog
-                                                    ref="dobDialog1"
-                                                    onDatePicked={this.onDOBDatePicked1.bind(this)}
-                                                />
-                                                <Image
-                                                style={styles.viewDatePickerImageStyle}
-                                                source={require("../icons/calender.png")}
-                                            />
-                                                </View>
-                                            </TouchableOpacity>
-                                            </View>
-                                            </View>
-                                        </View>
-                                        </Card>:<Text></Text>}
-                                            
-                                        
-                                    
-                                { this.props.navigation.state.params.UnitStatus == 'Sold Owner Occupied Unit' || this.props.navigation.state.params.UnitStatus == "Sold Tenant Occupied Unit" || this.props.navigation.state.params.UnitStatus == "Sold Vacant Unit" 
-                                   || this.state.OccupancyStatus===  'Sold Owner Occupied Unit'||this.state.OccupancyStatus==="Sold Tenant Occupied Unit"||this.state.OccupancyStatus==="Sold Vacant Unit" ?   
-                                <View>
-                                <View style={styles.associationDetailsView}>
-                                    <Text style={styles.titleChildText}>Unit Owner Information</Text>
-                                    <View style={styles.fillAssociationDetailline} />
-                                </View>
-                                <Card style={{ height:hp('45%') ,marginTop:hp('0')}}>
-                                <View style={{ height: hp('11%'),flexDirection:'row'}}>
-                                            <View style={{flex:0.5,height:hp('8.7%'),marginTop:hp('1.5%')}}>
-                                            <Text style={styles.text1}>Owner First Name<Text style={styles.imp}>*</Text></Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                    
-                                                    placeholder="First Name"
-                                                    // underlineColorAndroid="orange"
-                                                    defaultValue={this.state.Unitofname}
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    onChangeText={Unitofname => this.setState({ Unitofname: Unitofname })}
-                                                />
-                                            </View>
-                                            <View style={{flex:0.5,height:hp('8.7%'),marginTop:hp("1.5%")}}>
-                                            <Text style={styles.text1}>Owner Last Name<Text style={styles.imp}>*</Text></Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                    placeholder="Last Name"
-                                                    
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    defaultValue={this.state.Unitolname}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    onChangeText={Unitolname => this.setState({ Unitolname: Unitolname })}
-                                                />
-                                            </View>
-                    
-
-                                        </View>
-                                        <View style={{ height: hp('10%'),flexDirection:'row',marginTop:hp('2%')}}>
-                                            <View style={{flex:0.5,height:hp('8.7%')}}>
-                                            <Text style={styles.text1}>Owner Mobile Number<Text style={styles.imp}>*</Text></Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                    placeholder="Mobile Number"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType='phone-pad'
-                                                    defaultValue={this.props.navigation.state.params.Mobile? this.props.navigation.state.params.Mobile.toString():""}
-                                                    onChangeText={Unitomnum=> this.setState({ Unitomnum: Unitomnum })}
-                                                />
-                                            </View>
-                                            <View style={{flex:0.5,height:hp('8.7%')}}>
-                                            <Text style={styles.text1}>Alternate Mobile Number</Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                    placeholder="Mobile Number"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType='name-phone-pad'
-                                                    defaultValue={this.props.navigation.state.params.AMobile? this.props.navigation.state.params.AMobile.toString():""}
-                                                    onChangeText={UnitoAnum => this.setState({ UnitoAnum: UnitoAnum })}
-                                                />
-                                            </View>
-                                            
-                                        </View>
-                                        <View style={{ height: hp('10%'),marginTop:hp('1%')}}>
-                                            <Text style={styles.text1}>Owner Email ID<Text style={styles.imp}>*</Text></Text>
-                                            <Item style={styles.bankDetailLine}>
-                                                <Input
-                                                    style={styles.box}
-                                                    placeholder="Email ID"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    defaultValue={this.props.navigation.state.params.Email? this.props.navigation.state.params.Email:""}
-                                                    
-                                                    onChangeText={Unitoeid=> this.setState({ Unitoeid: Unitoeid })}
-                                                />
-                                            </Item>
-                                        </View>
-                                        <View style={{ height: hp('10%'),marginTop:hp('1%')}}>
-                                            <Text style={styles.text1}>Owner Alternate Email ID</Text>
-                                            <Item style={styles.bankDetailLine}>
-                                                <Input
-                                                    style={styles.box}
-                                                    placeholder="Email ID"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    defaultValue={this.props.navigation.state.params.AEmail? this.props.navigation.state.params.AEmail:""}
-                                                    onChangeText={UnitNumber=> this.setState({  Unitoaeid: UnitNumber })}
-                                                />
-                                            </Item>
-                                        </View>
-
-                                </Card>
-                                </View> :<Text></Text>}
-                                { this.props.navigation.state.params.UnitStatus =='Unsold Vacant Unit' || this.props.navigation.state.params.UnitStatus=="Sold Tenant Occupied Unit" ||this.props.navigation.state.params.UnitStatus=="Unsold Tenant Occupied Unit"
-                                || this.state.OccupancyStatus=== 'Unsold Vacant Unit' || this.state.OccupancyStatus=== "Sold Tenant Occupied Unit"|| this.state.OccupancyStatus=== "Unsold Tenant Occupied Unit"? 
-                                <View>
-                                <View style={styles.associationDetailsView}>
-                                    <Text style={styles.titleChildText}>Unit Tenant Information</Text>
-                                    <View style={styles.fillAssociationDetailline} />
-                                </View>
-                                <Card style={{ height:hp('35%') ,marginTop:hp('0')}}>
-                                        <View style={{ height: hp('10%'),flexDirection:'row',marginTop:hp('2%')}}>
-                                            <View style={{flex:0.5,height:hp('8.7%')}}>
-                                            <Text style={styles.text1}>Tenant First Name<Text style={styles.imp}>*</Text></Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                    placeholder="First Name"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    defaultValue={this.props.navigation.state.params.tfName? this.props.navigation.state.params.tfName:""}
-                                                    
-                                                    onChangeText={Unittfname => this.setState({ Unittfname: Unittfname })}
-                                                />
-                                            </View>
-                                            <View style={{flex:0.5,height:hp('8.7%')}}>
-                                            <Text style={styles.text1}>Tenant Last Name<Text style={styles.imp}>*</Text></Text>
-                                            <Input
-                                                    style={styles.box5}
-                                                    placeholder="Last Name"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    defaultValue={this.props.navigation.state.params.tlName? this.props.navigation.state.params.tlName:""}
-                                                    onChangeText={Unittlname => this.setState({ Unittlname: Unittlname })}
-                                                />
-                                            </View>
-                                            
-                                        </View>
-                                        <View style={{ height: hp('10%'),marginTop:hp('1%')}}>
-                                            <Text style={styles.text1}>Tenant Mobile Number<Text style={styles.imp}>*</Text></Text>
-                                            <Item style={styles.bankDetailLine}>
-                                                <Input
-                                                    style={styles.box}
-                                                    placeholder="Mobile Number"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    defaultValue={this.props.navigation.state.params.tMobile? this.props.navigation.state.params.tMobile.toString():""}
-                                                    onChangeText={Unittmnum => this.setState({Unittmnum: Unittmnum })}
-                                                />
-                                            </Item>
-                                        </View>
-                                        <View style={{ height: hp('10%'),marginTop:hp('1%')}}>
-                                            <Text style={styles.text1}>Tenant Email ID<Text style={styles.imp}>*</Text></Text>
-                                            <Item style={styles.bankDetailLine}>
-                                                <Input
-                                                    style={styles.box}
-                                                    placeholder="Email ID"
-                                                    // underlineColorAndroid="orange"
-                                                    autoCorrect={false}
-                                                    defaultValue={this.props.navigation.state.params.tEmail? this.props.navigation.state.params.tEmail:""}
-                                                    autoCapitalize="characters"
-                                                    keyboardType="default"
-                                                    onChangeText={Unitteid => this.setState({ Unitteid : Unitteid  })}
-                                                />
-                                            </Item>
-                                        </View>
-
-                                </Card>
-                                </View> :<Text></Text>}
-
-                            
-                            <View style={{flexDirection:'row'}}>
-                            <View style={{ alignSelf: "center", marginTop: hp('2%'),flex:0.5,marginLeft:hp('3%')}}>
-                    <Button
-                      onPress={()=> this.props.navigation.goBack()}
-                      style={{
-                        width: wp('40%'),
-                        height: hp('5.5%'),
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor:'#ff8c00'
-                      }}
-                      rounded
-                      
-                    >
-                      <Text style={{ color: "white",fontSize:hp('2%') }}>Cancel</Text>
-                    </Button>
+          <View>
+          <SafeAreaView style={{ backgroundColor: 'orange' }}>
+            <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
+                  <View style={{ height: hp("6%"), width: wp("20%"), alignItems: 'center', justifyContent: 'center', alignContent: 'center' }}>
+                    <Image source={require('../icons/backBtn.png')} style={styles.viewDetails2} />
+                  </View>
+                </TouchableOpacity>
               </View>
-              <View style={{ alignSelf: "center", marginTop: hp('2%'),flex:0.5,marginRight:hp('2%')}}>
-                    <Button
-                        onPress={()=>this.createUnitPostData()}
-                      style={{
-                        width: wp('40%'),
-                        height: hp('5.5%'),
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor:'#ff8c00'
-                      }}
-                      rounded
-                      
-                    >
-                      <Text style={{ color: "white",fontSize:hp('2%') }}>Update</Text>
-                    </Button>
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={[styles.image1]} source={require('../icons/headerLogo.png')} />
               </View>
-
-                            </View>
-
-
-                            </ScrollView>
-                        </View>
-                        
-                    </KeyboardAwareScrollView>
+              <View style={{ flex: 0.2, }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: 'orange' }}></View>
+          </SafeAreaView>
+  
+  
+          <KeyboardAwareScrollView>
+            <View style={styles.textWrapper}>
+  
+              <Text style={styles.titleText}>Edit Unit</Text>
+              <ScrollView>
+  
+  
+                <View style={styles.associationDetailsView}>
+                  <Text style={styles.titleChildText}>Unit Information</Text>
+                  <View style={styles.fillAssociationDetailline} />
                 </View>
-       
-        //    </TouchableWithoutFeedback>
+                <Card style={{ height: hp("23%"), marginTop: hp('0') }}>
+                  <View style={{ flexDirection: 'column' }}>
+  
+                    <View style={{ height: hp('10%'), marginTop: hp('1%') }}>
+                      <Text style={styles.text1}>Unit ID./Flat No./Site No./Door No.<Text style={styles.imp}>*</Text></Text>
+                      <Item style={styles.bankDetailLine}>
+                        <Text
+                          style={styles.box8}
+  
+                        // defaultValue={this.props.navigation.state.params.UnitName ? this.props.navigation.state.params.UnitName : ""}
+                        // onChangeText={UnitNumber=> this.setState({ UnitNumber: UnitNumber })}
+                        > {this.props.navigation.state.params.UnitName ? this.props.navigation.state.params.UnitName : ""} </Text>
+                      </Item>
+                    </View>
+                    <View style={{ height: hp('10%'), marginTop: hp('3%') }}>
+                      <View style={{ flex: 1, height: hp('10%') }}>
+                        <Text style={styles.text1}>Occupancy Status & Ownership Status<Text style={styles.imp}>*</Text></Text>
+                        <Dropdown
+                          containerStyle={[styles.box2]}
+                          // ref={this.typographyRef}
+                          onChangeText={(value) => this.setState({ OccupancyStatus: value })}
+                          // label='Select Unit'
+                          value={this.state.OccupancyStatus}
+                          data={Occupancy_Status}
+                          fontSize={hp("1.8%")}
+                          labelHeight={hp("0.7%")}
+                          labelPadding={hp('0.5%')}
+                        // inputContainerStyle={{ borderBottomColor: 'transparent' }}   
+                        />
+  
+  
+                      </View>
+                    </View>
+                  </View>
+  
+                </Card>
+  
+  
+  
+  
+                {this.props.navigation.state.params.UnitStatus == 'Sold Owner Occupied Unit' || this.props.navigation.state.params.UnitStatus == "Sold Tenant Occupied Unit" || this.props.navigation.state.params.UnitStatus == "Sold Vacant Unit"
+                  || this.state.OccupancyStatus === 'Sold Owner Occupied Unit' || this.state.OccupancyStatus === "Sold Tenant Occupied Unit" || this.state.OccupancyStatus === "Sold Vacant Unit" ?
+                  <View>
+                    <View style={styles.associationDetailsView}>
+                      <Text style={styles.titleChildText}>Unit Owner Information</Text>
+                      <View style={styles.fillAssociationDetailline} />
+                    </View>
+                    <Card style={{ height: hp('56%'), marginTop: hp('0') }}>
+  
+                      {this.props.navigation.state.params.UnitStatus === 'Sold Owner Occupied Unit' || this.state.OccupancyStatus === 'Sold Owner Occupied Unit' ?
+                        <View style={{ height: hp('10%'), marginTop: hp('1%') }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <View style={{ height: hp('7%'), marginTop: hp('0%') }}>
+                              <View style={{ height: hp('10%') }}>
+                                <Text style={styles.text1}>Unit Owner Occupied Date<Text style={styles.imp}>*</Text></Text>
+                                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                                  <View style={styles.datePickerBox}>
+                                    <Text style={styles.datePickerText}>{this.state.Ocdate.toString()} </Text>
+                                    <DatePickerDialog
+                                      ref="dobDialog"
+                                      onDatePicked={this.onDOBDatePicked.bind(this)}
+                                    />
+                                    <Image
+                                      style={styles.viewDatePickerImageStyle}
+                                      source={require("../icons/calender.png")}
+                                    />
+                                  </View>
+                                </TouchableOpacity>
+                              </View>
+                            </View>
+                          </View>
+  
+                        </View>
+                        : <Text></Text>}
+                      <View style={{ height: hp('11%'), flexDirection: 'row' }}>
+                        <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                          <Text style={styles.text1}>Owner First Name<Text style={styles.imp}>*</Text></Text>
+                          <Input
+                            style={styles.box5}
+  
+                            placeholder="First Name"
+                            // underlineColorAndroid="orange"
+                            defaultValue={this.state.Unitofname}
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            onChangeText={Unitofname => this.setState({ Unitofname: Unitofname })}
+                          />
+                        </View>
+                        <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                          <Text style={styles.text1}>Owner Last Name<Text style={styles.imp}>*</Text></Text>
+                          <Input
+                            style={styles.box5}
+                            placeholder="Last Name"
+  
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            defaultValue={this.state.Unitolname}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            onChangeText={Unitolname => this.setState({ Unitolname: Unitolname })}
+                          />
+                        </View>
+  
+  
+                      </View>
+                      <View style={{ height: hp('10%'), flexDirection: 'row', marginTop: hp('2%') }}>
+                        <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                          <Text style={styles.text1}>Owner Mobile Number<Text style={styles.imp}>*</Text></Text>
+                          <Input
+                            style={styles.box5}
+                            placeholder="Mobile Number"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType='phone-pad'
+                            defaultValue={this.props.navigation.state.params.Mobile ? this.props.navigation.state.params.Mobile.toString() : ""}
+                            onChangeText={Unitomnum => this.setState({ Unitomnum: Unitomnum })}
+                          />
+                        </View>
+                        <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                          <Text style={styles.text1}>Alternate Mobile Number</Text>
+                          <Input
+                            style={styles.box5}
+                            placeholder="Mobile Number"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType='name-phone-pad'
+                            defaultValue={this.props.navigation.state.params.AMobile ? this.props.navigation.state.params.AMobile.toString() : ""}
+                            onChangeText={UnitoAnum => this.setState({ UnitoAnum: UnitoAnum })}
+                          />
+                        </View>
+  
+                      </View>
+                      <View style={{ height: hp('10%'), marginTop: hp('1%') }}>
+                        <Text style={styles.text1}>Owner Email ID<Text style={styles.imp}>*</Text></Text>
+                        <Item style={styles.bankDetailLine}>
+                          <Input
+                            style={styles.box}
+                            placeholder="Email ID"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            defaultValue={this.props.navigation.state.params.Email ? this.props.navigation.state.params.Email : ""}
+  
+                            onChangeText={Unitoeid => this.setState({ Unitoeid: Unitoeid })}
+                          />
+                        </Item>
+                      </View>
+                      <View style={{ height: hp('10%'), marginTop: hp('1%') }}>
+                        <Text style={styles.text1}>Owner Alternate Email ID</Text>
+                        <Item style={styles.bankDetailLine}>
+                          <Input
+                            style={styles.box}
+                            placeholder="Email ID"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            defaultValue={this.props.navigation.state.params.AEmail ? this.props.navigation.state.params.AEmail : ""}
+                            onChangeText={UnitNumber => this.setState({ Unitoaeid: UnitNumber })}
+                          />
+                        </Item>
+                      </View>
+  
+                    </Card>
+                  </View> : <Text></Text>}
+                {this.props.navigation.state.params.UnitStatus == "Sold Tenant Occupied Unit" || this.props.navigation.state.params.UnitStatus == "Unsold Tenant Occupied Unit"
+                  || this.state.OccupancyStatus === "Sold Tenant Occupied Unit" || this.state.OccupancyStatus === "Unsold Tenant Occupied Unit" ?
+                  <View>
+                    <View style={styles.associationDetailsView}>
+                      <Text style={styles.titleChildText}>Unit Tenant Information</Text>
+                      <View style={styles.fillAssociationDetailline} />
+                    </View>
+                    <Card style={{ height: hp('45%'), marginTop: hp('1%') }}>
+                      {this.props.navigation.state.params.UnitStatus === 'Sold Tenant Occupied Unit' || this.state.OccupancyStatus === 'Sold Tenant Occupied Unit' ?
+                        <View style={{ height: hp('10%'), marginTop: ('1%') }}>
+                          <View style={{ flexDirection: 'column' }}>
+                            <View style={{ height: hp('7%') }}>
+                              <View style={{ height: hp('10%') }}>
+                                <Text style={styles.text1}>Unit Tenant Occupied Date<Text style={styles.imp}>*</Text></Text>
+                                <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                                  <View style={styles.datePickerBox}>
+                                    <Text style={styles.datePickerText}>{this.state.Osdate.toString()} </Text>
+                                    <DatePickerDialog
+                                      ref="dobDialog1"
+                                      onDatePicked={this.onDOBDatePicked1.bind(this)}
+                                    />
+                                    <Image
+                                      style={styles.viewDatePickerImageStyle}
+                                      source={require("../icons/calender.png")}
+                                    />
+                                  </View>
+                                </TouchableOpacity>
+                              </View>
+                            </View>
+                          </View>
+                        </View> : <Text></Text>}
+                      <View style={{ height: hp('10%'), flexDirection: 'row', }}>
+                        <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                          <Text style={styles.text1}>Tenant First Name<Text style={styles.imp}>*</Text></Text>
+                          <Input
+                            style={styles.box5}
+                            placeholder="First Name"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            defaultValue={this.props.navigation.state.params.tfName ? this.props.navigation.state.params.tfName : ""}
+  
+                            onChangeText={Unittfname => this.setState({ Unittfname: Unittfname })}
+                          />
+                        </View>
+                        <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                          <Text style={styles.text1}>Tenant Last Name<Text style={styles.imp}>*</Text></Text>
+                          <Input
+                            style={styles.box5}
+                            placeholder="Last Name"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            defaultValue={this.props.navigation.state.params.tlName ? this.props.navigation.state.params.tlName : ""}
+                            onChangeText={Unittlname => this.setState({ Unittlname: Unittlname })}
+                          />
+                        </View>
+  
+                      </View>
+                      <View style={{ height: hp('10%'), marginTop: hp('1%') }}>
+                        <Text style={styles.text1}>Tenant Mobile Number<Text style={styles.imp}>*</Text></Text>
+                        <Item style={styles.bankDetailLine}>
+                          <Input
+                            style={styles.box}
+                            placeholder="Mobile Number"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            defaultValue={this.props.navigation.state.params.tMobile ? this.props.navigation.state.params.tMobile.toString() : ""}
+                            onChangeText={Unittmnum => this.setState({ Unittmnum: Unittmnum })}
+                          />
+                        </Item>
+                      </View>
+                      <View style={{ height: hp('10%'), marginTop: hp('1%') }}>
+                        <Text style={styles.text1}>Tenant Email ID<Text style={styles.imp}>*</Text></Text>
+                        <Item style={styles.bankDetailLine}>
+                          <Input
+                            style={styles.box}
+                            placeholder="Email ID"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            defaultValue={this.props.navigation.state.params.tEmail ? this.props.navigation.state.params.tEmail : ""}
+                            autoCapitalize="characters"
+                            keyboardType="default"
+                            onChangeText={Unitteid => this.setState({ Unitteid: Unitteid })}
+                          />
+                        </Item>
+                      </View>
+  
+                    </Card>
+                  </View> : <Text></Text>}
+                <View style={styles.associationDetailsView}>
+                  <Text style={styles.titleChildText}>Unit Maintenance Details</Text>
+                  <View style={styles.fillAssociationDetailline} />
+                </View>
+                <Card style={{ height: hp("23%"), marginTop: hp("0") }}>
+                  <View style={{ flexDirection: "column" }}>
+                    <View style={{ height: hp('10%'), flexDirection: 'row', marginTop: hp('1%') }}>
+                      <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                        <Text style={styles.text1}>Select Unit Type</Text>
+                        <Dropdown
+                          containerStyle={styles.box2}
+                          // ref={this.typographyRef}
+                          onChangeText={(value) => this.setState({ UnitType: value })}
+                          // label='Unit Type'
+                          data={Unit_Type}
+                          fontSize={hp("1.8%")}
+                          value={this.state.UnitType}
+                          labelHeight={hp("0.7%")}
+                          labelPadding={hp('0.5%')}
+                          labelSize={hp("1%")}
+  
+  
+  
+                        />
+                      </View>
+                      <View style={{ flex: 0.5, height: hp('8.5%') }}>
+                        <Text style={styles.text1}>Unit Rate</Text>
+                        <Input
+                          style={styles.box5}
+                          placeholder="Unit Rate"
+                          // underlineColorAndroid="orange"
+                          autoCorrect={false}
+                          // defaultValue={this.state.UnitRate}
+                          // autoCapitalize="characters"
+                          keyboardType="number-pad"
+                          onChangeText={UnitRate => this.setState({ UnitRate: UnitRate })}
+                          defaultValue={this.props.navigation.state.params.Rate ? this.props.navigation.state.params.Rate.toString() : ""}
+                        />
+                      </View>
+  
+  
+                    </View>
+  
+  
+  
+  
+  
+  
+                    <View style={{ height: hp('8%'), flexDirection: 'row', marginTop: hp('1%') }}>
+                      <View style={{ flex: 0.5, height: hp('8.7%') }}>
+                        <Text style={styles.text1}>Select Maintenance Calculation Type</Text>
+                        <Dropdown
+                          containerStyle={styles.box2}
+                          // ref={}
+                          onChangeText={(value) => this.setState({ CalType: value })}
+                          // label='Unit Type'
+                          data={Calculation_Type}
+                          fontSize={hp("1.8%")}
+                          labelHeight={hp("0.8%")}
+                          labelPadding={hp('2%')}
+                          labelSize={hp("1%")}
+                          // Why are you using two different states for one element? bcz one is to set another one is for new update 
+                          // Its wrong, one element should use one state, you can't be passing one this as the value and one thins as another
+                          // You are setting the value of this to an empty string, hence the error
+                          // can you show me one in this so i can try my self 
+  
+                          value={this.state.CalType} //here where using 
+  
+                        />
+                      </View>
+                      <View style={{ flex: 0.5, height: hp('8.5%') }}>
+                        <Text style={styles.text1}>Unit Dimension</Text>
+                        <Input
+                          style={styles.box5}
+  
+                          placeholder="Unit Dimension"
+                          // underlineColorAndroid="orange"
+                          autoCorrect={false}
+  
+                          autoCapitalize="characters"
+                          keyboardType="default"
+                          onChangeText={vehName => this.setState({ UnitDimention: vehName })}
+                          defaultValue={this.state.UnitDimention.toString()}
+                        />
+  
+                      </View>
+  
+  
+  
+                    </View>
+  
+  
+  
+  
+                  </View>
+                </Card>
+  
+  
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ alignSelf: "center", marginTop: hp('2%'), flex: 0.5, marginLeft: hp('3%') }}>
+                    <Button
+                      onPress={() => this.props.navigation.goBack()}
+                      style={{
+                        width: wp('40%'),
+                        height: hp('5.5%'),
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: '#ff8c00'
+                      }}
+                      rounded
+  
+                    >
+                      <Text style={{ color: "white", fontSize: hp('2%') }}>Cancel</Text>
+                    </Button>
+                  </View>
+                  <View style={{ alignSelf: "center", marginTop: hp('2%'), flex: 0.5, marginRight: hp('2%') }}>
+                    <Button
+                      onPress={() => this.createUnitPostData()}
+                      style={{
+                        width: wp('40%'),
+                        height: hp('5.5%'),
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: '#ff8c00'
+                      }}
+                      rounded
+  
+                    >
+                      <Text style={{ color: "white", fontSize: hp('2%') }}>Update</Text>
+                    </Button>
+                  </View>
+  
+                </View>
+  
+  
+              </ScrollView>
+            </View>
+  
+          </KeyboardAwareScrollView>
+        </View>
+  
+  
         )
         
     }
