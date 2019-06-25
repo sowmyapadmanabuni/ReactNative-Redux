@@ -9,7 +9,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { Card, CardItem } from "native-base";
-import Header from "../components/Header";
+import Header from "../../../components/Header";
 import { Dropdown } from "react-native-material-dropdown";
 import { VictoryPie } from "victory-native";
 import {
@@ -29,7 +29,7 @@ import {
 } from "react-navigation";
 import Pie from "react-native-pie";
 import { openDatabase } from "react-native-sqlite-storage";
-import { Fonts } from "../pages/src/utils/Fonts";
+import { Fonts } from "../../../pages/src/utils/Fonts";
 import { RemoteMessage, Notification } from "react-native-firebase";
 import RNExitApp from "react-native-exit-app";
 import moment from "moment";
@@ -46,7 +46,7 @@ import {
   getDashUnits,
   updateUserInfo,
   getAssoMembers
-} from "../src/actions";
+} from "../../actions";
 
 class Dashboard extends React.Component {
   static navigationOptions = {
@@ -363,7 +363,7 @@ class Dashboard extends React.Component {
                   <CardItem style={{ flexDirection: "row", height: hp("10%") }}>
                     <Image
                       style={styles.image1}
-                      source={require("../icons/buil.png")}
+                      source={require("../../../icons/buil.png")}
                     />
                     <Dropdown
                       containerStyle={{ flex: 1, width: wp("10%") }}
@@ -427,7 +427,7 @@ class Dashboard extends React.Component {
                           <Text style={styles.text2}>{sold2}</Text>
                           <Image
                             style={styles.image2}
-                            source={require("../icons/ww.png")}
+                            source={require("../../../icons/ww.png")}
                           />
                         </View>
 
@@ -461,7 +461,7 @@ class Dashboard extends React.Component {
                           <Text style={styles.text4}>{unsold2}</Text>
                           <Image
                             style={styles.image3}
-                            source={require("../icons/hhhh.png")}
+                            source={require("../../../icons/hhhh.png")}
                           />
                         </View>
 
@@ -506,7 +506,7 @@ class Dashboard extends React.Component {
                     }}
                   >
                     <Image
-                      source={require("../icons/eye.png")}
+                      source={require("../../../icons/eye.png")}
                       style={styles.image4}
                     />
                     <Text style={{ alignSelf: "center", color: "black" }}>
@@ -540,7 +540,7 @@ class Dashboard extends React.Component {
                             height: hp("3.1%"),
                             marginBottom: hp("0.55%")
                           }}
-                          source={require("../icons/guests.png")}
+                          source={require("../../../icons/guests.png")}
                         />
                       </View>
                       <View
@@ -581,7 +581,7 @@ class Dashboard extends React.Component {
                             height: hp("3.1%"),
                             marginBottom: hp("0.55%")
                           }}
-                          source={require("../icons/guards.png")}
+                          source={require("../../../icons/guards.png")}
                         />
                       </View>
                       <View
@@ -622,7 +622,7 @@ class Dashboard extends React.Component {
                             height: hp("3.1%"),
                             marginBottom: hp("0.55%")
                           }}
-                          source={require("../icons/deliveries.png")}
+                          source={require("../../../icons/deliveries.png")}
                         />
                       </View>
                       <View
@@ -667,7 +667,7 @@ class Dashboard extends React.Component {
                             height: hp("3.1%"),
                             marginBottom: hp("0.55%")
                           }}
-                          source={require("../icons/admin.png")}
+                          source={require("../../../icons/admin.png")}
                         />
                       </View>
                       <View

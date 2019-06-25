@@ -54,7 +54,7 @@ export default class admin extends React.Component {
                 >
                   <Image
                     resizeMode="contain"
-                    source={require("../icons/back.png")}
+                    source={require("../../../icons/back.png")}
                     style={styles.viewDetails2}
                   />
                 </View>
@@ -69,7 +69,7 @@ export default class admin extends React.Component {
             >
               <Image
                 style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
+                source={require("../../../icons/OyeSpace.png")}
               />
             </View>
             <View style={{ flex: 0.2 }}>
@@ -88,19 +88,19 @@ export default class admin extends React.Component {
               <View style={styles.view1}>
                 <View style={styles.view2}>
                   <Image
-                    source={require("../pages/assets/img/petrolling.png")}
+                    source={require("../../../pages/assets/img/petrolling.png")}
                   />
                 </View>
                   <View style={styles.view3}>
-                    {/* <TouchableOpacity
+                     <TouchableOpacity
                         onPress={() =>
-                          this.props.navigation.navigate("CheckPointListScreen")
+                          this.props.navigation.navigate("schedulePatrolling")
                         }
-                      > */}
+                      >
                       <View style={styles.view3}>
                         <Text style={styles.text1}>Patrolling Check Points</Text>
                       </View>
-                    {/* </TouchableOpacity> */}
+                     </TouchableOpacity>
                   </View>
                 </View>
               <View style={styles.borderline} />
@@ -109,7 +109,7 @@ export default class admin extends React.Component {
               <View style={styles.view1}>
                 <View style={styles.view2}>
                   <Image
-                    source={require("../pages/assets/img/view_all_visitors1.png")}
+                    source={require("../../../pages/assets/img/view_all_visitors1.png")}
                   />
                 </View>
                 <View style={styles.view3}>
@@ -130,7 +130,7 @@ export default class admin extends React.Component {
             <View style={{ flexDirection: "column" }}>
               <View style={styles.view1}>
                 <View style={styles.view2}>
-                  <Image source={require("../pages/assets/img/settings.png")} />
+                  <Image source={require("../../../pages/assets/img/settings.png")} />
                 </View>
                 <View style={styles.view3}>
                   {/* <TouchableOpacity
@@ -151,7 +151,7 @@ export default class admin extends React.Component {
               <View style={styles.view1}>
                 <View style={styles.view2}>
                   <Image
-                    source={require("../pages/assets/img/join_asso.png")}
+                    source={require("../../../pages/assets/img/join_asso.png")}
                   />
                 </View>
                 <View style={styles.view3}>
@@ -173,7 +173,7 @@ export default class admin extends React.Component {
               <View style={styles.view1}>
                 <View style={styles.view2}>
                   <Image
-                    source={require("../pages/assets/img/create_association1.png")}
+                    source={require("../../../pages/assets/img/create_association1.png")}
                   />
                 </View>
                 <View style={styles.view3}>
@@ -195,7 +195,7 @@ export default class admin extends React.Component {
               <View style={styles.view1}>
                 <View style={styles.view2}>
                   <Image
-                    source={require("../pages/assets/img/building2.png")}
+                    source={require("../../../pages/assets/img/building2.png")}
                   />
                 </View>
                 <View style={styles.view3}>

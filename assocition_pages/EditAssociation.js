@@ -4,7 +4,7 @@
     ScrollView,TextInput,TouchableOpacity ,View } from 'react-native';
     import PhoneInput from "react-native-phone-input";
     import { mystyles} from '../pages/styles'
-    import home from '../dashboard_pages/ResApp'
+    import home from '../src/screens/dashboard_pages/ResApp'
     //import { View } from 'native-base';
   
   const instructions = Platform.select({

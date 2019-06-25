@@ -29,7 +29,7 @@ import OTPVerification from "./registration_pages/OTPVerification";
 import SelectMyRole from "./registration_pages/SelectMyRole";
 import RegistrationPage from "./registration_pages/RegistrationPage";
 
-import ResApp from "./dashboard_pages/ResApp";
+import ResApp from "./src/screens/dashboard_pages/ResApp";
 import associationlist from "./assocition_pages/associationlist";
 import CreateAssociation from "./assocition_pages/CreateAssociation";
 import unitlist from "./assocition_pages/unitlist";
@@ -38,6 +38,8 @@ import addmembers from "./assocition_pages/addmembers";
 import CreateUnitsPotrait from "./assocition_pages/CreateUnitsPotrait";
 import store from "./src/store";
 import { persistStore } from "redux-persist";
+import SchedulePatrolling from "./src/screens/Patrolling/SchedulePatrolling";
+import CommonHeader from "./src/components/NavigationalHeaders/CommonHeader";
 
 const AuthStack = createStackNavigator(
   {
@@ -186,12 +188,6 @@ const DashStack = createStackNavigator(
 
     ResDashBoard: {
       screen: ResApp,
-      navigationOptions: {
-        title: "ResidentDashBoard Drawer ",
-        headerStyle: { backgroundColor: "#f05555" },
-        headerTintColor: "#ffffff"
-        // header:null
-      }
     },
 
     CreateOrJoinScreen: {
@@ -206,10 +202,17 @@ const DashStack = createStackNavigator(
       navigationOptions: {
         title: "Association"
       }
-    }
+    },
+      schedulePatrolling:{
+          screen:SchedulePatrolling,
+          navigationOptions: {
+              title: "Schedule Patrolling",
+              header: <CommonHeader/>,
+          }
+      }
   },
   {
-    headerMode: "none",
+    headerMode: "screen",
     initialRouteName: "ResDashBoard"
   }
 );
