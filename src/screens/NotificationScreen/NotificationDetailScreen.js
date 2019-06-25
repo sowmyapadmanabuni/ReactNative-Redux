@@ -96,7 +96,7 @@ class NotificationDetailScreen extends Component {
                                     
                                     StatusUpdate = {
                                         NTID: item.ntid,
-	                                    NTStatDesc: responseJson.data.string
+	                                    NTStatDesc: responseJson.data
                                     }
 
                                     fetch(`http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`, {

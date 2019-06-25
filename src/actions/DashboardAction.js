@@ -83,36 +83,6 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               associationid: associationIds
             }
           });
-          // if (responseJson.success) {
-          //   let associations = responseJson.data.memberListByAccount;
-
-          //   let associationIds = [];
-          //   var count = Object.keys(responseJson.data.associationByAccount)
-          //     .length;
-          //   let drop_down_data = [];
-          //   let associationid = [];
-
-          //   for (var i = 0; i < count; i++) {
-          //     let associationName =
-          //       responseJson.data.associationByAccount[i].asAsnName;
-          //     drop_down_data.push({
-          //       value: associationName,
-          //       name: associationName,
-          //       id: i,
-          //       associationId: responseJson.data.associationByAccount[i].asAssnID
-          //     });
-          //     associationid.push({
-          //       id: responseJson.data.associationByAccount[i].asAssnID
-          //     });
-          //   }
-
-          // dispatch({
-          //   type: DASHBOARD_ASSOCIATION,
-          //   payload: {
-          //     dropdown: drop_down_data,
-          //     associationid
-          //   }
-          // });
         } else {
           dispatch({
             type: DASHBOARD_ASSOC_STOP

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import {
   StyleSheet,
   View,
@@ -17,7 +17,7 @@ import {
   RefreshControl,
   SafeAreaView,
   Dimensions
-} from "react-native"
+} from "react-native";
 import {
   Form,
   Item,
@@ -27,20 +27,26 @@ import {
   Card,
   CardItem,
   Picker
-} from "native-base"
+} from "native-base";
 import CountryPicker, {
   getAllCountries
-} from "react-native-country-picker-modal"
-import PhoneInput from "react-native-phone-input"
-import { Dropdown } from "react-native-material-dropdown"
+} from "react-native-country-picker-modal";
+import PhoneInput from "react-native-phone-input";
+import { Dropdown } from "react-native-material-dropdown";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import country from "react-native-phone-input/lib/country"
-import { NavigationEvents } from "react-navigation"
-import {connect} from 'react-redux';
+} from "react-native-responsive-screen";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import country from "react-native-phone-input/lib/country";
+import { NavigationEvents } from "react-navigation";
+import { connect } from "react-redux";
+import {
+  getDashAssociation,
+  getDashUnits,
+  getDashSub,
+  getAssoMembers
+} from "../src/actions";
 
 let data = [
   {
@@ -55,7 +61,7 @@ let data = [
     value: "Residential and Commercial",
     id: 3
   }
-]
+];
 
 let data1 = [
   {
@@ -66,7 +72,7 @@ let data1 = [
     value: "Current",
     id: 2
   }
-]
+];
 
 // const bankTemplate = {
 //   bank_name: "",
@@ -81,9 +87,9 @@ class App extends Component {
   static navigationOptions = {
     title: "CreateAssociation",
     header: null
-  }
+  };
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       association_Name: "",
       property_Name: "",
@@ -122,10 +128,10 @@ class App extends Component {
       pan_Number1: "",
       bankAccountNumber1: ""
       // count: 0
-    }
+    };
 
-    this.onPressFlag = this.onPressFlag.bind(this)
-    this.selectCountry = this.selectCountry.bind(this)
+    this.onPressFlag = this.onPressFlag.bind(this);
+    this.selectCountry = this.selectCountry.bind(this);
   }
 
   // _incrementCount() {
@@ -138,82 +144,82 @@ class App extends Component {
   //   this.state.cca2 = ""
   // }
   resetAllFields = () => {
-    this.textInput_association_Name.setNativeProps({ text: "" })
-    this.setState({ association_Name: "" })
-    this.textInput_property_Name.setNativeProps({ text: "" })
-    this.setState({ property_Name: "" })
+    this.textInput_association_Name.setNativeProps({ text: "" });
+    this.setState({ association_Name: "" });
+    this.textInput_property_Name.setNativeProps({ text: "" });
+    this.setState({ property_Name: "" });
     // this.textInput_property_Type.setNativeProps({ text: "" })
     // this.setState({ property_Type: "" })
 
     if (this.state.pan_Number.trim() != "") {
-      console.log(this.state.pan_Number, "this.state.pan_Number")
-      this.textInput_pan_Number.setNativeProps({ text: "" })
-      this.setState({ pan_Number: "" })
+      console.log(this.state.pan_Number, "this.state.pan_Number");
+      this.textInput_pan_Number.setNativeProps({ text: "" });
+      this.setState({ pan_Number: "" });
     }
 
     if (this.state.reg_Number.trim() != "") {
-      console.log(this.state.reg_Number, "this.state.reg_Number")
-      this.textInput_reg_Number.setNativeProps({ text: "" })
-      this.setState({ reg_Number: "" })
+      console.log(this.state.reg_Number, "this.state.reg_Number");
+      this.textInput_reg_Number.setNativeProps({ text: "" });
+      this.setState({ reg_Number: "" });
     }
 
-    this.textInput_state.setNativeProps({ text: "" })
-    this.setState({ state: "" })
-    this.textInput_city.setNativeProps({ text: "" })
-    this.setState({ city: "" })
-    this.textInput_association_Address.setNativeProps({ text: "" })
-    this.setState({ association_Address: "" })
-    this.textInput_pinCode.setNativeProps({ text: "" })
-    this.setState({ pinCode: "" })
-    this.textInput_total_NumberOfBlocks.setNativeProps({ text: "" })
-    this.setState({ total_NumberOfBlocks: "" })
-    this.textInput_total_NumberOfUnits.setNativeProps({ text: "" })
-    this.setState({ total_NumberOfUnits: "" })
-    this.textInput_emailAssociation.setNativeProps({ text: "" })
-    this.setState({ emailAssociation: "" })
-    this.textInput_bankName.setNativeProps({ text: "" })
-    this.setState({ bankName: "" })
-    this.textInput_bankIFSC.setNativeProps({ text: "" })
-    this.setState({ bankIFSC: "" })
-    this.textInput_bankAccountNumber.setNativeProps({ text: "" })
-    this.setState({ bankAccountNumber: "" })
-    this.phone.selectCountry("in")
-  }
+    this.textInput_state.setNativeProps({ text: "" });
+    this.setState({ state: "" });
+    this.textInput_city.setNativeProps({ text: "" });
+    this.setState({ city: "" });
+    this.textInput_association_Address.setNativeProps({ text: "" });
+    this.setState({ association_Address: "" });
+    this.textInput_pinCode.setNativeProps({ text: "" });
+    this.setState({ pinCode: "" });
+    this.textInput_total_NumberOfBlocks.setNativeProps({ text: "" });
+    this.setState({ total_NumberOfBlocks: "" });
+    this.textInput_total_NumberOfUnits.setNativeProps({ text: "" });
+    this.setState({ total_NumberOfUnits: "" });
+    this.textInput_emailAssociation.setNativeProps({ text: "" });
+    this.setState({ emailAssociation: "" });
+    this.textInput_bankName.setNativeProps({ text: "" });
+    this.setState({ bankName: "" });
+    this.textInput_bankIFSC.setNativeProps({ text: "" });
+    this.setState({ bankIFSC: "" });
+    this.textInput_bankAccountNumber.setNativeProps({ text: "" });
+    this.setState({ bankAccountNumber: "" });
+    this.phone.selectCountry("in");
+  };
 
   componentDidMount() {
-    this.phone.selectCountry("in")
+    this.phone.selectCountry("in");
     this.setState({
       pickerData: this.phone.getPickerData()
-    })
+    });
   }
 
   onPressFlag() {
-    this.countryPicker.openModal()
+    this.countryPicker.openModal();
   }
 
   selectCountry(country) {
-    this.phone.selectCountry(country.cca2.toLowerCase())
-    this.setState({ cca2: country.cca2 })
+    this.phone.selectCountry(country.cca2.toLowerCase());
+    this.setState({ cca2: country.cca2 });
   }
 
   createAssociationPostData = () => {
-    association_Name = this.state.association_Name
-    property_Name = this.state.property_Name
-    property_Type = this.state.property_Type
-    pan_Number = this.state.pan_Number
-    reg_Number = this.state.reg_Number
-    country_a = this.state.country_a
-    state = this.state.state
-    city = this.state.city
-    association_Address = this.state.association_Address
-    pinCode = this.state.pinCode
-    total_NumberOfBlocks = this.state.total_NumberOfBlocks
-    total_NumberOfUnits = this.state.total_NumberOfUnits
-    emailAssociation = this.state.emailAssociation
-    bankName = this.state.bankName
-    bankIFSC = this.state.bankIFSC
-    bankAccountNumber = this.state.bankAccountNumber
-    bankAccountType = this.state.bankAccountType
+    association_Name = this.state.association_Name;
+    property_Name = this.state.property_Name;
+    property_Type = this.state.property_Type;
+    pan_Number = this.state.pan_Number;
+    reg_Number = this.state.reg_Number;
+    country_a = this.state.country_a;
+    state = this.state.state;
+    city = this.state.city;
+    association_Address = this.state.association_Address;
+    pinCode = this.state.pinCode;
+    total_NumberOfBlocks = this.state.total_NumberOfBlocks;
+    total_NumberOfUnits = this.state.total_NumberOfUnits;
+    emailAssociation = this.state.emailAssociation;
+    bankName = this.state.bankName;
+    bankIFSC = this.state.bankIFSC;
+    bankAccountNumber = this.state.bankAccountNumber;
+    bankAccountType = this.state.bankAccountType;
     // let bank1
 
     // bank1.push({
@@ -225,104 +231,106 @@ class App extends Component {
     // })
     // console.log("####################", bank1)
     // const reg = /^[0]?[6789]\d{9}$/
+    const regTextOnly = /^[a-zA-Z ]+$/;
     const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/;
-    const regPIN = /^[0-9]{1,10}$/
+    const regPIN = /^[0-9]{1,10}$/;
 
-    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/
-    let regIFSC = /^[A-Za-z]{4}0[A-Z0-9a-z]{6}$/
-    var panNumber = this.state.pan_Number.charAt(4)
-    var associationName = this.state.association_Name.charAt(4)
+    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+    let regIFSC = /^[A-Za-z]{4}0[A-Z0-9a-z]{6}$/;
+    var panNumber = this.state.pan_Number.charAt(4);
+    var associationName = this.state.association_Name.charAt(4);
+    const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
     // else if (this.state.panCount != 0) {
     //   alert(" Pan Number already Exist");
     // }
 
     if (association_Name.length == 0) {
-      Alert.alert("Association name Cannot be Empty")
+      Alert.alert("Association name Cannot be Empty");
     } else if (oyeNonSpecialRegex.test(association_Name) === true) {
-      alert(
-        " Association name should not contain Special Character"
-      )
+      alert(" Association name should not contain Special Character");
     } else if (association_Name < 3) {
-      alert("Association name should be more than 3 Characters")
+      alert("Association name should be more than 3 Characters");
     } else if (association_Name > 50) {
-      alert("Association name should be less than 50 Characters")
+      alert("Association name should be less than 50 Characters");
     } else if (property_Name.length == 0) {
-      Alert.alert("Property name Cannot be Empty")
+      Alert.alert("Property name Cannot be Empty");
     } else if (oyeNonSpecialRegex.test(property_Name) === true) {
-      alert(" Property name should not contain Special Character")
+      alert(" Property name should not contain Special Character");
     } else if (property_Name < 3) {
-      alert("Property name should be more than 3 Characters")
+      alert("Property name should be more than 3 Characters");
     } else if (property_Name > 50) {
-      alert("Property name should be less than 50 Characters")
+      alert("Property name should be less than 50 Characters");
     } else if (property_Type == 0) {
-      alert("Select Property Type")
+      alert("Select Property Type");
     } else if (pan_Number.length === 0 && reg_Number === 0) {
-      alert("Pan Number or Registration Number Cannot be Empty")
+      alert("Pan Number or Registration Number Cannot be Empty");
     } else if (pan_Number < 10) {
-      alert("Invalid Pan Number or Invalid Registration Number")
+      alert("Invalid Pan Number or Invalid Registration Number");
     } else if (pan_Number.charAt(4) !== association_Name.charAt(0)) {
-      alert("Enter valid PAN Number")
+      alert("Enter valid PAN Number");
     }
     // else if (regpan.test(pan_Number) === false) {
     //   alert("Enter valid PAN Number or Enter valid Registration Number")
     // }
     else if (state.length == 0) {
-      alert("State cannot be Empty")
+      alert("State cannot be Empty");
     } else if (regTextOnly.test(state) === false) {
-      alert(" State should not contain Special Character")
+      alert(" State should not contain Special Character");
     } else if (city.length == 0) {
-      alert("City cannot be Empty")
+      alert("City cannot be Empty");
     } else if (city > 50) {
-      alert("City name should be less than 50 Characters")
+      alert("City name should be less than 50 Characters");
     } else if (regTextOnly.test(city) === false) {
-      alert(" City should not contain Special Character")
+      alert(" City should not contain Special Character");
     } else if (association_Address.length == 0) {
-      alert("Address cannot be Empty")
+      alert("Address cannot be Empty");
     } else if (regTextOnly.test(association_Address) === false) {
-      alert("Address should not contain Special Character")
+      alert("Address should not contain Special Character");
     } else if (association_Address > 50) {
-      alert("Association Address should be less than 50 Characters")
+      alert("Association Address should be less than 50 Characters");
     } else if (pinCode.length == 0) {
-      alert("Pin Code Cannot be Empty")
+      alert("Pin Code Cannot be Empty");
     } else if (pinCode.length < 6) {
-      alert("Invalid Pin Code")
+      alert("Invalid Pin Code");
     } else if (regPIN.test(pinCode) === false) {
-      alert(" PIN Code should not contain Special Character")
+      alert(" PIN Code should not contain Special Character");
     } else if (total_NumberOfBlocks.length == 0) {
-      alert(" Number of Blocks cannot be Empty")
+      alert(" Number of Blocks cannot be Empty");
     } else if (total_NumberOfBlocks == 0) {
-      alert("Number of Blocks cannot be empty")
+      alert("Number of Blocks cannot be empty");
     } else if (total_NumberOfBlocks === "0") {
-      Alert.alert(" Number Of Blocks cannot be zero")
+      Alert.alert(" Number Of Blocks cannot be zero");
     } else if (total_NumberOfBlocks.length < 1) {
-      alert("Number Of Blocks should at least be 1")
+      alert("Number Of Blocks should at least be 1");
     } else if (regPIN.test(total_NumberOfBlocks) === false) {
-      alert("Number Of Blocks should not contain Special Character")
+      alert("Number Of Blocks should not contain Special Character");
     } else if (total_NumberOfUnits.length == 0) {
-      alert("Number of Units cannot be Empty")
+      alert("Number of Units cannot be Empty");
     } else if (total_NumberOfUnits === "0") {
-      Alert.alert(" Number Of Units cannot be zero")
+      Alert.alert(" Number Of Units cannot be zero");
     } else if (total_NumberOfUnits === 0) {
-      Alert.alert("Number Of Units cannot be zero")
+      Alert.alert("Number Of Units cannot be zero");
     }
     // else if (total_NumberOfUnits < 99) {
     //   alert("Number Of Units should not be more than 99")
     // }
     else if (regPIN.test(total_NumberOfUnits) === false) {
-      alert("Number Of Units should not contain Special Character")
+      alert("Number Of Units should not contain Special Character");
     } else if (regemail.test(emailAssociation) === false) {
-      Alert.alert("Enter Valid Email ID Of Association")
+      Alert.alert("Enter Valid Email ID Of Association");
     } else if (bankName.length == 0) {
-      alert("Bank Name Cannot be Empty")
+      alert("Bank Name Cannot be Empty");
     } else if (regTextOnly.test(bankName) === false) {
-      alert("Enter valid Bank Name")
+      alert("Enter valid Bank Name");
     } else if (bankIFSC.length == 0) {
-      alert("IFSC Cannot be Empty")
+      alert("IFSC Cannot be Empty");
     } else if (regIFSC.test(bankIFSC) === false) {
-      alert("Enter valid IFSC")
+      alert("Enter valid IFSC");
     } else if (bankAccountNumber.length == 0) {
-      alert("Bank Account Number Cannot be Empty")
+      alert("Bank Account Number Cannot be Empty");
     }
     //  else if (bankAccountNumber < 10) {
     //   alert("Enter Valid Bank Account number")
@@ -330,14 +338,14 @@ class App extends Component {
     //   alert("Enter Valid Bank Account number")
     // }
     else if (bankAccountType === 0) {
-      alert("Select Account Type")
+      alert("Select Account Type");
     }
     // else if (regPIN.test(bankAccountNumber) === false) {
     //   alert("Enter valid Bank Account Number")
     // }
     else if (bankAccountNumber !== 0) {
       fetch(
-        `http://${this.props.oyeURL}/oyeliving/api/v1/association/getassociationlist`,
+        `http://${oyeURL}/oyeliving/api/v1/association/getassociationlist`,
         {
           method: "GET",
           headers: {
@@ -351,118 +359,119 @@ class App extends Component {
           console.log(
             responseJson,
             "*******************************************"
-          )
-          var count = Object.keys(responseJson.data.associations).length
-          let panNumber1 = []
-          let bankAccNumber1 = []
+          );
+          var count = Object.keys(responseJson.data.associations).length;
+          let panNumber1 = [];
+          let bankAccNumber1 = [];
 
           //  panNumber1 = responseJson.data.associations[i].aspanNum
           //  bankAccNumber1 = responseJson.data.associations[i].bankDetails.baActNo
           for (var i = 0; i < count; i++) {
             if (pan_Number == responseJson.data.associations[i].aspanNum) {
-              alert("PAN Number already used")
+              alert("PAN Number already used");
             } else if (
               bankAccountNumber ==
               responseJson.data.associations[i].bankDetails[0].baActNo
             ) {
-              alert("Bank Account Number already used")
+              alert("Bank Account Number already used");
             }
 
-            console.log(panNumber1, "))))))))))))))))))))))))))))))))))))")
-            console.log(bankAccNumber1, "))))))))))))))))))))))))))))))))))))")
+            // console.log(panNumber1, "))))))))))))))))))))))))))))))))))))");
+            // console.log(bankAccNumber1, "))))))))))))))))))))))))))))))))))))");
           }
-          console.log(panNumber1, "))))))))))))))))))))))))))))))))))))")
-          console.log(bankAccNumber1, "))))))))))))))))))))))))))))))))))))")
+          // console.log(panNumber1, "))))))))))))))))))))))))))))))))))))");
+          // console.log(bankAccNumber1, "))))))))))))))))))))))))))))))))))))");
 
-          fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/association/create`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-              },
-              body: JSON.stringify({
-                ACAccntID: this.props.MyAccountID,
-                association: {
-                  ASAddress: association_Address,
-                  // association_Address,
-                  ASCountry: country_a,
-                  //country_a,
-                  ASCity: city,
-                  //city,
-                  ASState: state,
-                  //state,
-                  ASPinCode: pinCode,
-                  //pinCode,
-                  ASAsnLogo: "Images/c1.img",
-                  ASAsnName: association_Name,
-                  // association_Name,
-                  ASPrpName: property_Name,
-                  //property_Name,
-                  ASPrpType: property_Type,
-                  //property_Type,
-                  ASRegrNum: reg_Number,
-                  //reg_Number,
-                  ASWebURL: "www.spectra.com",
-                  ASAsnEmail: emailAssociation,
-                  ASPANStat: "False",
-                  ASPANNum: pan_Number,
-                  //pan_Number,
-                  ASPANDoc: "",
-                  ASNofBlks: total_NumberOfBlocks,
-                  //total_NumberOfBlocks,
-                  ASNofUnit: total_NumberOfUnits,
-                  //total_NumberOfUnits,
-                  ASGSTNo: "",
-                  ASTrnsCur: "Rupees",
-                  ASRefCode: "",
-                  ASOTPStat: "ON",
-                  ASOPStat: "ON",
-                  ASONStat: "ON",
-                  ASOMStat: "ON",
-                  ASOLOStat: "ON",
-                  ASGPSPnt: "",
-                  ASFaceDet: "",
-                  BankDetails: [
-                    {
-                      BABName: bankName,
-                      BAActType: bankAccountType,
-                      BAActNo: bankAccountNumber,
-                      BAIFSC: bankIFSC,
-                      BAActBal: 1
-                    }
-                  ],
-                  Amenities: [
-                    {
-                      AMType: "ClubHouse",
-                      NoofAmenities: 2
-                    }
-                  ]
-                }
-              })
-            }
-          )
+          fetch(`http://${oyeURL}/oyeliving/api/v1/association/create`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            },
+            body: JSON.stringify({
+              ACAccntID: this.props.MyAccountID,
+              association: {
+                ASAddress: association_Address,
+                // association_Address,
+                ASCountry: country_a,
+                //country_a,
+                ASCity: city,
+                //city,
+                ASState: state,
+                //state,
+                ASPinCode: pinCode,
+                //pinCode,
+                ASAsnLogo: "Images/c1.img",
+                ASAsnName: association_Name,
+                // association_Name,
+                ASPrpName: property_Name,
+                //property_Name,
+                ASPrpType: property_Type,
+                //property_Type,
+                ASRegrNum: reg_Number,
+                //reg_Number,
+                ASWebURL: "www.spectra.com",
+                ASAsnEmail: emailAssociation,
+                ASPANStat: "False",
+                ASPANNum: pan_Number,
+                //pan_Number,
+                ASPANDoc: "",
+                ASNofBlks: total_NumberOfBlocks,
+                //total_NumberOfBlocks,
+                ASNofUnit: total_NumberOfUnits,
+                //total_NumberOfUnits,
+                ASGSTNo: "",
+                ASTrnsCur: "Rupees",
+                ASRefCode: "",
+                ASOTPStat: "ON",
+                ASOPStat: "ON",
+                ASONStat: "ON",
+                ASOMStat: "ON",
+                ASOLOStat: "ON",
+                ASGPSPnt: "",
+                ASFaceDet: "",
+                BankDetails: [
+                  {
+                    BABName: bankName,
+                    BAActType: bankAccountType,
+                    BAActNo: bankAccountNumber,
+                    BAIFSC: bankIFSC,
+                    BAActBal: 1
+                  }
+                ],
+                Amenities: [
+                  {
+                    AMType: "ClubHouse",
+                    NoofAmenities: 2
+                  }
+                ]
+              }
+            })
+          })
             .then(response => response.json())
             .then(responseJson => {
-              console.log("My Family Details ###############", responseJson)
+              console.log("My Family Details ###############", responseJson);
               // alert("Association Created")
-              console.log("%%%%%%%%%%%%%%%%%", this.state.emailAssociation)
-              this.props.navigation.navigate('ResDashBoard')
+              console.log("%%%%%%%%%%%%%%%%%", this.state.emailAssociation);
+
+              // getDashSub(oyeURL, SelectedAssociationID);
+              getDashAssociation(oyeURL, MyAccountID);
+              getAssoMembers(oyeURL, MyAccountID);
+              this.props.navigation.navigate("ResDashBoard");
             })
 
             .catch(error => {
-              console.log("ashdjkhasjkhjaksbcjaksbkjdasd", error)
-              alert("error")
-            })
+              console.log("ashdjkhasjkhjaksbcjaksbkjdasd", error);
+              alert("error");
+            });
           // }
         })
         .catch(error => {
-          console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-        })
+          console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        });
     }
     //  else {
-  }
+  };
 
   addItem = () => {
     // const banks = this.state.banks.map((bank, index) => {
@@ -634,44 +643,41 @@ class App extends Component {
             </View>
           </View>
         </Card>
-      )
+      );
     }
-  }
+  };
 
   buttonPress = () => {
-    this.setState({ viewSection: true })
-  }
+    this.setState({ viewSection: true });
+  };
+
   render() {
-    
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          Keyboard.dismiss()
+          Keyboard.dismiss();
         }}
       >
         <View>
-
           <SafeAreaView style={{ backgroundColor: "orange" }}>
             <View style={[styles.viewStyle, { flexDirection: "row" }]}>
-              <TouchableOpacity onPress={()=> this.props.navigation.goBack()}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  marginLeft: 20
-                }}
-                
-              >
-                <Image
-                  source={require("../icons/backBtn.png")}
-                  style={{ width: 20, height: 20 }}
-                />
-              </View>
-
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: 20
+                  }}
+                >
+                  <Image
+                    source={require("../icons/backBtn.png")}
+                    style={{ width: 20, height: 20 }}
+                  />
+                </View>
               </TouchableOpacity>
-              
+
               <View
                 style={{
                   flex: 3,
@@ -832,14 +838,14 @@ class App extends Component {
                       <View style={styles.countryPickerStyle}>
                         <PhoneInput
                           ref={ref => {
-                            this.phone = ref
+                            this.phone = ref;
                           }}
                           onPressFlag={this.onPressFlag}
                         />
 
                         <CountryPicker
                           ref={ref => {
-                            this.countryPicker = ref
+                            this.countryPicker = ref;
                           }}
                           // onChange={value => this.selectCountry(value)}
                           onChange={value => {
@@ -848,7 +854,7 @@ class App extends Component {
                               callingCode: value.callingCode,
                               country: this.selectCountry(value),
                               country_a: value.name
-                            })
+                            });
                           }}
                           translation="eng"
                           cca2={this.state.cca2}
@@ -882,8 +888,8 @@ class App extends Component {
                             placeholder="Enter PAN Number"
                             ref={text => (this.textInput_pan_Number = text)}
                             onChangeText={pan_Number => {
-                              this.setState({ pan_number_empty_flag: false })
-                              return this.setState({ pan_Number: pan_Number })
+                              this.setState({ pan_number_empty_flag: false });
+                              return this.setState({ pan_Number: pan_Number });
                             }}
                           />
                         </Item>
@@ -1287,7 +1293,7 @@ class App extends Component {
                     warning
                     style={styles.buttonOk}
                     onPress={() => {
-                      this.createAssociationPostData()
+                      this.createAssociationPostData();
                     }}
                     // onPress={this.resetAllFields.bind()}
                   >
@@ -1309,7 +1315,7 @@ class App extends Component {
           {/* </ImageBackground> */}
         </View>
       </TouchableWithoutFeedback>
-    )
+    );
   }
 }
 
@@ -1501,16 +1507,24 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   }
-})
-
+});
 
 const mapStateToProps = state => {
   return {
-    champBaseURL: state.OyespaceReducer.champBaseURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     MyAccountID: state.UserReducer.MyAccountID,
-    oyeURL: state.OyespaceReducer.oyeURL  
+    MyFirstName: state.UserReducer.MyFirstName,
+    userReducer: state.UserReducer,
+
+    // Oyespace urls
+    oyeURL: state.OyespaceReducer.oyeURL,
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    oyespaceReducer: state.OyespaceReducer,
+    receiveNotifications: state.NotificationReducer.receiveNotifications
   };
 };
 
-export default connect(mapStateToProps)(App);
+export default connect(
+  mapStateToProps,
+  { getDashAssociation, getDashUnits, getDashSub, getAssoMembers }
+)(App);
