@@ -90,13 +90,19 @@ class NotificationDetailScreen extends Component {
                               })
                                 .then((response) => response.json())
                                 .then((responseJson) => {
+                                    console.log(
+                                      JSON.stringify(
+                                        UpdateTenant
+                                      )
+                                    );
                                     console.log(responseJson)
                                     console.log(`https://${this.props.oyeURL}/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`)
                                     console.log(`https://apidev.oyespace.com/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`)
                                     
                                     StatusUpdate = {
                                         NTID: item.ntid,
-	                                    NTStatDesc: responseJson.data
+                                        // NTStatDesc: responseJson.data,
+                                        NTStatDesc: responseJson.data.string
                                     }
 
                                     fetch(`http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`, {
