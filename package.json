@@ -13,6 +13,7 @@
     "moment": "^2.24.0",
     "native-base": "^2.12.1",
     "papaparse": "^4.6.3",
+    "prop-types": "^15.7.2",
     "react": "16.6.3",
     "react-native": "^0.59.8",
     "react-native-action-button": "^2.8.5",

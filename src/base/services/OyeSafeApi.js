@@ -9,21 +9,21 @@
 
 import axios from 'axios';
 import React from 'react';
-import base from '../../base';
+import utils from '../utils';
 
 
 let instance = axios.create({
-    baseURL: base.utils.strings.oyeSafeUrl,
+    baseURL: utils.strings.oyeSafeUrl,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
-        "X-OYE247-APIKey": base.utils.strings.oyeSafeApiKey
+        "X-OYE247-APIKey": utils.strings.oyeSafeApiKey
     }
 });
 
 instance.interceptors.response.use((response) => {
 
-    base.utils.logger.logArgs(response);
+    utils.logger.logArgs(response);
 
     /**
      * Handle the success response here.
@@ -42,7 +42,7 @@ instance.interceptors.response.use((response) => {
     // }
 
 }, (error) => {
-    base.utils.logger.logArgs(error);
+    utils.logger.logArgs(error);
     return null;
 });
 

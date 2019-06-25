@@ -97,7 +97,7 @@ class AddRegularVisitor extends Component {
 	"ACMobile4" : "",	"ACEmail" : "basavarajeshk86@gmail.com",	"ACEmail1" : "",	"ACEmail2" : "",	"ACEmail3" : "",
 	"ACEmail4": "",	"ACISDCode" : "+91",	"ACISDCode1" : "",	"ACISDCode2" : "",	"ACISDCode3" : "",	"ACISDCode4" : ""
 }*/
-      const url = this.props.champBaseURL + "account/signup";
+      const url = "https://apidev.oyespace.com/oyeliving/api/v1/account/sendotp" //this.props.champBaseURL + "account/signup";
       //  const url = 'http://122.166.168.160/champ/api/v1/account/signup'
 
       console.log("member", JSON.stringify(member));

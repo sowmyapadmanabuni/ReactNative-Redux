@@ -9,21 +9,22 @@
 
 import axios from 'axios';
 import React from 'react';
-import base from '../../base';
+import utils from '../utils';
+
 
 
 let instance = axios.create({
-    baseURL: base.utils.strings.oyeLivingUrl,
+    baseURL: utils.strings.oyeLivingUrl,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
-        "X-Champ-APIKey": base.utils.strings.oyeLivingApiKey
+        "X-Champ-APIKey": utils.strings.oyeLivingApiKey
     }
 });
 
 instance.interceptors.response.use((response) => {
 
-    base.utils.logger.logArgs(response);
+    utils.logger.logArgs(response);
 
     /**
      * Handle the success response here.
@@ -42,7 +43,7 @@ instance.interceptors.response.use((response) => {
     // }
 
 }, (error) => {
-    base.utils.logger.logArgs(error);
+    utils.logger.logArgs(error);
     return null;
 });
 

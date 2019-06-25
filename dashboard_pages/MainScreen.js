@@ -48,6 +48,8 @@ import {
   getAssoMembers
 } from "../src/actions";
 
+import base from '../src/base'
+
 class Dashboard extends React.Component {
   static navigationOptions = {
     title: "Dashboard",
@@ -71,6 +73,8 @@ class Dashboard extends React.Component {
       unitid: "",
       uoMobile: ""
     };
+
+
   }
 
   requestNotifPermission = () => {

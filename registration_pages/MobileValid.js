@@ -14,7 +14,6 @@ import CountryPicker, {
   getAllCountries
 } from 'react-native-country-picker-modal'
 import { updateUserInfo } from '../src/actions';
-import base from '../src/base'
 
 let db = openDatabase({ name: global.DB_NAME });
 console.disableYellowBox = true;
@@ -147,7 +146,7 @@ class MobileValid extends Component {
         "MobileNumber": mobilenumber
       }
 
-      url = this.props.champBaseURL + 'account/sendotp';
+      url = "https://apidev.oyespace.com/oyeliving/api/v1/account/sendotp" //this.props.champBaseURL + 'account/sendotp';
       //  http://api.oyespace.com/champ/api/v1/account/sendotp
       console.log('anu', url + ' ff' + countryCode + mobilenumber);
 
@@ -354,7 +353,6 @@ class MobileValid extends Component {
         <Text style={{ height: '6%', fontSize: 12, paddingRight: '5%', paddingBottom: '5%', alignSelf: 'flex-end',alignItems:'flex-end', justifyContent:'flex-end', textAlignVertical: 'center', color: 'black',marginRight:10 }}>
           Version:{VersionNumber.appVersion}
         </Text>
-        
       </View>
 
     );

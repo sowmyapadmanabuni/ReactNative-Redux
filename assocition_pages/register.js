@@ -345,30 +345,6 @@ class RegisterMe extends Component {
                 {
                   headers: headers_2
                 }
-<<<<<<< HEAD
-            })
-            .then(response => {
-                console.log('*******')
-                console.log('here_1 ')
-                console.log('*******')
-                let responseData_1 = response.data;
-                if(responseData_1.success) {
-
-                    let headers_2 = {
-                        "Content-Type": "application/json",
-                        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-                    }
-                    
-                    let mobileNo = '+91' + this.props.MyMobileNumber;
-                    console.log(mobileNo)
-                    axios.post('http://'+ this.props.oyeURL +'/oyeliving/OyeLivingApi/v1/Member/GetRequestorDetails', {
-                        ACMobile : mobileNo,
-                        ASAssnID : this.props.navigation.state.params.associtionID,
-                        UNUnitID : this.props.navigation.state.params.unitID,
-                        MRMRoleID: parseInt(this.state.PickerValueHolder),
-                    }, {
-                        headers: headers_2
-=======
               )
               .then(response_2 => {
                 let responseData_2 = response_2.data.data.member;
@@ -442,7 +418,6 @@ class RegisterMe extends Component {
                       roleName: roleName,
                       soldDate: soldDate,
                       occupancyDate: occupancyDate
->>>>>>> d333328e5be6c6d80ebc45f75d2dbd266ce06957
                     })
                     .then(response_3 => {
                       this.setState({ loading: false });
