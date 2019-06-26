@@ -5,13 +5,11 @@ import { AppRegistry, View, Text, TextInput, StyleSheet, Button, Card,
 import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker'
 import PhoneInput from "react-native-phone-input";
-import { openDatabase } from 'react-native-sqlite-storage';
 import { TextField } from 'react-native-material-textfield';
 import CountryPicker, {
     getAllCountries
   } from 'react-native-country-picker-modal'
 
-var db = openDatabase({ name: global.DB_NAME });
 
 const options = {
     title: 'Select a Photo',
@@ -45,22 +43,6 @@ export default class AddRegularVisitor extends Component {
 
         this.renderInfo = this.renderInfo.bind(this);
 
-        db.transaction(tx => {
-            //SELECT B.* From (select max(Time) Time, GuardID FROM RouteTracker group by GuardID ) " +
-            // " A inner join RouteTracker B using (Time,GuardID)
-            tx.executeSql('SELECT Distinct M.AssociationID, A.Name FROM MyMembership M inner Join Association A on M.AssociationID=A.AssociationID ', [], (tx, results) => {
-                var temp = [];
-                for (let i = 0; i < results.rows.length; ++i) {
-                    temp.push(results.rows.item(i));
-                    console.log('Results UnitID', results.rows.item(i).Name + ' ' + results.rows.item(i).AssociationID);
-                    // this.innsert(results.rows.item(i).UnitID,results.rows.item(i).UnitName,results.rows.item(i).Type);
-                }
-
-                this.setState({
-                    dataSource: temp,
-                });
-            });
-        });
 
     }
 
@@ -129,7 +111,7 @@ export default class AddRegularVisitor extends Component {
 	"REMobile"		: "9490791859",	"REISDCode" 	: "+91",	"MEMemID"		: 2,
 	"UNUnitID"		: 1,	"WKWrkType"		: "Visitor",	"ASAssnID"		: 25
 } */
-            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/RegularVisitor/create'
+            const url = 'http://' + global.oyeURL + '/oye247/api/v1/RegularVisitor/create'
             //  const url = 'http://122.166.168.160/oye247/api/v1/RegularVisitor/create'
 
             console.log('AddRegularVisitor member', JSON.stringify(member));

@@ -9,7 +9,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { withBadge } from 'react-native-elements';
 import { DrawerNavigator, StackNavigator, createStackNavigator } from 'react-navigation';
 import Pie from 'react-native-pie';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
 import { RemoteMessage, Notification } from 'react-native-firebase';
 import RNExitApp from 'react-native-exit-app';
@@ -22,7 +21,6 @@ import ProgressBarAnimated from 'react-native-progress-bar-animated';
 import { newNotifInstance, createNotification, getNotifications, updateJoinedAssociation } from '../src/actions';
 
 console.disableYellowBox = true;
-var db = openDatabase({ name: global.DB_NAME });
 const radiusHeight = Dimensions.get('window').height / 8;
 const boxHeight = (Dimensions.get('window').height / 4) + 50;
 var date = new Date().getDate();
@@ -85,42 +83,6 @@ class MainScreen extends Component {
         });
     }
 
-        db.transaction(tx => {
-
-            tx.executeSql('SELECT Distinct M.AssociationID, A.AsnName FROM MyMembership M inner Join Association A on M.AssociationID=A.AssnID ', [], (tx, results) => {
-                var temp = [];
-                let drop_down_data_local = [];
-                for (let i = 0; i < results.rows.length; ++i) {
-                    temp.push(results.rows.item(i));
-                    drop_down_data_local.push({ value: results.rows.item(i).AssociationID, label: results.rows.item(i).AsnName, }); // Create your array of data
-                    console.log('Results AsnName ', results.rows.item(i).AsnName + ' ' + results.rows.item(i).AssociationID);
-                    global.AssociationName = results.rows.item(0).AsnName;
-                }
-                this.setState({
-                    dataSourceAssnPkr: temp,
-                });
-                this.setState({ drop_down_data: drop_down_data_local }); // Set 
-            });
-        });
-
-        db.transaction(tx => {
-
-            tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-                var temp = [];
-                let unit_drop_down_data_local = [];
-                for (let i = 0; i < results.rows.length; ++i) {
-                    temp.push(results.rows.item(i));
-                    unit_drop_down_data_local.push({ value: results.rows.item(i).OYEUnitID, label: results.rows.item(i).UnitName, }); // Create your array of data
-                    
-                    console.log('dataSourceUnitPkr UnitID ' + i, results.rows.item(i).UnitName + ' ' + results.rows.item(i).OYEUnitID);
-                }
-                this.setState({
-                    dataSourceUnitPkr: temp,
-                });
-                this.setState({ stUnit_drop_down_data: unit_drop_down_data_local }); // Set 
-
-            });
-        });
 
         this.fnSet_After_Association_Selected();
 
@@ -151,96 +113,13 @@ class MainScreen extends Component {
 
     fnSet_After_Association_Selected() {
 
-        db.transaction(tx => {
+       
 
-            tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-                var temp = [];
-                let unit_drop_down_data_local = [];
-                for (let i = 0; i < results.rows.length; ++i) {
-                    temp.push(results.rows.item(i));
-                    unit_drop_down_data_local.push({ value: results.rows.item(i).OYEUnitID, label: results.rows.item(i).UnitName, }); // Create your array of data
-                    console.log('dataSourceUnitPkr UnitID', results.rows.item(i).UnitName + ' ' + results.rows.item(i).OYEUnitID);
-                    global.AssociationUnitName = results.rows.item(0).UnitName;
-                    global.SelectedUnitID = results.rows.item(0).OYEUnitID;
-                    this.setState({ stSelectedUnitID: global.SelectedUnitID });
-                }
-                if (results.rows.length == 0) {
-                    console.log('count dataSourceUnitPkr ', value + ' ' + value);
-                    this.syncUnits(global.SelectedAssociationID);
-                }
-                this.setState({
-                    dataSourceUnitPkr: temp,
-                });
-                this.setState({ stUnit_drop_down_data: unit_drop_down_data_local }); // Set 
-
-            });
-        });
-
-        db.transaction(tx => {
-            tx.executeSql('SELECT Distinct AttendanceID FROM Attendance where AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-                console.log('Results', results.rowsAffected);
-
-                this.setState({
-                    guard_onduty_count: results.rows.length,
-                });
-            });
-        });
-
-        db.transaction(tx => {
-            tx.executeSql('SELECT Distinct WorkID FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-                console.log('Results', results.rowsAffected);
-
-                this.setState({
-                    guard_tot_count: results.rows.length,
-                });
-                if (results.rows.length > 0) {
-                    this.setState({
-                        workerID: results.rows.item(0).WorkID,
-                    });
-                }
-            });
-        });
-
-        db.transaction(tx => {
-            tx.executeSql('SELECT Distinct OwnerId FROM UnitOwner where OwnerAssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-                console.log('Results', results.rowsAffected);
-                this.setState({
-                    units_occupied_count: results.rows.length,
-                });
-            });
-        });
-
-        db.transaction(tx => {
-            tx.executeSql('SELECT Distinct NofUnit FROM Association where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-                console.log('Results', results.rowsAffected);
-                this.setState({
-                    units_tot_count: results.rows.item(0).NofUnit,
-                });
-            });
-        });
 
     }
 
     fnSet_MemberID_Role() {
-        db.transaction(txMyMem => {
-            txMyMem.executeSql('SELECT * FROM MyMembership where AssociationID=' + global.SelectedAssociationID + ' and OYEUnitID=' + global.SelectedUnitID, [], (txMyMem, resultsMyMem) => {
-                console.log('MainScreen Results MyMembership ', resultsMyMem.rows.length + ' ');
-
-                if (resultsMyMem.rows.length > 0) {
-                    console.log('MainScreen Results MyMembership', resultsMyMem.rows.item(0).AssociationID + ' ' + resultsMyMem.rows.item(0).OYEUnitID + ' '
-                        + resultsMyMem.rows.item(0).MobileNumber + ' ' + resultsMyMem.rows.item(0).OYEMemberRoleID + ' ');
-
-                    for (let i = 0; i < resultsMyMem.rows.length; ++i) {
-                        console.log('MainScreen Results UnitID', resultsMyMem.rows.item(i).OYEUnitID + ' ' + resultsMyMem.rows.item(i).OYEMemberID);
-                        //  this.innsert(results.rows.item(i).UnitID,results.rows.item(i).UnitName,results.rows.item(i).Type);
-                        global.SelectedRole = resultsMyMem.rows.item(0).OYEMemberRoleID;
-                        global.SelectedMemberID = resultsMyMem.rows.item(0).OYEMemberID;
-                    }
-
-                }
-
-            });
-        });
+        
     }
 
     Admin = () => {
@@ -422,7 +301,7 @@ class MainScreen extends Component {
         // this.props.getNotifications(global.MyAccountID, 2, true)
 
         //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
-        const url1 = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/Subscription/GetLatestSubscriptionByAssocID/' + global.SelectedAssociationID
+        const url1 = 'http://' + global.oyeURL + '/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/' + global.SelectedAssociationID
         fetch(url1, {
             method: 'GET',
             headers: {
@@ -449,7 +328,7 @@ class MainScreen extends Component {
                 } else {
                     console.log('Subscription ', 'else ');
                     //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
-                    const url3 = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/Subscription/Create'
+                    const url3 = 'http://' + global.oyeURL + '/oyesafe/api/v1/Subscription/Create'
                     member = {
                         "ASAssnID": global.SelectedAssociationID,
                         "SULPymtD": moment(new Date()).format('YYYY-MM-DD'),//"2018-01-26",// yearToday+"-"+monthToday+"-"+dateToday,
@@ -507,13 +386,9 @@ class MainScreen extends Component {
             console.log('componentdidmount lat ', this.state.lat + ',' + this.state.long);
         });
 
-        db.transaction(tx => {
-            tx.executeSql('delete FROM UnitParkingID ', [], (tx, results) => {
-                console.log('Results UnitParkingID delete ', results.rowsAffected);
-            });
-        });
+       
         //http://api.oyespace.com/oyeliving/api/v1/UnitParking/GetUnitParkingListByAssocID/30
-        //const url2 = 'http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
+        //const url2 = 'http://'+global.oyeURL+'/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
         const url3 = global.champBaseURL + 'UnitParking/GetUnitParkingListByAssocID/' + global.SelectedAssociationID
         console.log('Parking', url3)
         fetch(url3, {
@@ -555,7 +430,7 @@ class MainScreen extends Component {
     }
 
     getListOfNotifications = () => {
-        fetch('http://'+ global.oyeURL +'/oyesafe/OyeLivingApi/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+        fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
       , {
         method: 'GET',
         headers: {
@@ -574,11 +449,7 @@ class MainScreen extends Component {
     }
 
     getBlockList = () =>{
-        db.transaction(tx => {
-        tx.executeSql('delete FROM Blocks where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-        console.log('Results Blocks delete ', results.rowsAffected);
-        });
-        });
+        
         console.log('ff')
         const url = 'http://apidev.oyespace.com/oyeliving/api/v1/Block/GetBlockListByAssocID/'+global.SelectedAssociationID;
         
@@ -619,36 +490,16 @@ class MainScreen extends Component {
     }
 
     insert_BlockDetails(block_id, block_name, block_type, block_units, AssociationID) {
-        db.transaction(function (tx) {
-        tx.executeSql(
-        'INSERT INTO Blocks (BlockID, BlockName, BlockType, BlockUnits, AssnID ) VALUES (?,?,?,?,?)',
-        [block_id, block_name, block_type, block_units, AssociationID],
-        (tx, results) => {
-        console.log('Results Attendance', results.rowsAffected);
-        }
-        );
-        });
+        
     }
         
 
     insert_UnitParkingID(unitparking_id, association_id) {
-        db.transaction(function (tx) {
-            tx.executeSql(
-                'INSERT INTO UnitParkingID (UPID, AssociationID) VALUES (?,?)',
-                [unitparking_id, association_id],
-                (tx, results) => {
-                    console.log('Results UnitParkingID', results.rowsAffected);
-                }
-            );
-        });
+       
     }
 
     getAttendance_byAssociationID() {
-        db.transaction(tx => {
-            tx.executeSql('delete  FROM Attendance where AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-                console.log('Results Attendance delete ', results.rowsAffected);
-            });
-        });
+      
 
         var date = new Date().getDate();
         var month = new Date().getMonth() + 1;
@@ -656,8 +507,8 @@ class MainScreen extends Component {
 
         //GetAttendanceListByStartDateAndAssocID/66/12-10-2018
         //http://api.oyespace.com/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/66/12-10-2018
-        //const url2 = 'http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
-        const url2 = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID + '/' + month + '-' + date + '-' + year
+        //const url2 = 'http://'+global.oyeURL+'/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
+        const url2 = 'http://' + global.oyeURL + '/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID + '/' + month + '-' + date + '-' + year
         console.log('attendance ' + date + ' ' + month + ' ' + year + ' ' + url2);
         fetch(url2, {
             method: 'GET',
@@ -715,16 +566,7 @@ class MainScreen extends Component {
     }
 
     insert_GuardAttendance(attendance_id, association_id, guard_id, imei_no, start_date, end_date, start_time, end_time) {
-        db.transaction(function (tx) {
-            tx.executeSql(
-                'INSERT INTO Attendance (AttendanceID, AssociationID, GuardID, ImeiNo, StartDate, EndDate, StartTime, ' +
-                ' EndTime ) VALUES (?,?,?,?,?,?,?,?)',
-                [attendance_id, association_id, guard_id, imei_no, start_date, end_date, start_time, end_time],
-                (tx, results) => {
-                    console.log('Results Attendance', results.rowsAffected);
-                }
-            );
-        });
+       
     }
 
     exitApp = () => {
@@ -759,7 +601,7 @@ class MainScreen extends Component {
             }
 
             console.log('createEmergency ', anu)
-            fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Ticketing/Create',
+            fetch('http://' + global.oyeURL + '/oye247/api/v1/Ticketing/Create',
                 {
                     method: 'POST',
                     headers: {
@@ -853,30 +695,7 @@ class MainScreen extends Component {
 
     deleteUser = () => {
         var that = this;
-        db.transaction(tx => {
-            tx.executeSql(
-                'DELETE FROM  Account ',
-                [],
-                (tx, results) => {
-                    console.log('Results', results.rowsAffected);
-                    if (results.rowsAffected > 0) {
-                        Alert.alert(
-                            'Log Out User',
-                            'Successfull',
-                            [
-                                {
-                                    text: 'Ok',
-                                    onPress: () => that.props.navigation.navigate('MobileValid'),
-                                },
-                            ],
-                            { cancelable: false }
-                        );
-                    } else {
-                        alert('Logged Out Failed');
-                    }
-                }
-            );
-        });
+       
     };
 
     onAssnPickerValueChange = (value, index) => {
@@ -944,11 +763,7 @@ class MainScreen extends Component {
                 if (responseJson.success) {
                     console.log('ravii', responseJson);
                     console.log('responseJson count unit ', responseJson.data.unit.length);
-                    db.transaction(tx => {
-                        tx.executeSql('delete  FROM OyeUnit where AssociationID=' + assnID, [], (tx, results) => {
-                            console.log('Results Attendance delete ', results.rowsAffected);
-                        });
-                    });
+                   
                     for (let i = 0; i < responseJson.data.unit.length; ++i) {
                         //     temp.push(results.rows.item(i));
 
@@ -962,27 +777,7 @@ class MainScreen extends Component {
 
                     }
 
-                    db.transaction(tx => {
-
-                        tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-                            var temp = [];
-                            let unit_drop_down_data_local = [];
-                            for (let i = 0; i < results.rows.length; ++i) {
-                                temp.push(results.rows.item(i));
-                                unit_drop_down_data_local.push({ value: results.rows.item(i).OYEUnitID, label: results.rows.item(i).UnitName, }); // Create your array of data
-                                console.log('dataSourceUnitPkr UnitID', results.rows.item(i).UnitName + ' ' + results.rows.item(i).OYEUnitID);
-                                global.AssociationUnitName = results.rows.item(0).UnitName;
-                                global.SelectedUnitID = results.rows.item(0).OYEUnitID;
-                            }
-
-                            this.setState({
-                                dataSourceUnitPkr: temp,
-                            });
-                            this.setState({ stUnit_drop_down_data: unit_drop_down_data_local }); // Set 
-
-                        });
-                    });
-
+                  
                     this.fnSet_MemberID_Role();
 
                 } else {
@@ -1002,20 +797,7 @@ class MainScreen extends Component {
 
     insert_units(unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number
     ) {
-        db.transaction(function (tx) {
-            //// OyeUnit(UnitID integer , " +
-            //" AssociationID integer , UnitName VARCHAR(20) ,  Type VARCHAR(20) , AdminAccountID integer , " +
-            //" CreatedDateTime VARCHAR(20),  ParkingSlotNumber VARCHAR(20) )
-            tx.executeSql(
-                'INSERT INTO OyeUnit (UnitID, AssociationID, UnitName, Type, AdminAccountID, CreatedDateTime,  ' +
-                '  ParkingSlotNumber ) VALUES (?,?,?,?,?,?,?)',
-                [unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number],
-                (tx, results) => {
-                    console.log('INSERT oyeUnits ', results.rowsAffected + ' ' + association_id);
-
-                }
-            );
-        });
+      
     }
 
     renderAdmin = () => {

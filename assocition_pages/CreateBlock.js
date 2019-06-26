@@ -270,9 +270,11 @@ class AddBlock extends Component {
       Alert.alert("Please Select Block type")
     } else if (noOfUnits.length == 0) {
       Alert.alert("Number of Units Cannot be Empty")
-    } else if (noOfUnits >= 80) {
-      Alert.alert("Number Of Units should not be more than 80")
-    } else if (regPIN.test(noOfUnits) === false) {
+    } 
+    // else if (noOfUnits >= 80) {
+    //   Alert.alert("Number Of Units should not be more than 80")
+    // }
+     else if (regPIN.test(noOfUnits) === false) {
       alert("Number Of Units should not contain Special Character")
     } else if (managerName.length == 0) {
       Alert.alert("Manager Name Cannot be Empty")
@@ -753,12 +755,12 @@ class AddBlock extends Component {
                   {this.state.measurementTypeCountry == "indi" ? (
                     <Text style={styles.box8}>
                       {" "}
-                      India: MeasurementType Type, e.g, SQFT{" "}
+                      SQFT{" "}
                     </Text>
                   ) : (
                     <Text style={styles.box8}>
                       {" "}
-                      It's not India: MeasurementType Type, e.g, SQMT
+                      SQMT
                     </Text>
                   )}
                 </Item>

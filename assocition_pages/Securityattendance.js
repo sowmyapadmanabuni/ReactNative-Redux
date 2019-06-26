@@ -3,10 +3,8 @@ import { AppRegistry, Platform, Alert, TouchableOpacity, ScrollView, Permissions
 
 import { DatePickerDialog } from 'react-native-datepicker-dialog'
 import moment from 'moment';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts'
 
-var db = openDatabase({ name: global.DB_NAME });
 
 export default class Securityattendance extends Component {
   ShowCurrentDate = () => {
@@ -132,8 +130,8 @@ export default class Securityattendance extends Component {
     const { params } = this.props.navigation.state;
     console.log('params', this.props.navigation.state.params.fname + '' + this.props.navigation.state.params.id);
     console.log('componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByAttendyID/'+global.SelectedAssociationID
-    const url1 = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Attendance/GetAttendanceList'
+    const url = 'http://' + global.oyeURL + '/oye247/api/v1/Attendance/GetAttendanceListByAttendyID/'+global.SelectedAssociationID
+    const url1 = 'http://' + global.oyeURL + '/oye247/api/v1/Attendance/GetAttendanceList'
     console.log(url1)
     fetch(url1, {
       method: 'GET',
@@ -153,68 +151,7 @@ export default class Securityattendance extends Component {
           isLoading: false
         })
 
-        //           if (responseJson.success) 
-        //           {
-        //             console.log('workers count', responseJson.data.attendanceListByAttendyID.length);
-        //             for (let i = 0; i < responseJson.data.attendanceListByAttendyID.length; ++i) {
-        //               //  this.state.WorkerId=responseJson.data.workers[i].wkWorkID;
-        //                this.setState({
-        //                 WorkerId:responseJson.data.attendanceListByAttendyID[i].wkWorkID
-        //                 });
-        //                 console.log("ravi sir",this.state.WorkerId)
-        // }
-        //   db.transaction(tx=> 
-        //       {  tx.executeSql('SELECT FName FROM Workers where WorkID=?', [Workerid], (tx, results) => {
-        //         for(let i=0;i<results.rows.length;i++){
-        //           this.setState({
-        //             WorkerName: results.rows.item(0).FName
-        //           });
-        //           console.log('check db',
-        //      this.state.WorkerName+','+this.state.WorkerId);}
-        //       console.log('check db',
-        //       results.rows.length+","+results.rows.item(0).FName);
-        //       this.setState({
-        //       panCount: 
-        //       results.rows.item,
-        //       });
-        //       });
-        //       });
-
-        //     var temp = [];
-        //     db.transaction(tx => {
-        //       // Workers (WorkID, AssnID, FName, LName, WKMobile, WKImgName, ' +            ' WrkType , Desgn, IDCrdNo,
-        //       //Attendance (AttendanceID, AssociationID, GuardID, ImeiNo, StartDate, EndDate, StartTime,
-        //        tx.executeSql('SELECT Distinct M.AssnID,M.WorkID,M.FName, M.LName,M.Desgn, M.WrkType,A.AttendanceID, A.EndTime,A.StartTime, \'Onduty\' as C FROM Workers M inner Join Attendance A on M.WorkID=A.GuardID ', [], (tx, results) => {
-        //          for (let i = 0; i < results.rows.length; ++i) {
-        //            temp.push(results.rows.item(i));
-        //            console.log('get Attendance ', results.rows.item(i).AttendanceID+' ,'+results.rows.item(i).StartTime+','+results.rows.item(i).EndTime);
-        //          }
-        //          this.setState({
-        //           // dataSource: temp,
-        //          });
-        //        });
-        //      });
-
-        //      db.transaction(tx => {
-        //       let Guard='Guard'
-        //       // Workers (WorkID, AssnID, FName, LName, WKMobile, WKImgName, ' +            ' WrkType , Desgn, IDCrdNo,
-        //       //Attendance (AttendanceID, AssociationID, GuardID, ImeiNo, StartDate, EndDate, StartTime,
-        //        tx.executeSql('SELECT Distinct M.AssnID,M.WorkID,M.FName, M.LName,M.Desgn,  A.AttendanceID, A.EndTime,A.StartTime , \'Offduty\' as C FROM Workers M left Join Attendance A on M.WorkID!=A.GuardID ', [], (tx, results) => {
-        //         // var temp = [];
-        //         // temp=dataSource;
-        //          for (let i = 0; i < results.rows.length; ++i) {
-        //            temp.push(results.rows.item(i));
-        //            console.log('get Attendance ', results.rows.item(i).AttendanceID+' '+results.rows.item(i).StartTime+' '+results.rows.item(i).EndTime);
-        //          }
-        //          this.setState({
-        //           //  dataSource: temp,
-        //          });
-        //        });
-        //      });
-
-        //           }
-
-        // console.log('anu', dataSource);
+        
       })
       .catch((error) => {
         console.log(error)
@@ -227,25 +164,7 @@ export default class Securityattendance extends Component {
 
   }
   namebyid() {
-    db.transaction(tx => {
-      tx.executeSql('SELECT FName FROM Workers where WorkID=8', [], (tx, results) => {
-        for (let i = 0; i < results.rows.length; ++i) {
-          temp.push(results.rows.item(i));
-          this.setState({
-            WorkerName: results.rows.item(i).FName
-          });
-          console.log('check db',
-            this.state.WorkerName + ',' + this.state.WorkerId);
-        }
-        console.log('check db',
-          results.rows.length + "," + results.rows.item(0).FName);
-        this.setState({
-          panCount:  results.rows.item,
-        });
-
-      });
-
-    });
+    
     return this.state.WorkerName;
 
   }

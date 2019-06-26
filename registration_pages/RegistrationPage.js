@@ -15,14 +15,12 @@ import {
   ScrollView
 } from "react-native";
 import PhoneInput from "react-native-phone-input";
-import { openDatabase } from "react-native-sqlite-storage";
 import { Fonts } from "../pages/src/utils/Fonts";
 import RNExitApp from "react-native-exit-app";
 import { updateUserInfo } from "../src/actions";
 import { connect } from "react-redux";
 
 console.disableYellowBox = true;
-var db = openDatabase({ name: global.DB_NAME });
 
 class AddRegularVisitor extends Component {
   state = {
@@ -97,7 +95,7 @@ class AddRegularVisitor extends Component {
 	"ACMobile4" : "",	"ACEmail" : "basavarajeshk86@gmail.com",	"ACEmail1" : "",	"ACEmail2" : "",	"ACEmail3" : "",
 	"ACEmail4": "",	"ACISDCode" : "+91",	"ACISDCode1" : "",	"ACISDCode2" : "",	"ACISDCode3" : "",	"ACISDCode4" : ""
 }*/
-      const url = "https://apidev.oyespace.com/oyeliving/api/v1/account/sendotp" //this.props.champBaseURL + "account/signup";
+      const url = this.props.champBaseURL + "account/signup";
       //  const url = 'http://122.166.168.160/champ/api/v1/account/signup'
 
       console.log("member", JSON.stringify(member));
@@ -427,6 +425,7 @@ class AddRegularVisitor extends Component {
     console.log("testing", this.props.oyeNonSpecialNameRegex.test("email"));
   }
 }
+
 const mapStateToProps = state => {
   return {
     MyMobileNumber: state.UserReducer.MyMobileNumber,

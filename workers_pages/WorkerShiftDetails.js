@@ -4,12 +4,10 @@ import {
   Button, Alert, filter, Image, TouchableOpacity
 } from 'react-native';
 import Moment from 'moment';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
 
 import ActionButton from 'react-native-action-button';
 
-var db = openDatabase({ name: global.DB_NAME });
 
 export default class WorkerShiftDetails extends Component {
 
@@ -30,38 +28,12 @@ export default class WorkerShiftDetails extends Component {
       isLoading: true
     }
     console.log('anu123', 'constructor');
-    db.transaction(function (txn) {
-      txn.executeSql(
-        "SELECT * FROM sqlite_master WHERE type='table' AND name='WorkerShiftDetails1'",
-        [],
-        function (tx, res) {
-          console.log('item:', res.rows.length);
-          if (res.rows.length == 0) {
-
-            txn.executeSql(
-              'CREATE TABLE IF NOT EXISTS WorkerShiftDetails1( WorkerShiftID INTEGER,AssociationID INTEGER ,'
-              + ' WorkerName VARCHAR(30), ShiftStartDate VARCHAR(25), ShiftEndDate VARCHAR(25), ShiftStartTime VARCHAR(25), ShiftEndTime VARCHAR(25), '
-              + ' Weeklyoff VARCHAR(30), CreatedTime VARCHAR(30),Status VARCHAR(30) )',
-              []
-            );
-
-            // create table IF NOT EXISTS Attendance(AttendanceID integer , " +
-            //" GuardID integer , AssociationID integer , IMEINo VARCHAR(30), StartDate VARCHAR(20),EndDate VARCHAR(20),  " +
-            //" StartTime VARCHAR(10), StartGPSPoint VARCHAR(30), " +
-            //" EndTime VARCHAR(10) , EndGPSPoint VARCHAR(30) )
-
-          }
-        }
-      );
-    });
   }
 
   handlePress(url) {
-    //console.tron.log('Trying to access url')
-    //console.tron.log(url)
+    
     Linking.canOpenURL(url).then(supported => {
       if (!supported) {
-        //console.tron.log('Can\'t handle url: ' + url)
       } else {
         return Linking.openURL(url)
 
@@ -117,15 +89,7 @@ export default class WorkerShiftDetails extends Component {
               <Text style={styles.subtext}>To: {item.wseTime.substring(11, 19)}</Text>
             </View>
             <Text style={styles.subtext}>Weekly off : {item.wsWeekOff}</Text>
-            {/* <TouchableOpacity
-                     onPress={() => Communications.phonecall(item.mobileNumber, true)}>
-                     <View style={{flex:1,flexDirection:'row'}}>
-                        <Image
-                        source={require('../pages/assets/images/phone.png')}
-                        style={{height:20,width:20,alignItems:"center"}}/>
-                        <Text style={mystyles.text}>{item.mobileNumber}</Text>
-                     </View>
-                     </TouchableOpacity> */}
+           
           </View>
         </View>
       </View>
@@ -143,7 +107,7 @@ export default class WorkerShiftDetails extends Component {
 
   componentDidMount() {
     console.log('GetWorkerShiftTiming componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/WorkerShiftTiming/GetWorkerShiftTimingListByAssocID/' + global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oye247/api/v1/WorkerShiftTiming/GetWorkerShiftTimingListByAssocID/' + global.SelectedAssociationID
     fetch(url, {
       method: 'GET',
       headers: {
@@ -212,28 +176,10 @@ export default class WorkerShiftDetails extends Component {
     );
   }
 
-  /* SecurityGuard( GuardID INTEGER, AccountID INTEGER, AssociationID INTEGER ,'
-  +' OYEMemberID VARCHAR(40), OYEMemberRoleID VARCHAR(20), GuardRoleID VARCHAR(20), FirstName VARCHAR(20), LastName VARCHAR(30), ' 
-  +' MobileNumber VARCHAR(20), PhotoName VARCHAR(200), CreatedDate VARCHAR(20), AadharNumber VARCHAR(20),  ' 
-  +' Status VARCHAR(30) ) */
-
-  //guard_id,association_id,oye_memberid,oye_member_roleid,guard_roleid,first_name,last_name,
-  //mobile_number, aadhar_number, status
+  
   insert_ShiftDetails(shift_id, association_id, worker_name, shift_startdate, shift_enddate, shift_starttime, shift_endtime,
     weekly_off, created_time, status) {
 
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'INSERT INTO WorkerShiftDetails1(WorkerShiftID, AssociationID, WorkerName, ShiftStartDate, ShiftEndDate,ShiftStartTime,ShiftEndTime, Weeklyoff, ' +
-        ' CreatedTime , Status) VALUES (?,?,?,?,?,?,?,?,?,?)',
-        [shift_id, association_id, worker_name, shift_startdate, shift_enddate, shift_starttime, shift_endtime,
-          weekly_off, created_time, status],
-        (tx, results) => {
-          console.log('Results WorkerShiftDetails1', results.rowsAffected);
-
-        }
-      );
-    });
   }
 }
 
@@ -251,4 +197,3 @@ const styles = StyleSheet.create({
 
 });
 
-//AppRegistry.registerComponent('guardlist', () => guardlist);

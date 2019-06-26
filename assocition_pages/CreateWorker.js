@@ -4,7 +4,6 @@ import {
     Platform, alertMessage, Image, Picker, Button, Alert, ScrollView
 } from "react-native";
 import PhoneInput from "react-native-phone-input";
-import { openDatabase } from 'react-native-sqlite-storage';
 import ImagePicker from 'react-native-image-picker';
 import moment from 'moment';
 import DateTimePicker from 'react-native-modal-datetime-picker';
@@ -18,7 +17,6 @@ import CountryPicker, {
     getAllCountries
   } from 'react-native-country-picker-modal'
 
-var db = openDatabase({ name: 'UserDatabase.db' });
 
 const options = {
     title: 'Select a Photo',
@@ -191,22 +189,7 @@ export default class CreateWorker extends Component {
 
         if (result === true) {
             console.log('Validation', "Passed");
-            //   let number = this.phone.getValue() + mobile;
-            /* "{
-                ""WKFName""	 : ""Sowmya"",
-                ""WKLName""	 : ""Padmanabhuni"",
-                ""WKMobile""   : ""9490791520"",
-                ""WKISDCode""  : ""+91"",
-                ""WKImgName""  : ""Somu.jpeg"",
-                ""WKWrkType""  : ""RegularVisitor"",
-                ""WKDesgn""    : ""Developer"",
-                ""WKIDCrdNo""  : ""A00009"",
-                ""VNVendorID"" : 1,
-                ""BLBlockID""  : 27,
-                ""FLFloorID""  : 18,
-                ""ASAssnID""   : 25
-                }
-                " */
+            
             member = {
                 "ASAssnID": global.SelectedAssociationID,
                 "OYEMemberID": global.MyOYEMemberID,
@@ -226,7 +209,7 @@ export default class CreateWorker extends Component {
             this.setState({ isLoading: false });
             console.log('member', member);
             //const url = 'http://192.168.1.39:80/oye247/api/v1/Worker/Create'
-            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Worker/Create'
+            const url = 'http://' + global.oyeURL + '/oye247/api/v1/Worker/Create'
             fetch(url,
                 {
                     method: 'POST',
@@ -278,7 +261,7 @@ export default class CreateWorker extends Component {
         }
 
         console.log('anu', anu)
-        fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/WorkerShiftTiming/Create',
+        fetch('http://' + global.oyeURL + '/oye247/api/v1/WorkerShiftTiming/Create',
             {
                 method: 'POST',
                 headers: {
@@ -461,13 +444,7 @@ export default class CreateWorker extends Component {
                         style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                         </TouchableOpacity>
                     </View>
-                    {/* <TouchableOpacity 
-                        style={{paddingTop: 2, paddingRight: 2, paddingLeft: 2, flex: 1, alignItems: 'center', flexDirection: 'row',
-                            paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:'6%'}}
-                            onPress={() => this.props.navigation.navigate('SideMenu')}>
-                        <Image source={require('../pages/assets/images/menu_button.png')}
-                            style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                    </TouchableOpacity> */}
+                    
                     <View style={{ flex: 5, alignItems:'center', justifyContent:'center'}}>
                     <Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
                         style={{height: 40, width: 95, marginTop: 45,marginBottom:5}} />
@@ -581,14 +558,7 @@ export default class CreateWorker extends Component {
         onChangeText={this.handleIncidentCategory}
        />
        
-                            {/* <Picker style={styles.picker}
-                                selectedValue={this.state.PickerValueHolder}
-                                onValueChange={(itemValue, itemIndex) => this.setState({ PickerValueHolder: itemValue })} >
-  
-                                <Picker.Item label="Worker Type" value='0' />
-                                <Picker.Item label="Security Guard" value='Security Guard' />
-                                <Picker.Item label="Supervisor" value='Supervisor' />
-                            </Picker> */}
+                        
                             </View>
                             </View>
                         
@@ -662,20 +632,7 @@ export default class CreateWorker extends Component {
                                 />
 
 
-                                    {/* <Picker
-                                        style={styles.picker}
-                                        selectedValue={this.state.WeekOffPickerValueHolder}
-
-                                        onValueChange={(itemValue, itemIndex) => this.setState({ WeekOffPickerValueHolder: itemValue })} >
-                                        <Picker.Item label="Choose Weekly Off day" value='0' />
-                                        <Picker.Item label="Sunday" value='Sunday' />
-                                        <Picker.Item label="Monday" value='Monday' />
-                                        <Picker.Item label="Tuesday" value='Tuesday' />
-                                        <Picker.Item label="Wednesday" value='Wednesday' />
-                                        <Picker.Item label="Thursday" value='Thursday' />
-                                        <Picker.Item label="Friday" value='Friday' />
-                                        <Picker.Item label="Saturday" value='Saturday' />
-                                    </Picker> */}
+                                   
                                 </View>
                             </View>
                             <TouchableOpacity style={styles.loginScreenButton}

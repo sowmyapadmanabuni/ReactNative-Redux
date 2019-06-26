@@ -98,7 +98,7 @@ export default class CreateCheckPoint extends Component {
 
       console.log('anu', responseObj)
 
-      fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/CheckPoint/Create', {
+      fetch('http://' + global.oyeURL + '/oye247/api/v1/CheckPoint/Create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

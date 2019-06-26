@@ -16,11 +16,9 @@ import ImagePicker from 'react-native-image-picker'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { DatePickerDialog } from 'react-native-datepicker-dialog'
 import moment from 'moment';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { TextField } from 'react-native-material-textfield';
 import { Fonts } from '../pages/src/utils/Fonts';
 
-var db = openDatabase({ name: global.DB_NAME });
 var workerID=0;
 export default class CreateCheckPoint extends Component {
     constructor(props) {
@@ -47,19 +45,7 @@ export default class CreateCheckPoint extends Component {
         endDate: moment(new Date()).format('YYYY-MM-DD'),
 
     }
-    db.transaction(tx => {
-
-        tx.executeSql('SELECT Distinct WorkID, AssnID, FName, LName FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-            var temp = [];
-            for (let i = 0; i < results.rows.length; ++i) {
-                temp.push(results.rows.item(i));
-                console.log('dataSourceUnitPkr UnitID ' + i, results.rows.item(i).FName + ' ' + results.rows.item(i).WorkID);
-            }
-            this.setState({
-                dataSourceUnitPkr: temp,
-            });
-        });
-    });
+   
 }
     handleShiftName = (text) => {
         let newText = '';
@@ -207,7 +193,7 @@ export default class CreateCheckPoint extends Component {
             }
 
             console.log('anu', anu)
-            fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/WorkerShiftTiming/Create',
+            fetch('http://' + global.oyeURL + '/oye247/api/v1/WorkerShiftTiming/Create',
                 {
                     method: 'POST',
                     headers: {
