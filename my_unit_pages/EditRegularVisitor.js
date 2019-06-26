@@ -83,7 +83,7 @@ export default class EditRegularVisitor extends Component {
         const { params } = this.props.navigation.state;
         console.log('componentdidmount fmid start ', params.id)
         //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
-        const url = 'http://'+ global.oyeURL +'/oye247/api/v1/RegularVisitor/GetRegularVisitorListByRVID/' + params.id
+        const url = 'http://'+ global.oyeURL +'/oye247/OyeLivingApi/v1/RegularVisitor/GetRegularVisitorListByRVID/' + params.id
         console.log(url)
         fetch(url, {
             method: 'GET',
@@ -179,7 +179,7 @@ export default class EditRegularVisitor extends Component {
 	"REMobile"		: "9490791859",	"REISDCode" 	: "+91",	"MEMemID"		: 2,
 	"UNUnitID"		: 1,	"WKWrkType"		: "Visitor",	"ASAssnID"		: 25
 } */
-            const url = 'http://' + global.oyeURL + '/oye247/api/v1/RegularVisitorDetails/update'
+            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/RegularVisitorDetails/update'
             //  const url = 'http://122.166.168.160/oye247/api/v1/RegularVisitor/create'
         //    http://localhost:64284/oye247/api/v1/RegularVisitorDetails/update
             console.log('member', JSON.stringify(member));

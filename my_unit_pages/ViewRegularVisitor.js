@@ -107,7 +107,7 @@ ShowCurrentDate = () => {
 
   makeRemoteRequest=()=>{
     console.log('anu23467','componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/RegularVisitor/GetRegularVisitorListByAssocID/'+global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/RegularVisitor/GetRegularVisitorListByAssocID/'+global.SelectedAssociationID
     fetch(url, {
       method: 'GET',
       headers: {
@@ -151,7 +151,7 @@ ShowCurrentDate = () => {
   
   // componentDidMount() {
   //   console.log('anu23467','componentdidmount')
-  //   const url = 'http://' + global.oyeURL + '/oye247/api/v1/RegularVisitor/GetRegularVisitorListByAssocID/'+global.SelectedAssociationID
+  //   const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/RegularVisitor/GetRegularVisitorListByAssocID/'+global.SelectedAssociationID
   //   fetch(url, {
   //     method: 'GET',
   //     headers: {

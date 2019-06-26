@@ -112,7 +112,7 @@ class Screen1 extends Component {
     console.log('componentdidmount')
 
     //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
-    const url1 = 'http://' + global.oyeURL + '/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/' + global.SelectedAssociationID
+    const url1 = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/Subscription/GetLatestSubscriptionByAssocID/' + global.SelectedAssociationID
     fetch(url1, {
       method: 'GET',
       headers: {
@@ -139,7 +139,7 @@ class Screen1 extends Component {
         } else {
           console.log('Subscription ', 'else ');
           //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
-          const url3 = 'http://' + global.oyeURL + '/oyesafe/api/v1/Subscription/Create'
+          const url3 = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/Subscription/Create'
           member = {
             "ASAssnID": global.SelectedAssociationID,
             "SULPymtD": "2018-11-26",// yearToday+"-"+monthToday+"-"+dateToday,
@@ -194,8 +194,8 @@ class Screen1 extends Component {
     });
 
     console.log('attendance ')
-    //const url2 = 'http://'+global.oyeURL+'/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
-    const url2 = 'http://' + global.oyeURL + '/oye247/api/v1/Attendance/GetAttendanceListByAssocID/' + global.SelectedAssociationID
+    //const url2 = 'http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
+    const url2 = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByAssocID/' + global.SelectedAssociationID
     fetch(url2, {
       method: 'GET',
       headers: {
@@ -357,7 +357,7 @@ class Screen1 extends Component {
     console.log('unitlist start ', assnID)
     console.log('componentdidmount')
     //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+assnID
-    const url = 'http://' + global.oyeURL + '/champ/api/v1/Unit/GetUnitListByAssocID/' + assnID
+    const url = 'http://' + global.oyeURL + '/champ/OyeLivingApi/v1/Unit/GetUnitListByAssocID/' + assnID
     console.log(url)
     fetch(url, {
       method: 'GET',

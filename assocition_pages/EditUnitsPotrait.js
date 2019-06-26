@@ -82,7 +82,7 @@ export default class EditFamilyMember extends Component {
     console.log('EditunitsPotrait componentdidmount')
     //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
     //http://localhost:54400/champ/api/v1/Unit/GetUnitListByUnitID/{UnitID}
-    const url = 'http://' + global.oyeURL + '/champ/api/v1/Unit/GetUnitListByUnitID/' + params.unUnitID
+    const url = 'http://' + global.oyeURL + '/champ/OyeLivingApi/v1/Unit/GetUnitListByUnitID/' + params.unUnitID
     console.log('EditunitsPotrait '+url)
     fetch(url, {
       method: 'GET',
@@ -171,7 +171,7 @@ export default class EditFamilyMember extends Component {
 	""UNSldDate""	: ""2018-02-02"",	""UNDimens""  : ""2"",	""UNCalType""	: ""df"",
 	""FLFloorID"" : 1,	""BLBlockID"" : 1,	""UNUnitID""  : 8
 }" */
-      const url = 'http://' + global.oyeURL + '/champ/api/v1/Unit/UpdateUnitDetails'
+      const url = 'http://' + global.oyeURL + '/champ/OyeLivingApi/v1/Unit/UpdateUnitDetails'
       //  const url = 'http://localhost:54400/champ/api/v1/Unit/UpdateUnitDetails'
 
       console.log('EditunitsPotrait req', JSON.stringify(member));

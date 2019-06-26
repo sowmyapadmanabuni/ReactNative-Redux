@@ -220,7 +220,7 @@ export default class HomeContainer extends Component {
                     //    "asCountry": "India", "asCity": "",  "asState": "",  "asPinCode": "561000",  "asAsnLogo": "",
                     //   "asAsnName": "Demo Association",   "asPrpName": "",  "asPrpType": "",  "asRegrNum": "",
                     //    "asWebURL": "",   "asMgrName": "Veer", "asMgrMobile": "+919807045464",   "asMgrEmail": "stay_alert@oye247.com",
-                    //    "asAsnEmail": "",   "aspanStat": "",    "aspanNum": "FVNBD1232L",  "aspanDoc": "api.oyespace.com/FVNBD1232L",
+                    //    "asAsnEmail": "",   "aspanStat": "",    "aspanNum": "FVNBD1232L",  "aspanDoc": "OyeLivingApi.oyespace.com/FVNBD1232L",
                     //    "asNofBlks": 0,   "asNofUnit": 20, "asgstNo": "quwuehsjwiiwiei", "asTrnsCur": "",  "asRefCode": "no",
                     //    "asMtType": "", "asMtDimBs": 0, "asMtFRate": 0, "asUniMsmt": "", "asbGnDate": "0001-01-01T00:00:00",
                     //    "aslpcType": "",  "aslpChrg": 0, "aslpsDate": "0001-01-01T00:00:00", "asotpStat": "OFF", "asopStat": "OFF",

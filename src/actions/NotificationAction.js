@@ -16,7 +16,7 @@ import {connect} from 'react-redux';
 export const getNotifications = (oyeURL, MyAccountID) => {
     return(dispatch) => {
         dispatch({ type: GET_NOTIFICATIONS });
-        fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
+        fetch('http://'+ oyeURL +'/oyesafe/OyeLivingApi/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
       , {
         method: 'GET',
         headers: {
@@ -95,7 +95,7 @@ export const createNotification = (data, navigation, navigate, admin, oyeURL, My
                 console.log(responseData)
                 dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
                 if(navigate) {
-                    fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
+                    fetch('http://'+ oyeURL +'/oyesafe/OyeLivingApi/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
                 , {
                     method: 'GET',
                     headers: {
@@ -173,7 +173,7 @@ export const createNotification = (data, navigation, navigate, admin, oyeURL, My
                 if(navigate) {
 
                     // dispatch({ type: GET_NOTIFICATIONS });
-                    fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
+                    fetch('http://'+ oyeURL +'/oyesafe/OyeLivingApi/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
                 , {
                     method: 'GET',
                     headers: {
@@ -247,7 +247,7 @@ export const createNotification = (data, navigation, navigate, admin, oyeURL, My
                 dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS })
                 if(navigate) {
                     
-                    fetch('http://'+ oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
+                    fetch('http://'+ oyeURL +'/oyesafe/OyeLivingApi/v1/Notification/GetNotificationListByAccntID/' + MyAccountID
                 , {
                     method: 'GET',
                     headers: {

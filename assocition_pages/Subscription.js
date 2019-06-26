@@ -129,7 +129,7 @@ export default class Subscription extends Component {
 
     fnGetSubscription()  {
         //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
-        const url3 = 'http://' + global.oyeURL + 'oyesafe/api/v1/Subscription/Create'
+        const url3 = 'http://' + global.oyeURL + 'oyesafe/OyeLivingApi/v1/Subscription/Create'
         member = 
         {
             "SULPymtD" : moment(new Date()).format('YYYY-MM-DD'),

@@ -269,7 +269,7 @@ onPress={() => navigate('ResolveIncident', {
 
     console.log('componentdidmount')
 
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/Ticketing/GetTicketingList'
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Ticketing/GetTicketingList'
 
     console.log(url)
 

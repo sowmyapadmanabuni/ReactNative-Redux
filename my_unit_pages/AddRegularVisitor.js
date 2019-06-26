@@ -129,7 +129,7 @@ export default class AddRegularVisitor extends Component {
 	"REMobile"		: "9490791859",	"REISDCode" 	: "+91",	"MEMemID"		: 2,
 	"UNUnitID"		: 1,	"WKWrkType"		: "Visitor",	"ASAssnID"		: 25
 } */
-            const url = 'http://' + global.oyeURL + '/oye247/api/v1/RegularVisitor/create'
+            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/RegularVisitor/create'
             //  const url = 'http://122.166.168.160/oye247/api/v1/RegularVisitor/create'
 
             console.log('AddRegularVisitor member', JSON.stringify(member));

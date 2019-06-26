@@ -67,7 +67,7 @@ class MyVehicleList extends Component {
 
 //   deleteCell = () => {
 //     fetch(
-//       `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/VehicleStatusUpdate`,
+//       `http://${this.props.oyeURL}/oyeliving/OyeLivingApi/v1/Vehicle/VehicleStatusUpdate`,
 //       {
 //         method: "POST",
 //         headers: {

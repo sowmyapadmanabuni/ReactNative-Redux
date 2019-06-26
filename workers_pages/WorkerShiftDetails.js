@@ -143,7 +143,7 @@ export default class WorkerShiftDetails extends Component {
 
   componentDidMount() {
     console.log('GetWorkerShiftTiming componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/WorkerShiftTiming/GetWorkerShiftTimingListByAssocID/' + global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/WorkerShiftTiming/GetWorkerShiftTimingListByAssocID/' + global.SelectedAssociationID
     fetch(url, {
       method: 'GET',
       headers: {

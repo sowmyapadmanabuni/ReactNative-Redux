@@ -315,8 +315,8 @@ async createPDF() {
     //   "ASAssnID"	: 2
     // }
 
-    // const url = 'http://'+global.oyeURL+'/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/'+global.SelectedAssociationID+'/' + this.state.dobText
-    const url = 'http://'+global.oyeURL+'oye247/api/v1/Attendance/GetAttendanceListByDatesAndID';
+    // const url = 'http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/'+global.SelectedAssociationID+'/' + this.state.dobText
+    const url = 'http://'+global.oyeURL+'oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByDatesAndID';
     console.log('SecurityDailyReport componentdidmount '+url)
 
     requestBody = {

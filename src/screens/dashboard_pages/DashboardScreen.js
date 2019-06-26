@@ -422,7 +422,7 @@ class MainScreen extends Component {
         // this.props.getNotifications(global.MyAccountID, 2, true)
 
         //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
-        const url1 = 'http://' + global.oyeURL + '/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/' + global.SelectedAssociationID
+        const url1 = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/Subscription/GetLatestSubscriptionByAssocID/' + global.SelectedAssociationID
         fetch(url1, {
             method: 'GET',
             headers: {
@@ -449,7 +449,7 @@ class MainScreen extends Component {
                 } else {
                     console.log('Subscription ', 'else ');
                     //   const url1 = 'http://192.168.1.39:80/oye247/api/v1/GetWorkersList'
-                    const url3 = 'http://' + global.oyeURL + '/oyesafe/api/v1/Subscription/Create'
+                    const url3 = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/Subscription/Create'
                     member = {
                         "ASAssnID": global.SelectedAssociationID,
                         "SULPymtD": moment(new Date()).format('YYYY-MM-DD'),//"2018-01-26",// yearToday+"-"+monthToday+"-"+dateToday,
@@ -513,7 +513,7 @@ class MainScreen extends Component {
             });
         });
         //http://api.oyespace.com/oyeliving/api/v1/UnitParking/GetUnitParkingListByAssocID/30
-        //const url2 = 'http://'+global.oyeURL+'/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
+        //const url2 = 'http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
         const url3 = global.champBaseURL + 'UnitParking/GetUnitParkingListByAssocID/' + global.SelectedAssociationID
         console.log('Parking', url3)
         fetch(url3, {
@@ -555,7 +555,7 @@ class MainScreen extends Component {
     }
 
     getListOfNotifications = () => {
-        fetch('http://'+ global.oyeURL +'/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
+        fetch('http://'+ global.oyeURL +'/oyesafe/OyeLivingApi/v1/Notification/GetNotificationListByAccntID/' + global.MyAccountID
       , {
         method: 'GET',
         headers: {
@@ -656,8 +656,8 @@ class MainScreen extends Component {
 
         //GetAttendanceListByStartDateAndAssocID/66/12-10-2018
         //http://api.oyespace.com/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/66/12-10-2018
-        //const url2 = 'http://'+global.oyeURL+'/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
-        const url2 = 'http://' + global.oyeURL + '/oye247/api/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID + '/' + month + '-' + date + '-' + year
+        //const url2 = 'http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID+'/2018-11-26'
+        const url2 = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/' + global.SelectedAssociationID + '/' + month + '-' + date + '-' + year
         console.log('attendance ' + date + ' ' + month + ' ' + year + ' ' + url2);
         fetch(url2, {
             method: 'GET',
@@ -759,7 +759,7 @@ class MainScreen extends Component {
             }
 
             console.log('createEmergency ', anu)
-            fetch('http://' + global.oyeURL + '/oye247/api/v1/Ticketing/Create',
+            fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Ticketing/Create',
                 {
                     method: 'POST',
                     headers: {

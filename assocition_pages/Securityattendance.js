@@ -132,8 +132,8 @@ export default class Securityattendance extends Component {
     const { params } = this.props.navigation.state;
     console.log('params', this.props.navigation.state.params.fname + '' + this.props.navigation.state.params.id);
     console.log('componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oye247/api/v1/Attendance/GetAttendanceListByAttendyID/'+global.SelectedAssociationID
-    const url1 = 'http://' + global.oyeURL + '/oye247/api/v1/Attendance/GetAttendanceList'
+    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByAttendyID/'+global.SelectedAssociationID
+    const url1 = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Attendance/GetAttendanceList'
     console.log(url1)
     fetch(url1, {
       method: 'GET',

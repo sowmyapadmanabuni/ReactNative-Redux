@@ -135,7 +135,7 @@ else
         "TKTktID": params.cat2
       }
       console.log('anu', anu)
-      fetch('http://' + global.oyeURL + '/oye247/api/v1/Ticketing/TicketingResolveStatusUpdate',
+      fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Ticketing/TicketingResolveStatusUpdate',
         {
           method: 'POST',
           headers: {

@@ -12,7 +12,7 @@ import SMSVerifyCode from 'react-native-sms-verifycode';
 import { connect } from 'react-redux';
 import { updateUserInfo } from '../src/actions';
 
-var db = openDatabase({ name: global.DB_NAME });
+////var db({ name: global.DB_NAME });
 var Otp_auto;
 console.disableYellowBox = true;
 
@@ -111,7 +111,7 @@ class OTPVerification extends Component {
       }
 
       //http://122.166.168.160/champ/api/v1/account/verifyotp
-      url = this.props.champBaseURL + 'account/verifyotp';
+      let url = "https://apidev.oyespace.com/oyeliving/api/v1/account/verifyotp";
       console.log('req verifyotp ', JSON.stringify(anu) + ' ' + url);
 
       fetch(url,
@@ -383,6 +383,7 @@ class OTPVerification extends Component {
               onChangeText={this.handleOTP}
             /> */}
           <TextInput
+              secureText={true}
           style={{
             padding: 5, textAlign: 'center', textDecorationLine: 'underline',
             letterSpacing: 5, width: 120, alignSelf: 'center', backgroundColor: 'white',

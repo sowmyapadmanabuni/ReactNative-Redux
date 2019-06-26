@@ -4,7 +4,7 @@
 
 
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 
 export default class CommonHeader extends React.Component {
@@ -16,13 +16,16 @@ export default class CommonHeader extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{width: "17%", justifyContent: 'flex-end', height: "50%"}}>
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate("AdminFunction")
+                    }
+                    style={{width: "17%", justifyContent: 'flex-end', height: "50%"}}>
                     <Image
                         resizeMode={'center'}
                         style={styles.backButton}
                         source={require('../../../icons/arrowBack.png')}
                     />
-                </View>
+                </TouchableOpacity>
                 <View style={{width: "60%", justifyContent: 'flex-end', paddingTop: 10}}>
                     <Image
                         resizeMode={'center'}
@@ -41,7 +44,7 @@ export default class CommonHeader extends React.Component {
                     justifyContent: 'center',
                     borderColor: 'orange'
                 }}>
-                    <Text style={{color: 'orange',textAlign: 'center'}}>Schedule</Text>
+                    <Text style={{color: 'orange', textAlign: 'center'}}>Schedule</Text>
                 </View>
             </View>
         )

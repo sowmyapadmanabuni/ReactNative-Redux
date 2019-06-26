@@ -1,19 +1,19 @@
 import { UPDATE_USER_INFO } from "../actions/types";
 
 
-// const oyeURL = "apidev.oyespace.com";
-const oyeURL = "apiuat.oyespace.com";
+const oyeURL = "apidev.oyespace.com";
+// const oyeURL = "apiuat.oyespace.com";
 // const oyeURL = "api.oyespace.com";
 const oyeBaseURL = "https://" + oyeURL + "/oye247/api/v1/";
 
 const INITIAL_STATE = {
   oyeURL,
-  champBaseURL: "https://" + oyeURL + "/oyeliving/api/v1/",
-  oye247BaseURL: "https://" + oyeURL + "/oye247/api/v1/",
+  champBaseURL: "https://" + oyeURL + "/oyeliving/OyeLivingApi/v1/",
+  oye247BaseURL: "https://" + oyeURL + "/oye247/OyeLivingApi/v1/",
   oyeBaseURL,
   viewImageURL: "http://" + oyeBaseURL + "/Images/",
   uploadImageURL:
-    "http://" + oyeBaseURL + "/oyeliving/api/v1/association/upload",
+    "http://" + oyeBaseURL + "/oyeliving/OyeLivingApi/v1/association/upload",
   oyeMobileRegex: /^[0]?[456789]d{9}$/,
   oyeNonSpecialRegex: /[^0-9A-Za-z ,]/,
   oyeNonSpecialNameRegex: /[^0-9A-Za-z .]/,

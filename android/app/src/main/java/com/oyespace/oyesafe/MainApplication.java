@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.apsl.versionnumber.RNVersionNumberPackage;
-import com.razorpay.rn.RazorpayPackage;
+//import com.razorpay.rn.RazorpayPackage;
 import com.rpt.reactnativecheckpackageinstallation.CheckPackageInstallationPackage;
 import com.horcrux.svg.SvgPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;

@@ -44,8 +44,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
     //  ("http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/1");
     fetch(
       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
-      // `http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`,
-      // fetch(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/2`
+      // `http://${oyeURL}/oyeliving/OyeLivingApi/v1/GetAssociationListByAccountID/${MyAccountID}`,
+      // fetch(`http://${oyeURL}/oyeliving/OyeLivingApi/v1/GetAssociationListByAccountID/2`
       {
         method: "GET",
         headers: {
@@ -138,7 +138,7 @@ export const getDashUnits = (unit, oyeURL) => {
     let unsold2 = 0;
     let Residentlist = [];
 
-    // console.log(`http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`)
+    // console.log(`http://${oyeURL}/oyeliving/OyeLivingApi/v1/Unit/GetUnitListByAssocID/${unit}`)
 
     dispatch({ type: DASHBOARD_UNITS_START });
 

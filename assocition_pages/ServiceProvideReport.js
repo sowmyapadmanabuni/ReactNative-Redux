@@ -133,7 +133,7 @@ export default class DailyHelpList extends Component {
     const { params } = this.props.navigation.state;
     // console.log(params.id)
     console.log('componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByAssocID/'+ global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/VisitorLog/GetVisitorLogListByAssocID/'+ global.SelectedAssociationID
     console.log(url)
     fetch(url, {
       method: 'GET',

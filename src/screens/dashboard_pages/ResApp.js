@@ -6,88 +6,68 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator, createSwitchNavigator,createDrawerNavigator,createAppContainer } from 'react-navigation';
-//import HomeScreen from './pages/HomeScreen';
-//import NavDrawer2 from '../pages/NavDrawer2';
-
+import React from 'react';
+import {Platform} from 'react-native';
+import {createAppContainer, createStackNavigator} from 'react-navigation';
 //import ResidentDashBoard from '../dashboard_pages/ResidentDashBoard';
 import MainScreen from './MainScreen';
 import SideMenu from './SideMenu'
+import associationlist from '../../../assocition_pages/associationlist';
+import CreateAssociation from '../../../assocition_pages/CreateAssociation';
+//import EditAssociation from '../assocition_pages/EditAssociation';
+import unitlist from '../../../assocition_pages/unitlist';
 
-//import DrawerNavigator from '../dashboard_pages/DrawerNavigator';
-//import NavDrawer from './assocition_pages/NavDrawer';
+import guardlist from '../../../assocition_pages/guardlist';
+import ViewmembersList from '../../../assocition_pages/ViewmembersList';
+import EachServiceProvider from '../../../assocition_pages/IndivisualServiceProviderReport';
+import PatrollingList from '../../../assocition_pages/PatrollingList';
 
- import associationlist from '../../../assocition_pages/associationlist';
- import CreateAssociation from '../../../assocition_pages/CreateAssociation';
- //import EditAssociation from '../assocition_pages/EditAssociation';
- import unitlist from '../../../assocition_pages/unitlist';
-
- import guardlist from '../../../assocition_pages/guardlist';
- import ViewmembersList from '../../../assocition_pages/ViewmembersList';
- import EachServiceProvider from '../../../assocition_pages/IndivisualServiceProviderReport';
- import PatrollingList from '../../../assocition_pages/PatrollingList';
-
- import SecurityDailyReport from '../../../assocition_pages/SecurityDailyReport';
- import AllServiceProvider from '../../../assocition_pages/ServiceProvideReport';
- import CreateUnitsPotrait from '../../../assocition_pages/CreateUnits';
+import SecurityDailyReport from '../../../assocition_pages/SecurityDailyReport';
+import AllServiceProvider from '../../../assocition_pages/ServiceProvideReport';
+import CreateUnitsPotrait from '../../../assocition_pages/CreateUnits';
 import CreateWorker from '../../../assocition_pages/CreateWorker';
 import EditWorker from '../../../assocition_pages/EditWorker';
 
- import EditCheckPoint from '../../../assocition_pages/EditCheckPoint';
+import EditCheckPoint from '../../../assocition_pages/EditCheckPoint';
 //  import Subscription from '../assocition_pages/Subscription';
 // import EditCheckPointMap from '../assocition_pages/EditCheckPointMap';
 // import CreateCheckPointMap from '../assocition_pages/CheckPointMap';
 // import CreateCheckPointListMap from '../assocition_pages/CheckPointListMap';
- import CreateCheckPoint from '../../../assocition_pages/CreateCheckPoint';
-
+import CreateCheckPoint from '../../../assocition_pages/CreateCheckPoint';
 // import MapForGPS from '../assocition_pages/MapForGPS';
 // import EditUnitsPotrait from '../assocition_pages/EditUnitsPotrait';
- import CheckPointList from '../../../assocition_pages/CheckPointList';
-// import CreateOrJoin from '../assocition_pages/CreateOrJoin';
-// import CreateAssnMember from '../assocition_pages/CreateAssnMember';
-
+import CheckPointList from '../../../assocition_pages/CheckPointList';
 import ViewIncidentList from '../../../resident_pages/ViewIncidentList';
 import ViewFamilyMembersList from '../../../resident_pages/ViewFamilyMembersList';
- import QRCodeGeneration from '../../../resident_pages/QRCodeGeneration';
- import AdminSettings from '../../../resident_pages/AdminSettings';
- import AddFamilyMember from '../../../resident_pages/AddFamilyMember';
- import AssignTask from '../../../resident_pages/AssignTask';
- import HamburgerMenu from './HamburgerMenu'
+import QRCodeGeneration from '../../../resident_pages/QRCodeGeneration';
+import AdminSettings from '../../../resident_pages/AdminSettings';
+import AddFamilyMember from '../../../resident_pages/AddFamilyMember';
+import AssignTask from '../../../resident_pages/AssignTask';
+import HamburgerMenu from './HamburgerMenu'
 
- import ViewVisitorsList from '../../../my_unit_pages/ViewVisitorsList';
- //import UpdateDetails from '../my_unit_pages/UpdateDetails';
- import RaiseIncident from '../../../my_unit_pages/RaiseIncident';
- import InviteGuestScreen from '../../../my_unit_pages/InviteGuest';
- import InvitedGuestList from '../../../my_unit_pages/InvitedGuestList';
+import ViewVisitorsList from '../../../my_unit_pages/ViewVisitorsList';
+//import UpdateDetails from '../my_unit_pages/UpdateDetails';
+import RaiseIncident from '../../../my_unit_pages/RaiseIncident';
+import InviteGuestScreen from '../../../my_unit_pages/InviteGuest';
+import InvitedGuestList from '../../../my_unit_pages/InvitedGuestList';
 
- import EditFamilyMember from '../../../my_unit_pages/EditFamilyMember';
- 
- import MyProfile from '../../../my_unit_pages/MyProfile.js';
- import EditProfile from '../../../my_unit_pages/EditProfile';
+import EditFamilyMember from '../../../my_unit_pages/EditFamilyMember';
 
- import AddRegularVisitor from '../../../my_unit_pages/AddRegularVisitor';
- import ViewRegularVisitor from '../../../my_unit_pages/ViewRegularVisitor';
- import EditRegularVisitor from '../../../my_unit_pages/EditRegularVisitor';
+import MyProfile from '../../../my_unit_pages/MyProfile.js';
+import EditProfile from '../../../my_unit_pages/EditProfile';
+
+import AddRegularVisitor from '../../../my_unit_pages/AddRegularVisitor';
+import ViewRegularVisitor from '../../../my_unit_pages/ViewRegularVisitor';
+import EditRegularVisitor from '../../../my_unit_pages/EditRegularVisitor';
 
 import WorkerShiftDetails from '../../../workers_pages/WorkerShiftDetails';
 import CreateWorkerShift from '../../../workers_pages/CreateWorkerShift';
-import Communications from 'react-native-communications';
-import VersionNumber from 'react-native-version-number';
-import BlockDetail from '../../../assocition_pages/BlockDetail';
+import BlockDetail from '../../../assocition_pages/BlockDetails';
 import CreateBlock from '../../../assocition_pages/CreateBlock';
 import CreateOrJoin from '../../../assocition_pages/CreateOrJoin';
 import EditBlock from '../../../assocition_pages/EditBlock.js';
 import RegisterUser from '../../../pages/RegisterUser';
 import RegisterToUnit from '../../../assocition_pages/register'
-
-// import CountryCodePicker from '../registration_pages/CountryCodePicker';
-// import NotificationScreen from '../dashboard_pages/NotificationScreen';
-// import NotificationScreen2 from '../dashboard_pages/NotificationScreen2';
-
-//  import SelectMyRole from '../registration_pages/SelectMyRole';
-
 import ViewAllVisitorsList from '../../../assocition_pages/ViewAllVisitorsList';
 import NotificationScreen from '../NotificationScreen/NotificationScreen';
 import NotificationDetailScreen from '../NotificationScreen/NotificationDetailScreen';
@@ -95,11 +75,6 @@ import NotificationDetailScreen from '../NotificationScreen/NotificationDetailSc
 import MyVehicleListScreen from '../../../resident_pages/MyVehicleListScreen.js';
 import AddVehicles from '../../../resident_pages/AddVehicles';
 import EditVehicles from '../../../resident_pages/EditVehicles';
-
-// import BottomNavigation from '../my_unit_pages/BottomNavigation';
-// import UploadImage from '../my_unit_pages/UploadImage';
-
-console.disableYellowBox = true;
 import ShareQRCode from '../../../my_unit_pages/ShareQRCode';
 
 import SOS from '../../../assocition_pages/SOS.js';
@@ -107,7 +82,29 @@ import adminfunction from './adminfunction.js';
 import CreatePatrollingShift from '../../../assocition_pages/CreatePatrollingShift.js';
 import Securityattendance from '../../../assocition_pages/Securityattendance';
 import Blockwise from '../../../assocition_pages/BlockwiseUnits';
-/* 
+
+import AddUnit from '../../../assocition_pages/AddUnit.js';
+import EditUnit from '../../../assocition_pages/EditUnit.js';
+//import HomeScreen from './pages/HomeScreen';
+//import NavDrawer2 from '../pages/NavDrawer2';
+
+//import DrawerNavigator from '../dashboard_pages/DrawerNavigator';
+//import NavDrawer from './assocition_pages/NavDrawer';
+// import CreateOrJoin from '../assocition_pages/CreateOrJoin';
+// import CreateAssnMember from '../assocition_pages/CreateAssnMember';
+
+
+// import CountryCodePicker from '../registration_pages/CountryCodePicker';
+// import NotificationScreen from '../dashboard_pages/NotificationScreen';
+// import NotificationScreen2 from '../dashboard_pages/NotificationScreen2';
+
+//  import SelectMyRole from '../registration_pages/SelectMyRole';
+
+// import BottomNavigation from '../my_unit_pages/BottomNavigation';
+// import UploadImage from '../my_unit_pages/UploadImage';
+
+console.disableYellowBox = true;
+/*
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
 
 import ViewmembersList from '../assocition_pages/ViewmembersList';
@@ -288,7 +285,7 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff',
     },
   },
-//BlockDetail
+
 BlockDetailScreen:{
   screen:BlockDetail,
   navigationOptions:{
@@ -533,6 +530,24 @@ Unit: { screen: unitlist ,
     screen: Blockwise,
     navigationOptions: {
       title: 'Association List',
+      header:null,
+      headerStyle: { backgroundColor: '#FA9917' },
+      headerTintColor: '#ffffff',
+    },
+  },
+  AddUnit: {
+    screen: AddUnit,
+    navigationOptions: {
+      title: 'Edit Unit',
+      header:null,
+      headerStyle: { backgroundColor: '#FA9917' },
+      headerTintColor: '#ffffff',
+    },
+  },
+  EditUnit: {
+    screen: EditUnit,
+    navigationOptions: {
+      title: 'Edit Unit',
       header:null,
       headerStyle: { backgroundColor: '#FA9917' },
       headerTintColor: '#ffffff',

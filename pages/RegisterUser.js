@@ -4,7 +4,7 @@ import { View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Mytextinput from './components/Mytextinput';
 import Mybutton from './components/Mybutton';
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'UserDatabase.db' });
+//var db({ name: 'UserDatabase.db' });
 
 export default class RegisterUser extends React.Component {
   constructor(props) {

@@ -78,7 +78,7 @@ export default class EditWorker extends Component {
         const { params } = this.props.navigation.state;
         console.log('WorkersByWorkerID componentdidmount start ', params.id)
         //const url = 'http://localhost:64284/oye247/api/v1/GetWorkersListByWorkerID/{WorkerID}
-        const url = 'http://' + global.oyeURL + '/oye247/api/v1/GetWorkersListByWorkerID/' + params.id
+        const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/GetWorkersListByWorkerID/' + params.id
         console.log(url)
         fetch(url, {
             method: 'GET',
@@ -184,7 +184,7 @@ export default class EditWorker extends Component {
 
             console.log('member', member);
             //const url = 'http://localhost:64284/oye247/api/v1/Worker/WorkerDetailsUpdate'
-            const url = 'http://' + global.oyeURL + '/oye247/api/v1/Worker/WorkerDetailsUpdate'
+            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Worker/WorkerDetailsUpdate'
             //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYESecurityGuard/Add'
             fetch(url, {
                 method: 'POST',

@@ -73,7 +73,7 @@ export default class UpdateDetails extends Component {
         console.log('fmid start ', params.id)
         console.log('componentdidmount')
         //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
-        const url = 'http://'+ global.oyeURL +'/oye247/api/v1/FamilyMember/GetFamilyMemberListByFMemID/' + params.id
+        const url = 'http://'+ global.oyeURL +'/oye247/OyeLivingApi/v1/FamilyMember/GetFamilyMemberListByFMemID/' + params.id
         console.log(url)
         fetch(url, {
             method: 'GET',
@@ -166,7 +166,7 @@ export default class UpdateDetails extends Component {
 
             /* ""{""VLCmnts"": ""Active"",""VLCmntImg"" : ""Yes"",""FMID"": 4,""VLVisLgID""	: 4}"" */
 
-            const url = 'http://' + global.oyeURL + '/oyesafe/api/v1/VisitorCommentAndFMID/Update'
+            const url = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/VisitorCommentAndFMID/Update'
             //  const url = 'http://localhost:64284/oyesafe/api/v1/VisitorCommentAndFMID/Update'
 
             console.log('member', JSON.stringify(member)+''+url);

@@ -19,7 +19,7 @@ import CountryPicker from 'react-native-country-picker-modal'
 import {updateUserInfo} from '../src/actions';
 import OSApiConnector from "../src/NetworkCall/OSApiConnector";
 
-var db = openDatabase({name: global.DB_NAME});
+////var db({name: global.DB_NAME});
 console.disableYellowBox = true;
 
 class MobileValid extends Component {
@@ -152,10 +152,7 @@ class MobileValid extends Component {
         "MobileNumber": mobilenumber
       };
 
-        let stat = await OSApiConnector.loginScreen(anu);
-        console.log("Stat in Login Screen:",stat);
-
-      url = this.props.champBaseURL + 'account/sendotp';
+      let url = "https://apidev.oyespace.com/oyeliving/api/v1/account/sendotp";
       //  http://api.oyespace.com/champ/api/v1/account/sendotp
       console.log('anu', url + ' ff' + countryCode + mobilenumber);
 
@@ -175,7 +172,10 @@ class MobileValid extends Component {
             },
             body: JSON.stringify(anu)
           })
-          .then((response) => response.json())
+          .then((response) =>
+              //console.log(response)
+              response.json()
+          )
           .then((responseJson) => {
             console.log('bf responseJson Account', responseJson);
 
@@ -730,9 +730,9 @@ class MobileValid extends Component {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   paddingTop: 23
-  // },
+  container: {
+    paddingTop: 23
+  },
   input: {
     margin: 15,
     height: 40,
