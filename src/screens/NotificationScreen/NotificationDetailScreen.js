@@ -3,16 +3,70 @@ import { View, Text, StyleSheet, ActivityIndicator, Alert, Image } from 'react-n
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import { CLOUD_FUNCTION_URL } from '../../../constant';
+import { CLOUD_FUNCTION_URL,GATE_CLOUD_FUNCTION_URL } from '../../../constant';
 import { connect } from 'react-redux';
 import { updateApproveAdmin, getNotifications } from '../../actions';
 import _ from 'lodash';
+import base from '../../base'
+import fcmservice from '../../base/services/fcmservice';
 // import {connect} from 'react-redux';
 
 class NotificationDetailScreen extends Component {
     state = {
         loading: false, 
         date: ""
+    }
+
+    approveGateEntry = async (item, status) => {
+        
+        console.log(JSON.stringify(item))
+
+        let body = {
+            sbSubID: "AllGuards"+item.asAssnID,
+            ntTitle: 'Request Approved',
+            ntDesc: 'Your entry has been approved',
+            ntType: 'admin_approve_entry',
+            associationID: item.asAssnID,
+            
+        }
+
+        const responsePN = await base.services.fcmservice.sendGatePN(body);
+        console.log(responsePN)
+
+        // axios.post(`${GATE_CLOUD_FUNCTION_URL}/sendUserNotification`, {
+        //     sbSubID: "AllGuards"+item.asAssnID,
+        //     ntTitle: 'Request Approved',
+        //     ntDesc: 'Your entry has been approved',
+        //     ntType: 'admin_approve_entry',
+        //     associationID: item.asAssnID,    
+            
+        // }).then(() => {
+
+        // })
+        // .catch((error) => {
+        //     console.log('firebase', error)            
+        //     this.setState({ loading: false })
+        // })
+    }
+
+    rejectGateEntry = (item, status) => {
+        
+        let self = this;
+        console.log(JSON.stringify(item))
+        axios.post(`${GATE_CLOUD_FUNCTION_URL}/sendUserNotification`, {
+            sbSubID: "AllGuards"+item.asAssnID,
+            ntTitle: 'Request rejected',
+            ntDesc: 'Your entry has been rejected',
+            ntType: 'admin_approve_entry',
+            associationID: item.asAssnID,
+            
+        }).then(() => {
+            self.props.navigation.goBack(null)
+        })
+        .catch((error) => {
+            console.log('firebase', error)            
+            this.setState({ loading: false })
+        })
     }
 
     approve = (item, status) => {
@@ -222,7 +276,29 @@ class NotificationDetailScreen extends Component {
             if(details.ntType === 'Join_Status') {
                 return null
             } else if(details.ntType === 'gate_app') {
-                return null
+                return (
+                    <View style={styles.buttonContainer}>
+                        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <Avatar 
+                                onPress={() => this.rejectGateEntry(details, status)}
+                                overlayContainerStyle={{ backgroundColor: 'red'}}
+                                rounded 
+                                icon={{ name: 'close', type: 'font-awesome', size: 15, color: '#fff' }}
+                            />
+                            <Text style={{ color: 'red'}}> Reject </Text>
+                        </View>
+                        <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+                            <Avatar 
+                                onPress={() => this.approveGateEntry(details, status)}
+                                overlayContainerStyle={{ backgroundColor: 'orange'}}
+                                rounded  
+                                
+                                icon={{ name: 'check', type: 'font-awesome', size: 15, color: '#fff' }}
+                            />
+                            <Text style={{ color: 'orange'}}> Approve </Text>
+                        </View>
+                    </View>
+                )
             } else {
                 if(status === true) {
                     return <Text> {this.state.date || details.ntStatDesc }</Text>
@@ -259,6 +335,7 @@ class NotificationDetailScreen extends Component {
         const { navigation } = this.props;
         const details = navigation.getParam('details', 'NO-ID');
         console.log(this.state)
+       // console.log(JSON.stringify(details));
         return (
             <View style={styles.container}>
                 <Header 

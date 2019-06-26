@@ -191,8 +191,8 @@ class Dashboard extends React.Component {
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
       // alert('opened')
-      // console.log('**********')
-      // console.log(notificationOpen.notification._data.admin)
+       console.log('**********',notificationOpen.notification._data)
+       console.log(notificationOpen.notification._data.admin)
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.action) {
           this.props.newNotifInstance(notificationOpen.notification);
@@ -235,7 +235,7 @@ class Dashboard extends React.Component {
           navigationInstance,
           true,
           "gate_app",
-          "true",
+          
             this.props.oyeURL,
             this.props.MyAccountID
         );

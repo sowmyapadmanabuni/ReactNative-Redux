@@ -3,11 +3,13 @@
  */
 
 import OyeLivingApi from './OyeLivingApi';
-import OyeSafeApi from './OyeSafeApi'
+import OyeSafeApi from './OyeSafeApi';
+import fcmservice from './fcmservice';
 
 const services = {
-    OyeLivingApi: OyeLivingApi,
-    OyeSafeApi: OyeSafeApi
+    OyeLivingApi,
+    OyeSafeApi,
+    fcmservice
 }
 
 export default services;

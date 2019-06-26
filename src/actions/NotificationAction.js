@@ -67,6 +67,7 @@ export const createNotification = (data, navigation, navigate, admin, oyeURL, My
         let formatdate = date._d
         console.log(formatdate)
         console.log(data)
+        console.log(admin)
         // console.log(moment(datee).fromNow())
 
         if(admin === 'true') {
@@ -222,6 +223,7 @@ export const createNotification = (data, navigation, navigate, admin, oyeURL, My
                 dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED })
             })
         } else if(admin === 'gate_app') {
+            console.log(`http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`)
             axios.post(`http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`, {
                 ACAccntID: MyAccountID,
                 ASAssnID: data.associationID,
@@ -257,7 +259,7 @@ export const createNotification = (data, navigation, navigate, admin, oyeURL, My
                 })
                     .then(response => response.json())
                     .then(responseJson => {
-                        // console.log(responseJson.data.notificationListByAcctID)
+                         console.log(responseJson.data.notificationListByAcctID)
                         let resData = responseJson.data.notificationListByAcctID
 
                         let activeNotifications = [];
