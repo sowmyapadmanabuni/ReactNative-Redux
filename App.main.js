@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import {
   Platform,
   TextInput,
@@ -8,9 +8,7 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
-  Alert,
-  Dimensions,
-  SafeAreaView
+  Alert
 } from "react-native";
 import { connect } from "react-redux";
 import SplashScreen from "./splash_screen_pages/SplashScreen";
@@ -19,11 +17,6 @@ import {
   createSwitchNavigator,
   createAppContainer
 } from "react-navigation";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-
 import { mystyles } from "./pages/styles";
 import RegisterUser from "./pages/RegisterUser";
 import UpdateUser from "./pages/UpdateUser";
@@ -45,8 +38,6 @@ import addmembers from "./assocition_pages/addmembers";
 import CreateUnitsPotrait from "./assocition_pages/CreateUnitsPotrait";
 import store from "./src/store";
 import { persistStore } from "redux-persist";
-
-import Spinner from "react-native-spinkit";
 
 const AuthStack = createStackNavigator(
   {
@@ -245,82 +236,44 @@ class Loading extends Component {
     });
   }
 
-  // render() {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         flexDirection: "column",
-  //         backgroundColor: "#fff"
-  //       }}
-  //     >
-  //       <View
-  //         style={{
-  //           width: "100%",
-  //           height: "45%",
-  //           alignContent: "flex-end",
-  //           justifyContent: "flex-end"
-  //         }}
-  //       >
-  //         <Image
-  //           source={require("./pages/assets/images/OyespaceRebrandingLogo.png")}
-  //           style={{ width: 150, height: 130, alignSelf: "center" }}
-  //         />
-  //       </View>
-  //       <ActivityIndicator />
-  //       <Text style={{ fontSize: 8, color: "black", alignSelf: "center" }}>
-  //         {" "}
-  //         Data is loading now..
-  //       </Text>
-
-  //       {/*         <Text style={mystyles.splashHeadline}> OYE SAFE</Text>*/}
-  //       <Text style={mystyles.yourSafetyIsPriceless}>
-  //         {" "}
-  //         Your Safety is Priceless
-  //       </Text>
-  //       <Image
-  //         source={require("./pages/assets/images/building_complex.png")}
-  //         style={{ width: "100%", height: "35%", alignSelf: "center" }}
-  //       />
-  //     </View>
-  //   );
-  // }
-
   render() {
     return (
-      <Fragment>
-        <SafeAreaView style={{ flex: 0, backgroundColor: "#ff8c00" }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-          <View style={styles.container}>
-            <View style={{ flex: 1, flexDirection: "column" }}>
-              <View style={styles.ImageContainer}>
-                <Image
-                  source={require("./icons/headerLogo.png")}
-                  style={styles.topImageLogo}
-                />
-              </View>
-              <View style={styles.activityIndicatorContainer}>
-                {/* <ActivityIndicator size="large" color="orange" /> */}
-                <Spinner
-                  isVisible={true}
-                  color={"orange"}
-                  size={50}
-                  type={"Circle"}
-                />
-              </View>
-              <View style={styles.textContainer}>
-                <Text style={styles.text}>Your safety is priceless</Text>
-              </View>
-              <View style={styles.footerImageContainer}>
-                <Image
-                  source={require("./icons/img4.jpg")}
-                  style={styles.bottomImage}
-                />
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
-      </Fragment>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "column",
+          backgroundColor: "#fff"
+        }}
+      >
+        <View
+          style={{
+            width: "100%",
+            height: "45%",
+            alignContent: "flex-end",
+            justifyContent: "flex-end"
+          }}
+        >
+          <Image
+            source={require("./pages/assets/images/OyespaceRebrandingLogo.png")}
+            style={{ width: 150, height: 130, alignSelf: "center" }}
+          />
+        </View>
+        <ActivityIndicator />
+        <Text style={{ fontSize: 8, color: "black", alignSelf: "center" }}>
+          {" "}
+          Data is loading now..
+        </Text>
+
+        {/*         <Text style={mystyles.splashHeadline}> OYE SAFE</Text>*/}
+        <Text style={mystyles.yourSafetyIsPriceless}>
+          {" "}
+          Your Safety is Priceless
+        </Text>
+        <Image
+          source={require("./pages/assets/images/building_complex.png")}
+          style={{ width: "100%", height: "35%", alignSelf: "center" }}
+        />
+      </View>
     );
   }
 }
@@ -349,54 +302,3 @@ const App = createAppContainer(
 );
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff"
-  },
-  containers: {},
-  ImageContainer: {
-    //   backgroundColor:'yellow',
-    width: Dimensions.get("screen").width,
-    height: hp("30%"),
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  topImageLogo: {
-    height: hp("20%"),
-    width: wp("60%")
-    // backgroundColor:'yellow'
-  },
-  activityIndicatorContainer: {
-    width: Dimensions.get("screen").width,
-    height: hp("15%"),
-    //   backgroundColor:'red',
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  textContainer: {
-    // backgroundColor:'blue',
-    height: hp("15%"),
-    width: Dimensions.get("screen").width,
-    alignItems: "center",
-    justifyContent: "flex-start"
-  },
-  text: {
-    fontWeight: "500",
-    fontSize: hp("3%")
-  },
-  footerImageContainer: {
-    // backgroundColor:'green',
-    alignItems: "center",
-    justifyContent: "center",
-    height: hp("40%"),
-    width: Dimensions.get("screen").width
-  },
-  bottomImage: {
-    width: Dimensions.get("window").width,
-    height: wp("80%")
-  }
-});
