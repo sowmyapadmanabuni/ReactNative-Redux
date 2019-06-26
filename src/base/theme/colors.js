@@ -4,8 +4,8 @@
 
 const colors = {
     primary:"#ff8c00",
-    white:"#ffffff"
-
-}
+    white:"#ffffff",
+    black:"#000000"
+};
 
 export default colors;

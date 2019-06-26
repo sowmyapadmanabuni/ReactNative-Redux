@@ -28,6 +28,7 @@ import CommonHeader from "./src/components/NavigationalHeaders/CommonHeader";
 import PatrollingCheckPoints from "./src/screens/Patrolling/PatrollingCheckPoints";
 import AddCheckPoints from "./src/screens/Patrolling/AddCheckPoints";
 
+
 const AuthStack = createStackNavigator(
     {
         MobileValid: {

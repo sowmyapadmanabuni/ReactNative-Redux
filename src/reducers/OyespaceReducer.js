@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   oyeURL,
   champBaseURL: "http://" + oyeURL + "/oyeliving/api/v1/",
   oye247BaseURL: "https://" + oyeURL + "/oye247/api/v1/",
+
   oyeBaseURL,
   viewImageURL: "http://" + oyeBaseURL + "/Images/",
   uploadImageURL:

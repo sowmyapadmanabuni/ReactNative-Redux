@@ -116,7 +116,7 @@ class Dashboard extends React.Component {
         let responseData = response.data.data;
 
         responseData.associationByAccount.map(association => {
-          // console.log('***********')
+           console.log('***********', response.data.data)
           // console.log(association.asAsnName)
           // console.log(association.asAssnID)
           // console.log('***********')
@@ -711,6 +711,7 @@ class Dashboard extends React.Component {
       </View>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
