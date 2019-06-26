@@ -125,7 +125,7 @@ class OTPVerification extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log('ravii', responseJson);
+          console.log('ravii', JSON.stringify(responseJson));
           if (responseJson.success) {
 
             if (responseJson.data == null) {

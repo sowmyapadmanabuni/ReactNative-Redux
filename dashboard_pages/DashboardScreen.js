@@ -10,7 +10,7 @@ import { withBadge } from 'react-native-elements';
 import { DrawerNavigator, StackNavigator, createStackNavigator } from 'react-navigation';
 import Pie from 'react-native-pie';
 import { openDatabase } from 'react-native-sqlite-storage';
-import { Fonts } from '../../../pages/src/utils/Fonts';
+import { Fonts } from '../pages/src/utils/Fonts';
 import { RemoteMessage, Notification } from 'react-native-firebase';
 import RNExitApp from 'react-native-exit-app';
 // import ProgressBarClassic from 'react-native-progress-bar-classic';
@@ -19,7 +19,7 @@ import { Dropdown } from 'react-native-material-dropdown';
 import axios from 'axios';
 import firebase from 'react-native-firebase';
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
-import { newNotifInstance, createNotification, getNotifications, updateJoinedAssociation } from '../../actions';
+import { newNotifInstance, createNotification, getNotifications, updateJoinedAssociation } from '../src/actions';
 
 console.disableYellowBox = true;
 var db = openDatabase({ name: global.DB_NAME });
@@ -36,7 +36,7 @@ class MainScreen extends Component {
         tabBarLabel: 'Main Screen',
         drawerIcon: ({tintColor}) => {
             return (
-              <Image source={require('../../../pages/assets/images/OyeSpace.png')}
+              <Image source={require('../pages/assets/images/OyeSpace.png')}
               style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
             );
         }
@@ -1023,7 +1023,7 @@ class MainScreen extends Component {
             <View style={{flexDirection:'column',width:Dimensions.get('window').width/4,height:50,justifyContent:'center',alignItems:'center',}}>
                 <TouchableOpacity style={{justifyContent:'center',alignItems:'center'}}
                     onPress={() => this.props.navigation.navigate('AdminFunction')}>
-                    <Image source={require('../../../pages/assets/images/my_visitors_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
+                    <Image source={require('../pages/assets/images/my_visitors_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
                     <Text style={{ fontSize: 12, color: 'black'}}>Admin</Text>
                 </TouchableOpacity>
             </View>
@@ -1117,7 +1117,7 @@ class MainScreen extends Component {
                             style={{ height: 50, width: 80}}  />
                 </View>  */}
                 <View style={{ flex: 5,alignItems:'center',justifyContent:'center',marginLeft:60}}>
-                    <Image source={require('../../../pages/assets/images/OyespaceRebrandingLogo.png')}
+                    <Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
                         style={{height: 40, width: 95, marginTop: 45,marginBottom:5}} />
                 </View> 
                 <View style={{ flex: 3,alignItems:'center',justifyContent:'center',}}>
@@ -1150,7 +1150,7 @@ class MainScreen extends Component {
                                         borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                         }}
                                         onPress={() => this.props.navigation.navigate('SOS')}  /*Products is navigation name*/>
-                                        <Image source={require('../../../pages/assets/images/sos.png')}
+                                        <Image source={require('../pages/assets/images/sos.png')}
                                             style={{position:'absolute', height: 45, width: 45, }} />
                                         <Text style={{ fontSize: 12, color: 'white',marginBottom:12,marginRight:8, alignItems:"center",justifyContent:'center' }}>SOS</Text>
                         </TouchableOpacity>       
@@ -1253,7 +1253,7 @@ class MainScreen extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('ViewmembersScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/eye_orange.png')}
+                                <Image source={require('../pages/assets/images/eye_orange.png')}
                                     style={{ height: 20, width: 25, margin: 2, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 13, color: 'black', paddingBottom: 10 }}>View Resident List</Text>
                                 </TouchableOpacity>
@@ -1275,21 +1275,21 @@ class MainScreen extends Component {
                 <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',width:Dimensions.get('window').width/4,height:50}}>
                     <TouchableOpacity style={{justifyContent:'center',alignItems:'center'}}
                         onPress={() => this.props.navigation.navigate('InvitedGuestListScreen')}>
-                         <Image source={require('../../../pages/assets/images/invite_guest_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
+                         <Image source={require('../pages/assets/images/invite_guest_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
                          <Text style={{ fontSize: 12, color: 'black'}}>My Guests</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'column',width:Dimensions.get('window').width/4,height:50,justifyContent:'center',alignItems:'center',}}>
                     <TouchableOpacity style={{justifyContent:'center',alignItems:'center'}}
                         onPress={() => this.props.navigation.navigate('GuardListScreen')}>
-                        <Image source={require('../../../pages/assets/images/eye_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
+                        <Image source={require('../pages/assets/images/eye_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
                         <Text style={{ fontSize: 12, color: 'black'}}>My Guards</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'column',width:Dimensions.get('window').width/4,height:50,justifyContent:'center',alignItems:'center',}}>
                     <TouchableOpacity style={{justifyContent:'center',alignItems:'center'}}
                         onPress={() => this.props.navigation.navigate('ViewVisitorsScreen')}>
-                        <Image source={require('../../../pages/assets/images/my_visitors_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
+                        <Image source={require('../pages/assets/images/my_visitors_orange.png')} style={{width:25,height:25,justifyContent:'center',alignItems:'center'}}/>
                         <Text style={{ fontSize: 12, color: 'black'}}>My Visitors</Text>
                     </TouchableOpacity>
                 </View>                

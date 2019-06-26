@@ -12,79 +12,79 @@ import {createAppContainer, createStackNavigator} from 'react-navigation';
 //import ResidentDashBoard from '../dashboard_pages/ResidentDashBoard';
 import MainScreen from './MainScreen';
 import SideMenu from './SideMenu'
-import associationlist from '../../../assocition_pages/associationlist';
-import CreateAssociation from '../../../assocition_pages/CreateAssociation';
+import associationlist from '../assocition_pages/associationlist';
+import CreateAssociation from '../assocition_pages/CreateAssociation';
 //import EditAssociation from '../assocition_pages/EditAssociation';
-import unitlist from '../../../assocition_pages/unitlist';
+import unitlist from '../assocition_pages/unitlist';
 
-import guardlist from '../../../assocition_pages/guardlist';
-import ViewmembersList from '../../../assocition_pages/ViewmembersList';
-import EachServiceProvider from '../../../assocition_pages/IndivisualServiceProviderReport';
-import PatrollingList from '../../../assocition_pages/PatrollingList';
+import guardlist from '../assocition_pages/guardlist';
+import ViewmembersList from '../assocition_pages/ViewmembersList';
+import EachServiceProvider from '../assocition_pages/IndivisualServiceProviderReport';
+import PatrollingList from '../assocition_pages/PatrollingList';
 
-import SecurityDailyReport from '../../../assocition_pages/SecurityDailyReport';
-import AllServiceProvider from '../../../assocition_pages/ServiceProvideReport';
-import CreateUnitsPotrait from '../../../assocition_pages/CreateUnits';
-import CreateWorker from '../../../assocition_pages/CreateWorker';
-import EditWorker from '../../../assocition_pages/EditWorker';
+import SecurityDailyReport from '../assocition_pages/SecurityDailyReport';
+import AllServiceProvider from '../assocition_pages/ServiceProvideReport';
+import CreateUnitsPotrait from '../assocition_pages/CreateUnits';
+import CreateWorker from '../assocition_pages/CreateWorker';
+import EditWorker from '../assocition_pages/EditWorker';
 
-import EditCheckPoint from '../../../assocition_pages/EditCheckPoint';
+import EditCheckPoint from '../assocition_pages/EditCheckPoint';
 //  import Subscription from '../assocition_pages/Subscription';
 // import EditCheckPointMap from '../assocition_pages/EditCheckPointMap';
 // import CreateCheckPointMap from '../assocition_pages/CheckPointMap';
 // import CreateCheckPointListMap from '../assocition_pages/CheckPointListMap';
-import CreateCheckPoint from '../../../assocition_pages/CreateCheckPoint';
+import CreateCheckPoint from '../assocition_pages/CreateCheckPoint';
 // import MapForGPS from '../assocition_pages/MapForGPS';
 // import EditUnitsPotrait from '../assocition_pages/EditUnitsPotrait';
-import CheckPointList from '../../../assocition_pages/CheckPointList';
-import ViewIncidentList from '../../../resident_pages/ViewIncidentList';
-import ViewFamilyMembersList from '../../../resident_pages/ViewFamilyMembersList';
-import QRCodeGeneration from '../../../resident_pages/QRCodeGeneration';
-import AdminSettings from '../../../resident_pages/AdminSettings';
-import AddFamilyMember from '../../../resident_pages/AddFamilyMember';
-import AssignTask from '../../../resident_pages/AssignTask';
+import CheckPointList from '../assocition_pages/CheckPointList';
+import ViewIncidentList from '../resident_pages/ViewIncidentList';
+import ViewFamilyMembersList from '../resident_pages/ViewFamilyMembersList';
+import QRCodeGeneration from '../resident_pages/QRCodeGeneration';
+import AdminSettings from '../resident_pages/AdminSettings';
+import AddFamilyMember from '../resident_pages/AddFamilyMember';
+import AssignTask from '../resident_pages/AssignTask';
 import HamburgerMenu from './HamburgerMenu'
 
-import ViewVisitorsList from '../../../my_unit_pages/ViewVisitorsList';
+import ViewVisitorsList from '../my_unit_pages/ViewVisitorsList';
 //import UpdateDetails from '../my_unit_pages/UpdateDetails';
-import RaiseIncident from '../../../my_unit_pages/RaiseIncident';
-import InviteGuestScreen from '../../../my_unit_pages/InviteGuest';
-import InvitedGuestList from '../../../my_unit_pages/InvitedGuestList';
+import RaiseIncident from '../my_unit_pages/RaiseIncident';
+import InviteGuestScreen from '../my_unit_pages/InviteGuest';
+import InvitedGuestList from '../my_unit_pages/InvitedGuestList';
 
-import EditFamilyMember from '../../../my_unit_pages/EditFamilyMember';
+import EditFamilyMember from '../my_unit_pages/EditFamilyMember';
 
-import MyProfile from '../../../my_unit_pages/MyProfile.js';
-import EditProfile from '../../../my_unit_pages/EditProfile';
+import MyProfile from '../my_unit_pages/MyProfile.js';
+import EditProfile from '../my_unit_pages/EditProfile';
 
-import AddRegularVisitor from '../../../my_unit_pages/AddRegularVisitor';
-import ViewRegularVisitor from '../../../my_unit_pages/ViewRegularVisitor';
-import EditRegularVisitor from '../../../my_unit_pages/EditRegularVisitor';
+import AddRegularVisitor from '../my_unit_pages/AddRegularVisitor';
+import ViewRegularVisitor from '../my_unit_pages/ViewRegularVisitor';
+import EditRegularVisitor from '../my_unit_pages/EditRegularVisitor';
 
-import WorkerShiftDetails from '../../../workers_pages/WorkerShiftDetails';
-import CreateWorkerShift from '../../../workers_pages/CreateWorkerShift';
-import BlockDetail from '../../../assocition_pages/BlockDetails';
-import CreateBlock from '../../../assocition_pages/CreateBlock';
-import CreateOrJoin from '../../../assocition_pages/CreateOrJoin';
-import EditBlock from '../../../assocition_pages/EditBlock.js';
-import RegisterUser from '../../../pages/RegisterUser';
-import RegisterToUnit from '../../../assocition_pages/register'
-import ViewAllVisitorsList from '../../../assocition_pages/ViewAllVisitorsList';
-import NotificationScreen from '../NotificationScreen/NotificationScreen';
-import NotificationDetailScreen from '../NotificationScreen/NotificationDetailScreen';
+import WorkerShiftDetails from '../workers_pages/WorkerShiftDetails';
+import CreateWorkerShift from '../workers_pages/CreateWorkerShift';
+import BlockDetail from '../assocition_pages/BlockDetails';
+import CreateBlock from '../assocition_pages/CreateBlock';
+import CreateOrJoin from '../assocition_pages/CreateOrJoin';
+import EditBlock from '../assocition_pages/EditBlock.js';
+import RegisterUser from '../pages/RegisterUser';
+import RegisterToUnit from '../assocition_pages/register'
+import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
+import NotificationScreen from '../src/screens/NotificationScreen/NotificationScreen';
+import NotificationDetailScreen from '../src/screens/NotificationScreen/NotificationDetailScreen';
 
-import MyVehicleListScreen from '../../../resident_pages/MyVehicleListScreen.js';
-import AddVehicles from '../../../resident_pages/AddVehicles';
-import EditVehicles from '../../../resident_pages/EditVehicles';
-import ShareQRCode from '../../../my_unit_pages/ShareQRCode';
+import MyVehicleListScreen from '../resident_pages/MyVehicleListScreen.js';
+import AddVehicles from '../resident_pages/AddVehicles';
+import EditVehicles from '../resident_pages/EditVehicles';
+import ShareQRCode from '../my_unit_pages/ShareQRCode';
 
-import SOS from '../../../assocition_pages/SOS.js';
+import SOS from '../assocition_pages/SOS.js';
 import adminfunction from './adminfunction.js';
-import CreatePatrollingShift from '../../../assocition_pages/CreatePatrollingShift.js';
-import Securityattendance from '../../../assocition_pages/Securityattendance';
-import Blockwise from '../../../assocition_pages/BlockwiseUnits';
+import CreatePatrollingShift from '../assocition_pages/CreatePatrollingShift.js';
+import Securityattendance from '../assocition_pages/Securityattendance';
+import Blockwise from '../assocition_pages/BlockwiseUnits';
 
-import AddUnit from '../../../assocition_pages/AddUnit.js';
-import EditUnit from '../../../assocition_pages/EditUnit.js';
+import AddUnit from '../assocition_pages/AddUnit.js';
+import EditUnit from '../assocition_pages/EditUnit.js';
 //import HomeScreen from './pages/HomeScreen';
 //import NavDrawer2 from '../pages/NavDrawer2';
 

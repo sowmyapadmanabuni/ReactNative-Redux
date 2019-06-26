@@ -7,10 +7,10 @@ import {
 // import all basic components
 import { DrawerNavigator, StackNavigator,createStackNavigator } from 'react-navigation';
 import Pie from 'react-native-pie';
-import { mystyles } from '../../../pages/styles';
-import Mybutton from '../../../pages/components/Mybutton';
+import { mystyles } from '../pages/styles';
+import Mybutton from '../pages/components/Mybutton';
 import { openDatabase } from 'react-native-sqlite-storage';
-import { Fonts } from '../../../pages/src/utils/Fonts';
+import { Fonts } from '../pages/src/utils/Fonts';
 import RNExitApp from 'react-native-exit-app';
 
 console.disableYellowBox = true;
@@ -33,7 +33,7 @@ class ResNavigationDrawerStructure extends Component {
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
           {/*Donute Button Image */}
           <Image
-             source={require('../../../pages/assets/images/menu_button.png')}
+             source={require('../pages/assets/images/menu_button.png')}
             style={{ width: 25, height: 25, marginLeft: 5 }}
           />
         </TouchableOpacity>
@@ -522,7 +522,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('GuardListScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/eye_orange.png')}
+                <Image source={require('../pages/assets/images/eye_orange.png')}
                   style={{ height: 20, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 13, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 10 }}> View Guard List </Text>
               </TouchableOpacity>
@@ -538,7 +538,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('ViewVisitorsScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/my_visitors_orange.png')}
+                <Image source={require('../pages/assets/images/my_visitors_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>My Visitors</Text>
               </TouchableOpacity>
@@ -552,7 +552,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('ViewRegularVisitorScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/service_provider_orange.png')}
+                <Image source={require('../pages/assets/images/service_provider_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Service Provider</Text>
               </TouchableOpacity>
@@ -571,7 +571,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('InvitedGuestListScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/invite_guest_orange.png')}
+                <Image source={require('../pages/assets/images/invite_guest_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Invite Guest</Text>
               </TouchableOpacity>
@@ -583,7 +583,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('ResNavDrawerMenuScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/eye_orange.png')}
+                <Image source={require('../pages/assets/images/eye_orange.png')}
                   style={{ height: 20, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 13, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 10 }}> Nav Drawer </Text>
               </TouchableOpacity>
@@ -597,7 +597,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('ViewmembersScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/eye_orange.png')}
+                <Image source={require('../pages/assets/images/eye_orange.png')}
                   style={{ height: 20, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 13, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 10 }}> View Members </Text>
               </TouchableOpacity>
@@ -614,7 +614,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('ViewVisitorsScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/my_visitors_orange.png')}
+                <Image source={require('../pages/assets/images/my_visitors_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>My Visitors</Text>
               </TouchableOpacity>
@@ -628,7 +628,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('SecurityDailyReportScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/attendance_report_orange.png')}
+                <Image source={require('../pages/assets/images/attendance_report_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Attendance Report</Text>
               </TouchableOpacity>
@@ -647,7 +647,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('ViewIncidentsScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/assigned_task_orange.png')}
+                <Image source={require('../pages/assets/images/assigned_task_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Assigned Task</Text>
               </TouchableOpacity>
@@ -659,7 +659,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('AdminSettingsScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/admin_functions.png')}
+                <Image source={require('../pages/assets/images/admin_functions.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Admin Settings</Text>
               </TouchableOpacity>
@@ -673,7 +673,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('PatrollingListScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/patrol_shifts_orange.png')}
+                <Image source={require('../pages/assets/images/patrol_shifts_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Patrolling List</Text>
               </TouchableOpacity>
@@ -692,7 +692,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('CheckPointListScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/checkpoint_orange.png')}
+                <Image source={require('../pages/assets/images/checkpoint_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Check Point List</Text>
               </TouchableOpacity>
@@ -706,7 +706,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('EditProfileScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/admin_functions.png')}
+                <Image source={require('../pages/assets/images/admin_functions.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Edit Profile</Text>
               </TouchableOpacity>
@@ -720,7 +720,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.props.navigation.navigate('ViewFamilyMembersListScreen')}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/patrol_shifts_orange.png')}
+                <Image source={require('../pages/assets/images/patrol_shifts_orange.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Family Member</Text>
               </TouchableOpacity>
@@ -736,7 +736,7 @@ class Screen1 extends Component {
                   paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                 }}
                 onPress={() => this.deleteUser.bind(this)}  /*Products is navigation name*/>
-                <Image source={require('../../../pages/assets/images/logout.png')}
+                <Image source={require('../pages/assets/images/logout.png')}
                   style={{ height: 25, width: 25, margin: 2, alignSelf: 'center' }} />
                 <Text style={{ fontSize: 12, fontFamily: Fonts.OpenSansRegular, color: 'black', paddingBottom: 5 }}>Log Out</Text>
               </TouchableOpacity>

@@ -150,7 +150,6 @@ android {
 
 dependencies {
     implementation project(':react-native-version-number')
-    implementation project(':react-native-razorpay')
     implementation project(':react-native-check-app-install')
     implementation project(':react-native-svg')
     implementation project(':react-native-document-picker')

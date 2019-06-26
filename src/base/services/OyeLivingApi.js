@@ -11,7 +11,6 @@ import axios from 'axios';
 import React from 'react';
 import utils from '../utils';
 
-
 let instance = axios.create({
     baseURL: utils.strings.oyeLivingUrl,
     timeout: 10000,

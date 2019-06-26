@@ -112,7 +112,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('ResDashBoard')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/back.png')}
+                                <Image source={require('../pages/assets/images/back.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 12, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Dashboard</Text>
                             </TouchableOpacity>
@@ -216,7 +216,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('CheckPointListScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/checkpoint_orange.png')}
+                                <Image source={require('../pages/assets/images/checkpoint_orange.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Patrolling Check Points</Text>
                             </TouchableOpacity>
@@ -226,7 +226,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('SecurityDailyReportScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/attendance_report_orange.png')}
+                                <Image source={require('../pages/assets/images/attendance_report_orange.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Attendance Report</Text>
                             </TouchableOpacity>
@@ -236,7 +236,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('ViewAllVisitorsScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/my_visitors_orange.png')}
+                                <Image source={require('../pages/assets/images/my_visitors_orange.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>View All Visitors</Text>
                             </TouchableOpacity>
@@ -256,7 +256,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('AdminSettingsScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/admin_functions.png')}
+                                <Image source={require('../pages/assets/images/admin_functions.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Admin Settings</Text>
                             </TouchableOpacity>
@@ -293,7 +293,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('AssnListScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/join_association_orange.png')}
+                                <Image source={require('../pages/assets/images/join_association_orange.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Join Association</Text>
                             </TouchableOpacity>
@@ -303,7 +303,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('CreateAssnScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/building.png')}
+                                <Image source={require('../pages/assets/images/building.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Create Association</Text>
                             </TouchableOpacity>
@@ -313,7 +313,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={this.callContact.bind(this)}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/contact_support_orange.png')}
+                                <Image source={require('../pages/assets/images/contact_support_orange.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Contact Support</Text>
                             </TouchableOpacity>
@@ -338,7 +338,7 @@ class SideMenu extends Component {
                                     paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
                                 }}
                                 onPress={() => this.props.navigation.navigate('SubscriptionScreen')}  /*Products is navigation name*/>
-                                <Image source={require('../../../pages/assets/images/building.png')}
+                                <Image source={require('../pages/assets/images/building.png')}
                                     style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                                 <Text style={{ fontSize: 14, paddingLeft: 5,  color: 'black', alignSelf: 'center' }}>Subscription</Text>
                             </TouchableOpacity>

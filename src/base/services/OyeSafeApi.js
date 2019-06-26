@@ -26,7 +26,7 @@ instance.interceptors.response.use((response) => {
      * Uncomment below line only for debugging complete response
      */
 
-    //utils.logger.logArgs(response);
+    utils.logger.logArgs(response);
 
     /**
      * Handle the success response here.
