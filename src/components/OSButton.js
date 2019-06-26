@@ -6,8 +6,8 @@ import base from '../base'
 
 class OSButton extends React.Component {
     static propTypes = {
-        height: PropTypes.number,
-        width: PropTypes.number,
+        height: PropTypes.string,
+        width: PropTypes.string,
         borderRadius: PropTypes.number,
         oSBText: PropTypes.string.isRequired,
         oSBBackground: PropTypes.string,
@@ -16,13 +16,13 @@ class OSButton extends React.Component {
         oSBType: PropTypes.oneOf(['normal', 'custom']).isRequired,
     };
     static defaultProps = {
-        height:'20%',
+        height:'30%',
         width:'35%',
         borderRadius:5,
         oSBText: "Confirm",
         oSBBackground:base.theme.colors.primary,
         oSBType: 'normal',
-        oSBTextColor:"#ffffff",
+        oSBTextColor:base.theme.colors.white,
 
     };
 
@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
     confirmButton: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:"#000000",
+        backgroundColor:base.theme.colors.primary,
+        width:50,
     },
 
     confirmText: {
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', textAlign: 'center',
         alignSelf: 'center',
         //fontFamily:'',
-        //fontSize:'10%',
+        fontSize:14,
     },
     customBtn: {
         justifyContent: 'center',
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
         height:"20%",
         width:"35%",
         borderRadius:5,
-        backgroundColor:"#ffffff",
+        backgroundColor:base.theme.colors.white,
     }
 
 });

@@ -4,6 +4,8 @@
 
 const colors = {
     primary:"#ff8c00",
+    white:"#ffffff",
+    black:"#000000"
 
 }
 

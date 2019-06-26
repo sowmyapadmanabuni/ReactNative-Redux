@@ -37,7 +37,9 @@ import CreateOrJoin from "./assocition_pages/CreateOrJoin";
 import addmembers from "./assocition_pages/addmembers";
 import CreateUnitsPotrait from "./assocition_pages/CreateUnitsPotrait";
 import store from "./src/store";
+
 import { persistStore } from "redux-persist";
+
 
 const AuthStack = createStackNavigator(
   {

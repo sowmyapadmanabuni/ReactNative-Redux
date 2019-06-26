@@ -28,7 +28,8 @@ const strings = {
     mandatory:{
         firstName:"First Name"+isMandatory,
         lastName:"Last Name"+isMandatory,
-    }
+    },
+
 
 };
 
