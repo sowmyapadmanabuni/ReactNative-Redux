@@ -156,7 +156,9 @@ class Header extends React.Component {
             }}
           >
             <TouchableWithoutFeedback
-              onPress={() => this.props.navigate.navigate("NotificationScreen")}
+              onPress={() => this.props.navigate.navigate("NotificationScreen", {
+                refresh: true
+            })}
             >
               <View
                 style={{

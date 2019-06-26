@@ -15,7 +15,9 @@ const api = {
     oyeSafeApiPath:"/api/v1/",
     oyeLivingApiPath:"/oyeliving/OyeLivingApi/v1/",
     oyeSafeKey:'7470AD35-D51C-42AC-BC21-F45685805BBE',
-    oyeLivingKey:'1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+    oyeLivingKey:'1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+    CLOUD_FUNCTION_URL : 'https://us-central1-oyespace-dc544.cloudfunctions.net',
+    GATE_CLOUD_FUNCTION_URL :'https://us-central1-oyespace-b7e2d.cloudfunctions.net'
 };
 
 const strings = {
@@ -25,6 +27,7 @@ const strings = {
     oyeLivingUrl:api.protocol+api.oyeLivingDomain+api.oyeLivingApiPath,
     oyeSafeApiKey:api.oyeSafeKey,
     oyeLivingApiKey:api.oyeLivingKey,
+    gatecloudfuncurl:api.GATE_CLOUD_FUNCTION_URL,
     mandatory:{
         firstName:"First Name"+isMandatory,
         lastName:"Last Name"+isMandatory,

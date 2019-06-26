@@ -427,7 +427,6 @@ class AddRegularVisitor extends Component {
     console.log("testing", this.props.oyeNonSpecialNameRegex.test("email"));
   }
 }
-
 const mapStateToProps = state => {
   return {
     MyMobileNumber: state.UserReducer.MyMobileNumber,
