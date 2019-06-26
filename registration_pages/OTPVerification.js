@@ -4,15 +4,12 @@ import {
   TouchableOpacity, Linking, TextInput, View,PermissionsAndroid,KeyboardAvoidingView
 } from 'react-native';
 // import { TextInputLayout } from 'rn-textinputlayout';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
 import PhoneInput from "react-native-phone-input";
 import moment from 'moment';
-import SMSVerifyCode from 'react-native-sms-verifycode';
 import { connect } from 'react-redux';
 import { updateUserInfo } from '../src/actions';
 
-var db = openDatabase({ name: global.DB_NAME });
 var Otp_auto;
 console.disableYellowBox = true;
 
@@ -20,30 +17,7 @@ console.disableYellowBox = true;
 class OTPVerification extends Component {
   constructor(props) {
     super(props);
-   // this.SMSReadSubscription = {};
-    db.transaction(function (txn) {
-      txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='LoginTime'",
-        [],
-        function (tx, res) {
-          console.log('item:', res.rows.length);
-          if (res.rows.length == 0) {
-
-            txn.executeSql(
-              'CREATE TABLE IF NOT EXISTS LoginTime(Logintime VARCHAR(50))',
-              []
-            );
-
-          }
-        }
-      );
-    });
-
-    db.transaction(txMyMem => {
-      txMyMem.executeSql('SELECT * FROM OTPVerification', [], (txMyMem, resultsMyMem) => {
-        console.log('Results OTPVerification ', resultsMyMem.rows.length + ' ');
-      });
-    });
+   
 
     console.log('start screen OTPVerification ', global.MyISDCode + ' ' + global.MyMobileNumber);
   }
@@ -111,7 +85,7 @@ class OTPVerification extends Component {
       }
 
       //http://122.166.168.160/champ/api/v1/account/verifyotp
-      url = "https://apidev.oyespace.com/oyeliving/api/v1/account/verifyotp";
+      url = this.props.champBaseURL + 'account/verifyotp';
       console.log('req verifyotp ', JSON.stringify(anu) + ' ' + url);
 
       fetch(url,
@@ -125,7 +99,7 @@ class OTPVerification extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log('ravii', JSON.stringify(responseJson));
+          console.log('ravii', responseJson);
           if (responseJson.success) {
 
             if (responseJson.data == null) {
@@ -161,11 +135,7 @@ class OTPVerification extends Component {
   }
 
   changeNumber = (mobilenumber) => {
-    db.transaction(tx => {
-      tx.executeSql('delete  FROM OTPVerification ', [], (tx, results) => {
-        console.log('Results OTPVerification delete ', results.rowsAffected);
-      });
-    });
+   
     this.props.navigation.navigate('MobileValid');
   }
 
@@ -178,14 +148,7 @@ class OTPVerification extends Component {
 
     }
 
-    /*  db.transaction(tx => {
-       tx.executeSql('delete  FROM OTPVerification ', [], (tx, results) => {
-         console.log('Results OTPVerification delete ', results.rowsAffected);
-       });
-     }); */
-
     url = this.props.champBaseURL + 'account/sendotp';
-    // console.log('anu', url + ' ff' + global.MyISDCode + global.MyMobileNumber);
     this.setState({
       isLoading: true
     })
@@ -206,14 +169,9 @@ class OTPVerification extends Component {
         console.log('bf responseJson Account', responseJson);
 
         if (responseJson.success) {
-          // this.setState({
-          //   loginTime : new Date()
-          // })
+         
           console.log('responseJson Account if', this.state.loginTime);
-          // this.insert_OTP(mobilenumber, global.MyISDCode,'2019-02-03');
-    // this.setState({
-    //   dobTextDMY:moment(new Date()).format('YYYY-MM-DD')
-    // });
+          
 
 
         } else {
@@ -312,21 +270,7 @@ class OTPVerification extends Component {
     updateUserInfo({ prop: 'MyISDCode', value: isd_code })
     updateUserInfo({ prop: 'signedIn', value: true })
 
-    // console.log('bf_account',   ' ' + account_id);
-
-    // db.transaction(function (tx) {
-    //   //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
-    //   //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
-    //   tx.executeSql(
-    //     'INSERT INTO Account (AccountID, FirstName, LastName, MobileNumber, ISDCode , Email  ' +
-    //     '  ) VALUES (?,?,?,?,?,?)',
-    //     [account_id, first_name, last_name, mobile_number, isd_code,email],
-    //     (tx, results) => {
-    //       console.log('INSERT Account ', results.rowsAffected + ' ' + account_id);
-
-    //     }
-    //   );
-    // });
+    
   }
 
   render() {

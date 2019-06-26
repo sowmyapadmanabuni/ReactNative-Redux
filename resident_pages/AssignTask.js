@@ -9,10 +9,8 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import ImageLoad from 'react-native-image-placeholder';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
-import { openDatabase } from 'react-native-sqlite-storage';
 
 console.disableYellowBox = true;
-var db = openDatabase({ name: global.DB_NAME });
 import moment from 'moment';
 //import { Fonts } from '../pages/src/utils/Fonts';
 
@@ -48,20 +46,7 @@ export default class CreateCheckPoint extends Component {
       dobDate: null,
       data: null
     };
-    db.transaction(tx => {
-      tx.executeSql('SELECT Distinct FName FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-        console.log('Results', results.rowsAffected);
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i) {
-          temp.push(results.rows.item(i));
-          console.log('Guards name', results.rows.item(i).FName);
-        }
-
-        this.setState({
-          dataSourceGuardPkr: temp,
-        });
-      });
-    });
+    
   }
 
   onDOBPress = () => {

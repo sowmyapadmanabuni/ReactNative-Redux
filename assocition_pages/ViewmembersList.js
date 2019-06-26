@@ -82,8 +82,8 @@ class Resident extends Component {
   //   let admins = _.map(units, (admin, index) => {
   //     console.log(admin.admin)
   //     if(admin.admin) {
-  //       // promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/OyeLivingApi/v1/Member/GetMemberListByAccountID/2180`, {
-  //       promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/OyeLivingApi/v1/Member/GetMemberListByAccountID/${admin.admin}`, {
+  //       // promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/2180`, {
+  //       promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${admin.admin}`, {
   //         headers: {
   //           'Content-Type': 'application/json',
   //           "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",

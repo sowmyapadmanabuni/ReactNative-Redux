@@ -9,10 +9,8 @@ import Communications from 'react-native-communications';
 import Moment from 'moment';
 import ActionButton from 'react-native-action-button';
 //import { Fonts } from '../pages/src/utils/Fonts'
-import { openDatabase } from 'react-native-sqlite-storage';
 import PTRView from 'react-native-pull-to-refresh';
 
-var db = openDatabase({ name: global.DB_NAME });
 const screenWidth = Dimensions.get('window').width;
 
 export default class guardlist extends Component {
@@ -155,12 +153,7 @@ export default class guardlist extends Component {
         //  console.log('ravii', responseJson);
          // console.log('responseJson count WorkersLis ', responseJson.data.worker.length);
 
-          db.transaction(tx => {
-            tx.executeSql('delete  FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-            //  console.log('Results Workers delete ', results.rowsAffected);
-            });
-          });
-
+          
           for (let i = 0; i < responseJson.data.worker.length; ++i) {
             //     temp.push(results.rows.item(i));
             // "data": {  "workers": [  {
@@ -229,11 +222,7 @@ export default class guardlist extends Component {
         if (responseJson.success) {
           console.log('responseJson count WorkersLis ', responseJson.data.worker.length);
 
-          db.transaction(tx => {
-            tx.executeSql('delete  FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-              console.log('Results Workers delete ', results.rowsAffected);
-            });
-          });
+         
 
           for (let i = 0; i < responseJson.data.worker.length; ++i) {
             //     temp.push(results.rows.item(i));
@@ -319,19 +308,7 @@ export default class guardlist extends Component {
 
   insert_Guards(work_id, assn_id, first_name, last_name, wk_mobile, wk_img_name, wrk_type,
     desgn, idcrd_no, vendor_id, block_id, floor_id, created, updated, is_active) {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'INSERT INTO Workers (WorkID, AssnID, FName, LName, WKMobile, WKImgName, ' +
-        ' WrkType , Desgn, IDCrdNo, VendorID, BlockID , FloorID ,Created, Updated ,  ' +
-        ' WKIsActive ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-        [work_id, assn_id, first_name, last_name, wk_mobile, wk_img_name, wrk_type,
-          desgn, idcrd_no, vendor_id, block_id, floor_id, created, updated, is_active],
-        (tx, results) => {
-//          console.log('inserting workers', results.rowsAffected + ' ' + work_id + ' ' + wk_mobile);
-
-        }
-      );
-    });
+   
   }
 
   
@@ -364,23 +341,8 @@ export default class guardlist extends Component {
 
         if (responseJson.success) {
           console.log('responseJson count WorkersLis ', responseJson.data.worker.length);
-
-          db.transaction(tx => {
-            tx.executeSql('delete  FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-              console.log('Results Workers delete ', results.rowsAffected);
-            });
-          });
-
           for (let i = 0; i < responseJson.data.worker.length; ++i) {
-            //     temp.push(results.rows.item(i));
-            // "data": {  "workers": [  {
-            //           "wkWorkID": 8, "wkfName": "Sowmya",  "wklName": "Padmanabhuni",
-            //           "wkMobile": "+919490791520", "wkImgName": "Somu.jpeg",
-            //           "wkWrkType": "RegularVisitor",  "wkDesgn": "Developer",
-            //           "wkidCrdNo": "A00009", "vnVendorID": 1,  "blBlockID": 27,
-            //           "flFloorID": 18,  "asAssnID": 25,   "wkdCreated": "2018-11-12T10:43:25",
-            //           "wkdUpdated": "0001-01-01T00:00:00",  "wkIsActive": true
-            //       },
+            
             this.insert_Guards(responseJson.data.worker[i].wkWorkID,
               responseJson.data.worker[i].asAssnID, responseJson.data.worker[i].wkfName,
               responseJson.data.worker[i].wklName, responseJson.data.worker[i].wkMobile,
@@ -390,25 +352,10 @@ export default class guardlist extends Component {
               responseJson.data.worker[i].flFloorID, responseJson.data.worker[i].wkdCreated,
               responseJson.data.worker[i].wkdUpdated, responseJson.data.worker[i].wkIsActive);
 
-         //   console.log('Results WorkersLis', responseJson.data.worker[i].unUniName + ' ' + responseJson.data.worker[i].unUnitID);
 
           }
           if (responseJson.data.worker.filter(x => x.asAssnID == global.SelectedAssociationID).length == 0) {
-            // Alert.alert(
-            //   'No Guards / Supervisors',
-            //   'Add Guards',
-            //   [
-            //     {
-            //       text: 'Ok',
-            //       onPress: () => this.props.navigation.navigate('CreateWorkerScreen'),
-            //     },
-            //     {
-            //       text: 'Cancel',
-            //       onPress: () => this.props.navigation.navigate('ResDashBoard'),
-            //     },
-            //   ],
-            //   { cancelable: false }
-            // );
+            
           }
           console.log('App  come to  --' + this.state.appState)
 
@@ -420,21 +367,7 @@ export default class guardlist extends Component {
         this.setState({
           isLoading: false
         })
-        // Alert.alert(
-        //   'No Guards / Supervisors in this Association',
-        //   'Add Guards',
-        //   [
-        //     {
-        //       text: 'Ok',
-        //       onPress: () => this.props.navigation.navigate('CreateWorkerScreen'),
-        //     },
-        //     {
-        //       text: 'Cancel',
-        //       onPress: () => this.props.navigation.navigate('ResDashBoard'),
-        //     },
-        //   ],
-        //   { cancelable: false }
-        // );
+        
         console.log('WorkersLis err ', error)
       })
 

@@ -3,14 +3,12 @@ import { AppRegistry, Platform, Alert, TouchableOpacity, ScrollView, Permissions
   Linking, Text, Image, View, FlatList, ActivityIndicator, Button } from 'react-native';
 import { DatePickerDialog } from 'react-native-datepicker-dialog'
 import moment from 'moment';
-import { openDatabase } from 'react-native-sqlite-storage';
 //import { Fonts } from '../pages/src/utils/Fonts';
 
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 import FileViewer from 'react-native-file-viewer';
 
-var db = openDatabase({ name: global.DB_NAME });
 var date = new Date().getDate();
 var month = new Date().getMonth() + 1;
 var year = new Date().getFullYear();
@@ -298,25 +296,10 @@ async createPDF() {
 
   makeRemoteRequest = () => {
     const { params } = this.props.navigation.state;
-    db.transaction(tx => {
-      tx.executeSql('delete  FROM Attendance ', [], (tx, results) => {
-        console.log('SecurityDailyReport Results Attendance delete ', results.rowsAffected);
-      });
-    });
+   
 
-    // console.log(params.id)
 
-    //http://localhost:64284/oye247/api/v1/Attendance/GetAttendanceListByDatesAndID
-    //http://api.oyespace.com/oye247/api/v1/Attendance/GetAttendanceListByDatesAndID
-
-    // {
-    //   "ATSDate"   : "2018-12-22",
-    //   ""ATEDate"	: "2018-12-24",
-    //   "ASAssnID"	: 2
-    // }
-
-    // const url = 'http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByStartDateAndAssocID/'+global.SelectedAssociationID+'/' + this.state.dobText
-    const url = 'http://'+global.oyeURL+'oye247/OyeLivingApi/v1/Attendance/GetAttendanceListByDatesAndID';
+    const url = 'http://'+global.oyeURL+'oye247/api/v1/Attendance/GetAttendanceListByDatesAndID';
     console.log('SecurityDailyReport componentdidmount '+url)
 
     requestBody = {
@@ -363,24 +346,7 @@ async createPDF() {
             htmlData: "No Data for Selected Date"
           })
           htmlVariable="";
-          db.transaction(tx => {
-            // Workers (WorkID, AssnID, FName, LName, WKMobile, WKImgName, ' +            ' WrkType , Desgn, IDCrdNo,
-            //Attendance (AttendanceID, AssociationID, GuardID, ImeiNo, StartDate, EndDate, StartTime,
-            tx.executeSql('SELECT Distinct M.AssnID,M.WorkID,M.FName, M.LName,M.Desgn, M.WrkType,A.AttendanceID, A.EndTime,A.StartTime, \'Onduty\' as C FROM Workers M inner Join Attendance A on M.WorkID=A.GuardID ', [], (tx, results) => {
-              for (let i = 0; i < results.rows.length; ++i) {
-                temp.push(results.rows.item(i));
-                htmlVariable+='<p style="text-align: center;"> '+results.rows.item(i).FName + ' ' + results.rows.item(i).LName +
-                '  ' + results.rows.item(i).StartTime + ' ' + results.rows.item(i).EndTime +'</p>';
-                console.log('get Attendance ', results.rows.item(i).AttendanceID + ' ,' + results.rows.item(i).StartTime + ',' + results.rows.item(i).EndTime);
-              }
-              this.setState({
-                dataSource: temp,
-                htmlData:htmlVariable
-              });
-              console.log('get htmlVariable ', htmlVariable+ ' ') ;
-
-            });
-          });
+         
 
         }
 
@@ -391,16 +357,7 @@ async createPDF() {
   }
 
   insert_GuardAttendance(attendance_id, association_id, guard_id, imei_no, start_date, end_date, start_time, end_time) {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'INSERT INTO Attendance (AttendanceID, AssociationID, GuardID, ImeiNo, StartDate, EndDate, StartTime, ' +
-        ' EndTime ) VALUES (?,?,?,?,?,?,?,?)',
-        [attendance_id, association_id, guard_id, imei_no, start_date, end_date, start_time, end_time],
-        (tx, results) => {
-          console.log('Results Attendance', results.rowsAffected + ' ' + attendance_id);
-        }
-      );
-    });
+    
   }
 
   SampleFunction = () => {
@@ -409,59 +366,19 @@ async createPDF() {
 
   }
   namebyid(Workerid) {
-    db.transaction(tx => {
-      tx.executeSql('SELECT FName FROM Workers where WorkID=?', [Workerid], (tx, results) => {
-        for (let i = 0; i < results.rows.length; i++) {
-          this.setState({
-            WorkerName: results.rows.item(0).FName
-          });
-          console.log('check db',
-            this.state.WorkerName + ',' + this.state.WorkerId);
-        }
-        console.log('check db',
-          results.rows.length + "," + results.rows.item(0).FName);
-        this.setState({
-          panCount:
-            results.rows.item,
-        });
-      });
-    });
-    return this.state.WorkerName;
+    
   }
 
   worker_name(Workerid) {
     var name_of_worker = null;
-    db.transaction(tx => {
-      tx.executeSql('SELECT FName FROM Workers where WorkID=?', [Workerid], (tx, results) => {
-        if (results.rows.length > 0) {
-          console.log('check db',
-            results.rows.length + "," + results.rows.item(0).FName);
-          name_of_worker = results.rows.item(0).FName;
-        }
-      });
-
-    });
-    return name_of_worker;
-
   }
 
  
 
   render() {
-    // console.log('ravi',this.state.dobText.toString())
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
     return (
-
-      /*  this.state.isLoading
-         ?
-         <View style={{ backgroundColor: '#FFF', height: '100%' }}>
-           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-             <ActivityIndicator size="large" color="#330066" animating />
-           </View>
-         </View>
-         :
-  */
 
       
 <View

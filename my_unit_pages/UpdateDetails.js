@@ -6,9 +6,7 @@ import {
 import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker'
 import PhoneInput from "react-native-phone-input";
-import { openDatabase } from 'react-native-sqlite-storage';
 
-var db = openDatabase({ name: global.DB_NAME  });
 
 const options = {
     title: 'Select a Photo',
@@ -49,22 +47,6 @@ export default class UpdateDetails extends Component {
             dataSource: [],
         };
 
-        db.transaction(tx => {
-            //SELECT B.* From (select max(Time) Time, GuardID FROM RouteTracker group by GuardID ) " +
-            // " A inner join RouteTracker B using (Time,GuardID)
-            tx.executeSql('SELECT Distinct M.AssociationID, A.Name FROM MyMembership M inner Join Association A on M.AssociationID=A.AssociationID ', [], (tx, results) => {
-                var temp = [];
-                for (let i = 0; i < results.rows.length; ++i) {
-                    temp.push(results.rows.item(i));
-                    console.log('Results UnitID', results.rows.item(i).Name + ' ' + results.rows.item(i).AssociationID);
-                    // this.innsert(results.rows.item(i).UnitID,results.rows.item(i).UnitName,results.rows.item(i).Type);
-                }
-
-                this.setState({
-                    dataSource: temp,
-                });
-            });
-        });
 
     }
 
@@ -73,7 +55,7 @@ export default class UpdateDetails extends Component {
         console.log('fmid start ', params.id)
         console.log('componentdidmount')
         //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
-        const url = 'http://'+ global.oyeURL +'/oye247/OyeLivingApi/v1/FamilyMember/GetFamilyMemberListByFMemID/' + params.id
+        const url = 'http://'+ global.oyeURL +'/oye247/api/v1/FamilyMember/GetFamilyMemberListByFMemID/' + params.id
         console.log(url)
         fetch(url, {
             method: 'GET',
@@ -166,7 +148,7 @@ export default class UpdateDetails extends Component {
 
             /* ""{""VLCmnts"": ""Active"",""VLCmntImg"" : ""Yes"",""FMID"": 4,""VLVisLgID""	: 4}"" */
 
-            const url = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/VisitorCommentAndFMID/Update'
+            const url = 'http://' + global.oyeURL + '/oyesafe/api/v1/VisitorCommentAndFMID/Update'
             //  const url = 'http://localhost:64284/oyesafe/api/v1/VisitorCommentAndFMID/Update'
 
             console.log('member', JSON.stringify(member)+''+url);

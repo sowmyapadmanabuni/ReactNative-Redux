@@ -67,7 +67,7 @@ class ViewVisitorsList extends Component {
     }
     console.log('member', member);
     //http://122.166.168.160/oyesafe/api/v1/VisitorCommentAndFMID/Update
-    fetch('http://' + this.props.oyeURL + '/oyesafe/OyeLivingApi/v1/VisitorCommentAndFMID/Update',
+    fetch('http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorCommentAndFMID/Update',
       {
         method: 'POST',
         headers: {
@@ -332,7 +332,7 @@ class ViewVisitorsList extends Component {
     console.log('ff')
     console.log('componentdidmount')
     // http://api.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/1/2018-11-26
-    const url = 'http://' + this.props.oyeURL + '/oyesafe/OyeLivingApi/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/' + this.props.SelectedAssociationID + '/' + this.state.dobText;
+    const url = 'http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/' + this.props.SelectedAssociationID + '/' + this.state.dobText;
     console.log(url)
     fetch(url, {
       method: 'GET',
