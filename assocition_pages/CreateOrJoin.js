@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, AppState, TouchableOpacity } from 'react-native';
 import Mybutton from '../pages/components/Mybutton';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
+import {connect} from 'react-redux';
 
-var db = openDatabase({ name: global.DB_NAME });
 
-export default class CreateOrJoin extends React.Component {
+class CreateOrJoin extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -16,7 +15,7 @@ export default class CreateOrJoin extends React.Component {
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <View
           style={{ width: '100%', height: '75%', alignContent: 'flex-end' }}>
-          <Text style={styles.welcomemadan}>Welcome {global.MyFirstName},</Text>
+          <Text style={styles.welcomemadan}>Welcome {this.props.MyFirstName},</Text>
           <Text style={styles.thereisnorecordofthisnum} >There is no record of this number with us.
             Please proceed with enrolling your association or joining currently listed associations.</Text>
           <View style={{ marginTop: 30, }}>
@@ -81,34 +80,6 @@ export default class CreateOrJoin extends React.Component {
       </View>
     );
   }
-
-  deleteUser = () => {
-    var that = this;
-    db.transaction(tx => {
-      tx.executeSql(
-        'DELETE FROM  OTPVerification ',
-        [],
-        (tx, results) => {
-          console.log('OTPVerification DELETE', results.rowsAffected);
-
-        }
-      );
-    });
-    db.transaction(tx => {
-      tx.executeSql(
-        'DELETE FROM  Account ',
-        [],
-        (tx, results) => {
-          console.log('Account DELETE', results.rowsAffected);
-          if (results.rowsAffected > 0) {
-            that.props.navigation.navigate('SplashScreen');
-          } else {
-            alert('Logged Out Failed');
-          }
-        }
-      );
-    });
-  };
 }
 const styles = StyleSheet.create({
   welcomemadan: {
@@ -119,3 +90,22 @@ const styles = StyleSheet.create({
     color: '#f00',  fontSize: 17, //lineheight: '23px',
   },
 })
+
+const mapStateToProps = state => {
+  return {
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyLastName: state.UserReducer.MyLastName,
+    MyEmail: state.UserReducer.MyEmail,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    MyISDCode: state.UserReducer.MyISDCode,
+
+    joinedAssociations: state.AppReducer.joinedAssociations,
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyAccountID: state.UserReducer.MyAccountID
+  };
+};
+
+export default connect(
+  mapStateToProps
+)(CreateOrJoin);

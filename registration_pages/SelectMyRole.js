@@ -4,36 +4,17 @@ import {
   TouchableOpacity, Linking, View
 } from 'react-native';
 // import { TextInputLayout } from 'rn-textinputlayout';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
 import PhoneInput from "react-native-phone-input";
 
-var db = openDatabase({ name: global.DB_NAME });
 console.disableYellowBox = true;
 export default class SelectMyRole extends Component {
   constructor(props) {
     super(props);
     
-    db.transaction(tx => {
-      tx.executeSql('delete  FROM MyMembership ' , [], (tx, results) => {
-          console.log('Results MyMembership delete ', results.rowsAffected);
-      });
-  });
+  
 
-    db.transaction(txMyMem => {
-      txMyMem.executeSql('SELECT * FROM OTPVerification', [], (txMyMem, resultsMyMem) => {
-        console.log('Results OTPVerification ', resultsMyMem.rows.length + ' ');
-        if (resultsMyMem.rows.length > 0) {
-          global.MyISDCode = resultsMyMem.rows.item(0).ISDCode;
-          console.log('Results OTPVerification ',  global.MyISDCode +' ');
-          this.syncMyMembers( global.MyISDCode , global.MyMobileNumber);
-        } else {
-          this.props.navigation.navigate('MobileValid');
-
-        }
-      });
-    });
-    
+ 
   }
 
   static navigationOptions = {
@@ -79,19 +60,7 @@ export default class SelectMyRole extends Component {
 
   insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code ) {
       
-    db.transaction(function (tx) {
-      //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
-      //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
-      tx.executeSql(
-        'INSERT INTO Account (AccountID, FirstName, LastName, MobileNumber, ISDCode  ' +
-        '  ) VALUES (?,?,?,?,?)',
-        [account_id, first_name, last_name,  mobile_number, isd_code],
-        (tx, results) => {
-          console.log('INSERT Account ', results.rowsAffected + ' ' + account_id);
-
-        }
-      );
-    });
+  
   }
 
   syncMyMembers(cc, mobilenumber) {
@@ -221,31 +190,7 @@ export default class SelectMyRole extends Component {
   insert_associations(association_id, name, country, city, pan_number, pin_code, gps_location, total_units, property_code, fy_start,
     maint_pymt_freq, otp_status, photo_status, name_status, mobile_status, logoff_status) {
       console.log('bf INSERT Association ', association_id+ ' ' +name );
-    db.transaction(function (tx) {
-      // CREATE TABLE IF NOT EXISTS Association( AsiCrFreq INTEGER , AssnID INTEGER, PrpCode VARCHAR(40), Address TEXT ,'
-      // + ' Country VARCHAR(40), City VARCHAR(40) , State VARCHAR(80), PinCode VARCHAR(40), AsnLogo VARCHAR(200),  '
-      // + 'AsnName VARCHAR(200) , PrpName VARCHAR(200),'// MaintenanceRate double, MaintenancePenalty double,'
-      // + ' PrpType VARCHAR(50) , RegrNum VARCHAR(50), WebURL VARCHAR(50), MgrName VARCHAR(50), MgrMobile VARCHAR(20), '
-      // + ' MgrEmail VARCHAR(50) , AsnEmail VARCHAR(50), PanStat VARCHAR(50), PanNum VARCHAR(50), PanDoc VARCHAR(50), '
-      // + ' NofBlks INTEGER , NofUnit INTEGER, GstNo VARCHAR(50), TrnsCur VARCHAR(50), RefCode VARCHAR(50), '
-      // + ' MtType VARCHAR(50) , MtDimBs INTEGER, MtFRate INTEGER, UniMsmt VARCHAR(50), BGnDate VARCHAR(50), '
-      // + ' LpcType VARCHAR(50) , LpChrg INTEGER, LpsDate VARCHAR(50), OtpStat VARCHAR(50), PhotoStat VARCHAR(50), '
-      // + ' NameStat VARCHAR(50) , MobileStat VARCHAR(50), LogStat VARCHAR(50), GpsPnt VARCHAR(50), PyDate VARCHAR(50), '
-      // + ' Created VARCHAR(50) , Updated VARCHAR(50), IsActive bool, bToggle VARCHAR(50), AutovPymnt bool, '
-      // + ' AutoInvc bool , AlexaItg bool, aiPath VARCHAR(50), OkGItg bool, okgiPath VARCHAR(50), '
-      // + ' SiriItg bool , siPath VARCHAR(50), CorItg bool, ciPath VARCHAR(50), unit VARCHAR(50) )
-
-      tx.executeSql(
-        'INSERT INTO Association (AssnID, AsnName, Country, City, PanNum, PinCode, GPSLocation, ' +
-        ' NofUnit, PrpCode, AsiCrFreq, MtFRate, OtpStat, PhotoStat , NameStat , MobileStat ,' +
-        '  LogStat ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-        [association_id, name, country, city, pan_number, pin_code, gps_location, total_units, property_code, fy_start,
-          maint_pymt_freq, otp_status, photo_status, name_status, mobile_status, logoff_status],
-        (tx, results) => {
-          console.log('INSERT MV Association ', results.rowsAffected + ' ' + association_id);
-        }
-      );
-    });
+   
   }
 
   syncUnits(assnID) {
@@ -302,20 +247,7 @@ export default class SelectMyRole extends Component {
 
   insert_units(unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number
   ) {
-    db.transaction(function (tx) {
-      //// OyeUnit(UnitID integer , " +
-      //" AssociationID integer , UnitName VARCHAR(20) ,  Type VARCHAR(20) , AdminAccountID integer , " +
-      //" CreatedDateTime VARCHAR(20),  ParkingSlotNumber VARCHAR(20) )
-      tx.executeSql(
-        'INSERT INTO OyeUnit (UnitID, AssociationID, UnitName, Type, AdminAccountID, CreatedDateTime,  ' +
-        '  ParkingSlotNumber ) VALUES (?,?,?,?,?,?,?)',
-        [unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number],
-        (tx, results) => {
-          console.log('INSERT oyeUnits ', results.rowsAffected + ' ' + association_id);
-
-        }
-      );
-    });
+ 
   }
 
   syncUnitOwners(assnID) {
@@ -383,8 +315,8 @@ export default class SelectMyRole extends Component {
   syncWorkers(assnID) {
     console.log('GetWorkersList componentdidmount ', assnID)
     
-    const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/GetWorkerListByAssocID/' + assnID
-    //const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/GetWorkersList'
+    const url = 'http://' + global.oyeURL + '/oye247/api/v1/GetWorkerListByAssocID/' + assnID
+    //const url = 'http://' + global.oyeURL + '/oye247/api/v1/GetWorkersList'
 
     console.log(url)
     fetch(url, {
@@ -403,11 +335,7 @@ export default class SelectMyRole extends Component {
           console.log('ravii', responseJson);
           console.log('responseJson count WorkersLis ', responseJson.data.worker.length);
 
-          db.transaction(tx => {
-            tx.executeSql('delete  FROM Workers where AssnID=' + assnID, [], (tx, results) => {
-              console.log('Results Workers delete ', results.rowsAffected);
-            });
-          }); 
+        
 
           for (let i = 0; i < responseJson.data.worker.length; ++i) {
             //     temp.push(results.rows.item(i));
@@ -445,73 +373,24 @@ export default class SelectMyRole extends Component {
 
   insert_Guards(work_id, assn_id, first_name, last_name, wk_mobile, wk_img_name, wrk_type,
     desgn, idcrd_no, vendor_id, block_id, floor_id, created, updated, is_active) {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'INSERT INTO Workers (WorkID, AssnID, FName, LName, WKMobile, WKImgName, ' +
-        ' WrkType , Desgn, IDCrdNo, VendorID, BlockID , FloorID ,Created, Updated ,  ' +
-        ' WKIsActive ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-        [work_id, assn_id, first_name, last_name, wk_mobile, wk_img_name, wrk_type,
-          desgn, idcrd_no, vendor_id, block_id, floor_id, created, updated, is_active],
-        (tx, results) => {
-          console.log('inserting workers', results.rowsAffected + ' ' + work_id + ' ' + wk_mobile);
-
-        }
-      );
-    });
+   
   }
 
   insert_unitOwners(owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
     owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active
   ) {
-    db.transaction(function (tx) {
-      ////  'CREATE TABLE IF NOT EXISTS UnitOwner( OwnerId INTEGER,  OwnerFirstName VARCHAR(50) ,'
-      //  + ' OwnerLastName VARCHAR(50), OwnerMobile VARCHAR(50), OwnerEmail VARCHAR(50), OwnerDueAmnt double, '
-      //  + ' OwnerUnitID INTEGER, OwnerAssnID INTEGER , OwnerCreated VARCHAR(50), OwnerUpdated VARCHAR(50), OwnerIsActive boolean)',
-
-
-      tx.executeSql(
-        'INSERT INTO UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
-        ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-        [owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
-          owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active],
-        (tx, results) => {
-          console.log('INSERT UnitOwner ', results.rowsAffected + ' ' + owner_id);
-
-        }
-      );
-    });
+   
   }
 
 
   insert_MyMembership(oye_memberid, association_id, oye_unitid, first_name, last_name, mobile_number, email, parent_accountid,
     oye_memberroleid, status, account_id, vehicle_number) {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'INSERT INTO MyMembership (OYEMemberID, AssociationID, OYEUnitID, FirstName, LastName, MobileNumber, Email, ' +
-        ' ParentAccountID, OYEMemberRoleID, Status, AccountID, VehicleNumber ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
-        [oye_memberid, association_id, oye_unitid, first_name, last_name, mobile_number, email, parent_accountid,
-          oye_memberroleid, status, account_id, vehicle_number],
-        (tx, results) => {
-          console.log('Results', results.rowsAffected);
-
-        }
-      );
-    });
+  
   }
 
   insert_MyMembership_New(oye_memberid, association_id, oye_unitid, mobile_number,
     oye_memberroleid, status, account_id) {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'INSERT INTO MyMembership (OYEMemberID, AssociationID, OYEUnitID, MobileNumber, ' +
-        '  OYEMemberRoleID, Status, AccountID ) VALUES (?,?,?,?,?,?,?)',
-        [oye_memberid, association_id, oye_unitid, mobile_number,
-          oye_memberroleid, status, account_id],
-        (tx, results) => {
-          console.log('INSERT MyMembership', results.rowsAffected);
-        }
-      );
-    });
+    
   }
 
 }

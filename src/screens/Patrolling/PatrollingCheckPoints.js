@@ -19,7 +19,7 @@ class PatrollingCheckPoints extends React.Component{
     render(){
         return(
             <View style={styles.container}>
-                <FloatingActionButton onBtnClick={this.props.navigation.navigate('addCheckPoint')}/>
+                <FloatingActionButton onBtnClick={()=>this.props.navigation.navigate('addCheckPoint')}/>
             </View>
         )
     }

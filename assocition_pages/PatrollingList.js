@@ -3,8 +3,6 @@ import { AppRegistry, Platform, Alert, TouchableOpacity, ScrollView, Permissions
 import ImageLoad from 'react-native-image-placeholder';
 import moment from 'moment';
 //import { Fonts } from '../pages/src/utils/Fonts'
-import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: global.DB_NAME });
 
 console.disableYellowBox = true;
 
@@ -81,20 +79,20 @@ export default class home extends PureComponent {
   }
 
   renderItem = ({ item }) => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT FName FROM Workers where WorkID=' + item.wkWorkID, [], (tx, results) => {
-        console.log('Results', results.rowsAffected);
-        var temp = [];
-        for (let i = 0; i < results.rows.length; i++) {
-          temp.push(results.rows.item(i));
-          console.log('Guards Name', results.rows.item(i).FName);
-          this.setState({
-            WorkerName: results.rows.item(i).FName
-          });
-        }
-        console.log('guardName', WorkerName);
-      });
-    });
+    // db.transaction(tx => {
+    //   tx.executeSql('SELECT FName FROM Workers where WorkID=' + item.wkWorkID, [], (tx, results) => {
+    //     console.log('Results', results.rowsAffected);
+    //     var temp = [];
+    //     for (let i = 0; i < results.rows.length; i++) {
+    //       temp.push(results.rows.item(i));
+    //       console.log('Guards Name', results.rows.item(i).FName);
+    //       this.setState({
+    //         WorkerName: results.rows.item(i).FName
+    //       });
+    //     }
+    //     console.log('guardName', WorkerName);
+    //   });
+    // });
     return (
 
       <View style={styles.rectangle}>

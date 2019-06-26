@@ -48,7 +48,7 @@ export default class admin extends React.Component {
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: 'flex-start',
+                    alignItems: "flex-start",
                     justifyContent: "center"
                   }}
                 >
@@ -78,8 +78,7 @@ export default class admin extends React.Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-       
-        
+
         <View style={styles.textWrapper}>
           <Text style={styles.admin1}>Administration</Text>
 
@@ -91,18 +90,18 @@ export default class admin extends React.Component {
                     source={require("../pages/assets/img/petrolling.png")}
                   />
                 </View>
-                  <View style={styles.view3}>
-                     <TouchableOpacity
+                <View style={styles.view3}>
+                   <TouchableOpacity
                         onPress={() =>
                           this.props.navigation.navigate("schedulePatrolling")
                         }
                       >
-                      <View style={styles.view3}>
-                        <Text style={styles.text1}>Patrolling Check Points</Text>
-                      </View>
-                     </TouchableOpacity>
+                  <View style={styles.view3}>
+                    <Text style={styles.text1}>Patrolling Check Points</Text>
                   </View>
+                   </TouchableOpacity>
                 </View>
+              </View>
               <View style={styles.borderline} />
             </View>
             <View style={{ flexDirection: "column" }}>
@@ -113,17 +112,16 @@ export default class admin extends React.Component {
                   />
                 </View>
                 <View style={styles.view3}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.props.navigation.navigate("ViewAllVisitorsScreen")
-                      }
-                    >
-                      <View style={styles.view3}>
-                        <Text style={styles.text1}>View All Visitors</Text>
-                      </View>
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("ViewAllVisitorsScreen")
+                    }
+                  >
+                    <View style={styles.view3}>
+                      <Text style={styles.text1}>View All Visitors</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-                
               </View>
               <View style={styles.borderline} />
             </View>
@@ -133,18 +131,17 @@ export default class admin extends React.Component {
                   <Image source={require("../pages/assets/img/settings.png")} />
                 </View>
                 <View style={styles.view3}>
-                  {/* <TouchableOpacity
+                  <TouchableOpacity
                     onPress={() =>
                       this.props.navigation.navigate("AdminSettingsScreen")
                     }
-                  > */}
+                  >
                     <View style={styles.view3}>
                       <Text style={styles.text1}>Admin Settings</Text>
                     </View>
-                  {/* </TouchableOpacity> */}
-              
+                  </TouchableOpacity>
                 </View>
-                </View>
+              </View>
               <View style={styles.borderline} />
             </View>
             <View style={{ flexDirection: "column" }}>
@@ -155,17 +152,16 @@ export default class admin extends React.Component {
                   />
                 </View>
                 <View style={styles.view3}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.props.navigation.navigate("AssnListScreen")
-                      }
-                    >
-                      <View style={styles.view3}>
-                        <Text style={styles.text1}>Join Association</Text>
-                      </View>
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("AssnListScreen")
+                    }
+                  >
+                    <View style={styles.view3}>
+                      <Text style={styles.text1}>Join Association</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-                
               </View>
               <View style={styles.borderline} />
             </View>
@@ -177,17 +173,16 @@ export default class admin extends React.Component {
                   />
                 </View>
                 <View style={styles.view3}>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate("CreateAssnScreen")
-                  }
-                >
-                  <View style={styles.view3}>
-                    <Text style={styles.text1}>Create Association</Text>
-                  </View>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("CreateAssnScreen")
+                    }
+                  >
+                    <View style={styles.view3}>
+                      <Text style={styles.text1}>Create Association</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-                
               </View>
               <View style={styles.borderline} />
             </View>
@@ -199,17 +194,16 @@ export default class admin extends React.Component {
                   />
                 </View>
                 <View style={styles.view3}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.props.navigation.navigate("BlockDetailScreen")
-                      }
-                    >
-                      <View style={styles.view3}>
-                        <Text style={styles.text1}>Create Block and Units</Text>
-                      </View>
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("BlockDetailScreen")
+                    }
+                  >
+                    <View style={styles.view3}>
+                      <Text style={styles.text1}>Create Block and Units</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-                
               </View>
               <View style={styles.borderline} />
             </View>

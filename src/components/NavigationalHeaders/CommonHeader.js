@@ -5,15 +5,29 @@
 
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import PropTypes from 'prop-types';
+import base from "../../base";
+
+
 
 
 export default class CommonHeader extends React.Component {
     constructor(props) {
         super(props);
-        console.log("ldksnvifhkjv")
+        console.log("ldksnvifhkjv",this.props)
     }
 
+    static propTypes = {
+       isHidden:PropTypes.bool
+    }
+
+    static defaultProps = {
+        isHidden:false
+    };
+
     render() {
+        console.log(this.props);
+        let isHidden = this.props.isHidden;
         return (
             <View style={styles.container}>
                 <TouchableOpacity
@@ -33,6 +47,7 @@ export default class CommonHeader extends React.Component {
                         source={require('../../../icons/headerLogo.png')}
                     />
                 </View>
+                {!isHidden?
                 <View style={{
                     borderWidth: 1,
                     height: "30%",
@@ -44,8 +59,8 @@ export default class CommonHeader extends React.Component {
                     justifyContent: 'center',
                     borderColor: 'orange'
                 }}>
-                    <Text style={{color: 'orange', textAlign: 'center'}}>Schedule</Text>
-                </View>
+                    <Text style={{color: 'orange', textAlign: 'center',fontFamily:base.theme.fonts.bold}}>Schedule</Text>
+                </View>:<View style={{width: "20%",}}/>}
             </View>
         )
     }
@@ -60,7 +75,7 @@ const styles = StyleSheet.create({
         borderColor: "orange",
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-around'
     },
     backButton: {
         alignSelf: 'center',

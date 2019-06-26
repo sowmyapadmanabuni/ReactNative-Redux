@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -69,6 +68,17 @@
 		F86D2FF2019D49F593E73243 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 102944E29C634BF6AAFA7678 /* FontAwesome5_Regular.ttf */; };
 		FD2B2A64223F841A0061AB68 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2B2A61223F84080061AB68 /* libRNSVG.a */; };
 		FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */; };
+		9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */; };
+		E0DD5A639E34485C8EDFA30C /* HelveticaNeue BlackCond.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75C9C0A45548447EAD86EAB6 /* HelveticaNeue BlackCond.ttf */; };
+		77686AE00B724E57B8CEEA67 /* HelveticaNeue Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71E2D925009844C1BC539662 /* HelveticaNeue Light.ttf */; };
+		44512FD9D4104B779E62E424 /* HelveticaNeue Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7C2B4B7C4E54C8EB258ED03 /* HelveticaNeue Medium.ttf */; };
+		BC041C3F2D14464AA7111EC4 /* HelveticaNeue Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 253DDAA8919E4C8FA81CB155 /* HelveticaNeue Thin.ttf */; };
+		B4636BB2FBD24E9BA6FE9A13 /* HelveticaNeue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33D3B05148DA40A9A06D53D5 /* HelveticaNeue.ttf */; };
+		2451D65A86BF457FA86F22EE /* HelveticaNeueBd.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA03311D714E4B3487257C79 /* HelveticaNeueBd.ttf */; };
+		240306F65F3D4FAD950C1D2A /* HelveticaNeueHv.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 598D334FA25C41B08E24DE69 /* HelveticaNeueHv.ttf */; };
+		D0CC7FD192F94D04900DFA24 /* HelveticaNeueIt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2889CF3CB5DC45A686BC8893 /* HelveticaNeueIt.ttf */; };
+		58775470DA684F92AE55A9AD /* HelveticaNeueLt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00B61C2974B040ECA252A754 /* HelveticaNeueLt.ttf */; };
+		EF564E8C5B354C6AA75BA602 /* HelveticaNeueMed.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0B2FCB7F1B84CCA869C108E /* HelveticaNeueMed.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -548,6 +558,17 @@
 		FD8A832B22353D4E00D04468 /* libyoga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libyoga.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD8A836022353E8700D04468 /* libyoga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libyoga.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */ = {isa = PBXFileReference; name = "Helvetica Neu Bold.ttf"; path = "../fonts/Helvetica Neu Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		75C9C0A45548447EAD86EAB6 /* HelveticaNeue BlackCond.ttf */ = {isa = PBXFileReference; name = "HelveticaNeue BlackCond.ttf"; path = "../fonts/HelveticaNeue BlackCond.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		71E2D925009844C1BC539662 /* HelveticaNeue Light.ttf */ = {isa = PBXFileReference; name = "HelveticaNeue Light.ttf"; path = "../fonts/HelveticaNeue Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B7C2B4B7C4E54C8EB258ED03 /* HelveticaNeue Medium.ttf */ = {isa = PBXFileReference; name = "HelveticaNeue Medium.ttf"; path = "../fonts/HelveticaNeue Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		253DDAA8919E4C8FA81CB155 /* HelveticaNeue Thin.ttf */ = {isa = PBXFileReference; name = "HelveticaNeue Thin.ttf"; path = "../fonts/HelveticaNeue Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		33D3B05148DA40A9A06D53D5 /* HelveticaNeue.ttf */ = {isa = PBXFileReference; name = "HelveticaNeue.ttf"; path = "../fonts/HelveticaNeue.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DA03311D714E4B3487257C79 /* HelveticaNeueBd.ttf */ = {isa = PBXFileReference; name = "HelveticaNeueBd.ttf"; path = "../fonts/HelveticaNeueBd.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		598D334FA25C41B08E24DE69 /* HelveticaNeueHv.ttf */ = {isa = PBXFileReference; name = "HelveticaNeueHv.ttf"; path = "../fonts/HelveticaNeueHv.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2889CF3CB5DC45A686BC8893 /* HelveticaNeueIt.ttf */ = {isa = PBXFileReference; name = "HelveticaNeueIt.ttf"; path = "../fonts/HelveticaNeueIt.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		00B61C2974B040ECA252A754 /* HelveticaNeueLt.ttf */ = {isa = PBXFileReference; name = "HelveticaNeueLt.ttf"; path = "../fonts/HelveticaNeueLt.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F0B2FCB7F1B84CCA869C108E /* HelveticaNeueMed.ttf */ = {isa = PBXFileReference; name = "HelveticaNeueMed.ttf"; path = "../fonts/HelveticaNeueMed.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -688,6 +709,17 @@
 				E8BAB1885F524E67B6415E52 /* rubicon-icon-font.ttf */,
 				507D1399AF8540F6A8304349 /* SimpleLineIcons.ttf */,
 				962DB82BDD1249AB8E425B06 /* Zocial.ttf */,
+				227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */,
+				75C9C0A45548447EAD86EAB6 /* HelveticaNeue BlackCond.ttf */,
+				71E2D925009844C1BC539662 /* HelveticaNeue Light.ttf */,
+				B7C2B4B7C4E54C8EB258ED03 /* HelveticaNeue Medium.ttf */,
+				253DDAA8919E4C8FA81CB155 /* HelveticaNeue Thin.ttf */,
+				33D3B05148DA40A9A06D53D5 /* HelveticaNeue.ttf */,
+				DA03311D714E4B3487257C79 /* HelveticaNeueBd.ttf */,
+				598D334FA25C41B08E24DE69 /* HelveticaNeueHv.ttf */,
+				2889CF3CB5DC45A686BC8893 /* HelveticaNeueIt.ttf */,
+				00B61C2974B040ECA252A754 /* HelveticaNeueLt.ttf */,
+				F0B2FCB7F1B84CCA869C108E /* HelveticaNeueMed.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1551,6 +1583,17 @@
 				1EB458D80BAA45129F1275C1 /* rubicon-icon-font.ttf in Resources */,
 				67BCC157B1E14945AFCE9B93 /* SimpleLineIcons.ttf in Resources */,
 				380AF2CE6CA244499F710B30 /* Zocial.ttf in Resources */,
+				9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */,
+				E0DD5A639E34485C8EDFA30C /* HelveticaNeue BlackCond.ttf in Resources */,
+				77686AE00B724E57B8CEEA67 /* HelveticaNeue Light.ttf in Resources */,
+				44512FD9D4104B779E62E424 /* HelveticaNeue Medium.ttf in Resources */,
+				BC041C3F2D14464AA7111EC4 /* HelveticaNeue Thin.ttf in Resources */,
+				B4636BB2FBD24E9BA6FE9A13 /* HelveticaNeue.ttf in Resources */,
+				2451D65A86BF457FA86F22EE /* HelveticaNeueBd.ttf in Resources */,
+				240306F65F3D4FAD950C1D2A /* HelveticaNeueHv.ttf in Resources */,
+				D0CC7FD192F94D04900DFA24 /* HelveticaNeueIt.ttf in Resources */,
+				58775470DA684F92AE55A9AD /* HelveticaNeueLt.ttf in Resources */,
+				EF564E8C5B354C6AA75BA602 /* HelveticaNeueMed.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1633,7 +1676,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh\"\n";
-
 			showEnvVarsInLog = 0;
 		};
 		7AA62FFDC840D0C698307FFE /* [CP] Check Pods Manifest.lock */ = {
@@ -1768,9 +1810,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
 				PRODUCT_NAME = OyeSpace;
-
 				PROVISIONING_PROFILE_SPECIFIER = OyeSafe_mac_sarthak;
-
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;

@@ -5,10 +5,8 @@ import {
 } from 'react-native';
 import { DatePickerDialog } from 'react-native-datepicker-dialog'
 import moment from 'moment';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts'
 
-var db = openDatabase({ name: global.DB_NAME });
 
 export default class IndivisualServiceProviderReport extends Component {
 
@@ -47,44 +45,7 @@ export default class IndivisualServiceProviderReport extends Component {
       chosenDate: new Date(),
     }
 
-    db.transaction(function (txn) {
-
-      txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='Workers'",
-        [],
-        function (tx, res) {
-          console.log('item:', res.rows.length);
-          if (res.rows.length == 0) {
-
-            txn.executeSql(
-              'CREATE TABLE IF NOT EXISTS Workers( WorkID INTEGER, AssnID INTEGER , FName VARCHAR(50), '
-              + ' LName VARCHAR(50), WKMobile VARCHAR(20), WKImgName VARCHAR(200), WrkType VARCHAR(20), '
-              + ' Desgn VARCHAR(20), IDCrdNo VARCHAR(20), VendorID INTEGER, BlockID INTEGER, FloorID INTEGER,  '
-              + ' Created VARCHAR(20), Updated VARCHAR(20), WKIsActive bool )',
-              []
-            );
-
-            // Workers( WorkID INTEGER, AssnID INTEGER , FName VARCHAR(50), '
-            //  +' LName VARCHAR(50), WKMobile VARCHAR(20), WKImgName VARCHAR(200), WrkType VARCHAR(20), ' 
-            //  +' Desgn VARCHAR(20), IDCrdNo VARCHAR(20), VendorID INTEGER, BlockID INTEGER, FloorID INTEGER,  ' 
-            // +' Created VARCHAR(20), Updated VARCHAR(20), WKIsActive bool )
-
-            // "data": {  "workers": [  {
-            //           "wkWorkID": 8, "wkfName": "Sowmya",  "wklName": "Padmanabhuni",
-            //           "wkMobile": "+919490791520", "wkImgName": "Somu.jpeg",
-            //           "wkWrkType": "RegularVisitor",  "wkDesgn": "Developer",
-            //           "wkidCrdNo": "A00009", "vnVendorID": 1,  "blBlockID": 27,
-            //           "flFloorID": 18,  "asAssnID": 25,   "wkdCreated": "2018-11-12T10:43:25",
-            //           "wkdUpdated": "0001-01-01T00:00:00",  "wkIsActive": true
-            //       },
-
-          }
-
-        }
-
-      );
-
-    });
+    
     this.setDate = this.setDate.bind(this);
     this.onDateChange = this.onDateChange.bind(this);
     console.log('IndivisualServiceProviderReport ', 'constructor');
@@ -171,7 +132,7 @@ export default class IndivisualServiceProviderReport extends Component {
     const { params } = this.props.navigation.state;
     // console.log(params.id)
     console.log('IndivisualServiceProviderReport componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/VisitorLog/GetVisitorLogListByAssocID/' + global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByAssocID/' + global.SelectedAssociationID
     console.log(url)
     fetch(url, {
       method: 'GET',
@@ -201,24 +162,7 @@ export default class IndivisualServiceProviderReport extends Component {
 
   }
   namebyid(Workerid) {
-    db.transaction(tx => {
-      tx.executeSql('SELECT FName FROM Workers where WorkID=?', [Workerid], (tx, results) => {
-        for (let i = 0; i < results.rows.length; i++) {
-          this.setState({
-            WorkerName: results.rows.item(0).FName
-          });
-          console.log('check db', this.state.WorkerName + ',' + this.state.WorkerId);
-        }
-        console.log('check db',
-          results.rows.length + "," + results.rows.item(0).FName);
-        this.setState({
-          panCount:
-            results.rows.item,
-        });
-
-      });
-
-    });
+   
     return this.state.WorkerName;
 
   }

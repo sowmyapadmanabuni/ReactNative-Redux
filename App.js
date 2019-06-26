@@ -208,7 +208,7 @@ const DashStack = createStackNavigator(
             screen: AddCheckPoints,
             navigationOptions: {
                 title: "Add Checkpoints",
-                header: null
+                header: props => <CommonHeader isHidden={true} {...props}/>
             }
         }
     },

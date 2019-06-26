@@ -10,9 +10,7 @@ import {
   import MultiSelect from 'react-native-multiple-select';
   import BlinkView from 'react-native-blink-view'
   import ImagePicker from 'react-native-image-picker';
-  import { openDatabase } from 'react-native-sqlite-storage';
   import moment from 'moment';
-  var db = openDatabase({ name: global.DB_NAME });
   const options = {
     title: 'Select a Photo',
     takePhotoButton: 'Take a Photo',
@@ -41,22 +39,7 @@ import {
 
     }
 
-    db.transaction(tx => {
-        tx.executeSql('SELECT Distinct WorkID FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-            console.log('Results', results.rowsAffected);
-
-            this.setState({
-                guard_tot_count: results.rows.length,
-            });
-            console.log('jai hind',this.state.guard_tot_count);
-            if (results.rows.length > 0) {
-                this.setState({
-                    workerID: results.rows.item(0).WorkID,
-                });
-                console.log('jai hind',this.state.workerID);
-            }
-        });
-    });
+   
     
 }
 
@@ -114,7 +97,7 @@ createEmergency = () => {
         }
         //"WKWorkID": 614,
         console.log('createEmergency ', anu)
-        fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Ticketing/Create',
+        fetch('http://' + global.oyeURL + '/oye247/api/v1/Ticketing/Create',
             {
                 method: 'POST',
                 headers: {

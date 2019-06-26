@@ -5,7 +5,6 @@ import {
     TouchableOpacity, Linking, TextInput, View, KeyboardAvoidingView,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts';
 import { TextField } from 'react-native-material-textfield';
 import { connect } from 'react-redux';
@@ -15,7 +14,6 @@ import CountryPicker, {
 } from 'react-native-country-picker-modal'
 import { updateUserInfo } from '../src/actions';
 
-let db = openDatabase({ name: global.DB_NAME });
 console.disableYellowBox = true;
 
 class MobileValid extends Component {
@@ -146,7 +144,7 @@ class MobileValid extends Component {
                 "MobileNumber": mobilenumber
             }
 
-            url = "https://apidev.oyespace.com/oyeliving/api/v1/account/sendotp" //this.props.champBaseURL + 'account/sendotp';
+            url = this.props.champBaseURL + 'account/sendotp';
             //  http://api.oyespace.com/champ/api/v1/account/sendotp
             console.log('anu', url + ' ff' + countryCode + mobilenumber);
 
@@ -353,6 +351,7 @@ class MobileValid extends Component {
                 <Text style={{ height: '6%', fontSize: 12, paddingRight: '5%', paddingBottom: '5%', alignSelf: 'flex-end',alignItems:'flex-end', justifyContent:'flex-end', textAlignVertical: 'center', color: 'black',marginRight:10 }}>
                     Version:{VersionNumber.appVersion}
                 </Text>
+
             </View>
 
         );
@@ -360,36 +359,12 @@ class MobileValid extends Component {
 
     insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code) {
 
-        db.transaction(function (tx) {
-            //Account( AccountID INTEGER,  FirstName VARCHAR(50) ,LastName VARCHAR(50), '
-            //  + '  MobileNumber VARCHAR(20), Email VARCHAR(50),  '+ ' ISDCode VARCHAR(20))
-            tx.executeSql(
-                'INSERT INTO Account (AccountID, FirstName, LastName, MobileNumber, ISDCode  ' +
-                '  ) VALUES (?,?,?,?,?)',
-                [account_id, first_name, last_name, mobile_number, isd_code],
-                (tx, results) => {
-                    console.log('INSERT Account ', results.rowsAffected + ' ' + account_id);
 
-                }
-            );
-        });
     }
 
     insert_OTP(mobile_number, isd_code) {
 
-        db.transaction(function (tx) {
-            //ID INTEGER,  OTPVerified boolean ,'
-            // + '  MobileNumber VARCHAR(20),   '+ ' ISDCode VARCHAR(20)
-            tx.executeSql(
-                'INSERT INTO OTPVerification ( MobileNumber, ISDCode  ' +
-                '  ) VALUES (?,?)',
-                [mobile_number, isd_code],
-                (tx, results) => {
-                    console.log('INSERT OTPVerification ', results.rowsAffected + ' ' + mobile_number + ' ' + isd_code);
 
-                }
-            );
-        });
     }
 
     syncMyMembers(cc, mobilenumber) {
@@ -513,31 +488,7 @@ class MobileValid extends Component {
     insert_associations(association_id, name, country, city, pan_number, pin_code, gps_location, total_units, property_code, fy_start,
                         maint_pymt_freq, otp_status, photo_status, name_status, mobile_status, logoff_status) {
 
-        db.transaction(function (tx) {
-            // CREATE TABLE IF NOT EXISTS Association( AsiCrFreq INTEGER , AssnID INTEGER, PrpCode VARCHAR(40), Address TEXT ,'
-            // + ' Country VARCHAR(40), City VARCHAR(40) , State VARCHAR(80), PinCode VARCHAR(40), AsnLogo VARCHAR(200),  '
-            // + 'AsnName VARCHAR(200) , PrpName VARCHAR(200),'// MaintenanceRate double, MaintenancePenalty double,'
-            // + ' PrpType VARCHAR(50) , RegrNum VARCHAR(50), WebURL VARCHAR(50), MgrName VARCHAR(50), MgrMobile VARCHAR(20), '
-            // + ' MgrEmail VARCHAR(50) , AsnEmail VARCHAR(50), PanStat VARCHAR(50), PanNum VARCHAR(50), PanDoc VARCHAR(50), '
-            // + ' NofBlks INTEGER , NofUnit INTEGER, GstNo VARCHAR(50), TrnsCur VARCHAR(50), RefCode VARCHAR(50), '
-            // + ' MtType VARCHAR(50) , MtDimBs INTEGER, MtFRate INTEGER, UniMsmt VARCHAR(50), BGnDate VARCHAR(50), '
-            // + ' LpcType VARCHAR(50) , LpChrg INTEGER, LpsDate VARCHAR(50), OtpStat VARCHAR(50), PhotoStat VARCHAR(50), '
-            // + ' NameStat VARCHAR(50) , MobileStat VARCHAR(50), LogStat VARCHAR(50), GpsPnt VARCHAR(50), PyDate VARCHAR(50), '
-            // + ' Created VARCHAR(50) , Updated VARCHAR(50), IsActive bool, bToggle VARCHAR(50), AutovPymnt bool, '
-            // + ' AutoInvc bool , AlexaItg bool, aiPath VARCHAR(50), OkGItg bool, okgiPath VARCHAR(50), '
-            // + ' SiriItg bool , siPath VARCHAR(50), CorItg bool, ciPath VARCHAR(50), unit VARCHAR(50) )
 
-            tx.executeSql(
-                'INSERT INTO Association (AssnID, AsnName, Country, City, PanNum, PinCode, GPSLocation, ' +
-                ' NofUnit, PrpCode, AsiCrFreq, MtFRate, OtpStat, PhotoStat , NameStat , MobileStat ,' +
-                '  LogStat ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                [association_id, name, country, city, pan_number, pin_code, gps_location, total_units, property_code, fy_start,
-                    maint_pymt_freq, otp_status, photo_status, name_status, mobile_status, logoff_status],
-                (tx, results) => {
-                    console.log('INSERT MV Association ', results.rowsAffected + ' ' + association_id);
-                }
-            );
-        });
     }
 
     syncUnits(assnID) {
@@ -590,20 +541,7 @@ class MobileValid extends Component {
 
     insert_units(unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number
     ) {
-        db.transaction(function (tx) {
-            //// OyeUnit(UnitID integer , " +
-            //" AssociationID integer , UnitName VARCHAR(20) ,  Type VARCHAR(20) , AdminAccountID integer , " +
-            //" CreatedDateTime VARCHAR(20),  ParkingSlotNumber VARCHAR(20) )
-            tx.executeSql(
-                'INSERT INTO OyeUnit (UnitID, AssociationID, UnitName, Type, AdminAccountID, CreatedDateTime,  ' +
-                '  ParkingSlotNumber ) VALUES (?,?,?,?,?,?,?)',
-                [unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number],
-                (tx, results) => {
-                    console.log('INSERT oyeUnits ', results.rowsAffected + ' ' + association_id);
 
-                }
-            );
-        });
     }
 
     syncUnitOwners(assnID) {
@@ -661,54 +599,17 @@ class MobileValid extends Component {
     insert_unitOwners(owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
                       owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active
     ) {
-        db.transaction(function (tx) {
-            ////  'CREATE TABLE IF NOT EXISTS UnitOwner( OwnerId INTEGER,  OwnerFirstName VARCHAR(50) ,'
-            //  + ' OwnerLastName VARCHAR(50), OwnerMobile VARCHAR(50), OwnerEmail VARCHAR(50), OwnerDueAmnt double, '
-            //  + ' OwnerUnitID INTEGER, OwnerAssnID INTEGER , OwnerCreated VARCHAR(50), OwnerUpdated VARCHAR(50), OwnerIsActive boolean)',
 
-
-            tx.executeSql(
-                'INSERT INTO UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
-                ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-                [owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
-                    owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active],
-                (tx, results) => {
-                    console.log('INSERT UnitOwner ', results.rowsAffected + ' ' + owner_id);
-
-                }
-            );
-        });
     }
 
     insert_MyMembership(oye_memberid, association_id, oye_unitid, first_name, last_name, mobile_number, email, parent_accountid,
                         oye_memberroleid, status, account_id, vehicle_number) {
-        db.transaction(function (tx) {
-            tx.executeSql(
-                'INSERT INTO MyMembership (OYEMemberID, AssociationID, OYEUnitID, FirstName, LastName, MobileNumber, Email, ' +
-                ' ParentAccountID, OYEMemberRoleID, Status, AccountID, VehicleNumber ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
-                [oye_memberid, association_id, oye_unitid, first_name, last_name, mobile_number, email, parent_accountid,
-                    oye_memberroleid, status, account_id, vehicle_number],
-                (tx, results) => {
-                    console.log('Results', results.rowsAffected);
 
-                }
-            );
-        });
     }
 
     insert_MyMembership_New(oye_memberid, association_id, oye_unitid, mobile_number,
                             oye_memberroleid, status, account_id) {
-        db.transaction(function (tx) {
-            tx.executeSql(
-                'INSERT INTO MyMembership (OYEMemberID, AssociationID, OYEUnitID, MobileNumber, ' +
-                '  OYEMemberRoleID, Status, AccountID ) VALUES (?,?,?,?,?,?,?)',
-                [oye_memberid, association_id, oye_unitid, mobile_number,
-                    oye_memberroleid, status, account_id],
-                (tx, results) => {
-                    console.log('INSERT MyMembership', results.rowsAffected);
-                }
-            );
-        });
+
     }
 
 }

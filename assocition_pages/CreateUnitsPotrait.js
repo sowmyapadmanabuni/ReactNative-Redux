@@ -10,10 +10,8 @@ import { Dropdown } from 'react-native-material-dropdown';
 import PhoneInput from "react-native-phone-input";
 import { Fonts } from '../pages/src/utils/Fonts';
 import moment from 'moment';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { TextField } from 'react-native-material-textfield';
 import CountryPicker from 'react-native-country-picker-modal';
-var db = openDatabase({ name: global.DB_NAME });
 
 // const initial = Orientation.getInitialOrientation();
 var date = new Date().getDate();
@@ -171,57 +169,22 @@ export default class CreateUnitsPotrait extends Component {
   }
 
   componentWillMount() {
-    // The getOrientation method is async. It happens sometimes that
-    // you need the orientation at the moment the JS runtime starts running on device.
-    // `getInitialOrientation` returns directly because its a constant set at the
-    // beginning of the JS runtime.
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // const initial = Orientation.getInitialOrientation();
-    // if (initial === 'PORTRAIT') {
-    //   //alert('portaroiat1');
-    //   console.log('portrait', 'hi');
-    // } else {
-    //   console.log('landscape', 'hi');
-    //   // alert('hello else');
-    // }
+    
   }
 
   componentDidMount() {
 
-    // this locks the view to Portrait Mode
-    // Orientation.lockToPortrait();
-    // Orientation.lockToLandscape();
-    // this locks the view to Landscape Mode
-    // Orientation.lockToLandscape();
-    // this unlocks any previous locks to all Orientations
-    // Orientation.unlockAllOrientations();
-    // Orientation.addOrientationListener(this._orientationDidChange);
-
+    
   }
 
   _orientationDidChange = (orientation) => {
-    // if (orientation === 'LANDSCAPE') {
-    //   Orientation.lockToLandscape();
-    //   alert('landscape');
-    // } else {
-    //   Orientation.lockToLandscape();
-    //   console.log('port' ,'jhjkjh',)
-    //   alert('else land');
-    //   // do something with portrait layout
-    // }
+    
   }
 
   componentWillUnmount() {
-    // Orientation.unlockAllOrientations();
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 
-    // Orientation.getOrientation((err, orientation) => {
-      //  alert('close land');
-      // console.log(`Current Device Orientation: ${orientation}`);
-    // });
-
-    // Remember to remove listener
-    // Orientation.removeOrientationListener(this._orientationDidChange);
+    
   }
 
   mobilevalidate = (unitName) => {
@@ -440,24 +403,7 @@ this.goBack()
   }
 
   handleBackButtonClick() {
-    db.transaction(txMyMem => {
-      txMyMem.executeSql('SELECT * FROM MyMembership', [], (txMyMem, resultsMyMem) => {
-        console.log('CreateAssociation Results MyMembership ', resultsMyMem.rows.length + ' ');
-        //  tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on
-        // M.OYEUnitID=A.UnitID and M.AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-        //   UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
-        //  ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive
-
-        if (resultsMyMem.rows.length > 0) {
-          this.props.navigation.navigate('AssnListScreen');
-        } else {
-          this.props.navigation.navigate('AssnListScreen');
-        }
-
-      });
-    });
-
-    return true;
+    
   }
 
   render() {

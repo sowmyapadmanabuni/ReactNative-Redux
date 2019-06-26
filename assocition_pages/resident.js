@@ -7,9 +7,7 @@ import {
 import Communications from 'react-native-communications';
 import ActionButton from 'react-native-action-button';
 //import { Fonts } from '../pages/src/utils/Fonts'
-import { openDatabase } from 'react-native-sqlite-storage';
 
-var db = openDatabase({ name: global.DB_NAME });
 
 export default class ViewmembersList extends Component {
   constructor() {
@@ -75,11 +73,7 @@ export default class ViewmembersList extends Component {
 
         if (responseJson.success) {
           console.log('responseJson count unit ', responseJson.data.unit.length);
-          db.transaction(tx => {
-            tx.executeSql('delete  FROM OyeUnit where AssociationID=' + global.SelectedAssociationID, [], (tx, results) => {
-              console.log('Results OyeUnit delete ', results.rowsAffected);
-            });
-          });
+          
           for (let i = 0; i < responseJson.data.unit.length; ++i) {
             //     temp.push(results.rows.item(i));
             console.log('Results unit', responseJson.data.unit[i].unUniName + ' ' + responseJson.data.unit[i].unUnitID);
@@ -138,21 +132,7 @@ export default class ViewmembersList extends Component {
           isLoading: false
         })
 
-        db.transaction(tx => {
-
-          tx.executeSql('SELECT Distinct UO.OwnerId , UO.OwnerFirstName, UO.OwnerLastName, UO.OwnerMobile, ' +
-            ' A.UnitID, A.UnitName ,UO.OwnerAssnID ,A.AssociationID  FROM OyeUnit A  left Join UnitOwner UO on UO.OwnerUnitID=A.UnitID ' +
-             ' where A.AssociationID='+global.SelectedAssociationID, [], (tx, results) => {
-              var temp = [];
-              for (let i = 0; i < results.rows.length; ++i) {
-                temp.push(results.rows.item(i));
-                console.log('dataSourceUnitPkr UnitID ' + i, results.rows.item(i).OwnerFirstName + ' ' + results.rows.item(i).UnitName + ' ' + results.rows.item(i).UnitID);
-              }
-              this.setState({
-                dataSource: temp,
-              });
-            });
-        });
+       
       })
       .catch((error) => {
         console.log('responseJson err ' + error)
@@ -162,39 +142,11 @@ export default class ViewmembersList extends Component {
   insert_unitOwners(owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
     owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active
   ) {
-    db.transaction(function (tx) {
-      ////  'CREATE TABLE IF NOT EXISTS UnitOwner( OwnerId INTEGER,  OwnerFirstName VARCHAR(50) ,'
-      //  + ' OwnerLastName VARCHAR(50), OwnerMobile VARCHAR(50), OwnerEmail VARCHAR(50), OwnerDueAmnt double, '
-      //  + ' OwnerUnitID INTEGER, OwnerAssnID INTEGER , OwnerCreated VARCHAR(50), OwnerUpdated VARCHAR(50), OwnerIsActive boolean)',
-
-      tx.executeSql(
-        'INSERT INTO UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
-        ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-        [owner_id, unit_id, association_id, owner_first_name, owner_last_name, owner_mobile,
-          owner_email, owner_due_amnt, owner_created, owner_updated, owne_is_active],
-        (tx, results) => {
-          console.log('INSERT UnitOwner ', results.rowsAffected + ' ' + owner_id);
-
-        }
-      );
-    });
+   
   }
   insert_units(unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number
     ) {
-      db.transaction(function (tx) {
-        //// OyeUnit(UnitID integer , " +
-        //" AssociationID integer , UnitName VARCHAR(20) ,  Type VARCHAR(20) , AdminAccountID integer , " +
-        //" CreatedDateTime VARCHAR(20),  ParkingSlotNumber VARCHAR(20) )
-        tx.executeSql(
-          'INSERT INTO OyeUnit (UnitID, AssociationID, UnitName, Type, AdminAccountID, CreatedDateTime,  ' +
-          '  ParkingSlotNumber ) VALUES (?,?,?,?,?,?,?)',
-          [unit_id, association_id, UnitName, type, admin_account_id, created_date_time, parking_slot_number],
-          (tx, results) => {
-            console.log('Results oyeUnits ', results.rowsAffected + ' ' + association_id);
-  
-          }
-        );
-      });
+      
     }
   render() {
     const { navigate } = this.props.navigation;

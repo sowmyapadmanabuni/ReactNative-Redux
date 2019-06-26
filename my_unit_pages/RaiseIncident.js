@@ -4,8 +4,6 @@ import { Platform, StyleSheet, Text, View,ScrollView,ImageButton,
    TextInput,  Button,Dimensions,FlatList, ActivityIndicator,Form,
    TouchableHighlight,Alert,NetInfo,
    TouchableOpacity,Picker,Image} from 'react-native';
-   import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: global.DB_NAME});
    import ImagePicker from 'react-native-image-picker'
    import { Dropdown } from 'react-native-material-dropdown';
    import { TextField } from 'react-native-material-textfield';
@@ -55,20 +53,6 @@ export default class RaiseIncident extends Component {
     data: null,
     imgPath:""
 }
-db.transaction(tx => {
-  tx.executeSql('SELECT WorkID FROM Workers where AssnID=' + global.SelectedAssociationID+ ' ORDER BY WorkID ASC LIMIT 1', [], (tx, results) => {
-    console.log('Results', results.rowsAffected);
-    var temp=[];
-    for (let i = 0; i < results.rows.length; ++i) {
-      temp.push(results.rows.item(i));
-      console.log('Guards ID', results.rows.item(i).WorkID);
-      this.setState({
-        WorkerID:results.rows.item(i).WorkID
-      });
-    }
-    console.log('guard',WorkerID);
-  });
-});
 }
  onDOBPress = () => {
   let dobDate = this.state.dobDate;
@@ -274,7 +258,7 @@ else{
 }
 
 console.log('anu',anu)
-  fetch('http://'+global.oyeURL+'/oye247/OyeLivingApi/v1/Ticketing/Create',
+  fetch('http://'+global.oyeURL+'/oye247/api/v1/Ticketing/Create',
   {
           method: 'POST',
           headers: {

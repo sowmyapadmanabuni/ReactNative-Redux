@@ -36,6 +36,7 @@ import moment from "moment";
 import axios from "axios";
 import firebase from "react-native-firebase";
 import _ from "lodash";
+import {NavigationEvents} from 'react-navigation';
 import {
   newNotifInstance,
   createNotification,
@@ -47,8 +48,6 @@ import {
   updateUserInfo,
   getAssoMembers
 } from "../src/actions";
-
-import base from '../src/base'
 
 class Dashboard extends React.Component {
   static navigationOptions = {
@@ -73,24 +72,28 @@ class Dashboard extends React.Component {
       unitid: "",
       uoMobile: ""
     };
-
-
   }
 
   requestNotifPermission = () => {
+    const { MyAccountID, champBaseURL, receiveNotifications } = this.props;
+
     firebase
       .messaging()
       .hasPermission()
       .then(enabled => {
         if (enabled) {
-          this.listenForNotif();
+          if (receiveNotifications) {
+            this.listenForNotif();
+          }
           // user has permissions
         } else {
           firebase
             .messaging()
             .requestPermission()
             .then(() => {
-              this.listenForNotif();
+              if (receiveNotifications) {
+                this.listenForNotif();
+              }
               // User has authorised
             })
             .catch(error => {
@@ -105,8 +108,6 @@ class Dashboard extends React.Component {
       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
     };
 
-    const { MyAccountID, champBaseURL } = this.props;
-
     axios
       .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
         headers: headers
@@ -119,7 +120,16 @@ class Dashboard extends React.Component {
           // console.log(association.asAsnName)
           // console.log(association.asAssnID)
           // console.log('***********')
-          firebase.messaging().subscribeToTopic(association.asAssnID + "admin");
+          if (receiveNotifications) {
+            firebase
+              .messaging()
+              .subscribeToTopic(association.asAssnID + "admin");
+            // console.log(association.asAssnID);
+          } else if (!receiveNotifications) {
+            firebase
+              .messaging()
+              .unsubscribeFromTopic(association.asAssnID + "admin");
+          }
         });
       });
   };
@@ -190,8 +200,8 @@ class Dashboard extends React.Component {
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
       // alert('opened')
-       console.log('**********',notificationOpen.notification._data)
-       console.log(notificationOpen.notification._data.admin)
+      // console.log('**********')
+      // console.log(notificationOpen.notification._data.admin)
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.action) {
           this.props.newNotifInstance(notificationOpen.notification);
@@ -219,7 +229,7 @@ class Dashboard extends React.Component {
           this.props.newNotifInstance(notificationOpen.notification);
           this.props.createNotification(
             notificationOpen.notification._data,
-            navigationInstance,
+            "navigationInstance",
             true,
             "true",
             "true",
@@ -231,12 +241,12 @@ class Dashboard extends React.Component {
         this.props.newNotifInstance(notificationOpen.notification);
         this.props.createNotification(
           notificationOpen.notification._data,
-          navigationInstance,
+          "navigationInstance",
           true,
           "gate_app",
-          
-            this.props.oyeURL,
-            this.props.MyAccountID
+          "true",
+          this.props.oyeURL,
+          this.props.MyAccountID
         );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
@@ -245,12 +255,12 @@ class Dashboard extends React.Component {
         this.props.newNotifInstance(notificationOpen.notification);
         this.props.createNotification(
           notificationOpen.notification._data,
-          navigationInstance,
+          "navigationInstance",
           true,
           "false",
           "true",
-            this.props.oyeURL,
-            this.props.MyAccountID
+          this.props.oyeURL,
+          this.props.MyAccountID
         );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
@@ -272,7 +282,7 @@ class Dashboard extends React.Component {
     getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
-    // this.props.getNotifications()
+    this.props.getNotifications(oyeURL, MyAccountID);
   }
 
   onAssociationChange = (value, index) => {
@@ -347,6 +357,7 @@ class Dashboard extends React.Component {
           firstName={this.props.MyFirstName}
           navigate={this.props.navigation}
         />
+        
         <View style={styles.container}>
           <View style={styles.textWrapper}>
             <View
@@ -852,7 +863,8 @@ const mapStateToProps = state => {
     // Oyespace urls
     oyeURL: state.OyespaceReducer.oyeURL,
     champBaseURL: state.OyespaceReducer.champBaseURL,
-    oyespaceReducer: state.OyespaceReducer
+    oyespaceReducer: state.OyespaceReducer,
+    receiveNotifications: state.NotificationReducer.receiveNotifications
   };
 };
 

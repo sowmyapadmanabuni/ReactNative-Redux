@@ -6,10 +6,8 @@ import {
 import { Dropdown } from 'react-native-material-dropdown';
 import ImagePicker from 'react-native-image-picker'
 import PhoneInput from "react-native-phone-input";
-import { openDatabase } from 'react-native-sqlite-storage';
 import { DatePickerDialog } from 'react-native-datepicker-dialog'
 
-var db = openDatabase({ name: global.DB_NAME });
 
 const options = {
   title: 'Select a Photo',
@@ -82,7 +80,7 @@ export default class EditFamilyMember extends Component {
     console.log('EditunitsPotrait componentdidmount')
     //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYEUnit/OYEUnitlist/'+params.id
     //http://localhost:54400/champ/api/v1/Unit/GetUnitListByUnitID/{UnitID}
-    const url = 'http://' + global.oyeURL + '/champ/OyeLivingApi/v1/Unit/GetUnitListByUnitID/' + params.unUnitID
+    const url = 'http://' + global.oyeURL + '/champ/api/v1/Unit/GetUnitListByUnitID/' + params.unUnitID
     console.log('EditunitsPotrait '+url)
     fetch(url, {
       method: 'GET',
@@ -101,10 +99,7 @@ export default class EditFamilyMember extends Component {
         })
         if (responseJson.success) {
 
-          //{{ unUnitID: 11,    unUniName: 'fgh',  unUniIden: '560101', unUniType: '', unOpenBal: 0,
-          //  unCurrBal: 0,    unOcStat: '',  unOcSDate: '0001-01-01T00:00:00', unOwnStat: '', unSldDate: '0001-01-01T00:00:00',
-          //  unDimens: '',    unCalType: '',  flFloorID: 0, blBlockID: 0,   asAssnID: 6,
-
+         
           console.log('Results oyeUnits', responseJson.data.unit.unUniType + ' ' + responseJson.data.unit.unUniName);
 
           this.setState({
@@ -136,20 +131,12 @@ export default class EditFamilyMember extends Component {
 
   AddMember = (first, last, mobile, relation, OwnStatus,calculatnType) => {
 
-    /* this.setState({
-        valid: this.phone.isValidNumber(),
-        type: this.phone.getNumberType(),
-        value: this.phone.getValue()
-    });
-*/
+    
     const { params } = this.props.navigation.state;
     console.log('fmid start ', params.unUnitID)
     var result = this.Validate(first, last, mobile, relation)
     if (result === true) {
-      //let number = this.phone.getValue() + mobile;
-      //stDimension: '',    stUnitName: '',    stUnitType: '',    stOpenBal: '',    stCurrBal: '',
-      // stOcStat: '',    stOcSDate: '',    stOwnStat: '',    stSldDate: '',    stCalType: ''
-
+      
       member = {
         "UNUniType": this.state.stUnitType,
         "UNOpenBal": this.state.stOpenBal,
@@ -165,13 +152,8 @@ export default class EditFamilyMember extends Component {
         "UNUnitID": params.unUnitID
       }
 
-      /* "{
-	""UNUniType"" : ""FLAT"",	""UNOpenBal""	: ""12.3"",	""UNCurrBal""	: ""25.12"",
-	""UNOcStat""	: ""Active"",	""UNOcSDate"" : ""2018-02-25"",	""UNOwnStat"" : ""dsf"",
-	""UNSldDate""	: ""2018-02-02"",	""UNDimens""  : ""2"",	""UNCalType""	: ""df"",
-	""FLFloorID"" : 1,	""BLBlockID"" : 1,	""UNUnitID""  : 8
-}" */
-      const url = 'http://' + global.oyeURL + '/champ/OyeLivingApi/v1/Unit/UpdateUnitDetails'
+      
+      const url = 'http://' + global.oyeURL + '/champ/api/v1/Unit/UpdateUnitDetails'
       //  const url = 'http://localhost:54400/champ/api/v1/Unit/UpdateUnitDetails'
 
       console.log('EditunitsPotrait req', JSON.stringify(member));
@@ -316,19 +298,7 @@ export default class EditFamilyMember extends Component {
                 onChangeText={this.funcOpenBal} />
             </View>
 
-          {/*   <View style={{ flex: 1, flexDirection: 'row', marginTop: 5 }}>
-
-              <Text style={{ marginLeft: 15, color: 'black' }}>
-                Opening Due Balance as on
-</Text>
-               <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
-<TouchableOpacity onPress={this.onDOBPress.bind(this)} >
-  <View style={styles.datePickerBox}>
-    <Text style={styles.datePickerText}>    </Text>
-  </View>
-</TouchableOpacity> 
-
-            </View> */}
+          
 
             <View style={{ flex: 2, flexDirection: 'row', }}>
               <View style={{ flex: 1, marginLeft: 5, paddingRight: 5 }}>

@@ -3,10 +3,8 @@ import { AppRegistry, Platform, Alert, TouchableOpacity, ScrollView, Permissions
 
 import { DatePickerDialog } from 'react-native-datepicker-dialog'
 import moment from 'moment';
-import { openDatabase } from 'react-native-sqlite-storage';
 import { Fonts } from '../pages/src/utils/Fonts'
 
-var db = openDatabase({ name: global.DB_NAME });
 
 export default class DailyHelpList extends Component {
   ShowCurrentDate = () => {
@@ -133,7 +131,7 @@ export default class DailyHelpList extends Component {
     const { params } = this.props.navigation.state;
     // console.log(params.id)
     console.log('componentdidmount')
-    const url = 'http://' + global.oyeURL + '/oyesafe/OyeLivingApi/v1/VisitorLog/GetVisitorLogListByAssocID/'+ global.SelectedAssociationID
+    const url = 'http://' + global.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByAssocID/'+ global.SelectedAssociationID
     console.log(url)
     fetch(url, {
       method: 'GET',
@@ -163,25 +161,6 @@ export default class DailyHelpList extends Component {
 
   }
   namebyid(Workerid) {
-    db.transaction(tx => {
-      tx.executeSql('SELECT FName FROM Workers where WorkID=?', [Workerid], (tx, results) => {
-        for (let i = 0; i < results.rows.length; i++) {
-          this.setState({
-            WorkerName: results.rows.item(0).FName
-          });
-          console.log('check db',
-            this.state.WorkerName + ',' + this.state.WorkerId);
-        }
-        console.log('check db',
-          results.rows.length + "," + results.rows.item(0).FName);
-        this.setState({
-          panCount: results.rows.item,
-        });
-
-      });
-
-    });
-    return this.state.WorkerName;
 
   }
   render() {

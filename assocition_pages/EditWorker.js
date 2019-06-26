@@ -5,17 +5,9 @@ import {
     Platform, alertMessage, Image, Picker, Button, Alert, ScrollView
 } from "react-native";
 import PhoneInput from "react-native-phone-input";
-import { openDatabase } from 'react-native-sqlite-storage';
 import ImagePicker from 'react-native-image-picker';
 
-var db = openDatabase({ name: global.DB_NAME });
 
-/* const options = {
-    title: 'Select a Photo',
-    takePhotoButton: 'Take a Photo',
-    chooseFromLibraryButton: 'Choose From Library',
-    quality: 1
-}; */
 const options = {
     title: 'Select a Photo',
     takePhotoButton: 'Take a Photo',
@@ -78,7 +70,7 @@ export default class EditWorker extends Component {
         const { params } = this.props.navigation.state;
         console.log('WorkersByWorkerID componentdidmount start ', params.id)
         //const url = 'http://localhost:64284/oye247/api/v1/GetWorkersListByWorkerID/{WorkerID}
-        const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/GetWorkersListByWorkerID/' + params.id
+        const url = 'http://' + global.oyeURL + '/oye247/api/v1/GetWorkersListByWorkerID/' + params.id
         console.log(url)
         fetch(url, {
             method: 'GET',
@@ -143,30 +135,13 @@ export default class EditWorker extends Component {
     onAddGuard = (first, last, mobile, DesgnPickerValueHolder, aadhaar) => {
 
         const { params } = this.props.navigation.state;
-        this.setState({
-            // valid: this.phone.isValidNumber(),
-            // type: this.phone.getNumberType(),
-            // value: this.phone.getValue()
-        });
+        
 
         var result = this.Validate(first, last, mobile, DesgnPickerValueHolder, aadhaar)
 
         if (result === true) {
             console.log('Validation', "Passed");
-            // let number = this.phone.getValue() + mobile;
-            /* "{
-	""WKFName""	 : ""knlk"",
-    ""WKLName""	 : ""jknj"", 
-    ""WKMobile""   : ""+919490791523"", 
-    ""WKImgName""  : ""sdsd"",
-    ""WKWrkType""  : ""sdsd"",
-    ""WKDesgn""    : ""ddf00"",
-    ""WKIDCrdNo""  : ""sdfds"",
-    ""WKIsActive"" : ""false"",
-    ""WKWorkID""   : 8//this.phone.getValue(),
-}" */
-
-            // const imgName = 'Assn' + params.asAssnID + 'Worker' + params.id + '.jpg';
+            
             const imgName = "PERSONAssociation" + params.asAssnID + "GUARD" + params.id + ".jpg";
 
             member = {
@@ -184,7 +159,7 @@ export default class EditWorker extends Component {
 
             console.log('member', member);
             //const url = 'http://localhost:64284/oye247/api/v1/Worker/WorkerDetailsUpdate'
-            const url = 'http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Worker/WorkerDetailsUpdate'
+            const url = 'http://' + global.oyeURL + '/oye247/api/v1/Worker/WorkerDetailsUpdate'
             //const url = 'http://oye247api.oye247.com/oye247/api/v1/OYESecurityGuard/Add'
             fetch(url, {
                 method: 'POST',
@@ -255,18 +230,6 @@ export default class EditWorker extends Component {
         } else if (last == '' || last == undefined) {
             alert('Enter Last Name');
             return false
-
-            // } else if (reg.test(mobile) === false || first == undefined) {
-            ////  alert('Enter valid Mobile Number');
-            //  return false;
-
-            /*  } else if (regemail.test(email) === false || email == undefined) {
-              alert('Enter valid email Id);   
-                 return false; */
-
-            /*  } else if (aadhaar == '' || aadhaar == undefined) {
-                 alert('Enter valid ID Card number');
-                 return false */
         } else if (this.state.DesgnPickerValueHolder == '0' || this.state.DesgnPickerValueHolder == undefined) {
             alert('Select Work Type');
             return false
@@ -310,7 +273,6 @@ export default class EditWorker extends Component {
                 </View>
             );
         }
-        // require('../pages/assets/images/icons8-manager-50.png')}
         const { params } = this.props.navigation.state;
         
         const {
@@ -327,13 +289,7 @@ export default class EditWorker extends Component {
                         style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                         </TouchableOpacity>
                     </View>
-                    {/* <TouchableOpacity 
-                        style={{paddingTop: 2, paddingRight: 2, paddingLeft: 2, flex: 1, alignItems: 'center', flexDirection: 'row',
-                            paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:'6%'}}
-                            onPress={() => this.props.navigation.navigate('SideMenu')}>
-                        <Image source={require('../pages/assets/images/menu_button.png')}
-                            style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                    </TouchableOpacity> */}
+                   
                     <View style={{ flex: 5, alignItems:'center', justifyContent:'center'}}>
                     <Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
                         style={{height: 40, width: 95, marginTop: 45,marginBottom:5}} />
@@ -413,31 +369,7 @@ export default class EditWorker extends Component {
 
                             </View>
 
-                            {/*     <View style={styles.input}>
-
-                                <Image style={{ flex: 1 }}
-                                    source={require('../pages/assets/images/call-answer.png')}
-                                    style={styles.imagee} />
-
-                                <PhoneInput style={styles.text}
-                                    style={{ flex: 2 }}
-                                    ref={ref => {
-                                        this.phone = ref;
-                                    }}
-                                />
-                                <TextInput
-                                    style={styles.text}
-                                    style={{ flex: 5 }}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="Mobile Number"
-                                    placeholderTextColor="#828282"
-                                    autoCapitalize="none"
-                                    keyboardType={'numeric'}
-                                    maxLength={10}
-                                    onChangeText={this.Mobile} />
-
-                            </View>
- */}
+                            
                             <Picker style={{ fontSize: 5 }}
                                 selectedValue={this.state.DesgnPickerValueHolder}
                                 onValueChange={(itemValue, itemIndex) => this.setState({ DesgnPickerValueHolder: itemValue })} >
@@ -446,22 +378,7 @@ export default class EditWorker extends Component {
                                 <Picker.Item label="Security Guard" value='Security Guard' />
                                 <Picker.Item label="Supervisor" value='Supervisor' />
                             </Picker>
-                            {/* <View style={styles.input}>
-
-                                <Image source={require('../pages/assets/images/envelope.png')}
-                                    style={styles.imagee} />
-
-                                <TextInput style={styles.text}
-
-                                    underlineColorAndroid="transparent"
-                                    placeholder="Email ID"
-                                    placeholderTextColor="#828282"
-                                    autoCapitalize="none"
-                                     maxLength={50}
-                                    onChangeText={this.Email} />
-
-                            </View>
- */}
+                            
                             <View style={styles.input}>
 
                                 <Image
