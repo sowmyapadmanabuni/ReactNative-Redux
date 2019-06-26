@@ -99,7 +99,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
   };
 };
 
-export const getDashUnits = (unit, oyeURL) => {
+export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
+  console.log(notifications);
   return dispatch => {
     let sold = 100;
     let unsold = 100;
@@ -123,203 +124,231 @@ export const getDashUnits = (unit, oyeURL) => {
         }
       )
       .then(response => {
-        // if(response){
-
-        // }
-        let responseData = response.data.data;
-        let unitOwner = responseData.unitOwner;
-        let unitTenant = responseData.unitTenant;
-        let residents = _.union(unitOwner, unitTenant);
-
-        fetch(
-          `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        axios
+          .get(
+            //  `http://${oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${unit}`,
+            `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+              }
             }
-          }
-        )
-          .then(response => response.json())
-          .then(responseJson => {
-            if (responseJson.success) {
-              let count = Object.keys(responseJson.data.unit).length;
-              let sold_data = [];
-              let name = [];
-              let sold1 = 0;
-              let unsold1 = 0;
-              let totalunits = 0;
-              Residentlist = name;
+          )
+          .then(res => {
+            let responseData = response.data.data;
+            let unitOwner = responseData.unitOwner;
+            let unitTenant = responseData.unitTenant;
+            let residents = _.union(unitOwner, unitTenant);
 
-              for (var i = 0; i < count; i++) {
-                sold_data.push({ value: responseJson.data.unit[i].unOcStat });
-                var count1 = Object.keys(responseJson.data.unit[i].owner)
-                  .length;
-
-                for (var j = 0; j < count1; j++) {
-                  let ownername = responseJson.data.unit[i].owner[j].uofName;
-                  let unitname = responseJson.data.unit[i].unUniName;
-                  let unitid = responseJson.data.unit[i].unUnitID;
-                  let uoMobile = responseJson.data.unit[i].owner[j].uoMobile;
-                  let admin = responseJson.data.unit[i].owner[j].acAccntID;
-
-                  Residentlist.push({
-                    name: ownername,
-                    unit: unitname,
-                    role: "Owner",
-                    unitid: unitid,
-                    uoMobile: uoMobile,
-                    admin: admin
-                  });
-                }
-
-                var count2 = Object.keys(responseJson.data.unit[i].tenant)
-                  .length;
-
-                for (var k = 0; k < count2; k++) {
-                  let tenantname = responseJson.data.unit[i].tenant[k].utfName;
-                  let unitname = responseJson.data.unit[i].unUniName;
-
-                  Residentlist.push({
-                    name: tenantname,
-                    unit: unitname,
-                    role: "Tenant"
-                  });
+            fetch(
+              `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
                 }
               }
+            )
+              .then(response => response.json())
+              .then(responseJson => {
+                if (responseJson.success) {
+                  let count = Object.keys(responseJson.data.unit).length;
+                  let sold_data = [];
+                  let name = [];
+                  let sold1 = 0;
+                  let unsold1 = 0;
+                  let totalunits = 0;
+                  Residentlist = name;
 
-              // Sold Owner Occupied
-              // Sold Tenant Occupied
-              // Sold Vacant
-              // All Sold Flats
+                  for (var i = 0; i < count; i++) {
+                    sold_data.push({
+                      value: responseJson.data.unit[i].unOcStat
+                    });
+                    var count1 = Object.keys(responseJson.data.unit[i].owner)
+                      .length;
 
-              // Unsold Vacant
-              // Unsold Tenant Occupied
+                    for (var j = 0; j < count1; j++) {
+                      let ownername =
+                        responseJson.data.unit[i].owner[j].uofName;
+                      let unitname = responseJson.data.unit[i].unUniName;
+                      let unitid = responseJson.data.unit[i].unUnitID;
+                      let uoMobile =
+                        responseJson.data.unit[i].owner[j].uoMobile;
+                      let admin = responseJson.data.unit[i].owner[j].acAccntID;
 
-              // All Unsold Flats
-              // All Units
-              // Single Unit
-              // All Vacant Units
-              // All Occupied Units
+                      Residentlist.push({
+                        name: ownername,
+                        unit: unitname,
+                        role: "Owner",
+                        unitid: unitid,
+                        uoMobile: uoMobile,
+                        admin: admin
+                      });
+                    }
 
-              for (var j = 0; j < sold_data.length; j++) {
-                if (
-                  sold_data[j].value == "All Sold Flats" ||
-                  sold_data[j].value == "Sold Owner Occupied" ||
-                  sold_data[j].value == "Sold Tenant Occupied" ||
-                  sold_data[j].value == "Sold Vacant"
-                ) {
-                  sold1 = sold1 + 1;
-                } else if (
-                  sold_data[j].value == "Unsold Vacant" ||
-                  sold_data[j].value == "Unsold Tenant Occupied" ||
-                  sold_data[j].value == "NULL" ||
-                  sold_data[j].value == ""
-                ) {
-                  unsold1 = unsold1 + 1;
-                }
-                totalunits++;
-              }
+                    var count2 = Object.keys(responseJson.data.unit[i].tenant)
+                      .length;
 
-              sold = ((sold1 / totalunits) * 100).toFixed(0);
-              unsold = ((unsold1 / totalunits) * 100).toFixed(0);
-              totalunits1 = totalunits;
-              sold2 = sold1;
-              unsold2 = unsold1;
+                    for (var k = 0; k < count2; k++) {
+                      let tenantname =
+                        responseJson.data.unit[i].tenant[k].utfName;
+                      let unitname = responseJson.data.unit[i].unUniName;
 
-              let units = [];
+                      Residentlist.push({
+                        name: tenantname,
+                        unit: unitname,
+                        role: "Tenant"
+                      });
+                    }
+                  }
 
-              responseJson.data.unit.map((data, index) => {
-                // console.log(data);
-                units.push({
-                  value: data.unUniName,
-                  name: data.unUniName,
-                  unitId: data.unUnitID,
-                  id: index
-                });
-              });
+                  // Sold Owner Occupied
+                  // Sold Tenant Occupied
+                  // Sold Vacant
+                  // All Sold Flats
 
-              let residentListOwner = [];
-              let residentListTenant = [];
+                  // Unsold Vacant
+                  // Unsold Tenant Occupied
 
-              Residentlist.map((val, i) => {
-                if (val.role === "Owner") {
-                  residentListOwner.push({ ...val });
+                  // All Unsold Flats
+                  // All Units
+                  // Single Unit
+                  // All Vacant Units
+                  // All Occupied Units
+
+                  for (var j = 0; j < sold_data.length; j++) {
+                    if (
+                      sold_data[j].value == "All Sold Flats" ||
+                      sold_data[j].value == "Sold Owner Occupied" ||
+                      sold_data[j].value == "Sold Tenant Occupied" ||
+                      sold_data[j].value == "Sold Vacant"
+                    ) {
+                      sold1 = sold1 + 1;
+                    } else if (
+                      sold_data[j].value == "Unsold Vacant" ||
+                      sold_data[j].value == "Unsold Tenant Occupied" ||
+                      sold_data[j].value == "NULL" ||
+                      sold_data[j].value == ""
+                    ) {
+                      unsold1 = unsold1 + 1;
+                    }
+                    totalunits++;
+                  }
+
+                  sold = ((sold1 / totalunits) * 100).toFixed(0);
+                  unsold = ((unsold1 / totalunits) * 100).toFixed(0);
+                  totalunits1 = totalunits;
+                  sold2 = sold1;
+                  unsold2 = unsold1;
+
+                  let units = [];
+
+                  responseJson.data.unit.map((data, index) => {
+                    // console.log(data);
+                    units.push({
+                      value: data.unUniName,
+                      name: data.unUniName,
+                      unitId: data.unUnitID,
+                      id: index
+                    });
+                  });
+
+                  let residentListOwner = [];
+                  let residentListTenant = [];
+
+                  Residentlist.map((val, i) => {
+                    if (val.role === "Owner") {
+                      residentListOwner.push({ ...val });
+                    } else {
+                      residentListTenant.push({ ...val });
+                    }
+                  });
+
+                  let newResidentOwner = [];
+                  let newResidentTenant = [];
+
+                  residentListOwner.map((val, i) => {
+                    newResidentOwner.push({
+                      ...val,
+                      ...unitOwner[i]
+                    });
+                  });
+
+                  residentListTenant.map((val, i) => {
+                    newResidentTenant.push({
+                      ...val,
+                      uoRoleID: 0
+                    });
+                  });
+
+                  let newResidents = _.union(
+                    newResidentOwner,
+                    newResidentTenant
+                  );
+
+                  let accountUnits = res.data.memberListByAccount;
+
+                  let removedUnits = _.remove(accountUnits, n => {
+                    return n.meJoinStat !== "accepted";
+                  });
+
+                  let finalUnits = [];
+
+                  removedUnits.map((data, index) => {
+                    // console.log(data);
+                    units.push({
+                      value: data.unUniName,
+                      name: data.unUniName,
+                      unitId: data.unUnitID,
+                      id: index
+                    });
+                  });
+
+                  console.log(finalUnits, "finalUnits");
+                  console.log(removedUnits, "removedUnits");
+
+                  dispatch({
+                    type: DASHBOARD_UNITS,
+                    payload: finalUnits,
+                    association: unit
+                  });
+
+                  dispatch({
+                    type: DASHBOARD_RESIDENT_LIST,
+                    payload: newResidents
+                  });
+
+                  dispatch({
+                    type: DASHBOARD_PIE,
+                    payload: { prop: "sold", value: sold }
+                  });
+
+                  dispatch({
+                    type: DASHBOARD_PIE,
+                    payload: { prop: "sold2", value: sold2 }
+                  });
+
+                  dispatch({
+                    type: DASHBOARD_PIE,
+                    payload: { prop: "unsold", value: unsold }
+                  });
+
+                  dispatch({
+                    type: DASHBOARD_PIE,
+                    payload: { prop: "unsold2", value: unsold2 }
+                  });
                 } else {
-                  residentListTenant.push({ ...val });
+                  dispatch({ type: DASHBOARD_UNITS_STOP });
                 }
+              })
+              .catch(error => {
+                console.log(error);
+                dispatch({ type: DASHBOARD_UNITS_STOP });
               });
-
-              let newResidentOwner = [];
-              let newResidentTenant = [];
-
-              residentListOwner.map((val, i) => {
-                newResidentOwner.push({
-                  ...val,
-                  ...unitOwner[i]
-                });
-              });
-
-              residentListTenant.map((val, i) => {
-                newResidentTenant.push({
-                  ...val,
-                  uoRoleID: 0
-                });
-              });
-
-              let newResidents = _.union(newResidentOwner, newResidentTenant);
-
-              // console.log(newArr)
-              // console.log(unitOwner)
-              // console.log(residentListOwner)
-              console.log(newResidentOwner);
-              // console.log(unitTenant)
-              // console.log(residentListTenant)
-              console.log(newResidentTenant);
-              console.log(newResidents);
-              // console.log(residents)
-              // console.log(Residentlist)
-              console.log("_________");
-
-              dispatch({
-                type: DASHBOARD_UNITS,
-                payload: units,
-                association: unit
-              });
-
-              dispatch({
-                type: DASHBOARD_RESIDENT_LIST,
-                payload: newResidents
-              });
-
-              dispatch({
-                type: DASHBOARD_PIE,
-                payload: { prop: "sold", value: sold }
-              });
-
-              dispatch({
-                type: DASHBOARD_PIE,
-                payload: { prop: "sold2", value: sold2 }
-              });
-
-              dispatch({
-                type: DASHBOARD_PIE,
-                payload: { prop: "unsold", value: unsold }
-              });
-
-              dispatch({
-                type: DASHBOARD_PIE,
-                payload: { prop: "unsold2", value: unsold2 }
-              });
-            } else {
-              dispatch({ type: DASHBOARD_UNITS_STOP });
-            }
           })
-          .catch(error => {
-            console.log(error);
-            dispatch({ type: DASHBOARD_UNITS_STOP });
-          });
+          .catch(() => {});
       });
   };
 };

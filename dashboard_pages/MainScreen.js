@@ -289,9 +289,10 @@ class Dashboard extends React.Component {
       associationid,
       getDashUnits,
       updateUserInfo,
-      memberList
+      memberList,
+      notifications
     } = this.props;
-    // const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
     updateUserInfo({
@@ -307,7 +308,7 @@ class Dashboard extends React.Component {
       prop: "MyOYEMemberID",
       value: memId.meMemID
     });
-    getDashUnits(associationid[index].id, oyeURL);
+    getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
     // this.unit(this.state.associationid[index].id)
   };
 
@@ -839,6 +840,7 @@ const mapStateToProps = state => {
   return {
     isCreateLoading: state.NotificationReducer.isCreateLoading,
     notificationCount: state.NotificationReducer.notificationCount,
+    notifications: state.NotificationReducer.notifications,
     joinedAssociations: state.AppReducer.joinedAssociations,
     datasource: state.DashboardReducer.datasource,
     dropdown: state.DashboardReducer.dropdown,
