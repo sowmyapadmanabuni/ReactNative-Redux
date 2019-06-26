@@ -111,17 +111,39 @@ class OTPVerification extends Component {
                 "/" +
                 today.getFullYear();
 
-              // const { updateUserInfo } = this.props;
+              const { updateUserInfo, MyMobileNumber, MyISDCode } = this.props;
 
-              // updateUserInfo({ prop: 'MyAccountID', value: account_id })
-              // updateUserInfo({ prop: 'MyEmail', value: email })
-              // updateUserInfo({ prop: 'MyMobileNumber', value: mobile_number })
-              // updateUserInfo({ prop: 'MyFirstName', value: first_name })
-              // updateUserInfo({ prop: 'MyLastName', value: last_name })
-              // updateUserInfo({ prop: 'MyISDCode', value: isd_code })
-              // updateUserInfo({ prop: 'signedIn', value: true })
+              const {
+                acAccntID,
+                acfName,
+                aclName,
+                acEmail
+              } = responseJson.data.account;
 
-              AsyncStorage.setItem("userId", login);
+              updateUserInfo({
+                prop: "MyAccountID",
+                value: acAccntID
+              });
+              updateUserInfo({ prop: "MyEmail", value: acEmail });
+              updateUserInfo({
+                prop: "MyMobileNumber",
+                value: MyMobileNumber
+              });
+              updateUserInfo({
+                prop: "MyFirstName",
+                value: acfName
+              });
+              updateUserInfo({
+                prop: "MyLastName",
+                value: aclName
+              });
+              updateUserInfo({
+                prop: "MyISDCode",
+                value: MyISDCode
+              });
+              updateUserInfo({ prop: "signedIn", value: true });
+
+              // AsyncStorage.setItem("userId", login);
 
               global.MyLoginTime = moment(new Date()).format(
                 "DD-MM-YYYY HH:mm:ss"
