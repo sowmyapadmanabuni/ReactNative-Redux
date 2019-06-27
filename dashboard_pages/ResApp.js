@@ -146,7 +146,7 @@ EachServiceProvider from
 
 console.disableYellowBox = true;
 import Dashboard from '../src/screens/Resident/Dashboard/Dashboard'
-import DashBoardHeader from '../src/components/DashBoardHeader'
+import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader'
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:

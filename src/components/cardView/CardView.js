@@ -1,19 +1,13 @@
 import React, {Component} from 'react';
 import {
-    Platform,
-    StyleSheet,
     Text,
     View,
     Image,
-    TouchableHighlight,
     TouchableOpacity,
-    Dimensions,
-    ViewPropTypes,
-    PixelRatio
 } from 'react-native';
-import PropTypes from 'prop-types'
-import base from "../base";
-
+import PropTypes from 'prop-types';
+import CardViewStyles from '../cardView/CardViewStyles'
+import base from "../../base";
 
 class CardView extends React.Component {
     constructor(props) {
@@ -28,7 +22,7 @@ class CardView extends React.Component {
         backgroundColor: PropTypes.string,
         cardText: PropTypes.string,
         cardCount: PropTypes.number,
-        cardIcon: PropTypes.string,
+        cardIcon: PropTypes.any,
         cardType: PropTypes.oneOf(['default', 'normal',]).isRequired,
         onCardClick: PropTypes.func,
         elevation: PropTypes.number,
@@ -43,7 +37,7 @@ class CardView extends React.Component {
         height: '45%',
         width: '45%',
         borderRadius: 10,
-        backgroundColor: "#ffffff",
+        backgroundColor: base.theme.colors.white,
         cardText: "",
         cardCount: null,
         cardIcon: "",
@@ -58,15 +52,14 @@ class CardView extends React.Component {
 
 
     render() {
-        console.log("Props", this.props)
-        let cardStyle = styles.defaultCard;
+        let cardStyle = CardViewStyles.defaultCard;
         let imgSrc = (this.props.cardIcon);
         switch (this.props.cardType) {
             case 'normal':
-                cardStyle = styles.normalCard;
+                cardStyle = CardViewStyles.normalCard;
                 break;
             case 'default':
-                cardStyle = styles.defaultCard;
+                cardStyle = CardViewStyles.defaultCard;
                 break;
         }
         return (
@@ -83,15 +76,15 @@ class CardView extends React.Component {
             }]}
                               onPress={this.onCardClick.bind(this)}
                               disabled={this.props.disabled}>
-                <View style={styles.subCardView}>
-                    <Image style={styles.imageStyles}
+                <View style={CardViewStyles.subCardView}>
+                    <Image style={CardViewStyles.imageStyles}
                            source={imgSrc}>
                     </Image>
-                    <View style={[styles.subView]}>
-                        <Text style={styles.count}>
+                    <View style={[CardViewStyles.subView]}>
+                        <Text style={CardViewStyles.count}>
                             {this.props.cardCount}
                         </Text>
-                        <Text style={styles.cardText}
+                        <Text style={CardViewStyles.cardText}
                               numberOfLines={2}>
                             {this.props.cardText}
                         </Text>
@@ -112,57 +105,6 @@ class CardView extends React.Component {
 
 }
 
-const styles = StyleSheet.create({
-    defaultCard: {
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        elevation: 5,
-        borderColor: base.theme.colors.white,
-        shadowColor: base.theme.colors.black,
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
 
-    },
-    normalCard: {
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        elevation: 5,
-        borderColor: base.theme.colors.white,
-        shadowColor: base.theme.colors.black,
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-
-    },
-    subCardView: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    imageStyles: {
-        height: 20,
-        width: 20,
-        alignSelf: 'center',
-        marginBottom: 2
-    },
-    subView: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '65%',
-    },
-    count: {
-        fontSize: 15,
-        color: base.theme.colors.blue,
-        marginRight: 5,
-    },
-    cardText: {
-        fontSize: 10,
-        color: base.theme.colors.black,
-        //fontFamily:base.theme.fonts.bold
-    }
-
-})
 
 export default CardView;

@@ -16,29 +16,29 @@ console.disableYellowBox = true;
 class OTPVerification extends Component {
   constructor(props) {
     super(props);
-   
+
 
     console.log('start screen OTPVerification ', global.MyISDCode + ' ' + global.MyMobileNumber);
   }
 
   componentDidMount() {
     this.interval = setInterval(
-      () => this.setState((prevState) => ({ timer: prevState.timer - 1 })),
-      1000
+        () => this.setState((prevState) => ({ timer: prevState.timer - 1 })),
+        1000
     );
   }
 
   componentWillUnmount() {
     //remove listener
-   // this.SMSReadSubscription.remove();
+    // this.SMSReadSubscription.remove();
   }
-  
+
   componentDidUpdate() {
     if (this.state.timer === 1) {
       clearInterval(this.interval);
     }
   }
-  
+
   state = {
     Mobilenumber: '',
     OTPNumber: '',
@@ -61,7 +61,7 @@ class OTPVerification extends Component {
   handleMobile = (mobilenumber) => {
     this.setState({ Mobilenumber: mobilenumber })
   }
-  
+
   handleOTP = (otp) => {
     this.setState({ OTPNumber: otp })
   }
@@ -88,53 +88,53 @@ class OTPVerification extends Component {
       console.log('req verifyotp ', JSON.stringify(anu) + ' ' + url);
 
       fetch(url,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-          },
-          body: JSON.stringify(anu)
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log('ravii', responseJson);
-          if (responseJson.success) {
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+            },
+            body: JSON.stringify(anu)
+          })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log('ravii', responseJson);
+            if (responseJson.success) {
 
-            if (responseJson.data == null) {
-              this.props.navigation.navigate('RegistrationPageScreen');
-            } else {
-              console.log('hiii', 'bbbf');
+              if (responseJson.data == null) {
+                this.props.navigation.navigate('RegistrationPageScreen');
+              } else {
+                console.log('hiii', 'bbbf');
 
-              this.insert_Accounts(responseJson.data.account.acAccntID,
-                responseJson.data.account.acfName,
-                responseJson.data.account.aclName,
-                this.props.MyMobileNumber, this.props.MyISDCode,responseJson.data.account.acEmail);
-                
+                this.insert_Accounts(responseJson.data.account.acAccntID,
+                    responseJson.data.account.acfName,
+                    responseJson.data.account.aclName,
+                    this.props.MyMobileNumber, this.props.MyISDCode,responseJson.data.account.acEmail);
+
                 const login = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
                 var today = new Date();
                 let date=today.getDate() + "/"+ parseInt(today.getMonth()+1) +"/"+ today.getFullYear();
-              this.props.navigation.navigate('App');
+                this.props.navigation.navigate('App');
+              }
+            } else {
+              console.log('hiii', 'failed' + anu);
+              alert('Invalid OTP, check Mobile Number and try again');
             }
-          } else {
-            console.log('hiii', 'failed' + anu);
-            alert('Invalid OTP, check Mobile Number and try again');
-          }
 
-          console.log('suvarna', 'hi');
-        })
-        .catch((error) => {
-          console.error('err ' + error);
-          console.log('Verification', 'error ' + error);
-          alert('OTP Verification failed');
+            console.log('suvarna', 'hi');
+          })
+          .catch((error) => {
+            console.error('err ' + error);
+            console.log('Verification', 'error ' + error);
+            alert('OTP Verification failed');
 
-        });
+          });
 
     }
   }
 
   changeNumber = (mobilenumber) => {
-   
+
     this.props.navigation.navigate('MobileValid');
   }
 
@@ -151,46 +151,46 @@ class OTPVerification extends Component {
     this.setState({
       isLoading: true
     })
-    
+
     fetch(url,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          //  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-        },
-        body: JSON.stringify(anu)
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        console.log('bf responseJson Account', responseJson);
-
-        if (responseJson.success) {
-         
-          console.log('responseJson Account if', this.state.loginTime);
-          
-
-
-        } else {
-          console.log('responseJson Account else', responseJson.data);
-
-          alert('OTP not Sent');
-          // this.props.navigation.navigate('CreateOrJoinScreen');
-        }
-        console.log('suvarna', 'hi');
-        this.setState({
-          isLoading: false
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            //  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+          },
+          body: JSON.stringify(anu)
         })
-      })
-      .catch((error) => {
-        console.error(error);
-        alert(' Failed to Get OTP');
-        this.setState({
-          isLoading: false
+        .then((response) => response.json())
+        .then((responseJson) => {
+
+          console.log('bf responseJson Account', responseJson);
+
+          if (responseJson.success) {
+
+            console.log('responseJson Account if', this.state.loginTime);
+
+
+
+          } else {
+            console.log('responseJson Account else', responseJson.data);
+
+            alert('OTP not Sent');
+            // this.props.navigation.navigate('CreateOrJoinScreen');
+          }
+          console.log('suvarna', 'hi');
+          this.setState({
+            isLoading: false
+          })
         })
-      });
+        .catch((error) => {
+          console.error(error);
+          alert(' Failed to Get OTP');
+          this.setState({
+            isLoading: false
+          })
+        });
 
 
   }
@@ -208,53 +208,53 @@ class OTPVerification extends Component {
       isLoading: true
     })
     fetch(url,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          //  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-        },
-        body: JSON.stringify(anu)
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log('bf responseJson Account', responseJson);
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            //  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+          },
+          body: JSON.stringify(anu)
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log('bf responseJson Account', responseJson);
 
-        if (responseJson.success) {
-          console.log('responseJson Account if', responseJson.data);
+          if (responseJson.success) {
+            console.log('responseJson Account if', responseJson.data);
 
-          if (responseJson.data == null) {
-            console.log('Account not a Registered', responseJson.data);
-            this.props.navigation.navigate('RegistrationPageScreen');
-            alert('You are not a Registered User');
+            if (responseJson.data == null) {
+              console.log('Account not a Registered', responseJson.data);
+              this.props.navigation.navigate('RegistrationPageScreen');
+              alert('You are not a Registered User');
 
-          } else {
+            } else {
 
               console.log('Account Registered', responseJson.data);
 
-            this.insert_Accounts(responseJson.data.accountByMobile[0].acAccntID,
-              responseJson.data.accountByMobile[0].acfName,
-              responseJson.data.accountByMobile[0].aclName,
-              mobilenumber, global.MyISDCode,responseJson.data.accountByMobile[0].acEmail);
+              this.insert_Accounts(responseJson.data.accountByMobile[0].acAccntID,
+                  responseJson.data.accountByMobile[0].acfName,
+                  responseJson.data.accountByMobile[0].aclName,
+                  mobilenumber, global.MyISDCode,responseJson.data.accountByMobile[0].acEmail);
 
-            this.props.navigation.navigate('SplashScreen');
+              this.props.navigation.navigate('SplashScreen');
 
+            }
+
+          } else {
+            console.log('responseJson Account else', responseJson.data);
+
+            alert('You are not a Member of any Association');
+            // this.props.navigation.navigate('CreateOrJoinScreen');
           }
 
-        } else {
-          console.log('responseJson Account else', responseJson.data);
-
-          alert('You are not a Member of any Association');
-          // this.props.navigation.navigate('CreateOrJoinScreen');
-        }
-
-        console.log('suvarna', 'hi');
-      })
-      .catch((error) => {
-        console.error(error);
-        alert(' Failed to Get');
-      });
+          console.log('suvarna', 'hi');
+        })
+        .catch((error) => {
+          console.error(error);
+          alert(' Failed to Get');
+        });
   }
 
   insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code,email) {
@@ -269,52 +269,52 @@ class OTPVerification extends Component {
     updateUserInfo({ prop: 'MyISDCode', value: isd_code })
     updateUserInfo({ prop: 'signedIn', value: true })
 
-    
+
   }
 
   render() {
 
     return (
 
-      <View style={{
-        flex: 1, flexDirection: 'column',
-        backgroundColor: '#fff'
-      }}>
-        <TouchableOpacity
-          style={{
-            paddingTop: 0, paddingRight: 2, paddingLeft: 2, alignItems: 'center', flexDirection: 'row',
-            paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:45,
-          }}
-          onPress={this.changeNumber.bind(this, this.state.Mobilenumber)}  /*Products is navigation name*/>
-          <Image source={require('../pages/assets/images/back.png')}
-            style={{ flex: 1, height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-          <Text style={{ flex: 3, fontSize: 12, paddingLeft: 5, fontSize: 14, color: 'black', alignContent: 'flex-start', alignSelf: 'center' }}>Back </Text>
-          <Text style={{ flex: 4, fontSize: 12, paddingLeft: 15, fontSize: 14, color: 'black', alignSelf: 'center' }}>OTP Verification</Text>
-          <Text style={{ flex: 4, fontSize: 12, paddingLeft: 15, fontSize: 14, color: 'black', alignSelf: 'center' }}></Text>
-        </TouchableOpacity>
         <View style={{
-          backgroundColor: 'lightgrey',
-          flexDirection: "row",
-          height: 1, width: '100%'
-
+          flex: 1, flexDirection: 'column',
+          backgroundColor: '#fff'
         }}>
+          <TouchableOpacity
+              style={{
+                paddingTop: 0, paddingRight: 2, paddingLeft: 2, alignItems: 'center', flexDirection: 'row',
+                paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:45,
+              }}
+              onPress={this.changeNumber.bind(this, this.state.Mobilenumber)}  /*Products is navigation name*/>
+            <Image source={require('../pages/assets/images/back.png')}
+                   style={{ flex: 1, height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
+            <Text style={{ flex: 3, fontSize: 12, paddingLeft: 5, fontSize: 14, color: 'black', alignContent: 'flex-start', alignSelf: 'center' }}>Back </Text>
+            <Text style={{ flex: 4, fontSize: 12, paddingLeft: 15, fontSize: 14, color: 'black', alignSelf: 'center' }}>OTP Verification</Text>
+            <Text style={{ flex: 4, fontSize: 12, paddingLeft: 15, fontSize: 14, color: 'black', alignSelf: 'center' }}></Text>
+          </TouchableOpacity>
+          <View style={{
+            backgroundColor: 'lightgrey',
+            flexDirection: "row",
+            height: 1, width: '100%'
+
+          }}>
 
 
-        </View>
-        <KeyboardAvoidingView behavior="padding" style={{flex:1}}>
-        <Image
-          source={require('../pages/assets/images/building_complex.png')}
-          style={{ width: '100%', height: '35%', alignSelf: 'center', }}
-        />
-        {this.state.isLoading ? <View style={{ height: '5%' }}>
-          <ActivityIndicator />
-        </View> : <Text style={{ height: '5%' }}> </Text>}
-        <KeyboardAvoidingView behavior="position">
-        <Text style={styles.mobilenumberverification} >Enter OTP Sent to</Text>
-        <Text style={styles.mobilenumberverification} >{global.MyISDCode}{global.MyMobileNumber} </Text>
+          </View>
+          <KeyboardAvoidingView behavior="padding" style={{flex:1}}>
+            <Image
+                source={require('../pages/assets/images/building_complex.png')}
+                style={{ width: '100%', height: '35%', alignSelf: 'center', }}
+            />
+            {this.state.isLoading ? <View style={{ height: '5%' }}>
+              <ActivityIndicator />
+            </View> : <Text style={{ height: '5%' }}> </Text>}
+            <KeyboardAvoidingView behavior="position">
+              <Text style={styles.mobilenumberverification} >Enter OTP Sent to</Text>
+              <Text style={styles.mobilenumberverification} >{global.MyISDCode}{global.MyMobileNumber} </Text>
 
-        
-            {/* <TextField
+
+              {/* <TextField
               label='OTP'
               fontSize={12}
               labelHeight={10}
@@ -325,62 +325,62 @@ class OTPVerification extends Component {
               maxLength={10}
               onChangeText={this.handleOTP}
             /> */}
-          <TextInput
-              secureText={true}
-          style={{
-            padding: 5, textAlign: 'center', textDecorationLine: 'underline',
-            letterSpacing: 5, width: 120, alignSelf: 'center', backgroundColor: 'white',
-            borderRadius: 5,
-            borderWidth: 1,
-            borderColor: 'orange'
-          }}
-          
-          underlineColorAndroid="#828282"
-          placeholder="Enter OTP"
-          placeholderTextColor="black"
-          onChangeText={this.handleOTP}
-          maxLength={6}
-          returnKeyType="done"
-          
-          keyboardType={'numeric'} />
-        {this.state.OTPNumber.length == 6 ? <TouchableOpacity
-          style={styles.mybutton}
-          onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}>
-          <Text style={styles.submitButtonText}>Verify OTP</Text>
-        </TouchableOpacity> : <TouchableOpacity
-          style={styles.mybuttonDisable}
-        >
-            <Text style={styles.submitButtonText}>Verify OTP</Text>
-          </TouchableOpacity>}
-        {this.state.timer == 1 ? <Text> </Text> :
-          <Text style={{
-            color: 'black',
-            margin: '1%',
-            textAlign: 'center'
-          }}>Resend OTP in {this.state.timer} seconds </Text>}
-        {this.state.timer == 1 ? <TouchableOpacity
-          style={styles.mybutton}
-          // onPress={this.getOtp.bind(this, this.state.OTPNumber)}>
-          onPress={() => this.getOtp(this.state.OTPNumber)}>
-          <Text style={styles.submitButtonText}>Resend OTP</Text>
-        </TouchableOpacity> : <TouchableOpacity
-          style={styles.mybuttonDisable}
-        >
-            <Text style={styles.submitButtonText}>Resend OTP</Text>
-          </TouchableOpacity>}
-          </KeyboardAvoidingView>
-        {/* <TouchableOpacity
+              <TextInput
+                  secureText={true}
+                  style={{
+                    padding: 5, textAlign: 'center', textDecorationLine: 'underline',
+                    letterSpacing: 5, width: 120, alignSelf: 'center', backgroundColor: 'white',
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    borderColor: 'orange'
+                  }}
+
+                  underlineColorAndroid="#828282"
+                  placeholder="Enter OTP"
+                  placeholderTextColor="black"
+                  onChangeText={this.handleOTP}
+                  maxLength={6}
+                  returnKeyType="done"
+
+                  keyboardType={'numeric'} />
+              {this.state.OTPNumber.length == 6 ? <TouchableOpacity
+                  style={styles.mybutton}
+                  onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}>
+                <Text style={styles.submitButtonText}>Verify OTP</Text>
+              </TouchableOpacity> : <TouchableOpacity
+                  style={styles.mybuttonDisable}
+              >
+                <Text style={styles.submitButtonText}>Verify OTP</Text>
+              </TouchableOpacity>}
+              {this.state.timer == 1 ? <Text> </Text> :
+                  <Text style={{
+                    color: 'black',
+                    margin: '1%',
+                    textAlign: 'center'
+                  }}>Resend OTP in {this.state.timer} seconds </Text>}
+              {this.state.timer == 1 ? <TouchableOpacity
+                  style={styles.mybutton}
+                  // onPress={this.getOtp.bind(this, this.state.OTPNumber)}>
+                  onPress={() => this.getOtp(this.state.OTPNumber)}>
+                <Text style={styles.submitButtonText}>Resend OTP</Text>
+              </TouchableOpacity> : <TouchableOpacity
+                  style={styles.mybuttonDisable}
+              >
+                <Text style={styles.submitButtonText}>Resend OTP</Text>
+              </TouchableOpacity>}
+            </KeyboardAvoidingView>
+            {/* <TouchableOpacity
           style={styles.mybutton}
           onPress={this.getOtp.bind(this, this.state.Mobilenumber)}>
           <Text style={styles.submitButtonText}>Resend OTP</Text>
         </TouchableOpacity>  */}
-        {/* <Text style={styles.ihavereadandacceptthepri}
+            {/* <Text style={styles.ihavereadandacceptthepri}
           onPress={() => {
             //on clicking we are going to open the URL using Linking
             Linking.openURL('http://www.oye247.com/components/termsandconditions.html');
           }}  >I have read and accept the privacy policy and terms of use</Text> */}
           </KeyboardAvoidingView>
-          </View>
+        </View>
 
     );
   }
