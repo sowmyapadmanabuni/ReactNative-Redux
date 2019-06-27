@@ -4,12 +4,10 @@ import { NavigationActions } from 'react-navigation';
 import { ScrollView, Text, View, Share, Linking, StyleSheet, Helpers, TouchableOpacity, TouchableHighlight, Image } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 //import { Fonts } from '../pages/src/utils/Fonts';
-import { openDatabase } from 'react-native-sqlite-storage';
 import Communications from 'react-native-communications';
 import VersionNumber from 'react-native-version-number';
 
 
-var db = openDatabase({ name: global.DB_NAME });
 
 class SideMenu extends Component {
     
@@ -39,51 +37,7 @@ class SideMenu extends Component {
 
     };
     deleteUser = () => {
-        var that = this;
-        db.transaction(tx => {
-            tx.executeSql('delete  FROM OTPVerification ', [], (tx, results) => {
-                console.log('SideMenu Results OTPVerification delete ', results.rowsAffected);
-            });
-        });
-        db.transaction(tx => {
-            tx.executeSql('delete  FROM MyMembership ', [], (tx, results) => {
-                console.log('SideMenu Results MyMembership delete ', results.rowsAffected);
-            });
-        });
-        db.transaction(tx => {
-            tx.executeSql('delete  FROM UnitOwner ', [], (tx, results) => {
-                console.log('SideMenu Results UnitOwner delete ', results.rowsAffected);
-            });
-        });
-        db.transaction(tx => {
-            tx.executeSql('delete  FROM OyeUnit ', [], (tx, results) => {
-                console.log('SideMenu Results OyeUnit delete ', results.rowsAffected);
-            });
-        });
-        db.transaction(tx => {
-            tx.executeSql('delete  FROM Association ', [], (tx, results) => {
-                console.log('SideMenu Results Association delete ', results.rowsAffected);
-            });
-        });
-
-        db.transaction(tx => {
-            tx.executeSql(
-                'DELETE FROM  Account ',
-                [],
-                (tx, results) => {
-                    console.log('SideMenu Results Account ', results.rowsAffected);
-                    if (results.rowsAffected > 0) {
-                        console.log('SideMenu Results bf ', results.rowsAffected);
-                        this.props.navigation.navigate('MobileValid');
-
-                        alert('Log Out User Successfull');
-
-                    } else {
-                        alert('Logged Out Failed');
-                    }
-                }
-            );
-        });
+        
     };
     render() {
         console.log('appVersion ' + VersionNumber.appVersion);

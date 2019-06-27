@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.razorpay.rn.RazorpayPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.rpt.reactnativecheckpackageinstallation.CheckPackageInstallationPackage;
 import com.horcrux.svg.SvgPackage;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RazorpayPackage(),
             new RNVersionNumberPackage(),
             new CheckPackageInstallationPackage(),
             new SvgPackage(),

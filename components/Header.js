@@ -43,7 +43,7 @@ class Header extends React.Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        // console.log(responseJson);
+         console.log(responseJson);
         this.setState({
           datasource: responseJson,
           myFirstName: responseJson.data.account[0].acfName

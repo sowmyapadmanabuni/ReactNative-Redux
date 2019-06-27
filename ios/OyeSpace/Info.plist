@@ -104,6 +104,17 @@
 		<string>Roboto_medium.ttf</string>
 		<string>Roboto.ttf</string>
 		<string>rubicon-icon-font.ttf</string>
+		<string>Helvetica Neu Bold.ttf</string>
+		<string>HelveticaNeue BlackCond.ttf</string>
+		<string>HelveticaNeue Light.ttf</string>
+		<string>HelveticaNeue Medium.ttf</string>
+		<string>HelveticaNeue Thin.ttf</string>
+		<string>HelveticaNeue.ttf</string>
+		<string>HelveticaNeueBd.ttf</string>
+		<string>HelveticaNeueHv.ttf</string>
+		<string>HelveticaNeueIt.ttf</string>
+		<string>HelveticaNeueLt.ttf</string>
+		<string>HelveticaNeueMed.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

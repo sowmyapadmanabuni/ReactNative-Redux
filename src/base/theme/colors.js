@@ -4,7 +4,13 @@
 
 const colors = {
     primary:"#ff8c00",
-
+    white:"#ffffff",
+    black:"#000000",
+    lavender:"#E6E6FA",
+    blue:"#1E90FF",
+    grey:"#A9A9A9",
+    shadedWhite:"#F5F5F5",
+    rosePink:"#FFC6C0"
 }
 
 export default colors;

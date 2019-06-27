@@ -8,7 +8,6 @@ import {
 import ImagePicker from 'react-native-image-picker'
 import ImageLoad from 'react-native-image-placeholder';
 import { DatePickerDialog } from 'react-native-datepicker-dialog'
-import { openDatabase } from 'react-native-sqlite-storage';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {
   TextField
@@ -17,7 +16,6 @@ import {
 console.disableYellowBox = true;
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-var db = openDatabase({ name: global.DB_NAME });
 import moment from 'moment';
 import { Fonts } from '../pages/src/utils/Fonts';
 
@@ -135,7 +133,7 @@ else
         "TKTktID": params.cat2
       }
       console.log('anu', anu)
-      fetch('http://' + global.oyeURL + '/oye247/OyeLivingApi/v1/Ticketing/TicketingResolveStatusUpdate',
+      fetch('http://' + global.oyeURL + '/oye247/api/v1/Ticketing/TicketingResolveStatusUpdate',
         {
           method: 'POST',
           headers: {

@@ -3,9 +3,10 @@
  */
 
 const fonts = {
-    normal:"Helvetica",
-    medium:"Helvetica",
-    bold:"Helvetica"
+    thin:"HelveticaNeue-Thin",
+    light:"HelveticaNeue-Light",
+    medium:"HelveticaNeue-Medium",
+    bold:"HelveticaNeue-Bold"
 };
 
 export default fonts;

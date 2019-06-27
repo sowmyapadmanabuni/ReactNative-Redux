@@ -44,6 +44,7 @@ class UnitList extends Component {
   componentDidMount() {
     this.getUnitList();
   }
+
   searchFilterFunction = text => {
     const newData = this.arrayholder.filter(item => {
       const itemData = `${item.unUniName.toUpperCase()}`;
@@ -55,6 +56,7 @@ class UnitList extends Component {
       dataSource: newData
     });
   };
+
   getUnitList = () => {
     const { id, associationName } = this.props.navigation.state.params;
     fetch(
@@ -121,7 +123,9 @@ class UnitList extends Component {
                     style={styles.addUnitButton}
                     onPress={() =>
                       this.props.navigation.navigate("RegisterUser", {
-                        unitList: item
+                        unitList: item,
+                        AssnId: this.props.navigation.state.params.id,
+                        associationName: this.props.navigation.state.params.associationName
                       })
                     }
                   >

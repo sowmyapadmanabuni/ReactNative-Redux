@@ -1,220 +1,193 @@
-
-import React, { Component} from 'react';
-
-import {
-  Platform, StyleSheet, Text, View,
-  TextInput, Alert, Button, Dimensions, FlatList, ScrollView, ActivityIndicator,
-  TouchableOpacity, ToastAndroid, Picker, Image, Card, Avatar, NetInfo, TouchableHighlight
-} from 'react-native';
-import { Dropdown } from 'react-native-material-dropdown';
-import { Fonts } from '../pages/src/utils/Fonts';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import MultiSelect from 'react-native-multiple-select';
-import PropTypes from 'prop-types';
-import {
-  DatePickerDialog
-} from
-  'react-native-datepicker-dialog'
+import React, { Component } from "react";
 
 import {
-  openDatabase
-} from
-  'react-native-sqlite-storage';
-
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Alert,
+  Button,
+  Dimensions,
+  FlatList,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+  ToastAndroid,
+  Picker,
+  Image,
+  Card,
+  Avatar,
+  NetInfo,
+  TouchableHighlight
+} from "react-native";
+import { Dropdown } from "react-native-material-dropdown";
+import { Fonts } from "../pages/src/utils/Fonts";
 import {
-  TextField
-} from
-  'react-native-material-textfield';
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
+import MultiSelect from "react-native-multiple-select";
 
-var db = openDatabase({   name: global.DB_NAME});
-
-import moment
-  from 'moment';
-
-
+import moment from "moment";
 
 export default class CreatePatrollingShift extends Component {
-
-
-
-
   constructor() {
-
-    super()
+    super();
 
     this.state = {
-
-      PatrollingDays:'',
-      FrequencyValue: '',
-      PickerValueHolderguard:[],
-      PickerValueHolderCheckpoint:[],
+      PatrollingDays: "",
+      FrequencyValue: "",
+      PickerValueHolderguard: [],
+      PickerValueHolderCheckpoint: [],
       dataSourceGuardPkr: [],
-      dataSourceCheckpointPkr:[],
-      connection_Status:'',
+      dataSourceCheckpointPkr: [],
+      connection_Status: "",
       selectedItems: [],
       selectedItems1: [],
-      dobText: moment(new Date()).format('YYYY-MM-DD')
-
-    }
+      dobText: moment(new Date()).format("YYYY-MM-DD")
+    };
     this.items = [
-    {
-      
-      id: 'Sunday',
-      name: 'Sunday',
-    }, {
-      id: 'Monday',
-      name: 'Monday',
-    }, {
-      id: 'Tuesday',
-      name: 'Tuesday',
-    }, {
-      id: 'Wednesday',
-      name: 'Wednesday',
-    }, {
-      id: 'Thursday',
-      name: 'Thursday',
-    }, {
-      id: 'Friday',
-      name: 'Friday',
-    }, {
-      id: 'Saturday',
-      name: 'Saturday',
-    },
+      {
+        id: "Sunday",
+        name: "Sunday"
+      },
+      {
+        id: "Monday",
+        name: "Monday"
+      },
+      {
+        id: "Tuesday",
+        name: "Tuesday"
+      },
+      {
+        id: "Wednesday",
+        name: "Wednesday"
+      },
+      {
+        id: "Thursday",
+        name: "Thursday"
+      },
+      {
+        id: "Friday",
+        name: "Friday"
+      },
+      {
+        id: "Saturday",
+        name: "Saturday"
+      }
     ];
     this.items1 = [
       {
-        
-        id: 'Patrolling Start Point',
-        name: 'Patrolling Start Point',
-      }, {
-        id: 'Patrolling Point 1',
-        name: 'Patrolling Point 1',
-      }, {
-        id: 'Patrolling Point 2',
-        name: 'Patrolling Point 2',
-      }, {
-        id: 'Patrolling Point 3',
-        name: 'Patrolling Point 3',
-      }, {
-        id: 'Patrolling Point 4',
-        name: 'Patrolling Point 4',
-      }, {
-        id: 'Patrolling Point 5',
-        name: 'Patrolling Point 5',
-      }, {
-        id: 'Patrolling Point 6',
-        name: 'Patrolling Point 6',
+        id: "Patrolling Start Point",
+        name: "Patrolling Start Point"
       },
       {
-        id: 'Patrolling Point 7',
-        name: 'Patrolling Point 7',
+        id: "Patrolling Point 1",
+        name: "Patrolling Point 1"
       },
       {
-        id: 'Patrolling Point 8',
-        name: 'Patrolling Point 8',
+        id: "Patrolling Point 2",
+        name: "Patrolling Point 2"
       },
       {
-        id: 'Patrolling Point 9',
-        name: 'Patrolling Point 9',
+        id: "Patrolling Point 3",
+        name: "Patrolling Point 3"
       },
       {
-        id: 'Patrolling Point 10',
-        name: 'Patrolling Point 10',
+        id: "Patrolling Point 4",
+        name: "Patrolling Point 4"
       },
       {
-        id: 'Patrolling Point 11',
-        name: 'Patrolling Point 11',
-      }, {
-        id: 'Patrolling Point 12',
-        name: 'Patrolling Point 12',
-      }, {
-        id: 'Patrolling Point 13',
-        name: 'Patrolling Point 13',
-      }, {
-        id: 'Patrolling Point 14',
-        name: 'Patrolling Point 14',
-      }, {
-        id: 'Patrolling Point 15',
-        name: 'Patrolling Point 15',
-      }, {
-        id: 'Patrolling Point 16',
-        name: 'Patrolling Point 16',
+        id: "Patrolling Point 5",
+        name: "Patrolling Point 5"
       },
       {
-        id: 'Patrolling Point 17',
-        name: 'Patrolling Point 17',
+        id: "Patrolling Point 6",
+        name: "Patrolling Point 6"
       },
       {
-        id: 'Patrolling Point 18',
-        name: 'Patrolling Point 18',
+        id: "Patrolling Point 7",
+        name: "Patrolling Point 7"
       },
       {
-        id: 'Patrolling Point 19',
-        name: 'Patrolling Point 19',
+        id: "Patrolling Point 8",
+        name: "Patrolling Point 8"
       },
       {
-        id: 'Patrolling Point 20',
-        name: 'Patrolling Point 20',
+        id: "Patrolling Point 9",
+        name: "Patrolling Point 9"
       },
       {
-        id: 'Patrolling End Point',
-        name: 'Patrolling End Point',
+        id: "Patrolling Point 10",
+        name: "Patrolling Point 10"
       },
-      ];
- 
- 
-    db.transaction(tx => {
-        tx.executeSql('SELECT Distinct WorkID, AssnID, FName, LName FROM Workers where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-            console.log('Guards name', results.rows.item(i));
-          }
-  
-          this.setState({
-            dataSourceGuardPkr: temp,
-          });
-        });
-      });
-      db.transaction(tx => {
-        tx.executeSql('SELECT Distinct Checkpointid, Checkpointname FROM CheckPointList where AssnID=' + global.SelectedAssociationID, [], (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-            console.log('Checkpoint name', results.rows.item(i).Checkpointname);
-          }
-  
-          this.setState({
-            dataSourceCheckpointPkr: temp,
-          });
-        });
-      });
-      
-   
+      {
+        id: "Patrolling Point 11",
+        name: "Patrolling Point 11"
+      },
+      {
+        id: "Patrolling Point 12",
+        name: "Patrolling Point 12"
+      },
+      {
+        id: "Patrolling Point 13",
+        name: "Patrolling Point 13"
+      },
+      {
+        id: "Patrolling Point 14",
+        name: "Patrolling Point 14"
+      },
+      {
+        id: "Patrolling Point 15",
+        name: "Patrolling Point 15"
+      },
+      {
+        id: "Patrolling Point 16",
+        name: "Patrolling Point 16"
+      },
+      {
+        id: "Patrolling Point 17",
+        name: "Patrolling Point 17"
+      },
+      {
+        id: "Patrolling Point 18",
+        name: "Patrolling Point 18"
+      },
+      {
+        id: "Patrolling Point 19",
+        name: "Patrolling Point 19"
+      },
+      {
+        id: "Patrolling Point 20",
+        name: "Patrolling Point 20"
+      },
+      {
+        id: "Patrolling End Point",
+        name: "Patrolling End Point"
+      }
+    ];
   }
 
   onSelectedItemsChange = selectedItems => {
     this.setState({ selectedItems });
-    console.log("raju",this.state.selectedItems)
+    console.log("raju", this.state.selectedItems);
   };
   onSelectedItemsChange1 = selectedItems1 => {
     this.setState({ selectedItems1 });
-    console.log("raju",this.state.selectedItems1)
+    console.log("raju", this.state.selectedItems1);
   };
-  handleFrequencyValue = (text) => {
+  handleFrequencyValue = text => {
     this.setState({
       FrequencyValue: text
-    })
-  }
+    });
+  };
 
-  handlePatrollingDays = (text) => {
+  handlePatrollingDays = text => {
     this.setState({
       PatrollingDays: text
-    })
-
-  }
+    });
+  };
   onDOBPress = () => {
     let dobDate = this.state.dobDate;
 
@@ -228,204 +201,191 @@ export default class CreatePatrollingShift extends Component {
       date: dobDate,
       minDate: new Date() //To restirct future date
     });
-
-  }
-  onDOBDatePicked = (date) => {
+  };
+  onDOBDatePicked = date => {
     this.setState({
       dobDate: date,
-      dobText: moment(date).format('YYYY-MM-DD')
-
+      dobText: moment(date).format("YYYY-MM-DD")
     });
-  }
+  };
   onDateChange(date) {
     this.setState({
-      selectedStartDate: date,
+      selectedStartDate: date
     });
   }
 
   componentDidMount() {
-
     this.setState({
-
       firstname: global.MyFirstName,
       lastname: global.MyLastName,
 
       emailId: global.MyEmail,
-      AlternateEmailID: ''
-    })
+      AlternateEmailID: ""
+    });
 
-    NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectivityChange);
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this._handleConnectivityChange
+    );
 
-    NetInfo.isConnected.fetch().done((isConnected) => {
-
+    NetInfo.isConnected.fetch().done(isConnected => {
       if (isConnected == true) {
-
         this.setState({
           connection_Status: "Online"
-        })
-
+        });
       } else {
         this.setState({
           connection_Status: "Offline"
-        })
+        });
 
-        Alert.alert('No Internet',
-          'Please Connect to the Internet. ',
+        Alert.alert(
+          "No Internet",
+          "Please Connect to the Internet. ",
           [
             {
-              text: 'Ok',
-              onPress: () => { this.props.navigation.navigate('ResDashBoard') }
-            },
+              text: "Ok",
+              onPress: () => {
+                this.props.navigation.navigate("ResDashBoard");
+              }
+            }
           ],
           {
             cancelable: false
           }
         );
-
       }
-
     });
-
   }
 
   componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectivityChange);
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this._handleConnectivityChange
+    );
   }
 
-  _handleConnectivityChange = (isConnected) => {
-
+  _handleConnectivityChange = isConnected => {
     if (isConnected == true) {
       this.setState({
         connection_Status: "Online"
-      })
+      });
     } else {
       this.setState({
         connection_Status: "Offline"
-      })
-      alert('You are offline...');
+      });
+      alert("You are offline...");
     }
-
   };
   static navigationOptions = {
-    title: 'Create Patrolling Shift',
+    title: "Create Patrolling Shift",
     headerStyle: {
-      backgroundColor: '#696969',
+      backgroundColor: "#696969"
     },
 
     headerTitleStyle: {
-      color: '#fff',
+      color: "#fff"
     }
-
   };
 
   submit = () => {
-//console.log('bharath',WorkID+CheckpointID);
-spinnerWorkID = this.state.PickerValueHolderguard;
-spinnerCheckPointID=this.state.PickerValueHolderCheckpoint;
-patrollingValidityDate = this.state.dobText;
-patrollingDay=this.state.selectedItems;
-frequencyValue=this.state.FrequencyValue;
+    //console.log('bharath',WorkID+CheckpointID);
+    spinnerWorkID = this.state.PickerValueHolderguard;
+    spinnerCheckPointID = this.state.PickerValueHolderCheckpoint;
+    patrollingValidityDate = this.state.dobText;
+    patrollingDay = this.state.selectedItems;
+    frequencyValue = this.state.FrequencyValue;
 
-if (frequencyValue.length == 0) {
-  Alert.alert('Alert', 'Choose Patrolling Time',
-      [
-          { text: 'Ok', onPress: () => { } },
-      ],
-      { cancelable: false }
-  );
-
-} else
-if (patrollingDay.length == 0) {
-    Alert.alert('Alert', 'Choose Patrolling Day',
-        [
-            { text: 'Ok', onPress: () => { } },
-        ],
+    if (frequencyValue.length == 0) {
+      Alert.alert(
+        "Alert",
+        "Choose Patrolling Time",
+        [{ text: "Ok", onPress: () => {} }],
         { cancelable: false }
-    );
+      );
+    } else if (patrollingDay.length == 0) {
+      Alert.alert(
+        "Alert",
+        "Choose Patrolling Day",
+        [{ text: "Ok", onPress: () => {} }],
+        { cancelable: false }
+      );
+    }
+    // else if (spinnerWorkID == 0) {
+    //     Alert.alert('Alert', 'Choose Security Guards',
+    //         [
+    //             { text: 'Ok', onPress: () => { } },
+    //         ],
+    //         { cancelable: false }
+    //     );
 
-} 
-// else if (spinnerWorkID == 0) {
-//     Alert.alert('Alert', 'Choose Security Guards',
-//         [
-//             { text: 'Ok', onPress: () => { } },
-//         ],
-//         { cancelable: false }
-//     );
+    // }
+    // else if (spinnerCheckPointID == 0) {
+    //   Alert.alert('Alert', 'Choose Patrolling Checkpoint',
+    //       [
+    //           { text: 'Ok', onPress: () => { } },
+    //       ],
+    //       { cancelable: false }
+    //   );
 
-// }
-// else if (spinnerCheckPointID == 0) {
-//   Alert.alert('Alert', 'Choose Patrolling Checkpoint',
-//       [
-//           { text: 'Ok', onPress: () => { } },
-//       ],
-//       { cancelable: false }
-//   );
-
-// }
-else
-
-
-
-  
-    {
-
-   
-
+    // }
+    else {
       anu = {
-        "PSPtrlFrq" : frequencyValue,
-        "WKWorkIDs": "0",
-        "PSRepDays" : patrollingDay,
-        "PSSDate": "null",
-        "PSChkPIDs" : "0",
-        "ASAssnID"  : global.SelectedAssociationID
+        PSPtrlFrq: frequencyValue,
+        WKWorkIDs: "0",
+        PSRepDays: patrollingDay,
+        PSSDate: "null",
+        PSChkPIDs: "0",
+        ASAssnID: global.SelectedAssociationID
 
-//     "PSPtrlFrq" :frequencyValue,
-//  "WKWorkIDs"  : "0",
-//  "PSRepDays"  : patrollingDay,
-//  "PSSDate"    : patrollingValidityDate,
-//  "PSChkPIDs"  : "0",
-//  "ASAssnID"   : global.SelectedAssociationID
+        //     "PSPtrlFrq" :frequencyValue,
+        //  "WKWorkIDs"  : "0",
+        //  "PSRepDays"  : patrollingDay,
+        //  "PSSDate"    : patrollingValidityDate,
+        //  "PSChkPIDs"  : "0",
+        //  "ASAssnID"   : global.SelectedAssociationID
+      };
 
-      }
-  
+      console.log("anu", anu);
 
-      console.log('anu', anu)
-
-      fetch('http://apidev.oyespace.com/oye247/api/v1/PatrollingShifts/create',
+      fetch(
+        "http://apidev.oyespace.com/oye247/api/v1/PatrollingShifts/create",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+            "Content-Type": "application/json",
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
           },
           body: JSON.stringify(anu)
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log('logresponseupdate', responseJson);
+        }
+      )
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("logresponseupdate", responseJson);
           if (responseJson.success) {
-
-            Alert.alert('Success',
-            'Patrolling Shift Added Successfully ',
-            [
-              {
-                text: 'Ok', onPress: () => { }
-              },
-            ],
-            {
-              cancelable: false
-            }
-          );
-
-          } else {
-            console.log('hiii', failed);
-
-            Alert.alert('Failed',
-              'User Updation Failed',
+            Alert.alert(
+              "Success",
+              "Patrolling Shift Added Successfully ",
               [
                 {
-                  text: 'Ok', onPress: () => { }
-                },
+                  text: "Ok",
+                  onPress: () => {}
+                }
+              ],
+              {
+                cancelable: false
+              }
+            );
+          } else {
+            console.log("hiii", failed);
+
+            Alert.alert(
+              "Failed",
+              "User Updation Failed",
+              [
+                {
+                  text: "Ok",
+                  onPress: () => {}
+                }
               ],
               {
                 cancelable: false
@@ -433,78 +393,138 @@ else
             );
           }
         })
-        .catch((error) => {
-          console.log(error)
-        })
-
+        .catch(error => {
+          console.log(error);
+        });
     }
-
-  }
+  };
 
   render() {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
     const { selectedItems } = this.state;
     const { selectedItems1 } = this.state;
- 
-  
-    let Frequency_Type = [{
-        value: '07:00 am',
-      }, {
-        value: '09:00 am',
-      }, {
-        value: '12:00 pm',
-      }, {
-        value: '02:00 pm',
-      }, {
-        value: '04:00 pm',
-      }, {
-        value: '06:00 pm',
-      }, {
-        value: '08:00 pm',
+
+    let Frequency_Type = [
+      {
+        value: "07:00 am"
+      },
+      {
+        value: "09:00 am"
+      },
+      {
+        value: "12:00 pm"
+      },
+      {
+        value: "02:00 pm"
+      },
+      {
+        value: "04:00 pm"
+      },
+      {
+        value: "06:00 pm"
+      },
+      {
+        value: "08:00 pm"
       }
     ];
 
     return (
-
-
+      <View style={styles.container}>
         <View
-
-        style={styles.container}>
+          style={{
+            paddingTop: 2,
+            paddingRight: 2,
+            paddingLeft: 2,
+            flexDirection: "row",
+            paddingBottom: 2,
+            borderColor: "white",
+            borderRadius: 0,
+            borderWidth: 2,
+            textAlign: "center",
+            marginTop: 45
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => navigate("ResDashBoard", { cat: "" })}
+            style={{ flex: 1, alignSelf: "center" }}
+          >
+            <Image
+              source={require("../pages/assets/images/back.png")}
+              style={{ height: 25, width: 25 }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              flex: 2,
+              paddingLeft: 5,
+              fontSize: 14,
+              color: "black",
+              alignContent: "flex-start",
+              alignSelf: "center"
+            }}
+          >
+            {" "}
+          </Text>
+          <View style={{ flex: 3, alignSelf: "center" }}>
+            <Image
+              source={require("../pages/assets/images/OyespaceRebrandingLogo.png")}
+              style={{
+                height: 38,
+                width: 95,
+                margin: 5,
+                alignSelf: "center",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flex: 3,
+              alignSelf: "flex-end",
+              alignItems: "flex-end",
+              justifyContent: "flex-end"
+            }}
+          />
+        </View>
         <View
-style={{
-paddingTop: 2, paddingRight: 2, paddingLeft: 2, flexDirection: 'row', paddingBottom: 2,
-borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:45,
-}}>
-<TouchableOpacity onPress={() => navigate(('ResDashBoard'), { cat: '' })}
-style={{ flex: 1 , alignSelf:'center'}}>
-<Image source={require('../pages/assets/images/back.png')}
-style={{ height: 25, width: 25,  }} />
-</TouchableOpacity>
-<Text style={{ flex: 2, paddingLeft: 5, fontSize: 14, color: 'black', alignContent: 'flex-start', alignSelf: 'center' }}> </Text>
-<View style={{ flex: 3, alignSelf: 'center' }}>
-<Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
-style={{
-height: 38, width: 95, margin: 5,
-alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
-}} />
-</View>
-<View style={{ flex: 3,alignSelf: 'flex-end',alignItems:'flex-end',justifyContent:'flex-end' }}>
-                         
-
-                        </View>
-
-
-</View>
-                    <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-<Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',justifyContent:'center',alignContent:'center',marginBottom:10, marginTop:10,marginLeft:10 }}>Create Patrolling Shift</Text>
-<View style={{ flexDirection: 'column', paddingTop: 2,
-                paddingBottom: 2, paddingLeft:5,paddingRight:5,
-                backgroundColor: 'white',
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: 'orange' , margin:10 }}>
-                           {/* <View
+          style={{
+            backgroundColor: "lightgrey",
+            flexDirection: "row",
+            width: "100%",
+            height: 1
+          }}
+        />
+        <Text
+          style={{
+            fontSize: 16,
+            color: "black",
+            fontWeight: "bold",
+            justifyContent: "center",
+            alignContent: "center",
+            marginBottom: 10,
+            marginTop: 10,
+            marginLeft: 10
+          }}
+        >
+          Create Patrolling Shift
+        </Text>
+        <View
+          style={{
+            flexDirection: "column",
+            paddingTop: 2,
+            paddingBottom: 2,
+            paddingLeft: 5,
+            paddingRight: 5,
+            backgroundColor: "white",
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: "orange",
+            margin: 10
+          }}
+        >
+          {/* <View
             style={{
               paddingTop: 2, paddingRight: 2, paddingLeft: 2, flexDirection: 'row', paddingBottom: 2,
               borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
@@ -524,26 +544,31 @@ alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
                 }} />
             </View>
           </View> */}
-        <ScrollView style={{marginBottom:100}}>
- 
-        <View style={styles.row}>
-                              
-                              <Text style={{ fontSize: 14,width:wp('40%'), color: 'black',marginTop:hp('5.5%') }}>Patrolling Time: </Text>
-                          <View style={styles.inputWrap}>
-                          <Dropdown
-              label='Patrolling Time'
-              data={Frequency_Type}
-              width={wp('70%')}
-              labelFontSize={10}
-              rippleOpacity={0}
-              
-              fontSize={14}
-              onChangeText={this.handleFrequencyValue} 
-            />
-                         
-                          </View>
-                      </View>
-                      {/* <View style={styles.row}>
+          <ScrollView style={{ marginBottom: 100 }}>
+            <View style={styles.row}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  width: wp("40%"),
+                  color: "black",
+                  marginTop: hp("5.5%")
+                }}
+              >
+                Patrolling Time:{" "}
+              </Text>
+              <View style={styles.inputWrap}>
+                <Dropdown
+                  label="Patrolling Time"
+                  data={Frequency_Type}
+                  width={wp("70%")}
+                  labelFontSize={10}
+                  rippleOpacity={0}
+                  fontSize={14}
+                  onChangeText={this.handleFrequencyValue}
+                />
+              </View>
+            </View>
+            {/* <View style={styles.row}>
                               
                               <Text style={{ fontSize: 14, fontFamily:Fonts.PoppinsRegular, color: 'black', marginLeft: 15, }}>Validity Date: </Text>
                               <TouchableOpacity onPress={this.onDOBPress.bind(this)} >
@@ -554,7 +579,7 @@ alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
                 <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
                       </View> */}
 
-        {/* <View style={{flex:1,flexDirection: 'row'}}>
+            {/* <View style={{flex:1,flexDirection: 'row'}}>
         <View style={{flex:wp('40%')}}>                 
             <Text style={{ fontSize: 14, fontFamily:Fonts.PoppinsRegular,marginTop:hp('4%'), color: 'black'}}>Patrolling Days: </Text>
             </View>   
@@ -570,381 +595,286 @@ alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
             /> 
             </View>  
                       </View> */}
-    <MultiSelect
-          hideTags
-          items={this.items}
-          uniqueKey="id"
-          ref={(component) => { this.multiSelect = component }}
-          onSelectedItemsChange={this.onSelectedItemsChange}
-          selectedItems={selectedItems}
-          selectText="Select Patrolling days"
-          tagRemoveIconColor="#CCC"
-          tagBorderColor="#CCC"
-          tagTextColor="#CCC"
-          selectedItemTextColor="orange"
-          selectedItemIconColor="#CCC"
-          itemTextColor="#000"
-          displayKey="name"
-          searchInputStyle={{ color: '#CCC' }}
-          submitButtonColor="#CCC"
-          submitButtonText="Submit"
-        />
             <MultiSelect
-          hideTags
-          items={this.items1}
-          uniqueKey="id"
-          ref={(component) => { this.multiSelect = component }}
-          onSelectedItemsChange={this.onSelectedItemsChange1}
-          selectedItems={selectedItems1}
-          selectText="Select Check Points"
-          tagRemoveIconColor="#CCC"
-          tagBorderColor="#CCC"
-          tagTextColor="#CCC"
-          selectedItemTextColor="orange"
-          selectedItemIconColor="#CCC"
-          itemTextColor="#000"
-          displayKey="name"
-          searchInputStyle={{ color: '#CCC' }}
-          submitButtonColor="#CCC"
-          submitButtonText="Submit"
-        />
-              <TouchableOpacity
-                      style={[styles.loginScreenButton,]}
-                      onPress={() => this.submit()     }>
-                      <Text style={{ fontSize: 14,color: 'black',alignSelf:'center' }}>Submit </Text>
-                    </TouchableOpacity>
-                 
-        </ScrollView>
-
-   </View>
-   </View>
-    )
-
+              hideTags
+              items={this.items}
+              uniqueKey="id"
+              ref={component => {
+                this.multiSelect = component;
+              }}
+              onSelectedItemsChange={this.onSelectedItemsChange}
+              selectedItems={selectedItems}
+              selectText="Select Patrolling days"
+              tagRemoveIconColor="#CCC"
+              tagBorderColor="#CCC"
+              tagTextColor="#CCC"
+              selectedItemTextColor="orange"
+              selectedItemIconColor="#CCC"
+              itemTextColor="#000"
+              displayKey="name"
+              searchInputStyle={{ color: "#CCC" }}
+              submitButtonColor="#CCC"
+              submitButtonText="Submit"
+            />
+            <MultiSelect
+              hideTags
+              items={this.items1}
+              uniqueKey="id"
+              ref={component => {
+                this.multiSelect = component;
+              }}
+              onSelectedItemsChange={this.onSelectedItemsChange1}
+              selectedItems={selectedItems1}
+              selectText="Select Check Points"
+              tagRemoveIconColor="#CCC"
+              tagBorderColor="#CCC"
+              tagTextColor="#CCC"
+              selectedItemTextColor="orange"
+              selectedItemIconColor="#CCC"
+              itemTextColor="#000"
+              displayKey="name"
+              searchInputStyle={{ color: "#CCC" }}
+              submitButtonColor="#CCC"
+              submitButtonText="Submit"
+            />
+            <TouchableOpacity
+              style={[styles.loginScreenButton]}
+              onPress={() => this.submit()}
+            >
+              <Text
+                style={{ fontSize: 14, color: "black", alignSelf: "center" }}
+              >
+                Submit{" "}
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </View>
+    );
   }
-
-
-
 }
 
-const styles =
-  StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "flex-start",
 
-    container: {
+    backgroundColor: "#fff",
 
-      justifyContent:
-        'flex-start',
+    height: "100%",
 
-      backgroundColor:
-        "#fff",
+    width: "100%"
+  },
 
-      height: '100%',
+  input: {
+    marginLeft: 20,
+    marginRight: 15,
+    marginTop: 5,
+    marginBottom: 5,
 
-      width: '100%',
+    height: 40,
+    borderColor: "#F2F2F2",
+    backgroundColor: "#F2F2F2",
+    borderWidth: 1.5,
+    borderRadius: 2
+  },
 
-    },
+  submitButton: {
+    backgroundColor: "#ff8c00",
 
-    input: {
+    padding: 10,
 
-      marginLeft:
-        20, marginRight:
-        15, marginTop:
-        5, marginBottom:
-        5,
+    margin: 15,
 
-      height: 40,
-      borderColor: '#F2F2F2',
-      backgroundColor:
-        '#F2F2F2', borderWidth:
-        1.5, borderRadius:
-        2,
+    height: 40,
 
-    },
+    color: "white"
+  },
 
+  mybutton: {
+    backgroundColor: "white",
 
+    marginTop: 5,
 
-    submitButton: {
+    height: 40,
 
-      backgroundColor:
-        '#ff8c00',
+    borderColor: "orange",
 
-      padding:
-        10,
+    borderRadius: 0,
 
-      margin: 15,
+    borderWidth: 2,
 
-      height: 40,
+    textAlign: "center"
+  },
 
-      color: 'white'
+  rectangle: {
+    backgroundColor: "white",
+    padding: 10,
+    borderColor: "orange",
 
-    },
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 5,
+    borderRadius: 2,
+    borderWidth: 1
+  },
 
-    mybutton: {
+  textInput: {
+    fontSize: 10,
 
-      backgroundColor:
-        'white',
+    height: 25
+  },
 
-      marginTop:
-        5,
+  datePickerBox: {
+    marginLeft: wp("50%"),
 
-      height: 40,
+    marginLeft: 60,
 
-      borderColor:
-        'orange',
+    borderColor: "#ABABAB",
 
-      borderRadius:
-        0,
+    borderWidth: 0.5,
 
-      borderWidth:
-        2,
+    padding: 0,
 
-      textAlign:
-        'center',
+    borderTopLeftRadius: 4,
 
+    borderTopRightRadius: 4,
 
+    borderBottomLeftRadius: 4,
 
-    },
+    borderBottomRightRadius: 4,
 
-    rectangle: {
+    height: 25,
 
-      backgroundColor:
-        'white', padding:
-        10, borderColor:
-        'orange',
+    justifyContent: "center"
+  },
 
-      marginLeft: 5,
-      marginRight: 5, marginTop:
-        5, borderRadius:
-        2, borderWidth:
-        1,
+  profileImgContainer: {
+    marginTop: 5,
 
-    },
+    height: 100,
 
+    width: 100,
 
+    borderRadius: 50
+  },
 
-    textInput: {
+  profileImg: {
+    height: 100,
 
-      fontSize:
-        10,
+    width: 100,
 
-      height: 25
+    borderRadius: 50
+  },
 
-    },
+  loginScreenButton: {
+    alignSelf: "center",
 
-    datePickerBox: {
-        marginLeft:wp('50%'),
-     
-      marginLeft:
-        60,
+    width: "50%",
 
-      borderColor:
-        '#ABABAB',
+    marginLeft: 10,
 
-      borderWidth:
-        0.5,
+    marginTop: 5,
 
-      padding:
-        0,
+    paddingTop: 2,
 
-      borderTopLeftRadius:
-        4,
+    paddingBottom: 2,
 
-      borderTopRightRadius:
-        4,
+    backgroundColor: "white",
 
-      borderBottomLeftRadius:
-        4,
+    borderRadius: 5,
 
-      borderBottomRightRadius:
-        4,
+    borderWidth: 1,
 
-      height: 25,
+    borderColor: "orange"
+  },
 
-      justifyContent:
-        'center'
+  datePickerText: {
+    fontSize: 14,
 
-    },
+    marginLeft: 5,
 
-    profileImgContainer: {
+    borderWidth: 0,
 
-      marginTop:
-        5,
+    color: "#121212"
+  },
 
-      height: 100,
+  imagee: {
+    height: 14,
 
-      width: 100,
+    width: 14,
 
-      borderRadius:
-        50,
+    margin: 10
+  },
 
-    },
+  row: {
+    flex: 1,
 
-    profileImg: {
+    flexDirection: "row"
+  },
 
-      height: 100,
+  inputWrap: {
+    flex: 1,
 
-      width: 100,
+    marginLeft: 5,
 
-      borderRadius:
-        50,
+    paddingRight: 15
+  },
 
+  ImageStyle: {
+    padding: 10,
 
-    },
+    margin: 5,
 
-    loginScreenButton: {
+    height: 25,
 
-      alignSelf: 'center',
+    width: 25,
 
-      width: '50%',
+    resizeMode: "stretch",
 
-      marginLeft: 10,
+    alignItems: "center"
+  },
 
-      marginTop: 5,
+  SectionStyle: {
+    flexDirection: "row",
 
-      paddingTop: 2,
+    backgroundColor: "#fff",
 
-      paddingBottom: 2,
+    borderWidth: 0.5,
 
-      backgroundColor: 'white',
+    borderColor: "#000",
 
-      borderRadius: 5,
+    height: 40,
 
-      borderWidth:
-        1,
+    borderRadius: 5,
 
-      borderColor:
-        'orange'
+    margin: 10
+  },
 
-    },
+  inputLayout: {
+    marginTop: 5,
 
-    datePickerText: {
+    marginLeft: 10,
 
-      fontSize:
-        14,
+    marginRight: 10
+  },
 
-      marginLeft:
-        5,
+  image: {
+    width: 100,
 
-      borderWidth:
-        0,
+    height: 100,
 
-      color: '#121212',
+    marginTop: 10,
 
-    },
+    borderColor: "orange",
 
-    imagee: {
+    borderRadius: 2,
 
-      height: 14,
+    borderRadius: 100 / 2,
 
-      width: 14,
+    alignSelf: "center",
 
-      margin: 10,
+    justifyContent: "center",
 
-    },
-
-    row: {
-
-      flex: 1,
-
-      flexDirection:"row",
-
-    },
-
-    inputWrap: {
-
-      flex: 1,
-
-      marginLeft: 5,
-
-      paddingRight: 15
-
-    },
-
-
-
-    ImageStyle: {
-
-      padding:
-        10,
-
-      margin: 5,
-
-      height: 25,
-
-      width: 25,
-
-      resizeMode:
-        'stretch',
-
-      alignItems:
-        'center'
-
-    },
-
-    SectionStyle: {
-
-      flexDirection:
-        'row',
-
-      backgroundColor:
-        '#fff',
-
-      borderWidth:
-        .5,
-
-      borderColor:
-        '#000',
-
-      height: 40,
-
-      borderRadius:
-        5,
-
-      margin: 10
-
-    },
-
-    inputLayout: {
-
-      marginTop:
-        5,
-
-      marginLeft:
-        10,
-
-      marginRight:
-        10,
-
-    },
-
-    image: {
-
-      width: 100,
-
-      height: 100,
-
-      marginTop:
-        10,
-
-      borderColor:
-        'orange',
-
-      borderRadius:
-        2,
-
-      borderRadius:
-        100 / 2,
-
-      alignSelf:
-        'center',
-
-      justifyContent:
-        'center',
-
-      alignItems:
-        'center',
-
-    },
-
-
-
-  })
+    alignItems: "center"
+  }
+});
