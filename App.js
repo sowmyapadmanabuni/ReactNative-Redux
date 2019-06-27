@@ -24,7 +24,7 @@ import CreateUnitsPotrait from "./assocition_pages/CreateUnitsPotrait";
 import store from "./src/store";
 import {persistStore} from "redux-persist";
 import SchedulePatrolling from "./src/screens/Patrolling/SchedulePatrolling";
-import CommonHeader from "./src/components/NavigationalHeaders/CommonHeader";
+import PatrollingCommonHeader from "./src/components/NavigationalHeaders/PatrollingCommonHeader";
 import PatrollingCheckPoints from "./src/screens/Patrolling/PatrollingCheckPoints";
 import AddCheckPoints from "./src/screens/Patrolling/AddCheckPoints";
 
@@ -195,21 +195,21 @@ const DashStack = createStackNavigator(
             screen: SchedulePatrolling,
             navigationOptions: {
                 title: "Schedule Patrolling",
-                header: props => <CommonHeader {...props}/>,
+                header: props => <PatrollingCommonHeader isReportVisible={true} isHidden={false} {...props}/>,
             }
         },
         patrollingCheckPoint: {
             screen: PatrollingCheckPoints,
             navigationOptions: {
                 title: "Patrolling Check Points",
-                header: props => <CommonHeader {...props}/>
+                header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={false} {...props}/>
             }
         },
         addCheckPoint: {
             screen: AddCheckPoints,
             navigationOptions: {
                 title: "Add Checkpoints",
-                header: props => <CommonHeader isHidden={true} {...props}/>
+                header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
             }
         }
     },

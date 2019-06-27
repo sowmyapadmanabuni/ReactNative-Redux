@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View,Text} from 'react-native';
 import {connect} from 'react-redux';
 import base from "../../base";
 
@@ -17,6 +17,9 @@ class AddCheckPoints extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text>Add Check Points</Text>
+                </View>
 
             </View>
         )
@@ -29,6 +32,9 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         backgroundColor: base.theme.colors.white
+    },
+    header:{
+        alignItems:'center'
     }
 });
 

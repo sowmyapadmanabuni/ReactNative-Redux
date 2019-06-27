@@ -1,15 +1,9 @@
+/**
+ * Created by Jyoth Menda at Synclovis Systems Pvt. Ltd. on 2019-06-25
+ */
+
 import React from 'react';
-import {
-    View,
-    Text,
-    StatusBar,
-    StyleSheet,
-    FlatList,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    Dimensions
-} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import base from '../../../base'
 import {connect} from 'react-redux'
 import CardView from "../../../components/CardView";
@@ -129,7 +123,7 @@ class Dashboard extends React.Component {
                         height={"90%"}
                         width={"25%"}
                         cardText={'Admin'}
-                        onCardClick={()=>this.props.navigation.navigate('AdminFunction')}
+                        onCardClick={() => this.props.navigation.navigate('AdminFunction')}
                         cardIcon={require("../../../../icons/call.png")}/>
                     <CardView
                         height={"90%"}
@@ -166,7 +160,7 @@ class Dashboard extends React.Component {
     listOfInvoices(item) {
         console.log(item);
         return (
-            <TouchableOpacity style={{width: '100%', height: '80%',borderWidth: 1}}>
+            <TouchableOpacity style={{width: '100%', height: '80%', borderWidth: 1}}>
                 <View style={styles.invoiceView}>
                     <View style={styles.invoiceSubView}>
                         <Text>Invoice No. {item.item.invoiceNumber}</Text>
