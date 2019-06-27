@@ -28,8 +28,8 @@ class Dashboard extends React.Component {
         console.log("Dashboard Props", this.props)
         let associationList = [];
         let untiList = [];
-        let invoiceList = [{invoiceNumber: 528, bill: 12300, dueDate: '11-May-2019'},
-            {invoiceNumber: 527, bill: 12800, dueDate: '8-May-2019'}]
+        let invoiceList = [{invoiceNumber: 528, bill: 12300, dueDate: '11-May-2019', status: "NOT PAID"},
+            {invoiceNumber: 527, bill: 12800, dueDate: '8-May-2019', status: "PAID"}]
 
         return (
             <View style={styles.container}>
@@ -38,10 +38,12 @@ class Dashboard extends React.Component {
                         <Dropdown
                             value="Building Complex Name"
                             data={associationList}
-                            textColor="#000"
+                            textColor={base.theme.colors.black}
+                            dropdownOffset={{top: 10, left: 0}}
                             onChangeText={(value, index) =>
                                 this.onAssociationChange(value, index)
                             }
+                            pickerStyle={{color: base.theme.colors.primary}}
                         />
                     </View>
                     <View style={styles.rightDropDown}>
@@ -49,6 +51,7 @@ class Dashboard extends React.Component {
                             value="Unit"
                             data={untiList}
                             textColor="#000"
+                            dropdownOffset={{top: 10, left: 0}}
                             dropdownPosition={-3}
                             onChangeText={(value, index) => {
                                 updateUserInfo({
@@ -56,6 +59,7 @@ class Dashboard extends React.Component {
                                     value: unitList[index].unitId
                                 });
                             }}
+                            pickerStyle={{color: base.theme.colors.primary}}
                         />
                     </View>
                 </View>
@@ -66,36 +70,40 @@ class Dashboard extends React.Component {
                         <CardView
                             height={"100%"}
                             width={"25%"} cardText={' Family Members'}
-                            cardIcon={require("../../../../icons/call.png")}
+                            cardIcon={require("../../../../icons/view_all_visitors.png")}
                             cardCount={5}
-                            marginTop={20}/>
+                            marginTop={20}
+                            backgroundColor={base.theme.colors.shadedWhite}/>
                         <CardView
                             height={"100%"}
                             width={"25%"} cardText={'Vehicles'}
-                            cardIcon={require("../../../../icons/call.png")}
+                            cardIcon={require("../../../../icons/vehicle.png")}
                             cardCount={4}
-                            marginTop={20}/>
+                            marginTop={20}
+                            backgroundColor={base.theme.colors.shadedWhite}/>
                         <CardView
                             height={"100%"}
                             width={"25%"} cardText={'Visitors'}
-                            cardIcon={require("../../../../icons/call.png")}
+                            cardIcon={require("../../../../icons/view_all_visitors.png")}
                             cardCount={2}
-                            marginTop={20}/>
+                            marginTop={20}
+                            backgroundColor={base.theme.colors.shadedWhite}/>
                     </View>
                     <View style={styles.elevatedViewSub}>
                         <CardView
                             height={"100%"}
                             width={"39%"} cardText={'Documents'}
-                            cardIcon={require("../../../../icons/call.png")}
+                            cardIcon={require("../../../../icons/report.png")}
                             cardCount={0}
+                            backgroundColor={base.theme.colors.shadedWhite}
                         />
                         <CardView
                             height={"100%"}
                             width={"39%"} cardText={'Tickets'}
-                            cardIcon={require("../../../../icons/call.png")}
+                            cardIcon={require("../../../../icons/tickets.png")}
                             cardCount={2}
+                            backgroundColor={base.theme.colors.shadedWhite}
                         />
-
                     </View>
                     <ElevatedView elevation={12}
                                   style={styles.invoiceCardView}>
@@ -105,53 +113,62 @@ class Dashboard extends React.Component {
                                 <Text style={styles.viewMoreText}>View more</Text>
                             </TouchableOpacity>
                         </View>
-                        {invoiceList ?
+                        {invoiceList.length > 0 ?
 
-                            <FlatList
-                                data={invoiceList}
-                                extraData={this.state}
-                                style={{flex: 1}}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={(item) => this.listOfInvoices(item)}
-                            />
+                            <ScrollView style={styles.scrollView}>
+                                <FlatList
+                                    data={invoiceList}
+                                    extraData={this.state}
+                                    style={styles.flatList}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={(item) => this.listOfInvoices(item)}
+                                />
+                            </ScrollView>
                             :
-                            <Text>No Invoices</Text>
+                            <View style={styles.noDataView}>
+                                <Text style={styles.noDataMsg}>No Invoices</Text>
+                            </View>
                         }
+
                     </ElevatedView>
                 </ElevatedView>
                 <View style={styles.bottomCards}>
                     <CardView
                         height={"90%"}
-                        width={"25%"} cardText={'My Unit'}
-                        cardIcon={require("../../../../icons/call.png")}
-                        onCardClick={() => this.myUnit()}/>
+                        width={"30%"} cardText={'My Unit'}
+                        cardIcon={require("../../../../icons/myUnit.png")}
+                        onCardClick={() => this.myUnit()}
+                        disabled={true}/>
                     <CardView
-                        height={"90%"}
+                        height={"70%"}
                         width={"25%"}
                         cardText={'Admin'}
-                        cardIcon={require("../../../../icons/call.png")}/>
+                        cardIcon={require("../../../../icons/user.png")}/>
                     <CardView
-                        height={"90%"}
+                        height={"70%"}
                         width={"25%"}
                         cardText={'Offers'}
-                        cardIcon={require("../../../../icons/call.png")}
+                        cardIcon={require("../../../../icons/offers.png")}
+                        backgroundColor={base.theme.colors.rosePink}
                     />
                 </View>
                 <View style={styles.supportContainer}>
-                    <TouchableOpacity>
-                        <Image style={[styles.supportIcon]}
-                               source={require("../../../../icons/call.png")}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            style={styles.supportIcon}
-                            source={require("../../../../icons/call.png")}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            style={styles.supportIcon}
-                            source={require("../../../../icons/call.png")}/>
-                    </TouchableOpacity>
+                    <View style={styles.subSupportView}>
+                        <TouchableOpacity>
+                            <Image style={[styles.supportIcon]}
+                                   source={require("../../../../icons/call.png")}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                style={styles.supportIcon}
+                                source={require("../../../../icons/chat.png")}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                style={styles.supportIcon}
+                                source={require("../../../../icons/email.png")}/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         )
@@ -163,24 +180,28 @@ class Dashboard extends React.Component {
     }
 
     listOfInvoices(item) {
-        console.log(item);
+        base.utils.logger.log(item);
         return (
-            <TouchableOpacity style={{width: '100%', height: '80%',borderWidth: 1}}>
+            <TouchableOpacity>
                 <View style={styles.invoiceView}>
                     <View style={styles.invoiceSubView}>
-                        <Text>Invoice No. {item.item.invoiceNumber}</Text>
-                        <Text>{'\u20B9'} {item.item.bill}</Text>
+                        <Text style={styles.invoiceNumberText}>Invoice No. {item.item.invoiceNumber}</Text>
+                        <Text style={styles.billText}><Text style={styles.rupeeIcon}>{'\u20B9'}
+                        </Text> {item.item.bill}</Text>
+
                     </View>
                     <View style={styles.invoiceSubView}>
-                        <Text>Due No. {item.item.dueDate}</Text>
+                        <Text style={styles.dueDate}>Due No. {item.item.dueDate}</Text>
                         <OSButton
-                            height={'90%'}
-                            width={'30%'}
+                            height={'80%'}
+                            width={'25%'}
                             borderRadius={15}
-                            oSBBackground={base.theme.colors.primary}/>
+                            oSBBackground={item.item.status === "PAID" ? base.theme.colors.grey : base.theme.colors.primary}
+                            oSBText={item.item.status === "PAID" ? "Paid" : "Pay Now"}/>
                     </View>
                 </View>
             </TouchableOpacity>
+
         );
     }
 
@@ -196,7 +217,8 @@ const styles = StyleSheet.create({
         width: '90%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 20
+        // marginBottom: 20,
+        //  backgroundColor:base.theme.colors.grey
     },
     leftDropDown: {
         width: '60%'
@@ -205,20 +227,21 @@ const styles = StyleSheet.create({
         width: '30%'
     },
     bottomCards: {
-        height: '12%',
-        width: '90%',
+        height: '15%',
+        width: '80%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 10
+        marginTop: 10,
+        alignItems: 'center',
     },
     supportContainer: {
         height: '6%',
-        width: '95%',
+        width: '90%',
         alignItems: 'center',
         backgroundColor: base.theme.colors.white,
         borderColor: base.theme.colors.primary,
         borderWidth: 1,
-        marginBottom: 5,
+        marginTop: 5,
         justifyContent: 'center',
         flexDirection: 'row',
     },
@@ -226,7 +249,6 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         borderRadius: 5,
-        marginRight: 10
     },
     elevatedView: {
         alignItems: 'center',
@@ -269,21 +291,67 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     viewMoreText: {
-        color: "blue",
+        color: base.theme.colors.blue,
         fontSize: 14
     },
     invoiceView: {
-        backgroundColor: '#876543',
-        width: 300,
+        width: '100%',
+        height: 70,
+        backgroundColor: base.theme.colors.lavender,
+        marginBottom: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     invoiceSubView: {
+        width: "90%",
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width: '80%',
-        alignSelf: 'center'
+    },
+    subSupportView: {
+        height: '100%',
+        width: '45%',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        flexDirection: 'row',
+    },
+    invoiceNumberText: {
+        fontSize: 14,
+        color: base.theme.colors.black
+    },
+    dueDate: {
+        fontSize: 14,
+        color: base.theme.colors.blue
+    },
+    rupeeIcon: {
+        fontSize: 18,
+        color: base.theme.colors.primary,
+    },
+    billText: {
+        fontSize: 18,
+        color: base.theme.colors.black,
+        fontWeight: 'bold',
+    },
+    flatList: {
+        height: '100%',
+        width: '100%',
+    },
+    scrollView: {
+        height: '80%',
+        width: '90%',
+    },
+    noDataMsg: {
+        fontSize: 18,
+        color: base.theme.colors.grey
+    },
+    noDataView: {
+        height: '80%',
+        width: '90%',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
-})
+
+});
 
 
 const mapStateToProps = state => {

@@ -24,44 +24,41 @@ class CardView extends React.Component {
     static propTypes = {
         height: PropTypes.any,
         width: PropTypes.any,
-        borderRadius:PropTypes.number,
+        borderRadius: PropTypes.number,
         backgroundColor: PropTypes.string,
         cardText: PropTypes.string,
         cardCount: PropTypes.number,
         cardIcon: PropTypes.string,
-        cardType: PropTypes.oneOf(['default', 'normal', ]).isRequired,
+        cardType: PropTypes.oneOf(['default', 'normal',]).isRequired,
         onCardClick: PropTypes.func,
-        elevation:PropTypes.number,
-        disabled:PropTypes.bool,
-        marginTop:PropTypes.number,
-        marginLeft:PropTypes.number,
-        marginRight:PropTypes.number,
-        marginBottom:PropTypes.number
+        elevation: PropTypes.number,
+        disabled: PropTypes.bool,
+        marginTop: PropTypes.number,
+        marginLeft: PropTypes.number,
+        marginRight: PropTypes.number,
+        marginBottom: PropTypes.number
     }
 
     static defaultProps = {
-        height:'45%',
-        width:'45%',
-        borderRadius:10,
-        backgroundColor:"#ffffff",
-        cardText:"",
-        cardCount:null,
-        cardIcon:"",
-        cardType:'default',
-        elevation:5,
-        disabled:false,
-        marginTop:null,
-        marginLeft:null,
-        marginRight:null,
-        marginBottom:null
+        height: '45%',
+        width: '45%',
+        borderRadius: 10,
+        backgroundColor: "#ffffff",
+        cardText: "",
+        cardCount: null,
+        cardIcon: "",
+        cardType: 'default',
+        elevation: 5,
+        disabled: false,
+        marginTop: null,
+        marginLeft: null,
+        marginRight: null,
+        marginBottom: null
     }
 
 
-
-
-
     render() {
-        console.log("Props",this.props)
+        console.log("Props", this.props)
         let cardStyle = styles.defaultCard;
         let imgSrc = (this.props.cardIcon);
         switch (this.props.cardType) {
@@ -73,22 +70,29 @@ class CardView extends React.Component {
                 break;
         }
         return (
-            <TouchableOpacity style={[cardStyle,{height:this.props.height,width:this.props.width,
-                borderRadius:this.props.borderRadius, marginTop:this.props.marginTop,marginLeft:this.props.marginLeft,
-                marginRight:this.props.marginRight,marginBottom:this.props.marginBottom,
-                ...this.props.style}]}
+            <TouchableOpacity style={[cardStyle, {
+                height: this.props.height,
+                width: this.props.width,
+                borderRadius: this.props.borderRadius,
+                marginTop: this.props.marginTop,
+                marginLeft: this.props.marginLeft,
+                marginRight: this.props.marginRight,
+                marginBottom: this.props.marginBottom,
+                backgroundColor: this.props.backgroundColor,
+                ...this.props.style
+            }]}
                               onPress={this.onCardClick.bind(this)}
-            disabled={this.props.disabled}>
+                              disabled={this.props.disabled}>
                 <View style={styles.subCardView}>
                     <Image style={styles.imageStyles}
-                    source={imgSrc}>
+                           source={imgSrc}>
                     </Image>
                     <View style={[styles.subView]}>
                         <Text style={styles.count}>
                             {this.props.cardCount}
                         </Text>
                         <Text style={styles.cardText}
-                        numberOfLines={2}>
+                              numberOfLines={2}>
                             {this.props.cardText}
                         </Text>
 
@@ -109,55 +113,53 @@ class CardView extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    defaultCard:{
-        borderRadius:10,
-        backgroundColor:base.theme.colors.white,
-        alignItems:'center',
-        justifyContent:'center',
-        elevation:5,
-        borderColor:base.theme.colors.white,
+    defaultCard: {
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 5,
+        borderColor: base.theme.colors.white,
         shadowColor: base.theme.colors.black,
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.8,
         shadowRadius: 2,
 
     },
-    normalCard:{
-        borderRadius:10,
-        backgroundColor:base.theme.colors.white,
-        alignItems:'center',
-        justifyContent:'center',
-        elevation:5,
-        borderColor:base.theme.colors.white,
-        shadowColor:base.theme.colors.black,
-        shadowOffset: { width: 0, height: 2 },
+    normalCard: {
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 5,
+        borderColor: base.theme.colors.white,
+        shadowColor: base.theme.colors.black,
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.8,
-        shadowRadius:2,
+        shadowRadius: 2,
 
     },
-    subCardView:{
-       alignItems:'center',
-        justifyContent:'center',
+    subCardView: {
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    imageStyles:{
-        height:20,
-        width:20,
-        alignSelf:'center',
-        marginBottom:2
+    imageStyles: {
+        height: 20,
+        width: 20,
+        alignSelf: 'center',
+        marginBottom: 2
     },
-    subView:{
-        flexDirection:'row',
-        alignItems:'center',
-        width:'65%',
+    subView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '65%',
     },
-    count:{
-        fontSize:15,
-        color:'blue',
-        marginRight:5,
+    count: {
+        fontSize: 15,
+        color: base.theme.colors.blue,
+        marginRight: 5,
     },
-    cardText:{
-        fontSize:10,
-        color:base.theme.colors.black,
+    cardText: {
+        fontSize: 10,
+        color: base.theme.colors.black,
         //fontFamily:base.theme.fonts.bold
     }
 

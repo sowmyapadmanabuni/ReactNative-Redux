@@ -86,7 +86,7 @@ import CreateOrJoin from "../assocition_pages/CreateOrJoin";
 import EditBlock from "../assocition_pages/EditBlock.js";
 import RegisterUser from "../pages/RegisterUser";
 import RegisterToUnit from "../assocition_pages/register";
-import AdminSettingScreen from "../src/screens/AdminSetting/AdminSettingScreen";
+//import AdminSettingScreen from "../src/screens/AdminSetting/AdminSettingScreen";
 // import CountryCodePicker from '../registration_pages/CountryCodePicker';
 // import NotificationScreen from '../dashboard_pages/NotificationScreen';
 // import NotificationScreen2 from '../dashboard_pages/NotificationScreen2';
@@ -496,15 +496,15 @@ const ResApp = createStackNavigator({
     }
   },
   // EditBlock
-  AdminSettingsScreen: {
-    screen: AdminSettingScreen,
-    navigationOptions: {
-      title: "Admin Settings ",
-      header: null,
-      headerStyle: { backgroundColor: "#FA9917" },
-      headerTintColor: "#ffffff"
-    }
-  },
+  // AdminSettingsScreen: {
+  //   screen: AdminSettingScreen,
+  //   navigationOptions: {
+  //     title: "Admin Settings ",
+  //     header: null,
+  //     headerStyle: { backgroundColor: "#FA9917" },
+  //     headerTintColor: "#ffffff"
+  //   }
+  // },
 
   AddFamilyMemberScreen: {
     screen: AddFamilyMember,

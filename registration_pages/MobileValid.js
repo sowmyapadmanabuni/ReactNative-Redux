@@ -144,7 +144,7 @@ class MobileValid extends Component {
         "MobileNumber": mobilenumber
       }
 
-      url = this.props.champBaseURL + 'account/sendotp';
+      url = 'https://apidev.oyespace.com/oyeliving/api/v1/account/sendotp';
       //  http://api.oyespace.com/champ/api/v1/account/sendotp
       console.log('anu', url + ' ff' + countryCode + mobilenumber);
 
