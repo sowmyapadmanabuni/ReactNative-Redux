@@ -23,10 +23,10 @@ import addmembers from "./assocition_pages/addmembers";
 import CreateUnitsPotrait from "./assocition_pages/CreateUnitsPotrait";
 import store from "./src/store";
 import {persistStore} from "redux-persist";
-import SchedulePatrolling from "./src/screens/Patrolling/SchedulePatrolling";
-import PatrollingCommonHeader from "./src/components/NavigationalHeaders/PatrollingCommonHeader";
-import PatrollingCheckPoints from "./src/screens/Patrolling/PatrollingCheckPoints";
-import AddCheckPoints from "./src/screens/Patrolling/AddCheckPoints";
+// import SchedulePatrolling from "./src/screens/Patrolling/SchedulePatrolling";
+// import PatrollingCommonHeader from "./src/components/NavigationalHeaders/PatrollingCommonHeader";
+// import PatrollingCheckPoints from "./src/screens/Patrolling/PatrollingCheckPoints";
+// import AddCheckPoints from "./src/screens/Patrolling/AddCheckPoints";
 
 
 const AuthStack = createStackNavigator(
@@ -191,31 +191,31 @@ const DashStack = createStackNavigator(
                 title: "Association"
             }
         },
-        schedulePatrolling: {
-            screen: SchedulePatrolling,
-            navigationOptions: {
-                title: "Schedule Patrolling",
-                header: props => <PatrollingCommonHeader isReportVisible={true} isHidden={false} {...props}/>,
-            }
-        },
-        patrollingCheckPoint: {
-            screen: PatrollingCheckPoints,
-            navigationOptions: {
-                title: "Patrolling Check Points",
-                header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={false} {...props}/>
-            }
-        },
-        addCheckPoint: {
-            screen: AddCheckPoints,
-            navigationOptions: {
-                title: "Add Checkpoints",
-                header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
-            }
-        }
+        // schedulePatrolling: {
+        //     screen: SchedulePatrolling,
+        //     navigationOptions: {
+        //         title: "Schedule Patrolling",
+        //         header: props => <PatrollingCommonHeader isReportVisible={true} isHidden={false} {...props}/>,
+        //     }
+        // },
+        // patrollingCheckPoint: {
+        //     screen: PatrollingCheckPoints,
+        //     navigationOptions: {
+        //         title: "Patrolling Check Points",
+        //         header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={false} {...props}/>
+        //     }
+        // },
+        // addCheckPoint: {
+        //     screen: AddCheckPoints,
+        //     navigationOptions: {
+        //         title: "Add Checkpoints",
+        //         header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
+        //     }
+        // }
     },
     {
-        headerMode: "screen",
-        initialRouteName: "ResDashBoard"
+                initialRouteName: "ResDashBoard",
+                headerMode:"none"
     }
 );
 

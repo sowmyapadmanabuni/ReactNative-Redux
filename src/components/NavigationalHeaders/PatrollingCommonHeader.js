@@ -4,7 +4,7 @@
 
 
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View,Platform} from 'react-native';
 import PropTypes from 'prop-types';
 import base from "../../base";
 import EmptyView from "../common/EmptyView";
@@ -53,11 +53,10 @@ export default class PatrollingCommonHeader extends React.Component {
                     isReportVisible ?
                         <View style={{
                             borderWidth: 1,
-                            height: "30%",
+                            height: "40%",
                             alignSelf: 'center',
-                            width: "20%",
+                            width: "25%",
                             borderRadius: 10,
-                            marginTop: '1%',
                             alignItems: 'center',
                             justifyContent: 'center',
                             borderColor: 'orange'
@@ -77,14 +76,15 @@ export default class PatrollingCommonHeader extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: "12%",
+        height: "10%",
         width: "100%",
         backgroundColor: "white",
         borderWidth: 1,
         borderColor: "orange",
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginTop:Platform.OS === 'ios'?20:0
     },
     buttonView: {
         width: "17%",
@@ -96,12 +96,12 @@ const styles = StyleSheet.create({
         height: "50%"
     },
     logoView: {
-        width: "60%",
+        width: "65%",
         justifyContent: 'flex-end',
         paddingTop: 10
     },
     logo: {
         alignSelf: 'center',
-        height: '75%',
+        height: '120%',
     }
 });

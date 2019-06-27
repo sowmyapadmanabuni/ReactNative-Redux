@@ -17,56 +17,60 @@ class NotificationDetailScreen extends Component {
         date: ""
     }
 
-    approveGateEntry = async (item, status) => {
-        
-        console.log(JSON.stringify(item))
+    approveGateEntry = async (item, status) => {        
+        const responseGuards = await base.services.OyeSafeApi.getallguardsofassociation(tem.asAssnID);
+        if(responseGuards.data != undefined){
+            let workers = responseGuards.data.worker;
+            if(workers != undefined){
+                let mobileNumbers = workers.map(({ wkMobile }) => wkMobile);
+                mobileNumbers = mobileNumbers.filter(mob => mob.trim() != '');
 
-        let body = {
-            sbSubID: "AllGuards"+item.asAssnID,
-            ntTitle: 'Request Approved',
-            ntDesc: 'Your entry has been approved',
-            ntType: 'admin_approve_entry',
-            associationID: item.asAssnID,
-            
+                let body = {
+                    sbSubID: "AllGuards"+item.asAssnID,
+                    ntTitle: 'Request Approved',
+                    ntDesc: 'Your entry has been approved',
+                    ntType: 'admin_approve_entry',
+                    status:'approved',
+                    asAssnID: item.asAssnID,
+                    WKMobile:mobileNumbers
+                    
+                }
+                
+                const responsePN = await base.services.fcmservice.sendGatePN(body);
+                //@Todo: Rest of the actions
+            }
         }
-
-        const responsePN = await base.services.fcmservice.sendGatePN(body);
-        console.log(responsePN)
-
-        // axios.post(`${GATE_CLOUD_FUNCTION_URL}/sendUserNotification`, {
-        //     sbSubID: "AllGuards"+item.asAssnID,
-        //     ntTitle: 'Request Approved',
-        //     ntDesc: 'Your entry has been approved',
-        //     ntType: 'admin_approve_entry',
-        //     associationID: item.asAssnID,    
-            
-        // }).then(() => {
-
-        // })
-        // .catch((error) => {
-        //     console.log('firebase', error)            
-        //     this.setState({ loading: false })
-        // })
     }
 
-    rejectGateEntry = (item, status) => {
+    rejectGateEntry = async (item, status) => {
         
         let self = this;
         console.log(JSON.stringify(item))
-        axios.post(`${GATE_CLOUD_FUNCTION_URL}/sendUserNotification`, {
-            sbSubID: "AllGuards"+item.asAssnID,
-            ntTitle: 'Request rejected',
-            ntDesc: 'Your entry has been rejected',
-            ntType: 'admin_approve_entry',
-            associationID: item.asAssnID,
-            
-        }).then(() => {
-            self.props.navigation.goBack(null)
-        })
-        .catch((error) => {
-            console.log('firebase', error)            
-            this.setState({ loading: false })
-        })
+
+
+        const responseGuards = await base.services.OyeSafeApi.getallguardsofassociation(tem.asAssnID);
+        if(responseGuards.data != undefined){
+            let workers = responseGuards.data.worker;
+            if(workers != undefined){
+                let mobileNumbers = workers.map(({ wkMobile }) => wkMobile);
+                mobileNumbers = mobileNumbers.filter(mob => mob.trim() != '');
+
+                let body = {
+                    sbSubID: "AllGuards"+item.asAssnID,
+                    ntTitle: 'Request Approved',
+                    ntDesc: 'Your entry has been approved',
+                    ntType: 'admin_approve_entry',
+                    status:'rejected',
+                    asAssnID: item.asAssnID,
+                    WKMobile:mobileNumbers
+                    
+                }
+                
+                const responsePN = await base.services.fcmservice.sendGatePN(body);
+                //@Todo: Rest of the actions
+            }
+        }
+
     }
 
     approve = (item, status) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text,View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types'
 import base from '../base'
 
@@ -16,13 +16,13 @@ class OSButton extends React.Component {
         oSBType: PropTypes.oneOf(['normal', 'custom']).isRequired,
     };
     static defaultProps = {
-        height:'30%',
-        width:'35%',
-        borderRadius:5,
+        height: '30%',
+        width: '35%',
+        borderRadius: 5,
         oSBText: "Confirm",
-        oSBBackground:base.theme.colors.primary,
+        oSBBackground: base.theme.colors.primary,
         oSBType: 'normal',
-        oSBTextColor:base.theme.colors.white,
+        oSBTextColor: base.theme.colors.white,
 
     };
 
@@ -49,8 +49,11 @@ class OSButton extends React.Component {
                               style={[oSBStyle, {
                                   height: (this.props.height),
                                   width: (this.props.width),
+                                  justifyContent:'center',
                                   borderRadius: (this.props.borderRadius),
-                                  ...this.props.style}]}>
+                                  backgroundColor: this.props.oSBBackground,
+                                  ...this.props.style
+                              }]}>
                 <Text style={[styles.confirmText, {
                     color: this.props.oSBTextColor
                 }]}>{this.props.oSBText}</Text>
@@ -73,8 +76,7 @@ const styles = StyleSheet.create({
     confirmButton: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor:base.theme.colors.primary,
-        width:50,
+        width: 50,
     },
 
     confirmText: {
@@ -82,15 +84,14 @@ const styles = StyleSheet.create({
         alignItems: 'center', textAlign: 'center',
         alignSelf: 'center',
         //fontFamily:'',
-        fontSize:14,
+        fontSize: 14,
     },
     customBtn: {
         justifyContent: 'center',
         alignItems: 'center',
-        height:"20%",
-        width:"35%",
-        borderRadius:5,
-        backgroundColor:base.theme.colors.white,
+        height: "20%",
+        width: "35%",
+        borderRadius: 5,
     }
 
 });

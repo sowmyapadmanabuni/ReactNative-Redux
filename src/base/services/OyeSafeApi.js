@@ -39,6 +39,12 @@ instance.interceptors.response.use((response) => {
 
 
 export default class OyeSafeApi{
+
+    static async getallguardsofassociation(assnid){
+        return await instance.get('GetWorkerListByAssocID/'+assnid);
+    }
+
+    
     static async getPatrollingSchedules(){
         return await instance.get('/Patrolling/GetPatrollingList')
         //return await instance.get('/GetPatrollingShiftsList')
