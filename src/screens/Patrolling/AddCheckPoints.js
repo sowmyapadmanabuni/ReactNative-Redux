@@ -17,7 +17,7 @@ import {
 import {connect} from 'react-redux';
 import base from "../../base";
 import {TextField} from "react-native-material-textfield";
-import OSButton from "../../components/OSButton";
+import OSButton from "../../components/osButton/OSButton";
 import EmptyView from "../../components/common/EmptyView";
 
 

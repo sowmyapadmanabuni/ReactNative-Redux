@@ -214,8 +214,8 @@ const DashStack = createStackNavigator(
         // }
     },
     {
-                initialRouteName: "ResDashBoard",
-                headerMode:"none"
+        headerMode: "none",
+        initialRouteName: "ResDashBoard"
     }
 );
 

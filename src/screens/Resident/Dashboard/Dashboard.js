@@ -1,45 +1,58 @@
 import React from 'react';
-import {FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
+import {
+    View,
+    Text,
+    FlatList,
+    ScrollView,
+    Image,
+    TouchableOpacity,
+    TouchableHighlight
+} from 'react-native';
 import base from '../../../base'
 import {connect} from 'react-redux'
-import CardView from "../../../components/CardView";
+import CardView from "../../../components/cardView/CardView";
 import {Dropdown} from "react-native-material-dropdown";
 import ElevatedView from 'react-native-elevated-view'
-import OSButton from "../../../components/OSButton";
+import OSButton from "../../../components/osButton/OSButton";
+import Style from './Style'
 
 
 class Dashboard extends React.Component {
     constructor(props) {
         super(props);
+        this.props=props;
     }
 
 
     render() {
-        console.log("Dashboard Props", this.props)
+       // base.utils.logger.log(this.props)
+
         let associationList = [];
-        let untiList = [];
-        let invoiceList = [{invoiceNumber: 528, bill: 12300, dueDate: '11-May-2019', status: "NOT PAID"},
-            {invoiceNumber: 527, bill: 12800, dueDate: '8-May-2019', status: "PAID"}]
+        let unitList = [];
+        let invoiceList = [{invoiceNumber: 528, bill: "12,300", dueDate: '11-May-2019', status: "NOT PAID"},
+            {invoiceNumber: 527, bill: "12,800", dueDate: '8-May-2019', status: "PAID"}]
 
         return (
-            <View style={styles.container}>
-                <View style={styles.dropDownContainer}>
-                    <View style={styles.leftDropDown}>
+            <View style={Style.container}>
+                <View style={Style.dropDownContainer}>
+                    <View style={Style.leftDropDown}>
                         <Dropdown
                             value="Building Complex Name"
                             data={associationList}
                             textColor={base.theme.colors.black}
+                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
                             dropdownOffset={{top: 10, left: 0}}
                             onChangeText={(value, index) =>
                                 this.onAssociationChange(value, index)
                             }
-                            pickerStyle={{color: base.theme.colors.primary}}
                         />
                     </View>
-                    <View style={styles.rightDropDown}>
+                    <View style={Style.rightDropDown}>
                         <Dropdown
                             value="Unit"
-                            data={untiList}
+                            data={unitList}
+                            inputContainerStyle={{ borderBottomColor: 'transparent' }}
                             textColor="#000"
                             dropdownOffset={{top: 10, left: 0}}
                             dropdownPosition={-3}
@@ -49,37 +62,36 @@ class Dashboard extends React.Component {
                                     value: unitList[index].unitId
                                 });
                             }}
-                            pickerStyle={{color: base.theme.colors.primary}}
                         />
                     </View>
                 </View>
-                <ElevatedView elevation={10}
-                              style={styles.mainElevatedView}
-                >
-                    <View style={styles.elevatedView}>
+                <ElevatedView elevation={6} style={Style.mainElevatedView}>
+
+                    <View style={Style.elevatedView}>
                         <CardView
                             height={"100%"}
                             width={"25%"} cardText={' Family Members'}
                             cardIcon={require("../../../../icons/view_all_visitors.png")}
                             cardCount={5}
                             marginTop={20}
-                            backgroundColor={base.theme.colors.shadedWhite}/>
+                            backgroundColor={base.theme.colors.cardBackground}/>
                         <CardView
                             height={"100%"}
                             width={"25%"} cardText={'Vehicles'}
                             cardIcon={require("../../../../icons/vehicle.png")}
                             cardCount={4}
                             marginTop={20}
-                            backgroundColor={base.theme.colors.shadedWhite}/>
+                            backgroundColor={base.theme.colors.cardBackground}/>
                         <CardView
                             height={"100%"}
                             width={"25%"} cardText={'Visitors'}
                             cardIcon={require("../../../../icons/view_all_visitors.png")}
                             cardCount={2}
                             marginTop={20}
-                            backgroundColor={base.theme.colors.shadedWhite}/>
+                            backgroundColor={base.theme.colors.cardBackground}/>
                     </View>
-                    <View style={styles.elevatedViewSub}>
+
+                    <View style={Style.elevatedViewSub}>
                         <CardView
                             height={"100%"}
                             width={"39%"} cardText={'Documents'}
@@ -95,69 +107,67 @@ class Dashboard extends React.Component {
                             backgroundColor={base.theme.colors.shadedWhite}
                         />
                     </View>
-                    <ElevatedView elevation={12}
-                                  style={styles.invoiceCardView}>
-                        <View style={styles.invoiceHeadingView}>
-                            <Text style={styles.invoiceText}>Invoices</Text>
+                    <ElevatedView elevation={0} style={Style.invoiceCardView}>
+                        <View style={Style.invoiceHeadingView}>
+                            <Text style={Style.invoiceText}>Invoices</Text>
                             <TouchableOpacity>
-                                <Text style={styles.viewMoreText}>View more</Text>
+                                <Text style={Style.viewMoreText}>View more</Text>
                             </TouchableOpacity>
                         </View>
                         {invoiceList.length > 0 ?
 
-                            <ScrollView style={styles.scrollView}>
+                            <ScrollView style={Style.scrollView}>
                                 <FlatList
                                     data={invoiceList}
                                     extraData={this.state}
-                                    style={styles.flatList}
+                                    style={Style.inVoiceFlatList}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={(item) => this.listOfInvoices(item)}
                                 />
                             </ScrollView>
                             :
-                            <View style={styles.noDataView}>
-                                <Text style={styles.noDataMsg}>No Invoices</Text>
+                            <View style={Style.noDataView}>
+                                <Text style={Style.noDataMsg}>No Invoices</Text>
                             </View>
                         }
 
                     </ElevatedView>
                 </ElevatedView>
-                <View style={styles.bottomCards}>
+                <View style={Style.bottomCards}>
                     <CardView
-                        height={"90%"}
-                        width={"30%"} cardText={'My Unit'}
-                        cardIcon={require("../../../../icons/myUnit.png")}
-                        onCardClick={() => this.myUnit()}
+                        height={"80%"}
+                        width={"25%"} cardText={'My Unit'}
+                        cardIcon={require("../../../../icons/my_unit.png")}
                         disabled={true}/>
                     <CardView
                         height={"70%"}
-                        width={"25%"}
+                        width={"22%"}
                         cardText={'Admin'}
-                        onCardClick={() => this.props.navigation.navigate('AdminFunction')}
+                        //onCardClick={() => this.props.navigation.navigate('AdminFunction')}
                         cardIcon={require("../../../../icons/user.png")}/>
 
                     <CardView
                         height={"70%"}
-                        width={"25%"}
+                        width={"22%"}
                         cardText={'Offers'}
                         cardIcon={require("../../../../icons/offers.png")}
                         backgroundColor={base.theme.colors.rosePink}
                     />
                 </View>
-                <View style={styles.supportContainer}>
-                    <View style={styles.subSupportView}>
+                <View style={Style.supportContainer}>
+                    <View style={Style.subSupportView}>
                         <TouchableOpacity>
-                            <Image style={[styles.supportIcon]}
+                            <Image style={[Style.supportIcon]}
                                    source={require("../../../../icons/call.png")}/>
                         </TouchableOpacity>
                         <TouchableOpacity>
                             <Image
-                                style={styles.supportIcon}
+                                style={Style.supportIcon}
                                 source={require("../../../../icons/chat.png")}/>
                         </TouchableOpacity>
                         <TouchableOpacity>
                             <Image
-                                style={styles.supportIcon}
+                                style={Style.supportIcon}
                                 source={require("../../../../icons/email.png")}/>
                         </TouchableOpacity>
                     </View>
@@ -167,23 +177,23 @@ class Dashboard extends React.Component {
 
     }
 
-    myUnit() {
-        console.log(this.props)
-    }
 
     listOfInvoices(item) {
         base.utils.logger.log(item);
         return (
-            <TouchableOpacity>
-                <View style={styles.invoiceView}>
-                    <View style={styles.invoiceSubView}>
-                        <Text style={styles.invoiceNumberText}>Invoice No. {item.item.invoiceNumber}</Text>
-                        <Text style={styles.billText}><Text style={styles.rupeeIcon}>{'\u20B9'}
-                        </Text> {item.item.bill}</Text>
+            <TouchableHighlight underlayColor={'transparent'}>
+                <View style={Style.invoiceView}>
+                    <View style={Style.invoiceSubView}>
+                        <Text style={Style.invoiceNumberText}>Invoice No. {item.item.invoiceNumber}
+                        </Text>
+                        <Text style={Style.billText}>
+                            <Text style={Style.rupeeIcon}>{'\u20B9'}
+                        </Text>
+                            {item.item.bill}</Text>
 
                     </View>
-                    <View style={styles.invoiceSubView}>
-                        <Text style={styles.dueDate}>Due No. {item.item.dueDate}</Text>
+                    <View style={Style.invoiceSubView}>
+                        <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
                         <OSButton
                             height={'80%'}
                             width={'25%'}
@@ -192,159 +202,12 @@ class Dashboard extends React.Component {
                             oSBText={item.item.status === "PAID" ? "Paid" : "Pay Now"}/>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableHighlight>
 
         );
     }
 
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    dropDownContainer: {
-        height: '10%',
-        width: '90%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        // marginBottom: 20,
-        //  backgroundColor:base.theme.colors.grey
-    },
-    leftDropDown: {
-        width: '60%'
-    },
-    rightDropDown: {
-        width: '30%'
-    },
-    bottomCards: {
-        height: '15%',
-        width: '80%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-        alignItems: 'center',
-    },
-    supportContainer: {
-        height: '6%',
-        width: '90%',
-        alignItems: 'center',
-        backgroundColor: base.theme.colors.white,
-        borderColor: base.theme.colors.primary,
-        borderWidth: 1,
-        marginTop: 5,
-        justifyContent: 'center',
-        flexDirection: 'row',
-    },
-    supportIcon: {
-        height: 25,
-        width: 25,
-        borderRadius: 5,
-    },
-    elevatedView: {
-        alignItems: 'center',
-        //backgroundColor:base.theme.colors.primary,
-        height: '20%',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-    },
-    elevatedViewSub: {
-        marginTop: 30,
-        height: '20%',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        width: '65%',
-        //backgroundColor:base.theme.colors.primary,
-        alignSelf: 'center',
-    },
-    mainElevatedView: {
-        height: '65%',
-        width: '95%',
-        borderRadius: 25,
-        backgroundColor: base.theme.colors.white
-    },
-    invoiceCardView: {
-        height: '45%',
-        width: '95%',
-        borderRadius: 5,
-        margin: 10,
-        backgroundColor: base.theme.colors.white,
-        alignItems: 'center'
-    },
-    invoiceHeadingView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '90%',
-        margin: 5
-    },
-    invoiceText: {
-        color: base.theme.colors.primary,
-        fontSize: 14
-    },
-    viewMoreText: {
-        color: base.theme.colors.blue,
-        fontSize: 14
-    },
-    invoiceView: {
-        width: '100%',
-        height: 70,
-        backgroundColor: base.theme.colors.lavender,
-        marginBottom: 5,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    invoiceSubView: {
-        width: "90%",
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    subSupportView: {
-        height: '100%',
-        width: '45%',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-    },
-    invoiceNumberText: {
-        fontSize: 14,
-        color: base.theme.colors.black
-    },
-    dueDate: {
-        fontSize: 14,
-        color: base.theme.colors.blue
-    },
-    rupeeIcon: {
-        fontSize: 18,
-        color: base.theme.colors.primary,
-    },
-    billText: {
-        fontSize: 18,
-        color: base.theme.colors.black,
-        fontWeight: 'bold',
-    },
-    flatList: {
-        height: '100%',
-        width: '100%',
-    },
-    scrollView: {
-        height: '80%',
-        width: '90%',
-    },
-    noDataMsg: {
-        fontSize: 18,
-        color: base.theme.colors.grey
-    },
-    noDataView: {
-        height: '80%',
-        width: '90%',
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-
-});
-
 
 const mapStateToProps = state => {
     return {

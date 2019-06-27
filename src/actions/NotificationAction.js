@@ -45,6 +45,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
             })
         })
         .catch(error => {
+            console.log("jhjh")
             console.log(error)
             dispatch({ 
                 type: GET_NOTIFICATIONS_FAILED, 

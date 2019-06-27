@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { Text, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types'
-import base from '../base'
+import base from '../../base'
+import OSButtonStyles from "./OSButtonStyles";
 
 
 class OSButton extends React.Component {
@@ -33,13 +34,13 @@ class OSButton extends React.Component {
 
     render() {
 
-        let oSBStyle = styles.confirmButton;
+        let oSBStyle = OSButtonStyles.confirmButton;
         switch (this.props.oSBType) {
             case 'normal':
-                oSBStyle = styles.confirmButton;
+                oSBStyle = OSButtonStyles.confirmButton;
                 break;
             case 'custom':
-                oSBStyle = styles.customButton;
+                oSBStyle = OSButtonStyles.customBtn;
                 break;
         }
 
@@ -54,7 +55,7 @@ class OSButton extends React.Component {
                                   backgroundColor: this.props.oSBBackground,
                                   ...this.props.style
                               }]}>
-                <Text style={[styles.confirmText, {
+                <Text style={[OSButtonStyles.confirmText, {
                     color: this.props.oSBTextColor
                 }]}>{this.props.oSBText}</Text>
             </TouchableOpacity>
@@ -71,29 +72,6 @@ class OSButton extends React.Component {
 
 }
 
-const styles = StyleSheet.create({
 
-    confirmButton: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 50,
-    },
-
-    confirmText: {
-        justifyContent: 'center',
-        alignItems: 'center', textAlign: 'center',
-        alignSelf: 'center',
-        //fontFamily:'',
-        fontSize: 14,
-    },
-    customBtn: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: "20%",
-        width: "35%",
-        borderRadius: 5,
-    }
-
-});
 
 export default OSButton;
