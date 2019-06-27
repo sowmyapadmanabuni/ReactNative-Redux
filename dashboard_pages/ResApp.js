@@ -114,20 +114,14 @@ import Blockwise from "../assocition_pages/BlockwiseUnits";
 import AddUnit from "../assocition_pages/AddUnit.js";
 import EditUnit from "../assocition_pages/EditUnit.js";
 
-/* 
+/*
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
-
 import ViewmembersList from '../assocition_pages/ViewmembersList';
 import ViewVisitorsList from '../my_unit_pages/ViewVisitorsList';
 import UpdateDetails from '../my_unit_pages/UpdateDetails';
-
 import PatrollingList from '../assocition_pages/PatrollingList';
-
 import ResolveIncident from '../resident_pages/ResolveIncident';
-
-
 import ShareQRCode from '../my_unit_pages/ShareQRCode';
-
 import CreateOrJoin from '../assocition_pages/CreateOrJoin';
 import CreateAssnMember from '../assocition_pages/CreateAssnMember';
 import ResNavDrawerMenu from '../dashboard_pages/ResNavDrawerMenu';
@@ -136,24 +130,16 @@ import CreateUnits from '../assocition_pages/CreateUnits';
 import EditUnitsPotrait from '../assocition_pages/EditUnitsPotrait';
 import NotificationScreen from '../dashboard_pages/NotificationScreen';
 import NotificationScreen2 from '../dashboard_pages/NotificationScreen2';
-
 import CreateWorker from '../assocition_pages/CreateWorker';
 import EditWorker from '../assocition_pages/EditWorker';
 import SelectMyRole from '../registration_pages/SelectMyRole';
-
 import BottomNavigation from '../my_unit_pages/BottomNavigation';
-
-
 import UploadImage from '../my_unit_pages/UploadImage';
-
 import EditCheckPointMap from '../assocition_pages/EditCheckPointMap';
 import CreateCheckPointMap from '../assocition_pages/CheckPointMap';
 import CreateCheckPointListMap from '../assocition_pages/CheckPointListMap';
-
 import Securityattendance from '../assocition_pages/Securityattendance';
 import AllServiceProvider from '../assocition_pages/ServiceProvideReport';
-
-
 import
 EachServiceProvider from
   '../assocition_pages/IndivisualServiceProviderReport'; */
@@ -164,8 +150,8 @@ import DashBoardHeader from '../src/components/DashBoardHeader'
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
+      "Double tap R on your keyboard to reload,\n" +
+      "Shake or press menu button for dev menu"
 });
 
 const NotificationStack = createStackNavigator({

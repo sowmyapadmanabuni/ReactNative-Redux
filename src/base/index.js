@@ -11,6 +11,6 @@ const base = {
     theme,
     utils,
     services
-}
+};
 
 export default base;

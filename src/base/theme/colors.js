@@ -11,7 +11,6 @@ const colors = {
     grey:"#A9A9A9",
     shadedWhite:"#F5F5F5",
     rosePink:"#FFC6C0"
-
 }
 
 export default colors;

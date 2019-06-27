@@ -91,15 +91,15 @@ export default class admin extends React.Component {
                   />
                 </View>
                 <View style={styles.view3}>
-                  {/* <TouchableOpacity
+                   <TouchableOpacity
                         onPress={() =>
-                          this.props.navigation.navigate("CheckPointListScreen")
+                          this.props.navigation.navigate("schedulePatrolling")
                         }
-                      > */}
+                      >
                   <View style={styles.view3}>
                     <Text style={styles.text1}>Patrolling Check Points</Text>
                   </View>
-                  {/* </TouchableOpacity> */}
+                   </TouchableOpacity>
                 </View>
               </View>
               <View style={styles.borderline} />

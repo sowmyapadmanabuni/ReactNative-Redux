@@ -144,6 +144,7 @@ class Dashboard extends React.Component {
                         width={"25%"}
                         cardText={'Admin'}
                         cardIcon={require("../../../../icons/user.png")}/>
+                    onCardClick={() => this.props.navigation.navigate('AdminFunction')}
                     <CardView
                         height={"70%"}
                         width={"25%"}

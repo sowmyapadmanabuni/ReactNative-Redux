@@ -873,8 +873,8 @@ class MainScreen extends Component {
         return (
 
             <View style={{
-                paddingTop: 2, backgroundColor: 'white', height: '100%',
-                marginTop: 1,
+                paddingTop: 0, backgroundColor: 'white', height: '100%',
+                marginTop: 0,
             }}>
             <View style={{flexDirection:'row'}}>
             

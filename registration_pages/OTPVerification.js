@@ -9,7 +9,6 @@ import PhoneInput from "react-native-phone-input";
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { updateUserInfo } from '../src/actions';
-
 var Otp_auto;
 console.disableYellowBox = true;
 
@@ -85,7 +84,7 @@ class OTPVerification extends Component {
       }
 
       //http://122.166.168.160/champ/api/v1/account/verifyotp
-      url = 'https://apidev.oyespace.com/oyeliving/api/v1/account/verifyotp';
+      let url = "https://apidev.oyespace.com/oyeliving/api/v1/account/verifyotp";
       console.log('req verifyotp ', JSON.stringify(anu) + ' ' + url);
 
       fetch(url,
@@ -114,7 +113,7 @@ class OTPVerification extends Component {
                 
                 const login = moment(new Date()).format('DD-MM-YYYY HH:mm:ss');
                 var today = new Date();
-                date=today.getDate() + "/"+ parseInt(today.getMonth()+1) +"/"+ today.getFullYear();
+                let date=today.getDate() + "/"+ parseInt(today.getMonth()+1) +"/"+ today.getFullYear();
               this.props.navigation.navigate('App');
             }
           } else {
@@ -283,7 +282,7 @@ class OTPVerification extends Component {
       }}>
         <TouchableOpacity
           style={{
-            paddingTop: 2, paddingRight: 2, paddingLeft: 2, alignItems: 'center', flexDirection: 'row',
+            paddingTop: 0, paddingRight: 2, paddingLeft: 2, alignItems: 'center', flexDirection: 'row',
             paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:45,
           }}
           onPress={this.changeNumber.bind(this, this.state.Mobilenumber)}  /*Products is navigation name*/>
@@ -327,6 +326,7 @@ class OTPVerification extends Component {
               onChangeText={this.handleOTP}
             /> */}
           <TextInput
+              secureText={true}
           style={{
             padding: 5, textAlign: 'center', textDecorationLine: 'underline',
             letterSpacing: 5, width: 120, alignSelf: 'center', backgroundColor: 'white',
@@ -387,9 +387,7 @@ class OTPVerification extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 23
-  },
+
   input: {
     margin: 15,
     height: 40,
@@ -410,7 +408,8 @@ const styles = StyleSheet.create({
     color: 'black',
     margin: '1%',
     textAlign: 'center'
-  }, container: {
+  },
+  container: {
     flex: 1,
     paddingTop: 100
   },

@@ -22,25 +22,16 @@ let instance = axios.create({
 });
 
 instance.interceptors.response.use((response) => {
+    /**
+     * Uncomment below line only for debugging complete response
+     */
 
     utils.logger.logArgs(response);
 
     /**
      * Handle the success response here.
-     * Uncomment if you have similar response structure
      */
-
-
-    // if (response.data !== undefined && response.data.errorCode !== undefined) {
-    //
-    // }
-    //
-    // if (response.request.responseURL !== undefined) {
-    //     return response.data
-    // } else {
-    //     return response.data
-    // }
-
+    return response.data
 }, (error) => {
     utils.logger.logArgs(error);
     return null;
@@ -48,7 +39,13 @@ instance.interceptors.response.use((response) => {
 
 
 export default class OyeSafeApi{
+    static async getPatrollingSchedules(){
+        return await instance.get('/Patrolling/GetPatrollingList')
+        //return await instance.get('/GetPatrollingShiftsList')
+    }
 
-
-
+    static async getPatrollingShiftListByAssociationID(associationId){
+        console.log(associationId);
+        return await instance.get('/GetPatrollingShiftsListByAssocID/'+associationId)
+    }
 }

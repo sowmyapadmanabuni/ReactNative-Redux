@@ -4,6 +4,7 @@ import { View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Mytextinput from './components/Mytextinput';
 import Mybutton from './components/Mybutton';
 
+
 export default class RegisterUser extends React.Component {
   constructor(props) {
     super(props);

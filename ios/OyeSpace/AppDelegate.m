@@ -21,6 +21,13 @@
   [FIRApp configure];
   [RNFirebaseNotifications configure];
   NSURL *jsCodeLocation;
+  
+  //Uncomment code below to check Postscript name of the fonts   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
+  /*for (NSString *fontFamilyName in [UIFont familyNames]) {
+    for (NSString *fontName in [UIFont fontNamesForFamilyName:fontFamilyName]) {
+      NSLog(@"Family: %@ Font: %@", fontFamilyName, fontName);
+    }
+  }*/
   //debug
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   //Release
