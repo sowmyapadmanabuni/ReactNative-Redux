@@ -258,10 +258,10 @@ class MobileValid extends Component {
                   >
                     <View
                       style={{
-                        marginLeft: wp("1.8%"),
+                        marginLeft: hp("1.8%"),
                         flexDirection: "row",
-                        height: hp("2%"),
-                        marginTop: wp("3%")
+                        height: hp("3%"),
+                        marginTop: hp("3%")
                       }}
                     >
                       <CheckBox

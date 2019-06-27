@@ -14,12 +14,13 @@ import {
   PermissionsAndroid,
   KeyboardAvoidingView,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from "react-native";
 import { TextField } from "react-native-material-textfield";
 import moment from "moment";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Header from "./Header.js";
+// import Header from "./Header.js";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -165,26 +166,10 @@ class OTPVerification extends Component {
         });
     }
   };
-  // insert_Accounts(account_id, first_name, last_name, mobile_number, isd_code,email) {
-
-  //   const { updateUserInfo } = this.props;
-
-  //   updateUserInfo({ prop: 'MyAccountID', value: account_id })
-  //   updateUserInfo({ prop: 'MyEmail', value: email })
-  //   updateUserInfo({ prop: 'MyMobileNumber', value: mobile_number })
-  //   updateUserInfo({ prop: 'MyFirstName', value: first_name })
-  //   updateUserInfo({ prop: 'MyLastName', value: last_name })
-  //   updateUserInfo({ prop: 'MyISDCode', value: isd_code })
-  //   updateUserInfo({ prop: 'signedIn', value: true })
-
-  // }
+  
 
   changeNumber = mobilenumber => {
-    // db.transaction(tx => {
-    //   tx.executeSql('delete  FROM OTPVerification ', [], (tx, results) => {
-    //     console.log('Results OTPVerification delete ', results.rowsAffected);
-    //   });
-    // });
+    
     this.props.navigation.navigate("MobileReg");
   };
 
@@ -336,8 +321,51 @@ class OTPVerification extends Component {
         </TouchableOpacity>
         <View style={{backgroundColor: "lightgrey",flexDirection: "row",height: 1,width: "100%"}}/> */}
 
-        <Header />
+        {/* <Header /> */}
 
+        <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: 'flex-start',
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+       
         <KeyboardAwareScrollView>
           <View style={{ flex: 1, flexDirection: "column" }}>
             <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -361,8 +389,7 @@ class OTPVerification extends Component {
                   alignContent: "center",
                   alignItems: "center",
                   justifyContent: "center",
-                  textDecorationLine: "underline",
-                  letterSpacing: 150,
+                  letterSpacing: hp('1.5%'),
                   width: wp("50%"),
                   fontSize: hp("3%"),
                   alignSelf: "center",
@@ -628,7 +655,39 @@ const styles = StyleSheet.create({
 
   underlineStyleHighLighted: {
     borderColor: "#03DAC6"
-  }
+  },
+
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+  
 });
 
 const mapStateToProps = state => {

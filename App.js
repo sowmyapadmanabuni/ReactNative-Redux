@@ -93,14 +93,7 @@ const AuthStack = createStackNavigator(
 
 const DashStack = createStackNavigator(
   {
-    // SplashScreen: {
-    //   screen: SplashScreen,
-    //   navigationOptions: {
-    //     title: "OYE SAFE",
-    //     headerStyle: { backgroundColor: "#f05555" },
-    //     headerTintColor: "#ffffff"
-    //   }
-    // },
+    
 
     AssnListScreen: {
       screen: associationlist,
@@ -138,15 +131,6 @@ const DashStack = createStackNavigator(
         headerTintColor: "#ffffff"
       }
     },
-
-    // SelectMyRoleScreen: {
-    //   screen: SelectMyRole,
-    //   navigationOptions: {
-    //     title: "Syncing ",
-    //     headerStyle: { backgroundColor: "#f05555" },
-    //     headerTintColor: "#000000"
-    //   }
-    // },
 
     View: {
       screen: ViewUser,
@@ -228,63 +212,15 @@ class Loading extends Component {
     super(props);
   }
 
-  // componentDidUpdate() {
-  //   const { signedIn } = this.props;
-  //   setTimeout(() => {
-  //     this.props.navigation.navigate(signedIn ? "App" : "Auth");
-  //   }, 2000);
-  // }
-
   componentDidMount() {
     persistStore(store, null, () => {
       const { signedIn } = this.props;
       this.props.navigation.navigate(signedIn ? "App" : "Auth");
-      // setTimeout(() => {
-      //   this.props.navigation.navigate(signedIn ? "App" : "Auth");
-      // }, 1000);
+      
     });
   }
 
-  // render() {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         flexDirection: "column",
-  //         backgroundColor: "#fff"
-  //       }}
-  //     >
-  //       <View
-  //         style={{
-  //           width: "100%",
-  //           height: "45%",
-  //           alignContent: "flex-end",
-  //           justifyContent: "flex-end"
-  //         }}
-  //       >
-  //         <Image
-  //           source={require("./pages/assets/images/OyespaceRebrandingLogo.png")}
-  //           style={{ width: 150, height: 130, alignSelf: "center" }}
-  //         />
-  //       </View>
-  //       <ActivityIndicator />
-  //       <Text style={{ fontSize: 8, color: "black", alignSelf: "center" }}>
-  //         {" "}
-  //         Data is loading now..
-  //       </Text>
-
-  //       {/*         <Text style={mystyles.splashHeadline}> OYE SAFE</Text>*/}
-  //       <Text style={mystyles.yourSafetyIsPriceless}>
-  //         {" "}
-  //         Your Safety is Priceless
-  //       </Text>
-  //       <Image
-  //         source={require("./pages/assets/images/building_complex.png")}
-  //         style={{ width: "100%", height: "35%", alignSelf: "center" }}
-  //       />
-  //     </View>
-  //   );
-  // }
+  
 
   render() {
     return (
@@ -386,7 +322,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "500",
-    fontSize: hp("3%")
+    fontSize: hp("3%"),
+    color:'#000',
+    
   },
   footerImageContainer: {
     // backgroundColor:'green',

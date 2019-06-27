@@ -220,17 +220,14 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
 
                   for (var j = 0; j < sold_data.length; j++) {
                     if (
-                      sold_data[j].value == "All Sold Flats" ||
-                      sold_data[j].value == "Sold Owner Occupied" ||
-                      sold_data[j].value == "Sold Tenant Occupied" ||
-                      sold_data[j].value == "Sold Vacant"
+                      sold_data[j].value == "Sold Owner Occupied Unit" ||
+                      sold_data[j].value == "Sold Tenant Occupied Unit" ||
+                      sold_data[j].value == "Sold Vacant Unit"
                     ) {
                       sold1 = sold1 + 1;
                     } else if (
-                      sold_data[j].value == "Unsold Vacant" ||
-                      sold_data[j].value == "Unsold Tenant Occupied" ||
-                      sold_data[j].value == "NULL" ||
-                      sold_data[j].value == ""
+                      sold_data[j].value == "Unsold Vacant Unit" ||
+                      sold_data[j].value == "Unsold Tenant Occupied Unit"
                     ) {
                       unsold1 = unsold1 + 1;
                     }
