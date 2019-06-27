@@ -149,7 +149,7 @@ class OTPVerification extends Component {
               global.MyLoginTime = moment(new Date()).format(
                 "DD-MM-YYYY HH:mm:ss"
               );
-              Alert.alert("OTP Verified");
+              // Alert.alert("OTP Verified");
               this.props.navigation.navigate("ResDashBoard");
             }
           } else {
