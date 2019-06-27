@@ -309,7 +309,7 @@ class App extends Component {
     let bankAccountNumber = this.state.bankAccountNumber
 
     fetch(
-      "http://apidev.oyespace.com/oyeliving/api/v1/association/getassociationlist",
+      `http://${this.props.oyeURL}/oyeliving/api/v1/association/getassociationlist`,
       {
         method: "GET",
         headers: {
@@ -348,14 +348,14 @@ class App extends Component {
   }
 
   createassocition = () => {
-    fetch("http://apidev.oyespace.com/oyeliving/api/v1/association/create", {
+    fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/association/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
       },
       body: JSON.stringify({
-        ACAccntID: 1,
+        ACAccntID: this.props.MyAccountID,
         association: {
           ASAddress: association_Address,
 
