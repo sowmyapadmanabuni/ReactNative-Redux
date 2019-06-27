@@ -416,11 +416,11 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        // getDashAssociation(oyeURL, MyAccountID);
 
         alert("Association Created Successfully")
         this.props.navigation.navigate("ResDashBoard");
-        
+        // getDashAssociation(oyeURL, MyAccountID);
+
       })
 
       .catch(error => {
