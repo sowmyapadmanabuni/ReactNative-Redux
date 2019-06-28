@@ -20,14 +20,12 @@ import { Dropdown } from "react-native-material-dropdown";
 import PhoneInput from "react-native-phone-input";
 //import { Fonts } from '../pages/src/utils/Fonts';
 import moment from "moment";
-import { openDatabase } from "react-native-sqlite-storage";
 import { TextField } from "react-native-material-textfield";
 import { connect } from "react-redux";
 
 import CountryPicker, {
   getAllCountries
 } from "react-native-country-picker-modal";
-var db = openDatabase({ name: global.DB_NAME });
 
 //const initial = Orientation.getInitialOrientation();
 var date = new Date().getDate();
@@ -78,28 +76,7 @@ class CreateUnitsPotrait extends Component {
       dataSourceGuardPkr: [],
       PickerValueHolderguard: ""
     };
-    db.transaction(tx => {
-      tx.executeSql(
-        "SELECT Distinct BlockID,BlockName FROM Blocks where AssnID=" +
-          this.props.SelectedAssociationID,
-        [],
-        (tx, results) => {
-          console.log("Results", results.rowsAffected);
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-            console.log(
-              "Guards name",
-              results.rows.item(i).BlockName + results.rows.item(i).BlockID
-            );
-          }
-
-          this.setState({
-            dataSourceGuardPkr: temp
-          });
-        }
-      );
-    });
+    
     this.setDate = this.setDate.bind(this);
     this.onDateChange = this.onDateChange.bind(this);
 
@@ -486,28 +463,7 @@ class CreateUnitsPotrait extends Component {
   };
 
   handleBackButtonClick() {
-    db.transaction(txMyMem => {
-      txMyMem.executeSql(
-        "SELECT * FROM MyMembership",
-        [],
-        (txMyMem, resultsMyMem) => {
-          console.log(
-            "CreateAssociation Results MyMembership ",
-            resultsMyMem.rows.length + " "
-          );
-          //  tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on
-          // M.OYEUnitID=A.UnitID and M.AssociationID=' + this.props.SelectedAssociationID, [], (tx, results) => {
-          //   UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
-          //  ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive
-
-          if (resultsMyMem.rows.length > 0) {
-            this.props.navigation.navigate("ResDashBoard");
-          } else {
-            this.props.navigation.navigate("AssnListScreen");
-          }
-        }
-      );
-    });
+   
 
     return true;
   }
