@@ -21,6 +21,13 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.props=props;
+        this.state={
+            animatedCardHeight:"80%",
+            animatedCardWidth:"25%",
+            normalCardHeight:"70",
+            normalCardWidth:"22",
+            isCardSelected:""
+        }
     }
 
 
@@ -137,6 +144,7 @@ class Dashboard extends React.Component {
                         height={"80%"}
                         width={"25%"} cardText={'My Unit'}
                         cardIcon={require("../../../../icons/my_unit.png")}
+                        onCardClick={() => this.myUnit()}
                         disabled={true}/>
                     <CardView
                         height={"70%"}
@@ -203,6 +211,10 @@ class Dashboard extends React.Component {
             </TouchableHighlight>
 
         );
+    }
+
+    myUnit(){
+
     }
 
 }

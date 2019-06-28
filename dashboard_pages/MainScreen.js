@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  YellowBox,
+  YellowBox,AppState,
   ActivityIndicator
 } from "react-native";
 import { Card, CardItem } from "native-base";
@@ -16,6 +16,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import SearchableDropdown from "react-native-searchable-dropdown";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -48,6 +49,7 @@ import {
   updateUserInfo,
   getAssoMembers
 } from "../src/actions";
+import base from '../src/base'
 
 class Dashboard extends React.Component {
   static navigationOptions = {
@@ -82,18 +84,18 @@ class Dashboard extends React.Component {
       .hasPermission()
       .then(enabled => {
         if (enabled) {
-          if (receiveNotifications) {
+          //if (receiveNotifications) {
             this.listenForNotif();
-          }
+          //}
           // user has permissions
         } else {
           firebase
             .messaging()
             .requestPermission()
             .then(() => {
-              if (receiveNotifications) {
+              //if (receiveNotifications) {
                 this.listenForNotif();
-              }
+              //}
               // User has authorised
             })
             .catch(error => {
@@ -117,34 +119,36 @@ class Dashboard extends React.Component {
 
         responseData.associationByAccount.map(association => {
            console.log('***********', response.data.data)
-          // console.log(association.asAsnName)
-          // console.log(association.asAssnID)
-          // console.log('***********')
-          if (receiveNotifications) {
+           console.log(association.asAsnName)
+           console.log(association.asAssnID)
+           console.log('***********',receiveNotifications)
+          //if (receiveNotifications) {
+            console.log('*****subscribeToTopic******', association.asAssnID + "admin")
             firebase
               .messaging()
               .subscribeToTopic(association.asAssnID + "admin");
             // console.log(association.asAssnID);
-          } else if (!receiveNotifications) {
-            firebase
-              .messaging()
-              .unsubscribeFromTopic(association.asAssnID + "admin");
-          }
+          // } else if (!receiveNotifications) {
+          //   firebase
+          //     .messaging()
+          //     .unsubscribeFromTopic(association.asAssnID + "admin");
+          // }
         });
       });
   };
 
   showLocalNotification = notification => {
-    console.log(notification);
+    console.log("^^^^6",notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
       "Oyespace",
       firebase.notifications.Android.Importance.Max
     ).setDescription("Oyespace channel");
     channel.enableLights(true);
-    // channel.enableVibration(true);
-    // channel.vibrationPattern([500]);
-    firebase.notifications().android.createChannel(channel);
+     //channel.enableVibration(true);
+     //channel.vibrationPattern([500]);
+
+     firebase.notifications().android.createChannel(channel);
 
     const notificationBuild = new firebase.notifications.Notification({
       sound: "default",
@@ -163,22 +167,39 @@ class Dashboard extends React.Component {
       .android.setAutoCancel(true)
       .android.setSmallIcon("ic_stat_ic_notification")
       .android.setChannelId("channel_id")
-      .android.setVibrate("default")
+      .android.setVibrate(1000)
       // .android.setChannelId('notification-action')
-      .android.setPriority(firebase.notifications.Android.Priority.Max);
+      .android.setPriority(firebase.notifications.Android.Priority.High);
+
+    if(AppState.currentState == 'active') {
+        showMessage({
+            message: notification._title,
+            description:notification._body,
+            type: "default",
+            backgroundColor: base.theme.colors.primary,
+            color: base.theme.colors.white,
+            onPress: () => {
+                firebase.notifications().removeAllDeliveredNotifications();
+                //@Todo: Navigate to specific screen
+            }
+        });
+    }
 
     firebase.notifications().displayNotification(notificationBuild);
+
+
+
     this.setState({ foregroundNotif: notification._data });
   };
 
   listenForNotif = () => {
     let navigationInstance = this.props.navigation;
-
+    console.log('listenForNotif')
     this.notificationDisplayedListener = firebase
       .notifications()
       .onNotificationDisplayed(notification => {
-        // console.log('___________')
-        // console.log(notification)
+         console.log('___________')
+         console.log(notification)
         // console.log('____________')
         // Process your notification as required
         // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
@@ -187,8 +208,8 @@ class Dashboard extends React.Component {
     this.notificationListener = firebase
       .notifications()
       .onNotification(notification => {
-        // console.log('___________')
-        // console.log(notification)
+         console.log('___________')
+         console.log(notification)
         // console.log('____________')
 
         if (notification._data.associationID) {
@@ -273,6 +294,7 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
+      console.log(this.props)
     const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
