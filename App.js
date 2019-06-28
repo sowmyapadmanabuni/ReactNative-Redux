@@ -93,8 +93,6 @@ const AuthStack = createStackNavigator(
 
 const DashStack = createStackNavigator(
   {
-    
-
     AssnListScreen: {
       screen: associationlist,
       navigationOptions: {
@@ -216,11 +214,8 @@ class Loading extends Component {
     persistStore(store, null, () => {
       const { signedIn } = this.props;
       this.props.navigation.navigate(signedIn ? "App" : "Auth");
-      
     });
   }
-
-  
 
   render() {
     return (
@@ -323,8 +318,7 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: "500",
     fontSize: hp("3%"),
-    color:'#000',
-    
+    color: "#000"
   },
   footerImageContainer: {
     // backgroundColor:'green',
