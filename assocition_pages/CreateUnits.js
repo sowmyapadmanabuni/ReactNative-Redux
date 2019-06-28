@@ -27,6 +27,7 @@ import { connect } from "react-redux";
 import CountryPicker, {
   getAllCountries
 } from "react-native-country-picker-modal";
+var db = openDatabase({ name: global.DB_NAME });
 
 //const initial = Orientation.getInitialOrientation();
 var date = new Date().getDate();
@@ -224,16 +225,33 @@ class CreateUnitsPotrait extends Component {
     });
   };
   componentWillMount() {
-    
+    // The getOrientation method is async. It happens sometimes that
+    // you need the orientation at the moment the JS runtime starts running on device.
+    // `getInitialOrientation` returns directly because its a constant set at the
+    // beginning of the JS runtime.
     BackHandler.addEventListener(
       "hardwareBackPress",
       this.handleBackButtonClick
     );
-    
+    /*  const initial = Orientation.getInitialOrientation();
+    if (initial === 'PORTRAIT') {
+      //alert('portaroiat1');
+      console.log('portrait', 'hi');
+    } else {
+      console.log('landscape', 'hi');
+      // alert('hello else');
+    } */
   }
 
   componentDidMount() {
-    
+    // this locks the view to Portrait Mode
+    // Orientation.lockToPortrait();
+    // Orientation.lockToLandscape();
+    // this locks the view to Landscape Mode
+    // Orientation.lockToLandscape();
+    // this unlocks any previous locks to all Orientations
+    // Orientation.unlockAllOrientations();
+    //Orientation.addOrientationListener(this._orientationDidChange);
   }
 
   _orientationDidChange = orientation => {
@@ -294,14 +312,73 @@ class CreateUnitsPotrait extends Component {
     if (nFalt.length == 0) {
       Alert.alert("Enter Flat Number");
     }
-    
+    // else if (nfirst_name.length == 0) {
+    //   Alert.alert(' Enter First name');
+    // } else if (nlast_name.length == 0) {
+    //   Alert.alert(' Enter Last name');
+    // }
+    // else if (nmob.length < 10) {
+    //   Alert.alert('Invalid Mobilenumber');
+    // }
+    // else if (this.props.oyeMobileRegex.test(nmob) === false) {
+    //   Alert.alert('Enter valid  Mobile Number');
+    //   this.setState({
+    //     mobilevalidate: false,
+    //     telephone: nmob,
+    //   });
+    //   return false;
+    // } else if (nemail.length == 0) {
+    //   Alert.alert('Email ID cannot be empty');
+    //   // } else if (regemail.test(nemail) == false) {
+    //   //   Alert.alert('enter valid mail');
+    //   //   this.setState({
+    //   //     mobilevalidate: false,
+    //   //     telephone: nemail,
+    //   //   });
+    //   //   return false;
+    // }
     else if (nunitType == "") {
       Alert.alert("Select Unit Type");
     } else if (mocc_sts == "") {
       Alert.alert("Select Occupancy Status");
     } else {
 
-    
+    /* 
+    Unit_Name
+    UnitIdentifier
+    Unit_Type
+    Opening_Balance
+    Current_Balance
+    Occupancy_Status(int, 0,1,2,3)
+    Occupancy_Status_Date(is respect to Occupancy_Status)
+    Ownership_Status(bool)
+    Sold_Date(if Ownership_Status 0,1 this field will come)
+    Association_ID
+    Unit_Dimension
+    CalculationType(per unit or dimesion Based Calculation)
+    Floor_ID
+    Block_ID */
+      // anu1 = {
+      //   "ASAssnID": 6,
+      //   "units": [
+      //     {
+      //       "UNUniName": nFalt,
+      //       "UNUniType": nunitType,
+      //       "UNOpenBal": "12.3",
+      //       "UNCurrBal": "25.12",
+      //       "UNOcStat": mocc_sts,
+      //       "UNOcSDate": this.state.PinCode,
+      //       "UNOwnStat": mown_sts,
+      //       "UNSldDate": "2018-02-02",
+      //       "UNDimens": "2",
+      //       "UNCalType": "df",
+      //       "FLFloorID": 1,
+      //       "BLBlockID": 1
+
+      //     }
+      //   ]
+
+      // }
       anu = {
         ASAssnID: this.props.SelectedAssociationID,
         AcAccntID: this.props.MyAccountID,
@@ -418,7 +495,11 @@ class CreateUnitsPotrait extends Component {
             "CreateAssociation Results MyMembership ",
             resultsMyMem.rows.length + " "
           );
-          
+          //  tx.executeSql('SELECT Distinct M.OYEUnitID, A.UnitName FROM MyMembership M inner Join OyeUnit A on
+          // M.OYEUnitID=A.UnitID and M.AssociationID=' + this.props.SelectedAssociationID, [], (tx, results) => {
+          //   UnitOwner (OwnerId, OwnerUnitID, OwnerAssnID, OwnerFirstName, OwnerLastName, OwnerMobile,  ' +
+          //  ' OwnerEmail,  OwnerDueAmnt, OwnerCreated ,OwnerUpdated,OwnerIsActive
+
           if (resultsMyMem.rows.length > 0) {
             this.props.navigation.navigate("ResDashBoard");
           } else {
@@ -434,6 +515,7 @@ class CreateUnitsPotrait extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
+    //  let dpOwnershipStatus = [{ value: 'Sold', }, { value: 'Unsold', }]
 
     let dpOccupancyStatus = [
       { value: "Sold Vacant" },
@@ -538,7 +620,28 @@ class CreateUnitsPotrait extends Component {
             Create Unit
           </Text>
 
-          
+          {/* <View
+            style={{
+              paddingTop: 2, paddingRight: 2, paddingLeft: 2, flexDirection: 'row', paddingBottom: 2,
+              borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
+              marginTop:10,
+            }}>
+            <TouchableOpacity onPress={() => this.handleBackButtonClick()}
+              style={{ flex: 1 }}>
+              <Image source={require('../pages/assets/images/back.png')}
+                style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
+            </TouchableOpacity>
+            <Text style={{ flex: 3, paddingLeft: 5, fontSize: 14, color: 'black', alignContent: 'flex-start', alignSelf: 'center' }}> </Text>
+            <Text style={{ flex: 4, fontSize: 16, color: 'black',  alignSelf: 'center' }}>Create Unit</Text>
+            <View style={{ flex: 4, alignSelf: 'center' }}>
+              <Image source={require('../pages/assets/images/OyeSpace_hor.png')}
+                style={{
+                  height: 35, width: 105, margin: 5,
+                  alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
+                }} />
+            </View>
+          </View>
+          <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View> */}
         </View>
         <ScrollView
           style={{ height: "90%", paddingLeft: 20, paddingRight: 20 }}
@@ -546,7 +649,18 @@ class CreateUnitsPotrait extends Component {
           <Text style={{ color: "orange", fontSize: 16 }}>
             Unit Information
           </Text>
-          
+          {/*  <View style={{ flexDirection: 'row', marginTop: 2, flex: 2 }}>
+            <Text style={styles.whatisthenameofyourassoc1}>
+              Flat No <Text style={{ fontSize: 20, textAlignVertical: 'center', color: 'red' }}>
+                *</Text>
+            </Text>
+            <TextInput style={styles.input11}
+              underlineColorAndroid="transparent"
+              placeholder="Flat No"
+              autoCapitalize="words"
+              onChangeText={this.Flat}
+              maxLength={50} />
+          </View> */}
           <TextField
             label="Flat Number / Door Number (eg:B007 )"
             autoCapitalize="sentences"
@@ -557,7 +671,12 @@ class CreateUnitsPotrait extends Component {
             fontSize={15}
             onChangeText={this.Flat}
           />
-          
+          {/* <View style={{ flex: 1,  }}>
+
+            <Dropdown label='Select Ownership Status'
+              data={dpOwnershipStatus}
+              onChangeText={this.ownstatus} />
+          </View> */}
           <View style={{ flex: 2, flexDirection: "row" }}>
             <View style={{ flex: 1, paddingRight: 5 }}>
               <Dropdown
@@ -566,7 +685,11 @@ class CreateUnitsPotrait extends Component {
                 onChangeText={this.handleUnitType}
               />
             </View>
-            
+            {/* <View style={{ flex: 1, marginLeft: 5, paddingRight: 5 }}>
+              <Dropdown label='Select Rate Type'
+                data={dpRateType}
+                onChangeText={this.handleRateType} />
+            </View> */}
           </View>
           <View style={{ flex: 1 }}>
             <Dropdown
