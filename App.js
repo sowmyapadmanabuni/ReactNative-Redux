@@ -46,7 +46,7 @@ import CreateUnitsPotrait from "./assocition_pages/CreateUnitsPotrait";
 import store from "./src/store";
 import { persistStore } from "redux-persist";
 
-// import Spinner from "react-native-spinkit";
+import Spinner from "react-native-spinkit";
 
 const AuthStack = createStackNavigator(
   {
@@ -236,13 +236,13 @@ class Loading extends Component {
                 />
               </View>
               <View style={styles.activityIndicatorContainer}>
-                <ActivityIndicator size="large" color="orange" />
-                {/* <Spinner
+                {/* <ActivityIndicator size="large" color="orange" /> */}
+                <Spinner
                   isVisible={true}
                   color={"orange"}
                   size={50}
                   type={"Circle"}
-                /> */}
+                />
               </View>
               <View style={styles.textContainer}>
                 <Text style={styles.text}>Your safety is priceless</Text>
