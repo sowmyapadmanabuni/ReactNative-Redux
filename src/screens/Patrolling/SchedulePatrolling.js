@@ -45,17 +45,17 @@ class SchedulePatrolling extends React.Component {
 
 
     render() {
-        console.log("State:",this.props)
+        console.log("State:", this.props)
         return (
             <Container style={styles.container}>
-                <Subtitle style={{color: 'orange', fontSize: 20}}>Patrolling Schedule</Subtitle>
-                <View style={{justifyContent: 'center', width: "98%", alignSelf: 'center'}}>
+                <Subtitle style={styles.subtitle}>Patrolling Schedule</Subtitle>
+                <View style={styles.childView}>
                     <FlatList
                         keyExtractor={(item, index) => index.toString()}
                         data={this.state.patrollingCheckPoint}
                         renderItem={(item, index) => this._renderPatrollingCheckPoints(item, index)}/>
                 </View>
-                <FloatingButton onBtnClick={()=>this.props.navigation.navigate('patrollingCheckPoint')}/>
+                <FloatingButton onBtnClick={() => this.props.navigation.navigate('patrollingCheckPoint')}/>
 
             </Container>
         )
@@ -63,7 +63,7 @@ class SchedulePatrolling extends React.Component {
 
     _renderPatrollingCheckPoints(item, index) {
         return (
-            <View style={{borderWidth: 1, flexDirection: 'row', alignItems: 'center'}}>
+            <View style={styles.flatListView}>
                 <Image
                     resizeMode={'contain'}
                     source={require('../../../icons/entry_time.png')}
@@ -81,9 +81,21 @@ class SchedulePatrolling extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: "100%",
-        width: "100%",
+        flex:1,
         backgroundColor: "white"
+    },
+    subtitle: {
+        color: 'orange', fontSize: 20
+    },
+    childView: {
+        justifyContent: 'center',
+        width: "98%",
+        alignSelf: 'center'
+    },
+    flatListView: {
+        borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 });
 
@@ -95,7 +107,7 @@ const mapStateToProps = state => {
         champBaseURL: state.OyespaceReducer.champBaseURL,
         oye247BaseURL: state.OyespaceReducer.oye247BaseURL,
         oyeBaseURL: state.OyespaceReducer.oyeBaseURL,
-        userReducer:state.UserReducer,
+        userReducer: state.UserReducer,
         SelectedAssociationID: state.UserReducer.SelectedAssociationID
     }
 };

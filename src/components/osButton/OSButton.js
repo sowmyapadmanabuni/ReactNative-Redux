@@ -50,6 +50,7 @@ class OSButton extends React.Component {
                               style={[oSBStyle, {
                                   height: (this.props.height),
                                   width: (this.props.width),
+                                  justifyContent:'center',
                                   borderRadius: (this.props.borderRadius),
                                   backgroundColor: this.props.oSBBackground,
                                   ...this.props.style

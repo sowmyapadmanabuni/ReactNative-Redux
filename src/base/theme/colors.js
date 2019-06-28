@@ -11,6 +11,8 @@ const colors = {
     grey:"#bfbfbf",
     shadedWhite:"#F5F5F5",
     rosePink:"#FFC6C0",
+    transparent:"transparent",
+    red:"#ff1624",
     darkgrey:'#3f3f3f',
     mediumgrey:'#696969',
     lightgrey:'#d3d3d3',

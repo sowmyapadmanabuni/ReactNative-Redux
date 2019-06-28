@@ -4,6 +4,7 @@
 
 import React from 'react';
 import {Dimensions, Image,Text, TouchableHighlight, View} from 'react-native';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen'
 import PropTypes from 'prop-types';
 import base from '../base'
 const {height, width} = Dimensions.get('screen');
@@ -31,7 +32,7 @@ export default class FloatingActionButton extends React.Component {
     static defaultProps = {
         height: 50,
         width: 50,
-        marginTop:btnHeight+bufferMargin+ 400,
+        marginTop:btnHeight+bufferMargin+wp(105),
         btnBackground: base.theme.colors.primary,
         imgSrc: require('../../icons/plus_white.png')
     };
@@ -47,7 +48,7 @@ export default class FloatingActionButton extends React.Component {
                 position: 'absolute',
                 alignSelf: 'flex-end',
                 justifyContent: 'flex-end',
-                zIndex: 400,
+                zIndex: 10,
                 marginTop: btnPosition,
                 marginRight: 10
             }}>

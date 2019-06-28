@@ -113,6 +113,10 @@ import Securityattendance from "../assocition_pages/Securityattendance";
 import Blockwise from "../assocition_pages/BlockwiseUnits";
 import AddUnit from "../assocition_pages/AddUnit.js";
 import EditUnit from "../assocition_pages/EditUnit.js";
+import SchedulePatrolling from "../src/screens/Patrolling/SchedulePatrolling";
+import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
+import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
+import AddCheckPoints from "../src/screens/Patrolling/AddCheckPoints";
 
 /*
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
@@ -704,7 +708,31 @@ const ResApp = createStackNavigator({
       headerStyle: { backgroundColor: "#FA9917" },
       headerTintColor: "#ffffff"
     }
-  }
+  },
+  schedulePatrolling: {
+    screen: SchedulePatrolling,
+    navigationOptions: {
+        title: "Schedule Patrolling",
+        header: props => <PatrollingCommonHeader isReportVisible={true} isHidden={false} {...props}/>,
+    }
+},
+patrollingCheckPoint: {
+    screen: PatrollingCheckPoints,
+    navigationOptions: {
+        title: "Patrolling Check Points",
+        header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={false} {...props}/>
+    }
+},
+addCheckPoint: {
+    screen: AddCheckPoints,
+    navigationOptions: {
+        title: "Add Checkpoints",
+        header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
+    }
+}
+},{
+  initialRouteName: "ResDashBoard",
+  headerMode:"screen"
 });
 
 export default createAppContainer(ResApp);

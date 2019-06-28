@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
     View,
     Text,
@@ -150,8 +151,9 @@ class Dashboard extends React.Component {
                         height={"70%"}
                         width={"22%"}
                         cardText={'Admin'}
-                        onCardClick={() => this.props.navigation.navigate('AdminFunction')}
+                        //onCardClick={() => this.props.navigation.navigate('AdminFunction')}
                         cardIcon={require("../../../../icons/user.png")}/>
+
                     <CardView
                         height={"70%"}
                         width={"22%"}
