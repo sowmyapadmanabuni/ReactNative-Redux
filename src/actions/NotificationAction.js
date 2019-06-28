@@ -81,11 +81,27 @@ export const createNotification = (
 
     let date = moment();
     let formatdate = date._d;
-    console.log(formatdate);
+    console.log(oyeURL);
     console.log(data);
-    // console.log(moment(datee).fromNow())
+    console.log(navigation);
 
     if (admin === "true") {
+      console.log({
+        ACAccntID: MyAccountID,
+        ASAssnID: data.associationID,
+        NTType: data.ntType,
+        NTDesc: data.ntDesc,
+        SBUnitID: "resident_user",
+        SBMemID: "resident_user",
+        SBSubID: data.sbSubID,
+        SBRoleID: "resident_user",
+        ASAsnName: "resident_user",
+        MRRolName: "resident_user",
+        NTDCreated: formatdate,
+        NTDUpdated: formatdate,
+        UNOcSDate: "resident_user",
+        UNSldDate: "resident_user"
+      });
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
@@ -174,9 +190,22 @@ export const createNotification = (
         });
     } else if (admin === "false") {
       console.log(data);
-      console.log(
-        `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`
-      );
+      console.log({
+        ACAccntID: MyAccountID,
+        ASAssnID: data.associationID,
+        NTType: data.ntType,
+        NTDesc: data.ntDesc,
+        SBUnitID: "resident_user",
+        SBMemID: "resident_user",
+        SBSubID: data.sbSubID,
+        SBRoleID: "resident_user",
+        ASAsnName: "resident_user",
+        MRRolName: "resident_user",
+        NTDCreated: formatdate,
+        NTDUpdated: formatdate,
+        UNOcSDate: "resident_user",
+        UNSldDate: "resident_user"
+      });
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,

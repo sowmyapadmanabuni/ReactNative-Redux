@@ -124,14 +124,7 @@ class NotificationDetailScreen extends Component {
                       );
                       StatusUpdate = {
                         NTID: item.ntid,
-                        NTStatDesc:
-                          "Your request to join" +
-                          item.mrRolName +
-                          " unit in " +
-                          item.asAsnName +
-                          " association as " +
-                          roleName +
-                          " has been approved"
+                        NTStatDesc: "Request Sent"
                         // NTStatDesc: responseJson_2.data.string
                       };
 

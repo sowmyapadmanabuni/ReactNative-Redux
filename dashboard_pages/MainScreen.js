@@ -203,7 +203,7 @@ class Dashboard extends React.Component {
       // console.log(notificationOpen.notification._data.admin)
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.action) {
-          this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.newNotifInstance(notificationOpen.notification);
           this.props.createNotification(
             notificationOpen.notification._data,
             navigationInstance,
@@ -225,25 +225,23 @@ class Dashboard extends React.Component {
 
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.notification._data.foreground) {
-          this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.newNotifInstance(notificationOpen.notification);
           this.props.createNotification(
             notificationOpen.notification._data,
             navigationInstance,
             true,
-            "true",
             "true",
             this.props.oyeURL,
             this.props.MyAccountID
           );
         }
       } else if (notificationOpen.notification._data.admin === "gate_app") {
-        this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.newNotifInstance(notificationOpen.notification);
         this.props.createNotification(
           notificationOpen.notification._data,
           navigationInstance,
           true,
           "gate_app",
-          "true",
           this.props.oyeURL,
           this.props.MyAccountID
         );
@@ -251,13 +249,12 @@ class Dashboard extends React.Component {
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
         // alert('clicked here')
-        this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.newNotifInstance(notificationOpen.notification);
         this.props.createNotification(
           notificationOpen.notification._data,
           navigationInstance,
           true,
           "false",
-          "true",
           this.props.oyeURL,
           this.props.MyAccountID
         );
