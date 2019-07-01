@@ -13,6 +13,7 @@
 #import <React/RCTRootView.h>
 #import "RNFirebaseNotifications.h"
 #import "RNFirebaseMessaging.h"
+#import "RNSplashScreen.h"
 
 @implementation AppDelegate
 
@@ -38,6 +39,7 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [Fabric with:@[[Crashlytics class]]];
+  [RNSplashScreen show];
   return YES;
 }
 

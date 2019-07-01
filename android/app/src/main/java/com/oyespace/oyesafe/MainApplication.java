@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.razorpay.rn.RazorpayPackage;
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new RNSpinkitPackage(),
             new RNVersionNumberPackage(),
             new RazorpayPackage(),

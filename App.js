@@ -23,7 +23,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-
+import SplashScreen_Main from "react-native-splash-screen";
 import { mystyles } from "./pages/styles";
 import RegisterUser from "./pages/RegisterUser";
 import UpdateUser from "./pages/UpdateUser";
@@ -215,6 +215,7 @@ class Loading extends Component {
       const { signedIn } = this.props;
       this.props.navigation.navigate(signedIn ? "App" : "Auth");
     });
+    SplashScreen_Main.hide();
   }
 
   render() {

@@ -62,6 +62,8 @@ target 'OyeSpace' do
 
   pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   target 'OyeSpaceTests' do
     inherit! :search_paths
     # Pods for testing
