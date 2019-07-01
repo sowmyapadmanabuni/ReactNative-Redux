@@ -76,10 +76,14 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
             });
           });
 
+          let removeDuplicates = [];
+
+          removeDuplicates = _.uniqBy(drop_down_data, "associationId");
+
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
-              dropdown: drop_down_data,
+              dropdown: removeDuplicates,
               associationid: associationIds
             }
           });
