@@ -56,16 +56,12 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        // console.log(responseJson);
         if (responseJson.success) {
           let associations = responseJson.data.memberListByAccount;
 
           let associationIds = [];
           let drop_down_data = [];
-
-          associations.map((data, index) => {
-            associationIds.push({ id: data.asAssnID });
-          });
 
           associations.map((data, index) => {
             drop_down_data.push({
@@ -74,17 +70,27 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               id: index,
               associationId: data.asAssnID
             });
+            associationIds.push({
+              id: data.asAssnID
+            });
           });
+
+          // drop_down_data.map((data, index) => {
+          //   associationIds.push({ id: data.associationId });
+          // });
+
+          console.log("associationIds", associationIds);
 
           let removeDuplicates = [];
 
           removeDuplicates = _.uniqBy(drop_down_data, "associationId");
+          removeidDuplicates = _.uniqBy(associationIds, "id");
 
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
               dropdown: removeDuplicates,
-              associationid: associationIds
+              associationid: removeidDuplicates
             }
           });
         } else {
@@ -104,7 +110,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
 };
 
 export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
-  console.log(notifications);
+  // console.log(notifications);
   return dispatch => {
     let sold = 100;
     let unsold = 100;
@@ -140,6 +146,7 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
             }
           )
           .then(res => {
+            console.log(res.data.memberListByAccount);
             let responseData = response.data.data;
             let unitOwner = responseData.unitOwner;
             let unitTenant = responseData.unitTenant;
@@ -289,6 +296,8 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                     newResidentTenant
                   );
 
+                  // console.log(res.data);
+
                   let accountUnits = res.data.memberListByAccount;
 
                   let removedUnits = _.remove(accountUnits, n => {
@@ -307,13 +316,13 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                     });
                   });
 
-                  console.log(finalUnits, "finalUnits");
-                  console.log(removedUnits, "removedUnits");
+                  // console.log(finalUnits, "finalUnits");
+                  // console.log(removedUnits, "removedUnits");
 
                   dispatch({
                     type: DASHBOARD_UNITS,
-                    payload: finalUnits,
-                    association: unit
+                    payload: units,
+                    association: res.data.memberListByAccount
                   });
 
                   dispatch({
@@ -345,7 +354,7 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                 }
               })
               .catch(error => {
-                console.log(error);
+                // console.log(error);
                 dispatch({ type: DASHBOARD_UNITS_STOP });
               });
           })

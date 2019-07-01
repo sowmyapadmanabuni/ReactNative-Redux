@@ -287,25 +287,26 @@ class Dashboard extends React.Component {
       getDashUnits,
       updateUserInfo,
       memberList,
-      notifications
+      notifications,
+      dropdown
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
+    getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
+
     updateUserInfo({
       prop: "SelectedAssociationID",
-      value: associationid[index].id
+      value: dropdown[index].associationId
     });
 
     let memId = _.find(memberList, function(o) {
-      return o.asAssnID === associationid[index].id;
+      return o.asAssnID === dropdown[index].associationId;
     });
-    console.log("memId", memId);
     updateUserInfo({
       prop: "MyOYEMemberID",
       value: memId.meMemID
     });
-    getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
     // this.unit(this.state.associationid[index].id)
   };
 
