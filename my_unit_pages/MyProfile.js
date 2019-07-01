@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import {
   View,
   StyleSheet,
@@ -9,32 +9,30 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  Dimensions,
-  SafeAreaView
-} from "react-native";
-// import Header from "./src/components/common/Header";
-import { Card, Item, Button } from "native-base";
+  YellowBox,
+  Dimensions
+} from "react-native"
+import { Card, Item, Button, Form } from "native-base"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-import { NavigationEvents } from "react-navigation";
-import { connect } from 'react-redux';
+} from "react-native-responsive-screen"
+import { NavigationEvents } from "react-navigation"
 
 class MyProfile extends Component {
   state = {
     ImageSource: null,
     datasource: null,
-    myFirstName:"",
-  };
+    datasource1: ""
+  }
 
   static navigationOptions = {
     title: "My Profile",
     header: null
-  };
+  }
 
   myProfile = () => {
-    console.log("________\n before fetch");
+    console.log("________\n before fetch")
     fetch(
       `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${this.props.MyAccountID}`,
       {
@@ -47,78 +45,74 @@ class MyProfile extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        console.log(responseJson)
         this.setState({
-          datasource: responseJson,
-          myFirstName: responseJson.data.account[0].acfName
-        });
-        console.log("gghdsfjksdhfksdhkfsklfklsdjgg", this.state.datasource);
-        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", this.state.myFirstName);
-        // global.myName = this.state.myFirstName;
-        // console.log("#############", global.myName);  
+          datasource1: responseJson.data.account[0].acImgName,
+          datasource: responseJson
+        })
+        console.log("gggg", datasource)
       })
-      .catch(error => console.log(error));
-    // )
-  };
+      .catch(error => console.log(error))
+  }
 
   componentDidMount() {
-    this.myProfile(); 
-    
+    this.myProfile()
   }
 
   render() {
-    const { navigate } = this.props.navigation;
+    // YellowBox.ignoreWarnings(["Warning:"])
+    const { navigate } = this.props.navigation
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          Keyboard.dismiss();
+          Keyboard.dismiss()
         }}
       >
         <View style={styles.mainViewStyle}>
           {/* <Header /> */}
           <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate("MyProfileScreen")
                   }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                    style={{
+                      height: hp("4%"),
+                      width: wp("15%"),
+                      alignItems: "flex-start",
+                      justifyContent: "center"
+                    }}
+                  >
+                    <Image
+                      resizeMode="contain"
+                      source={require("../icons/back.png")}
+                      style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Image
+                  style={[styles.image1]}
+                  source={require("../icons/OyeSpace.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-       
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
+
           <NavigationEvents
             onDidFocus={payload => this.myProfile()}
             onWillBlur={payload => this.myProfile()}
@@ -130,31 +124,44 @@ class MyProfile extends Component {
                 <View style={styles.myProfileFlexStyle}>
                   <View style={styles.emptyViewStyle} />
                   <View style={styles.viewForMyProfileText}>
-                    <Text style={styles.myProfileTitleStyle}>
-                      {this.state.datasource
-                        ? this.state.datasource.data.account[0].acfName.trim() !=
-                          ""
-                          ? this.state.datasource.data.account[0].acfName.trim() +
-                            "'s "
-                          : "My "
-                        : "My "}
-                      Profile
+                    <Text style={{ fontSize: hp("2.5%"), color: "#ff8c00" }}>
+                      My Profile
                     </Text>
                   </View>
 
                   <View style={styles.editButtonViewStyle}>
                     <TouchableOpacity
                       onPress={() => {
-                        navigate("EditProfileScreen", {
+                        navigate("Editprofile", {
                           profileDataSourceFirstName: this.state.datasource.data
                             .account[0].acfName,
                           profileDataSourceLastName: this.state.datasource.data
                             .account[0].aclName,
+                          profileDataSourceIsdCode: this.state.datasource.data.account[0].acisdCode.substring(
+                            0,
+                            this.state.datasource.data.account[0].acisdCode
+                              .length - 2
+                          ),
+                          profileDataSourceIsdCode1: this.state.datasource.data.account[0].acisdCode1.substring(
+                            0,
+                            this.state.datasource.data.account[0].acisdCode1
+                              .length - 2
+                          ),
+                          profileDataSourceCca2: this.state.datasource.data.account[0].acisdCode
+                            .toString()
+                            .slice(-2),
+                          profileDataSourceCca3: this.state.datasource.data.account[0].acisdCode1
+                            .toString()
+                            .slice(-2),
+                          profileDataSourceMobileNumber: this.state.datasource
+                            .data.account[0].acMobile,
+                          profileDataSourceAlternateMobileNum: this.state
+                            .datasource.data.account[0].acMobile1,
                           profileDataSourceEmail: this.state.datasource.data
                             .account[0].acEmail,
                           profileDataSourceAlternateEmail: this.state.datasource
                             .data.account[0].acEmail1
-                        });
+                        })
                       }}
                     >
                       <Image
@@ -167,143 +174,100 @@ class MyProfile extends Component {
 
                 <View style={styles.containerView_ForProfilePicViewStyle}>
                   <View style={styles.viewForProfilePicImageStyle}>
-                  {this.state.ImageSource != null 
-                  ?
-                  <Image
-                  style={styles.profilePicImageStyle}
-                  source={ 
-                      {
-                          uri: this.props.viewImageURL + 'PERSON' +
-                          this.props.MyAccountID +
-                          '.jpg'+'?random_number=' +new Date().getTime(),
-                      }
-                      }
-                  />
-                  :
-                  <Image
-                  style={styles.profilePicImageStyle}
-                  source={ require("../icons/camwithgradientbg.png")}
-                  />
-                  }
-
-                    {/* <Image
-                      style={styles.profilePicImageStyle}
-                      source={this.state.ImageSource != null ? 
-                        {
-                          uri: global.viewImageURL + 'PERSON' +
-                            global.MyAccountID +
-                            '.jpg'+'?random_number=' +new Date().getTime(),
-                        }:
-                        require("../icons/camwithgradientbg.png") 
-
-                  
-                        }
-                    /> */}
+                    {this.state.datasource1 == "" ? (
+                      <Image
+                        style={styles.profilePicImageStyle}
+                        source={{
+                          uri:
+                            "http://mediaupload.oyespace.com/Images/" +
+                            this.state.datasource.data.account[0].acImgName
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        style={styles.profilePicImageStyle}
+                        source={require("../icons/camwithgradientbg.png")}
+                      />
+                    )}
                   </View>
                 </View>
 
-                <View>
-                  <Card style={styles.myProfileCardsStyle}>
-                    {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                    <Text style={styles.itemTextTitles}>First Name</Text>
-                    {/* <View
-                      style={{
-                        borderColor: "#bfbfbf",
-                        borderBottomWidth: hp("0.1%"),
-                        paddingBottom: hp("0.2%"),
-                        // paddingRight: hp("33.5%")
-                      }}
-                    > */}
-                    <Text style={styles.itemTextValues}>
-                      {this.state.datasource
-                        ? this.state.datasource.data.account[0].acfName
-                        : null}
-                    </Text>
-                    {/* </View> */}
-                    {/* </Item> */}
-                  </Card>
+                <View style={{ alignItems: "center", marginBottom: hp("4%") }}>
+                  <Text style={styles.itemTextValues1}>
+                    {this.state.datasource
+                      ? this.state.datasource.data.account[0].acfName +
+                        " " +
+                        this.state.datasource.data.account[0].aclName
+                      : null}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    marginLeft: hp("2%"),
+                    marginBottom: hp("0.5%"),
+                    flexDirection: "row"
+                  }}
+                >
+                  <Image
+                    style={styles.editButtonImageStyle1}
+                    source={require("../icons/call.png")}
+                  />
+                  <Text style={styles.itemTextValues}>
+                    {this.state.datasource
+                      ? " " +
+                        this.state.datasource.data.account[0].acisdCode.substring(
+                          0,
+                          this.state.datasource.data.account[0].acisdCode
+                            .length - 2
+                        ) +
+                        " " +
+                        this.state.datasource.data.account[0].acMobile
+                      : null}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    marginLeft: hp("2%"),
+                    marginBottom: hp("3%"),
+                    flexDirection: "row"
+                  }}
+                >
+                  <Image
+                    style={styles.editButtonImageStyle1}
+                    source={require("../icons/mail.png")}
+                  />
+                  <Text style={styles.itemTextValues}>
+                    {this.state.datasource
+                      ? "  " + this.state.datasource.data.account[0].acEmail
+                      : null}
+                  </Text>
                 </View>
 
-                <View>
-                  <Card style={styles.myProfileCardsStyle}>
-                    {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                    <Text style={styles.itemTextTitles}>Last Name</Text>
-                    {/* <View
-                      style={{
-                        borderColor: "#bfbfbf",
-                        borderBottomWidth: hp("0.1%"),
-                        paddingBottom: hp("0.2%"),
-                        // paddingRight: hp("33.5%")
-                      }}
-                    > */}
-                    <Text style={styles.itemTextValues}>
-                      {this.state.datasource
-                        ? this.state.datasource.data.account[0].aclName
-                        : null}
-                    </Text>
-                    {/* </View> */}
-                    {/* </Item> */}
-                  </Card>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <View>
+                    <Button bordered style={styles.button1}>
+                      <Text>Create Association</Text>
+                    </Button>
+                    <View />
+                    <View style={{ marginTop: hp("2%") }}>
+                      <Button bordered style={styles.button1}>
+                        <Text>Join Existing Association</Text>
+                      </Button>
+                    </View>
+                  </View>
                 </View>
-
-                <View>
-                  <Card style={styles.myProfileCardsStyle}>
-                    {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                    <Text style={styles.itemTextTitles}>Email</Text>
-                    {/* <View
-                      style={{
-                        borderColor: "#bfbfbf",
-                        borderBottomWidth: hp("0.1%"),
-                        paddingBottom: hp("0.2%"),
-                        // paddingRight: hp("33.5%")
-                      }}
-                    > */}
-                    <Text style={styles.itemTextValues}>
-                      {this.state.datasource
-                        ? this.state.datasource.data.account[0].acEmail
-                        : null}
-                    </Text>
-                    {/* </View> */}
-                    {/* </Item> */}
-                  </Card>
-                </View>
-
-                <View>
-                  <Card style={styles.myProfileCardsStyle}>
-                    {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                    <Text style={styles.itemTextTitles}>Alternate Email </Text>
-                    {/* <View
-                      style={{
-                        borderColor: "#bfbfbf",
-                        borderBottomWidth: hp("0.1%"),
-                        paddingBottom: hp("0.2%"),
-                        paddingRight: hp("33.5%")
-                      }}
-                    > */}
-                    <Text style={styles.itemTextValues}>
-                      {this.state.datasource
-                        ? this.state.datasource.data.account[0].acEmail1
-                        : null}
-                    </Text>
-                    {/* </View> */}
-                    {/* </Item> */}
-                  </Card>
-                </View>
-
-                {/* <View style={styles.viewForPaddingAboveAndBelowButtons}>
-                  <Button bordered dark style={styles.buttonFamily} onPress={()=> this.props.navigation.navigate('MyVehicleListScreen')}>
-                    <Text style={styles.textFamilyVehicle}>My Vehicles</Text>
-                  </Button>
-                  <Button bordered dark style={styles.buttonVehicle}>
-                    <Text style={styles.textFamilyVehicle}>My Family</Text>
-                  </Button>
-                </View> */}
               </ScrollView>
             </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
-    );
+    )
   }
 }
 
@@ -320,9 +284,9 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    // marginTop: 0,
+
     paddingHorizontal: hp("1.4%"),
-    // paddingBottom: hp("80%"),
+
     backgroundColor: "#fff",
     flexDirection: "column"
   },
@@ -330,10 +294,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginTop: hp("2%")
-    // marginBottom: 0
   },
   emptyViewStyle: {
-    flex: 1
+    flex: 3
   },
   viewForMyProfileText: {
     flex: 4,
@@ -354,6 +317,10 @@ const styles = StyleSheet.create({
     width: wp("7%"),
     height: hp("5%")
   },
+  editButtonImageStyle1: {
+    width: wp("6%"),
+    height: hp("4%")
+  },
   containerView_ForProfilePicViewStyle: {
     justifyContent: "center",
     alignItems: "center"
@@ -364,77 +331,38 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: hp("4%"),
-    marginBottom: hp("8%"),
+    marginBottom: hp("2%")
   },
   profilePicImageStyle: {
     width: 110,
     height: 110,
     borderColor: "orange",
     borderRadius: 55,
-    borderWidth: hp("0.2%") / PixelRatio.get()
+    // borderWidth: hp("0.2%") / PixelRatio.get()
+    borderWidth: hp("0.2%")
   },
 
-  myProfileCardsStyle: {
-    marginTop: hp("0.5%"),
-    paddingHorizontal: hp("2%"),
-    paddingVertical: hp("0.5%"),
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    height: hp("7%")
-  },
-  cardItemsStyle: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start"
-  },
-  itemTextTitles: {
-    fontSize: hp("1.6%"),
-    fontWeight: "300",
-    // fontStyle: "italic",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    color: "#909091"
-  },
   itemTextValues: {
     fontSize: hp("2%"),
     fontWeight: "300",
     paddingTop: hp("0.8%"),
     paddingHorizontal: 0,
-    // paddingBottom: -8,
+
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    color: "#474749"
+  },
+  itemTextValues1: {
+    fontSize: hp("2.2%"),
+    fontWeight: "500",
+    paddingTop: hp("0.8%"),
+    paddingHorizontal: 0,
+
     alignItems: "flex-start",
     justifyContent: "flex-start",
     color: "#474749"
   },
 
-  viewForPaddingAboveAndBelowButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: hp("4%"),
-    marginBottom: hp("2%"),
-    marginHorizontal: hp("2%")
-  },
-  buttonVehicle: {
-    width: wp("32%"),
-    height: hp("5%"),
-    borderRadius: hp("2.5%"),
-    borderWidth: hp("0.2%"),
-    borderColor: "orange",
-    backgroundColor: "orange",
-    justifyContent: "center"
-  },
-  buttonFamily: {
-    width: wp("32%"),
-    height: hp("5%"),
-    borderRadius: hp("2.5%"),
-    borderWidth: hp("0.2%"),
-    borderColor: "#C3C3C3",
-    backgroundColor: "#C3C3C3",
-    justifyContent: "center"
-  },
-  textFamilyVehicle: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: hp("2%")
-  },
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
@@ -446,27 +374,49 @@ const styles = StyleSheet.create({
     position: "relative"
   },
   image1: {
+    width: wp("19%"),
+    height: hp("12%"),
+    marginRight: hp("8%")
+  },
+  button1: {
+    width: hp("40%"),
+    justifyContent: "center"
+  },
+  image1: {
     width: wp("17%"),
     height: hp("12%"),
     marginRight: hp("3%")
   },
- viewDetails1: {
-  flex: 0.3,
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  marginLeft: 3
-},
-viewDetails2: {
-  alignItems: "flex-start",
-  justifyContent: "center",
-  width: hp("3%"),
-  height: hp("3%"),
-  marginTop: 5
-  // marginLeft: 10
-},
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  }
+})
 
-});
+export default MyProfile
+
+
 
 const mapStateToProps = state => {
     return {
