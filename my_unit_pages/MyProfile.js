@@ -10,7 +10,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   YellowBox,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from "react-native"
 import { Card, Item, Button, Form } from "native-base"
 import {
@@ -22,8 +23,7 @@ import { NavigationEvents } from "react-navigation"
 class MyProfile extends Component {
   state = {
     ImageSource: null,
-    datasource: null,
-    datasource1: ""
+    datasource: null
   }
 
   static navigationOptions = {
@@ -34,7 +34,7 @@ class MyProfile extends Component {
   myProfile = () => {
     console.log("________\n before fetch")
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${this.props.MyAccountID}`,
+      "http://apidev.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1",
       {
         method: "GET",
         headers: {
@@ -47,7 +47,6 @@ class MyProfile extends Component {
       .then(responseJson => {
         console.log(responseJson)
         this.setState({
-          datasource1: responseJson.data.account[0].acImgName,
           datasource: responseJson
         })
         console.log("gggg", datasource)
@@ -166,7 +165,7 @@ class MyProfile extends Component {
                     >
                       <Image
                         style={styles.editButtonImageStyle}
-                        source={require("../icons/edit.png")}
+                        source={require("./src/components/images/edit.png")}
                       />
                     </TouchableOpacity>
                   </View>
@@ -174,7 +173,7 @@ class MyProfile extends Component {
 
                 <View style={styles.containerView_ForProfilePicViewStyle}>
                   <View style={styles.viewForProfilePicImageStyle}>
-                    {this.state.datasource1 == "" ? (
+                    {this.state.ImageSource == null ? (
                       <Image
                         style={styles.profilePicImageStyle}
                         source={{
@@ -186,7 +185,7 @@ class MyProfile extends Component {
                     ) : (
                       <Image
                         style={styles.profilePicImageStyle}
-                        source={require("../icons/camwithgradientbg.png")}
+                        source={require("./src/components/images/camwithgradientbg.png")}
                       />
                     )}
                   </View>
@@ -210,7 +209,7 @@ class MyProfile extends Component {
                 >
                   <Image
                     style={styles.editButtonImageStyle1}
-                    source={require("../icons/call.png")}
+                    source={require("./src/components/images/call.png")}
                   />
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
@@ -234,7 +233,7 @@ class MyProfile extends Component {
                 >
                   <Image
                     style={styles.editButtonImageStyle1}
-                    source={require("../icons/mail.png")}
+                    source={require("./src/components/images/mail.png")}
                   />
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
@@ -416,14 +415,3 @@ const styles = StyleSheet.create({
 
 export default MyProfile
 
-
-
-const mapStateToProps = state => {
-    return {
-        oyeURL: state.OyespaceReducer.oyeURL,
-        MyAccountID: state.UserReducer.MyAccountID,
-        viewImageURL: state.OyespaceReducer.viewImageURL
-    }
-}
-
-export default connect(mapStateToProps)(MyProfile);

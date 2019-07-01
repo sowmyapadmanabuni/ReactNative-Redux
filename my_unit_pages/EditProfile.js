@@ -33,7 +33,7 @@ import CountryPicker, {
   getAllCountries
 } from "react-native-country-picker-modal"
 
-class MyProfile extends Component {
+class EditProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -155,24 +155,19 @@ class MyProfile extends Component {
       Alert.alert("Last name should be more than 3 characters")
     } else if (lastname > 50) {
       Alert.alert("Last name should be less than 50 characters")
-    }
-    else if (mobilenumber.length < 10) {
+    } else if (mobilenumber.length < 10) {
       Alert.alert("Primary mobile number should contain 10 numerics.")
-    }
-    else if (reg.test(mobilenumber) === false) {
+    } else if (reg.test(mobilenumber) === false) {
       Alert.alert(
         "Primary mobile number should not contain special characters."
       )
-    }
-    else if (alternatemobilenumber.length < 10) {
+    } else if (alternatemobilenumber.length < 10) {
       Alert.alert("Alternate mobile number should contain 10 numerics.")
-    }
-    else if (reg.test(alternatemobilenumber) === false) {
+    } else if (reg.test(alternatemobilenumber) === false) {
       Alert.alert(
         "Alternate mobile number should not contain special characters."
       )
-    }
-    else if (email.length == 0) {
+    } else if (email.length == 0) {
       Alert.alert("Primary email cannot be empty")
     } else if (regemail.test(email) === false) {
       Alert.alert("Enter valid primary email id")
@@ -182,7 +177,7 @@ class MyProfile extends Component {
     } else {
       axios
         .post(
-          `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
+          "http://apidev.oyespace.com/oyeliving/api/v1/AccountDetails/Update",
           {
             ACFName:
               firstname.length <= 0 ? profileDataSourceFirstName : firstname,
@@ -220,7 +215,7 @@ class MyProfile extends Component {
             ACEmail4: null,
             ACImgName: photo.fileName,
 
-            ACAccntID: this.props.MyAccountID
+            ACAccntID: 1
           },
           {
             headers: {
@@ -378,7 +373,7 @@ class MyProfile extends Component {
                   }}
                 >
                   <Image
-                    source={require("../icons/backBtn.png")}
+                    source={require("./src/components/images/backBtn.png")}
                     style={{ width: 18, height: 18 }}
                   />
                 </TouchableOpacity>
@@ -393,7 +388,7 @@ class MyProfile extends Component {
               >
                 <Image
                   style={[styles.image]}
-                  source={require("../icons/headerLogo.png")}
+                  source={require("./src/components/images/headerLogo.png")}
                 />
               </View>
               <View style={styles.emptyViewStyle} />
@@ -420,7 +415,7 @@ class MyProfile extends Component {
                         {this.state.photo == null ? (
                           <Image
                             style={styles.profilePicImageStyle}
-                            source={require("../icons/camwithgradientbg.png")}
+                            source={require("./src/components/images/camwithgradientbg.png")}
                           />
                         ) : (
                           <Image
@@ -437,7 +432,7 @@ class MyProfile extends Component {
                       <View style={styles.imagesmallCircle}>
                         <Image
                           style={[styles.smallImage]}
-                          source={require("../icons/cam_with_gray_bg.png")}
+                          source={require("./src/components/images/cam_with_gray_bg.png")}
                         />
                       </View>
                     </TouchableOpacity>
@@ -468,7 +463,7 @@ class MyProfile extends Component {
                         placeholder="First Name"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        autoCapitalize="characters"
+                        autoCapitalize="words"
                         keyboardType="default"
                         maxLength={50}
                         defaultValue={
@@ -496,10 +491,10 @@ class MyProfile extends Component {
                       </Label>
                       <Input
                         marginBottom={hp("-1%")}
-                        placeholder="Last Name"
+                        placeholder=""
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        autoCapitalize="characters"
+                        autoCapitalize="words"
                         keyboardType="default"
                         maxLength={50}
                         defaultValue={
@@ -558,7 +553,8 @@ class MyProfile extends Component {
                           marginTop={hp("-0.5%")}
                           placeholder="Mobile Number"
                           autoCorrect={false}
-                          keyboardType="name-phone-pad"
+                          keyboardType="number-pad
+                          "
                           maxLength={20}
                           defaultValue={
                             this.props.navigation.state.params
@@ -612,7 +608,7 @@ class MyProfile extends Component {
                           marginTop={hp("-0.5%")}
                           placeholder="Alternate Mobile Number"
                           autoCorrect={false}
-                          keyboardType="name-phone-pad"
+                          keyboardType="number-pad"
                           maxLength={20}
                           defaultValue={
                             this.props.navigation.state.params
@@ -862,19 +858,5 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MyProfile
-
-
-
-const mapStateToProps = state => {
-  return {
-      oyeURL: state.OyespaceReducer.oyeURL,
-      MyAccountID: state.UserReducer.MyAccountID,
-      MyMobileNumber: state.UserReducer.MyMobileNumber,
-      MyISDCode: state.UserReducer.MyISDCode,
-      // viewImageURL: state.OyespaceReducer.viewImageURL
-  }
-}
-
-export default connect(mapStateToProps)(EditProfile);
+export default EditProfile
 
