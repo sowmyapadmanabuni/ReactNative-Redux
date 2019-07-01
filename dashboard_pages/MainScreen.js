@@ -45,8 +45,10 @@ import {
   getDashAssociation,
   getDashUnits,
   updateUserInfo,
+  updateApproveAdmin,
   getAssoMembers
 } from "../src/actions";
+import { NavigationEvents } from "react-navigation";
 
 class Dashboard extends React.Component {
   static navigationOptions = {
@@ -268,10 +270,11 @@ class Dashboard extends React.Component {
     // console.log("hhhhhhhhhhhhhh",this.state.data1)
   };
 
-  componentDidMount() {
+  didMount = () => {
     const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
+    this.props.updateApproveAdmin([]);
 
     getDashSub(oyeURL, SelectedAssociationID);
     getDashAssociation(oyeURL, MyAccountID);
@@ -279,7 +282,7 @@ class Dashboard extends React.Component {
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-  }
+  };
 
   onAssociationChange = (value, index) => {
     const {
@@ -351,6 +354,7 @@ class Dashboard extends React.Component {
     } = this.props;
     return (
       <View style={{ flex: 1 }}>
+        <NavigationEvents onDidFocus={() => this.didMount()} />
         <Header
           firstName={this.props.MyFirstName}
           navigate={this.props.navigation}
@@ -877,6 +881,7 @@ export default connect(
     getDashAssociation,
     getDashUnits,
     updateUserInfo,
-    getAssoMembers
+    getAssoMembers,
+    updateApproveAdmin
   }
 )(Dashboard);

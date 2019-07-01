@@ -13,6 +13,7 @@ import axios from "axios";
 import { CLOUD_FUNCTION_URL } from "../../../constant";
 import { connect } from "react-redux";
 import { updateApproveAdmin, getNotifications } from "../../actions";
+
 import _ from "lodash";
 // import {connect} from 'react-redux';
 
@@ -346,7 +347,7 @@ class NotificationDetailScreen extends Component {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam("details", "NO-ID");
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <View style={styles.container}>
         <Header
