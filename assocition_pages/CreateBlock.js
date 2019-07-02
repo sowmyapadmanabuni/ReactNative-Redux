@@ -752,7 +752,7 @@ class AddBlock extends Component {
                   Unit of Measurement
                 </Text>
                 <Item style={styles.bankDetailLine}>
-                  {this.state.measurementTypeCountry == "indi" ? (
+                  {this.state.measurementTypeCountry == "india" ? (
                     <Text style={styles.box8}>
                       {" "}
                       SQFT{" "}

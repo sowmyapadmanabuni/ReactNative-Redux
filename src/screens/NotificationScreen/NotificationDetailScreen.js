@@ -54,14 +54,14 @@ class NotificationDetailScreen extends Component {
           }
         )
         .then(response => {
-          let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
+          let roleName = item.sbRoleID === 2 ? "Owner" : "Tenant";
 
           axios
             .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
               sbSubID: item.sbSubID,
               ntTitle: "Request Approved",
               ntDesc:
-                "Your request to join" +
+                "Your request to join " +
                 item.mrRolName +
                 " unit in " +
                 item.asAsnName +
@@ -124,8 +124,8 @@ class NotificationDetailScreen extends Component {
                       );
                       StatusUpdate = {
                         NTID: item.ntid,
-                        NTStatDesc: "Request Sent"
-                        // NTStatDesc: responseJson_2.data.string
+                        // NTStatDesc: "Request Sent"
+                        NTStatDesc: responseJson_2.data.string
                       };
 
                       fetch(

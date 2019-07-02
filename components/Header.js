@@ -129,7 +129,7 @@ class Header extends React.Component {
             >
               <Text style={{ fontWeight: "bold" }}>
                 {this.state.myFirstName.length.toString() > 6
-                  ? <Text>{this.state.myFirstName.substring(0, 6)}.</Text>
+                  ? <Text>{this.state.myFirstName.substring(0, 6)}</Text>
                   : this.state.myFirstName}
               </Text>
             </View>
