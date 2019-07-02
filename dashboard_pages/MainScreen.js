@@ -76,7 +76,12 @@ class Dashboard extends React.Component {
   }
 
   requestNotifPermission = () => {
-    const { MyAccountID, champBaseURL, receiveNotifications } = this.props;
+    const {
+      MyAccountID,
+      champBaseURL,
+      receiveNotifications,
+      oyeURL
+    } = this.props;
 
     firebase
       .messaging()
@@ -130,6 +135,29 @@ class Dashboard extends React.Component {
             firebase
               .messaging()
               .unsubscribeFromTopic(association.asAssnID + "admin");
+          }
+        });
+      });
+
+    axios
+      .get(
+        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
+        {
+          headers: headers
+        }
+      )
+      .then(response => {
+        let data = response.data.data.memberListByAccount;
+        // console.log("dataoye", data);
+        data.map(units => {
+          console.log(units.unUnitID + "admin");
+          console.log(units.mrmRoleID + "role");
+          if (receiveNotifications) {
+            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+              firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+            }
+          } else if (!receiveNotifications) {
+            firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
           }
         });
       });
@@ -274,7 +302,7 @@ class Dashboard extends React.Component {
     const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    this.props.updateApproveAdmin([]);
+    // this.props.updateApproveAdmin([]);
 
     getDashSub(oyeURL, SelectedAssociationID);
     getDashAssociation(oyeURL, MyAccountID);

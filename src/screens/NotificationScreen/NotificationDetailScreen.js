@@ -24,7 +24,6 @@ class NotificationDetailScreen extends Component {
   };
 
   approve = (item, status) => {
-    console.log(item.asAssnID);
     if (status) {
       Alert.alert(
         "Oyespace",
