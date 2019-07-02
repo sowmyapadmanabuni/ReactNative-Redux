@@ -15,17 +15,23 @@ import {
   KeyboardAvoidingView,
   Alert,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,
+  Platform
 } from "react-native"
-import { Card, Item, Input, Button } from "native-base"
-import { TextInput } from "react-native-gesture-handler"
+
+import { Card, Item, Input, Button, Form, Label } from "native-base"
+
 import ImagePicker from "react-native-image-picker"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen"
-import {connect} from 'react-redux';
+import RNFetchBlob from "rn-fetch-blob"
+import axios from "axios"
+import CountryPicker, {
+  getAllCountries
+} from "react-native-country-picker-modal"
 
 class EditProfile extends Component {
   constructor(props) {
@@ -33,11 +39,24 @@ class EditProfile extends Component {
     this.state = {
       FirstName: "",
       LastName: "",
+
+      MobileNumber: "",
+      AlternateMobileNumber: "",
+      cca2: "",
+      cca3: "",
+      callingCode: "",
+      callingCode1: "",
+
       Email: "",
       AlternateEmail: "",
+
       Image: "",
-      ImageSource: "",
-      data1: []
+
+      // cca2: "",
+      // callingCode: "",
+      data1: [],
+      photo: "",
+      photoDetails: null
     }
   }
 
@@ -49,6 +68,27 @@ class EditProfile extends Component {
     this.setState({ LastName: lastName })
   }
 
+  MNumber = mobileNumber => {
+    this.setState({ MobileNumber: mobileNumber })
+  }
+
+  AMNumber = alternateMobileNumber => {
+    this.setState({ AlternateMobileNumber: alternateMobileNumber })
+  }
+  CCode = callingCode => {
+    this.setState({ callingCode: callingCode })
+  }
+  Ccca2 = cca2 => {
+    this.setState({ cca2: cca2 })
+  }
+  Ccca3 = cca3 => {
+    this.setState({ cca3: cca3 })
+  }
+
+  CCode1 = callingCode1 => {
+    this.setState({ CallingCode1: callingCode1 })
+  }
+
   FEmail = fEmail => {
     this.setState({ Email: fEmail })
   }
@@ -56,93 +96,167 @@ class EditProfile extends Component {
   AEmail = aEmail => {
     this.setState({ AlternateEmail: aEmail })
   }
-  FImage = image => {
-    this.setState({ Image: image })
-  }
+
   myEditProfile = () => {
+    const {
+      profileDataSourceFirstName,
+      profileDataSourceLastName,
+      profileDataSourceIsdCode,
+      profileDataSourceIsdCode1,
+      profileDataSourceCca2,
+      profileDataSourceCca3,
+      profileDataSourceMobileNumber,
+      profileDataSourceAlternateMobileNum,
+      profileDataSourceEmail,
+      profileDataSourceAlternateEmail
+    } = this.props.navigation.state.params
     firstname = this.state.FirstName
     lastname = this.state.LastName
+    callingCode = this.state.callingCode
+    callingCode1 = this.state.callingCode1
+    mobilenumber = this.state.MobileNumber
+    alternatemobilenumber = this.state.AlternateMobileNumber
     email = this.state.Email
     alternateemail = this.state.AlternateEmail
-    fimage = this.state.Image
+    cca2 = this.state.cca2
+    cca3 = this.state.cca3
 
-    
+    const { photo } = this.state
+    const data = new FormData()
+
+    data.append("photo", {
+      name: photo.fileName,
+      type: photo.type,
+      uri:
+        Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+    })
+
+    console.log(data)
+    console.log("Image will show", photo.fileName)
+
     const regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     const reg = /^[0]?[6789]\d{9}$/
     const OyeFullName = /^[a-zA-Z ]+$/
+    const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
 
     if (firstname.length == 0) {
-      Alert.alert("First Name should not be empty")
-    } else if (OyeFullName.test(firstname) === false) {
-      alert("Enter valid First name")
-      return false
+      Alert.alert("First name should not be empty")
+    } else if (oyeNonSpecialRegex.test(firstname) === true) {
+      Alert.alert("First name should not contain special characters")
     } else if (firstname.length < 3) {
-      Alert.alert("First name should be more than 3 Characters")
+      Alert.alert("First name should be more than 3 characters")
+    } else if (firstname > 50) {
+      Alert.alert("First name should be less than 50 characters")
     } else if (lastname.length == 0) {
-      Alert.alert("Last Name should not be empty")
-    } else if (OyeFullName.test(lastname) === false) {
-      alert("Enter valid Last name")
-      return false
+      Alert.alert("Last name should not be empty")
+    } else if (oyeNonSpecialRegex.test(lastname) === true) {
+      Alert.alert("Last name should not contain special characters")
     } else if (lastname.length < 3) {
-      Alert.alert("Last Name should be more than 3 Characters")
-    } else if (regemail.test(email) === false)  {
-
-       Alert.alert("Enter valid  Email id")
-    }
-    else if (regemail.test(alternateemail) == false && !alternateemail.length == "")  {
-
-      Alert.alert("Enter valid Alternate Email id")
-   }
-    // else if (alternateemail.length == 0) {
-    //   Alert.alert("Enter valid primary mail id");
-    // }
-    // else if (regemail.test(alternateemail) === false) {
-    //   Alert.alert("Enter valid alternative email id.");
-    // }
-    else {
-      fetch(
-        `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-          },
-          body: JSON.stringify({
-            ACFName: firstname,
-            ACLName: lastname,
-            ACMobile: this.props.MyMobileNumber,
-            ACEmail: email,
-            ACISDCode:  this.props.MyISDCode,
-            ACMobile1: null,
-            ACISDCode1: null,
+      Alert.alert("Last name should be more than 3 characters")
+    } else if (lastname > 50) {
+      Alert.alert("Last name should be less than 50 characters")
+    } else if (mobilenumber.length < 10) {
+      Alert.alert("Primary mobile number should contain 10 numerics.")
+    } else if (reg.test(mobilenumber) === false) {
+      Alert.alert(
+        "Primary mobile number should not contain special characters."
+      )
+    } else if (alternatemobilenumber.length < 10) {
+      Alert.alert("Alternate mobile number should contain 10 numerics.")
+    } else if (reg.test(alternatemobilenumber) === false) {
+      Alert.alert(
+        "Alternate mobile number should not contain special characters."
+      )
+    } else if (email.length == 0) {
+      Alert.alert("Primary email cannot be empty")
+    } else if (regemail.test(email) === false) {
+      Alert.alert("Enter valid primary email id")
+      //"Please check your email-id"
+    } else if (regemail.test(alternateemail) === false) {
+      Alert.alert("Enter valid alternative email id.")
+    } else {
+      axios
+        .post(
+          "http://apidev.oyespace.com/oyeliving/api/v1/AccountDetails/Update",
+          {
+            ACFName:
+              firstname.length <= 0 ? profileDataSourceFirstName : firstname,
+            ACLName:
+              lastname.length <= 0 ? profileDataSourceLastName : lastname,
+            ACMobile:
+              mobilenumber.length <= 0
+                ? profileDataSourceMobileNumber
+                : mobilenumber,
+            ACEmail: email.length <= 0 ? profileDataSourceEmail : email,
+            ACISDCode:
+              callingCode.length <= 0
+                ? profileDataSourceIsdCode + profileDataSourceCca2
+                : callingCode + cca2,
+            ACMobile1:
+              alternatemobilenumber.length <= 0
+                ? profileDataSourceAlternateMobileNum
+                : alternatemobilenumber,
+            ACISDCode1:
+              callingCode1.length <= 0
+                ? profileDataSourceIsdCode1 + profileDataSourceCca3
+                : callingCode1 + cca3,
             ACMobile2: null,
             ACISDCode2: null,
             ACMobile3: null,
             ACISDCode3: null,
             ACMobile4: null,
             ACISDCode4: null,
-            ACEmail1: alternateemail,
+            ACEmail1:
+              alternateemail.length <= 0
+                ? profileDataSourceAlternateEmail
+                : alternateemail,
             ACEmail2: null,
             ACEmail3: null,
             ACEmail4: null,
-            ACImgName: fimage.length <= 0 ? this.state.ImageSource : fimage,
-            ACAccntID: this.props.MyAccountID
-          })
-        }
-      )
-        .then(responseData => responseData.json())
-        .then(responseJson => {
-          // Alert.alert("Saved");
-          this.props.navigation.goBack()
-          // this.setState({
-          //   datasource: responseJson
+            ACImgName: photo.fileName,
 
-          // })
+            ACAccntID: 1
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            }
+          }
+        )
+
+        .then(response => {
+          console.log(response.data)
+          this.props.navigation.goBack()
+          RNFetchBlob.config({
+            trusty: true
+          })
+            .fetch(
+              "POST",
+              "http://mediaupload.oyespace.com/oyeliving/api/V1/association/upload",
+
+              {
+                "Content-Type": "multipart/form-data",
+                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+              },
+              [
+                {
+                  name: "oyespace",
+                  filename: this.state.photoDetails.fileName,
+                  type: this.state.photoDetails.type,
+                  data: this.state.photoDetails.data // this is a base 64 string
+                }
+              ]
+            )
+            .then(resp => {
+              console.log("resp", resp)
+            })
+            .catch(error => {
+              console.log("RNFetchBlob err = ", err)
+            })
         })
         .catch(error => {
           console.log(error)
-          Alert.alert("Upload Fail")
         })
     }
   }
@@ -150,16 +264,6 @@ class EditProfile extends Component {
   static navigationOptions = {
     title: "My Profile",
     header: null
-  }
-  selectPhotoTapped() {
-    const options = {
-      quality: 1.0,
-      maxWidth: 250,
-      maxHeight: 250,
-      storageOptions: {
-        skipBackup: true
-      }
-    }
   }
 
   componentWillMount() {
@@ -172,6 +276,26 @@ class EditProfile extends Component {
     this.setState({
       LastName: this.props.navigation.state.params.profileDataSourceLastName
         ? this.props.navigation.state.params.profileDataSourceLastName
+        : ""
+    })
+    this.setState({
+      callingCode: this.props.navigation.state.params.profileDataSourceIsdCode
+        ? this.props.navigation.state.params.profileDataSourceIsdCode
+        : ""
+    })
+    this.setState({
+      callingCode1: this.props.navigation.state.params.profileDataSourceIsdCode1
+        ? this.props.navigation.state.params.profileDataSourceIsdCode1
+        : ""
+    })
+    this.setState({
+      cca2: this.props.navigation.state.params.profileDataSourceCca2
+        ? this.props.navigation.state.params.profileDataSourceCca2
+        : ""
+    })
+    this.setState({
+      cca3: this.props.navigation.state.params.profileDataSourceCca3
+        ? this.props.navigation.state.params.profileDataSourceCca3
         : ""
     })
 
@@ -188,10 +312,9 @@ class EditProfile extends Component {
         : ""
     })
   }
-
   selectPhotoTapped() {
     const options = {
-      quality: 1.0,
+      quality: 0.5,
       maxWidth: 250,
       maxHeight: 250,
       storageOptions: {
@@ -199,7 +322,6 @@ class EditProfile extends Component {
       }
     }
 
-    //launch camera
     ImagePicker.showImagePicker(options, response => {
       console.log("Response = ", response)
 
@@ -210,20 +332,22 @@ class EditProfile extends Component {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton)
       } else {
-        let source = { uri: response.uri }
-
         // You can also display the image using data:
         // let source = { uri: "data:image/jpeg;base64," + response.data };
+        let source = { uri: response.uri }
 
-        this.setState({
-          ImageSource: source
-        })
+        // CameraRoll.saveToCameraRoll(data.uri)
+
+        this.setState({ photo: response, photoDetails: response })
+        //console.log(this.state.photoDetails)
+        //this.setState({ photo: response })
       }
     })
   }
 
   render() {
-    const { navigate } = this.props.navigation
+    //const { navigate } = this.props.navigation
+    const { photo } = this.state
 
     return (
       <TouchableWithoutFeedback
@@ -232,50 +356,46 @@ class EditProfile extends Component {
         }}
       >
         <View style={styles.mainViewStyle}>
-          {/* <Header /> */}
           <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("MyProfileScreen");
+            <View style={[styles.viewStyle, { flexDirection: "row" }]}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  marginLeft: 20
                 }}
               >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.goBack()
                   }}
                 >
                   <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
+                    source={require("./src/components/images/backBtn.png")}
+                    style={{ width: 18, height: 18 }}
                   />
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  flex: 3,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Image
+                  style={[styles.image]}
+                  source={require("./src/components/images/headerLogo.png")}
+                />
+              </View>
+              <View style={styles.emptyViewStyle} />
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-        <KeyboardAwareScrollView>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
+          <KeyboardAwareScrollView>
             <View style={styles.mainContainer}>
               <View style={styles.textWrapper}>
                 <View style={styles.myProfileFlexStyle}>
@@ -292,15 +412,16 @@ class EditProfile extends Component {
                       onPress={this.selectPhotoTapped.bind(this)}
                     >
                       <View style={styles.viewForProfilePicImageStyle}>
-                        {this.state.ImageSource === null ? (
+                        {this.state.photo == null ? (
                           <Image
                             style={styles.profilePicImageStyle}
-                            source={require("../icons/camwithgradientbg.png")}
+                            source={require("./src/components/images/camwithgradientbg.png")}
                           />
                         ) : (
                           <Image
                             style={styles.profilePicImageStyle}
-                            source={this.state.ImageSource}
+                            //source={this.state.ImageSource}
+                            source={{ uri: photo.uri }}
                           />
                         )}
                       </View>
@@ -311,26 +432,40 @@ class EditProfile extends Component {
                       <View style={styles.imagesmallCircle}>
                         <Image
                           style={[styles.smallImage]}
-                          source={require("../icons/cam_with_gray_bg.png")}
+                          source={require("./src/components/images/cam_with_gray_bg.png")}
                         />
                       </View>
                     </TouchableOpacity>
                   </View>
 
-                  <View>
-                    <Card style={styles.myProfileCardsStyle}>
-                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                      <Text style={styles.itemTextTitles}>First Name:</Text>
-                      {/* <View style={styles.underlineStyle}> */}
+                  <View
+                    style={{ alignItems: "center", marginBottom: hp("4%") }}
+                  >
+                    <Text style={styles.itemTextValues1}>
+                      {this.props.navigation.state.params
+                        .profileDataSourceFirstName
+                        ? this.props.navigation.state.params
+                            .profileDataSourceFirstName
+                        : ""}
+                    </Text>
+                  </View>
+
+                  <Form>
+                    {/* <Text style={{ marginLeft: hp("2.5%"), color: "#909091" }}>
+                      First Name
+                    </Text> */}
+                    <Item style={styles.inputItem} stackedLabel>
+                      <Label style={{ marginRight: hp("0.6%") }}>
+                        First Name
+                      </Label>
                       <Input
-                        style={styles.itemTextValues}
+                        marginBottom={hp("-1%")}
+                        placeholder="First Name"
+                        // underlineColorAndroid="orange"
                         autoCorrect={false}
                         autoCapitalize="words"
-                        multiline={false}
-                        maxLength={24}
-                        
                         keyboardType="default"
-                        placeholder="Enter First Name Here"
+                        maxLength={50}
                         defaultValue={
                           this.props.navigation.state.params
                             .profileDataSourceFirstName
@@ -338,25 +473,30 @@ class EditProfile extends Component {
                                 .profileDataSourceFirstName
                             : ""
                         }
+                        // onChangeText={FirstName =>
+                        //   this.setState({ FirstName: FirstName })
+                        // }
+                        value={this.state.FName}
                         onChangeText={this.FName}
+                        // value={this.state.FirstName}
                       />
-                      {/* </View> */}
-                      {/* </Item> */}
-                    </Card>
-                  </View>
+                    </Item>
 
-                  <View>
-                    <Card style={styles.myProfileCardsStyle}>
-                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                      <Text style={styles.itemTextTitles}>Last Name:</Text>
+                    {/* <Text style={{ marginLeft: hp("2.5%"), color: "#909091" }}>
+                      Last Name
+                    </Text> */}
+                    <Item style={styles.inputItem} stackedLabel>
+                      <Label style={{ marginRight: hp("0.6%") }}>
+                        Last Name
+                      </Label>
                       <Input
-                        style={styles.itemTextValues}
+                        marginBottom={hp("-1%")}
+                        placeholder=""
+                        // underlineColorAndroid="orange"
                         autoCorrect={false}
                         autoCapitalize="words"
-                        multiline={false}
-                        maxLength={30}
                         keyboardType="default"
-                        placeholder="Enter Last Name Here"
+                        maxLength={50}
                         defaultValue={
                           this.props.navigation.state.params
                             .profileDataSourceLastName
@@ -365,23 +505,135 @@ class EditProfile extends Component {
                             : ""
                         }
                         onChangeText={this.LName}
+                        value={this.state.LName}
                       />
-                      {/* </Item> */}
-                    </Card>
-                  </View>
+                    </Item>
 
-                  <View>
-                    <Card style={styles.myProfileCardsStyle}>
-                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                      <Text style={styles.itemTextTitles}>Email:</Text>
+                    <View style={styles.number}>
+                      <View
+                        style={{
+                          flex: 0.1,
+                          flexDirection: "row",
+                          alignItems: "center"
+                        }}
+                      >
+                        <CountryPicker
+                          onChange={value => {
+                            this.setState({
+                              cca2: value.cca2,
+                              callingCode: "+" + value.callingCode
+                            })
+                          }}
+                          //cca2={this.state.cca2}
+                          cca2={this.state.cca2}
+                          translation="eng"
+                        />
+                      </View>
+
+                      <View
+                        style={{
+                          flex: 0.15,
+                          flexDirection: "row",
+                          marginLeft: hp("0.5%"),
+                          alignItems: "center",
+                          marginBottom: hp("-0.8%")
+                        }}
+                      >
+                        <Text style={{ color: "black", fontSize: hp("2%") }}>
+                          {this.state.callingCode}
+                        </Text>
+                      </View>
+
+                      <Item style={styles.inputItem1} stackedLabel>
+                        {/* <Label style={{ marginRight: hp("0.6%") }}>
+                          {" "}
+                          Mobile Number
+                        </Label> */}
+                        <Input
+                          marginTop={hp("-0.5%")}
+                          placeholder="Mobile Number"
+                          autoCorrect={false}
+                          keyboardType="number-pad
+                          "
+                          maxLength={20}
+                          defaultValue={
+                            this.props.navigation.state.params
+                              .profileDataSourceMobileNumber
+                              ? this.props.navigation.state.params
+                                  .profileDataSourceMobileNumber
+                              : ""
+                          }
+                          onChangeText={this.MNumber}
+                          value={this.state.MNumber}
+                        />
+                      </Item>
+                    </View>
+
+                    <View style={styles.number}>
+                      <View
+                        style={{
+                          flex: 0.1,
+                          flexDirection: "row",
+                          alignItems: "center"
+                        }}
+                      >
+                        <CountryPicker
+                          onChange={value => {
+                            this.setState({
+                              cca3: value.cca2,
+                              callingCode1: "+" + value.callingCode
+                            })
+                          }}
+                          cca2={this.state.cca3}
+                          translation="eng"
+                        />
+                      </View>
+
+                      <View
+                        style={{
+                          flex: 0.15,
+                          flexDirection: "row",
+                          marginLeft: hp("0.5%"),
+                          alignItems: "center",
+                          marginBottom: hp("-0.8%")
+                        }}
+                      >
+                        <Text style={{ color: "black", fontSize: hp("2%") }}>
+                          {this.state.callingCode1}
+                        </Text>
+                      </View>
+
+                      <Item style={styles.inputItem1} stackedLabel>
+                        <Input
+                          marginTop={hp("-0.5%")}
+                          placeholder="Alternate Mobile Number"
+                          autoCorrect={false}
+                          keyboardType="number-pad"
+                          maxLength={20}
+                          defaultValue={
+                            this.props.navigation.state.params
+                              .profileDataSourceAlternateMobileNum
+                              ? this.props.navigation.state.params
+                                  .profileDataSourceAlternateMobileNum
+                              : ""
+                          }
+                          onChangeText={this.AMNumber}
+                          value={this.state.AMNumber}
+                        />
+                      </Item>
+                    </View>
+
+                    <Item style={styles.inputItem} stackedLabel>
+                      <Label style={{ marginRight: hp("0.6%") }}>
+                        {" "}
+                        Email ID
+                      </Label>
                       <Input
-                        style={styles.itemTextValues}
+                        marginBottom={hp("-1%")}
+                        placeholder="Email ID"
                         autoCorrect={false}
-                        autoCapitalize="words"
-                        multiline={false}
-                        maxLength={30}
                         keyboardType="email-address"
-                        placeholder="Enter Primary Email Here"
+                        maxLength={50}
                         defaultValue={
                           this.props.navigation.state.params
                             .profileDataSourceEmail
@@ -390,25 +642,20 @@ class EditProfile extends Component {
                             : ""
                         }
                         onChangeText={this.FEmail}
+                        value={this.state.FEmail}
                       />
-                      {/* </Item> */}
-                    </Card>
-                  </View>
+                    </Item>
 
-                  <View>
-                    <Card style={styles.myProfileCardsStyle}>
-                      {/* <Item stackedLabel style={styles.cardItemsStyle}> */}
-                      <Text style={styles.itemTextTitles}>
-                        Alternate Email:
-                      </Text>
+                    <Item style={styles.inputItem} stackedLabel>
+                      <Label style={{ marginRight: hp("0.6%") }}>
+                        Alternate Email ID
+                      </Label>
                       <Input
-                        style={styles.itemTextValues}
+                        marginBottom={hp("-1%")}
+                        placeholder="Alternate Email ID"
                         autoCorrect={false}
-                        autoCapitalize="words"
-                        multiline={false}
-                        maxLength={30}
                         keyboardType="email-address"
-                        placeholder="Enter Aternate Email here"
+                        maxLength={50}
                         defaultValue={
                           this.props.navigation.state.params
                             .profileDataSourceAlternateEmail
@@ -417,20 +664,11 @@ class EditProfile extends Component {
                             : ""
                         }
                         onChangeText={this.AEmail}
+                        value={this.state.AEmail}
                       />
-                      {/* </Item> */}
-                    </Card>
-                  </View>
-                  {/* <View style={styles.viewForPaddingAboveAndBelowUpdateButtons}>
-                    <Button
-                      bordered
-                      warning
-                      style={styles.buttonUpdateStyle}
-                      onPress={() => this.myEditProfile()}
-                    >
-                      <Text style={styles.textInUpdateButtonStyle}>Update</Text>
-                    </Button>
-                  </View> */}
+                    </Item>
+                  </Form>
+
                   <View style={styles.viewForPaddingAboveAndBelowButtons}>
                     <Button
                       bordered
@@ -464,36 +702,6 @@ class EditProfile extends Component {
 }
 
 const styles = StyleSheet.create({
-    image1: {
-        width: wp("17%"),
-        height: hp("12%"),
-        marginRight: hp("3%")
-      },
-    viewDetails2: {
-        alignItems: "flex-start",
-        justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
-        marginTop: 5
-        // marginLeft: 10
-      },
-    viewStyle1: {
-        backgroundColor: "#fff",
-        height: hp("7%"),
-        width: Dimensions.get("screen").width,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        elevation: 2,
-        position: "relative"
-      },
-      viewDetails1: {
-        flex: 0.3,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        marginLeft: 3
-      },
   textWrapper: {
     height: hp("85%"),
     width: wp("95%")
@@ -533,9 +741,7 @@ const styles = StyleSheet.create({
     marginTop: hp("2%"),
     marginBottom: 0
   },
-  emptyViewStyle: {
-    flex: 1
-  },
+
   viewForMyProfileText: {
     flex: 4,
     justifyContent: "center",
@@ -544,17 +750,10 @@ const styles = StyleSheet.create({
   myProfileTitleStyle: {
     textAlign: "center",
     fontSize: hp("2.5%"),
-    fontWeight: "500"
+    fontWeight: "500",
+    color: "#ff8c00"
   },
-  editButtonViewStyle: {
-    flex: 1,
-    alignItems: "flex-end",
-    justifyContent: "center"
-  },
-  editButtonImageStyle: {
-    width: wp("4.5%"),
-    height: hp("4.5%")
-  },
+
   containerView_ForProfilePicViewStyle: {
     justifyContent: "center",
     alignItems: "center",
@@ -570,83 +769,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     marginTop: hp("4%"),
-    marginBottom: hp("8%"),
+    marginBottom: hp("2%"),
     marginLeft: hp("4%")
   },
   profilePicImageStyle: {
+    //backgroundColor: "yellow",
     width: 110,
     height: 110,
     borderColor: "orange",
     borderRadius: 55,
     borderWidth: hp("0.2%") / PixelRatio.get()
   },
-  myProfileCardsStyle: {
-    marginTop: hp("0.5%"),
-    paddingHorizontal: hp("2%"),
-    paddingVertical: hp("0.3%"),
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    height: hp("7%")
-  },
-  cardItemsStyle: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start"
-  },
-  itemTextTitles: {
-    fontSize: hp("1.6%"),
-    fontWeight: "300",
-    // fontStyle: "italic",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    color: "#909091",
-    paddingLeft: hp("0.8%")
-  },
-  itemTextValues: {
-    
-    fontSize: hp("2%"),
-    fontWeight: "300",
-    paddingTop: hp("0.3%"),
-    paddingHorizontal: hp("0.5%"),
-    paddingBottom: hp("0.2%"),
-    width:wp('90%'),
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
-    color: "#474749"
-  },
 
-//   underlineStyle: {
-//       flex:1,
-//       marginLeft:hp('2%')
-//   },
-  viewForPaddingAboveAndBelowUpdateButtons: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: hp("4%"),
-    marginBottom: hp("2%"),
-    marginHorizontal: hp("2%")
-  },
-  buttonUpdateStyle: {
-    width: wp("28%"),
-    height: hp("5%"),
-    borderRadius: hp("2.5%"),
-    borderWidth: hp("0.2%"),
-    borderColor: "orange",
-    backgroundColor: "orange",
-    justifyContent: "center"
-  },
-  textInUpdateButtonStyle: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: hp("2%")
-  },
   imagesmallCircle: {
     alignItems: "flex-end",
     justifyContent: "flex-start",
     width: 10,
     height: 10,
-    marginTop: hp("5%"),
-    marginLeft: hp("2%"),
+    marginTop: hp("6%"),
+    marginLeft: hp("3%"),
     borderRadius: 5
   },
   smallImage: {
@@ -658,18 +799,18 @@ const styles = StyleSheet.create({
   },
   viewForPaddingAboveAndBelowButtons: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginTop: hp("4%"),
     marginBottom: hp("2%"),
     marginHorizontal: hp("2%")
   },
   buttonFamily: {
-    width: wp("32%"),
-    height: hp("5%"),
+    width: wp("25%"),
+    height: hp("4%"),
     borderRadius: hp("2.5%"),
     borderWidth: hp("0.2%"),
-    borderColor: "#C3C3C3",
-    backgroundColor: "#C3C3C3",
+    borderColor: "#EF3939",
+    backgroundColor: "#EF3939",
     justifyContent: "center"
   },
   textFamilyVehicle: {
@@ -678,25 +819,44 @@ const styles = StyleSheet.create({
     fontSize: hp("2%")
   },
   buttonVehicle: {
-    width: wp("32%"),
-    height: hp("5%"),
+    width: wp("25%"),
+    height: hp("4%"),
     borderRadius: hp("2.5%"),
     borderWidth: hp("0.2%"),
     borderColor: "orange",
     backgroundColor: "orange",
     justifyContent: "center"
+  },
+  itemTextValues1: {
+    fontSize: hp("2.2%"),
+    fontWeight: "500",
+    paddingTop: hp("0.8%"),
+    paddingHorizontal: 0,
+
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    color: "#474749"
+  },
+  inputItem: {
+    marginTop: wp("2%"),
+    marginLeft: wp("4%"),
+    marginRight: wp("4%"),
+    borderColor: "#909091"
+  },
+  inputItem1: {
+    flex: 0.65,
+    marginTop: wp("2%"),
+    marginLeft: wp("3%"),
+    marginRight: wp("4%"),
+    borderColor: "#909091"
+  },
+  number: {
+    flexDirection: "row",
+    width: Dimensions.get("screen").width,
+    justifyContent: "center",
+    alignItems: "center"
   }
 })
 
-const mapStateToProps = state => {
-  return {
-      oyeURL: state.OyespaceReducer.oyeURL,
-      MyAccountID: state.UserReducer.MyAccountID,
-      MyMobileNumber: state.UserReducer.MyMobileNumber,
-      MyISDCode: state.UserReducer.MyISDCode,
-      // viewImageURL: state.OyespaceReducer.viewImageURL
-  }
-}
-
-export default connect(mapStateToProps)(EditProfile);
+export default EditProfile
 
