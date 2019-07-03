@@ -151,6 +151,7 @@ EachServiceProvider from
 console.disableYellowBox = true;
 import Dashboard from '../src/screens/Resident/Dashboard/Dashboard'
 import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader'
+import Staff from "../src/screens/Resident/Visitors/Staff/Staff";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
@@ -178,10 +179,10 @@ const NotificationStack = createStackNavigator({
 const ResApp = createStackNavigator({
 
     ResDashBoard:  {
-        screen:MainScreen ,
+        screen:Staff ,
         navigationOptions: {
           title: 'Dashboard',
-          header:null //props => <DashBoardHeader {...props}/>
+          header:props => <PatrollingCommonHeader {...props}/>
         },
       },
 
