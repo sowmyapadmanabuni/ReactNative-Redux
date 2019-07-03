@@ -13,7 +13,7 @@ import { Card,CardItem, Form, Item, Label, Input, Button, } from "native-base"
 import CountryPicker, {getAllCountries} from 'react-native-country-picker-modal';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import moment from 'moment';
-import Switch from '../../src/components/common/Switch.js'
+//import Switch from '../../src/components/common/Switch.js'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import {

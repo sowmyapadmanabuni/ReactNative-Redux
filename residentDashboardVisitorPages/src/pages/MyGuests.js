@@ -19,7 +19,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import visited from './Visited.js';
 import Invited from './Invited.js';
 import { createMaterialTopTabNavigator, createAppContainer } from "react-navigation"
-import Header from '../components/common/Header.js';
+//import Header from '../components/common/Header.js';
 
 export default class MyGuests extends Component {
   render() {
