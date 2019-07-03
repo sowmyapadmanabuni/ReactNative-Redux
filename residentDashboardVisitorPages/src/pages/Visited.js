@@ -14,7 +14,7 @@ import {
   SafeAreaView,
   Image 
 } from "react-native";
-import Header from '../components/common/Header.js';
+//import Header from '../components/common/Header.js';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 // import { createMaterialTopTabNavigator, createAppContainer } from "react-navigation"

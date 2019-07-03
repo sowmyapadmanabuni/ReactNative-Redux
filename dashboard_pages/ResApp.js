@@ -181,7 +181,7 @@ const ResApp = createStackNavigator({
         screen:Dashboard ,
         navigationOptions: {
           title: 'Dashboard',
-          header: props => <DashBoardHeader {...props}/>
+          header:props => <DashBoardHeader {...props}/>
         },
       },
 

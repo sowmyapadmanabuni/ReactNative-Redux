@@ -372,10 +372,10 @@ class EditProfile extends Component {
                     this.props.navigation.goBack()
                   }}
                 >
-                  <Image
+                  {/*<Image
                     source={require("./src/components/images/backBtn.png")}
                     style={{ width: 18, height: 18 }}
-                  />
+                  />*/}
                 </TouchableOpacity>
               </View>
 
@@ -386,10 +386,10 @@ class EditProfile extends Component {
                   alignItems: "center"
                 }}
               >
-                <Image
+                {/*<Image
                   style={[styles.image]}
                   source={require("./src/components/images/headerLogo.png")}
-                />
+                />*/}
               </View>
               <View style={styles.emptyViewStyle} />
             </View>
@@ -413,10 +413,10 @@ class EditProfile extends Component {
                     >
                       <View style={styles.viewForProfilePicImageStyle}>
                         {this.state.photo == null ? (
-                          <Image
+                         {/* <Image
                             style={styles.profilePicImageStyle}
                             source={require("./src/components/images/camwithgradientbg.png")}
-                          />
+                          />*/}
                         ) : (
                           <Image
                             style={styles.profilePicImageStyle}
@@ -430,10 +430,10 @@ class EditProfile extends Component {
                       onPress={this.selectPhotoTapped.bind(this)}
                     >
                       <View style={styles.imagesmallCircle}>
-                        <Image
+                        {/*<Image
                           style={[styles.smallImage]}
                           source={require("./src/components/images/cam_with_gray_bg.png")}
-                        />
+                        />*/}
                       </View>
                     </TouchableOpacity>
                   </View>

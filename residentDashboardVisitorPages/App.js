@@ -10,7 +10,7 @@ import {
 // import Header from './src/components/common/Header';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import FirstTab from './FirstTab.js';
-import QRCodeGeneration from './src/pages/QRCodeGeneration.js';
+//import QRCodeGeneration from './src/pages/QRCodeGeneration.js';
 
 import { createStackNavigator, createAppContainer } from "react-navigation";
 

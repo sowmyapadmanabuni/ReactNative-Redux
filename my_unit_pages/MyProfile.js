@@ -163,10 +163,10 @@ class MyProfile extends Component {
                         })
                       }}
                     >
-                      <Image
+                      {/*<Image
                         style={styles.editButtonImageStyle}
                         source={require("./src/components/images/edit.png")}
-                      />
+                      />*/}
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -183,10 +183,10 @@ class MyProfile extends Component {
                         }}
                       />
                     ) : (
-                      <Image
+                      {/*<Image
                         style={styles.profilePicImageStyle}
                         source={require("./src/components/images/camwithgradientbg.png")}
-                      />
+                      />*/}
                     )}
                   </View>
                 </View>
@@ -207,10 +207,10 @@ class MyProfile extends Component {
                     flexDirection: "row"
                   }}
                 >
-                  <Image
+                  {/*<Image
                     style={styles.editButtonImageStyle1}
                     source={require("./src/components/images/call.png")}
-                  />
+                  />*/}
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
                       ? " " +
@@ -231,10 +231,10 @@ class MyProfile extends Component {
                     flexDirection: "row"
                   }}
                 >
-                  <Image
+                  {/*<Image
                     style={styles.editButtonImageStyle1}
                     source={require("./src/components/images/mail.png")}
-                  />
+                  />*/}
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
                       ? "  " + this.state.datasource.data.account[0].acEmail
