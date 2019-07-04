@@ -122,7 +122,7 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
     // console.log(`http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`)
 
     dispatch({ type: DASHBOARD_UNITS_START });
-
+    // "http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberByAccountID/accountid/associationid";
     axios
       .get(
         `http://${oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${unit}`,
@@ -146,11 +146,24 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
             }
           )
           .then(res => {
-            console.log(res.data.memberListByAccount);
+            let filteredUnits = res.data.data.memberListByAccount;
             let responseData = response.data.data;
             let unitOwner = responseData.unitOwner;
             let unitTenant = responseData.unitTenant;
             let residents = _.union(unitOwner, unitTenant);
+            console.log("filetred", filteredUnits);
+            let selUnits = [];
+
+            filteredUnits.map((data, index) => {
+              selUnits.push({
+                value: data.unUniName,
+                name: data.unUniName,
+                unitId: data.unUnitID,
+                id: index
+              });
+            });
+
+            console.log("selUnits", selUnits);
 
             fetch(
               `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`,
@@ -215,20 +228,6 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                     }
                   }
 
-                  // Sold Owner Occupied
-                  // Sold Tenant Occupied
-                  // Sold Vacant
-                  // All Sold Flats
-
-                  // Unsold Vacant
-                  // Unsold Tenant Occupied
-
-                  // All Unsold Flats
-                  // All Units
-                  // Single Unit
-                  // All Vacant Units
-                  // All Occupied Units
-
                   for (var j = 0; j < sold_data.length; j++) {
                     if (
                       sold_data[j].value == "Sold Owner Occupied Unit" ||
@@ -251,17 +250,15 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                   sold2 = sold1;
                   unsold2 = unsold1;
 
-                  let units = [];
-
-                  responseJson.data.unit.map((data, index) => {
-                    // console.log(data);
-                    units.push({
-                      value: data.unUniName,
-                      name: data.unUniName,
-                      unitId: data.unUnitID,
-                      id: index
-                    });
-                  });
+                  // responseJson.data.unit.map((data, index) => {
+                  //   // console.log(data);
+                  //   units.push({
+                  //     value: data.unUniName,
+                  //     name: data.unUniName,
+                  //     unitId: data.unUnitID,
+                  //     id: index
+                  //   });
+                  // });
 
                   let residentListOwner = [];
                   let residentListTenant = [];
@@ -296,33 +293,12 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                     newResidentTenant
                   );
 
-                  // console.log(res.data);
-
-                  let accountUnits = res.data.memberListByAccount;
-
-                  let removedUnits = _.remove(accountUnits, n => {
-                    return n.meJoinStat !== "accepted";
-                  });
-
-                  let finalUnits = [];
-
-                  removedUnits.map((data, index) => {
-                    // console.log(data);
-                    units.push({
-                      value: data.unUniName,
-                      name: data.unUniName,
-                      unitId: data.unUnitID,
-                      id: index
-                    });
-                  });
-
-                  // console.log(finalUnits, "finalUnits");
-                  // console.log(removedUnits, "removedUnits");
+                  // console.log("filetred", filteredUnits);
 
                   dispatch({
                     type: DASHBOARD_UNITS,
-                    payload: units,
-                    association: res.data.memberListByAccount
+                    payload: selUnits,
+                    association: res.data.data.memberListByAccount
                   });
 
                   dispatch({
@@ -354,7 +330,7 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                 }
               })
               .catch(error => {
-                // console.log(error);
+                console.log(error);
                 dispatch({ type: DASHBOARD_UNITS_STOP });
               });
           })

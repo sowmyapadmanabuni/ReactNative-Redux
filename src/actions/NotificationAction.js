@@ -189,23 +189,7 @@ export const createNotification = (
           dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED });
         });
     } else if (admin === "false") {
-      console.log(data);
-      console.log({
-        ACAccntID: MyAccountID,
-        ASAssnID: data.associationID,
-        NTType: data.ntType,
-        NTDesc: data.ntDesc,
-        SBUnitID: "resident_user",
-        SBMemID: "resident_user",
-        SBSubID: data.sbSubID,
-        SBRoleID: "resident_user",
-        ASAsnName: "resident_user",
-        MRRolName: "resident_user",
-        NTDCreated: formatdate,
-        NTDUpdated: formatdate,
-        UNOcSDate: "resident_user",
-        UNSldDate: "resident_user"
-      });
+      // console.log(data)
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
@@ -302,7 +286,7 @@ export const createNotification = (
             NTDesc: data.ntDesc,
             SBUnitID: "gate_app",
             SBMemID: "gate_app",
-            SBSubID: "gate_app",
+            SBSubID: data.sbSubID,
             SBRoleID: "gate_app",
             ASAsnName: "gate_app",
             MRRolName: "gate_app",
@@ -310,7 +294,6 @@ export const createNotification = (
             NTDUpdated: formatdate,
             UNOcSDate: "gate_app",
             UNSldDate: "gate_app"
-            // ntIsActive: false
           },
           {
             headers: headers
@@ -360,7 +343,7 @@ export const createNotification = (
                 });
               })
               .catch(error => {
-                console.log(error);
+                console.log("error", error);
                 dispatch({
                   type: GET_NOTIFICATIONS_FAILED,
                   payload: ""
