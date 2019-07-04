@@ -71,9 +71,10 @@ class RegisterMe extends Component {
       associationName,
       unitList
     } = this.props.navigation.state.params;
-    console.log("#!@$@$!@$!@$!@", unitList.unUnitID);
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
+    } else if (this.checkStatus()) {
+      alert("You already requested to join this unit");
     } else {
       anu = {
         ASAssnID: unitList.asAssnID,
@@ -182,16 +183,16 @@ class RegisterMe extends Component {
                   let soldDate = this.state.dobText;
                   let occupancyDate = this.state.dobText;
 
-                  console.log("userId", userID);
-                  console.log("sbUnitID", sbUnitID);
-                  console.log("sbSubID", sbSubID);
-                  console.log("sbRoleId", sbRoleId);
-                  console.log("sbMemID", sbMemID);
-                  console.log("sbName", sbName);
-                  console.log("associationID", associationID);
-                  console.log("ntType", ntType);
-                  console.log("ntTitle", ntTitle);
-                  console.log("ntDesc", ntDesc);
+                  // console.log("userId", userID);
+                  // console.log("sbUnitID", sbUnitID);
+                  // console.log("sbSubID", sbSubID);
+                  // console.log("sbRoleId", sbRoleId);
+                  // console.log("sbMemID", sbMemID);
+                  // console.log("sbName", sbName);
+                  // console.log("associationID", associationID);
+                  // console.log("ntType", ntType);
+                  // console.log("ntTitle", ntTitle);
+                  // console.log("ntDesc", ntDesc);
 
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
@@ -216,16 +217,18 @@ class RegisterMe extends Component {
                     })
                     .then(response_3 => {
                       this.setState({ loading: false });
-                      console.log("*******");
-                      console.log("here_3 ");
-                      console.log("*******");
+                      console.log("unitid", unitList.unUnitID);
+                      // console.log("*******");
+                      // console.log("here_3 ");
+                      // console.log("*******");
                       // let responseData_3 = response_3.data;
                       // console.log(responseData_3)
                       this.props.navigation.navigate("SplashScreen");
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
-                        this.props.navigation.state.params.unitID
+                        unitList.unUnitID
                       );
+
                       fetch(
                         `http://${
                           this.props.oyeURL
@@ -343,9 +346,12 @@ class RegisterMe extends Component {
       associationName,
       unitList
     } = this.props.navigation.state.params;
+    // this.checkStatus();
 
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
+    } else if (this.checkStatus()) {
+      alert("You already requested to join this unit");
     } else {
       anu = {
         ASAssnID: unitList.asAssnID,
@@ -455,16 +461,16 @@ class RegisterMe extends Component {
                   let soldDate = this.state.dobText;
                   let occupancyDate = this.state.dobText;
 
-                  console.log("userId", userID);
-                  console.log("sbUnitID", sbUnitID);
-                  console.log("sbSubID", sbSubID);
-                  console.log("sbRoleId", sbRoleId);
-                  console.log("sbMemID", sbMemID);
-                  console.log("sbName", sbName);
-                  console.log("associationID", associationID);
-                  console.log("ntType", ntType);
-                  console.log("ntTitle", ntTitle);
-                  console.log("ntDesc", ntDesc);
+                  // console.log("userId", userID);
+                  // console.log("sbUnitID", sbUnitID);
+                  // console.log("sbSubID", sbSubID);
+                  // console.log("sbRoleId", sbRoleId);
+                  // console.log("sbMemID", sbMemID);
+                  // console.log("sbName", sbName);
+                  // console.log("associationID", associationID);
+                  // console.log("ntType", ntType);
+                  // console.log("ntTitle", ntTitle);
+                  // console.log("ntDesc", ntDesc);
 
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
@@ -490,17 +496,17 @@ class RegisterMe extends Component {
                     })
                     .then(response_3 => {
                       this.setState({ loading: false });
-                      console.log("*******");
-                      console.log("here_3 ");
-                      console.log("*******");
+                      // console.log("*******");
+                      // console.log("here_3 ");
+                      // console.log("*******");
                       // let responseData_3 = response_3.data;
                       // console.log(responseData_3)
+
                       this.props.navigation.navigate("SplashScreen");
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
-                        this.props.navigation.state.params.unitID
+                        unitList.unUnitID
                       );
-
                       fetch(
                         `http://${
                           this.props.oyeURL
@@ -612,13 +618,21 @@ class RegisterMe extends Component {
     }
   };
 
+  checkStatus = () => {
+    const { unitList, AssnId } = this.props.navigation.state.params;
+    const { joinedAssociations } = this.props;
+    let unitID = unitList.unUnitID;
+
+    let status = _.includes(joinedAssociations, unitID);
+
+    return status;
+    // console.log("unitId", unitID);
+    // console.log(_.includes(joinedAssociations, unitID));
+  };
+
   render() {
     const { unitList, AssnId } = this.props.navigation.state.params;
-    console.log("#!@$@$!@$!@$!@", unitList.unUnitID, AssnId);
-    console.log("$$$$$$$$@$@!$!@$@%#^#$%&%^&%$", unitList.unOcStat);
-    console.log(this.props);
-    //   console.log('$$$$$$$$@$@!$!@$@%#^#$%&%^&%$', unitList.owner[0].uofName)
-    console.log("$$$$$$$$$$$$$$$$$$", unitList.owner.length.toString());
+
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: "orange" }}>
