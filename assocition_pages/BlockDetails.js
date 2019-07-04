@@ -206,7 +206,8 @@ class BlockDetail extends React.Component {
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                position: "absolute"
+                position: 'relative',
+                marginTop:hp('1%')
               }}
             >
               <Text>Please Wait</Text>

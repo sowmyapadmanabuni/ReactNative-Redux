@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,TouchableWithoutFeedback, Keyboard, Image,SafeAreaView, ScrollView,Alert, Dimensions, TouchableOpacity } from 'react-native';
-// import Header from './src/components/common/Header'
+import {Platform, StyleSheet, Text, View,TouchableWithoutFeedback, Keyboard, Image, ScrollView,Alert, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Card,CardItem, Form, Item, Label, Input, Button, } from "native-base"
 import CountryPicker, {getAllCountries} from 'react-native-country-picker-modal';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import moment from 'moment';
+import Switch from './Switch.js'
 import DateTimePicker from 'react-native-modal-datetime-picker';
-// import Switch from './src/components/common/Switch.js';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import {
   widthPercentageToDP as wp,
@@ -152,8 +151,8 @@ sendInvitation = () => {
   vehNo=this.state.vehNo;
   emailId=this.state.emailId;
   purpose=this.state.purpose;
-  dobDate=this.state.dobText;
-  dobDate1=this.state.dobText1;
+  dobDate=this.state.dobDate;
+  dobDate1=this.state.dobDate1;
   time=this.state.datetime;
   time1=this.state.datetime1;
   switches=this.state.switch;
@@ -207,15 +206,15 @@ else{
 
 
   
-  fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
+  fetch('http://apidev.oyespace.com/oye247/api/v1/Invitation/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
       body: JSON.stringify({
-        "MeMemID"   :  this.props.MyOYEMemberID,
-        "UnUnitID"  :  this.props.SelectedUnitID,
+        "MeMemID"   :  52,
+        "UnUnitID"  :  77,
         "INFName"   : fname,
         "INLName"   : lname,
         "INMobile"  : "+"+ callingCode + mobNum,
@@ -227,7 +226,8 @@ else{
         "INEDate"   : dobDate1 + time1,
         "INPOfInv"  : purpose,
         "INMultiEy" : switches,
-        "ASAssnID"  : this.props.SelectedAssociationID
+        "ASAssnID"  : 8,
+        "INQRCode"  : 1
       })
     })
       .then(response => response.json())
@@ -241,62 +241,58 @@ else{
 }
 
 
-
-
   render() {
     return (
       <View style={styles.container}>
-        {/* <Header/> */}
         <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-       
+           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+             <View style={styles.viewDetails1}>
+               <TouchableOpacity
+                 onPress={() => {
+                   this.props.navigation.goBack();
+                 }}
+               >
+                 <View
+                   style={{
+                     height: hp("4%"),
+                     width: wp("15%"),
+                     alignItems: 'flex-start',
+                     justifyContent: "center"
+                   }}
+                 >
+                   <Image
+                     resizeMode="contain"
+                     source={require("../icons/back.png")}
+                     style={styles.viewDetails2}
+                   />
+                 </View>
+               </TouchableOpacity>
+             </View>
+             <View
+               style={{
+                 flex: 1,
+                 justifyContent: "center",
+                 alignItems: "center"
+               }}
+             >
+               <Image
+                 style={[styles.image1]}
+                 source={require("../icons/OyeSpace.png")}
+               />
+             </View>
+             <View style={{ flex: 0.2 }}>
+             </View>
+           </View>
+           <View style={{ borderWidth: 1, borderColor: "orange" }} />
+         </SafeAreaView>
+         
         <KeyboardAwareScrollView >
           
             <Text style={styles.titleOfScreen}> Invite Guests </Text>
             <Form style={{marginRight:hp('1.5%')}}>
                 <View style={{width:'100%',alignSelf:'center'}}>
                   <Image source={require('../icons/illusn_bg.jpg')} 
-                    style={{width: '100%', height: hp('16%')}}/>
+                    style={{width: '100%', height: hp('20%')}}/>
                 </View>
                 <View style={{flexDirection:'row',}}>
                   
@@ -385,7 +381,7 @@ else{
                     <Text style={{color:'#ff8c00', marginRight:hp('1%'), fontSize:hp('1.8%')}}>From</Text>
                     <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                             <View style={styles.datePickerBox}>
-                              <Text style={styles.datePickerText}>{this.state.dobText} </Text>
+                              <Text style={styles.datePickerText}>{this.state.dobText}</Text>
                               <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
                             </View >
                     </TouchableOpacity>
@@ -480,13 +476,7 @@ else{
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor:'#fff'
-  },
-  containers: {
-  },
-
+ 
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
@@ -517,60 +507,64 @@ const styles = StyleSheet.create({
     height: hp("12%"),
     marginRight: hp("3%")
   },
-
-
-  titleOfScreen: {
-    marginTop:hp('1.5%'),
-    textAlign: 'center',
-    fontSize: hp('2.4%'),
-    fontWeight: 'bold',
-    marginBottom: hp('1.5%'),
-    color:'#ff8c00',
-    justifyContent:'center',
-    alignItems:'center',
-  },
-  incdecBtn:{
-    flexDirection:'row', 
-    justifyContent:'space-evenly', 
-    alignItems:'center', 
-    marginRight:'5%',
-    width:wp('14%'),
-    height:hp('3.5%'), 
-    borderWidth:hp('0.1%'), 
-    borderColor:'orange',
-    borderRadius:hp('0.6%'),
-  },
-  button: {
-    width: hp('12%'),
-    height:hp('5%'),
-    borderRadius: 25,
-    borderWidth: 2,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    marginLeft: 30,
-    marginRight: 30,
-    borderColor:'#fff',
-    marginBottom:hp('2%')
-  },
-  datePickerBox: {
-    margin: hp('0.2%'), 
-    borderColor: '#ABABAB', 
-    borderBottomWidth:hp('0.1%'),
-    justifyContent: 'center'
-
-  },
-  datePickerText: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212', },
-  subtext1: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212' } 
+    container: {
+      flex: 1,
+      backgroundColor:'#fff'
+    },
+    containers: {
+    },
+  
+    titleOfScreen: {
+      marginTop:hp('1.5%'),
+      textAlign: 'center',
+      fontSize: hp('2.4%'),
+      fontWeight: 'bold',
+      marginBottom: hp('1.5%'),
+      color:'#ff8c00',
+      justifyContent:'center',
+      alignItems:'center',
+    },
+    incdecBtn:{
+      flexDirection:'row', 
+      justifyContent:'space-evenly', 
+      alignItems:'center', 
+      marginRight:'5%',
+      width:wp('14%'),
+      height:hp('3.5%'), 
+      borderWidth:hp('0.1%'), 
+      borderColor:'orange',
+      borderRadius:hp('0.6%'),
+    },
+    button: {
+      width: hp('12%'),
+      height:hp('5%'),
+      borderRadius: 25,
+      borderWidth: 2,
+      backgroundColor: 'white',
+      justifyContent: 'center',
+      marginLeft: 30,
+      marginRight: 30,
+      borderColor:'#fff',
+      marginBottom:hp('2%')
+    },
+    datePickerBox: {
+      margin: hp('0.2%'), 
+      borderColor: '#ABABAB', 
+      borderBottomWidth:hp('0.1%'),
+      justifyContent: 'center'
+  
+    },
+    datePickerText: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212', },
+    subtext1: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212' } 
 });
 
 const mapStateToProps = state => {
-    return {
-      oyeURL: state.OyespaceReducer.oyeURL,
-      SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-      SelectedUnitID: state.UserReducer.SelectedUnitID,
-      MyOYEMemberID: state.UserReducer.MyOYEMemberID,
-      SelectedMemberID: state.UserReducer.SelectedMemberID,
-    };
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
   };
-  
-  export default connect(mapStateToProps)(InviteGuests);
+};
+
+export default connect(mapStateToProps)(InviteGuests);
+
+

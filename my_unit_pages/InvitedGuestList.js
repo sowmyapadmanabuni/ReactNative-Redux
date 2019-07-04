@@ -12,18 +12,17 @@ import {
   TextInput,
   Keyboard,
   Alert,
-  ActivityIndicator,
   SafeAreaView,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
-// import Header from "./src/components/common/Header";
 import { Card, CardItem } from "native-base";
 import { NavigationEvents } from "react-navigation";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
 class MyGuests extends Component {
   static navigationOptions = {
@@ -38,17 +37,28 @@ class MyGuests extends Component {
       ImageSource: null,
 
       loading: false,
-      error: null
+      error: null,
+
+      isSelected: false
     };
     this.arrayholder = [];
   }
   componentDidMount() {
     this.getInvitationList();
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 5000);
   }
 
   getInvitationList = () => {
     fetch(
-      `http://${this.props.oyeURL}/oye247/api/v1/Invitation/GetInvitationListByAssocID/${this.props.SelectedAssociationID}`,
+      `http://${
+        this.props.oyeURL
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${
+        this.props.SelectedAssociationID
+      }/True`,
       {
         method: "GET",
         headers: {
@@ -89,72 +99,76 @@ class MyGuests extends Component {
       dataSource: newData
     });
   };
+
   renderItem = ({ item, index }) => {
     // console.log(item,index)
     return (
       <View style={{ flexDirection: "column" }}>
-        <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
-        <View
-          style={[
-            styles.listItem,
-            {
-              justifyContent: "space-between",
-              paddingRight: 0,
-              height: hp("15%")
-            }
-          ]}
-        >
-          <View style={styles.iconContainer}>
-            <Text style={styles.contactIcon}>
-              {item.infName[0].toUpperCase()}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>
-              {item.infName} {item.inlName}
-            </Text>
-            <View style={{ flexDirection: "column" }}>
-              <Text style={styles.infoNumber}>{item.inMobile}</Text>
+        <TouchableOpacity onPress={() => !this.state.isSelected}>
+          <View style={{ borderColor: "#707070", borderWidth: hp("0.04%") }} />
+          <View
+            style={[
+              styles.listItem,
+              {
+                justifyContent: "space-between",
+                paddingRight: 0,
+                height: hp("15%")
+              }
+            ]}
+          >
+            <View style={styles.iconContainer}>
+              <Text style={styles.contactIcon}>
+                {item.infName[0].toUpperCase()}
+              </Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>
+                {item.infName} {item.inlName}
+              </Text>
+              <View style={{ flexDirection: "column" }}>
+                <Text style={styles.infoNumber}>{item.inMobile}</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
+              <Card style={{ paddingTop: 0 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate("QRCodeGeneration", {
+                      value: this.state.dataSource[index]
+                    });
+                  }}
+                >
+                  <CardItem bordered>
+                    <Image
+                      style={styles.images}
+                      source={require("../icons/share.png")}
+                    />
+                  </CardItem>
+                </TouchableOpacity>
+              </Card>
+              <Card style={{ marginTop: 0 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    {
+                      Platform.OS === "android"
+                        ? Linking.openURL(`tel:${item.inMobile}`)
+                        : Linking.openURL(`telprompt:${item.inMobile}`);
+                    }
+                  }}
+                >
+                  <CardItem bordered>
+                    <Image
+                      style={styles.images}
+                      source={require("../icons/phone.png")}
+                    />
+                  </CardItem>
+                </TouchableOpacity>
+              </Card>
             </View>
           </View>
-          <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
-            <Card style={{ paddingTop: 0, }}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ShareQRCode", {
-                    value: this.state.dataSource[index]
-                  });
-                }}
-              >
-                <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/share.png")}
-                  />
-                </CardItem>
-              </TouchableOpacity>
-            </Card>
-            <Card style={{ marginTop: 0, }}>
-              <TouchableOpacity
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`telprompt:${item.inMobile}`)
-                      : Linking.openURL(`tel:${item.inMobile}`);
-                  }
-                }}
-              >
-                <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/phone.png")}
-                  />
-                </CardItem>
-              </TouchableOpacity>
-            </Card>
-          </View>
-        </View>
-        <View style={{ borderColor: "#707070", borderWidth: wp("0.05%") }} />
+          <View style={{ borderColor: "#707070", borderWidth: hp("0.04%") }} />
+        </TouchableOpacity>
+        {/* {this.state.isSelected === true && this.renderDetails()} */}
       </View>
     );
   };
@@ -163,54 +177,47 @@ class MyGuests extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
-          {/* <Header /> */}
           <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate("ResDashBoard");
                   }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                    style={{
+                      height: hp("4%"),
+                      width: wp("15%"),
+                      alignItems: "flex-start",
+                      justifyContent: "center"
+                    }}
+                  >
+                    <Image
+                      resizeMode="contain"
+                      source={require("../icons/back.png")}
+                      style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Image
+                  style={[styles.image1]}
+                  source={require("../icons/OyeSpace.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }} />
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-       
-        <NavigationEvents
-          onDidFocus={payload => this.getInvitationList()}
-          onWillBlur={payload => this.getInvitationList()}
-        />
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
+
           <Text style={styles.titleOfScreen}>My Guests</Text>
 
           <View style={styles.progress}>
@@ -221,7 +228,6 @@ class MyGuests extends Component {
     }
     return (
       <View style={{ flex: 1 }}>
-        {/* <Header /> */}
         <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
             <View style={styles.viewDetails1}>
@@ -234,7 +240,7 @@ class MyGuests extends Component {
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: 'flex-start',
+                    alignItems: "flex-start",
                     justifyContent: "center"
                   }}
                 >
@@ -258,13 +264,11 @@ class MyGuests extends Component {
                 source={require("../icons/OyeSpace.png")}
               />
             </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
+            <View style={{ flex: 0.2 }} />
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-       
+
         <NavigationEvents
           onDidFocus={payload => this.getInvitationList()}
           onWillBlur={payload => this.getInvitationList()}
@@ -273,43 +277,69 @@ class MyGuests extends Component {
 
         <TextInput
           style={styles.textinput}
-          placeholder="search...."
-          // lightTheme
+          placeholder="Search..."
           round
           onChangeText={this.searchFilterFunction}
         />
-        <FlatList
-          style={{ marginTop: hp('1.5%') }}
-          data={this.state.dataSource.sort((a, b) =>
-            a.infName.localeCompare(b.infName)
-          )}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => item.inInvtID.toString()}
-        />
-
-        <TouchableOpacity
-          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-          onPress={() => this.props.navigation.navigate("InviteGuestScreen")}
-        >
-          <Text
+        {this.state.dataSource.length == 0 ? 
+            <View
             style={{
-              fontSize: hp('5%'),
-              color: "#fff",
-              fontWeight: "bold",
-              justifyContent: "center",
+              flex: 1,
               alignItems: "center",
-              alignSelf: "center",
-              marginBottom: hp('0.5%')
+              justifyContent: "center",
+              backgroundColor: "white",
+              margin:hp('2%')
             }}
           >
-            +
-          </Text>
-          {/* <Entypo 
+            <Text
+              style={{
+                backgroundColor: "white",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: hp("1.8%"),
+              }}
+            >
+              Please select Association from the dropdown in Dashboard
+            </Text>
+          </View>
+        
+        : 
+        <View style={{flex:1,  flexDirection: "column" }}>
+        
+          <FlatList
+            style={{ marginTop: hp("1.5%") }}
+            data={this.state.dataSource.sort((a, b) =>
+              a.infName.localeCompare(b.infName)
+            )}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => item.inInvtID.toString()}
+          />
+
+          <TouchableOpacity
+            style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+            onPress={() => this.props.navigation.navigate("InviteGuestScreen")}
+          >
+            <Text
+              style={{
+                fontSize: hp("5%"),
+                color: "#fff",
+                fontWeight: "bold",
+                justifyContent: "center",
+                alignItems: "center",
+                alignSelf: "center",
+                marginBottom: hp("0.5%")
+              }}
+            >
+              +
+            </Text>
+            {/* <Entypo 
                     name="plus"
                     size={30}
                     color="#fff"
                 /> */}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
+        }
       </View>
     );
   }
@@ -321,6 +351,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "column"
   },
+  progress: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
@@ -352,20 +388,18 @@ const styles = StyleSheet.create({
     marginRight: hp("3%")
   },
 
-  progress: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
   textinput: {
-    height: hp('6%'),
-    borderWidth: hp('0.1%'),
+    height: hp("5%"),
+    borderWidth: hp("0.1%"),
     borderColor: "#fff",
-    marginHorizontal: hp('1%'),
-    paddingLeft: hp('2%'),
-    fontSize: hp('3.5%'),
-    backgroundColor: "#f4f4f4",
-    borderRadius: hp('2%')
+    marginHorizontal: hp("1%"),
+    paddingLeft: hp("2%"),
+    marginTop: hp("0.5%"),
+    fontSize: hp("2.2%"),
+    borderBottomWidth: hp("0.5%"),
+    borderColor: "#f4f4f4"
+    // backgroundColor: "#f4f4f4",
+    // borderRadius: hp('4%'),
   },
   listItem: {
     flexDirection: "row",
@@ -407,12 +441,12 @@ const styles = StyleSheet.create({
   },
 
   titleOfScreen: {
-    marginTop: hp('1.5%'),
+    marginTop: hp("1.5%"),
     textAlign: "center",
-    fontSize: hp('2.4%'),
+    fontSize: hp("2.4%"),
     fontWeight: "bold",
-    marginBottom: hp('1.5%'),
-    color:'#ff8c00'
+    marginBottom: hp("1.5%"),
+    color: "#ff8c00"
   },
 
   floatButton: {
@@ -420,11 +454,11 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    width: hp('8%'),
+    width: hp("8%"),
     position: "absolute",
-    bottom: hp('2.5%'),
-    right: hp('2.5%'),
-    height: hp('8%'),
+    bottom: hp("2.5%"),
+    right: hp("2.5%"),
+    height: hp("8%"),
     backgroundColor: "#FF8C00",
     borderRadius: 100,
     // shadowColor: '#000000',
@@ -446,7 +480,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     oyeURL: state.OyespaceReducer.oyeURL,
-    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID
   };
 };
 

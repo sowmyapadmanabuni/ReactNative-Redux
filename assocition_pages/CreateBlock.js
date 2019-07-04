@@ -259,47 +259,44 @@ class AddBlock extends Component {
     let mobRegex = /^[0]?[456789]d{9}$/
 
     if (blockName.length == 0) {
-      Alert.alert("Block name Cannot be Empty")
+      Alert.alert("Please enter the Block Name with only Alpha Numeric Value")
     } else if (oyeNonSpecialRegex.test(blockName) === true) {
-      Alert.alert("Block name should not contain Special Character")
-    } else if (blockName < 3) {
+      Alert.alert("Please insert only Alpha-Numeric value in Block Name")
+    } else if (blockName.length < 3) {
       alert("Block name should be more than 3 Characters")
-    } else if (blockName > 50) {
+    } else if (blockName.length > 50) {
       alert("Block name should be less than 50 Characters")
     } else if (blockType.length == 0) {
-      Alert.alert("Please Select Block type")
+      Alert.alert("Please select the Block Type from dropdown list")
     } else if (noOfUnits.length == 0) {
-      Alert.alert("Number of Units Cannot be Empty")
-    } 
-    // else if (noOfUnits >= 80) {
-    //   Alert.alert("Number Of Units should not be more than 80")
-    // }
-     else if (regPIN.test(noOfUnits) === false) {
-      alert("Number Of Units should not contain Special Character")
+      Alert.alert("Please enter the No. of Units with Numeric Value")
+    } else if (regPIN.test(noOfUnits) === false) {
+      alert("Please enter the No. of Units with Numeric Value")
     } else if (managerName.length == 0) {
-      Alert.alert("Manager Name Cannot be Empty")
+      Alert.alert("Please enter Manager Name with only Alpha characters")
     } else if (regTextOnly.test(managerName) === false) {
-      Alert.alert("Manager Name should not contain Special Character")
+      Alert.alert("Please enter Manager Name with only Alpha characters")
     } else if (mobNum.length < 10) {
-      Alert.alert("Mobile number should contains 10 numerics.")
+      Alert.alert("Please enter valid mobile no.")
     } else if (reg.test(mobNum) === false) {
-      Alert.alert("Mobile number should not contain special characters.")
+      Alert.alert("Please enter valid mobile no.")
     } else if (regemail.test(emailID) === false) {
-      Alert.alert("Please check your email-id")
-    } else if (invoiceCreationFreq.length == 0) {
-      Alert.alert("Please select Invoice creation frequency")
+      Alert.alert("Please enter valid Manager Email Id")
+    } 
+    else if (invoiceCreationFreq.length == 0) {
+      Alert.alert("Please select Invoice Creation Frequency from dropdown list")
     } else if (dobText.length == 0) {
-      Alert.alert("Please select Next Invoice generation date")
+      Alert.alert("Please select Next Invoice Generation date")
     } else if (dobText2 < dobText) {
-      Alert.alert("Invoice Creation frequency less than Due date")
+      Alert.alert("Due Date should be more than Next Invoice Generation Date")
     } else if (latePayChargeType.length == 0) {
-      Alert.alert("Please select LatePayChargeType")
-    } else if (latePayCharge == 0) {
-      Alert.alert("Late Payment Charge cannot be empty")
+      Alert.alert("Please select Late Payment Charge Type from the dropdown list")
+    } else if (latePayCharge.length === 0) {
+      Alert.alert("Please enter the Late Payment Charge with only Numeric Value")
     } else if (regPIN.test(latePayCharge) === false) {
-      Alert.alert("Late Payment Charge should not contain special characters")
+      Alert.alert("Please enter the Late Payment Charge with only Numeric Value")
     } else if (dobText4 < dobText2 && dobText) {
-      Alert.alert("Start's from date")
+      Alert.alert("Starts From Date should be equal to Due Date and more than Next Invoice Generation Date.")
     } else if (checked === false) {
       this.flatrate()
       return
@@ -313,7 +310,7 @@ class AddBlock extends Component {
   flatrate = () => {
     let flatRateValue = this.state.flatRateValue
     if (flatRateValue.length === 0) {
-      Alert.alert("Please should give Flat rate value")
+      Alert.alert("Please enter Flat rate value")
       return
     } else {
       this.createBlockPostData()
@@ -323,7 +320,7 @@ class AddBlock extends Component {
   dimenstion = () => {
     let maintenaceValue = this.state.maintenaceValue
     if (maintenaceValue.length === 0) {
-      Alert.alert("Please should give Maintenace value")
+      Alert.alert("Please enter Maintenace value")
       return
     } else {
       this.createBlockPostData()
