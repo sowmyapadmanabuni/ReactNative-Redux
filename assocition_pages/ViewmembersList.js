@@ -92,18 +92,10 @@ class Resident extends Component {
       this.props.oyeURL
     }/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate`;
 
-    //  console.log("values", {
-    //    ACMobile: this.state
-    //      .selectedRoleData.uoMobile,
-    //    UNUnitID: this.state
-    //      .selectedRoleData.unitid,
-    //    // MRMRoleID: this.state.selectedRoleData.selRolId
-    //    // global.MyOYEMemberID
-    //    MRMRoleID: this.state
-    //      .selectedRoleData.selRolId,
-    //    MEMemID: this.props
-    //      .SelectedMemberID
-    //  });
+    console.log("values", {
+      MRMRoleID: this.state.selectedRoleData.selRolId,
+      MEMemID: this.props.SelectedMemberID
+    });
 
     requestBody = {
       // ACMobile: this.state.selectedRoleData.uoMobile,
