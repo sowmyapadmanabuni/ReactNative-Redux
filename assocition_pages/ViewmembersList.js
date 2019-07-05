@@ -70,124 +70,48 @@ class Resident extends Component {
 
   residentialListGetMethod = () => {};
 
-  // componentDidMount() {
-  //   const { params } = this.props.navigation.state;
-  //   // const { units } = this.state;
-  //   let units = params.data.sort((a, b) => a.unit.localeCompare(b.unit));
-
-  //   const promises = [];
-
-  //   let completeList = [];
-  //   let comp = this;
-  //   let admins = _.map(units, (admin, index) => {
-  //     console.log(admin.admin)
-  //     if(admin.admin) {
-  //       // promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/2180`, {
-  //       promises[index] = axios.get(`http://${global.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${admin.admin}`, {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-  //         },
-  //       })
-  //       .then((res) => {
-  //         if(res.data.success) {
-  //           let responseData = res.data.data;
-  //           console.log(responseData)
-  //           return responseData;
-  //         }
-  //       })
-  //     }
-  //   })
-
-  //   Promise.all(promises)
-  //   .then(function(values, index) {
-  //     completeList = values;
-  //     console.log('values', values)
-
-  //     let indexValue = _.map(completeList, (value, index) => {
-  //       return { ...value, id: index };
-  //     });
-
-  //     indexValue.map((data, index, allData) => {
-  //       // arr[index];
-  //       _.map(data, (mem, i, j) => {
-  //         // console.log('mem', mem)
-  //         // console.log('i', i)
-  //         // console.log('j', j)
-  //           let a = _.map(j.memberListByAccount, (sorted) => {
-  //             return { ...sorted, id: j.id }
-  //           })
-
-  //           test.push(a);
-  //         return mem
-  //       })
-
-  //     })
-
-  //     let filtered = test.filter(function (el) {
-  //       return el.length != 0;
-  //   })
-
-  //     // console.log('filtered', filtered);
-
-  //       _.map(filtered, (value) => {
-  //       _.map(value, (data) => {
-
-  //         if(data.unUnitID === units[data.id].unitid && data.mrmRoleID === 1) {
-  //           role.push({ ...data, isAdmin: true });
-  //         } else {
-  //           // role.push({ ...data, isAdmin: false });
-  //         }
-
-  //       })
-  //     })
-
-  //     let freeDup = _.unionBy(role, 'acMobile');
-
-  //     console.log(freeDup);
-
-  //     // secUnits = units;
-
-  //     secUnits = _.map(units, (data, i) => {
-  //       return { ...data, isAdmin: false }
-  //     })
-
-  //     secArr = _.map(units, (data, i) => {
-  //       if(freeDup[i]) {
-  //         secUnits[freeDup[i].id].isAdmin = true
-  //         console.log(secUnits[freeDup[i].id].isAdmin)
-  //       } else {
-  //       }
-  //     })
-
-  //     console.log(secArr)
-  //     console.log(secUnits)
-  //     let newData = [ ...secUnits ]
-  //     comp.setState({ residentList: newData, loading: false });
-
-  //   })
-  //   .catch((error, index )=> {
-  //     console.log(error)
-  //     console.log(index)
-  //   })
-
-  // }
-
   componentDidMount = () => {};
 
   changeRole = () => {
-    const { getDashUnits, selectedAssociation } = this.props;
+    const {
+      getDashUnits,
+      // selectedAssociation,
+      selectedAssociationIndex,
+      associationid,
+      notifications
+    } = this.props;
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    // const { oyeURL } = this.props.oyespaceReducer;
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
+    //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate
+    // const url = `http://${
+    //   this.props.oyeURL
+    // }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
+
     const url = `http://${
       this.props.oyeURL
-    }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
-    console.log(this.state);
-    console.log(url);
+    }/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate`;
+
+    //  console.log("values", {
+    //    ACMobile: this.state
+    //      .selectedRoleData.uoMobile,
+    //    UNUnitID: this.state
+    //      .selectedRoleData.unitid,
+    //    // MRMRoleID: this.state.selectedRoleData.selRolId
+    //    // global.MyOYEMemberID
+    //    MRMRoleID: this.state
+    //      .selectedRoleData.selRolId,
+    //    MEMemID: this.props
+    //      .SelectedMemberID
+    //  });
+
     requestBody = {
-      ACMobile: this.state.selectedRoleData.uoMobile,
-      UNUnitID: this.state.selectedRoleData.unitid,
-      MRMRoleID: this.state.selectedRoleData.selRolId
+      // ACMobile: this.state.selectedRoleData.uoMobile,
+      // UNUnitID: this.state.selectedRoleData.unitid,
+      // MRMRoleID: this.state.selectedRoleData.selRolId
       // global.MyOYEMemberID
+      MRMRoleID: this.state.selectedRoleData.selRolId,
+      MEMemID: this.props.SelectedMemberID
     };
 
     fetch(url, {
@@ -204,8 +128,13 @@ class Resident extends Component {
 
       .then(responseJson => {
         console.log("%%%%%%%%%%", responseJson);
+        getDashUnits(
+          associationid[selectedAssociationIndex].id,
+          this.props.oyeURL,
+          notifications,
+          MyAccountID
+        );
         this.props.navigation.goBack();
-        getDashUnits(selectedAssociation);
       })
       .catch(error => {
         console.log("err " + error);
@@ -265,7 +194,7 @@ class Resident extends Component {
   };
 
   render() {
-    console.log("$$$$$$$$$$#%#%@#%#^$#^&%&%^&%^*^%*%^&$%^$",this.props.oyeURL)
+    console.log("$$$$$$$$$$#%#%@#%#^$#^&%&%^&%^*^%*%^&$%^$", this.props.oyeURL);
     const { params } = this.props.navigation.state;
     // console.log(params)
     // console.log(this.props.associationid)
@@ -295,7 +224,7 @@ class Resident extends Component {
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: 'flex-start',
+                    alignItems: "flex-start",
                     justifyContent: "center"
                   }}
                 >
@@ -421,7 +350,11 @@ const mapStateToProps = state => {
   return {
     associationid: state.DashboardReducer.associationid,
     selectedAssociation: state.DashboardReducer.selectedAssociation,
-    oyeURL: state.OyespaceReducer.oyeURL
+    oyeURL: state.OyespaceReducer.oyeURL,
+    SelectedMemberID: state.UserReducer.SelectedMemberID,
+    selectedAssociationIndex: state.DashboardReducer.selectedAssociationIndex,
+    notifications: state.NotificationReducer.notifications,
+    userReducer: state.UserReducer
   };
 };
 
@@ -437,7 +370,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: hp("2%"),
     marginBottom: hp("1%"),
-    color:'orange'
+    color: "orange"
   },
   viewDetails: {
     flexDirection: "column",

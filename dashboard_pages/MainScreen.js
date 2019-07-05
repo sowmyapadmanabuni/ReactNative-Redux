@@ -46,7 +46,8 @@ import {
   getDashUnits,
   updateUserInfo,
   updateApproveAdmin,
-  getAssoMembers
+  getAssoMembers,
+  updateDropDownIndex
 } from "../src/actions";
 import { NavigationEvents } from "react-navigation";
 
@@ -150,11 +151,11 @@ class Dashboard extends React.Component {
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
         data.map(units => {
-          console.log(units.unUnitID + "admin");
-          console.log(units.mrmRoleID + "role");
+          // console.log(units.unUnitID + "admin");
+          // console.log(units.mrmRoleID + "role");
           if (receiveNotifications) {
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-              console.log(units.unUnitID + "admin");
+              // console.log(units.unUnitID + "admin");
               firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
             }
           } else if (!receiveNotifications) {
@@ -165,7 +166,7 @@ class Dashboard extends React.Component {
   };
 
   showLocalNotification = notification => {
-    console.log(notification);
+    // console.log(notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
       "Oyespace",
@@ -335,17 +336,22 @@ class Dashboard extends React.Component {
     let memId = _.find(memberList, function(o) {
       return o.asAssnID === dropdown[index].associationId;
     });
+
     updateUserInfo({
       prop: "MyOYEMemberID",
       value: memId.meMemID
     });
-    // this.unit(this.state.associationid[index].id)
+
+    updateUserInfo({
+      prop: "SelectedMemberID",
+      value: dropdown[index].memberId
+    });
   };
 
   renderSubscription = () => {
     const { datasource, SelectedAssociationID } = this.props;
 
-    console.log(datasource);
+    // console.log(datasource);
 
     if (!SelectedAssociationID) {
       return (
@@ -379,7 +385,8 @@ class Dashboard extends React.Component {
       isLoading,
       sold2,
       unsold2,
-      updateUserInfo
+      updateUserInfo,
+      updateDropDownIndex
     } = this.props;
     return (
       <View style={{ flex: 1 }}>
@@ -421,9 +428,10 @@ class Dashboard extends React.Component {
                       // labelHeight={hp("1%")}
                       labelPadding={hp("1%")}
                       labelSize={hp("1%")}
-                      onChangeText={(value, index) =>
-                        this.onAssociationChange(value, index)
-                      }
+                      onChangeText={(value, index) => {
+                        this.onAssociationChange(value, index);
+                        updateDropDownIndex(index);
+                      }}
                     />
                   </CardItem>
                 </Card>
@@ -447,8 +455,9 @@ class Dashboard extends React.Component {
                             prop: "SelectedUnitID",
                             value: dropdown1[index].unitId
                           });
-                          console.log(value);
-                          console.log(index);
+
+                          // console.log(value);
+                          // console.log(index);
                         }}
                       />
                     )}
@@ -539,7 +548,8 @@ class Dashboard extends React.Component {
                   // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
                   onPress={() => {
                     this.props.navigation.navigate("ViewmembersScreen", {
-                      data: residentList
+                      data: residentList,
+                      reload: this.onAssociationChange
                     });
                   }}
                 >
@@ -911,6 +921,7 @@ export default connect(
     getDashUnits,
     updateUserInfo,
     getAssoMembers,
-    updateApproveAdmin
+    updateApproveAdmin,
+    updateDropDownIndex
   }
 )(Dashboard);

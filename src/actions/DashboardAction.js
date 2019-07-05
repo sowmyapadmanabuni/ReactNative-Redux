@@ -8,7 +8,8 @@ import {
   DASHBOARD_UNITS_STOP,
   DASHBOARD_ASSOC_STOP,
   GET_MEMBERLIST_SUCCESS,
-  GET_MEMBERLIST_FAILED
+  GET_MEMBERLIST_FAILED,
+  UPDATE_DROPDOWN_INDEX
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
@@ -68,7 +69,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               value: data.asAsnName,
               name: data.asAsnName,
               id: index,
-              associationId: data.asAssnID
+              associationId: data.asAssnID,
+              memberId: data.meMemID
             });
             associationIds.push({
               id: data.asAssnID
@@ -79,7 +81,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
           //   associationIds.push({ id: data.associationId });
           // });
 
-          console.log("associationIds", associationIds);
+          console.log("associations", associations);
 
           let removeDuplicates = [];
 
@@ -162,8 +164,6 @@ export const getDashUnits = (unit, oyeURL, notifications, MyAccountID) => {
                 id: index
               });
             });
-
-            console.log("selUnits", selUnits);
 
             fetch(
               `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`,
@@ -363,5 +363,14 @@ export const getAssoMembers = (oyeURL, id) => {
           type: GET_MEMBERLIST_FAILED
         });
       });
+  };
+};
+
+export const updateDropDownIndex = index => {
+  return dispatch => {
+    dispatch({
+      type: UPDATE_DROPDOWN_INDEX,
+      payload: index
+    });
   };
 };

@@ -8,7 +8,8 @@ import {
   DASHBOARD_UNITS_STOP,
   DASHBOARD_ASSOC_STOP,
   GET_MEMBERLIST_SUCCESS,
-  GET_MEMBERLIST_FAILED
+  GET_MEMBERLIST_FAILED,
+  UPDATE_DROPDOWN_INDEX
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -23,7 +24,8 @@ const INITIAL_STATE = {
   unsold: 0,
   isLoading: true,
   selectedAssociation: null,
-  memberList: []
+  memberList: [],
+  selectedAssociationIndex: null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -77,6 +79,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_MEMBERLIST_FAILED:
       return { ...state, memberList: [] };
+
+    case UPDATE_DROPDOWN_INDEX:
+      return { ...state, selectedAssociationIndex: action.payload };
 
     default:
       return state;
