@@ -351,8 +351,8 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   editButtonImageStyle: {
-    width: wp("7%"),
-    height: hp("5%")
+    width: hp("4%"),
+    height: hp("4%")
   },
   containerView_ForProfilePicViewStyle: {
     justifyContent: "center",

@@ -95,9 +95,12 @@ class EditUnit extends Component {
             CalType:"",
             OccupancyStatus:"",
             //date picker
-            dobText: moment(new Date()).format("YYYY-MM-DD hh:mm:ss"), //year + '-' + month + '-' + date,
-            dobText1: moment(new Date()).format("YYYY-MM-DD hh:mm:ss"), //year + '-' + month + '-' + date,
-        
+            dobText: this.props.navigation.state.params.Osdate,
+            // moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
+            dobText1: this.props.navigation.state.params.Ocdate,
+            // moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
+            dobdate:this.props.navigation.state.params.Osdate,
+            dobdate1:this.props.navigation.state.params.Ocdate,
 
             Unitofname:"",
             Unitolname:"",
@@ -109,54 +112,55 @@ class EditUnit extends Component {
             Unittlname:"",
             Unittmnum:"",
             Unitteid:"",
-            Ocdate:"",
-            Osdate:""
+            // Ocdate:this.props.navigation.state.params.Ocdate,
+            // Osdate:this.props.navigation.state.params.Osdate,
+        
         }
             
               
     }
      //Date Picker
-  onDOBPress = () => {
-    let dobDate = this.state.Ocdate;
-    if (!dobDate || dobDate == null) {
-      dobDate = new Date();
-      this.setState({
-        Ocdate: dobDate
+     onDOBPress = () => {
+      let dobDate = this.state.dobDate;
+      if (!dobDate || dobDate == null) {
+        dobDate = new Date();
+        this.setState({
+          dobDate: dobDate
+        });
+      }
+      this.refs.dobDialog.open({
+        date: dobDate,
+        maxDate: new Date() //To restirct past dates
       });
-    }
-    this.refs.dobDialog.open({
-      date: dobDate,
-      maxDate: new Date() //To restirct past dates
-    });
-  };
-
-  onDOBDatePicked = date => {
-    this.setState({
-      dobDate: date,
-      dobText: moment(date).format("YYYY-MM-DD")
-    });
-  };
-
-  onDOBPress1 = () => {
-    let dobDate = this.state.Osdate;
-    if (!dobDate || dobDate == null) {
-      dobDate = new Date();
+    };
+  
+    onDOBDatePicked = date => {
       this.setState({
-        Osdate: dobDate
+        dobDate: date,
+        dobText: moment(date).format("YYYY-MM-DD")
       });
-    }
-    this.refs.dobDialog1.open({
-      date: dobDate,
-      maxDate: new Date() //To restirct past dates
-    });
-  };
-
-  onDOBDatePicked1 = date => {
+    };
+// ///////////////////
+onDOBPress1 = () => {
+  let dobDate = this.state.dobDate1;
+  if (!dobDate || dobDate == null) {
+    dobDate = new Date();
     this.setState({
-      dobDate1: date,
-      dobText1: moment(date).format("YYYY-MM-DD")
+      dobDate1: dobDate
     });
-  };
+  }
+  this.refs.dobDialog1.open({
+    date: dobDate,
+    maxDate: new Date() //To restirct past dates
+  });
+};
+
+onDOBDatePicked1 = date => {
+  this.setState({
+    dobDate1: date,
+    dobText1: moment(date).format("YYYY-MM-DD")
+  });
+};
 
     toggleModal = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -237,33 +241,49 @@ class EditUnit extends Component {
         let Unittlname1 = this.state.Unittlname;
         let Unittmnum1 = this.state.Unittmnum;
         let Unitteid1 = this.state.Unitteid;
+        let Unitoaeid1 = this.state.Unitoaeid;
+        let UnitoAnum1 =this.state.UnitoAnum;
     
         if (Unitofname1.length === 0) {
           Alert.alert("Owner first Name Cannot be Empty");
         } else if (regTextOnly.test(Unitofname1) === false) {
-          Alert.alert("Owner first Name should not contain Special Character");
+          Alert.alert("Owner first Name should contain characters");
         } else if (Unitolname1.length === 0) {
           Alert.alert("Owner Last Name Cannot be Empty");
         } else if (regTextOnly.test(Unitolname1) === false) {
-          Alert.alert("Owner Last Name should not contain Special Character");
-        } else if (Unitomnum1.length < 10) {
-          Alert.alert("Please Enter Mobile Number");
-        } 
-        // else if (mobRegex.test(Unitomnum1)== false) {
-        //   Alert.alert("Please check Mobile Number");
-        // }
-        else if (Unitoeid1.length == 0 ) {
-          Alert.alert("Enter Email ID");
-        } else if (regemail.test(Unitoeid1) == false) {
-          Alert.alert("Enter Valid Email ID");
+          Alert.alert("Owner Last Name should contain characters");
+        } else if (Unitomnum1.length < 9) {
+          Alert.alert("Please check  Mobile Number");
+          return;
+        } else if (mobRegex.test(Unitomnum1) == true) {
+          Alert.alert("Please check  Mobile Number");
+          return;
+        } else if ( !UnitoAnum1.length === "" && mobRegex.test(UnitoAnum1) == true){
+          Alert.alert(" Please Enter Valid Alternate Mobile Number ");
+          return;
+        }else if (!UnitoAnum1.length === "" && Unitomnum1 == UnitoAnum1 ){
+          Alert.alert(" Mobile Number Should not be Same");
+          return;
+        }else if (Unitoeid1.length === 0 ) {
+          Alert.alert("Please Enter Valid Email");
+          return;
+        }else if (regemail.test(Unitoeid1)=== false ) {
+          Alert.alert("Please Enter Valid Email");
+          return;
+        } else if (!Unitoaeid1.length === "" && Unitoaeid1 === Unitoeid1){
+          Alert.alert(" Email id Should not be Same ");
+          return;
+        } else if ( !Unitoaeid1.length === "" && regemail.test(Unitoaeid1) == false){
+          Alert.alert(" Please Enter Valid Alternate Email ");
+          return;
         }else if (Unittfname1.length === 0) {
           Alert.alert("Tenant first Name Cannot be Empty");
         } else if (regTextOnly.test(Unittfname1) === false) {
-          Alert.alert("Tenant first Name should not contain Special Character");
+          Alert.alert("Tenant first Name should contain characters");
         } else if (Unittlname1.length === 0) {
           Alert.alert("Tenant Last Name Cannot be Empty");
         }else if (regTextOnly.test(Unittlname1) === false) {
-          Alert.alert("Tenant Last Name should not contain Special Character");
+          Alert.alert("Tenant Last Name should contain characters");
         }  else if (Unittmnum1.length < 10) {
           Alert.alert("Please check Tenant Mobile Number");
         } else if (Unitteid1.length === 0) {
@@ -280,6 +300,8 @@ class EditUnit extends Component {
         let Unitolname1 = this.state.Unitolname;
         let Unitomnum1 = this.state.Unitomnum;
         let Unitoeid1 = this.state.Unitoeid;
+        let Unitoaeid1 = this.state.Unitoaeid;
+        let UnitoAnum1 =this.state.UnitoAnum;
         let mobRegex = /^[0]?[456789]d{9}$/;
         let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         let status = false;
@@ -289,27 +311,37 @@ class EditUnit extends Component {
           Alert.alert("Owner first Name Cannot be Empty");
           return;
         } else if (regTextOnly.test(Unitofname1) == false) {
-          Alert.alert("Owner first name should not contain Special Character");
+          Alert.alert("Owner first name should contain characters");
           return;
         } else if (Unitolname1.length == 0) {
           Alert.alert("Owner Last Name Cannot be Empty");
           return;
         }else if (regTextOnly.test(Unitolname1)== false) {
-          Alert.alert("Owner Last Nname should not contain Special Character");
+          Alert.alert("Owner Last Nname should contain characters");
           return;
-        }else if (Unitomnum1.length < 10) {
+        }else if (Unitomnum1.length < 9) {
           Alert.alert("Please check  Mobile Number");
           return;
-        } 
-        // else if (mobRegex.test(Unitomnum1) == false) {
-        //   Alert.alert("Please check  Mobile Number");
-        //   return;
-        // } 
-        else if (Unitoeid1.length == 0 ) {
+        } else if (mobRegex.test(Unitomnum1) == true) {
+          Alert.alert("Please check  Mobile Number");
+          return;
+        } else if ( !UnitoAnum1.length == "" && mobRegex.test(UnitoAnum1) == true){
+          Alert.alert(" Please Enter Valid Alternate Mobile Number ");
+          return;
+        }else if (!UnitoAnum1.length == "" && Unitomnum1 == UnitoAnum1 ){
+          Alert.alert(" Mobile Number Should not be Same");
+          return;
+        }else if (Unitoeid1.length == 0 ) {
           Alert.alert("Please Enter Valid Email");
           return;
         }else if (regemail.test(Unitoeid1)== false ) {
           Alert.alert("Please Enter Valid Email");
+          return;
+        } else if (!Unitoaeid1.length == "" && Unitoaeid1 === Unitoeid1){
+          Alert.alert(" Email id Should not be Same ");
+          return;
+        } else if ( !Unitoaeid1.length == "" && regemail.test(Unitoaeid1) == false){
+          Alert.alert(" Please Enter Valid Alternate Email ");
           return;
         }
         
@@ -373,15 +405,16 @@ class EditUnit extends Component {
 
       createUnit = () => {
 
-        
+       
         console.log("jkhhjjhsgjhagsjf")
         const { CalType, UnitNumber, UnitType, UnitRate ,OccupancyStatus,UnitDimention,selectblock,Unitofname,
-            Unitolname, Unitomnum,UnitoAnum,Unitoeid,Unitoaeid,Unittfname,Unittlname,Unittmnum,Unitteid,dobDate,dobDate1,Ocdate,Osdate
+            Unitolname, Unitomnum,UnitoAnum,Unitoeid,Unitoaeid,Unittfname,Unittlname,Unittmnum,Unitteid,Ocdate,Osdate,dobtext,dobText1
         } = this.state;
 
         const {
             unitid,blockId
           } = this.props.navigation.state.params
+          
 
           fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Unit/UpdateUnitOwnerTenantDetails`, {
             method: "POST",
@@ -394,9 +427,9 @@ class EditUnit extends Component {
                 "UNOpenBal"	: "",
                 "UNCurrBal"	: "",
                 "UNOcStat"	: OccupancyStatus ,
-                "UNOcSDate" : Ocdate,  //tenabt
+                "UNOcSDate" : this.state.dobText1 ,  //tenabt
                 "UNOwnStat" : "",
-                "UNSldDate"	: Osdate,   //owner,
+                "UNSldDate"	: this.state.dobText ,   //owner,
                 "UNDimens"  : UnitDimention,
                 "UNCalType"	: CalType, // Make sure you change this
                 "UNRate"    : UnitRate,
@@ -411,7 +444,7 @@ class EditUnit extends Component {
                             "UOEmail":Unitoeid,
                             "UOEmail1":Unitoaeid,
                             "UODCreated":"",
-                            "UOIsActive":"1"
+                            "UOIsActive":1
                         }],
                 "tenant":[{
                     "UTFName":Unittfname,
@@ -458,11 +491,12 @@ this.setState({Unittfname:this.props.navigation.state.params.tfName? this.props.
 this.setState({Unittlname:this.props.navigation.state.params.tlName? this.props.navigation.state.params.tlName:""})
 this.setState({Unittmnum:this.props.navigation.state.params.tMobile? this.props.navigation.state.params.tMobile:""})
 this.setState({Unitteid:this.props.navigation.state.params.tEmail? this.props.navigation.state.params.tEmail:""})
-this.setState({Ocdate:this.props.navigation.state.params.Ocdate? this.props.navigation.state.params.Ocdate:""})
-this.setState({Osdate:this.props.navigation.state.params.Osdate? this.props.navigation.state.params.Osdate:""})
+this.setState({dobtext:this.props.navigation.state.params.Osdate? this.props.navigation.state.params.Osdate:""})
+this.setState({dobtext1:this.props.navigation.state.params.Ocdate? this.props.navigation.state.params.Ocdate:""})
 
-console.log("###############3",this.state.Osdate)
-console.log("###############3",this.state.Ocdate)
+
+console.log("###############",this.state.dobText)
+console.log("###############3",this.props.navigation.state.params.Ocdate)
 }
 // for onchange text ? what we have to sign ?
 
@@ -577,12 +611,12 @@ console.log('Edit Unit')
                             <View style={{ height: hp('7%'), marginTop: hp('0%') }}>
                               <View style={{ height: hp('10%') }}>
                                 <Text style={styles.text1}>Unit Owner Occupied Date<Text style={styles.imp}>*</Text></Text>
-                                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                                <TouchableOpacity onPress={this.onDOBPress}>
                                   <View style={styles.datePickerBox}>
-                                    <Text style={styles.datePickerText}>{this.state.Ocdate.toString()} </Text>
+                                    <Text style={styles.datePickerText}>{this.state.dobText} </Text>
                                     <DatePickerDialog
                                       ref="dobDialog"
-                                      onDatePicked={this.onDOBDatePicked.bind(this)}
+                                      onDatePicked={this.onDOBDatePicked}
                                     />
                                     <Image
                                       style={styles.viewDatePickerImageStyle}
@@ -705,9 +739,9 @@ console.log('Edit Unit')
                             <View style={{ height: hp('7%') }}>
                               <View style={{ height: hp('10%') }}>
                                 <Text style={styles.text1}>Unit Tenant Occupied Date<Text style={styles.imp}>*</Text></Text>
-                                <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                                <TouchableOpacity onPress={this.onDOBPress1}>
                                   <View style={styles.datePickerBox}>
-                                    <Text style={styles.datePickerText}>{this.state.Osdate.toString()} </Text>
+                                    <Text style={styles.datePickerText}>{this.state.dobText1} </Text>
                                     <DatePickerDialog
                                       ref="dobDialog1"
                                       onDatePicked={this.onDOBDatePicked1.bind(this)}
@@ -846,10 +880,7 @@ console.log('Edit Unit')
                           labelHeight={hp("0.8%")}
                           labelPadding={hp('2%')}
                           labelSize={hp("1%")}
-                          // Why are you using two different states for one element? bcz one is to set another one is for new update 
-                          // Its wrong, one element should use one state, you can't be passing one this as the value and one thins as another
-                          // You are setting the value of this to an empty string, hence the error
-                          // can you show me one in this so i can try my self 
+                          
   
                           value={this.state.CalType} //here where using 
   
@@ -934,7 +965,7 @@ console.log('Edit Unit')
 
 const styles = StyleSheet.create({
     textWrapper: {
-        height: hp("85%"), // 70% of height device screen
+        height: hp("87%"), // 70% of height device screen
         // width: wp("98%"), // 80% of width device screen
         marginLeft: hp("1%"),
         marginRight: hp("1%")
@@ -1137,3 +1168,4 @@ const mapStateToProps = state => {
   };
   
   export default connect(mapStateToProps)(EditUnit);
+

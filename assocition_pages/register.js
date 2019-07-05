@@ -686,30 +686,6 @@ class RegisterMe extends Component {
                 Join Us
               </Text>
             </View>
-            <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForOwnwer()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForTenant()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              </View>
-            </View>
             <View style={styles.View}>
               <Card style={styles.DateCard}>
                 <View
@@ -736,6 +712,32 @@ class RegisterMe extends Component {
                 </View>
               </Card>
             </View>
+            
+            <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
+              <View style={styles.View}>
+                <TouchableOpacity onPress={() => this.submitForOwnwer()}>
+                  <Card style={styles.Card}>
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
+                    </View>
+                  </Card>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.View}>
+                <TouchableOpacity onPress={() => this.submitForTenant()}>
+                  <Card style={styles.Card}>
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
+                    </View>
+                  </Card>
+                </TouchableOpacity>
+              </View>
+            </View>
+            
             {/* <Text>{unitList.owner[0].uofName}</Text> */}
           </View>
         ) : (

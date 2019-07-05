@@ -104,7 +104,11 @@ class Header extends React.Component {
                     }}
                   />
                 ) : (
-                  <Text>{this.props.MyFirstName[0].toUpperCase()}</Text>
+                  <Text style={{ fontWeight: "bold" }}>
+                {this.state.myFirstName.length.toString() === 0
+                  ? <Text></Text>
+                  : <Text>{this.state.myFirstName[0]}</Text>}
+                </Text>
                 )}
               </View>
             </TouchableOpacity>

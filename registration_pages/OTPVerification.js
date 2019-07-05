@@ -391,7 +391,7 @@ class OTPVerification extends Component {
                   justifyContent: "center",
                   letterSpacing: hp('1.5%'),
                   width: wp("50%"),
-                  fontSize: hp("3%"),
+                  fontSize: hp("2%"),
                   alignSelf: "center",
                   backgroundColor: "white",
                   borderBottomWidth: 1,
@@ -400,6 +400,7 @@ class OTPVerification extends Component {
                 }}
                 placeholder="Enter OTP"
                 placeholderTextColor="#474749"
+                
                 onChangeText={this.handleOTP}
                 maxLength={6}
                 allowFontScaling={true}
