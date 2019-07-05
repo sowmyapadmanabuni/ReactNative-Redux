@@ -105,7 +105,7 @@ class BlockDetail extends React.Component {
               </View>
               {/* <View style={styles.emptyViewStyle} /> */}
               <View style={styles.editButtonViewStyle}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     
                     this.props.navigation.navigate("EditBlockScreen", {
@@ -132,7 +132,7 @@ class BlockDetail extends React.Component {
                     style={styles.pencilBtnStyle}
                     source={require("../icons/pencil120.png")}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <View style={{ marginLeft: hp("1%") }}>
                   <Button bordered dark style={styles.addUnitButton}
                     onPress={() => this.props.navigation.navigate("BlockWiseUnitListScreen",{
@@ -206,7 +206,8 @@ class BlockDetail extends React.Component {
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                position: "absolute"
+                position: 'relative',
+                marginTop:hp('1%')
               }}
             >
               <Text>Please Wait</Text>

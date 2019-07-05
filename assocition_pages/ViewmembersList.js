@@ -73,6 +73,8 @@ class Resident extends Component {
   componentDidMount = () => {};
 
   changeRole = () => {
+    console.log("myunit",this.state.selectedRoleData.selRolId)
+    console.log("idddd",this.props.SelectedMemberID)
     const {
       getDashUnits,
       // selectedAssociation,
@@ -81,6 +83,7 @@ class Resident extends Component {
       notifications
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+   
     // const { oyeURL } = this.props.oyespaceReducer;
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate

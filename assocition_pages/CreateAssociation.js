@@ -42,6 +42,7 @@ import country from "react-native-phone-input/lib/country"
 import { NavigationEvents } from "react-navigation"
 import { connect } from "react-redux";
 import { getDashAssociation, getDashSub } from "../src/actions";
+import RNRestart from "react-native-restart";
 
 let data = [
   {
@@ -169,6 +170,7 @@ class App extends Component {
     this.setState({ cca2: country.cca2 })
   }
 
+
   createAssociationPostData = () => {
     association_Name = this.state.association_Name
     property_Name = this.state.property_Name
@@ -197,32 +199,33 @@ class App extends Component {
     let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/
     let regIFSC = /^([A-Za-z]){4}([0-9]){7}$/
+    let oyeNonSpecialRegexs = /[^0-9]/
     var panNumber = this.state.pan_Number.charAt(4)
     var associationName = this.state.association_Name.charAt(4)
 
     if (association_Name.length == 0) {
-      Alert.alert("Association name Cannot be empty")
+      Alert.alert("Association name cannot be empty")
     } else if (oyeNonSpecialRegex.test(association_Name) === true) {
-      alert("Association name should not contain special character")
-    } else if (association_Name < 3) {
+      alert("Association name should not contain special characters")
+    } else if (association_Name.length < 3) {
       alert("Association name should be more than 3 characters")
-    } else if (association_Name > 50) {
+    } else if (association_Name.length > 50) {
       alert("Association name should be less than 50 characters")
     } else if (property_Name.length == 0) {
       Alert.alert("Property name cannot be empty")
-    } else if (oyeNonSpecialRegex.test(property_Name) === true) {
-      alert(" Property name should not contain special character")
-    } else if (property_Name < 3) {
+    } else if (regTextOnly.test(property_Name) === false) {
+      alert(" Property name should not contain numeric and special characters")
+    } else if (property_Name.length < 3) {
       alert("Property name should be more than 3 characters")
-    } else if (property_Name > 50) {
+    } else if (property_Name.length > 50) {
       alert("Property name should be less than 50 characters")
     } else if (property_Type == 0) {
       alert("Select property type")
     } else if (country_a.length == 0) {
       alert("Please select country")
-    } else if (pan_Number.length === 0 && reg_Number === 0) {
+    } else if (pan_Number.length == 0 && reg_Number == 0) {
       alert("PAN number or Registration number Cannot be Empty")
-    } else if (pan_Number < 10) {
+    } else if (pan_Number.length < 10) {
       alert("Invalid PAN number")
     } else if (pan_Number.charAt(4) !== association_Name.charAt(0)) {
       alert("Enter valid PAN number")
@@ -231,31 +234,35 @@ class App extends Component {
     } else if (state.length == 0) {
       alert("State cannot be empty")
     } else if (regTextOnly.test(state) === false) {
-      alert(" State should not contain special character")
-    } else if (state > 50) {
+      alert(" State should not contain numeric and special characters")
+    } else if (state.length > 50) {
       alert("State name should be less than 50 characters")
     } else if (city.length == 0) {
       alert("City cannot be empty")
-    } else if (city > 50) {
+    } else if (city.length > 50) {
       alert("City name should be less than 50 characters")
     } else if (regTextOnly.test(city) === false) {
-      alert(" City should not contain special character")
-    } else if (association_Address.length == 0) {
-      alert("Address cannot be empty")
-    } else if (regTextOnly.test(association_Address) === false) {
-      alert("Address should not contain special character")
-    } else if (association_Address > 50) {
-      alert("Association address should be less than 50 characters")
+      alert(" City should not contain numeric and special characters")
     } else if (pinCode.length == 0) {
       alert("Pincode cannot be empty")
     } else if (pinCode.length < 6) {
       alert("Invalid pincode")
     } else if (regPIN.test(pinCode) === false) {
       alert(" PIN code should not contain alphabets and special characters")
+    } else if (association_Address.length == 0) {
+      alert("Address cannot be empty")
+    }
+    // else if (regTextOnly.test(association_Address) === false) {
+    //   alert("Address should not contain numeric and special characters")
+    // }
+    else if (association_Address.length > 50) {
+      alert("Association address should be less than 50 characters")
+    } else if (emailAssociation.length == 0) {
+      alert("Email cannot be empty")
+    } else if (regemail.test(emailAssociation) === false) {
+      Alert.alert("Enter valid email ID of association")
     } else if (total_NumberOfBlocks.length == 0) {
       alert(" Number of blocks cannot be Empty")
-    } else if (total_NumberOfBlocks == 0) {
-      alert("Number of blocks cannot be empty")
     } else if (total_NumberOfBlocks === "0") {
       Alert.alert(" Number of blocks cannot be zero")
     } else if (total_NumberOfBlocks.length < 1) {
@@ -276,29 +283,73 @@ class App extends Component {
       alert(
         "Number of units should not contain alphabets and special character"
       )
-    } else if (regemail.test(emailAssociation) === false) {
-      Alert.alert("Enter valid email ID of association")
-    } else if (emailAssociation.length == 0) {
-      alert("Email cannot be empty")
-    } else if (bankName.length == 0) {
+    } else if (
+      !bankName.length == 0 ||
+      !bankAccountNumber.length == 0 ||
+      !bankIFSC.length == 0 ||
+      !bankAccountType.length == 0
+    ) {
+      this.bankNumber()
+      return
+    } else if (pan_Number != 0) {
+      this.validationbank()
+      return
+    }
+    // else if (bankName.length == 0) {
+    //   Alert.alert("Bank name cannot be empty")
+    // }
+
+    // else if (pan_Number != 0 && bankAccountNumber != 0) {
+    //   this.validationbank()
+    //   return
+    // }
+  }
+
+  bankNumber = () => {
+    bankName = this.state.bankName
+    bankIFSC = this.state.bankIFSC
+    bankAccountNumber = this.state.bankAccountNumber
+    bankAccountType = this.state.bankAccountType
+
+    const reg = /^[0]?[6789]\d{9}$/
+    const regTextOnly = /^[a-zA-Z ]+$/
+    //const regTextOnly = /^[a-zA-Z\s]*$/
+    const regPIN = /^[0-9]{1,20}$/
+    const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
+
+    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/
+    let regIFSC = /^([A-Za-z]){4}([0-9]){7}$/
+    let oyeNonSpecialRegexs = /[^0-9]/
+
+    if (bankName.length == 0) {
       Alert.alert("Bank name cannot be empty")
+      return
     } else if (regTextOnly.test(bankName) === false) {
       alert("Enter valid bank name")
+      return
     } else if (bankIFSC.length == 0) {
       alert("IFSC cannot be empty")
+      return
     } else if (regIFSC.test(bankIFSC) === false) {
       alert("Enter valid IFSC")
+      return
     } else if (bankAccountNumber.length == 0) {
       alert("Bank account number cannot be empty")
-    } else if (bankAccountNumber.length < 10) {
+      return
+    } else if (bankAccountNumber.length < 9) {
       alert("Enter valid bank account number")
+      return
     } else if (bankAccountNumber.length > 18) {
       alert("Enter valid bank account number")
-    } else if (bankAccountType === 0) {
-      alert("Select bank account type")
+      return
     } else if (oyeNonSpecialRegex.test(bankAccountNumber) === true) {
       alert("Enter valid Bank account number")
-    } else if (pan_Number != 0 && bankAccountNumber != 0) {
+      return
+    } else if (bankAccountType == 0) {
+      alert("Select bank account type")
+      return
+    } else {
       this.validationbank()
       return
     }
@@ -416,9 +467,22 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
+        // Alert.alert(
+        //   "Oyespace",
+        //   " Association Created Successfully",
+        //   [
+        //     {
+        //       text: "Ok",
+        //       onPress: () =>
+        //       RNRestart.Restart()
+        //     }
+        //   ],
+        //   { cancelable: false }
+        // );
+        this.props.navigation.goBack();
 
-        alert("Association Created Successfully")
-        this.props.navigation.navigate("ResDashBoard");
+        // alert("Association Created Successfully")
+        // this.props.navigation.navigate("ResDashBoard");
         // getDashAssociation(oyeURL, MyAccountID);
 
       })
@@ -428,182 +492,14 @@ class App extends Component {
       })
   }
 
-  addItem = () => {
-    // const banks = this.state.banks.map((bank, index) => {
-    if (this.state.viewSection) {
-      return (
-        // <View key={bank + index}>
-        <Card style={{ height: hp("46%") }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between"
-            }}
-          >
-            <Text
-              style={{
-                color: "#38BCDB",
-                marginLeft: wp("5%"),
-                fontSize: hp("2.2%"),
-                marginVertical: hp("1%")
-              }}
-            >
-              Bank {this.setState.count}
-            </Text>
-            <Image
-              style={styles.deleteImageStyle}
-              source={require("../icons/delete.png")}
-            />
-          </View>
-          <Text
-            style={{
-              color: "#696969",
-              marginLeft: wp("5%"),
-              fontSize: hp("2%"),
-              marginVertical: hp("1%")
-            }}
-          >
-            Bank Name
-          </Text>
-          <Item style={styles.bankDetailLine}>
-            <Input
-              style={styles.box}
-              placeholder="Enter Bank Name"
-              autoCorrect={false}
-              autoCapitalize="characters"
-              keyboardType="default"
-              ref={text => (this.textInput_bankName = text)}
-              onChangeText={bankName => this.setState({ bankName: bankName })}
-            />
-          </Item>
-          <View style={{ flexDirection: "row", marginTop: hp("1%") }}>
-            <View style={{ height: hp("5%"), width: wp("40%") }}>
-              <Text
-                style={{
-                  color: "#696969",
-                  marginLeft: wp("5%"),
-                  fontSize: hp("2%"),
-                  marginVertical: hp("1%")
-                }}
-              >
-                IFSC
-              </Text>
-              <Item style={styles.bankDetailLine}>
-                <Input
-                  style={styles.box}
-                  placeholder="IFSC"
-                  // underlineColorAndroid="orange"
-                  autoCorrect={false}
-                  autoCapitalize="characters"
-                  keyboardType="default"
-                  ref={text => (this.textInput_bankIFSC = text)}
-                  onChangeText={bankIFSC =>
-                    this.setState({ bankIFSC: bankIFSC })
-                  }
-                />
-              </Item>
-            </View>
-            <View style={{ height: hp("5%"), width: wp("60%") }}>
-              <Text
-                style={{
-                  color: "#696969",
-                  marginLeft: wp("5%"),
-                  fontSize: hp("2%"),
-                  marginVertical: hp("1%")
-                }}
-              >
-                Account Number
-              </Text>
-              <Item style={styles.bankDetailLine}>
-                <Input
-                  style={styles.box}
-                  placeholder="Account Number"
-                  // underlineColorAndroid="orange"
-                  autoCorrect={false}
-                  autoCapitalize="characters"
-                  keyboardType="default"
-                  ref={text => (this.textInput_bankAccountNumber = text)}
-                  onChangeText={bankAccountNumber =>
-                    this.setState({
-                      bankAccountNumber: bankAccountNumber
-                    })
-                  }
-                />
-              </Item>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: "row", marginTop: hp("7%") }}>
-            <View style={{ height: hp("5%"), width: wp("70%") }}>
-              <Text
-                style={{
-                  color: "#696969",
-                  marginLeft: wp("5%"),
-                  fontSize: hp("2%"),
-                  marginVertical: hp("1%")
-                }}
-              >
-                Account Type
-              </Text>
-
-              <Item style={styles.bankDetailLine}>
-                <Dropdown
-                  containerStyle={styles.box1}
-                  dropdownPosition={-1}
-                  // label="Select Account Type"
-                  style={{ fontSize: hp("2%") }}
-                  value={"Savings"}
-                  textColor="#3A3A3C"
-                  labelHeight={hp("0.7%")}
-                  data={data1}
-                  inputContainerStyle={{ borderBottomColor: "transparent" }}
-                  onChangeText={bankAccountType =>
-                    this.setState({ bankAccountType: bankAccountType })
-                  }
-                />
-              </Item>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-
-                justifyContent: "space-evenly"
-              }}
-            >
-              <Image
-                style={styles.circleImageStyle}
-                source={require("../icons/circle.png")}
-              />
-              <Text
-                style={{
-                  marginLeft: hp("0.5%"),
-                  fontSize: hp("2%"),
-                  marginVertical: hp("5.4%")
-                }}
-              >
-                Default
-              </Text>
-            </View>
-          </View>
-        </Card>
-      )
-    }
-  }
 
   
-  buttonPress = () => {
-    this.setState({ viewSection: true })
-  }
   render() {
-    
-
     return (
       <View>
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
+        <SafeAreaView style={{ backgroundColor: "#FF8C00" }}>
           <View style={[styles.viewStyle, { flexDirection: "row" }]}>
-            <TouchableOpacity onPress={()=> this.props.navigation.goBack()}>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <View
               style={{
                 flex: 1,
@@ -618,7 +514,9 @@ class App extends Component {
                 style={{ width: 20, height: 20 }}
               />
             </View>
+
             </TouchableOpacity>
+           
             <View
               style={{
                 flex: 3,
@@ -633,33 +531,74 @@ class App extends Component {
             </View>
             <View style={styles.emptyViewStyle} />
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          <View style={{ borderWidth: 1, borderColor: "#FF8C00" }} />
         </SafeAreaView>
 
         <KeyboardAwareScrollView>
           <View style={styles.textWrapper}>
             <Text style={styles.titleText}>Create Association</Text>
 
-            <View style={styles.associationDetailsView}>
-              <Text style={styles.titleChildText}>Association Details</Text>
-              <View style={styles.fillAssociationDetailline} />
-            </View>
+         
 
             <ScrollView>
-              {/* ******************************* */}
-              <View style={styles.container}>
-                <Card style={styles.myProfileCardsStyle}>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>Association Name:</Text>
+              <View
+                style={{
+                  backgroundColor: "#FF8C00",
+                  height: hp("5%"),
+                  marginHorizontal: hp("1%"),
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: hp("-0.5%")
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontWeight: "600",
+
+                    fontSize: hp("2.6%")
+                  }}
+                >
+                  {" "}
+                  Association Details
+                </Text>
+              </View>
+              <Card
+                style={{
+                  shadowColor: "gray",
+                  shadowOpacity: 0.2,
+                  shadowRadius: 1.5,
+                  marginRight: hp("1%"),
+                  marginLeft: hp("1%")
+                }}
+              >
+                <Form style={{ marginBottom: hp("4%") }}>
+                  
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Association Name
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
                     <Input
-                      style={styles.itemTextValues}
-                      autoCorrect={false}
-                      maxLength={50}
-                      autoCapitalize='words'
-                      multiline={false}
-                      textAlign={"justify"}
-                      keyboardType="default"
+                      color="#909091"
+                      marginBottom={hp("-1%")}
                       placeholder="Enter Association Name"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="words"
+                      keyboardType="default"
+                      maxLength={50}
+                      textAlign={"justify"}
                       ref={text => (this.textInput_association_Name = text)}
                       onChangeText={association_Name =>
                         this.setState({
@@ -668,41 +607,73 @@ class App extends Component {
                       }
                     />
                   </Item>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>Property Name:</Text>
+
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Property Name
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
                     <Input
-                      style={styles.itemTextValues}
+                      color="#909091"
+                      marginBottom={hp("-1%")}
+                      placeholder="Enter Property Name"
+                      // underlineColorAndroid="orange"
                       autoCorrect={false}
+                      autoCapitalize="words"
+                      keyboardType="default"
                       maxLength={50}
-                      autoCapitalize='words'
                       multiline={false}
                       textAlign={"justify"}
-                      keyboardType="default"
-                      placeholder="Enter Property Name"
                       ref={text => (this.textInput_property_Name = text)}
                       onChangeText={property_Name =>
                         this.setState({ property_Name: property_Name })
                       }
                     />
                   </Item>
-                </Card>
 
-                <Card style={styles.myProfileCardsStyle}>
                   <Item stackedLabel style={styles.cardItemsStyle}>
+                    <Label
+                      style={{
+                        marginRight: hp("0.6%"),
+                        marginBottom: hp("-3%"),
+                        color: "#000000"
+                      }}
+                    >
+                      Property Type
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
                     <Dropdown
                       containerStyle={{
                         flex: 1,
                         width: wp("90%"),
-                        marginLeft: hp("2%"),
-                        height: hp("3%"),
-                        marginRight: hp("2%")
+                        //marginLeft: hp("2%"),
+                        height: hp("3%")
+                        //marginRight: hp("2%")
                       }}
                       //placeholder={hp("3.2%")}
                       dropdownPosition={-4}
                       // defaultIndex={-1}
-                      label="Select Property Type"
+                      placeholder="Select Property Type"
                       labelHeight={hp("4%")}
-                      style={{ fontSize: hp("2.2%") }}
+                      style={{ fontSize: hp("2.4%") }}
                       value={data.vlaue}
                       textColor="#3A3A3C"
                       data={data}
@@ -713,22 +684,8 @@ class App extends Component {
                       }
                     />
                   </Item>
-                </Card>
 
-                <Card style={styles.myProfileCardsStyle}>
                   <Item stackedLabel style={styles.countryPickerCardItemStyle}>
-                    <Text style={styles.itemTextTitles}>
-                      Country
-                      <Text
-                        style={{
-                          fontSize: hp("2.2%"),
-                          textAlignVertical: "center",
-                          color: "red"
-                        }}
-                      >
-                        *
-                      </Text>
-                    </Text>
                     <View style={styles.countryPickerStyle}>
                       <PhoneInput
                         ref={ref => {
@@ -755,95 +712,211 @@ class App extends Component {
                         <View />
                       </CountryPicker>
                     </View>
+                    <Text style={styles.itemTextTitles}>
+                      Select Country
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Text>
                   </Item>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    {this.state.cca2 == "IN" ? (
-                      <Item stackedLabel style={styles.cardItemsStyle}>
-                        <Text style={styles.itemTextTitles}>PAN Number:</Text>
-                        <Input
-                          style={styles.itemTextValues}
-                          autoCorrect={false}
-                          autoCapitalize='characters'
-                          multiline={false}
-                          textAlign={"justify"}
-                          keyboardType="default"
-                          placeholder="Enter PAN Number"
-                          ref={text => (this.textInput_pan_Number = text)}
-                          onChangeText={pan_Number => {
-                            this.setState({ pan_number_empty_flag: false })
-                            return this.setState({ pan_Number: pan_Number })
-                          }}
-                        />
-                      </Item>
-                    ) : (
-                      <Item stackedLabel style={styles.cardItemsStyle}>
-                        <Text style={styles.itemTextTitles}>
-                          Registration Number:
-                        </Text>
-                        <Input
-                          style={styles.itemTextValues}
-                          autoCorrect={false}
-                          autoCapitalize="words"
-                          multiline={false}
-                          maxLength={25}
-                          textAlign={"justify"}
-                          keyboardType="default"
-                          placeholder="Enter Registration Number"
-                          ref={text => (this.textInput_reg_Number = text)}
-                          onChangeText={reg_Number =>
-                            this.setState({ reg_Number: reg_Number })
-                          }
-                        />
-                      </Item>
-                    )}
-                  </Item>
-                </Card>
 
-                <Card style={styles.myProfileCardsStyle}>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>State:</Text>
+                  {/* <Item stackedLabel> */}
+                  {this.state.cca2 == "IN" ? (
+                    <Item stackedLabel style={styles.inputItem}>
+                      <Label style={{ color: "#000000" }}>
+                        PAN Number
+                        <Text
+                          style={{
+                            fontSize: hp("2.2%"),
+                            textAlignVertical: "center",
+                            color: "red"
+                          }}
+                        >
+                          *
+                        </Text>
+                      </Label>
+
+                      <Input
+                        color="#909091"
+                        marginBottom={hp("-1%")}
+                        //style={styles.itemTextValues}
+                        autoCorrect={false}
+                        autoCapitalize="characters"
+                        multiline={false}
+                        maxLength={15}
+                        textAlign={"justify"}
+                        keyboardType="default"
+                        placeholder="Enter PAN Number eg: AAAAA1234A"
+                        ref={text => (this.textInput_pan_Number = text)}
+                        onChangeText={pan_Number => {
+                          this.setState({ pan_number_empty_flag: false })
+                          return this.setState({ pan_Number: pan_Number })
+                        }}
+                      />
+                    </Item>
+                  ) : (
+                    <Item stackedLabel style={styles.inputItem}>
+                      <Label style={{ color: "#000000" }}>
+                        Registration Number
+                        <Text
+                          style={{
+                            fontSize: hp("2.2%"),
+                            textAlignVertical: "center",
+                            color: "red"
+                          }}
+                        >
+                          *
+                        </Text>
+                      </Label>
+                      <Input
+                        color="#909091"
+                        marginBottom={hp("-1%")}
+                        //style={styles.itemTextValues}
+                        autoCorrect={false}
+                        autoCapitalize="characters"
+                        multiline={false}
+                        maxLength={15}
+                        textAlign={"justify"}
+                        keyboardType="default"
+                        placeholder="Enter Registration Number"
+                        ref={text => (this.textInput_reg_Number = text)}
+                        onChangeText={reg_Number =>
+                          this.setState({ reg_Number: reg_Number })
+                        }
+                      />
+                    </Item>
+                  )}
+                  {/* </Item> */}
+
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      State
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
+
                     <Input
-                      style={styles.itemTextValues}
-                      autoCorrect={false}
-                      multiline={false}
-                      maxLength={50}
+                      color="#909091"
+                      marginBottom={hp("-1%")}
                       placeholder="Enter State"
-                      autoCapitalize='words'
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="words"
+                      keyboardType="default"
+                      maxLength={50}
                       multiline={false}
                       textAlign={"justify"}
-                      keyboardType="default"
                       ref={text => (this.textInput_state = text)}
                       onChangeText={state => this.setState({ state: state })}
                     />
                   </Item>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>City:</Text>
+
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      City
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
+
                     <Input
-                      style={styles.itemTextValues}
-                      autoCorrect={false}
-                      maxLength={50}
+                      color="#909091"
+                      marginBottom={hp("-1%")}
                       placeholder="Enter City"
-                      autoCapitalize='words'
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="words"
+                      keyboardType="default"
+                      maxLength={50}
                       multiline={false}
                       textAlign={"justify"}
-                      keyboardType="default"
                       ref={text => (this.textInput_city = text)}
                       onChangeText={city => this.setState({ city: city })}
                     />
                   </Item>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>
-                      Association Address:
-                    </Text>
+
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Pincode
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
+
                     <Input
-                      style={styles.itemTextValues}
+                      color="#909091"
+                      marginBottom={hp("-1%")}
+                      placeholder="Enter Pincode"
+                      // underlineColorAndroid="orange"
                       autoCorrect={false}
-                      maxLength={50}
-                      autoCapitalize='words'
+                      keyboardType="number-pad"
+                      maxLength={6}
                       multiline={false}
                       textAlign={"justify"}
-                      keyboardType="default"
+                      ref={text => (this.textInput_pinCode = text)}
+                      onChangeText={pinCode =>
+                        this.setState({ pinCode: pinCode })
+                      }
+                    />
+                  </Item>
+
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Association Address
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
+                    <Input
+                      color="#909091"
+                      marginBottom={hp("-1%")}
                       placeholder="Enter Association Address"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="words"
+                      multiline={false}
+                      keyboardType="default"
+                      maxLength={50}
+                      textAlign={"justify"}
                       ref={text => (this.textInput_association_Address = text)}
                       onChangeText={association_Address =>
                         this.setState({
@@ -852,83 +925,34 @@ class App extends Component {
                       }
                     />
                   </Item>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>Pincode:</Text>
-                    <Input
-                      style={styles.itemTextValues}
-                      autoCorrect={false}
-                      autoCapitalize="words"
-                      multiline={false}
-                      textAlign={"justify"}
-                      keyboardType="number-pad"
-                      placeholder="Enter Pincode"
-                      ref={text => (this.textInput_pinCode = text)}
-                      onChangeText={pinCode =>
-                        this.setState({ pinCode: pinCode })
-                      }
-                    />
-                  </Item>
-                </Card>
 
-                <Card style={styles.myProfileCardsStyle}>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>
-                      Total Number of Blocks:
-                    </Text>
-                    <Input
-                      style={styles.itemTextValues}
-                      autoCorrect={false}
-                      autoCapitalize="words"
-                      multiline={false}
-                      maxLength={3}
-                      textAlign={"justify"}
-                      keyboardType="number-pad"
-                      placeholder="Enter Total Number of Blocks"
-                      ref={text => (this.textInput_total_NumberOfBlocks = text)}
-                      onChangeText={total_NumberOfBlocks =>
-                        this.setState({
-                          total_NumberOfBlocks: total_NumberOfBlocks
-                        })
-                      }
-                    />
-                  </Item>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>
-                      Total Number of Units:
-                    </Text>
-                    <Input
-                      style={styles.itemTextValues}
-                      autoCorrect={false}
-                      autoCapitalize="words"
-                      multiline={false}
-                      maxLength={3}
-                      textAlign={"justify"}
-                      keyboardType="number-pad"
-                      placeholder="Enter Total Number of Units"
-                      ref={text => (this.textInput_total_NumberOfUnits = text)}
-                      onChangeText={total_NumberOfUnits =>
-                        this.setState({
-                          total_NumberOfUnits: total_NumberOfUnits
-                        })
-                      }
-                    />
-                  </Item>
-                </Card>
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Email ID Of Association
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
 
-                <Card style={styles.myProfileCardsStyle}>
-                  <Item stackedLabel style={styles.cardItemsStyle}>
-                    <Text style={styles.itemTextTitles}>
-                      EmailID Of Association:
-                    </Text>
                     <Input
-                      style={styles.itemTextValues}
+                      color="#909091"
+                      marginBottom={hp("-1%")}
+                      placeholder="Enter Email ID Of Association"
+                      // underlineColorAndroid="orange"
                       autoCorrect={false}
-                      autoCapitalize='none'
+                      autoCapitalize="none"
                       multiline={false}
+                      keyboardType="email-address"
                       maxLength={50}
                       textAlign={"justify"}
-                      keyboardType="email-address"
-                      placeholder="Enter EmailID Of Association"
                       ref={text => (this.textInput_emailAssociation = text)}
                       onChangeText={emailAssociation =>
                         this.setState({
@@ -937,179 +961,317 @@ class App extends Component {
                       }
                     />
                   </Item>
-                </Card>
-              </View>
 
-              <View style={styles.associationDetailsView}>
-                <Text style={styles.titleChildText}>Bank Details</Text>
-                <View style={styles.fillAssociationDetailline1} />
-              </View>
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Total Number Of Blocks
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
 
-              <Card style={{ height: hp("42%") }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#38BCDB",
-                      marginLeft: wp("5%"),
-                      fontSize: hp("2.2%"),
-                      marginVertical: hp("1%")
-                    }}
-                  >
-                    Bank
-                    
-                  </Text>
-                  
-                </View>
+                    <Input
+                      color="#909091"
+                      marginBottom={hp("-1%")}
+                      placeholder="Enter Total Number Of Blocks"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                      multiline={false}
+                      keyboardType="number-pad"
+                      maxLength={3}
+                      textAlign={"justify"}
+                      ref={text => (this.textInput_emailAssociation = text)}
+                      ref={text => (this.textInput_total_NumberOfBlocks = text)}
+                      onChangeText={total_NumberOfBlocks =>
+                        this.setState({
+                          total_NumberOfBlocks: total_NumberOfBlocks
+                        })
+                      }
+                    />
+                  </Item>
+
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Total Number Of Units
+                      <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
+                        }}
+                      >
+                        *
+                      </Text>
+                    </Label>
+
+                    <Input
+                      color="#909091"
+                      marginBottom={hp("-1%")}
+                      placeholder="Enter Total Number Of Units"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                      multiline={false}
+                      keyboardType="number-pad"
+                      maxLength={3}
+                      textAlign={"justify"}
+                      ref={text => (this.textInput_total_NumberOfUnits = text)}
+                      onChangeText={total_NumberOfUnits =>
+                        this.setState({
+                          total_NumberOfUnits: total_NumberOfUnits
+                        })
+                      }
+                    />
+                  </Item>
+                </Form>
+              </Card>
+              {/* ******************************* */}
+
+              <View
+                style={{
+                  backgroundColor: "#FF8C00",
+                  height: hp("5%"),
+                  marginHorizontal: hp("1%"),
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginTop: hp("2%"),
+                  marginBottom: hp("-0.3%")
+                }}
+              >
                 <Text
                   style={{
-                    color: "#696969",
-                    marginLeft: wp("5%"),
-                    fontSize: hp("2%"),
-                    marginVertical: hp("1%")
+                    color: "white",
+                    fontWeight: "600",
+
+                    fontSize: hp("2.6%")
                   }}
                 >
-                  Bank Name
+                  {" "}
+                  Bank Details
                 </Text>
-                <Item style={styles.bankDetailLine}>
-                  <Input
-                    style={styles.box}
-                    placeholder="Enter Bank Name"
-                    autoCorrect={false}
-                    maxLength={50}
-                    autoCapitalize='characters'
-                    multiline={false}
-                    textAlign={"justify"}
-                    keyboardType="default"
-                    ref={text => (this.textInput_bankName = text)}
-                    onChangeText={bankName =>
-                      this.setState({ bankName: bankName.toUpperCase() })
-                    }
-                  />
-                </Item>
-                <View style={{ flexDirection: "row", marginTop: hp("1%") }}>
-                  <View style={{ height: hp("5%"), width: wp("40%") }}>
-                    <Text
-                      style={{
-                        color: "#696969",
-                        marginLeft: wp("5%"),
-                        fontSize: hp("2%"),
-                        marginVertical: hp("1%")
-                      }}
-                    >
-                      IFSC
-                    </Text>
-                    <Item style={styles.bankDetailLine}>
-                      <Input
-                        style={styles.box}
-                        placeholder="IFSC"
-                        // underlineColorAndroid="orange"
-                        maxLength={20}
-                        autoCorrect={false}
-                        autoCapitalize='characters'
-                        multiline={false}
-                        textAlign={"justify"}
-                        keyboardType="default"
-                        ref={text => (this.textInput_bankIFSC = text)}
-                        onChangeText={bankIFSC =>
-                          this.setState({ bankIFSC: bankIFSC.toUpperCase() })
-                        }
-                      />
-                    </Item>
-                  </View>
-                  <View style={{ height: hp("5%"), width: wp("60%") }}>
-                    <Text
-                      style={{
-                        color: "#696969",
-                        marginLeft: wp("5%"),
-                        fontSize: hp("2%"),
-                        marginVertical: hp("1%")
-                      }}
-                    >
-                      Account Number
-                    </Text>
-                    <Item style={styles.bankDetailLine}>
-                      <Input
-                        style={styles.box}
-                        placeholder="Account Number"
-                        // underlineColorAndroid="orange"
-                        maxLength={30}
-                        autoCorrect={false}
-                        autoCapitalize="characters"
-                        keyboardType="number-pad"
-                        ref={text => (this.textInput_bankAccountNumber = text)}
-                        onChangeText={bankAccountNumber =>
-                          this.setState({
-                            bankAccountNumber: bankAccountNumber
-                          })
-                        }
-                      />
-                    </Item>
-                  </View>
-                </View>
+              </View>
 
-                <View style={{ flexDirection: "row", marginTop: hp("7%") }}>
-                  <View style={{ height: hp("5%"), width: wp("70%") }}>
+              <Card
+                style={{
+                  shadowColor: "gray",
+                  shadowOpacity: 0.2,
+                  shadowRadius: 1.5,
+                  marginRight: hp("1%"),
+                  marginLeft: hp("1%")
+                }}
+              >
+                <Form style={{ marginBottom: hp("4%") }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between"
+                    }}
+                  >
                     <Text
                       style={{
-                        color: "#696969",
-                        marginLeft: wp("5%"),
-                        fontSize: hp("2%"),
+                        color: "#38BCDB",
+                        marginLeft: wp("2%"),
+                        fontSize: hp("2.4%"),
                         marginVertical: hp("1%")
+                      }}
+                    >
+                      Bank
+                      {/* {this.setState.count} */}
+                    </Text>
+                    
+                  </View>
+                  <Item style={styles.inputItem} stackedLabel>
+                    <Label
+                      style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                    >
+                      Bank Name
+                      
+                    </Label>
+
+                    <Input
+                      color="#909091"
+                      marginBottom={hp("-1%")}
+                      placeholder="Enter Bank Name"
+                      // underlineColorAndroid="orange"
+                      autoCorrect={false}
+                      autoCapitalize="characters"
+                      multiline={false}
+                      keyboardType="default"
+                      maxLength={50}
+                      textAlign={"justify"}
+                      ref={text => (this.textInput_bankName = text)}
+                      onChangeText={bankName =>
+                        this.setState({ bankName: bankName })
+                      }
+                    />
+                  </Item>
+                  <View
+                    style={{
+                      flexDirection: "row"
+                      // marginTop: hp("1%"),
+                    }}
+                  >
+                    <View style={{ flex: 0.7 }}>
+                      <Item style={styles.inputItem} stackedLabel>
+                        <Label
+                          style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                        >
+                          IFSC
+                          {/* <Text
+                            style={{
+                              fontSize: hp("2.2%"),
+                              textAlignVertical: "center",
+                              color: "red"
+                            }}
+                          >
+                            *
+                          </Text> */}
+                        </Label>
+
+                        <Input
+                          color="#909091"
+                          marginBottom={hp("-1%")}
+                          placeholder="Enter IFSC"
+                          // underlineColorAndroid="orange"
+                          autoCorrect={false}
+                          autoCapitalize="characters"
+                          multiline={false}
+                          keyboardType="default"
+                          maxLength={11}
+                          textAlign={"justify"}
+                          ref={text => (this.textInput_bankIFSC = text)}
+                          onChangeText={bankIFSC =>
+                            this.setState({ bankIFSC: bankIFSC })
+                          }
+                        />
+                      </Item>
+                    </View>
+
+                    <View style={{ flex: 1.3 }}>
+                      <Item style={styles.inputItem} stackedLabel>
+                        <Label
+                          style={{ marginRight: hp("0.6%"), color: "#000000" }}
+                        >
+                          Account Number
+                          {/* <Text
+                            style={{
+                              fontSize: hp("2.2%"),
+                              textAlignVertical: "center",
+                              color: "red"
+                            }}
+                          >
+                            *
+                          </Text> */}
+                        </Label>
+
+                        <Input
+                          color="#909091"
+                          marginBottom={hp("-1%")}
+                          placeholder="Enter Account Number"
+                          // underlineColorAndroid="orange"
+                          autoCorrect={false}
+                          autoCapitalize="characters"
+                          multiline={false}
+                          keyboardType="default"
+                          maxLength={18}
+                          textAlign={"justify"}
+                          ref={text =>
+                            (this.textInput_bankAccountNumber = text)
+                          }
+                          onChangeText={bankAccountNumber =>
+                            this.setState({
+                              bankAccountNumber: bankAccountNumber
+                            })
+                          }
+                        />
+                      </Item>
+                    </View>
+                  </View>
+                  <Item stackedLabel style={styles.cardItemsStyle}>
+                    <Label
+                      style={{
+                        marginRight: hp("0.6%"),
+                        marginBottom: hp("-3%"),
+                        color: "#000000"
                       }}
                     >
                       Account Type
-                    </Text>
-
-                    <Item style={styles.bankDetailLine}>
-                      <Dropdown
-                        containerStyle={styles.box1}
-                        dropdownPosition={-2.5}
-                        // defaultIndex={-1}
-                        // label="Select Account Type"
-                        style={{ fontSize: hp("2%") }}
-                        value={"Savings"}
-                        textColor="#3A3A3C"
-                        labelHeight={hp("0.7%")}
-                        data={data1}
-                        inputContainerStyle={{
-                          borderBottomColor: "transparent"
+                      {/* <Text
+                        style={{
+                          fontSize: hp("2.2%"),
+                          textAlignVertical: "center",
+                          color: "red"
                         }}
-                        onChangeText={bankAccountType =>
-                          this.setState({ bankAccountType: bankAccountType })
-                        }
-                      />
-                    </Item>
-                  </View>
-                  
-                </View>
+                      >
+                        *
+                      </Text> */}
+                    </Label>
+                    <Dropdown
+                      containerStyle={{
+                        flex: 1,
+                        width: wp("90%"),
+                        //marginLeft: hp("2%"),
+                        height: hp("3%")
+                        //marginRight: hp("2%")
+                      }}
+                      //placeholder={hp("3.2%")}
+                      dropdownPosition={-4}
+                      // defaultIndex={-1}
+                      //label="Select Account Type"
+                      placeholder="Select Account Type"
+                      labelHeight={hp("4%")}
+                      style={{ fontSize: hp("2.4%") }}
+                      value={data1.vlaue}
+                      textColor="#3A3A3C"
+                      data={data1}
+                      inputContainerStyle={{ borderBottomColor: "transparent" }}
+                      onChangeText={bankAccountType =>
+                        this.setState({ bankAccountType: bankAccountType })
+                      }
+                    />
+                  </Item>
+                </Form>
               </Card>
+
               
               <View style={styles.resetOkButtonView}>
-              <TouchableOpacity onPress={this.resetAllFields.bind()}>
-              <Button
-                  rounded
-                  light
-                  style={styles.buttonReset}
-                  onPress={this.resetAllFields.bind()}
-                  
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      fontWeight: "600",
-                      fontSize: hp("2%")
-                    }}
+                <TouchableOpacity onPress={this.resetAllFields.bind()}>
+                  <Button
+                    rounded
+                    light
+                    style={styles.buttonReset}
+                    onPress={this.resetAllFields.bind()}
+                    //onPress={this.onSubmit.bind()}
+
+                    // refreshControl={
+                    //   <RefreshControl
+                    //     refreshing={this.state.refreshing}
+                    //     onRefresh={this._onRefresh}
+                    //   />
+                    // }
                   >
-                    Reset
-                  </Text>
-                </Button>
-                
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: hp("2%")
+                      }}
+                    >
+                      Reset
+                    </Text>
+                  </Button>
                 </TouchableOpacity>
                 <Button
                   rounded
@@ -1168,7 +1330,7 @@ const styles = StyleSheet.create({
     fontSize: hp("2.4%"),
     fontWeight: "300",
     fontStyle: "normal",
-    marginBottom: hp("1.5%"),
+
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
@@ -1203,14 +1365,17 @@ const styles = StyleSheet.create({
 
   cardItemsStyle: {
     alignItems: "flex-start",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
+    marginRight: hp("2%")
     // flexDirection: "row"
   },
   countryPickerCardItemStyle: {
     //alignItems: "flex-start",
     justifyContent: "flex-start",
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    marginLeft: hp("1.2%"),
+    marginRight: hp("1.2%")
   },
   itemTextTitles: {
     marginTop: hp("1%"),
@@ -1222,12 +1387,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start"
   },
   itemTextValues: {
-    marginLeft: hp("1.5%"),
+    // marginLeft: hp("-10%"),
     fontSize: hp("2.1%"),
     fontWeight: "300",
     paddingTop: hp("1%"),
     paddingBottom: hp("0.4%"),
-    paddingHorizontal: 0,
+
     height: hp("2%"),
     alignItems: "flex-start",
     justifyContent: "flex-start"
@@ -1266,7 +1431,7 @@ const styles = StyleSheet.create({
     marginTop: hp("5%")
   },
   countryPickerStyle: {
-    marginLeft: hp("4%"),
+    marginLeft: hp("1%"),
     marginTop: hp("1.2%")
   },
   bankDetailLine: {
@@ -1321,32 +1486,38 @@ const styles = StyleSheet.create({
   },
   emptyViewStyle: {
     flex: 1
+  },
+  inputItem: {
+    marginTop: wp("2%"),
+    marginLeft: wp("4%"),
+    marginRight: wp("4%"),
+    //borderColor: "#909091"
+    borderColor: "#C3C3C3"
   }
 })
-
 const mapStateToProps = state => {
-  return {
-    MyFirstName: state.UserReducer.MyFirstName,
-    MyLastName: state.UserReducer.MyLastName,
-    MyEmail: state.UserReducer.MyEmail,
-    MyMobileNumber: state.UserReducer.MyMobileNumber,
-    MyISDCode: state.UserReducer.MyISDCode,
-
-    joinedAssociations: state.AppReducer.joinedAssociations,
-    champBaseURL: state.OyespaceReducer.champBaseURL,
-    oyeURL: state.OyespaceReducer.oyeURL,
-    MyAccountID: state.UserReducer.MyAccountID,
-    userReducer: state.UserReducer,
-    oyespaceReducer: state.OyespaceReducer
+    return {
+      MyFirstName: state.UserReducer.MyFirstName,
+      MyLastName: state.UserReducer.MyLastName,
+      MyEmail: state.UserReducer.MyEmail,
+      MyMobileNumber: state.UserReducer.MyMobileNumber,
+      MyISDCode: state.UserReducer.MyISDCode,
+  
+      joinedAssociations: state.AppReducer.joinedAssociations,
+      champBaseURL: state.OyespaceReducer.champBaseURL,
+      oyeURL: state.OyespaceReducer.oyeURL,
+      MyAccountID: state.UserReducer.MyAccountID,
+      userReducer: state.UserReducer,
+      oyespaceReducer: state.OyespaceReducer
+    };
   };
-};
-
-export default connect(
-  mapStateToProps,
-  {
-    getDashSub,
-    getDashAssociation
-  }
-)(App);
+  
+  export default connect(
+    mapStateToProps,
+    {
+      getDashSub,
+      getDashAssociation
+    }
+  )(App);
 
 

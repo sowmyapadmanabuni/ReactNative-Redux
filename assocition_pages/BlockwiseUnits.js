@@ -57,7 +57,7 @@ class UnitDetails extends Component {
       Tmob: "",
       query: "",
       Osdate: "",
-      Todate: "",
+      Ocdate: "",
       empty: [],
       unitlist: [],
       Unitlist2: [],
@@ -88,6 +88,7 @@ class UnitDetails extends Component {
       });
     }, 5000);
   };
+
   UnitDetail = () => {
     const {
       unitid,
@@ -196,7 +197,7 @@ console.log("2424298749812749712947912",unitid)
               UnitId: responseJson.data.unitsByBlockID[i].unUnitID
             });
             this.setState({
-              Todate: responseJson.data.unitsByBlockID[i].unOcSDate
+              Ocdate: responseJson.data.unitsByBlockID[i].unOcSDate
             });
             this.setState({
               UnitDimention: responseJson.data.unitsByBlockID[i].unDimens
@@ -257,7 +258,7 @@ console.log("2424298749812749712947912",unitid)
               Email: this.state.OGmail,
               AEmail: this.state.OAGmail,
               AMobile: this.state.OAMobile,
-              Ocdate: this.state.Todate,
+              Ocdate: this.state.Ocdate,
               role: "tenant"
             });
           }
@@ -306,7 +307,7 @@ console.log("2424298749812749712947912",unitid)
 
   render() {
     const {blockName, unitid} = this.props.navigation.state.params; 
-    console.log('!@#!@#@$@#%#%@#$!@$@', blockName, unitid)
+    // console.log('!@#!@#@$@#%#%@#$!@$@', blockName, unitid)
     if (this.state.isLoading1) {
       return (
         <View style={{ flex: 1, flexDirection: "column" }}>
@@ -359,7 +360,8 @@ console.log("2424298749812749712947912",unitid)
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                position: "absolute"
+                position: 'relative',
+                marginTop:hp('1%')
               }}
             >
               <Text>Please Wait</Text>
@@ -373,8 +375,10 @@ console.log("2424298749812749712947912",unitid)
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
         <NavigationEvents
+
           onDidFocus={payload => this.UnitDetail()}
           onWillBlur={payload => this.UnitDetail()}
+         
         />
         <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
@@ -436,7 +440,7 @@ console.log("2424298749812749712947912",unitid)
                 marginTop: hp("1%")
               }}
             >
-              <View
+              {/* <View
                 style={{
                   flex: 0.85,
                   flexDirection: "row",
@@ -477,33 +481,7 @@ console.log("2424298749812749712947912",unitid)
                   </Text>
                 </Button>
               </View>
-              <View style={{ flex: 0.15, justifyContent: "flex-end" }}>
-                <TouchableOpacity
-                  style={[styles.floatButton]}
-                  onPress={() => this.props.navigation.navigate("AddUnit", {
-                    blockname: blockName,
-                    unit:  unitid
-                  })}
-                >
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      aspectRatio: 1
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: hp("5%"),
-                        color: "#fff",
-                        fontWeight: "200"
-                      }}
-                    >
-                      +
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+             */}
             </View>
           </View>
           <View style={styles.viewDetails}>
@@ -513,7 +491,7 @@ console.log("2424298749812749712947912",unitid)
                 keyExtractor={(item, index) => item.UnitName + index}
                 extraData={this.state}
                 renderItem={({ item, index }) => (
-                  <Card style={{ height: hp("17%") }}>
+                  <Card style={{ height: hp("19%") }}>
                     <View style={{ marginTop: hp("1%") }}>
                       <View style={{ flexDirection: "column" }}>
                         <View
@@ -544,43 +522,36 @@ console.log("2424298749812749712947912",unitid)
                             >{`${item.UnitStatus}`}</Text>
                           </View>
                         </View>
-                        <View style={{ height: hp("3%") }}>
-                          {item.role == "tenant" ? (
-                            <Text style={styles.textDetails}>{`${item.tfName} ${
-                              item.tlName
-                            }`}</Text>
-                          ) : (
-                            <Text style={styles.textDetails}>{`${item.fName} ${
-                              item.lName
-                            }`}</Text>
-                          )}
-                        </View>
-                        <View style={{ height: hp("3%") }}>
-                          {item.role == "tenant" ? (
-                            <Text
-                              style={[styles.textDetails, { color: "#ff8c00" }]}
-                            >{`${item.tMobile}`}</Text>
-                          ) : (
-                            <Text
-                              style={[styles.textDetails, { color: "#ff8c00" }]}
-                            >{`${item.Mobile}`}</Text>
-                          )}
-                        </View>
                         <View
                           style={{ flexDirection: "row", height: hp("3%") }}
                         >
-                          <View style={{ flex: 0.99 }}>
-                            {item.role == "tenant" ? (
-                              <Text style={styles.textDetails}>{`${
-                                item.tEmail
-                              }`}</Text>
-                            ) : (
-                              <Text style={styles.textDetails}>{`${
-                                item.Email
-                              }`}</Text>
-                            )}
-                          </View>
-                          <TouchableOpacity
+                          {item.UnitStatus === "Sold Owner Occupied Unit" || item.UnitStatus === "Sold Vacant Unit" ?
+                            <View style={{ height: hp("3%"),flex: 0.99 }} > 
+                            {item.role === "tenant" ? <Text style={[styles.textDetails4]}>Tenant</Text>:
+                           <Text style={[styles.textDetails4]}>Owner</Text>
+                          }
+                             </View>:<Text></Text>
+                        }
+                        {item.UnitStatus === "Sold Tenant Occupied Unit" ?
+                            <View style={{ height: hp("3%"),flex: 0.99 }} > 
+                            {item.role === "tenant" ? <Text style={[styles.textDetails4]}>Tenant</Text>:
+                           <Text style={[styles.textDetails4]}>Owner</Text>
+                          }
+                             </View>:<Text></Text>
+                        }
+                        {item.UnitStatus === "Unsold Tenant Occupied Unit" ?
+                            <View style={{ height: hp("3%"),flex: 0.99 }} > 
+                            {item.role === "tenant" ? <Text style={[styles.textDetails4]}>Tenant</Text>:
+                           <Text style={[styles.textDetails4]}></Text>
+                          }
+                             </View>:<Text></Text>
+                        }
+                        {/* <View style={{ height: hp("3%"),flex: 0.99 }} > 
+                        {item.role === "tenant" ? <Text style={[styles.textDetails4]}>Tenant</Text>:
+                       <Text style={[styles.textDetails4]}>Owner</Text>
+                      }
+                         </View> */}
+                         {/* <TouchableOpacity
                             onPress={() => {
                               this.props.navigation.navigate("EditUnit", {
                                 UnitName: item.UnitName,
@@ -619,7 +590,44 @@ console.log("2424298749812749712947912",unitid)
                               />
                             </View>
                           </TouchableOpacity>
+                           */}
+                          </View>
+                        <View style={{ height: hp("3%") }}>
+                          {item.role == "tenant" ? (
+                            <Text style={styles.textDetails}>{`${item.tfName} ${
+                              item.tlName
+                            }`}</Text>
+                          ) : (
+                            <Text style={styles.textDetails}>{`${item.fName} ${
+                              item.lName
+                            }`}</Text>
+                          )}
                         </View>
+                        <View style={{ height: hp("3%") }}>
+                          {item.role == "tenant" ? (
+                            <Text
+                              style={[styles.textDetails, { color: "#ff8c00" }]}
+                            >{`${item.tMobile}`}</Text>
+                          ) : (
+                            <Text
+                              style={[styles.textDetails, { color: "#ff8c00" }]}
+                            >{`${item.Mobile}`}</Text>
+                          )}
+                        </View>
+                        
+                          <View style={{ flex: 0.99 }}>
+                            {item.role == "tenant" ? (
+                              <Text style={styles.textDetails}>{`${
+                                item.tEmail
+                              }`}</Text>
+                            ) : (
+                              <Text style={styles.textDetails}>{`${
+                                item.Email
+                              }`}</Text>
+                            )}
+                          </View>
+      
+                      
                       </View>
                     </View>
                   </Card>
@@ -627,6 +635,28 @@ console.log("2424298749812749712947912",unitid)
               />
             </View>
           </View>
+          <TouchableOpacity
+          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+          onPress={() => this.props.navigation.navigate("AddUnit", {
+            blockname: blockName,
+            unit:  unitid
+          })}
+        >
+          <Text
+            style={{
+              fontSize: hp('5%'),
+              color: "#fff",
+              fontWeight: "bold",
+              justifyContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+              marginBottom: hp('0.5%')
+            }}
+          >
+            +
+          </Text>
+          
+        </TouchableOpacity>
         </View>
       </View>
     );
@@ -661,6 +691,15 @@ const styles = StyleSheet.create({
     // fontWeight:'bold',
     color: "black"
   },
+
+  textDetails4: {
+    fontSize: hp("1.8%"),
+    paddingLeft: hp("2%"),
+    paddingTop: hp("0.9%"),
+    paddingBottom: hp("0.2%"),
+    fontWeight:'bold',
+    color: "#000000"
+  },
   textDetails1: {
     fontSize: hp("2%"),
     paddingLeft: hp("0.5%"),
@@ -685,7 +724,7 @@ const styles = StyleSheet.create({
     marginRight: hp("1%")
   },
   textWrapper: {
-    height: hp("85%"), // 70% of height device screen
+    height: hp("87%"), // 70% of height device screen
     width: wp("100%") // 80% of width device screen
   },
   viewDetails1: {
@@ -719,12 +758,11 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
-    width: hp("6%"),
-    // position: "absolute",
-    bottom: hp("0.5%"),
-    // right: hp('3%'),
-    height: hp("6%"),
+    width: hp('8%'),
+    position: "absolute",
+    bottom: hp('2.5%'),
+    right: hp('2.5%'),
+    height: hp('8%'),
     backgroundColor: "#FF8C00",
     borderRadius: 100,
     // shadowColor: '#000000',
