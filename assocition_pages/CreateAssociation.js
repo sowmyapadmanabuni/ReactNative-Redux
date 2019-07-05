@@ -467,19 +467,19 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        Alert.alert(
-            "",
-          " Association Created Successfully",
-          [
-            {
-              text: "Ok",
-              onPress: () =>
-              RNRestart.Restart()
-            }
-          ],
-          { cancelable: false }
-        );
-        
+        // Alert.alert(
+        //   "Oyespace",
+        //   " Association Created Successfully",
+        //   [
+        //     {
+        //       text: "Ok",
+        //       onPress: () =>
+        //       RNRestart.Restart()
+        //     }
+        //   ],
+        //   { cancelable: false }
+        // );
+        this.props.navigation.goBack();
 
         // alert("Association Created Successfully")
         // this.props.navigation.navigate("ResDashBoard");

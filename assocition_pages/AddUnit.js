@@ -452,19 +452,19 @@ class AddUnit extends Component {
       .then(responseJson => {
         console.log("unit added ###############", responseJson);
         // alert("Unit Created");
-        Alert.alert(
-          "",
-          "Unit Created Successfully",
-          [
-            {
-              text: "Ok",
-              onPress: () =>
-              RNRestart.Restart()
-            }
-          ],
-          { cancelable: false }
-        );
-        
+        // Alert.alert(
+        //   "",
+        //   "Unit Created Successfully",
+        //   [
+        //     {
+        //       text: "Ok",
+        //       onPress: () =>
+        //       RNRestart.Restart()
+        //     }
+        //   ],
+        //   { cancelable: false }
+        // );
+        this.props.navigation.goBack();
       })
 
       .catch(error => {
