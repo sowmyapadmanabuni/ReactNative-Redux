@@ -41,16 +41,33 @@ export const getNotifications = (oyeURL, MyAccountID) => {
           activeNotifications.push({ ...value, read: false });
         });
 
-        const sorted = _.sortBy(activeNotifications, [
+        // console.log("sorted", sorted);
+        let joinNotif = [];
+        let joinStatNotif = [];
+        let gateAppNotif = [];
+
+        activeNotifications.map((data, index) => {
+          if (data.ntType === "gate_app") {
+            gateAppNotif.push(data);
+          } else if (data.ntType === "Join_Status") {
+            joinStatNotif.push(data);
+          } else if (data.ntType === "Join") {
+            joinNotif.push(data);
+          }
+        });
+
+        const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
+        const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+        let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
+
+        const sorted = _.sortBy(allNotifs, [
           "ntdCreated",
           "ntdUpdated"
         ]).reverse();
-        const unique = _.uniqBy(sorted, "sbSubID");
-        // const unique = sorted;
 
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
-          payload: unique
+          payload: sorted
         });
       })
       .catch(error => {
@@ -129,7 +146,7 @@ export const createNotification = (
         )
         .then(response => {
           let responseData = response.data;
-          console.log(responseData);
+          // console.log(responseData);
           dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS });
           if (navigate) {
             fetch(
@@ -403,5 +420,125 @@ export const toggleAdminNotification = val => {
       type: TOGGLE_ADMIN_NOTIFICATION,
       payload: val
     });
+  };
+};
+
+export const createUserNotification = (
+  notifType,
+  oyeURL,
+  accountID,
+  associationID,
+  ntDesc,
+  sbUnitID,
+  sbMemID,
+  sbSubID,
+  sbRoleId,
+  associationName,
+  unitName,
+  occupancyDate,
+  soldDate
+) => {
+  return dispatch => {
+    let headers = {
+      "Content-Type": "application/json",
+      "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+    };
+
+    let date = moment();
+    let formatdate = date._d;
+
+    if (notifType === "Join") {
+      axios
+        .post(
+          `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
+          {
+            ACAccntID: accountID,
+            ASAssnID: associationID,
+            NTType: notifType,
+            NTDesc: ntDesc,
+            SBUnitID: sbUnitID,
+            SBMemID: sbMemID,
+            SBSubID: sbSubID,
+            SBRoleID: sbRoleId,
+            ASAsnName: associationName,
+            MRRolName: unitName,
+            NTDCreated: formatdate,
+            NTDUpdated: formatdate,
+            UNOcSDate: occupancyDate,
+            UNSldDate: soldDate
+          },
+          {
+            headers: headers
+          }
+        )
+        .then(res => {
+          console.log("notification created succ", res.data.data);
+        })
+        .catch(error => {
+          console.log("notification not created succ", error);
+        });
+    } else if (notifType === "Join_Status") {
+      axios
+        .post(
+          `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
+          {
+            ACAccntID: accountID,
+            ASAssnID: associationID,
+            NTType: notifType,
+            NTDesc: ntDesc,
+            SBUnitID: sbUnitID,
+            SBMemID: sbMemID,
+            SBSubID: sbSubID,
+            SBRoleID: sbRoleId,
+            ASAsnName: associationName,
+            MRRolName: unitName,
+            NTDCreated: formatdate,
+            NTDUpdated: formatdate,
+            UNOcSDate: occupancyDate,
+            UNSldDate: soldDate
+          },
+          {
+            headers: headers
+          }
+        )
+        .then(res => {
+          console.log("notification joinstatus succ", res.data.data);
+          getNotifications(oyeURL, accountID);
+        })
+        .catch(error => {
+          console.log("notification not joinstatus succ", error);
+        });
+    } else if (notifType === "gate_app") {
+      axios
+        .post(
+          `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
+          {
+            ACAccntID: accountID,
+            ASAssnID: associationID,
+            NTType: notifType,
+            NTDesc: ntDesc,
+            SBUnitID: sbUnitID,
+            SBMemID: sbMemID,
+            SBSubID: sbSubID,
+            SBRoleID: sbRoleId,
+            ASAsnName: associationName,
+            MRRolName: unitName,
+            NTDCreated: formatdate,
+            NTDUpdated: formatdate,
+            UNOcSDate: occupancyDate,
+            UNSldDate: soldDate
+          },
+          {
+            headers: headers
+          }
+        )
+        .then(res => {
+          console.log("notification joinstatus succ", res.data.data);
+          getNotifications(oyeURL, accountID);
+        })
+        .catch(error => {
+          console.log("notification not joinstatus succ", error);
+        });
+    }
   };
 };

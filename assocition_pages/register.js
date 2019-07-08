@@ -19,7 +19,10 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import { connect } from "react-redux";
-import { updateJoinedAssociation } from "../src/actions";
+import {
+  updateJoinedAssociation,
+  createUserNotification
+} from "../src/actions";
 import _ from "lodash";
 import { CLOUD_FUNCTION_URL } from "../constant";
 import firebase from "react-native-firebase";
@@ -126,7 +129,7 @@ class RegisterMe extends Component {
               "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
             };
             let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
-            console.log(mobileNo);
+            // console.log(mobileNo);
             axios
               .post(
                 "http://" +
@@ -217,12 +220,21 @@ class RegisterMe extends Component {
                     })
                     .then(response_3 => {
                       this.setState({ loading: false });
-                      console.log("unitid", unitList.unUnitID);
-                      // console.log("*******");
-                      // console.log("here_3 ");
-                      // console.log("*******");
-                      // let responseData_3 = response_3.data;
-                      // console.log(responseData_3)
+                      this.props.createUserNotification(
+                        ntType,
+                        this.props.oyeURL,
+                        adminAccId,
+                        this.props.navigation.state.params.AssnId.toString(),
+                        ntDesc,
+                        sbUnitID.toString(),
+                        sbMemID.toString(),
+                        sbSubID.toString(),
+                        sbRoleId,
+                        this.props.navigation.state.params.associationName,
+                        unitName.toString(),
+                        occupancyDate,
+                        soldDate
+                      );
                       this.props.navigation.navigate("SplashScreen");
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
@@ -428,6 +440,7 @@ class RegisterMe extends Component {
 
                 if (!_.isEmpty(responseData_2)) {
                   let userID = this.props.MyAccountID;
+                  let adminAccId = unitList.acAccntID;
                   let sbUnitID = unitList.unUnitID;
                   let unitName = unitList.unUniName;
                   let sbSubID =
@@ -461,17 +474,6 @@ class RegisterMe extends Component {
                   let soldDate = this.state.dobText;
                   let occupancyDate = this.state.dobText;
 
-                  // console.log("userId", userID);
-                  // console.log("sbUnitID", sbUnitID);
-                  // console.log("sbSubID", sbSubID);
-                  // console.log("sbRoleId", sbRoleId);
-                  // console.log("sbMemID", sbMemID);
-                  // console.log("sbName", sbName);
-                  // console.log("associationID", associationID);
-                  // console.log("ntType", ntType);
-                  // console.log("ntTitle", ntTitle);
-                  // console.log("ntDesc", ntDesc);
-
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
                   // Send a push notification to the admin here
@@ -496,11 +498,22 @@ class RegisterMe extends Component {
                     })
                     .then(response_3 => {
                       this.setState({ loading: false });
-                      // console.log("*******");
-                      // console.log("here_3 ");
-                      // console.log("*******");
-                      // let responseData_3 = response_3.data;
-                      // console.log(responseData_3)
+                      this.props.createUserNotification(
+                        ntType,
+                        this.props.oyeURL,
+                        adminAccId,
+                        this.props.navigation.state.params.AssnId.toString(),
+                        ntDesc,
+                        sbUnitID.toString(),
+                        sbMemID.toString(),
+                        sbSubID.toString(),
+                        sbRoleId,
+                        this.props.navigation.state.params.associationName,
+                        unitName.toString(),
+                        occupancyDate,
+                        soldDate
+                        // this.props.navigation
+                      );
 
                       this.props.navigation.navigate("SplashScreen");
                       this.props.updateJoinedAssociation(
@@ -632,7 +645,7 @@ class RegisterMe extends Component {
 
   render() {
     const { unitList, AssnId } = this.props.navigation.state.params;
-
+    console.log("unitList", unitList);
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: "orange" }}>
@@ -712,7 +725,7 @@ class RegisterMe extends Component {
                 </View>
               </Card>
             </View>
-            
+
             <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
               <View style={styles.View}>
                 <TouchableOpacity onPress={() => this.submitForOwnwer()}>
@@ -737,7 +750,7 @@ class RegisterMe extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-            
+
             {/* <Text>{unitList.owner[0].uofName}</Text> */}
           </View>
         ) : (
@@ -865,5 +878,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { updateJoinedAssociation }
+  { updateJoinedAssociation, createUserNotification }
 )(RegisterMe);

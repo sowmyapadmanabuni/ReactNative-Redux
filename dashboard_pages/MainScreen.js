@@ -47,7 +47,8 @@ import {
   updateUserInfo,
   updateApproveAdmin,
   getAssoMembers,
-  updateDropDownIndex
+  updateDropDownIndex,
+  createUserNotification
 } from "../src/actions";
 import { NavigationEvents } from "react-navigation";
 
@@ -230,69 +231,70 @@ class Dashboard extends React.Component {
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
-      // alert('opened')
-      // console.log('**********')
-      // console.log(notificationOpen.notification._data.admin)
+      const { MyAccountID } = this.props.userReducer;
+      const { oyeURL } = this.props.oyespaceReducer;
+      let details = notificationOpen.notification._data;
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.action) {
           // this.props.newNotifInstance(notificationOpen.notification);
-          this.props.createNotification(
-            notificationOpen.notification._data,
-            navigationInstance,
-            true,
-            "true",
-            this.props.oyeURL,
-            this.props.MyAccountID
-          );
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
           // this.props.createNotification(notificationOpen.notification)
         }
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+        this.props.createUserNotification(
+          "Join_Status",
+          oyeURL,
+          MyAccountID,
+          1,
+          details.ntDesc,
+          "resident_user",
+          "resident_user",
+          details.sbSubID,
+          "resident_user",
+          "resident_user",
+          "resident_user",
+          "resident_user",
+          "resident_user"
+        );
       }
 
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.notification._data.foreground) {
           // this.props.newNotifInstance(notificationOpen.notification);
-          this.props.createNotification(
-            notificationOpen.notification._data,
-            navigationInstance,
-            true,
-            "true",
-            this.props.oyeURL,
-            this.props.MyAccountID
-          );
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
         }
       } else if (notificationOpen.notification._data.admin === "gate_app") {
         // this.props.newNotifInstance(notificationOpen.notification);
-        this.props.createNotification(
-          notificationOpen.notification._data,
-          navigationInstance,
-          true,
-          "gate_app",
-          this.props.oyeURL,
-          this.props.MyAccountID
-        );
+        // this.props.createNotification(
+        //   notificationOpen.notification._data,
+        //   navigationInstance,
+        //   true,
+        //   "gate_app",
+        //   this.props.oyeURL,
+        //   this.props.MyAccountID
+        // );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
-        // alert('clicked here')
-        // this.props.newNotifInstance(notificationOpen.notification);
-        this.props.createNotification(
-          notificationOpen.notification._data,
-          navigationInstance,
-          true,
-          "false",
-          this.props.oyeURL,
-          this.props.MyAccountID
-        );
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       }
+      this.props.getNotifications(oyeURL, MyAccountID);
+      this.props.navigation.navigate("NotificationScreen");
     });
   };
 
@@ -922,6 +924,7 @@ export default connect(
     updateUserInfo,
     getAssoMembers,
     updateApproveAdmin,
-    updateDropDownIndex
+    updateDropDownIndex,
+    createUserNotification
   }
 )(Dashboard);
