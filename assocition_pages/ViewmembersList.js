@@ -73,8 +73,8 @@ class Resident extends Component {
   componentDidMount = () => {};
 
   changeRole = () => {
-    console.log("myunit",this.state.selectedRoleData.selRolId)
-    console.log("idddd",this.props.SelectedMemberID)
+    console.log("myunit", this.state.selectedRoleData.selRolId);
+    console.log("idddd", this.props.SelectedMemberID);
     const {
       getDashUnits,
       // selectedAssociation,
@@ -83,7 +83,7 @@ class Resident extends Component {
       notifications
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-   
+
     // const { oyeURL } = this.props.oyespaceReducer;
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate
@@ -101,12 +101,12 @@ class Resident extends Component {
     });
 
     requestBody = {
-      // ACMobile: this.state.selectedRoleData.uoMobile,
-      // UNUnitID: this.state.selectedRoleData.unitid,
-      // MRMRoleID: this.state.selectedRoleData.selRolId
+      ACMobile: this.state.selectedRoleData.uoMobile,
+      UNUnitID: this.state.selectedRoleData.unitid,
+      MRMRoleID: this.state.selectedRoleData.selRolId
       // global.MyOYEMemberID
-      MRMRoleID: this.state.selectedRoleData.selRolId,
-      MEMemID: this.props.SelectedMemberID
+      // MRMRoleID: this.state.selectedRoleData.selRolId,
+      // MEMemID: this.props.SelectedMemberID
     };
 
     fetch(url, {

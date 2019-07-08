@@ -5784,6 +5784,11 @@ react-native-responsive-screen@^1.2.0:
   resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.2.1.tgz#fa9b74a3bb76856bc2f3754af1ba267893e98595"
   integrity sha512-QquX/XWt5kHCs9duKPuvIU49p3Dq/0rnztvDWxec8KnV7q1agnS9JN9BRb/xro1G2zJOoNZBmLjEuXFRknZtpg==
 
+react-native-restart@0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/react-native-restart/-/react-native-restart-0.0.12.tgz#afd51c445bdadfd34a02e29955eefe66a86af86d"
+  integrity sha512-aSvcsiSLUbHt1E0AXuC2gpIXBTn1p3J4jfTYFbFv/D19zTLW5WVUb4blgVt70RCkqvZWD3NEymS4ZZmFWGDclA==
+
 react-native-safe-area-view@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.12.0.tgz#5c312f087300ecf82e8541c3eac25d560e147f22"
