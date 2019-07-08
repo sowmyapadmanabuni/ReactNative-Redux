@@ -9,10 +9,14 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { ListItem, Header, Card } from "react-native-elements";
-import { onNotificationOpen, storeOpenedNotif } from "../../actions";
+import {
+  onNotificationOpen,
+  storeOpenedNotif,
+  getNotifications
+} from "../../actions";
 import TimeAgo from "react-native-timeago";
-import { Map } from "immutable";
 import _ from "lodash";
+import { NavigationEvents } from "react-navigation";
 // import console = require('console');
 
 class NotificationScreen extends Component {
@@ -141,10 +145,15 @@ class NotificationScreen extends Component {
   };
 
   render() {
-    const { navigation, notifications } = this.props;
+    const { navigation, notifications, oyeURL, MyAccountID } = this.props;
     const refresh = navigation.getParam("refresh", "NO-ID");
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onDidFocus={payload =>
+            this.props.getNotifications(oyeURL, MyAccountID)
+          }
+        />
         <Header
           leftComponent={{
             icon: "arrow-left",
@@ -182,11 +191,13 @@ const mapStateToProps = state => {
     notifications: state.NotificationReducer.notifications,
     isCreateLoading: state.NotificationReducer.isCreateLoading,
     loading: state.NotificationReducer.loading,
-    savedNoifId: state.AppReducer.savedNoifId
+    savedNoifId: state.AppReducer.savedNoifId,
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyAccountID: state.UserReducer.MyAccountID
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onNotificationOpen, storeOpenedNotif }
+  { onNotificationOpen, storeOpenedNotif, getNotifications }
 )(NotificationScreen);
