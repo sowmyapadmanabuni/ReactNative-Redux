@@ -451,19 +451,18 @@ class AddUnit extends Component {
       .then(response => response.json())
       .then(responseJson => {
         console.log("unit added ###############", responseJson);
-        // alert("Unit Created");
-        // Alert.alert(
-        //   "",
-        //   "Unit Created Successfully",
-        //   [
-        //     {
-        //       text: "Ok",
-        //       onPress: () =>
-        //       RNRestart.Restart()
-        //     }
-        //   ],
-        //   { cancelable: false }
-        // );
+        Alert.alert(
+          "",
+          "Unit Created Successfully",
+          [
+            {
+              text: "Ok",
+              onPress: ()=>
+                RNRestart.Restart()  
+            }
+          ],
+          { cancelable: false }
+        );
         this.props.navigation.goBack();
       })
 
@@ -529,8 +528,16 @@ class AddUnit extends Component {
       Alert.alert("Tenant Last Name should contain characters");
     }  else if (Unittmnum1.length < 10) {
       Alert.alert("Please check Tenant Mobile Number");
+    }else if ((Unittmnum1) === Unitomnum1 ) {
+      Alert.alert("Owner & Tenant Mobile Number should not be same");
+    }else if (Unittmnum1 ===  UnitoAnum1) {
+      Alert.alert("Owner & Tenant Mobile Number should not be same");
     } else if (Unitteid1.length === 0) {
       Alert.alert("Enter  Tenant Email ID");
+    }else if ((Unitteid1)=== Unitoeid1 ) {
+      Alert.alert("Owner & Tenant Email ID should not be same");
+    }else if ((Unitteid1)=== Unitoaeid1) {
+      Alert.alert("Owner & Tenant Email ID should not be same");
     } else if (regemail.test(Unitteid1) === false) {
       Alert.alert("Enter Valid Tenant Email ID");
     }
@@ -634,48 +641,50 @@ class AddUnit extends Component {
      
 
       <View style={{ flex: 1 }}>
-      <SafeAreaView style={{ backgroundColor: "orange" }}>
-        <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-          <View style={styles.viewDetails1}>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}
-            >
-              <View
-                style={{
-                  height: hp("6%"),
-                  width: wp("20%"),
-                  alignItems: "center",
-                  justifyContent: "center",
-                  alignContent: "center"
+     
+     <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
                 }}
               >
-                <Image
-                  source={require("../icons/backBtn.png")}
-                  style={styles.viewDetails2}
-                />
-              </View>
-            </TouchableOpacity>
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
           </View>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Image
-              style={[styles.image1]}
-              source={require("../icons/headerLogo.png")}
-            />
-          </View>
-          <View style={{ flex: 0.2 }}>
-            {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-          </View>
-        </View>
-        <View style={{ borderWidth: 1, borderColor: "orange" }} />
-      </SafeAreaView>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+
 
       <KeyboardAwareScrollView>
         <View style={styles.textWrapper}>
@@ -869,6 +878,7 @@ class AddUnit extends Component {
                         autoCorrect={false}
                         autoCapitalize="characters"
                         keyboardType='number-pad'
+                        maxLength={10}
                         onChangeText={Unitomnum =>
                           this.setState({ Unitomnum: Unitomnum })
                         }
@@ -883,6 +893,7 @@ class AddUnit extends Component {
                         placeholder="Mobile Number"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
+                        maxLength={10}
                         autoCapitalize="characters"
                         keyboardType='number-pad'
                         onChangeText={UnitoAnum =>
@@ -1053,7 +1064,7 @@ class AddUnit extends Component {
                         placeholder="Mobile Number"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        
+                        maxLength={10}
                         keyboardType='number-pad'
                         onChangeText={Unittmnum =>
                           this.setState({ Unittmnum: Unittmnum })
@@ -1578,24 +1589,9 @@ const styles = StyleSheet.create({
   rowStyle: { flexDirection: "row", backgroundColor: "#FFF1C1" },
   btn: { width: 58, height: 18, backgroundColor: "#78B7BB", borderRadius: 2 },
   btnText: { textAlign: "center", color: "#fff" },
-  viewDetails1: {
-    flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3
-  },
-  viewDetails2: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: wp("6%"),
-    height: hp("2%")
-  },
-  image1: {
-    width: wp("22%"),
-    height: hp("12%"),
-    marginRight: hp("1%")
-  },
+
+
+
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
@@ -1606,6 +1602,31 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
+
+viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+
+viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+
+image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
+  
   imp: {
     fontSize: hp("1.5%"),
     color: "red"

@@ -12,7 +12,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 import { CLOUD_FUNCTION_URL } from "../../../constant";
 import { connect } from "react-redux";
-import { updateApproveAdmin, getNotifications } from "../../actions";
+import {
+  updateApproveAdmin,
+  getNotifications,
+  createUserNotification
+} from "../../actions";
 
 import _ from "lodash";
 // import {connect} from 'react-redux';
@@ -275,7 +279,7 @@ class NotificationDetailScreen extends Component {
 
     let subId = details.sbSubID;
     let status = _.includes(approvedAdmins, subId);
-    console.log(status);
+    // console.log(status);
 
     if (loading) {
       return (
@@ -407,5 +411,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { updateApproveAdmin, getNotifications }
+  { updateApproveAdmin, getNotifications, createUserNotification }
 )(NotificationDetailScreen);

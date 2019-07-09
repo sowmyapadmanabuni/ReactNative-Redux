@@ -95,9 +95,10 @@ class Header extends React.Component {
                     }}
                     source={{
                       uri:
-                        this.props.viewImageURL +
-                        "PERSON" +
-                        this.props.MyAccountID +
+                        // this.props.viewImageURL +
+                        this.props.imageUrl+
+                        "PERSONAssociation8NONREGULAR9447679600.jpg"+
+                        this.props.MyAccountID+
                         ".jpg" +
                         "?random_number=" +
                         new Date().getTime()
@@ -211,7 +212,8 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
     MyFirstName: state.UserReducer.MyFirstName,
-    viewImageURL: state.OyespaceReducer.viewImageURL
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    imageUrl: state.OyespaceReducer.imageUrl
   };
 };
 

@@ -195,7 +195,7 @@ class ViewAllVisitorsList extends Component {
              <ZoomImage
                source={{
                  uri:
-                   "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                   this.props.imageUrl + item.vlEntryImg
                }}
                imgStyle={styles.mainCardItemImage}
                duration={300}
@@ -265,14 +265,14 @@ class ViewAllVisitorsList extends Component {
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("AdminFunction");
+                  this.props.navigation.navigate("ResDashBoard");
                 }}
               >
                 <View
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: "center",
+                    alignItems: "flex-start",
                     justifyContent: "center"
                   }}
                 >
@@ -302,6 +302,8 @@ class ViewAllVisitorsList extends Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+
+        
         <Text style={styles.titleOfScreen}> My Visitors </Text>
 
           <View style={styles.progress}>
@@ -628,7 +630,8 @@ const mapStateToProps = state => {
   return {
       oyeURL: state.OyespaceReducer.oyeURL,
       associationid: state.DashboardReducer.associationid,
-      SelectedAssociationID: state.UserReducer.SelectedAssociationID
+      SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+      imageUrl: state.OyespaceReducer.imageUrl
   }
 }
 

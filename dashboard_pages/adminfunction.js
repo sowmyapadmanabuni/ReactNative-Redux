@@ -27,8 +27,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import { connect } from "react-redux";
 
-export default class admin extends React.Component {
+class admin extends React.Component {
   static navigationOptions = {
     title: "admin",
     header: null
@@ -112,15 +113,38 @@ export default class admin extends React.Component {
                   />
                 </View>
                 <View style={styles.view3}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.props.navigation.navigate("ViewAllVisitorsScreen")
-                    }
-                  >
-                    <View style={styles.view3}>
-                      <Text style={styles.text1}>View All Visitors</Text>
-                    </View>
-                  </TouchableOpacity>
+                  {this.props.navigation.state.params.assocationSel ===
+                  false ? (
+                    <TouchableOpacity
+                      onPress={() =>
+                        Alert.alert(
+                          "",
+                          "Please select Association from Dropdown in Dashboard",
+                          [
+                            {
+                              text: "Ok",
+                              onPress: () => this.props.navigation.goBack()
+                            }
+                          ],
+                          { cancelable: false }
+                        )
+                      }
+                    >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>View All Visitors</Text>
+                      </View>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate("ViewAllVisitorsScreen")
+                      }
+                    >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>View All Visitors</Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
               <View style={styles.borderline} />
@@ -131,15 +155,15 @@ export default class admin extends React.Component {
                   <Image source={require("../pages/assets/img/settings.png")} />
                 </View>
                 <View style={styles.view3}>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() =>
                       this.props.navigation.navigate("AdminSettingsScreen")
                     }
-                  >
+                  > */}
                     <View style={styles.view3}>
                       <Text style={styles.text1}>Admin Settings</Text>
                     </View>
-                  </TouchableOpacity>
+                  {/* </TouchableOpacity> */}
                 </View>
               </View>
               <View style={styles.borderline} />
@@ -193,17 +217,41 @@ export default class admin extends React.Component {
                     source={require("../pages/assets/img/building2.png")}
                   />
                 </View>
-                <View style={styles.view3}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.props.navigation.navigate("BlockDetailScreen")
-                    }
-                  >
-                    <View style={styles.view3}>
-                      <Text style={styles.text1}>Create Block and Units</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                {this.props.navigation.state.params.assocationSel === false ? (
+                  <View style={styles.view3}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Alert.alert(
+                          "",
+                          "Please select Association from Dropdown in Dashboard",
+                          [
+                            {
+                              text: "Ok",
+                              onPress: () => this.props.navigation.goBack()
+                            }
+                          ],
+                          { cancelable: false }
+                        )
+                      }
+                    >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>Create Block and Units</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View style={styles.view3}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate("BlockDetailScreen")
+                      }
+                    >
+                      <View style={styles.view3}>
+                        <Text style={styles.text1}>Create Block and Units</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
               <View style={styles.borderline} />
             </View>
@@ -283,3 +331,11 @@ const styles = StyleSheet.create({
     color: "#474749"
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID
+  };
+};
+
+export default connect(mapStateToProps)(admin);

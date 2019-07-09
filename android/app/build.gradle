@@ -107,8 +107,8 @@ lintOptions {
         applicationId "com.oyespace.oyesafe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "8.0"
+        versionCode 4
+        versionName "9.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -154,6 +154,7 @@ lintOptions {
 }
 
 dependencies {
+    implementation project(':react-native-restart')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-spinkit')
     implementation project(':react-native-version-number')

@@ -66,7 +66,10 @@ class UnitDetails extends Component {
       error: null,
       isLoading: true,
       dataSource: [],
-      loading: false
+      loading: false,
+
+      unitcount: "",
+      unitcount1:""
     };
     this.arrayholder = [];
   }
@@ -87,6 +90,7 @@ class UnitDetails extends Component {
         isLoading1: false
       });
     }, 5000);
+    this.unitDetailsLimitation()
   };
 
   UnitDetail = () => {
@@ -111,20 +115,23 @@ console.log("2424298749812749712947912",unitid)
       .then(responseJson => {
         let units = [];
 
-        // console.log("hhhhhh",responseJson)
-
-        // this.arrayholder = responseJson.data.unitsByBlockID
         var count = Object.keys(responseJson.data.unitsByBlockID).length;
-        // console.log("#######",count)
+        console.log("#######",count)
+        this.setState({unitcount1:count})
+        console.log("myunit",this.state.unitcount1)
         for (var i = 0; i < count; i++) {
-          var count1 = Object.keys(responseJson.data.unitsByBlockID[i].owner)
+           
+            
+            var count1 = Object.keys(responseJson.data.unitsByBlockID[i].owner)
             .length;
-          for (var j = 0; j < count1; j++) {
+            var count2 = Object.keys(responseJson.data.unitsByBlockID[i].tenant)
+            .length;
+            console.log("hhhhhh",count1)
+            if(!count1 == 0 || !count2 == 0)
+            {
+           for (var j = 0; j < count1; j++) {
             this.setState({
               UnitName: responseJson.data.unitsByBlockID[i].unUniName
-            });
-            this.setState({
-              UnitType: responseJson.data.unitsByBlockID[i].unUniType
             });
             this.setState({
               UnitStatus: responseJson.data.unitsByBlockID[i].unOcStat
@@ -145,6 +152,9 @@ console.log("2424298749812749712947912",unitid)
               CalType: responseJson.data.unitsByBlockID[i].unCalType
             });
             this.setState({
+              UnitType: responseJson.data.unitsByBlockID[i].unUniType
+            });
+            this.setState({
               OwnerfName: responseJson.data.unitsByBlockID[i].owner[j].uofName
             });
             this.setState({
@@ -162,11 +172,10 @@ console.log("2424298749812749712947912",unitid)
             this.setState({
               OAGmail: responseJson.data.unitsByBlockID[i].owner[j].uoEmail1
             });
-
             units.push({
               UnitName: this.state.UnitName,
-              UnitType: this.state.UnitType,
               UnitStatus: this.state.UnitStatus,
+              UnitType: this.state.UnitType,
               UnitId: this.state.UnitId,
               UnitDimention: this.state.UnitDimention,
               UnitRate: this.state.UniteRate,
@@ -181,8 +190,6 @@ console.log("2424298749812749712947912",unitid)
               role: "owner"
             });
           }
-          var count2 = Object.keys(responseJson.data.unitsByBlockID[i].tenant)
-            .length;
           for (var k = 0; k < count2; k++) {
             this.setState({
               UnitName: responseJson.data.unitsByBlockID[i].unUniName
@@ -262,7 +269,53 @@ console.log("2424298749812749712947912",unitid)
               role: "tenant"
             });
           }
+        } 
+        else {
+          this.setState({
+            UnitName: responseJson.data.unitsByBlockID[i].unUniName
+          });
+          this.setState({
+            UnitStatus: responseJson.data.unitsByBlockID[i].unOcStat
+          });
+          this.setState({
+            UnitId: responseJson.data.unitsByBlockID[i].unUnitID
+          });
+          this.setState({
+            Osdate: responseJson.data.unitsByBlockID[i].unSldDate
+          });
+          this.setState({
+            UnitDimention: responseJson.data.unitsByBlockID[i].unDimens
+          });
+          this.setState({
+            UniteRate: responseJson.data.unitsByBlockID[i].unRate
+          });
+          this.setState({
+            CalType: responseJson.data.unitsByBlockID[i].unCalType
+          });
+          this.setState({
+            UnitType: responseJson.data.unitsByBlockID[i].unUniType
+          });
+          units.push({
+            UnitName: this.state.UnitName,
+            UnitStatus: this.state.UnitStatus,
+            UnitType: this.state.UnitType,
+            UnitId: this.state.UnitId,
+            UnitDimention: this.state.UnitDimention,
+            UnitRate: this.state.UniteRate,
+            CalType: this.state.CalType,
+            fName: "",
+            lName: "",
+            Mobile: "",
+            Email: "",
+            AEmail: "",
+            AMobile: "",
+            Osdate: "",
+           });
+
         }
+          
+        }
+        console.log("hjhdjhjshdjhjdhj",units)
         this.setState({
           isLoading: false,
           dataSource: units,
@@ -273,13 +326,42 @@ console.log("2424298749812749712947912",unitid)
         });
         this.arrayholder = units;
         // this.setState({ });
-        // console.log("JJJJJJJJJJJJJJJJJ",this.state.unitlist)
+        console.log("JJJJJJJJJJJJJJJJJ",this.state.unitlist)
       })
       .catch();
 
     // console.log("getting dada",this.props.navigation.state.params.data)
   };
 
+  unitDetailsLimitation = () => {
+    const {
+      unitid,
+    } = this.props.navigation.state.params
+    fetch(
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Block/GetBlockListByBlockID/${unitid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+  .then(responseJson => {
+    console.log(responseJson, "ppppppp")
+    this.setState({
+      unitcount:responseJson.data.blocksByBlockID[0].blNofUnit
+    })
+  console.log("myunit2",this.state.unitcount)
+  console.log("kkkkkkk",responseJson.data.blocksByBlockID[0].blNofUnit)
+    
+  })
+  .catch(error => {
+    this.setState({ error, loading: false })
+    console.log(error, "77777777777777777777")
+  })
+  }
   searchFilterFunction = text => {
     this.setState({
       value: text
@@ -312,75 +394,6 @@ console.log("2424298749812749712947912",unitid)
       return (
         <View style={{ flex: 1, flexDirection: "column" }}>
           <SafeAreaView style={{ backgroundColor: "orange" }}>
-            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-              <View style={styles.viewDetails1}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.goBack();
-                  }}
-                >
-                  <View
-                    style={{
-                      height: hp("6%"),
-                      width: wp("20%"),
-                      alignItems: "center",
-                      justifyContent: "center",
-                      alignContent: "center"
-                    }}
-                  >
-                    <Image
-                      source={require("../icons/backBtn.png")}
-                      style={styles.viewDetails2}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <Image
-                  style={[styles.image1]}
-                  source={require("../icons/headerLogo.png")}
-                />
-              </View>
-              <View style={{ flex: 0.2 }}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-              </View>
-            </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
-          <Text style={styles.residentialListTitle}>Unit Details</Text>
-          <View style={styles.progress}>
-            <ActivityIndicator size="large" color="#F3B431" />
-            <View
-              style={{
-                alignItems: "flex-start",
-                justifyContent: "center",
-                position: 'relative',
-                marginTop:hp('1%')
-              }}
-            >
-              <Text>Please Wait</Text>
-            </View>
-          </View>
-        </View>
-      );
-    }
-    // console.log(this.state.unitlist)
-
-    return (
-      <View style={{ flex: 1, flexDirection: "column" }}>
-        <NavigationEvents
-
-          onDidFocus={payload => this.UnitDetail()}
-          onWillBlur={payload => this.UnitDetail()}
-         
-        />
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
@@ -390,15 +403,15 @@ console.log("2424298749812749712947912",unitid)
               >
                 <View
                   style={{
-                    height: hp("6%"),
-                    width: wp("20%"),
-                    alignItems: "center",
-                    justifyContent: "center",
-                    alignContent: "center"
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
                   }}
                 >
                   <Image
-                    source={require("../icons/backBtn.png")}
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
                     style={styles.viewDetails2}
                   />
                 </View>
@@ -413,7 +426,7 @@ console.log("2424298749812749712947912",unitid)
             >
               <Image
                 style={[styles.image1]}
-                source={require("../icons/headerLogo.png")}
+                source={require("../icons/OyeSpace.png")}
               />
             </View>
             <View style={{ flex: 0.2 }}>
@@ -422,6 +435,78 @@ console.log("2424298749812749712947912",unitid)
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+
+          
+          <Text style={styles.residentialListTitle}>Unit Details</Text>
+          <View style={styles.progress}>
+            <ActivityIndicator size="large" color="#F3B431" />
+            <View
+              style={{
+                alignItems: "flex-start",
+                justifyContent: "center",
+                position: 'relative',marginTop:hp('1%')
+              }}
+            >
+              <Text>Please Wait</Text>
+            </View>
+          </View>
+        </View>
+      );
+    }
+    // console.log(this.state.unitlist)
+
+    return (
+      <View style={{ flex: 1, flexDirection: "column" }}>
+        <NavigationEvents
+
+          // onDidFocus={payload => this.UnitDetail()}
+          // onWillBlur={payload => this.UnitDetail()}
+         
+        />
+        <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+
+        
         <View style={styles.textWrapper}>
           <Text style={styles.residentialListTitle}>Unit Details</Text>
           <View style={{ flexDirection: "column", height: hp("15%") }}>
@@ -433,14 +518,14 @@ console.log("2424298749812749712947912",unitid)
                 onChangeText={this.searchFilterFunction}
               />
             </View>
-            <View
+            {/* <View
               style={{
                 height: hp("6%"),
                 flexDirection: "row",
                 marginTop: hp("1%")
               }}
             >
-              {/* <View
+              <View
                 style={{
                   flex: 0.85,
                   flexDirection: "row",
@@ -481,8 +566,8 @@ console.log("2424298749812749712947912",unitid)
                   </Text>
                 </Button>
               </View>
-             */}
-            </View>
+            
+            </View> */}
           </View>
           <View style={styles.viewDetails}>
             <View style={{ flex: 1 }}>
@@ -635,28 +720,32 @@ console.log("2424298749812749712947912",unitid)
               />
             </View>
           </View>
-          <TouchableOpacity
-          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-          onPress={() => this.props.navigation.navigate("AddUnit", {
-            blockname: blockName,
-            unit:  unitid
-          })}
-        >
-          <Text
-            style={{
-              fontSize: hp('5%'),
-              color: "#fff",
-              fontWeight: "bold",
-              justifyContent: "center",
-              alignItems: "center",
-              alignSelf: "center",
-              marginBottom: hp('0.5%')
-            }}
-          >
-            +
-          </Text>
-          
-        </TouchableOpacity>
+          { this.state.unitcount === this.state.unitcount1 ? <Text></Text> :
+         
+         <TouchableOpacity
+         style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+         onPress={() => this.props.navigation.navigate("AddUnit", {
+           blockname: blockName,
+           unit:  unitid
+         })}
+       >
+         <Text
+           style={{
+             fontSize: hp('5%'),
+             color: "#fff",
+             fontWeight: "bold",
+             justifyContent: "center",
+             alignItems: "center",
+             alignSelf: "center",
+             marginBottom: hp('0.5%')
+           }}
+         >
+           +
+         </Text>
+         
+       </TouchableOpacity>
+         }
+        
         </View>
       </View>
     );
@@ -692,6 +781,42 @@ const styles = StyleSheet.create({
     color: "black"
   },
 
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+
+viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+
+viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+
+image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
+
+
   textDetails4: {
     fontSize: hp("1.8%"),
     paddingLeft: hp("2%"),
@@ -708,38 +833,14 @@ const styles = StyleSheet.create({
     // fontWeight:'bold',
     color: "black"
   },
-  viewStyle1: {
-    backgroundColor: "#fff",
-    height: hp("7%"),
-    width: Dimensions.get("screen").width,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    position: "relative"
-  },
-  image1: {
-    width: wp("22%"),
-    height: hp("12%"),
-    marginRight: hp("1%")
-  },
+  
+
   textWrapper: {
     height: hp("87%"), // 70% of height device screen
     width: wp("100%") // 80% of width device screen
   },
-  viewDetails1: {
-    flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3
-  },
-  viewDetails2: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: wp("6%"),
-    height: hp("2%")
-  },
+  
+ 
   viewDetails3: {
     height: hp("6.5%"),
     backgroundColor: "#F5F5F5",
