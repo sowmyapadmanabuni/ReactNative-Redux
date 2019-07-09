@@ -173,7 +173,7 @@ class MyProfile extends Component {
                   style={styles.profilePicImageStyle}
                   source={ 
                       {
-                          uri: this.props.viewImageURL + 'PERSON' +
+                          uri: this.props.imageUrl + 'PERSON' +
                           this.props.MyAccountID +
                           '.jpg'+'?random_number=' +new Date().getTime(),
                       }
@@ -472,7 +472,8 @@ const mapStateToProps = state => {
     return {
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,
-        viewImageURL: state.OyespaceReducer.viewImageURL
+        viewImageURL: state.OyespaceReducer.viewImageURL,
+        imageUrl: state.OyespaceReducer.imageUrl
     }
 }
 

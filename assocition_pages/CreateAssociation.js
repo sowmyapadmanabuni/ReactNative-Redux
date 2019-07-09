@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import {
   StyleSheet,
   View,
@@ -17,7 +17,7 @@ import {
   RefreshControl,
   SafeAreaView,
   Dimensions
-} from "react-native"
+} from "react-native";
 import {
   Form,
   Item,
@@ -27,21 +27,20 @@ import {
   Card,
   CardItem,
   Picker
-} from "native-base"
+} from "native-base";
 import CountryPicker, {
   getAllCountries
-} from "react-native-country-picker-modal"
-import PhoneInput from "react-native-phone-input"
-import { Dropdown } from "react-native-material-dropdown"
+} from "react-native-country-picker-modal";
+import PhoneInput from "react-native-phone-input";
+import { Dropdown } from "react-native-material-dropdown";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import country from "react-native-phone-input/lib/country"
-import { NavigationEvents } from "react-navigation"
+} from "react-native-responsive-screen";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import country from "react-native-phone-input/lib/country";
+import { NavigationEvents } from "react-navigation";
 import { connect } from "react-redux";
-import { getDashAssociation, getDashSub } from "../src/actions";
 import RNRestart from "react-native-restart";
 
 let data = [
@@ -57,7 +56,7 @@ let data = [
     value: "Residential and Commercial",
     id: 3
   }
-]
+];
 
 let data1 = [
   {
@@ -68,15 +67,15 @@ let data1 = [
     value: "Current",
     id: 2
   }
-]
+];
 
 class App extends Component {
   static navigationOptions = {
     title: "CreateAssociation",
     header: null
-  }
+  };
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       association_Name: "",
       property_Name: "",
@@ -101,199 +100,228 @@ class App extends Component {
       bankAccountNumber: "",
       bankAccountType: "",
       banks: [],
-      
+      // banks: [
+      //   {
+      //     BABName: "",
+      //     BAActType: "",
+      //     BAActNo: "",
+      //     BAIFSC: ""
+      //     //BAActBal: 644346
+      //   }
+      // ],
       viewSection: false,
       pan_number_empty_flag: true,
       pan_Number1: "",
       bankAccountNumber1: ""
-    }
+      // count: 0
+    };
 
-    this.onPressFlag = this.onPressFlag.bind(this)
-    this.selectCountry = this.selectCountry.bind(this)
+    this.onPressFlag = this.onPressFlag.bind(this);
+    this.selectCountry = this.selectCountry.bind(this);
   }
 
-  
-  resetAllFields = () => {
-    this.textInput_association_Name.setNativeProps({ text: "" })
-    this.setState({ association_Name: "" })
-    this.textInput_property_Name.setNativeProps({ text: "" })
-    this.setState({ property_Name: "" })
+  // _incrementCount() {
+  //   this.setState({
+  //     count: this.state.count + 1
+  //   })
+  // }
 
+  // onSubmit = () => {
+  //   this.state.cca2 = ""
+  // }
+  resetAllFields = () => {
+    this.textInput_association_Name.setNativeProps({ text: "" });
+    this.setState({ association_Name: "" });
+    this.textInput_property_Name.setNativeProps({ text: "" });
+    this.setState({ property_Name: "" });
+
+    this.setState({ property_Type: "" });
+    this.setState({ bankAccountType: "" });
     if (this.state.pan_Number.trim() != "") {
-      console.log(this.state.pan_Number, "this.state.pan_Number")
-      this.textInput_pan_Number.setNativeProps({ text: "" })
-      this.setState({ pan_Number: "" })
+      console.log(this.state.pan_Number, "this.state.pan_Number");
+      this.textInput_pan_Number.setNativeProps({ text: "" });
+      this.setState({ pan_Number: "" });
     }
 
     if (this.state.reg_Number.trim() != "") {
-      console.log(this.state.reg_Number, "this.state.reg_Number")
-      this.textInput_reg_Number.setNativeProps({ text: "" })
-      this.setState({ reg_Number: "" })
+      console.log(this.state.reg_Number, "this.state.reg_Number");
+      this.textInput_reg_Number.setNativeProps({ text: "" });
+      this.setState({ reg_Number: "" });
     }
 
-    this.textInput_state.setNativeProps({ text: "" })
-    this.setState({ state: "" })
-    this.textInput_city.setNativeProps({ text: "" })
-    this.setState({ city: "" })
-    this.textInput_association_Address.setNativeProps({ text: "" })
-    this.setState({ association_Address: "" })
-    this.textInput_pinCode.setNativeProps({ text: "" })
-    this.setState({ pinCode: "" })
-    this.textInput_total_NumberOfBlocks.setNativeProps({ text: "" })
-    this.setState({ total_NumberOfBlocks: "" })
-    this.textInput_total_NumberOfUnits.setNativeProps({ text: "" })
-    this.setState({ total_NumberOfUnits: "" })
-    this.textInput_emailAssociation.setNativeProps({ text: "" })
-    this.setState({ emailAssociation: "" })
-    this.textInput_bankName.setNativeProps({ text: "" })
-    this.setState({ bankName: "" })
-    this.textInput_bankIFSC.setNativeProps({ text: "" })
-    this.setState({ bankIFSC: "" })
-    this.textInput_bankAccountNumber.setNativeProps({ text: "" })
-    this.setState({ bankAccountNumber: "" })
-    this.phone.selectCountry("in")
-  }
+    this.textInput_state.setNativeProps({ text: "" });
+    this.setState({ state: "" });
+    this.textInput_city.setNativeProps({ text: "" });
+    this.setState({ city: "" });
+    this.textInput_association_Address.setNativeProps({ text: "" });
+    this.setState({ association_Address: "" });
+    this.textInput_pinCode.setNativeProps({ text: "" });
+    this.setState({ pinCode: "" });
+    this.textInput_total_NumberOfBlocks.setNativeProps({ text: "" });
+    this.setState({ total_NumberOfBlocks: "" });
+    this.textInput_total_NumberOfUnits.setNativeProps({ text: "" });
+    this.setState({ total_NumberOfUnits: "" });
+    this.textInput_emailAssociation.setNativeProps({ text: "" });
+    this.setState({ emailAssociation: "" });
+    this.textInput_bankName.setNativeProps({ text: "" });
+    this.setState({ bankName: "" });
+    this.textInput_bankIFSC.setNativeProps({ text: "" });
+    this.setState({ bankIFSC: "" });
+    this.textInput_bankAccountNumber.setNativeProps({ text: "" });
+    this.setState({ bankAccountNumber: "" });
+    this.phone.selectCountry("in");
+  };
 
   componentDidMount() {
-    this.phone.selectCountry("in")
+    this.phone.selectCountry("in");
     this.setState({
       pickerData: this.phone.getPickerData()
-    })
+    });
   }
 
   onPressFlag() {
-    this.countryPicker.openModal()
+    this.countryPicker.openModal();
   }
 
   selectCountry(country) {
-    this.phone.selectCountry(country.cca2.toLowerCase())
-    this.setState({ cca2: country.cca2 })
+    this.phone.selectCountry(country.cca2.toLowerCase());
+    this.setState({ cca2: country.cca2 });
   }
 
-
   createAssociationPostData = () => {
-    association_Name = this.state.association_Name
-    property_Name = this.state.property_Name
-    property_Type = this.state.property_Type
-    pan_Number = this.state.pan_Number
-    reg_Number = this.state.reg_Number
-    country_a = this.state.country_a
-    state = this.state.state
-    city = this.state.city
-    association_Address = this.state.association_Address
-    pinCode = this.state.pinCode
-    total_NumberOfBlocks = this.state.total_NumberOfBlocks
-    total_NumberOfUnits = this.state.total_NumberOfUnits
-    emailAssociation = this.state.emailAssociation
-    bankName = this.state.bankName
-    bankIFSC = this.state.bankIFSC
-    bankAccountNumber = this.state.bankAccountNumber
-    bankAccountType = this.state.bankAccountType
+    association_Name = this.state.association_Name;
+    property_Name = this.state.property_Name;
+    property_Type = this.state.property_Type;
+    pan_Number = this.state.pan_Number;
+    reg_Number = this.state.reg_Number;
+    country_a = this.state.country_a;
+    state = this.state.state;
+    city = this.state.city;
+    association_Address = this.state.association_Address;
+    pinCode = this.state.pinCode;
+    total_NumberOfBlocks = this.state.total_NumberOfBlocks;
+    total_NumberOfUnits = this.state.total_NumberOfUnits;
+    emailAssociation = this.state.emailAssociation;
+    bankName = this.state.bankName;
+    bankIFSC = this.state.bankIFSC;
+    bankAccountNumber = this.state.bankAccountNumber;
+    bankAccountType = this.state.bankAccountType;
 
-    const reg = /^[0]?[6789]\d{9}$/
-    const regTextOnly = /^[a-zA-Z ]+$/
+    const reg = /^[0]?[6789]\d{9}$/;
+    const regTextOnly = /^[a-zA-Z ]+$/;
     //const regTextOnly = /^[a-zA-Z\s]*$/
-    const regPIN = /^[0-9]{1,20}$/
-    const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
+    const regPIN = /^[0-9]{1,20}$/;
+    const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/;
 
-    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/
-    let regIFSC = /^([A-Za-z]){4}([0-9]){7}$/
-    let oyeNonSpecialRegexs = /[^0-9]/
-    var panNumber = this.state.pan_Number.charAt(4)
-    var associationName = this.state.association_Name.charAt(4)
+    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+    let regIFSC = /^([A-Za-z]){4}([0-9]){7}$/;
+    let oyeNonSpecialRegexs = /[^0-9]/;
+    var panNumber = this.state.pan_Number.charAt(4);
+    var associationName = this.state.association_Name.charAt(4);
 
     if (association_Name.length == 0) {
-      Alert.alert("Association name cannot be empty")
+      Alert.alert("Association name cannot be empty");
     } else if (oyeNonSpecialRegex.test(association_Name) === true) {
-      alert("Association name should not contain special characters")
+      alert("Association name should not contain special characters");
     } else if (association_Name.length < 3) {
-      alert("Association name should be more than 3 characters")
+      alert("Association name should be more than 3 characters");
     } else if (association_Name.length > 50) {
-      alert("Association name should be less than 50 characters")
+      alert("Association name should be less than 50 characters");
     } else if (property_Name.length == 0) {
-      Alert.alert("Property name cannot be empty")
+      Alert.alert("Property name cannot be empty");
     } else if (regTextOnly.test(property_Name) === false) {
-      alert(" Property name should not contain numeric and special characters")
+      alert(" Property name should not contain numeric and special characters");
     } else if (property_Name.length < 3) {
-      alert("Property name should be more than 3 characters")
+      alert("Property name should be more than 3 characters");
     } else if (property_Name.length > 50) {
-      alert("Property name should be less than 50 characters")
+      alert("Property name should be less than 50 characters");
     } else if (property_Type == 0) {
-      alert("Select property type")
+      alert("Select property type");
     } else if (country_a.length == 0) {
-      alert("Please select country")
+      alert("Please select country");
     } else if (pan_Number.length == 0 && reg_Number == 0) {
-      alert("PAN number or Registration number Cannot be Empty")
-    } else if (pan_Number.length < 10) {
-      alert("Invalid PAN number")
-    } else if (pan_Number.charAt(4) !== association_Name.charAt(0)) {
-      alert("Enter valid PAN number")
-    } else if (regpan.test(pan_Number) === false) {
-      alert("Enter valid PAN number")
+      alert("PAN number or Registration number Cannot be Empty");
+    } else if (this.state.cca2 == "IN" && pan_Number.length < 10) {
+      alert("Invalid PAN number");
+    }else if ( !reg_Number == 0 && reg_Number.length < 10) {
+      alert("Invalid Registration number");
+    } else if ((!pan_Number == 0) && (pan_Number.charAt(4) !== association_Name.charAt(0))) {
+      alert("Enter valid PAN number");
+    } else if ((!pan_Number == 0) && (regpan.test(pan_Number) === false)) {
+      alert("Enter valid PAN number");
+    } else if ((!pan_Number == 0) && (pan_Number.length > 10)) {
+      alert("Enter valid Pan Number");
     } else if (state.length == 0) {
-      alert("State cannot be empty")
+      alert("State cannot be empty");
     } else if (regTextOnly.test(state) === false) {
-      alert(" State should not contain numeric and special characters")
+      alert(" State should not contain numeric and special characters");
     } else if (state.length > 50) {
-      alert("State name should be less than 50 characters")
+      alert("State name should be less than 50 characters");
     } else if (city.length == 0) {
-      alert("City cannot be empty")
+      alert("City cannot be empty");
     } else if (city.length > 50) {
-      alert("City name should be less than 50 characters")
+      alert("City name should be less than 50 characters");
     } else if (regTextOnly.test(city) === false) {
-      alert(" City should not contain numeric and special characters")
+      alert(" City should not contain numeric and special characters");
+    } else if (this.state.pinCode.substring(0) === 0) {
+      alert("Please Check pincode");
     } else if (pinCode.length == 0) {
-      alert("Pincode cannot be empty")
+      alert("Pincode cannot be empty");
     } else if (pinCode.length < 6) {
-      alert("Invalid pincode")
+      alert("Invalid pincode");
     } else if (regPIN.test(pinCode) === false) {
-      alert(" PIN code should not contain alphabets and special characters")
+      alert(" PIN code should not contain alphabets and special characters");
     } else if (association_Address.length == 0) {
-      alert("Address cannot be empty")
+      alert("Address cannot be empty");
     }
     // else if (regTextOnly.test(association_Address) === false) {
     //   alert("Address should not contain numeric and special characters")
     // }
-    else if (association_Address.length > 50) {
-      alert("Association address should be less than 50 characters")
+    // else if (association_Address.length > 50) {
+    //   alert("Association address should be less than 50 characters")
+    // }
+    else if (oyeNonSpecialRegex.test(association_Address) === true) {
+      alert("Association address should contain alpha-numeric value");
     } else if (emailAssociation.length == 0) {
-      alert("Email cannot be empty")
+      alert("Email cannot be empty");
     } else if (regemail.test(emailAssociation) === false) {
-      Alert.alert("Enter valid email ID of association")
+      Alert.alert("Enter valid email ID of association");
     } else if (total_NumberOfBlocks.length == 0) {
-      alert(" Number of blocks cannot be Empty")
+      alert(" Number of blocks cannot be Empty");
     } else if (total_NumberOfBlocks === "0") {
-      Alert.alert(" Number of blocks cannot be zero")
+      Alert.alert(" Number of blocks cannot be zero");
     } else if (total_NumberOfBlocks.length < 1) {
-      alert("Number of blocks should at least be 1")
+      alert("Number of blocks should at least be 1");
     } else if (regPIN.test(total_NumberOfBlocks) === false) {
       alert(
         "Number of blocks should not contain alphabets and special character"
-      )
+      );
     } else if (total_NumberOfBlocks > 99) {
-      alert("Number of blocks should not be more than 99")
+      alert("Number of blocks should not be more than 99");
     } else if (total_NumberOfUnits.length == 0) {
-      alert("Number of units cannot be empty")
+      alert("Number of units cannot be empty");
     } else if (total_NumberOfUnits === "0") {
-      Alert.alert(" Number of units cannot be zero")
+      Alert.alert(" Number of units cannot be zero");
     } else if (total_NumberOfUnits === 0) {
-      Alert.alert("Number of units cannot be zero")
+      Alert.alert("Number of units cannot be zero");
+    } else if (Number(total_NumberOfUnits.toString())  < Number(total_NumberOfBlocks.toString())) {
+      alert("Blocks should be less than units");
     } else if (regPIN.test(total_NumberOfUnits) === false) {
       alert(
         "Number of units should not contain alphabets and special character"
-      )
+      );
     } else if (
       !bankName.length == 0 ||
       !bankAccountNumber.length == 0 ||
       !bankIFSC.length == 0 ||
       !bankAccountType.length == 0
     ) {
-      this.bankNumber()
-      return
+      this.bankNumber();
+      return;
     } else if (pan_Number != 0) {
-      this.validationbank()
-      return
+      this.validationbank();
+      return;
     }
     // else if (bankName.length == 0) {
     //   Alert.alert("Bank name cannot be empty")
@@ -303,64 +331,66 @@ class App extends Component {
     //   this.validationbank()
     //   return
     // }
-  }
+  };
 
   bankNumber = () => {
-    bankName = this.state.bankName
-    bankIFSC = this.state.bankIFSC
-    bankAccountNumber = this.state.bankAccountNumber
-    bankAccountType = this.state.bankAccountType
+    bankName = this.state.bankName;
+    bankIFSC = this.state.bankIFSC;
+    bankAccountNumber = this.state.bankAccountNumber;
+    bankAccountType = this.state.bankAccountType;
 
-    const reg = /^[0]?[6789]\d{9}$/
-    const regTextOnly = /^[a-zA-Z ]+$/
+    const reg = /^[0]?[6789]\d{9}$/;
+    const regTextOnly = /^[a-zA-Z ]+$/;
     //const regTextOnly = /^[a-zA-Z\s]*$/
-    const regPIN = /^[0-9]{1,20}$/
-    const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
+    const regPIN = /^[0-9]{1,20}$/;
+    const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/;
 
-    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/
-    let regIFSC = /^([A-Za-z]){4}([0-9]){7}$/
-    let oyeNonSpecialRegexs = /[^0-9]/
+    let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+    let regIFSC = /^([A-Za-z]){4}([0-9]){7}$/;
+    let oyeNonSpecialRegexs = /[^0-9]/;
 
     if (bankName.length == 0) {
-      Alert.alert("Bank name cannot be empty")
-      return
+      Alert.alert("Bank name cannot be empty");
+      return;
     } else if (regTextOnly.test(bankName) === false) {
-      alert("Enter valid bank name")
-      return
+      alert("Enter valid bank name");
+      return;
     } else if (bankIFSC.length == 0) {
-      alert("IFSC cannot be empty")
-      return
+      alert("IFSC cannot be empty");
+      return;
     } else if (regIFSC.test(bankIFSC) === false) {
-      alert("Enter valid IFSC")
-      return
+      alert("Enter valid IFSC");
+      return;
     } else if (bankAccountNumber.length == 0) {
-      alert("Bank account number cannot be empty")
-      return
+      alert("Bank account number cannot be empty");
+      return;
     } else if (bankAccountNumber.length < 9) {
-      alert("Enter valid bank account number")
-      return
+      alert("Enter valid bank account number");
+      return;
     } else if (bankAccountNumber.length > 18) {
-      alert("Enter valid bank account number")
-      return
+      alert("Enter valid bank account number");
+      return;
     } else if (oyeNonSpecialRegex.test(bankAccountNumber) === true) {
-      alert("Enter valid Bank account number")
-      return
+      alert("Enter valid Bank account number");
+      return;
     } else if (bankAccountType == 0) {
-      alert("Select bank account type")
-      return
+      alert("Select bank account type");
+      return;
     } else {
-      this.validationbank()
-      return
+      this.validationbank();
+      return;
     }
-  }
+  };
 
   validationbank = () => {
-    let pan_Number = this.state.pan_Number
-    let bankAccountNumber = this.state.bankAccountNumber
+    let pan_Number = this.state.pan_Number;
+    let bankAccountNumber = this.state.bankAccountNumber;
 
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/association/getassociationlist`,
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/association/getassociationlist`,
       {
         method: "GET",
         headers: {
@@ -371,32 +401,38 @@ class App extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson, "*******************************************")
-        var count = Object.keys(responseJson.data.associations).length
+        console.log(
+          responseJson,
+          "*******************************************"
+        );
+        var count = Object.keys(responseJson.data.associations).length;
 
         for (var i = 0; i < count; i++) {
-          console.log("hfjshgkfh", responseJson.data.associations[i].aspanNum)
+          console.log("hfjshgkfh", responseJson.data.associations[i].aspanNum);
 
           if (pan_Number === responseJson.data.associations[i].aspanNum) {
-            alert("Pan Number already used")
-            return
-          } else if (responseJson.data.associations[i].bankDetails.length > 0) {
+            alert("Pan Number already used");
+            return;
+          } else if (
+            responseJson.data.associations[i].bankDetails.length > 0 &&
+            bankAccountNumber.length > 0
+          ) {
             if (
               bankAccountNumber ===
               responseJson.data.associations[i].bankDetails[0].baActNo
             ) {
-              alert("Bank Account Number already used")
-              return
+              alert("Bank Account Number already used");
+              return;
             }
           }
         }
 
-        this.createassocition()
+        this.createassocition();
       })
       .catch(error => {
-        console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-      })
-  }
+        console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+      });
+  };
 
   createassocition = () => {
     fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/association/create`, {
@@ -467,78 +503,248 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        // Alert.alert(
-        //   "Oyespace",
-        //   " Association Created Successfully",
-        //   [
-        //     {
-        //       text: "Ok",
-        //       onPress: () =>
-        //       RNRestart.Restart()
-        //     }
-        //   ],
-        //   { cancelable: false }
-        // );
-        this.props.navigation.goBack();
-
         // alert("Association Created Successfully")
-        // this.props.navigation.navigate("ResDashBoard");
-        // getDashAssociation(oyeURL, MyAccountID);
-
+        Alert.alert(
+          "",
+          "Association Created Successfully",
+          [
+            {
+              text: "Ok",
+              onPress: () => RNRestart.Restart()
+            }
+          ],
+          { cancelable: false }
+        );
       })
 
       .catch(error => {
-        alert("error",error)
-      })
-  }
+        alert("error");
+      });
+  };
 
+  addItem = () => {
+    // const banks = this.state.banks.map((bank, index) => {
+    if (this.state.viewSection) {
+      return (
+        // <View key={bank + index}>
+        <Card style={{ height: hp("46%") }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}
+          >
+            <Text
+              style={{
+                color: "#38BCDB",
+                marginLeft: wp("5%"),
+                fontSize: hp("2.2%"),
+                marginVertical: hp("1%")
+              }}
+            >
+              Bank {this.setState.count}
+            </Text>
+            <Image
+              style={styles.deleteImageStyle}
+              source={require("../icons/delete.png")}
+            />
+          </View>
+          <Text
+            style={{
+              color: "#696969",
+              marginLeft: wp("5%"),
+              fontSize: hp("2%"),
+              marginVertical: hp("1%")
+            }}
+          >
+            Bank Name
+          </Text>
+          <Item style={styles.bankDetailLine}>
+            <Input
+              style={styles.box}
+              placeholder="Enter Bank Name"
+              autoCorrect={false}
+              autoCapitalize="characters"
+              keyboardType="default"
+              ref={text => (this.textInput_bankName = text)}
+              onChangeText={bankName => this.setState({ bankName: bankName })}
+            />
+          </Item>
+          <View style={{ flexDirection: "row", marginTop: hp("1%") }}>
+            <View style={{ height: hp("5%"), width: wp("40%") }}>
+              <Text
+                style={{
+                  color: "#696969",
+                  marginLeft: wp("5%"),
+                  fontSize: hp("2%"),
+                  marginVertical: hp("1%")
+                }}
+              >
+                IFSC
+              </Text>
+              <Item style={styles.bankDetailLine}>
+                <Input
+                  style={styles.box}
+                  placeholder="IFSC"
+                  // underlineColorAndroid="orange"
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  keyboardType="default"
+                  ref={text => (this.textInput_bankIFSC = text)}
+                  onChangeText={bankIFSC =>
+                    this.setState({ bankIFSC: bankIFSC })
+                  }
+                />
+              </Item>
+            </View>
+            <View style={{ height: hp("5%"), width: wp("60%") }}>
+              <Text
+                style={{
+                  color: "#696969",
+                  marginLeft: wp("5%"),
+                  fontSize: hp("2%"),
+                  marginVertical: hp("1%")
+                }}
+              >
+                Account Number
+              </Text>
+              <Item style={styles.bankDetailLine}>
+                <Input
+                  style={styles.box}
+                  placeholder="Account Number"
+                  // underlineColorAndroid="orange"
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  keyboardType="default"
+                  ref={text => (this.textInput_bankAccountNumber = text)}
+                  onChangeText={bankAccountNumber =>
+                    this.setState({
+                      bankAccountNumber: bankAccountNumber
+                    })
+                  }
+                />
+              </Item>
+            </View>
+          </View>
 
-  
-  render() {
-    return (
-      <View>
-        <SafeAreaView style={{ backgroundColor: "#FF8C00" }}>
-          <View style={[styles.viewStyle, { flexDirection: "row" }]}>
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+          <View style={{ flexDirection: "row", marginTop: hp("7%") }}>
+            <View style={{ height: hp("5%"), width: wp("70%") }}>
+              <Text
+                style={{
+                  color: "#696969",
+                  marginLeft: wp("5%"),
+                  fontSize: hp("2%"),
+                  marginVertical: hp("1%")
+                }}
+              >
+                Account Type
+              </Text>
+
+              <Item style={styles.bankDetailLine}>
+                <Dropdown
+                  containerStyle={styles.box1}
+                  dropdownPosition={-1}
+                  // label="Select Account Type"
+                  style={{ fontSize: hp("2%") }}
+                  value={"Savings"}
+                  textColor="#3A3A3C"
+                  labelHeight={hp("0.7%")}
+                  data={data1}
+                  inputContainerStyle={{ borderBottomColor: "transparent" }}
+                  onChangeText={bankAccountType =>
+                    this.setState({ bankAccountType: bankAccountType })
+                  }
+                />
+              </Item>
+            </View>
             <View
               style={{
-                flex: 1,
                 flexDirection: "row",
-                justifyContent: "flex-start",
                 alignItems: "center",
-                marginLeft: 20
+
+                justifyContent: "space-evenly"
               }}
             >
               <Image
-                source={require("../icons/backBtn.png")}
-                style={{ width: 20, height: 20 }}
+                style={styles.circleImageStyle}
+                source={require("../icons/circle.png")}
               />
+              <Text
+                style={{
+                  marginLeft: hp("0.5%"),
+                  fontSize: hp("2%"),
+                  marginVertical: hp("5.4%")
+                }}
+              >
+                Default
+              </Text>
             </View>
+          </View>
+        </Card>
+        // </View>
+      );
+    }
+    // )
+  };
 
-            </TouchableOpacity>
-           
+  buttonPress = () => {
+    this.setState({ viewSection: true });
+  };
+  render() {
+    return (
+      <View>
+        <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
             <View
               style={{
-                flex: 3,
+                flex: 1,
                 justifyContent: "center",
                 alignItems: "center"
               }}
             >
               <Image
-                style={[styles.image]}
-                source={require("../icons/headerLogo.png")}
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
               />
             </View>
-            <View style={styles.emptyViewStyle} />
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "#FF8C00" }} />
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
 
         <KeyboardAwareScrollView>
           <View style={styles.textWrapper}>
             <Text style={styles.titleText}>Create Association</Text>
 
-         
+            {/* <View style={styles.associationDetailsView}>
+              <Text style={styles.titleChildText}>Association Details</Text>
+              <View style={styles.fillAssociationDetailline} />
+            </View> */}
 
             <ScrollView>
               <View
@@ -573,7 +779,9 @@ class App extends Component {
                 }}
               >
                 <Form style={{ marginBottom: hp("4%") }}>
-                  
+                  {/* <Text style={{ marginLeft: hp("2.5%"), color: "#909091" }}>
+                      First Name
+                    </Text> */}
                   <Item style={styles.inputItem} stackedLabel>
                     <Label
                       style={{ marginRight: hp("0.6%"), color: "#000000" }}
@@ -673,12 +881,13 @@ class App extends Component {
                       // defaultIndex={-1}
                       placeholder="Select Property Type"
                       labelHeight={hp("4%")}
-                      style={{ fontSize: hp("2.4%") }}
-                      value={data.vlaue}
+                      style={{ fontSize: hp("2.2%") }}
+                      //value={data.vlaue}
+                      value={this.state.property_Type}
                       textColor="#3A3A3C"
                       data={data}
                       inputContainerStyle={{ borderBottomColor: "transparent" }}
-                      ref={value => (this.value_property_Type = value)}
+                      //ref={value => (this.value_property_Type = value)}
                       onChangeText={property_Type =>
                         this.setState({ property_Type: property_Type })
                       }
@@ -686,32 +895,6 @@ class App extends Component {
                   </Item>
 
                   <Item stackedLabel style={styles.countryPickerCardItemStyle}>
-                    <View style={styles.countryPickerStyle}>
-                      <PhoneInput
-                        ref={ref => {
-                          this.phone = ref
-                        }}
-                        onPressFlag={this.onPressFlag}
-                      />
-
-                      <CountryPicker
-                        ref={ref => {
-                          this.countryPicker = ref
-                        }}
-                        onChange={value => {
-                          this.setState({
-                            cca2: value.cca2,
-                            callingCode: value.callingCode,
-                            country: this.selectCountry(value),
-                            country_a: value.name
-                          })
-                        }}
-                        translation="eng"
-                        cca2={this.state.cca2}
-                      >
-                        <View />
-                      </CountryPicker>
-                    </View>
                     <Text style={styles.itemTextTitles}>
                       Select Country
                       <Text
@@ -724,6 +907,35 @@ class App extends Component {
                         *
                       </Text>
                     </Text>
+
+                    <View style={styles.countryPickerStyle}>
+                      <PhoneInput
+                        ref={ref => {
+                          this.phone = ref;
+                        }}
+                        onPressFlag={this.onPressFlag}
+                      />
+
+                      <CountryPicker
+                        ref={ref => {
+                          this.countryPicker = ref;
+                        }}
+                        onChange={value => {
+                          this.setState({
+                            cca2: value.cca2,
+                            callingCode: value.callingCode,
+                            country: this.selectCountry(value),
+                            country_a: value.name,
+                            pan_Number: "",
+                            reg_Number: ""
+                          });
+                        }}
+                        translation="eng"
+                        cca2={this.state.cca2}
+                      >
+                        <View />
+                      </CountryPicker>
+                    </View>
                   </Item>
 
                   {/* <Item stackedLabel> */}
@@ -749,14 +961,14 @@ class App extends Component {
                         autoCorrect={false}
                         autoCapitalize="characters"
                         multiline={false}
-                        maxLength={15}
+                        maxLength={10}
                         textAlign={"justify"}
                         keyboardType="default"
                         placeholder="Enter PAN Number eg: AAAAA1234A"
                         ref={text => (this.textInput_pan_Number = text)}
                         onChangeText={pan_Number => {
-                          this.setState({ pan_number_empty_flag: false })
-                          return this.setState({ pan_Number: pan_Number })
+                          this.setState({ pan_number_empty_flag: false });
+                          return this.setState({ pan_Number: pan_Number });
                         }}
                       />
                     </Item>
@@ -1088,16 +1300,13 @@ class App extends Component {
                       }}
                     >
                       Bank
-                      {/* {this.setState.count} */}
                     </Text>
-                    
                   </View>
                   <Item style={styles.inputItem} stackedLabel>
                     <Label
                       style={{ marginRight: hp("0.6%"), color: "#000000" }}
                     >
                       Bank Name
-                      
                     </Label>
 
                     <Input
@@ -1232,8 +1441,9 @@ class App extends Component {
                       //label="Select Account Type"
                       placeholder="Select Account Type"
                       labelHeight={hp("4%")}
-                      style={{ fontSize: hp("2.4%") }}
-                      value={data1.vlaue}
+                      style={{ fontSize: hp("2.2%") }}
+                      //value={data1.vlaue}
+                      value={this.state.bankAccountType}
                       textColor="#3A3A3C"
                       data={data1}
                       inputContainerStyle={{ borderBottomColor: "transparent" }}
@@ -1245,7 +1455,6 @@ class App extends Component {
                 </Form>
               </Card>
 
-              
               <View style={styles.resetOkButtonView}>
                 <TouchableOpacity onPress={this.resetAllFields.bind()}>
                   <Button
@@ -1278,7 +1487,7 @@ class App extends Component {
                   warning
                   style={styles.buttonOk}
                   onPress={() => {
-                    this.createAssociationPostData()
+                    this.createAssociationPostData();
                   }}
                   // onPress={this.resetAllFields.bind()}
                 >
@@ -1298,7 +1507,7 @@ class App extends Component {
           </View>
         </KeyboardAwareScrollView>
       </View>
-    )
+    );
   }
 }
 
@@ -1374,12 +1583,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: hp("1.2%"),
-    marginRight: hp("1.2%")
+    marginLeft: hp("1.5%"),
+    marginRight: hp("1.5%")
   },
   itemTextTitles: {
     marginTop: hp("1%"),
-    marginLeft: hp("2%"),
+    marginLeft: hp("1%"),
     fontSize: hp("2.1%"),
     fontWeight: "300",
     // fontStyle: "italic",
@@ -1493,31 +1702,49 @@ const styles = StyleSheet.create({
     marginRight: wp("4%"),
     //borderColor: "#909091"
     borderColor: "#C3C3C3"
+  },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
   }
-})
+});
+
 const mapStateToProps = state => {
-    return {
-      MyFirstName: state.UserReducer.MyFirstName,
-      MyLastName: state.UserReducer.MyLastName,
-      MyEmail: state.UserReducer.MyEmail,
-      MyMobileNumber: state.UserReducer.MyMobileNumber,
-      MyISDCode: state.UserReducer.MyISDCode,
-  
-      joinedAssociations: state.AppReducer.joinedAssociations,
-      champBaseURL: state.OyespaceReducer.champBaseURL,
-      oyeURL: state.OyespaceReducer.oyeURL,
-      MyAccountID: state.UserReducer.MyAccountID,
-      userReducer: state.UserReducer,
-      oyespaceReducer: state.OyespaceReducer
-    };
+  return {
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    MyAccountID: state.UserReducer.MyAccountID,
+    oyeURL: state.OyespaceReducer.oyeURL
   };
-  
-  export default connect(
-    mapStateToProps,
-    {
-      getDashSub,
-      getDashAssociation
-    }
-  )(App);
+};
 
-
+export default connect(mapStateToProps)(App);

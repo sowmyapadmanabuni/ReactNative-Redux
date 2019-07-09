@@ -412,4 +412,8 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { updateApproveAdmin, getNotifications, createUserNotification }
+<<<<<<< HEAD
 )(NotificationDetailScreen);
+=======
+)(NotificationDetailScreen);
+>>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d

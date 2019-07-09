@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import {
   StyleSheet,
   View,
@@ -7,76 +7,115 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions,SafeAreaView
-} from "react-native"
-import { Button } from "native-base"
+  Dimensions,
+  SafeAreaView
+} from "react-native";
+import { Button } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
-import { NavigationEvents } from "react-navigation"
-import {connect} from 'react-redux';
+} from "react-native-responsive-screen";
+import { NavigationEvents } from "react-navigation";
+import { connect } from "react-redux";
 
 class BlockDetail extends React.Component {
   static navigationOptions = {
     title: "BlockDetail",
     header: null
-  }
+  };
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isLoading: true,
       dataSource: [],
 
       loading: false,
-      error: null
-    }
-    this.arrayholder = []
+      error: null,
+
+      blockCount: ""
+    };
+    this.arrayholder = [];
   }
 
   componentDidMount() {
-    this.myBlockDetailListGetData()
+    this.myBlockDetailListGetData();
     setTimeout(() => {
       this.setState({
         isLoading: false
       });
     }, 3000);
+
+    this.blockDetailsLimitation();
   }
 
   myBlockDetailListGetData = () => {
     // console.log("________")
-    this.setState({ loading: true })
+    this.setState({ loading: true });
 
-    fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Block/GetBlockListByAssocID/${this.props.SelectedAssociationID}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+    fetch(
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/Block/GetBlockListByAssocID/${
+        this.props.SelectedAssociationID
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
       }
-    })
+    )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson, "8888888888888888888888888888888888888")
+        console.log(responseJson, "8888888888888888888888888888888888888");
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.blocksByAssoc,
           error: responseJson.error || null,
           loading: false
-        })
-        this.arrayholder = responseJson.data.blocksByAssoc
+        });
+        this.arrayholder = responseJson.data.blocksByAssoc;
         console.log(
           this.state.dataSource,
           "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-        )
+        );
       })
       .catch(error => {
-        this.setState({ error, loading: false })
-        console.log(error, "77777777777777777777777777777")
+        this.setState({ error, loading: false });
+        console.log(error, "77777777777777777777777777777");
+      });
+  };
+
+  blockDetailsLimitation = () => {
+    //http://apiuat.oyespace.com/oyeliving/api/v1/association/getAssociationList/8
+    fetch(
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/association/getAssociationList/${
+        this.props.SelectedAssociationID
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson, "ppppp");
+        this.setState({
+          blockCount: responseJson.data.association.asNofBlks
+        });
       })
-  }
-
+      .catch(error => {
+        this.setState({ error, loading: false });
+        console.log(error, "hhhh");
+      });
+  };
   renderItem = ({ item }) => {
-
     return (
       <View style={styles.tableView}>
         <View style={styles.cellView}>
@@ -134,11 +173,19 @@ class BlockDetail extends React.Component {
                   />
                 </TouchableOpacity> */}
                 <View style={{ marginLeft: hp("1%") }}>
-                  <Button bordered dark style={styles.addUnitButton}
-                    onPress={() => this.props.navigation.navigate("BlockWiseUnitListScreen",{
-                      unitid: item.blBlockID,
-                      blockName: item.blBlkName
-                    })}
+                  <Button
+                    bordered
+                    dark
+                    style={styles.addUnitButton}
+                    onPress={() =>
+                      this.props.navigation.navigate(
+                        "BlockWiseUnitListScreen",
+                        {
+                          unitid: item.blBlockID,
+                          blockName: item.blBlkName
+                        }
+                      )
+                    }
                   >
                     <Text style={styles.addUnitText}>Add Unit</Text>
                   </Button>
@@ -149,11 +196,21 @@ class BlockDetail extends React.Component {
         </View>
         <View style={styles.lineAboveAndBelowFlatList} />
       </View>
-    )
-  }
+    );
+  };
 
   render() {
-    const { navigate } = this.props.navigation
+    const { navigate } = this.props.navigation;
+
+    console.log(
+      "$!@!@$@#@#$^$%&%$&%&$^@#$!@$!@$!@!@hghjg asNofBlks",
+      this.state.blockCount
+    );
+    console.log(
+      "$!@!@$@#@#$^$%&%$&%&$^@#$!@$!@$!@!@hghjg blocklist",
+      this.state.dataSource.length.toString()
+    );
+
     if (this.state.isLoading) {
       return (
         <View style={{ flex: 1, flexDirection: "column" }}>
@@ -167,15 +224,15 @@ class BlockDetail extends React.Component {
                 >
                   <View
                     style={{
-                      height: hp("6%"),
-                      width: wp("20%"),
-                      alignItems: "center",
-                      justifyContent: "center",
-                      alignContent: "center"
+                      height: hp("4%"),
+                      width: wp("15%"),
+                      alignItems: "flex-start",
+                      justifyContent: "center"
                     }}
                   >
                     <Image
-                      source={require("../icons/backBtn.png")}
+                      resizeMode="contain"
+                      source={require("../icons/back.png")}
                       style={styles.viewDetails2}
                     />
                   </View>
@@ -190,7 +247,7 @@ class BlockDetail extends React.Component {
               >
                 <Image
                   style={[styles.image1]}
-                  source={require("../icons/headerLogo.png")}
+                  source={require("../icons/OyeSpace.png")}
                 />
               </View>
               <View style={{ flex: 0.2 }}>
@@ -199,6 +256,7 @@ class BlockDetail extends React.Component {
             </View>
             <View style={{ borderWidth: 1, borderColor: "orange" }} />
           </SafeAreaView>
+
           <Text style={styles.residentialListTitle}>Block Details</Text>
           <View style={styles.progress}>
             <ActivityIndicator size="large" color="#F3B431" />
@@ -206,15 +264,15 @@ class BlockDetail extends React.Component {
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                position: 'relative',
-                marginTop:hp('1%')
+                position: "relative",
+                marginTop: hp("1%")
               }}
             >
               <Text>Please Wait</Text>
             </View>
           </View>
         </View>
-      )
+      );
     }
     return (
       <View style={styles.mainView}>
@@ -230,7 +288,7 @@ class BlockDetail extends React.Component {
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: 'flex-start',
+                    alignItems: "flex-start",
                     justifyContent: "center"
                   }}
                 >
@@ -260,7 +318,7 @@ class BlockDetail extends React.Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-       
+
         <NavigationEvents
           onDidFocus={payload => this.myBlockDetailListGetData()}
           onWillBlur={payload => this.myBlockDetailListGetData()}
@@ -277,30 +335,39 @@ class BlockDetail extends React.Component {
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.blBlockID.toString()}
           />
-
-          <TouchableOpacity
-            style={[styles.floatButton]}
-            onPress={() => this.props.navigation.navigate("CreateBlockScreen")}
-          >
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                aspectRatio: 1,
-                paddingBottom: hp("0.8%")
-                // backgroundColor: "red"
-              }}
+          {this.state.dataSource.length === this.state.blockCount ? (
+            <View />
+          ) : (
+            <TouchableOpacity
+              style={[styles.floatButton]}
+              onPress={() =>
+                this.props.navigation.navigate("CreateBlockScreen")
+              }
             >
-              <Text
-                style={{ fontSize: hp("5%"), color: "#fff", fontWeight: "700" }}
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  aspectRatio: 1,
+                  paddingBottom: hp("0.8%")
+                  // backgroundColor: "red"
+                }}
               >
-                +
-              </Text>
-            </View>
-          </TouchableOpacity>
+                <Text
+                  style={{
+                    fontSize: hp("5%"),
+                    color: "#fff",
+                    fontWeight: "700"
+                  }}
+                >
+                  +
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -308,6 +375,7 @@ const styles = StyleSheet.create({
   emptyViewStyle: {
     width: hp("15%")
   },
+
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
@@ -318,6 +386,30 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
+
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
   residentialListTitle: {
     textAlign: "center",
     fontSize: hp("2.5%"),
@@ -330,24 +422,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1
-  },
-  viewDetails1: {
-    flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3
-  },
-  viewDetails2: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: wp("6%"),
-    height: hp("2%")
-  },
-  image1: {
-    width: wp("22%"),
-    height: hp("12%"),
-    marginRight: hp("1%")
   },
 
   editButtonViewStyle: {
@@ -501,16 +575,15 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: hp("1.6%")
   }
-})
+});
 
 const mapStateToProps = state => {
-    return {
-      champBaseURL: state.OyespaceReducer.champBaseURL,
-      SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-      MyAccountID: state.UserReducer.MyAccountID,
-      oyeURL: state.OyespaceReducer.oyeURL  
-    };
+  return {
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    MyAccountID: state.UserReducer.MyAccountID,
+    oyeURL: state.OyespaceReducer.oyeURL
   };
-  
-  export default connect(mapStateToProps)(BlockDetail);
-  
+};
+
+export default connect(mapStateToProps)(BlockDetail);

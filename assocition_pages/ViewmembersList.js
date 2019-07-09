@@ -93,7 +93,7 @@ class Resident extends Component {
 
     const url = `http://${
       this.props.oyeURL
-    }/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate`;
+    }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
 
     console.log("values", {
       MRMRoleID: this.state.selectedRoleData.selRolId,
@@ -249,6 +249,7 @@ class Resident extends Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+        
         <View style={styles.textWrapper}>
           <Text style={styles.residentialListTitle}> Resident List </Text>
           <View style={{ flexDirection: "row" }}>
@@ -324,7 +325,8 @@ class Resident extends Component {
                         ) : (
                           <Text> </Text>
                         )}
-                        {this.renderAdminStatus(item)}
+                        {/* {this.renderAdminStatus(item)} */}
+                        {item.uoRoleID === 1 ?<Text>Admin</Text>:<Text></Text>}
                         {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
                       </View>
                     </View>
