@@ -879,8 +879,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { updateJoinedAssociation, createUserNotification }
-<<<<<<< HEAD
 )(RegisterMe);
-=======
-)(RegisterMe);
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d

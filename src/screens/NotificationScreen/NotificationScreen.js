@@ -200,8 +200,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { onNotificationOpen, storeOpenedNotif, getNotifications }
-<<<<<<< HEAD
 )(NotificationScreen);
-=======
-)(NotificationScreen);
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d

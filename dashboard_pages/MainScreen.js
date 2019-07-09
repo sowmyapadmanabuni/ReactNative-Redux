@@ -49,11 +49,7 @@ import {
   updateApproveAdmin,
   getAssoMembers,
   updateDropDownIndex,
-<<<<<<< HEAD
   createUserNotification
-=======
-	createUserNotification
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d
 } from "../src/actions";
 import { NavigationEvents } from "react-navigation";
 
@@ -83,7 +79,6 @@ class Dashboard extends React.Component {
     };
   }
 
-  
   requestNotifPermission = () => {
     const {
       MyAccountID,
@@ -238,18 +233,9 @@ class Dashboard extends React.Component {
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
-<<<<<<< HEAD
       const { MyAccountID } = this.props.userReducer;
       const { oyeURL } = this.props.oyespaceReducer;
       let details = notificationOpen.notification._data;
-=======
-      // alert('opened')
-      // console.log('**********')
-      // console.log(notificationOpen.notification._data.admin)
-      const { MyAccountID } = this.props.userReducer;
-	      const { oyeURL } = this.props.oyespaceReducer;
-	      let details = notificationOpen.notification._data;
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.action) {
           // this.props.newNotifInstance(notificationOpen.notification);
@@ -266,13 +252,6 @@ class Dashboard extends React.Component {
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
-<<<<<<< HEAD
-=======
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d
         this.props.createUserNotification(
           "Join_Status",
           oyeURL,
@@ -315,18 +294,9 @@ class Dashboard extends React.Component {
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
-<<<<<<< HEAD
       }
       // this.props.getNotifications(oyeURL, MyAccountID);
       this.props.navigation.navigate("NotificationScreen");
-=======
-       
-        
-        
-      }
-      this.props.getNotifications(oyeURL, MyAccountID);
-	    this.props.navigation.navigate("NotificationScreen");
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d
     });
   };
 
@@ -468,7 +438,7 @@ class Dashboard extends React.Component {
                         updateDropDownIndex(index);
                         this.setState({
                           associationSelected: true
-                        })
+                        });
                       }}
                     />
                   </CardItem>
@@ -581,60 +551,59 @@ class Dashboard extends React.Component {
                 </View>
               )}
               <View style={{ height: hp("7%") }}>
-                {this.state.associationSelected === false ? 
-                <TouchableOpacity
-                // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
-                onPress={() => {
-                  Alert.alert(
-                    "",
-                    "Please select Association from Dropdown in Dashboard"
-                  )
-                }}
-              >
-                <Card
-                  style={{
-                    height: hp("5%"),
-                    alignItems: "center",
-                    flexDirection: "row"
-                  }}
-                >
-                  <Image
-                    source={require("../icons/eye.png")}
-                    style={styles.image4}
-                  />
-                  <Text style={{ alignSelf: "center", color: "black" }}>
-                    View Resident List
-                  </Text>
-                </Card>
-              </TouchableOpacity>
-              :
-              <TouchableOpacity
-                  // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
-                  onPress={() => {
-                    this.props.navigation.navigate("ViewmembersScreen", {
-                      data: residentList,
-                      reload: this.onAssociationChange
-                    });
-                  }}
-                >
-                  <Card
-                    style={{
-                      height: hp("5%"),
-                      alignItems: "center",
-                      flexDirection: "row"
+                {this.state.associationSelected === false ? (
+                  <TouchableOpacity
+                    // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
+                    onPress={() => {
+                      Alert.alert(
+                        "",
+                        "Please select Association from Dropdown in Dashboard"
+                      );
                     }}
                   >
-                    <Image
-                      source={require("../icons/eye.png")}
-                      style={styles.image4}
-                    />
-                    <Text style={{ alignSelf: "center", color: "black" }}>
-                      View Resident List
-                    </Text>
-                  </Card>
-                </TouchableOpacity>
-              }
-                
+                    <Card
+                      style={{
+                        height: hp("5%"),
+                        alignItems: "center",
+                        flexDirection: "row"
+                      }}
+                    >
+                      <Image
+                        source={require("../icons/eye.png")}
+                        style={styles.image4}
+                      />
+                      <Text style={{ alignSelf: "center", color: "black" }}>
+                        View Resident List
+                      </Text>
+                    </Card>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
+                    onPress={() => {
+                      this.props.navigation.navigate("ViewmembersScreen", {
+                        data: residentList,
+                        reload: this.onAssociationChange
+                      });
+                    }}
+                  >
+                    <Card
+                      style={{
+                        height: hp("5%"),
+                        alignItems: "center",
+                        flexDirection: "row"
+                      }}
+                    >
+                      <Image
+                        source={require("../icons/eye.png")}
+                        style={styles.image4}
+                      />
+                      <Text style={{ alignSelf: "center", color: "black" }}>
+                        View Resident List
+                      </Text>
+                    </Card>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
             <View style={styles.view1}>
@@ -646,33 +615,33 @@ class Dashboard extends React.Component {
                       this.props.navigation.navigate("InvitedGuestListScreen")
                     }
                   > */}
-                    <View style={{ flexDirection: "column" }}>
-                      <View
+                  <View style={{ flexDirection: "column" }}>
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: hp("2%")
+                      }}
+                    >
+                      <Image
                         style={{
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginTop: hp("2%")
+                          width: hp("4%"),
+                          height: hp("3.1%"),
+                          marginBottom: hp("0.55%")
                         }}
-                      >
-                        <Image
-                          style={{
-                            width: hp("4%"),
-                            height: hp("3.1%"),
-                            marginBottom: hp("0.55%")
-                          }}
-                          source={require("../icons/guests.png")}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center"
-                        }}
-                      >
-                        <Text style={{ fontSize: hp("1.5%") }}>Guests</Text>
-                      </View>
+                        source={require("../icons/guests.png")}
+                      />
                     </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Text style={{ fontSize: hp("1.5%") }}>Guests</Text>
+                    </View>
+                  </View>
                   {/* </TouchableOpacity> */}
                   {/* </CardItem> */}
                   <View style={styles.view2} />
@@ -687,33 +656,33 @@ class Dashboard extends React.Component {
                       this.props.navigation.navigate("GuardListScreen")
                     }
                   > */}
-                    <View style={{ flexDirection: "column" }}>
-                      <View
+                  <View style={{ flexDirection: "column" }}>
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: hp("2%")
+                      }}
+                    >
+                      <Image
                         style={{
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginTop: hp("2%")
+                          width: hp("4%"),
+                          height: hp("3.1%"),
+                          marginBottom: hp("0.55%")
                         }}
-                      >
-                        <Image
-                          style={{
-                            width: hp("4%"),
-                            height: hp("3.1%"),
-                            marginBottom: hp("0.55%")
-                          }}
-                          source={require("../icons/guards.png")}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center"
-                        }}
-                      >
-                        <Text style={{ fontSize: hp("1.5%") }}>Guards</Text>
-                      </View>
+                        source={require("../icons/guards.png")}
+                      />
                     </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Text style={{ fontSize: hp("1.5%") }}>Guards</Text>
+                    </View>
+                  </View>
                   {/* </TouchableOpacity> */}
                   {/* </CardItem> */}
                   <View style={styles.view2} />
@@ -765,7 +734,9 @@ class Dashboard extends React.Component {
                   {/* <CardItem Style={styles.cardItem}> */}
                   <TouchableOpacity
                     onPress={() =>
-                      this.props.navigation.navigate("AdminFunction",{assocationSel: this.state.associationSelected})
+                      this.props.navigation.navigate("AdminFunction", {
+                        assocationSel: this.state.associationSelected
+                      })
                     }
                   >
                     <View
@@ -989,10 +960,6 @@ export default connect(
     getAssoMembers,
     updateApproveAdmin,
     updateDropDownIndex,
-<<<<<<< HEAD
     createUserNotification
-=======
-	  createUserNotification
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d
   }
 )(Dashboard);

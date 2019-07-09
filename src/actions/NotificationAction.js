@@ -444,14 +444,9 @@ export const createUserNotification = (
       "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
     };
 
-<<<<<<< HEAD
     let formatdate = moment().format("YYYY-MMMM-ddd, hh:mm:ss");
     // let date = moment();
     // let formatdate = date._d;
-=======
-    let date = moment();
-    let formatdate = date._d;
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d
 
     if (notifType === "Join") {
       axios
@@ -547,8 +542,4 @@ export const createUserNotification = (
         });
     }
   };
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 27e45e44eaf108ab984715aff96d1beab7d0557d
