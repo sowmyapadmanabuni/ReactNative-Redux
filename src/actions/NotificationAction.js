@@ -444,8 +444,9 @@ export const createUserNotification = (
       "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
     };
 
-    let date = moment();
-    let formatdate = date._d;
+    let formatdate = moment().format("YYYY-MMMM-ddd, hh:mm:ss");
+    // let date = moment();
+    // let formatdate = date._d;
 
     if (notifType === "Join") {
       axios

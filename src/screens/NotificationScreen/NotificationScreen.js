@@ -108,7 +108,7 @@ class NotificationScreen extends Component {
           //     { backgroundColor: '#fff' }
           // }
         />
-        <TimeAgo time={item.ntdUpdated} />
+        <Text> {item.ntdUpdated}</Text>
       </Card>
     );
   };

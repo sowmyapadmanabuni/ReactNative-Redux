@@ -293,7 +293,7 @@ class Dashboard extends React.Component {
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
       }
-      this.props.getNotifications(oyeURL, MyAccountID);
+      // this.props.getNotifications(oyeURL, MyAccountID);
       this.props.navigation.navigate("NotificationScreen");
     });
   };
@@ -313,7 +313,7 @@ class Dashboard extends React.Component {
     getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
-    this.props.getNotifications(oyeURL, MyAccountID);
+    // this.props.getNotifications(oyeURL, MyAccountID);
   };
 
   onAssociationChange = (value, index) => {
@@ -390,6 +390,7 @@ class Dashboard extends React.Component {
       updateUserInfo,
       updateDropDownIndex
     } = this.props;
+
     return (
       <View style={{ flex: 1 }}>
         <NavigationEvents onDidFocus={() => this.didMount()} />
