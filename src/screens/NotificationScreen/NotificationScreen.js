@@ -5,14 +5,16 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
-  Text
+  Text,
+  RefreshControl
 } from "react-native";
 import { connect } from "react-redux";
 import { ListItem, Header, Card } from "react-native-elements";
 import {
   onNotificationOpen,
   storeOpenedNotif,
-  getNotifications
+  getNotifications,
+  refreshNotifications
 } from "../../actions";
 import TimeAgo from "react-native-timeago";
 import _ from "lodash";
@@ -20,6 +22,9 @@ import { NavigationEvents } from "react-navigation";
 // import console = require('console');
 
 class NotificationScreen extends Component {
+  componentDidMount() {
+    // console.log("didmount");
+  }
   keyExtractor = (item, index) => index.toString();
 
   onPress = (item, index) => {
@@ -116,7 +121,15 @@ class NotificationScreen extends Component {
   onRefresh = () => {};
 
   renderComponent = () => {
-    const { loading, isCreateLoading, notifications } = this.props;
+    const {
+      loading,
+      isCreateLoading,
+      notifications,
+      refresh,
+      refreshNotifications,
+      oyeURL,
+      MyAccountID
+    } = this.props;
     // console.log(loading)
     // console.log(isCreateLoading)
     if (loading) {
@@ -139,6 +152,15 @@ class NotificationScreen extends Component {
           data={notifications}
           renderItem={this.renderItem}
           extraData={this.props.notifications}
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
+              progressBackgroundColor="#fff"
+              tintColor="#ED8A19"
+              colors={["#ED8A19"]}
+            />
+          }
         />
       );
     }
@@ -149,11 +171,7 @@ class NotificationScreen extends Component {
     const refresh = navigation.getParam("refresh", "NO-ID");
     return (
       <View style={styles.container}>
-        <NavigationEvents
-          onDidFocus={payload =>
-            this.props.getNotifications(oyeURL, MyAccountID)
-          }
-        />
+        <NavigationEvents />
         <Header
           leftComponent={{
             icon: "arrow-left",
@@ -193,11 +211,17 @@ const mapStateToProps = state => {
     loading: state.NotificationReducer.loading,
     savedNoifId: state.AppReducer.savedNoifId,
     oyeURL: state.OyespaceReducer.oyeURL,
-    MyAccountID: state.UserReducer.MyAccountID
+    MyAccountID: state.UserReducer.MyAccountID,
+    refresh: state.NotificationReducer.refresh
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onNotificationOpen, storeOpenedNotif, getNotifications }
+  {
+    onNotificationOpen,
+    storeOpenedNotif,
+    getNotifications,
+    refreshNotifications
+  }
 )(NotificationScreen);

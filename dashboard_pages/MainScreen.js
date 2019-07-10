@@ -49,7 +49,8 @@ import {
   updateApproveAdmin,
   getAssoMembers,
   updateDropDownIndex,
-  createUserNotification
+  createUserNotification,
+  refreshNotifications
 } from "../src/actions";
 import { NavigationEvents } from "react-navigation";
 
@@ -265,11 +266,14 @@ class Dashboard extends React.Component {
           "resident_user",
           "resident_user",
           "resident_user",
-          "resident_user"
+          "resident_user",
+          true
         );
+        // this.props.navigation.navigate("NotificationScreen");
       }
 
       if (notificationOpen.notification._data.admin === "true") {
+        this.props.refreshNotifications(oyeURL, MyAccountID);
         if (notificationOpen.notification._data.foreground) {
           // this.props.newNotifInstance(notificationOpen.notification);
           // this.props.createNotification(
@@ -282,6 +286,7 @@ class Dashboard extends React.Component {
           // );
         }
       } else if (notificationOpen.notification._data.admin === "gate_app") {
+        this.props.refreshNotifications(oyeURL, MyAccountID);
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(
         //   notificationOpen.notification._data,
@@ -315,7 +320,7 @@ class Dashboard extends React.Component {
     getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
-    // this.props.getNotifications(oyeURL, MyAccountID);
+    this.props.getNotifications(oyeURL, MyAccountID);
   };
 
   onAssociationChange = (value, index) => {
@@ -960,6 +965,7 @@ export default connect(
     getAssoMembers,
     updateApproveAdmin,
     updateDropDownIndex,
-    createUserNotification
+    createUserNotification,
+    refreshNotifications
   }
 )(Dashboard);

@@ -7,7 +7,10 @@ import {
   GET_NOTIFICATIONS_FAILED,
   GET_NOTIFICATIONS_SUCCESS,
   ON_NOTIFICATION_OPEN,
-  TOGGLE_ADMIN_NOTIFICATION
+  TOGGLE_ADMIN_NOTIFICATION,
+  REFRESH_NOTIFICATION_START,
+  REFRESH_NOTIFICATION_FAILED,
+  REFRESH_NOTIFICATION_SUCCESS
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -17,7 +20,8 @@ const INITIAL_STATE = {
   refreshing: false,
   newNotifInstance: null,
   count: null,
-  receiveNotifications: true
+  receiveNotifications: true,
+  refresh: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -48,6 +52,15 @@ export default (state = INITIAL_STATE, action) => {
 
     case TOGGLE_ADMIN_NOTIFICATION:
       return { ...state, receiveNotifications: action.payload };
+
+    case REFRESH_NOTIFICATION_START:
+      return { ...state, refresh: true };
+
+    case REFRESH_NOTIFICATION_SUCCESS:
+      return { ...state, refresh: false, notifications: action.payload };
+
+    case REFRESH_NOTIFICATION_FAILED:
+      return { ...state, refresh: false };
 
     default:
       return state;

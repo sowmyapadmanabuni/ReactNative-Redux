@@ -9,7 +9,10 @@ import {
   GET_NOTIFICATIONS_SUCCESS,
   GET_NOTIFICATIONS_FAILED,
   ON_NOTIFICATION_OPEN,
-  TOGGLE_ADMIN_NOTIFICATION
+  TOGGLE_ADMIN_NOTIFICATION,
+  REFRESH_NOTIFICATION_START,
+  REFRESH_NOTIFICATION_SUCCESS,
+  REFRESH_NOTIFICATION_FAILED
 } from "./types";
 import _ from "lodash";
 import { connect } from "react-redux";
@@ -423,6 +426,74 @@ export const toggleAdminNotification = val => {
   };
 };
 
+export const refreshNotifications = (oyeURL, MyAccountID) => {
+  return dispatch => {
+    dispatch({
+      type: REFRESH_NOTIFICATION_START
+    });
+
+    fetch(
+      "http://" +
+        oyeURL +
+        "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+        MyAccountID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        // console.log(responseJson.data.notificationListByAcctID);
+        let resData = responseJson.data.notificationListByAcctID;
+
+        let activeNotifications = [];
+
+        _.forEach(resData, function(value) {
+          activeNotifications.push({ ...value, read: false });
+        });
+
+        // console.log("sorted", sorted);
+        let joinNotif = [];
+        let joinStatNotif = [];
+        let gateAppNotif = [];
+
+        activeNotifications.map((data, index) => {
+          if (data.ntType === "gate_app") {
+            gateAppNotif.push(data);
+          } else if (data.ntType === "Join_Status") {
+            joinStatNotif.push(data);
+          } else if (data.ntType === "Join") {
+            joinNotif.push(data);
+          }
+        });
+
+        const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
+        const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+        let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
+
+        const sorted = _.sortBy(allNotifs, [
+          "ntdCreated",
+          "ntdUpdated"
+        ]).reverse();
+
+        dispatch({
+          type: REFRESH_NOTIFICATION_SUCCESS,
+          payload: [...sorted]
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch({
+          type: REFRESH_NOTIFICATION_FAILED
+        });
+      });
+  };
+};
+
 export const createUserNotification = (
   notifType,
   oyeURL,
@@ -436,7 +507,8 @@ export const createUserNotification = (
   associationName,
   unitName,
   occupancyDate,
-  soldDate
+  soldDate,
+  refresh
 ) => {
   return dispatch => {
     let headers = {
@@ -447,7 +519,8 @@ export const createUserNotification = (
     let formatdate = moment().format("YYYY-MMMM-ddd, hh:mm:ss");
     // let date = moment();
     // let formatdate = date._d;
-
+    // alert(refresh);
+    // console.log(notifType);
     if (notifType === "Join") {
       axios
         .post(
@@ -503,8 +576,74 @@ export const createUserNotification = (
           }
         )
         .then(res => {
-          console.log("notification joinstatus succ", res.data.data);
-          getNotifications(oyeURL, accountID);
+          // console.log("notification joinstatus succ", res.data.data);
+          refreshNotifications(oyeURL, accountID);
+          if (refresh) {
+            alert("refreshed");
+            dispatch({
+              type: REFRESH_NOTIFICATION_START
+            });
+            fetch(
+              "http://" +
+                oyeURL +
+                "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+                accountID,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                }
+              }
+            )
+              .then(response => response.json())
+              .then(responseJson => {
+                // console.log(responseJson.data.notificationListByAcctID);
+                let resData = responseJson.data.notificationListByAcctID;
+                let activeNotifications = [];
+                _.forEach(resData, function(value) {
+                  activeNotifications.push({
+                    ...value,
+                    read: false
+                  });
+                });
+                // console.log("sorted", sorted);
+                let joinNotif = [];
+                let joinStatNotif = [];
+                let gateAppNotif = [];
+                activeNotifications.map((data, index) => {
+                  if (data.ntType === "gate_app") {
+                    gateAppNotif.push(data);
+                  } else if (data.ntType === "Join_Status") {
+                    joinStatNotif.push(data);
+                  } else if (data.ntType === "Join") {
+                    joinNotif.push(data);
+                  }
+                });
+                const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
+                const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+                let allNotifs = [
+                  ...gateAppNotif,
+                  ...uniqueJoinStat,
+                  ...uniqueJoin
+                ];
+                const sorted = _.sortBy(allNotifs, [
+                  "ntdCreated",
+                  "ntdUpdated"
+                ]).reverse();
+                dispatch({
+                  type: REFRESH_NOTIFICATION_SUCCESS,
+                  payload: [...sorted]
+                });
+              })
+              .catch(error => {
+                console.log(error);
+                dispatch({
+                  type: REFRESH_NOTIFICATION_FAILED
+                });
+              });
+          }
+          // getNotifications(oyeURL, accountID);
         })
         .catch(error => {
           console.log("notification not joinstatus succ", error);
@@ -535,7 +674,7 @@ export const createUserNotification = (
         )
         .then(res => {
           console.log("notification joinstatus succ", res.data.data);
-          getNotifications(oyeURL, accountID);
+          // getNotifications(oyeURL, accountID);
         })
         .catch(error => {
           console.log("notification not joinstatus succ", error);

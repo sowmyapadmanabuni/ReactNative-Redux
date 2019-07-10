@@ -279,6 +279,7 @@ class NotificationDetailScreen extends Component {
 
     let subId = details.sbSubID;
     let status = _.includes(approvedAdmins, subId);
+    // let status = false;
     // console.log(status);
 
     if (loading) {

@@ -638,7 +638,7 @@ class RegisterMe extends Component {
 
     let status = _.includes(joinedAssociations, unitID);
 
-    return false;
+    return status;
     // console.log("unitId", unitID);
     // console.log(_.includes(joinedAssociations, unitID));
   };
