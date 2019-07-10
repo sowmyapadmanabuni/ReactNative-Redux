@@ -10,6 +10,8 @@ import com.horcrux.svg.SvgPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.zmxv.RNSound.RNSoundPackage;
+
+import cl.json.ShareApplication;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage; 
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage; // <-- Add this line
@@ -29,11 +31,17 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import org.pgsqlite.SQLitePluginPackage;
+import cl.json.ShareApplication;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application implements ShareApplication,ReactApplication {
+
+  @Override
+  public String getFileProviderAuthority() {
+    return BuildConfig.APPLICATION_ID + ".provider";
+  }
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -66,7 +74,6 @@ public class MainApplication extends Application implements ReactApplication {
             new SQLitePluginPackage(),
             new RNFirebaseMessagingPackage(),
             new RNFirebaseNotificationsPackage()
-
       );
     }
 

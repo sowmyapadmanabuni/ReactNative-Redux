@@ -54,4 +54,16 @@ export default class OyeSafeApi{
         console.log(associationId);
         return await instance.get('/GetPatrollingShiftsListByAssocID/'+associationId)
     }
+
+    static async getStaffListByAssociationId(associationId){
+        console.log("AsId",associationId);
+        return await instance.get('/GetWorkerListByAssocID/'+associationId)
+
+    }
+
+    static async getStaffReportByDate(input){
+        console.log("Data", input)
+        return await instance.post('/Worker/GetWorkerListByDates/',input)
+    }
+
 }

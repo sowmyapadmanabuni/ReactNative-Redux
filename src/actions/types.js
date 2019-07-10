@@ -29,3 +29,6 @@ export const GET_MEMBERLIST_FAILED = "get_memberlist_failed";
 
 // User Reducer
 export const UPDATE_USER_INFO = "update_user_info";
+
+
+export const UPDATE_STAFF_INFO="update_staff_info"

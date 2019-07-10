@@ -151,6 +151,8 @@ EachServiceProvider from
 console.disableYellowBox = true;
 import Dashboard from '../src/screens/Resident/Dashboard/Dashboard'
 import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader'
+import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport"
+import FirstTab from "../residentDashboardVisitorPages/FirstTab";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
@@ -176,15 +178,20 @@ const NotificationStack = createStackNavigator({
 });
 
 const ResApp = createStackNavigator({
-
-    ResDashBoard:  {
-        screen:Dashboard ,
+ResDashBoard:  {
+        screen: Dashboard ,
         navigationOptions: {
           title: 'Dashboard',
-          header:props => <DashBoardHeader {...props}/>
+          header:props => <DashBoardHeader  {...props}/>
         },
       },
-
+  firstTab:{
+  screen:FirstTab,
+    navigationOptions: ({navigation}) =>({
+      title: "Tabs Visitors",
+      header: props => <PatrollingCommonHeader navigation={navigation} isStaff={true} isReportVisible={false} isHidden={true} {...props}/>
+    }),
+  },
   MyProfileScreen: {
     screen: MyProfile,
     navigationOptions: {
@@ -729,10 +736,11 @@ addCheckPoint: {
         title: "Add Checkpoints",
         header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
     }
-}
+},
 },{
   initialRouteName: "ResDashBoard",
   headerMode:"screen"
 });
+
 
 export default createAppContainer(ResApp);

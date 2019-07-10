@@ -9,8 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />                                               
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />                                              
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28" />
-
 
 
 
@@ -21,6 +19,17 @@
       android:allowBackup="false"
 
       android:theme="@style/noActionBar">
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                tools:replace="android:resource"
+                android:resource="@xml/filepaths" />
+        </provider>
 
       <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"

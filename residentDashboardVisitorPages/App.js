@@ -13,6 +13,8 @@ import FirstTab from './FirstTab.js';
 //import QRCodeGeneration from './src/pages/QRCodeGeneration.js';
 
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport";
+import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
 
 // export default class App extends Component {
 //   render() {
@@ -44,20 +46,8 @@ const Header = props => {
 };
 const MainNavigator = createStackNavigator({
   FirstTab:{screen: FirstTab},
-  // QRCodeGeneration: {screen: QRCodeGeneration}
-},
-{
-  // defaultNavigationOptions: {
-  //   headerTintColor: '#fff',
-  //   headerStyle:{
-  //     backgroundColor:'#b83227'
-  //   },
-  //   headerTitleStyle:{
-  //     color:'#fff'
-  //   }
+     }
 
-  // }
-}
 );
 
 const AppContainer = createAppContainer(MainNavigator);

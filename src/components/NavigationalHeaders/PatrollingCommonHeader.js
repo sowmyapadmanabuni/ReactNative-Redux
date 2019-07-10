@@ -13,8 +13,8 @@ import EmptyView from "../common/EmptyView";
 export default class PatrollingCommonHeader extends React.Component {
     constructor(props) {
         super(props);
-        console.log("ldksnvifhkjv", this.props)
     }
+
 
     static propTypes = {
         isHidden: PropTypes.bool,
@@ -27,6 +27,8 @@ export default class PatrollingCommonHeader extends React.Component {
     };
 
     render() {
+        console.log("PatrollingHeader", this.props)
+
         console.log(this.props);
         let isHidden = this.props.isHidden;
         let isReportVisible = this.props.isReportVisible;
@@ -79,12 +81,13 @@ const styles = StyleSheet.create({
         height: "10%",
         width: "100%",
         backgroundColor: "white",
-        borderWidth: 1,
+        //borderWidth: 1,
         borderColor: "orange",
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-        marginTop:Platform.OS === 'ios'?20:0
+        marginTop:Platform.OS === 'ios'?20:0,
+        borderBottomWidth:1
     },
     buttonView: {
         width: "17%",

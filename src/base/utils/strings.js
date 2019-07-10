@@ -32,9 +32,13 @@ const strings = {
         firstName:"First Name"+isMandatory,
         lastName:"Last Name"+isMandatory,
     },
+    staffPlaceHolder:'https://via.placeholder.com/150/ff8c00/FFFFFF',
+    StaffImageLink:'http://mediauploaddev.oyespace.com/Images/'
 
 
 };
+
+
 
 
 export default strings;
