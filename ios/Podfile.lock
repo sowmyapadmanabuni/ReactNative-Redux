@@ -40,12 +40,33 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - Google-Maps-iOS-Utils (2.1.0):
+    - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
+    - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 2.1.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 2.1.0)
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Clustering (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Geometry (2.1.0):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (2.1.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/QuadTree (2.1.0):
+    - GoogleMaps
   - GoogleAppMeasurement (5.4.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
     - GoogleUtilities/MethodSwizzler (~> 5.2)
     - GoogleUtilities/Network (~> 5.2)
     - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
+  - GoogleMaps (2.5.0):
+    - GoogleMaps/Maps (= 2.5.0)
+  - GoogleMaps/Base (2.5.0)
+  - GoogleMaps/Maps (2.5.0):
+    - GoogleMaps/Base
   - GoogleUtilities/AppDelegateSwizzler (5.8.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -74,7 +95,13 @@ PODS:
     - React/Core (= 0.59.8)
   - react-native-document-picker (2.3.0):
     - React
+  - react-native-google-maps (0.24.2):
+    - Google-Maps-iOS-Utils (= 2.1.0)
+    - GoogleMaps (= 2.5.0)
+    - React
   - react-native-image-picker (0.28.0):
+    - React
+  - react-native-maps (0.24.2):
     - React
   - react-native-orientation (3.1.3):
     - React
@@ -161,8 +188,12 @@ DEPENDENCIES:
   - Firebase/Messaging (~> 5.15.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Google-Maps-iOS-Utils
+  - GoogleMaps
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-orientation (from `../node_modules/react-native-orientation`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-number (from `../node_modules/react-native-version-number`)
@@ -200,7 +231,9 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseInstanceID
     - FirebaseMessaging
+    - Google-Maps-iOS-Utils
     - GoogleAppMeasurement
+    - GoogleMaps
     - GoogleUtilities
     - nanopb
     - Protobuf
@@ -214,8 +247,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-google-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-orientation:
     :path: "../node_modules/react-native-orientation"
   react-native-sqlite-storage:
@@ -252,13 +289,17 @@ SPEC CHECKSUMS:
   FirebaseMessaging: b412996f6a09337d232bb3a6676ce4d1f353d024
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
+  Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleAppMeasurement: 98b71f5e04142793729a5ef23e5b96651ff4b70f
+  GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
   react-native-document-picker: e7934f6a3c898a1b62fa68b1f09371beef6ac51a
+  react-native-google-maps: 77af0fa3b5325c72c107d054677911f6e6170496
   react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
+  react-native-maps: bb480348a3fe1e5a811fed1ba3387b329161c5cc
   react-native-orientation: 3d9a0a8273d18260f7528414093a6a36491382b6
   react-native-sqlite-storage: 848fb96c0b6d17b3f70e169ac41f84434cdad94c
   react-native-version-number: 36c0d8eb57a275a6239a860f8dbab3d18299b0e0
@@ -271,6 +312,6 @@ SPEC CHECKSUMS:
   RNViewShot: fdf9a64f0621ebc4e7c3392a10d2ffb70a7faee4
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: 1e8e62e5c1a0e09bf030c3dd4e7db7a71e3c4340
+PODFILE CHECKSUM: 5ea04674629cc86c494fcfa90f89dbeb72a40777
 
 COCOAPODS: 1.5.3

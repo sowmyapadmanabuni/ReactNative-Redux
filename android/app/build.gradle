@@ -99,7 +99,7 @@ android {
 
     defaultConfig {
         applicationId "com.oyespace.oyesafe"
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
         versionName "8.0"
@@ -168,6 +168,8 @@ dependencies {
     implementation project(':react-native-image-picker')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-firebase')
+    implementation project(':react-native-maps')
+
 
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.1.0"

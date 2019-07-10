@@ -124,79 +124,76 @@ class MobileValid extends Component {
         }
     }
 
-    getOtp = (mobilenumber) => {
+    getOtp = mobilenumber => {
         const reg = /^[0]?[6789]\d{9}$/;
-        const countryCode = '+' + this.state.callingCode;//this.phone.getValue();
+        const countryCode = "+" + this.state.callingCode; //this.phone.getValue();
 
-        if ( mobilenumber == 0) {
-            alert('Mobile Number cannot be Empty');
-        } else if (!this.state.isChecked ) {
-            alert('Please read and accept Terms and Conditions and Privacy Policy to proceed');
+        if (mobilenumber == 0) {
+            alert("Mobile Number cannot be Empty");
+        } else if (!this.state.isChecked) {
+            alert(
+                "Please read and accept Terms and Conditions and Privacy Policy to proceed"
+            );
         } else if (reg.test(mobilenumber) === false) {
-            alert('Enter valid Mobile Number');
+            alert("Enter valid Mobile Number");
             return false;
-        } else if (mobilenumber =='9480107369' && countryCode=='+91') {
-            this.mobilevalidate(this.state.Mobilenumber)
+        } else if (mobilenumber == "9480107369" && countryCode == "+91") {
+            // alert('Testing');
+            this.mobilevalidate(this.state.Mobilenumber);
             return false;
         } else {
             anu = {
-                "CountryCode": countryCode,
-                "MobileNumber": mobilenumber
-            }
+                CountryCode: countryCode,
+                MobileNumber: mobilenumber
+            };
 
-            url = this.props.champBaseURL + 'account/sendotp';
+            url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/sendotp`;
             //  http://api.oyespace.com/champ/api/v1/account/sendotp
-            console.log('anu', url + ' ff' + countryCode + mobilenumber);
 
             this.setState({
                 isLoading: true
-            })
+            });
 
             const { updateUserInfo } = this.props;
 
-            fetch(url,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        //  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-                        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-                    },
-                    body: JSON.stringify(anu)
-                })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    console.log('bf responseJson Account', responseJson);
-
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    //  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                },
+                body: JSON.stringify(anu)
+            })
+                .then(response => response.json())
+                .then(responseJson => {
                     if (responseJson.success) {
-                        console.log('responseJson Account if', responseJson.data);
-                        this.insert_OTP(mobilenumber, countryCode);
-                        updateUserInfo({ prop: 'MyMobileNumber', value: mobilenumber })
-                        updateUserInfo({ prop: 'MyISDCode', value: countryCode })
+                        console.log("responseJson Account if", responseJson.data);
+                        // this.insert_OTP(mobilenumber, countryCode);
+                        updateUserInfo({ prop: "MyMobileNumber", value: mobilenumber });
+                        updateUserInfo({ prop: "MyISDCode", value: countryCode });
                         // global.MyMobileNumber = mobilenumber;
                         // global.MyISDCode = countryCode;
-                        this.props.navigation.navigate('OTPVerificationScreen');
-
+                        this.props.navigation.navigate("OTPVerificationScreen");
                     } else {
-                        console.log('responseJson Account else', responseJson.data);
+                        console.log("responseJson Account else", responseJson.data);
                         this.setState({
                             isLoading: false
-                        })
-                        alert('OTP not Sent');
+                        });
+                        alert("OTP not Sent");
                         // this.props.navigation.navigate('CreateOrJoinScreen');
                     }
-                    console.log('suvarna', 'hi');
+                    console.log("suvarna", "hi");
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.log(error);
-                    alert(' Failed to Get OTP');
+                    alert(" Failed to Get OTP");
                     this.setState({
                         isLoading: false
-                    })
+                    });
                 });
-
         }
-    }
+    };
 
 
     render() {

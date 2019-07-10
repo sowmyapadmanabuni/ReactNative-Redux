@@ -8,8 +8,9 @@ const isSecure = true;
 
 const isMandatory = " is required";
 
+
 const api = {
-    oyeSafeDomain:isDev?"apidev.oyespace.com/oye247":"apidev.oyespace.com/oye247",
+    oyeSafeDomain:isDev?"apidev.oyespace.com/":"apidev.oyespace.com/",
     oyeLivingDomain:isDev?"apiuat.oyespace.com":"OyeLivingApi.oyespace.com",
     protocol:isSecure?"https://":"http://",
     oyeSafeApiPath:"/api/v1/",
@@ -23,7 +24,7 @@ const api = {
 const strings = {
 
     appName:"OyeSpace",
-    oyeSafeUrl:api.protocol+api.oyeSafeDomain+api.oyeSafeApiPath,
+    oyeSafeUrl:api.protocol+api.oyeSafeDomain,
     oyeLivingUrl:api.protocol+api.oyeLivingDomain+api.oyeLivingApiPath,
     oyeSafeApiKey:api.oyeSafeKey,
     oyeLivingApiKey:api.oyeLivingKey,

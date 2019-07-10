@@ -16,7 +16,7 @@ export default class EmptyView extends React.Component {
     }
 
     static propTypes = {
-        height: PropTypes.number,
+        height: PropTypes.string||PropTypes.number,
         width: PropTypes.number,
         backgroundColor: PropTypes.string
     };

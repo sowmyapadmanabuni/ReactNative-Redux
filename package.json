@@ -32,6 +32,7 @@
     "react-native-document-picker": "^2.3.0",
     "react-native-dropdown-searchable": "1.0.1",
     "react-native-elements": "^1.0.0",
+    "react-native-elevated-view": "^0.0.6",
     "react-native-exit-app": "^1.0.0",
     "react-native-file-viewer": "^1.0.10",
     "react-native-firebase": "^5.3.0",
@@ -41,6 +42,8 @@
     "react-native-html-to-pdf": "^0.6.0",
     "react-native-image-picker": "^0.28.0",
     "react-native-image-placeholder": "^1.0.14",
+    "react-native-maps": "^0.24.2",
+    "react-native-marquee": "^0.3.2",
     "react-native-material-dropdown": "^0.11.1",
     "react-native-material-textfield": "^0.12.0",
     "react-native-modal": "^11.0.2",
@@ -56,7 +59,7 @@
     "react-native-progress-bar-classic": "^1.2.1",
     "react-native-pull-to-refresh": "^2.1.3",
     "react-native-qrcode": "^0.2.7",
-    "react-native-razorpay": "^2.0.20",
+    "react-native-qrcode-svg": "^5.1.2",
     "react-native-responsive-screen": "^1.2.0",
     "react-native-search-box": "0.0.19",
     "react-native-search-header": "^0.3.1",
@@ -84,8 +87,7 @@
     "redux-persist-filesystem-storage": "^1.3.2",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.10.15",
-    "victory-native": "^32.0.2",
-    "react-native-elevated-view": "^0.0.6"
+    "victory-native": "^32.0.2"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

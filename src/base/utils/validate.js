@@ -9,4 +9,9 @@ export class validate{
         }
     }*/
 
+    static isBlank = (field) => {
+        field += "";
+        return !(field != null && field !== undefined && field !== "" && field.length > 0 && field !== "undefined");
+    }
+
 }

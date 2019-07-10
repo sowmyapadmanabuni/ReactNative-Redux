@@ -261,13 +261,13 @@ class OTPVerification extends Component {
 
     const { updateUserInfo } = this.props;
 
-    updateUserInfo({ prop: 'MyAccountID', value: account_id })
-    updateUserInfo({ prop: 'MyEmail', value: email })
-    updateUserInfo({ prop: 'MyMobileNumber', value: mobile_number })
-    updateUserInfo({ prop: 'MyFirstName', value: first_name })
-    updateUserInfo({ prop: 'MyLastName', value: last_name })
-    updateUserInfo({ prop: 'MyISDCode', value: isd_code })
-    updateUserInfo({ prop: 'signedIn', value: true })
+    updateUserInfo({ prop: 'MyAccountID', value: account_id });
+    updateUserInfo({ prop: 'MyEmail', value: email });
+    updateUserInfo({ prop: 'MyMobileNumber', value: mobile_number });
+    updateUserInfo({ prop: 'MyFirstName', value: first_name });
+    updateUserInfo({ prop: 'MyLastName', value: last_name });
+    updateUserInfo({ prop: 'MyISDCode', value: isd_code });
+    updateUserInfo({ prop: 'signedIn', value: true });
 
 
   }
