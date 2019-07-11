@@ -14,8 +14,15 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from "react-native-share";
 import RNFetchBlob from 'rn-fetch-blob'
 import moment from "moment";
+import IndicatorViewPager from "rn-viewpager/viewpager/IndicatorViewPager";
 
 let RNFS = require('react-native-fs');
+
+let inActiveLeftIcon=require('../../../../../icons/prev.png');
+let activeLeftIcon=require('../../../../../icons/prev1.png');
+let inActiveRightIcon=require('../../../../../icons/next1.png');
+let activeRightIcon=require('../../../../../icons/next.png');
+
 
 
 class GetStaffReport extends React.Component {
@@ -24,18 +31,23 @@ class GetStaffReport extends React.Component {
         this.props = props;
         this.state = {
             isLoading: false,
-            bottomPageIndicator: [1, 2, 3],
-            tableHeader: ['Date', 'Entry Point', 'Entry Time', 'Exit Point', 'Exit Time'],
+            bottomPageIndicator:[],
+            tableHeader: [['Date',true], ['Entry Point',false],
+                ['Entry Time',false],
+                ['Exit Point',false],
+                ['Exit Time',false]],
             tableData: [],
             staffReport: [],
-            checkPage: 0,
             isPermitted: false,
             filePath: '',
-            noDataMsg: false,
             selectedAssociationId: '',
             selectedWorkerId: '',
             startDate: '',
             endDate: '',
+            isShowViewPager:false,
+            numberOfPages:0,
+            pageLimit:10,
+            pageNumber:1
         },
             this.getTheReport = this.getTheReport.bind(this);
 
@@ -136,7 +148,7 @@ class GetStaffReport extends React.Component {
     }
 
 
-    async getTheReport(pageSelected, props) {
+    async getTheReport(props) {
         let self = this;
         self.setState({isLoading: true})
 
@@ -163,7 +175,6 @@ class GetStaffReport extends React.Component {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-                let setData = [];
                 if (difference !== 0) {
                     for (let i = 0; i < reportsData.length; i++) {
                         let rowData = []
@@ -185,63 +196,7 @@ class GetStaffReport extends React.Component {
                         }
                         tableData.push(rowData);
                     }
-                    self.setState({
-                        staffReport: tableData
-                    })
 
-                    if (tableData.length <= 10) {
-                        if (pageSelected === 0) {
-                            setData = tableData
-                            self.setState({
-                                noDataMsg: false
-                            })
-                        } else if (pageSelected === 2 || pageSelected === 1) {
-                            self.setState({
-                                noDataMsg: true
-                            })
-                        }
-                    } else if (tableData.length > 10 && tableData.length <= 20) { //11 to 20
-                        if (pageSelected === 1) {
-                            for (let i = 11; i < tableData.length; i++) {
-                                setData.push(tableData[i])
-                            }
-                            self.setState({
-                                noDataMsg: false
-                            })
-                        } else if (pageSelected === 2) {
-                            self.setState({noDataMsg: true})
-                        } else if (pageSelected === 0) {
-                            for (let i = 0; i < 10; i++) {
-                                setData.push(tableData[i])
-                            }
-                            self.setState({
-                                noDataMsg: false
-                            })
-                        }
-                    } else if (tableData.length > 20) { // more than 20
-                        if (pageSelected === 2) {
-                            for (let i = 21; i < tableData.length; i++) {
-                                setData.push(tableData[i])
-                            }
-                            self.setState({
-                                noDataMsg: false
-                            })
-                        } else if (pageSelected === 1) {
-                            for (let i = 11; i < 20; i++) {
-                                setData.push(tableData[i])
-                            }
-                            self.setState({
-                                noDataMsg: false
-                            })
-                        } else if (pageSelected === 0) {
-                            for (let i = 1; i < 10; i++) {
-                                setData.push(tableData[i])
-                            }
-                            self.setState({
-                                noDataMsg: false
-                            })
-                        }
-                    }
 
                 } else {
                     let rowData = [];
@@ -250,12 +205,26 @@ class GetStaffReport extends React.Component {
                     rowData.push(moment(reportsData[0].vlEntryT).format('HH:mm' + ' A'))
                     rowData.push(reportsData[0].vlexgName)
                     rowData.push(moment(reportsData[0].vlExitT).format('HH:mm' + ' A'))
-                    setData.push(rowData)
+                    tableData.push(rowData)
                 }
 
+                let numberOfPages=tableData.length/self.state.pageLimit;
+                let dataBottomList=[]
+                if(numberOfPages !==parseInt(numberOfPages)){
+                    numberOfPages=parseInt(numberOfPages)+1
+                }
+
+                for(let i=0;i<numberOfPages;i++){
+                    dataBottomList[i]=i+1
+                }
                 self.setState({
-                    tableData: setData
+                    tableData:tableData,
+                    staffReport:tableData,
+                    numberOfPages:numberOfPages,
+                    bottomPageIndicator:dataBottomList
                 })
+
+                this.changeTheData(self.state.pageNumber)
 
             } else {
                 let tableData = 'No report exist'
@@ -266,9 +235,10 @@ class GetStaffReport extends React.Component {
 
             }
         } catch (error) {
-            console.log('Error', error)
+            base.utils.logger.log(error)
         }
     }
+
 
     render() {
         base.utils.logger.log(this.props)
@@ -300,12 +270,14 @@ class GetStaffReport extends React.Component {
                     {this.renderViewPagerData()}
                 </ScrollView>
 
+                {this.state.numberOfPages>1 ?
 
                 <View style={StaffReportStyle.bottomView}>
                     <TouchableOpacity style={{alignItems: 'center'}}
-                                      onPress={() => this.changePage(this.state.checkPage - 1)}>
+                                      onPress={() => this.changeTheData(this.state.pageNumber - 1)}
+                    disabled={this.state.pageNumber===1}>
                         <Image style={StaffReportStyle.arrowIcon}
-                               source={require('../../../../../icons/prev.png')}
+                               source={this.state.pageNumber===1?inActiveLeftIcon:activeLeftIcon}
                         />
                     </TouchableOpacity>
                     <View style={StaffReportStyle.viewPagerIcons}>
@@ -318,42 +290,31 @@ class GetStaffReport extends React.Component {
                         />
                     </View>
                     <TouchableOpacity style={{alignItems: 'center'}}
-                                      onPress={() => this.changePage(this.state.checkPage + 1)}>
+                                      onPress={() => this.changeTheData(this.state.pageNumber + 1)}
+                                      disabled={this.state.pageNumber===this.state.numberOfPages}>
                         <Image style={StaffReportStyle.arrowIcon}
-                               source={require('../../../../../icons/next.png')}
+                               source={this.state.pageNumber===this.state.numberOfPages?inActiveRightIcon:activeRightIcon}
                         />
                     </TouchableOpacity>
                 </View>
+                    :
+                    <View/>}
             </View>
         )
     }
 
-    changePage(index) {
-        let self = this;
-        let val = index
-        if (index > 2) {
-            val = 0
-        } else if (index < 0) {
-            val = 2
-        }
-        self.setState({
-            checkPage: val
-        })
-        this.getTheReport(val)
-
-    }
 
     arrangeBottomTab(item) {
         return (
-            <TouchableOpacity onPress={() => this.changePage(item.index)}
+            <TouchableOpacity onPress={() => this.changeTheData(item.index+1)}
                               style={[StaffReportStyle.bottomTabView, {
                                   shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 2},
                                   shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                                  backgroundColor: this.state.checkPage === item.index ? base.theme.colors.primary : base.theme.colors.white
+                                  backgroundColor: this.state.pageNumber-1 === item.index ? base.theme.colors.primary : base.theme.colors.white
                               }]}>
                 <Text
-                    style={{color: this.state.checkPage === item.index ? base.theme.colors.white : base.theme.colors.black}}>
-                    {item.item}
+                    style={{color: this.state.pageNumber-1 === item.index ? base.theme.colors.white : base.theme.colors.black}}>
+                    {item.index+1}
                 </Text>
             </TouchableOpacity>
         )
@@ -362,36 +323,72 @@ class GetStaffReport extends React.Component {
 
     renderViewPagerData() {
         let state = this.state;
+
         return (
             <View Style={StaffReportStyle.tableMainView}>
                 <Table borderStyle={StaffReportStyle.tableView}>
 
                     <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
-                         textStyle={StaffReportStyle.textHead}/>
-                    {!this.state.noDataMsg ?
-                        state.tableData.map((rowData, index) => (
-                            <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
-                                {
-                                    rowData.map((cellData, cellIndex) => (
-                                        <Cell key={cellIndex} style={{
-                                            width: rowData.length < 3 && cellIndex === 1 ? '80%' : '20%',
-                                            borderWidth: 1,
-                                            backgroundColor: rowData.length < 3 && cellIndex === 1 ? 'red' : base.theme.colors.white
-                                        }} data={cellData}
-                                              textStyle={[StaffReportStyle.cellData, {color: rowData.length < 3 && cellIndex === 1 ? base.theme.colors.white : base.theme.colors.black}]}>
-                                        </Cell>
+                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber)}/>
+                    {state.tableData.map((rowData, index) => (
+                        <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
+                            {
+                                rowData.map((cellData, cellIndex) => (
+                                    <Cell key={cellIndex} style={{
+                                        width: rowData.length < 3 && cellIndex === 1 ? '80%' : '20%',
+                                        borderWidth: 1,
+                                        backgroundColor: rowData.length < 3 && cellIndex === 1 ? 'red' : base.theme.colors.white
+                                    }} data={cellData}
+                                          textStyle={[StaffReportStyle.cellData, {color: rowData.length < 3 && cellIndex === 1 ? base.theme.colors.white : base.theme.colors.black}]}>
+                                    </Cell>
 
-                                    ))
-                                }
-                            </TableWrapper>
-                        ))
-
-                        :
-                        <Row data={['No Data Exist']} style={{height: '60%',width:'90%'}} textStyle={{textAlign: 'center'}}/>}
+                                ))
+                            }
+                        </TableWrapper>
+                    ))
+                    }
                 </Table>
             </View>
         );
     }
+
+
+    changeTheData(pageNumber,datToReversOrder){
+        let self=this;
+        let tableData=[];
+        let staffReportData=self.state.staffReport;
+        if(datToReversOrder){
+            staffReportData=datToReversOrder
+        }
+            let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
+            let pageEndData=pageNumber*(self.state.pageLimit)
+        if (pageEndData>staffReportData.length){
+            pageEndData=staffReportData.length
+        }
+            let j=0;
+            for(let i=pageStartData-1; i<pageEndData;i++){
+                tableData[j]=staffReportData[i]
+                j=j+1
+            }
+        self.setState({tableData:tableData,pageNumber:pageNumber})
+    }
+
+
+
+
+    onCellClick(pageNumber){
+        let self=this;
+        let data=self.state.staffReport;
+        let reverseData=[];
+        let j=data.length-1;
+        for(let i=0; i<data.length; i++){
+            reverseData[i]=data[j]
+            j=j-1;
+        }
+        self.setState({staffReport:reverseData})
+        self.changeTheData(pageNumber,reverseData)
+    }
+
 
 }
 

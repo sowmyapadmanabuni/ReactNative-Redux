@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ViewPropTypes, Text, StyleSheet,Image } from 'react-native';
+import { View, ViewPropTypes, Text, StyleSheet,Image,TouchableOpacity } from 'react-native';
 import { Cell } from './cell';
 //import { sum } from '../utils';
 
@@ -8,19 +8,21 @@ const sum = arr => arr.reduce((acc, n) => acc + n, 0);
 export class Row extends Component {
     static propTypes = {
         style: ViewPropTypes.style,
-        textStyle: Text.propTypes.style
+        textStyle: Text.propTypes.style,
     };
 
     render() {
-        const { data, style, widthArr, height, flexArr, textStyle, ...props } = this.props;
+        const { data, style, widthArr, height, flexArr, textStyle,onClickIcon, ...props } = this.props;
+        console.log('Props',this.props)
         let width = widthArr ? sum(widthArr) : 0;
 
         return data ? (
             <View style={[height && { height }, width && { width }, styles.row, style]}>
                 {data.map((item, i) => {
+                    console.log("Data sending to Cell",item)
                     const flex = flexArr && flexArr[i];
                     const wth = widthArr && widthArr[i];
-                    return <Cell key={i} data={item} width={wth} height={height} flex={flex} textStyle={textStyle} {...props} />;
+                    return <Cell key={i} data={item} width={wth} height={height} flex={flex} textStyle={textStyle} onClickIcon={this.props.onClickIcon.bind(this)} {...props} />;
                 })}
             </View>
         ) : null;

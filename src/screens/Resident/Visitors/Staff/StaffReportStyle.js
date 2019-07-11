@@ -78,8 +78,8 @@ const StaffReportStyle = StyleSheet.create({
         height:'15%',
     },
     arrowIcon:{
-        height:30,
-        width:30,
+        height:25,
+        width:25,
         alignSelf:'center',
         marginTop:5
     },
