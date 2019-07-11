@@ -6,7 +6,8 @@ import {
   FlatList,
   ActivityIndicator,
   Text,
-  RefreshControl
+  RefreshControl,
+  TouchableWithoutFeedback
 } from "react-native";
 import { connect } from "react-redux";
 import { ListItem, Header, Card } from "react-native-elements";
@@ -14,12 +15,13 @@ import {
   onNotificationOpen,
   storeOpenedNotif,
   getNotifications,
-  refreshNotifications
+  refreshNotifications,
+  toggleCollapsible
 } from "../../actions";
 import TimeAgo from "react-native-timeago";
 import _ from "lodash";
 import { NavigationEvents } from "react-navigation";
-// import console = require('console');
+import Collapsible from "react-native-collapsible";
 
 class NotificationScreen extends Component {
   componentDidMount() {
@@ -91,31 +93,91 @@ class NotificationScreen extends Component {
   };
 
   renderItem = ({ item, index }) => {
-    const { savedNoifId } = this.props;
+    const { savedNoifId, notifications } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
-    return (
-      <Card>
-        <ListItem
-          onPress={() => this.onPress(item, index)}
-          // bottomDivider
-          title={this.renderTitle(item.ntType, item)}
-          subtitle={item.ntDesc}
-          leftIcon={{
-            // name:   (!item.read || !status) ? 'ios-mail-unread' : 'mail-read',
-            name: this.renderIcons("name", item, index),
-            // type:  (!item.read || !status) ? 'ionicon' : 'octicon',
-            type: this.renderIcons("type", item, index),
-            color: "#ED8A19"
+
+    if (item.ntType !== "gate_app") {
+      return (
+        <Card>
+          {item.ntType !== "gate_app" ? (
+            <ListItem
+              onPress={() => this.onPress(item, index)}
+              title={this.renderTitle(item.ntType, item)}
+              subtitle={item.ntDesc}
+              leftIcon={{
+                name: this.renderIcons("name", item, index),
+                type: this.renderIcons("type", item, index),
+                color: "#ED8A19"
+              }}
+              containerStyle={this.renderIcons("style", item, index)}
+            />
+          ) : (
+            <View style={{ flex: 1 }}>
+              <View>
+                <Text> Request from Gate App</Text>
+              </View>
+              <Collapsible
+                duration={100}
+                style={{ flex: 1 }}
+                collapsed={item.open}
+              >
+                <View style={{ backgroundColor: "#ED8A19" }}>
+                  <Text> {item.ntDesc}</Text>
+                </View>
+              </Collapsible>
+            </View>
+          )}
+          <Text> {item.ntdUpdated}</Text>
+        </Card>
+      );
+    } else {
+      return (
+        <TouchableWithoutFeedback
+          onPress={() => {
+            this.props.toggleCollapsible(notifications, item.open, index);
           }}
-          containerStyle={this.renderIcons("style", item, index)}
-          // containerStyle={(!item.read || !status) ?
-          //     { backgroundColor: '#eee'} :
-          //     { backgroundColor: '#fff' }
-          // }
-        />
-        <Text> {item.ntdUpdated}</Text>
-      </Card>
-    );
+        >
+          <Card>
+            {item.ntType !== "gate_app" ? (
+              <ListItem
+                onPress={() => this.onPress(item, index)}
+                title={this.renderTitle(item.ntType, item)}
+                subtitle={item.ntDesc}
+                leftIcon={{
+                  name: this.renderIcons("name", item, index),
+                  type: this.renderIcons("type", item, index),
+                  color: "#ED8A19"
+                }}
+                containerStyle={this.renderIcons("style", item, index)}
+              />
+            ) : (
+              <View style={{ flex: 1 }}>
+                <View>
+                  <Text> Request from Gate App</Text>
+                </View>
+                <Collapsible
+                  duration={300}
+                  style={{ flex: 1 }}
+                  collapsed={item.open}
+                  align="center"
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#ED8A19",
+                      paddingVertical: 25,
+                      margin: 4
+                    }}
+                  >
+                    <Text> {item.ntDesc}</Text>
+                  </View>
+                </Collapsible>
+              </View>
+            )}
+            <Text> {item.ntdUpdated}</Text>
+          </Card>
+        </TouchableWithoutFeedback>
+      );
+    }
   };
 
   onRefresh = () => {};
@@ -222,6 +284,7 @@ export default connect(
     onNotificationOpen,
     storeOpenedNotif,
     getNotifications,
-    refreshNotifications
+    refreshNotifications,
+    toggleCollapsible
   }
 )(NotificationScreen);

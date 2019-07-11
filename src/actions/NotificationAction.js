@@ -12,7 +12,8 @@ import {
   TOGGLE_ADMIN_NOTIFICATION,
   REFRESH_NOTIFICATION_START,
   REFRESH_NOTIFICATION_SUCCESS,
-  REFRESH_NOTIFICATION_FAILED
+  REFRESH_NOTIFICATION_FAILED,
+  TOGGLE_COLLAPSIBLE
 } from "./types";
 import _ from "lodash";
 import { connect } from "react-redux";
@@ -51,7 +52,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
 
         activeNotifications.map((data, index) => {
           if (data.ntType === "gate_app") {
-            gateAppNotif.push(data);
+            gateAppNotif.push({ open: true, ...data });
           } else if (data.ntType === "Join_Status") {
             joinStatNotif.push(data);
           } else if (data.ntType === "Join") {
@@ -463,7 +464,7 @@ export const refreshNotifications = (oyeURL, MyAccountID) => {
 
         activeNotifications.map((data, index) => {
           if (data.ntType === "gate_app") {
-            gateAppNotif.push(data);
+            gateAppNotif.push({ open: true, ...data });
           } else if (data.ntType === "Join_Status") {
             joinStatNotif.push(data);
           } else if (data.ntType === "Join") {
@@ -613,7 +614,10 @@ export const createUserNotification = (
                 let gateAppNotif = [];
                 activeNotifications.map((data, index) => {
                   if (data.ntType === "gate_app") {
-                    gateAppNotif.push(data);
+                    gateAppNotif.push({
+                      open: true,
+                      ...data
+                    });
                   } else if (data.ntType === "Join_Status") {
                     joinStatNotif.push(data);
                   } else if (data.ntType === "Join") {
@@ -680,5 +684,16 @@ export const createUserNotification = (
           console.log("notification not joinstatus succ", error);
         });
     }
+  };
+};
+
+export const toggleCollapsible = (prevData, value, index) => {
+  return dispatch => {
+    let newVal = prevData;
+    newVal[index].open = !value;
+    dispatch({
+      type: TOGGLE_COLLAPSIBLE,
+      payload: [...newVal]
+    });
   };
 };

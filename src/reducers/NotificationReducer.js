@@ -10,7 +10,8 @@ import {
   TOGGLE_ADMIN_NOTIFICATION,
   REFRESH_NOTIFICATION_START,
   REFRESH_NOTIFICATION_FAILED,
-  REFRESH_NOTIFICATION_SUCCESS
+  REFRESH_NOTIFICATION_SUCCESS,
+  TOGGLE_COLLAPSIBLE
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -61,6 +62,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case REFRESH_NOTIFICATION_FAILED:
       return { ...state, refresh: false };
+
+    case TOGGLE_COLLAPSIBLE:
+      return { ...state, notifications: action.payload };
 
     default:
       return state;
