@@ -77,7 +77,7 @@ class CardView extends React.Component {
                               onPress={this.onCardClick.bind(this)}
                               disabled={this.props.disabled}>
                 <View style={CardViewStyles.subCardView}>
-                    <Image style={CardViewStyles.imageStyles}
+                    <Image style={[CardViewStyles.imageStyles]}
                            source={imgSrc}>
                     </Image>
                     <View style={[CardViewStyles.subView]}>

@@ -247,48 +247,78 @@ class RegisterMe extends Component {
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
                         this.props.navigation.state.params.unitID
-
-                        
                       );
-                      fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${this.props.MyAccountID}`,{
-                        method: 'GET',
-                        headers: headers_2
-                      })
-                      .then(response => response.json())
-                      .then(responseJson => {
-                          
-                          console.log("2312#!@$@#%$#24235346$^#$^#",this.state.unitofperson)
+                      fetch(
+                        `http://${
+                          this.props.oyeURL
+                        }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
+                          this.props.MyAccountID
+                        }`,
+                        {
+                          method: "GET",
+                          headers: headers_2
+                        }
+                      )
+                        .then(response => response.json())
+                        .then(responseJson => {
+                          console.log(
+                            "2312#!@$@#%$#24235346$^#$^#",
+                            this.state.unitofperson
+                          );
 
-                          let count = Object.keys(responseJson.data.memberListByAccount).length;
-                          for(let i= 0 ; i<count; i++){
-                            if(responseJson.data.memberListByAccount[i].unUnitID === this.props.navigation.state.params.unitList.unUnitID ){
-                              this.setState({unitofperson: true})
+                          let count = Object.keys(
+                            responseJson.data.memberListByAccount
+                          ).length;
+                          for (let i = 0; i < count; i++) {
+                            if (
+                              responseJson.data.memberListByAccount[i]
+                                .unUnitID ===
+                              this.props.navigation.state.params.unitList
+                                .unUnitID
+                            ) {
+                              this.setState({ unitofperson: true });
                             }
-                            
                           }
-                          console.log("@$!@$!@$2$41242$@$@#$@#4", count)
-                      })
-                      .catch(error => {
-                        console.log("second error", error);
-                      })
-                      console.log("2312#!@$@#%$#24235346$^#$^#",this.state.unitofperson)
+                          console.log("@$!@$!@$2$41242$@$@#$@#4", count);
+                        })
+                        .catch(error => {
+                          console.log("second error", error);
+                        });
+                      console.log(
+                        "2312#!@$@#%$#24235346$^#$^#",
+                        this.state.unitofperson
+                      );
                       {
-                        this.state.unitofperson === true ?
-                        Alert.alert(
-                          "Oyespace",
-                          "Request Send to Admin Successfully",
-                          [{ text: "Ok", onPress: () => this.props.navigation.navigate('ResDashBoard') }],
-                          { cancelable: false }
-                        ) :
-
-                        Alert.alert(
-                          "Oyespace",
-                          "Request Send to Admin Successfully",
-                          [{ text: "Ok", onPress: () => this.props.navigation.navigate('CreateOrJoinScreen') }],
-                          { cancelable: false }
-                        );
+                        this.state.unitofperson === true
+                          ? Alert.alert(
+                              "Oyespace",
+                              "Request Send to Admin Successfully",
+                              [
+                                {
+                                  text: "Ok",
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "ResDashBoard"
+                                    )
+                                }
+                              ],
+                              { cancelable: false }
+                            )
+                          : Alert.alert(
+                              "Oyespace",
+                              "Request Send to Admin Successfully",
+                              [
+                                {
+                                  text: "Ok",
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "CreateOrJoinScreen"
+                                    )
+                                }
+                              ],
+                              { cancelable: false }
+                            );
                       }
-                     
                     });
                 } else {
                   this.setState({ loading: false });
@@ -390,7 +420,7 @@ class RegisterMe extends Component {
               "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
             };
 
-            let mobileNo = "+91" + this.props.MyMobileNumber;
+            let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
             console.log(mobileNo);
             axios
               .post(
@@ -492,48 +522,78 @@ class RegisterMe extends Component {
                         this.props.joinedAssociations,
                         this.props.navigation.state.params.unitID
                       );
-                      
-                      fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${this.props.MyAccountID}`,{
-                        method: 'GET',
-                        headers: headers_2
-                      })
-                      .then(response => response.json())
-                      .then(responseJson => {
-                          
-                          console.log("2312#!@$@#%$#24235346$^#$^#",this.state.unitofperson1)
 
-                          let count = Object.keys(responseJson.data.memberListByAccount).length;
-                          for(let i= 0 ; i<count; i++){
-                            if(responseJson.data.memberListByAccount[i].unUnitID === this.props.navigation.state.params.unitList.unUnitID ){
-                              this.setState({unitofperson1: true})
+                      fetch(
+                        `http://${
+                          this.props.oyeURL
+                        }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
+                          this.props.MyAccountID
+                        }`,
+                        {
+                          method: "GET",
+                          headers: headers_2
+                        }
+                      )
+                        .then(response => response.json())
+                        .then(responseJson => {
+                          console.log(
+                            "2312#!@$@#%$#24235346$^#$^#",
+                            this.state.unitofperson1
+                          );
+
+                          let count = Object.keys(
+                            responseJson.data.memberListByAccount
+                          ).length;
+                          for (let i = 0; i < count; i++) {
+                            if (
+                              responseJson.data.memberListByAccount[i]
+                                .unUnitID ===
+                              this.props.navigation.state.params.unitList
+                                .unUnitID
+                            ) {
+                              this.setState({ unitofperson1: true });
                             }
-                            
                           }
-                          console.log("@$!@$!@$2$41242$@$@#$@#4", count)
-                      })
-                      .catch(error => {
-                        console.log("second error", error);
-                      })
-                      console.log("2312#!@$@#%$#24235346$^#$^#",this.state.unitofperson1)
+                          console.log("@$!@$!@$2$41242$@$@#$@#4", count);
+                        })
+                        .catch(error => {
+                          console.log("second error", error);
+                        });
+                      console.log(
+                        "2312#!@$@#%$#24235346$^#$^#",
+                        this.state.unitofperson1
+                      );
                       {
-                        this.state.unitofperson1 === true ?
-                        Alert.alert(
-                          "Oyespace",
-                          "Request Send to Admin Successfully",
-                          [{ text: "Ok", onPress: () => this.props.navigation.navigate('ResDashBoard') }],
-                          { cancelable: false }
-                        ) :
-
-                        Alert.alert(
-                          "Oyespace",
-                          "Request Send to Admin Successfully",
-                          [{ text: "Ok", onPress: () => this.props.navigation.navigate('CreateOrJoinScreen') }],
-                          { cancelable: false }
-                        );
+                        this.state.unitofperson1 === true
+                          ? Alert.alert(
+                              "Oyespace",
+                              "Request Send to Admin Successfully",
+                              [
+                                {
+                                  text: "Ok",
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "ResDashBoard"
+                                    )
+                                }
+                              ],
+                              { cancelable: false }
+                            )
+                          : Alert.alert(
+                              "Oyespace",
+                              "Request Send to Admin Successfully",
+                              [
+                                {
+                                  text: "Ok",
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "CreateOrJoinScreen"
+                                    )
+                                }
+                              ],
+                              { cancelable: false }
+                            );
                       }
-                     
-          
-                      
                     });
                 } else {
                   this.setState({ loading: false });

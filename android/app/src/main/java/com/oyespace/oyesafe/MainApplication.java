@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.react.rnspinkit.RNSpinkitPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.rpt.reactnativecheckpackageinstallation.CheckPackageInstallationPackage;
 import com.horcrux.svg.SvgPackage;
@@ -74,7 +75,8 @@ public class MainApplication extends Application implements ShareApplication,Rea
                     new SQLitePluginPackage(),
                     new RNFirebaseMessagingPackage(),
                     new RNFirebaseNotificationsPackage(),
-                    new MapsPackage()
+                    new MapsPackage(),
+                    new RNSpinkitPackage()
 
             );
         }
@@ -93,6 +95,7 @@ public class MainApplication extends Application implements ShareApplication,Rea
     @Override
     public ReactNativeHost getReactNativeHost() {
         return mReactNativeHost;
+
     }
 
     @Override
