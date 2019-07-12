@@ -74,16 +74,14 @@ class GetStaffReport extends React.Component {
 
     getAndroidPermissions() {
         let that = this;
-
-
         async function requestExternalWritePermission() {
             try {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     {
-                        title: 'CameraExample App External Storage Write Permission',
+                        title: 'OyeSafe App External Storage Write Permission',
                         message:
-                            'CameraExample App needs access to Storage data in your SD Card ',
+                            'OyeSafe App needs access to Storage data in your SD Card ',
                     }
                 );
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -110,7 +108,7 @@ class GetStaffReport extends React.Component {
         let htmlContent = base.utils.validate.ReportData(this.state.staffReport);
         let options = {
             html: htmlContent,
-            fileName: 'test',
+            fileName: 'Report',
             directory: docFolder,
         };
         let file = await RNHTMLtoPDF.convert(options);
