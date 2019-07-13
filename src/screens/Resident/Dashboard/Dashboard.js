@@ -87,7 +87,7 @@ class Dashboard extends React.Component {
                         height={this.state.adminCardHeight}
                         width={this.state.adminCardWidth}
                         cardText={'Admin'}
-                        onCardClick={() => this.changeCardStatus("ADMIN")}
+                        // onCardClick={() => this.changeCardStatus("ADMIN")}
                         cardIcon={require("../../../../icons/user.png")}
                         disabled={this.state.isSelectedCard=== "ADMIN"}
                     />
@@ -98,7 +98,7 @@ class Dashboard extends React.Component {
                         cardText={'Offers Zone'}
                         cardIcon={require("../../../../icons/offers.png")}
                         backgroundColor={base.theme.colors.rosePink}
-                        onCardClick={() => this.changeCardStatus("OFFERS")}
+                        // onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     />
 

@@ -149,6 +149,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-restart')
+    implementation project(':react-native-device-info')
     implementation project(':react-native-spinkit')
     implementation project(':react-native-version-number')
     implementation project(':react-native-check-app-install')

@@ -32,6 +32,7 @@ import axios from "axios"
 import CountryPicker, {
   getAllCountries
 } from "react-native-country-picker-modal"
+import {connect} from 'react-redux';
 
 class EditProfile extends Component {
   constructor(props) {
@@ -108,7 +109,8 @@ class EditProfile extends Component {
       profileDataSourceMobileNumber,
       profileDataSourceAlternateMobileNum,
       profileDataSourceEmail,
-      profileDataSourceAlternateEmail
+      profileDataSourceAlternateEmail,
+      profileDataSourceImageName
     } = this.props.navigation.state.params
     firstname = this.state.FirstName
     lastname = this.state.LastName
@@ -155,19 +157,21 @@ class EditProfile extends Component {
       Alert.alert("Last name should be more than 3 characters")
     } else if (lastname > 50) {
       Alert.alert("Last name should be less than 50 characters")
-    } else if (mobilenumber.length < 10) {
-      Alert.alert("Primary mobile number should contain 10 numerics.")
-    } else if (reg.test(mobilenumber) === false) {
-      Alert.alert(
-        "Primary mobile number should not contain special characters."
-      )
-    } else if (alternatemobilenumber.length < 10) {
-      Alert.alert("Alternate mobile number should contain 10 numerics.")
-    } else if (reg.test(alternatemobilenumber) === false) {
-      Alert.alert(
-        "Alternate mobile number should not contain special characters."
-      )
-    } else if (email.length == 0) {
+    }
+    // else if (mobilenumber.length < 10) {
+    //   Alert.alert("Primary mobile number should contain 10 numerics.")
+    // } else if (reg.test(mobilenumber) === false) {
+    //   Alert.alert(
+    //     "Primary mobile number should not contain special characters."
+    //   )
+    // } else if (alternatemobilenumber.length < 10) {
+    //   Alert.alert("Alternate mobile number should contain 10 numerics.")
+    // } else if (reg.test(alternatemobilenumber) === false) {
+    //   Alert.alert(
+    //     "Alternate mobile number should not contain special characters."
+    //   )
+    // }
+    else if (email.length == 0) {
       Alert.alert("Primary email cannot be empty")
     } else if (regemail.test(email) === false) {
       Alert.alert("Enter valid primary email id")
@@ -177,7 +181,7 @@ class EditProfile extends Component {
     } else {
       axios
         .post(
-          "http://apidev.oyespace.com/oyeliving/api/v1/AccountDetails/Update",
+          `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
           {
             ACFName:
               firstname.length <= 0 ? profileDataSourceFirstName : firstname,
@@ -215,7 +219,7 @@ class EditProfile extends Component {
             ACEmail4: null,
             ACImgName: photo.fileName,
 
-            ACAccntID: 1
+            ACAccntID: this.props.MyAccountID
           },
           {
             headers: {
@@ -321,8 +325,8 @@ class EditProfile extends Component {
         skipBackup: true
       }
     }
-
-    ImagePicker.showImagePicker(options, response => {
+    //showImagePicker
+    ImagePicker.launchImageLibrary(options, response => {
       console.log("Response = ", response)
 
       if (response.didCancel) {
@@ -372,10 +376,11 @@ class EditProfile extends Component {
                     this.props.navigation.goBack()
                   }}
                 >
-                  {/*<Image
-                    source={require("./src/components/images/backBtn.png")}
-                    style={{ width: 18, height: 18 }}
-                  />*/}
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/backBtn.png")}
+                    style={styles.viewDetails2}
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -386,10 +391,10 @@ class EditProfile extends Component {
                   alignItems: "center"
                 }}
               >
-                {/*<Image
+                <Image
                   style={[styles.image]}
-                  source={require("./src/components/images/headerLogo.png")}
-                />*/}
+                  source={require("../icons/headerLogo.png")}
+                />
               </View>
               <View style={styles.emptyViewStyle} />
             </View>
@@ -413,11 +418,20 @@ class EditProfile extends Component {
                     >
                       <View style={styles.viewForProfilePicImageStyle}>
                         {this.state.photo == null ? (
-                         {/* <Image
+                          <Image
                             style={styles.profilePicImageStyle}
-                            source={require("./src/components/images/camwithgradientbg.png")}
-                          />*/}
+                            source={require("../icons/camwithgradientbg.png")}
+                          />
                         ) : (
+                          // <Image
+                          //   style={styles.profilePicImageStyle}
+                          //   source={{
+                          //     uri:
+                          //       "http://mediauploaddev.oyespace.com/Images/" +
+                          //       this.props.navigation.state.params
+                          //         .profileDataSourceImageName
+                          //   }}
+                          // />
                           <Image
                             style={styles.profilePicImageStyle}
                             //source={this.state.ImageSource}
@@ -430,10 +444,10 @@ class EditProfile extends Component {
                       onPress={this.selectPhotoTapped.bind(this)}
                     >
                       <View style={styles.imagesmallCircle}>
-                        {/*<Image
+                        <Image
                           style={[styles.smallImage]}
-                          source={require("./src/components/images/cam_with_gray_bg.png")}
-                        />*/}
+                          source={require("../icons/cam_with_gray_bg.png")}
+                        />
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -553,8 +567,7 @@ class EditProfile extends Component {
                           marginTop={hp("-0.5%")}
                           placeholder="Mobile Number"
                           autoCorrect={false}
-                          keyboardType="number-pad
-                          "
+                          keyboardType="number-pad"
                           maxLength={20}
                           defaultValue={
                             this.props.navigation.state.params
@@ -855,8 +868,29 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width,
     justifyContent: "center",
     alignItems: "center"
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
   }
 })
 
-export default EditProfile
+
+
+
+const mapStateToProps = state => {
+  return {
+      oyeURL: state.OyespaceReducer.oyeURL,
+      MyAccountID: state.UserReducer.MyAccountID,
+      MyMobileNumber: state.UserReducer.MyMobileNumber,
+      MyISDCode: state.UserReducer.MyISDCode,
+      // viewImageURL: state.OyespaceReducer.viewImageURL
+  }
+}
+
+export default connect(mapStateToProps)(EditProfile);
 

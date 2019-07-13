@@ -23,10 +23,10 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import RNFS from "react-native-fs";
-import { captureScreen } from "react-native-view-shot";
-// import {connect} from'react-redux';
+import { captureRef, captureScreen } from "react-native-view-shot";
+import {connect} from'react-redux';
 
-export default class QRCodeGeneration extends Component {
+class QRCodeGeneration extends Component {
   static navigationOptions = {
     title: "QRCodeGeneration",
     header: null
@@ -40,7 +40,16 @@ export default class QRCodeGeneration extends Component {
       imageURI: "",
       dataBase64: "",
 
-      association: ""
+      association: "",
+
+    error: null,
+    res: null,
+    value: {
+      format: "png",
+      quality: 0.9,
+      result: "tmpfile",
+      snapshotContentContainer: false
+    }
     };
   }
 
@@ -60,6 +69,7 @@ export default class QRCodeGeneration extends Component {
     const { params } = this.props.navigation.state;
     // let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
     //   +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inpOfInv +params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
+    console.log("$@#$!@$!@%#%#$%#$%", params)
     let txt =
       params.value.infName +
       "," +
@@ -114,12 +124,16 @@ export default class QRCodeGeneration extends Component {
     console.log(txt);
   };
 
-  takeScreenShot = () => {
+  takeScreenShot = qrcode => {
     const { params } = this.props.navigation.state;
-    captureScreen({
+    (qrcode ? 
+      captureRef(this.refs[qrcode],this.state.value)
+      :
+      
+     captureScreen({
       format: "jpg",
       quality: 0.8
-    }).then(
+    })).then(
       //callback function to get the result URL of the screnshot
       uri => {
         this.setState({ imageURI: uri }),
@@ -156,7 +170,7 @@ export default class QRCodeGeneration extends Component {
 
   associationName = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/association/getAssociationList/${
+      `http://${this.props.oyeURL}/oyeliving/api/v1/association/getAssociationList/${
         this.props.navigation.state.params.value.asAssnID
       }`,
       {
@@ -218,7 +232,7 @@ export default class QRCodeGeneration extends Component {
       return (
         <View style={styles.contaianer}>
           {/* <Header/> */}
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -255,11 +269,10 @@ export default class QRCodeGeneration extends Component {
                 />
               </View>
               <View style={{ flex: 0.2 }}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
               </View>
             </View>
             <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
+          </SafeAreaView> */}
 
           <Text style={styles.titleOfScreen}>QR Code Generation </Text>
           <View style={styles.progress}>
@@ -273,7 +286,7 @@ export default class QRCodeGeneration extends Component {
       <View style={{ flex: 1 }}>
         {/* <Header/> */}
         <ScrollView>
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -310,11 +323,10 @@ export default class QRCodeGeneration extends Component {
                 />
               </View>
               <View style={{ flex: 0.2 }}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
               </View>
             </View>
             <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
+          </SafeAreaView> */}
 
           <NavigationEvents
             onWillFocus={payload => this.qrGeneration()}
@@ -328,7 +340,7 @@ export default class QRCodeGeneration extends Component {
               flex: 1,
               backgroundColor: "#F4F4F4",
               flexDirection: "column"
-            }}
+            }} ref='qrcode' options={{ format: "jpg", quality: 0.9 }}
           >
             <View style={{ flexDirection: "column",marginTop:hp('2%'),backgroundColor:'#fff',height:hp('16%') }}>
               <View style={{ flexDirection: "row", flex: 1,marginTop:hp('1.4%') }}>
@@ -472,6 +484,7 @@ export default class QRCodeGeneration extends Component {
                 <Text style={{color:'white',fontSize:24,fontWeight:'500'}}>Share</Text>
             </Button> */}
             </View>
+          
           </View>
         </ScrollView>
       </View>
@@ -479,17 +492,17 @@ export default class QRCodeGeneration extends Component {
   }
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     oyeURL: state.OyespaceReducer.oyeURL,
-//     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-//     SelectedUnitID: state.UserReducer.SelectedUnitID,
-//     MyOYEMemberID: state.UserReducer.MyOYEMemberID,
-//     SelectedMemberID: state.UserReducer.SelectedMemberID,
-//   };
-// };
+const mapStateToProps = state => {
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    MyOYEMemberID: state.UserReducer.MyOYEMemberID,
+    SelectedMemberID: state.UserReducer.SelectedMemberID,
+  };
+};
 
-// export default connect(mapStateToProps)(QRCodeGeneration);
+export default connect(mapStateToProps)(QRCodeGeneration);
 
 const styles = StyleSheet.create({
   contaianer: {
