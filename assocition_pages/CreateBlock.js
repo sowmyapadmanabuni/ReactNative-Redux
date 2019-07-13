@@ -268,8 +268,8 @@ class AddBlock extends Component {
       alert("Block name should be less than 50 Characters")
     } else if (blockType.length == 0) {
       Alert.alert("Please Select Block type")
-    } else if (noOfUnits.length == 0) {
-      Alert.alert("Number of Units Cannot be Empty")
+    } else if (noOfUnits == "0") {
+      Alert.alert("Number of Units Cannot be zero")
     } 
     // else if (noOfUnits >= 80) {
     //   Alert.alert("Number Of Units should not be more than 80")
@@ -298,9 +298,12 @@ class AddBlock extends Component {
       Alert.alert("Late Payment Charge cannot be empty")
     } else if (regPIN.test(latePayCharge) === false) {
       Alert.alert("Late Payment Charge should not contain special characters")
-    } else if (dobText4 < dobText2 && dobText) {
-      Alert.alert("Start's from date")
-    } else if (checked === false) {
+    } else if (dobText4 < dobText2 ) {
+      Alert.alert("Starts From Date should be more due date.")
+    }else if(dobText4 < dobText) {
+      Alert.alert("Starts From Date should be more than Invoice Generation date.")
+    }
+     else if (checked === false) {
       this.flatrate()
       return
     } else if (checked2 === false) {
@@ -398,7 +401,7 @@ class AddBlock extends Component {
 
       .catch(error => {
         console.log("ashdjkhasjkhjaksbcjaksbkjdasd", error)
-        alert("error")
+        alert("Block not created. Please check your internet connection.")
       })
   }
 
@@ -435,47 +438,51 @@ class AddBlock extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {/* <Header /> */}
+      
         <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle, { flexDirection: "row" }]}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 flex: 1,
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                marginLeft: 20
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack()
-                }}
-              >
-                <Image
-                  source={require("../icons/backBtn.png")}
-                  style={{ width: 20, height: 20 }}
-                />
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={{
-                flex: 3,
                 justifyContent: "center",
                 alignItems: "center"
               }}
             >
               <Image
-                style={[styles.image]}
-                source={require("../icons/headerLogo.png")}
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
               />
             </View>
-            <View style={styles.emptyViewStyle} />
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-        {/* <Header /> */}
+
+
 
         <KeyboardAwareScrollView>
           <View style={styles.textWrapper}>
@@ -513,9 +520,10 @@ class AddBlock extends Component {
                       containerStyle={styles.box2}
                       dropdownPosition={0}
                       style={{ fontSize: hp("2%") }}
-                      value={"Residential"}
+                      // value={"Residential"}
                       textColor="#3A3A3C"
                       data={data2}
+                      placeholder="Select Value"
                       labelHeight={hp("0.7%")}
                       // labelPadding={hp("0.5%")}
                       //labelSize={hp("1%")}
@@ -531,6 +539,7 @@ class AddBlock extends Component {
                     style={[styles.box, { flex: 0.4 }]}
                     placeholder="No. of Units"
                     autoCorrect={false}
+                    maxLength={4}
                     autoCapitalize="characters"
                     keyboardType="number-pad"
                     onChangeText={noOfUnits =>
@@ -589,7 +598,7 @@ class AddBlock extends Component {
                 <View style={styles.fillAssociationDetailline} />
               </View>
               <Card />
-              <Card style={{ height: 900 }}>
+              <Card style={{ height:hp('110%') }}>
                 <Text
                   style={{
                     color: "#696969",
@@ -616,7 +625,7 @@ class AddBlock extends Component {
                       marginTop: wp("3%")
                     }}
                   >
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={{ flexDirection: "row",height:hp('5%') }}>
                       <CheckBox
                         onClick={() => {
                           this.setState({
@@ -648,7 +657,8 @@ class AddBlock extends Component {
                     height: hp("5%"),
                     marginTop: wp("8%"),
                     marginLeft: wp("5%"),
-                    marginRight: wp("5%")
+                    marginRight: wp("5%"),
+                    height:hp('5%')
                   }}
                 >
                   {this.state.checked == false ? (
@@ -686,7 +696,7 @@ class AddBlock extends Component {
                       marginTop: wp("3%")
                     }}
                   >
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={{ flexDirection: "row", height:hp('5%') }}>
                       <CheckBox
                         onClick={() => {
                           this.setState({
@@ -752,7 +762,7 @@ class AddBlock extends Component {
                   Unit of Measurement
                 </Text>
                 <Item style={styles.bankDetailLine}>
-                  {this.state.measurementTypeCountry == "indi" ? (
+                  {this.state.measurementTypeCountry == "India" ? (
                     <Text style={styles.box8}>
                       {" "}
                       SQFT{" "}
@@ -780,9 +790,10 @@ class AddBlock extends Component {
                   dropdownPosition={-3}
                   // label="Select Frequency"
                   style={{ fontSize: hp("2%") }}
-                  value={"Monthly"}
+                  // value={"Monthly"}
                   textColor="#3A3A3C"
                   // baseColor="#fff"
+                  placeholder="Select Invoice Creation Frequency"
                   data={data}
                   labelHeight={hp("0.7%")}
                   inputContainerStyle={{ borderBottomColor: "transparent" }}
@@ -850,7 +861,8 @@ class AddBlock extends Component {
                   dropdownPosition={-5}
                   // label="Select Charge Type"
                   style={{ fontSize: hp("2%") }}
-                  value={"Monthly"}
+                  // value={"Monthly"}
+                  placeholder="Select Late Payment Charge Type"
                   textColor="#3A3A3C"
                   data={data1}
                   labelHeight={hp("0.7%")}
@@ -952,6 +964,40 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     color: "#FF8C00"
   },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+
+viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+
+viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+
+image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
   associationDetailsView: {
     justifyContent: "space-between",
     flexDirection: "row",

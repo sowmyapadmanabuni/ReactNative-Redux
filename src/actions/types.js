@@ -8,7 +8,12 @@ export const CREATE_NEW_NOTIFICATION_FAILED = "create_new_notification_failed";
 export const CREATE_NEW_NOTIFICATION_SUCCESS =
   "create_new_notification_success";
 export const ON_NOTIFICATION_OPEN = "on_notification_open";
+export const TOGGLE_ADMIN_NOTIFICATION = "toggle_admin_notification";
+export const REFRESH_NOTIFICATION_START = "refresh_notification_start";
+export const REFRESH_NOTIFICATION_SUCCESS = "refresh_notification_success";
+export const REFRESH_NOTIFICATION_FAILED = "refresh_notification_failed";
 // export const ON_NOTIFICATION_REFRESH = 'on_notification_refresh';
+export const TOGGLE_COLLAPSIBLE = "toggle_collapsible";
 
 // App Reducer
 export const JOIN_ASSOCIATION = "join_association";
@@ -26,9 +31,8 @@ export const DASHBOARD_RESIDENT_LIST = "dashboard_resident_list";
 export const DASHBOARD_PIE = "dashboard_pie";
 export const GET_MEMBERLIST_SUCCESS = "get_memberlist_success";
 export const GET_MEMBERLIST_FAILED = "get_memberlist_failed";
+export const UPDATE_DROPDOWN_INDEX = "update_dropdown_index";
 
 // User Reducer
 export const UPDATE_USER_INFO = "update_user_info";
 
-
-export const UPDATE_STAFF_INFO="update_staff_info"
