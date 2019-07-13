@@ -8,7 +8,7 @@ export class validate{
         try{
             console.log("Validate",img,strings.StaffImageLink,strings.StaffImageLink+img)
 
-            let mImg = (img && img != "" ) ? strings.StaffImageLink+img: strings.staffPlaceHolder;
+            let mImg = (img && img != "" && img !='' ) ? strings.StaffImageLink+img: strings.staffPlaceHolder;
             return mImg;
         }
         catch(err){
