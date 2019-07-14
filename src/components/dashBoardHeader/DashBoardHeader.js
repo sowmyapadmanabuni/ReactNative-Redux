@@ -21,7 +21,7 @@ class DashBoardHeader extends React.Component {
         return (
             <View style={HeaderStyles.container}>
                 <View style={HeaderStyles.subContainerLeft}>
-                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('MyProfileScreen')}>
+                    <TouchableOpacity>
                         <Image style={HeaderStyles.imageStyles}
                                source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
                         </Image>
@@ -41,7 +41,7 @@ class DashBoardHeader extends React.Component {
                     </Image>
                 </View>
                 <View style={HeaderStyles.subContainerRight}>
-                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('NotificationScreen')}>
+                    <TouchableOpacity>
                         <Image style={HeaderStyles.logoStyles}
                                source={require("../../../icons/notifications.png")}>
                         </Image>

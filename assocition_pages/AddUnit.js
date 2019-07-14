@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import {
   StyleSheet,
@@ -49,8 +50,7 @@ import VehicleRow from "./VehicleRow.js";
 import { initializeRegistryWithDefinitions } from "react-native-animatable";
 import _ from "lodash";
 import {connect} from 'react-redux';
-import RNRestart from "react-native-restart";
-var index1=60;
+
 let Unit_Type = [
   {
     value: "Vacant Plot"
@@ -76,7 +76,7 @@ let Occupancy_Status = [
     id: 3 // Owner Details
   },
   {
-    value: "Unsold Vacant Unit", 
+    value: "Unsold Vacant Unit",
     id: 4 // Only Tenant Details
   },
   {
@@ -107,7 +107,6 @@ class AddUnit extends Component {
     header: null
   };
   constructor(props) {
-    
     super(props);
     this.state = {
       tableHead: ["Parking Lot No. ", "Vehicle No.", "Remove"],
@@ -129,7 +128,7 @@ class AddUnit extends Component {
       dobDate: "",
       dobText1: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
       dobDate1: "",
-      
+
       Unitofname: "",
       Unitolname: "",
       Unitomnum: "",
@@ -144,11 +143,10 @@ class AddUnit extends Component {
   }
 
   removeVehicle = index => {
-    index1=index1-30;
     let tableData = this.state.tableData;
     tableData.splice(index, 1);
     this.setState({ tableData: tableData });
-    // console.log("KKKKKKKKKKKKKKKKKKKKKKKKKKK",tableData);
+    console.log(tableData);
   };
   //Date Picker
   onDOBPress = () => {
@@ -161,7 +159,7 @@ class AddUnit extends Component {
     }
     this.refs.dobDialog.open({
       date: dobDate,
-      // maxDate: new Date() //To restirct past dates
+      maxDate: new Date() //To restirct past dates
     });
   };
 
@@ -171,7 +169,7 @@ class AddUnit extends Component {
       dobText: moment(date).format("YYYY-MM-DD")
     });
   };
-///////////////////////////////
+
   onDOBPress1 = () => {
     let dobDate = this.state.dobDate1;
     if (!dobDate || dobDate == null) {
@@ -182,7 +180,7 @@ class AddUnit extends Component {
     }
     this.refs.dobDialog1.open({
       date: dobDate,
-      // maxDate: new Date() //To restirct past dates
+      maxDate: new Date() //To restirct past dates
     });
   };
 
@@ -211,13 +209,13 @@ class AddUnit extends Component {
       Alert.alert("Tenant first Cannot be Empty");
       return;
     }else if (regTextOnly.test(Unittfname1) == false) {
-      Alert.alert("Tenant first name should contain characters");
+      Alert.alert("Tenant first name should not contain Special Character");
       return;
     } else if (Unittlname1.length == 0) {
       Alert.alert("Tenant Last name Cannot be Empty");
       return;
     }else if (regTextOnly.test(Unittlname1)== false) {
-      Alert.alert("Tenant Last name should contain characters");
+      Alert.alert("Tenant Last name should not contain Special Character");
       return;
     }else if(Unittmnum1.length < 10){
       Alert.alert("Enter Tenant Mobile Number");
@@ -228,7 +226,7 @@ class AddUnit extends Component {
     } else if (Unitteid1.length == 0 ) {
       Alert.alert("Please Enter Tenant Email");
       return;
-    } else if (regemail.test(Unitteid1)== false ) {
+    } else if (regemail.test(Unitteid1)== true ) {
       Alert.alert("Please Check Tenant Email");
       return;
     }
@@ -247,8 +245,6 @@ class AddUnit extends Component {
     let Unitolname1 = this.state.Unitolname;
     let Unitomnum1 = this.state.Unitomnum;
     let Unitoeid1 = this.state.Unitoeid;
-    let Unitoaeid1 = this.state.Unitoaeid;
-    let UnitoAnum1 =this.state.UnitoAnum;
     let mobRegex = /^[0]?[456789]d{9}$/;
     let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     let status = false;
@@ -258,43 +254,25 @@ class AddUnit extends Component {
       Alert.alert("Owner first Name Cannot be Empty");
       return;
     } else if (regTextOnly.test(Unitofname1) == false) {
-      Alert.alert("Owner first name should contain characters ");
+      Alert.alert("Owner first name should not contain Special Character");
       return;
     } else if (Unitolname1.length == 0) {
       Alert.alert("Owner Last Name Cannot be Empty");
       return;
     }else if (regTextOnly.test(Unitolname1)== false) {
-      Alert.alert("Owner Last Nname should contain characters");
+      Alert.alert("Owner Last Nname should not contain Special Character");
       return;
-    }else if (Unitomnum1.length == 0) {
-      Alert.alert("Enter Owner Mobile Number");
-      return;
-    } else if (Unitomnum1.length < 10) {
-      Alert.alert("Please Enter Valid Owner Mobile Number");
-      return;
-    }else if (mobRegex.test(Unitomnum1) == true) {
+    }else if (Unitomnum1.length < 10) {
       Alert.alert("Please check  Mobile Number");
       return;
-    }else if ( !UnitoAnum1.length == "" && UnitoAnum1.length < 10){
-      Alert.alert(" Please Enter Valid Alternate Mobile Number ");
+    } else if (mobRegex.test(Unitomnum1) == true) {
+      Alert.alert("Please check  Mobile Number");
       return;
-    } else if ( !UnitoAnum1.length == "" && mobRegex.test(UnitoAnum1) == true){
-      Alert.alert(" Please Enter Valid Alternate Mobile Number ");
-      return;
-    }else if (!UnitoAnum1.length == "" && Unitomnum1 == UnitoAnum1 ){
-      Alert.alert(" Mobile Number Should not be Same");
-      return;
-    }else if (Unitoeid1.length == 0 ) {
-      Alert.alert("Please Enter Owner Email ID");
+    } else if (Unitoeid1.length == 0 ) {
+      Alert.alert("Please Enter Valid Email");
       return;
     }else if (regemail.test(Unitoeid1)== false ) {
-      Alert.alert("Please Enter Valid Owner Email ID");
-      return;
-    } else if (!Unitoaeid1.length == "" && Unitoaeid1 === Unitoeid1){
-      Alert.alert(" Email ID Should not be Same ");
-      return;
-    } else if ( !Unitoaeid1.length == "" && regemail.test(Unitoaeid1) == false){
-      Alert.alert(" Please Enter Valid Alternate Email ID ");
+      Alert.alert("Please Enter Valid Email");
       return;
     }
     
@@ -308,8 +286,6 @@ class AddUnit extends Component {
   };
 
   createUnit = () => {
-    console.log("bhaiiiiiiiiiiii",this.state.dobDate)
-    console.log("$$$$$$$$$$$4",this.state.dobText)
     UnitNum1 = this.state.UnitNumber;
     UnitType1 = this.state.UnitType;
     UnitRate1 = this.state.UnitRate;
@@ -330,29 +306,24 @@ class AddUnit extends Component {
     Unittlname1 = this.state.Unittlname;
     Unittmnum1 = this.state.Unittmnum;
     Unitteid1 = this.state.Unitteid;
-    date1 = this.state.dobText;
-    date2 = this.state.dobText1;
-    mobile =""
-    if(OccupancyStatus1 === "Unsold Vacant Unit" || OccupancyStatus1 === "Unsold Tenant Occupied Unit"  )
-    {
-      mobile=""
-    }
-    else {
-      mobile="+91"
-    }
-    if(OccupancyStatus1 === "Unsold Vacant Unit" )
-    {
-      mobile1=""
-    }
-    else{
-      mobile1="+91"
-    }
+    date1 = this.state.dobDate;
+    date2 = this.state.dobDate1;
 
     vehicle = [];
     for (var i = 0; i < this.state.tableData.length; i++) {
       vehicle.push({ parkinglot: this.state.tableData[i] });
     }
- 
+    // console.log("hhhhhhh", vehicle);
+
+    // const reg = /^[0]?[6789]\d{9}$/
+    // const regTextOnly = /^[a-zA-Z ]+$/;
+    // const regPIN = /^[0-9]{1,10}$/;
+
+    // let regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    // let regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;
+    // let regIFSC = /^[A-Za-z]{4}0[A-Z0-9a-z]{6}$/;
+    // let oyeNonSpecialRegex = /[^0-9A-Za-z ]/;
+    // let mobRegex = /^[0]?[456789]d{9}$/;
     let finalData;
     let unitParkingLot = [];
     let p;
@@ -396,9 +367,9 @@ class AddUnit extends Component {
             UNUniName: UnitNum1,
             UNUniType: UnitType1,
             UNOcStat: OccupancyStatus1,
-            UNOcSDate: date2,
+            UNOcSDate: date1,
             UNOwnStat: "Sold",
-            UNSldDate: this.state.dobText,
+            UNSldDate: date2,
             UNDimens: UnitDimention1,
             UNRate: UnitRate1,
             UNCalType: CalculationType1,
@@ -409,7 +380,7 @@ class AddUnit extends Component {
                 UOFName: Unitofname1,
                 UOLName: Unitolname1,
                 UOMobile: Unitomnum1,
-                UOISDCode: mobile,
+                UOISDCode: "+91",
                 UOMobile1: UnitoAnu1,
                 UOMobile2: "",
                 UOMobile3: "",
@@ -428,7 +399,7 @@ class AddUnit extends Component {
                 UTFName: Unittfname1,
                 UTLName: Unittlname1,
                 UTMobile: Unittmnum1,
-                UTISDCode: mobile1,
+                UTISDCode: "+91",
                 UTMobile1: "",
                 UTEmail: Unitteid1,
                 UTEmail1: ""
@@ -451,24 +422,13 @@ class AddUnit extends Component {
       .then(response => response.json())
       .then(responseJson => {
         console.log("unit added ###############", responseJson);
-        Alert.alert(
-          "",
-          "Unit Created Successfully",
-          [
-            {
-              text: "Ok",
-              onPress: ()=>
-                RNRestart.Restart()  
-            }
-          ],
-          { cancelable: false }
-        );
-        // this.props.navigation.goBack();
+        alert("Unit Created");
+        this.props.navigation.goBack();
       })
 
       .catch(error => {
         console.log("ashdjkhasjkhjaksbcjaksbkjdasd", error);
-        alert("Unit not created. Please check internet connection.");
+        alert("error");
       });
   };
 
@@ -485,59 +445,35 @@ class AddUnit extends Component {
     let Unittlname1 = this.state.Unittlname;
     let Unittmnum1 = this.state.Unittmnum;
     let Unitteid1 = this.state.Unitteid;
-    let Unitoaeid1 = this.state.Unitoaeid;
-    let UnitoAnum1 =this.state.UnitoAnum;
 
     if (Unitofname1.length === 0) {
       Alert.alert("Owner first Name Cannot be Empty");
     } else if (regTextOnly.test(Unitofname1) === false) {
-      Alert.alert("Owner first Name should contain characters");
+      Alert.alert("Owner first Name should not contain Special Character");
     } else if (Unitolname1.length === 0) {
       Alert.alert("Owner Last Name Cannot be Empty");
     } else if (regTextOnly.test(Unitolname1) === false) {
-      Alert.alert("Owner Last Name should contain characters");
+      Alert.alert("Owner Last Name should not contain Special Character");
     } else if (Unitomnum1.length < 10) {
       Alert.alert("Please Enter Mobile Number");
     } else if (mobRegex.test(Unitomnum1)== true) {
       Alert.alert("Please check Mobile Number");
-    }else if ( !UnitoAnum1.length == "" && mobRegex.test(UnitoAnum1) == true){
-      Alert.alert(" Please Enter Valid Alternate Mobile Number ");
-      return;
-    }else if (!UnitoAnum1.length == "" && Unitomnum1 == UnitoAnum1 ){
-      Alert.alert(" Mobile Number Should not be Same");
-      return;
     }else if (Unitoeid1.length == 0 ) {
-      Alert.alert("Please Enter Owner Email ID");
-      return;
-    }else if (regemail.test(Unitoeid1)== false ) {
-      Alert.alert("Please Enter Valid Owner Email ID");
-      return;
-    } else if (!Unitoaeid1.length == "" && Unitoaeid1 === Unitoeid1){
-      Alert.alert(" Email ID Should not be Same ");
-      return;
-    } else if ( !Unitoaeid1.length == "" && regemail.test(Unitoaeid1) == false){
-      Alert.alert(" Please Enter Valid Owner Alternate Email ID ");
-      return;
+      Alert.alert("Enter Email ID");
+    } else if (regemail.test(Unitoeid1) == false) {
+      Alert.alert("Enter Valid Email ID");
     }else if (Unittfname1.length === 0) {
       Alert.alert("Tenant first Name Cannot be Empty");
     } else if (regTextOnly.test(Unittfname1) === false) {
-      Alert.alert("Tenant first Name should contain characters");
+      Alert.alert("Tenant first Name should not contain Special Character");
     } else if (Unittlname1.length === 0) {
       Alert.alert("Tenant Last Name Cannot be Empty");
     }else if (regTextOnly.test(Unittlname1) === false) {
-      Alert.alert("Tenant Last Name should contain characters");
+      Alert.alert("Tenant Last Name should not contain Special Character");
     }  else if (Unittmnum1.length < 10) {
       Alert.alert("Please check Tenant Mobile Number");
-    }else if ((Unittmnum1) === Unitomnum1 ) {
-      Alert.alert("Owner & Tenant Mobile Number should not be same");
-    }else if (Unittmnum1 ===  UnitoAnum1) {
-      Alert.alert("Owner & Tenant Mobile Number should not be same");
     } else if (Unitteid1.length === 0) {
       Alert.alert("Enter  Tenant Email ID");
-    }else if ((Unitteid1)=== Unitoeid1 ) {
-      Alert.alert("Owner & Tenant Email ID should not be same");
-    }else if ((Unitteid1)=== Unitoaeid1) {
-      Alert.alert("Owner & Tenant Email ID should not be same");
     } else if (regemail.test(Unitteid1) === false) {
       Alert.alert("Enter Valid Tenant Email ID");
     }
@@ -641,50 +577,48 @@ class AddUnit extends Component {
      
 
       <View style={{ flex: 1 }}>
-     
-     <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: "flex-start",
-                    justifyContent: "center"
-                  }}
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
+      <SafeAreaView style={{ backgroundColor: "orange" }}>
+        <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+          <View style={styles.viewDetails1}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("UnitDetails");
               }}
             >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
+              <View
+                style={{
+                  height: hp("6%"),
+                  width: wp("20%"),
+                  alignItems: "center",
+                  justifyContent: "center",
+                  alignContent: "center"
+                }}
+              >
+                <Image
+                  source={require("../icons/backBtn.png")}
+                  style={styles.viewDetails2}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Image
+              style={[styles.image1]}
+              source={require("../icons/headerLogo.png")}
+            />
+          </View>
+          <View style={{ flex: 0.2 }}>
+            {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+          </View>
+        </View>
+        <View style={{ borderWidth: 1, borderColor: "orange" }} />
+      </SafeAreaView>
 
       <KeyboardAwareScrollView>
         <View style={styles.textWrapper}>
@@ -713,8 +647,9 @@ class AddUnit extends Component {
                     <Input
                       style={styles.box}
                       placeholder="Unit Number"
+                      // underlineColorAndroid="orange"
                       autoCorrect={false}
-                      autoCapitalize='characters'
+                      autoCapitalize="characters"
                       keyboardType="default"
                       onChangeText={UnitNumber =>
                         this.setState({ UnitNumber: UnitNumber })
@@ -740,8 +675,7 @@ class AddUnit extends Component {
                         this.setState({ OccupancyStatus: value })
                       }
                       // label='Select Unit'
-                      placeholder={"Select Occupancy Status"}
-                      // value={"Occupancy Status"}
+                      value={"Occupancy Status"}
                       data={Occupancy_Status}
                       fontSize={hp("1.8%")}
                       labelHeight={hp("0.7%")}
@@ -877,7 +811,6 @@ class AddUnit extends Component {
                         autoCorrect={false}
                         autoCapitalize="characters"
                         keyboardType='number-pad'
-                        maxLength={10}
                         onChangeText={Unitomnum =>
                           this.setState({ Unitomnum: Unitomnum })
                         }
@@ -892,7 +825,6 @@ class AddUnit extends Component {
                         placeholder="Mobile Number"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        maxLength={10}
                         autoCapitalize="characters"
                         keyboardType='number-pad'
                         onChangeText={UnitoAnum =>
@@ -1063,7 +995,7 @@ class AddUnit extends Component {
                         placeholder="Mobile Number"
                         // underlineColorAndroid="orange"
                         autoCorrect={false}
-                        maxLength={10}
+                        
                         keyboardType='number-pad'
                         onChangeText={Unittmnum =>
                           this.setState({ Unittmnum: Unittmnum })
@@ -1125,8 +1057,7 @@ class AddUnit extends Component {
                       // label='Unit Type'
                       data={Unit_Type}
                       fontSize={hp("1.8%")}
-                      placeholder={"Select Unit Type"}
-                     
+                      value={"Unit Type"}
                       labelHeight={hp("0.7%")}
                       labelPadding={hp("0.5%")}
                       labelSize={hp("1%")}
@@ -1171,8 +1102,7 @@ class AddUnit extends Component {
                       labelHeight={hp("0.8%")}
                       labelPadding={hp("2%")}
                       labelSize={hp("1%")}
-                      // value={"Calculation Type"}
-                      placeholder={"Select Calculation Type"}
+                      value={"Calculation Type"}
                     />
                   </View>
                   <View style={{ flex: 0.5, height: hp("8.5%") }}>
@@ -1201,7 +1131,7 @@ class AddUnit extends Component {
               </Text>
               <View style={styles.fillAssociationDetailline} />
             </View>
-            <View style={{ height:(index1) }}>
+            <View style={{ height: hp("30%") }}>
               <VehicleRow
                 tableData={this.state.tableData}
                 removeVehicle={this.removeVehicle}
@@ -1242,15 +1172,15 @@ class AddUnit extends Component {
               >
                 <View
                   style={{
-                    width: wp("70%"),
-                    height: hp("40%"),
+                    width: wp("60%"),
+                    height: hp("50%"),
                     backgroundColor: "#fff"
                   }}
                 >
                   <View style={{ flexDirection: "column" }}>
                     <Text style={styles.titleText}>Add Vehicle</Text>
 
-                    <Item style={[styles.bankDetailLine,marginLeft= hp("2%"),marginRight=hp("2%"),marginBottom=hp("2%")]}>
+                    <Item style={styles.bankDetailLine}>
                       <Input
                         style={styles.box}
                         placeholder="Parking Lot No."
@@ -1265,7 +1195,7 @@ class AddUnit extends Component {
                         }
                       />
                     </Item>
-                    <Item style={[styles.bankDetailLine,marginLeft= hp("2%"),marginRight=hp("2%"),marginBottom=hp("2%")]}>
+                    <Item style={styles.bankDetailLine}>
                       <Input
                         style={styles.box}
                         placeholder="Vehicle No."
@@ -1284,12 +1214,11 @@ class AddUnit extends Component {
                           alignSelf: "center",
                           marginTop: hp("2%"),
                           flex: 0.5,
-                          marginLeft: hp("5%"),
-                          marginRight: hp("2%")
+                          marginLeft: hp("3%")
                         }}
                       >
                         <Button
-                          onPress={() => this.toggleModal()}
+                          onPress={() => this.props.navigation.goBack()}
                           style={{
                             width: wp("20%"),
                             height: hp("5.5%"),
@@ -1317,64 +1246,39 @@ class AddUnit extends Component {
                           marginRight: hp("2%")
                         }}
                       >
-                        {(this.state.parkingLotno === "" &&
-                          this.state.Vehicleno === "") || (this.state.Vehicleno.length === 0 && this.state.parkingLotno.length === 0) ? (
-                            <Button
-                              style={{
-                                width: wp("20%"),
-                                height: hp("5.5%"),
-                                justifyContent: "center",
-                                alignItems: "center",
-                                backgroundColor: "#909091"
-                              }}
-                              rounded
-                            >
-                              <Text
-                                style={{
-                                  color: "white",
-                                  fontSize: hp("2%")
-                                }}
-                              >
-                                Add
-                              </Text>
-                            </Button>
-                          ) : (
-                            <Button
-                              style={{
-                                width: wp("20%"),
-                                height: hp("5.5%"),
-                                justifyContent: "center",
-                                alignItems: "center",
-                                backgroundColor: "#ff8c00"
-                              }}
-                              rounded
-                              onPress={() => {
-                                this.toggleModal();
-                                const prevData = this.state.tableData;
-                                let newData = [];
-                                newData.push(this.state.parkinglot);
-                                newData.push(this.state.Vehicleno);
-                                newData.push(4);
-                                prevData.push(newData);
-                                index1=index1+30;
-                                this.setState({
-                                  tableData: prevData,
-                                  parkingLotno: "",
-                                  Vehicleno: "",
-                                });
-                                console.log(this.state.tableData);
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  color: "white",
-                                  fontSize: hp("2%")
-                                }}
-                              >
-                                Add
-                              </Text>
-                            </Button>
-                          )}
+                        <Button
+                          style={{
+                            width: wp("20%"),
+                            height: hp("5.5%"),
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "#ff8c00"
+                          }}
+                          rounded
+                          onPress={() => {
+                            this.toggleModal();
+                            const prevData = this.state.tableData;
+                            let newData = [];
+                            newData.push(this.state.parkinglot);
+                            newData.push(this.state.Vehicleno);
+                            newData.push(4);
+                            prevData.push(newData);
+
+                            this.setState({
+                              tableData: prevData
+                            });
+                            console.log(this.state.tableData);
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "white",
+                              fontSize: hp("2%")
+                            }}
+                          >
+                            Add
+                          </Text>
+                        </Button>
                       </View>
                     </View>
                   </View>
@@ -1382,7 +1286,7 @@ class AddUnit extends Component {
               </Modal>
             </View>
 
-            <View style={{ flexDirection: "row", marginBottom:hp('3%') }}>
+            <View style={{ flexDirection: "row" }}>
               <View
                 style={{
                   alignSelf: "center",
@@ -1445,7 +1349,7 @@ class AddUnit extends Component {
 
 const styles = StyleSheet.create({
   textWrapper: {
-    height: hp("87%"), // 70% of height device screen
+    height: hp("85%"), // 70% of height device screen
     // width: wp("98%"), // 80% of width device screen
     marginLeft: hp("1%"),
     marginRight: hp("1%")
@@ -1501,7 +1405,7 @@ const styles = StyleSheet.create({
     borderColor: "orange"
   },
   bankDetailLine: {
-    borderColor: "white",
+    borderColor: "white"
   },
   box: {
     borderColor: "#696969",
@@ -1588,9 +1492,24 @@ const styles = StyleSheet.create({
   rowStyle: { flexDirection: "row", backgroundColor: "#FFF1C1" },
   btn: { width: 58, height: 18, backgroundColor: "#78B7BB", borderRadius: 2 },
   btnText: { textAlign: "center", color: "#fff" },
-
-
-
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: wp("6%"),
+    height: hp("2%")
+  },
+  image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("1%")
+  },
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
@@ -1601,31 +1520,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
-
-viewDetails1: {
-    flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3
-  },
-
-viewDetails2: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: hp("3%"),
-    height: hp("3%"),
-    marginTop: 5
-    // marginLeft: 10
-  },
-
-image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
-  },
-
-  
   imp: {
     fontSize: hp("1.5%"),
     color: "red"
@@ -1642,4 +1536,3 @@ const mapStateToProps = state => {
   };
   
   export default connect(mapStateToProps)(AddUnit);
-

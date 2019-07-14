@@ -8,8 +8,6 @@ const isSecure = true;
 
 const isMandatory = " is required";
 
-//http://apidev.oyespace.com/oye247/api/v1/GetWorkerListByAssocID/1
-
 const api = {
     oyeSafeDomain:isDev?"apidev.oyespace.com/oye247":"apidev.oyespace.com/oye247",
     oyeLivingDomain:isDev?"apiuat.oyespace.com":"OyeLivingApi.oyespace.com",

@@ -166,10 +166,8 @@ class OTPVerification extends Component {
         });
     }
   };
-  
 
   changeNumber = mobilenumber => {
-    
     this.props.navigation.navigate("MobileReg");
   };
 
@@ -239,6 +237,12 @@ class OTPVerification extends Component {
       CountryCode: this.props.MyISDCode,
       MobileNumber: this.props.MyMobileNumber
     };
+
+    /*  db.transaction(tx => {
+       tx.executeSql('delete  FROM OTPVerification ', [], (tx, results) => {
+         console.log('Results OTPVerification delete ', results.rowsAffected);
+       });
+     }); */
 
     url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/resendotp`;
     //  http://122.166.168.160/champ/api/v1/Account/GetAccountDetailsByMobileNumber
@@ -329,7 +333,7 @@ class OTPVerification extends Component {
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: 'flex-start',
+                    alignItems: "flex-start",
                     justifyContent: "center"
                   }}
                 >
@@ -345,12 +349,12 @@ class OTPVerification extends Component {
               style={{
                 flex: 1,
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Image
                 style={[styles.image1]}
-                source={require("../icons/headerLogo.png")}
+                source={require("../icons/OyeSpace.png")}
               />
             </View>
             <View style={{ flex: 0.2 }}>
@@ -359,7 +363,7 @@ class OTPVerification extends Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-       
+
         <KeyboardAwareScrollView>
           <View style={{ flex: 1, flexDirection: "column" }}>
             <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -383,9 +387,9 @@ class OTPVerification extends Component {
                   alignContent: "center",
                   alignItems: "center",
                   justifyContent: "center",
-                  letterSpacing: hp('1.5%'),
+                  letterSpacing: hp("1.5%"),
                   width: wp("50%"),
-                  fontSize: hp("2%"),
+                  fontSize: hp("3%"),
                   alignSelf: "center",
                   backgroundColor: "white",
                   borderBottomWidth: 1,
@@ -394,7 +398,6 @@ class OTPVerification extends Component {
                 }}
                 placeholder="Enter OTP"
                 placeholderTextColor="#474749"
-                
                 onChangeText={this.handleOTP}
                 maxLength={6}
                 allowFontScaling={true}
@@ -678,10 +681,10 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   image1: {
-      width: wp("22%"),
-      height: hp("12%")
-  },
-  
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  }
 });
 
 const mapStateToProps = state => {

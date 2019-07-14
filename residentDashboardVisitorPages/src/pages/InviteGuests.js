@@ -13,18 +13,17 @@ import { Card,CardItem, Form, Item, Label, Input, Button, } from "native-base"
 import CountryPicker, {getAllCountries} from 'react-native-country-picker-modal';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import moment from 'moment';
-import Switch from '../../src/components/common/Switch.js'
+//import Switch from '../../src/components/common/Switch.js'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import {connect} from 'react-redux';
 
 var multipleEntries = "FALSE";
 
-class InviteGuests extends Component {
+export default class InviteGuests extends Component {
   static navigationOptions = {
     title: "Invite Guests",
     header: null
@@ -215,14 +214,15 @@ else{
 
 
   
-  fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
+  fetch('http://apidev.oyespace.com/oye247/api/v1/Invitation/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
       body: JSON.stringify({
-        "UnUnitID"  :  this.props.SelectedUnitID,
+        "MeMemID"   :  52,
+        "UnUnitID"  :  77,
         "INFName"   : fname,
         "INLName"   : lname,
         "INMobile"  : "+"+ callingCode + mobNum,
@@ -234,8 +234,7 @@ else{
         "INEDate"   : dobDate1 + time1,
         "INPOfInv"  : purpose,
         "INMultiEy" : switches,
-        "ASAssnID"  : this.props.SelectedAssociationID,
-        "INQRCode"  : 1
+        "ASAssnID"  : 8
       })
     })
       .then(response => response.json())
@@ -493,18 +492,3 @@ const styles = StyleSheet.create({
   datePickerText: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212', },
   subtext1: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212' } 
 });
-
-const mapStateToProps = state => {
-  return {
-    oyeURL: state.OyespaceReducer.oyeURL,
-    MyFirstName: state.UserReducer.MyFirstName,
-    MyLastName: state.UserReducer.MyLastName,
-    MyMobileNumber: state.UserReducer.MyMobileNumber,
-    viewImageURL: state.OyespaceReducer.viewImageURL,
-    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-    SelectedUnitID: state.UserReducer.SelectedUnitID
-
-  };
-};
-
-export default connect(mapStateToProps)(InviteGuests);

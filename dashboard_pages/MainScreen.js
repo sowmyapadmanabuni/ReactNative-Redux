@@ -5,9 +5,8 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  YellowBox,
-  ActivityIndicator,
-  Alert
+  YellowBox,AppState,
+  ActivityIndicator
 } from "react-native";
 import { Card, CardItem } from "native-base";
 import Header from "../components/Header";
@@ -17,6 +16,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import SearchableDropdown from "react-native-searchable-dropdown";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -37,6 +37,7 @@ import moment from "moment";
 import axios from "axios";
 import firebase from "react-native-firebase";
 import _ from "lodash";
+import {NavigationEvents} from 'react-navigation';
 import {
   newNotifInstance,
   createNotification,
@@ -46,13 +47,9 @@ import {
   getDashAssociation,
   getDashUnits,
   updateUserInfo,
-  updateApproveAdmin,
-  getAssoMembers,
-  updateDropDownIndex,
-  createUserNotification,
-  refreshNotifications
+  getAssoMembers
 } from "../src/actions";
-import { NavigationEvents } from "react-navigation";
+import base from '../src/base'
 
 class Dashboard extends React.Component {
   static navigationOptions = {
@@ -75,36 +72,30 @@ class Dashboard extends React.Component {
       tenantname: "",
       unitname: "",
       unitid: "",
-      uoMobile: "",
-      associationSelected: false
+      uoMobile: ""
     };
   }
 
   requestNotifPermission = () => {
-    const {
-      MyAccountID,
-      champBaseURL,
-      receiveNotifications,
-      oyeURL
-    } = this.props;
+    const { MyAccountID, champBaseURL, receiveNotifications } = this.props;
 
     firebase
       .messaging()
       .hasPermission()
       .then(enabled => {
         if (enabled) {
-          if (receiveNotifications) {
+          //if (receiveNotifications) {
             this.listenForNotif();
-          }
+          //}
           // user has permissions
         } else {
           firebase
             .messaging()
             .requestPermission()
             .then(() => {
-              if (receiveNotifications) {
+              //if (receiveNotifications) {
                 this.listenForNotif();
-              }
+              //}
               // User has authorised
             })
             .catch(error => {
@@ -127,59 +118,37 @@ class Dashboard extends React.Component {
         let responseData = response.data.data;
 
         responseData.associationByAccount.map(association => {
-          // console.log('***********')
-          // console.log(association.asAsnName)
-          // console.log(association.asAssnID)
-          // console.log('***********')
-          if (receiveNotifications) {
+           console.log('***********', response.data.data)
+           console.log(association.asAsnName)
+           console.log(association.asAssnID)
+           console.log('***********',receiveNotifications)
+          //if (receiveNotifications) {
+            console.log('*****subscribeToTopic******', association.asAssnID + "admin")
             firebase
               .messaging()
               .subscribeToTopic(association.asAssnID + "admin");
             // console.log(association.asAssnID);
-          } else if (!receiveNotifications) {
-            firebase
-              .messaging()
-              .unsubscribeFromTopic(association.asAssnID + "admin");
-          }
-        });
-      });
-
-    axios
-      .get(
-        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
-        {
-          headers: headers
-        }
-      )
-      .then(response => {
-        let data = response.data.data.memberListByAccount;
-        // console.log("dataoye", data);
-        data.map(units => {
-          // console.log(units.unUnitID + "admin");
-          // console.log(units.mrmRoleID + "role");
-          if (receiveNotifications) {
-            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-              // console.log(units.unUnitID + "admin");
-              firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
-            }
-          } else if (!receiveNotifications) {
-            firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
-          }
+          // } else if (!receiveNotifications) {
+          //   firebase
+          //     .messaging()
+          //     .unsubscribeFromTopic(association.asAssnID + "admin");
+          // }
         });
       });
   };
 
   showLocalNotification = notification => {
-    // console.log(notification);
+    console.log("^^^^6",notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
       "Oyespace",
       firebase.notifications.Android.Importance.Max
     ).setDescription("Oyespace channel");
     channel.enableLights(true);
-    // channel.enableVibration(true);
-    // channel.vibrationPattern([500]);
-    firebase.notifications().android.createChannel(channel);
+     //channel.enableVibration(true);
+     //channel.vibrationPattern([500]);
+
+     firebase.notifications().android.createChannel(channel);
 
     const notificationBuild = new firebase.notifications.Notification({
       sound: "default",
@@ -198,22 +167,39 @@ class Dashboard extends React.Component {
       .android.setAutoCancel(true)
       .android.setSmallIcon("ic_stat_ic_notification")
       .android.setChannelId("channel_id")
-      .android.setVibrate("default")
+      .android.setVibrate(1000)
       // .android.setChannelId('notification-action')
-      .android.setPriority(firebase.notifications.Android.Priority.Max);
+      .android.setPriority(firebase.notifications.Android.Priority.High);
+
+    if(AppState.currentState == 'active') {
+        showMessage({
+            message: notification._title,
+            description:notification._body,
+            type: "default",
+            backgroundColor: base.theme.colors.primary,
+            color: base.theme.colors.white,
+            onPress: () => {
+                firebase.notifications().removeAllDeliveredNotifications();
+                //@Todo: Navigate to specific screen
+            }
+        });
+    }
 
     firebase.notifications().displayNotification(notificationBuild);
+
+
+
     this.setState({ foregroundNotif: notification._data });
   };
 
   listenForNotif = () => {
     let navigationInstance = this.props.navigation;
-
+    console.log('listenForNotif')
     this.notificationDisplayedListener = firebase
       .notifications()
       .onNotificationDisplayed(notification => {
-        // console.log('___________')
-        // console.log(notification)
+         console.log('___________')
+         console.log(notification)
         // console.log('____________')
         // Process your notification as required
         // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
@@ -222,8 +208,8 @@ class Dashboard extends React.Component {
     this.notificationListener = firebase
       .notifications()
       .onNotification(notification => {
-        // console.log('___________')
-        // console.log(notification)
+         console.log('___________')
+         console.log(notification)
         // console.log('____________')
 
         if (notification._data.associationID) {
@@ -234,74 +220,72 @@ class Dashboard extends React.Component {
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
-      const { MyAccountID } = this.props.userReducer;
-      const { oyeURL } = this.props.oyespaceReducer;
-      let details = notificationOpen.notification._data;
+      // alert('opened')
+      // console.log('**********')
+      // console.log(notificationOpen.notification._data.admin)
       if (notificationOpen.notification._data.admin === "true") {
         if (notificationOpen.action) {
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(
-          //   notificationOpen.notification._data,
-          //   navigationInstance,
-          //   true,
-          //   "true",
-          //   this.props.oyeURL,
-          //   this.props.MyAccountID
-          // );
+          this.props.newNotifInstance(notificationOpen.notification);
+          this.props.createNotification(
+            notificationOpen.notification._data,
+            navigationInstance,
+            true,
+            "true",
+            this.props.oyeURL,
+            this.props.MyAccountID
+          );
           // this.props.createNotification(notificationOpen.notification)
         }
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
-        this.props.createUserNotification(
-          "Join_Status",
-          oyeURL,
-          MyAccountID,
-          1,
-          details.ntDesc,
-          "resident_user",
-          "resident_user",
-          details.sbSubID,
-          "resident_user",
-          "resident_user",
-          "resident_user",
-          "resident_user",
-          "resident_user",
-          true
-        );
-        // this.props.navigation.navigate("NotificationScreen");
+        // this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
+        // this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       }
 
       if (notificationOpen.notification._data.admin === "true") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
         if (notificationOpen.notification._data.foreground) {
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(
-          //   notificationOpen.notification._data,
-          //   navigationInstance,
-          //   true,
-          //   "true",
-          //   this.props.oyeURL,
-          //   this.props.MyAccountID
-          // );
+          this.props.newNotifInstance(notificationOpen.notification);
+          this.props.createNotification(
+            notificationOpen.notification._data,
+            "navigationInstance",
+            true,
+            "true",
+            "true",
+            this.props.oyeURL,
+            this.props.MyAccountID
+          );
         }
       } else if (notificationOpen.notification._data.admin === "gate_app") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(
-        //   notificationOpen.notification._data,
-        //   navigationInstance,
-        //   true,
-        //   "gate_app",
-        //   this.props.oyeURL,
-        //   this.props.MyAccountID
-        // );
+        this.props.newNotifInstance(notificationOpen.notification);
+        this.props.createNotification(
+          notificationOpen.notification._data,
+          "navigationInstance",
+          true,
+          "gate_app",
+          "true",
+          this.props.oyeURL,
+          this.props.MyAccountID
+        );
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
+        // alert('clicked here')
+        this.props.newNotifInstance(notificationOpen.notification);
+        this.props.createNotification(
+          notificationOpen.notification._data,
+          "navigationInstance",
+          true,
+          "false",
+          "true",
+          this.props.oyeURL,
+          this.props.MyAccountID
+        );
+        // this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       }
-      // this.props.getNotifications(oyeURL, MyAccountID);
-      this.props.navigation.navigate("NotificationScreen");
     });
   };
 
@@ -309,11 +293,11 @@ class Dashboard extends React.Component {
     // console.log("hhhhhhhhhhhhhh",this.state.data1)
   };
 
-  didMount = () => {
+  componentDidMount() {
+      console.log(this.props)
     const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    // this.props.updateApproveAdmin([]);
 
     getDashSub(oyeURL, SelectedAssociationID);
     getDashAssociation(oyeURL, MyAccountID);
@@ -321,46 +305,39 @@ class Dashboard extends React.Component {
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-  };
+  }
 
   onAssociationChange = (value, index) => {
     const {
       associationid,
       getDashUnits,
       updateUserInfo,
-      memberList,
-      notifications,
-      dropdown
+      memberList
     } = this.props;
-    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    // const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-
-    getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
 
     updateUserInfo({
       prop: "SelectedAssociationID",
-      value: dropdown[index].associationId
+      value: associationid[index].id
     });
 
     let memId = _.find(memberList, function(o) {
-      return o.asAssnID === dropdown[index].associationId;
+      return o.asAssnID === associationid[index].id;
     });
-
+    console.log("memId", memId);
     updateUserInfo({
       prop: "MyOYEMemberID",
       value: memId.meMemID
     });
-
-    updateUserInfo({
-      prop: "SelectedMemberID",
-      value: dropdown[index].memberId
-    });
+    getDashUnits(associationid[index].id, oyeURL);
+    // this.unit(this.state.associationid[index].id)
   };
 
   renderSubscription = () => {
     const { datasource, SelectedAssociationID } = this.props;
 
-    // console.log(datasource);
+    console.log(datasource);
 
     if (!SelectedAssociationID) {
       return (
@@ -394,17 +371,15 @@ class Dashboard extends React.Component {
       isLoading,
       sold2,
       unsold2,
-      updateUserInfo,
-      updateDropDownIndex
+      updateUserInfo
     } = this.props;
-
     return (
       <View style={{ flex: 1 }}>
-        <NavigationEvents onDidFocus={() => this.didMount()} />
         <Header
           firstName={this.props.MyFirstName}
           navigate={this.props.navigation}
         />
+        
         <View style={styles.container}>
           <View style={styles.textWrapper}>
             <View
@@ -438,13 +413,9 @@ class Dashboard extends React.Component {
                       // labelHeight={hp("1%")}
                       labelPadding={hp("1%")}
                       labelSize={hp("1%")}
-                      onChangeText={(value, index) => {
-                        this.onAssociationChange(value, index);
-                        updateDropDownIndex(index);
-                        this.setState({
-                          associationSelected: true
-                        });
-                      }}
+                      onChangeText={(value, index) =>
+                        this.onAssociationChange(value, index)
+                      }
                     />
                   </CardItem>
                 </Card>
@@ -468,9 +439,8 @@ class Dashboard extends React.Component {
                             prop: "SelectedUnitID",
                             value: dropdown1[index].unitId
                           });
-
-                          // console.log(value);
-                          // console.log(index);
+                          console.log(value);
+                          console.log(index);
                         }}
                       />
                     )}
@@ -556,98 +526,70 @@ class Dashboard extends React.Component {
                 </View>
               )}
               <View style={{ height: hp("7%") }}>
-                {this.state.associationSelected === false ? (
-                  <TouchableOpacity
-                    // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
-                    onPress={() => {
-                      Alert.alert(
-                        "",
-                        "Please select Association from Dropdown in Dashboard"
-                      );
+                {}
+                <TouchableOpacity
+                  // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
+                  onPress={() => {
+                    this.props.navigation.navigate("ViewmembersScreen", {
+                      data: residentList
+                    });
+                  }}
+                >
+                  <Card
+                    style={{
+                      height: hp("5%"),
+                      alignItems: "center",
+                      flexDirection: "row"
                     }}
                   >
-                    <Card
-                      style={{
-                        height: hp("5%"),
-                        alignItems: "center",
-                        flexDirection: "row"
-                      }}
-                    >
-                      <Image
-                        source={require("../icons/eye.png")}
-                        style={styles.image4}
-                      />
-                      <Text style={{ alignSelf: "center", color: "black" }}>
-                        View Resident List
-                      </Text>
-                    </Card>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
-                    onPress={() => {
-                      this.props.navigation.navigate("ViewmembersScreen", {
-                        data: residentList,
-                        reload: this.onAssociationChange
-                      });
-                    }}
-                  >
-                    <Card
-                      style={{
-                        height: hp("5%"),
-                        alignItems: "center",
-                        flexDirection: "row"
-                      }}
-                    >
-                      <Image
-                        source={require("../icons/eye.png")}
-                        style={styles.image4}
-                      />
-                      <Text style={{ alignSelf: "center", color: "black" }}>
-                        View Resident List
-                      </Text>
-                    </Card>
-                  </TouchableOpacity>
-                )}
+                    <Image
+                      source={require("../icons/eye.png")}
+                      style={styles.image4}
+                    />
+                    <Text style={{ alignSelf: "center", color: "black" }}>
+                      View Resident List
+                    </Text>
+                  </Card>
+                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.view1}>
               <View style={{ flexDirection: "column" }}>
                 <Card style={styles.card}>
                   {/* <CardItem Style={styles.cardItem}> */}
-                  {/* <TouchableOpacity
+                  <TouchableOpacity
                     onPress={() =>
                       this.props.navigation.navigate("InvitedGuestListScreen")
                     }
-                  > */}
-                  <View style={{ flexDirection: "column" }}>
-                    <View
-                      style={{
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: hp("2%")
-                      }}
-                    >
-                      <Image
+                  >
+                    <View style={{ flexDirection: "column" }}>
+                      <View
                         style={{
-                          width: hp("4%"),
-                          height: hp("3.1%"),
-                          marginBottom: hp("0.55%")
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginTop: hp("2%")
                         }}
-                        source={require("../icons/guests.png")}
-                      />
+                      >
+                        <Image
+                          style={{
+                            width: hp("4%"),
+                            height: hp("3.1%"),
+                            marginBottom: hp("0.55%")
+                          }}
+                          source={require("../icons/guests.png")}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <Text style={{ fontSize: hp("1.5%") }}>Guests</Text>
+                      </View>
                     </View>
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center"
-                      }}
-                    >
-                      <Text style={{ fontSize: hp("1.5%") }}>Guests</Text>
-                    </View>
-                  </View>
-                  {/* </TouchableOpacity> */}
+                  </TouchableOpacity>
                   {/* </CardItem> */}
                   <View style={styles.view2} />
                 </Card>
@@ -656,39 +598,39 @@ class Dashboard extends React.Component {
               <View style={{ flexDirection: "column" }}>
                 <Card style={styles.card}>
                   {/* <CardItem Style={styles.cardItem}> */}
-                  {/* <TouchableOpacity
+                  <TouchableOpacity
                     onPress={() =>
                       this.props.navigation.navigate("GuardListScreen")
                     }
-                  > */}
-                  <View style={{ flexDirection: "column" }}>
-                    <View
-                      style={{
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: hp("2%")
-                      }}
-                    >
-                      <Image
+                  >
+                    <View style={{ flexDirection: "column" }}>
+                      <View
                         style={{
-                          width: hp("4%"),
-                          height: hp("3.1%"),
-                          marginBottom: hp("0.55%")
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginTop: hp("2%")
                         }}
-                        source={require("../icons/guards.png")}
-                      />
+                      >
+                        <Image
+                          style={{
+                            width: hp("4%"),
+                            height: hp("3.1%"),
+                            marginBottom: hp("0.55%")
+                          }}
+                          source={require("../icons/guards.png")}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <Text style={{ fontSize: hp("1.5%") }}>Guards</Text>
+                      </View>
                     </View>
-                    <View
-                      style={{
-                        justifyContent: "center",
-                        alignItems: "center"
-                      }}
-                    >
-                      <Text style={{ fontSize: hp("1.5%") }}>Guards</Text>
-                    </View>
-                  </View>
-                  {/* </TouchableOpacity> */}
+                  </TouchableOpacity>
                   {/* </CardItem> */}
                   <View style={styles.view2} />
                 </Card>
@@ -739,9 +681,7 @@ class Dashboard extends React.Component {
                   {/* <CardItem Style={styles.cardItem}> */}
                   <TouchableOpacity
                     onPress={() =>
-                      this.props.navigation.navigate("AdminFunction", {
-                        assocationSel: this.state.associationSelected
-                      })
+                      this.props.navigation.navigate("AdminFunction")
                     }
                   >
                     <View
@@ -793,6 +733,7 @@ class Dashboard extends React.Component {
       </View>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
@@ -923,7 +864,6 @@ const mapStateToProps = state => {
   return {
     isCreateLoading: state.NotificationReducer.isCreateLoading,
     notificationCount: state.NotificationReducer.notificationCount,
-    notifications: state.NotificationReducer.notifications,
     joinedAssociations: state.AppReducer.joinedAssociations,
     datasource: state.DashboardReducer.datasource,
     dropdown: state.DashboardReducer.dropdown,
@@ -962,11 +902,6 @@ export default connect(
     getDashAssociation,
     getDashUnits,
     updateUserInfo,
-    getAssoMembers,
-    updateApproveAdmin,
-    updateDropDownIndex,
-    createUserNotification,
-    refreshNotifications
+    getAssoMembers
   }
 )(Dashboard);
-

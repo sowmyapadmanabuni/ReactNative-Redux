@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import {
   View,
   StyleSheet,
@@ -9,18 +9,16 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  YellowBox,
   Dimensions,
   SafeAreaView
-} from "react-native";
-// import Header from "./src/components/common/Header";
-import { Card, Item, Button } from "native-base";
+} from "react-native"
+import { Card, Item, Button, Form } from "native-base"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-import { NavigationEvents } from "react-navigation";
-import { connect } from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
+} from "react-native-responsive-screen"
+import { NavigationEvents } from "react-navigation"
 
 class MyProfile extends Component {
   state = {
@@ -34,8 +32,9 @@ class MyProfile extends Component {
   }
 
   myProfile = () => {
+    console.log("________\n before fetch")
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${this.props.MyAccountID}`,
+      "http://apidev.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1",
       {
         method: "GET",
         headers: {
@@ -48,8 +47,7 @@ class MyProfile extends Component {
       .then(responseJson => {
         console.log(responseJson)
         this.setState({
-          datasource: responseJson,
-          ImageSource: responseJson.data.account[0].acImgName
+          datasource: responseJson
         })
         console.log("gggg", datasource)
       })
@@ -76,7 +74,7 @@ class MyProfile extends Component {
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate("ResDashBoard")
+                    this.props.navigation.navigate("MyProfileScreen")
                   }}
                 >
                   <View
@@ -103,8 +101,8 @@ class MyProfile extends Component {
                 }}
               >
                 <Image
-                  style={[styles.image]}
-                  source={require("../icons/headerLogo.png")}
+                  style={[styles.image1]}
+                  source={require("../icons/OyeSpace.png")}
                 />
               </View>
               <View style={{ flex: 0.2 }}>
@@ -133,60 +131,42 @@ class MyProfile extends Component {
                   <View style={styles.editButtonViewStyle}>
                     <TouchableOpacity
                       onPress={() => {
-                        navigate("EditProfileScreen", {
-                          profileDataSourceFirstName: this.state.datasource
-                            ? this.state.datasource.data.account[0].acfName
-                            : "",
-                          profileDataSourceLastName: this.state.datasource
-                            ? this.state.datasource.data.account[0].aclName
-                            : "",
-                          profileDataSourceIsdCode: this.state.datasource
-                            ? this.state.datasource.data.account[0].acisdCode.substring(
-                                0,
-                                this.state.datasource.data.account[0].acisdCode
-                                  .length - 2
-                              )
-                            : "",
-                          profileDataSourceIsdCode1: this.state.datasource
-                            ? this.state.datasource.data.account[0].acisdCode1.substring(
-                                0,
-                                this.state.datasource.data.account[0].acisdCode1
-                                  .length - 2
-                              )
-                            : "",
-                          profileDataSourceCca2: this.state.datasource
-                            ? this.state.datasource.data.account[0].acisdCode
-                                .toString()
-                                .slice(-2)
-                            : "",
-                          profileDataSourceCca3: this.state.datasource
-                            ? this.state.datasource.data.account[0].acisdCode1
-                                .toString()
-                                .slice(-2)
-                            : "",
+                        navigate("Editprofile", {
+                          profileDataSourceFirstName: this.state.datasource.data
+                            .account[0].acfName,
+                          profileDataSourceLastName: this.state.datasource.data
+                            .account[0].aclName,
+                          profileDataSourceIsdCode: this.state.datasource.data.account[0].acisdCode.substring(
+                            0,
+                            this.state.datasource.data.account[0].acisdCode
+                              .length - 2
+                          ),
+                          profileDataSourceIsdCode1: this.state.datasource.data.account[0].acisdCode1.substring(
+                            0,
+                            this.state.datasource.data.account[0].acisdCode1
+                              .length - 2
+                          ),
+                          profileDataSourceCca2: this.state.datasource.data.account[0].acisdCode
+                            .toString()
+                            .slice(-2),
+                          profileDataSourceCca3: this.state.datasource.data.account[0].acisdCode1
+                            .toString()
+                            .slice(-2),
                           profileDataSourceMobileNumber: this.state.datasource
-                            ? this.state.datasource.data.account[0].acMobile
-                            : "",
+                            .data.account[0].acMobile,
                           profileDataSourceAlternateMobileNum: this.state
-                            .datasource
-                            ? this.state.datasource.data.account[0].acMobile1
-                            : "",
-                          profileDataSourceEmail: this.state.datasource
-                            ? this.state.datasource.data.account[0].acEmail
-                            : "",
+                            .datasource.data.account[0].acMobile1,
+                          profileDataSourceEmail: this.state.datasource.data
+                            .account[0].acEmail,
                           profileDataSourceAlternateEmail: this.state.datasource
-                            ? this.state.datasource.data.account[0].acEmail1
-                            : "",
-                          profileDataSourceImageName: this.state.datasource
-                            ? this.state.datasource.data.account[0].acImgName
-                            : ""
+                            .data.account[0].acEmail1
                         })
                       }}
                     >
-                      <Image
+                      {/*<Image
                         style={styles.editButtonImageStyle}
-                        source={require("../icons/edit.png")}
-                      />
+                        source={require("./src/components/images/edit.png")}
+                      />*/}
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -196,17 +176,17 @@ class MyProfile extends Component {
                     {this.state.ImageSource == null ? (
                       <Image
                         style={styles.profilePicImageStyle}
-                        source={require("../icons/camwithgradientbg.png")}
-                      />
-                    ) : (
-                      <Image
-                        style={styles.profilePicImageStyle}
                         source={{
                           uri:
-                            "http://mediauploaddev.oyespace.com/Images/" +
-                            this.state.ImageSource
+                            "http://mediaupload.oyespace.com/Images/" +
+                            this.state.datasource.data.account[0].acImgName
                         }}
                       />
+                    ) : (
+                      {/*<Image
+                        style={styles.profilePicImageStyle}
+                        source={require("./src/components/images/camwithgradientbg.png")}
+                      />*/}
                     )}
                   </View>
                 </View>
@@ -227,10 +207,10 @@ class MyProfile extends Component {
                     flexDirection: "row"
                   }}
                 >
-                  <Image
+                  {/*<Image
                     style={styles.editButtonImageStyle1}
-                    source={require("../icons/call.png")}
-                  />
+                    source={require("./src/components/images/call.png")}
+                  />*/}
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
                       ? " " +
@@ -251,10 +231,10 @@ class MyProfile extends Component {
                     flexDirection: "row"
                   }}
                 >
-                  <Image
+                  {/*<Image
                     style={styles.editButtonImageStyle1}
-                    source={require("../icons/mail.png")}
-                  />
+                    source={require("./src/components/images/mail.png")}
+                  />*/}
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
                       ? "  " + this.state.datasource.data.account[0].acEmail
@@ -270,21 +250,18 @@ class MyProfile extends Component {
                   }}
                 >
                   <View>
-                    <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('CreateAssnScreen')}>
+                    <Button bordered style={styles.button1}>
                       <Text>Create Association</Text>
                     </Button>
                     <View />
                     <View style={{ marginTop: hp("2%") }}>
-                      <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('AssnListScreen')}>
+                      <Button bordered style={styles.button1}>
                         <Text>Join Existing Association</Text>
                       </Button>
                     </View>
                   </View>
                 </View>
               </ScrollView>
-            </View>
-            <View style={{bottom:hp('3%'), alignItems:'flex-end', right:hp('3%')}}>
-              <Text>Version: - {DeviceInfo.getVersion()}</Text>
             </View>
           </View>
         </View>
@@ -331,17 +308,17 @@ const styles = StyleSheet.create({
     fontWeight: "500"
   },
   editButtonViewStyle: {
-    flex: 1.5,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center"
   },
   editButtonImageStyle: {
-    width: hp("3.5%"),
-    height: hp("3.5%")
+    width: wp("7%"),
+    height: hp("5%")
   },
   editButtonImageStyle1: {
-    width: hp("3.5%"),
-    height: hp("3.5%")
+    width: wp("6%"),
+    height: hp("4%")
   },
   containerView_ForProfilePicViewStyle: {
     justifyContent: "center",
@@ -395,16 +372,20 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
-
-  image: {
-    width: wp("24%"),
-    height: hp("10%")
+  image1: {
+    width: wp("19%"),
+    height: hp("12%"),
+    marginRight: hp("8%")
   },
   button1: {
     width: hp("40%"),
     justifyContent: "center"
   },
-
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
@@ -432,17 +413,5 @@ const styles = StyleSheet.create({
   }
 })
 
+export default MyProfile
 
-
-
-const mapStateToProps = state => {
-    return {
-        oyeURL: state.OyespaceReducer.oyeURL,
-        MyAccountID: state.UserReducer.MyAccountID,
-        viewImageURL: state.OyespaceReducer.viewImageURL,
-        imageUrl: state.OyespaceReducer.imageUrl,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-    }
-}
-
-export default connect(mapStateToProps)(MyProfile);
