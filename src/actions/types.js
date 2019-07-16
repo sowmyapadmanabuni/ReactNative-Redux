@@ -33,3 +33,5 @@ export const UPDATE_USER_INFO = "update_user_info";
 //Patrolling Reducer
 export const UPDATE_PATROLLING_CP_LIST = "update_patrolling_list";
 export const UPDATE_QR_BASE64 = "update_qr_bas64";
+
+export const UPDATE_STAFF_INFO="update_staff_info"

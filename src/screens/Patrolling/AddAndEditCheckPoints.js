@@ -25,6 +25,7 @@ import EmptyView from "../../components/common/EmptyView";
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import RadioForm, {RadioButton} from 'react-native-simple-radio-button';
 import OyeSafeApi from "../../base/services/OyeSafeApi";
+import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles"
 
 
 const {width, height} = Dimensions.get('window');
@@ -72,13 +73,11 @@ class AddAndEditCheckPoints extends React.Component {
 
     componentWillMount() {
         let params = this.props.navigation.state.params !== undefined ? this.props.navigation.state.params.data.item : null;
-        console.log("Params Received:", params);
         if (params === null) {
             if (Platform.OS === 'ios' ? this.getUserLocation() : this.requestLocationPermission())
                 this.getUserLocation();
         } else {
             let gpsLocationArr = params.cpgpsPnt.split(" ");
-            console.log("GPS LOC:", gpsLocationArr);
             this.setState({
                 isEditing: true,
                 checkPointName: params.cpCkPName,
@@ -137,7 +136,6 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     log(data, val) {
-        console.log(data, val)
     }
 
     renderUserLocation() {
@@ -157,7 +155,7 @@ class AddAndEditCheckPoints extends React.Component {
 
     onRegionChange(region) {
         let self = this;
-        console.log("scdc", region);
+
         self.setState({
             region: {
                 latitude: region.latitude,
@@ -171,7 +169,7 @@ class AddAndEditCheckPoints extends React.Component {
     };
 
     getCurrentLocation() {
-        console.log("Setting GPS");
+
         this.state.buttonVisibility ? this.getUserLocation() : null;
         this.setState({
             gpsLocation: this.state.region.latitude.toFixed(4) + "," + this.state.region.longitude.toFixed(4)
@@ -214,7 +212,7 @@ class AddAndEditCheckPoints extends React.Component {
         }
 
         let stat = self.state.isEditing ? await OyeSafeApi.editCheckPoint(details) : await OyeSafeApi.addCheckPoint(details);
-        console.log("Stat:", stat);
+
         try {
             if (stat !== undefined && stat !== null) {
                 if (stat.success) {
@@ -239,7 +237,6 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     setRadioButtonValue(val, index) {
-        console.log(val, index);
         this.setState({
             selectedValue: val,
             selectedIndex: index,
@@ -253,21 +250,17 @@ class AddAndEditCheckPoints extends React.Component {
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
         return (
             <ScrollView onPress={() => Keyboard.dismiss()}>
-                <View style={styles.container}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerText}>{headerText}</Text>
+                <View style={AddAndEditCheckPointStyles.container}>
+                    <View style={AddAndEditCheckPointStyles.header}>
+                        <Text style={AddAndEditCheckPointStyles.headerText}>{headerText}</Text>
                     </View>
-                    <View style={styles.mapBox}>
+                    <View style={AddAndEditCheckPointStyles.mapBox}>
                         <MapView
-                            ref={map => {
-                                this.map = map
-                            }}
                             provider={PROVIDER_GOOGLE}
-                            style={styles.map}
+                            style={AddAndEditCheckPointStyles.map}
                             region={this.state.region}
                             showsUserLocation={true}
                             showsBuildings={true}
-                            followsUserLocation={true}
                             zoomEnabled={true}
                             minZoomLevel={19}
                             onRegionChange={(region) => this.onRegionChange(region)}
@@ -276,7 +269,7 @@ class AddAndEditCheckPoints extends React.Component {
                         </MapView>
                     </View>
 
-                    <View style={styles.textView}>
+                    <View style={AddAndEditCheckPointStyles.textView}>
                         <TextField
                             fontSize={12}
                             label={'Patrolling Check Point Name'}
@@ -289,33 +282,26 @@ class AddAndEditCheckPoints extends React.Component {
                             onChangeText={(text) => this.setPointName(text)}
                         />
                     </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={styles.gpsView}>
+                    <View style={AddAndEditCheckPointStyles.gpsLocView}>
+                        <View style={AddAndEditCheckPointStyles.gpsView}>
                             <Image
-                                resizeMode={'cover'}
-                                style={styles.gpsIcon}
+                                resizeMode={'contain'}
+                                style={AddAndEditCheckPointStyles.gpsIcon}
                                 source={require('../../../icons/location.png')}
                             />
                             <Text>{this.state.gpsLocation}</Text>
                         </View>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.getCurrentLocation()} style={{
-                            borderWidth: 1,
-                            height: "35%",
-                            width: "35%",
-                            borderRadius: 12,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderColor: this.state.buttonVisibility ? base.theme.colors.primary : base.theme.colors.grey
-                        }}>
+                            onPress={() => this.getCurrentLocation()} style={[AddAndEditCheckPointStyles.setGPS,{borderColor: this.state.buttonVisibility ? base.theme.colors.primary : base.theme.colors.grey
+                        }]}>
                             <Text
                                 style={{color: this.state.buttonVisibility ? base.theme.colors.primary : base.theme.colors.grey}}>Set
                                 GPS</Text>
                         </TouchableHighlight>
                     </View>
                     <EmptyView height={35}/>
-                    <View style={styles.radioView}>
+                    <View style={AddAndEditCheckPointStyles.radioView}>
                         <RadioForm
                             formHorizontal={true}
                             animation={true}
@@ -323,7 +309,7 @@ class AddAndEditCheckPoints extends React.Component {
                             {this.state.types2.map((obj, i) => {
                                 let is_selected = this.state.selectedIndex === i;
                                 return (
-                                    <View key={i} style={styles.radioButtonWrap}>
+                                    <View key={i} style={AddAndEditCheckPointStyles.radioButtonWrap}>
                                         <RadioButton
                                             isSelected={is_selected}
                                             obj={obj}
@@ -332,7 +318,7 @@ class AddAndEditCheckPoints extends React.Component {
                                             labelHorizontal={true}
                                             buttonColor={base.theme.colors.primary}
                                             labelColor={base.theme.colors.black}
-                                            style={[i !== this.state.types2.length - 1 && styles.radioStyle]}
+                                            style={[i !== this.state.types2.length - 1 && AddAndEditCheckPointStyles.radioStyle]}
                                             onPress={(value, index) => {
                                                 this.setRadioButtonValue(value, index)
                                             }}
@@ -343,7 +329,7 @@ class AddAndEditCheckPoints extends React.Component {
                         </RadioForm>
                     </View>
                     <EmptyView height={0}/>
-                    <View style={styles.buttonView}>
+                    <View style={AddAndEditCheckPointStyles.buttonView}>
                         <OSButton onButtonClick={() => this.props.navigation.goBack(null)} oSBText={"Cancel"}
                                   oSBType={"custom"}
                                   oSBBackground={base.theme.colors.red}
@@ -358,85 +344,6 @@ class AddAndEditCheckPoints extends React.Component {
         )
     }
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        height: hp("100%"),
-        backgroundColor: base.theme.colors.white,
-        paddingBottom: Platform.OS === 'ios' ? hp('80%') : hp('70%')
-    },
-    header: {
-        alignItems: 'center',
-        justifyContent: "center",
-        height: hp('10%')
-    },
-    headerText: {
-        fontSize: 15,
-        fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.primary
-    },
-    mapBox: {
-        height: hp('50%'),
-        width: "90%",
-        borderWidth: 1,
-        alignSelf: 'center'
-    },
-    textView: {
-        marginTop: 40,
-        width: '90%',
-        alignSelf: 'center',
-        //height:'20%'
-    },
-    gpsView: {
-        marginTop: 20,
-        width: '50%',
-        marginLeft: "5%",
-        borderBottomWidth: 0.6,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    gpsIcon: {
-        height: 30,
-        width: 30
-    },
-    gpsButtonView: {
-        borderWidth: 1,
-        height: "35%",
-        width: "35%",
-        borderRadius: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-
-    },
-    gpsButton: {
-        color: base.theme.colors.primary
-    },
-    buttonView: {
-        borderWidth: 0,
-        width: "100%",
-        height: hp('10%'),
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        flexDirection: 'row'
-    },
-    map: {
-        ...StyleSheet.absoluteFillObject,
-    },
-    radioView: {
-        height: "20%",
-        width: "90%",
-        alignSelf: 'center'
-    },
-    radioButtonWrap: {
-        marginRight: 5
-    },
-    radioStyle: {
-        paddingRight: 10
-    },
-
-});
-
 const mapStateToProps = state => {
     return {
         oyeURL: state.OyespaceReducer.oyeURL,

@@ -11,6 +11,8 @@ import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 
+
+import cl.json.ShareApplication;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage; // <-- Add this line
@@ -26,7 +28,6 @@ import com.rnfs.RNFSPackage;
 import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
 
 import cl.json.RNSharePackage;
-import cl.json.ShareApplication;
 
 import com.imagepicker.ImagePickerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -86,6 +87,7 @@ public class MainApplication extends Application implements ShareApplication,Rea
             return "index";
         }
     };
+
 
     @Override
     public String getFileProviderAuthority() {

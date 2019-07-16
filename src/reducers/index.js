@@ -5,6 +5,8 @@ import DashboardReducer from "./DashboardReducer";
 import UserReducer from "./UserReducer";
 import OyespaceReducer from "./OyespaceReducer";
 import PatrollingReducer  from './PatrollingReducer'
+import StaffReducer from "./StaffReducer";
+
 
 export default combineReducers({
   NotificationReducer: NotificationReducer,
@@ -12,5 +14,6 @@ export default combineReducers({
   DashboardReducer: DashboardReducer,
   UserReducer: UserReducer,
   OyespaceReducer: OyespaceReducer,
-  PatrollingReducer: PatrollingReducer
+  PatrollingReducer: PatrollingReducer,
+  StaffReducer:StaffReducer,
 });

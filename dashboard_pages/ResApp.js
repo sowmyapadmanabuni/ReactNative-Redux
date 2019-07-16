@@ -165,7 +165,6 @@ const NotificationStack = createStackNavigator({
 });
 
 const ResApp = createStackNavigator({
-
     ResDashBoard: {
         screen: MainScreen,
         navigationOptions: {
@@ -173,7 +172,6 @@ const ResApp = createStackNavigator({
             header: null
         },
     },
-
     MyProfileScreen: {
         screen: MyProfile,
         navigationOptions: {
@@ -562,9 +560,7 @@ const ResApp = createStackNavigator({
 
             headerStyle: {
                 backgroundColor: "#f05555"
-            },
-
-            headerTintColor: "#ffffff"
+            }, headerTintColor: "#ffffff"
         }
     },
     WorkerShiftDetailsScreen: {
@@ -753,6 +749,8 @@ const ResApp = createStackNavigator({
 }, {
     initialRouteName: "ResDashBoard",
     headerMode: "screen"
+
 });
+
 
 export default createAppContainer(ResApp);

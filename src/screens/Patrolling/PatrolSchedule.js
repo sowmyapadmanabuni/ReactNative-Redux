@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, StyleSheet, Switch, Text, TouchableHighlight, View,} from 'react-native';
+import {Dimensions, FlatList, Image, StyleSheet, Switch, Text, TouchableHighlight, View,AsyncStorage,Platform} from 'react-native';
 import {Container, Subtitle} from 'native-base';
 import {connect} from 'react-redux';
 import base from '../../base';
@@ -17,6 +17,7 @@ import MarqueeText from "react-native-marquee";
 import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from "react-native-maps";
 import {captureRef, captureScreen} from "react-native-view-shot";
 import Share from "react-native-share";
+import PatrollingScheduleStyles from "./PatrollingScheduleStyles";
 
 const catsSource = {
     uri: "https://i.imgur.com/5EOyTDQ.jpg"
@@ -73,7 +74,6 @@ class PatrolSchedule extends React.Component {
         let self = this;
 
         let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
-        console.log("Stat in schedule patrolling", stat);
         try {
             if (stat.success) {
                 self.setState({
@@ -90,11 +90,10 @@ class PatrolSchedule extends React.Component {
 
 
     render() {
-        console.log("State:", this.state);
         return (
-            <Container style={styles.container}>
-                <Subtitle style={styles.subtitle}>Patrolling Schedule</Subtitle>
-                <View style={styles.childView}>
+            <Container style={PatrollingScheduleStyles.container}>
+                <Subtitle style={PatrollingScheduleStyles.subtitle}>Patrolling Schedule</Subtitle>
+                <View style={PatrollingScheduleStyles.childView}>
                     {this.state.patrollingCheckPoint.length > 0 ?
                         <FlatList
                             keyExtractor={(item, index) => index.toString()}
@@ -102,14 +101,19 @@ class PatrolSchedule extends React.Component {
                             renderItem={(item, index) => this._renderPatrollingCheckPoints(item, index)}
                             extraData={this.state}
                         /> :
-                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={PatrollingScheduleStyles.noSlotTextView}>
                             <Text>No Patrolling Slots Available</Text>
                         </View>}
                 </View>
                 {this.openMapModal()}
-                <FloatingButton onBtnClick={() => this.props.navigation.navigate('patrollingCheckPoint')}/>
+                <FloatingButton onBtnClick={() =>this.changePage()}/>
             </Container>
         )
+    }
+
+    changePage(){
+        AsyncStorage.removeItem(base.utils.strings.patrolId);
+        this.props.navigation.navigate('patrollingCheckPoint')
     }
 
     mapModal(data) {
@@ -141,7 +145,6 @@ class PatrolSchedule extends React.Component {
 
     changeSnooze(data) {
         let patrolArray = this.state.patrollingCheckPoint;
-        console.log(data);
 
         for (let i in patrolArray) {
             if (patrolArray[i].psPtrlSID === data.psPtrlSID) {
@@ -156,9 +159,10 @@ class PatrolSchedule extends React.Component {
 
     async updateSnooze(data) {
         let detail = {
-            PSSnooze: !data.psSnooze,
+            PSSnooze: data.psSnooze,
             PSPtrlSID: data.psPtrlSID
         };
+
         let stat = await base.services.OyeSafeApi.updateSnooze(detail);
 
     }
@@ -166,57 +170,48 @@ class PatrolSchedule extends React.Component {
     _renderPatrollingCheckPoints(item, index) {
         let data = item.item;
         return (
-            <View style={styles.flatListView}>
+            <View style={PatrollingScheduleStyles.flatListView}>
                 <TouchableHighlight onPress={() => this.mapModal(data)}
                                     underlayColor={base.theme.colors.transparent}
                                     style={{justifyContent: 'center'}}>
                     <View>
                         <Image
-                            style={styles.mapImage}
+                            style={PatrollingScheduleStyles.mapImage}
                             source={require('../../../icons/map1.png')}
                         />
                         <Image
                             resizeMode={'center'}
-                            style={styles.mapImage1}
+                            style={PatrollingScheduleStyles.mapImage1}
                             source={require('../../../icons/zoom.png')}
                         />
                     </View>
                 </TouchableHighlight>
-                <View style={styles.centerView}>
-                    <View style={styles.centerTextView}>
-                        <Text style={styles.centerTextStyle}>{data.psSltName}</Text>
+                <View style={PatrollingScheduleStyles.centerView}>
+                    <View style={PatrollingScheduleStyles.centerTextView}>
+                        <Text style={PatrollingScheduleStyles.centerTextStyle}>{data.psSltName}</Text>
                     </View>
-                    <View style={styles.locationView}>
+                    <View style={PatrollingScheduleStyles.locationView}>
                         <View style={{flexDirection: 'column'}}>
                             <View style={{flexDirection: 'row', marginTop: hp('1%')}}>
                                 <Image
-                                    style={styles.locationImageStyle}
+                                    style={PatrollingScheduleStyles.locationImageStyle}
                                     source={require('../../../icons/entry_time.png')}
                                 />
                                 <Text numberOfLines={1}
-                                      style={styles.locationText}>Start : {moment(data.pseTime).format('hh:mm A')} Stop
-                                    : {moment(data.pssTime).format('hh:mm A')}</Text>
+                                      style={PatrollingScheduleStyles.locationText}>Start : {moment(data.pssTime).format('hh:mm A')} Stop
+                                    : {moment(data.pseTime).format('hh:mm A')}</Text>
                             </View>
-                            <View style={{flexDirection: 'row', marginTop: hp('1%')}}>
+                            <View style={PatrollingScheduleStyles.deviceView}>
                                 <Image
-                                    style={styles.locationImageStyle}
+                                    style={PatrollingScheduleStyles.locationImageStyle}
                                     source={require('../../../icons/device.png')}
                                 />
                                 <Text numberOfLines={1}
-                                      style={styles.locationText}>{data.deName}</Text>
+                                      style={PatrollingScheduleStyles.locationText}>{data.deName}</Text>
                             </View>
-                            <View style={{
-                                flexDirection: 'row',
-                                marginTop: hp('1%'),
-                                justifyContent: 'flex-start'
-                            }}>
+                            <View style={PatrollingScheduleStyles.alarmView}>
                                 <Text numberOfLines={1}
-                                      style={{
-                                          fontFamily: base.theme.fonts.medium,
-                                          color: base.theme.colors.black,
-                                          fontSize: hp('2%'),
-                                          marginLeft: wp('1%')
-                                      }}>Alarm: </Text>
+                                      style={PatrollingScheduleStyles.alarmText}>Alarm: </Text>
                                 <MarqueeText
                                     duration={3000}
                                     marqueeOnStart
@@ -224,22 +219,17 @@ class PatrolSchedule extends React.Component {
                                     marqueeDelay={1000}
                                     marqueeResetDelay={1000}
                                     numberOfLines={1}
-                                    style={{
-                                        width: wp('45%'),
-                                        fontFamily: base.theme.fonts.light,
-                                        color: base.theme.colors.black,
-                                        fontSize: hp('2%'),
-                                    }}>{data.psRepDays}</MarqueeText>
+                                    style={PatrollingScheduleStyles.marqueeText}>{data.psRepDays}</MarqueeText>
                             </View>
                         </View>
                     </View>
                 </View>
-                <View style={styles.rightView}>
+                <View style={PatrollingScheduleStyles.rightView}>
                     <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.editPatrol(data)}>
-                            <Image style={styles.rightImageStyle}
+                            <Image style={PatrollingScheduleStyles.rightImageStyle}
                                    source={require('../../../icons/edit.png')}/>
                         </TouchableHighlight>
                     </ElevatedView>
@@ -248,7 +238,7 @@ class PatrolSchedule extends React.Component {
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.deletePatrolSlot(data)}>
-                            <Image style={styles.rightImageStyle}
+                            <Image style={PatrollingScheduleStyles.rightImageStyle}
                                    source={require('../../../icons/delete.png')}/>
                         </TouchableHighlight>
                     </ElevatedView>
@@ -265,6 +255,9 @@ class PatrolSchedule extends React.Component {
     }
 
     editPatrol(data) {
+
+        let key = base.utils.strings.patrolId;
+        Platform.OS === 'ios'?AsyncStorage.setItem(key,data.psPtrlSID):AsyncStorage.setItem(key,(data.psPtrlSID).toString());
         this.props.navigation.navigate('patrollingCheckPoint', {data: data})
     }
 
@@ -317,70 +310,45 @@ class PatrolSchedule extends React.Component {
             message: "Share Check Point QR",
             url: this.state.previewSource.uri
         };
-        console.log("base 64:", shareImageBase64);
         Share.open(shareImageBase64).then((response) => {
             console.log(response)
         });
     }
 
+
     openMapModal() {
         let data = this.state.cpData;
         return (
             <Modal isVisible={this.state.isModalOpen}
-                   style={{
-                       flex: 1,
-                       backgroundColor: base.theme.colors.transparent,
-                       alignSelf: 'center',
-                       width: wp('90%'),
-                   }}>
+                   style={PatrollingScheduleStyles.mapModal}>
                 <TouchableHighlight ref='View'>
                     <View
-                        style={{
-                            height: hp("65%"),
-                            justifyContent: 'flex-start',
-                            backgroundColor: base.theme.colors.white,
-                        }}>
+                        style={PatrollingScheduleStyles.mapModalView}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
-                            style={{
-                                height: hp('7%'),
-                                justifyContent: 'center',
-                                alignItems: 'flex-end',
-                                alignSelf: 'flex-end',
-                                width: wp('20%'),
-                            }}
+                            style={PatrollingScheduleStyles.mapTouchableView}
                             onPress={() => this.setState({isModalOpen: false})}>
-                            <Text style={{
-                                alignSelf: 'center',
-                                color: base.theme.colors.primary,
-                                fontFamily: base.theme.fonts.medium
-                            }}>Close</Text>
+                            <Text style={PatrollingScheduleStyles.closeText}>Close</Text>
                         </TouchableHighlight>
-                        <View style={{borderWidth: 0, height: hp('12%'), width: wp('85%'), alignSelf: 'center'}}>
+                        <View style={PatrollingScheduleStyles.slotView}>
                             <Text>{data.psSltName}</Text>
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <View style={PatrollingScheduleStyles.shareView}>
                                 <Text
                                     style={{borderWidth: 0}}>Start: {moment(data.pseTime).format('hh:mm A')} Stop: {moment(data.pssTime).format('hh:mm A')}</Text>
                                 <TouchableHighlight
-                                    style={{width: wp('30%'), alignItems: 'flex-end'}}
+                                    style={PatrollingScheduleStyles.shareImageView}
                                     underlayColor={base.theme.colors.transparent}
                                     onPress={this.snapshot("View")}>
                                     <Image
                                         resizeMode={'cover'}
-                                        style={{height: hp('3%'), width: hp('3%')}}
+                                        style={PatrollingScheduleStyles.shareIcon}
                                         source={require('../../../icons/share.png')}/>
                                 </TouchableHighlight>
                             </View>
                             <View style={{flexDirection: 'row'}}>
                                 <Text numberOfLines={1}>Device: {data.deName} Alarm: </Text>
                                 <MarqueeText
-                                    style={{
-                                        fontSize: 12,
-                                        textAlign: "center",
-                                        alignSelf: 'center',
-                                        top: 1,
-                                        width: wp('50%')
-                                    }}
+                                    style={PatrollingScheduleStyles.marqView}
                                     duration={3000}
                                     marqueeOnStart
                                     loop
@@ -402,7 +370,6 @@ class PatrolSchedule extends React.Component {
                                 strokeWidth={4}
                                 lineDashPhase={5}
                             />
-
                             {this.state.splitCoords.map((item, index) => this.renderMarker(item, index))}
                         </MapView>
                     </View>
@@ -412,104 +379,19 @@ class PatrolSchedule extends React.Component {
     }
 
     renderMarker(item, index) {
-        console.log("LLLLL:", item, index);
-
         return (
             <Marker key={index}
                     coordinate={{latitude: item.latitude, longitude: item.longitude}}
                     pinColor={base.theme.colors.transparent}
             >
-                <View style={{
-                    height: hp('2%'),
-                    width: hp('2%'),
-                    borderRadius: hp('1%'),
-                    backgroundColor: base.theme.colors.green
-                }}/>
+                <View style={PatrollingScheduleStyles.markerView}/>
             </Marker>
         )
     }
 
 }
 
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "white"
-    },
-    subtitle: {
-        color: 'orange', fontSize: 20
-    },
-    childView: {
-        justifyContent: 'center',
-        width: "98%",
-        alignSelf: 'center',
-        height: hp('85%')
-    },
-    flatListView: {
-        height: hp('19%'),
-        width: "98%",
-        borderBottomWidth: 1,
-        alignSelf: 'center',
-        flexDirection: 'row'
-    },
-    mapImage: {
-        height: "80%",
-        width: wp("20%")
-    },
-    mapImage1: {
-        height: hp('20%'),
-        width: wp("15%"),
-        position: "absolute",
-        alignSelf: 'flex-end'
-    },
-    centerView: {
-        height: '70%',
-        width: wp("50%"),
-        alignSelf: 'center',
-        marginLeft: wp('1%')
-    },
-    centerTextView: {
-        height: hp('5%'),
-        justifyContent: 'center'
-    },
-    centerTextStyle: {
-        fontFamily: base.theme.fonts.bold,
-        fontSize: 15
-    },
-    locationView: {
-        flexDirection: 'row',
-        height: hp('8%'),
-        width: wp('50%'),
-        alignItems: 'center',
-    },
-    locationImageStyle: {
-        height: hp('3%'),
-        width: hp('3%')
-    },
-    locationText: {
-        width: wp('55%'),
-        fontFamily: base.theme.fonts.light,
-        color: base.theme.colors.black,
-        fontSize: hp('2%'),
-        marginLeft: wp('1%')
-    },
-    rightView: {
-        height: "85%",
-        width: wp('20%'),
-        alignSelf: 'center',
-        alignItems: 'flex-end',
-        justifyContent: 'center'
-    },
-    rightImageStyle: {
-        height: hp('4%'),
-        width: hp('4%')
-    },
-});
-
-
 const mapStateToProps = state => {
-    console.log(state)
     return {
         oyeURL: state.OyespaceReducer.oyeURL,
         champBaseURL: state.OyespaceReducer.champBaseURL,

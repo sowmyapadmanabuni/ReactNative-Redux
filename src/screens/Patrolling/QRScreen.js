@@ -10,6 +10,7 @@ import QRCode from 'react-native-qrcode-svg';
 import EmptyView from "../../components/common/EmptyView";
 import {updateQRBase64} from '../../../src/actions';
 import {connect} from 'react-redux';
+import QRScreenStyles from "./QRScreenStyles";
 
 
 class QRScreen extends React.Component {
@@ -20,7 +21,6 @@ class QRScreen extends React.Component {
             latLong: '0000',
             qrBase64: ''
         };
-        console.log("Props:", props)
     }
 
     componentWillMount() {
@@ -41,18 +41,16 @@ class QRScreen extends React.Component {
                 qrBase64: data
             }, () => self.updateStore())
         });
-
     };
 
     render() {
-        console.log("DNKDVNDV:", this.props);
         return (
-            <View style={styles.container}>
-                <View style={styles.header}>
+            <View style={QRScreenStyles.container}>
+                <View style={QRScreenStyles.header}>
                     <Text
-                        style={styles.headerText}>Patrolling Check Points QR Code</Text>
+                        style={QRScreenStyles.headerText}>Patrolling Check Points QR Code</Text>
                 </View>
-                <View style={styles.qrView}>
+                <View style={QRScreenStyles.qrView}>
                     <QRCode
                         value={this.state.latLong}
                         logo={require('../../../icons/headerLogo.png')}
@@ -65,47 +63,13 @@ class QRScreen extends React.Component {
                 <TouchableHighlight
                     underlayColor={base.theme.colors.transparent}
                     onPress={() => this.props.navigation.goBack(null)}
-                    style={styles.cpTextView}>
-                    <Text style={styles.cpTextStyle}>Patrolling Check Points QR Code</Text>
+                    style={QRScreenStyles.cpTextView}>
+                    <Text style={QRScreenStyles.cpTextStyle}>Patrolling Check Points QR Code</Text>
                 </TouchableHighlight>
             </View>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        height: hp('100%'),
-        width: wp("100%")
-    },
-    header: {
-        alignItems: 'center',
-        justifyContent: "center",
-        height: "10%"
-    },
-    headerText: {
-        fontSize: 15,
-        fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.primary
-    },
-    qrView: {
-        justifyContent: 'center',
-        alignSelf: 'center'
-    },
-    cpTextView: {
-        borderWidth: 2,
-        height: hp('8%'),
-        width: wp('90%'),
-        alignSelf: 'center',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: base.theme.colors.grey
-    },
-    cpTextStyle: {
-        color: base.theme.colors.grey,
-        fontFamily: base.theme.fonts.bold
-    }
-});
 
 const mapStateToProps = state => {
     return {

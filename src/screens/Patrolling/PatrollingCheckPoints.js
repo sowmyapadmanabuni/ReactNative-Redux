@@ -3,11 +3,10 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, StyleSheet, Text, TouchableHighlight, View,Platform} from 'react-native';
+import {Dimensions, FlatList, Image, Text, TouchableHighlight, View} from 'react-native';
 import {connect} from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import OyeSafeApi from "../../base/services/OyeSafeApi";
 import CheckBox from 'react-native-check-box';
 import ElevatedView from 'react-native-elevated-view';
@@ -15,6 +14,7 @@ import EmptyView from "../../components/common/EmptyView";
 import {updateSelectedCheckPoints} from '../../../src/actions';
 import Modal from "react-native-modal";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
+import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
 
 const {height, width} = Dimensions.get('screen');
 
@@ -36,19 +36,25 @@ class PatrollingCheckPoints extends React.Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
+            isEditing: false,
+            selectedArray: [],
+            checkedArray: []
         };
         this.getCheckPoints = this.getCheckPoints.bind(this);
-        console.log("Props:", props);
     };
 
     componentWillMount() {
         this.getCheckPoints();
+
+        if (this.props.navigation.state.params !== undefined) {
+            this.setState({isEditing: true})
+        }
+
         this.updateStore();
 
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("Next props:", nextProps);
         if (nextProps.navigation.state.params !== undefined) {
             if (nextProps.navigation.state.params.isRefreshing === true) {
                 this.getCheckPoints();
@@ -82,7 +88,6 @@ class PatrollingCheckPoints extends React.Component {
             } else {
                 let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
                 let cpListIDArr = cpListIDs.split(",");
-                console.log(cpList, cpListIDArr);
                 for (let i in cpList) {
                     for (let j in cpListIDArr) {
                         if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
@@ -111,14 +116,13 @@ class PatrollingCheckPoints extends React.Component {
     }
 
     render() {
-        console.log("State:", this.state)
         return (
-            <View style={styles.container}>
-                <View style={styles.header}>
+            <View style={PatrollingCheckPointsStyles.container}>
+                <View style={PatrollingCheckPointsStyles.header}>
                     <Text
-                        style={styles.headerText}>{this.state.checkPointArray.length > 0 ? "Select Patrolling Check Points" : ""}</Text>
+                        style={PatrollingCheckPointsStyles.headerText}>{this.state.checkPointArray.length > 0 ? "Select Patrolling Check Points" : ""}</Text>
                 </View>
-                <View style={styles.flatListView}>
+                <View style={PatrollingCheckPointsStyles.flatListView}>
                     {this.state.checkPointArray.length > 0 ?
                         <FlatList
                             keyExtractor={(item, index) => index.toString()}
@@ -154,41 +158,21 @@ class PatrollingCheckPoints extends React.Component {
     openMapModal() {
         return (
             <Modal isVisible={this.state.isModalOpen}
-                   style={{
-                       flex: 1,
-                       backgroundColor: base.theme.colors.transparent,
-                       height: 50,
-                       alignSelf: 'center',
-                       width: wp('90%'),
-                   }}>
+                   style={PatrollingCheckPointsStyles.mapViewModal}>
                 <View
-                    style={{
-                        height: hp("50%"),
-                        justifyContent: 'flex-start',
-                        backgroundColor: base.theme.colors.white,
-                    }}>
+                    style={PatrollingCheckPointsStyles.modalView}>
                     <TouchableHighlight
                         underlayColor={base.theme.colors.transparent}
-                        style={{
-                            height: hp('7%'),
-                            justifyContent: 'center',
-                            alignItems: 'flex-end',
-                            alignSelf: 'flex-end',
-                            width: wp('20%'),
-                        }}
+                        style={PatrollingCheckPointsStyles.modalTouchable}
                         onPress={() => this.setState({isModalOpen: false})}>
-                        <Text style={{
-                            alignSelf: 'center',
-                            color: base.theme.colors.primary,
-                            fontFamily: base.theme.fonts.medium
-                        }}>Close</Text>
+                        <Text style={PatrollingCheckPointsStyles.modalText}>Close</Text>
                     </TouchableHighlight>
                     <MapView
                         ref={map => {
                             this.map = map
                         }}
                         provider={PROVIDER_GOOGLE}
-                        style={styles.map}
+                        style={PatrollingCheckPointsStyles.map}
                         region={this.state.region}
                         showsUserLocation={false}
                         showsBuildings={true}
@@ -214,7 +198,7 @@ class PatrollingCheckPoints extends React.Component {
             <View>
                 <Marker key={1024}
                         pinColor={base.theme.colors.primary}
-                        style={{alignItems: 'center', justifyContent: 'center'}}
+                        style={PatrollingCheckPointsStyles.marker}
                         coordinate={{latitude: lat, longitude: long}}>
 
                 </Marker>
@@ -224,9 +208,7 @@ class PatrollingCheckPoints extends React.Component {
 
 
     mapModal(data) {
-        console.log("Data:", data);
         let res = data.item.cpgpsPnt.split(" ");
-        console.log("res:", res);
         this.setState({
             isModalOpen: !this.state.isModalOpen,
             region: {
@@ -239,10 +221,10 @@ class PatrollingCheckPoints extends React.Component {
     _renderCheckPoints(item) {
         let data = item;
         return (
-            <View style={styles.checkBoxView}>
-                <View style={{width: '10%'}}>
+            <View style={PatrollingCheckPointsStyles.checkBoxView}>
+                <View style={PatrollingCheckPointsStyles.checkPoint}>
                     <CheckBox
-                        style={styles.checkBoxStyle}
+                        style={PatrollingCheckPointsStyles.checkBoxStyle}
                         checkedCheckBoxColor={base.theme.colors.blue}
                         onClick={() => {
                             this.setCheckVal(data)
@@ -254,42 +236,42 @@ class PatrollingCheckPoints extends React.Component {
                                     style={{justifyContent: 'center'}}>
                     <View>
                         <Image
-                            style={styles.mapImage}
+                            style={PatrollingCheckPointsStyles.mapImage}
                             source={require('../../../icons/map1.png')}
                         />
                         <Image
                             resizeMode={'center'}
-                            style={styles.mapImage1}
+                            style={PatrollingCheckPointsStyles.mapImage1}
                             source={require('../../../icons/zoom.png')}
                         />
                     </View>
                 </TouchableHighlight>
-                <View style={styles.centerView}>
-                    <View style={styles.centerTextView}>
-                        <Text style={styles.centerTextStyle}>{data.item.cpCkPName}</Text>
+                <View style={PatrollingCheckPointsStyles.centerView}>
+                    <View style={PatrollingCheckPointsStyles.centerTextView}>
+                        <Text style={PatrollingCheckPointsStyles.centerTextStyle}>{data.item.cpCkPName}</Text>
                     </View>
-                    <View style={styles.locationView}>
+                    <View style={PatrollingCheckPointsStyles.locationView}>
                         <Image
-                            style={styles.locationImageStyle}
+                            style={PatrollingCheckPointsStyles.locationImageStyle}
                             source={require('../../../icons/location.png')}
                         />
                         <Text numberOfLines={1}
-                              style={styles.locationText}>{data.item.cpgpsPnt}</Text>
+                              style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>
                     </View>
                 </View>
-                <View style={styles.rightView}>
+                <View style={PatrollingCheckPointsStyles.rightView}>
                     <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.props.navigation.navigate('qrScreen', {latLongData: data.item.cpgpsPnt})}>
-                            <Image updateCheckListstyle={styles.rightImageStyle}
+                            <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                    source={require('../../../icons/qr-codes.png')}/>
                         </TouchableHighlight>
                     </ElevatedView>
                     <EmptyView height={10}/>
                     <ElevatedView elevation={0}>
                         <TouchableHighlight onPress={() => this.editCheckPoint(data)}>
-                            <Image style={styles.rightImageStyle}
+                            <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                    source={require('../../../icons/edit.png')}/>
                         </TouchableHighlight>
                     </ElevatedView>
@@ -298,7 +280,7 @@ class PatrollingCheckPoints extends React.Component {
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.deleteCP(data)}>
-                            <Image style={styles.rightImageStyle}
+                            <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                    source={require('../../../icons/delete.png')}/>
                         </TouchableHighlight>
                     </ElevatedView>
@@ -331,108 +313,63 @@ class PatrollingCheckPoints extends React.Component {
 
     setCheckVal(item) {
         let cpList = this.state.checkPointArray;
-        console.info("Val:", item.item, cpList);
-        for (let i in cpList) {
-            if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
-                cpList[i].isChecked = !item.item.isChecked
+        let selectedArr = this.state.selectedArray;
+        if (selectedArr.length === 0) {
+            selectedArr.push(item);
+            for (let i in cpList) {
+                if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
+                    cpList[i].isChecked = !item.item.isChecked
+                }
+            }
+            this.setState({
+                checkPointArray: cpList
+            }, () => this.updateStore())
+        } else {
+            let splitLatLongArr = [];
+            for (let i in cpList) {
+                if (cpList[i].isChecked) {
+                    splitLatLongArr.push(cpList[i])
+                }
+            }
+            for (let i in selectedArr) {
+                splitLatLongArr = base.utils.validate.strToArray(selectedArr[selectedArr.length - 1].item.cpgpsPnt);
+            }
+
+            let splitNewLatLongArr = base.utils.validate.strToArray(item.item.cpgpsPnt);
+            let lat1 = parseFloat(splitLatLongArr[0]);
+            let lat2 = parseFloat(splitNewLatLongArr[0]);
+            let long1 = parseFloat(splitLatLongArr[1]);
+            let long2 = parseFloat(splitNewLatLongArr[1]);
+            let pcpStatus = base.utils.validate.distanceMeasurement(lat1, lat2, long1, long2);
+            if (pcpStatus === true) {
+                for (let i in cpList) {
+                    if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
+                        cpList[i].isChecked = !item.item.isChecked
+                    }
+                }
+                this.setState({
+                    checkPointArray: cpList
+                }, () => this.updateStore())
+            } else {
+                if (pcpStatus === 'less') {
+                    alert("Distance between two Checkpoints must be minimum 10 ft")
+                } else if (pcpStatus === 'more') {
+                    alert("Distance between two Checkpoints must be maximum 20 ft")
+                } else {
+                    for (let i in cpList) {
+                        if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
+                            cpList[i].isChecked = !item.item.isChecked
+                        }
+                        this.setState({
+                            checkPointArray: cpList
+                        }, () => this.updateStore())
+                    }
+                }
             }
         }
-
-        this.setState({
-            checkPointArray: cpList
-        }, () => this.updateStore())
     }
 
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        height: hp("100%"),
-        width: '100%',
-        backgroundColor: base.theme.colors.white
-    },
-    header: {
-        alignItems: 'center',
-        justifyContent: "center",
-        height: "10%"
-    },
-    headerText: {
-        fontSize: 15,
-        fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.primary
-    },
-    flatListView: {
-        height: hp('75%'),
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    checkBoxView: {
-        height:Platform.OS === 'ios' ?hp('20%'): hp('17%'),
-        width: "98%",
-        borderBottomWidth: 1,
-        alignSelf: 'center',
-        flexDirection: 'row'
-    },
-    checkBoxStyle: {
-        flex: 1,
-        padding: 10
-    },
-    mapImage: {
-        height: "80%",
-        width: wp("20%")
-    },
-    mapImage1: {
-        height: hp('20%'),
-        width: wp("15%"),
-        position: "absolute",
-        alignSelf: 'flex-end'
-    },
-    centerView: {
-        height: '70%',
-        width: wp("40%"),
-        alignSelf: 'center',
-        marginLeft: wp('4%')
-    },
-    centerTextView: {
-        height: hp('5%'),
-        justifyContent: 'center'
-    },
-    centerTextStyle: {
-        fontFamily: base.theme.fonts.bold,
-        fontSize: 15
-    },
-    locationView: {
-        flexDirection: 'row',
-        height: hp('4%'),
-        width: wp('38%'),
-        alignItems: 'center',
-    },
-    locationImageStyle: {
-        height: hp('3%'),
-        width: hp('3%')
-    },
-    locationText: {
-        width: wp('35%'),
-        fontFamily: base.theme.fonts.thin
-    },
-    rightView: {
-        height: "85%",
-        width: wp('20%'),
-        alignSelf: 'center',
-        alignItems: 'flex-end',
-        justifyContent: 'center'
-    },
-    rightImageStyle: {
-        height: hp('4%'),
-        width: hp('4%')
-    },
-    map: {
-        height: hp('50%'),
-        alignSelf: 'center',
-        width: wp('90%'),
-    },
-});
 
 const mapStateToProps = state => {
     return {

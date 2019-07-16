@@ -75,12 +75,16 @@ export default class OyeSafeApi{
         return await instance.post('oye247/api/v1/PatrollingShifts/create',detail)
     }
 
+    static async updatePatrol(detail){
+        return await instance.post('oye247/api/v1/PatrollingShifts/Update',detail)
+    }
+
     static async deleteCP(detail){
         return await instance.post('oye247/api/v1/CheckPoint/DeleteCheckPoint',detail)
     }
 
     static async deletePatrolSlot(detail){
-        console.log("djnskvnvn",detail)
+        console.log("djnskvnvn",detail);
         return await instance.post('oye247/api/v1/PatrollingShiftSlotDelete/Update',detail)
     }
 
@@ -91,4 +95,16 @@ export default class OyeSafeApi{
     static async getReport(detail){
         return await instance.post('oye247/api/v1/GetPatrollingReportByDates',detail)
     }
+
+    static async getStaffListByAssociationId(associationId){
+        console.log("AsId",associationId);
+        return await instance.get('/GetWorkerListByAssocID/'+associationId)
+
+    }
+
+    static async getStaffReportByDate(input){
+        console.log("Data", input)
+        return await instance.post('/Worker/GetWorkerListByDates/',input)
+    }
+
 }

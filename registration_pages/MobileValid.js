@@ -383,7 +383,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    { updateUserInfo }
-)(MobileValid);
+export default connect(mapStateToProps, { updateUserInfo })(MobileValid);

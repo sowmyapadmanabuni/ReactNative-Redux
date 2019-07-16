@@ -1,5 +1,4 @@
 import React,  { Component }  from 'react';
-
 import {
     View,
     Text,
@@ -50,6 +49,7 @@ class Dashboard extends React.Component {
                             textColor={base.theme.colors.black}
                             inputContainerStyle={{ borderBottomColor: 'transparent' }}
                             dropdownOffset={{top: 10, left: 0}}
+                            rippleOpacity={0}
                             onChangeText={(value, index) =>
                                 this.onAssociationChange(value, index)
                             }
@@ -63,6 +63,7 @@ class Dashboard extends React.Component {
                             textColor="#000"
                             dropdownOffset={{top: 10, left: 0}}
                             dropdownPosition={-3}
+                            rippleOpacity={0}
                             onChangeText={(value, index) => {
                                 updateUserInfo({
                                     prop: "SelectedUnitID",
@@ -79,7 +80,7 @@ class Dashboard extends React.Component {
                         height={this.state.myUnitCardHeight}
                         width={this.state.myUnitCardWidth} cardText={'My Unit'}
                         cardIcon={require("../../../../icons/my_unit.png")}
-                        onCardClick={() => this.changeCardStatus("UNIT")}
+                        onCardClick={()=>this.props.navigation.navigate("Staff")}
                         disabled={this.state.isSelectedCard === "UNIT"}
                     />
                     <CardView
@@ -164,6 +165,11 @@ class Dashboard extends React.Component {
         }
     }
 
+
+    navigateToScreen(){
+        this.props.navigation.navigate("")
+    }
+
     myUnitCard(){
         let invoiceList = [{invoiceNumber: 528, bill: "12,300", dueDate: '11-May-2019', status: "NOT PAID"},
             {invoiceNumber: 527, bill: "12,800", dueDate: '8-May-2019', status: "PAID"}]
@@ -177,21 +183,26 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         cardCount={5}
                         marginTop={20}
-                        backgroundColor={base.theme.colors.cardBackground}/>
+                        backgroundColor={base.theme.colors.cardBackground}
+                    />
                     <CardView
                         height={"100%"}
                         width={"25%"} cardText={'Vehicles'}
                         cardIcon={require("../../../../icons/vehicle.png")}
                         cardCount={4}
                         marginTop={20}
-                        backgroundColor={base.theme.colors.cardBackground}/>
+                        backgroundColor={base.theme.colors.cardBackground}
+                        onCardClick={()=>this.props.navigation.navigate('getStaffReports')
+                        }
+                    />
                     <CardView
                         height={"100%"}
                         width={"25%"} cardText={'Visitors'}
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         cardCount={2}
                         marginTop={20}
-                        backgroundColor={base.theme.colors.cardBackground}/>
+                        backgroundColor={base.theme.colors.cardBackground}
+                        onCardClick={()=>this.props.navigation.navigate("firstTab")}/>
                 </View>
 
                 <View style={Style.elevatedViewSub}>

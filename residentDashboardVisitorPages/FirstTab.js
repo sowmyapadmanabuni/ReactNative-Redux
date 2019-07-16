@@ -10,42 +10,45 @@ import {
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import MyGuests from './src/pages/MyGuests.js';
 import Deliveries from './src/pages/Deliveries.js';
-import Staff from './src/pages/Staff.js';
-import { createMaterialTopTabNavigator, createAppContainer } from "react-navigation"
+import Staff from '../src/screens/Resident/Visitors/Staff/Staff';
+import { createMaterialTopTabNavigator, createAppContainer,TabNavigatorConfig } from "react-navigation"
 import Header from './src/components/common/Header.js';
+import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
+import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport";
 
 class FirstTab extends Component {
     render() {
       const AppTabNavigator = createMaterialTopTabNavigator({
-        MyGuests : { screen: MyGuests,  
-          navigationOptions:{  
-              tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>My Guests</Text>, 
-              
-            //   tabBarIcon: ({ tintColor }) => (  
-            //     <View>  
-            //       <Image style={{tintColor}} source={require('./Image/ic_map_48px.png')}></Image>
-            //     </View>),  
-                
-          }  
-      },  
-      Deliveries: { screen: Deliveries,  
-          navigationOptions:{  
-              tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>Deliveries</Text>, 
-          }  
-      },  
-      Staff:{ screen: Staff,  
-          navigationOptions:{  
-              tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>Staff</Text>,   
-              
-          }  
-      },  
-            
+        MyGuests : { screen: MyGuests,
+          navigationOptions: {
+              tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>My Guests</Text>,
+          }
+      },
+      Deliveries: { screen: Deliveries,
+          navigationOptions:{
+              tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>Deliveries</Text>,
+          }  ,
+
+      },
+      Staff:{ screen: Staff,
+          navigationOptions: {
+              tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>Staff</Text>,
+              title: "Staff Tab",
+          }
+      },
+      getStaffReports:{
+              screen: GetStaffReport,
+              navigationOptions: {
+                  title: "Staff Report",
+              }
+          },
+
       }, {
         initialRouteName: 'MyGuests',
         tabBarPosition:'top',
         tabBarOptions:{
           activeTintColor:"#000",
-          inactiveTintColor:"#000",  
+          inactiveTintColor:"#000",
             style:{
             backgroundColor:'#F4F4F4',
             borderTopWidth:0.5,
@@ -61,9 +64,9 @@ class FirstTab extends Component {
                 width: Dimensions.get('window').width / 3,
             },
             showIcon:true
-  
-      }
-        
+        },
+          lazy:true,
+          backBehavior:"history",
       });
   
       const AppContainer = createAppContainer(AppTabNavigator)

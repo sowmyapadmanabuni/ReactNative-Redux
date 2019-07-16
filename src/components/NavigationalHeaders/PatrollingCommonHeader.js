@@ -18,6 +18,7 @@ class PatrollingCommonHeader extends React.Component {
         super(props);
     }
 
+
     static propTypes = {
         isHidden: PropTypes.bool,
         isReportVisible: PropTypes.bool,
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
         height: "40%",
         width: widthPercentageToDP("15%"),
         borderRadius: 10,
-        marginRight: widthPercentageToDP('20%'),
+        marginRight: widthPercentageToDP('35%'),
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: 'orange'

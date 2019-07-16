@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:name=".MainApplication"
         android:allowBackup="false"
@@ -29,17 +28,17 @@
             android:resource="@color/colorAccent" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCJc5HvTftpIWK1VRupATlDPgYVYqVn2Dc"/>
+            android:value="AIzaSyCJc5HvTftpIWK1VRupATlDPgYVYqVn2Dc" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
-                tools:replace="android:resource"
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
+                android:resource="@xml/filepaths"
+                tools:replace="android:resource" />
         </provider>
 
         <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
@@ -62,6 +61,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
     </application>
 
 </manifest>

@@ -102,7 +102,6 @@ class OTPVerification extends Component {
               if (responseJson.data == null) {
                 this.props.navigation.navigate("RegistrationPageScreen");
               } else {
-                console.log("hiii", "bbbf");
                 const login = moment(new Date()).format("DD-MM-YYYY HH:mm:ss");
                 var today = new Date();
                 date =
@@ -113,7 +112,6 @@ class OTPVerification extends Component {
                     today.getFullYear();
 
                 const { updateUserInfo, MyMobileNumber, MyISDCode } = this.props;
-
                 const {
                   acAccntID,
                   acfName,
@@ -407,7 +405,7 @@ class OTPVerification extends Component {
                 />
               </View>
               <View>
-                {this.state.timer == 1 ? (
+                {this.state.timer === 1 ? (
                     <Text> </Text>
                 ) : (
                     <Text
