@@ -234,7 +234,7 @@ class PatrollingReport extends React.Component {
                             <Text style={PatrollingReportStyles.selType}>Today</Text>
                         </View>
                     </View>
-                    <View style={{alignSelf: 'flex-start', left: Platform.OS === 'ios' ? 44 : 44, top: 25}}>
+                    <View style={{alignSelf: 'flex-start', left: Platform.OS === 'ios' ? 44 : 70, top: 25}}>
                         <View style={PatrollingReportStyles.radioView_1}>
                             <TouchableHighlight onPress={() => this.selectTime(2)}
                                                 underlayColor={base.theme.colors.transparent}
