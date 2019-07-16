@@ -246,7 +246,7 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     render() {
-        base.utils.logger.log(this.state);
+        base.utils.logger.logArgs("",this.state);
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
         return (
             <ScrollView onPress={() => Keyboard.dismiss()}>

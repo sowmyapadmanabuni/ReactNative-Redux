@@ -341,6 +341,7 @@ class PatrollingCheckPoints extends React.Component {
             let long1 = parseFloat(splitLatLongArr[1]);
             let long2 = parseFloat(splitNewLatLongArr[1]);
             let pcpStatus = base.utils.validate.distanceMeasurement(lat1, lat2, long1, long2);
+            console.log("PCP Status:", pcpStatus, lat1, lat2, long1, long2)
             if (pcpStatus === true) {
                 for (let i in cpList) {
                     if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
