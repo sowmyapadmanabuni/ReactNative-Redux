@@ -505,6 +505,7 @@ class MyGuests extends Component {
         </Modal>
   }
   render() {
+    console.log("Dashboard",this.props)
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -684,8 +685,11 @@ const mapStateToProps = state => {
     MyMobileNumber: state.UserReducer.MyMobileNumber,
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-    SelectedUnitID: state.UserReducer.SelectedUnitID
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    dashBoardReducer:state.DashboardReducer
+
   };
 };
+
 
 export default connect(mapStateToProps)(MyGuests);

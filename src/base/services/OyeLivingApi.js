@@ -12,7 +12,7 @@ import React from 'react';
 import utils from '../utils';
 
 let instance = axios.create({
-    baseURL: utils.strings.oyeLivingUrl,
+    baseURL: utils.strings.oyeLivingDashBoard,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
@@ -39,6 +39,7 @@ instance.interceptors.response.use((response) => {
     // } else {
     //     return response.data
     // }
+    return response.data
 
 }, (error) => {
     utils.logger.logArgs(error);
@@ -51,5 +52,17 @@ export default class OyeLivingApi{
 
     static async login(detail){
         return await instance.post('Account/GetAccountDetailsByMobileNumber',detail);
+    }
+
+    static async getAssociationListByAccountId(accountId){ 
+        console.log("ASD",accountId)
+
+        return await instance.get('Member/GetMemberListByAccountID/'+accountId)
+    }
+
+    static async getUnitListByAssoc(assocId){ 
+        console.log("UNIT",assocId)
+
+        return await instance.get('Member/GetMemUniOwnerTenantListByAssoc/'+assocId)
     }
 }

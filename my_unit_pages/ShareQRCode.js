@@ -23,8 +23,8 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import RNFS from "react-native-fs";
-import { captureScreen } from "react-native-view-shot";
-import {connect} from'react-redux';
+import { captureRef, captureScreen } from "react-native-view-shot";
+import { connect } from "react-redux";
 
 class QRCodeGeneration extends Component {
   static navigationOptions = {
@@ -40,7 +40,17 @@ class QRCodeGeneration extends Component {
       imageURI: "",
       dataBase64: "",
 
-      association: ""
+      association: "",
+
+      previewSource: catsSource,
+      error: null,
+      res: null,
+      value: {
+        format: "png",
+        quality: 0.9,
+        result: "tmpfile",
+        snapshotContentContainer: false
+      }
     };
   }
 
@@ -114,12 +124,29 @@ class QRCodeGeneration extends Component {
     console.log(txt);
   };
 
-  takeScreenShot = () => {
+  takeScreenShot = qrcode => {
     const { params } = this.props.navigation.state;
-    captureScreen({
-      format: "jpg",
-      quality: 0.8
-    }).then(
+    (qrcode
+      ? captureRef(this.refs[qrcode], this.state.value)
+      : 
+      captureScreen(this.state.value)
+    )
+    .then(
+      res =>
+        this.state.value.result !== "tmpfile"
+          ? res
+          : new Promise((success, failure) =>
+              // just a test to ensure res can be used in Image.getSize
+              Image.getSize(
+                res,
+                (width, height) => (
+                  console.log(res, width, height), success(res)
+                ),
+                failure
+              )
+            )
+    )
+    .then(
       //callback function to get the result URL of the screnshot
       uri => {
         this.setState({ imageURI: uri }),
@@ -156,7 +183,9 @@ class QRCodeGeneration extends Component {
 
   associationName = () => {
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/association/getAssociationList/${
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/association/getAssociationList/${
         this.props.navigation.state.params.value.asAssnID
       }`,
       {
@@ -323,20 +352,29 @@ class QRCodeGeneration extends Component {
           <Text style={styles.titleOfScreen}>Share QR Code</Text>
           {/* <Text>{this.state.qrShare}</Text> */}
 
-          <View
+          <View ref="qrcode"
             style={{
               flex: 1,
               backgroundColor: "#F4F4F4",
               flexDirection: "column"
             }}
           >
-            <View style={{ flexDirection: "column",marginTop:hp('2%'),backgroundColor:'#fff',height:hp('16%') }}>
-              <View style={{ flexDirection: "row", flex: 1,marginTop:hp('1.4%') }}>
-                <View style={{ flex: 0.9,marginLeft:hp('2%') }}>
-                  <Text style={{color:'grey'}}>Association Name</Text>
+            <View
+              style={{
+                flexDirection: "column",
+                marginTop: hp("2%"),
+                backgroundColor: "#fff",
+                height: hp("16%")
+              }}
+            >
+              <View
+                style={{ flexDirection: "row", flex: 1, marginTop: hp("1.4%") }}
+              >
+                <View style={{ flex: 0.9, marginLeft: hp("2%") }}>
+                  <Text style={{ color: "grey" }}>Association Name</Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{color:'black',fontWeight:'500'}}>
+                  <Text style={{ color: "black", fontWeight: "500" }}>
                     {this.state.association === ""
                       ? ""
                       : this.state.association}
@@ -344,21 +382,21 @@ class QRCodeGeneration extends Component {
                 </View>
               </View>
               <View style={{ flexDirection: "row", flex: 1 }}>
-                <View style={{ flex: 0.9,marginLeft:hp('2%')  }}>
-                  <Text style={{color:'grey'}}>Purpose of Visit</Text>
+                <View style={{ flex: 0.9, marginLeft: hp("2%") }}>
+                  <Text style={{ color: "grey" }}>Purpose of Visit</Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{color:'black',fontWeight:'500'}}>
+                  <Text style={{ color: "black", fontWeight: "500" }}>
                     {this.props.navigation.state.params.value.inpOfInv}
                   </Text>
                 </View>
               </View>
               <View style={{ flexDirection: "row", flex: 1 }}>
-                <View style={{ flex: 0.9,marginLeft:hp('2%') }}>
-                  <Text style={{color:'grey'}}>Invited On</Text>
+                <View style={{ flex: 0.9, marginLeft: hp("2%") }}>
+                  <Text style={{ color: "grey" }}>Invited On</Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{color:'#38BCDB',fontWeight:'500'}}>
+                  <Text style={{ color: "#38BCDB", fontWeight: "500" }}>
                     {this.props.navigation.state.params.value.insDate.substring(
                       0,
                       10
@@ -373,21 +411,23 @@ class QRCodeGeneration extends Component {
               <View style={{ flexDirection: "row", flex: 1 }}>
                 {this.props.navigation.state.params.value.inVisCnt === 1 ? (
                   <View style={{ flex: 1, flexDirection: "row" }}>
-                    <View style={{ flex: 0.9,marginLeft:hp('2%') }}>
-                      <Text style={{color:'grey'}}>Total Guest</Text>
+                    <View style={{ flex: 0.9, marginLeft: hp("2%") }}>
+                      <Text style={{ color: "grey" }}>Total Guest</Text>
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{color:'black',fontWeight:'500'}}> {this.props.navigation.state.params.value.inVisCnt}
+                      <Text style={{ color: "black", fontWeight: "500" }}>
+                        {" "}
+                        {this.props.navigation.state.params.value.inVisCnt}
                       </Text>
                     </View>
                   </View>
                 ) : (
                   <View style={{ flex: 1, flexDirection: "row" }}>
-                    <View style={{ flex: 0.9,marginLeft:hp('2%')}}>
-                      <Text style={{color:'grey'}}>Total Guests</Text>
+                    <View style={{ flex: 0.9, marginLeft: hp("2%") }}>
+                      <Text style={{ color: "grey" }}>Total Guests</Text>
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{color:'black',fontWeight:'500'}}>
+                      <Text style={{ color: "black", fontWeight: "500" }}>
                         {this.props.navigation.state.params.value.inVisCnt}
                       </Text>
                     </View>
@@ -399,7 +439,7 @@ class QRCodeGeneration extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "center",
-                marginTop:hp('3%'),
+                marginTop: hp("3%")
               }}
             >
               <QRCode
@@ -423,7 +463,7 @@ class QRCodeGeneration extends Component {
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
-                marginBottom:hp('5%')
+                marginBottom: hp("5%")
               }}
             >
               {/* <TouchableOpacity onPress={()=>{
@@ -449,7 +489,7 @@ class QRCodeGeneration extends Component {
                     justifyContent: "center",
                     alignItems: "center",
                     marginTop: hp("5%"),
-                    backgroundColor:'#fff',
+                    backgroundColor: "#fff",
                     borderColor: "#797979"
                   }}
                 >
@@ -472,8 +512,8 @@ class QRCodeGeneration extends Component {
                 <Text style={{color:'white',fontSize:24,fontWeight:'500'}}>Share</Text>
             </Button> */}
             </View>
-          
           </View>
+        
         </ScrollView>
       </View>
     );
@@ -486,7 +526,7 @@ const mapStateToProps = state => {
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
     MyOYEMemberID: state.UserReducer.MyOYEMemberID,
-    SelectedMemberID: state.UserReducer.SelectedMemberID,
+    SelectedMemberID: state.UserReducer.SelectedMemberID
   };
 };
 

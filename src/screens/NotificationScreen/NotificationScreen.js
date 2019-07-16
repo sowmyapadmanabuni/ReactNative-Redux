@@ -6,7 +6,8 @@ import {
   FlatList,
   ActivityIndicator,
   Text,
-  Platform,Linking,
+  Platform,
+  Linking,
   RefreshControl,
   TouchableWithoutFeedback,
   Easing,
@@ -45,6 +46,7 @@ class NotificationScreen extends Component {
   componentDidMount() {
     // console.log("didmount");
     // this.gateAppNotif()
+    this.doNetwork();
   }
   keyExtractor = (item, index) => index.toString();
 
@@ -164,10 +166,13 @@ class NotificationScreen extends Component {
     for (let i in notifications) {
       if (item === notifications[i].ntid) {
         console.log("Notification", notifications[i].sbMemID);
+        //10906
         fetch(
           `http://${
             this.props.oyeURL
-          }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/10906`,
+          }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
+            notifications[i].sbMemID
+          }`,
           {
             method: "GET",
             headers: {
@@ -289,6 +294,7 @@ class NotificationScreen extends Component {
                   <Text>Gate App Notification</Text>
                   <Text>{item.ntDesc} </Text>
                 </View>
+
                 <Collapsible
                   duration={300}
                   style={{ flex: 1 }}
@@ -298,69 +304,70 @@ class NotificationScreen extends Component {
                     this.doNetwork(item.ntid, notifications)
                   }
                 >
+                  {item.sbMemID === 0 ? (
+                    <View>
+                      <Text>No Data</Text>
+                    </View>
+                  ) : (
                     <View style={{ flexDirection: "column" }}>
-                      <View style={{ flexDirection: "column" }}>
-                        <View
-                          style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <View style={{ flexDirection: "row" }}>
-                            <Text style={{ fontSize: hp("2%") }}>
-                              {this.state.gateDetails !== null
-                                ? this.state.gateDetails.vlGtName
-                                : ""}{" "}
-                              Association
-                            </Text>
-                          </View>
-                        </View>
-
-                        
-                      </View>
-
                       <View
                         style={{
-                          flexDirection: "column",
-                          margin: hp("1%"),
                           justifyContent: "center",
                           alignItems: "center"
                         }}
                       >
-                        <View>
+                        <View style={{ flexDirection: "row" }}>
                           <Text style={{ fontSize: hp("2%") }}>
                             {this.state.gateDetails !== null
-                              ? this.state.gateDetails.vlfName
-                              : ""}
+                              ? this.state.gateDetails.vlGtName
+                              : ""}{" "}
+                            Association
                           </Text>
                         </View>
-                        <View style={{ justifyContent: "center", alignItems: "center" }}>
-                  {this.state.gateDetails.vlEntryImg == "" ? (
-                    <Image
-                    style={styles.img}
-                      // style={styles.img}
-                      source={require('../../../icons/placeholderImg.png')}
-                      />
-                  ) : (
-                      <Image
-                        style={styles.img}
-                        // style={styles.img}
-                        source={{
-                          uri: "http://mediaupload.oyespace.com" + this.state.gateDetails.vlEntryImg
-                        }}
-                        
-                      />
-
-                    )}
-                </View>
-                        <View>
+                      </View>
+                      <View style={{ flexDirection: "row" }}>
+                        <View
+                          style={{
+                            alignItems: "flex-start",
+                            justifyContent: "flex-start"
+                          }}
+                        >
+                          {this.state.gateDetails.vlEntryImg == "" ? (
+                            <Image
+                              style={styles.img}
+                              // style={styles.img}
+                              source={require("../../../icons/placeholderImg.png")}
+                            />
+                          ) : (
+                            <Image
+                              style={styles.img}
+                              // style={styles.img}
+                              source={{
+                                uri:
+                                  "http://mediaupload.oyespace.com" +
+                                  this.state.gateDetails.vlEntryImg
+                              }}
+                            />
+                          )}
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start"
+                          }}
+                        >
                           <View
                             style={{
-                              flexDirection: "row",
-                              margin: hp("1%"),
-                              justifyContent: "space-between"
+                              marginLeft: hp("1%"),
+                              flexDirection: "column"
                             }}
                           >
+                            <Text style={{ fontSize: hp("2%") }}>
+                              {this.state.gateDetails !== null
+                                ? this.state.gateDetails.vlfName
+                                : ""}
+                            </Text>
                             <View style={{ flexDirection: "row" }}>
                               <Text style={{ color: "#000" }}>
                                 {this.state.gateDetails !== null
@@ -374,46 +381,60 @@ class NotificationScreen extends Component {
                               </Text>
                             </View>
                           </View>
-                        </View>
-                        <TouchableOpacity
-                          onPress={() => {
-                            {
-                              Platform.OS === "android"
-                                ? Linking.openURL(
-                                    `tel:${this.state.gateDetails.vlMobile}`
-                                  )
-                                : Linking.openURL(
-                                    `tel:${this.state.gateDetails.vlMobile}`
-                                  );
-                            }
-                          }}
-                        >
-                          <View style={{ flexDirection: "row" }}>
-                            <View>
-                              <Text style={{ color: "#ff8c00" }}>
-                                {this.state.gateDetails !== null
-                                  ? this.state.gateDetails.vlMobile
-                                  : ""}
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                width: hp("2%"),
-                                height: hp("2%"),
-                                marginLeft: hp("0.5%")
-                              }}
-                            >
-                              <Image
-                                style={{
-                                  width: hp("2%"),
-                                  height: hp("2%")
+                          <View
+                            style={{
+                              width: hp("18%"),
+                              alignItems: "flex-end"
+                            }}
+                          >
+                            <View style={{}}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  {
+                                    Platform.OS === "android"
+                                      ? Linking.openURL(
+                                          `tel:${
+                                            this.state.gateDetails.vlMobile
+                                          }`
+                                        )
+                                      : Linking.openURL(
+                                          `tel:${
+                                            this.state.gateDetails.vlMobile
+                                          }`
+                                        );
+                                  }
                                 }}
-                                source={require("../../../icons/call.png")}
-                              />
+                              >
+                                <View style={{ flexDirection: "row" }}>
+                                  <View>
+                                    <Text style={{ color: "#ff8c00" }}>
+                                      {this.state.gateDetails !== null
+                                        ? this.state.gateDetails.vlMobile
+                                        : ""}
+                                    </Text>
+                                  </View>
+                                  <View
+                                    style={{
+                                      width: hp("2%"),
+                                      height: hp("2%"),
+                                      marginLeft: hp("0.5%")
+                                    }}
+                                  >
+                                    <Image
+                                      style={{
+                                        width: hp("2%"),
+                                        height: hp("2%")
+                                      }}
+                                      source={require("../../../icons/call.png")}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
                             </View>
                           </View>
-                        </TouchableOpacity>
+                        </View>
                       </View>
+
                       <View
                         style={{
                           flexDirection: "column"
@@ -515,27 +536,9 @@ class NotificationScreen extends Component {
                             ""
                           )}
                         </View>
-
-                        {/* <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                  <View style={{flexDirection:'row'}}>
-                    <Text style={{color:'#ff8c00'}}>Entry Approved by: </Text>
-                    <Text>Pawan Verma</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
-                    <Image/>
-                  </View>
-                </View> */}
-                        {/* <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                  <View style={{flexDirection:'row'}}>
-                    <Text style={{color:'#ff8c00'}}>Exit Approved by: </Text>
-                    <Text>Sunil Raman</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
-                    <Image/>
-                  </View>
-                </View> */}
                       </View>
                     </View>
+                  )}
                 </Collapsible>
               </View>
             )}

@@ -33,6 +33,9 @@ export const GET_MEMBERLIST_SUCCESS = "get_memberlist_success";
 export const GET_MEMBERLIST_FAILED = "get_memberlist_failed";
 export const UPDATE_DROPDOWN_INDEX = "update_dropdown_index";
 
+
 // User Reducer
 export const UPDATE_USER_INFO = "update_user_info";
+
+export const UPDATE_STAFF_INFO="update_staff_info"
 

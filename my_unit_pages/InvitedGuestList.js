@@ -44,6 +44,7 @@ class MyGuests extends Component {
   }
   componentDidMount() {
     this.getInvitationList();
+    console.log('$@#$#%#$%$#%@$@#%@#%$# Association ID',this.props.navigation.state.params.assocId) 
   }
 
   getInvitationList = () => {
@@ -160,6 +161,7 @@ class MyGuests extends Component {
   };
 
   render() {
+
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>

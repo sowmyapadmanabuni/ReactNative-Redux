@@ -563,6 +563,7 @@ class NotificationDetailScreen extends Component {
                 </View> */}
 
               </View>
+            
             </View>
           </Card>
         
