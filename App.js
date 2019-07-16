@@ -210,6 +210,7 @@ const DashStack = createStackNavigator(
 class Loading extends Component {
   constructor(props) {
     super(props);
+    this.state = { text: 'Useless Placeholder' };
   }
 
   componentDidMount() {
@@ -224,42 +225,19 @@ class Loading extends Component {
 
   render() {
     return (
-      <Fragment>
-        <SafeAreaView style={{ flex: 0, backgroundColor: "#ff8c00" }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-          <View style={styles.container}>
-            <View style={{ flex: 1, flexDirection: "column" }}>
-              <View style={styles.ImageContainer}>
-                <Image
-                  source={require("./icons/headerLogo.png")}
-                  style={styles.topImageLogo}
-                />
-              </View>
-              <View style={styles.activityIndicatorContainer}>
-                {/* <ActivityIndicator size="large" color="orange" /> */}
-                <Spinner
-                  isVisible={true}
-                  color={"orange"}
-                  size={50}
-                  type={"Circle"}
-                />
-              </View>
-              <View style={styles.textContainer}>
-                <Text style={styles.text}>Your safety is priceless</Text>
-              </View>
-              <View style={styles.footerImageContainer}>
-                <Image
-                  source={require("./icons/img4.jpg")}
-                  style={styles.bottomImage}
-                />
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
-      </Fragment>
+      <View>
+        <TextInput
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            onChangeText={(text) => this.setState({text})}
+            value={this.state.text}
+        />
+      </View>
     );
   }
 }
+
+//^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$
+//(([A-Za-z]){2,3}(|-)([0-9]){1,2}(|-)([A-Za-z]){1,3}(|-)([0-9]){1,4})|(([A-Za-z]){2,3}(|-)([0-9]){1,4})
 
 const mapStateToProps = state => {
   return {

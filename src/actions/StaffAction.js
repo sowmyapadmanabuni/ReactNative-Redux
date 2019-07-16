@@ -10,3 +10,4 @@ export const updateStaffInfo = ({ prop, value }) => {
         })
     }
 }
+
