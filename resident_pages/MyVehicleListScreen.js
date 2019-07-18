@@ -3,8 +3,9 @@ import {Platform, StyleSheet, Text, View, TouchableOpacity,Dimensions,SafeAreaVi
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { NavigationEvents } from 'react-navigation';
 // import Swipeout from 'react-native-swipeout';
+import { connect } from "react-redux";
 
-export default class VehicleList extends Component {
+class VehicleList extends Component {
 
     static navigationOptions = {
         title: "Vehicle List",
@@ -25,7 +26,7 @@ export default class VehicleList extends Component {
       // this.deleteCell()
     }
     getVehicleList = () => {
-      fetch('http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/13'
+      fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`
         , {
           method: 'GET',
           headers: {
@@ -425,3 +426,14 @@ const styles = StyleSheet.create({
     marginRight: hp("3%")
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    
+    dashBoardReducer:state.DashboardReducer //u have to call this in file where u need ids
+
+  };
+};
+
+
+export default connect(mapStateToProps)(VehicleList);

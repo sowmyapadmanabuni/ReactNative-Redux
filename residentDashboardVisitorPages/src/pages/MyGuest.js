@@ -179,10 +179,11 @@ class MyGuests extends Component {
   };
 
   getInvitationList = () => {
+    console.log("association id in guest", this.props)
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/8/True`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True`,
       {
         method: "GET",
         headers: {
@@ -228,7 +229,7 @@ class MyGuests extends Component {
     fetch(
       `http://${
         this.props.oyeURL
-      }/oyeliving/api/v1/association/getAssociationList/8`,
+      }/oyeliving/api/v1/association/getAssociationList/${this.props.dashBoardReducer.assId}`,
       {
         method: "GET",
         headers: {
@@ -505,7 +506,7 @@ class MyGuests extends Component {
         </Modal>
   }
   render() {
-    console.log("Dashboard",this.props)
+    console.log("Dashboard",this.props.dashBoardReducer) 
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -686,7 +687,7 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
-    dashBoardReducer:state.DashboardReducer
+    dashBoardReducer:state.DashboardReducer 
 
   };
 };

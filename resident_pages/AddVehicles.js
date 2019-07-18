@@ -28,13 +28,14 @@ import { Card, CardItem, Form, Item, Label, Input, Button } from "native-base";
 // import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
+import { connect } from "react-redux";
 
 var radio_props = [
   { label: "Two Wheeler", value: 0 },
   { label: "Four Wheeler", value: 1 }
 ];
 
-export default class AddVehicle extends Component {
+class AddVehicle extends Component {
   static navigationOptions = {
     title: "Add Vehicle",
     header: null
@@ -102,11 +103,11 @@ export default class AddVehicle extends Component {
           VEType: value,
           VEMakeMdl: vehName,
           VEStickNo: vehStickerNum,
-          UNUnitID: "28",
-          MEMemID: "13",
+          UNUnitID: this.props.dashBoardReducer.assId,
+          // MEMemID: "13",
           UPID: "28",
           UPLNum: parkingSlotNum,
-          ASAssnID: "2"
+          ASAssnID: this.props.dashBoardReducer.uniID
         })
       })
         .then(response => response.json())
@@ -356,3 +357,14 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    
+    dashBoardReducer:state.DashboardReducer //u have to call this in file where u need ids
+
+  };
+};
+
+
+export default connect(mapStateToProps)(AddVehicle);

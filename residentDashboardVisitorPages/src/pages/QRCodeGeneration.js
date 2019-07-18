@@ -171,7 +171,7 @@ class QRCodeGeneration extends Component {
   associationName = () => {
     fetch(
       `http://${this.props.oyeURL}/oyeliving/api/v1/association/getAssociationList/${
-        this.props.navigation.state.params.value.asAssnID
+        this.props.dashBoardReducer.assId
       }`,
       {
         method: "GET",
@@ -499,6 +499,7 @@ const mapStateToProps = state => {
     SelectedUnitID: state.UserReducer.SelectedUnitID,
     MyOYEMemberID: state.UserReducer.MyOYEMemberID,
     SelectedMemberID: state.UserReducer.SelectedMemberID,
+    dashBoardReducer:state.DashboardReducer
   };
 };
 

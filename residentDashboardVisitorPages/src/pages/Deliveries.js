@@ -332,7 +332,7 @@ class ViewVisitorsList extends Component {
     console.log('ff')
     console.log('componentdidmount')
     // http://api.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/1/2018-11-26
-    const url = 'http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/' + this.props.SelectedAssociationID + '/' + this.state.dobText;
+    const url = 'http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/' + this.props.dashBoardReducer.assId + '/' + this.state.dobText;
     console.log(url)
     fetch(url, {
       method: 'GET',
@@ -511,7 +511,8 @@ const mapStateToProps = state => {
     MyMobileNumber: state.UserReducer.MyMobileNumber,
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-    SelectedUnitID: state.UserReducer.SelectedUnitID
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    dashBoardReducer:state.DashboardReducer
 
   };
 };

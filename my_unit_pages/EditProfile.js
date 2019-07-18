@@ -129,8 +129,8 @@ class EditProfile extends Component {
     data.append("photo", {
       name: photo.fileName,
       type: photo.type,
-      uri:
-        Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+      // uri:
+      //   Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
     })
 
     console.log(data)
@@ -158,19 +158,19 @@ class EditProfile extends Component {
     } else if (lastname > 50) {
       Alert.alert("Last name should be less than 50 characters")
     }
-    // else if (mobilenumber.length < 10) {
-    //   Alert.alert("Primary mobile number should contain 10 numerics.")
-    // } else if (reg.test(mobilenumber) === false) {
-    //   Alert.alert(
-    //     "Primary mobile number should not contain special characters."
-    //   )
-    // } else if (alternatemobilenumber.length < 10) {
-    //   Alert.alert("Alternate mobile number should contain 10 numerics.")
-    // } else if (reg.test(alternatemobilenumber) === false) {
-    //   Alert.alert(
-    //     "Alternate mobile number should not contain special characters."
-    //   )
-    // }
+    else if (mobilenumber.length < 10) {
+      Alert.alert("Primary mobile number should contain 10 numerics.")
+    } else if (reg.test(mobilenumber) === true) {
+      Alert.alert(
+        "Primary mobile number should not contain special characters."
+      )
+    } else if (alternatemobilenumber.length < 10) {
+      Alert.alert("Alternate mobile number should contain 10 numerics.")
+    } else if (reg.test(alternatemobilenumber) === true) {
+      Alert.alert(
+        "Alternate mobile number should not contain special characters."
+      )
+    }
     else if (email.length == 0) {
       Alert.alert("Primary email cannot be empty")
     } else if (regemail.test(email) === false) {

@@ -222,7 +222,7 @@ else{
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
       body: JSON.stringify({
-        "UnUnitID"  :  this.props.SelectedUnitID,
+        "UnUnitID"  :  this.props.dashBoardReducer.uniID,
         "INFName"   : fname,
         "INLName"   : lname,
         "INMobile"  : "+"+ callingCode + mobNum,
@@ -234,7 +234,7 @@ else{
         "INEDate"   : dobDate1 + time1,
         "INPOfInv"  : purpose,
         "INMultiEy" : switches,
-        "ASAssnID"  : this.props.SelectedAssociationID,
+        "ASAssnID"  : this.props.dashBoardReducer.assId,
         "INQRCode"  : 1
       })
     })
@@ -502,7 +502,8 @@ const mapStateToProps = state => {
     MyMobileNumber: state.UserReducer.MyMobileNumber,
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-    SelectedUnitID: state.UserReducer.SelectedUnitID
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    dashBoardReducer:state.DashboardReducer
 
   };
 };
