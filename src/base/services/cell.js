@@ -24,9 +24,7 @@ export class Cell extends Component {
         const borderTopWidth = (borderStyle && borderStyle.borderWidth) || 1;
         const borderRightWidth = borderTopWidth;
         const borderColor = (borderStyle && borderStyle.borderColor) || '#000';
-        console.log('PropsCell',this.props,data[0],data[1])
-
-        return (
+     return (
             <TouchableOpacity
                 style={[
                     {

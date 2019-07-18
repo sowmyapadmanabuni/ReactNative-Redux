@@ -169,6 +169,7 @@ dependencies {
     implementation project(':react-native-image-picker')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-firebase')
+    implementation project(':react-native-maps')
     implementation project(':react-native-device-info')
 
 

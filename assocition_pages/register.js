@@ -75,7 +75,7 @@ class RegisterMe extends Component {
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
     } else {
-      anu = {
+      let anu = {
         ASAssnID: unitList.asAssnID,
         BLBlockID: unitList.blBlockID,
         UNUnitID: unitList.unUnitID,
@@ -90,6 +90,10 @@ class RegisterMe extends Component {
       };
 
       let champBaseURL = this.props.champBaseURL;
+
+      console.log(champBaseURL+"/association/join");
+      console.log(anu);
+
 
       axios
         .post(
@@ -197,6 +201,24 @@ class RegisterMe extends Component {
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
                   // Send a push notification to the admin here
+
+                    console.log(JSON.stringify({
+                        userID: userID.toString(),
+                        sbUnitID: sbUnitID.toString(),
+                        unitName: unitName.toString(),
+                        sbSubID: sbSubID.toString(),
+                        sbRoleId: sbRoleId,
+                        sbMemID: sbMemID.toString(),
+                        sbName: sbName,
+                        associationID: AssnId.toString(),
+                        associationName: associationName,
+                        ntType: ntType,
+                        ntTitle: ntTitle,
+                        ntDesc: ntDesc,
+                        roleName: roleName,
+                        soldDate: soldDate,
+                        occupancyDate: occupancyDate
+                    }));
                   axios
                     .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
                       userID: userID.toString(),
@@ -345,7 +367,7 @@ class RegisterMe extends Component {
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
     } else {
-      anu = {
+      let anu = {
         ASAssnID: unitList.asAssnID,
         BLBlockID: unitList.blBlockID,
         UNUnitID: unitList.unUnitID,

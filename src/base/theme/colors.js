@@ -14,10 +14,11 @@ const colors = {
     transparent:"transparent",
     red:"#ff1624",
     darkgrey:'#3f3f3f',
-    mediumgrey:'#696969',
+    mediumGrey:'#696969',
     lightgrey:'#d3d3d3',
     invoiceList:'#f4f4f4',
-    cardBackground:"#fafafa"
+    cardBackground:"#fafafa",
+    green:"#32CD32"
 }
 
 export default colors;

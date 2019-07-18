@@ -272,7 +272,6 @@ class Staff extends React.Component {
                 fromDate = moment().format(),
                     toDate = fromDate;
             }
-            console.log('If')
             const {updateStaffInfo} = this.props;  //Copy Rights @Sarthak Mishra
             updateStaffInfo({prop: "startDate", value: fromDate})
             updateStaffInfo({prop: "endDate", value: toDate})
@@ -285,9 +284,6 @@ class Staff extends React.Component {
 
             this.props.navigation.navigate('getStaffReports',)
         } else {
-            console.log('If')
-
-
             let initialDateString = moment(fromDate);
             let endDateString = moment(toDate)
             let duration = moment.duration(endDateString.diff(initialDateString));
@@ -361,5 +357,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {updateStaffInfo})(Staff);
-
-

@@ -51,7 +51,7 @@ const HeaderStyles = StyleSheet.create({
     },
     statusText: {
         fontSize: 10,
-        color: base.theme.colors.mediumgrey,
+        color: base.theme.colors.mediumGrey,
     },
     appLogoStyles: {
         height: 80,

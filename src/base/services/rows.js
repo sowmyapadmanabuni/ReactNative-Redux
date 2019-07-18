@@ -13,13 +13,11 @@ export class Row extends Component {
 
     render() {
         const { data, style, widthArr, height, flexArr, textStyle,onClickIcon, ...props } = this.props;
-        console.log('Props',this.props)
         let width = widthArr ? sum(widthArr) : 0;
 
         return data ? (
             <View style={[height && { height }, width && { width }, styles.row, style]}>
                 {data.map((item, i) => {
-                    console.log("Data sending to Cell",item)
                     const flex = flexArr && flexArr[i];
                     const wth = widthArr && widthArr[i];
                     return <Cell key={i} data={item} width={wth} height={height} flex={flex} textStyle={textStyle} onClickIcon={this.props.onClickIcon.bind(this)} {...props} />;
