@@ -66,26 +66,32 @@ class Header extends React.Component {
 
     const BadgedIcon = withBadge(count)(Icon);
 
-    if (count >= 1) {
-      return (
-        <BadgedIcon
-          color="#FF8C00"
-          type="material"
-          name="notifications"
-          size={hp("4%")}
-        />
-      );
-    } else
-      return (
-        <Icon
-          color="#FF8C00"
-          type="material"
-          name="notifications"
-          size={hp("4%")}
-        />
-      );
-
-    console.log("count", count);
+    // if (count >= 1) {
+    //   return (
+    //     <BadgedIcon
+    //       color="#FF8C00"
+    //       type="material"
+    //       name="notifications"
+    //       size={hp("4%")}
+    //     />
+    //   );
+    // } else
+    //   return (
+    //     <Icon
+    //       color="#FF8C00"
+    //       type="material"
+    //       name="notifications"
+    //       size={hp("4%")}
+    //     />
+    //   );
+    return (
+      <Icon
+        color="#FF8C00"
+        type="material"
+        name="notifications"
+        size={hp("4%")}
+      />
+    );
   };
 
   render() {

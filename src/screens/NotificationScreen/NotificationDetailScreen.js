@@ -128,8 +128,8 @@ class NotificationDetailScreen extends Component {
                       );
                       StatusUpdate = {
                         NTID: item.ntid,
-                        // NTStatDesc: "Request Sent"
-                        NTStatDesc: responseJson_2.data.string
+                        NTStatDesc: "Request Sent"
+                        // NTStatDesc: responseJson_2.data.string
                       };
 
                       fetch(
@@ -209,86 +209,88 @@ class NotificationDetailScreen extends Component {
         "Content-Type": "application/json"
       };
 
+      // axios
+      //   .get(
+      //     this.props.champBaseURL + `GetMemberListByMemberID/${item.sbMemID}`,
+      //     {
+      //       headers: headers
+      //     }
+      //   )
+      //   .then(() => {
       axios
         .get(
-          this.props.champBaseURL + `GetMemberListByMemberID/${item.sbMemID}`,
+          `http://${
+            this.props.oyeURL
+          }/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
           {
-            headers: headers
+            headers: {
+              "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+              "Content-Type": "application/json"
+            }
           }
         )
         .then(() => {
+          let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
           axios
             .get(
               `http://${
                 this.props.oyeURL
-              }/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
+              }/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${
+                item.sbMemID
+              }`,
               {
                 headers: {
-                  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                  "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
                   "Content-Type": "application/json"
                 }
               }
             )
-            .then(() => {
-              let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
+            .then(succc => {
+              console.log(succc, "worked");
               axios
-                .get(
-                  `http://${
-                    this.props.oyeURL
-                  }/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${
-                    item.sbMemID
-                  }`,
-                  {
-                    headers: {
-                      "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-                      "Content-Type": "application/json"
-                    }
-                  }
-                )
-                .then(succc => {
-                  console.log(succc, "worked");
-                  axios
-                    .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
-                      sbSubID: item.sbSubID,
-                      ntTitle: "Request Declined",
-                      ntDesc:
-                        "Your request to join" +
-                        item.mrRolName +
-                        " unit in " +
-                        item.asAsnName +
-                        " association as " +
-                        roleName +
-                        " has been declined",
-                      ntType: "Join_Status"
-                    })
-                    .then(() => {
-                      this.setState({ loading: false });
-                      this.props.updateApproveAdmin(
-                        this.props.approvedAdmins,
-                        item.sbSubID
-                      );
-                      setTimeout(() => {
-                        this.props.navigation.navigate("ResDashBoard");
-                      }, 300);
-                    })
-                    .catch(error => {
-                      Alert.alert("@@@@@@@@@@@@@@@", error.message);
-                      this.setState({ loading: false });
-                    });
+                .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
+                  sbSubID: item.sbSubID,
+                  ntTitle: "Request Declined",
+                  ntDesc:
+                    "Your request to join" +
+                    item.mrRolName +
+                    " unit in " +
+                    item.asAsnName +
+                    " association as " +
+                    roleName +
+                    " has been declined",
+                  ntType: "Join_Status"
+                })
+                .then(() => {
+                  this.setState({ loading: false });
+                  this.props.updateApproveAdmin(
+                    this.props.approvedAdmins,
+                    item.sbSubID
+                  );
+                  setTimeout(() => {
+                    this.props.navigation.navigate("ResDashBoard");
+                  }, 300);
                 })
                 .catch(error => {
-                  console.log("updated didn't work", error);
+                  Alert.alert("@@@@@@@@@@@@@@@", error.message);
+                  this.setState({ loading: false });
                 });
             })
             .catch(error => {
-              Alert.alert("******************", error.message);
-              this.setState({ loading: false });
+              console.log("updated didn't work", error);
             });
         })
         .catch(error => {
-          Alert.alert("#################", error.message);
+          // Alert.alert("******************", error.message);
+          console.log(error);
           this.setState({ loading: false });
         });
+      // })
+      // .catch(error => {
+      //   // Alert.alert("#################", error.message);
+      //   console.log(error, "last");
+      //   this.setState({ loading: false });
+      // });
     }
   };
 

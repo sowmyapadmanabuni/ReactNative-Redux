@@ -240,7 +240,11 @@ class RegisterMe extends Component {
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
                         unitList.unUnitID
-                      );
+                      ).then(succ => {
+                        console.log("succ", succ)
+                      }).catch(error => {
+                        console.log(error)
+                      });
 
                       fetch(
                         `http://${
