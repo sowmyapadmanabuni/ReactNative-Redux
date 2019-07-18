@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import {
   View,
   StyleSheet,
@@ -9,16 +9,18 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  YellowBox,
   Dimensions,
   SafeAreaView
-} from "react-native"
-import { Card, Item, Button, Form } from "native-base"
+} from "react-native";
+// import Header from "./src/components/common/Header";
+import { Card, Item, Button } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
-import { NavigationEvents } from "react-navigation"
+} from "react-native-responsive-screen";
+import { NavigationEvents } from "react-navigation";
+import { connect } from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
 
 class MyProfile extends Component {
   state = {
@@ -32,26 +34,26 @@ class MyProfile extends Component {
   }
 
   myProfile = () => {
-    console.log("________\n before fetch")
     fetch(
-      "http://apidev.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${this.props.MyAccountID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          }
         }
-      }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson)
-        this.setState({
-          datasource: responseJson
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log(responseJson)
+          this.setState({
+            datasource: responseJson,
+            ImageSource: responseJson.data.account[0].acImgName
+          })
+          console.log("gggg", datasource)
         })
-        console.log("gggg", datasource)
-      })
-      .catch(error => console.log(error))
+        .catch(error => console.log(error))
   }
 
   componentDidMount() {
@@ -62,210 +64,231 @@ class MyProfile extends Component {
     // YellowBox.ignoreWarnings(["Warning:"])
     const { navigate } = this.props.navigation
     return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss()
-        }}
-      >
-        <View style={styles.mainViewStyle}>
-          {/* <Header /> */}
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
-            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-              <View style={styles.viewDetails1}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate("MyProfileScreen")
-                  }}
-                >
-                  <View
+        <TouchableWithoutFeedback
+            onPress={() => {
+              Keyboard.dismiss()
+            }}
+        >
+          <View style={styles.mainViewStyle}>
+            {/* <Header /> */}
+            <SafeAreaView style={{ backgroundColor: "orange" }}>
+              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+                <View style={styles.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate("ResDashBoard")
+                      }}
+                  >
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: "flex-start",
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../icons/back.png")}
+                          style={styles.viewDetails2}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
                     style={{
-                      height: hp("4%"),
-                      width: wp("15%"),
-                      alignItems: "flex-start",
-                      justifyContent: "center"
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
                     }}
+                >
+                  <Image
+                      style={[styles.image]}
+                      source={require("../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={{ flex: 0.2 }}>
+                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            </SafeAreaView>
+
+            <NavigationEvents
+                onDidFocus={payload => this.myProfile()}
+                onWillBlur={payload => this.myProfile()}
+            />
+
+            <View style={styles.mainContainer}>
+              <View style={styles.textWrapper}>
+                <ScrollView style={styles.scrollViewStyle}>
+                  <View style={styles.myProfileFlexStyle}>
+                    <View style={styles.emptyViewStyle} />
+                    <View style={styles.viewForMyProfileText}>
+                      <Text style={{ fontSize: hp("2.5%"), color: "#ff8c00" }}>
+                        My Profile
+                      </Text>
+                    </View>
+
+                    <View style={styles.editButtonViewStyle}>
+                      <TouchableOpacity
+                          // onPress={() => {
+                          //   navigate("EditProfileScreen", {
+                          //     profileDataSourceFirstName: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acfName
+                          //       : "",
+                          //     profileDataSourceLastName: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].aclName
+                          //       : "",
+                          //     profileDataSourceIsdCode: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acisdCode.substring(
+                          //           0,
+                          //           this.state.datasource.data.account[0].acisdCode
+                          //             .length - 2
+                          //         )
+                          //       : "",
+                          //     profileDataSourceIsdCode1: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acisdCode1.substring(
+                          //           0,
+                          //           this.state.datasource.data.account[0].acisdCode1
+                          //             .length - 2
+                          //         )
+                          //       : "",
+                          //     profileDataSourceCca2: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acisdCode
+                          //           .toString()
+                          //           .slice(-2)
+                          //       : "",
+                          //     profileDataSourceCca3: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acisdCode1
+                          //           .toString()
+                          //           .slice(-2)
+                          //       : "",
+                          //     profileDataSourceMobileNumber: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acMobile
+                          //       : "",
+                          //     profileDataSourceAlternateMobileNum: this.state
+                          //       .datasource
+                          //       ? this.state.datasource.data.account[0].acMobile1
+                          //       : "",
+                          //     profileDataSourceEmail: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acEmail
+                          //       : "",
+                          //     profileDataSourceAlternateEmail: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acEmail1
+                          //       : "",
+                          //     profileDataSourceImageName: this.state.datasource
+                          //       ? this.state.datasource.data.account[0].acImgName
+                          //       : ""
+                          //   })
+                          // }}
+                      >
+                        <Image
+                            style={styles.editButtonImageStyle}
+                            source={require("../icons/edit.png")}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.containerView_ForProfilePicViewStyle}>
+                    <View style={styles.viewForProfilePicImageStyle}>
+                      {this.state.ImageSource == null ? (
+                          <Image
+                              style={styles.profilePicImageStyle}
+                              source={require("../icons/camwithgradientbg.png")}
+                          />
+                      ) : (
+                          <Image
+                              style={styles.profilePicImageStyle}
+                              source={{
+                                uri:
+                                    "http://mediauploaddev.oyespace.com/Images/" +
+                                    this.state.ImageSource
+                              }}
+                          />
+                      )}
+                    </View>
+                  </View>
+
+                  <View style={{ alignItems: "center", marginBottom: hp("4%") }}>
+                    <Text style={styles.itemTextValues1}>
+                      {this.state.datasource
+                          ? this.state.datasource.data.account[0].acfName +
+                          " " +
+                          this.state.datasource.data.account[0].aclName
+                          : null}
+                    </Text>
+                  </View>
+                  <View
+                      style={{
+                        marginLeft: hp("2%"),
+                        marginBottom: hp("0.5%"),
+                        flexDirection: "row"
+                      }}
                   >
                     <Image
-                      resizeMode="contain"
-                      source={require("../icons/back.png")}
-                      style={styles.viewDetails2}
+                        style={styles.editButtonImageStyle1}
+                        source={require("../icons/call.png")}
                     />
+                    <Text style={styles.itemTextValues}>
+                      {this.state.datasource
+                          ? " " +
+                          this.state.datasource.data.account[0].acisdCode.substring(
+                              0,
+                              this.state.datasource.data.account[0].acisdCode
+                                  .length - 2
+                          ) +
+                          " " +
+                          this.state.datasource.data.account[0].acMobile
+                          : null}
+                    </Text>
                   </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <Image
-                  style={[styles.image1]}
-                  source={require("../icons/OyeSpace.png")}
-                />
-              </View>
-              <View style={{ flex: 0.2 }}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-              </View>
-            </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
-
-          <NavigationEvents
-            onDidFocus={payload => this.myProfile()}
-            onWillBlur={payload => this.myProfile()}
-          />
-
-          <View style={styles.mainContainer}>
-            <View style={styles.textWrapper}>
-              <ScrollView style={styles.scrollViewStyle}>
-                <View style={styles.myProfileFlexStyle}>
-                  <View style={styles.emptyViewStyle} />
-                  <View style={styles.viewForMyProfileText}>
-                    <Text style={{ fontSize: hp("2.5%"), color: "#ff8c00" }}>
-                      My Profile
+                  <View
+                      style={{
+                        marginLeft: hp("2%"),
+                        marginBottom: hp("3%"),
+                        flexDirection: "row"
+                      }}
+                  >
+                    <Image
+                        style={styles.editButtonImageStyle1}
+                        source={require("../icons/mail.png")}
+                    />
+                    <Text style={styles.itemTextValues}>
+                      {this.state.datasource
+                          ? "  " + this.state.datasource.data.account[0].acEmail
+                          : null}
                     </Text>
                   </View>
 
-                  <View style={styles.editButtonViewStyle}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        navigate("Editprofile", {
-                          profileDataSourceFirstName: this.state.datasource.data
-                            .account[0].acfName,
-                          profileDataSourceLastName: this.state.datasource.data
-                            .account[0].aclName,
-                          profileDataSourceIsdCode: this.state.datasource.data.account[0].acisdCode.substring(
-                            0,
-                            this.state.datasource.data.account[0].acisdCode
-                              .length - 2
-                          ),
-                          profileDataSourceIsdCode1: this.state.datasource.data.account[0].acisdCode1.substring(
-                            0,
-                            this.state.datasource.data.account[0].acisdCode1
-                              .length - 2
-                          ),
-                          profileDataSourceCca2: this.state.datasource.data.account[0].acisdCode
-                            .toString()
-                            .slice(-2),
-                          profileDataSourceCca3: this.state.datasource.data.account[0].acisdCode1
-                            .toString()
-                            .slice(-2),
-                          profileDataSourceMobileNumber: this.state.datasource
-                            .data.account[0].acMobile,
-                          profileDataSourceAlternateMobileNum: this.state
-                            .datasource.data.account[0].acMobile1,
-                          profileDataSourceEmail: this.state.datasource.data
-                            .account[0].acEmail,
-                          profileDataSourceAlternateEmail: this.state.datasource
-                            .data.account[0].acEmail1
-                        })
+                  <View
+                      style={{
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center"
                       }}
-                    >
-                      {/*<Image
-                        style={styles.editButtonImageStyle}
-                        source={require("./src/components/images/edit.png")}
-                      />*/}
-                    </TouchableOpacity>
-                  </View>
-                </View>
-
-                <View style={styles.containerView_ForProfilePicViewStyle}>
-                  <View style={styles.viewForProfilePicImageStyle}>
-                    {this.state.ImageSource == null ? (
-                      <Image
-                        style={styles.profilePicImageStyle}
-                        source={{
-                          uri:
-                            "http://mediaupload.oyespace.com/Images/" +
-                            this.state.datasource.data.account[0].acImgName
-                        }}
-                      />
-                    ) : (
-                      {/*<Image
-                        style={styles.profilePicImageStyle}
-                        source={require("./src/components/images/camwithgradientbg.png")}
-                      />*/}
-                    )}
-                  </View>
-                </View>
-
-                <View style={{ alignItems: "center", marginBottom: hp("4%") }}>
-                  <Text style={styles.itemTextValues1}>
-                    {this.state.datasource
-                      ? this.state.datasource.data.account[0].acfName +
-                        " " +
-                        this.state.datasource.data.account[0].aclName
-                      : null}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    marginLeft: hp("2%"),
-                    marginBottom: hp("0.5%"),
-                    flexDirection: "row"
-                  }}
-                >
-                  {/*<Image
-                    style={styles.editButtonImageStyle1}
-                    source={require("./src/components/images/call.png")}
-                  />*/}
-                  <Text style={styles.itemTextValues}>
-                    {this.state.datasource
-                      ? " " +
-                        this.state.datasource.data.account[0].acisdCode.substring(
-                          0,
-                          this.state.datasource.data.account[0].acisdCode
-                            .length - 2
-                        ) +
-                        " " +
-                        this.state.datasource.data.account[0].acMobile
-                      : null}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    marginLeft: hp("2%"),
-                    marginBottom: hp("3%"),
-                    flexDirection: "row"
-                  }}
-                >
-                  {/*<Image
-                    style={styles.editButtonImageStyle1}
-                    source={require("./src/components/images/mail.png")}
-                  />*/}
-                  <Text style={styles.itemTextValues}>
-                    {this.state.datasource
-                      ? "  " + this.state.datasource.data.account[0].acEmail
-                      : null}
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <View>
-                    <Button bordered style={styles.button1}>
+                  >
+                    <View>
+                      {/* <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('CreateAssnScreen')}>
                       <Text>Create Association</Text>
-                    </Button>
-                    <View />
-                    <View style={{ marginTop: hp("2%") }}>
-                      <Button bordered style={styles.button1}>
-                        <Text>Join Existing Association</Text>
-                      </Button>
+                    </Button> */}
+                      <View />
+                      <View style={{ marginTop: hp("2%") }}>
+                        <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('AssnListScreen')}>
+                          <Text>Join Existing Association</Text>
+                        </Button>
+                      </View>
                     </View>
                   </View>
-                </View>
-              </ScrollView>
+                </ScrollView>
+              </View>
+              <View style={{bottom:hp('3%'), alignItems:'flex-end', right:hp('3%')}}>
+                <Text>Version: - {DeviceInfo.getVersion()}</Text>
+              </View>
             </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
     )
   }
 }
@@ -308,17 +331,17 @@ const styles = StyleSheet.create({
     fontWeight: "500"
   },
   editButtonViewStyle: {
-    flex: 1,
+    flex: 1.5,
     alignItems: "center",
     justifyContent: "center"
   },
   editButtonImageStyle: {
-    width: wp("7%"),
-    height: hp("5%")
+    width: hp("3.5%"),
+    height: hp("3.5%")
   },
   editButtonImageStyle1: {
-    width: wp("6%"),
-    height: hp("4%")
+    width: hp("3.5%"),
+    height: hp("3.5%")
   },
   containerView_ForProfilePicViewStyle: {
     justifyContent: "center",
@@ -372,20 +395,16 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
-  image1: {
-    width: wp("19%"),
-    height: hp("12%"),
-    marginRight: hp("8%")
+
+  image: {
+    width: wp("24%"),
+    height: hp("10%")
   },
   button1: {
     width: hp("40%"),
     justifyContent: "center"
   },
-  image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
-  },
+
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
@@ -413,5 +432,17 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MyProfile
 
+
+
+const mapStateToProps = state => {
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyAccountID: state.UserReducer.MyAccountID,
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    imageUrl: state.OyespaceReducer.imageUrl,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+  }
+}
+
+export default connect(mapStateToProps)(MyProfile);

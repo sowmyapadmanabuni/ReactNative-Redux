@@ -20,10 +20,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import  {connect} from "react-redux";
 
 var multipleEntries = "FALSE";
 
-export default class InviteGuests extends Component {
+class InviteGuests extends Component {
   static navigationOptions = {
     title: "Invite Guests",
     header: null
@@ -221,8 +222,8 @@ else{
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
       body: JSON.stringify({
-        "MeMemID"   :  52,
-        "UnUnitID"  :  77,
+
+        "UnUnitID"  :  this.props.dashBoardReducer.uniID,
         "INFName"   : fname,
         "INLName"   : lname,
         "INMobile"  : "+"+ callingCode + mobNum,
@@ -234,7 +235,8 @@ else{
         "INEDate"   : dobDate1 + time1,
         "INPOfInv"  : purpose,
         "INMultiEy" : switches,
-        "ASAssnID"  : 8
+        "ASAssnID"  : this.props.dashBoardReducer.assId,
+        "INQRCode"  : 1
       })
     })
       .then(response => response.json())
@@ -492,3 +494,19 @@ const styles = StyleSheet.create({
   datePickerText: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212', },
   subtext1: { fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212' } 
 });
+
+const mapStateToProps = state => {
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyLastName: state.UserReducer.MyLastName,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    dashBoardReducer:state.DashboardReducer
+
+  };
+};
+
+export default connect(mapStateToProps)(InviteGuests);

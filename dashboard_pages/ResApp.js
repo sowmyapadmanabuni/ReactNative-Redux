@@ -61,6 +61,7 @@ import AddFamilyMember from "../resident_pages/AddFamilyMember";
 import AssignTask from "../resident_pages/AssignTask";
 import HamburgerMenu from "../dashboard_pages/HamburgerMenu";
 
+import ViewAlllVisitorsPage from '../my_unit_pages/ViewAlllVisitorsPage';
 import ViewVisitorsList from "../my_unit_pages/ViewVisitorsList";
 //import UpdateDetails from '../my_unit_pages/UpdateDetails';
 import RaiseIncident from "../my_unit_pages/RaiseIncident";
@@ -117,7 +118,12 @@ import SchedulePatrolling from "../src/screens/Patrolling/SchedulePatrolling";
 import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
 import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
 import AddCheckPoints from "../src/screens/Patrolling/AddCheckPoints";
-import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement"
+
+//import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement"
+
+import MyFamilyList from "../src/screens/Resident/MyFamilyScreen/MyFamilyListOne/MyFamilyList"
+import MyFamily from "../src/screens/Resident/MyFamilyScreen/MyFamilyAdd/MyFamily"
+import MyFamilyEdit from "../src/screens/Resident/MyFamilyScreen/MyFamilyEditOne/MyFamilyEdit"
 /*
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
 import ViewmembersList from '../assocition_pages/ViewmembersList';
@@ -242,8 +248,44 @@ ResDashBoard:  {
   //     headerTintColor: '#ffffff',
   //   },
   // },
+
+  MyFamilyList: {
+    screen: MyFamilyList,
+    navigationOptions: {
+      title: "My Family List"
+      // headerStyle: { backgroundColor: "#f05555"},
+      // headerTintColor:  "#ffffff"
+    }
+  },
+  MyFamily: {
+    screen: MyFamily,
+    navigationOptions: {
+      title: "My Family Add",
+      header: null
+      // headerStyle: { backgroundColor: "#f05555"},
+      // headerTintColor:  "#ffffff"
+    }
+  },
+  MyFamilyEdit: {
+    screen: MyFamilyEdit,
+    navigationOptions: {
+      title: "My Family Edit",
+      header: null
+      // headerStyle: { backgroundColor: "#f05555"},
+      // headerTintColor:  "#ffffff"
+    }
+  },
+
+
   ViewVisitorsScreen: {
     screen: ViewVisitorsList,
+    navigationOptions: {
+      title: "My Visitors",
+      header: null
+    }
+  },
+  ViewAlllVisitorsPage: {
+    screen: ViewAlllVisitorsPage,
     navigationOptions: {
       title: "My Visitors",
       header: null
@@ -738,13 +780,6 @@ addCheckPoint: {
         header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
     }
 },
-  subscriptionManagement: {
-    screen: SubscriptionManagement,
-    navigationOptions: {
-      title: "Subscription Management",
-      header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
-    }
-  },
 
 },{
   initialRouteName: "ResDashBoard",

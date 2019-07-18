@@ -265,7 +265,8 @@ class Resident extends Component {
   };
 
   render() {
-    console.log("$$$$$$$$$$#%#%@#%#^$#^&%&%^&%^*^%*%^&$%^$",this.props.oyeURL)
+    console.log("$$$$$$$$$$#%#%@#%#^$#^&%&%^&%^*^%*%^&$%^$",this.props) //residentList
+    let residentList= this.props.dashBoardReducer.residentList
     const { params } = this.props.navigation.state;
     // console.log(params)
     // console.log(this.props.associationid)
@@ -373,9 +374,9 @@ class Resident extends Component {
             <View style={{ flex: 1 }}>
               {/* {this.state.loading ? <Text> Loding </Text> :  */}
               <FlatList
-                data={this.state.residentList}
+                data={residentList}
                 keyExtractor={(item, index) => item.unit + index}
-                extraData={this.state.residentList}
+                // extraData={this.state.residentList}
                 renderItem={({ item, index }) => (
                   <Card style={{ height: hp("14%") }}>
                     <View style={{ height: 1, backgroundColor: "lightgray" }} />
@@ -421,7 +422,8 @@ const mapStateToProps = state => {
   return {
     associationid: state.DashboardReducer.associationid,
     selectedAssociation: state.DashboardReducer.selectedAssociation,
-    oyeURL: state.OyespaceReducer.oyeURL
+    oyeURL: state.OyespaceReducer.oyeURL,
+    dashBoardReducer:state.DashboardReducer
   };
 };
 
