@@ -17,31 +17,36 @@ class DashBoardHeader extends React.Component {
     let self = this;
     setTimeout(() => {
       self.myProfile();
-    }, 2000);
+    }, 500);
   }
-  myProfile = () => {
-    
-    fetch(
-      `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-        }
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson);
-        
+  myProfile = async () => {
+    const response = await base.services.OyeLivingApi.getProfileFromAccount(this.props.MyAccountID)    
+    console.log(response)
         this.setState({
-          datasource: responseJson,
-          ImageSource: responseJson.data.account[0].acImgName
+          datasource: response,
+          ImageSource: response.data.account[0].acImgName
         });
-        console.log("gggg", datasource);
-      })
-      .catch(error => console.log(error));
+    // fetch(
+    //   `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
+    //   {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+    //     }
+    //   }
+    // )
+    //   .then(response => response.json())
+    //   .then(responseJson => {
+    //     console.log(responseJson);
+        
+    //     this.setState({
+    //       datasource: responseJson,
+    //       ImageSource: responseJson.data.account[0].acImgName
+    //     });
+    //     console.log("gggg", datasource);
+    //   })
+    //   .catch(error => console.log(error));
   };
 
   render() {

@@ -7,10 +7,12 @@ import App from './App';
 import store from './src/store';
 import {name as appName} from './app.json';
 import FlashMessage from "react-native-flash-message";
+import $ from 'logdecor';
 
 class RootApp extends Component {
 
     render() {
+        $.logTitle("O Y E S P A C E")
         return (
             <Provider store={store}>
                 <App />
