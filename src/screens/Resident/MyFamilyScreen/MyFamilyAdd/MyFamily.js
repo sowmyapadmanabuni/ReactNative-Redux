@@ -152,13 +152,15 @@ class MyFamily extends Component {
       return false
     } else if (frelation.length == 0) {
       Alert.alert("Relation should not be empty")
-    } else if (fage.length == 0) {
-      Alert.alert("Age should not be empty")
-    } else if (fage < 1) {
-      Alert.alert("Age cannot be less than 1")
-    } else if (fage > 150) {
-      Alert.alert("Age cannot be grater than 150")
-    } else if (photo === null) {
+    } 
+    // else if (fage.length == 0) {
+    //   Alert.alert("Age should not be empty")
+    // } else if (fage < 1) {
+    //   Alert.alert("Age cannot be less than 1")
+    // } else if (fage > 150) {
+    //   Alert.alert("Age cannot be grater than 150")
+    // } 
+    else if (photo === null) {
       alert("Upload photo")
       return false
     } else {

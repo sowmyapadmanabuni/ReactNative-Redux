@@ -22,7 +22,7 @@ import axios from "axios";
 import firebase from "react-native-firebase";
 import _ from "lodash";
 import { VictoryPie } from "victory-native";
-import { Card, CardItem } from "native-base";
+import { Card, CardItem, } from "native-base";
 
 import {
   widthPercentageToDP as wp,
