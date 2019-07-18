@@ -196,8 +196,8 @@ class Staff extends React.Component {
                                             index={i.toString()}
                                             isSelected={this.state.daySelected === i}
                                             onPress={onPress}
-                                            buttonInnerColor={base.theme.colors.mediumgrey}
-                                            buttonOuterColor={base.theme.colors.mediumgrey}
+                                            buttonInnerColor={base.theme.colors.mediumGrey}
+                                            buttonOuterColor={base.theme.colors.mediumGrey}
                                             buttonSize={15}
                                             buttonStyle={{}}
                                             buttonWrapStyle={{marginLeft: 20}}
@@ -206,7 +206,7 @@ class Staff extends React.Component {
                                             obj={obj}
                                             index={i.toString()}
                                             onPress={onPress}
-                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumgrey}}
+                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumGrey}}
                                             labelWrapStyle={{marginLeft: 5}}
                                         />
                                     </RadioButton>
@@ -230,8 +230,8 @@ class Staff extends React.Component {
                                             index={j.toString()}
                                             isSelected={this.state.isMonthSelected}
                                             onPress={onPress}
-                                            buttonInnerColor={base.theme.colors.mediumgrey}
-                                            buttonOuterColor={base.theme.colors.mediumgrey}
+                                            buttonInnerColor={base.theme.colors.mediumGrey}
+                                            buttonOuterColor={base.theme.colors.mediumGrey}
                                             buttonSize={15}
                                             buttonStyle={{}}
                                             buttonWrapStyle={{marginLeft: 20}}
@@ -240,7 +240,7 @@ class Staff extends React.Component {
                                             obj={obj}
                                             index={j.toString()}
                                             onPress={onPress}
-                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumgrey}}
+                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumGrey}}
                                             labelWrapStyle={{marginLeft: 5}}
                                         />
                                     </RadioButton>
@@ -272,7 +272,6 @@ class Staff extends React.Component {
                 fromDate = moment().format(),
                     toDate = fromDate;
             }
-            console.log('If')
             const {updateStaffInfo} = this.props;  //Copy Rights @Sarthak Mishra
             updateStaffInfo({prop: "startDate", value: fromDate})
             updateStaffInfo({prop: "endDate", value: toDate})
@@ -285,9 +284,6 @@ class Staff extends React.Component {
 
             this.props.navigation.navigate('getStaffReports',)
         } else {
-            console.log('If')
-
-
             let initialDateString = moment(fromDate);
             let endDateString = moment(toDate)
             let duration = moment.duration(endDateString.diff(initialDateString));
@@ -361,5 +357,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {updateStaffInfo})(Staff);
-
-

@@ -32,7 +32,7 @@ export default class FloatingActionButton extends React.Component {
     static defaultProps = {
         height: 50,
         width: 50,
-        marginTop:btnHeight+bufferMargin+wp(105),
+        marginTop:btnHeight+bufferMargin+wp("120%"),
         btnBackground: base.theme.colors.primary,
         imgSrc: require('../../icons/plus_white.png')
     };

@@ -11,7 +11,7 @@ const utils = {
     logger,
     strings,
     storage,
-    validate
+    validate,
 };
 
 
