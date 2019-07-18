@@ -117,7 +117,7 @@ import EditUnit from "../assocition_pages/EditUnit.js";
 import SchedulePatrolling from "../src/screens/Patrolling/PatrolSchedule";
 import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
 import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
-import AddCheckPoints from "../src/screens/Patrolling/AddCheckPoints";
+//import AddCheckPoints from "../src/screens/Patrolling/AddCheckPoints";
 
 import AddAndEditCheckPoints from "../src/screens/Patrolling/AddAndEditCheckPoints";
 import SchedulePatrol from "../src/screens/Patrolling/SchedulePatrol";
@@ -778,7 +778,7 @@ patrollingCheckPoint: {
     }
 },
 addCheckPoint: {
-    screen: AddCheckPoints,
+    screen: AddAndEditCheckPoints,
     navigationOptions: {
         title: "Add Checkpoints",
         header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false} isHidden={true} {...props}/>
