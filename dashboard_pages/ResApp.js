@@ -118,9 +118,6 @@ import SchedulePatrolling from "../src/screens/Patrolling/SchedulePatrolling";
 import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
 import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
 import AddCheckPoints from "../src/screens/Patrolling/AddCheckPoints";
-
-//import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement"
-
 import MyFamilyList from "../src/screens/Resident/MyFamilyScreen/MyFamilyListOne/MyFamilyList"
 import MyFamily from "../src/screens/Resident/MyFamilyScreen/MyFamilyAdd/MyFamily"
 import MyFamilyEdit from "../src/screens/Resident/MyFamilyScreen/MyFamilyEditOne/MyFamilyEdit"
