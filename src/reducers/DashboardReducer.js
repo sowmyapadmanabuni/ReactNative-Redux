@@ -8,7 +8,9 @@ import {
   DASHBOARD_UNITS_STOP,
   DASHBOARD_ASSOC_STOP,
   GET_MEMBERLIST_SUCCESS,
-  GET_MEMBERLIST_FAILED
+  GET_MEMBERLIST_FAILED,
+  UPDATE_ID_DASHBOARD,
+
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -23,7 +25,9 @@ const INITIAL_STATE = {
   unsold: 0,
   isLoading: true,
   selectedAssociation: null,
-  memberList: []
+  memberList: [],
+  assId: null,
+  uniID: null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -78,7 +82,10 @@ export default (state = INITIAL_STATE, action) => {
     case GET_MEMBERLIST_FAILED:
       return { ...state, memberList: [] };
 
-    default:
+      case UPDATE_ID_DASHBOARD:
+            return { ...state, [action.payload.prop]: action.payload.value };
+
+      default:
       return state;
   }
 };

@@ -20,7 +20,7 @@ export class Row extends Component {
                 {data.map((item, i) => {
                     const flex = flexArr && flexArr[i];
                     const wth = widthArr && widthArr[i];
-                    return <Cell key={i} data={item} width={wth} height={height} flex={flex} textStyle={textStyle} onClickIcon={this.props.onClickIcon.bind(this,item)} {...props} />;
+                    return <Cell key={i} data={item} width={wth} height={height} flex={flex} textStyle={textStyle} onClickIcon={this.props.onClickIcon.bind(this)} {...props} />;
                 })}
             </View>
         ) : null;

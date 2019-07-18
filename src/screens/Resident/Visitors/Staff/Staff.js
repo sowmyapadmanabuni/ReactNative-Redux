@@ -284,7 +284,6 @@ class Staff extends React.Component {
 
             this.props.navigation.navigate('getStaffReports',)
         } else {
-
             let initialDateString = moment(fromDate);
             let endDateString = moment(toDate)
             let duration = moment.duration(endDateString.diff(initialDateString));
@@ -358,4 +357,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {updateStaffInfo})(Staff);
-

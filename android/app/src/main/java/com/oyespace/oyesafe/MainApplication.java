@@ -35,12 +35,9 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
 import org.pgsqlite.SQLitePluginPackage;
-
 import com.airbnb.android.react.maps.MapsPackage;
-
-
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,7 +74,8 @@ public class MainApplication extends Application implements ShareApplication,Rea
                     new RNFirebaseMessagingPackage(),
                     new RNFirebaseNotificationsPackage(),
                     new MapsPackage(),
-                    new RNSpinkitPackage()
+                    new RNSpinkitPackage(),
+                    new RNDeviceInfo()
 
             );
         }
@@ -97,7 +95,6 @@ public class MainApplication extends Application implements ShareApplication,Rea
     @Override
     public ReactNativeHost getReactNativeHost() {
         return mReactNativeHost;
-
     }
 
     @Override

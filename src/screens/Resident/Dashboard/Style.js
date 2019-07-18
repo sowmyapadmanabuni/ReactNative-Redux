@@ -1,10 +1,15 @@
 import {StyleSheet} from 'react-native';
 import base from '../../../base'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
 
 const Style = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        marginTop:hp('2.8%')
     },
     dropDownContainer: {
         height: '7.5%',

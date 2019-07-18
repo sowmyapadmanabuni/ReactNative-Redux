@@ -152,5 +152,4 @@ export class validate{
     static strToArray(str){
         return str.split(" ")
     }
-
 }

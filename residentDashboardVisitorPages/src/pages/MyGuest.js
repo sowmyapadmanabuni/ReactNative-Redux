@@ -21,8 +21,10 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import {connect} from "react-redux";
 
-export default class MyGuests extends Component {
+
+class MyGuests extends Component {
   static navigationOptions = {
     title: "My Guests",
     header: null
@@ -44,8 +46,11 @@ export default class MyGuests extends Component {
   }
 
   getInvitationList = () => {
+    console.log("association id in guest", this.props)
     fetch(
-      `http://apidev.oyespace.com/oye247/api/v1/Invitation/GetInvitationListByAssocID/8`,
+      `http://${
+        this.props.oyeURL
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True`,
       {
         method: "GET",
         headers: {
@@ -86,6 +91,36 @@ export default class MyGuests extends Component {
       dataSource: newData
     });
   };
+
+  associationName = () => {
+    fetch(
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/association/getAssociationList/${this.props.dashBoardReducer.assId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          association: responseJson.data.association.asAsnName
+        });
+        console.log("!@#!@#!@$@#%@#$!@$@$!@$!@", this.state.association);
+      })
+      .catch(error => console.log(error));
+  };
+
+  setData(data){
+      this.setState({
+          selectedData:data
+      },()=>this.Modal())
+  }
+
   renderItem = ({ item, index }) => {
     // console.log(item,index)
     return (
@@ -157,6 +192,7 @@ export default class MyGuests extends Component {
   };
 
   render() {
+    console.log("Dashboard",this.props.dashBoardReducer) 
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -320,3 +356,21 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+
+
+const mapStateToProps = state => {
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyLastName: state.UserReducer.MyLastName,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    dashBoardReducer:state.DashboardReducer 
+
+  };
+};
+
+
+export default connect(mapStateToProps)(MyGuests);

@@ -26,6 +26,9 @@ export const DASHBOARD_RESIDENT_LIST = "dashboard_resident_list";
 export const DASHBOARD_PIE = "dashboard_pie";
 export const GET_MEMBERLIST_SUCCESS = "get_memberlist_success";
 export const GET_MEMBERLIST_FAILED = "get_memberlist_failed";
+export const UPDATE_DROPDOWN_INDEX = "update_dropdown_index";
+export const UPDATE_ID_DASHBOARD="update_id_dashboard"
+
 
 // User Reducer
 export const UPDATE_USER_INFO = "update_user_info";
@@ -34,4 +37,5 @@ export const UPDATE_USER_INFO = "update_user_info";
 export const UPDATE_PATROLLING_CP_LIST = "update_patrolling_list";
 export const UPDATE_QR_BASE64 = "update_qr_bas64";
 
+//Staff Reducer
 export const UPDATE_STAFF_INFO="update_staff_info"

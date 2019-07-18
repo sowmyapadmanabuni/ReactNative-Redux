@@ -64,6 +64,9 @@ target 'OyeSpace' do
   pod 'react-native-google-maps', path: '../node_modules/react-native-maps'
   pod 'GoogleMaps'
   pod 'Google-Maps-iOS-Utils'
+  pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
 
   
 end

@@ -181,6 +181,7 @@ class GetStaffReport extends React.Component {
                             rowData.push('No Entry on this Date')
 
                         } else {
+
                             rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                             rowData.push(reportsData[i].vlengName)
                             rowData.push(moment(reportsData[i].vlEntryT).format('HH:mm' + ' A'))
@@ -267,32 +268,31 @@ class GetStaffReport extends React.Component {
                 </ScrollView>
 
                 {this.state.numberOfPages>1 ?
-
-                    <View style={StaffReportStyle.bottomView}>
-                        <TouchableOpacity style={{alignItems: 'center'}}
-                                          onPress={() => this.changeTheData(this.state.pageNumber - 1)}
-                                          disabled={this.state.pageNumber===1}>
-                            <Image style={StaffReportStyle.arrowIcon}
-                                   source={this.state.pageNumber===1?inActiveLeftIcon:activeLeftIcon}
-                            />
-                        </TouchableOpacity>
-                        <View style={StaffReportStyle.viewPagerIcons}>
-                            <FlatList
-                                data={this.state.bottomPageIndicator}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={(item) => this.arrangeBottomTab(item)}
-                                extraData={this.state}
-                                horizontal={true}
-                            />
-                        </View>
-                        <TouchableOpacity style={{alignItems: 'center'}}
-                                          onPress={() => this.changeTheData(this.state.pageNumber + 1)}
-                                          disabled={this.state.pageNumber===this.state.numberOfPages}>
-                            <Image style={StaffReportStyle.arrowIcon}
-                                   source={this.state.pageNumber===this.state.numberOfPages?inActiveRightIcon:activeRightIcon}
-                            />
-                        </TouchableOpacity>
+                <View style={StaffReportStyle.bottomView}>
+                    <TouchableOpacity style={{alignItems: 'center'}}
+                                      onPress={() => this.changeTheData(this.state.pageNumber - 1)}
+                    disabled={this.state.pageNumber===1}>
+                        <Image style={StaffReportStyle.arrowIcon}
+                               source={this.state.pageNumber===1?inActiveLeftIcon:activeLeftIcon}
+                        />
+                    </TouchableOpacity>
+                    <View style={StaffReportStyle.viewPagerIcons}>
+                        <FlatList
+                            data={this.state.bottomPageIndicator}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={(item) => this.arrangeBottomTab(item)}
+                            extraData={this.state}
+                            horizontal={true}
+                        />
                     </View>
+                    <TouchableOpacity style={{alignItems: 'center'}}
+                                      onPress={() => this.changeTheData(this.state.pageNumber + 1)}
+                                      disabled={this.state.pageNumber===this.state.numberOfPages}>
+                        <Image style={StaffReportStyle.arrowIcon}
+                               source={this.state.pageNumber===this.state.numberOfPages?inActiveRightIcon:activeRightIcon}
+                        />
+                    </TouchableOpacity>
+                </View>
                     :
                     <View/>}
             </View>
@@ -325,7 +325,7 @@ class GetStaffReport extends React.Component {
                 <Table borderStyle={StaffReportStyle.tableView}>
 
                     <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
-                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber)}/>
+                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
                     {state.tableData.map((rowData, index) => (
                         <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
                             {
@@ -356,16 +356,16 @@ class GetStaffReport extends React.Component {
         if(datToReversOrder){
             staffReportData=datToReversOrder
         }
-        let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
-        let pageEndData=pageNumber*(self.state.pageLimit)
+          let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
+            let pageEndData=pageNumber*(self.state.pageLimit)
         if (pageEndData>staffReportData.length){
             pageEndData=staffReportData.length
         }
-        let j=0;
-        for(let i=pageStartData-1; i<pageEndData;i++){
-            tableData[j]=staffReportData[i]
-            j=j+1
-        }
+            let j=0;
+            for(let i=pageStartData-1; i<pageEndData;i++){
+                tableData[j]=staffReportData[i]
+                j=j+1
+            }
         self.setState({tableData:tableData,pageNumber:pageNumber})
     }
 

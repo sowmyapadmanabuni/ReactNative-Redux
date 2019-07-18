@@ -305,7 +305,8 @@ class Dashboard extends React.Component {
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-  }
+    console.log("Notification")
+  };
 
   onAssociationChange = (value, index) => {
     const {

@@ -119,9 +119,9 @@ class RegisterMe extends Component {
           }
         )
         .then(response => {
-          console.log("*******");
-          console.log("here_1 ");
-          console.log("*******");
+          // console.log("*******");
+          // console.log("here_1 ");
+          // console.log("*******");
           let responseData_1 = response.data;
           if (responseData_1.success) {
             let headers_2 = {
@@ -154,6 +154,7 @@ class RegisterMe extends Component {
                   let userID = this.props.MyAccountID;
                   let sbUnitID = unitList.unUnitID;
                   let unitName = unitList.unUniName;
+                  let adminAccId = unitList.acAccntID;
                   let sbSubID =
                     this.props.MyAccountID.toString() +
                     unitList.unUnitID.toString() +
@@ -296,10 +297,7 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "ResDashBoard"
-                                    )
+                                  
                                 }
                               ],
                               { cancelable: false }
@@ -310,10 +308,10 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "CreateOrJoinScreen"
-                                    )
+                                  // onPress: () =>
+                                  //   this.props.navigation.navigate(
+                                  //     "CreateOrJoinScreen"
+                                  //   )
                                 }
                               ],
                               { cancelable: false }
@@ -571,10 +569,10 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "ResDashBoard"
-                                    )
+                                  // onPress: () =>
+                                  //   this.props.navigation.navigate(
+                                  //     "Dashboard"
+                                  //   )
                                 }
                               ],
                               { cancelable: false }
@@ -585,10 +583,10 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "CreateOrJoinScreen"
-                                    )
+                                  // onPress: () =>
+                                  //   this.props.navigation.navigate(
+                                  //     "CreateOrJoinScreen"
+                                  //   )
                                 }
                               ],
                               { cancelable: false }

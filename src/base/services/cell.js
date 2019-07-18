@@ -7,16 +7,16 @@ export class Cell extends Component {
         style: ViewPropTypes.style,
         textStyle: Text.propTypes.style,
         borderStyle: ViewPropTypes.style,
-        onClickIcon:PropTypes.func
+        onClickIcon:PropTypes.func,
     };
 
     render() {
-        const { data, width, height, flex, style, textStyle, borderStyle , onClickIcon, ...props } = this.props;
+        const { data, width, height, flex, style, textStyle, borderStyle ,icon, onClickIcon, ...props } = this.props;
         const textDom = React.isValidElement(data) ? (
             data
         ) : (
-            <View style={{width:50,}}>
-            <Text style={[textStyle, styles.text,]} {...props} numberOfLines={2}>
+            <View style={{width:40}}>
+            <Text style={[textStyle, styles.text]} {...props} numberOfLines={2}>
                 {data[0]}
             </Text>
             </View>
@@ -24,8 +24,7 @@ export class Cell extends Component {
         const borderTopWidth = (borderStyle && borderStyle.borderWidth) || 1;
         const borderRightWidth = borderTopWidth;
         const borderColor = (borderStyle && borderStyle.borderColor) || '#000';
-
-        return (
+     return (
             <TouchableOpacity
                 style={[
                     {
