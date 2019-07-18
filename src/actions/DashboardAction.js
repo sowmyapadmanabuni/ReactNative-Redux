@@ -8,7 +8,8 @@ import {
   DASHBOARD_UNITS_STOP,
   DASHBOARD_ASSOC_STOP,
   GET_MEMBERLIST_SUCCESS,
-  GET_MEMBERLIST_FAILED
+  GET_MEMBERLIST_FAILED,
+  UPDATE_ID_DASHBOARD
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
@@ -380,3 +381,15 @@ export const getAssoMembers = (oyeURL, id) => {
       });
   };
 };
+
+
+export const updateIdDashboard = ({ prop, value }) => {
+
+  return (dispatch) => {
+      console.log("DASHBOARDAction",prop,value)
+      dispatch({
+          type: UPDATE_ID_DASHBOARD,
+          payload: { prop, value }
+      })
+  }
+}

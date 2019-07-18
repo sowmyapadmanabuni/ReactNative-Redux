@@ -7,21 +7,19 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard,Dimensions,SafeAreaView,Image, TouchableOpacity} from 'react-native';
-// import Header from './components/common/Header'
+import {Platform, StyleSheet, Text, View, TouchableWithoutFeedback, Dimensions, Keyboard,SafeAreaView, TouchableOpacity, Image, Alert} from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Card,CardItem, Form, Item, Label, Input, Button, } from "native-base";
 // import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
-import {connect} from 'react-redux';
 
 var radio_props = [
   {label: 'Two Vehicle', value: 0 },
   {label: 'Four Vehicle', value: 1 }
 ];
 
-class EditVehicle extends Component {
+export default class EditVehicle extends Component {
 
     static navigationOptions = {
         title: "Edit Vehicle",
@@ -32,11 +30,12 @@ class EditVehicle extends Component {
       super(props);
       this.state = {
         value: 0,
-        text:"",
+        text:this.props.navigation.state.params.VehType,
         vehName:"",
         vehNum:"",
         vehStickerNum:"",
-        parkingSlotNum:""
+        vehParkingSlotNum:"",
+        id:""
       }
     }
 
@@ -60,57 +59,97 @@ class EditVehicle extends Component {
       })
   
       this.setState({
-        parkingSlotNum: this.props.navigation.state.params.VehParkingSlotNum ? 
+        vehParkingSlotNum: this.props.navigation.state.params.VehParkingSlotNum ? 
         this.props.navigation.state.params.VehParkingSlotNum
         : ""
       })
     }
 
-    myFamilyUpdate = () => {
+    onSelect(index, value) {
+      this.setState({
+        text:  `${value}`
+      });
+    }
+
+    ModelName = modelName => {
+      this.setState({ vehName: modelName })
+    }
+    VehNum = vehNum => {
+      this.setState({ vehNum: vehNum })
+    }
+    VehStickerNum = vehStickerNum => {
+      this.setState({ vehStickerNum: vehStickerNum })
+    }
+    VehParkingSlotNum = vehParkingSlotNum => {
+      this.setState({ vehParkingSlotNum: vehParkingSlotNum })
+    }
+
+    editVehicle = () => {
       const {
         VehName,
         VehNum,
         VehStickerNum,
         VehParkingSlotNum,
+        VehType,
+        Veid
       } = this.props.navigation.state.params
 
+      // id = Veid
       value = this.state.text;
       vehName = this.state.vehName
       vehNum = this.state.vehNum
       vehStickerNum = this.state.vehStickerNum
-      parkingSlotNum = this.state.parkingSlotNum
-  
+      parkingSlotNum = this.state.vehParkingSlotNum
+      vehType = this.state.text
+
       const reg = /^[0]?[6789]\d{9}$/
       const OyeFullName = /^[a-zA-Z ]+$/
-  
-      if (vehName.length == 0) {
-        Alert.alert("Vehicle Name should not be empty")
-      } else if (OyeFullName.test(vehName) === false) {
-        alert("Enter valid Vehicle Name")
-        return false
-      } else if (fname.length < 3) {
-        Alert.alert("Vehicle Name should be more than 3 letters")
-      } else if (vehNum.length == 0) {
-        Alert.alert("Vehicle Number cannot be empty")
-      } else if (vehStickerNum.length == 0) {
-        Alert.alert("vehicle Sticker Number should not be empty")
-      } else if (parkingSlotNum.length == 0) {
-        Alert.alert("Parking Slot Number should not be empty")
+  //regex code
+  const oyeNonSpecialRegex = /[^0-9A-Za-z ]/;
+      if (vehName.length == 0 || vehName == "") {
+        Alert.alert("Enter Vehicle Name");
+        return false;
+      } else if (vehNum.length == 0 || vehNum == "") {
+        Alert.alert("Enter Vehicle Number");
+        return false;
+      } else if (vehStickerNum.length == 0 || vehStickerNum == "") {
+        Alert.alert("Enter Sticker Number");
+        return false;
+      } else if (parkingSlotNum.length == 0 || parkingSlotNum == "") {
+        Alert.alert("Enter Parking Slot Number");
+        return false;
+      } else if (oyeNonSpecialRegex.test(vehName) === true) {
+        Alert.alert("Vehicle Name should not contain special character");
+        return false;
+      } else if (oyeNonSpecialRegex.test(vehNum) === true) {
+        Alert.alert("Vehicle Number should not contain special character");
+        return false;
+      } else if (oyeNonSpecialRegex.test(vehStickerNum) === true) {
+        Alert.alert(
+          "Vehicle Sticker Number should not contain special character"
+        );
+        return false;
+      } else if (oyeNonSpecialRegex.test(parkingSlotNum) === true) {
+        Alert.alert("Parking Slot Number should not contain special character");
+        return false;
       } else {
         fetch(
-            `http://${this.props.oyeURL}/oyesafe/api/v1/FamilyMemberDetails/update`,
+          `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/VehicleUpdate`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
             },
             body: JSON.stringify({
-              FMName: vehName.length <= 0 ? VehName : vehName,
+              VEType   : this.state.text === "Two Wheeler" ? "Two Wheeler" : "Four Wheeler",
+              VERegNo   : vehNum.length <= 0 ? VehNum : vehNum.toString(),
+              VEMakeMdl : vehName.length <= 0 ? VehName : vehName,
+              VEStickNo : vehStickerNum.length <= 0 ? VehStickerNum : vehStickerNum.toString(),
+              UPLNum    : parkingSlotNum.length <= 0 ? VehParkingSlotNum : parkingSlotNum.toString(),
+              VEID      : this.props.navigation.state.params.Veid,
+
               
-              FMRltn: vehNum.length <= 0 ? VehNum : vehNum,
-              FMAge: vehStickerNum.length <= 0 ? VehStickerNum : vehStickerNum,
-              FMFlag: parkingSlotNum.length <= 0 ? VehParkingSlotNum : parkingSlotNum
             })
           }
         )
@@ -136,6 +175,7 @@ class EditVehicle extends Component {
       });
     }
   render() {
+
     return (
       <View style={styles.container}>
         {/* <Header/> */}
@@ -149,14 +189,14 @@ class EditVehicle extends Component {
               >
                 <View
                   style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: "flex-start",
-                    justifyContent: "center"
+                    height: hp("6%"),
+                    width: wp("20%"),
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignContent: "center"
                   }}
                 >
                   <Image
-                    resizeMode="contain"
                     source={require("../icons/back.png")}
                     style={styles.viewDetails2}
                   />
@@ -175,93 +215,134 @@ class EditVehicle extends Component {
                 source={require("../icons/OyeSpace.png")}
               />
             </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
+            <View style={{ flex: 0.2 }} />
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+        <Text style={styles.titleOfScreen}>Add Vehicle</Text>
+        <View style={[styles.containers, { flex: 1, flexDirection: "column" ,}]}>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent:'space-around',
+              flexDirection: "row",
+              backgroundColor: "#DAE0E2",
+              height: hp("7%")
+            }}
+          >
+            
+            <RadioGroup
+              style={{ flexDirection: "row" }}
+              onSelect={(index, value) => this.onSelect(index, value)}
+              selectedIndex={
+                this.props.navigation.state.params.VehType === "Two Wheeler" ? 
+                    0                     
+                    : 1
+              }
+            >
+              <RadioButton value={"Two Wheeler"} >
+                <Text>Two Wheeler</Text>
+              </RadioButton>
 
-        <Text style={styles.titleOfScreen}>Edit Vehicle</Text>
-        <View style={[styles.containers,{flex:1,flexDirection:'column'}]}>
-          <View style={{alignItems:'center',flexDirection: "row",backgroundColor:'#DAE0E2',height:hp('7%'),justifyContent:'space-around'}}>
-                    {/* <RadioForm style={{marginTop:hp('1%'),}}
-                      radio_props={radio_props}
-                      initial={this.props.navigation.state.params.VehType == 0 ? 0 : 1}
-                      formHorizontal={true}
-                      labelHorizontal={true}
-                      buttonColor={'#2196f3'}
-                      selectedButtonColor={'orange'}
-                      selectedLabelColor = {'orange'}
-                      animation={true}
-                      buttonWrapStyle={{margin: wp('10%')}}
-                      onPress={(value) => {this.setState({value:value})}}
-                    /> */}
-                    <RadioGroup
-                      style={{ flexDirection: "row" }}
-                      onSelect={(index, value) => this.onSelect(index, value)}
-                    >
-                      <RadioButton value={"Two Wheeler"}>
-                        <Text>Two Wheeler</Text>
-                      </RadioButton>
-
-                      <RadioButton value={"Four Wheeler"}>
-                        <Text>Four Wheeler</Text>
-                      </RadioButton>
-                    </RadioGroup>
-                  </View>     
-            <KeyboardAwareScrollView>
-                  <Form>
-                    <Text style={styles.inputItem}>Vehicle Name</Text>
-                    <Input
-                        style={styles.itemTextValues}
-                        autoCorrect={false}
-                        autoCapitalize="characters"
-                        keyboardType="default"
-                        defaultValue={this.state.vehName}
-                        onChangeText={vehName => this.setState({ vehName : vehName })}
-                    />
-                    <Text style={styles.inputItem}>Vehicle Number</Text>
-                    <Input
-                        style={styles.itemTextValues}
-                        autoCorrect={false}
-                        autoCapitalize="characters"
-                        keyboardType="default"
-                        defaultValue={this.state.vehNum}
-                        onChangeText={vehNum => this.setState({ vehNum : vehNum})}
-                    />
-                    <Text style={styles.inputItem}>Vehicle Sticker Number</Text>
-                    <Input
-                        style={styles.itemTextValues}
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        keyboardType="number-pad"                        
-                        defaultValue={this.state.vehStickerNum}
-                        onChangeText={vehStickerNum => this.setState({ vehStickerNum : vehStickerNum})}
-                    />
-                    <Text style={styles.inputItem}>Parking Slot Number</Text>
-                    <Input
-                        style={styles.itemTextValues}
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        keyboardType='number-pad'
-                        defaultValue={this.state.parkingSlotNum}
-                        onChangeText={parkingSlotNum => this.setState({ parkingSlotNum : parkingSlotNum})}
-                    />
-                  </Form>
-                  <View style={styles.buttonStyle}>
-                    <Button bordered dark style={styles.buttonFamily} onPress={() => this.props.navigation.goBack()}>
-                      <Text style={styles.textFamilyVehicle}>Cancel</Text>
-                    </Button>
-                    <Button bordered dark style={styles.buttonVehicle}>
-                      <Text style={styles.textFamilyVehicle}>Update</Text>
-                    </Button>
-                  </View>
-        
-            </KeyboardAwareScrollView>
+              <RadioButton value={"Four Wheeler"}>
+                <Text>Four Wheeler</Text>
+              </RadioButton>
+            </RadioGroup>
+          </View>
+          {/* <Text style={styles.text}>{this.state.text}</Text> */}
+          <KeyboardAwareScrollView>
+            <Form>
+              <Item style={styles.inputItem} stackedLabel>
+                <Label>Vehicle Name</Label>
+                <Input
+                  // underlineColorAndroid="orange"
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  keyboardType="default"
+                  defaultValue={
+                    this.props.navigation.state.params.VehName ? 
+                    this.props.navigation.state.params.VehName.toString()
+                    : ""
+                  }
+                  value={this.state.vehName}
+                  onChangeText={this.ModelName}
+                />
+              </Item>
+              <Item style={styles.inputItem} stackedLabel>
+                <Label>Vehicle Number</Label>
+                <Input
+                  // underlineColorAndroid="orange"
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  keyboardType="default"
+                  defaultValue={
+                    this.props.navigation.state.params.VehName ? 
+                    this.props.navigation.state.params.VehName.toString()
+                    : ""
+                  }
+                  value={this.state.vehNum}
+                  onChangeText={this.VehNum}
+                />
+              </Item>
+              <Item style={styles.inputItem} stackedLabel>
+                <Label>Vehicle Sticker Number</Label>
+                <Input
+                  // underlineColorAndroid="orange"
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  maxLength={10}
+                  keyboardType='default'
+                  defaultValue={
+                    this.props.navigation.state.params.VehName ? 
+                    this.props.navigation.state.params.VehName.toString()
+                    : ""
+                  }
+                  value={this.state.vehStickerNum}
+                  onChangeText={this.VehStickerNum
+                  }
+                />
+              </Item>
+              <Item style={styles.inputItem} stackedLabel>
+                <Label>Parking Slot Number</Label>
+                <Input
+                  // underlineColorAndroid="orange"
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  keyboardType='default'
+                  defaultValue={
+                    this.props.navigation.state.params.VehParkingSlotNum ? 
+                    this.props.navigation.state.params.VehParkingSlotNum.toString()
+                    : ""
+                  }
+                  value={this.state.vehParkingSlotNum}
+                  onChangeText={(vehParkingSlotNum) =>
+                    this.setState({ vehParkingSlotNum: vehParkingSlotNum })
+                  }
+                />
+              </Item>
+            </Form>
+            <View style={styles.buttonStyle}>
+              <Button
+                bordered
+                info
+                style={styles.buttonCancel}
+                onPress={() => this.props.navigation.goBack()}
+              >
+                <Text style={styles.textFamilyVehicle}>Cancel</Text>
+              </Button>
+              <Button
+                bordered
+                warning
+                style={styles.buttonAdd}
+                onPress={() => this.editVehicle()}
+              >
+                <Text style={styles.textFamilyVehicle}>Edit Vehicle</Text>
+              </Button>
             </View>
+          </KeyboardAwareScrollView>
+        </View>
       </View>
-    );
+   );
   }
 }
 
@@ -273,43 +354,12 @@ const styles = StyleSheet.create({
   containers: {
     
   },
-  viewStyle1: {
-    backgroundColor: "#fff",
-    height: hp("7%"),
-    width: Dimensions.get("screen").width,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    position: "relative"
-  },
-  viewDetails1: {
-    flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginLeft: 3
-  },
-  viewDetails2: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: hp("3%"),
-    height: hp("3%"),
-    marginTop: 5
-    // marginLeft: 10
-  },
-  image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
-  },
-
   titleOfScreen: {
     marginTop:hp("1.6%"),
     textAlign: 'center',
     fontSize: hp('2%'),
     fontWeight:'bold',
-    color:'black',
+    color:'#ff8c00',
     marginBottom: hp("1.6%"),
   },
   inputItem: {
@@ -360,14 +410,55 @@ const styles = StyleSheet.create({
     backgroundColor: "orange",
     justifyContent: "center"
   },
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: wp("6%"),
+    height: hp("2%")
+  },
+  image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("1%")
+  },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  buttonCancel: {
+    width: wp("32%"),
+    height: hp("5%"),
+    borderRadius: hp("2.5%"),
+    borderWidth: hp("0.2%"),
+    borderColor: "#bcbcbc",
+    backgroundColor: "#bcbcbc",
+    justifyContent: "center"
+  },
+  textFamilyVehicle: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: hp("2%")
+  },
+  buttonAdd: {
+    width: wp("32%"),
+    height: hp("5%"),
+    borderRadius: hp("2.5%"),
+    borderWidth: hp("0.2%"),
+    borderColor: "orange",
+    backgroundColor: "orange",
+    justifyContent: "center"
+  }
 });
-
-const mapStateToProps = state => {
-    return {
-        oyeURL: state.OyespaceReducer.oyeURL,
-        MyAccountID: state.UserReducer.MyAccountID,
-        MyOYEMemberID: state.UserReducer.MyOYEMemberID,
-    }
-}
-
-export default connect(mapStateToProps)(EditVehicle);

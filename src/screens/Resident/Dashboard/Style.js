@@ -1,5 +1,9 @@
 import {StyleSheet} from 'react-native';
 import base from '../../../base'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
 
 const Style = StyleSheet.create({
     container: {

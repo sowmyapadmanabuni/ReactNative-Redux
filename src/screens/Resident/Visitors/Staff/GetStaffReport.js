@@ -327,7 +327,7 @@ class GetStaffReport extends React.Component {
                 <Table borderStyle={StaffReportStyle.tableView}>
 
                     <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
-                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber)}/>
+                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
                     {state.tableData.map((rowData, index) => (
                         <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
                             {
@@ -398,4 +398,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(GetStaffReport);
+
 

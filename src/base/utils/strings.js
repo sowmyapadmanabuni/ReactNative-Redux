@@ -10,6 +10,7 @@ const isMandatory = " is required";
 
 const api = {
     oyeSafeDomain:isDev?"apidev.oyespace.com/oye247":"apidev.oyespace.com/oye247",
+    oyeDomain:isDev?"apidev.oyespace.com/oyeliving":"apidev.oyespace.com/oyeliving",
     oyeLivingDomain:isDev?"apiuat.oyespace.com":"OyeLivingApi.oyespace.com",
     protocol:isSecure?"https://":"http://",
     oyeSafeApiPath:"/api/v1/",
@@ -25,6 +26,7 @@ const strings = {
     appName:"OyeSpace",
     oyeSafeUrl:api.protocol+api.oyeSafeDomain+api.oyeSafeApiPath,
     oyeLivingUrl:api.protocol+api.oyeLivingDomain+api.oyeLivingApiPath,
+    oyeLivingDashBoard:api.protocol+api.oyeDomain+api.oyeSafeApiPath,
     oyeSafeApiKey:api.oyeSafeKey,
     oyeLivingApiKey:api.oyeLivingKey,
     gatecloudfuncurl:api.GATE_CLOUD_FUNCTION_URL,
@@ -36,8 +38,8 @@ const strings = {
     StaffImageLink:'http://mediauploaddev.oyespace.com/Images/'
 
 
-
-
+//http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/8
+//https://apidev.oyespace.com/oyeliving/api/v1/
 };
 
 

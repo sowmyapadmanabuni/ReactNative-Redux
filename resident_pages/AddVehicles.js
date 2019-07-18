@@ -20,7 +20,6 @@ import {
   Image,
   Dimensions
 } from "react-native";
-// import Header from "./components/common/Header";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -29,14 +28,13 @@ import { Card, CardItem, Form, Item, Label, Input, Button } from "native-base";
 // import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
-import {connect} from 'react-redux';
 
 var radio_props = [
   { label: "Two Wheeler", value: 0 },
   { label: "Four Wheeler", value: 1 }
 ];
 
-class AddVehicle extends Component {
+export default class AddVehicle extends Component {
   static navigationOptions = {
     title: "Add Vehicle",
     header: null
@@ -90,8 +88,10 @@ class AddVehicle extends Component {
     } else if (oyeNonSpecialRegex.test(parkingSlotNum) === true) {
       Alert.alert("Parking Slot Number should not contain special character");
       return false;
-    } else {
-      fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/Create`, {
+    } else if(value == ""){
+      Alert.alert("Please select Vehicle type")
+    }else {
+      fetch("http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/Create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,11 +102,11 @@ class AddVehicle extends Component {
           VEType: value,
           VEMakeMdl: vehName,
           VEStickNo: vehStickerNum,
-          UNUnitID: this.props.SelectedUnitID,
-          MEMemID: this.props.MyOYEMemberID,
+          UNUnitID: "28",
+          MEMemID: "13",
           UPID: "28",
           UPLNum: parkingSlotNum,
-          ASAssnID: this.props.SelectedAssociationID
+          ASAssnID: "2"
         })
       })
         .then(response => response.json())
@@ -137,14 +137,14 @@ class AddVehicle extends Component {
               >
                 <View
                   style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
+                    height: hp("6%"),
+                    width: wp("20%"),
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignContent: "center"
                   }}
                 >
                   <Image
-                    resizeMode="contain"
                     source={require("../icons/back.png")}
                     style={styles.viewDetails2}
                   />
@@ -163,13 +163,10 @@ class AddVehicle extends Component {
                 source={require("../icons/OyeSpace.png")}
               />
             </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
+            <View style={{ flex: 0.2 }} />
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-        
         <Text style={styles.titleOfScreen}>Add Vehicle</Text>
         <View style={[styles.containers, { flex: 1, flexDirection: "column" ,}]}>
           <View
@@ -235,9 +232,9 @@ class AddVehicle extends Component {
                 <Input
                   // underlineColorAndroid="orange"
                   autoCorrect={false}
-                  autoCapitalize="none"
+                  autoCapitalize="characters"
                   maxLength={10}
-                  keyboardType="number-pad"
+                  keyboardType='default'
                   onChangeText={vehStickerNum =>
                     this.setState({ vehStickerNum: vehStickerNum })
                   }
@@ -248,8 +245,8 @@ class AddVehicle extends Component {
                 <Input
                   // underlineColorAndroid="orange"
                   autoCorrect={false}
-                  autoCapitalize="none"
-                  keyboardType="number-pad"
+                  autoCapitalize="characters"
+                  keyboardType='default'
                   onChangeText={parkingSlotNum =>
                     this.setState({ parkingSlotNum: parkingSlotNum })
                   }
@@ -297,15 +294,13 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
-    width: hp("3%"),
-    height: hp("3%"),
-    marginTop: 5
-    // marginLeft: 10
+    width: wp("6%"),
+    height: hp("2%")
   },
   image1: {
-    width: wp("17%"),
+    width: wp("22%"),
     height: hp("12%"),
-    marginRight: hp("3%")
+    marginRight: hp("1%")
   },
   viewStyle1: {
     backgroundColor: "#fff",
@@ -322,7 +317,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: hp("2%"),
     fontWeight: "bold",
-    color: "black",
+    color: "#ff8c00",
     marginBottom: hp("1.6%")
   },
   inputItem: {
@@ -361,15 +356,3 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
-
-const mapStateToProps = state => {
-    return {
-        oyeURL: state.OyespaceReducer.oyeURL,
-        SelectedAssociationID:state.UserReducer.SelectedAssociationID,
-        MyAccountID: state.UserReducer.MyAccountID,
-        SelectedUnitID:state.UserReducer.SelectedUnitID,
-        MyOYEMemberID: state.UserReducer.MyOYEMemberID,
-    }
-}
-
-export default connect(mapStateToProps)(AddVehicle);

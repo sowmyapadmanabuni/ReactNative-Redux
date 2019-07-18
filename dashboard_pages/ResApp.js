@@ -117,7 +117,7 @@ import SchedulePatrolling from "../src/screens/Patrolling/SchedulePatrolling";
 import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
 import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
 import AddCheckPoints from "../src/screens/Patrolling/AddCheckPoints";
-
+import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement"
 /*
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
 import ViewmembersList from '../assocition_pages/ViewmembersList';
@@ -153,6 +153,7 @@ import Dashboard from '../src/screens/Resident/Dashboard/Dashboard'
 import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader'
 import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport"
 import FirstTab from "../residentDashboardVisitorPages/FirstTab";
+import Subscription from "../assocition_pages/Subscription";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
@@ -737,6 +738,14 @@ addCheckPoint: {
         header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
     }
 },
+  subscriptionManagement: {
+    screen: SubscriptionManagement,
+    navigationOptions: {
+      title: "Subscription Management",
+      header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
+    }
+  },
+
 },{
   initialRouteName: "ResDashBoard",
   headerMode:"screen"

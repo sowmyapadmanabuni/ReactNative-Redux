@@ -21,8 +21,10 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import {connect} from "react-redux";
 
-export default class MyGuests extends Component {
+
+class MyGuests extends Component {
   static navigationOptions = {
     title: "My Guests",
     header: null
@@ -45,7 +47,7 @@ export default class MyGuests extends Component {
 
   getInvitationList = () => {
     fetch(
-      `http://apidev.oyespace.com/oye247/api/v1/Invitation/GetInvitationListByAssocID/8`,
+      `http://apidev.oyespace.com/oye247/api/v1/Invitation/GetInvitationListByAssocID/10386`,
       {
         method: "GET",
         headers: {
@@ -157,6 +159,7 @@ export default class MyGuests extends Component {
   };
 
   render() {
+    console.log("Dashboard",this.props)
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -320,3 +323,21 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+
+
+const mapStateToProps = state => {
+  return {
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyLastName: state.UserReducer.MyLastName,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    dashBoardReducer:state.DashboardReducer
+
+  };
+};
+
+
+export default connect(mapStateToProps)(MyGuests);

@@ -7,11 +7,11 @@ export class Cell extends Component {
         style: ViewPropTypes.style,
         textStyle: Text.propTypes.style,
         borderStyle: ViewPropTypes.style,
-        onClickIcon:PropTypes.func
+        onClickIcon:PropTypes.func,
     };
 
     render() {
-        const { data, width, height, flex, style, textStyle, borderStyle , onClickIcon, ...props } = this.props;
+        const { data, width, height, flex, style, textStyle, borderStyle ,icon, onClickIcon, ...props } = this.props;
         const textDom = React.isValidElement(data) ? (
             data
         ) : (
