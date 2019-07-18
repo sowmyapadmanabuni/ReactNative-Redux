@@ -8,7 +8,9 @@ const isSecure = true;
 
 const isMandatory = " is required";
 
+
 const api = {
+   // oyeSafeDomain:isDev?"apidev.oyespace.com/":"apidev.oyespace.com/", Check for patrolling it is like this
     oyeSafeApiDomainFamily: isDev
    ? "apiuat.oyespace.com/oyesafe/api/v1/"
    : "apiuat.oyespace.com/oyesafe/api/v1/",
@@ -27,6 +29,7 @@ const api = {
 const strings = {
 
     appName:"OyeSpace",
+     //oyeSafeUrl:api.protocol+api.oyeSafeDomain, Patrolling it is like this
     oyeSafeUrlFamily: api.protocol + api.oyeSafeApiDomainFamily,
     oyeSafeUrl:api.protocol+api.oyeSafeDomain+api.oyeSafeApiPath,
     oyeLivingUrl:api.protocol+api.oyeLivingDomain+api.oyeLivingApiPath,
@@ -39,11 +42,8 @@ const strings = {
         lastName:"Last Name"+isMandatory,
     },
     staffPlaceHolder:'https://via.placeholder.com/150/ff8c00/FFFFFF',
-    StaffImageLink:'http://mediauploaddev.oyespace.com/Images/'
-
-
-//http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/8
-//https://apidev.oyespace.com/oyeliving/api/v1/
+    StaffImageLink:'http://mediauploaddev.oyespace.com/Images/',
+    patrolId:"PATROL_ID"
 };
 
 

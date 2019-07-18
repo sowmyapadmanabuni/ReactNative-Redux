@@ -55,8 +55,8 @@ class OTPVerification extends Component {
   }
   componentDidMount() {
     this.interval = setInterval(
-      () => this.setState(prevState => ({ timer: prevState.timer - 1 })),
-      1000
+        () => this.setState(prevState => ({ timer: prevState.timer - 1 })),
+        1000
     );
   }
   handleMobile = mobilenumber => {
@@ -95,81 +95,77 @@ class OTPVerification extends Component {
         },
         body: JSON.stringify(anu)
       })
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log("ravii", responseJson);
-          if (responseJson.success) {
-            if (responseJson.data == null) {
-              this.props.navigation.navigate("RegistrationPageScreen");
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log("ravii", responseJson);
+            if (responseJson.success) {
+              if (responseJson.data == null) {
+                this.props.navigation.navigate("RegistrationPageScreen");
+              } else {
+                const login = moment(new Date()).format("DD-MM-YYYY HH:mm:ss");
+                var today = new Date();
+                date =
+                    today.getDate() +
+                    "/" +
+                    parseInt(today.getMonth() + 1) +
+                    "/" +
+                    today.getFullYear();
+
+                const { updateUserInfo, MyMobileNumber, MyISDCode } = this.props;
+                const {
+                  acAccntID,
+                  acfName,
+                  aclName,
+                  acEmail
+                } = responseJson.data.account;
+
+                updateUserInfo({
+                  prop: "MyAccountID",
+                  value: acAccntID
+                });
+                updateUserInfo({ prop: "MyEmail", value: acEmail });
+                updateUserInfo({
+                  prop: "MyMobileNumber",
+                  value: MyMobileNumber
+                });
+                updateUserInfo({
+                  prop: "MyFirstName",
+                  value: acfName
+                });
+                updateUserInfo({
+                  prop: "MyLastName",
+                  value: aclName
+                });
+                updateUserInfo({
+                  prop: "MyISDCode",
+                  value: MyISDCode
+                });
+                updateUserInfo({ prop: "signedIn", value: true });
+
+                // AsyncStorage.setItem("userId", login);
+
+                global.MyLoginTime = moment(new Date()).format(
+                    "DD-MM-YYYY HH:mm:ss"
+                );
+                // Alert.alert("OTP Verified");
+                this.props.navigation.navigate("ResDashBoard");
+              }
             } else {
-              console.log("hiii", "bbbf");
-              const login = moment(new Date()).format("DD-MM-YYYY HH:mm:ss");
-              var today = new Date();
-              date =
-                today.getDate() +
-                "/" +
-                parseInt(today.getMonth() + 1) +
-                "/" +
-                today.getFullYear();
-
-              const { updateUserInfo, MyMobileNumber, MyISDCode } = this.props;
-
-              const {
-                acAccntID,
-                acfName,
-                aclName,
-                acEmail
-              } = responseJson.data.account;
-
-              updateUserInfo({
-                prop: "MyAccountID",
-                value: acAccntID
-              });
-              updateUserInfo({ prop: "MyEmail", value: acEmail });
-              updateUserInfo({
-                prop: "MyMobileNumber",
-                value: MyMobileNumber
-              });
-              updateUserInfo({
-                prop: "MyFirstName",
-                value: acfName
-              });
-              updateUserInfo({
-                prop: "MyLastName",
-                value: aclName
-              });
-              updateUserInfo({
-                prop: "MyISDCode",
-                value: MyISDCode
-              });
-              updateUserInfo({ prop: "signedIn", value: true });
-
-              // AsyncStorage.setItem("userId", login);
-
-              global.MyLoginTime = moment(new Date()).format(
-                "DD-MM-YYYY HH:mm:ss"
-              );
-              // Alert.alert("OTP Verified");
-              this.props.navigation.navigate("ResDashBoard");
+              console.log("hiii", "failed" + anu);
+              alert("Invalid OTP, check Mobile Number and try again");
             }
-          } else {
-            console.log("hiii", "failed" + anu);
-            alert("Invalid OTP, check Mobile Number and try again");
-          }
 
-          console.log("suvarna", "hi");
-        })
-        .catch(error => {
-          console.error("err " + error);
-          console.log("Verification", "error " + error);
-          alert("OTP Verification failed");
-        });
+            console.log("suvarna", "hi");
+          })
+          .catch(error => {
+            console.error("err " + error);
+            console.log("Verification", "error " + error);
+            alert("OTP Verification failed");
+          });
     }
   };
-  
 
   changeNumber = mobilenumber => {
-    
     this.props.navigation.navigate("MobileReg");
   };
 
@@ -182,10 +178,10 @@ class OTPVerification extends Component {
     };
 
     url =
-      "http://control.msg91.com/api/retryotp.php?authkey=261622AtznpKYJ5c5ab60e&mobile=" +
-      this.props.MyISDCode +
-      this.props.MyMobileNumber +
-      "&retrytype=voice";
+        "http://control.msg91.com/api/retryotp.php?authkey=261622AtznpKYJ5c5ab60e&mobile=" +
+        this.props.MyISDCode +
+        this.props.MyMobileNumber +
+        "&retrytype=voice";
     //  http://122.166.168.160/champ/api/v1/Account/GetAccountDetailsByMobileNumber
     // console.log('anu', url + ' ff' + this.props.MyISDCode + this.props.MyMobileNumber);
     this.setState({
@@ -200,37 +196,37 @@ class OTPVerification extends Component {
       },
       body: JSON.stringify(anu)
     })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("bf responseJson Account", responseJson);
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("bf responseJson Account", responseJson);
 
-        if (responseJson.success) {
-          this.setState({
-            loginTime: new Date()
-          });
-          console.log("responseJson Account if", this.state.loginTime);
-          // this.insert_OTP(mobilenumber, this.props.MyISDCode,'2019-02-03');
-          this.setState({
-            dobTextDMY: moment(new Date()).format("YYYY-MM-DD")
-          });
-        } else {
-          console.log("responseJson Account else", responseJson.data);
+          if (responseJson.success) {
+            this.setState({
+              loginTime: new Date()
+            });
+            console.log("responseJson Account if", this.state.loginTime);
+            // this.insert_OTP(mobilenumber, this.props.MyISDCode,'2019-02-03');
+            this.setState({
+              dobTextDMY: moment(new Date()).format("YYYY-MM-DD")
+            });
+          } else {
+            console.log("responseJson Account else", responseJson.data);
 
-          // alert('OTP not Sent');
-          // this.props.navigation.navigate('CreateOrJoinScreen');
-        }
-        console.log("suvarna", "hi");
-        this.setState({
-          isLoading: false
+            // alert('OTP not Sent');
+            // this.props.navigation.navigate('CreateOrJoinScreen');
+          }
+          console.log("suvarna", "hi");
+          this.setState({
+            isLoading: false
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          alert(" Failed to Get OTP");
+          this.setState({
+            isLoading: false
+          });
         });
-      })
-      .catch(error => {
-        console.error(error);
-        alert(" Failed to Get OTP");
-        this.setState({
-          isLoading: false
-        });
-      });
   };
   getOtp1 = mobilenumber => {
     const reg = /^[0]?[6789]\d{9}$/;
@@ -240,11 +236,17 @@ class OTPVerification extends Component {
       MobileNumber: this.props.MyMobileNumber
     };
 
+    /*  db.transaction(tx => {
+       tx.executeSql('delete  FROM OTPVerification ', [], (tx, results) => {
+         console.log('Results OTPVerification delete ', results.rowsAffected);
+       });
+     }); */
+
     url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/resendotp`;
     //  http://122.166.168.160/champ/api/v1/Account/GetAccountDetailsByMobileNumber
     console.log(
-      "anu",
-      url + " ff" + this.props.MyISDCode + this.props.MyMobileNumber
+        "anu",
+        url + " ff" + this.props.MyISDCode + this.props.MyMobileNumber
     );
     this.setState({
       isLoading: true
@@ -258,45 +260,45 @@ class OTPVerification extends Component {
       },
       body: JSON.stringify(anu)
     })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("bf responseJson Account", responseJson);
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("bf responseJson Account", responseJson);
 
-        if (responseJson.success) {
-          this.setState({
-            loginTime: new Date()
-          });
-          console.log("responseJson Account if", this.state.loginTime);
-          // this.insert_OTP(mobilenumber, this.props.MyISDCode,'2019-02-03');
-          this.setState({
-            dobTextDMY: moment(new Date()).format("YYYY-MM-DD")
-          });
-        } else {
-          console.log("responseJson Account else", responseJson.data);
+          if (responseJson.success) {
+            this.setState({
+              loginTime: new Date()
+            });
+            console.log("responseJson Account if", this.state.loginTime);
+            // this.insert_OTP(mobilenumber, this.props.MyISDCode,'2019-02-03');
+            this.setState({
+              dobTextDMY: moment(new Date()).format("YYYY-MM-DD")
+            });
+          } else {
+            console.log("responseJson Account else", responseJson.data);
 
-          alert("OTP not Sent");
-          // this.props.navigation.navigate('CreateOrJoinScreen');
-        }
-        console.log("suvarna", "hi");
-        this.setState({
-          isLoading: false
+            alert("OTP not Sent");
+            // this.props.navigation.navigate('CreateOrJoinScreen');
+          }
+          console.log("suvarna", "hi");
+          this.setState({
+            isLoading: false
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          alert(" Failed to Get OTP");
+          this.setState({
+            isLoading: false
+          });
         });
-      })
-      .catch(error => {
-        console.error(error);
-        alert(" Failed to Get OTP");
-        this.setState({
-          isLoading: false
-        });
-      });
   };
 
   render() {
     return (
-      <View
-        style={{ flex: 1, flexDirection: "column", backgroundColor: "#fff" }}
-      >
-        {/* <TouchableOpacity
+        <View
+            style={{ flex: 1, flexDirection: "column", backgroundColor: "#fff" }}
+        >
+          {/* <TouchableOpacity
           style={{backgroundColor: "white",paddingTop: 2,paddingRight: 2,paddingLeft: 2,alignItems: "center",flexDirection: "row",paddingBottom: 2,borderColor: "#FF8C00",borderRadius: 4,borderWidth: 1,textAlign: "center",marginTop: 30}}
           onPress={()=> this.props.navigation.goBack()} >
           <Image
@@ -315,194 +317,193 @@ class OTPVerification extends Component {
         </TouchableOpacity>
         <View style={{backgroundColor: "lightgrey",flexDirection: "row",height: 1,width: "100%"}}/> */}
 
-        {/* <Header /> */}
+          {/* <Header /> */}
 
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/headerLogo.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-       
-        <KeyboardAwareScrollView>
-          <View style={{ flex: 1, flexDirection: "column" }}>
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
-              <Text
-                style={{
-                  color: "#ff8c00",
-                  fontSize: hp("2.5%"),
-                  marginTop: hp("1.5%"),
-                  marginBottom: hp("1.5%")
-                }}
-              >
-                Enter OTP
-              </Text>
-            </View>
-            <View>
-              <TextInput
-                style={{
-                  padding: 5,
-                  paddingTop: hp("5%"),
-                  textAlign: "center",
-                  alignContent: "center",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  letterSpacing: hp('1.5%'),
-                  width: wp("50%"),
-                  fontSize: hp("2%"),
-                  alignSelf: "center",
-                  backgroundColor: "white",
-                  borderBottomWidth: 1,
-                  borderColor: "#38bcdb",
-                  marginBottom: 10
-                }}
-                placeholder="Enter OTP"
-                placeholderTextColor="#474749"
-                
-                onChangeText={this.handleOTP}
-                maxLength={6}
-                allowFontScaling={true}
-                textBreakStrategy="highQuality"
-                returnKeyType="done"
-                keyboardType={"numeric"}
-              />
-            </View>
-            <View>
-              {this.state.timer == 1 ? (
-                <Text> </Text>
-              ) : (
-                <Text
-                  style={{
-                    color: "black",
-                    margin: "1%",
-                    textAlign: "center",
-                    marginTop: hp("5%")
-                  }}
-                >
-                  Resend OTP in {this.state.timer} seconds{" "}
-                </Text>
-              )}
-              {this.state.timer == 1 ? (
+          <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
                 <TouchableOpacity
-                  style={styles.mybutton}
-                  onPress={this.getOtp1.bind(this, this.state.OTPNumber)}
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
                 >
-                  <Text style={styles.submitButtonText}>Resend OTP</Text>
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
                 </TouchableOpacity>
-              ) : (
-                <TouchableOpacity style={styles.mybuttonDisable}>
-                  <Text style={styles.submitButtonText}>Resend OTP</Text>
-                </TouchableOpacity>
-              )}
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../icons/OyeSpace.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
 
-              <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
+          <KeyboardAwareScrollView>
+            <View style={{ flex: 1, flexDirection: "column" }}>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <Text
+                    style={{
+                      color: "#ff8c00",
+                      fontSize: hp("2.5%"),
+                      marginTop: hp("1.5%"),
+                      marginBottom: hp("1.5%")
+                    }}
+                >
+                  Enter OTP
+                </Text>
+              </View>
+              <View>
+                <TextInput
+                    style={{
+                      padding: 5,
+                      paddingTop: hp("5%"),
+                      textAlign: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      letterSpacing: hp("1.5%"),
+                      width: wp("50%"),
+                      fontSize: hp("3%"),
+                      alignSelf: "center",
+                      backgroundColor: "white",
+                      borderBottomWidth: 1,
+                      borderColor: "#38bcdb",
+                      marginBottom: 10
+                    }}
+                    placeholder="Enter OTP"
+                    placeholderTextColor="#474749"
+                    onChangeText={this.handleOTP}
+                    maxLength={6}
+                    allowFontScaling={true}
+                    textBreakStrategy="highQuality"
+                    returnKeyType="done"
+                    keyboardType={"numeric"}
+                />
+              </View>
+              <View>
+                {this.state.timer === 1 ? (
+                    <Text> </Text>
+                ) : (
+                    <Text
+                        style={{
+                          color: "black",
+                          margin: "1%",
+                          textAlign: "center",
+                          marginTop: hp("5%")
+                        }}
+                    >
+                      Resend OTP in {this.state.timer} seconds{" "}
+                    </Text>
+                )}
                 {this.state.timer == 1 ? (
-                  <TouchableOpacity
-                    style={styles.mybutton}
-                    onPress={this.getOtp.bind(this, this.state.OTPNumber)}
-                  >
-                    <Text style={styles.submitButtonText}>
-                      Receive OTP By Call <Image />
-                    </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.mybutton}
+                        onPress={this.getOtp1.bind(this, this.state.OTPNumber)}
+                    >
+                      <Text style={styles.submitButtonText}>Resend OTP</Text>
+                    </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity style={styles.mybuttonDisable}>
-                    <Text style={styles.submitButtonText}>
-                      Receive OTP By Call <Image />
-                    </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity style={styles.mybuttonDisable}>
+                      <Text style={styles.submitButtonText}>Resend OTP</Text>
+                    </TouchableOpacity>
                 )}
-              </View>
 
-              <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
-                {this.state.OTPNumber.length == 6 ? (
-                  <Button
-                    onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}
-                    style={{
-                      width: wp("30%"),
-                      height: hp("4.8%"),
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "#ff8c00"
-                    }}
-                    rounded
-                  >
-                    <Text style={{ color: "white", fontSize: hp("2%") }}>
-                      Submit
-                    </Text>
-                  </Button>
-                ) : (
-                  <Button
-                    style={{
-                      width: wp("30%"),
-                      height: hp("4.8%"),
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "#ff8c00"
-                    }}
-                    rounded
-                  >
-                    <Text style={{ color: "white", fontSize: hp("2%") }}>
-                      Submit
-                    </Text>
-                  </Button>
-                )}
+                <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
+                  {this.state.timer == 1 ? (
+                      <TouchableOpacity
+                          style={styles.mybutton}
+                          onPress={this.getOtp.bind(this, this.state.OTPNumber)}
+                      >
+                        <Text style={styles.submitButtonText}>
+                          Receive OTP By Call <Image />
+                        </Text>
+                      </TouchableOpacity>
+                  ) : (
+                      <TouchableOpacity style={styles.mybuttonDisable}>
+                        <Text style={styles.submitButtonText}>
+                          Receive OTP By Call <Image />
+                        </Text>
+                      </TouchableOpacity>
+                  )}
+                </View>
+
+                <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
+                  {this.state.OTPNumber.length == 6 ? (
+                      <Button
+                          onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}
+                          style={{
+                            width: wp("30%"),
+                            height: hp("4.8%"),
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "#ff8c00"
+                          }}
+                          rounded
+                      >
+                        <Text style={{ color: "white", fontSize: hp("2%") }}>
+                          Submit
+                        </Text>
+                      </Button>
+                  ) : (
+                      <Button
+                          style={{
+                            width: wp("30%"),
+                            height: hp("4.8%"),
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "#ff8c00"
+                          }}
+                          rounded
+                      >
+                        <Text style={{ color: "white", fontSize: hp("2%") }}>
+                          Submit
+                        </Text>
+                      </Button>
+                  )}
+                </View>
+              </View>
+              <View
+                  style={{
+                    width: Dimensions.get("screen").width,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    marginTop: hp("5%"),
+                    height: hp("35%")
+                  }}
+              >
+                <Image
+                    style={styles.image}
+                    source={require("../icons/img5.png")}
+                />
               </View>
             </View>
-            <View
-              style={{
-                width: Dimensions.get("screen").width,
-                alignItems: "center",
-                justifyContent: "center",
-                alignContent: "center",
-                marginTop: hp("5%"),
-                height: hp("35%")
-              }}
-            >
-              <Image
-                style={styles.image}
-                source={require("../icons/img5.png")}
-              />
-            </View>
-          </View>
-        </KeyboardAwareScrollView>
-      </View>
+          </KeyboardAwareScrollView>
+        </View>
     );
   }
 }
@@ -678,10 +679,10 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   image1: {
-      width: wp("22%"),
-      height: hp("12%")
-  },
-  
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  }
 });
 
 const mapStateToProps = state => {
@@ -696,6 +697,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-  mapStateToProps,
-  { updateUserInfo }
+    mapStateToProps,
+    { updateUserInfo }
 )(OTPVerification);

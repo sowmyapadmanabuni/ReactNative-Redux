@@ -54,7 +54,6 @@ class DashBoardHeader extends React.Component {
         "?random_number=" +
         new Date().getTime()
     );
-
     return (
       <View style={HeaderStyles.container}>
         <View style={HeaderStyles.subContainerLeft}>

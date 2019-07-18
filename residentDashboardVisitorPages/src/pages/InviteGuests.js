@@ -13,14 +13,14 @@ import { Card,CardItem, Form, Item, Label, Input, Button, } from "native-base"
 import CountryPicker, {getAllCountries} from 'react-native-country-picker-modal';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import moment from 'moment';
-import Switch from '../../src/components/common/Switch.js'
+//import Switch from '../../src/components/common/Switch.js'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import {connect} from 'react-redux';
+import  {connect} from "react-redux";
 
 var multipleEntries = "FALSE";
 
@@ -215,13 +215,14 @@ else{
 
 
   
-  fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
+  fetch('http://apidev.oyespace.com/oye247/api/v1/Invitation/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
       body: JSON.stringify({
+
         "UnUnitID"  :  this.props.dashBoardReducer.uniID,
         "INFName"   : fname,
         "INLName"   : lname,

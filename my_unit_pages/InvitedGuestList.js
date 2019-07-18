@@ -44,35 +44,35 @@ class MyGuests extends Component {
   }
   componentDidMount() {
     this.getInvitationList();
-    console.log('$@#$#%#$%$#%@$@#%@#%$# Association ID',this.props.navigation.state.params.assocId) 
+    console.log('$@#$#%#$%$#%@$@#%@#%$# Association ID',this.props.navigation.state.params.assocId)
   }
 
   getInvitationList = () => {
     fetch(
-      `http://${this.props.oyeURL}/oye247/api/v1/Invitation/GetInvitationListByAssocID/${this.props.SelectedAssociationID}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+        `http://${this.props.oyeURL}/oye247/api/v1/Invitation/GetInvitationListByAssocID/${this.props.SelectedAssociationID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          }
         }
-      }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("Manas", responseJson);
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.data.invitation,
-          error: responseJson.error || null,
-          loading: false
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("Manas", responseJson);
+          this.setState({
+            isLoading: false,
+            dataSource: responseJson.data.invitation,
+            error: responseJson.error || null,
+            loading: false
+          });
+          this.arrayholder = responseJson.data.invitation;
+        })
+        .catch(error => {
+          this.setState({ error, loading: false });
+          console.log(error);
         });
-        this.arrayholder = responseJson.data.invitation;
-      })
-      .catch(error => {
-        this.setState({ error, loading: false });
-        console.log(error);
-      });
   };
 
   searchFilterFunction = text => {
@@ -93,70 +93,70 @@ class MyGuests extends Component {
   renderItem = ({ item, index }) => {
     // console.log(item,index)
     return (
-      <View style={{ flexDirection: "column" }}>
-        <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
-        <View
-          style={[
-            styles.listItem,
-            {
-              justifyContent: "space-between",
-              paddingRight: 0,
-              height: hp("15%")
-            }
-          ]}
-        >
-          <View style={styles.iconContainer}>
-            <Text style={styles.contactIcon}>
-              {item.infName[0].toUpperCase()}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>
-              {item.infName} {item.inlName}
-            </Text>
-            <View style={{ flexDirection: "column" }}>
-              <Text style={styles.infoNumber}>{item.inMobile}</Text>
+        <View style={{ flexDirection: "column" }}>
+          <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
+          <View
+              style={[
+                styles.listItem,
+                {
+                  justifyContent: "space-between",
+                  paddingRight: 0,
+                  height: hp("15%")
+                }
+              ]}
+          >
+            <View style={styles.iconContainer}>
+              <Text style={styles.contactIcon}>
+                {item.infName[0].toUpperCase()}
+              </Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>
+                {item.infName} {item.inlName}
+              </Text>
+              <View style={{ flexDirection: "column" }}>
+                <Text style={styles.infoNumber}>{item.inMobile}</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
+              <Card style={{ paddingTop: 0, }}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate("ShareQRCode", {
+                        value: this.state.dataSource[index]
+                      });
+                    }}
+                >
+                  <CardItem bordered>
+                    <Image
+                        style={styles.images}
+                        source={require("../icons/share.png")}
+                    />
+                  </CardItem>
+                </TouchableOpacity>
+              </Card>
+              <Card style={{ marginTop: 0, }}>
+                <TouchableOpacity
+                    onPress={() => {
+                      {
+                        Platform.OS === "android"
+                            ? Linking.openURL(`telprompt:${item.inMobile}`)
+                            : Linking.openURL(`tel:${item.inMobile}`);
+                      }
+                    }}
+                >
+                  <CardItem bordered>
+                    <Image
+                        style={styles.images}
+                        source={require("../icons/phone.png")}
+                    />
+                  </CardItem>
+                </TouchableOpacity>
+              </Card>
             </View>
           </View>
-          <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
-            <Card style={{ paddingTop: 0, }}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ShareQRCode", {
-                    value: this.state.dataSource[index]
-                  });
-                }}
-              >
-                <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/share.png")}
-                  />
-                </CardItem>
-              </TouchableOpacity>
-            </Card>
-            <Card style={{ marginTop: 0, }}>
-              <TouchableOpacity
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`telprompt:${item.inMobile}`)
-                      : Linking.openURL(`tel:${item.inMobile}`);
-                  }
-                }}
-              >
-                <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/phone.png")}
-                  />
-                </CardItem>
-              </TouchableOpacity>
-            </Card>
-          </View>
+          <View style={{ borderColor: "#707070", borderWidth: wp("0.05%") }} />
         </View>
-        <View style={{ borderColor: "#707070", borderWidth: wp("0.05%") }} />
-      </View>
     );
   };
 
@@ -164,155 +164,155 @@ class MyGuests extends Component {
 
     if (this.state.isLoading) {
       return (
-        <View style={styles.contaianer}>
-          {/* <Header /> */}
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
-                }}
-              >
+          <View style={styles.contaianer}>
+            {/* <Header /> */}
+            <SafeAreaView style={{ backgroundColor: "orange" }}>
+              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+                <View style={styles.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate("ResDashBoard");
+                      }}
+                  >
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: 'flex-start',
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../icons/back.png")}
+                          style={styles.viewDetails2}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
                 <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
                 >
                   <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
+                      style={[styles.image1]}
+                      source={require("../icons/OyeSpace.png")}
                   />
                 </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-       
-        <NavigationEvents
-          onDidFocus={payload => this.getInvitationList()}
-          onWillBlur={payload => this.getInvitationList()}
-        />
-          <Text style={styles.titleOfScreen}>My Guests</Text>
+                <View style={{ flex: 0.2 }}>
+                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            </SafeAreaView>
 
-          <View style={styles.progress}>
-            <ActivityIndicator size="large" color="#F3B431" />
+            <NavigationEvents
+                onDidFocus={payload => this.getInvitationList()}
+                onWillBlur={payload => this.getInvitationList()}
+            />
+            <Text style={styles.titleOfScreen}>My Guests</Text>
+
+            <View style={styles.progress}>
+              <ActivityIndicator size="large" color="#F3B431" />
+            </View>
           </View>
-        </View>
       );
     }
     return (
-      <View style={{ flex: 1 }}>
-        {/* <Header /> */}
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
+        <View style={{ flex: 1 }}>
+          {/* <Header /> */}
+          <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate("ResDashBoard");
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: 'flex-start',
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../icons/OyeSpace.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-       
-        <NavigationEvents
-          onDidFocus={payload => this.getInvitationList()}
-          onWillBlur={payload => this.getInvitationList()}
-        />
-        <Text style={styles.titleOfScreen}> My Guests </Text>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
 
-        <TextInput
-          style={styles.textinput}
-          placeholder="search...."
-          // lightTheme
-          round
-          onChangeText={this.searchFilterFunction}
-        />
-        <FlatList
-          style={{ marginTop: hp('1.5%') }}
-          data={this.state.dataSource.sort((a, b) =>
-            a.infName.localeCompare(b.infName)
-          )}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => item.inInvtID.toString()}
-        />
+          <NavigationEvents
+              onDidFocus={payload => this.getInvitationList()}
+              onWillBlur={payload => this.getInvitationList()}
+          />
+          <Text style={styles.titleOfScreen}> My Guests </Text>
 
-        <TouchableOpacity
-          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-          onPress={() => this.props.navigation.navigate("InviteGuestScreen")}
-        >
-          <Text
-            style={{
-              fontSize: hp('5%'),
-              color: "#fff",
-              fontWeight: "bold",
-              justifyContent: "center",
-              alignItems: "center",
-              alignSelf: "center",
-              marginBottom: hp('0.5%')
-            }}
+          <TextInput
+              style={styles.textinput}
+              placeholder="search...."
+              // lightTheme
+              round
+              onChangeText={this.searchFilterFunction}
+          />
+          <FlatList
+              style={{ marginTop: hp('1.5%') }}
+              data={this.state.dataSource.sort((a, b) =>
+                  a.infName.localeCompare(b.infName)
+              )}
+              renderItem={this.renderItem}
+              keyExtractor={(item, index) => item.inInvtID.toString()}
+          />
+
+          <TouchableOpacity
+              style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+              onPress={() => this.props.navigation.navigate("InviteGuestScreen")}
           >
-            +
-          </Text>
-          {/* <Entypo 
+            <Text
+                style={{
+                  fontSize: hp('5%'),
+                  color: "#fff",
+                  fontWeight: "bold",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignSelf: "center",
+                  marginBottom: hp('0.5%')
+                }}
+            >
+              +
+            </Text>
+            {/* <Entypo
                     name="plus"
                     size={30}
                     color="#fff"
                 /> */}
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
     );
   }
 }

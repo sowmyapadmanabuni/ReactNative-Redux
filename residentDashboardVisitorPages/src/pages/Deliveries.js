@@ -18,12 +18,12 @@ class ViewVisitorsList extends Component {
   static navigationOptions = {
     tabBarLabel: 'ViewVisitorsList',
     drawerIcon: ({tintColor}) => {
-        return (
+      return (
           <Image source={require('../../../icons/OyeSpace.png')}
-          style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-        );
+                 style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
+      );
     }
-}
+  }
   ShowCurrentDate = () => {
     Alert.alert(date + '-' + month + '-' + year);
   }
@@ -68,66 +68,66 @@ class ViewVisitorsList extends Component {
     console.log('member', member);
     //http://122.166.168.160/oyesafe/api/v1/VisitorCommentAndFMID/Update
     fetch('http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorCommentAndFMID/Update',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-        },
-        body: JSON.stringify(member)
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.success) {
-          console.log('response', responseJson);
-          //alert('member added suceefully !')
-          ///FCM Start
-          fcmMsg = {
-            "data": {
-              "activt": "childExitApproved",
-              "name": this.props.MyFirstName + " " + this.props.MyLastName,
-              "nr_id": visitorId,
-              "entry_type": peermissionStatus,
-              "mobile": this.props.MyMobileNumber,
-            },
-            "to": "/topics/AllGuards" + assnID,
-          }
-          console.log('fcmMsg ', fcmMsg);
-          fetch('https://fcm.googleapis.com/fcm/send',
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "key=AAAAZFz1cFA:APA91bHV9vd8g4zSMR13q_IYrNmza0e0m0EgG4BJxzaQOcH3Nc3RRrTfYNyRryEgz0iDQwXhP-XYHAGOIcgYjLOf2KnwYp-6_9XKNdiYzjakfnFFruYz89BXpc474OWJBU_ZzCScV6Zy",
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+          },
+          body: JSON.stringify(member)
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (responseJson.success) {
+            console.log('response', responseJson);
+            //alert('member added suceefully !')
+            ///FCM Start
+            fcmMsg = {
+              "data": {
+                "activt": "childExitApproved",
+                "name": this.props.MyFirstName + " " + this.props.MyLastName,
+                "nr_id": visitorId,
+                "entry_type": peermissionStatus,
+                "mobile": this.props.MyMobileNumber,
               },
-              body: JSON.stringify(fcmMsg)
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              console.log('response fcmMsg', responseJson);
-              if (responseJson.success) {
-                //alert('member added suceefully !')
-              } else {
-                console.log('hiii', responseJson);
-               // alert('fcmMsg failed  !')
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-              alert('caught error in fcmMsg');
-            });
-          ///FCM end
-        }
-        else {
-          console.log('hiii', responseJson);
-          alert('failed to add member !');
-        }
-        console.log('suvarna', 'hi');
-      })
-      .catch((error) => {
-        console.error(error);
-        alert('caught error in adding member');
-      });
+              "to": "/topics/AllGuards" + assnID,
+            }
+            console.log('fcmMsg ', fcmMsg);
+            fetch('https://fcm.googleapis.com/fcm/send',
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": "key=AAAAZFz1cFA:APA91bHV9vd8g4zSMR13q_IYrNmza0e0m0EgG4BJxzaQOcH3Nc3RRrTfYNyRryEgz0iDQwXhP-XYHAGOIcgYjLOf2KnwYp-6_9XKNdiYzjakfnFFruYz89BXpc474OWJBU_ZzCScV6Zy",
+                  },
+                  body: JSON.stringify(fcmMsg)
+                })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                  console.log('response fcmMsg', responseJson);
+                  if (responseJson.success) {
+                    //alert('member added suceefully !')
+                  } else {
+                    console.log('hiii', responseJson);
+                    // alert('fcmMsg failed  !')
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                  alert('caught error in fcmMsg');
+                });
+            ///FCM end
+          }
+          else {
+            console.log('hiii', responseJson);
+            alert('failed to add member !');
+          }
+          console.log('suvarna', 'hi');
+        })
+        .catch((error) => {
+          console.error(error);
+          alert('caught error in adding member');
+        });
   }
 
   onDOBPress = () => {
@@ -188,131 +188,129 @@ class ViewVisitorsList extends Component {
       <Text style={styles.text}>{item.vlExitT.substring(11, 16)}</Text>
     </View>;
     const childExitOptions = <View style={{ flexDirection: 'row' }}><TouchableOpacity
-      style={styles.mybutton1}
-      onPress={this.updatePersssion.bind(this, "Approved", item.vlVisLgID, item.asAssnID)}
+        style={styles.mybutton1}
+        onPress={this.updatePersssion.bind(this, "Approved", item.vlVisLgID, item.asAssnID)}
 
-             /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
+        /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
       <Text style={styles.lighttext}> Allow </Text>
     </TouchableOpacity><TouchableOpacity
-      style={styles.mybutton1}
-      onPress={this.updatePersssion.bind(this, "Rejected", item.vlVisLgID, item.asAssnID)}  /*Products is navigation name*/>
-        <Text style={styles.lighttext}> Reject </Text>
-      </TouchableOpacity></View>;
+        style={styles.mybutton1}
+        onPress={this.updatePersssion.bind(this, "Rejected", item.vlVisLgID, item.asAssnID)}  /*Products is navigation name*/>
+      <Text style={styles.lighttext}> Reject </Text>
+    </TouchableOpacity></View>;
     const courierEntryOptions = <View style={{ flexDirection: 'row' }}><TouchableOpacity
-      style={styles.mybutton1}
-      onPress={this.updatePersssion.bind(this, "Approved", item.vlVisLgID, item.asAssnID)}
+        style={styles.mybutton1}
+        onPress={this.updatePersssion.bind(this, "Approved", item.vlVisLgID, item.asAssnID)}
 
-              /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
+        /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
       <Text style={styles.lighttext}> Allow </Text>
     </TouchableOpacity><TouchableOpacity
-      style={styles.mybutton1}
-      onPress={this.updatePersssion.bind(this, "Leave at Guard", item.vlVisLgID, item.asAssnID)}  /*Products is navigation name*/>
-        <Text style={styles.lighttext}> Reject </Text>
-      </TouchableOpacity></View>;
+        style={styles.mybutton1}
+        onPress={this.updatePersssion.bind(this, "Leave at Guard", item.vlVisLgID, item.asAssnID)}  /*Products is navigation name*/>
+      <Text style={styles.lighttext}> Reject </Text>
+    </TouchableOpacity></View>;
     const buttonUpdateDetails = <View style={{ flexDirection: 'row' }}><TouchableOpacity
-      style={styles.mybutton1}
-      onPress={() => navigate('UpdateDetailsScreen', { vlVisLgID: item.vlVisLgID, asAssnID: item.asAssnID })}
+        style={styles.mybutton1}
+        onPress={() => navigate('UpdateDetailsScreen', { vlVisLgID: item.vlVisLgID, asAssnID: item.asAssnID })}
 
-              /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
+        /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
       <Text style={styles.lighttext}> Update Details </Text>
     </TouchableOpacity></View>;
     //PERSON+"Association"+prefManager.getAssociationId()+NONREGULAR+movie.getOYERegularVisitorID()+".jpg"
     //http://cohapi.careofhomes.com/Images/PERSONAssociation30NONREGULAR97.jpg
     //  console.log('NONREGULAR '+item.vlfName, 'http://cohapi.careofhomes.com/Images/PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg  ' );
     return (
-      <View style={{
-        flex: 1, backgroundColor: 'white', padding: 5, borderColor: 'orange',
-        marginLeft: 5, marginRight: 5, marginTop: 5, borderRadius: 2, borderWidth: 1,
-      }}>
-        <View style={{ flex: 3, flexDirection: 'row', padding: 1 }}>
-          <View style={{ flex: 1, flexDirection: 'column' }}>
+        <View style={{
+          flex: 1, backgroundColor: 'white', padding: 5, borderColor: 'orange',
+          marginLeft: 5, marginRight: 5, marginTop: 5, borderRadius: 2, borderWidth: 1,
+        }}>
+          <View style={{ flex: 3, flexDirection: 'row', padding: 1 }}>
+            <View style={{ flex: 1, flexDirection: 'column' }}>
 
-            <TouchableHighlight
-              style={[styles.profileImgContainer, { borderColor: 'orange', borderWidth: 1 }]} >
-              { item.vlVisType === 'STAFF' ?
-                <ImageLoad
-                style={{ width: 100, height: 100, marginRight: 10 }}
-                style={styles.profileImg}
-                loadingStyle={{ size: 'large', color: 'blue' }}
-                source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'STAFF' + item.reRgVisID + '.jpg' }} />
-                :
-                <ImageLoad
-                style={{ width: 100, height: 100, marginRight: 10 }}
-                style={styles.profileImg}
-                loadingStyle={{ size: 'large', color: 'blue' }}
-                source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} />
+              <TouchableHighlight
+                  style={[styles.profileImgContainer, { borderColor: 'orange', borderWidth: 1 }]} >
+                { item.vlVisType === 'STAFF' ?
+                    <ImageLoad
+                        style={{ width: 100, height: 100, marginRight: 10 }}
+                        style={styles.profileImg}
+                        loadingStyle={{ size: 'large', color: 'blue' }}
+                        source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'STAFF' + item.reRgVisID + '.jpg' }} />
+                    :
+                    <ImageLoad
+                        style={{ width: 100, height: 100, marginRight: 10 }}
+                        style={styles.profileImg}
+                        loadingStyle={{ size: 'large', color: 'blue' }}
+                        source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} />
                 }
-              {/* <ImageLoad
+                {/* <ImageLoad
                 style={{ width: 70, height: 70, marginRight: 10 }}
                 style={styles.profileImg}
                 loadingStyle={{ size: 'large', color: 'blue' }}
                 source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} /> */}
 
-            </TouchableHighlight>
-            <TouchableHighlight style={[styles.vehicleNum, {width:100}]}
-              underlayColor='#fff'>
-              <Text>{item.vlVehNum}</Text>
-            </TouchableHighlight>
-          </View>
+              </TouchableHighlight>
+              <TouchableHighlight style={[styles.vehicleNum, {width:100}]}
+                                  underlayColor='#fff'>
+                <Text>{item.vlVehNum}</Text>
+              </TouchableHighlight>
+            </View>
 
-          <View style={{ flex: 2, flexDirection: 'column', marginLeft: 5 }}>
-            <Text style={styles.title}>{item.vlfName + ' ' + item.vllName}</Text>
-            {item.vlEntryT.substring(11, 16) === '00:00' && item.vlVisType === 'Child_Exit'
+            <View style={{ flex: 2, flexDirection: 'column', marginLeft: 5 }}>
+              <Text style={styles.title}>{item.vlfName + ' ' + item.vllName}</Text>
+              {item.vlEntryT.substring(11, 16) === '00:00' && item.vlVisType === 'Child_Exit'
               && item.vlCmnts === '' ? childExitOptions : item.vlEntryT.substring(11, 16) === '00:00'
-                && item.vlVisType === 'Service Provider'
-                && item.vlCmnts === '' ? courierEntryOptions : timeMessage}
+              && item.vlVisType === 'Service Provider'
+              && item.vlCmnts === '' ? courierEntryOptions : timeMessage}
 
-            <Text style={styles.text}>Visiting : {item.unUniName}</Text>
-            <TouchableOpacity onPress={() =>
-              Communications.phonecall(item.vlMobile, true)}>
-              <View
-                style={{ flex: 1, flexDirection: 'row' }}>
-                {/* <Image
+              <Text style={styles.text}>Visiting : {item.unUniName}</Text>
+              <TouchableOpacity onPress={() =>
+                  Communications.phonecall(item.vlMobile, true)}>
+                <View
+                    style={{ flex: 1, flexDirection: 'row' }}>
+                  {/* <Image
                   source={require('../../../icons/call_answer_green.png')}
                   style={{ height: 15, width: 15, alignItems: "center" }} /> */}
-                <Text style={styles.text}>{item.vlMobile}</Text>
-              </View>
-            </TouchableOpacity>
-            <View
-              style={{ flex: 1, flexDirection: 'row' }}>
-              <Text style={styles.text}>Visitor Type : {item.vlVisType}  </Text>
-              {item.vlEntryT.substring(11, 16) === '00:00' && item.vlVisType === 'Child_Exit'
+                  <Text style={styles.text}>{item.vlMobile}</Text>
+                </View>
+              </TouchableOpacity>
+              <View
+                  style={{ flex: 1, flexDirection: 'row' }}>
+                <Text style={styles.text}>Visitor Type : {item.vlVisType}  </Text>
+                {item.vlEntryT.substring(11, 16) === '00:00' && item.vlVisType === 'Child_Exit'
                 && item.vlCmnts === '' ? <Text style={styles.text}> </Text> : <Text style={styles.text}>{item.vlCmnts}  </Text>}
-            </View>
-            <Text style={styles.text}>Number of persons : {item.vlVisCnt}</Text>
-            {/* <Image source={require('./team.png')}  /> */}
-            {item.vlExitT.substring(11, 16) === '00:00' && item.vlVisType === 'Regular'
+              </View>
+              <Text style={styles.text}>Number of persons : {item.vlVisCnt}</Text>
+              {/* <Image source={require('./team.png')}  /> */}
+              {item.vlExitT.substring(11, 16) === '00:00' && item.vlVisType === 'Regular'
               && item.vlCmnts === '' ? buttonUpdateDetails : <Text style={styles.text}> </Text>}
-            {item.vlExitT.substring(11, 16) === '00:00' && item.vlVisType === 'ServiceProvider'
+              {item.vlExitT.substring(11, 16) === '00:00' && item.vlVisType === 'ServiceProvider'
               && item.vlCmnts === '' ? buttonUpdateDetails : <Text style={styles.text}> </Text>}
 
-          </View>
-          {/* <View style={{ backgroundColor: 'lightgrey', flexDirection: "column", width: 1, height:'80%', justifyContent:'center' }}></View> */}
-          {/* <View style={{flex:.6, justifyContent:'center'}}>
+            </View>
+            {/* <View style={{ backgroundColor: 'lightgrey', flexDirection: "column", width: 1, height:'80%', justifyContent:'center' }}></View> */}
+            {/* <View style={{flex:.6, justifyContent:'center'}}>
           <TouchableOpacity onPress={() =>
               Communications.phonecall(item.vlMobile, true)}>
-        <Image  
+        <Image
                  style={{margin:10, height:40, width:40}}
-                source={require('../pages/assets/images/call_answer_green.png')}  
-              
+                source={require('../pages/assets/images/call_answer_green.png')}
+
                  />
-
-             </TouchableOpacity>    
-
+             </TouchableOpacity>
           </View>   */}
-        </View>
-        
-        {/* <Image source={{uri: 'http://cohapi.careofhomes.com/Images/PERSONAssociation30NONREGULAR'+item.oyeNonRegularVisitorID+'.jpg'}}
+          </View>
+
+          {/* <Image source={{uri: 'http://cohapi.careofhomes.com/Images/PERSONAssociation30NONREGULAR'+item.oyeNonRegularVisitorID+'.jpg'}}
        style={{width: 40, height: 40,resizeMode : 'stretch'}} /> */}
-      </View>
+        </View>
     )
 
   }
 
   renderSeparator = () => {
     return (
-      <View style={{ height: 2, width: '100%', backgroundColor: '#fff' }}>
-      </View>
+        <View style={{ height: 2, width: '100%', backgroundColor: '#fff' }}>
+        </View>
     )
 
   }
@@ -341,23 +339,23 @@ class ViewVisitorsList extends Component {
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
     })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log('vievisitorlist ', responseJson);
-        this.setState({
-          dataSource: responseJson.data.visitorlogbydate.filter(x => x.unUnitID == this.props.SelectedUnitID && x.vlVisType === 'Delivery' ),
-       // dataSource: responseJson.data.visitorlogbydate,
-          isLoading: false
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log('vievisitorlist ', responseJson);
+          this.setState({
+            dataSource: responseJson.data.visitorlogbydate.filter(x => x.unUnitID == this.props.SelectedUnitID && x.vlVisType === 'Delivery' ),
+            // dataSource: responseJson.data.visitorlogbydate,
+            isLoading: false
+          })
+          // console.log('anu', dataSource);
         })
-        // console.log('anu', dataSource);
-      })
-      .catch((error) => {
-        console.log('err ' + error)
-        this.setState({
-          isLoading: false
+        .catch((error) => {
+          console.log('err ' + error)
+          this.setState({
+            isLoading: false
+          })
+          Alert.alert("No Data for Selected Date");
         })
-        Alert.alert("No Data for Selected Date");
-      })
 
   }
 
@@ -372,49 +370,47 @@ class ViewVisitorsList extends Component {
     const { navigate } = this.props.navigation;
 
     return (
-      <View style={{ backgroundColor: '#FFF', height: '100%' }}>
-        <View>
-        {/* <View style={{flexDirection:'row',}}> */}
-                    {/* <View style={{flex:1, marginTop:43,marginRight:0, justifyContent:'center',marginLeft:10}}>
+        <View style={{ backgroundColor: '#FFF', height: '100%' }}>
+          <View>
+            {/* <View style={{flexDirection:'row',}}> */}
+            {/* <View style={{flex:1, marginTop:43,marginRight:0, justifyContent:'center',marginLeft:10}}>
                         <TouchableOpacity onPress={() => navigate(('ResDashBoard'), { cat: '' })}
                         >
                         <Image source={require('../../../icons/back.png')}
                         style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                         </TouchableOpacity>
                     </View> */}
-                    {/* <TouchableOpacity 
+            {/* <TouchableOpacity
                         style={{paddingTop: 2, paddingRight: 2, paddingLeft: 2, flex: 1, alignItems: 'center', flexDirection: 'row',
                             paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:'6%'}}
                             onPress={() => this.props.navigation.navigate('SideMenu')}>
                         <Image source={require('../pages/assets/images/menu_button.png')}
                             style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                     </TouchableOpacity> */}
-                    {/* <View style={{ flex: 5, alignItems:'center', justifyContent:'center'}}> */}
-                    {/* <Image source={require('../../../icons/OyespaceRebrandingLogo.png')}
+            {/* <View style={{ flex: 5, alignItems:'center', justifyContent:'center'}}> */}
+            {/* <Image source={require('../../../icons/OyespaceRebrandingLogo.png')}
                         style={{height: 40, width: 95, marginTop: 45,marginBottom:5}} /> */}
-                    {/* </View>  
-                    <View style={{flex:1,marginTop:45, marginRight:10, justifyContent:'center',}}>    
-                    </View>                 
-                </View> 
-
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-
-                <Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',margin:10 }}>My Visitors</Text> */}
-            
-          <View style={{ flexDirection: 'row', justify: 'center', margin: 5 }}>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Text style={{ fontSize: 15, color: 'black', margin: 5 }}>Select Date: </Text>
-              <TouchableOpacity onPress={this.onDOBPress.bind(this)} >
-                <View style={styles.datePickerBox}>
-                  <Text style={styles.datePickerText}>{this.state.dobText}</Text>
+            {/* </View>
+                    <View style={{flex:1,marginTop:45, marginRight:10, justifyContent:'center',}}>
+                    </View>
                 </View>
-              </TouchableOpacity>
-              <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
+                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
+                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
+                <Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',margin:10 }}>My Visitors</Text> */}
+
+            <View style={{ flexDirection: 'row', justify: 'center', margin: 5 }}>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <Text style={{ fontSize: 15, color: 'black', margin: 5 }}>Select Date: </Text>
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)} >
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>{this.state.dobText}</Text>
+                  </View>
+                </TouchableOpacity>
+                <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
+              </View>
             </View>
           </View>
-        </View>
-        {/*  <View style={{ height: '10%' }}>
+          {/*  <View style={{ height: '10%' }}>
           <View style={{ flex: 1, justify: 'center', flexDirection: 'row' , margin: 5}}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <Text style={{ fontSize: 15, color: 'black', marginTop: 10 }}>Select Date: </Text>
@@ -427,41 +423,41 @@ class ViewVisitorsList extends Component {
             </View>
           </View>
         </View> */}
-        {this.state.isLoading
-          ?
-          <View style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white'
-          }}>
-            <ActivityIndicator
-              size="large"
-              color="#330066"
-              animating />
-          </View>
-          :
-          this.state.dataSource.length == 0 ?
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-              <Text style={{ backgroundColor: 'white' }}>No Visitors for Selected Date</Text>
-            </View>
-            :
-            <View style={{ backgroundColor: '#FFF' }}>
-              <View style={{ height: '90%' }}>
-                <FlatList
-                  data={this.state.dataSource}
-                  renderItem={this.renderItem}
-                  keyExtractor={(item, index) => item.name}
-                  ItemSeparatorComponent={this.renderSeparator}
-                />
-                {/*  <TouchableOpacity activeOpacity={0.5} onPress={this.SampleFunction} style={styles.TouchableOpacityStyle} >
+          {this.state.isLoading
+              ?
+              <View style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'white'
+              }}>
+                <ActivityIndicator
+                    size="large"
+                    color="#330066"
+                    animating />
+              </View>
+              :
+              this.state.dataSource.length == 0 ?
+                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+                    <Text style={{ backgroundColor: 'white' }}>No Visitors for Selected Date</Text>
+                  </View>
+                  :
+                  <View style={{ backgroundColor: '#FFF' }}>
+                    <View style={{ height: '90%' }}>
+                      <FlatList
+                          data={this.state.dataSource}
+                          renderItem={this.renderItem}
+                          keyExtractor={(item, index) => item.name}
+                          ItemSeparatorComponent={this.renderSeparator}
+                      />
+                      {/*  <TouchableOpacity activeOpacity={0.5} onPress={this.SampleFunction} style={styles.TouchableOpacityStyle} >
               <Image source={{ uri: 'https://reactnativecode.com/wp-content/uploads/2017/11/Floating_Button.png' }}
                 style={styles.FloatingButtonStyle} />
             </TouchableOpacity> */}
-              </View>
-            </View>
-        }
-      </View>
+                    </View>
+                  </View>
+          }
+        </View>
     );
   }
 }

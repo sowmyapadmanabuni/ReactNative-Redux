@@ -167,22 +167,21 @@ class GetStaffReport extends React.Component {
         let endDateString = moment(input.ToDate, "YYYY-MM-DDTHH:mm:ss a")
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days())
-        let difference = duration.days()
+        let difference=duration.as('days');
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
                 if (difference !== 0) {
-                    for (let i = 0; i < reportsData.length; i++) {
+                    for (let i = 0; i < difference; i++) {
                         let rowData = []
                         if (initialDate !== reportsData[i].vlEntryT || !reportsData[i]) {
-                            base.utils.logger.logArgs(i, initialDate, reportsData[i].vlEntryT)
                             rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                             rowData.push('No Entry on this Date')
 
                         } else {
-                            base.utils.logger.logArgs(i, initialDate, reportsData[i].vlEntryT)
+
                             rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                             rowData.push(reportsData[i].vlengName)
                             rowData.push(moment(reportsData[i].vlEntryT).format('HH:mm' + ' A'))
@@ -269,7 +268,6 @@ class GetStaffReport extends React.Component {
                 </ScrollView>
 
                 {this.state.numberOfPages>1 ?
-
                 <View style={StaffReportStyle.bottomView}>
                     <TouchableOpacity style={{alignItems: 'center'}}
                                       onPress={() => this.changeTheData(this.state.pageNumber - 1)}
@@ -327,7 +325,7 @@ class GetStaffReport extends React.Component {
                 <Table borderStyle={StaffReportStyle.tableView}>
 
                     <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
-                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber)}/>
+                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
                     {state.tableData.map((rowData, index) => (
                         <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
                             {
@@ -358,7 +356,7 @@ class GetStaffReport extends React.Component {
         if(datToReversOrder){
             staffReportData=datToReversOrder
         }
-            let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
+          let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
             let pageEndData=pageNumber*(self.state.pageLimit)
         if (pageEndData>staffReportData.length){
             pageEndData=staffReportData.length
@@ -398,5 +396,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(GetStaffReport);
-
-

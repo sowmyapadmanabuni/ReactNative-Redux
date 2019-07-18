@@ -357,7 +357,6 @@ role:"",
 //     const { oyeURL } = this.props.oyespaceReducer;
 
 //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
-
 //     updateUserInfo({
 //       prop: "SelectedAssociationID",
 //       value: dropdown[index].associationId
@@ -412,8 +411,9 @@ roleCheckForAdmin = () => {
     self.setState({ isLoading: true });
     console.log("APi", base.utils.strings.oyeLivingDashBoard);
     let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
-      this.props.userReducer.MyAccountID
-    );
+        this.props.userReducer.MyAccountID
+    )
+    console.log('data from stat',stat)
     //self.setState({isLoading: false})
     try {
       if (stat && stat.data) {
@@ -662,7 +662,7 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
                         cardText={'Offers Zone'}
                         cardIcon={require("../../../../icons/offers.png")}
                         backgroundColor={base.theme.colors.rosePink}
-                        // onCardClick={() => this.changeCardStatus("OFFERS")}
+                        onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
         </View>
@@ -994,7 +994,6 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
       </TouchableHighlight>
     );
   }
-
   myUnit() {}
 
   goToFirstTab() {
@@ -1133,9 +1132,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    userReducer: state.UserReducer,
-
-    isCreateLoading: state.NotificationReducer.isCreateLoading,
+      isCreateLoading: state.NotificationReducer.isCreateLoading,
     notificationCount: state.NotificationReducer.notificationCount,
     notifications: state.NotificationReducer.notifications,
     joinedAssociations: state.AppReducer.joinedAssociations,

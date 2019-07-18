@@ -7,12 +7,14 @@
 
 #import <Firebase.h>
 #import "AppDelegate.h"
+#import <React/RCTBridge.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "RNFirebaseNotifications.h"
 #import "RNFirebaseMessaging.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
@@ -21,6 +23,9 @@
   [FIRApp configure];
   [RNFirebaseNotifications configure];
   NSURL *jsCodeLocation;
+  
+  [GMSServices provideAPIKey:@"AIzaSyCJc5HvTftpIWK1VRupATlDPgYVYqVn2Dc"];
+
   
   //Uncomment code below to check Postscript name of the fonts   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
   /*for (NSString *fontFamilyName in [UIFont familyNames]) {
@@ -32,6 +37,7 @@
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   //Release
 //  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  
   
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"OyeSpace"

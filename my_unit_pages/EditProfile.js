@@ -162,13 +162,13 @@ class EditProfile extends Component {
       Alert.alert("Primary mobile number should contain 10 numerics.")
     } else if (reg.test(mobilenumber) === true) {
       Alert.alert(
-        "Primary mobile number should not contain special characters."
+          "Primary mobile number should not contain special characters."
       )
     } else if (alternatemobilenumber.length < 10) {
       Alert.alert("Alternate mobile number should contain 10 numerics.")
     } else if (reg.test(alternatemobilenumber) === true) {
       Alert.alert(
-        "Alternate mobile number should not contain special characters."
+          "Alternate mobile number should not contain special characters."
       )
     }
     else if (email.length == 0) {
@@ -180,88 +180,88 @@ class EditProfile extends Component {
       Alert.alert("Enter valid alternative email id.")
     } else {
       axios
-        .post(
-          `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
-          {
-            ACFName:
-              firstname.length <= 0 ? profileDataSourceFirstName : firstname,
-            ACLName:
-              lastname.length <= 0 ? profileDataSourceLastName : lastname,
-            ACMobile:
-              mobilenumber.length <= 0
-                ? profileDataSourceMobileNumber
-                : mobilenumber,
-            ACEmail: email.length <= 0 ? profileDataSourceEmail : email,
-            ACISDCode:
-              callingCode.length <= 0
-                ? profileDataSourceIsdCode + profileDataSourceCca2
-                : callingCode + cca2,
-            ACMobile1:
-              alternatemobilenumber.length <= 0
-                ? profileDataSourceAlternateMobileNum
-                : alternatemobilenumber,
-            ACISDCode1:
-              callingCode1.length <= 0
-                ? profileDataSourceIsdCode1 + profileDataSourceCca3
-                : callingCode1 + cca3,
-            ACMobile2: null,
-            ACISDCode2: null,
-            ACMobile3: null,
-            ACISDCode3: null,
-            ACMobile4: null,
-            ACISDCode4: null,
-            ACEmail1:
-              alternateemail.length <= 0
-                ? profileDataSourceAlternateEmail
-                : alternateemail,
-            ACEmail2: null,
-            ACEmail3: null,
-            ACEmail4: null,
-            ACImgName: photo.fileName,
-
-            ACAccntID: this.props.MyAccountID
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-            }
-          }
-        )
-
-        .then(response => {
-          console.log(response.data)
-          this.props.navigation.goBack()
-          RNFetchBlob.config({
-            trusty: true
-          })
-            .fetch(
-              "POST",
-              "http://mediaupload.oyespace.com/oyeliving/api/V1/association/upload",
-
+          .post(
+              `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
               {
-                "Content-Type": "multipart/form-data",
-                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                ACFName:
+                    firstname.length <= 0 ? profileDataSourceFirstName : firstname,
+                ACLName:
+                    lastname.length <= 0 ? profileDataSourceLastName : lastname,
+                ACMobile:
+                    mobilenumber.length <= 0
+                        ? profileDataSourceMobileNumber
+                        : mobilenumber,
+                ACEmail: email.length <= 0 ? profileDataSourceEmail : email,
+                ACISDCode:
+                    callingCode.length <= 0
+                        ? profileDataSourceIsdCode + profileDataSourceCca2
+                        : callingCode + cca2,
+                ACMobile1:
+                    alternatemobilenumber.length <= 0
+                        ? profileDataSourceAlternateMobileNum
+                        : alternatemobilenumber,
+                ACISDCode1:
+                    callingCode1.length <= 0
+                        ? profileDataSourceIsdCode1 + profileDataSourceCca3
+                        : callingCode1 + cca3,
+                ACMobile2: null,
+                ACISDCode2: null,
+                ACMobile3: null,
+                ACISDCode3: null,
+                ACMobile4: null,
+                ACISDCode4: null,
+                ACEmail1:
+                    alternateemail.length <= 0
+                        ? profileDataSourceAlternateEmail
+                        : alternateemail,
+                ACEmail2: null,
+                ACEmail3: null,
+                ACEmail4: null,
+                ACImgName: photo.fileName,
+
+                ACAccntID: this.props.MyAccountID
               },
-              [
-                {
-                  name: "oyespace",
-                  filename: this.state.photoDetails.fileName,
-                  type: this.state.photoDetails.type,
-                  data: this.state.photoDetails.data // this is a base 64 string
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
                 }
-              ]
-            )
-            .then(resp => {
-              console.log("resp", resp)
+              }
+          )
+
+          .then(response => {
+            console.log(response.data)
+            this.props.navigation.goBack()
+            RNFetchBlob.config({
+              trusty: true
             })
-            .catch(error => {
-              console.log("RNFetchBlob err = ", err)
-            })
-        })
-        .catch(error => {
-          console.log(error)
-        })
+                .fetch(
+                    "POST",
+                    "http://mediaupload.oyespace.com/oyeliving/api/V1/association/upload",
+
+                    {
+                      "Content-Type": "multipart/form-data",
+                      "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                    },
+                    [
+                      {
+                        name: "oyespace",
+                        filename: this.state.photoDetails.fileName,
+                        type: this.state.photoDetails.type,
+                        data: this.state.photoDetails.data // this is a base 64 string
+                      }
+                    ]
+                )
+                .then(resp => {
+                  console.log("resp", resp)
+                })
+                .catch(error => {
+                  console.log("RNFetchBlob err = ", err)
+                })
+          })
+          .catch(error => {
+            console.log(error)
+          })
     }
   }
 
@@ -273,47 +273,47 @@ class EditProfile extends Component {
   componentWillMount() {
     this.setState({
       FirstName: this.props.navigation.state.params.profileDataSourceFirstName
-        ? this.props.navigation.state.params.profileDataSourceFirstName
-        : ""
+          ? this.props.navigation.state.params.profileDataSourceFirstName
+          : ""
     })
 
     this.setState({
       LastName: this.props.navigation.state.params.profileDataSourceLastName
-        ? this.props.navigation.state.params.profileDataSourceLastName
-        : ""
+          ? this.props.navigation.state.params.profileDataSourceLastName
+          : ""
     })
     this.setState({
       callingCode: this.props.navigation.state.params.profileDataSourceIsdCode
-        ? this.props.navigation.state.params.profileDataSourceIsdCode
-        : ""
+          ? this.props.navigation.state.params.profileDataSourceIsdCode
+          : ""
     })
     this.setState({
       callingCode1: this.props.navigation.state.params.profileDataSourceIsdCode1
-        ? this.props.navigation.state.params.profileDataSourceIsdCode1
-        : ""
+          ? this.props.navigation.state.params.profileDataSourceIsdCode1
+          : ""
     })
     this.setState({
       cca2: this.props.navigation.state.params.profileDataSourceCca2
-        ? this.props.navigation.state.params.profileDataSourceCca2
-        : ""
+          ? this.props.navigation.state.params.profileDataSourceCca2
+          : ""
     })
     this.setState({
       cca3: this.props.navigation.state.params.profileDataSourceCca3
-        ? this.props.navigation.state.params.profileDataSourceCca3
-        : ""
+          ? this.props.navigation.state.params.profileDataSourceCca3
+          : ""
     })
 
     this.setState({
       Email: this.props.navigation.state.params.profileDataSourceEmail
-        ? this.props.navigation.state.params.profileDataSourceEmail
-        : ""
+          ? this.props.navigation.state.params.profileDataSourceEmail
+          : ""
     })
 
     this.setState({
       AlternateEmail: this.props.navigation.state.params
-        .profileDataSourceAlternateEmail
-        ? this.props.navigation.state.params.profileDataSourceAlternateEmail
-        : ""
+          .profileDataSourceAlternateEmail
+          ? this.props.navigation.state.params.profileDataSourceAlternateEmail
+          : ""
     })
   }
   selectPhotoTapped() {
@@ -354,362 +354,362 @@ class EditProfile extends Component {
     const { photo } = this.state
 
     return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss()
-        }}
-      >
-        <View style={styles.mainViewStyle}>
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
-            <View style={[styles.viewStyle, { flexDirection: "row" }]}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  marginLeft: 20
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.goBack()
-                  }}
+        <TouchableWithoutFeedback
+            onPress={() => {
+              Keyboard.dismiss()
+            }}
+        >
+          <View style={styles.mainViewStyle}>
+            <SafeAreaView style={{ backgroundColor: "orange" }}>
+              <View style={[styles.viewStyle, { flexDirection: "row" }]}>
+                <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      marginLeft: 20
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/backBtn.png")}
-                    style={styles.viewDetails2}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={{
-                  flex: 3,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <Image
-                  style={[styles.image]}
-                  source={require("../icons/headerLogo.png")}
-                />
-              </View>
-              <View style={styles.emptyViewStyle} />
-            </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
-          <KeyboardAwareScrollView>
-            <View style={styles.mainContainer}>
-              <View style={styles.textWrapper}>
-                <View style={styles.myProfileFlexStyle}>
-                  <View style={styles.emptyViewStyle} />
-                  <View style={styles.viewForMyProfileText}>
-                    <Text style={styles.myProfileTitleStyle}>Edit Profile</Text>
-                  </View>
-                  <View style={styles.emptyViewStyle} />
-                </View>
-
-                <ScrollView>
-                  <View style={styles.containerView_ForProfilePicViewStyle}>
-                    <TouchableOpacity
-                      onPress={this.selectPhotoTapped.bind(this)}
-                    >
-                      <View style={styles.viewForProfilePicImageStyle}>
-                        {this.state.photo == null ? (
-                          <Image
-                            style={styles.profilePicImageStyle}
-                            source={require("../icons/camwithgradientbg.png")}
-                          />
-                        ) : (
-                          // <Image
-                          //   style={styles.profilePicImageStyle}
-                          //   source={{
-                          //     uri:
-                          //       "http://mediauploaddev.oyespace.com/Images/" +
-                          //       this.props.navigation.state.params
-                          //         .profileDataSourceImageName
-                          //   }}
-                          // />
-                          <Image
-                            style={styles.profilePicImageStyle}
-                            //source={this.state.ImageSource}
-                            source={{ uri: photo.uri }}
-                          />
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={this.selectPhotoTapped.bind(this)}
-                    >
-                      <View style={styles.imagesmallCircle}>
-                        <Image
-                          style={[styles.smallImage]}
-                          source={require("../icons/cam_with_gray_bg.png")}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View
-                    style={{ alignItems: "center", marginBottom: hp("4%") }}
-                  >
-                    <Text style={styles.itemTextValues1}>
-                      {this.props.navigation.state.params
-                        .profileDataSourceFirstName
-                        ? this.props.navigation.state.params
-                            .profileDataSourceFirstName
-                        : ""}
-                    </Text>
-                  </View>
-
-                  <Form>
-                    {/* <Text style={{ marginLeft: hp("2.5%"), color: "#909091" }}>
-                      First Name
-                    </Text> */}
-                    <Item style={styles.inputItem} stackedLabel>
-                      <Label style={{ marginRight: hp("0.6%") }}>
-                        First Name
-                      </Label>
-                      <Input
-                        marginBottom={hp("-1%")}
-                        placeholder="First Name"
-                        // underlineColorAndroid="orange"
-                        autoCorrect={false}
-                        autoCapitalize="words"
-                        keyboardType="default"
-                        maxLength={50}
-                        defaultValue={
-                          this.props.navigation.state.params
-                            .profileDataSourceFirstName
-                            ? this.props.navigation.state.params
-                                .profileDataSourceFirstName
-                            : ""
-                        }
-                        // onChangeText={FirstName =>
-                        //   this.setState({ FirstName: FirstName })
-                        // }
-                        value={this.state.FName}
-                        onChangeText={this.FName}
-                        // value={this.state.FirstName}
-                      />
-                    </Item>
-
-                    {/* <Text style={{ marginLeft: hp("2.5%"), color: "#909091" }}>
-                      Last Name
-                    </Text> */}
-                    <Item style={styles.inputItem} stackedLabel>
-                      <Label style={{ marginRight: hp("0.6%") }}>
-                        Last Name
-                      </Label>
-                      <Input
-                        marginBottom={hp("-1%")}
-                        placeholder=""
-                        // underlineColorAndroid="orange"
-                        autoCorrect={false}
-                        autoCapitalize="words"
-                        keyboardType="default"
-                        maxLength={50}
-                        defaultValue={
-                          this.props.navigation.state.params
-                            .profileDataSourceLastName
-                            ? this.props.navigation.state.params
-                                .profileDataSourceLastName
-                            : ""
-                        }
-                        onChangeText={this.LName}
-                        value={this.state.LName}
-                      />
-                    </Item>
-
-                    <View style={styles.number}>
-                      <View
-                        style={{
-                          flex: 0.1,
-                          flexDirection: "row",
-                          alignItems: "center"
-                        }}
-                      >
-                        <CountryPicker
-                          onChange={value => {
-                            this.setState({
-                              cca2: value.cca2,
-                              callingCode: "+" + value.callingCode
-                            })
-                          }}
-                          //cca2={this.state.cca2}
-                          cca2={this.state.cca2}
-                          translation="eng"
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          flex: 0.15,
-                          flexDirection: "row",
-                          marginLeft: hp("0.5%"),
-                          alignItems: "center",
-                          marginBottom: hp("-0.8%")
-                        }}
-                      >
-                        <Text style={{ color: "black", fontSize: hp("2%") }}>
-                          {this.state.callingCode}
-                        </Text>
-                      </View>
-
-                      <Item style={styles.inputItem1} stackedLabel>
-                        {/* <Label style={{ marginRight: hp("0.6%") }}>
-                          {" "}
-                          Mobile Number
-                        </Label> */}
-                        <Input
-                          marginTop={hp("-0.5%")}
-                          placeholder="Mobile Number"
-                          autoCorrect={false}
-                          keyboardType="number-pad"
-                          maxLength={20}
-                          defaultValue={
-                            this.props.navigation.state.params
-                              .profileDataSourceMobileNumber
-                              ? this.props.navigation.state.params
-                                  .profileDataSourceMobileNumber
-                              : ""
-                          }
-                          onChangeText={this.MNumber}
-                          value={this.state.MNumber}
-                        />
-                      </Item>
-                    </View>
-
-                    <View style={styles.number}>
-                      <View
-                        style={{
-                          flex: 0.1,
-                          flexDirection: "row",
-                          alignItems: "center"
-                        }}
-                      >
-                        <CountryPicker
-                          onChange={value => {
-                            this.setState({
-                              cca3: value.cca2,
-                              callingCode1: "+" + value.callingCode
-                            })
-                          }}
-                          cca2={this.state.cca3}
-                          translation="eng"
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          flex: 0.15,
-                          flexDirection: "row",
-                          marginLeft: hp("0.5%"),
-                          alignItems: "center",
-                          marginBottom: hp("-0.8%")
-                        }}
-                      >
-                        <Text style={{ color: "black", fontSize: hp("2%") }}>
-                          {this.state.callingCode1}
-                        </Text>
-                      </View>
-
-                      <Item style={styles.inputItem1} stackedLabel>
-                        <Input
-                          marginTop={hp("-0.5%")}
-                          placeholder="Alternate Mobile Number"
-                          autoCorrect={false}
-                          keyboardType="number-pad"
-                          maxLength={20}
-                          defaultValue={
-                            this.props.navigation.state.params
-                              .profileDataSourceAlternateMobileNum
-                              ? this.props.navigation.state.params
-                                  .profileDataSourceAlternateMobileNum
-                              : ""
-                          }
-                          onChangeText={this.AMNumber}
-                          value={this.state.AMNumber}
-                        />
-                      </Item>
-                    </View>
-
-                    <Item style={styles.inputItem} stackedLabel>
-                      <Label style={{ marginRight: hp("0.6%") }}>
-                        {" "}
-                        Email ID
-                      </Label>
-                      <Input
-                        marginBottom={hp("-1%")}
-                        placeholder="Email ID"
-                        autoCorrect={false}
-                        keyboardType="email-address"
-                        maxLength={50}
-                        defaultValue={
-                          this.props.navigation.state.params
-                            .profileDataSourceEmail
-                            ? this.props.navigation.state.params
-                                .profileDataSourceEmail
-                            : ""
-                        }
-                        onChangeText={this.FEmail}
-                        value={this.state.FEmail}
-                      />
-                    </Item>
-
-                    <Item style={styles.inputItem} stackedLabel>
-                      <Label style={{ marginRight: hp("0.6%") }}>
-                        Alternate Email ID
-                      </Label>
-                      <Input
-                        marginBottom={hp("-1%")}
-                        placeholder="Alternate Email ID"
-                        autoCorrect={false}
-                        keyboardType="email-address"
-                        maxLength={50}
-                        defaultValue={
-                          this.props.navigation.state.params
-                            .profileDataSourceAlternateEmail
-                            ? this.props.navigation.state.params
-                                .profileDataSourceAlternateEmail
-                            : ""
-                        }
-                        onChangeText={this.AEmail}
-                        value={this.state.AEmail}
-                      />
-                    </Item>
-                  </Form>
-
-                  <View style={styles.viewForPaddingAboveAndBelowButtons}>
-                    <Button
-                      bordered
-                      dark
-                      style={styles.buttonFamily}
+                  <TouchableOpacity
                       onPress={() => {
                         this.props.navigation.goBack()
                       }}
-                    >
-                      <Text style={styles.textFamilyVehicle}>Cancel</Text>
-                    </Button>
-                    <Button
-                      bordered
-                      dark
-                      style={styles.buttonVehicle}
-                      onPress={() => this.myEditProfile()}
-                    >
-                      <Text style={styles.textFamilyVehicle}>Update</Text>
-                    </Button>
-                  </View>
-                </ScrollView>
-              </View>
-            </View>
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/backBtn.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </TouchableOpacity>
+                </View>
 
-            {/* </View> */}
-          </KeyboardAwareScrollView>
-        </View>
-      </TouchableWithoutFeedback>
+                <View
+                    style={{
+                      flex: 3,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                >
+                  <Image
+                      style={[styles.image]}
+                      source={require("../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={styles.emptyViewStyle} />
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            </SafeAreaView>
+            <KeyboardAwareScrollView>
+              <View style={styles.mainContainer}>
+                <View style={styles.textWrapper}>
+                  <View style={styles.myProfileFlexStyle}>
+                    <View style={styles.emptyViewStyle} />
+                    <View style={styles.viewForMyProfileText}>
+                      <Text style={styles.myProfileTitleStyle}>Edit Profile</Text>
+                    </View>
+                    <View style={styles.emptyViewStyle} />
+                  </View>
+
+                  <ScrollView>
+                    <View style={styles.containerView_ForProfilePicViewStyle}>
+                      <TouchableOpacity
+                          onPress={this.selectPhotoTapped.bind(this)}
+                      >
+                        <View style={styles.viewForProfilePicImageStyle}>
+                          {this.state.photo == null ? (
+                              <Image
+                                  style={styles.profilePicImageStyle}
+                                  source={require("../icons/camwithgradientbg.png")}
+                              />
+                          ) : (
+                              // <Image
+                              //   style={styles.profilePicImageStyle}
+                              //   source={{
+                              //     uri:
+                              //       "http://mediauploaddev.oyespace.com/Images/" +
+                              //       this.props.navigation.state.params
+                              //         .profileDataSourceImageName
+                              //   }}
+                              // />
+                              <Image
+                                  style={styles.profilePicImageStyle}
+                                  //source={this.state.ImageSource}
+                                  source={{ uri: photo.uri }}
+                              />
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                          onPress={this.selectPhotoTapped.bind(this)}
+                      >
+                        <View style={styles.imagesmallCircle}>
+                          <Image
+                              style={[styles.smallImage]}
+                              source={require("../icons/cam_with_gray_bg.png")}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
+                        style={{ alignItems: "center", marginBottom: hp("4%") }}
+                    >
+                      <Text style={styles.itemTextValues1}>
+                        {this.props.navigation.state.params
+                            .profileDataSourceFirstName
+                            ? this.props.navigation.state.params
+                                .profileDataSourceFirstName
+                            : ""}
+                      </Text>
+                    </View>
+
+                    <Form>
+                      {/* <Text style={{ marginLeft: hp("2.5%"), color: "#909091" }}>
+                      First Name
+                    </Text> */}
+                      <Item style={styles.inputItem} stackedLabel>
+                        <Label style={{ marginRight: hp("0.6%") }}>
+                          First Name
+                        </Label>
+                        <Input
+                            marginBottom={hp("-1%")}
+                            placeholder="First Name"
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="words"
+                            keyboardType="default"
+                            maxLength={50}
+                            defaultValue={
+                              this.props.navigation.state.params
+                                  .profileDataSourceFirstName
+                                  ? this.props.navigation.state.params
+                                      .profileDataSourceFirstName
+                                  : ""
+                            }
+                            // onChangeText={FirstName =>
+                            //   this.setState({ FirstName: FirstName })
+                            // }
+                            value={this.state.FName}
+                            onChangeText={this.FName}
+                            // value={this.state.FirstName}
+                        />
+                      </Item>
+
+                      {/* <Text style={{ marginLeft: hp("2.5%"), color: "#909091" }}>
+                      Last Name
+                    </Text> */}
+                      <Item style={styles.inputItem} stackedLabel>
+                        <Label style={{ marginRight: hp("0.6%") }}>
+                          Last Name
+                        </Label>
+                        <Input
+                            marginBottom={hp("-1%")}
+                            placeholder=""
+                            // underlineColorAndroid="orange"
+                            autoCorrect={false}
+                            autoCapitalize="words"
+                            keyboardType="default"
+                            maxLength={50}
+                            defaultValue={
+                              this.props.navigation.state.params
+                                  .profileDataSourceLastName
+                                  ? this.props.navigation.state.params
+                                      .profileDataSourceLastName
+                                  : ""
+                            }
+                            onChangeText={this.LName}
+                            value={this.state.LName}
+                        />
+                      </Item>
+
+                      <View style={styles.number}>
+                        <View
+                            style={{
+                              flex: 0.1,
+                              flexDirection: "row",
+                              alignItems: "center"
+                            }}
+                        >
+                          <CountryPicker
+                              onChange={value => {
+                                this.setState({
+                                  cca2: value.cca2,
+                                  callingCode: "+" + value.callingCode
+                                })
+                              }}
+                              //cca2={this.state.cca2}
+                              cca2={this.state.cca2}
+                              translation="eng"
+                          />
+                        </View>
+
+                        <View
+                            style={{
+                              flex: 0.15,
+                              flexDirection: "row",
+                              marginLeft: hp("0.5%"),
+                              alignItems: "center",
+                              marginBottom: hp("-0.8%")
+                            }}
+                        >
+                          <Text style={{ color: "black", fontSize: hp("2%") }}>
+                            {this.state.callingCode}
+                          </Text>
+                        </View>
+
+                        <Item style={styles.inputItem1} stackedLabel>
+                          {/* <Label style={{ marginRight: hp("0.6%") }}>
+                          {" "}
+                          Mobile Number
+                        </Label> */}
+                          <Input
+                              marginTop={hp("-0.5%")}
+                              placeholder="Mobile Number"
+                              autoCorrect={false}
+                              keyboardType="number-pad"
+                              maxLength={20}
+                              defaultValue={
+                                this.props.navigation.state.params
+                                    .profileDataSourceMobileNumber
+                                    ? this.props.navigation.state.params
+                                        .profileDataSourceMobileNumber
+                                    : ""
+                              }
+                              onChangeText={this.MNumber}
+                              value={this.state.MNumber}
+                          />
+                        </Item>
+                      </View>
+
+                      <View style={styles.number}>
+                        <View
+                            style={{
+                              flex: 0.1,
+                              flexDirection: "row",
+                              alignItems: "center"
+                            }}
+                        >
+                          <CountryPicker
+                              onChange={value => {
+                                this.setState({
+                                  cca3: value.cca2,
+                                  callingCode1: "+" + value.callingCode
+                                })
+                              }}
+                              cca2={this.state.cca3}
+                              translation="eng"
+                          />
+                        </View>
+
+                        <View
+                            style={{
+                              flex: 0.15,
+                              flexDirection: "row",
+                              marginLeft: hp("0.5%"),
+                              alignItems: "center",
+                              marginBottom: hp("-0.8%")
+                            }}
+                        >
+                          <Text style={{ color: "black", fontSize: hp("2%") }}>
+                            {this.state.callingCode1}
+                          </Text>
+                        </View>
+
+                        <Item style={styles.inputItem1} stackedLabel>
+                          <Input
+                              marginTop={hp("-0.5%")}
+                              placeholder="Alternate Mobile Number"
+                              autoCorrect={false}
+                              keyboardType="number-pad"
+                              maxLength={20}
+                              defaultValue={
+                                this.props.navigation.state.params
+                                    .profileDataSourceAlternateMobileNum
+                                    ? this.props.navigation.state.params
+                                        .profileDataSourceAlternateMobileNum
+                                    : ""
+                              }
+                              onChangeText={this.AMNumber}
+                              value={this.state.AMNumber}
+                          />
+                        </Item>
+                      </View>
+
+                      <Item style={styles.inputItem} stackedLabel>
+                        <Label style={{ marginRight: hp("0.6%") }}>
+                          {" "}
+                          Email ID
+                        </Label>
+                        <Input
+                            marginBottom={hp("-1%")}
+                            placeholder="Email ID"
+                            autoCorrect={false}
+                            keyboardType="email-address"
+                            maxLength={50}
+                            defaultValue={
+                              this.props.navigation.state.params
+                                  .profileDataSourceEmail
+                                  ? this.props.navigation.state.params
+                                      .profileDataSourceEmail
+                                  : ""
+                            }
+                            onChangeText={this.FEmail}
+                            value={this.state.FEmail}
+                        />
+                      </Item>
+
+                      <Item style={styles.inputItem} stackedLabel>
+                        <Label style={{ marginRight: hp("0.6%") }}>
+                          Alternate Email ID
+                        </Label>
+                        <Input
+                            marginBottom={hp("-1%")}
+                            placeholder="Alternate Email ID"
+                            autoCorrect={false}
+                            keyboardType="email-address"
+                            maxLength={50}
+                            defaultValue={
+                              this.props.navigation.state.params
+                                  .profileDataSourceAlternateEmail
+                                  ? this.props.navigation.state.params
+                                      .profileDataSourceAlternateEmail
+                                  : ""
+                            }
+                            onChangeText={this.AEmail}
+                            value={this.state.AEmail}
+                        />
+                      </Item>
+                    </Form>
+
+                    <View style={styles.viewForPaddingAboveAndBelowButtons}>
+                      <Button
+                          bordered
+                          dark
+                          style={styles.buttonFamily}
+                          onPress={() => {
+                            this.props.navigation.goBack()
+                          }}
+                      >
+                        <Text style={styles.textFamilyVehicle}>Cancel</Text>
+                      </Button>
+                      <Button
+                          bordered
+                          dark
+                          style={styles.buttonVehicle}
+                          onPress={() => this.myEditProfile()}
+                      >
+                        <Text style={styles.textFamilyVehicle}>Update</Text>
+                      </Button>
+                    </View>
+                  </ScrollView>
+                </View>
+              </View>
+
+              {/* </View> */}
+            </KeyboardAwareScrollView>
+          </View>
+        </TouchableWithoutFeedback>
     )
   }
 }
@@ -884,13 +884,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-      oyeURL: state.OyespaceReducer.oyeURL,
-      MyAccountID: state.UserReducer.MyAccountID,
-      MyMobileNumber: state.UserReducer.MyMobileNumber,
-      MyISDCode: state.UserReducer.MyISDCode,
-      // viewImageURL: state.OyespaceReducer.viewImageURL
+    oyeURL: state.OyespaceReducer.oyeURL,
+    MyAccountID: state.UserReducer.MyAccountID,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    MyISDCode: state.UserReducer.MyISDCode,
+    // viewImageURL: state.OyespaceReducer.viewImageURL
   }
 }
 
 export default connect(mapStateToProps)(EditProfile);
-

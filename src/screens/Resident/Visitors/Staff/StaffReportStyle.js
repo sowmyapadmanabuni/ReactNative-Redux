@@ -1,6 +1,6 @@
 import {StyleSheet} from "react-native";
 import base from '../../../../base'
-import {heightPercentageToDP as wp} from "react-native-responsive-screen";
+import {heightPercentageToDP as wp, widthPercentageToDP as hp} from "react-native-responsive-screen";
 
 const StaffReportStyle = StyleSheet.create({
     mainContainer: {

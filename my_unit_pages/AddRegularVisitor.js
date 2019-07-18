@@ -8,7 +8,7 @@ import PhoneInput from "react-native-phone-input";
 import { TextField } from 'react-native-material-textfield';
 import CountryPicker, {
     getAllCountries
-  } from 'react-native-country-picker-modal'
+} from 'react-native-country-picker-modal'
 
 
 const options = {
@@ -19,12 +19,12 @@ const options = {
 };
 
 export default class AddRegularVisitor extends Component {
-   
+
     constructor() {
         super();
         const userCountryData = getAllCountries()
         let callingCode = null
-     // this.onButtonPressed = this.onButtonPressed.bind(this);
+        // this.onButtonPressed = this.onButtonPressed.bind(this);
         this.state = {
             imageSource: null,
             data: null,
@@ -105,7 +105,7 @@ export default class AddRegularVisitor extends Component {
                 "WKWrkType": relation,
                 "ASAssnID":  global.SelectedAssociationID,
             }
-            
+
             /* {
 	"REFName"		: "Sowmya",	"RELName"		: "Padmanabhuni",
 	"REMobile"		: "9490791859",	"REISDCode" 	: "+91",	"MEMemID"		: 2,
@@ -128,14 +128,14 @@ export default class AddRegularVisitor extends Component {
                 .then((responseJson) => {
                     console.log('AddRegularVisitor response', responseJson);
                     if (responseJson.success) {
-                        
-                     //   "data": {  "regularVisitor": {  "reRgVisID": 49,
+
+                        //   "data": {  "regularVisitor": {  "reRgVisID": 49,
                         alert('Regular Visitor Added Successfully !')
                         const imgName='PERSONAssociation'+ global.SelectedAssociationID+'Regular'+responseJson.data.regularVisitor.reRgVisID+'.jpg';
 
                         //  this.props.navigation.navigate('ResDashBoard');
                         if (this.state.imgPath) {
-                          //  alert("start with image upload!")
+                            //  alert("start with image upload!")
 
                             var data = new FormData();
                             data.append('Test', { uri: this.state.imgPath, name: imgName, type: 'image/jpg' });
@@ -143,25 +143,25 @@ export default class AddRegularVisitor extends Component {
                                 method: 'POST',
                                 headers: {"X-Champ-APIKey":"1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1","content-type": "multipart/form-data"},
                                 body: data };
-                                console.log("Config",config);
-                                 fetch(global.uploadImageURL, config).then(responseData => {
-                                   console.log("sucess==>");
-                                 console.log(responseData._bodyText);
-                                 console.log(responseData);
-                            //     alert("Image uploaded done! Image path=\nhttp://cohapi.careofhomes.com/Images/selfie.jpg")
-                                 alert('Regular Visitor added Successfully!')
-                                 this.props.navigation.navigate('ResDashBoard');
-                                }).catch(err => {
-                                   console.log("err==>");
-                                   alert("Error with image upload!")
-                                   this.props.navigation.navigate('ResDashBoard');
-                                   console.log(err);
-                                });
+                            console.log("Config",config);
+                            fetch(global.uploadImageURL, config).then(responseData => {
+                                console.log("sucess==>");
+                                console.log(responseData._bodyText);
+                                console.log(responseData);
+                                //     alert("Image uploaded done! Image path=\nhttp://cohapi.careofhomes.com/Images/selfie.jpg")
+                                alert('Regular Visitor added Successfully!')
+                                this.props.navigation.navigate('ResDashBoard');
+                            }).catch(err => {
+                                console.log("err==>");
+                                alert("Error with image upload!")
+                                this.props.navigation.navigate('ResDashBoard');
+                                console.log(err);
+                            });
                         }else{
                             alert('Regular Visitor added Successfully!')
                             this.props.navigation.navigate('ResDashBoard');
                         }
-                        
+
                     } else {
                         console.log('AddRegularVisitor ', 'failed');
                         alert('failed to add member !')
@@ -192,7 +192,7 @@ export default class AddRegularVisitor extends Component {
             return false;
         } else if(global.oyeOnlyAlpha.test(last) === false){
             alert("Last Name should not contain special characters or numbers")
-           return false;
+            return false;
         } else if ( mobile.length == 0) {
             alert('Enter Mobile Number')
             return false;
@@ -232,22 +232,22 @@ export default class AddRegularVisitor extends Component {
     }
 
     render() {
-        let dpWorkType = [{ value: 'Aunt',  },{value: 'Baby Sitter', }, { value: 'Beautician', }, { value: 'Care Taker', }, { value: 'Carpenter',  }, {value: 'Coach',  }, {  value: 'Cook', }, { value: 'Dance Teacher',  },{ value: 'Dietitian',  },{  
-                        value: 'Doctor', }, { value: 'Driver', }, { value: 'Electrician',  }, {  value: 'Father-In-Law', }, {  value: 'Gym Trainer', },
-                        {value: 'Hair dresser',  },{ value: 'Health Instructor',  }, {value: 'Laundry',  },
-                        {  value: 'Maid',  },{ value: 'Music Teacher',  },{value: 'Nurse', },
-                        { value: 'Physiotherapist',  },{  value: 'Plumber', },{
-                            value: 'Sports Teacher',  },{ value: 'Stay at Home Maid',  }, { value: 'Trainer',  },
-                            { value: 'Tuition Teacher',  }, {
-                                value: 'Uncle',  }, {  
-                                    value: 'Others', }          
-                 ];
+        let dpWorkType = [{ value: 'Aunt',  },{value: 'Baby Sitter', }, { value: 'Beautician', }, { value: 'Care Taker', }, { value: 'Carpenter',  }, {value: 'Coach',  }, {  value: 'Cook', }, { value: 'Dance Teacher',  },{ value: 'Dietitian',  },{
+            value: 'Doctor', }, { value: 'Driver', }, { value: 'Electrician',  }, {  value: 'Father-In-Law', }, {  value: 'Gym Trainer', },
+            {value: 'Hair dresser',  },{ value: 'Health Instructor',  }, {value: 'Laundry',  },
+            {  value: 'Maid',  },{ value: 'Music Teacher',  },{value: 'Nurse', },
+            { value: 'Physiotherapist',  },{  value: 'Plumber', },{
+                value: 'Sports Teacher',  },{ value: 'Stay at Home Maid',  }, { value: 'Trainer',  },
+            { value: 'Tuition Teacher',  }, {
+                value: 'Uncle',  }, {
+                value: 'Others', }
+        ];
 
-      //  "Care Taker", "Cook", "Driver", "Laundry", "Maid","Stay at Home Maid", "Baby Sitter", 
-       // "Beautician", "Carpenter", "Coach",  "Dance Teacher", "Dietitian", 
-       // "Doctor", "Electrician",  "Gym Trainer", "Hair dresser", "Health Instructor",
-       // "Music Teacher", "Nurse", "Physiotherapist", "Plumber", 
-       // "Sports Teacher", "Trainer", "Tuition Teacher","Others"
+        //  "Care Taker", "Cook", "Driver", "Laundry", "Maid","Stay at Home Maid", "Baby Sitter",
+        // "Beautician", "Carpenter", "Coach",  "Dance Teacher", "Dietitian",
+        // "Doctor", "Electrician",  "Gym Trainer", "Hair dresser", "Health Instructor",
+        // "Music Teacher", "Nurse", "Physiotherapist", "Plumber",
+        // "Sports Teacher", "Trainer", "Tuition Teacher","Others"
 
         if (this.state.isLoading) {
             return (
@@ -264,73 +264,73 @@ export default class AddRegularVisitor extends Component {
                 <ScrollView>
                     <View style={{ flexDirection: 'column' }}>
                         <Image source={this.state.imageSource !=
-                            null ?
+                        null ?
                             this.state.imageSource :
                             require('../pages/assets/images/icons8-manager-50.png')}
-                            style={{ height: 80, width: 80, margin: 10, alignSelf: 'center', borderColor:
-                                    'orange', margin: '3%', borderRadius: 40, borderWidth: 2,  }} />
+                               style={{ height: 80, width: 80, margin: 10, alignSelf: 'center', borderColor:
+                                       'orange', margin: '3%', borderRadius: 40, borderWidth: 2,  }} />
 
                         <TouchableOpacity style={styles.loginScreenButton}
-                            onPress={this.selectPhoto.bind(this)}   >
+                                          onPress={this.selectPhoto.bind(this)}   >
                             <Text style={{ fontSize: 15,fontWeight:'bold', alignSelf: 'center', color: 'white',  marginLeft:'5%',
-       marginRight:'5%', }}>
+                                marginRight:'5%', }}>
                                 TAKE A PHOTO </Text>
                         </TouchableOpacity>
 
                         <View style={styles.rectangle1}>
-                        <View style={styles.row}>
-                        <View style={styles.inputWrap}>
-                        <TextField
-        label='First Name'
-        autoCapitalize='sentences'
-        labelHeight={15}
-        maxLength={30}
-        activeLineWidth={0.5}
-        fontSize={12}
-        onChangeText={ this.Firstname }
-      />
-        </View>
-        <View style={styles.inputWrap}>
-        <TextField
-        label='Last Name'
-        autoCapitalize='sentences'
-        labelHeight={15}
-        maxLength={30}
-        activeLineWidth={0.5}
-        fontSize={12}
-        onChangeText={ this.Lastname }
-      />
-        </View>
-        
-    
-      </View>
-      <View style={{ flexDirection: 'row',marginLeft:15,paddingRight:15 }}>
-                            <View style={{ flex: 0.10, flexDirection: 'row', marginTop:'3.5%' }}>
-                            <CountryPicker
-          onChange={value => {
-            this.setState({ cca2: value.cca2, callingCode: value.callingCode })
-          }}
-          cca2={this.state.cca2}
-          translation="eng"
-        /> 
-        </View>
-        <View style={{ flex: 0.10, flexDirection: 'row',marginTop:'4.5%' }}>
-           <Text style={{color:'black',fontSize:12}}>+{this.state.callingCode}</Text></View>
-                            
-                            <View style={{ flex: 0.85 }}>
-                            <TextField
-        label='Mobile Number'
-        fontSize={12}
-        labelHeight={10}
-        characterRestriction={10}
-        activeLineWidth={0.5}
-        keyboardType='numeric'
-        maxLength={10}
-        onChangeText={ this.Mobile }
-      />
-        </View>
-                        </View>
-                        <View style={{ marginLeft: 15, paddingRight: 15 }}>
+                            <View style={styles.row}>
+                                <View style={styles.inputWrap}>
+                                    <TextField
+                                        label='First Name'
+                                        autoCapitalize='sentences'
+                                        labelHeight={15}
+                                        maxLength={30}
+                                        activeLineWidth={0.5}
+                                        fontSize={12}
+                                        onChangeText={ this.Firstname }
+                                    />
+                                </View>
+                                <View style={styles.inputWrap}>
+                                    <TextField
+                                        label='Last Name'
+                                        autoCapitalize='sentences'
+                                        labelHeight={15}
+                                        maxLength={30}
+                                        activeLineWidth={0.5}
+                                        fontSize={12}
+                                        onChangeText={ this.Lastname }
+                                    />
+                                </View>
+
+
+                            </View>
+                            <View style={{ flexDirection: 'row',marginLeft:15,paddingRight:15 }}>
+                                <View style={{ flex: 0.10, flexDirection: 'row', marginTop:'3.5%' }}>
+                                    <CountryPicker
+                                        onChange={value => {
+                                            this.setState({ cca2: value.cca2, callingCode: value.callingCode })
+                                        }}
+                                        cca2={this.state.cca2}
+                                        translation="eng"
+                                    />
+                                </View>
+                                <View style={{ flex: 0.10, flexDirection: 'row',marginTop:'4.5%' }}>
+                                    <Text style={{color:'black',fontSize:12}}>+{this.state.callingCode}</Text></View>
+
+                                <View style={{ flex: 0.85 }}>
+                                    <TextField
+                                        label='Mobile Number'
+                                        fontSize={12}
+                                        labelHeight={10}
+                                        characterRestriction={10}
+                                        activeLineWidth={0.5}
+                                        keyboardType='numeric'
+                                        maxLength={10}
+                                        onChangeText={ this.Mobile }
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ marginLeft: 15, paddingRight: 15 }}>
                                 <Dropdown
                                     label='Select Work Type'
                                     data={dpWorkType}
@@ -338,29 +338,27 @@ export default class AddRegularVisitor extends Component {
                                     fontSize={12}
                                     onChangeText= {this.Relation}
                                 />
-                            </View> 
+                            </View>
                             {/* <View style={{ flexDirection: 'row' }}>
                                 <View style={{flex: 1, flexDirection: 'row', marginLeft:
                                         '2%', marginTop: 5, borderColor: '#F2F2F2', backgroundColor:
                                         '#F2F2F2', borderWidth: 1.5, borderRadius: 2, }}>
-
                                     <Image source={require('../pages/assets/images/man-user.png')}
                                         style={styles.imagee} /> */}
-       
-                                   {/*  <TextInput style={styles.text}
+
+                            {/*  <TextInput style={styles.text}
                                         underlineColorAndroid="transparent"
                                         placeholder="First Name"
                                         placeholderTextColor="#828282"
                                         autoCapitalize="words"
                                         //value={this.state.FirstName}
                                         onChangeText={this.Firstname} /> */}
-                                {/* </View> */}
+                            {/* </View> */}
 
-                                {/* <View style={{ flex: 1, flexDirection: 'row', marginLeft:
+                            {/* <View style={{ flex: 1, flexDirection: 'row', marginLeft:
                                         '2%', marginRight: 5, marginTop: 5, height:
                                         40, borderColor: '#F2F2F2', backgroundColor:
                                         '#F2F2F2', borderWidth: 1.5, borderRadius: 2, }}>
-
                                     <Image source={require('../pages/assets/images/man-user.png')}
                                         style={styles.imagee} />
                                     <TextInput style={styles.text}
@@ -411,10 +409,10 @@ export default class AddRegularVisitor extends Component {
                                 />
                             </View> */}
                             <TouchableOpacity style={styles.loginScreenButton}
-                                onPress={this.AddMember.bind(this, this.state.FirstName, this.state.LastName,
-                                    this.state.MobileNumber, this.state.Relation)} >
+                                              onPress={this.AddMember.bind(this, this.state.FirstName, this.state.LastName,
+                                                  this.state.MobileNumber, this.state.Relation)} >
                                 <Text  style= {{ fontSize: 15,fontWeight:'bold',padding: 3, alignSelf: 'center', color: 'white',  marginLeft:'5%',
-       marginRight:'5%', }}>
+                                    marginRight:'5%', }}>
                                     SUBMIT </Text>
                             </TouchableOpacity>
                         </View>
@@ -438,15 +436,15 @@ const styles = StyleSheet.create({
         margin: 5, borderRadius: 2, borderWidth: 1, alignContent: 'center',
     },
     loginScreenButton:{
-       alignSelf:'center',
-       marginTop:5,
+        alignSelf:'center',
+        marginTop:5,
         paddingTop:2,
         paddingBottom:2,
         backgroundColor:'#696969',
         borderRadius:10,
         borderWidth: 1,
         borderColor: '#fff'
-      },
+    },
     input: {
         marginLeft: 15, marginRight: 15, marginTop: 15, height: 40, borderColor: '#F2F2F2',
         backgroundColor: '#F2F2F2', borderWidth: 1.5, borderRadius: 2, flexDirection: 'row',
@@ -465,12 +463,12 @@ const styles = StyleSheet.create({
     row: {
         flex: 1,
         flexDirection: "row",
-      },
-      inputWrap: {
+    },
+    inputWrap: {
         flex: 1,
         marginLeft:15,
         paddingRight:15
-      },
+    },
 
     submitButtonText: { color: '#FA9917' }
 

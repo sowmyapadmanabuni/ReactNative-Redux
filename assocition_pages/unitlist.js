@@ -187,10 +187,7 @@ class UnitList extends Component {
             </View>
             <View style={{ borderWidth: 1, borderColor: "orange" }} />
           </SafeAreaView>
-          <NavigationEvents
-          onDidFocus={payload => this.getUnitList()}
-          onWillBlur={payload => this.getUnitList()}
-        />
+
           <Text style={styles.titleOfScreen}>Unit List</Text>
 
           <View style={styles.progress}>
@@ -205,7 +202,7 @@ class UnitList extends Component {
       <View style={styles.container}>
         <NavigationEvents
           onDidFocus={payload => this.getUnitList()}
-          onWillBlur={payload => this.getUnitList()}
+          // onWillBlur={payload => this.getUnitList()}
         />
         <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
@@ -286,7 +283,6 @@ class UnitList extends Component {
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.unUnitID.toString()}
           />
-          
         )}
       </View>
     );
