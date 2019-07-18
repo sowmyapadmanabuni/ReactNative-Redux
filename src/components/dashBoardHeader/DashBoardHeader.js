@@ -22,7 +22,7 @@ class DashBoardHeader extends React.Component {
   myProfile = () => {
     
     fetch(
-      `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
+      `https://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${this.props.MyAccountID}`,
       {
         method: "GET",
         headers: {

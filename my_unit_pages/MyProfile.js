@@ -270,9 +270,9 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                      {/* <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('CreateAssnScreen')}>
+                      <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('CreateAssnScreen')}>
                       <Text>Create Association</Text>
-                    </Button> */}
+                    </Button>
                       <View />
                       <View style={{ marginTop: hp("2%") }}>
                         <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('AssnListScreen')}>
