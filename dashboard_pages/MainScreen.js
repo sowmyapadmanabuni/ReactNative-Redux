@@ -22,7 +22,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import all basic components
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { withBadge } from "react-native-elements";
 import {
   DrawerNavigator,
   StackNavigator,
@@ -159,8 +158,9 @@ class Dashboard extends React.Component {
           // console.log(units.mrmRoleID + "role");
           if (receiveNotifications) {
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-              // console.log(units.unUnitID + "admin");
-              firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+              if (units.meIsActive) {
+                firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+              }
             }
           } else if (!receiveNotifications) {
             firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");

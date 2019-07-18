@@ -232,32 +232,52 @@ class NotificationDetailScreen extends Component {
             .then(() => {
               let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
               axios
-                .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
-                  sbSubID: item.sbSubID,
-                  ntTitle: "Request Declined",
-                  ntDesc:
-                    "Your request to join" +
-                    item.mrRolName +
-                    " unit in " +
-                    item.asAsnName +
-                    " association as " +
-                    roleName +
-                    " has been declined",
-                  ntType: "Join_Status"
-                })
-                .then(() => {
-                  this.setState({ loading: false });
-                  this.props.updateApproveAdmin(
-                    this.props.approvedAdmins,
-                    item.sbSubID
-                  );
-                  setTimeout(() => {
-                    this.props.navigation.navigate("ResDashBoard");
-                  }, 300);
+                .get(
+                  `http://${
+                    this.props.oyeURL
+                  }/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${
+                    item.sbMemID
+                  }`,
+                  {
+                    headers: {
+                      "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                      "Content-Type": "application/json"
+                    }
+                  }
+                )
+                .then(succc => {
+                  console.log(succc, "worked");
+                  axios
+                    .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
+                      sbSubID: item.sbSubID,
+                      ntTitle: "Request Declined",
+                      ntDesc:
+                        "Your request to join" +
+                        item.mrRolName +
+                        " unit in " +
+                        item.asAsnName +
+                        " association as " +
+                        roleName +
+                        " has been declined",
+                      ntType: "Join_Status"
+                    })
+                    .then(() => {
+                      this.setState({ loading: false });
+                      this.props.updateApproveAdmin(
+                        this.props.approvedAdmins,
+                        item.sbSubID
+                      );
+                      setTimeout(() => {
+                        this.props.navigation.navigate("ResDashBoard");
+                      }, 300);
+                    })
+                    .catch(error => {
+                      Alert.alert("@@@@@@@@@@@@@@@", error.message);
+                      this.setState({ loading: false });
+                    });
                 })
                 .catch(error => {
-                  Alert.alert("@@@@@@@@@@@@@@@", error.message);
-                  this.setState({ loading: false });
+                  console.log("updated didn't work", error);
                 });
             })
             .catch(error => {

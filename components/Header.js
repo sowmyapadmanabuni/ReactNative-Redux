@@ -12,9 +12,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import { State } from "react-native-gesture-handler";
 import { NavigationEvents } from "react-navigation";
-
+import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import { connect } from "react-redux";
 
 class Header extends React.Component {
@@ -27,6 +26,7 @@ class Header extends React.Component {
   componentDidMount() {
     this.myProfile();
   }
+
   myProfile = () => {
     // console.log("________\n before fetch");
     fetch(
@@ -52,6 +52,42 @@ class Header extends React.Component {
       .catch(error => console.log(error));
     // )
   };
+
+  renderBadge = () => {
+    const { notifications } = this.props;
+
+    let count = 0;
+
+    notifications.map((data, index) => {
+      if (!data.read) {
+        count += 1;
+      }
+    });
+
+    const BadgedIcon = withBadge(count)(Icon);
+
+    if (count >= 1) {
+      return (
+        <BadgedIcon
+          color="#FF8C00"
+          type="material"
+          name="notifications"
+          size={hp("4%")}
+        />
+      );
+    } else
+      return (
+        <Icon
+          color="#FF8C00"
+          type="material"
+          name="notifications"
+          size={hp("4%")}
+        />
+      );
+
+    console.log("count", count);
+  };
+
   render() {
     return (
       <SafeAreaView style={{ backgroundColor: "orange" }}>
@@ -59,17 +95,29 @@ class Header extends React.Component {
           onDidFocus={payload => this.myProfile()}
           onWillBlur={payload => this.myProfile()}
         />
-        <View style={[styles.viewStyle, { flexDirection: "row" }]}>
+        <View
+          style={[
+            styles.viewStyle,
+            { flexDirection: "row", justifyContent: "space-between" }
+          ]}
+        >
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "center",
+              // justifyContent: "center",
               alignItems: "center",
-              marginLeft: 8
+              marginLeft: 8,
+              flex: 1
             }}
           >
             <TouchableOpacity
               onPress={() => this.props.navigate.navigate("MyProfileScreen")}
+              style={{
+                flexDirection: "row",
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
             >
               <View
                 style={{
@@ -79,7 +127,8 @@ class Header extends React.Component {
                   borderColor: "orange",
                   borderWidth: 1,
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
+                  marginRight: 10
                 }}
               >
                 {this.state.ImageSource != null ? (
@@ -90,15 +139,15 @@ class Header extends React.Component {
                       borderRadius: 15,
                       borderColor: "orange",
                       borderWidth: 1,
-                      justifyContent: "center",
+                      // justifyContent: "center",
                       alignItems: "center"
                     }}
                     source={{
                       uri:
                         // this.props.viewImageURL +
-                        this.props.imageUrl+
-                        "PERSONAssociation8NONREGULAR9447679600.jpg"+
-                        this.props.MyAccountID+
+                        this.props.imageUrl +
+                        "PERSONAssociation8NONREGULAR9447679600.jpg" +
+                        this.props.MyAccountID +
                         ".jpg" +
                         "?random_number=" +
                         new Date().getTime()
@@ -106,18 +155,27 @@ class Header extends React.Component {
                   />
                 ) : (
                   <Text style={{ fontWeight: "bold" }}>
-                {this.state.myFirstName.length.toString() === 0
-                  ? <Text></Text>
-                  : <Text>{this.state.myFirstName[0]}</Text>}
-                </Text>
+                    {this.state.myFirstName.length.toString() === 0 ? (
+                      <Text />
+                    ) : (
+                      <Text>{this.state.myFirstName[0]}</Text>
+                    )}
+                  </Text>
                 )}
               </View>
+              <Text style={{ fontWeight: "bold" }}>
+                {this.state.myFirstName.length.toString() > 6 ? (
+                  <Text>{this.state.myFirstName.substring(0, 6)}</Text>
+                ) : (
+                  this.state.myFirstName
+                )}
+              </Text>
             </TouchableOpacity>
           </View>
 
           <View
             style={{
-              flex: 20,
+              flex: 1,
               height: hp("7%"),
               width: 100,
               flexDirection: "row",
@@ -125,19 +183,6 @@ class Header extends React.Component {
               alignItems: "center"
             }}
           >
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                marginLeft: hp("1%")
-              }}
-            >
-              <Text style={{ fontWeight: "bold" }}>
-                {this.state.myFirstName.length.toString() > 6
-                  ? <Text>{this.state.myFirstName.substring(0, 6)}</Text>
-                  : this.state.myFirstName}
-              </Text>
-            </View>
             <View
               style={{
                 flex: 2,
@@ -156,8 +201,9 @@ class Header extends React.Component {
           <View
             style={{
               justifyContent: "center",
-              alignItems: "center",
-              marginRight: 8
+              alignItems: "flex-end",
+              marginRight: 23,
+              flex: 1
             }}
           >
             <TouchableWithoutFeedback
@@ -170,15 +216,7 @@ class Header extends React.Component {
                   justifyContent: "center"
                 }}
               >
-                <Image
-                  source={require("../icons/notifications.png")}
-                  style={{
-                    width: hp("4.5%"),
-                    height: hp("4%"),
-                    justifyContent: "center",
-                    alignItems: "flex-end"
-                  }}
-                />
+                {this.renderBadge()}
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -213,7 +251,8 @@ const mapStateToProps = state => {
     MyAccountID: state.UserReducer.MyAccountID,
     MyFirstName: state.UserReducer.MyFirstName,
     viewImageURL: state.OyespaceReducer.viewImageURL,
-    imageUrl: state.OyespaceReducer.imageUrl
+    imageUrl: state.OyespaceReducer.imageUrl,
+    notifications: state.NotificationReducer.notifications
   };
 };
 

@@ -353,6 +353,9 @@ export const getAssoMembers = (oyeURL, id) => {
       )
       .then(response => {
         let resData = response.data.data.memberListByAccount;
+        resData.map((data, index) => {
+          console.log(data.meJoinStat + index);
+        });
         dispatch({
           type: GET_MEMBERLIST_SUCCESS,
           payload: resData

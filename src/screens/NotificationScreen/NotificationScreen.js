@@ -18,19 +18,15 @@ import {
   refreshNotifications,
   toggleCollapsible
 } from "../../actions";
-import TimeAgo from "react-native-timeago";
 import _ from "lodash";
 import { NavigationEvents } from "react-navigation";
 import Collapsible from "react-native-collapsible";
 
 class NotificationScreen extends Component {
-  componentDidMount() {
-    // console.log("didmount");
-  }
   keyExtractor = (item, index) => index.toString();
 
   onPress = (item, index) => {
-    const { notifications, savedNoifId } = this.props;
+    const { notifications, savedNoifId, oyeURL } = this.props;
     if (
       item.ntType === "Join" ||
       item.ntType === "Join_Status" ||
@@ -40,41 +36,29 @@ class NotificationScreen extends Component {
         details: item
       });
 
-      this.props.onNotificationOpen(notifications, index);
+      this.props.onNotificationOpen(notifications, index, oyeURL);
       this.props.storeOpenedNotif(savedNoifId, item.ntid);
     }
   };
 
   renderIcons = (type, item, index) => {
     const { savedNoifId } = this.props;
-
     let status = _.includes(savedNoifId, item.ntid);
-    // if(index === 0) {
-    //     console.log('ststus', !status || item.read)
-    //     console.log('sat only', !status)
-    //     console.log('read', item.read)
-    // }
 
     if (type === "name") {
-      if (status || item.read) {
-        // console.log('here')
-        // return 'ios-mail-unread'
+      if (status || item.ntIsActive) {
         return "mail-read";
       } else {
-        // console.log('here2')
-        // return 'mail-read'
         return "ios-mail-unread";
       }
     } else if (type === "type") {
-      if (status || item.read) {
+      if (status || item.ntIsActive) {
         return "octicon";
-        // return 'ionicon'
       } else {
-        // return 'octicon'
         return "ionicon";
       }
     } else if (type === "style") {
-      if (status || item.read) {
+      if (status || item.ntIsActive) {
         return { backgroundColor: "#fff" };
       } else {
         return { backgroundColor: "#eee" };
@@ -93,7 +77,7 @@ class NotificationScreen extends Component {
   };
 
   renderItem = ({ item, index }) => {
-    const { savedNoifId, notifications } = this.props;
+    const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
 
     if (item.ntType !== "gate_app") {
@@ -134,6 +118,10 @@ class NotificationScreen extends Component {
       return (
         <TouchableWithoutFeedback
           onPress={() => {
+            console.log(item.ntIsActive);
+            if (item.ntIsActive) {
+              this.props.onNotificationOpen(notifications, index, oyeURL);
+            }
             this.props.toggleCollapsible(notifications, item.open, index);
           }}
         >
@@ -179,8 +167,6 @@ class NotificationScreen extends Component {
       );
     }
   };
-
-  onRefresh = () => {};
 
   renderComponent = () => {
     const {

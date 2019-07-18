@@ -634,12 +634,39 @@ class RegisterMe extends Component {
 
   checkStatus = () => {
     const { unitList, AssnId } = this.props.navigation.state.params;
-    const { joinedAssociations } = this.props;
+    const { joinedAssociations, memberList } = this.props;
     let unitID = unitList.unUnitID;
 
-    let status = _.includes(joinedAssociations, unitID);
+    // let status = _.includes(joinedAssociations, unitID);
+    let status;
+    console.log(memberList, "memberList");
+
+    let matchUnit = _.find(memberList, function(o) {
+      console.log(o, "values");
+      return o.unUnitID === unitID;
+    });
+
+    // alert("called");
+
+    console.log(unitID);
+    console.log(matchUnit, "matchUnit");
+
+    if (matchUnit) {
+      if (
+        matchUnit.meJoinStat === "Approved" ||
+        matchUnit.meJoinStat === "Requested"
+      ) {
+        status = true;
+      } else {
+        status = false;
+      }
+    } else {
+      status = false;
+    }
 
     return status;
+
+    // return false;
     // console.log("unitId", unitID);
     // console.log(_.includes(joinedAssociations, unitID));
   };
@@ -873,7 +900,8 @@ const mapStateToProps = state => {
     joinedAssociations: state.AppReducer.joinedAssociations,
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyeURL: state.OyespaceReducer.oyeURL,
-    MyAccountID: state.UserReducer.MyAccountID
+    MyAccountID: state.UserReducer.MyAccountID,
+    memberList: state.DashboardReducer.memberList
   };
 };
 

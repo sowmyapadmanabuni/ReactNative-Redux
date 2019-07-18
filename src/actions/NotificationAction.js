@@ -35,7 +35,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson.data.notificationListByAcctID);
+        console.log(responseJson);
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];
@@ -68,13 +68,17 @@ export const getNotifications = (oyeURL, MyAccountID) => {
           "ntdUpdated"
         ]).reverse();
 
+        sorted.map(data => {
+          console.log(data.ntIsActive);
+        });
+
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
           payload: sorted
         });
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
         dispatch({
           type: GET_NOTIFICATIONS_FAILED,
           payload: ""
@@ -392,15 +396,39 @@ export const newNotifInstance = data => {
   };
 };
 
-export const onNotificationOpen = (notif, index) => {
+export const onNotificationOpen = (notif, index, oyeURL) => {
   console.log(index);
   return dispatch => {
     newNotif = Object.assign([], notif);
     newNotif[index].read = true;
     newNotif[index].read = true;
-    console.log(newNotif[index].read);
-    // newNotif.notificationListByAssocAcctID[index].ntIsActive = false;
+    newNotif[index].ntIsActive = false;
+    newNotif[index].ntIsActive = false;
 
+    let headers = {
+      "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+      "Content-Type": "application/json"
+    };
+
+    console.log(newNotif[index]);
+
+    axios
+      .get(
+        `http://${oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${
+          newNotif[index].ntid
+        }`,
+        {
+          headers: headers
+        }
+      )
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    console.log(newNotif[index].ntid);
     dispatch({
       type: ON_NOTIFICATION_OPEN,
       payload: newNotif
@@ -579,7 +607,6 @@ export const createUserNotification = (
           // console.log("notification joinstatus succ", res.data.data);
           refreshNotifications(oyeURL, accountID);
           if (refresh) {
-            alert("refreshed");
             dispatch({
               type: REFRESH_NOTIFICATION_START
             });
