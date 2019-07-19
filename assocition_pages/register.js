@@ -19,7 +19,10 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import { connect } from "react-redux";
-import { updateJoinedAssociation } from "../src/actions";
+import {
+  updateJoinedAssociation,
+  createUserNotification
+} from "../src/actions";
 import _ from "lodash";
 import { CLOUD_FUNCTION_URL } from "../constant";
 import firebase from "react-native-firebase";
@@ -71,11 +74,12 @@ class RegisterMe extends Component {
       associationName,
       unitList
     } = this.props.navigation.state.params;
-    console.log("#!@$@$!@$!@$!@", unitList.unUnitID);
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
+    } else if (this.checkStatus()) {
+      alert("You already requested to join this unit");
     } else {
-      let anu = {
+      anu = {
         ASAssnID: unitList.asAssnID,
         BLBlockID: unitList.blBlockID,
         UNUnitID: unitList.unUnitID,
@@ -90,10 +94,6 @@ class RegisterMe extends Component {
       };
 
       let champBaseURL = this.props.champBaseURL;
-
-      console.log(champBaseURL+"/association/join");
-      console.log(anu);
-
 
       axios
         .post(
@@ -129,7 +129,7 @@ class RegisterMe extends Component {
               "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
             };
             let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
-            console.log(mobileNo);
+            // console.log(mobileNo);
             axios
               .post(
                 "http://" +
@@ -187,38 +187,20 @@ class RegisterMe extends Component {
                   let soldDate = this.state.dobText;
                   let occupancyDate = this.state.dobText;
 
-                  console.log("userId", userID);
-                  console.log("sbUnitID", sbUnitID);
-                  console.log("sbSubID", sbSubID);
-                  console.log("sbRoleId", sbRoleId);
-                  console.log("sbMemID", sbMemID);
-                  console.log("sbName", sbName);
-                  console.log("associationID", associationID);
-                  console.log("ntType", ntType);
-                  console.log("ntTitle", ntTitle);
-                  console.log("ntDesc", ntDesc);
+                  // console.log("userId", userID);
+                  // console.log("sbUnitID", sbUnitID);
+                  // console.log("sbSubID", sbSubID);
+                  // console.log("sbRoleId", sbRoleId);
+                  // console.log("sbMemID", sbMemID);
+                  // console.log("sbName", sbName);
+                  // console.log("associationID", associationID);
+                  // console.log("ntType", ntType);
+                  // console.log("ntTitle", ntTitle);
+                  // console.log("ntDesc", ntDesc);
 
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
                   // Send a push notification to the admin here
-
-                    console.log(JSON.stringify({
-                        userID: userID.toString(),
-                        sbUnitID: sbUnitID.toString(),
-                        unitName: unitName.toString(),
-                        sbSubID: sbSubID.toString(),
-                        sbRoleId: sbRoleId,
-                        sbMemID: sbMemID.toString(),
-                        sbName: sbName,
-                        associationID: AssnId.toString(),
-                        associationName: associationName,
-                        ntType: ntType,
-                        ntTitle: ntTitle,
-                        ntDesc: ntDesc,
-                        roleName: roleName,
-                        soldDate: soldDate,
-                        occupancyDate: occupancyDate
-                    }));
                   axios
                     .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
                       userID: userID.toString(),
@@ -239,16 +221,31 @@ class RegisterMe extends Component {
                     })
                     .then(response_3 => {
                       this.setState({ loading: false });
-                      console.log("*******");
-                      console.log("here_3 ");
-                      console.log("*******");
-                      // let responseData_3 = response_3.data;
-                      // console.log(responseData_3)
+                      this.props.createUserNotification(
+                        ntType,
+                        this.props.oyeURL,
+                        adminAccId,
+                        this.props.navigation.state.params.AssnId.toString(),
+                        ntDesc,
+                        sbUnitID.toString(),
+                        sbMemID.toString(),
+                        sbSubID.toString(),
+                        sbRoleId,
+                        this.props.navigation.state.params.associationName,
+                        unitName.toString(),
+                        occupancyDate,
+                        soldDate
+                      );
                       this.props.navigation.navigate("SplashScreen");
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
-                        this.props.navigation.state.params.unitID
-                      );
+                        unitList.unUnitID
+                      ).then(succ => {
+                        console.log("succ", succ)
+                      }).catch(error => {
+                        console.log(error)
+                      });
+
                       fetch(
                         `http://${
                           this.props.oyeURL
@@ -297,7 +294,10 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "ResDashBoard"
+                                    )
                                 }
                               ],
                               { cancelable: false }
@@ -308,10 +308,10 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  // onPress: () =>
-                                  //   this.props.navigation.navigate(
-                                  //     "CreateOrJoinScreen"
-                                  //   )
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "CreateOrJoinScreen"
+                                    )
                                 }
                               ],
                               { cancelable: false }
@@ -363,11 +363,14 @@ class RegisterMe extends Component {
       associationName,
       unitList
     } = this.props.navigation.state.params;
+    // this.checkStatus();
 
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
+    } else if (this.checkStatus()) {
+      alert("You already requested to join this unit");
     } else {
-      let anu = {
+      anu = {
         ASAssnID: unitList.asAssnID,
         BLBlockID: unitList.blBlockID,
         UNUnitID: unitList.unUnitID,
@@ -442,6 +445,7 @@ class RegisterMe extends Component {
 
                 if (!_.isEmpty(responseData_2)) {
                   let userID = this.props.MyAccountID;
+                  let adminAccId = unitList.acAccntID;
                   let sbUnitID = unitList.unUnitID;
                   let unitName = unitList.unUniName;
                   let sbSubID =
@@ -475,17 +479,6 @@ class RegisterMe extends Component {
                   let soldDate = this.state.dobText;
                   let occupancyDate = this.state.dobText;
 
-                  console.log("userId", userID);
-                  console.log("sbUnitID", sbUnitID);
-                  console.log("sbSubID", sbSubID);
-                  console.log("sbRoleId", sbRoleId);
-                  console.log("sbMemID", sbMemID);
-                  console.log("sbName", sbName);
-                  console.log("associationID", associationID);
-                  console.log("ntType", ntType);
-                  console.log("ntTitle", ntTitle);
-                  console.log("ntDesc", ntDesc);
-
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
                   // Send a push notification to the admin here
@@ -510,17 +503,28 @@ class RegisterMe extends Component {
                     })
                     .then(response_3 => {
                       this.setState({ loading: false });
-                      console.log("*******");
-                      console.log("here_3 ");
-                      console.log("*******");
-                      // let responseData_3 = response_3.data;
-                      // console.log(responseData_3)
+                      this.props.createUserNotification(
+                        ntType,
+                        this.props.oyeURL,
+                        adminAccId,
+                        this.props.navigation.state.params.AssnId.toString(),
+                        ntDesc,
+                        sbUnitID.toString(),
+                        sbMemID.toString(),
+                        sbSubID.toString(),
+                        sbRoleId,
+                        this.props.navigation.state.params.associationName,
+                        unitName.toString(),
+                        occupancyDate,
+                        soldDate
+                        // this.props.navigation
+                      );
+
                       this.props.navigation.navigate("SplashScreen");
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
-                        this.props.navigation.state.params.unitID
+                        unitList.unUnitID
                       );
-
                       fetch(
                         `http://${
                           this.props.oyeURL
@@ -569,10 +573,10 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  // onPress: () =>
-                                  //   this.props.navigation.navigate(
-                                  //     "Dashboard"
-                                  //   )
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "ResDashBoard"
+                                    )
                                 }
                               ],
                               { cancelable: false }
@@ -583,10 +587,10 @@ class RegisterMe extends Component {
                               [
                                 {
                                   text: "Ok",
-                                  // onPress: () =>
-                                  //   this.props.navigation.navigate(
-                                  //     "CreateOrJoinScreen"
-                                  //   )
+                                  onPress: () =>
+                                    this.props.navigation.navigate(
+                                      "CreateOrJoinScreen"
+                                    )
                                 }
                               ],
                               { cancelable: false }
@@ -632,13 +636,48 @@ class RegisterMe extends Component {
     }
   };
 
+  checkStatus = () => {
+    const { unitList, AssnId } = this.props.navigation.state.params;
+    const { joinedAssociations, memberList } = this.props;
+    let unitID = unitList.unUnitID;
+
+    // let status = _.includes(joinedAssociations, unitID);
+    let status;
+    console.log(memberList, "memberList");
+
+    let matchUnit = _.find(memberList, function(o) {
+      console.log(o, "values");
+      return o.unUnitID === unitID;
+    });
+
+    // alert("called");
+
+    console.log(unitID);
+    console.log(matchUnit, "matchUnit");
+
+    if (matchUnit) {
+      if (
+        matchUnit.meJoinStat === "Approved" ||
+        matchUnit.meJoinStat === "Requested"
+      ) {
+        status = true;
+      } else {
+        status = false;
+      }
+    } else {
+      status = false;
+    }
+
+    return status;
+
+    // return false;
+    // console.log("unitId", unitID);
+    // console.log(_.includes(joinedAssociations, unitID));
+  };
+
   render() {
     const { unitList, AssnId } = this.props.navigation.state.params;
-    console.log("#!@$@$!@$!@$!@", unitList.unUnitID, AssnId);
-    console.log("$$$$$$$$@$@!$!@$@%#^#$%&%^&%$", unitList.unOcStat);
-    console.log(this.props);
-    //   console.log('$$$$$$$$@$@!$!@$@%#^#$%&%^&%$', unitList.owner[0].uofName)
-    console.log("$$$$$$$$$$$$$$$$$$", unitList.owner.length.toString());
+    console.log("unitList", unitList);
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: "orange" }}>
@@ -692,30 +731,6 @@ class RegisterMe extends Component {
                 Join Us
               </Text>
             </View>
-            <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForOwnwer()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForTenant()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              </View>
-            </View>
             <View style={styles.View}>
               <Card style={styles.DateCard}>
                 <View
@@ -742,6 +757,32 @@ class RegisterMe extends Component {
                 </View>
               </Card>
             </View>
+
+            <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
+              <View style={styles.View}>
+                <TouchableOpacity onPress={() => this.submitForOwnwer()}>
+                  <Card style={styles.Card}>
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
+                    </View>
+                  </Card>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.View}>
+                <TouchableOpacity onPress={() => this.submitForTenant()}>
+                  <Card style={styles.Card}>
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
+                    </View>
+                  </Card>
+                </TouchableOpacity>
+              </View>
+            </View>
+
             {/* <Text>{unitList.owner[0].uofName}</Text> */}
           </View>
         ) : (
@@ -863,11 +904,12 @@ const mapStateToProps = state => {
     joinedAssociations: state.AppReducer.joinedAssociations,
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyeURL: state.OyespaceReducer.oyeURL,
-    MyAccountID: state.UserReducer.MyAccountID
+    MyAccountID: state.UserReducer.MyAccountID,
+    memberList: state.DashboardReducer.memberList
   };
 };
 
 export default connect(
   mapStateToProps,
-  { updateJoinedAssociation }
+  { updateJoinedAssociation, createUserNotification }
 )(RegisterMe);

@@ -3,49 +3,85 @@ import { Text, View, TouchableOpacity, Image } from "react-native";
 import base from "../../base";
 import { connect } from "react-redux";
 import HeaderStyles from "./HeaderStyles";
+import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
+import { NavigationEvents } from "react-navigation";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
 class DashBoardHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ImageSource: null,
-      datasource: null
+      datasource: null,
+      myFirstName: ""
     };
   }
 
+  renderBadge = () => {
+    const { notifications } = this.props;
+
+    let count = 0;
+
+    notifications.map((data, index) => {
+      if (!data.read) {
+        count += 1;
+      }
+    });
+
+    const BadgedIcon = withBadge(count)(Icon);
+
+    return (
+      <Icon
+        color="#FF8C00"
+        type="material"
+        name="notifications"
+        size={hp("4%")}
+      />
+    );
+  };
   componentDidMount() {
     let self = this;
     setTimeout(() => {
       self.myProfile();
-    }, 2000);
+    }, 500);
   }
-  myProfile = () => {
-    
-    fetch(
-      `https://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${this.props.MyAccountID}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-        }
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson);
-        
-        this.setState({
-          datasource: responseJson,
-          ImageSource: responseJson.data.account[0].acImgName
-        });
-        console.log("gggg", datasource);
-      })
-      .catch(error => console.log(error));
+
+  myProfile = async () => {
+    const response = await base.services.OyeLivingApi.getProfileFromAccount(
+      this.props.MyAccountID
+    );
+    console.log(response);
+    this.setState({
+      datasource: response,
+      ImageSource: response.data.account[0].acImgName
+    });
+    // fetch(
+    //   `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
+    //   {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+    //     }
+    //   }
+    // )
+    //   .then(response => response.json())
+    //   .then(responseJson => {
+    //     console.log(responseJson);
+
+    //     this.setState({
+    //       datasource: responseJson,
+    //       ImageSource: responseJson.data.account[0].acImgName
+    //     });
+    //     console.log("gggg", datasource);
+    //   })
+    //   .catch(error => console.log(error));
   };
 
   render() {
-
     base.utils.logger.log(
       this.props.viewImageURL +
         "PERSON" +
@@ -64,12 +100,9 @@ class DashBoardHeader extends React.Component {
                                source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
                         </Image> */}
             {this.state.ImageSource == null ? (
-              <Image
-                style={HeaderStyles.imageStyles}
-                source={{
-                  uri: "https://via.placeholder.com/150/ff8c00/FFFFFF"
-                }}
-              />
+              <Image style={HeaderStyles.imageStyles}
+                               source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
+                        </Image>
             ) : (
               <Image
                 style={HeaderStyles.imageStyles}
@@ -90,6 +123,7 @@ class DashBoardHeader extends React.Component {
                 {this.state.datasource
                   ? this.state.datasource.data.account[0].acfName
                   : null}
+                
               </Text>
               <Text style={HeaderStyles.statusText} numberOfLines={1}>
                 Owner
@@ -107,10 +141,11 @@ class DashBoardHeader extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("NotificationScreen")}
           >
-            <Image
+            {/* <Image
               style={HeaderStyles.logoStyles}
               source={require("../../../icons/notifications.png")}
-            />
+            /> */}
+            {this.renderBadge()}
           </TouchableOpacity>
         </View>
       </View>
@@ -124,8 +159,26 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
     MyFirstName: state.UserReducer.MyFirstName,
-    viewImageURL: state.OyespaceReducer.viewImageURL
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    notifications: state.NotificationReducer.notifications
   };
 };
 
 export default connect(mapStateToProps)(DashBoardHeader);
+
+
+
+
+
+// const mapStateToProps = state => {
+//   return {
+//     oyeURL: state.OyespaceReducer.oyeURL,
+//     MyAccountID: state.UserReducer.MyAccountID,
+//     MyFirstName: state.UserReducer.MyFirstName,
+//     viewImageURL: state.OyespaceReducer.viewImageURL,
+//     imageUrl: state.OyespaceReducer.imageUrl,
+//     notifications: state.NotificationReducer.notifications
+//   };
+// };
+
+// export default connect(mapStateToProps)(Header);

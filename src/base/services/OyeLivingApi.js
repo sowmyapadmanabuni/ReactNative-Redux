@@ -65,4 +65,8 @@ export default class OyeLivingApi{
 
         return await instance.get('Member/GetMemUniOwnerTenantListByAssoc/'+assocId)
     }
+
+    static async getProfileFromAccount(assocId){ 
+        return await instance.get('GetAccountListByAccountID/'+assocId)
+    }
 }
