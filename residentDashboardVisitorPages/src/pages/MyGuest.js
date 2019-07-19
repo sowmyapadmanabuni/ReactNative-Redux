@@ -42,7 +42,10 @@ class MyGuests extends Component {
     this.arrayholder = [];
   }
   componentDidMount() {
-    this.getInvitationList();
+    let self = this;
+    setTimeout(() => {
+      self.getInvitationList();
+    }, 5000);
   }
 
   getInvitationList = () => {
