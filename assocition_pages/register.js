@@ -196,7 +196,7 @@ class RegisterMe extends Component {
                   // console.log("associationID", associationID);
                   // console.log("ntType", ntType);
                   // console.log("ntTitle", ntTitle);
-                  // console.log("ntDesc", ntDesc);
+                  console.log("ntDesc", ntDesc);
 
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
@@ -237,14 +237,17 @@ class RegisterMe extends Component {
                         soldDate
                       );
                       this.props.navigation.navigate("SplashScreen");
-                      this.props.updateJoinedAssociation(
-                        this.props.joinedAssociations,
-                        unitList.unUnitID
-                      ).then(succ => {
-                        console.log("succ", succ)
-                      }).catch(error => {
-                        console.log(error)
-                      });
+                      this.props
+                        .updateJoinedAssociation(
+                          this.props.joinedAssociations,
+                          unitList.unUnitID
+                        )
+                        .then(succ => {
+                          console.log("succ", succ);
+                        })
+                        .catch(error => {
+                          console.log(error);
+                        });
 
                       fetch(
                         `http://${
@@ -724,70 +727,66 @@ class RegisterMe extends Component {
         </SafeAreaView>
 
         <Text style={styles.titleOfScreen}>Register Me</Text>
-        {unitList.owner.length > 0 ? (
-          <View style={{ flexDirection: "column" }}>
-            <View style={styles.box}>
-              <Text style={{ color: "#fff", fontSize: hp("2.2%") }}>
-                Join Us
-              </Text>
-            </View>
-            <View style={styles.View}>
-              <Card style={styles.DateCard}>
-                <View
-                  style={{ justifyContent: "center", alignItems: "center" }}
-                >
-                  <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                    <View style={styles.datePickerBox}>
-                      <View style={styles.calView}>
-                        <Image
-                          style={styles.viewDatePickerImageStyle}
-                          source={require("../icons/cal.png")}
-                        />
-                      </View>
-
-                      <Text style={styles.datePickerText}>
-                        {this.state.dobText}{" "}
-                      </Text>
-                      <DatePickerDialog
-                        ref="dobDialog"
-                        onDatePicked={this.onDOBDatePicked.bind(this)}
+        {/* {unitList.owner.length > 0 ? ( */}
+        <View style={{ flexDirection: "column" }}>
+          <View style={styles.box}>
+            <Text style={{ color: "#fff", fontSize: hp("2.2%") }}>Join Us</Text>
+          </View>
+          <View style={styles.View}>
+            <Card style={styles.DateCard}>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <View style={styles.calView}>
+                      <Image
+                        style={styles.viewDatePickerImageStyle}
+                        source={require("../icons/cal.png")}
                       />
                     </View>
-                  </TouchableOpacity>
-                </View>
-              </Card>
-            </View>
 
-            <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForOwnwer()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
-                    </View>
-                  </Card>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText}{" "}
+                    </Text>
+                    <DatePickerDialog
+                      ref="dobDialog"
+                      onDatePicked={this.onDOBDatePicked.bind(this)}
+                    />
+                  </View>
                 </TouchableOpacity>
               </View>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForTenant()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* <Text>{unitList.owner[0].uofName}</Text> */}
+            </Card>
           </View>
-        ) : (
+
+          <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
+            <View style={styles.View}>
+              <TouchableOpacity onPress={() => this.submitForOwnwer()}>
+                <Card style={styles.Card}>
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.View}>
+              <TouchableOpacity onPress={() => this.submitForTenant()}>
+                <Card style={styles.Card}>
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* <Text>{unitList.owner[0].uofName}</Text> */}
+        </View>
+        {/* ) : (
           <View />
-        )}
+        )} */}
       </View>
     );
   }
