@@ -215,7 +215,7 @@ else{
 
 
   
-  fetch('http://apidev.oyespace.com/oye247/api/v1/Invitation/create', {
+  fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

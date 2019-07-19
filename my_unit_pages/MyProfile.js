@@ -237,7 +237,7 @@ class MyProfile extends Component {
                           this.state.datasource.data.account[0].acisdCode.substring(
                               0,
                               this.state.datasource.data.account[0].acisdCode
-                                  .length - 2
+                                  .length 
                           ) +
                           " " +
                           this.state.datasource.data.account[0].acMobile

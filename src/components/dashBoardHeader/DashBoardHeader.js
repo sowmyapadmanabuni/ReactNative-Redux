@@ -99,7 +99,7 @@ class DashBoardHeader extends React.Component {
             {/* <Image style={HeaderStyles.imageStyles}
                                source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
                         </Image> */}
-            {this.state.ImageSource == null ? (
+            {this.state.ImageSource === null ? (
               <Image style={HeaderStyles.imageStyles}
                                source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
                         </Image>
@@ -165,20 +165,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(DashBoardHeader);
-
-
-
-
-
-// const mapStateToProps = state => {
-//   return {
-//     oyeURL: state.OyespaceReducer.oyeURL,
-//     MyAccountID: state.UserReducer.MyAccountID,
-//     MyFirstName: state.UserReducer.MyFirstName,
-//     viewImageURL: state.OyespaceReducer.viewImageURL,
-//     imageUrl: state.OyespaceReducer.imageUrl,
-//     notifications: state.NotificationReducer.notifications
-//   };
-// };
-
-// export default connect(mapStateToProps)(Header);
