@@ -14,13 +14,16 @@ class DashBoardHeader extends React.Component {
   }
 
   componentDidMount() {
-    this.myProfile();
+    let self = this;
+    setTimeout(() => {
+      self.myProfile();
+    }, 2000);
   }
+
   myProfile = () => {
+    
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${
-        this.props.MyAccountID
-      }`,
+      `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
       {
         method: "GET",
         headers: {
@@ -32,24 +35,16 @@ class DashBoardHeader extends React.Component {
       .then(response => response.json())
       .then(responseJson => {
         console.log(responseJson);
+        
         this.setState({
           datasource: responseJson,
           ImageSource: responseJson.data.account[0].acImgName
         });
-        console.log("gggg", datasource);
       })
       .catch(error => console.log(error));
   };
 
   render() {
-    base.utils.logger.log(
-      this.props.viewImageURL +
-        "PERSON" +
-        this.props.MyAccountID +
-        ".jpg" +
-        "?random_number=" +
-        new Date().getTime()
-    );
     return (
       <View style={HeaderStyles.container}>
         <View style={HeaderStyles.subContainerLeft}>

@@ -22,7 +22,7 @@ import axios from "axios";
 import firebase from "react-native-firebase";
 import _ from "lodash";
 import { VictoryPie } from "victory-native";
-import { Card, CardItem } from "native-base";
+import { Card, CardItem, } from "native-base";
 
 import {
   widthPercentageToDP as wp,
@@ -475,7 +475,7 @@ roleCheckForAdmin = () => {
     let self = this;
     //self.setState({isLoading: true})
     console.log("APi1233", self.state.assocId);
-    let stat = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
+    let stat = await base.services.OyeLivingApi.getUnitListByAssoc(self.state.assocId);
     self.setState({ isLoading: false });
     console.log("STAT123", stat);
 

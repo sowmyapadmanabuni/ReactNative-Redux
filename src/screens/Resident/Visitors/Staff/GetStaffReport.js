@@ -168,6 +168,7 @@ class GetStaffReport extends React.Component {
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days())
         let difference=duration.as('days');
+        console.log("GetStaffData",stat)
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
@@ -224,10 +225,10 @@ class GetStaffReport extends React.Component {
                 this.changeTheData(self.state.pageNumber)
 
             } else {
-                let tableData = 'No report exist'
+                //let tableData = 'No report exist'
 
                 self.setState({
-                    tableData: tableData
+                    tableData: []
                 })
 
             }
@@ -253,12 +254,15 @@ class GetStaffReport extends React.Component {
                         <Text style={StaffStyle.desigText}> ({this.props.staffReducer.staffDesignation})</Text>
                     </View>
                     <View style={StaffStyle.detailsRightView}>
+                        {this.state.tableData.length !==0 ?
                         <TouchableOpacity
                             onPress={() => this.state.isPermitted ? this.createPDF() : alert('Please Provide permissions to share report')}>
                             <Image style={StaffStyle.shareImg}
                                    source={require('../../../../../icons/share.png')}
                             />
                         </TouchableOpacity>
+                            :
+                            <View/>}
                     </View>
                 </View>
 
@@ -322,11 +326,11 @@ class GetStaffReport extends React.Component {
 
         return (
             <View Style={StaffReportStyle.tableMainView}>
-                <Table borderStyle={StaffReportStyle.tableView}>
-
+                {state.tableData.length !==0?
+                    <Table borderStyle={StaffReportStyle.tableView}>
                     <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
                          textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
-                    {state.tableData.map((rowData, index) => (
+                         {state.tableData.map((rowData, index) => (
                         <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
                             {
                                 rowData.map((cellData, cellIndex) => (
@@ -344,6 +348,10 @@ class GetStaffReport extends React.Component {
                     ))
                     }
                 </Table>
+                    :
+                    <View style={{alignItems:'center'}}>
+                    <Text>No data for selected worker</Text>
+                    </View>}
             </View>
         );
     }

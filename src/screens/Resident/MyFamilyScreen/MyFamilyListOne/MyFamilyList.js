@@ -68,7 +68,7 @@ class MyFamilyList extends React.Component {
     let itemId = itemID
 
     fetch(
-      "http://apidev.oyespace.com/oyesafe/api/v1/FamilyMemberDetailsDelete/update",
+      `http://${this.props.oyeURL}/oyesafe/api/v1/FamilyMemberDetailsDelete/update`,
       {
         method: "POST",
         headers: {
@@ -140,6 +140,11 @@ class MyFamilyList extends React.Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 5000);
     this.myFamilyListGetData()
   }
 
@@ -254,8 +259,55 @@ class MyFamilyList extends React.Component {
 
     if (this.state.isLoading) {
       return (
+        <View style={Style.mainView}>
+        {/* <Header /> */}
+
+        <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[Style.viewStyle1, { flexDirection: "row" }]}>
+            <View style={Style.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("ResDashBoard")
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../../../../../icons/back.png")}
+                    //style={Style.viewDetails2}
+                    style={{ width: 20, height: 20 }}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[Style.image1]}
+                source={require("../../../../../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ flex: 1 }} />
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
+        </SafeAreaView>
+
+
         <View style={Style.progressViewStyle}>
           <ActivityIndicator size="large" color="#01CBC6" />
+        </View>
         </View>
       )
     }

@@ -774,7 +774,7 @@ patrollingCheckPoint: {
         header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={false} {...props}/>
     }
 },
-  addCheckPoint: {
+addCheckPoint: {
     screen: AddAndEditCheckPoints,
     navigationOptions: {
       title: "Add Checkpoints",
