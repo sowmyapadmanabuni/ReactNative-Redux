@@ -411,7 +411,7 @@ roleCheckForAdmin = () => {
     self.setState({ isLoading: true });
     console.log("APi", base.utils.strings.oyeLivingDashBoard);
     let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
-        this.props.userReducer.MyAccountID
+        8
     )
     console.log('data from stat',stat)
     //self.setState({isLoading: false})
@@ -786,7 +786,7 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>
-              this.props.navigation.navigate("MyVehicleListScreen")
+              this.props.navigation.navigate("subscriptionManagement")
             }
           />
           <CardView
@@ -972,7 +972,7 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
               Invoice No. {item.item.invoiceNumber}
             </Text>
             <Text style={Style.billText}>
-              <Text style={Style.rupeeIcon}>{"\u20B9"}</Text>
+              <Text style={Style.rupeeIcon}>{base.utils.strings.rupeeIconCode}</Text>
               {item.item.bill}
             </Text>
           </View>

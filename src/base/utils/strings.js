@@ -43,7 +43,8 @@ const strings = {
     },
     staffPlaceHolder:'https://via.placeholder.com/150/ff8c00/FFFFFF',
     StaffImageLink:'http://mediauploaddev.oyespace.com/Images/',
-    patrolId:"PATROL_ID"
+    patrolId:"PATROL_ID",
+    rupeeIconCode:"\u20B9"
 };
 
 
