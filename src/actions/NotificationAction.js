@@ -81,7 +81,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
         // console.log(error);
         dispatch({
           type: GET_NOTIFICATIONS_FAILED,
-          payload: ""
+          payload: []
         });
       });
   };

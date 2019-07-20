@@ -7,7 +7,8 @@ import {
   Image,
   TouchableOpacity,
   TouchableHighlight,
-  StyleSheet,Dimensions,
+  StyleSheet,
+  Dimensions,
   Platform,
   Linking
 } from "react-native";
@@ -22,7 +23,7 @@ import axios from "axios";
 import firebase from "react-native-firebase";
 import _ from "lodash";
 import { VictoryPie } from "victory-native";
-import { Card, CardItem, } from "native-base";
+import { Card, CardItem } from "native-base";
 
 import {
   widthPercentageToDP as wp,
@@ -66,16 +67,16 @@ class Dashboard extends React.Component {
 
       unitList: [],
       unitName: "",
-      unitId:null,
+      unitId: null,
 
       falmilyMemebCount: null,
       vechiclesCount: null,
       visitorCount: null,
 
-role:"",
+      role: "",
 
-      assdNameHide:false,
-      unitNameHide:false,
+      assdNameHide: false,
+      unitNameHide: false
     };
   }
 
@@ -341,79 +342,87 @@ role:"",
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-
-    
   }
-//   onAssociationChange = (value, index) => {
-//     const {
-//       associationid,
-//       getDashUnits,
-//       updateUserInfo,
-//       memberList,
-//       notifications,
-//       dropdown
-//     } = this.props;
-//     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-//     const { oyeURL } = this.props.oyespaceReducer;
+  //   onAssociationChange = (value, index) => {
+  //     const {
+  //       associationid,
+  //       getDashUnits,
+  //       updateUserInfo,
+  //       memberList,
+  //       notifications,
+  //       dropdown
+  //     } = this.props;
+  //     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+  //     const { oyeURL } = this.props.oyespaceReducer;
 
-//     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
-//     updateUserInfo({
-//       prop: "SelectedAssociationID",
-//       value: dropdown[index].associationId
-//     });
+  //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
+  //     updateUserInfo({
+  //       prop: "SelectedAssociationID",
+  //       value: dropdown[index].associationId
+  //     });
 
-//     let memId = _.find(memberList, function(o) {
-//       return o.asAssnID === dropdown[index].associationId;
-//     });
+  //     let memId = _.find(memberList, function(o) {
+  //       return o.asAssnID === dropdown[index].associationId;
+  //     });
 
-//     updateUserInfo({
-//       prop: "MyOYEMemberID",
-//       value: memId.meMemID
-//     });
+  //     updateUserInfo({
+  //       prop: "MyOYEMemberID",
+  //       value: memId.meMemID
+  //     });
 
-//     updateUserInfo({
-//       prop: "SelectedMemberID",
-//       value: dropdown[index].memberId
-//     });
-//   };
+  //     updateUserInfo({
+  //       prop: "SelectedMemberID",
+  //       value: dropdown[index].memberId
+  //     });
+  //   };
 
-roleCheckForAdmin = () => {
-    console.log("Association id123123123123", this.state.assocId)
+  roleCheckForAdmin = () => {
+    console.log("Association id123123123123", this.state.assocId);
     fetch(
-        `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${this.state.assocId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-          }
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
+        this.state.assocId
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
         }
-      )
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log("Manas", responseJson,responseJson.data,responseJson.data.members);
-          console.log("MRMRoleid", responseJson.data.members[0].mrmRoleID,responseJson.data.members.mrmRoleID);
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(
+          "Manas",
+          responseJson,
+          responseJson.data,
+          responseJson.data.members
+        );
+        console.log(
+          "MRMRoleid",
+          responseJson.data.members[0].mrmRoleID,
+          responseJson.data.members.mrmRoleID
+        );
 
-          this.setState({
-            
-           role:responseJson.data.members[0].mrmRoleID
-          });
-          
-        })
-        .catch(error => {
-          this.setState({ error, loading: false });
-          
+        this.setState({
+          role: responseJson.data.members[0].mrmRoleID
         });
-}
+      })
+      .catch(error => {
+        this.setState({ error, loading: false });
+      });
+  };
   async getListOfAssociation() {
     let self = this;
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
     console.log("APi", base.utils.strings.oyeLivingDashBoard);
     let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
-        this.props.userReducer.MyAccountID
-    )
-    console.log('data from stat',stat)
+      this.props.userReducer.MyAccountID
+    );
+    console.log("data from stat", stat);
     //self.setState({isLoading: false})
     try {
       if (stat && stat.data) {
@@ -431,28 +440,29 @@ roleCheckForAdmin = () => {
           assocName: assocList[0].details.asAsnName,
           assocId: assocList[0].details.asAssnID
         });
-        const {updateIdDashboard}=this.props;
-               console.log("updateIdDashboard1", this.props)
-               updateIdDashboard({prop:"assId", value:assocList[0].details.asAssnID}) 
-               updateIdDashboard({prop:"memberList", value:assocList}) 
+        const { updateIdDashboard } = this.props;
+        console.log("updateIdDashboard1", this.props);
+        updateIdDashboard({
+          prop: "assId",
+          value: assocList[0].details.asAssnID
+        });
+        updateIdDashboard({ prop: "memberList", value: assocList });
 
-               const {getDashUnits}=this.props;
-               getDashUnits(assocList[0].details.asAssnID, oyeURL);
-
+        const { getDashUnits } = this.props;
+        getDashUnits(assocList[0].details.asAssnID, oyeURL);
       }
       self.getUnitListByAssoc();
-      
     } catch (error) {
       base.utils.logger.log(error);
     }
   }
 
   onAssociationChange(value, index) {
-      console.log('on Aschange',value,index)
+    console.log("on Aschange", value, index);
     let self = this;
     let oyeURL = this.props.oyeURL;
     let assocList = self.state.assocList;
-    let assocName,assocId;
+    let assocName, assocId;
     for (let i = 0; i < assocList.length; i++) {
       if (i === index) {
         assocName = assocList[i].details.asAsnName;
@@ -463,19 +473,21 @@ roleCheckForAdmin = () => {
       assocName: value,
       assocId: assocId
     });
-    const {updateIdDashboard}=this.props;
-    console.log("updateIdDashboard2", this.props)
-    updateIdDashboard({prop:"assId", value:assocId})
-    const {getDashUnits}=this.props;
+    const { updateIdDashboard } = this.props;
+    console.log("updateIdDashboard2", this.props);
+    updateIdDashboard({ prop: "assId", value: assocId });
+    const { getDashUnits } = this.props;
     getDashUnits(assocId, oyeURL);
-    self.getUnitListByAssoc()
+    self.getUnitListByAssoc();
   }
 
   async getUnitListByAssoc() {
     let self = this;
     //self.setState({isLoading: true})
     console.log("APi1233", self.state.assocId);
-    let stat = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
+    let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
+      this.state.assocId
+    );
     self.setState({ isLoading: false });
     console.log("STAT123", stat);
 
@@ -496,19 +508,21 @@ roleCheckForAdmin = () => {
             unitList.push({ value: Unit, details: stat.data.members[i] });
           }
         }
-        console.log("JGjhgjhg", unitList,unitList[0].details.unUnitID);
+        console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
 
         self.setState({
           unitList: unitList,
           unitName: unitList[0].value,
-          unitId:unitList[0].details.unUnitID
+          unitId: unitList[0].details.unUnitID
         });
-        const {updateIdDashboard}=this.props;
-        console.log("updateIdDashboard3", this.props)
-       updateIdDashboard({prop:"uniID", value:unitList[0].details.unUnitID})
+        const { updateIdDashboard } = this.props;
+        console.log("updateIdDashboard3", this.props);
+        updateIdDashboard({
+          prop: "uniID",
+          value: unitList[0].details.unUnitID
+        });
 
-       self.roleCheckForAdmin()
-
+        self.roleCheckForAdmin();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -516,10 +530,10 @@ roleCheckForAdmin = () => {
   }
 
   updateUnit(value, index) {
-    console.log("Unit123", value, index,this.state.unitList);
+    console.log("Unit123", value, index, this.state.unitList);
     let self = this;
     let unitList = self.state.unitList;
-    let unitName,unitId;
+    let unitName, unitId;
     for (let i = 0; i < unitList.length; i++) {
       if (i === index) {
         unitName = unitList[i].details.asAsnName;
@@ -530,14 +544,16 @@ roleCheckForAdmin = () => {
       unitName: value,
       unitId: unitId
     });
-    const {updateIdDashboard}=this.props;
-    console.log("updateIdDashboard5", this.props)
-    updateIdDashboard({prop:"uniID", value:unitId})
+    const { updateIdDashboard } = this.props;
+    console.log("updateIdDashboard5", this.props);
+    updateIdDashboard({ prop: "uniID", value: unitId });
   }
 
   getVehicleList = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
+      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+        this.props.dashBoardReducer.assId
+      }`,
       {
         method: "GET",
         headers: {
@@ -560,73 +576,69 @@ roleCheckForAdmin = () => {
         console.log(error);
       });
   };
+
   render() {
-      console.log("Role Id", this.state.role)
     const {
-        dropdown,
-        dropdown1,
-        residentList,
-        sold,
-        unsold,
-        isLoading,
-        sold2,
-        unsold2,
-        updateUserInfo,
-        updateDropDownIndex
-      } = this.props;
+      dropdown,
+      dropdown1,
+      residentList,
+      sold,
+      unsold,
+      isLoading,
+      sold2,
+      unsold2,
+      updateUserInfo,
+      updateDropDownIndex
+    } = this.props;
 
     // base.utils.logger.log(this.props)
     console.log("Asociation", this.state.unitList, this.state.assocList);
 
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-console.log("Association Id", this.props.dashBoardReducer.assId)
+    console.log("Association Id", this.props.dashBoardReducer.assId);
     return (
       <View style={Style.container}>
         <View style={Style.dropDownContainer}>
           <View style={Style.leftDropDown}>
-              {this.state.assdNameHide === false ? 
+            {this.state.assdNameHide === false ? (
               <Dropdown
-              value={this.state.assocName}
-              label="Association Name"
-              baseColor="rgba(0, 0, 0, 1)"
-              data={associationList}
-              textColor={base.theme.colors.black}
-              inputContainerStyle={{ borderBottomColor: "transparent" }}
-              dropdownOffset={{ top: 10, left: 0 }}
-              dropdownPosition={-3}
-              rippleOpacity={0}
-              onChangeText={(value, index) =>
-                this.onAssociationChange(value, index)
-              }
-            /> 
-            : 
-            <View></View>
-            
-            }
-            
+                value={this.state.assocName}
+                label="Association Name"
+                baseColor="rgba(0, 0, 0, 1)"
+                data={associationList}
+                textColor={base.theme.colors.black}
+                inputContainerStyle={{ borderBottomColor: "transparent" }}
+                dropdownOffset={{ top: 10, left: 0 }}
+                dropdownPosition={-3}
+                rippleOpacity={0}
+                onChangeText={(value, index) =>
+                  this.onAssociationChange(value, index)
+                }
+              />
+            ) : (
+              <View />
+            )}
           </View>
           <View style={Style.rightDropDown}>
-              {this.state.unitNameHide === false ? 
+            {this.state.unitNameHide === false ? (
               <Dropdown
-              value={this.state.unitName}
-              label="UNIT"
-              baseColor="rgba(0, 0, 0, 1)"
-              data={unitList}
-              inputContainerStyle={{ borderBottomColor: "transparent" }}
-              textColor="#000"
-              dropdownOffset={{ top: 10, left: 0 }}
-              dropdownPosition={-3}
-              rippleOpacity={0}
-              onChangeText={(value, index) => {
-                this.updateUnit(value, index);
-              }}
-            />
-            :
-            <View></View>
-            
-            }
-            
+                value={this.state.unitName}
+                label="UNIT"
+                baseColor="rgba(0, 0, 0, 1)"
+                data={unitList}
+                inputContainerStyle={{ borderBottomColor: "transparent" }}
+                textColor="#000"
+                dropdownOffset={{ top: 10, left: 0 }}
+                dropdownPosition={-3}
+                rippleOpacity={0}
+                onChangeText={(value, index) => {
+                  this.updateUnit(value, index);
+                }}
+              />
+            ) : (
+              <View />
+            )}
           </View>
         </View>
         {this.state.isSelectedCard === "UNIT"
@@ -643,18 +655,18 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
             onCardClick={() => this.changeCardStatus("UNIT")}
             disabled={this.state.isSelectedCard === "UNIT"}
           />
-          {this.state.role === 1 ?
-          <CardView
-          height={this.state.adminCardHeight}
-          width={this.state.adminCardWidth}
-          cardText={"Admin"}
-          onCardClick={() => this.changeCardStatus("ADMIN")}
-          cardIcon={require("../../../../icons/user.png")}
-          disabled={this.state.isSelectedCard === "ADMIN"}
-        /> :
-        <View></View>
-        }
-          
+          {this.state.role === 1 ? (
+            <CardView
+              height={this.state.adminCardHeight}
+              width={this.state.adminCardWidth}
+              cardText={"Admin"}
+              onCardClick={() => this.changeCardStatus("ADMIN")}
+              cardIcon={require("../../../../icons/user.png")}
+              disabled={this.state.isSelectedCard === "ADMIN"}
+            />
+          ) : (
+            <View />
+          )}
 
           {/* <CardView
                         height={this.state.offersCardHeight}
@@ -706,8 +718,7 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
 
   changeCardStatus(status) {
     this.setState({
-      isSelectedCard: status,
-      
+      isSelectedCard: status
     });
     if (status == "UNIT") {
       this.setState({
@@ -719,7 +730,7 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
         offersCardWidth: "22%",
 
         assdNameHide: false,
-        unitNameHide: false,
+        unitNameHide: false
       });
     } else if (status == "ADMIN") {
       this.setState({
@@ -731,7 +742,7 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
         offersCardWidth: "22%",
 
         assdNameHide: true,
-        unitNameHide: true,
+        unitNameHide: true
       });
     } else if (status == "OFFERS") {
       this.setState({
@@ -863,7 +874,7 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
           </TouchableOpacity>
         </View> */}
 
-{/* <View style={{ flexDirection: "row", height: hp("32%") }}>
+        {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
 
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
@@ -935,11 +946,11 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
                 </View> */}
 
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <TouchableOpacity onPress={() => {
-              this.props.navigation.navigate("ViewmembersScreen",{
-                
-              });
-            }}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("ViewmembersScreen", {});
+            }}
+          >
             <Text>Role Management</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -997,142 +1008,142 @@ console.log("Association Id", this.props.dashBoardReducer.assId)
   myUnit() {}
 
   goToFirstTab() {
-    const {updateIdDashboard}=this.props;
-     console.log("updateIdDashboard", this.props)
-     updateIdDashboard({prop:"assId", value:this.state.assocId})
-    updateIdDashboard({prop:"uniID", value:this.state.unitId})  //update
+    const { updateIdDashboard } = this.props;
+    console.log("updateIdDashboard", this.props);
+    updateIdDashboard({ prop: "assId", value: this.state.assocId });
+    updateIdDashboard({ prop: "uniID", value: this.state.unitId }); //update
 
     this.props.navigation.navigate("firstTab");
   }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: "column",
-      backgroundColor: "#fff",
-      paddingLeft: hp("0.7%")
-    },
-    progress: {
-      justifyContent: "center",
-      alignItems: "center"
-    },
-    card: {
-      borderBottomWidth: 1,
-      flexDirection: "column",
-      width: Dimensions.get("window").width / 4 - 10,
-      height: hp("9%"),
-      alignItems: "center"
-    },
-    cardItem: {
-      flexDirection: "column",
-      borderColor: "orange",
-      borderWidth: hp("10%")
-      // borderBottomWidth:30,
-    },
-    textWrapper: {
-      height: hp("85%"), // 70% of height device screen
-      width: wp("97%") // 80% of width device screen
-    },
-    gaugeText: {
-      backgroundColor: "transparent",
-      color: "#000",
-      fontSize: hp("3%")
-    },
-    image1: {
-      width: wp("6%"),
-      height: hp("3%"),
-      marginRight: 10,
-      justifyContent: "space-between"
-    },
-    image2: {
-      height: hp("2%"),
-      width: hp("2%"),
-      justifyContent: "flex-end",
-      alignItems: "flex-end",
-      marginBottom: hp("2.4%"),
-      marginTop: hp("2.4%")
-    },
-    text1: {
-      justifyContent: "flex-start",
-      alignItems: "flex-start",
-      flex: 5,
-      color: "#FF8C00",
-      marginBottom: hp("2.4%"),
-      marginTop: hp("2.4%")
-    },
-    text2: {
-      justifyContent: "flex-end",
-      alignItems: "flex-end",
-      color: "#FF8C00",
-      marginBottom: hp("2.4%"),
-      marginTop: hp("2.4%")
-    },
-    text3: {
-      justifyContent: "flex-start",
-      alignItems: "flex-start",
-      flex: 1,
-      color: "#45B591",
-      marginBottom: hp("2.4%"),
-      marginTop: hp("2.4%")
-    },
-    text4: {
-      justifyContent: "flex-end",
-      alignItems: "flex-end",
-      color: "#45B591",
-      marginBottom: hp("2.4%"),
-      marginTop: hp("2.4%")
-    },
-    image3: {
-      height: hp("2%"),
-      width: hp("2%"),
-      justifyContent: "flex-end",
-      alignItems: "flex-end",
-      marginBottom: hp("2.4%"),
-      marginTop: hp("2.4%")
-    },
-    image4: {
-      width: wp("5%"),
-      height: hp("2%"),
-      justifyContent: "flex-start",
-      marginLeft: hp("1%"),
-      marginRight: hp("1%")
-    },
-    view1: {
-      flexDirection: "row",
-      margin: hp("0.5%"),
-      alignItems: "center",
-      justifyContent: "center",
-      bottom: 0,
-      height: hp("12%")
-    },
-    view2: {
-      borderWidth: hp("0.8%"),
-      borderBottomEndRadius: hp("0.8%"),
-      borderBottomStartRadius: hp("0.8%"),
-      borderColor: "orange",
-      width: Dimensions.get("window").width / 4 - 10,
-      marginTop: hp("0.8%")
-    },
-    card1: {
-      height: hp("4%"),
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#fff6e5",
-      marginBottom: hp("2%")
-    },
-    gauge: {
-      position: "absolute",
-      width: wp("40%"),
-      height: hp("22%"),
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  });
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#fff",
+    paddingLeft: hp("0.7%")
+  },
+  progress: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  card: {
+    borderBottomWidth: 1,
+    flexDirection: "column",
+    width: Dimensions.get("window").width / 4 - 10,
+    height: hp("9%"),
+    alignItems: "center"
+  },
+  cardItem: {
+    flexDirection: "column",
+    borderColor: "orange",
+    borderWidth: hp("10%")
+    // borderBottomWidth:30,
+  },
+  textWrapper: {
+    height: hp("85%"), // 70% of height device screen
+    width: wp("97%") // 80% of width device screen
+  },
+  gaugeText: {
+    backgroundColor: "transparent",
+    color: "#000",
+    fontSize: hp("3%")
+  },
+  image1: {
+    width: wp("6%"),
+    height: hp("3%"),
+    marginRight: 10,
+    justifyContent: "space-between"
+  },
+  image2: {
+    height: hp("2%"),
+    width: hp("2%"),
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text1: {
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    flex: 5,
+    color: "#FF8C00",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text2: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    color: "#FF8C00",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text3: {
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    flex: 1,
+    color: "#45B591",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text4: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    color: "#45B591",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  image3: {
+    height: hp("2%"),
+    width: hp("2%"),
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  image4: {
+    width: wp("5%"),
+    height: hp("2%"),
+    justifyContent: "flex-start",
+    marginLeft: hp("1%"),
+    marginRight: hp("1%")
+  },
+  view1: {
+    flexDirection: "row",
+    margin: hp("0.5%"),
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: 0,
+    height: hp("12%")
+  },
+  view2: {
+    borderWidth: hp("0.8%"),
+    borderBottomEndRadius: hp("0.8%"),
+    borderBottomStartRadius: hp("0.8%"),
+    borderColor: "orange",
+    width: Dimensions.get("window").width / 4 - 10,
+    marginTop: hp("0.8%")
+  },
+  card1: {
+    height: hp("4%"),
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff6e5",
+    marginBottom: hp("2%")
+  },
+  gauge: {
+    position: "absolute",
+    width: wp("40%"),
+    height: hp("22%"),
+    alignItems: "center",
+    justifyContent: "center"
+  }
+});
 
 const mapStateToProps = state => {
   return {
-      isCreateLoading: state.NotificationReducer.isCreateLoading,
+    isCreateLoading: state.NotificationReducer.isCreateLoading,
     notificationCount: state.NotificationReducer.notificationCount,
     notifications: state.NotificationReducer.notifications,
     joinedAssociations: state.AppReducer.joinedAssociations,
@@ -1160,7 +1171,7 @@ const mapStateToProps = state => {
     oyespaceReducer: state.OyespaceReducer,
     receiveNotifications: state.NotificationReducer.receiveNotifications,
     dashBoardReducer: state.DashboardReducer
-};
+  };
 };
 
 export default connect(

@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  YellowBox,AppState,
+  YellowBox,
+  AppState,
   ActivityIndicator
 } from "react-native";
 import { Card, CardItem } from "native-base";
@@ -37,7 +38,7 @@ import moment from "moment";
 import axios from "axios";
 import firebase from "react-native-firebase";
 import _ from "lodash";
-import {NavigationEvents} from 'react-navigation';
+import base from "../src/base";
 import {
   newNotifInstance,
   createNotification,
@@ -47,9 +48,13 @@ import {
   getDashAssociation,
   getDashUnits,
   updateUserInfo,
-  getAssoMembers
+  updateApproveAdmin,
+  getAssoMembers,
+  updateDropDownIndex,
+  createUserNotification,
+  refreshNotifications
 } from "../src/actions";
-import base from '../src/base'
+import { NavigationEvents } from "react-navigation";
 
 class Dashboard extends React.Component {
   static navigationOptions = {
@@ -75,265 +80,6 @@ class Dashboard extends React.Component {
       uoMobile: ""
     };
   }
-
-  requestNotifPermission = () => {
-    const { MyAccountID, champBaseURL, receiveNotifications } = this.props;
-
-    firebase
-      .messaging()
-      .hasPermission()
-      .then(enabled => {
-        if (enabled) {
-          //if (receiveNotifications) {
-            this.listenForNotif();
-          //}
-          // user has permissions
-        } else {
-          firebase
-            .messaging()
-            .requestPermission()
-            .then(() => {
-              //if (receiveNotifications) {
-                this.listenForNotif();
-              //}
-              // User has authorised
-            })
-            .catch(error => {
-              // User has rejected permissions
-            });
-          // user doesn't have permission
-        }
-      });
-
-    var headers = {
-      "Content-Type": "application/json",
-      "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-    };
-
-    axios
-      .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
-        headers: headers
-      })
-      .then(response => {
-        let responseData = response.data.data;
-
-        responseData.associationByAccount.map(association => {
-           console.log('***********', response.data.data)
-           console.log(association.asAsnName)
-           console.log(association.asAssnID)
-           console.log('***********',receiveNotifications)
-          //if (receiveNotifications) {
-            console.log('*****subscribeToTopic******', association.asAssnID + "admin")
-            firebase
-              .messaging()
-              .subscribeToTopic(association.asAssnID + "admin");
-            // console.log(association.asAssnID);
-          // } else if (!receiveNotifications) {
-          //   firebase
-          //     .messaging()
-          //     .unsubscribeFromTopic(association.asAssnID + "admin");
-          // }
-        });
-      });
-  };
-
-  showLocalNotification = notification => {
-    console.log("^^^^6",notification);
-    const channel = new firebase.notifications.Android.Channel(
-      "channel_id",
-      "Oyespace",
-      firebase.notifications.Android.Importance.Max
-    ).setDescription("Oyespace channel");
-    channel.enableLights(true);
-     //channel.enableVibration(true);
-     //channel.vibrationPattern([500]);
-
-     firebase.notifications().android.createChannel(channel);
-
-    const notificationBuild = new firebase.notifications.Notification({
-      sound: "default",
-      show_in_foreground: true
-    })
-      .setTitle(notification._title)
-      .setBody(notification._body)
-      .setNotificationId(notification._notificationId)
-      // .setSound('default')
-      .setData({
-        ...notification._data,
-        foreground: true
-      })
-      .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")
-      .android.setAutoCancel(true)
-      .android.setSmallIcon("ic_stat_ic_notification")
-      .android.setChannelId("channel_id")
-      .android.setVibrate(1000)
-      // .android.setChannelId('notification-action')
-      .android.setPriority(firebase.notifications.Android.Priority.High);
-
-    if(AppState.currentState == 'active') {
-        showMessage({
-            message: notification._title,
-            description:notification._body,
-            type: "default",
-            backgroundColor: base.theme.colors.primary,
-            color: base.theme.colors.white,
-            onPress: () => {
-                firebase.notifications().removeAllDeliveredNotifications();
-                //@Todo: Navigate to specific screen
-            }
-        });
-    }
-
-    firebase.notifications().displayNotification(notificationBuild);
-
-
-
-    this.setState({ foregroundNotif: notification._data });
-  };
-
-  listenForNotif = () => {
-    let navigationInstance = this.props.navigation;
-    console.log('listenForNotif')
-    this.notificationDisplayedListener = firebase
-      .notifications()
-      .onNotificationDisplayed(notification => {
-         console.log('___________')
-         console.log(notification)
-        // console.log('____________')
-        // Process your notification as required
-        // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-      });
-
-    this.notificationListener = firebase
-      .notifications()
-      .onNotification(notification => {
-         console.log('___________')
-         console.log(notification)
-        // console.log('____________')
-
-        if (notification._data.associationID) {
-          // this.props.createNotification(notification._data, navigationInstance, false)
-        }
-
-        this.showLocalNotification(notification);
-      });
-
-    firebase.notifications().onNotificationOpened(notificationOpen => {
-      // alert('opened')
-      // console.log('**********')
-      // console.log(notificationOpen.notification._data.admin)
-      if (notificationOpen.notification._data.admin === "true") {
-        if (notificationOpen.action) {
-          this.props.newNotifInstance(notificationOpen.notification);
-          this.props.createNotification(
-            notificationOpen.notification._data,
-            navigationInstance,
-            true,
-            "true",
-            this.props.oyeURL,
-            this.props.MyAccountID
-          );
-          // this.props.createNotification(notificationOpen.notification)
-        }
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      } else if (notificationOpen.notification._data.admin === "false") {
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, 'false')
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      }
-
-      if (notificationOpen.notification._data.admin === "true") {
-        if (notificationOpen.notification._data.foreground) {
-          this.props.newNotifInstance(notificationOpen.notification);
-          this.props.createNotification(
-            notificationOpen.notification._data,
-            "navigationInstance",
-            true,
-            "true",
-            "true",
-            this.props.oyeURL,
-            this.props.MyAccountID
-          );
-        }
-      } else if (notificationOpen.notification._data.admin === "gate_app") {
-        this.props.newNotifInstance(notificationOpen.notification);
-        this.props.createNotification(
-          notificationOpen.notification._data,
-          "navigationInstance",
-          true,
-          "gate_app",
-          "true",
-          this.props.oyeURL,
-          this.props.MyAccountID
-        );
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      } else if (notificationOpen.notification._data.admin === "false") {
-        // alert('clicked here')
-        this.props.newNotifInstance(notificationOpen.notification);
-        this.props.createNotification(
-          notificationOpen.notification._data,
-          "navigationInstance",
-          true,
-          "false",
-          "true",
-          this.props.oyeURL,
-          this.props.MyAccountID
-        );
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      }
-    });
-  };
-
-  onChangeText = () => {
-    // console.log("hhhhhhhhhhhhhh",this.state.data1)
-  };
-
-  componentDidMount() {
-      console.log(this.props)
-    const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
-
-    getDashSub(oyeURL, SelectedAssociationID);
-    getDashAssociation(oyeURL, MyAccountID);
-    getAssoMembers(oyeURL, MyAccountID);
-    this.requestNotifPermission();
-    // this.getBlockList();
-    this.props.getNotifications(oyeURL, MyAccountID);
-    console.log("Notification")
-  };
-
-  onAssociationChange = (value, index) => {
-    const {
-      associationid,
-      getDashUnits,
-      updateUserInfo,
-      memberList
-    } = this.props;
-    // const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
-
-    updateUserInfo({
-      prop: "SelectedAssociationID",
-      value: associationid[index].id
-    });
-
-    let memId = _.find(memberList, function(o) {
-      return o.asAssnID === associationid[index].id;
-    });
-    console.log("memId", memId);
-    updateUserInfo({
-      prop: "MyOYEMemberID",
-      value: memId.meMemID
-    });
-    getDashUnits(associationid[index].id, oyeURL);
-    // this.unit(this.state.associationid[index].id)
-  };
 
   renderSubscription = () => {
     const { datasource, SelectedAssociationID } = this.props;
@@ -362,6 +108,280 @@ class Dashboard extends React.Component {
     }
   };
 
+  requestNotifPermission = () => {
+    const {
+      MyAccountID,
+      champBaseURL,
+      receiveNotifications,
+      oyeURL
+    } = this.props;
+
+    firebase
+      .messaging()
+      .hasPermission()
+      .then(enabled => {
+        if (enabled) {
+          if (receiveNotifications) {
+            this.listenForNotif();
+          }
+          // user has permissions
+        } else {
+          firebase
+            .messaging()
+            .requestPermission()
+            .then(() => {
+              if (receiveNotifications) {
+                this.listenForNotif();
+              }
+              // User has authorised
+            })
+            .catch(error => {
+              // User has rejected permissions
+            });
+          // user doesn't have permission
+        }
+      });
+
+    var headers = {
+      "Content-Type": "application/json",
+      "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+    };
+
+    axios
+      .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
+        headers: headers
+      })
+      .then(response => {
+        let responseData = response.data.data;
+
+        responseData.associationByAccount.map(association => {
+          // console.log('***********')
+          // console.log(association.asAsnName)
+          // console.log(association.asAssnID)
+          // console.log('***********')
+          if (receiveNotifications) {
+            firebase
+              .messaging()
+              .subscribeToTopic(association.asAssnID + "admin");
+            // console.log(association.asAssnID);
+          } else if (!receiveNotifications) {
+            firebase
+              .messaging()
+              .unsubscribeFromTopic(association.asAssnID + "admin");
+          }
+        });
+      });
+
+    axios
+      .get(
+        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
+        {
+          headers: headers
+        }
+      )
+      .then(response => {
+        let data = response.data.data.memberListByAccount;
+        // console.log("dataoye", data);
+        data.map(units => {
+          // console.log(units.unUnitID + "admin");
+          // console.log(units.mrmRoleID + "role");
+          if (receiveNotifications) {
+            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+              if (units.meIsActive) {
+                firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+              }
+            }
+          } else if (!receiveNotifications) {
+            firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
+          }
+        });
+      });
+  };
+
+  showLocalNotification = notification => {
+    // console.log(notification);
+    const channel = new firebase.notifications.Android.Channel(
+      "channel_id",
+      "Oyespace",
+      firebase.notifications.Android.Importance.Max
+    ).setDescription("Oyespace channel");
+    channel.enableLights(true);
+    // channel.enableVibration(true);
+    // channel.vibrationPattern([500]);
+    firebase.notifications().android.createChannel(channel);
+
+    const notificationBuild = new firebase.notifications.Notification({
+      sound: "default",
+      show_in_foreground: true
+    })
+      .setTitle(notification._title)
+      .setBody(notification._body)
+      .setNotificationId(notification._notificationId)
+      // .setSound('default')
+      .setData({
+        ...notification._data,
+        foreground: true
+      })
+      .android.setColor("#FF9100")
+      .android.setLargeIcon("ic_notif")
+      .android.setAutoCancel(true)
+      .android.setSmallIcon("ic_stat_ic_notification")
+      .android.setChannelId("channel_id")
+      .android.setVibrate("default")
+      // .android.setChannelId('notification-action')
+      .android.setPriority(firebase.notifications.Android.Priority.Max);
+
+    firebase.notifications().displayNotification(notificationBuild);
+    this.setState({ foregroundNotif: notification._data });
+  };
+
+  listenForNotif = () => {
+    let navigationInstance = this.props.navigation;
+
+    this.notificationDisplayedListener = firebase
+      .notifications()
+      .onNotificationDisplayed(notification => {
+        // console.log('___________')
+        // console.log(notification)
+        // console.log('____________')
+        // Process your notification as required
+        // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+      });
+
+    this.notificationListener = firebase
+      .notifications()
+      .onNotification(notification => {
+        // console.log('___________')
+        // console.log(notification)
+        // console.log('____________')
+
+        if (notification._data.associationID) {
+          // this.props.createNotification(notification._data, navigationInstance, false)
+        }
+
+        this.showLocalNotification(notification);
+      });
+
+    firebase.notifications().onNotificationOpened(notificationOpen => {
+      const { MyAccountID } = this.props.userReducer;
+      const { oyeURL } = this.props.oyespaceReducer;
+      let details = notificationOpen.notification._data;
+      if (notificationOpen.notification._data.admin === "true") {
+        if (notificationOpen.action) {
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+          // this.props.createNotification(notificationOpen.notification)
+        }
+        // this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+      } else if (notificationOpen.notification._data.admin === "false") {
+        this.props.createUserNotification(
+          "Join_Status",
+          oyeURL,
+          MyAccountID,
+          1,
+          details.ntDesc,
+          "resident_user",
+          "resident_user",
+          details.sbSubID,
+          "resident_user",
+          "resident_user",
+          "resident_user",
+          "resident_user",
+          "resident_user",
+          true
+        );
+        // this.props.navigation.navigate("NotificationScreen");
+      }
+
+      if (notificationOpen.notification._data.admin === "true") {
+        this.props.refreshNotifications(oyeURL, MyAccountID);
+        if (notificationOpen.notification._data.foreground) {
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+        }
+      } else if (notificationOpen.notification._data.admin === "gate_app") {
+        this.props.refreshNotifications(oyeURL, MyAccountID);
+        // this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.createNotification(
+        //   notificationOpen.notification._data,
+        //   navigationInstance,
+        //   true,
+        //   "gate_app",
+        //   this.props.oyeURL,
+        //   this.props.MyAccountID
+        // );
+        // this.props.newNotifInstance(notificationOpen.notification);
+        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+      } else if (notificationOpen.notification._data.admin === "false") {
+      }
+      // this.props.getNotifications(oyeURL, MyAccountID);
+      this.props.navigation.navigate("NotificationScreen");
+    });
+  };
+
+  didMount = () => {
+    const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+    // this.props.updateApproveAdmin([]);
+
+    getDashSub(oyeURL, SelectedAssociationID);
+    getDashAssociation(oyeURL, MyAccountID);
+    getAssoMembers(oyeURL, MyAccountID);
+    this.requestNotifPermission();
+    // this.getBlockList();
+    this.props.getNotifications(oyeURL, MyAccountID);
+  };
+
+  onAssociationChange = (value, index) => {
+    const {
+      associationid,
+      getDashUnits,
+      updateUserInfo,
+      memberList,
+      notifications,
+      dropdown
+    } = this.props;
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
+    getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
+
+    updateUserInfo({
+      prop: "SelectedAssociationID",
+      value: dropdown[index].associationId
+    });
+
+    let memId = _.find(memberList, function(o) {
+      return o.asAssnID === dropdown[index].associationId;
+    });
+
+    updateUserInfo({
+      prop: "MyOYEMemberID",
+      value: memId.meMemID
+    });
+
+    updateUserInfo({
+      prop: "SelectedMemberID",
+      value: dropdown[index].memberId
+    });
+  };
+
   render() {
     const {
       dropdown,
@@ -376,11 +396,12 @@ class Dashboard extends React.Component {
     } = this.props;
     return (
       <View style={{ flex: 1 }}>
-        <Header
+        <NavigationEvents onDidFocus={() => this.didMount()} />
+        {/* <Header
           firstName={this.props.MyFirstName}
           navigate={this.props.navigation}
-        />
-        
+        /> */}
+
         <View style={styles.container}>
           <View style={styles.textWrapper}>
             <View
@@ -527,7 +548,6 @@ class Dashboard extends React.Component {
                 </View>
               )}
               <View style={{ height: hp("7%") }}>
-                {}
                 <TouchableOpacity
                   // onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
                   onPress={() => {
@@ -734,7 +754,6 @@ class Dashboard extends React.Component {
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -865,6 +884,7 @@ const mapStateToProps = state => {
   return {
     isCreateLoading: state.NotificationReducer.isCreateLoading,
     notificationCount: state.NotificationReducer.notificationCount,
+    notifications: state.NotificationReducer.notifications,
     joinedAssociations: state.AppReducer.joinedAssociations,
     datasource: state.DashboardReducer.datasource,
     dropdown: state.DashboardReducer.dropdown,
@@ -903,6 +923,10 @@ export default connect(
     getDashAssociation,
     getDashUnits,
     updateUserInfo,
-    getAssoMembers
+    getAssoMembers,
+    updateApproveAdmin,
+    updateDropDownIndex,
+    createUserNotification,
+    refreshNotifications
   }
 )(Dashboard);
