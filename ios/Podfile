@@ -34,8 +34,8 @@ target 'OyeSpace' do
   
   pod 'RNFS', :path => '../node_modules/react-native-fs'
   
-  pod 'RNViewShot', :path => '../node_modules/react-native-view-shot'
-  
+#  pod 'RNViewShot', :path => '../node_modules/react-native-view-shot'
+
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   
   

@@ -237,7 +237,7 @@ class MyProfile extends Component {
                           this.state.datasource.data.account[0].acisdCode.substring(
                               0,
                               this.state.datasource.data.account[0].acisdCode
-                                  .length - 2
+                                  .length 
                           ) +
                           " " +
                           this.state.datasource.data.account[0].acMobile
@@ -270,9 +270,9 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                      {/* <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('CreateAssnScreen')}>
+                      <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('CreateAssnScreen')}>
                       <Text>Create Association</Text>
-                    </Button> */}
+                    </Button>
                       <View />
                       <View style={{ marginTop: hp("2%") }}>
                         <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('AssnListScreen')}>

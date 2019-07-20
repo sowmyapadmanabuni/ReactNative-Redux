@@ -3,16 +3,45 @@ import { Text, View, TouchableOpacity, Image } from "react-native";
 import base from "../../base";
 import { connect } from "react-redux";
 import HeaderStyles from "./HeaderStyles";
+import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
+import { NavigationEvents } from "react-navigation";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
 class DashBoardHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ImageSource: null,
-      datasource: null
+      datasource: null,
+      myFirstName: ""
     };
   }
 
+  renderBadge = () => {
+    const { notifications } = this.props;
+
+    let count = 0;
+
+    notifications.map((data, index) => {
+      if (!data.read) {
+        count += 1;
+      }
+    });
+
+    const BadgedIcon = withBadge(count)(Icon);
+
+    return (
+      <Icon
+        color="#FF8C00"
+        type="material"
+        name="notifications"
+        size={hp("4%")}
+      />
+    );
+  };
   componentDidMount() {
     let self = this;
     setTimeout(() => {
@@ -21,11 +50,14 @@ class DashBoardHeader extends React.Component {
   }
 
   myProfile = async () => {
-    const response = await base.services.OyeLivingApi.getProfileFromAccount(this.props.MyAccountID)
-        this.setState({
-          datasource: response,
-          ImageSource: response.data.account[0].acImgName
-        });
+    const response = await base.services.OyeLivingApi.getProfileFromAccount(
+      this.props.MyAccountID
+    );
+    console.log(response);
+    this.setState({
+      datasource: response,
+      ImageSource: response.data.account[0].acImgName
+    });
     // fetch(
     //   `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
     //   {
@@ -39,7 +71,7 @@ class DashBoardHeader extends React.Component {
     //   .then(response => response.json())
     //   .then(responseJson => {
     //     console.log(responseJson);
-        
+
     //     this.setState({
     //       datasource: responseJson,
     //       ImageSource: responseJson.data.account[0].acImgName
@@ -50,6 +82,15 @@ class DashBoardHeader extends React.Component {
   };
 
   render() {
+
+    base.utils.logger.log(
+      this.props.viewImageURL +
+        "PERSON" +
+        this.props.MyAccountID +
+        ".jpg" +
+        "?random_number=" +
+        new Date().getTime()
+    );
     return (
       <View style={HeaderStyles.container}>
         <View style={HeaderStyles.subContainerLeft}>
@@ -59,13 +100,10 @@ class DashBoardHeader extends React.Component {
             {/* <Image style={HeaderStyles.imageStyles}
                                source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
                         </Image> */}
-            {this.state.ImageSource == null ? (
-              <Image
-                style={HeaderStyles.imageStyles}
-                source={{
-                  uri: "https://via.placeholder.com/150/ff8c00/FFFFFF"
-                }}
-              />
+            {this.state.ImageSource === null ? (
+              <Image style={HeaderStyles.imageStyles}
+                               source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
+                        </Image>
             ) : (
               <Image
                 style={HeaderStyles.imageStyles}
@@ -86,6 +124,7 @@ class DashBoardHeader extends React.Component {
                 {this.state.datasource
                   ? this.state.datasource.data.account[0].acfName
                   : null}
+                
               </Text>
               <Text style={HeaderStyles.statusText} numberOfLines={1}>
                 Owner
@@ -103,10 +142,11 @@ class DashBoardHeader extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("NotificationScreen")}
           >
-            <Image
+            {/* <Image
               style={HeaderStyles.logoStyles}
               source={require("../../../icons/notifications.png")}
-            />
+            /> */}
+            {this.renderBadge()}
           </TouchableOpacity>
         </View>
       </View>
@@ -120,7 +160,8 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
     MyFirstName: state.UserReducer.MyFirstName,
-    viewImageURL: state.OyespaceReducer.viewImageURL
+    viewImageURL: state.OyespaceReducer.viewImageURL,
+    notifications: state.NotificationReducer.notifications
   };
 };
 

@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.rpt.reactnativecheckpackageinstallation.CheckPackageInstallationPackage;
@@ -53,6 +54,7 @@ public class MainApplication extends Application implements ShareApplication,Rea
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new ReactNativeRestartPackage(),
                     new RNVersionNumberPackage(),
                     new CheckPackageInstallationPackage(),
                     new SvgPackage(),
