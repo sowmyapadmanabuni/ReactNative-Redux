@@ -168,7 +168,8 @@ class BlockDetail extends React.Component {
                     onPress={() => this.props.navigation.navigate("BlockWiseUnitListScreen",{
                       blockid: item.blBlockID,
                       blockName: item.blBlkName,
-                      associationId:associationId
+                      associationId:associationId,
+                      noOfUnits: item.blNofUnit
                     })}
                   >
                     <Text style={styles.addUnitText}>Add Unit</Text>

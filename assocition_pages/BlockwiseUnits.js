@@ -586,7 +586,7 @@ console.log("2424298749812749712947912",blockid)
                               }`}</Text>
                             )}
                           </View>
-                          <TouchableOpacity
+                          {/* <TouchableOpacity
                             onPress={() => {
                               this.props.navigation.navigate("EditUnit", {
                                 UnitName: item.UnitName,
@@ -624,7 +624,7 @@ console.log("2424298749812749712947912",blockid)
                                 source={require("../icons/pencil120.png")}
                               />
                             </View>
-                          </TouchableOpacity>
+                          </TouchableOpacity> */}
                         </View>
                       </View>
                     </View>
@@ -632,33 +632,43 @@ console.log("2424298749812749712947912",blockid)
                 )}
               />
             </View>
+            {this.state.unitlist.length === this.props.navigation.state.params.noOfUnits ?
+            
+            <View/>
+          
+            :
+
             <TouchableOpacity
-          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-          onPress={() => this.props.navigation.navigate("AddUnit", {
-            blockname: blockName,
-            unit:  blockid,
-            assocID:assocId
-          })}
-        >
-          <Text
-            style={{
-              fontSize: hp('5%'),
-              color: "#fff",
-              fontWeight: "bold",
-              justifyContent: "center",
-              alignItems: "center",
-              alignSelf: "center",
-              marginBottom: hp('0.5%')
-            }}
+            style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+            onPress={() => this.props.navigation.navigate("AddUnit", {
+              blockname: blockName,
+              unit:  blockid,
+              assocID:assocId
+            })}
           >
-            +
-          </Text>
-          {/* <Entypo 
-                    name="plus"
-                    size={30}
-                    color="#fff"
-                /> */}
-        </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: hp('5%'),
+                color: "#fff",
+                fontWeight: "bold",
+                justifyContent: "center",
+                alignItems: "center",
+                alignSelf: "center",
+                marginBottom: hp('0.5%')
+              }}
+            >
+              +
+            </Text>
+            {/* <Entypo 
+                      name="plus"
+                      size={30}
+                      color="#fff"
+                  /> */}
+          </TouchableOpacity>
+            
+          
+          }
+           
           </View>
         </View>
       </View>
