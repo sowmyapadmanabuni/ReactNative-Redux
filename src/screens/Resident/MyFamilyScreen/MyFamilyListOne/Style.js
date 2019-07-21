@@ -1,8 +1,8 @@
-import { StyleSheet, Dimensions } from "react-native"
+import { StyleSheet, Dimensions } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
 const Style = StyleSheet.create({
   progressViewStyle: {
@@ -81,37 +81,34 @@ const Style = StyleSheet.create({
     backgroundColor: "lightgray",
     height: hp("0.1%")
   },
-  floatingPlusButtonStyle: {
+  floatButton: {
     borderWidth: 1,
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center",
-    marginLeft: hp("1%"),
-    width: 55,
-    height: 55,
+    width: hp("8%"),
     position: "absolute",
     bottom: hp("2.5%"),
     right: hp("2.5%"),
+    height: hp("8%"),
     backgroundColor: "#FF8C00",
     borderRadius: 100,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 3
-    // },
+    // shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
     shadowRadius: 3,
     shadowOpacity: 0.6
   },
   plusTextStyle: {
-    flex: 1,
     fontSize: hp("5%"),
     color: "#fff",
-    fontWeight: "700",
+    fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    textAlign: "center",
-    textAlignVertical: "center"
+    marginBottom: hp("0.5%")
   },
   tableView: {
     flexDirection: "column"
@@ -216,6 +213,6 @@ const Style = StyleSheet.create({
   icon: {
     color: "orange"
   }
-})
+});
 
-export default Style
+export default Style;

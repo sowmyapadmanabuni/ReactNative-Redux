@@ -214,7 +214,7 @@ class AddVehicle extends Component {
                   // underlineColorAndroid="orange"
                   autoCorrect={false}
                   autoCapitalize="characters"
-                  keyboardType="default"
+                  keyboardType='ascii-capable'
                   onChangeText={vehName => this.setState({ vehName: vehName })}
                 />
               </Item>
@@ -224,7 +224,7 @@ class AddVehicle extends Component {
                   // underlineColorAndroid="orange"
                   autoCorrect={false}
                   autoCapitalize="characters"
-                  keyboardType="default"
+                  keyboardType='ascii-capable'
                   onChangeText={vehNum => this.setState({ vehNum: vehNum })}
                 />
               </Item>
@@ -235,7 +235,7 @@ class AddVehicle extends Component {
                   autoCorrect={false}
                   autoCapitalize="characters"
                   maxLength={10}
-                  keyboardType='default'
+                  keyboardType='ascii-capable'
                   onChangeText={vehStickerNum =>
                     this.setState({ vehStickerNum: vehStickerNum })
                   }
@@ -247,7 +247,7 @@ class AddVehicle extends Component {
                   // underlineColorAndroid="orange"
                   autoCorrect={false}
                   autoCapitalize="characters"
-                  keyboardType='default'
+                  keyboardType='ascii-capable'
                   onChangeText={parkingSlotNum =>
                     this.setState({ parkingSlotNum: parkingSlotNum })
                   }

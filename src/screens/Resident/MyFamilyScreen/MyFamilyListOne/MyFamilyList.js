@@ -390,7 +390,7 @@ class MyFamilyList extends React.Component {
           />
 
           <TouchableOpacity
-            style={Style.floatingPlusButtonStyle}
+            style={Style.floatButton}
             onPress={() => {
               this.props.navigation.navigate("MyFamily")
             }}

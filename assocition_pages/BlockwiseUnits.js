@@ -90,14 +90,14 @@ class UnitDetails extends Component {
   };
   UnitDetail = () => {
     const {
-      unitid,
+      blockid,
     } = this.props.navigation.state.params
 
-console.log("2424298749812749712947912",unitid)
+console.log("2424298749812749712947912",blockid)
     // this.setState({ isLoading1: true });
 
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByBlockID/${unitid}`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByBlockID/${blockid}`,
       {
         method: "GET",
         headers: {
@@ -305,8 +305,13 @@ console.log("2424298749812749712947912",unitid)
   // }
 
   render() {
-    const {blockName, unitid} = this.props.navigation.state.params; 
-    console.log('!@#!@#@$@#%#%@#$!@$@', blockName, unitid)
+    const {blockName, blockid} = this.props.navigation.state.params; 
+    console.log("The Assocn Id -------$@#@#%@#$!@>", this.props.navigation.state.params.associationId)
+    console.log('!@#!@#@$@#%#%@#$!@$@', blockName, blockid)
+    Alert.alert("The Association: -", this.props.navigation.state.params.associationId)
+
+    let assocId = this.props.navigation.state.params.associationId;
+
     if (this.state.isLoading1) {
       return (
         <View style={{ flex: 1, flexDirection: "column" }}>
@@ -436,7 +441,7 @@ console.log("2424298749812749712947912",unitid)
                 marginTop: hp("1%")
               }}
             >
-              <View
+              {/* <View
                 style={{
                   flex: 0.85,
                   flexDirection: "row",
@@ -476,13 +481,14 @@ console.log("2424298749812749712947912",unitid)
                     Import CSV
                   </Text>
                 </Button>
-              </View>
-              <View style={{ flex: 0.15, justifyContent: "flex-end" }}>
+              </View> */}
+
+              {/* <View style={{ flex: 0.15, justifyContent: "flex-end" }}>
                 <TouchableOpacity
                   style={[styles.floatButton]}
                   onPress={() => this.props.navigation.navigate("AddUnit", {
                     blockname: blockName,
-                    unit:  unitid
+                    unit:  blockid
                   })}
                 >
                   <View
@@ -503,7 +509,7 @@ console.log("2424298749812749712947912",unitid)
                     </Text>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           </View>
           <View style={styles.viewDetails}>
@@ -626,6 +632,33 @@ console.log("2424298749812749712947912",unitid)
                 )}
               />
             </View>
+            <TouchableOpacity
+          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+          onPress={() => this.props.navigation.navigate("AddUnit", {
+            blockname: blockName,
+            unit:  blockid,
+            assocID:assocId
+          })}
+        >
+          <Text
+            style={{
+              fontSize: hp('5%'),
+              color: "#fff",
+              fontWeight: "bold",
+              justifyContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+              marginBottom: hp('0.5%')
+            }}
+          >
+            +
+          </Text>
+          {/* <Entypo 
+                    name="plus"
+                    size={30}
+                    color="#fff"
+                /> */}
+        </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -719,12 +752,11 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
-    width: hp("6%"),
-    // position: "absolute",
-    bottom: hp("0.5%"),
-    // right: hp('3%'),
-    height: hp("6%"),
+    width: hp('8%'),
+    position: "absolute",
+    bottom: hp('2.5%'),
+    right: hp('2.5%'),
+    height: hp('8%'),
     backgroundColor: "#FF8C00",
     borderRadius: 100,
     // shadowColor: '#000000',

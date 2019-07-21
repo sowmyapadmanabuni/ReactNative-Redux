@@ -116,6 +116,9 @@ class DashBoardHeader extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={HeaderStyles.textContainer}>
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("MyProfileScreen")}
+          >
               <Text
                 style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
                 numberOfLines={1}
@@ -125,6 +128,7 @@ class DashBoardHeader extends React.Component {
                   : null}
                 
               </Text>
+              </TouchableOpacity>
               <Text style={HeaderStyles.statusText} numberOfLines={1}>
                 Owner
               </Text>

@@ -139,7 +139,7 @@ class MyFamily extends Component {
     if (fname.length == 0) {
       Alert.alert("Name should not be empty")
     } else if (OyeFullName.test(fname) === false) {
-      alert("Enter valid Name")
+      alert("Enter valid First Name")
       return false
     } else if (fname.length < 3) {
       Alert.alert("Name should be more than 3 letters")
@@ -466,7 +466,7 @@ class MyFamily extends Component {
                         multiline={false}
                         autoCorrect={false}
                         autoCapitalize="words"
-                        keyboardType="default"
+                        keyboardType='ascii-capable'
                         maxLength={50}
                         textAlign={"justify"}
                         value={this.state.FName}
@@ -493,7 +493,7 @@ class MyFamily extends Component {
                         multiline={false}
                         autoCorrect={false}
                         autoCapitalize="words"
-                        keyboardType="default"
+                        keyboardType='ascii-capable'
                         maxLength={50}
                         textAlign={"justify"}
                         value={this.state.FName}
@@ -536,7 +536,7 @@ class MyFamily extends Component {
                     {this.state.minor == true ? (
                       <Item style={Style.inputItemMobile} stackedLabel>
                         <Label style={{ marginRight: hp("0.6%") }}>
-                          Gardien's Name
+                        Guardian's Name
                           <Text
                             style={{
                               fontSize: hp("2.2%"),
@@ -549,11 +549,11 @@ class MyFamily extends Component {
                         </Label>
                         <Input
                           marginBottom={hp("-1%")}
-                          placeholder="Enter Gardien's Name"
+                          placeholder="Enter guardian's Name"
                           multiline={false}
                           autoCorrect={false}
                           autoCapitalize="words"
-                          keyboardType="default"
+                          keyboardType='ascii-capable'
                           maxLength={50}
                           textAlign={"justify"}
                           value={this.state.FName}
@@ -630,14 +630,14 @@ class MyFamily extends Component {
                             this.onPressPhoneBook()
                           }}
                         > */}
-                          <Image
+                          {/* <Image
                             source={require("../../../../../icons/phone-book.png")}
                             style={{
                               width: 20,
                               height: 20,
                               marginTophp: hp("-0.5%")
                             }}
-                          />
+                          /> */}
                         {/* </TouchableOpacity> */}
                       </Item>
                     </View>
