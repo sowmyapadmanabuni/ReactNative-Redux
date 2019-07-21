@@ -55,10 +55,10 @@ class Dashboard extends React.Component {
     this.state = {
       myUnitCardHeight: "80%",
       myUnitCardWidth: "25%",
-      adminCardHeight: "70%",
-      adminCardWidth: "22%",
-      offersCardHeight: "70%",
-      offersCardWidth: "22%",
+      adminCardHeight: "60%",
+      adminCardWidth: "20%",
+      offersCardHeight: "60%",
+      offersCardWidth: "20%",
       isSelectedCard: "UNIT",
 
       isLoading: false,
@@ -1016,6 +1016,7 @@ class Dashboard extends React.Component {
       isSelectedCard: status
     });
     if (status == "UNIT") {
+      
       this.setState({
         myUnitCardHeight: "80%",
         myUnitCardWidth: "25%",
