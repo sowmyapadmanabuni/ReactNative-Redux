@@ -15,13 +15,13 @@ import {
   ActivityIndicator
 } from "react-native";
 // import Header from "./src/components/common/Header";
-import { Card, CardItem } from "native-base";
 import { NavigationEvents } from "react-navigation";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import { connect } from "react-redux";
+import { Card, CardItem, Form, Item, Input, Icon } from "native-base"
 
 class MyGuests extends Component {
   static navigationOptions = {
@@ -169,13 +169,27 @@ class MyGuests extends Component {
         />
         {/* <Text style={styles.titleOfScreen}> My Guests </Text> */}
 
-        <TextInput
+        <Form style={styles.formSearch}>
+            <Item style={styles.inputItem}>
+              <Input
+                marginBottom={hp("-1%")}
+                placeholder="Search...."
+                multiline={false}
+                onChangeText={this.searchFilterFunction}
+              />
+
+              <Icon style={styles.icon} name="search" size={14} />
+            </Item>
+          </Form>
+
+        {/* <TextInput
           style={styles.textinput}
           placeholder="search...."
           // lightTheme
           round
           onChangeText={this.searchFilterFunction}
-        />
+        /> */}
+
         {this.state.dataSource.length == 0 ?
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
               <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Data Available.</Text>
@@ -291,6 +305,19 @@ const styles = StyleSheet.create({
     height: hp("1.6%"),
     justifyContent: "center",
     alignItems: "center"
+  },
+  inputItem: {
+    marginTop: wp("1%"),
+    marginLeft: wp("4%"),
+    marginRight: wp("4%"),
+    //borderColor: "#909091"
+    borderColor: "#000000"
+  },
+formSearch: {
+    marginBottom: hp("1%")
+  },
+  icon: {
+    color: "orange"
   }
 });
 
