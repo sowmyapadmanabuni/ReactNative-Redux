@@ -404,14 +404,18 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
-  viewDetails1: {
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+ viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 3
   },
-
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
@@ -420,12 +424,6 @@ const styles = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
-
-  image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
-  }
 });
 
 const mapStateToProps = state => {

@@ -326,6 +326,7 @@ class Resident extends Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+        
         <View style={styles.textWrapper}>
           <Text style={styles.residentialListTitle}> Resident List </Text>
           <View style={{ flexDirection: "row" }}>

@@ -212,7 +212,37 @@ const Style = StyleSheet.create({
   },
   icon: {
     color: "orange"
-  }
+  },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+ viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
 });
 
 export default Style;

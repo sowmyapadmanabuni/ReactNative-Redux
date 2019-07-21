@@ -267,22 +267,21 @@ class MyFamilyList extends React.Component {
             <View style={Style.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard")
+                  this.props.navigation.goBack();
                 }}
               >
                 <View
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: "flex-start",
+                    alignItems: 'flex-start',
                     justifyContent: "center"
                   }}
                 >
                   <Image
                     resizeMode="contain"
                     source={require("../../../../../icons/back.png")}
-                    //style={Style.viewDetails2}
-                    style={{ width: 20, height: 20 }}
+                    style={Style.viewDetails2}
                   />
                 </View>
               </TouchableOpacity>
@@ -296,14 +295,16 @@ class MyFamilyList extends React.Component {
             >
               <Image
                 style={[Style.image1]}
-                source={require("../../../../../icons/headerLogo.png")}
+                source={require("../../../../../icons/OyeSpace.png")}
               />
             </View>
-            <View style={{ flex: 1 }} />
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-
+        
 
         <View style={Style.progressViewStyle}>
           <ActivityIndicator size="large" color="#01CBC6" />
@@ -320,22 +321,21 @@ class MyFamilyList extends React.Component {
             <View style={Style.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard")
+                  this.props.navigation.goBack();
                 }}
               >
                 <View
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: "flex-start",
+                    alignItems: 'flex-start',
                     justifyContent: "center"
                   }}
                 >
                   <Image
                     resizeMode="contain"
                     source={require("../../../../../icons/back.png")}
-                    //style={Style.viewDetails2}
-                    style={{ width: 20, height: 20 }}
+                    style={Style.viewDetails2}
                   />
                 </View>
               </TouchableOpacity>
@@ -349,14 +349,16 @@ class MyFamilyList extends React.Component {
             >
               <Image
                 style={[Style.image1]}
-                source={require("../../../../../icons/headerLogo.png")}
+                source={require("../../../../../icons/OyeSpace.png")}
               />
             </View>
-            <View style={{ flex: 1 }} />
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-
+        
         <NavigationEvents
           onDidFocus={payload => this.myFamilyListGetData()}
           onWillBlur={payload => this.myFamilyListGetData()}
