@@ -46,7 +46,7 @@ class MyGuests extends Component {
       this.setState({
         isLoading: false
       });
-    }, 5000);
+    }, 2500);
   }
 
   getInvitationList = () => {
@@ -176,6 +176,11 @@ class MyGuests extends Component {
           round
           onChangeText={this.searchFilterFunction}
         />
+        {this.state.dataSource.length == 0 ?
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Data Available.</Text>
+            </View>
+          :  
         <FlatList
           style={{ marginTop: hp('1.5%') }}
           data={this.state.dataSource.sort((a, b) =>
@@ -184,7 +189,7 @@ class MyGuests extends Component {
           renderItem={this.renderItem}
           keyExtractor={(item, index) => item.inInvtID.toString()}
         />
-
+          }
         
       </View>
     );

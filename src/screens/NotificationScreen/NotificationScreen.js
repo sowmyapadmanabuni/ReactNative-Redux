@@ -7,9 +7,9 @@ import {
   ActivityIndicator,
   Text,
   Platform,
-    Linking,
+  Linking,
   RefreshControl,
-    TouchableOpacity,
+  TouchableOpacity,
   TouchableWithoutFeedback
 } from "react-native";
 import { connect } from "react-redux";
@@ -30,23 +30,22 @@ import {
 } from "react-native-responsive-screen";
 import ZoomImage from "react-native-zoom-image";
 
-
 class NotificationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        gateDetails: "",
-        Date: "",
-        Time: "",
-        Date1: "",
-        Time1: ""
+      gateDetails: "",
+      Date: "",
+      Time: "",
+      Date1: "",
+      Time1: ""
     };
-}
-componentDidMount() {
+  }
+  componentDidMount() {
     // console.log("didmount");
     // this.gateAppNotif()
     this.doNetwork();
-}
+  }
   keyExtractor = (item, index) => index.toString();
 
   onPress = (item, index) => {
@@ -110,97 +109,97 @@ componentDidMount() {
     const { details } = this.props.navigation.state.params;
     console.log("@#@$#$#@%#%#%#%@#%@#%", details.sbMemID);
     fetch(
-        `http://${
-            this.props.oyeURL
-            }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
+      `http://${
+        this.props.oyeURL
+      }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
         details.sbMemID,
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-            }
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
         }
+      }
     )
-        .then(response => response.json())
-        .then(responseJson => {
-            console.log("Manas", responseJson);
-            this.setState({
-                gateDetails: responseJson.data.visitorLog,
-                Date:
-                    responseJson.data.visitorLog.vldCreated.substring(8, 10) +
-                    "-" +
-                    responseJson.data.visitorLog.vldCreated.substring(5, 7) +
-                    "-" +
-                    responseJson.data.visitorLog.vldCreated.substring(0, 4),
-                Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
-                Date1:
-                    responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
-                    "-" +
-                    responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
-                    "-" +
-                    responseJson.data.visitorLog.vldUpdated.substring(0, 4),
-                Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
-            });
-            console.log(
-                "@#!@$@#%#%#$^$^$%^$%^Gate Details",
-                this.state.gateDetails,
-                this.state.Date,
-                this.state.Time
-            );
-        })
-        .catch(error => {
-            console.log(error);
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Manas", responseJson);
+        this.setState({
+          gateDetails: responseJson.data.visitorLog,
+          Date:
+            responseJson.data.visitorLog.vldCreated.substring(8, 10) +
+            "-" +
+            responseJson.data.visitorLog.vldCreated.substring(5, 7) +
+            "-" +
+            responseJson.data.visitorLog.vldCreated.substring(0, 4),
+          Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
+          Date1:
+            responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
+            "-" +
+            responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
+            "-" +
+            responseJson.data.visitorLog.vldUpdated.substring(0, 4),
+          Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
         });
-};
+        console.log(
+          "@#!@$@#%#%#$^$^$%^$%^Gate Details",
+          this.state.gateDetails,
+          this.state.Date,
+          this.state.Time
+        );
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
-doNetwork = (item, notifications) => {
+  doNetwork = (item, notifications) => {
     console.log("242#$@$@#$", item, notifications);
     for (let i in notifications) {
-        if (item === notifications[i].ntid) {
-            console.log("Notification", notifications[i].sbMemID);
-            //10906
-            fetch(
-                `http://${
-                    this.props.oyeURL
-                    }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
-                    notifications[i].sbMemID
-                    }`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-                    }
-                }
-            )
-                .then(response => response.json())
-                .then(responseJson => {
-                    console.log("Manas", responseJson);
-                    this.setState({
-                        gateDetails: responseJson.data.visitorLog,
-                        Date:
-                            responseJson.data.visitorLog.vldCreated.substring(8, 10) +
-                            "-" +
-                            responseJson.data.visitorLog.vldCreated.substring(5, 7) +
-                            "-" +
-                            responseJson.data.visitorLog.vldCreated.substring(0, 4),
-                        Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
-                        Date1:
-                            responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
-                            "-" +
-                            responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
-                            "-" +
-                            responseJson.data.visitorLog.vldUpdated.substring(0, 4),
-                        Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
+      if (item === notifications[i].ntid) {
+        console.log("Notification", notifications[i].sbMemID);
+        //10906
+        fetch(
+          `http://${
+            this.props.oyeURL
+          }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
+            notifications[i].sbMemID
+          }`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log("Manas", responseJson);
+            this.setState({
+              gateDetails: responseJson.data.visitorLog,
+              Date:
+                responseJson.data.visitorLog.vldCreated.substring(8, 10) +
+                "-" +
+                responseJson.data.visitorLog.vldCreated.substring(5, 7) +
+                "-" +
+                responseJson.data.visitorLog.vldCreated.substring(0, 4),
+              Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
+              Date1:
+                responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
+                "-" +
+                responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
+                "-" +
+                responseJson.data.visitorLog.vldUpdated.substring(0, 4),
+              Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     }
-};
+  };
 
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
@@ -276,7 +275,7 @@ doNetwork = (item, notifications) => {
                   align="center"
                   onAnimationEnd={() =>
                     this.doNetwork(item.ntid, notifications)
-                }
+                  }
                 >
                   {/* <View
                     style={{
@@ -288,242 +287,241 @@ doNetwork = (item, notifications) => {
                     <Text> {item.ntDesc}</Text>
                   </View> */}
 
-{item.sbMemID === 0 ? (
-                                        <View>
-                                            <Text>No Data</Text>
-                                        </View>
-                                    ) : (
-                                        <View style={{ flexDirection: "column" }}>
-                                            <View
-                                                style={{
-                                                    justifyContent: "center",
-                                                    alignItems: "center"
-                                                }}
-                                            >
-                                                <View style={{ flexDirection: "row" }}>
-                                                    <Text style={{ fontSize: hp("2%") }}>
-                                                        {this.state.gateDetails !== null
-                                                            ? this.state.gateDetails.vlGtName
-                                                            : ""}{" "}
-                                                        Association
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                            <View style={{ flexDirection: "row" }}>
-                                                <View
-                                                    style={{
-                                                        alignItems: "flex-start",
-                                                        justifyContent: "flex-start"
-                                                    }}
-                                                >
-                                                    {this.state.gateDetails.vlEntryImg == "" ? (
-                                                        <Image
-                                                            style={styles.img}
-                                                            // style={styles.img}
-                                                            source={require("../../../icons/placeholderImg.png")}
-                                                        />
-                                                    ) : (
-                                                        <Image
-                                                            style={styles.img}
-                                                            // style={styles.img}
-                                                            source={{
-                                                                uri:
-                                                                    "http://mediaupload.oyespace.com" +
-                                                                    this.state.gateDetails.vlEntryImg
-                                                            }}
-                                                        />
-                                                    )}
-                                                </View>
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        justifyContent: "flex-start",
-                                                        alignItems: "flex-start"
-                                                    }}
-                                                >
-                                                    <View
-                                                        style={{
-                                                            marginLeft: hp("1%"),
-                                                            flexDirection: "column"
-                                                        }}
-                                                    >
-                                                        <Text style={{ fontSize: hp("2%") }}>
-                                                            {this.state.gateDetails !== null
-                                                                ? this.state.gateDetails.vlfName
-                                                                : ""}
-                                                        </Text>
-                                                        <View style={{ flexDirection: "row" }}>
-                                                            <Text style={{ color: "#000" }}>
-                                                                {this.state.gateDetails !== null
-                                                                    ? this.state.gateDetails.vlVisType
-                                                                    : ""}{" "}
-                                                            </Text>
-                                                            <Text style={{ color: "#38bcdb" }}>
-                                                                {this.state.gateDetails !== null
-                                                                    ? this.state.gateDetails.vlComName
-                                                                    : ""}{" "}
-                                                            </Text>
-                                                        </View>
-                                                    </View>
-                                                    <View
-                                                        style={{
-                                                            width: hp("18%"),
-                                                            alignItems: "flex-end"
-                                                        }}
-                                                    >
-                                                        <View style={{}}>
-                                                            <TouchableOpacity
-                                                                onPress={() => {
-                                                                    {
-                                                                        Platform.OS === "android"
-                                                                            ? Linking.openURL(
-                                                                            `tel:${
-                                                                                this.state.gateDetails.vlMobile
-                                                                                }`
-                                                                            )
-                                                                            : Linking.openURL(
-                                                                            `tel:${
-                                                                                this.state.gateDetails.vlMobile
-                                                                                }`
-                                                                            );
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <View style={{ flexDirection: "row" }}>
-                                                                    <View>
-                                                                        <Text style={{ color: "#ff8c00" }}>
-                                                                            {this.state.gateDetails !== null
-                                                                                ? this.state.gateDetails.vlMobile
-                                                                                : ""}
-                                                                        </Text>
-                                                                    </View>
-                                                                    <View
-                                                                        style={{
-                                                                            width: hp("2%"),
-                                                                            height: hp("2%"),
-                                                                            marginLeft: hp("0.5%")
-                                                                        }}
-                                                                    >
-                                                                        <Image
-                                                                            style={{
-                                                                                width: hp("2%"),
-                                                                                height: hp("2%")
-                                                                            }}
-                                                                            source={require("../../../icons/call.png")}
-                                                                        />
-                                                                    </View>
-                                                                </View>
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    </View>
-                                                </View>
-                                            </View>
+                  {item.sbMemID === 0 ? (
+                    <View>
+                      <Text>No Data</Text>
+                    </View>
+                  ) : (
+                    <View style={{ flexDirection: "column" }}>
+                      <View
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <View style={{ flexDirection: "row" }}>
+                          <Text style={{ fontSize: hp("2%") }}>
+                            {this.state.gateDetails !== null
+                              ? this.state.gateDetails.vlGtName
+                              : ""}{" "}
+                            Association
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={{ flexDirection: "row" }}>
+                        <View
+                          style={{
+                            alignItems: "flex-start",
+                            justifyContent: "flex-start"
+                          }}
+                        >
+                          {this.state.gateDetails.vlEntryImg == "" ? (
+                            <Image
+                              style={styles.img}
+                              // style={styles.img}
+                              source={require("../../../icons/placeholderImg.png")}
+                            />
+                          ) : (
+                            <Image
+                              style={styles.img}
+                              // style={styles.img}
+                              source={{
+                                uri:
+                                  "http://mediaupload.oyespace.com" +
+                                  this.state.gateDetails.vlEntryImg
+                              }}
+                            />
+                          )}
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start"
+                          }}
+                        >
+                          <View
+                            style={{
+                              marginLeft: hp("1%"),
+                              flexDirection: "column"
+                            }}
+                          >
+                            <Text style={{ fontSize: hp("2%") }}>
+                              {this.state.gateDetails !== null
+                                ? this.state.gateDetails.vlfName
+                                : ""}
+                            </Text>
+                            <View style={{ flexDirection: "row" }}>
+                              <Text style={{ color: "#000" }}>
+                                {this.state.gateDetails !== null
+                                  ? this.state.gateDetails.vlVisType
+                                  : ""}{" "}
+                              </Text>
+                              <Text style={{ color: "#38bcdb" }}>
+                                {this.state.gateDetails !== null
+                                  ? this.state.gateDetails.vlComName
+                                  : ""}{" "}
+                              </Text>
+                            </View>
+                          </View>
+                          <View
+                            style={{
+                              width: hp("18%"),
+                              alignItems: "flex-end"
+                            }}
+                          >
+                            <View style={{}}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  {
+                                    Platform.OS === "android"
+                                      ? Linking.openURL(
+                                          `tel:${
+                                            this.state.gateDetails.vlMobile
+                                          }`
+                                        )
+                                      : Linking.openURL(
+                                          `tel:${
+                                            this.state.gateDetails.vlMobile
+                                          }`
+                                        );
+                                  }
+                                }}
+                              >
+                                <View style={{ flexDirection: "row" }}>
+                                  <View>
+                                    <Text style={{ color: "#ff8c00" }}>
+                                      {this.state.gateDetails !== null
+                                        ? this.state.gateDetails.vlMobile
+                                        : ""}
+                                    </Text>
+                                  </View>
+                                  <View
+                                    style={{
+                                      width: hp("2%"),
+                                      height: hp("2%"),
+                                      marginLeft: hp("0.5%")
+                                    }}
+                                  >
+                                    <Image
+                                      style={{
+                                        width: hp("2%"),
+                                        height: hp("2%")
+                                      }}
+                                      source={require("../../../icons/call.png")}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
 
-                                            <View
-                                                style={{
-                                                    flexDirection: "column"
-                                                }}
-                                            >
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        justifyContent: "space-between"
-                                                    }}
-                                                >
-                                                    <View
-                                                        style={{
-                                                            flexDirection: "row",
-                                                            margin: hp("3%"),
-                                                            alignItems: "stretch"
-                                                        }}
-                                                    >
-                                                        <View style={{ flexDirection: "row" }}>
-                                                            <Text style={{ color: "#ff8c00" }}>
-                                                                Entry On:{" "}
-                                                            </Text>
-                                                            <View style={{ flexDirection: "row" }}>
-                                                                <Text>
-                                                                    {this.state.Date !== null
-                                                                        ? this.state.Date
-                                                                        : ""}{" "}
-                                                                </Text>
-                                                                <Text>
-                                                                    {this.state.Time !== null
-                                                                        ? this.state.Time
-                                                                        : ""}
-                                                                </Text>
-                                                            </View>
-                                                        </View>
+                      <View
+                        style={{
+                          flexDirection: "column"
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between"
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              margin: hp("3%"),
+                              alignItems: "stretch"
+                            }}
+                          >
+                            <View style={{ flexDirection: "row" }}>
+                              <Text style={{ color: "#ff8c00" }}>
+                                Entry On:{" "}
+                              </Text>
+                              <View style={{ flexDirection: "row" }}>
+                                <Text>
+                                  {this.state.Date !== null
+                                    ? this.state.Date
+                                    : ""}{" "}
+                                </Text>
+                                <Text>
+                                  {this.state.Time !== null
+                                    ? this.state.Time
+                                    : ""}
+                                </Text>
+                              </View>
+                            </View>
 
-                                                        <View
-                                                            style={{
-                                                                flexDirection: "row",
-                                                                marginLeft: hp("3%")
-                                                            }}
-                                                        >
-                                                            <Text style={{ color: "#ff8c00" }}>From: </Text>
-                                                            <Text>
-                                                                {this.state.gateDetails !== null
-                                                                    ? this.state.gateDetails.vlengName
-                                                                    : ""}
-                                                            </Text>
-                                                        </View>
-                                                    </View>
-                                                </View>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                marginLeft: hp("3%")
+                              }}
+                            >
+                              <Text style={{ color: "#ff8c00" }}>From: </Text>
+                              <Text>
+                                {this.state.gateDetails !== null
+                                  ? this.state.gateDetails.vlengName
+                                  : ""}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
 
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        justifyContent: "space-between"
-                                                    }}
-                                                >
-                                                    {this.state.gateDetails.vlExitT !== null ? (
-                                                        <View
-                                                            style={{
-                                                                flexDirection: "row",
-                                                                marginLeft: hp("3%")
-                                                            }}
-                                                        >
-                                                            <View style={{ flexDirection: "row" }}>
-                                                                <Text style={{ color: "#ff8c00" }}>
-                                                                    Exit On:{" "}
-                                                                </Text>
-                                                                <View style={{ flexDirection: "row" }}>
-                                                                    <Text>
-                                                                        {this.state.Date1 !== null
-                                                                            ? this.state.Date1
-                                                                            : ""}{" "}
-                                                                    </Text>
-                                                                    <Text>
-                                                                        {this.state.Time1 !== null
-                                                                            ? this.state.Time1
-                                                                            : ""}
-                                                                    </Text>
-                                                                </View>
-                                                            </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between"
+                          }}
+                        >
+                          {this.state.gateDetails.vlExitT !== null ? (
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                marginLeft: hp("3%")
+                              }}
+                            >
+                              <View style={{ flexDirection: "row" }}>
+                                <Text style={{ color: "#ff8c00" }}>
+                                  Exit On:{" "}
+                                </Text>
+                                <View style={{ flexDirection: "row" }}>
+                                  <Text>
+                                    {this.state.Date1 !== null
+                                      ? this.state.Date1
+                                      : ""}{" "}
+                                  </Text>
+                                  <Text>
+                                    {this.state.Time1 !== null
+                                      ? this.state.Time1
+                                      : ""}
+                                  </Text>
+                                </View>
+                              </View>
 
-                                                            <View
-                                                                style={{
-                                                                    flexDirection: "row",
-                                                                    marginLeft: hp("4.5%")
-                                                                }}
-                                                            >
-                                                                <Text style={{ color: "#ff8c00" }}>From: </Text>
-                                                                <Text>
-                                                                    {this.state.gateDetails !== null
-                                                                        ? this.state.gateDetails.vlexgName
-                                                                        : ""}
-                                                                </Text>
-                                                            </View>
-                                                        </View>
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </View>
-                                            </View>
-                                        </View>
-                                    )}
- 
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  marginLeft: hp("4.5%")
+                                }}
+                              >
+                                <Text style={{ color: "#ff8c00" }}>From: </Text>
+                                <Text>
+                                  {this.state.gateDetails !== null
+                                    ? this.state.gateDetails.vlexgName
+                                    : ""}
+                                </Text>
+                              </View>
+                            </View>
+                          ) : (
+                            ""
+                          )}
+                        </View>
+                      </View>
+                    </View>
+                  )}
                 </Collapsible>
               </View>
             )}
@@ -617,12 +615,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
   img: {
-      width: hp("5%"),
-      height: hp("5%"),
-      borderColor: "orange",
-      borderRadius: hp("2.5%"),
-      // marginTop: hp("3%"),
-      borderWidth: hp("0.2%")
+    width: hp("5%"),
+    height: hp("5%"),
+    borderColor: "orange",
+    borderRadius: hp("2.5%"),
+    // marginTop: hp("3%"),
+    borderWidth: hp("0.2%")
   }
 });
 

@@ -21,8 +21,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import {connect} from "react-redux";
-
+import { connect } from "react-redux";
 
 class MyGuests extends Component {
   static navigationOptions = {
@@ -45,15 +44,17 @@ class MyGuests extends Component {
     let self = this;
     setTimeout(() => {
       self.getInvitationList();
-    }, 5000);
+    }, 2500);
   }
 
   getInvitationList = () => {
-    console.log("association id in guest", this.props)
+    console.log("association id in guest", this.props);
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${
+        this.props.dashBoardReducer.assId
+      }/True`,
       {
         method: "GET",
         headers: {
@@ -99,7 +100,9 @@ class MyGuests extends Component {
     fetch(
       `http://${
         this.props.oyeURL
-      }/oyeliving/api/v1/association/getAssociationList/${this.props.dashBoardReducer.assId}`,
+      }/oyeliving/api/v1/association/getAssociationList/${
+        this.props.dashBoardReducer.assId
+      }`,
       {
         method: "GET",
         headers: {
@@ -118,10 +121,13 @@ class MyGuests extends Component {
       .catch(error => console.log(error));
   };
 
-  setData(data){
-      this.setState({
-          selectedData:data
-      },()=>this.Modal())
+  setData(data) {
+    this.setState(
+      {
+        selectedData: data
+      },
+      () => this.Modal()
+    );
   }
 
   renderItem = ({ item, index }) => {
@@ -153,7 +159,7 @@ class MyGuests extends Component {
             </View>
           </View>
           <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
-            <Card style={{ paddingTop: 0, }}>
+            <Card style={{ paddingTop: 0 }}>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate("QRCodeGeneration", {
@@ -169,7 +175,7 @@ class MyGuests extends Component {
                 </CardItem>
               </TouchableOpacity>
             </Card>
-            <Card style={{ marginTop: 0, }}>
+            <Card style={{ marginTop: 0 }}>
               <TouchableOpacity
                 onPress={() => {
                   {
@@ -195,7 +201,7 @@ class MyGuests extends Component {
   };
 
   render() {
-    console.log("Dashboard",this.props.dashBoardReducer) 
+    console.log("Dashboard", this.props.dashBoardReducer);
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -210,7 +216,7 @@ class MyGuests extends Component {
       );
     }
     return (
-      <View style={{ flex: 1, marginTop:hp('1%') }}>
+      <View style={{ flex: 1, marginTop: hp("1%") }}>
         {/* <Header /> */}
         <NavigationEvents
           onDidFocus={payload => this.getInvitationList()}
@@ -225,28 +231,60 @@ class MyGuests extends Component {
           round
           onChangeText={this.searchFilterFunction}
         />
-        <FlatList
-          style={{ marginTop: hp('1.5%') }}
-          data={this.state.dataSource.sort((a, b) =>
-            a.infName.localeCompare(b.infName)
-          )}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => item.inInvtID.toString()}
-        />
 
+        {this.state.dataSource.length == 0 ? (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "white"
+            }}
+          >
+            <Text
+              style={{
+                backgroundColor: "white",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: hp("1.8%")
+              }}
+            >
+              No Guest invited.
+            </Text>
+            <Text
+              style={{
+                backgroundColor: "white",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: hp("1.6%")
+              }}
+            >
+              Please invite.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            style={{ marginTop: hp("1.5%") }}
+            data={this.state.dataSource.sort((a, b) =>
+              a.infName.localeCompare(b.infName)
+            )}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => item.inInvtID.toString()}
+          />
+        )}
         <TouchableOpacity
           style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-          onPress={() => this.props.navigation.navigate('InviteGuests')}
+          onPress={() => this.props.navigation.navigate("InviteGuests")}
         >
           <Text
             style={{
-              fontSize: hp('5%'),
+              fontSize: hp("5%"),
               color: "#fff",
               fontWeight: "bold",
               justifyContent: "center",
               alignItems: "center",
               alignSelf: "center",
-              marginBottom: hp('0.5%')
+              marginBottom: hp("0.5%")
             }}
           >
             +
@@ -274,15 +312,15 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   textinput: {
-    height: hp('6%'),
-    borderWidth: hp('0.1%'),
+    height: hp("6%"),
+    borderWidth: hp("0.1%"),
     borderColor: "#fff",
-    marginHorizontal: hp('1%'),
-    paddingLeft: hp('2%'),
-    marginTop:hp('0.5%'),
-    fontSize: hp('2.2%'),
+    marginHorizontal: hp("1%"),
+    paddingLeft: hp("2%"),
+    marginTop: hp("0.5%"),
+    fontSize: hp("2.2%"),
     backgroundColor: "#f4f4f4",
-    borderRadius: hp('4%'),
+    borderRadius: hp("4%")
   },
   listItem: {
     flexDirection: "row",
@@ -324,12 +362,12 @@ const styles = StyleSheet.create({
   },
 
   titleOfScreen: {
-    marginTop: hp('1.5%'),
+    marginTop: hp("1.5%"),
     textAlign: "center",
-    fontSize: hp('2.4%'),
+    fontSize: hp("2.4%"),
     fontWeight: "bold",
-    marginBottom: hp('1.5%'),
-    color:'#ff8c00'
+    marginBottom: hp("1.5%"),
+    color: "#ff8c00"
   },
 
   floatButton: {
@@ -337,11 +375,11 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    width: hp('8%'),
+    width: hp("8%"),
     position: "absolute",
-    bottom: hp('2.5%'),
-    right: hp('2.5%'),
-    height: hp('8%'),
+    bottom: hp("2.5%"),
+    right: hp("2.5%"),
+    height: hp("8%"),
     backgroundColor: "#FF8C00",
     borderRadius: 100,
     // shadowColor: '#000000',
@@ -360,7 +398,6 @@ const styles = StyleSheet.create({
   }
 });
 
-
 const mapStateToProps = state => {
   return {
     oyeURL: state.OyespaceReducer.oyeURL,
@@ -370,10 +407,8 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
-    dashBoardReducer:state.DashboardReducer 
-
+    dashBoardReducer: state.DashboardReducer
   };
 };
-
 
 export default connect(mapStateToProps)(MyGuests);

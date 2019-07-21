@@ -362,7 +362,7 @@ class MyFamilyList extends React.Component {
           onWillBlur={payload => this.myFamilyListGetData()}
         />
         <View style={Style.containerViewStyle}>
-          <Text style={Style.titleOfScreenStyle}>My Family Members</Text>
+          <Text style={Style.titleOfScreenStyle}>Family Members</Text>
 
           <Form style={Style.formSearch}>
             <Item style={Style.inputItem}>
@@ -377,6 +377,13 @@ class MyFamilyList extends React.Component {
             </Item>
           </Form>
           {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
+
+          {this.state.familyData.length == 0 ?
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>No Family Data Available.</Text>
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Add your family details.</Text>
+            </View>
+          :  
           <FlatList
             // data={this.state.dataSource.sort((a, b) =>
             //   a.fmName.localeCompare(b.fmName)
@@ -389,6 +396,7 @@ class MyFamilyList extends React.Component {
             keyExtractor={(item, index) => item.fmid.toString()}
           />
 
+            }
           <TouchableOpacity
             style={Style.floatButton}
             onPress={() => {

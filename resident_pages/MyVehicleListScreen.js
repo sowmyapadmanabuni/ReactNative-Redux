@@ -267,13 +267,14 @@ deleteCell = () => {
           onDidFocus={payload => this.getVehicleList()}
           onWillBlur={payload => this.getVehicleList()}
         />
-        <Text style={styles.titleOfScreen}>My Vehicle</Text>
+        <Text style={styles.titleOfScreen}>Vehicles</Text>
         
 
       
         {this.state.dataSource.length == 0 ?
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('2%') }}>Vehicle is not available</Text>
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Vehicle Data Available.</Text>
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Add your vehicle details.</Text>
             </View>
           :  
           <FlatList
