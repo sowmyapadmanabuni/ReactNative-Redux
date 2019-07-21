@@ -25,11 +25,11 @@ import _ from "lodash";
 import { VictoryPie } from "victory-native";
 import { Card, CardItem, Button } from "native-base";
 
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import { withBadge } from "react-native-elements";
 import {
   newNotifInstance,
   createNotification,
@@ -46,6 +46,7 @@ import {
   refreshNotifications,
   updateIdDashboard
 } from "../../../actions";
+import { NavigationEvents } from "react-navigation";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -84,6 +85,297 @@ class Dashboard extends React.Component {
     this.getListOfAssociation();
     this.getVehicleList();
   }
+
+  // requestNotifPermission = () => {
+  //   const {
+  //     MyAccountID,
+  //     champBaseURL,
+  //     receiveNotifications,
+  //     oyeURL
+  //   } = this.props;
+
+  //   firebase
+  //     .messaging()
+  //     .hasPermission()
+  //     .then(enabled => {
+  //       if (enabled) {
+  //         if (receiveNotifications) {
+  //           this.listenForNotif();
+  //         }
+  //         // user has permissions
+  //       } else {
+  //         firebase
+  //           .messaging()
+  //           .requestPermission()
+  //           .then(() => {
+  //             if (receiveNotifications) {
+  //               this.listenForNotif();
+  //             }
+  //             // User has authorised
+  //           })
+  //           .catch(error => {
+  //             // User has rejected permissions
+  //           });
+  //         // user doesn't have permission
+  //       }
+  //     });
+
+  //   var headers = {
+  //     "Content-Type": "application/json",
+  //     "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+  //   };
+
+  //   axios
+  //     .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
+  //       headers: headers
+  //     })
+  //     .then(response => {
+  //       let responseData = response.data.data;
+
+  //       responseData.associationByAccount.map(association => {
+  //         // console.log('***********')
+  //         // console.log(association.asAsnName)
+  //         // console.log(association.asAssnID)
+  //         // console.log('***********')
+  //         if (receiveNotifications) {
+  //           firebase
+  //             .messaging()
+  //             .subscribeToTopic(association.asAssnID + "admin");
+  //           // console.log(association.asAssnID);
+  //         } else if (!receiveNotifications) {
+  //           firebase
+  //             .messaging()
+  //             .unsubscribeFromTopic(association.asAssnID + "admin");
+  //         }
+  //       });
+  //     });
+
+  //   axios
+  //     .get(
+  //       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
+  //       {
+  //         headers: headers
+  //       }
+  //     )
+  //     .then(response => {
+  //       let data = response.data.data.memberListByAccount;
+  //       // console.log("dataoye", data);
+  //       data.map(units => {
+  //         // console.log(units.unUnitID + "admin");
+  //         // console.log(units.mrmRoleID + "role");
+  //         if (receiveNotifications) {
+  //           if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+  //             // console.log(units.unUnitID + "admin");
+  //             firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+  //           }
+  //         } else if (!receiveNotifications) {
+  //           firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
+  //         }
+  //       });
+  //     });
+  // };
+
+  // showLocalNotification = notification => {
+  //   // console.log(notification);
+  //   const channel = new firebase.notifications.Android.Channel(
+  //     "channel_id",
+  //     "Oyespace",
+  //     firebase.notifications.Android.Importance.Max
+  //   ).setDescription("Oyespace channel");
+  //   channel.enableLights(true);
+  //   // channel.enableVibration(true);
+  //   // channel.vibrationPattern([500]);
+  //   firebase.notifications().android.createChannel(channel);
+
+  //   const notificationBuild = new firebase.notifications.Notification({
+  //     sound: "default",
+  //     show_in_foreground: true
+  //   })
+  //     .setTitle(notification._title)
+  //     .setBody(notification._body)
+  //     .setNotificationId(notification._notificationId)
+  //     // .setSound('default')
+  //     .setData({
+  //       ...notification._data,
+  //       foreground: true
+  //     })
+  //     .android.setColor("#FF9100")
+  //     .android.setLargeIcon("ic_notif")
+  //     .android.setAutoCancel(true)
+  //     .android.setSmallIcon("ic_stat_ic_notification")
+  //     .android.setChannelId("channel_id")
+  //     .android.setVibrate("default")
+  //     // .android.setChannelId('notification-action')
+  //     .android.setPriority(firebase.notifications.Android.Priority.Max);
+
+  //   firebase.notifications().displayNotification(notificationBuild);
+  //   this.setState({ foregroundNotif: notification._data });
+  // };
+
+  // listenForNotif = () => {
+  //   let navigationInstance = this.props.navigation;
+
+  //   this.notificationDisplayedListener = firebase
+  //     .notifications()
+  //     .onNotificationDisplayed(notification => {
+  //       // console.log('___________')
+  //       // console.log(notification)
+  //       // console.log('____________')
+  //       // Process your notification as required
+  //       // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+  //     });
+
+  //   this.notificationListener = firebase
+  //     .notifications()
+  //     .onNotification(notification => {
+  //       // console.log('___________')
+  //       // console.log(notification)
+  //       // console.log('____________')
+
+  //       if (notification._data.associationID) {
+  //         // this.props.createNotification(notification._data, navigationInstance, false)
+  //       }
+
+  //       this.showLocalNotification(notification);
+  //     });
+
+  //   firebase.notifications().onNotificationOpened(notificationOpen => {
+  //     const { MyAccountID } = this.props.userReducer;
+  //     const { oyeURL } = this.props.oyespaceReducer;
+  //     let details = notificationOpen.notification._data;
+  //     if (notificationOpen.notification._data.admin === "true") {
+  //       if (notificationOpen.action) {
+  //         // this.props.newNotifInstance(notificationOpen.notification);
+  //         // this.props.createNotification(
+  //         //   notificationOpen.notification._data,
+  //         //   navigationInstance,
+  //         //   true,
+  //         //   "true",
+  //         //   this.props.oyeURL,
+  //         //   this.props.MyAccountID
+  //         // );
+  //         // this.props.createNotification(notificationOpen.notification)
+  //       }
+  //       // this.props.newNotifInstance(notificationOpen.notification);
+  //       // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+  //     } else if (notificationOpen.notification._data.admin === "false") {
+  //       this.props.createUserNotification(
+  //         "Join_Status",
+  //         oyeURL,
+  //         MyAccountID,
+  //         1,
+  //         details.ntDesc,
+  //         "resident_user",
+  //         "resident_user",
+  //         details.sbSubID,
+  //         "resident_user",
+  //         "resident_user",
+  //         "resident_user",
+  //         "resident_user",
+  //         "resident_user",
+  //         true
+  //       );
+  //       // this.props.navigation.navigate("NotificationScreen");
+  //     }
+
+  //     if (notificationOpen.notification._data.admin === "true") {
+  //       this.props.refreshNotifications(oyeURL, MyAccountID);
+  //       if (notificationOpen.notification._data.foreground) {
+  //         // this.props.newNotifInstance(notificationOpen.notification);
+  //         // this.props.createNotification(
+  //         //   notificationOpen.notification._data,
+  //         //   navigationInstance,
+  //         //   true,
+  //         //   "true",
+  //         //   this.props.oyeURL,
+  //         //   this.props.MyAccountID
+  //         // );
+  //       }
+  //     } else if (notificationOpen.notification._data.admin === "gate_app") {
+  //       this.props.refreshNotifications(oyeURL, MyAccountID);
+  //       // this.props.newNotifInstance(notificationOpen.notification);
+  //       // this.props.createNotification(
+  //       //   notificationOpen.notification._data,
+  //       //   navigationInstance,
+  //       //   true,
+  //       //   "gate_app",
+  //       //   this.props.oyeURL,
+  //       //   this.props.MyAccountID
+  //       // );
+  //       // this.props.newNotifInstance(notificationOpen.notification);
+  //       // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+  //     } else if (notificationOpen.notification._data.admin === "false") {
+  //     }
+  //     // this.props.getNotifications(oyeURL, MyAccountID);
+  //     this.props.navigation.navigate("NotificationScreen");
+  //   });
+  // };
+
+  // onChangeText = () => {
+  //   // console.log("hhhhhhhhhhhhhh",this.state.data1)
+  // };
+
+  // didMount = () => {
+  //   const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+  //   const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+  //   const { oyeURL } = this.props.oyespaceReducer;
+  //   // this.props.updateApproveAdmin([]);
+
+  //   getDashSub(oyeURL, SelectedAssociationID);
+  //   getDashAssociation(oyeURL, MyAccountID);
+  //   getAssoMembers(oyeURL, MyAccountID);
+  //   this.requestNotifPermission();
+  //   // this.getBlockList();
+  //   this.props.getNotifications(oyeURL, MyAccountID);
+  //   console.log("Notification");
+  // };
+
+  // componentDidMount() {
+  //   console.log("Notification");
+  //   const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+  //   const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+  //   const { oyeURL } = this.props.oyespaceReducer;
+  //   // this.props.updateApproveAdmin([]);
+
+  //   getDashSub(oyeURL, SelectedAssociationID);
+  //   getDashAssociation(oyeURL, MyAccountID);
+  //   getAssoMembers(oyeURL, MyAccountID);
+  //   this.requestNotifPermission();
+  //   // this.getBlockList();
+  //   this.props.getNotifications(oyeURL, MyAccountID);
+  // }
+  //   onAssociationChange = (value, index) => {
+  //     const {
+  //       associationid,
+  //       getDashUnits,
+  //       updateUserInfo,
+  //       memberList,
+  //       notifications,
+  //       dropdown
+  //     } = this.props;
+  //     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+  //     const { oyeURL } = this.props.oyespaceReducer;
+
+  //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
+  //     updateUserInfo({
+  //       prop: "SelectedAssociationID",
+  //       value: dropdown[index].associationId
+  //     });
+
+  //     let memId = _.find(memberList, function(o) {
+  //       return o.asAssnID === dropdown[index].associationId;
+  //     });
+
+  //     updateUserInfo({
+  //       prop: "MyOYEMemberID",
+  //       value: memId.meMemID
+  //     });
+
+  //     updateUserInfo({
+  //       prop: "SelectedMemberID",
+  //       value: dropdown[index].memberId
+  //     });
+  //   };
 
   requestNotifPermission = () => {
     const {
@@ -140,7 +432,6 @@ class Dashboard extends React.Component {
             firebase
               .messaging()
               .subscribeToTopic(association.asAssnID + "admin");
-            // console.log(association.asAssnID);
           } else if (!receiveNotifications) {
             firebase
               .messaging()
@@ -160,17 +451,19 @@ class Dashboard extends React.Component {
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
         data.map(units => {
-          // console.log(units.unUnitID + "admin");
-          // console.log(units.mrmRoleID + "role");
           if (receiveNotifications) {
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-              // console.log(units.unUnitID + "admin");
-              firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+              if (units.meIsActive) {
+                firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+              }
             }
           } else if (!receiveNotifications) {
             firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
           }
         });
+      })
+      .catch(error => {
+        console.log(error);
       });
   };
 
@@ -227,9 +520,9 @@ class Dashboard extends React.Component {
     this.notificationListener = firebase
       .notifications()
       .onNotification(notification => {
-        // console.log('___________')
-        // console.log(notification)
-        // console.log('____________')
+        console.log("___________");
+        console.log(notification);
+        console.log("____________");
 
         if (notification._data.associationID) {
           // this.props.createNotification(notification._data, navigationInstance, false)
@@ -326,7 +619,6 @@ class Dashboard extends React.Component {
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-    console.log("Notification");
   };
 
   componentDidMount() {
@@ -376,6 +668,7 @@ class Dashboard extends React.Component {
   //     });
   //   };
 
+
   roleCheckForAdmin = () => {
     console.log("Association id123123123123", this.state.assocId);
     fetch(
@@ -414,6 +707,8 @@ class Dashboard extends React.Component {
         this.setState({ error, loading: false });
       });
   };
+
+
   async getListOfAssociation() {
     let self = this;
     let oyeURL = this.props.oyeURL;
@@ -577,8 +872,9 @@ class Dashboard extends React.Component {
         console.log(error);
       });
   };
+
   render() {
-    console.log("Role Id", this.state.role);
+
     const {
       dropdown,
       dropdown1,
@@ -592,14 +888,12 @@ class Dashboard extends React.Component {
       updateDropDownIndex
     } = this.props;
 
-    // base.utils.logger.log(this.props)
-    console.log("Asociation", this.state.unitList, this.state.assocList);
 
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-    console.log("Association Id", this.props.dashBoardReducer.assId);
     return (
       <View style={Style.container}>
+        <NavigationEvents onDidFocus={() => this.didMount()} />
         <View style={Style.dropDownContainer}>
           <View style={Style.leftDropDown}>
             {this.state.assdNameHide === false ? (
@@ -971,20 +1265,7 @@ class Dashboard extends React.Component {
           >
             <Text>View All Visitors</Text>
           </Button>
-          {/* <TouchableOpacity onPress={() => {
-              this.props.navigation.navigate("ViewmembersScreen",{
-                
-              });
-            }}>
-            <Text>Role Management</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("ViewAlllVisitorsPage");
-            }}
-          >
-            <Text>View All Visitors</Text>
-          </TouchableOpacity> */}
+          
         </View>
       </ElevatedView>
     );
@@ -1030,6 +1311,7 @@ class Dashboard extends React.Component {
       </TouchableHighlight>
     );
   }
+
   myUnit() {}
 
   goToFirstTab() {
