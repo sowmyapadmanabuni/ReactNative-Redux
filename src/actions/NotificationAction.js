@@ -74,6 +74,41 @@ export const getNotifications = (oyeURL, MyAccountID) => {
           console.log(data.ntIsActive);
         });
 
+        let gateDetailsArr = [];
+
+        // sorted.map((data, index) => {
+        //   if (data.ntType === "gate_app") {
+        //     axios
+        //       .get(
+        //         `http://${
+        //           this.props.oyeURL
+        //         }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
+        //           data.sbMemID
+        //         }`,
+        //         {
+        //           headers: {
+        //             "Content-Type": "application/json",
+        //             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+        //           }
+        //         }
+        //       )
+        //       .then(res => {
+        //         let responseData = res.data.data;
+        //         console.log(responseData, "responseData");
+        //         gateDetailsArr.push(responseData);
+
+        //         // dispatch({
+        //         //   type: GET_GATE_APP
+        //         // })
+        //       })
+        //       .catch(error => {
+        //         console.log(error, "ben");
+        //       });
+
+        //     console.log(gateDetailsArr, "gateDetailsArr");
+        //   }
+        // });
+
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
           payload: sorted
