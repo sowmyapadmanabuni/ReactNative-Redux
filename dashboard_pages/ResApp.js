@@ -117,14 +117,11 @@ import EditUnit from "../assocition_pages/EditUnit.js";
 import SchedulePatrolling from "../src/screens/Patrolling/PatrolSchedule";
 import PatrollingCommonHeader from "../src/components/NavigationalHeaders/PatrollingCommonHeader";
 import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
-//import AddCheckPoints from "../src/screens/Patrolling/AddCheckPoints";
-
 import AddAndEditCheckPoints from "../src/screens/Patrolling/AddAndEditCheckPoints";
 import SchedulePatrol from "../src/screens/Patrolling/SchedulePatrol";
 import QRScreen from "../src/screens/Patrolling/QRScreen";
 import PatrollingReport from '../src/screens/Patrolling/PatrollingReport'
 import ReportScreen from "../src/screens/Patrolling/ReportScreen";
-
 import MyFamilyList from "../src/screens/Resident/MyFamilyScreen/MyFamilyListOne/MyFamilyList"
 import MyFamily from "../src/screens/Resident/MyFamilyScreen/MyFamilyAdd/MyFamily"
 import MyFamilyEdit from "../src/screens/Resident/MyFamilyScreen/MyFamilyEditOne/MyFamilyEdit"
@@ -164,6 +161,8 @@ import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader'
 import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport"
 import FirstTab from "../residentDashboardVisitorPages/FirstTab";
 import Subscription from "../assocition_pages/Subscription";
+import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement";
+import MyFamilyHeader from "../src/components/NavigationalHeaders/MyFamilyHeader";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
@@ -264,10 +263,8 @@ ResDashBoard:  {
   MyFamily: {
     screen: MyFamily,
     navigationOptions: {
-      title: "My Family Add",
       header: null
-      // headerStyle: { backgroundColor: "#f05555"},
-      // headerTintColor:  "#ffffff"
+      //header:props => <MyFamilyHeader  {...props}/>
     }
   },
   MyFamilyEdit: {
@@ -780,10 +777,11 @@ patrollingCheckPoint: {
 addCheckPoint: {
     screen: AddAndEditCheckPoints,
     navigationOptions: {
-        title: "Add Checkpoints",
-        header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false} isHidden={true} {...props}/>
+      title: "Add Checkpoints",
+      header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
+                                               isHidden={true} {...props}/>
     }
-},
+  },
   schPatrolling: {
     screen: SchedulePatrol,
     navigationOptions: {
@@ -810,6 +808,12 @@ addCheckPoint: {
     navigationOptions: {
       header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
                                                isHidden={true} {...props}/>
+    }
+  },
+  subscriptionManagement: {
+    screen: SubscriptionManagement,
+    navigationOptions: {
+      header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
     }
   },
 },{

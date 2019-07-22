@@ -34,8 +34,8 @@ target 'OyeSpace' do
   
   pod 'RNFS', :path => '../node_modules/react-native-fs'
   
-#  pod 'RNViewShot', :path => '../node_modules/react-native-view-shot'
-
+  pod 'RNViewShot', :path => '../node_modules/react-native-view-shot'
+  
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   
   
@@ -64,7 +64,6 @@ target 'OyeSpace' do
   pod 'react-native-google-maps', path: '../node_modules/react-native-maps'
   pod 'GoogleMaps'
   pod 'Google-Maps-iOS-Utils'
-  pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
 

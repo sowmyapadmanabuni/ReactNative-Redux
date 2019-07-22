@@ -18,7 +18,8 @@ const colors = {
     lightgrey:'#d3d3d3',
     invoiceList:'#f4f4f4',
     cardBackground:"#fafafa",
-    green:"#32CD32"
+    green:"#32CD32",
+    hyperLink:'#0000EE'
 }
 
 export default colors;

@@ -22,7 +22,7 @@ class Staff extends React.Component {
             isLoading: false,
             staffList: [],
             staffName: "",
-            departmentName: "",
+            departmentName:"",
             staffPic: "",
             staffMobileNum: "",
             staffId: '',
@@ -46,8 +46,12 @@ class Staff extends React.Component {
     async getListOfStaff() {
         let self = this;
         self.setState({isLoading: true})
-        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(1); //this.props.userReducer.SelectedAssociationID
+        console.log("StaffList Input",self.props.userReducer.SelectedAssociationID)
+
+        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID);// 1
         self.setState({isLoading: false})
+
+        console.log("Check Data",stat)
 
         try {
             if (stat && stat.data) {
@@ -77,8 +81,10 @@ class Staff extends React.Component {
         let staffList = this.state.staffList;
         return (
             <View style={StaffStyle.mainContainer}>
+                {this.state.staffList.length!==0?
                 <View style={StaffStyle.dropDownView}>
                     <Dropdown
+                        label="Select Staff"
                         value={this.state.staffName}
                         data={staffList}
                         textColor={base.theme.colors.black}
@@ -91,6 +97,8 @@ class Staff extends React.Component {
                         }
                     />
                 </View>
+                    :<View/>}
+                {this.state.staffList.length!==0?
                 <View style={StaffStyle.detailsMainView}>
                     <View style={StaffStyle.detailsLeftView}>
                         <Image style={StaffStyle.staffImg}
@@ -100,7 +108,9 @@ class Staff extends React.Component {
                             <Text style={StaffStyle.staffText}
                                   numberofLines={1} ellipsizeMode={'tail'}>{this.state.staffName} </Text>
                         </View>
+                        {this.state.departmentName?
                         <Text style={StaffStyle.desigText}> ({this.state.departmentName})</Text>
+                            :<View/>}
 
                     </View>
                     <View style={StaffStyle.detailsRightView}>
@@ -111,6 +121,11 @@ class Staff extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                    :
+                    <View style={StaffStyle.noStaffData}>
+                        <Text style={StaffStyle.noStaffDataText}> No staff is there in the Selected Association </Text>
+                    </View>}
+                {this.state.staffList.length!==0?
                 <View style={StaffStyle.datePickerMainView}>
                     <View style={StaffStyle.datePickerSubView}>
                         <DatePicker
@@ -177,7 +192,10 @@ class Staff extends React.Component {
                         />
                     </View>
                 </View>
-                <View style={StaffStyle.radioButtonView}>
+                    :<View/>}
+
+                {this.state.staffList.length!==0?
+                    <View style={StaffStyle.radioButtonView}>
                     <RadioForm formHorizontal={true} animation={true}>
                         {this.state.dayRadioProps.map((obj, i) => {
                             let onPress = (value, index) => {
@@ -196,8 +214,8 @@ class Staff extends React.Component {
                                             index={i.toString()}
                                             isSelected={this.state.daySelected === i}
                                             onPress={onPress}
-                                            buttonInnerColor={base.theme.colors.mediumgrey}
-                                            buttonOuterColor={base.theme.colors.mediumgrey}
+                                            buttonInnerColor={base.theme.colors.mediumGrey}
+                                            buttonOuterColor={base.theme.colors.mediumGrey}
                                             buttonSize={15}
                                             buttonStyle={{}}
                                             buttonWrapStyle={{marginLeft: 20}}
@@ -206,7 +224,7 @@ class Staff extends React.Component {
                                             obj={obj}
                                             index={i.toString()}
                                             onPress={onPress}
-                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumgrey}}
+                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumGrey}}
                                             labelWrapStyle={{marginLeft: 5}}
                                         />
                                     </RadioButton>
@@ -230,8 +248,8 @@ class Staff extends React.Component {
                                             index={j.toString()}
                                             isSelected={this.state.isMonthSelected}
                                             onPress={onPress}
-                                            buttonInnerColor={base.theme.colors.mediumgrey}
-                                            buttonOuterColor={base.theme.colors.mediumgrey}
+                                            buttonInnerColor={base.theme.colors.mediumGrey}
+                                            buttonOuterColor={base.theme.colors.mediumGrey}
                                             buttonSize={15}
                                             buttonStyle={{}}
                                             buttonWrapStyle={{marginLeft: 20}}
@@ -240,7 +258,7 @@ class Staff extends React.Component {
                                             obj={obj}
                                             index={j.toString()}
                                             onPress={onPress}
-                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumgrey}}
+                                            labelStyle={{fontWeight: 'bold', color: base.theme.colors.mediumGrey}}
                                             labelWrapStyle={{marginLeft: 5}}
                                         />
                                     </RadioButton>
@@ -249,12 +267,16 @@ class Staff extends React.Component {
                         })}
                     </RadioForm>
                 </View>
+                    :
+                    <View/>}
+                {this.state.staffList.length!==0?
                 <OSButton
                     height={'8%'}
                     width={'45%'}
                     borderRadius={20}
                     oSBText={'Get Report'}
                     onButtonClick={() => this.getStaffReport()}/>
+                    :<View/>}
             </View>
         )
     }

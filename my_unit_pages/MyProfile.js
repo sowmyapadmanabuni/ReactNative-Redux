@@ -1,25 +1,21 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import {
-  View,
+  Dimensions,
+  Image,
+  Keyboard,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
-  Image,
   TouchableOpacity,
-  PixelRatio,
-  ScrollView,
   TouchableWithoutFeedback,
-  Keyboard,
-  Dimensions,
-  SafeAreaView
+  View
 } from "react-native";
 // import Header from "./src/components/common/Header";
-import { Card, Item, Button } from "native-base";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-import { NavigationEvents } from "react-navigation";
-import { connect } from 'react-redux';
+import {Button} from "native-base";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {NavigationEvents} from "react-navigation";
+import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
 class MyProfile extends Component {
@@ -51,7 +47,6 @@ class MyProfile extends Component {
             datasource: responseJson,
             ImageSource: responseJson.data.account[0].acImgName
           })
-          console.log("gggg", datasource)
         })
         .catch(error => console.log(error))
   }
@@ -62,7 +57,7 @@ class MyProfile extends Component {
 
   render() {
     // YellowBox.ignoreWarnings(["Warning:"])
-    const { navigate } = this.props.navigation
+    const {navigate} = this.props.navigation
     return (
         <TouchableWithoutFeedback
             onPress={() => {
@@ -71,8 +66,8 @@ class MyProfile extends Component {
         >
           <View style={styles.mainViewStyle}>
             {/* <Header /> */}
-            <SafeAreaView style={{ backgroundColor: "orange" }}>
-              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <SafeAreaView style={{backgroundColor: "orange"}}>
+              <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
                 <View style={styles.viewDetails1}>
                   <TouchableOpacity
                       onPress={() => {
@@ -107,11 +102,11 @@ class MyProfile extends Component {
                       source={require("../icons/headerLogo.png")}
                   />
                 </View>
-                <View style={{ flex: 0.2 }}>
+                <View style={{flex: 0.2}}>
                   {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                 </View>
               </View>
-              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+              <View style={{borderWidth: 1, borderColor: "orange"}}/>
             </SafeAreaView>
 
             <NavigationEvents
@@ -123,9 +118,9 @@ class MyProfile extends Component {
               <View style={styles.textWrapper}>
                 <ScrollView style={styles.scrollViewStyle}>
                   <View style={styles.myProfileFlexStyle}>
-                    <View style={styles.emptyViewStyle} />
+                    <View style={styles.emptyViewStyle}/>
                     <View style={styles.viewForMyProfileText}>
-                      <Text style={{ fontSize: hp("2.5%"), color: "#ff8c00" }}>
+                      <Text style={{fontSize: hp("2.5%"), color: "#ff8c00"}}>
                         My Profile
                       </Text>
                     </View>
@@ -211,7 +206,7 @@ class MyProfile extends Component {
                     </View>
                   </View>
 
-                  <View style={{ alignItems: "center", marginBottom: hp("4%") }}>
+                  <View style={{alignItems: "center", marginBottom: hp("4%")}}>
                     <Text style={styles.itemTextValues1}>
                       {this.state.datasource
                           ? this.state.datasource.data.account[0].acfName +
@@ -270,12 +265,14 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                      <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('CreateAssnScreen')}>
-                      <Text>Create Association</Text>
-                    </Button>
-                      <View />
-                      <View style={{ marginTop: hp("2%") }}>
-                        <Button bordered style={styles.button1} onPress={()=> this.props.navigation.navigate('AssnListScreen')}>
+                      <Button bordered style={styles.button1}
+                              onPress={() => this.props.navigation.navigate('CreateAssnScreen')}>
+                        <Text>Create Association</Text>
+                      </Button>
+                      <View/>
+                      <View style={{marginTop: hp("2%")}}>
+                        <Button bordered style={styles.button1}
+                                onPress={() => this.props.navigation.navigate('AssnListScreen')}>
                           <Text>Join Existing Association</Text>
                         </Button>
                       </View>
@@ -283,7 +280,7 @@ class MyProfile extends Component {
                   </View>
                 </ScrollView>
               </View>
-              <View style={{bottom:hp('3%'), alignItems:'flex-end', right:hp('3%')}}>
+              <View style={{bottom: hp('3%'), alignItems: 'flex-end', right: hp('3%')}}>
                 <Text>Version: - {DeviceInfo.getVersion()}</Text>
               </View>
             </View>
@@ -390,7 +387,7 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
@@ -413,16 +410,6 @@ const styles = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
-  viewStyle1: {
-    backgroundColor: "#fff",
-    height: hp("7%"),
-    width: Dimensions.get("screen").width,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    position: "relative"
-  },
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
@@ -431,8 +418,6 @@ const styles = StyleSheet.create({
     marginLeft: 3
   }
 })
-
-
 
 
 const mapStateToProps = state => {

@@ -30,7 +30,7 @@ const StaffStyle = StyleSheet.create({
             width: '28%',
         },
         staffText: {
-            fontSize: 16,
+            fontSize: 15,
             color: base.theme.colors.black,
             marginRight:2,
         },
@@ -83,6 +83,15 @@ const StaffStyle = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 80
+    },
+    noStaffDataText:{
+            fontSize:14,
+        color:base.theme.colors.black
+    },
+    noStaffData:{
+            alignItems:'center',
+        justifyContent:'center',
+        height:'100%'
     }
 
 
