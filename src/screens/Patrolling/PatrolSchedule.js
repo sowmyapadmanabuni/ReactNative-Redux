@@ -73,7 +73,10 @@ class PatrolSchedule extends React.Component {
     async getPatrollingList() {
         let self = this;
 
+        console.log("Props:",self.props);
+
         let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
+        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
         try {
             if (stat.success) {
                 self.setState({
@@ -398,7 +401,7 @@ const mapStateToProps = state => {
         oye247BaseURL: state.OyespaceReducer.oye247BaseURL,
         oyeBaseURL: state.OyespaceReducer.oyeBaseURL,
         userReducer: state.UserReducer,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID
+        SelectedAssociationID: state.DashboardReducer.assId
     }
 };
 

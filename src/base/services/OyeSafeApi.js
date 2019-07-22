@@ -51,20 +51,20 @@ export default class OyeSafeApi{
 
     static async getPatrollingShiftListByAssociationID(associationId){
         console.log(associationId);
-        return await instance.get('oye247/api/v1/GetPatrollingShiftsListByAssocID/'+associationId);
+        return await instance.get('GetPatrollingShiftsListByAssocID/'+associationId);
     };
 
     static async addCheckPoint(details){
-        return await instance.post('oye247/api/v1/CheckPoint/Create',details);
+        return await instance.post('CheckPoint/Create',details);
     }
 
     static async editCheckPoint(details){
         console.log("Details in net call:",details);
-        return await instance.post('oye247/api/v1/CheckPointGPS/Update',details)
+        return await instance.post('CheckPointGPS/Update',details)
     }
 
     static async getCheckPointList(associationId){
-        return await instance.get('oye247/api/v1/CheckPoint/GetCheckPointByAssocID/'+associationId)
+        return await instance.get('CheckPoint/GetCheckPointByAssocID/'+associationId)
     }
 
     static async getDeviceList(associationId){
@@ -72,15 +72,15 @@ export default class OyeSafeApi{
     }
 
     static async schedulePatrol(detail){
-        return await instance.post('oye247/api/v1/PatrollingShifts/create',detail)
+        return await instance.post('PatrollingShifts/create',detail)
     }
 
     static async updatePatrol(detail){
-        return await instance.post('oye247/api/v1/PatrollingShifts/Update',detail)
+        return await instance.post('PatrollingShifts/Update',detail)
     }
 
     static async deleteCP(detail){
-        return await instance.post('oye247/api/v1/CheckPoint/DeleteCheckPoint',detail)
+        return await instance.post('CheckPoint/DeleteCheckPoint',detail)
     }
 
     static async deletePatrolSlot(detail){

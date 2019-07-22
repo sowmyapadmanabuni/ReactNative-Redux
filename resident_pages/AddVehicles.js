@@ -142,7 +142,7 @@ class AddVehicle extends Component {
                 UPID: (this.state.parkingLotDetail.length !== 0) ? upID : null,
                 UPLNum: parkingSlotNum,
                 ASAssnID: this.props.dashBoardReducer.assId
-            }
+            };
 
             console.log("Payload Data:", payloadData);
 
@@ -152,7 +152,7 @@ class AddVehicle extends Component {
                     "Content-Type": "application/json",
                     "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
                 },
-                body: JSON.stringify({payloadData})
+                body: JSON.stringify(payloadData)
             })
                 .then(response => response.json())
                 .then(responseJson => {
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
         width: hp("50%"),
         marginTop: hp('4%')
     },
-    noData:{
+    noData: {
         marginLeft: wp("5%"),
         marginRight: wp("5%"),
         height: hp("5%"),

@@ -833,7 +833,7 @@ class Dashboard extends React.Component {
         for (let i = 0; i < unitList.length; i++) {
             if (i === index) {
                 unitName = unitList[i].details.asAsnName;
-                unitId = unitList[i].details.asAssnID;
+                unitId = unitList[i].details.unUnitID;
             }
         }
         self.setState({
@@ -872,6 +872,63 @@ class Dashboard extends React.Component {
                 console.log(error);
             });
     };
+
+    getFamilyMemberList = () => {
+        fetch(
+            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+                this.props.dashBoardReducer.assId
+                }`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                }
+            }
+        )
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log("Manas", responseJson);
+                this.setState({
+                    //Object.keys(responseJson.data.unitsByBlockID).length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+                        .length
+                });
+            })
+            .catch(error => {
+                this.setState({ loading: false });
+                console.log(error);
+            });
+    };
+
+    getVisitorList = () => {
+        fetch(
+            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+                this.props.dashBoardReducer.assId
+                }`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                }
+            }
+        )
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log("Manas", responseJson);
+                this.setState({
+                    //Object.keys(responseJson.data.unitsByBlockID).length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+                        .length
+                });
+            })
+            .catch(error => {
+                this.setState({ loading: false });
+                console.log(error);
+            });
+    };
+
 
     render() {
 
@@ -997,7 +1054,8 @@ class Dashboard extends React.Component {
             </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={() => {
-                                Linking.openURL("mailto:happy@oyespace.com");
+                                this.props.navigation.navigate("schedulePatrolling")
+                                //Linking.openURL("mailto:happy@oyespace.com");
                             }}
                         >
                             <Image
@@ -1132,6 +1190,7 @@ class Dashboard extends React.Component {
                         </TouchableOpacity>
                     </View>
                     {invoiceList.length > 0 ?
+
                         <ScrollView style={Style.scrollView}>
                             <FlatList
                                 data={invoiceList}
@@ -1146,6 +1205,7 @@ class Dashboard extends React.Component {
                             <Text style={Style.noDataMsg}>No Invoices</Text>
                         </View>
                     }
+
                 </ElevatedView>
             */}
             </ElevatedView>
@@ -1169,6 +1229,7 @@ class Dashboard extends React.Component {
         </View> */}
 
                 {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
+
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
                       <View style={{ flexDirection: "column" }}>
@@ -1180,6 +1241,7 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/ww.png")}
                           />
                         </View>
+
                         <View>
                           <VictoryPie
                             colorScale={["#ff8c00", "#D0D0D0"]}
@@ -1190,6 +1252,7 @@ class Dashboard extends React.Component {
                             height={hp("22%")}
                             labels={() => null}
                           />
+
                           <View style={styles.gauge}>
                             <Text
                               style={[styles.gaugeText, { color: "#FF8C00" }]}
@@ -1212,6 +1275,7 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/hhhh.png")}
                           />
                         </View>
+
                         <View>
                           <VictoryPie
                             colorScale={["#45B591", "#D0D0D0"]}

@@ -205,14 +205,14 @@ class AddAndEditCheckPoints extends React.Component {
             details = {
                 "CPCkPName": self.state.checkPointName,
                 "CPGPSPnt": gpsLocation,
-                "MEMemID": self.props.userReducer.MyOYEMemberID,
+              //  "MEMemID": self.props.userReducer.MyOYEMemberID,
                 "ASAssnID": self.props.SelectedAssociationID,
                 "CPCPntAt": self.state.checkPointType
             };
         }
 
         let stat = self.state.isEditing ? await OyeSafeApi.editCheckPoint(details) : await OyeSafeApi.addCheckPoint(details);
-
+        console.log("Stat:",stat,details)
         try {
             if (stat !== undefined && stat !== null) {
                 if (stat.success) {
@@ -351,7 +351,7 @@ const mapStateToProps = state => {
         oye247BaseURL: state.OyespaceReducer.oye247BaseURL,
         oyeBaseURL: state.OyespaceReducer.oyeBaseURL,
         userReducer: state.UserReducer,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID
+        SelectedAssociationID: state.DashboardReducer.assId
     }
 };
 
