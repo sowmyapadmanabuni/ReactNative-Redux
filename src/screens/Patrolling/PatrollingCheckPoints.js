@@ -68,6 +68,7 @@ class PatrollingCheckPoints extends React.Component {
         base.utils.logger.log(self.props);
 
         let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
+        //let stat = await OyeSafeApi.getCheckPointList(8);
         base.utils.logger.logArgs("Stat:", stat);
         try {
             if (stat && stat !== undefined) {
@@ -379,7 +380,7 @@ const mapStateToProps = state => {
         oye247BaseURL: state.OyespaceReducer.oye247BaseURL,
         oyeBaseURL: state.OyespaceReducer.oyeBaseURL,
         userReducer: state.UserReducer,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        SelectedAssociationID: state.DashboardReducer.assId,
         selectedCheckPoints: state.PatrollingReducer
     }
 };

@@ -124,6 +124,7 @@ class DashBoardHeader extends React.Component {
   };
 
   render() {
+
     base.utils.logger.log(
       this.props.viewImageURL +
         "PERSON" +

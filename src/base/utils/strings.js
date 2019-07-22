@@ -10,10 +10,9 @@ const isMandatory = " is required";
 
 
 const api = {
-   // oyeSafeDomain:isDev?"apidev.oyespace.com/":"apidev.oyespace.com/", Check for patrolling it is like this
     oyeSafeApiDomainFamily: isDev
-   ? "apidev.oyespace.com/oyesafe/api/v1/"
-   : "apidev.oyespace.com/oyesafe/api/v1/",
+        ? "apidev.oyespace.com/oyesafe/api/v1/"
+        : "apidev.oyespace.com/oyesafe/api/v1/",
     oyeSafeDomain:isDev?"apidev.oyespace.com/oye247":"apidev.oyespace.com/oye247",
     oyeDomain:isDev?"apidev.oyespace.com/oyeliving":"apidev.oyespace.com/oyeliving",
     oyeLivingDomain:isDev?"apidev.oyespace.com":"OyeLivingApi.oyespace.com",
@@ -43,7 +42,10 @@ const strings = {
     },
     staffPlaceHolder:'https://via.placeholder.com/150/ff8c00/FFFFFF',
     StaffImageLink:'http://mediauploaddev.oyespace.com/Images/',
-    patrolId:"PATROL_ID"
+    patrolId:"PATROL_ID",
+    rupeeIconCode:"\u20B9",
+    mediaUploadUrl:"http://mediaupload.oyespace.com/oyeliving/api/V1",
+    oyeImageUploadKey:"1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
 };
 
 

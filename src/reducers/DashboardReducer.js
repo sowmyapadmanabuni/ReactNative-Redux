@@ -82,10 +82,10 @@ export default (state = INITIAL_STATE, action) => {
     case GET_MEMBERLIST_FAILED:
       return { ...state, memberList: [] };
 
-      case UPDATE_ID_DASHBOARD:
-            return { ...state, [action.payload.prop]: action.payload.value };
+    case UPDATE_ID_DASHBOARD:
+      return { ...state, [action.payload.prop]: action.payload.value };
 
-      default:
+    default:
       return state;
   }
 };

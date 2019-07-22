@@ -33,8 +33,6 @@ const CardViewStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     imageStyles: {
-        height: 28,
-        width: 28,
         alignSelf: 'center',
         marginBottom: 2
     },
