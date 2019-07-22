@@ -847,6 +847,62 @@ class Dashboard extends React.Component {
 
   getVehicleList = () => {
     fetch(
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+        this.props.dashBoardReducer.assId
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Manas", responseJson);
+        this.setState({
+          //Object.keys(responseJson.data.unitsByBlockID).length
+          vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+            .length
+        });
+      })
+      .catch(error => {
+        this.setState({ loading: false });
+        console.log(error);
+      });
+  };
+
+  getFamilyMemberList = () => {
+    fetch(
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetFamilyMemberListByAssocAndUnitID/${
+        this.props.dashBoardReducer.assId
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Manas", responseJson);
+        this.setState({
+          //Object.keys(responseJson.data.unitsByBlockID).length
+          vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+            .length
+        });
+      })
+      .catch(error => {
+        this.setState({ loading: false });
+        console.log(error);
+      });
+  };
+
+  getVisitorList = () => {
+    fetch(
       `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
         this.props.dashBoardReducer.assId
       }`,
@@ -872,6 +928,7 @@ class Dashboard extends React.Component {
         console.log(error);
       });
   };
+
 
   render() {
 
