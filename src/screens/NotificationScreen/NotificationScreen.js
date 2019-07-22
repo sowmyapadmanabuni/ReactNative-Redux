@@ -28,23 +28,25 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import axios from "axios";
 import ZoomImage from "react-native-zoom-image";
 
 class NotificationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gateDetails: "",
-      Date: "",
-      Time: "",
-      Date1: "",
-      Time1: ""
+      gateDetails: [],
+      Date: [],
+      Time: [],
+      Date1: [],
+      Time1: []
     };
   }
+
   componentDidMount() {
     // console.log("didmount");
     // this.gateAppNotif()
-    this.doNetwork();
+    this.doNetwork(null, this.props.notifications);
   }
   keyExtractor = (item, index) => index.toString();
 
@@ -153,52 +155,76 @@ class NotificationScreen extends Component {
       });
   };
 
-  doNetwork = (item, notifications) => {
-    console.log("242#$@$@#$", item, notifications);
-    for (let i in notifications) {
-      if (item === notifications[i].ntid) {
-        console.log("Notification", notifications[i].sbMemID);
-        //10906
-        fetch(
-          `http://${
-            this.props.oyeURL
-          }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
-            notifications[i].sbMemID
-          }`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-            }
-          }
-        )
-          .then(response => response.json())
-          .then(responseJson => {
-            console.log("Manas", responseJson);
-            this.setState({
-              gateDetails: responseJson.data.visitorLog,
-              Date:
-                responseJson.data.visitorLog.vldCreated.substring(8, 10) +
-                "-" +
-                responseJson.data.visitorLog.vldCreated.substring(5, 7) +
-                "-" +
-                responseJson.data.visitorLog.vldCreated.substring(0, 4),
-              Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
-              Date1:
-                responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
-                "-" +
-                responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
-                "-" +
-                responseJson.data.visitorLog.vldUpdated.substring(0, 4),
-              Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
-            });
-          })
-          .catch(error => {
-            console.log(error);
-          });
+  renderCollapseData = (type, id) => {
+    const { gateDetails } = this.state;
+    let value = "";
+    console.log("gateDetails", gateDetails);
+
+    if (gateDetails.length <= 0) {
+      value = "";
+    } else {
+      if (type === "vlGtName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlGtName : "";
+      } else if (type === "vlfName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlfName : "";
+      } else if (type === "vlVisType") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlVisType : "";
+      } else if (type === "vlComName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlComName : " ";
+      } else if (type === "vlMobile") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlMobile : " ";
+      } else if (type === "vlEntryImg") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlEntryImg : "";
       }
     }
+
+    return value;
+  };
+
+  doNetwork = (item, notifications) => {
+    // console.log("242#$@$@#$", item, notifications);
+    let gateDetailsArr = [];
+
+    this.props.notifications.map((data, index) => {
+      if (data.ntType === "gate_app") {
+        axios
+          .get(
+            `http://${
+              this.props.oyeURL
+            }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
+              data.sbMemID
+            }`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+              }
+            }
+          )
+          .then(res => {
+            let responseData = res.data.data;
+            console.log(responseData, "responseData");
+
+            this.setState(
+              (prevState, newEmployer) => ({
+                gateDetails: prevState.gateDetails.concat([
+                  { ...responseData.visitorLog, ...data }
+                ])
+              }),
+              () => {}
+            );
+          })
+          .catch(error => {
+            console.log(error, "ben");
+          });
+      }
+    });
   };
 
   renderItem = ({ item, index }) => {
@@ -273,20 +299,10 @@ class NotificationScreen extends Component {
                   style={{ flex: 1 }}
                   collapsed={item.open}
                   align="center"
-                  onAnimationEnd={() =>
-                    this.doNetwork(item.ntid, notifications)
-                  }
+                  // onAnimationEnd={() =>
+                  //   this.doNetwork(item.ntid, notifications)
+                  // }
                 >
-                  {/* <View
-                    style={{
-                      backgroundColor: "#ED8A19",
-                      paddingVertical: 25,
-                      margin: 4
-                    }}
-                  >
-                    <Text> {item.ntDesc}</Text>
-                  </View> */}
-
                   {item.sbMemID === 0 ? (
                     <View>
                       <Text>No Data</Text>
@@ -299,11 +315,12 @@ class NotificationScreen extends Component {
                           alignItems: "center"
                         }}
                       >
+                        {/* {this.state.gateDetails !== null
+                          ? this.state.gateDetails.vlGtName
+                          : ""} */}
                         <View style={{ flexDirection: "row" }}>
                           <Text style={{ fontSize: hp("2%") }}>
-                            {this.state.gateDetails !== null
-                              ? this.state.gateDetails.vlGtName
-                              : ""}{" "}
+                            {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
                             Association
                           </Text>
                         </View>
@@ -315,7 +332,11 @@ class NotificationScreen extends Component {
                             justifyContent: "flex-start"
                           }}
                         >
-                          {this.state.gateDetails.vlEntryImg == "" ? (
+                          {this.renderCollapseData(
+                            "vlEntryImg",
+                            item.sbMemID
+                          ) ? (
+                            // this.state.gateDetails.vlEntryImg == "" ? (
                             <Image
                               style={styles.img}
                               // style={styles.img}
@@ -328,7 +349,11 @@ class NotificationScreen extends Component {
                               source={{
                                 uri:
                                   "http://mediaupload.oyespace.com" +
-                                  this.state.gateDetails.vlEntryImg
+                                  // this.state.gateDetails.vlEntryImg
+                                  this.renderCollapseData(
+                                    "vlEntryImg",
+                                    item.sbMemID
+                                  )
                               }}
                             />
                           )}
@@ -347,20 +372,29 @@ class NotificationScreen extends Component {
                             }}
                           >
                             <Text style={{ fontSize: hp("2%") }}>
-                              {this.state.gateDetails !== null
+                              {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
+                              {/* {this.state.gateDetails !== null
                                 ? this.state.gateDetails.vlfName
-                                : ""}
+                                : ""} */}
                             </Text>
                             <View style={{ flexDirection: "row" }}>
                               <Text style={{ color: "#000" }}>
-                                {this.state.gateDetails !== null
+                                {this.renderCollapseData(
+                                  "vlVisType",
+                                  item.sbMemID
+                                )}{" "}
+                                {/* {this.state.gateDetails !== null
                                   ? this.state.gateDetails.vlVisType
-                                  : ""}{" "}
+                                  : ""}{" "} */}
                               </Text>
                               <Text style={{ color: "#38bcdb" }}>
-                                {this.state.gateDetails !== null
+                                {this.renderCollapseData(
+                                  "vlComName",
+                                  item.sbMemID
+                                )}{" "}
+                                {/* {this.state.gateDetails !== null
                                   ? this.state.gateDetails.vlComName
-                                  : ""}{" "}
+                                  : ""}{" "} */}
                               </Text>
                             </View>
                           </View>
@@ -377,12 +411,21 @@ class NotificationScreen extends Component {
                                     Platform.OS === "android"
                                       ? Linking.openURL(
                                           `tel:${
-                                            this.state.gateDetails.vlMobile
+                                            this.renderCollapseData(
+                                              "vlMobile",
+                                              item.sbMemID
+                                            )
+                                            // this.state.gateDetails
+                                            //   .vlMobile
                                           }`
                                         )
                                       : Linking.openURL(
                                           `tel:${
-                                            this.state.gateDetails.vlMobile
+                                            // this.state.gateDetails.vlMobile
+                                            this.renderCollapseData(
+                                              "vlMobile",
+                                              item.sbMemID
+                                            )
                                           }`
                                         );
                                   }
@@ -391,9 +434,13 @@ class NotificationScreen extends Component {
                                 <View style={{ flexDirection: "row" }}>
                                   <View>
                                     <Text style={{ color: "#ff8c00" }}>
-                                      {this.state.gateDetails !== null
+                                      {this.renderCollapseData(
+                                        "vlMobile",
+                                        item.sbMemID
+                                      )}
+                                      {/* {this.state.gateDetails !== null
                                         ? this.state.gateDetails.vlMobile
-                                        : ""}
+                                        : ""} */}
                                     </Text>
                                   </View>
                                   <View
@@ -580,7 +627,8 @@ class NotificationScreen extends Component {
 
   render() {
     const { navigation, notifications, oyeURL, MyAccountID } = this.props;
-    const refresh = navigation.getParam("refresh", "NO-ID");
+    // const refresh = navigation.getParam("refresh", "NO-ID");
+    console.log(this.state.gateDetails, "gateDetails");
     return (
       <View style={styles.container}>
         <NavigationEvents />
