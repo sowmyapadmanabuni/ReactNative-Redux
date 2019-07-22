@@ -15,7 +15,7 @@ const api = {
    ? "apiuat.oyespace.com/oyesafe/api/v1/"
    : "apiuat.oyespace.com/oyesafe/api/v1/",
     oyeSafeDomain:isDev?"apiuat.oyespace.com/oye247":"apiuat.oyespace.com/oye247",
-    oyeDomain:isDev?"apiuat.oyespace.com/oyeliving":"apiuat.oyespace.com/oyeliving",
+    oyeDomain:isDev?"apidev.oyespace.com/oyeliving":"apiuat.oyespace.com/oyeliving",
     oyeLivingDomain:isDev?"apiuat.oyespace.com":"OyeLivingApi.oyespace.com",
     protocol:isSecure?"https://":"http://",
     oyeSafeApiPath:"/api/v1/",

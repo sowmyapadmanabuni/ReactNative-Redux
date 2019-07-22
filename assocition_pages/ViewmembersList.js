@@ -1,39 +1,12 @@
-import React, { Component } from "react";
-import {
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-  Keyboard,
-  FlatList,
-  Text,
-  Image,
-  SafeAreaView,
-  TouchableOpacity,
-  Dimensions,
-  Alert
-} from "react-native";
-import {
-  Card,
-  CardItem,
-  Container,
-  Left,
-  Body,
-  Right,
-  Title,
-  Row,
-  Button
-} from "native-base";
-import { TextInput } from "react-native-gesture-handler";
-import { NavigationEvents } from "react-navigation";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-import { Dropdown } from "react-native-material-dropdown";
-import { connect } from "react-redux";
-import axios from "axios";
-import _ from "lodash";
-import { getDashUnits } from "../src/actions";
+import React, {Component} from "react";
+import {Alert, Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Button, Card} from "native-base";
+import {TextInput} from "react-native-gesture-handler";
+import {NavigationEvents} from "react-navigation";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {Dropdown} from "react-native-material-dropdown";
+import {connect} from "react-redux";
+import {getDashUnits} from "../src/actions";
 
 let data = [
   {
@@ -60,15 +33,24 @@ class Resident extends Component {
     selectedRoleData: 0,
     units: [],
     memberList: [],
-    loading: true
+    loading: true,
+    residentData: []
   };
+
+
+  componentWillMount() {
+    this.setState({
+      residentData: this.props.dashBoardReducer.residentList
+    })
+  }
 
   static navigationOptions = {
     title: "resident",
     header: null
   };
 
-  residentialListGetMethod = () => {};
+  residentialListGetMethod = () => {
+  };
 
   // componentDidMount() {
   //   const { params } = this.props.navigation.state;
@@ -173,14 +155,15 @@ class Resident extends Component {
 
   // }
 
-  componentDidMount = () => {};
+  componentDidMount = () => {
+  };
 
   changeRole = () => {
-    const { getDashUnits, selectedAssociation } = this.props;
+    const {getDashUnits, selectedAssociation} = this.props;
     //http://localhost:54400/oyeliving/api/v1/MemberRoleChangeToAdminOwnerUpdate
     const url = `http://${
-      this.props.oyeURL
-    }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
+        this.props.oyeURL
+        }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
     console.log(this.state);
     console.log(url);
     requestBody = {
@@ -200,60 +183,64 @@ class Resident extends Component {
       },
       body: JSON.stringify(requestBody)
     })
-      .then(response => response.json())
+        .then(response => response.json())
 
-      .then(responseJson => {
-        console.log("%%%%%%%%%%", responseJson);
-        this.props.navigation.goBack();
-        getDashUnits(selectedAssociation);
-      })
-      .catch(error => {
-        console.log("err " + error);
-        Alert.alert("No Data for Selected");
-      });
+        .then(responseJson => {
+          console.log("%%%%%%%%%%", responseJson);
+          this.props.navigation.goBack();
+          getDashUnits(selectedAssociation);
+        })
+        .catch(error => {
+          console.log("err " + error);
+          Alert.alert("No Data for Selected");
+        });
   };
 
   selectRole = (item, index) => {
+    console.log("KSJHGF:",item,index)
     let sortedList = this.state.residentList.sort((a, b) =>
-      a.unit.localeCompare(b.unit)
+        a.unit.localeCompare(b.unit)
     );
     // console.log(sortedList)
     return (
-      <Dropdown
-        label="Select Role"
-        value={data.value}
-        data={data}
-        containerStyle={20}
-        onChangeText={(val, vals) => {
-          // console.log(val, vals)
-          let currSel = sortedList[index];
-          let value = {
-            ...currSel,
-            selRolId: (vals = vals + 1),
-            selRolName: val
-          };
-          this.setState({ selectedRoleData: value });
-          // console.log("mobie",this.state.selectedRoleData.uoMobile)
-        }}
-      />
+        <Dropdown
+            label="Select Role"
+            value={data.value}
+            data={data}
+            containerStyle={20}
+            onChangeText={(val, vals) => {
+              // console.log(val, vals)
+              let currSel = sortedList[index];
+              let value = {
+                ...currSel,
+                selRolId: (vals = vals + 1),
+                selRolName: val
+              };
+              console.log("Role:", value)
+              this.setState({selectedRoleData: value});
+            }}
+        />
     );
   };
 
-  handleSearch = text => {
-    const { residentList } = this.state;
-    const { params } = this.props.navigation.state;
-    this.setState({ query: text });
+  //handleSearch Code Change By Sarthak Mishra At Synclovis System Pvt. Ltd. on July 20, 2019
 
-    let sortResident = params.data;
+  handleSearch(text) {
+    this.setState({query: text});
+    let sortResident = this.state.residentData;
+    let filteredArray = [];
+    if (text.length === 0) {
+      filteredArray.push(this.props.dashBoardReducer.residentList)
+    } else {
+      for (let i in sortResident) {
+        if (sortResident[i].name.includes(text) || sortResident[i].unit.includes(text)) {
+          filteredArray.push(sortResident[i])
+        }
+      }
+    }
 
     this.setState({
-      residentList: [
-        ...sortResident.filter(
-          item =>
-            item.unit.toUpperCase().includes(text.toUpperCase()) ||
-            item.name.toUpperCase().includes(text.toUpperCase())
-        )
-      ]
+      residentData:text.length === 0?filteredArray[0]: filteredArray
     });
   };
 
@@ -265,155 +252,152 @@ class Resident extends Component {
   };
 
   render() {
-    console.log("$$$$$$$$$$#%#%@#%#^$#^&%&%^&%^*^%*%^&$%^$",this.props) //residentList
-    let residentList= this.props.dashBoardReducer.residentList
-    const { params } = this.props.navigation.state;
-    // console.log(params)
-    // console.log(this.props.associationid)
+    let residentList = this.props.dashBoardReducer.residentList;
+    const {params} = this.props.navigation.state;
     return (
-      <View style={{ flex: 1, flexDirection: "column" }}>
-        <NavigationEvents
-          onDidFocus={payload => {
-            residentList = params.data;
-            this.setState({
-              residentList: residentList.sort((a, b) =>
-                a.unit.localeCompare(b.unit)
-              )
-            });
-            residentList.sort((a, b) => a.unit.localeCompare(b.unit));
-            this.setState({ units: residentList });
-          }}
-        />
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard");
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
+        <View style={{flex: 1, flexDirection: "column"}}>
+          <NavigationEvents
+              onDidFocus={payload => {
+                residentList = params.data;
+                this.setState({
+                  residentList: residentList.sort((a, b) =>
+                      a.unit.localeCompare(b.unit)
+                  )
+                });
+                residentList.sort((a, b) => a.unit.localeCompare(b.unit));
+                this.setState({units: residentList});
               }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-        <View style={styles.textWrapper}>
-          <Text style={styles.residentialListTitle}> Resident List </Text>
-          <View style={{ flexDirection: "row" }}>
-            <View
-              style={{ flex: 0.8, height: hp("5.5%"), marginStart: hp("2%") }}
-            >
-              <TextInput
-                style={styles.viewDetails3}
-                placeholder="  search...."
-                round
-                autoCapitalize="characters"
-                onChangeText={this.handleSearch}
-              />
-            </View>
-            <View
-              style={{ flex: 0.3, height: hp("5.5%"), alignItems: "flex-end" }}
-            >
-              <View style={{ alignItems: "flex-end", marginEnd: hp("2%") }}>
-                {this.state.selectedRoleData.selRolId == 1 ||
-                this.state.selectedRoleData.selRolId == 2 ? (
-                  <Button
-                    rounded
-                    warning
-                    style={{ height: hp("5.5%"), width: wp("19%") }}
+          />
+          <SafeAreaView style={{backgroundColor: "orange"}}>
+            <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
                     onPress={() => {
-                      this.changeRole();
+                      this.props.navigation.navigate("ResDashBoard");
                     }}
+                >
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: 'flex-start',
+                        justifyContent: "center"
+                      }}
                   >
-                    <Text style={{ color: "white", paddingStart: hp(" 0.9%") }}>
-                      {" "}
-                      Update
-                    </Text>
-                  </Button>
-                ) : (
-                  <Button rounded style={styles.viewDetails4}>
-                    <Text style={{ color: "white", paddingStart: hp("0.9%") }}>
-                      {" "}
-                      Update
-                    </Text>
-                  </Button>
-                )}
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../icons/OyeSpace.png")}
+                />
+              </View>
+              <View style={{flex: 0.2}}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
+            </View>
+            <View style={{borderWidth: 1, borderColor: "orange"}}/>
+          </SafeAreaView>
+          <View style={styles.textWrapper}>
+            <Text style={styles.residentialListTitle}> Resident List </Text>
+            <View style={{flexDirection: "row"}}>
+              <View
+                  style={{flex: 0.8, height: hp("5.5%"), marginStart: hp("2%")}}
+              >
+                <TextInput
+                    style={styles.viewDetails3}
+                    placeholder="  search...."
+                    round
+                    autoCapitalize="characters"
+                    onChangeText={(text) => this.handleSearch(text)}
+                />
+              </View>
+              <View
+                  style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
+              >
+                <View style={{alignItems: "flex-end", marginEnd: hp("2%")}}>
+                  {this.state.selectedRoleData.selRolId == 1 ||
+                  this.state.selectedRoleData.selRolId == 2 ? (
+                      <Button
+                          rounded
+                          warning
+                          style={{height: hp("5.5%"), width: wp("19%")}}
+                          onPress={() => {
+                            this.changeRole();
+                          }}
+                      >
+                        <Text style={{color: "white", paddingStart: hp(" 0.9%")}}>
+                          {" "}
+                          Update
+                        </Text>
+                      </Button>
+                  ) : (
+                      <Button rounded style={styles.viewDetails4}>
+                        <Text style={{color: "white", paddingStart: hp("0.9%")}}>
+                          {" "}
+                          Update
+                        </Text>
+                      </Button>
+                  )}
+                </View>
+              </View>
+            </View>
+            <View style={styles.viewDetails}>
+              <View style={{flex: 1}}>
+                {/* {this.state.loading ? <Text> Loding </Text> :  */}
+                <FlatList
+                    data={this.state.residentData}
+                    keyExtractor={(item, index) => index.toString()}
+                    extraData={this.state}
+                    renderItem={({item, index}) => (
+                        <Card style={{height: hp("14%")}}>
+                          <View style={{height: 1, backgroundColor: "lightgray"}}/>
+                          <View style={{flexDirection: "row", flex: 1}}>
+                            <View style={{flex: 1}}>
+                              <View Style={{flexDirection: "column"}}>
+                                <Text style={styles.textDetails}>{`Name: ${
+                                    item.name
+                                    }`}</Text>
+                                <Text style={styles.textDetails}>{`Unit: ${
+                                    item.unit
+                                    }`}</Text>
+                                <Text style={styles.textDetails}>{`Role: ${
+                                    item.role
+                                    }`}</Text>
+                              </View>
+                            </View>
+
+                            <View style={{flex: 0.5, marginRight: hp("3%")}}>
+                              {item.role === "Owner" ? (
+                                  this.selectRole(item, index)
+                              ) : (
+                                  <Text> </Text>
+                              )}
+                              {this.renderAdminStatus(item)}
+                              {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
+                            </View>
+                          </View>
+                          <View style={{height: 1, backgroundColor: "lightgray"}}/>
+                        </Card>
+                    )}
+                />
+                {/* } */}
               </View>
             </View>
           </View>
-          <View style={styles.viewDetails}>
-            <View style={{ flex: 1 }}>
-              {/* {this.state.loading ? <Text> Loding </Text> :  */}
-              <FlatList
-                data={residentList}
-                keyExtractor={(item, index) => item.unit + index}
-                // extraData={this.state.residentList}
-                renderItem={({ item, index }) => (
-                  <Card style={{ height: hp("14%") }}>
-                    <View style={{ height: 1, backgroundColor: "lightgray" }} />
-                    <View style={{ flexDirection: "row", flex: 1 }}>
-                      <View style={{ flex: 1 }}>
-                        <View Style={{ flexDirection: "column" }}>
-                          <Text style={styles.textDetails}>{`Name: ${
-                            item.name
-                          }`}</Text>
-                          <Text style={styles.textDetails}>{`Unit: ${
-                            item.unit
-                          }`}</Text>
-                          <Text style={styles.textDetails}>{`Role: ${
-                            item.role
-                          }`}</Text>
-                        </View>
-                      </View>
-
-                      <View style={{ flex: 0.5, marginRight: hp("3%") }}>
-                        {item.role == "Owner" ? (
-                          this.selectRole(item, index)
-                        ) : (
-                          <Text> </Text>
-                        )}
-                        {this.renderAdminStatus(item)}
-                        {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
-                      </View>
-                    </View>
-                    <View style={{ height: 1, backgroundColor: "lightgray" }} />
-                  </Card>
-                )}
-              />
-              {/* } */}
-            </View>
-          </View>
         </View>
-      </View>
     );
   }
 }
@@ -423,13 +407,13 @@ const mapStateToProps = state => {
     associationid: state.DashboardReducer.associationid,
     selectedAssociation: state.DashboardReducer.selectedAssociation,
     oyeURL: state.OyespaceReducer.oyeURL,
-    dashBoardReducer:state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer
   };
 };
 
 export default connect(
-  mapStateToProps,
-  { getDashUnits }
+    mapStateToProps,
+    {getDashUnits}
 )(Resident);
 
 const styles = StyleSheet.create({
@@ -439,7 +423,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: hp("2%"),
     marginBottom: hp("1%"),
-    color:'orange'
+    color: 'orange'
   },
   viewDetails: {
     flexDirection: "column",
@@ -465,7 +449,7 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"

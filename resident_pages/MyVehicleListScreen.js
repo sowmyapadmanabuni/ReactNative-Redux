@@ -26,6 +26,7 @@ class VehicleList extends Component {
       // this.deleteCell()
     }
     getVehicleList = () => {
+      console.log("props in vehicle list:",this.props);
       fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`
         , {
           method: 'GET',
@@ -429,9 +430,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    
     dashBoardReducer:state.DashboardReducer //u have to call this in file where u need ids
-
   };
 };
 

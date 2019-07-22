@@ -32,10 +32,8 @@ instance.interceptors.response.use(
 
 export default class OyeSafeApiFamily {
   static async myFamilyList(associationId, userId) {
-    console.log("MyFamilyMessage")
-    return await instance.get(
-      "GetFamilyMemberListByAssocAndUnitID/" + associationId + "/" + userId
-    )
+    console.log("MyFamilyMessage");
+    return await instance.get("GetFamilyMemberListByAssocAndUnitID/" + associationId + "/" + userId)
   }
 
   static async myFamilyAddMember(input) {

@@ -12,6 +12,7 @@
     "lodash": "^4.17.11",
     "logdecor": "^1.0.2",
     "moment": "^2.24.0",
+    "firebase": "^6.3.1",
     "native-base": "^2.12.1",
     "papaparse": "^4.6.3",
     "prop-types": "^15.7.2",
