@@ -252,7 +252,10 @@ class GetStaffReport extends React.Component {
                             <Text style={StaffStyle.staffText}
                                   numberofLines={1} ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
                         </View>
+                        {this.props.staffReducer.staffDesignation?
+
                         <Text style={StaffStyle.desigText}> ({this.props.staffReducer.staffDesignation})</Text>
+                            :<View/>}
                     </View>
                     <View style={StaffStyle.detailsRightView}>
                         {this.state.tableData.length !==0 ?

@@ -22,7 +22,7 @@ class Staff extends React.Component {
             isLoading: false,
             staffList: [],
             staffName: "",
-            departmentName: "",
+            departmentName:"",
             staffPic: "",
             staffMobileNum: "",
             staffId: '',
@@ -108,7 +108,9 @@ class Staff extends React.Component {
                             <Text style={StaffStyle.staffText}
                                   numberofLines={1} ellipsizeMode={'tail'}>{this.state.staffName} </Text>
                         </View>
+                        {this.state.departmentName?
                         <Text style={StaffStyle.desigText}> ({this.state.departmentName})</Text>
+                            :<View/>}
 
                     </View>
                     <View style={StaffStyle.detailsRightView}>

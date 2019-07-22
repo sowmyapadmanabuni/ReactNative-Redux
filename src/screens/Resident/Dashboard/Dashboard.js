@@ -1058,8 +1058,7 @@ class Dashboard extends React.Component {
             </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={() => {
-                                this.props.navigation.navigate("schedulePatrolling")
-                                //Linking.openURL("mailto:happy@oyespace.com");
+                                Linking.openURL("mailto:happy@oyespace.com");
                             }}
                         >
                             <Image
@@ -1169,6 +1168,9 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={2}
                         marginTop={20}
+                        iconWidth={20}
+                        iconHeight={20}
+                        iconBorderRadius={0}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() => this.goToFirstTab()}
                     />
