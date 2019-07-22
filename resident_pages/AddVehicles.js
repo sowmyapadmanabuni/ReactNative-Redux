@@ -250,7 +250,6 @@ class AddVehicle extends Component {
                             <RadioButton value={"Two Wheeler"}>
                                 <Text>Two Wheeler</Text>
                             </RadioButton>
-
                             <RadioButton value={"Four Wheeler"}>
                                 <Text>Four Wheeler</Text>
                             </RadioButton>

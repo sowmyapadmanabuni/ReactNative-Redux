@@ -127,56 +127,56 @@ class MyProfile extends Component {
 
                     <View style={styles.editButtonViewStyle}>
                       <TouchableOpacity
-                          // onPress={() => {
-                          //   navigate("EditProfileScreen", {
-                          //     profileDataSourceFirstName: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acfName
-                          //       : "",
-                          //     profileDataSourceLastName: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].aclName
-                          //       : "",
-                          //     profileDataSourceIsdCode: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acisdCode.substring(
-                          //           0,
-                          //           this.state.datasource.data.account[0].acisdCode
-                          //             .length - 2
-                          //         )
-                          //       : "",
-                          //     profileDataSourceIsdCode1: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acisdCode1.substring(
-                          //           0,
-                          //           this.state.datasource.data.account[0].acisdCode1
-                          //             .length - 2
-                          //         )
-                          //       : "",
-                          //     profileDataSourceCca2: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acisdCode
-                          //           .toString()
-                          //           .slice(-2)
-                          //       : "",
-                          //     profileDataSourceCca3: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acisdCode1
-                          //           .toString()
-                          //           .slice(-2)
-                          //       : "",
-                          //     profileDataSourceMobileNumber: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acMobile
-                          //       : "",
-                          //     profileDataSourceAlternateMobileNum: this.state
-                          //       .datasource
-                          //       ? this.state.datasource.data.account[0].acMobile1
-                          //       : "",
-                          //     profileDataSourceEmail: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acEmail
-                          //       : "",
-                          //     profileDataSourceAlternateEmail: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acEmail1
-                          //       : "",
-                          //     profileDataSourceImageName: this.state.datasource
-                          //       ? this.state.datasource.data.account[0].acImgName
-                          //       : ""
-                          //   })
-                          // }}
+                          onPress={() => {
+                            navigate("EditProfileScreen", {
+                              profileDataSourceFirstName: this.state.datasource
+                                ? this.state.datasource.data.account[0].acfName
+                                : "",
+                              profileDataSourceLastName: this.state.datasource
+                                ? this.state.datasource.data.account[0].aclName
+                                : "",
+                              profileDataSourceIsdCode: this.state.datasource
+                                ? this.state.datasource.data.account[0].acisdCode.substring(
+                                    0,
+                                    this.state.datasource.data.account[0].acisdCode
+                                      .length - 2
+                                  )
+                                : "",
+                              profileDataSourceIsdCode1: this.state.datasource
+                                ? this.state.datasource.data.account[0].acisdCode1.substring(
+                                    0,
+                                    this.state.datasource.data.account[0].acisdCode1
+                                      .length - 2
+                                  )
+                                : "",
+                              profileDataSourceCca2: this.state.datasource
+                                ? this.state.datasource.data.account[0].acisdCode
+                                    .toString()
+                                    .slice(-2)
+                                : "",
+                              profileDataSourceCca3: this.state.datasource
+                                ? this.state.datasource.data.account[0].acisdCode1
+                                    .toString()
+                                    .slice(-2)
+                                : "",
+                              profileDataSourceMobileNumber: this.state.datasource
+                                ? this.state.datasource.data.account[0].acMobile
+                                : "",
+                              profileDataSourceAlternateMobileNum: this.state
+                                .datasource
+                                ? this.state.datasource.data.account[0].acMobile1
+                                : "",
+                              profileDataSourceEmail: this.state.datasource
+                                ? this.state.datasource.data.account[0].acEmail
+                                : "",
+                              profileDataSourceAlternateEmail: this.state.datasource
+                                ? this.state.datasource.data.account[0].acEmail1
+                                : "",
+                              profileDataSourceImageName: this.state.datasource
+                                ? this.state.datasource.data.account[0].acImgName
+                                : ""
+                            })
+                          }}
                       >
                         <Image
                             style={styles.editButtonImageStyle}
@@ -232,7 +232,7 @@ class MyProfile extends Component {
                           this.state.datasource.data.account[0].acisdCode.substring(
                               0,
                               this.state.datasource.data.account[0].acisdCode
-                                  .length - 2
+                                  .length 
                           ) +
                           " " +
                           this.state.datasource.data.account[0].acMobile

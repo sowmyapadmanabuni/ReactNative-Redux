@@ -29,7 +29,9 @@ class BlockDetail extends React.Component {
       dataSource: [],
 
       loading: false,
-      error: null
+      error: null,
+
+      blockCount: ""
     }
     this.arrayholder = []
   }
@@ -41,13 +43,41 @@ class BlockDetail extends React.Component {
         isLoading: false
       });
     }, 3000);
+    this.blockDetailsLimitation();
   }
+  blockDetailsLimitation = () => {
+    //http://apiuat.oyespace.com/oyeliving/api/v1/association/getAssociationList/8
+    let assid = this.props.navigation.state.params.associd
+    fetch(
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/association/getAssociationList/${assid}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson, "ppppp");
+        this.setState({
+          blockCount: responseJson.data.association.asNofBlks
+        });
+      })
+      .catch(error => {
+        this.setState({ error, loading: false });
+        console.log(error, "hhhh");
+      });
+  };
 
   myBlockDetailListGetData = () => {
     // console.log("________")
     this.setState({ loading: true })
-
-    fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Block/GetBlockListByAssocID/${this.props.SelectedAssociationID}`, {
+    let assid = this.props.navigation.state.params.associd
+    fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Block/GetBlockListByAssocID/${assid}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +106,7 @@ class BlockDetail extends React.Component {
   }
 
   renderItem = ({ item }) => {
-
+    let associationId = this.props.navigation.state.params.associd
     return (
       <View style={styles.tableView}>
         <View style={styles.cellView}>
@@ -105,7 +135,7 @@ class BlockDetail extends React.Component {
               </View>
               {/* <View style={styles.emptyViewStyle} /> */}
               <View style={styles.editButtonViewStyle}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     
                     this.props.navigation.navigate("EditBlockScreen", {
@@ -132,12 +162,14 @@ class BlockDetail extends React.Component {
                     style={styles.pencilBtnStyle}
                     source={require("../icons/pencil120.png")}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <View style={{ marginLeft: hp("1%") }}>
                   <Button bordered dark style={styles.addUnitButton}
                     onPress={() => this.props.navigation.navigate("BlockWiseUnitListScreen",{
-                      unitid: item.blBlockID,
-                      blockName: item.blBlkName
+                      blockid: item.blBlockID,
+                      blockName: item.blBlkName,
+                      associationId:associationId,
+                      noOfUnits: item.blNofUnit
                     })}
                   >
                     <Text style={styles.addUnitText}>Add Unit</Text>
@@ -154,6 +186,8 @@ class BlockDetail extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation
+    console.log("The Association id: ---- ", this.props.navigation.state.params.associd)
+    let associationId = this.props.navigation.state.params.associd
     if (this.state.isLoading) {
       return (
         <View style={{ flex: 1, flexDirection: "column" }}>
@@ -276,10 +310,13 @@ class BlockDetail extends React.Component {
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.blBlockID.toString()}
           />
-
+          {this.state.dataSource.length === this.state.blockCount ? 
+            <View /> : 
           <TouchableOpacity
             style={[styles.floatButton]}
-            onPress={() => this.props.navigation.navigate("CreateBlockScreen")}
+            onPress={() => this.props.navigation.navigate("CreateBlockScreen",{
+              associationId: associationId
+            })}
           >
             <View
               style={{
@@ -297,6 +334,7 @@ class BlockDetail extends React.Component {
               </Text>
             </View>
           </TouchableOpacity>
+          }
         </View>
       </View>
     )

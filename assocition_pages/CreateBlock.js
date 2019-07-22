@@ -139,7 +139,10 @@ class AddBlock extends Component {
       dobDate4: "",
 
       checked: true,
-      checked2: true
+      checked2: true,
+
+
+      associationId:null
     }
   }
 
@@ -352,6 +355,12 @@ class AddBlock extends Component {
     checked2 = this.state.checked2
 
     console.log(invoiceCreationFreq)
+    console.log("All Data sending",this.props.navigation.state.params.associationId,
+    this.props.MyAccountID,blockName,blockType,noOfUnits,managerName,mobNum,emailID,checked, checked2,
+    invoiceCreationFreq,maintenaceValue,flatRateValue,measurementType,dobText,latePayChargeType,
+    latePayCharge,dobText4,dobText2
+
+    )
     fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Block/create`, {
       method: "POST",
       headers: {
@@ -359,7 +368,7 @@ class AddBlock extends Component {
         "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
       },
       body: JSON.stringify({
-        ASAssnID: this.props.SelectedAssociationID,
+        ASAssnID: this.props.navigation.state.params.associationId,
         ACAccntID: this.props.MyAccountID,
         blocks: [
           {
@@ -385,13 +394,14 @@ class AddBlock extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(
-          "###############",
-          responseJson.BLBlkName,
-          responseJson.ASUniMsmt,
-          responseJson.ASMtDimBs,
-          responseJson.ASICrFreq
-        )
+        // console.log(
+        //   "###############",
+        //   responseJson.BLBlkName,
+        //   responseJson.ASUniMsmt,
+        //   responseJson.ASMtDimBs,
+        //   responseJson.ASICrFreq
+        // )
+        console.log("Block Created", responseJson)
         //alert("Data Created")
         this.props.navigation.goBack()
       })
@@ -404,6 +414,8 @@ class AddBlock extends Component {
 
   componentDidMount = () => {
     this.measurementType()
+    
+    console.log("The Association Id ----> ", this.state.associationId)
   }
   measurementType = () => {
     fetch(
@@ -433,6 +445,7 @@ class AddBlock extends Component {
   }
 
   render() {
+    console.log("The Association Id: ----> ", this.props.navigation.state.params.associationId)
     return (
       <View style={{ flex: 1 }}>
         {/* <Header /> */}

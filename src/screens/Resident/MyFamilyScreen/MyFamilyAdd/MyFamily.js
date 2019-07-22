@@ -1,28 +1,43 @@
-import React, {Component} from "react"
+import React, { Component } from "react"
 import {
-    Alert,
-    Image,
-    Keyboard,
-    SafeAreaView,
-    ScrollView,
+    AppRegistry,
+    View,
+    ImageBackground,
+    StyleSheet,
     Text,
+    Image,
+    TouchableHighlight,
+    KeyboardAvoidingView,
     TouchableOpacity,
+    PixelRatio,
+    ScrollView,
     TouchableWithoutFeedback,
-    View
+    Keyboard,
+    Alert,
+    Dimensions,
+    SafeAreaView,
+    Platform
 } from "react-native"
 
-import {Button, Form, Input, Item, Label} from "native-base"
+import { Card, Form, Item, Input, Label, Button, CardItem } from "native-base"
 import ImagePicker from "react-native-image-picker"
-import {Dropdown} from "react-native-material-dropdown"
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import { Dropdown } from "react-native-material-dropdown"
+import axios from "axios"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { NavigationEvents } from "react-navigation"
 import Style from "./Style"
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
-import CountryPicker from "react-native-country-picker-modal"
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from "react-native-responsive-screen"
+import CountryPicker, {
+    getAllCountries
+} from "react-native-country-picker-modal"
 import RNFetchBlob from "rn-fetch-blob"
 import base from "../../../../base"
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
-import {RadioButton, RadioGroup} from "react-native-flexi-radio-button"
+import { RadioGroup, RadioButton } from "react-native-flexi-radio-button"
 // import simpleContacts from "react-native-simple-contacts"
 
 //import Contacts from "react-native-contacts"
@@ -79,29 +94,29 @@ class MyFamily extends Component {
     }
 
     FName = family_name => {
-        this.setState({Family_Name: family_name})
+        this.setState({ Family_Name: family_name })
     }
 
     FMobileNum = mobile_no => {
-        this.setState({Mobile_No: mobile_no})
+        this.setState({ Mobile_No: mobile_no })
     }
 
     FRelations = relation => {
-        this.setState({Relation: relation})
+        this.setState({ Relation: relation })
     }
 
     FAge = age => {
-        this.setState({Age: age})
+        this.setState({ Age: age })
     }
 
     FImage = image => {
-        this.setState({Image: image})
+        this.setState({ Image: image })
     }
     FCallingCode = callingcode => {
-        this.setState({callingCode: callingcode})
+        this.setState({ callingCode: callingcode })
     }
     FCca2 = cca2 => {
-        this.setState({cca2: cca2})
+        this.setState({ cca2: cca2 })
     }
 
     myFamilySendData = () => {
@@ -124,7 +139,7 @@ class MyFamily extends Component {
         if (fname.length == 0) {
             Alert.alert("Name should not be empty")
         } else if (OyeFullName.test(fname) === false) {
-            alert("Enter valid Name")
+            alert("Enter valid First Name")
             return false
         } else if (fname.length < 3) {
             Alert.alert("Name should be more than 3 letters")
@@ -153,7 +168,6 @@ class MyFamily extends Component {
             return
         }
     }
-
     //this.arrayholder = responseJson.data.familyMembers.fmMobile
 
     async myFamilyPostData() {
@@ -207,19 +221,18 @@ class MyFamily extends Component {
                         console.log("RNFetchBlob err = ", err)
                     })
             }
-        } catch {
-        }
+        } catch {}
     }
 
     async mobileNumber() {
-        let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(8, 2);
+        let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(4, 2)
         try {
             if (myFamilyList && myFamilyList.data) {
                 let Mobile_No = "+" + this.state.callingCode + this.state.Mobile_No
                 var count = Object.keys(responseJson.data.familyMembers).length
                 for (var i = 0; i < count; i++) {
                     if (Mobile_No === responseJson.data.familyMembers[i].fmMobile) {
-                        alert("Mobile Number already used");
+                        alert("Mobile Number already used")
                         return
                     }
                 }
@@ -236,13 +249,12 @@ class MyFamily extends Component {
             maxWidth: 250,
             maxHeight: 250,
             storageOptions: {
-                skipBackup: true,
-                path: 'myexternalimages',
+                skipBackup: true
             }
         }
         //showImagePicker
-        ImagePicker.showImagePicker(options, response => {
-            console.log("Response = ", response);
+        ImagePicker.launchImageLibrary(options, response => {
+            // console.log("Response = ", response);
 
             if (response.didCancel) {
                 console.log("User cancelled photo picker")
@@ -253,11 +265,11 @@ class MyFamily extends Component {
             } else {
                 // You can also display the image using data:
                 // let source = { uri: "data:image/jpeg;base64," + response.data };
-                let source = {uri: response.uri}
+                let source = { uri: response.uri }
 
                 // CameraRoll.saveToCameraRoll(data.uri)
 
-                this.setState({photo: response, photoDetails: response});
+                this.setState({ photo: response, photoDetails: response })
                 console.log(this.state.photoDetails)
                 //this.setState({ photo: response })
             }
@@ -306,26 +318,26 @@ class MyFamily extends Component {
     // }
     onSelect(index, value) {
         if (value === "Yes") {
-            this.setState({minor: true})
+            this.setState({ minor: true })
         } else {
-            this.setState({minor: false})
+            this.setState({ minor: false })
         }
     }
 
     render() {
-        const {navigate} = this.props.navigation
-        const {photo} = this.state
-        console.log("photo_____111",this.props);
+        const { navigate } = this.props.navigation
+        const { photo } = this.state
+        console.log("photo_____111")
         return (
             <TouchableWithoutFeedback
                 onPress={() => {
                     Keyboard.dismiss()
                 }}
             >
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                     {/* <Header /> */}
-                    <SafeAreaView style={{backgroundColor: "orange"}}>
-                        <View style={[Style.viewStyle, {flexDirection: "row"}]}>
+                    <SafeAreaView style={{ backgroundColor: "orange" }}>
+                        <View style={[Style.viewStyle, { flexDirection: "row" }]}>
                             <View
                                 style={{
                                     flex: 1,
@@ -342,7 +354,7 @@ class MyFamily extends Component {
                                 >
                                     <Image
                                         source={require("../../../../../icons/backBtn.png")}
-                                        style={{width: 20, height: 20}}
+                                        style={{ width: 20, height: 20 }}
                                     />
                                 </TouchableOpacity>
                             </View>
@@ -359,9 +371,9 @@ class MyFamily extends Component {
                                     source={require("../../../../../icons/headerLogo.png")}
                                 />
                             </View>
-                            <View style={Style.emptyViewStyle}/>
+                            <View style={Style.emptyViewStyle} />
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                        <View style={{ borderWidth: 1, borderColor: "orange" }} />
                     </SafeAreaView>
                     <KeyboardAwareScrollView>
                         <View style={Style.contaianer}>
@@ -383,7 +395,7 @@ class MyFamily extends Component {
                                                 ) : (
                                                     <Image
                                                         style={Style.ImageContainer}
-                                                        source={{uri: photo.uri}}
+                                                        source={{ uri: photo.uri }}
                                                     />
                                                 )}
                                             </View>
@@ -421,7 +433,7 @@ class MyFamily extends Component {
                                                 //label="Select Account Type"
                                                 placeholder="Relationship *"
                                                 labelHeight={hp("4%")}
-                                                style={{fontSize: hp("2.2%")}}
+                                                style={{ fontSize: hp("2.2%") }}
                                                 //value={data.vlaue}
 
                                                 textColor="#3A3A3C"
@@ -436,7 +448,7 @@ class MyFamily extends Component {
                       First Name
                     </Text> */}
                                         <Item style={Style.inputItem} stackedLabel>
-                                            <Label style={{marginRight: hp("0.6%")}}>
+                                            <Label style={{ marginRight: hp("0.6%") }}>
                                                 First Name
                                                 <Text
                                                     style={{
@@ -454,7 +466,7 @@ class MyFamily extends Component {
                                                 multiline={false}
                                                 autoCorrect={false}
                                                 autoCapitalize="words"
-                                                keyboardType="default"
+                                                keyboardType='ascii-capable'
                                                 maxLength={50}
                                                 textAlign={"justify"}
                                                 value={this.state.FName}
@@ -463,7 +475,7 @@ class MyFamily extends Component {
                                         </Item>
 
                                         <Item style={Style.inputItem} stackedLabel>
-                                            <Label style={{marginRight: hp("0.6%")}}>
+                                            <Label style={{ marginRight: hp("0.6%") }}>
                                                 Last Name
                                                 <Text
                                                     style={{
@@ -481,7 +493,7 @@ class MyFamily extends Component {
                                                 multiline={false}
                                                 autoCorrect={false}
                                                 autoCapitalize="words"
-                                                keyboardType="default"
+                                                keyboardType='ascii-capable'
                                                 maxLength={50}
                                                 textAlign={"justify"}
                                                 value={this.state.FName}
@@ -508,7 +520,7 @@ class MyFamily extends Component {
                                                 Minor
                                             </Text>
                                             <RadioGroup
-                                                style={{flexDirection: "row"}}
+                                                style={{ flexDirection: "row" }}
                                                 onSelect={(index, value) => this.onSelect(index, value)}
                                             >
                                                 <RadioButton value={"Yes"}>
@@ -523,8 +535,8 @@ class MyFamily extends Component {
 
                                         {this.state.minor == true ? (
                                             <Item style={Style.inputItemMobile} stackedLabel>
-                                                <Label style={{marginRight: hp("0.6%")}}>
-                                                    Gardien's Name
+                                                <Label style={{ marginRight: hp("0.6%") }}>
+                                                    Guardian's Name
                                                     <Text
                                                         style={{
                                                             fontSize: hp("2.2%"),
@@ -537,11 +549,11 @@ class MyFamily extends Component {
                                                 </Label>
                                                 <Input
                                                     marginBottom={hp("-1%")}
-                                                    placeholder="Enter Gardien's Name"
+                                                    placeholder="Enter guardian's Name"
                                                     multiline={false}
                                                     autoCorrect={false}
                                                     autoCapitalize="words"
-                                                    keyboardType="default"
+                                                    keyboardType='ascii-capable'
                                                     maxLength={50}
                                                     textAlign={"justify"}
                                                     value={this.state.FName}
@@ -549,7 +561,7 @@ class MyFamily extends Component {
                                                 />
                                             </Item>
                                         ) : (
-                                            <Text/>
+                                            <Text />
                                         )}
                                         {/* <RadioForm
                       radio_props={radio_props}
@@ -563,7 +575,6 @@ class MyFamily extends Component {
                         this.setState({ value: value })
                       }}
                     /> */}
-
                                         <View style={Style.number}>
                                             <View
                                                 style={{
@@ -584,7 +595,6 @@ class MyFamily extends Component {
                                                     translation="eng"
                                                 />
                                             </View>
-
                                             <View
                                                 style={{
                                                     flex: 0.15,
@@ -594,11 +604,10 @@ class MyFamily extends Component {
                                                     marginBottom: hp("-0.8%")
                                                 }}
                                             >
-                                                <Text style={{color: "black", fontSize: hp("2%")}}>
+                                                <Text style={{ color: "black", fontSize: hp("2%") }}>
                                                     +{this.state.callingCode}
                                                 </Text>
                                             </View>
-
                                             <Item style={Style.inputItem1} stackedLabel>
                                                 {/* <Label style={{ marginRight: hp("0.6%") }}>
                           {" "}
@@ -618,19 +627,18 @@ class MyFamily extends Component {
                             this.onPressPhoneBook()
                           }}
                         > */}
-                                                <Image
-                                                    source={require("../../../../../icons/phone-book.png")}
-                                                    style={{
-                                                        width: 20,
-                                                        height: 20,
-                                                        marginTop: hp("-0.5%")
-                                                    }}
-                                                />
+                                                {/* <Image
+                            source={require("../../../../../icons/phone-book.png")}
+                            style={{
+                              width: 20,
+                              height: 20,
+                              marginTophp: hp("-0.5%")
+                            }}
+                          /> */}
                                                 {/* </TouchableOpacity> */}
                                             </Item>
                                         </View>
                                     </Form>
-
                                     <View style={Style.viewForPaddingAboveAndBelowButtons}>
                                         <Button
                                             bordered
@@ -660,15 +668,12 @@ class MyFamily extends Component {
         )
     }
 }
-
 const mapStateToProps = state => {
     return {
         associationid: state.DashboardReducer.associationid,
         selectedAssociation: state.DashboardReducer.selectedAssociation,
         oyeURL: state.OyespaceReducer.oyeURL,
-        dashBoardReducer: state.DashboardReducer,
-        userReducer: state.UserReducer
+        dashBoardReducer:state.DashboardReducer
     };
 };
-
 export default connect(mapStateToProps)(MyFamily);
