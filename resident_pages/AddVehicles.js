@@ -255,49 +255,52 @@ class AddVehicle extends Component {
                             </RadioButton>
                         </RadioGroup>
                     </View>
-                    {/* <Text style={styles.text}>{this.state.text}</Text> */}
                     <KeyboardAwareScrollView>
                         <Form>
-                            <Item style={styles.inputItem} floatingLabel>
-                                <Label>Vehicle Name</Label>
+                            <Item style={styles.inputItem} >
+                                {/* <Label>Vehicle Name</Label> */}
                                 <Input
                                     // underlineColorAndroid="orange"
                                     autoCorrect={false}
                                     autoCapitalize="characters"
                                     keyboardType="default"
+                                    placeholder="Vehicle Name"
                                     onChangeText={vehName => this.setState({vehName: vehName})}
                                 />
                             </Item>
-                            <Item style={styles.inputItem} floatingLabel>
-                                <Label>Vehicle Number</Label>
+                            <Item style={styles.inputItem} >
+                                {/* <Label>Vehicle Number</Label> */}
                                 <Input
                                     // underlineColorAndroid="orange"
                                     autoCorrect={false}
                                     autoCapitalize="characters"
                                     keyboardType="default"
+                                    placeholder="Vehicle Number"
                                     onChangeText={vehNum => this.setState({vehNum: vehNum})}
                                 />
                             </Item>
-                            <Item style={styles.inputItem} floatingLabel>
-                                <Label>Vehicle Sticker Number</Label>
+                            <Item style={styles.inputItem} >
+                                {/* <Label>Vehicle Sticker Number</Label> */}
                                 <Input
                                     // underlineColorAndroid="orange"
                                     autoCorrect={false}
                                     autoCapitalize="characters"
                                     maxLength={10}
                                     keyboardType='default'
+                                    placeholder="Vehicle Sticker Number"
                                     onChangeText={vehStickerNum =>
                                         this.setState({vehStickerNum: vehStickerNum})
                                     }
                                 />
                             </Item>
-                            <Item style={styles.inputItem} floatingLabel>
-                                <Label>Parking Slot Number</Label>
+                            <Item style={styles.inputItem} >
+                                {/* <Label>Parking Slot Number</Label> */}
                                 <Input
                                     // underlineColorAndroid="orange"
                                     autoCorrect={false}
                                     autoCapitalize="characters"
                                     keyboardType='default'
+                                    placeholder="Parking Slot Number"
                                     onChangeText={parkingSlotNum =>
                                         this.setState({parkingSlotNum: parkingSlotNum})
                                     }
