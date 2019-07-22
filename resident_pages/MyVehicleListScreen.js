@@ -27,7 +27,7 @@ class VehicleList extends Component {
     }
     getVehicleList = () => {
       console.log("props in vehicle list:",this.props);
-      fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`
+      fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`
         , {
           method: 'GET',
           headers: {
@@ -40,7 +40,7 @@ class VehicleList extends Component {
             console.log("Manas",responseJson)
             this.setState({
               isLoading: false,
-              dataSource: responseJson.data.vehicleListByMemID,
+              dataSource: responseJson.data.vehicleListByUnitID,
             })
           })
           .catch(error=>{
@@ -379,7 +379,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    alignItems:'center',
     width: hp('8%'),
     position: "absolute",
     bottom: 20,
