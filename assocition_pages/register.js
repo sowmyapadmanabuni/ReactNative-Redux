@@ -176,7 +176,7 @@ class RegisterMe extends Component {
                   let ntDesc =
                     sbName +
                     " " +
-                    "requested to join" +
+                    "requested to join " +
                     unitName +
                     " " +
                     "unit in " +
@@ -196,7 +196,7 @@ class RegisterMe extends Component {
                   // console.log("associationID", associationID);
                   // console.log("ntType", ntType);
                   // console.log("ntTitle", ntTitle);
-                  // console.log("ntDesc", ntDesc);
+                  console.log("ntDesc", ntDesc);
 
                   firebase.messaging().subscribeToTopic(sbSubID);
                   // alert(sbSubID)
@@ -236,87 +236,93 @@ class RegisterMe extends Component {
                         occupancyDate,
                         soldDate
                       );
-                      this.props.navigation.navigate("SplashScreen");
+
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
                         unitList.unUnitID
-                      ).then(succ => {
-                        console.log("succ", succ)
-                      }).catch(error => {
-                        console.log(error)
-                      });
-
-                      fetch(
-                        `http://${
-                          this.props.oyeURL
-                        }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
-                          this.props.MyAccountID
-                        }`,
-                        {
-                          method: "GET",
-                          headers: headers_2
-                        }
-                      )
-                        .then(response => response.json())
-                        .then(responseJson => {
-                          console.log(
-                            "2312#!@$@#%$#24235346$^#$^#",
-                            this.state.unitofperson
-                          );
-
-                          let count = Object.keys(
-                            responseJson.data.memberListByAccount
-                          ).length;
-                          for (let i = 0; i < count; i++) {
-                            if (
-                              responseJson.data.memberListByAccount[i]
-                                .unUnitID ===
-                              this.props.navigation.state.params.unitList
-                                .unUnitID
-                            ) {
-                              this.setState({ unitofperson: true });
-                            }
-                          }
-                          console.log("@$!@$!@$2$41242$@$@#$@#4", count);
-                        })
-                        .catch(error => {
-                          console.log("second error", error);
-                        });
-                      console.log(
-                        "2312#!@$@#%$#24235346$^#$^#",
-                        this.state.unitofperson
                       );
-                      {
-                        this.state.unitofperson === true
-                          ? Alert.alert(
-                              "Oyespace",
-                              "Request Send to Admin Successfully",
-                              [
-                                {
-                                  text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "ResDashBoard"
-                                    )
-                                }
-                              ],
-                              { cancelable: false }
-                            )
-                          : Alert.alert(
-                              "Oyespace",
-                              "Request Send to Admin Successfully",
-                              [
-                                {
-                                  text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "CreateOrJoinScreen"
-                                    )
-                                }
-                              ],
-                              { cancelable: false }
-                            );
-                      }
+
+                      // this.props.navigation.navigate("SplashScreen");
+                      Alert.alert(
+                        "Oyespace",
+                        "Request Send to Admin Successfully",
+                        [
+                          {
+                            text: "Ok",
+                            onPress: () =>
+                              this.props.navigation.navigate("ResDashBoard")
+                          }
+                        ],
+                        { cancelable: false }
+                      );
+
+                      // fetch(
+                      //   `http://${
+                      //     this.props.oyeURL
+                      //   }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
+                      //     this.props.MyAccountID
+                      //   }`,
+                      //   {
+                      //     method: "GET",
+                      //     headers: headers_2
+                      //   }
+                      // )
+                      //   .then(response => response.json())
+                      //   .then(responseJson => {
+                      //     console.log(
+                      //       "2312#!@$@#%$#24235346$^#$^#",
+                      //       this.state.unitofperson
+                      //     );
+
+                      //     let count = Object.keys(
+                      //       responseJson.data.memberListByAccount
+                      //     ).length;
+                      //     for (let i = 0; i < count; i++) {
+                      //       if (
+                      //         responseJson.data.memberListByAccount[i]
+                      //           .unUnitID ===
+                      //         this.props.navigation.state.params.unitList
+                      //           .unUnitID
+                      //       ) {
+                      //         this.setState({ unitofperson: true });
+                      //       }
+                      //     }
+                      //     console.log("@$!@$!@$2$41242$@$@#$@#4", count);
+                      //   })
+                      //   .catch(error => {
+                      //     console.log("second error", error);
+                      //   });
+                      // {
+                      //   this.state.unitofperson === true
+                      //     ? Alert.alert(
+                      //         "Oyespace",
+                      //         "Request Send to Admin Successfully",
+                      //         [
+                      //           {
+                      //             text: "Ok",
+                      //             onPress: () =>
+                      //               this.props.navigation.navigate(
+                      //                 "ResDashBoard"
+                      //               )
+                      //           }
+                      //         ],
+                      //         { cancelable: false }
+                      //       )
+                      //     : Alert.alert(
+                      //         "Oyespace",
+                      //         "Request Send to Admin Successfully",
+                      //         [
+                      //           {
+                      //             text: "Ok",
+                      //             onPress: () =>
+                      //               this.props.navigation.navigate(
+                      //                 "CreateOrJoinScreen"
+                      //               )
+                      //           }
+                      //         ],
+                      //         { cancelable: false }
+                      //       );
+                      // }
                     });
                 } else {
                   this.setState({ loading: false });
@@ -468,7 +474,7 @@ class RegisterMe extends Component {
                   let ntDesc =
                     sbName +
                     " " +
-                    "requested to join" +
+                    "requested to join " +
                     unitName +
                     " " +
                     "unit in " +
@@ -520,82 +526,91 @@ class RegisterMe extends Component {
                         // this.props.navigation
                       );
 
-                      this.props.navigation.navigate("SplashScreen");
+                      // this.props.navigation.navigate("SplashScreen");
                       this.props.updateJoinedAssociation(
                         this.props.joinedAssociations,
                         unitList.unUnitID
                       );
-                      fetch(
-                        `http://${
-                          this.props.oyeURL
-                        }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
-                          this.props.MyAccountID
-                        }`,
-                        {
-                          method: "GET",
-                          headers: headers_2
-                        }
-                      )
-                        .then(response => response.json())
-                        .then(responseJson => {
-                          console.log(
-                            "2312#!@$@#%$#24235346$^#$^#",
-                            this.state.unitofperson1
-                          );
 
-                          let count = Object.keys(
-                            responseJson.data.memberListByAccount
-                          ).length;
-                          for (let i = 0; i < count; i++) {
-                            if (
-                              responseJson.data.memberListByAccount[i]
-                                .unUnitID ===
-                              this.props.navigation.state.params.unitList
-                                .unUnitID
-                            ) {
-                              this.setState({ unitofperson1: true });
-                            }
+                      Alert.alert(
+                        "Oyespace",
+                        "Request Send to Admin Successfully",
+                        [
+                          {
+                            text: "Ok",
+                            onPress: () =>
+                              this.props.navigation.navigate("ResDashBoard")
                           }
-                          console.log("@$!@$!@$2$41242$@$@#$@#4", count);
-                        })
-                        .catch(error => {
-                          console.log("second error", error);
-                        });
-                      console.log(
-                        "2312#!@$@#%$#24235346$^#$^#",
-                        this.state.unitofperson1
+                        ],
+                        { cancelable: false }
                       );
-                      {
-                        this.state.unitofperson1 === true
-                          ? Alert.alert(
-                              "Oyespace",
-                              "Request Send to Admin Successfully",
-                              [
-                                {
-                                  text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "ResDashBoard"
-                                    )
-                                }
-                              ],
-                              { cancelable: false }
-                            )
-                          : Alert.alert(
-                              "Oyespace",
-                              "Request Send to Admin Successfully",
-                              [
-                                {
-                                  text: "Ok",
-                                  onPress: () =>
-                                    this.props.navigation.navigate(
-                                      "CreateOrJoinScreen"
-                                    )
-                                }
-                              ],
-                              { cancelable: false }
-                            );
-                      }
+                      // fetch(
+                      //   `http://${
+                      //     this.props.oyeURL
+                      //   }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
+                      //     this.props.MyAccountID
+                      //   }`,
+                      //   {
+                      //     method: "GET",
+                      //     headers: headers_2
+                      //   }
+                      // )
+                      //   .then(response => response.json())
+                      //   .then(responseJson => {
+                      //     console.log(
+                      //       "2312#!@$@#%$#24235346$^#$^#",
+                      //       this.state.unitofperson1
+                      //     );
+
+                      //     let count = Object.keys(
+                      //       responseJson.data.memberListByAccount
+                      //     ).length;
+                      //     for (let i = 0; i < count; i++) {
+                      //       if (
+                      //         responseJson.data.memberListByAccount[i]
+                      //           .unUnitID ===
+                      //         this.props.navigation.state.params.unitList
+                      //           .unUnitID
+                      //       ) {
+                      //         this.setState({ unitofperson1: true });
+                      //       }
+                      //     }
+                      //     console.log("@$!@$!@$2$41242$@$@#$@#4", count);
+                      //   })
+                      //   .catch(error => {
+                      //     console.log("second error", error);
+                      //   });
+                      // {
+                      //   this.state.unitofperson1 === true
+                      //     ? Alert.alert(
+                      //         "Oyespace",
+                      //         "Request Send to Admin Successfully",
+                      //         [
+                      //           {
+                      //             text: "Ok",
+                      //             onPress: () =>
+                      //               this.props.navigation.navigate(
+                      //                 "ResDashBoard"
+                      //               )
+                      //           }
+                      //         ],
+                      //         { cancelable: false }
+                      //       )
+                      //     : Alert.alert(
+                      //         "Oyespace",
+                      //         "Request Send to Admin Successfully",
+                      //         [
+                      //           {
+                      //             text: "Ok",
+                      //             onPress: () =>
+                      //               this.props.navigation.navigate(
+                      //                 "CreateOrJoinScreen"
+                      //               )
+                      //           }
+                      //         ],
+                      //         { cancelable: false }
+                      //       );
+                      // }
                     });
                 } else {
                   this.setState({ loading: false });
@@ -724,70 +739,66 @@ class RegisterMe extends Component {
         </SafeAreaView>
 
         <Text style={styles.titleOfScreen}>Register Me</Text>
-        {unitList.owner.length > 0 ? (
-          <View style={{ flexDirection: "column" }}>
-            <View style={styles.box}>
-              <Text style={{ color: "#fff", fontSize: hp("2.2%") }}>
-                Join Us
-              </Text>
-            </View>
-            <View style={styles.View}>
-              <Card style={styles.DateCard}>
-                <View
-                  style={{ justifyContent: "center", alignItems: "center" }}
-                >
-                  <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                    <View style={styles.datePickerBox}>
-                      <View style={styles.calView}>
-                        <Image
-                          style={styles.viewDatePickerImageStyle}
-                          source={require("../icons/cal.png")}
-                        />
-                      </View>
-
-                      <Text style={styles.datePickerText}>
-                        {this.state.dobText}{" "}
-                      </Text>
-                      <DatePickerDialog
-                        ref="dobDialog"
-                        onDatePicked={this.onDOBDatePicked.bind(this)}
+        {/* {unitList.owner.length > 0 ? ( */}
+        <View style={{ flexDirection: "column" }}>
+          <View style={styles.box}>
+            <Text style={{ color: "#fff", fontSize: hp("2.2%") }}>Join Us</Text>
+          </View>
+          <View style={styles.View}>
+            <Card style={styles.DateCard}>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <View style={styles.calView}>
+                      <Image
+                        style={styles.viewDatePickerImageStyle}
+                        source={require("../icons/cal.png")}
                       />
                     </View>
-                  </TouchableOpacity>
-                </View>
-              </Card>
-            </View>
 
-            <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForOwnwer()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
-                    </View>
-                  </Card>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText}{" "}
+                    </Text>
+                    <DatePickerDialog
+                      ref="dobDialog"
+                      onDatePicked={this.onDOBDatePicked.bind(this)}
+                    />
+                  </View>
                 </TouchableOpacity>
               </View>
-              <View style={styles.View}>
-                <TouchableOpacity onPress={() => this.submitForTenant()}>
-                  <Card style={styles.Card}>
-                    <View
-                      style={{ justifyContent: "center", alignItems: "center" }}
-                    >
-                      <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
-                    </View>
-                  </Card>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* <Text>{unitList.owner[0].uofName}</Text> */}
+            </Card>
           </View>
-        ) : (
+
+          <View style={{ flexDirection: "column", marginTop: hp("3%") }}>
+            <View style={styles.View}>
+              <TouchableOpacity onPress={() => this.submitForOwnwer()}>
+                <Card style={styles.Card}>
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <Text style={{ fontSize: hp("2%") }}>Join As Owner</Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.View}>
+              <TouchableOpacity onPress={() => this.submitForTenant()}>
+                <Card style={styles.Card}>
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <Text style={{ fontSize: hp("2%") }}>Join As Tenant</Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* <Text>{unitList.owner[0].uofName}</Text> */}
+        </View>
+        {/* ) : (
           <View />
-        )}
+        )} */}
       </View>
     );
   }

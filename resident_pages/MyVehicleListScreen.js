@@ -26,6 +26,7 @@ class VehicleList extends Component {
       // this.deleteCell()
     }
     getVehicleList = () => {
+      console.log("props in vehicle list:",this.props);
       fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`
         , {
           method: 'GET',
@@ -267,13 +268,14 @@ deleteCell = () => {
           onDidFocus={payload => this.getVehicleList()}
           onWillBlur={payload => this.getVehicleList()}
         />
-        <Text style={styles.titleOfScreen}>My Vehicle</Text>
+        <Text style={styles.titleOfScreen}>Vehicles</Text>
         
 
       
         {this.state.dataSource.length == 0 ?
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('2%') }}>Vehicle is not available</Text>
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Vehicle Data Available.</Text>
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Add your vehicle details.</Text>
             </View>
           :  
           <FlatList
@@ -403,14 +405,18 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: "relative"
   },
-  viewDetails1: {
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+ viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 3
   },
-
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
@@ -419,19 +425,11 @@ const styles = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
-
-  image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
-  }
 });
 
 const mapStateToProps = state => {
   return {
-    
     dashBoardReducer:state.DashboardReducer //u have to call this in file where u need ids
-
   };
 };
 

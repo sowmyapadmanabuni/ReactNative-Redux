@@ -5,7 +5,7 @@
 	<key></key>
 	<string></string>
 	<key>NSContactsUsageDescription</key>
-	<string>OyeSpace would like access your phone contacts</string>
+	<string>OyeSpace would like to access your phone contacts</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>UILaunchStoryboardName</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleVersion</key>
-	<string>35</string>
+	<string>34</string>
 	<key>NSCameraUsageDescription</key>
 	<string>OyeSpace would like to use your camera for profile image</string>
 	<key>UIBackgroundModes</key>
@@ -61,7 +61,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>9.2</string>
+	<string>9.1</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>

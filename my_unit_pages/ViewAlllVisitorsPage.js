@@ -323,7 +323,7 @@ class App extends React.Component {
       return (
         <View style={styles.container}>
           {/* <Header /> */}
-          <Text style={styles.titleOfScreen}> Visitors </Text>
+          <Text style={styles.titleOfScreen}>Visitors</Text>
 
           {/* <TextInput
             //source={require("./src/components/images/call.png")}
@@ -449,22 +449,21 @@ class App extends React.Component {
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard")
+                  this.props.navigation.goBack();
                 }}
               >
                 <View
                   style={{
                     height: hp("4%"),
                     width: wp("15%"),
-                    alignItems: "flex-start",
+                    alignItems: 'flex-start',
                     justifyContent: "center"
                   }}
                 >
                   <Image
                     resizeMode="contain"
                     source={require("../icons/back.png")}
-                    //style={Style.viewDetails2}
-                    style={{ width: 20, height: 20 }}
+                    style={styles.viewDetails2}
                   />
                 </View>
               </TouchableOpacity>
@@ -477,14 +476,18 @@ class App extends React.Component {
               }}
             >
               <Image
-                style={styles.image1}
-                source={require("../icons/headerLogo.png")}
+                style={[styles.image1]}
+                source={require("../icons/OyeSpace.png")}
               />
             </View>
-            <View style={{ flex: 1 }} />
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+        
+        
         <View style={styles.textWrapper}>
           <Text style={styles.titleOfScreen}> Visitors </Text>
           
@@ -815,28 +818,36 @@ const styles = StyleSheet.create({
     //borderColor: "#909091"
     borderColor: "#000000"
   },
-  image1: {
-    width: wp("24%"),
-    height: hp("10%")
-  },
   viewStyle1: {
     backgroundColor: "#fff",
-    height: hp("8%"),
+    height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
-    position: "relative",
-    flexDirection: "row"
+    position: "relative"
   },
-  viewDetails1: {
-    flex: 1,
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+ viewDetails1: {
+    flex: 0.3,
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
-    marginLeft: 20
-  }
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
 })
 
 const mapStateToProps = state => {

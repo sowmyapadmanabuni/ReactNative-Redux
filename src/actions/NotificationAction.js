@@ -63,10 +63,12 @@ export const getNotifications = (oyeURL, MyAccountID) => {
         const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
         let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
 
-        const sorted = _.sortBy(allNotifs, [
-          "ntdCreated",
-          "ntdUpdated"
-        ]).reverse();
+        // const sorted = _.sortBy(allNotifs, [
+        //   "ntdCreated",
+        //   "ntdUpdated"
+        // ]).reverse();
+
+        const sorted = _.sortBy(allNotifs, ["ntdUpdated"]).reverse();
 
         sorted.map(data => {
           console.log(data.ntIsActive);
@@ -81,7 +83,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
         // console.log(error);
         dispatch({
           type: GET_NOTIFICATIONS_FAILED,
-          payload: ""
+          payload: []
         });
       });
   };
@@ -503,10 +505,11 @@ export const refreshNotifications = (oyeURL, MyAccountID) => {
         const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
         let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
 
-        const sorted = _.sortBy(allNotifs, [
-          "ntdCreated",
-          "ntdUpdated"
-        ]).reverse();
+        // const sorted = _.sortBy(allNotifs, [
+        //   "ntdCreated",
+        //   "ntdUpdated"
+        // ]).reverse();
+        const sorted = _.sortBy(allNotifs, ["ntdUpdated"]).reverse();
 
         dispatch({
           type: REFRESH_NOTIFICATION_SUCCESS,

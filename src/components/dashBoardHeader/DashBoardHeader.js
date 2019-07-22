@@ -20,28 +20,70 @@ class DashBoardHeader extends React.Component {
     };
   }
 
+  // renderBadge = () => {
+  //   const { notifications } = this.props;
+
+  //   let count = 0;
+
+  //   notifications.map((data, index) => {
+  //     if (!data.read) {
+  //       count += 1;
+  //     }
+  //   });
+
+  //   const BadgedIcon = withBadge(count)(Icon);
+
+  //   return (
+  //     <Icon
+  //       color="#FF8C00"
+  //       type="material"
+  //       name="notifications"
+  //       size={hp("4%")}
+  //     />
+  //   );
+  // };
+
   renderBadge = () => {
     const { notifications } = this.props;
 
     let count = 0;
 
     notifications.map((data, index) => {
-      if (!data.read) {
+      if (data.ntIsActive) {
         count += 1;
       }
     });
 
     const BadgedIcon = withBadge(count)(Icon);
 
-    return (
-      <Icon
-        color="#FF8C00"
-        type="material"
-        name="notifications"
-        size={hp("4%")}
-      />
-    );
+    if (count >= 1) {
+      return (
+        <BadgedIcon
+          color="#FF8C00"
+          type="material"
+          name="notifications"
+          size={hp("4%")}
+        />
+      );
+    } else
+      return (
+        <Icon
+          color="#FF8C00"
+          type="material"
+          name="notifications"
+          size={hp("4%")}
+        />
+      );
+    // return (
+    //   <Icon
+    //     color="#FF8C00"
+    //     type="material"
+    //     name="notifications"
+    //     size={hp("4%")}
+    //   />
+    // );
   };
+
   componentDidMount() {
     let self = this;
     setTimeout(() => {
@@ -101,9 +143,12 @@ class DashBoardHeader extends React.Component {
                                source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
                         </Image> */}
             {this.state.ImageSource === null ? (
-              <Image style={HeaderStyles.imageStyles}
-                               source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
-                        </Image>
+              <Image
+                style={HeaderStyles.imageStyles}
+                source={{
+                  uri: "https://via.placeholder.com/150/ff8c00/FFFFFF"
+                }}
+              />
             ) : (
               <Image
                 style={HeaderStyles.imageStyles}
@@ -117,6 +162,9 @@ class DashBoardHeader extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={HeaderStyles.textContainer}>
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("MyProfileScreen")}
+          >
               <Text
                 style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
                 numberOfLines={1}
@@ -124,8 +172,8 @@ class DashBoardHeader extends React.Component {
                 {this.state.datasource
                   ? this.state.datasource.data.account[0].acfName
                   : null}
-                
               </Text>
+              </TouchableOpacity>
               <Text style={HeaderStyles.statusText} numberOfLines={1}>
                 Owner
               </Text>

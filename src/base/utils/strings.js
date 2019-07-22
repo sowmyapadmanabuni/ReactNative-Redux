@@ -10,10 +10,9 @@ const isMandatory = " is required";
 
 
 const api = {
-   // oyeSafeDomain:isDev?"apidev.oyespace.com/":"apidev.oyespace.com/", Check for patrolling it is like this
     oyeSafeApiDomainFamily: isDev
-   ? "apidev.oyespace.com/oyesafe/api/v1/"
-   : "apidev.oyespace.com/oyesafe/api/v1/",
+        ? "apidev.oyespace.com/oyesafe/api/v1/"
+        : "apidev.oyespace.com/oyesafe/api/v1/",
     oyeSafeDomain:isDev?"apidev.oyespace.com/oye247":"apidev.oyespace.com/oye247",
     oyeDomain:isDev?"apidev.oyespace.com/oyeliving":"apidev.oyespace.com/oyeliving",
     oyeLivingDomain:isDev?"apidev.oyespace.com":"OyeLivingApi.oyespace.com",

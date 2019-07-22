@@ -30,7 +30,10 @@ class CardView extends React.Component {
         marginTop: PropTypes.number,
         marginLeft: PropTypes.number,
         marginRight: PropTypes.number,
-        marginBottom: PropTypes.number
+        marginBottom: PropTypes.number,
+        iconHeight:PropTypes.any,
+        iconWidth:PropTypes.any,
+        iconBorderRadius:PropTypes.number
     }
 
     static defaultProps = {
@@ -47,7 +50,10 @@ class CardView extends React.Component {
         marginTop: null,
         marginLeft: null,
         marginRight: null,
-        marginBottom: null
+        marginBottom: null,
+        iconHeight:25,
+        iconWidth:25,
+        iconBorderRadius:0
     }
 
 
@@ -77,7 +83,8 @@ class CardView extends React.Component {
                               onPress={this.onCardClick.bind(this)}
                               disabled={this.props.disabled}>
                 <View style={CardViewStyles.subCardView}>
-                    <Image style={[CardViewStyles.imageStyles]}
+                    <Image style={[CardViewStyles.imageStyles,{height:this.props.iconHeight,width:this.props.iconWidth,
+                        borderRadius:this.props.iconBorderRadius,...this.props.style}]}
                            source={imgSrc}>
                     </Image>
                     <View style={[CardViewStyles.subView]}>

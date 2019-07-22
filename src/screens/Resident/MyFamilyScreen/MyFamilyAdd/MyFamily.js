@@ -52,6 +52,7 @@ class MyFamily extends Component {
             relationName: '',
             cCode: '',
             mobileNumber: '',
+            sendNum:'',
             isMinor: false,
             firstName: '',
             lastName: '',
@@ -60,7 +61,7 @@ class MyFamily extends Component {
             isMinorSelected: 0,
             guardianName: '',
             relativeImage: '',
-            imageUrl:''
+            imageUrl:'',
         }
     }
 
@@ -298,7 +299,11 @@ class MyFamily extends Component {
         })
         if (value === 'Child') {
             this.setState({
-                isMinor: true
+                isMinor: true,
+                firsName:'',
+                lastName:'',
+                mobileNumber:'',
+                guardianName:''
             })
         } else {
             this.setState({
@@ -330,19 +335,32 @@ class MyFamily extends Component {
                     let name = contact.name.split(" ")
                     let mobCode = contact.phone.split('')
                     let mobNum = contact.phone.replaceAll(/[ !@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?]/, '')
+                    let sendMob=contact.phone.split(" ")
 
                     if (mobCode[0] === '+') {
                         console.log('plus')
                         let mobCode2 = contact.phone.split(" ")
-                        console.log('mobCode', mobCode, mobCode2, mobCode2[0])
+                        console.log('mobCode',sendMob, mobCode, mobCode2, mobCode2[0])
+                         let arr='';
+                        for(let i=1;i<sendMob.length;i++){
+                            arr=arr+sendMob[i]
+                        }
+                        console.log('mobbbbbb',arr)
                         this.setState({
-                            cCode: mobCode2[0]
+                            cCode: mobCode2[0],
+                            sendNum:arr
+                        })
+
+                    }
+                 else{
+                        this.setState({
+                            sendNum:mobNum
                         })
                     }
-                    if (this.state.isMinorSelected === 0) {
+                    if (this.state.isMinor && this.state.isMinorSelected === 0) {
                         this.setState({
                             guardianName: name[0],
-                            mobileNumber: mobNum,
+                            mobileNumber: mobNum
                         })
                     } else {
                         this.setState({
@@ -382,7 +400,7 @@ class MyFamily extends Component {
         let self = this;
         let input = {
             "FMName"    : self.state.firstName,
-            "FMMobile"  : self.state.mobileNumber,
+            "FMMobile"  : self.state.sendNum,
             "FMISDCode" : self.state.cCode,
             "UNUnitID"  : self.props.dashBoardReducer.uniID,
             "FMRltn"    : self.state.relationName,
@@ -391,7 +409,8 @@ class MyFamily extends Component {
             "FMMinor"   :self.state.isMinor,
             "FMLName"   : self.state.lastName,
             "FMGurName" : self.state.guardianName
-        }
+        };
+        console.log('MyFam',input)
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
         console.log('Stat in Add family',stat)
         if (stat && stat.data && stat.success) {
@@ -402,8 +421,8 @@ class MyFamily extends Component {
             }
         }
     }
-}
 
+}
 const mapStateToProps = state => {
     return {
         selectedAssociation: state.DashboardReducer.selectedAssociation,
@@ -411,5 +430,4 @@ const mapStateToProps = state => {
         dashBoardReducer: state.DashboardReducer,
     };
 };
-
 export default connect(mapStateToProps)(MyFamily);

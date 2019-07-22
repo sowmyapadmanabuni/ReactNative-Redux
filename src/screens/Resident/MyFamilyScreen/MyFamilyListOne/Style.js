@@ -1,8 +1,8 @@
-import { StyleSheet, Dimensions } from "react-native"
+import { StyleSheet, Dimensions } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
 const Style = StyleSheet.create({
   progressViewStyle: {
@@ -81,37 +81,34 @@ const Style = StyleSheet.create({
     backgroundColor: "lightgray",
     height: hp("0.1%")
   },
-  floatingPlusButtonStyle: {
+  floatButton: {
     borderWidth: 1,
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center",
-    marginLeft: hp("1%"),
-    width: 55,
-    height: 55,
+    width: hp("8%"),
     position: "absolute",
     bottom: hp("2.5%"),
     right: hp("2.5%"),
+    height: hp("8%"),
     backgroundColor: "#FF8C00",
     borderRadius: 100,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 3
-    // },
+    // shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
     shadowRadius: 3,
     shadowOpacity: 0.6
   },
   plusTextStyle: {
-    flex: 1,
     fontSize: hp("5%"),
     color: "#fff",
-    fontWeight: "700",
+    fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    textAlign: "center",
-    textAlignVertical: "center"
+    marginBottom: hp("0.5%")
   },
   tableView: {
     flexDirection: "column"
@@ -215,7 +212,37 @@ const Style = StyleSheet.create({
   },
   icon: {
     color: "orange"
-  }
-})
+  },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  image1: {
+    width: wp("17%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+ viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+});
 
-export default Style
+export default Style;
