@@ -837,7 +837,7 @@ class Dashboard extends React.Component {
         for (let i = 0; i < unitList.length; i++) {
             if (i === index) {
                 unitName = unitList[i].details.asAsnName;
-                unitId = unitList[i].details.asAssnID;
+                unitId = unitList[i].details.unUnitID;
             }
         }
         self.setState({
@@ -1058,7 +1058,8 @@ class Dashboard extends React.Component {
             </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={() => {
-                                Linking.openURL("mailto:happy@oyespace.com");
+                                this.props.navigation.navigate("schedulePatrolling")
+                                //Linking.openURL("mailto:happy@oyespace.com");
                             }}
                         >
                             <Image
