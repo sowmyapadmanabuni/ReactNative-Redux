@@ -439,6 +439,9 @@ roleCheckForAdmin = () => {
                const {getDashUnits}=this.props;
                getDashUnits(assocList[0].details.asAssnID, oyeURL);
 
+               const {updateUserInfo}=this.props;
+                updateUserInfo({prop:'SelectedAssociationID' , value:assocList[0].details.asAssnID})
+
       }
       self.getUnitListByAssoc();
       
@@ -468,6 +471,8 @@ roleCheckForAdmin = () => {
     updateIdDashboard({prop:"assId", value:assocId})
     const {getDashUnits}=this.props;
     getDashUnits(assocId, oyeURL);
+    const {updateUserInfo}=this.props;
+    updateUserInfo({prop:'SelectedAssociationID' , value:assocId})
     self.getUnitListByAssoc()
   }
 
@@ -522,8 +527,8 @@ roleCheckForAdmin = () => {
     let unitName,unitId;
     for (let i = 0; i < unitList.length; i++) {
       if (i === index) {
-        unitName = unitList[i].details.asAsnName;
-        unitId = unitList[i].details.asAssnID;
+        unitName = unitList[i].details.unUniName;
+        unitId = unitList[i].details.unUnitID;
       }
     }
     self.setState({

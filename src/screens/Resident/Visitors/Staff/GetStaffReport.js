@@ -149,12 +149,13 @@ class GetStaffReport extends React.Component {
     async getTheReport(props) {
         let self = this;
         self.setState({isLoading: true})
+        console.log('Staff Report Input', this.props)
 
         let input = {
-            "ASAssnID": "2",   //props.userReducer.selectedAssociationId
-            "WKWorkID": "4",    //props.staffReducer.staffId
-            "FromDate": "2019-02-04", //props.staffReducer.startDate
-            "ToDate": "2019-02-13" //props.staffReducer.endDate
+            "ASAssnID": this.props.userReducer.selectedAssociationId,
+            "WKWorkID": this.props.staffReducer.staffId,
+            "FromDate":this.props.staffReducer.startDate,
+            "ToDate": this.props.staffReducer.endDate
         }
 
         let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
@@ -350,7 +351,7 @@ class GetStaffReport extends React.Component {
                 </Table>
                     :
                     <View style={{alignItems:'center'}}>
-                    <Text>No data for selected worker</Text>
+                    <Text>No report exist for the selected worker</Text>
                     </View>}
             </View>
         );

@@ -44,7 +44,9 @@ const strings = {
     staffPlaceHolder:'https://via.placeholder.com/150/ff8c00/FFFFFF',
     StaffImageLink:'http://mediauploaddev.oyespace.com/Images/',
     patrolId:"PATROL_ID",
-    rupeeIconCode:"\u20B9"
+    rupeeIconCode:"\u20B9",
+    mediaUploadUrl:"http://mediaupload.oyespace.com/oyeliving/api/V1",
+    oyeImageUploadKey:"1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
 };
 
 

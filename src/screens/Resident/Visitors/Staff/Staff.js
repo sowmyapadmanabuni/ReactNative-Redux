@@ -46,8 +46,12 @@ class Staff extends React.Component {
     async getListOfStaff() {
         let self = this;
         self.setState({isLoading: true})
-        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(1); //this.props.userReducer.SelectedAssociationID
+        console.log("StaffList Input",self.props.userReducer.SelectedAssociationID)
+
+        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID);// 1
         self.setState({isLoading: false})
+
+        console.log("Check Data",stat)
 
         try {
             if (stat && stat.data) {
@@ -77,8 +81,10 @@ class Staff extends React.Component {
         let staffList = this.state.staffList;
         return (
             <View style={StaffStyle.mainContainer}>
+                {this.state.staffList.length!==0?
                 <View style={StaffStyle.dropDownView}>
                     <Dropdown
+                        label="Select Staff"
                         value={this.state.staffName}
                         data={staffList}
                         textColor={base.theme.colors.black}
@@ -91,6 +97,8 @@ class Staff extends React.Component {
                         }
                     />
                 </View>
+                    :<View/>}
+                {this.state.staffList.length!==0?
                 <View style={StaffStyle.detailsMainView}>
                     <View style={StaffStyle.detailsLeftView}>
                         <Image style={StaffStyle.staffImg}
@@ -111,6 +119,11 @@ class Staff extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                    :
+                    <View style={StaffStyle.noStaffData}>
+                        <Text style={StaffStyle.noStaffDataText}> No staff is there in the Selected Association </Text>
+                    </View>}
+                {this.state.staffList.length!==0?
                 <View style={StaffStyle.datePickerMainView}>
                     <View style={StaffStyle.datePickerSubView}>
                         <DatePicker
@@ -177,7 +190,10 @@ class Staff extends React.Component {
                         />
                     </View>
                 </View>
-                <View style={StaffStyle.radioButtonView}>
+                    :<View/>}
+
+                {this.state.staffList.length!==0?
+                    <View style={StaffStyle.radioButtonView}>
                     <RadioForm formHorizontal={true} animation={true}>
                         {this.state.dayRadioProps.map((obj, i) => {
                             let onPress = (value, index) => {
@@ -249,12 +265,16 @@ class Staff extends React.Component {
                         })}
                     </RadioForm>
                 </View>
+                    :
+                    <View/>}
+                {this.state.staffList.length!==0?
                 <OSButton
                     height={'8%'}
                     width={'45%'}
                     borderRadius={20}
                     oSBText={'Get Report'}
                     onButtonClick={() => this.getStaffReport()}/>
+                    :<View/>}
             </View>
         )
     }

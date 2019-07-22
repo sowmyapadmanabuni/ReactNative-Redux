@@ -26,6 +26,7 @@
     "react-native-check-box": "^2.1.7",
     "react-native-collapsible": "^1.4.0",
     "react-native-communications": "^2.2.1",
+    "react-native-contacts-wrapper": "^0.2.4",
     "react-native-country-picker-modal": "^0.7.1",
     "react-native-custom-qr-codes": "^2.0.0",
     "react-native-datepicker": "^1.7.2",
