@@ -8,7 +8,14 @@ const INITIAL_STATE={
     staffMobileNum:"",
     staffDesignation:"",
     startDate:"",
-    endDate:""
+    endDate:"",
+    relativeFName:'',
+    relativeLName:'',
+    relativeMob:'',
+    relativeGuardian:'',
+    relativeImg:'',
+    relativeRelation:'',
+    isRelativeMinor:false,
 };
 
 export default (state = INITIAL_STATE, action) => {

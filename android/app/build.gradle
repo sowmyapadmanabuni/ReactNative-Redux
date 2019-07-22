@@ -149,6 +149,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-contacts-wrapper')
     implementation project(':react-native-restart')
     implementation project(':react-native-spinkit')
     implementation project(':react-native-version-number')

@@ -42,7 +42,6 @@ class AddFamilyMember extends Component {
           PickerValueHolder: "",
           cca2: "IN",
           callingCode: "91",
-          isLoading: false,
           FirstName: "",
           LastName: "",
           MobileNumber: "",
@@ -299,7 +298,7 @@ class AddFamilyMember extends Component {
                             this.state.imageSource :
                             require('../pages/assets/images/icons8-manager-50.png')}
                             style={{ height: 120, width: 120, margin: 10, alignSelf: 'center', borderColor:
-                                    'orange', margin: '3%', borderRadius: 60, borderWidth: 2,  }} />
+                                    'orange',  borderRadius: 60, borderWidth: 2,  }} />
 
                         <TouchableOpacity style={styles.loginScreenButton}
                             onPress={this.selectPhoto.bind(this)}   >

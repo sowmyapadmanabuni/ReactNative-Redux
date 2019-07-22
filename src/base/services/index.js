@@ -6,12 +6,14 @@ import OyeLivingApi from './OyeLivingApi';
 import OyeSafeApi from './OyeSafeApi';
 import fcmservice from './fcmservice';
 import OyeSafeApiFamily from './OyeSafeApiFamily';
+import MediaUploadApi from './MediaUploadApi'
 
 const services = {
     OyeLivingApi,
     OyeSafeApi,
     fcmservice,
-    OyeSafeApiFamily
+    OyeSafeApiFamily,
+   MediaUploadApi
 }
 
 export default services;

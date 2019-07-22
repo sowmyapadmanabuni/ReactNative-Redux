@@ -742,6 +742,8 @@ class Dashboard extends React.Component {
                     value: assocList[0].details.asAssnID
                 });
                 updateIdDashboard({ prop: "memberList", value: assocList });
+                const {  updateUserInfo } = this.props;
+                updateUserInfo({ prop: "SelectedAssociationID", value:assocList[0].details.asAssnID});
 
                 const { getDashUnits } = this.props;
                 getDashUnits(assocList[0].details.asAssnID, oyeURL);
@@ -771,6 +773,8 @@ class Dashboard extends React.Component {
         const { updateIdDashboard } = this.props;
         console.log("updateIdDashboard2", this.props);
         updateIdDashboard({ prop: "assId", value: assocId });
+        const {  updateUserInfo } = this.props;
+        updateUserInfo({ prop: "SelectedAssociationID", value:assocId});
         const { getDashUnits } = this.props;
         getDashUnits(assocId, oyeURL);
         self.getUnitListByAssoc();
@@ -1054,8 +1058,7 @@ class Dashboard extends React.Component {
             </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={() => {
-                                this.props.navigation.navigate("schedulePatrolling")
-                                //Linking.openURL("mailto:happy@oyespace.com");
+                                Linking.openURL("mailto:happy@oyespace.com");
                             }}
                         >
                             <Image
@@ -1139,6 +1142,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={5}
                         marginTop={20}
+                        iconWidth={20}
+                        iconHeight={20}
                         onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
@@ -1146,6 +1151,8 @@ class Dashboard extends React.Component {
                         height={"100%"}
                         width={"25%"}
                         cardText={"Vehicles"}
+                        iconWidth={20}
+                        iconHeight={20}
                         cardIcon={require("../../../../icons/vehicle.png")}
                         cardCount={this.state.vechiclesCount}
                         marginTop={20}
@@ -1161,6 +1168,9 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={2}
                         marginTop={20}
+                        iconWidth={20}
+                        iconHeight={20}
+                        iconBorderRadius={0}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() => this.goToFirstTab()}
                     />
@@ -1377,7 +1387,10 @@ class Dashboard extends React.Component {
         const { updateIdDashboard } = this.props;
         console.log("updateIdDashboard", this.props);
         updateIdDashboard({ prop: "assId", value: this.state.assocId });
-        updateIdDashboard({ prop: "uniID", value: this.state.unitId }); //update
+        updateIdDashboard({ prop: "uniID", value: this.state.unitId });
+        const {  updateUserInfo } = this.props;
+        updateUserInfo({ prop: "SelectedAssociationID", value: this.state.assocId });
+
 
         this.props.navigation.navigate("firstTab");
     }
@@ -1564,3 +1577,4 @@ export default connect(
         updateIdDashboard
     }
 )(Dashboard);
+

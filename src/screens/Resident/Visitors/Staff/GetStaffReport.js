@@ -149,12 +149,13 @@ class GetStaffReport extends React.Component {
     async getTheReport(props) {
         let self = this;
         self.setState({isLoading: true})
+        console.log('Staff Report Input', this.props)
 
         let input = {
-            "ASAssnID": "2",   //props.userReducer.selectedAssociationId
-            "WKWorkID": "4",    //props.staffReducer.staffId
-            "FromDate": "2019-02-04", //props.staffReducer.startDate
-            "ToDate": "2019-02-13" //props.staffReducer.endDate
+            "ASAssnID": this.props.userReducer.selectedAssociationId,
+            "WKWorkID": this.props.staffReducer.staffId,
+            "FromDate":this.props.staffReducer.startDate,
+            "ToDate": this.props.staffReducer.endDate
         }
 
         let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
@@ -168,6 +169,7 @@ class GetStaffReport extends React.Component {
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days())
         let difference=duration.as('days');
+        console.log("GetStaffData",stat)
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
@@ -224,10 +226,10 @@ class GetStaffReport extends React.Component {
                 this.changeTheData(self.state.pageNumber)
 
             } else {
-                let tableData = 'No report exist'
+                //let tableData = 'No report exist'
 
                 self.setState({
-                    tableData: tableData
+                    tableData: []
                 })
 
             }
@@ -250,15 +252,21 @@ class GetStaffReport extends React.Component {
                             <Text style={StaffStyle.staffText}
                                   numberofLines={1} ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
                         </View>
+                        {this.props.staffReducer.staffDesignation?
+
                         <Text style={StaffStyle.desigText}> ({this.props.staffReducer.staffDesignation})</Text>
+                            :<View/>}
                     </View>
                     <View style={StaffStyle.detailsRightView}>
+                        {this.state.tableData.length !==0 ?
                         <TouchableOpacity
                             onPress={() => this.state.isPermitted ? this.createPDF() : alert('Please Provide permissions to share report')}>
                             <Image style={StaffStyle.shareImg}
                                    source={require('../../../../../icons/share.png')}
                             />
                         </TouchableOpacity>
+                            :
+                            <View/>}
                     </View>
                 </View>
 
@@ -322,11 +330,11 @@ class GetStaffReport extends React.Component {
 
         return (
             <View Style={StaffReportStyle.tableMainView}>
-                <Table borderStyle={StaffReportStyle.tableView}>
-
+                {state.tableData.length !==0?
+                    <Table borderStyle={StaffReportStyle.tableView}>
                     <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
                          textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
-                    {state.tableData.map((rowData, index) => (
+                         {state.tableData.map((rowData, index) => (
                         <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
                             {
                                 rowData.map((cellData, cellIndex) => (
@@ -344,6 +352,10 @@ class GetStaffReport extends React.Component {
                     ))
                     }
                 </Table>
+                    :
+                    <View style={{alignItems:'center'}}>
+                    <Text>No report exist for the selected worker</Text>
+                    </View>}
             </View>
         );
     }
