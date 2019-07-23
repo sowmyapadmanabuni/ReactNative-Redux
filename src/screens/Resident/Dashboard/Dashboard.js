@@ -1158,8 +1158,8 @@ class Dashboard extends React.Component {
                         marginTop={20}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() =>
-                           // this.props.navigation.navigate("MyVehicleListScreen")
-                            this.props.navigation.navigate("subscriptionManagement")
+                           this.props.navigation.navigate("MyVehicleListScreen")
+                            //this.props.navigation.navigate("subscriptionManagement")
 
                         }
                     />
