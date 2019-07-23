@@ -27,7 +27,7 @@ class VehicleList extends Component {
     }
     getVehicleList = () => {
       console.log("props in vehicle list:",this.props);
-      fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`
+      fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`
         , {
           method: 'GET',
           headers: {
@@ -428,7 +428,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    dashBoardReducer:state.DashboardReducer //u have to call this in file where u need ids
+    dashBoardReducer:state.DashboardReducer, //u have to call this in file where u need ids
+    oyeURL: state.OyespaceReducer.oyeURL,
+
   };
 };
 

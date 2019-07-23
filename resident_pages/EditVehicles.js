@@ -135,7 +135,7 @@ class EditVehicle extends Component {
         return false;
       } else {
         fetch(
-          `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/VehicleUpdate`,
+          `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/VehicleUpdate`,
           {
             method: "POST",
             headers: {
@@ -467,7 +467,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     
-    dashBoardReducer:state.DashboardReducer //u have to call this in file where u need ids
+    dashBoardReducer:state.DashboardReducer, //u have to call this in file where u need ids
+    oyeURL: state.OyespaceReducer.oyeURL,
+
 
   };
 };

@@ -796,15 +796,15 @@ class Dashboard extends React.Component {
                 for (let i = 0; i < stat.data.members.length; i++) {
                     if (stat.data.members[i]) {
                         let Unit = "";
-                        if (
-                            !stat.data.members[i].unUniName ||
-                            stat.data.members[i].unUniName === ""
-                        ) {
-                            console.log("No Unit name", stat.data.members[i].unUniName);
-                            Unit = "Unit" + i;
-                        } else {
-                            Unit = stat.data.members[i].unUniName;
-                        }
+                        // if (
+                        //     !stat.data.members[i].unUniName ||
+                        //     stat.data.members[i].unUniName === ""
+                        // ) {
+                        //     console.log("No Unit name", stat.data.members[i].unUniName);
+                        //     Unit = "Unit" + i;
+                        // } else {
+                        //     Unit = stat.data.members[i].unUniName;
+                        // }
                         unitList.push({ value: Unit, details: stat.data.members[i] });
                     }
                 }

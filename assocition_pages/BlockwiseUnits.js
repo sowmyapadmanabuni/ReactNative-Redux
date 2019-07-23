@@ -306,9 +306,9 @@ console.log("2424298749812749712947912",blockid)
 
   render() {
     const {blockName, blockid} = this.props.navigation.state.params; 
-    console.log("The Assocn Id -------$@#@#%@#$!@>", this.props.navigation.state.params.associationId)
-    console.log('!@#!@#@$@#%#%@#$!@$@', blockName, blockid)
-    Alert.alert("The Association: -", this.props.navigation.state.params.associationId)
+    // console.log("The Assocn Id -------$@#@#%@#$!@>", this.props.navigation.state.params.associationId)
+    // console.log('!@#!@#@$@#%#%@#$!@$@', blockName, blockid)
+    // Alert.alert("The Association: -", this.props.navigation.state.params.associationId)
 
     let assocId = this.props.navigation.state.params.associationId;
 
@@ -364,7 +364,8 @@ console.log("2424298749812749712947912",blockid)
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                position: "absolute"
+                position: 'relative',
+                marginTop:hp('1%')
               }}
             >
               <Text>Please Wait</Text>
