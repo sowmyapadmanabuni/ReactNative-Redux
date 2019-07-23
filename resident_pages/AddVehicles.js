@@ -146,7 +146,7 @@ class AddVehicle extends Component {
 
             console.log("Payload Data:", payloadData);
 
-            fetch("http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/Create", {
+            fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/Create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -454,6 +454,8 @@ const mapStateToProps = state => {
     return {
         dashBoardReducer: state.DashboardReducer, //u have to call this in file where u need ids
         userReducer: state.UserReducer,
+        oyeURL: state.OyespaceReducer.oyeURL,
+
     };
 };
 

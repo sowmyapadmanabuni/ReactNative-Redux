@@ -248,8 +248,9 @@ class NotificationScreen extends Component {
             />
           ) : (
             <View style={{ flex: 1 }}>
-              <View>
-                <Text>Gate App Notification</Text>
+              <View style={{flexDirection:'column'}}>
+                <Text>{item.ntDesc}</Text>
+                <Text> {item.ntdCreated}</Text>
               </View>
               <Collapsible
                 duration={100}
@@ -257,12 +258,12 @@ class NotificationScreen extends Component {
                 collapsed={item.open}
               >
                 <View style={{ backgroundColor: "#ED8A19" }}>
-                  <Text> {item.ntDesc}</Text>
+                  {/* <Text> {item.ntDesc}</Text> */}
                 </View>
               </Collapsible>
             </View>
           )}
-          <Text> {item.ntdCreated}</Text>
+          {/* <Text> {item.ntdCreated}</Text> */}
         </Card>
       );
     } else {
@@ -291,8 +292,9 @@ class NotificationScreen extends Component {
               />
             ) : (
               <View style={{ flex: 1 }}>
-                <View>
-                  <Text>Gate App Notification</Text>
+                <View style={{flexDirection:'column'}}>
+                  <Text>{item.ntDesc}</Text>
+                  <Text>{item.ntdUpdated}</Text>
                 </View>
                 <Collapsible
                   duration={300}
@@ -572,7 +574,7 @@ class NotificationScreen extends Component {
                 </Collapsible>
               </View>
             )}
-            <Text> {item.ntdUpdated}</Text>
+            {/* <Text> {item.ntdUpdated}</Text> */}
           </Card>
         </TouchableWithoutFeedback>
       );
