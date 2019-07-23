@@ -55,9 +55,9 @@ class Dashboard extends React.Component {
         this.state = {
             myUnitCardHeight: "80%",
             myUnitCardWidth: "25%",
-            adminCardHeight: "60%",
+            adminCardHeight: "70%",
             adminCardWidth: "20%",
-            offersCardHeight: "60%",
+            offersCardHeight: "70%",
             offersCardWidth: "20%",
             isSelectedCard: "UNIT",
 
@@ -634,6 +634,7 @@ class Dashboard extends React.Component {
         this.requestNotifPermission();
         // this.getBlockList();
         this.props.getNotifications(oyeURL, MyAccountID);
+        this.getVehicleList();
     }
     //   onAssociationChange = (value, index) => {
     //     const {
@@ -749,6 +750,7 @@ class Dashboard extends React.Component {
                 getDashUnits(assocList[0].details.asAssnID, oyeURL);
             }
             self.getUnitListByAssoc();
+            self.getVehicleList();
         } catch (error) {
             base.utils.logger.log(error);
         }
@@ -778,6 +780,7 @@ class Dashboard extends React.Component {
         const { getDashUnits } = this.props;
         getDashUnits(assocId, oyeURL);
         self.getUnitListByAssoc();
+        self.getVehicleList();
     }
 
     async getUnitListByAssoc() {
@@ -851,9 +854,7 @@ class Dashboard extends React.Component {
 
     getVehicleList = () => {
         fetch(
-            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
-                this.props.dashBoardReducer.assId
-                }`,
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
             {
                 method: "GET",
                 headers: {
@@ -867,8 +868,7 @@ class Dashboard extends React.Component {
                 console.log("Manas", responseJson);
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
-                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-                        .length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID).length
                 });
             })
             .catch(error => {
@@ -923,8 +923,7 @@ class Dashboard extends React.Component {
                 console.log("Manas", responseJson);
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
-                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-                        .length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID).length
                 });
             })
             .catch(error => {
@@ -1007,6 +1006,8 @@ class Dashboard extends React.Component {
                         height={this.state.myUnitCardHeight}
                         width={this.state.myUnitCardWidth}
                         cardText={"My Unit"}
+                        iconWidth={Platform.OS==='ios'?22:18}
+                        iconHeight={Platform.OS==='ios'?22:16}
                         cardIcon={require("../../../../icons/my_unit.png")}
                         onCardClick={() => this.changeCardStatus("UNIT")}
                         disabled={this.state.isSelectedCard === "UNIT"}
@@ -1016,6 +1017,8 @@ class Dashboard extends React.Component {
                             height={this.state.adminCardHeight}
                             width={this.state.adminCardWidth}
                             cardText={"Admin"}
+                            iconWidth={Platform.OS==='ios'?22:18}
+                            iconHeight={Platform.OS==='ios'?22:18}
                             onCardClick={() => this.changeCardStatus("ADMIN")}
                             cardIcon={require("../../../../icons/user.png")}
                             disabled={this.state.isSelectedCard === "ADMIN"}
@@ -1028,6 +1031,8 @@ class Dashboard extends React.Component {
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
+                        iconWidth={Platform.OS==='ios'?18:18}
+                        iconHeight={Platform.OS==='ios'?16:16}
                         cardIcon={require("../../../../icons/offers.png")}
                         backgroundColor={base.theme.colors.rosePink}
                         onCardClick={() => this.changeCardStatus("OFFERS")}
@@ -1081,9 +1086,9 @@ class Dashboard extends React.Component {
             this.setState({
                 myUnitCardHeight: "80%",
                 myUnitCardWidth: "25%",
-                adminCardHeight: "60%",
+                adminCardHeight: "70%",
                 adminCardWidth: "20%",
-                offersCardHeight: "60%",
+                offersCardHeight: "70%",
                 offersCardWidth: "20%",
 
                 assdNameHide: false,
@@ -1091,11 +1096,11 @@ class Dashboard extends React.Component {
             });
         } else if (status == "ADMIN") {
             this.setState({
-                myUnitCardHeight: "60%",
+                myUnitCardHeight: "70%",
                 myUnitCardWidth: "20%",
                 adminCardHeight: "80%",
                 adminCardWidth: "25%",
-                offersCardHeight: "60%",
+                offersCardHeight: "70%",
                 offersCardWidth: "20%",
 
                 assdNameHide: true,
@@ -1103,9 +1108,9 @@ class Dashboard extends React.Component {
             });
         } else if (status == "OFFERS") {
             this.setState({
-                myUnitCardHeight: "60%",
+                myUnitCardHeight: "70%",
                 myUnitCardWidth: "20%",
-                adminCardHeight: "60%",
+                adminCardHeight: "70%",
                 adminCardWidth: "20%",
                 offersCardHeight: "80%",
                 offersCardWidth: "25%"
@@ -1142,8 +1147,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={5}
                         marginTop={20}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS==='ios'?35:35}
+                        iconHeight={Platform.OS==='ios'?20:20}
                         onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
@@ -1151,8 +1156,8 @@ class Dashboard extends React.Component {
                         height={"100%"}
                         width={"25%"}
                         cardText={"Vehicles"}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS==='ios'?30:30}
+                        iconHeight={Platform.OS==='ios'?30:30}
                         cardIcon={require("../../../../icons/vehicle.png")}
                         cardCount={this.state.vechiclesCount}
                         marginTop={20}
@@ -1168,8 +1173,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={2}
                         marginTop={20}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS==='ios'?35:35}
+                        iconHeight={Platform.OS==='ios'?20:20}
                         iconBorderRadius={0}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() => this.goToFirstTab()}

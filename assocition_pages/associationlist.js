@@ -38,12 +38,13 @@ class BlockDetail extends React.Component {
   }
 
   componentDidMount() {
+    this.myJoinAssociationListGetData();
     setTimeout(() => {
       this.setState({
         isLoading: false
       });
-    }, 2000);
-    this.myJoinAssociationListGetData();
+    }, 3000);
+    
   }
 
   searchFilterFunction = text => {
@@ -178,6 +179,10 @@ class BlockDetail extends React.Component {
                       id: item.asAssnID,
                       associationName: item.asAsnName
                     });
+                    this.setState({
+                      dataSource:[],
+                      arrayholder:[]
+                    })
                   }}
                 >
                   <Text style={styles.addUnitText}>Join</Text>
