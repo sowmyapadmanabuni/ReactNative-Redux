@@ -444,50 +444,49 @@ class App extends React.Component {
     return (
       <View style={styles.mainView}>
         {/* <Header /> */}
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
+        <SafeAreaView style={{backgroundColor: "orange"}}>
+            <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: 'flex-start',
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{flex: 0.2}}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-        
-        
+            <View style={{borderWidth: 1, borderColor: "orange"}}/>
+          </SafeAreaView>
+
         <View style={styles.textWrapper}>
           <Text style={styles.titleOfScreen}> Visitors </Text>
           
@@ -505,7 +504,7 @@ class App extends React.Component {
             <Item style={styles.inputItem}>
               <Input
                 marginBottom={hp("-1%")}
-                placeholder="Search by...."
+                placeholder="Search...."
                 multiline={false}
                 onChangeText={this.searchFilterFunction}
               />
@@ -823,17 +822,18 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
-  image1: {
-    width: wp("17%"),
+   image1: {
+    width: wp("22%"),
     height: hp("12%"),
-    marginRight: hp("3%")
   },
- viewDetails1: {
+
+ 
+  viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
     justifyContent: "center",
@@ -848,6 +848,8 @@ const styles = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
+
+
 })
 
 const mapStateToProps = state => {

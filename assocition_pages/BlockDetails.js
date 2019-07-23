@@ -42,7 +42,7 @@ class BlockDetail extends React.Component {
       this.setState({
         isLoading: false
       });
-    }, 3000);
+    }, 2000);
     this.blockDetailsLimitation();
   }
   blockDetailsLimitation = () => {

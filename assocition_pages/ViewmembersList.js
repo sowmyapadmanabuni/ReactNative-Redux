@@ -301,7 +301,7 @@ class Resident extends Component {
               >
                 <Image
                     style={[styles.image1]}
-                    source={require("../icons/OyeSpace.png")}
+                    source={require("../icons/headerLogo.png")}
                 />
               </View>
               <View style={{flex: 0.2}}>
@@ -310,6 +310,7 @@ class Resident extends Component {
             </View>
             <View style={{borderWidth: 1, borderColor: "orange"}}/>
           </SafeAreaView>
+          
           <View style={styles.textWrapper}>
             <Text style={styles.residentialListTitle}> Resident List </Text>
             <View style={{flexDirection: "row"}}>
@@ -455,14 +456,10 @@ const styles = StyleSheet.create({
     position: "relative"
   },
   image1: {
-    width: wp("17%"),
+    width: wp("22%"),
     height: hp("12%"),
-    marginRight: hp("3%")
   },
-  textWrapper: {
-    height: hp("85%"), // 70% of height device screen
-    width: wp("100%") // 80% of width device screen
-  },
+ 
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
@@ -477,6 +474,10 @@ const styles = StyleSheet.create({
     height: hp("3%"),
     marginTop: 5
     // marginLeft: 10
+  },
+  textWrapper: {
+    height: hp("85%"), // 70% of height device screen
+    width: wp("100%") // 80% of width device screen
   },
   viewDetails3: {
     height: hp("5.5%"),

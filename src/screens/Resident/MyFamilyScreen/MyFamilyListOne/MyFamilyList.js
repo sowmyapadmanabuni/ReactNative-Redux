@@ -262,49 +262,49 @@ class MyFamilyList extends React.Component {
         <View style={Style.mainView}>
         {/* <Header /> */}
 
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[Style.viewStyle1, { flexDirection: "row" }]}>
-            <View style={Style.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
+
+        <SafeAreaView style={{backgroundColor: "orange"}}>
+            <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
+              <View style={Style.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../../../../../icons/back.png")}
-                    style={Style.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: 'flex-start',
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../../../../../icons/back.png")}
+                        style={Style.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[Style.image1]}
+                    source={require("../../../../../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{flex: 0.2}}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[Style.image1]}
-                source={require("../../../../../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-        
+            <View style={{borderWidth: 1, borderColor: "orange"}}/>
+          </SafeAreaView>
 
         <View style={Style.progressViewStyle}>
           <ActivityIndicator size="large" color="#01CBC6" />
@@ -316,49 +316,49 @@ class MyFamilyList extends React.Component {
       <View style={Style.mainView}>
         {/* <Header /> */}
 
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[Style.viewStyle1, { flexDirection: "row" }]}>
-            <View style={Style.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
-                  }}
+        <SafeAreaView style={{backgroundColor: "orange"}}>
+            <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
+              <View style={Style.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../../../../../icons/back.png")}
-                    style={Style.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: 'flex-start',
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../../../../../icons/back.png")}
+                        style={Style.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[Style.image1]}
+                    source={require("../../../../../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{flex: 0.2}}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[Style.image1]}
-                source={require("../../../../../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-        
+            <View style={{borderWidth: 1, borderColor: "orange"}}/>
+          </SafeAreaView>
+
         <NavigationEvents
           onDidFocus={payload => this.myFamilyListGetData()}
           onWillBlur={payload => this.myFamilyListGetData()}

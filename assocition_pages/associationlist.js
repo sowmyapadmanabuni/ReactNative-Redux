@@ -37,6 +37,11 @@ class BlockDetail extends React.Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 2000);
     this.myJoinAssociationListGetData();
   }
 
