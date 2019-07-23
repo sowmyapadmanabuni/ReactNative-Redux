@@ -144,7 +144,7 @@ class MyFamilyList extends React.Component {
       this.setState({
         isLoading: false
       });
-    }, 5000);
+    }, 1500);
     this.myFamilyListGetData()
   }
 

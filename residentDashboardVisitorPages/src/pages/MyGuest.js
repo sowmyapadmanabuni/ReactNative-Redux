@@ -44,7 +44,7 @@ class MyGuests extends Component {
     let self = this;
     setTimeout(() => {
       self.getInvitationList();
-    }, 2500);
+    }, 1500);
   }
 
   getInvitationList = () => {

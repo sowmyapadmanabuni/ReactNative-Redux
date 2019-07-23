@@ -408,6 +408,7 @@ const styles = StyleSheet.create({
    image1: {
     width: wp("22%"),
     height: hp("12%"),
+    marginRight: hp("3%")
   },
 
  
@@ -426,6 +427,7 @@ const styles = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
+
 
 });
 

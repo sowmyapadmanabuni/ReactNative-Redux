@@ -262,6 +262,7 @@ class AddVehicle extends Component {
                     /> */}
             <RadioGroup
               style={{ flexDirection: "row" }}
+              selectedIndex={0}
               onSelect={(index, value) => this.onSelect(index, value)}
             >
               <RadioButton value={"Two Wheeler"}>
@@ -434,8 +435,8 @@ const styles = StyleSheet.create({
     height: hp("5%"),
     borderRadius: hp("2.5%"),
     borderWidth: hp("0.2%"),
-    borderColor: "#bcbcbc",
-    backgroundColor: "#bcbcbc",
+    borderColor: "#EF3939",
+    backgroundColor: "#EF3939",
     justifyContent: "center"
   },
   textFamilyVehicle: {

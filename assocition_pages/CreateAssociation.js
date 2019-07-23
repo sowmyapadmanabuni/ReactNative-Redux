@@ -740,7 +740,7 @@ class App extends Component {
             >
               <Image
                 style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
+                source={require("../icons/headerLogo.png")}
               />
             </View>
             <View style={{ flex: 0.2 }}>
@@ -1721,12 +1721,18 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
+   image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
 
+ 
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
@@ -1734,7 +1740,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 3
   },
-
   viewDetails2: {
     alignItems: "flex-start",
     justifyContent: "center",
@@ -1744,11 +1749,6 @@ const styles = StyleSheet.create({
     // marginLeft: 10
   },
 
-  image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
-  }
 });
 
 const mapStateToProps = state => {

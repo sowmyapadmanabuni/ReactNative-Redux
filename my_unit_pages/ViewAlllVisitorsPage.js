@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import {
   Platform,
   StyleSheet,
@@ -16,24 +16,24 @@ import {
   Easing,
   SafeAreaView,
   Dimensions
-} from "react-native"
+} from "react-native";
 // import Header from "./src/components/common/Header"
-import { Card, CardItem, Button, Form, Item, Input, Icon } from "native-base"
-import DatePicker from "react-native-datepicker"
-import moment from "moment"
-import DateTimePicker from "react-native-modal-datetime-picker"
-import { DatePickerDialog } from "react-native-datepicker-dialog"
-import ImageLoad from "react-native-image-placeholder"
+import { Card, CardItem, Button, Form, Item, Input, Icon } from "native-base";
+import DatePicker from "react-native-datepicker";
+import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { DatePickerDialog } from "react-native-datepicker-dialog";
+import ImageLoad from "react-native-image-placeholder";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
-import ZoomImage from "react-native-zoom-image"
-import {connect} from 'react-redux';
+} from "react-native-responsive-screen";
+import ZoomImage from "react-native-zoom-image";
+import { connect } from "react-redux";
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       dataSource: [],
       isLoading: true,
@@ -56,54 +56,54 @@ class App extends React.Component {
       switch: false,
 
       count: 1
-    }
-    this.arrayholder = []
+    };
+    this.arrayholder = [];
   }
 
   //Date Picker 1
   onDOBPress = () => {
-    let dobDate = this.state.dobDate
+    let dobDate = this.state.dobDate;
     if (!dobDate || dobDate == null) {
-      dobDate = new Date()
+      dobDate = new Date();
       this.setState({
         dobDate: dobDate
-      })
+      });
     }
     this.refs.dobDialog.open({
       date: dobDate,
       maxDate: new Date() //To restirct past dates
-    })
-  }
+    });
+  };
 
   onDOBDatePicked = date => {
     this.setState({
       dobDate: date,
       dobText: moment(date).format("YYYY-MM-DD")
-    })
-  }
+    });
+  };
 
   //Date Piker 2
 
   onDOBPress1 = () => {
-    let dobDate = this.state.dobDate1
+    let dobDate = this.state.dobDate1;
     if (!dobDate || dobDate == null) {
-      dobDate = new Date()
+      dobDate = new Date();
       this.setState({
         dobDate1: dobDate
-      })
+      });
     }
     this.refs.dobDialog1.open({
       date: dobDate,
       maxDate: new Date() //To restirct past dates
-    })
-  }
+    });
+  };
 
   onDOBDatePicked1 = date => {
     this.setState({
       dobDate1: date,
       dobText1: moment(date).format("YYYY-MM-DD")
-    })
-  }
+    });
+  };
 
   // //Time Picker
   // _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
@@ -119,68 +119,85 @@ class App extends React.Component {
   searchFilterFunction = text => {
     this.setState({
       value: text
-    })
+    });
 
     const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.vlfName.toUpperCase()} ${item.vlComName.toUpperCase()}`
-      const textData = text.toUpperCase()
+      const itemData = `${item.vlfName.toUpperCase()} ${item.vlComName.toUpperCase()}`;
+      const textData = text.toUpperCase();
 
-      return itemData.indexOf(textData) > -1
-    })
+      return itemData.indexOf(textData) > -1;
+    });
     this.setState({
       dataSource: newData
-    })
-  }
+    });
+  };
 
   componentDidMount() {
-    this.myVisitorsGetList()
+    this.myVisitorsGetList();
     setTimeout(() => {
       this.setState({
         isLoading: false
-      })
-    }, 5000)
-    console.log("Association Id",this.props.dashBoardReducer.assId)
+      });
+    }, 5000);
+    console.log("Association Id", this.props.dashBoardReducer.assId);
   }
   myVisitorsGetList = () => {
-    console.log("-----------------------") //2019/june/26
-    fetch(
-      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
-
-      {
-        method: "POST",
-        headers: {
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          StartDate: this.state.dobText,
-          EndDate: this.state.dobText1,
-          ASAssnID: this.props.dashBoardReducer.assId
-        })
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
-        //console.log("fsbkfh", count);
-        console.log(responseJson, "*******************************************")
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.data.visitorlog,
-          error: responseJson.error || null,
-          loading: false
-        })
-        this.arrayholder = responseJson.data.visitorlog
+    this.setState({
+      isLoading:true
+    })
+    if (this.state.dobDate > this.state.dobDate1) {
+      Alert.alert("From Date should be less than To Date.");
+      this.setState({
+        isLoading:false
       })
+      return false;
+    } else {
+      fetch(
+        `http://${
+          this.props.oyeURL
+        }/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
 
-      .catch(error => {
-        this.setState({ error, loading: false })
-        console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-      })
-  }
+        {
+          method: "POST",
+          headers: {
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            StartDate: this.state.dobText,
+            EndDate: this.state.dobText1,
+            ASAssnID: this.props.dashBoardReducer.assId
+          })
+        }
+      )
+        .then(response => response.json())
+        .then(responseJson => {
+          //var count = Object.keys(responseJson.data.visitorlogbydate).length;
+          //console.log("fsbkfh", count);
+          console.log(
+            responseJson,
+            "*******************************************"
+          );
+          this.setState({
+            isLoading: false,
+            dataSource: responseJson.data.visitorlog,
+            error: responseJson.error || null,
+            loading: false,
+            dobDate: null,
+            dobDate1: null
+          });
+          this.arrayholder = responseJson.data.visitorlog;
+        })
+
+        .catch(error => {
+          this.setState({ error, loading: false });
+          console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        });
+    }
+  };
 
   renderItem = ({ item }) => {
-    console.log(item)
+    console.log(item);
     // const time = item.vlEntryT;
     // const entertiming = time.subString();
     // console.log(entertiming);
@@ -291,7 +308,7 @@ class App extends React.Component {
                   {
                     Platform.OS === "android"
                       ? Linking.openURL(`tel:${item.vlMobile}`)
-                      : Linking.openURL(`telprompt:${item.vlMobile}`)
+                      : Linking.openURL(`telprompt:${item.vlMobile}`);
                   }
                 }}
               >
@@ -314,15 +331,57 @@ class App extends React.Component {
         </View>
         <View style={styles.lineForCellView} />
       </View>
-    )
-  }
+    );
+  };
   render() {
-
-    console.log('View All Visitor', this.props.dashBoardReducer.assId)
+    console.log("View All Visitor", this.props.dashBoardReducer.assId);
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
           {/* <Header /> */}
+          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+
           <Text style={styles.titleOfScreen}>Visitors</Text>
 
           {/* <TextInput
@@ -338,7 +397,7 @@ class App extends React.Component {
             <Item style={styles.inputItem}>
               <Input
                 marginBottom={hp("-1%")}
-                placeholder="Search by...."
+                placeholder="Search...."
                 multiline={false}
                 onChangeText={this.searchFilterFunction}
               />
@@ -437,59 +496,58 @@ class App extends React.Component {
             <ActivityIndicator size="large" color="#01CBC6" />
           </View>
         </View>
-      )
+      );
     }
-    console.log(this.state.dataSource, "*******************************")
-    console.log("ekjfhkwrghj")
+    console.log(this.state.dataSource, "*******************************");
+    console.log("ekjfhkwrghj");
     return (
       <View style={styles.mainView}>
         {/* <Header /> */}
-        <SafeAreaView style={{backgroundColor: "orange"}}>
-            <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
-              <View style={styles.viewDetails1}>
-                <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.goBack();
-                    }}
-                >
-                  <View
-                      style={{
-                        height: hp("4%"),
-                        width: wp("15%"),
-                        alignItems: 'flex-start',
-                        justifyContent: "center"
-                      }}
-                  >
-                    <Image
-                        resizeMode="contain"
-                        source={require("../icons/back.png")}
-                        style={styles.viewDetails2}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
+        <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
               >
-                <Image
-                    style={[styles.image1]}
-                    source={require("../icons/headerLogo.png")}
-                />
-              </View>
-              <View style={{flex: 0.2}}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-              </View>
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
-            <View style={{borderWidth: 1, borderColor: "orange"}}/>
-          </SafeAreaView>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
 
         <View style={styles.textWrapper}>
           <Text style={styles.titleOfScreen}> Visitors </Text>
-          
 
           {/* <TextInput
             //source={require("./src/components/images/call.png")}
@@ -580,7 +638,6 @@ class App extends React.Component {
                 marginRight: hp("-1.5%")
               }}
             >
-              
               <Button
                 bordered
                 warning
@@ -654,7 +711,7 @@ class App extends React.Component {
           )}
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -822,17 +879,16 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
-   image1: {
+  image1: {
     width: wp("22%"),
-    height: hp("12%"),
+    height: hp("12%")
   },
 
- 
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
@@ -847,18 +903,14 @@ const styles = StyleSheet.create({
     height: hp("3%"),
     marginTop: 5
     // marginLeft: 10
-  },
-
-
-})
+  }
+});
 
 const mapStateToProps = state => {
-    return {
-      
-      dashBoardReducer:state.DashboardReducer, //u have to call this in file where u need ids
-      oyeURL : state.OyespaceReducer.oyeURL 
-    };
+  return {
+    dashBoardReducer: state.DashboardReducer, //u have to call this in file where u need ids
+    oyeURL: state.OyespaceReducer.oyeURL
   };
-  
-  
-  export default connect(mapStateToProps)(App);
+};
+
+export default connect(mapStateToProps)(App);

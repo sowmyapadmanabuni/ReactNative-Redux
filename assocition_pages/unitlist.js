@@ -46,7 +46,7 @@ class UnitList extends Component {
       this.setState({
         isLoading: false
       });
-    }, 2000);
+    }, 1500);
     this.getUnitList();
   }
 
@@ -197,9 +197,6 @@ class UnitList extends Component {
 
           <View style={styles.progress}>
             <ActivityIndicator size="large" color="#F3B431" />
-          </View>
-          <View style={{justifyContent:'center', alignItems:'center'}}>
-            <Text>No Units available.</Text>
           </View>
         </View>
       );

@@ -224,8 +224,9 @@ const Style = StyleSheet.create({
     position: "relative"
   },
    image1: {
-    width: wp("16%"),
-    height: hp("8%"),
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
   },
 
  
@@ -244,6 +245,7 @@ const Style = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
+
 
 });
 
