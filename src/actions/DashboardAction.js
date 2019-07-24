@@ -9,7 +9,8 @@ import {
   DASHBOARD_ASSOC_STOP,
   GET_MEMBERLIST_SUCCESS,
   GET_MEMBERLIST_FAILED,
-  UPDATE_ID_DASHBOARD
+  UPDATE_ID_DASHBOARD,
+  UPDATE_DROPDOWN_INDEX
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
@@ -45,8 +46,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
     //  ("http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/1");
     fetch(
       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
-      // `http://${oyeURL}/oyeliving/OyeLivingApi/v1/GetAssociationListByAccountID/${MyAccountID}`,
-      // fetch(`http://${oyeURL}/oyeliving/OyeLivingApi/v1/GetAssociationListByAccountID/2`
+      // `http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/${MyAccountID}`,
+      // fetch(`http://${oyeURL}/oyeliving/api/v1/GetAssociationListByAccountID/2`
       {
         method: "GET",
         headers: {
@@ -57,7 +58,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        // console.log(responseJson);
         if (responseJson.success) {
           let associations = responseJson.data.memberListByAccount;
 
@@ -65,55 +66,36 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
           let drop_down_data = [];
 
           associations.map((data, index) => {
-            associationIds.push({ id: data.asAssnID });
-          });
-
-          associations.map((data, index) => {
             drop_down_data.push({
               value: data.asAsnName,
               name: data.asAsnName,
               id: index,
-              associationId: data.asAssnID
+              associationId: data.asAssnID,
+              memberId: data.meMemID
+            });
+            associationIds.push({
+              id: data.asAssnID
             });
           });
+
+          // drop_down_data.map((data, index) => {
+          //   associationIds.push({ id: data.associationId });
+          // });
+
+          // console.log("associations", associations);
+
+          let removeDuplicates = [];
+
+          removeDuplicates = _.uniqBy(drop_down_data, "associationId");
+          removeidDuplicates = _.uniqBy(associationIds, "id");
 
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
-              dropdown: drop_down_data,
-              associationid: associationIds
+              dropdown: removeDuplicates,
+              associationid: removeidDuplicates
             }
           });
-          // if (responseJson.success) {
-          //   let associations = responseJson.data.memberListByAccount;
-
-          //   let associationIds = [];
-          //   var count = Object.keys(responseJson.data.associationByAccount)
-          //     .length;
-          //   let drop_down_data = [];
-          //   let associationid = [];
-
-          //   for (var i = 0; i < count; i++) {
-          //     let associationName =
-          //       responseJson.data.associationByAccount[i].asAsnName;
-          //     drop_down_data.push({
-          //       value: associationName,
-          //       name: associationName,
-          //       id: i,
-          //       associationId: responseJson.data.associationByAccount[i].asAssnID
-          //     });
-          //     associationid.push({
-          //       id: responseJson.data.associationByAccount[i].asAssnID
-          //     });
-          //   }
-
-          // dispatch({
-          //   type: DASHBOARD_ASSOCIATION,
-          //   payload: {
-          //     dropdown: drop_down_data,
-          //     associationid
-          //   }
-          // });
         } else {
           dispatch({
             type: DASHBOARD_ASSOC_STOP
@@ -382,14 +364,21 @@ export const getAssoMembers = (oyeURL, id) => {
   };
 };
 
-
 export const updateIdDashboard = ({ prop, value }) => {
+  return dispatch => {
+    console.log("DASHBOARDAction", prop, value);
+    dispatch({
+      type: UPDATE_ID_DASHBOARD,
+      payload: { prop, value }
+    });
+  };
+};
 
-  return (dispatch) => {
-      console.log("DASHBOARDAction",prop,value)
-      dispatch({
-          type: UPDATE_ID_DASHBOARD,
-          payload: { prop, value }
-      })
-  }
-}
+export const updateDropDownIndex = index => {
+  return dispatch => {
+    dispatch({
+      type: UPDATE_DROPDOWN_INDEX,
+      payload: index
+    });
+  };
+};

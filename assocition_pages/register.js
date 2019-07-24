@@ -187,19 +187,8 @@ class RegisterMe extends Component {
                   let soldDate = this.state.dobText;
                   let occupancyDate = this.state.dobText;
 
-                  // console.log("userId", userID);
-                  // console.log("sbUnitID", sbUnitID);
-                  // console.log("sbSubID", sbSubID);
-                  // console.log("sbRoleId", sbRoleId);
-                  // console.log("sbMemID", sbMemID);
-                  // console.log("sbName", sbName);
-                  // console.log("associationID", associationID);
-                  // console.log("ntType", ntType);
-                  // console.log("ntTitle", ntTitle);
-                  console.log("ntDesc", ntDesc);
-
                   firebase.messaging().subscribeToTopic(sbSubID);
-                  // alert(sbSubID)
+                  
                   // Send a push notification to the admin here
                   axios
                     .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
@@ -656,7 +645,7 @@ class RegisterMe extends Component {
     const { joinedAssociations, memberList } = this.props;
     let unitID = unitList.unUnitID;
 
-    // let status = _.includes(joinedAssociations, unitID);
+    let joinStat = _.includes(joinedAssociations, unitID);
     let status;
     console.log(memberList, "memberList");
 
@@ -667,21 +656,28 @@ class RegisterMe extends Component {
 
     // alert("called");
 
-    console.log(unitID);
+    // console.log(unitID);
     console.log(matchUnit, "matchUnit");
 
     if (matchUnit) {
       if (
         matchUnit.meJoinStat === "Approved" ||
-        matchUnit.meJoinStat === "Requested"
+        matchUnit.meJoinStat === "Requested" ||
+        matchUnit.meJoinStat === "Accepted"
       ) {
+        status = true;
+      } else if (joinStat) {
         status = true;
       } else {
         status = false;
       }
+    } else if (joinStat) {
+      status = true;
     } else {
       status = false;
     }
+
+
 
     return status;
 
@@ -912,7 +908,7 @@ const mapStateToProps = state => {
     MyMobileNumber: state.UserReducer.MyMobileNumber,
     MyISDCode: state.UserReducer.MyISDCode,
 
-    joinedAssociations: state.AppReducer.joinedAssociations,
+    joinedAssociations: state.JoinAssociationReducer.joinedAssociations,
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
