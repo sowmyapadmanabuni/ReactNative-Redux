@@ -31,20 +31,20 @@ import {
     heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import {
-    newNotifInstance,
-    createNotification,
-    getNotifications,
-    updateJoinedAssociation,
-    getDashSub,
-    getDashAssociation,
-    getDashUnits,
-    updateUserInfo,
-    updateApproveAdmin,
-    getAssoMembers,
-    updateDropDownIndex,
-    createUserNotification,
-    refreshNotifications,
-    updateIdDashboard
+  newNotifInstance,
+  createNotification,
+  getNotifications,
+  updateJoinedAssociation,
+  getDashSub,
+  getDashAssociation,
+  getDashUnits,
+  updateUserInfo,
+  updateApproveAdmin,
+  getAssoMembers,
+  updateDropDownIndex,
+  createUserNotification,
+  refreshNotifications,
+  updateIdDashboard,
 } from "../../../actions";
 import { NavigationEvents } from "react-navigation";
 
@@ -85,297 +85,6 @@ class Dashboard extends React.Component {
         this.getListOfAssociation();
         this.getVehicleList();
     }
-
-    // requestNotifPermission = () => {
-    //   const {
-    //     MyAccountID,
-    //     champBaseURL,
-    //     receiveNotifications,
-    //     oyeURL
-    //   } = this.props;
-
-    //   firebase
-    //     .messaging()
-    //     .hasPermission()
-    //     .then(enabled => {
-    //       if (enabled) {
-    //         if (receiveNotifications) {
-    //           this.listenForNotif();
-    //         }
-    //         // user has permissions
-    //       } else {
-    //         firebase
-    //           .messaging()
-    //           .requestPermission()
-    //           .then(() => {
-    //             if (receiveNotifications) {
-    //               this.listenForNotif();
-    //             }
-    //             // User has authorised
-    //           })
-    //           .catch(error => {
-    //             // User has rejected permissions
-    //           });
-    //         // user doesn't have permission
-    //       }
-    //     });
-
-    //   var headers = {
-    //     "Content-Type": "application/json",
-    //     "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-    //   };
-
-    //   axios
-    //     .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
-    //       headers: headers
-    //     })
-    //     .then(response => {
-    //       let responseData = response.data.data;
-
-    //       responseData.associationByAccount.map(association => {
-    //         // console.log('***********')
-    //         // console.log(association.asAsnName)
-    //         // console.log(association.asAssnID)
-    //         // console.log('***********')
-    //         if (receiveNotifications) {
-    //           firebase
-    //             .messaging()
-    //             .subscribeToTopic(association.asAssnID + "admin");
-    //           // console.log(association.asAssnID);
-    //         } else if (!receiveNotifications) {
-    //           firebase
-    //             .messaging()
-    //             .unsubscribeFromTopic(association.asAssnID + "admin");
-    //         }
-    //       });
-    //     });
-
-    //   axios
-    //     .get(
-    //       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
-    //       {
-    //         headers: headers
-    //       }
-    //     )
-    //     .then(response => {
-    //       let data = response.data.data.memberListByAccount;
-    //       // console.log("dataoye", data);
-    //       data.map(units => {
-    //         // console.log(units.unUnitID + "admin");
-    //         // console.log(units.mrmRoleID + "role");
-    //         if (receiveNotifications) {
-    //           if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-    //             // console.log(units.unUnitID + "admin");
-    //             firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
-    //           }
-    //         } else if (!receiveNotifications) {
-    //           firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
-    //         }
-    //       });
-    //     });
-    // };
-
-    // showLocalNotification = notification => {
-    //   // console.log(notification);
-    //   const channel = new firebase.notifications.Android.Channel(
-    //     "channel_id",
-    //     "Oyespace",
-    //     firebase.notifications.Android.Importance.Max
-    //   ).setDescription("Oyespace channel");
-    //   channel.enableLights(true);
-    //   // channel.enableVibration(true);
-    //   // channel.vibrationPattern([500]);
-    //   firebase.notifications().android.createChannel(channel);
-
-    //   const notificationBuild = new firebase.notifications.Notification({
-    //     sound: "default",
-    //     show_in_foreground: true
-    //   })
-    //     .setTitle(notification._title)
-    //     .setBody(notification._body)
-    //     .setNotificationId(notification._notificationId)
-    //     // .setSound('default')
-    //     .setData({
-    //       ...notification._data,
-    //       foreground: true
-    //     })
-    //     .android.setColor("#FF9100")
-    //     .android.setLargeIcon("ic_notif")
-    //     .android.setAutoCancel(true)
-    //     .android.setSmallIcon("ic_stat_ic_notification")
-    //     .android.setChannelId("channel_id")
-    //     .android.setVibrate("default")
-    //     // .android.setChannelId('notification-action')
-    //     .android.setPriority(firebase.notifications.Android.Priority.Max);
-
-    //   firebase.notifications().displayNotification(notificationBuild);
-    //   this.setState({ foregroundNotif: notification._data });
-    // };
-
-    // listenForNotif = () => {
-    //   let navigationInstance = this.props.navigation;
-
-    //   this.notificationDisplayedListener = firebase
-    //     .notifications()
-    //     .onNotificationDisplayed(notification => {
-    //       // console.log('___________')
-    //       // console.log(notification)
-    //       // console.log('____________')
-    //       // Process your notification as required
-    //       // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-    //     });
-
-    //   this.notificationListener = firebase
-    //     .notifications()
-    //     .onNotification(notification => {
-    //       // console.log('___________')
-    //       // console.log(notification)
-    //       // console.log('____________')
-
-    //       if (notification._data.associationID) {
-    //         // this.props.createNotification(notification._data, navigationInstance, false)
-    //       }
-
-    //       this.showLocalNotification(notification);
-    //     });
-
-    //   firebase.notifications().onNotificationOpened(notificationOpen => {
-    //     const { MyAccountID } = this.props.userReducer;
-    //     const { oyeURL } = this.props.oyespaceReducer;
-    //     let details = notificationOpen.notification._data;
-    //     if (notificationOpen.notification._data.admin === "true") {
-    //       if (notificationOpen.action) {
-    //         // this.props.newNotifInstance(notificationOpen.notification);
-    //         // this.props.createNotification(
-    //         //   notificationOpen.notification._data,
-    //         //   navigationInstance,
-    //         //   true,
-    //         //   "true",
-    //         //   this.props.oyeURL,
-    //         //   this.props.MyAccountID
-    //         // );
-    //         // this.props.createNotification(notificationOpen.notification)
-    //       }
-    //       // this.props.newNotifInstance(notificationOpen.notification);
-    //       // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-    //     } else if (notificationOpen.notification._data.admin === "false") {
-    //       this.props.createUserNotification(
-    //         "Join_Status",
-    //         oyeURL,
-    //         MyAccountID,
-    //         1,
-    //         details.ntDesc,
-    //         "resident_user",
-    //         "resident_user",
-    //         details.sbSubID,
-    //         "resident_user",
-    //         "resident_user",
-    //         "resident_user",
-    //         "resident_user",
-    //         "resident_user",
-    //         true
-    //       );
-    //       // this.props.navigation.navigate("NotificationScreen");
-    //     }
-
-    //     if (notificationOpen.notification._data.admin === "true") {
-    //       this.props.refreshNotifications(oyeURL, MyAccountID);
-    //       if (notificationOpen.notification._data.foreground) {
-    //         // this.props.newNotifInstance(notificationOpen.notification);
-    //         // this.props.createNotification(
-    //         //   notificationOpen.notification._data,
-    //         //   navigationInstance,
-    //         //   true,
-    //         //   "true",
-    //         //   this.props.oyeURL,
-    //         //   this.props.MyAccountID
-    //         // );
-    //       }
-    //     } else if (notificationOpen.notification._data.admin === "gate_app") {
-    //       this.props.refreshNotifications(oyeURL, MyAccountID);
-    //       // this.props.newNotifInstance(notificationOpen.notification);
-    //       // this.props.createNotification(
-    //       //   notificationOpen.notification._data,
-    //       //   navigationInstance,
-    //       //   true,
-    //       //   "gate_app",
-    //       //   this.props.oyeURL,
-    //       //   this.props.MyAccountID
-    //       // );
-    //       // this.props.newNotifInstance(notificationOpen.notification);
-    //       // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-    //     } else if (notificationOpen.notification._data.admin === "false") {
-    //     }
-    //     // this.props.getNotifications(oyeURL, MyAccountID);
-    //     this.props.navigation.navigate("NotificationScreen");
-    //   });
-    // };
-
-    // onChangeText = () => {
-    //   // console.log("hhhhhhhhhhhhhh",this.state.data1)
-    // };
-
-    // didMount = () => {
-    //   const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    //   const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //   const { oyeURL } = this.props.oyespaceReducer;
-    //   // this.props.updateApproveAdmin([]);
-
-    //   getDashSub(oyeURL, SelectedAssociationID);
-    //   getDashAssociation(oyeURL, MyAccountID);
-    //   getAssoMembers(oyeURL, MyAccountID);
-    //   this.requestNotifPermission();
-    //   // this.getBlockList();
-    //   this.props.getNotifications(oyeURL, MyAccountID);
-    //   console.log("Notification");
-    // };
-
-    // componentDidMount() {
-    //   console.log("Notification");
-    //   const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    //   const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //   const { oyeURL } = this.props.oyespaceReducer;
-    //   // this.props.updateApproveAdmin([]);
-
-    //   getDashSub(oyeURL, SelectedAssociationID);
-    //   getDashAssociation(oyeURL, MyAccountID);
-    //   getAssoMembers(oyeURL, MyAccountID);
-    //   this.requestNotifPermission();
-    //   // this.getBlockList();
-    //   this.props.getNotifications(oyeURL, MyAccountID);
-    // }
-    //   onAssociationChange = (value, index) => {
-    //     const {
-    //       associationid,
-    //       getDashUnits,
-    //       updateUserInfo,
-    //       memberList,
-    //       notifications,
-    //       dropdown
-    //     } = this.props;
-    //     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //     const { oyeURL } = this.props.oyespaceReducer;
-
-    //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
-    //     updateUserInfo({
-    //       prop: "SelectedAssociationID",
-    //       value: dropdown[index].associationId
-    //     });
-
-    //     let memId = _.find(memberList, function(o) {
-    //       return o.asAssnID === dropdown[index].associationId;
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "MyOYEMemberID",
-    //       value: memId.meMemID
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "SelectedMemberID",
-    //       value: dropdown[index].memberId
-    //     });
-    //   };
 
     requestNotifPermission = () => {
         const {
@@ -619,56 +328,8 @@ class Dashboard extends React.Component {
         this.requestNotifPermission();
         // this.getBlockList();
         this.props.getNotifications(oyeURL, MyAccountID);
+        this.props.updateJoinedAssociation([], "");
     };
-
-    componentDidMount() {
-        console.log("Notification");
-        const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-        const { oyeURL } = this.props.oyespaceReducer;
-        // this.props.updateApproveAdmin([]);
-
-        getDashSub(oyeURL, SelectedAssociationID);
-        getDashAssociation(oyeURL, MyAccountID);
-        getAssoMembers(oyeURL, MyAccountID);
-        this.requestNotifPermission();
-        // this.getBlockList();
-        this.props.getNotifications(oyeURL, MyAccountID);
-        this.getVehicleList();
-    }
-    //   onAssociationChange = (value, index) => {
-    //     const {
-    //       associationid,
-    //       getDashUnits,
-    //       updateUserInfo,
-    //       memberList,
-    //       notifications,
-    //       dropdown
-    //     } = this.props;
-    //     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //     const { oyeURL } = this.props.oyespaceReducer;
-
-    //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
-    //     updateUserInfo({
-    //       prop: "SelectedAssociationID",
-    //       value: dropdown[index].associationId
-    //     });
-
-    //     let memId = _.find(memberList, function(o) {
-    //       return o.asAssnID === dropdown[index].associationId;
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "MyOYEMemberID",
-    //       value: memId.meMemID
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "SelectedMemberID",
-    //       value: dropdown[index].memberId
-    //     });
-    //   };
-
 
     roleCheckForAdmin = () => {
         console.log("Association id123123123123", this.state.assocId);
@@ -773,7 +434,6 @@ class Dashboard extends React.Component {
             assocId: assocId
         });
         const { updateIdDashboard } = this.props;
-        console.log("updateIdDashboard2", this.props);
         updateIdDashboard({ prop: "assId", value: assocId });
         const {  updateUserInfo } = this.props;
         updateUserInfo({ prop: "SelectedAssociationID", value:assocId});
@@ -952,82 +612,93 @@ class Dashboard extends React.Component {
         let associationList = this.state.assocList;
         let unitList = this.state.unitList;
         return (
-            <View style={Style.container}>
-                <NavigationEvents onDidFocus={() => this.didMount()} />
-                <View style={Style.dropDownContainer}>
-                    <View style={Style.leftDropDown}>
-                        {this.state.assdNameHide === false ? (
-                            <Dropdown
-                                value={this.state.assocName}
-                                label="Association Name"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={associationList}
-                                textColor={base.theme.colors.black}
-                                inputContainerStyle={{ borderBottomColor: "transparent" }}
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={-4}
-                                rippleOpacity={0}
-                                onChangeText={(value, index) =>
-                                    this.onAssociationChange(value, index)
-                                }
-                            />
-                        ) : (
-                            <View />
-                        )}
-                    </View>
-                    <View style={Style.rightDropDown}>
-                        {this.state.unitNameHide === false ? (
-                            <Dropdown
-                                value={this.state.unitName}
-                                label="Unit"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={unitList}
-                                inputContainerStyle={{ borderBottomColor: "transparent" }}
-                                textColor="#000"
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={-3}
-                                rippleOpacity={0}
-                                onChangeText={(value, index) => {
-                                    this.updateUnit(value, index);
-                                }}
-                            />
-                        ) : (
-                            <View />
-                        )}
-                    </View>
-                </View>
-                {this.state.isSelectedCard === "UNIT"
-                    ? this.myUnitCard()
-                    : this.state.isSelectedCard === "ADMIN"
-                        ? this.adminCard()
-                        : this.offersZoneCard()}
-                <View style={Style.bottomCards}>
-                    <CardView
-                        height={this.state.myUnitCardHeight}
-                        width={this.state.myUnitCardWidth}
-                        cardText={"My Unit"}
-                        iconWidth={Platform.OS==='ios'?22:18}
-                        iconHeight={Platform.OS==='ios'?22:16}
-                        cardIcon={require("../../../../icons/my_unit.png")}
-                        onCardClick={() => this.changeCardStatus("UNIT")}
-                        disabled={this.state.isSelectedCard === "UNIT"}
-                    />
-                    {this.state.role === 1 ? (
-                        <CardView
-                            height={this.state.adminCardHeight}
-                            width={this.state.adminCardWidth}
-                            cardText={"Admin"}
-                            iconWidth={Platform.OS==='ios'?22:18}
-                            iconHeight={Platform.OS==='ios'?22:18}
-                            onCardClick={() => this.changeCardStatus("ADMIN")}
-                            cardIcon={require("../../../../icons/user.png")}
-                            disabled={this.state.isSelectedCard === "ADMIN"}
-                        />
-                    ) : (
-                        <View />
-                    )}
+          <View style={Style.container}>
+            <NavigationEvents onDidFocus={() => this.didMount()} />
+            <View style={Style.dropDownContainer}>
+              <View style={Style.leftDropDown}>
+                {this.state.assdNameHide === false ? (
+                  <Dropdown
+                    // value={this.state.assocName}
+                    label="Association Name"
+                    baseColor="rgba(0, 0, 0, 1)"
+                    data={dropdown}
+                    textColor={base.theme.colors.black}
+                    inputContainerStyle={{
+                      borderBottomColor: "transparent"
+                    }}
+                    dropdownOffset={{ top: 10, left: 0 }}
+                    dropdownPosition={-4}
+                    rippleOpacity={0}
+                    // onChangeText={(value, index) =>
+                    //     this.onAssociationChange(value, index)
+                    // }
+                    onChangeText={(value, index) => {
+                      this.onAssociationChange(value, index);
+                      updateDropDownIndex(index);
+                      this.setState({
+                        associationSelected: true
+                      });
+                    }}
+                  />
+                ) : (
+                  <View />
+                )}
+              </View>
+              <View style={Style.rightDropDown}>
+                {this.state.unitNameHide === false ? (
+                  <Dropdown
+                    value={this.state.unitName}
+                    label="Unit"
+                    baseColor="rgba(0, 0, 0, 1)"
+                    data={unitList}
+                    inputContainerStyle={{
+                      borderBottomColor: "transparent"
+                    }}
+                    textColor="#000"
+                    dropdownOffset={{ top: 10, left: 0 }}
+                    dropdownPosition={-3}
+                    rippleOpacity={0}
+                    onChangeText={(value, index) => {
+                      this.updateUnit(value, index);
+                    }}
+                  />
+                ) : (
+                  <View />
+                )}
+              </View>
+            </View>
+            {this.state.isSelectedCard === "UNIT"
+              ? this.myUnitCard()
+              : this.state.isSelectedCard === "ADMIN"
+              ? this.adminCard()
+              : this.offersZoneCard()}
+            <View style={Style.bottomCards}>
+              <CardView
+                height={this.state.myUnitCardHeight}
+                width={this.state.myUnitCardWidth}
+                cardText={"My Unit"}
+                iconWidth={Platform.OS === "ios" ? 22 : 18}
+                iconHeight={Platform.OS === "ios" ? 22 : 16}
+                cardIcon={require("../../../../icons/my_unit.png")}
+                onCardClick={() => this.changeCardStatus("UNIT")}
+                disabled={this.state.isSelectedCard === "UNIT"}
+              />
+              {this.state.role === 1 ? (
+                <CardView
+                  height={this.state.adminCardHeight}
+                  width={this.state.adminCardWidth}
+                  cardText={"Admin"}
+                  iconWidth={Platform.OS === "ios" ? 22 : 18}
+                  iconHeight={Platform.OS === "ios" ? 22 : 18}
+                  onCardClick={() => this.changeCardStatus("ADMIN")}
+                  cardIcon={require("../../../../icons/user.png")}
+                  disabled={this.state.isSelectedCard === "ADMIN"}
+                />
+              ) : (
+                <View />
+              )}
 
-                    {/* <CardView
+              {/* <CardView
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
@@ -1038,42 +709,42 @@ class Dashboard extends React.Component {
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-                </View>
-                <View style={Style.supportContainer}>
-                    <View style={Style.subSupportView}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                {
-                                    Platform.OS === "android"
-                                        ? Linking.openURL(`tel:+919343121121`)
-                                        : Linking.openURL(`tel:+919343121121`);
-                                }
-                            }}
-                        >
-                            <Image
-                                style={[Style.supportIcon]}
-                                source={require("../../../../icons/call1.png")}
-                            />
-                        </TouchableOpacity>
-                        {/* <TouchableOpacity>
+            </View>
+            <View style={Style.supportContainer}>
+              <View style={Style.subSupportView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    {
+                      Platform.OS === "android"
+                        ? Linking.openURL(`tel:+919343121121`)
+                        : Linking.openURL(`tel:+919343121121`);
+                    }
+                  }}
+                >
+                  <Image
+                    style={[Style.supportIcon]}
+                    source={require("../../../../icons/call1.png")}
+                  />
+                </TouchableOpacity>
+                {/* <TouchableOpacity>
               <Image
                 style={Style.supportIcon}
                 source={require("../../../../icons/chat.png")}
               />
             </TouchableOpacity> */}
-                        <TouchableOpacity
-                            onPress={() => {
-                                Linking.openURL("mailto:happy@oyespace.com");
-                            }}
-                        >
-                            <Image
-                                style={Style.supportIcon}
-                                source={require("../../../../icons/Group771.png")}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openURL("mailto:happy@oyespace.com");
+                  }}
+                >
+                  <Image
+                    style={Style.supportIcon}
+                    source={require("../../../../icons/Group771.png")}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
+          </View>
         );
     }
 
@@ -1564,22 +1235,22 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-    mapStateToProps,
-    {
-        newNotifInstance,
-        createNotification,
-        getNotifications,
-        updateJoinedAssociation,
-        getDashSub,
-        getDashAssociation,
-        getDashUnits,
-        updateUserInfo,
-        getAssoMembers,
-        updateApproveAdmin,
-        updateDropDownIndex,
-        createUserNotification,
-        refreshNotifications,
-        updateIdDashboard
-    }
+  mapStateToProps,
+  {
+    newNotifInstance,
+    createNotification,
+    getNotifications,
+    updateJoinedAssociation,
+    getDashSub,
+    getDashAssociation,
+    getDashUnits,
+    updateUserInfo,
+    getAssoMembers,
+    updateApproveAdmin,
+    updateDropDownIndex,
+    createUserNotification,
+    refreshNotifications,
+    updateIdDashboard,
+  }
 )(Dashboard);
 

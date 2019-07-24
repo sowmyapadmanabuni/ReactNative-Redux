@@ -158,7 +158,7 @@ class NotificationScreen extends Component {
   renderCollapseData = (type, id) => {
     const { gateDetails } = this.state;
     let value = "";
-    console.log("gateDetails", gateDetails);
+    // console.log("gateDetails", gateDetails);
 
     if (gateDetails.length <= 0) {
       value = "";
@@ -181,6 +181,12 @@ class NotificationScreen extends Component {
       } else if (type === "vlEntryImg") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlEntryImg : "";
+      } else if (type === "vlEntryT") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlEntryT : "";
+      } else if (type === "vlExitT") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlExitT : "";
       }
     }
 
@@ -248,7 +254,7 @@ class NotificationScreen extends Component {
             />
           ) : (
             <View style={{ flex: 1 }}>
-              <View style={{flexDirection:'column'}}>
+              <View style={{ flexDirection: "column" }}>
                 <Text>{item.ntDesc}</Text>
                 <Text> {item.ntdCreated}</Text>
               </View>
@@ -292,7 +298,7 @@ class NotificationScreen extends Component {
               />
             ) : (
               <View style={{ flex: 1 }}>
-                <View style={{flexDirection:'column'}}>
+                <View style={{ flexDirection: "column" }}>
                   <Text>{item.ntDesc}</Text>
                   <Text>{item.ntdUpdated}</Text>
                 </View>
@@ -496,9 +502,13 @@ class NotificationScreen extends Component {
                                     : ""}{" "}
                                 </Text>
                                 <Text>
-                                  {this.state.Time !== null
+                                  {/* {this.state.Time !== null
                                     ? this.state.Time
-                                    : ""}
+                                    : ""} */}
+                                  {this.renderCollapseData(
+                                    "vlEntryT",
+                                    item.sbMemID
+                                  )}
                                 </Text>
                               </View>
                             </View>
@@ -543,9 +553,13 @@ class NotificationScreen extends Component {
                                       : ""}{" "}
                                   </Text>
                                   <Text>
-                                    {this.state.Time1 !== null
+                                    {/* {this.state.Time1 !== null
                                       ? this.state.Time1
-                                      : ""}
+                                      : ""} */}
+                                    {this.renderCollapseData(
+                                      "vlExitT",
+                                      item.sbMemID
+                                    )}
                                   </Text>
                                 </View>
                               </View>

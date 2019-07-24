@@ -10,7 +10,7 @@ import {
   GET_MEMBERLIST_SUCCESS,
   GET_MEMBERLIST_FAILED,
   UPDATE_ID_DASHBOARD,
-
+  UPDATE_DROPDOWN_INDEX
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -27,7 +27,8 @@ const INITIAL_STATE = {
   selectedAssociation: null,
   memberList: [],
   assId: null,
-  uniID: null
+  uniID: null,
+  selectedAssociationIndex: null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -84,6 +85,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_ID_DASHBOARD:
       return { ...state, [action.payload.prop]: action.payload.value };
+
+    case UPDATE_DROPDOWN_INDEX:
+      return { ...state, selectedAssociationIndex: action.payload };
 
     default:
       return state;
