@@ -38,7 +38,7 @@ export default class OyeSafeApiFamily {
 
   static async myFamilyAddMember(input) {
     console.log("MyFamily add member", input)
-    return await instance.post("FamilyMember/create/", input)
+    return await instance.post("FamilyMember/create", input)
   }
 
   static async myFamilyEditMember(input) {

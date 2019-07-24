@@ -14,7 +14,6 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from "react-native-share";
 import RNFetchBlob from 'rn-fetch-blob'
 import moment from "moment";
-import IndicatorViewPager from "rn-viewpager/viewpager/IndicatorViewPager";
 
 let RNFS = require('react-native-fs');
 
@@ -30,7 +29,7 @@ class GetStaffReport extends React.Component {
         super(props);
         this.props = props;
         this.state = {
-            isLoading: false,
+            isLoading:true,
             bottomPageIndicator:[],
             tableHeader: [['Date',true], ['Entry Point',false],
                 ['Entry Time',false],
@@ -48,7 +47,7 @@ class GetStaffReport extends React.Component {
             numberOfPages:0,
             pageLimit:10,
             pageNumber:1
-        },
+        };
             this.getTheReport = this.getTheReport.bind(this);
 
 
@@ -148,7 +147,6 @@ class GetStaffReport extends React.Component {
 
     async getTheReport(props) {
         let self = this;
-        self.setState({isLoading: true})
         console.log('Staff Report Input', this.props)
 
         let input = {
@@ -183,7 +181,6 @@ class GetStaffReport extends React.Component {
                             rowData.push('No Entry on this Date')
 
                         } else {
-
                             rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                             rowData.push(reportsData[i].vlengName)
                             rowData.push(moment(reportsData[i].vlEntryT).format('HH:mm' + ' A'))
@@ -242,7 +239,8 @@ class GetStaffReport extends React.Component {
     render() {
         base.utils.logger.log(this.props)
         return (
-            <View style={StaffReportStyle.mainContainer}>
+            !this.state.isLoading?
+                <View style={StaffReportStyle.mainContainer}>
                 <View style={StaffReportStyle.detailsMainView}>
                     <View style={StaffStyle.detailsLeftView}>
                         <Image style={StaffStyle.staffImg}
@@ -303,7 +301,10 @@ class GetStaffReport extends React.Component {
                 </View>
                     :
                     <View/>}
-            </View>
+            </View>:
+        <View style={StaffStyle.activityIndicator}>
+            <ActivityIndicator size="large" color={base.theme.colors.primary}/>
+        </View>
         )
     }
 
