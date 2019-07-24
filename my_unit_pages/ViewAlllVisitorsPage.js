@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import {
   Platform,
   StyleSheet,
@@ -16,24 +16,24 @@ import {
   Easing,
   SafeAreaView,
   Dimensions
-} from "react-native"
+} from "react-native";
 // import Header from "./src/components/common/Header"
-import { Card, CardItem, Button, Form, Item, Input, Icon } from "native-base"
-import DatePicker from "react-native-datepicker"
-import moment from "moment"
-import DateTimePicker from "react-native-modal-datetime-picker"
-import { DatePickerDialog } from "react-native-datepicker-dialog"
-import ImageLoad from "react-native-image-placeholder"
+import { Card, CardItem, Button, Form, Item, Input, Icon } from "native-base";
+import DatePicker from "react-native-datepicker";
+import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { DatePickerDialog } from "react-native-datepicker-dialog";
+import ImageLoad from "react-native-image-placeholder";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
-} from "react-native-responsive-screen"
-import ZoomImage from "react-native-zoom-image"
-import {connect} from 'react-redux';
+} from "react-native-responsive-screen";
+import ZoomImage from "react-native-zoom-image";
+import { connect } from "react-redux";
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       dataSource: [],
       isLoading: true,
@@ -56,54 +56,54 @@ class App extends React.Component {
       switch: false,
 
       count: 1
-    }
-    this.arrayholder = []
+    };
+    this.arrayholder = [];
   }
 
   //Date Picker 1
   onDOBPress = () => {
-    let dobDate = this.state.dobDate
+    let dobDate = this.state.dobDate;
     if (!dobDate || dobDate == null) {
-      dobDate = new Date()
+      dobDate = new Date();
       this.setState({
         dobDate: dobDate
-      })
+      });
     }
     this.refs.dobDialog.open({
       date: dobDate,
       maxDate: new Date() //To restirct past dates
-    })
-  }
+    });
+  };
 
   onDOBDatePicked = date => {
     this.setState({
       dobDate: date,
       dobText: moment(date).format("YYYY-MM-DD")
-    })
-  }
+    });
+  };
 
   //Date Piker 2
 
   onDOBPress1 = () => {
-    let dobDate = this.state.dobDate1
+    let dobDate = this.state.dobDate1;
     if (!dobDate || dobDate == null) {
-      dobDate = new Date()
+      dobDate = new Date();
       this.setState({
         dobDate1: dobDate
-      })
+      });
     }
     this.refs.dobDialog1.open({
       date: dobDate,
       maxDate: new Date() //To restirct past dates
-    })
-  }
+    });
+  };
 
   onDOBDatePicked1 = date => {
     this.setState({
       dobDate1: date,
       dobText1: moment(date).format("YYYY-MM-DD")
-    })
-  }
+    });
+  };
 
   // //Time Picker
   // _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
@@ -119,213 +119,437 @@ class App extends React.Component {
   searchFilterFunction = text => {
     this.setState({
       value: text
-    })
+    });
 
     const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.vlfName.toUpperCase()} ${item.vlComName.toUpperCase()}`
-      const textData = text.toUpperCase()
+      const itemData = `${item.vlfName.toUpperCase()} ${item.vlComName.toUpperCase()}`;
+      const textData = text.toUpperCase();
 
-      return itemData.indexOf(textData) > -1
-    })
+      return itemData.indexOf(textData) > -1;
+    });
     this.setState({
       dataSource: newData
-    })
-  }
+    });
+  };
 
   componentDidMount() {
-    this.myVisitorsGetList()
+    this.myVisitorsGetList();
     setTimeout(() => {
       this.setState({
         isLoading: false
-      })
-    }, 5000)
-    console.log("Association Id******",this.props.dashBoardReducer.assId,this.props.oyeURL,this.state.dobText,this.state.dobText1)
+      });
+    }, 5000);
+    console.log("Association Id", this.props.dashBoardReducer.assId);
   }
-  myVisitorsGetList = () => {  //
-    console.log("-----------------------") //2019/june/26
-    fetch(
-      `https://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
-
-      {
-        method: "POST",
-        headers: {
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          StartDate: "2019-07-19",
-          EndDate: "2019-07-22",
-          ASAssnID: 3008
-        })
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
-        //console.log("fsbkfh", count);
-        console.log(responseJson, "*******************************************")
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.data.visitorlog,
-          error: responseJson.error || null,
-          loading: false
-        })
-        this.arrayholder = responseJson.data.visitorlog
+  myVisitorsGetList = () => {
+    this.setState({
+      isLoading:true
+    })
+    if (this.state.dobDate > this.state.dobDate1) {
+      Alert.alert("From Date should be less than To Date.");
+      this.setState({
+        isLoading:false
       })
+      return false;
+    } else {
+      fetch(
+          `http://${
+              this.props.oyeURL
+          }/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
 
-      .catch(error => {
-        this.setState({ error, loading: false })
-        console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-      })
-  }
+          {
+            method: "POST",
+            headers: {
+              "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              StartDate: this.state.dobText,
+              EndDate: this.state.dobText1,
+              ASAssnID: this.props.dashBoardReducer.assId
+            })
+          }
+      )
+          .then(response => response.json())
+          .then(responseJson => {
+            //var count = Object.keys(responseJson.data.visitorlogbydate).length;
+            //console.log("fsbkfh", count);
+            console.log(
+                responseJson,
+                "*******************************************"
+            );
+            this.setState({
+              isLoading: false,
+              dataSource: responseJson.data.visitorlog,
+              error: responseJson.error || null,
+              loading: false,
+              dobDate: null,
+              dobDate1: null
+            });
+            this.arrayholder = responseJson.data.visitorlog;
+          })
+
+          .catch(error => {
+            this.setState({ error, loading: false });
+            console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+          });
+    }
+  };
 
   renderItem = ({ item }) => {
-    console.log(item)
+    console.log(item);
     // const time = item.vlEntryT;
     // const entertiming = time.subString();
     // console.log(entertiming);
     return (
-      <View style={styles.tableView}>
-        <View style={styles.lineForCellView} />
-        <View style={styles.cellView}>
-          <View style={styles.containerImageView}>
-            {item.vlEntryImg == "" ? (
-              <ZoomImage
-                source={require("../icons/img.png")}
-                imgStyle={{
-                  height: wp("20%"),
-                  width: wp("20%"),
-                  borderRadius: wp("20%") / 2,
-                  borderColor: "orange",
-                  borderWidth: hp("0.1%")
-                }}
-                //style={styles.mainCardItemImage}
-                //style={styles.dummyImageForProfile}
-                duration={300}
-                enableScaling={true}
-                easingFunc={Easing.bounce}
-              />
-            ) : (
-              // <Image
-              //   style={styles.dummyImageForProfile}
-              //   source={require("./src/components/images/profile_img@png.png")}
-              // />
-              <ZoomImage
-                source={{
-                  uri:
-                    "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
-                }}
-                imgStyle={{
-                  height: wp("20%"),
-                  width: wp("20%"),
-                  borderRadius: wp("20%") / 2,
-                  borderColor: "orange",
-                  borderWidth: hp("0.1%")
-                }}
-                //style={styles.mainCardItemImage}
-                duration={300}
-                enableScaling={true}
-                easingFunc={Easing.bounce}
-              />
-              // <Image
-              //   style={styles.mainCardItemImage}
-              //   source={{
-              //     uri:
-              //       "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
-              //   }}
+        <View style={styles.tableView}>
+          <View style={styles.lineForCellView} />
+          <View style={styles.cellView}>
+            <View style={styles.containerImageView}>
+              {item.vlEntryImg == "" ? (
+                  <ZoomImage
+                      source={require("../icons/img.png")}
+                      imgStyle={{
+                        height: wp("20%"),
+                        width: wp("20%"),
+                        borderRadius: wp("20%") / 2,
+                        borderColor: "orange",
+                        borderWidth: hp("0.1%")
+                      }}
+                      //style={styles.mainCardItemImage}
+                      //style={styles.dummyImageForProfile}
+                      duration={300}
+                      enableScaling={true}
+                      easingFunc={Easing.bounce}
+                  />
+              ) : (
+                  // <Image
+                  //   style={styles.dummyImageForProfile}
+                  //   source={require("./src/components/images/profile_img@png.png")}
+                  // />
+                  <ZoomImage
+                      source={{
+                        uri:
+                            "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                      }}
+                      imgStyle={{
+                        height: wp("20%"),
+                        width: wp("20%"),
+                        borderRadius: wp("20%") / 2,
+                        borderColor: "orange",
+                        borderWidth: hp("0.1%")
+                      }}
+                      //style={styles.mainCardItemImage}
+                      duration={300}
+                      enableScaling={true}
+                      easingFunc={Easing.bounce}
+                  />
+                  // <Image
+                  //   style={styles.mainCardItemImage}
+                  //   source={{
+                  //     uri:
+                  //       "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                  //   }}
 
-              // />
-            )}
-          </View>
-          <View style={styles.textViewContainer}>
-            <Text style={styles.nameTextStyle}>
-              {item.vlfName}
-              {/* {this.state.dataSource[0].vlfName} */}
-            </Text>
-            <View style={styles.viewTextStyle}>
-              <Image
-                style={styles.viewImageStyle}
-                source={require("../icons/user.png")}
-              />
-              <Text style={styles.subNameTextStyleOne}>{item.vlComName} </Text>
+                  // />
+              )}
             </View>
-            <View style={styles.viewTextStyle}>
-              <Image
-                style={styles.viewImageStyle}
-                source={require("../icons/entry_time.png")}
-              />
-              {/* <Text style={styles.subNameTextStyleTwo}>
+            <View style={styles.textViewContainer}>
+              <Text style={styles.nameTextStyle}>
+                {item.vlfName}
+                {/* {this.state.dataSource[0].vlfName} */}
+              </Text>
+              <View style={styles.viewTextStyle}>
+                <Image
+                    style={styles.viewImageStyle}
+                    source={require("../icons/user.png")}
+                />
+                <Text style={styles.subNameTextStyleOne}>{item.vlComName} </Text>
+              </View>
+              <View style={styles.viewTextStyle}>
+                <Image
+                    style={styles.viewImageStyle}
+                    source={require("../icons/entry_time.png")}
+                />
+                {/* <Text style={styles.subNameTextStyleTwo}>
                 Entry: {item.vlEntryT.substring(5, 10)},
                 {item.vlEntryT.substring(11, 16)} Exit:{" "}
                 {item.vlExitT.substring(5, 10)},{item.vlExitT.substring(11, 16)}
                 </Text>  */}
-              {/* <Text style={styles.subNameTextStyleTwo}>
+                {/* <Text style={styles.subNameTextStyleTwo}>
                 Entry:
                 {item.vlEntryT.substring(11, 16)} Exit:{" "}
                 {item.vlExitT.substring(11, 16)}
               </Text> */}
 
-              <Text style={styles.subNameTextStyleTwo}>
-                Entry:
-                {item.vlEntryT.substring(11, 19)}
-              </Text>
-              <Image
-                style={styles.viewImageStyle}
-                source={require("../icons/entry_time.png")}
-              />
-              <Text style={styles.subNameTextStyleTwo}>
-                Exit: {item.vlExitT.substring(11, 19)}
-              </Text>
-              {/* {moment(newDate(item.vlExitT.substring(11, 16))).format(
+                <Text style={styles.subNameTextStyleTwo}>
+                  Entry:
+                  {item.vlEntryT.substring(11, 19)}
+                </Text>
+                <Image
+                    style={styles.viewImageStyle}
+                    source={require("../icons/entry_time.png")}
+                />
+                <Text style={styles.subNameTextStyleTwo}>
+                  Exit: {item.vlExitT.substring(11, 19)}
+                </Text>
+                {/* {moment(newDate(item.vlExitT.substring(11, 16))).format(
                 "HH:mm:ss a"
               )} */}
-              {/* {moment(
+                {/* {moment(
               newDate({item.vlExitT.substring(11, 16)}, "Hmm")).format("hh:mm")} */}
-              {/* datetime: moment(new Date()).format("HH:mm:ss a") */}
+                {/* datetime: moment(new Date()).format("HH:mm:ss a") */}
+              </View>
+            </View>
+            <View style={styles.cellEndIcons}>
+              <Card>
+                <TouchableOpacity
+                    onPress={() => {
+                      {
+                        Platform.OS === "android"
+                            ? Linking.openURL(`tel:${item.vlMobile}`)
+                            : Linking.openURL(`telprompt:${item.vlMobile}`);
+                      }
+                    }}
+                >
+                  <View
+                      style={{
+                        width: hp("5.5%"),
+                        height: hp("5.5%"),
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                  >
+                    <Image
+                        style={styles.smallCardItemImage}
+                        source={require("../icons/call.png")}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </Card>
             </View>
           </View>
-          <View style={styles.cellEndIcons}>
-            <Card>
-              <TouchableOpacity
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`tel:${item.vlMobile}`)
-                      : Linking.openURL(`telprompt:${item.vlMobile}`)
-                  }
-                }}
-              >
+          <View style={styles.lineForCellView} />
+        </View>
+    );
+  };
+  render() {
+    console.log("View All Visitor", this.props.dashBoardReducer.assId);
+    if (this.state.isLoading) {
+      return (
+          <View style={styles.container}>
+            {/* <Header /> */}
+            <SafeAreaView style={{ backgroundColor: "orange" }}>
+              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+                <View style={styles.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.goBack();
+                      }}
+                  >
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: "flex-start",
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../icons/back.png")}
+                          style={styles.viewDetails2}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
                 <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                >
+                  <Image
+                      style={[styles.image1]}
+                      source={require("../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={{ flex: 0.2 }}>
+                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            </SafeAreaView>
+
+            <Text style={styles.titleOfScreen}>Visitors</Text>
+
+            {/* <TextInput
+            //source={require("./src/components/images/call.png")}
+            style={styles.textinput}
+            placeholder="Search by Name...."
+            // lightTheme
+            round
+            onChangeText={this.searchFilterFunction}
+          /> */}
+
+            <Form>
+              <Item style={styles.inputItem}>
+                <Input
+                    marginBottom={hp("-1%")}
+                    placeholder="Search...."
+                    multiline={false}
+                    onChangeText={this.searchFilterFunction}
+                />
+                <Icon style={{ color: "orange" }} name="search" size={14} />
+              </Item>
+            </Form>
+
+            <View style={styles.datePickerButtonView}>
+              <View
                   style={{
-                    width: hp("5.5%"),
-                    height: hp("5.5%"),
+                    flex: 0.8,
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: hp("-1%")
+                  }}
+              >
+                <View>
+                  <Text style={{ color: "#38BCDB" }}>From</Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText}{" "}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog"
+                        onDatePicked={this.onDOBDatePicked.bind(this)}
+                    />
+
+                    <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                      <Image
+                          style={[styles.viewDatePickerImageStyle]}
+                          source={require("../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+
+                {/* </View> */}
+                <View>
+                  <Text style={{ color: "#38BCDB" }}> To </Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText1}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog1"
+                        onDatePicked={this.onDOBDatePicked1.bind(this)}
+                    />
+                    <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                      <Image
+                          style={styles.viewDatePickerImageStyle}
+                          source={require("../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+
+                {/* </View> */}
+              </View>
+
+              <View
+                  style={{
+                    flex: 0.2,
+
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                    marginRight: hp("-1.5%")
+                  }}
+              >
+                <Button
+                    bordered
+                    warning
+                    style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
+                    onPress={() => this.myVisitorsGetList()}
+                >
+                  <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: hp("1.6%")
+                      }}
+                  >
+                    Get
+                  </Text>
+                </Button>
+              </View>
+            </View>
+
+            <View style={styles.progress}>
+              <ActivityIndicator size="large" color="#01CBC6" />
+            </View>
+          </View>
+      );
+    }
+    console.log(this.state.dataSource, "*******************************");
+    console.log("ekjfhkwrghj");
+    return (
+        <View style={styles.mainView}>
+          {/* <Header /> */}
+          <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
+                >
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
                     justifyContent: "center",
                     alignItems: "center"
                   }}
-                >
-                  <Image
-                    style={styles.smallCardItemImage}
-                    source={require("../icons/call.png")}
-                  />
-                </View>
-              </TouchableOpacity>
-            </Card>
-          </View>
-        </View>
-        <View style={styles.lineForCellView} />
-      </View>
-    )
-  }
-  render() {
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
 
-    console.log('View All Visitor', this.props.dashBoardReducer.assId)
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.container}>
-          {/* <Header /> */}
-          <Text style={styles.titleOfScreen}>Visitors</Text>
+          <View style={styles.textWrapper}>
+            <Text style={styles.titleOfScreen}> Visitors </Text>
 
-          {/* <TextInput
+            {/* <TextInput
             //source={require("./src/components/images/call.png")}
             style={styles.textinput}
             placeholder="Search by Name...."
@@ -334,274 +558,106 @@ class App extends React.Component {
             onChangeText={this.searchFilterFunction}
           /> */}
 
-          <Form>
-            <Item style={styles.inputItem}>
-              <Input
-                marginBottom={hp("-1%")}
-                placeholder="Search by...."
-                multiline={false}
-                onChangeText={this.searchFilterFunction}
-              />
-              <Icon style={{ color: "orange" }} name="search" size={14} />
-            </Item>
-          </Form>
+            <Form>
+              <Item style={styles.inputItem}>
+                <Input
+                    marginBottom={hp("-1%")}
+                    placeholder="Search...."
+                    multiline={false}
+                    onChangeText={this.searchFilterFunction}
+                />
+                <Icon style={{ color: "orange" }} name="search" size={14} />
+              </Item>
+            </Form>
 
-          <View style={styles.datePickerButtonView}>
-            <View
-              style={{
-                flex: 0.8,
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                marginLeft: hp("-1%")
-              }}
-            >
-              <View>
-                <Text style={{ color: "#38BCDB" }}>From</Text>
-              </View>
-              {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
-              <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                <View style={styles.datePickerBox}>
-                  <Text style={styles.datePickerText}>
-                    {this.state.dobText}{" "}
-                  </Text>
-                  <DatePickerDialog
-                    ref="dobDialog"
-                    onDatePicked={this.onDOBDatePicked.bind(this)}
-                  />
-
-                  <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                    <Image
-                      style={[styles.viewDatePickerImageStyle]}
-                      source={require("../icons/calender.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-
-              {/* </View> */}
-              <View>
-                <Text style={{ color: "#38BCDB" }}> To </Text>
-              </View>
-              {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
-              <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                <View style={styles.datePickerBox}>
-                  <Text style={styles.datePickerText}>
-                    {this.state.dobText1}
-                  </Text>
-                  <DatePickerDialog
-                    ref="dobDialog1"
-                    onDatePicked={this.onDOBDatePicked1.bind(this)}
-                  />
-                  <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                    <Image
-                      style={styles.viewDatePickerImageStyle}
-                      source={require("../icons/calender.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-
-              {/* </View> */}
-            </View>
-
-            <View
-              style={{
-                flex: 0.2,
-
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                marginRight: hp("-1.5%")
-              }}
-            >
-              <Button
-                bordered
-                warning
-                style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
-                onPress={() => this.myVisitorsGetList()}
-              >
-                <Text
+            <View style={styles.datePickerButtonView}>
+              <View
                   style={{
-                    color: "white",
-                    fontWeight: "600",
-                    fontSize: hp("1.6%")
+                    flex: 0.8,
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: hp("-1%")
                   }}
-                >
-                  Get
-                </Text>
-              </Button>
-            </View>
-          </View>
-
-          <View style={styles.progress}>
-            <ActivityIndicator size="large" color="#01CBC6" />
-          </View>
-        </View>
-      )
-    }
-    console.log(this.state.dataSource, "*******************************")
-    console.log("ekjfhkwrghj")
-    return (
-      <View style={styles.mainView}>
-        {/* <Header /> */}
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
               >
-                <View
+                <View>
+                  <Text style={{ color: "#38BCDB" }}>From</Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText}{" "}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog"
+                        onDatePicked={this.onDOBDatePicked.bind(this)}
+                    />
+
+                    <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                      <Image
+                          style={[styles.viewDatePickerImageStyle]}
+                          source={require("../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+
+                {/* </View> */}
+                <View>
+                  <Text style={{ color: "#38BCDB" }}> To </Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText1}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog1"
+                        onDatePicked={this.onDOBDatePicked1.bind(this)}
+                    />
+                    <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                      <Image
+                          style={styles.viewDatePickerImageStyle}
+                          source={require("../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+
+                {/* </View> */}
+              </View>
+
+              <View
                   style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: 'flex-start',
-                    justifyContent: "center"
+                    flex: 0.2,
+
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                    marginRight: hp("-1.5%")
                   }}
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
-        
-        
-        <View style={styles.textWrapper}>
-          <Text style={styles.titleOfScreen}> Visitors </Text>
-          
-
-          {/* <TextInput
-            //source={require("./src/components/images/call.png")}
-            style={styles.textinput}
-            placeholder="Search by Name...."
-            // lightTheme
-            round
-            onChangeText={this.searchFilterFunction}
-          /> */}
-
-          <Form>
-            <Item style={styles.inputItem}>
-              <Input
-                marginBottom={hp("-1%")}
-                placeholder="Search by...."
-                multiline={false}
-                onChangeText={this.searchFilterFunction}
-              />
-              <Icon style={{ color: "orange" }} name="search" size={14} />
-            </Item>
-          </Form>
-
-          <View style={styles.datePickerButtonView}>
-            <View
-              style={{
-                flex: 0.8,
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                marginLeft: hp("-1%")
-              }}
-            >
-              <View>
-                <Text style={{ color: "#38BCDB" }}>From</Text>
-              </View>
-              {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
-              <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                <View style={styles.datePickerBox}>
-                  <Text style={styles.datePickerText}>
-                    {this.state.dobText}{" "}
-                  </Text>
-                  <DatePickerDialog
-                    ref="dobDialog"
-                    onDatePicked={this.onDOBDatePicked.bind(this)}
-                  />
-
-                  <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                    <Image
-                      style={[styles.viewDatePickerImageStyle]}
-                      source={require("../icons/calender.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-
-              {/* </View> */}
-              <View>
-                <Text style={{ color: "#38BCDB" }}> To </Text>
-              </View>
-              {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
-              <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                <View style={styles.datePickerBox}>
-                  <Text style={styles.datePickerText}>
-                    {this.state.dobText1}
-                  </Text>
-                  <DatePickerDialog
-                    ref="dobDialog1"
-                    onDatePicked={this.onDOBDatePicked1.bind(this)}
-                  />
-                  <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                    <Image
-                      style={styles.viewDatePickerImageStyle}
-                      source={require("../icons/calender.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-
-              {/* </View> */}
-            </View>
-
-            <View
-              style={{
-                flex: 0.2,
-
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                marginRight: hp("-1.5%")
-              }}
-            >
-              
-              <Button
-                bordered
-                warning
-                style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
-                onPress={() => this.myVisitorsGetList()}
               >
-                <Text
-                  style={{
-                    color: "white",
-                    fontWeight: "600",
-                    fontSize: hp("2%")
-                  }}
+                <Button
+                    bordered
+                    warning
+                    style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
+                    onPress={() => this.myVisitorsGetList()}
                 >
-                  Get
-                </Text>
-              </Button>
+                  <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: hp("2%")
+                      }}
+                  >
+                    Get
+                  </Text>
+                </Button>
+              </View>
             </View>
-          </View>
 
-          {/* <TouchableOpacity onPress={this._showDateTimePicker}>
+            {/* <TouchableOpacity onPress={this._showDateTimePicker}>
           <DateTimePicker
             isVisible={this.state.isDateTimePickerVisible}
             onConfirm={this._handleDatePicked}
@@ -613,26 +669,26 @@ class App extends React.Component {
             <Text style={styles.subtext1}>{this.state.datetime}</Text>
           </View>
         </TouchableOpacity> */}
-          {this.state.dataSource.length == 0 ? (
-            <View
-              style={{
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "white"
-              }}
-            >
-              <Text
-                style={{
-                  backgroundColor: "white",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: hp("2%")
-                }}
-              >
-                No Entries for selected Date
-              </Text>
-              {/* <Text
+            {this.state.dataSource.length == 0 ? (
+                <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "white"
+                    }}
+                >
+                  <Text
+                      style={{
+                        backgroundColor: "white",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: hp("2%")
+                      }}
+                  >
+                    No Entries for selected Date
+                  </Text>
+                  {/* <Text
                 style={{
                   backgroundColor: "white",
                   alignItems: "center",
@@ -642,20 +698,20 @@ class App extends React.Component {
               >
                 Choose other date please.
               </Text> */}
-            </View>
-          ) : (
-            <FlatList
-              style={{ marginTop: hp("2%") }}
-              data={this.state.dataSource.sort((a, b) =>
-                a.vlfName.localeCompare(b.vlfName)
-              )}
-              renderItem={this.renderItem}
-              keyExtractor={(item, index) => item.fmid.toString()}
-            />
-          )}
+                </View>
+            ) : (
+                <FlatList
+                    style={{ marginTop: hp("2%") }}
+                    data={this.state.dataSource.sort((a, b) =>
+                        a.vlfName.localeCompare(b.vlfName)
+                    )}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item, index) => item.fmid.toString()}
+                />
+            )}
+          </View>
         </View>
-      </View>
-    )
+    );
   }
 }
 
@@ -829,11 +885,11 @@ const styles = StyleSheet.create({
     position: "relative"
   },
   image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
+    width: wp("22%"),
+    height: hp("12%")
   },
- viewDetails1: {
+
+  viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
     justifyContent: "center",
@@ -847,16 +903,14 @@ const styles = StyleSheet.create({
     height: hp("3%"),
     marginTop: 5
     // marginLeft: 10
-  },
-})
+  }
+});
 
 const mapStateToProps = state => {
-    return {
-      
-      dashBoardReducer:state.DashboardReducer, //u have to call this in file where u need ids
-      oyeURL : state.OyespaceReducer.oyeURL 
-    };
+  return {
+    dashBoardReducer: state.DashboardReducer,
+    oyeURL: state.OyespaceReducer.oyeURL
   };
-  
-  
-  export default connect(mapStateToProps)(App);
+};
+
+export default connect(mapStateToProps)(App);

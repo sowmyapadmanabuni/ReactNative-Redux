@@ -245,7 +245,7 @@ class RegisterMe extends Component {
                       // this.props.navigation.navigate("SplashScreen");
                       Alert.alert(
                         "Oyespace",
-                        "Request Send to Admin Successfully",
+                        "Request sent to Admin",
                         [
                           {
                             text: "Ok",
@@ -296,7 +296,7 @@ class RegisterMe extends Component {
                       //   this.state.unitofperson === true
                       //     ? Alert.alert(
                       //         "Oyespace",
-                      //         "Request Send to Admin Successfully",
+                      //         "Request sent to Admin",
                       //         [
                       //           {
                       //             text: "Ok",
@@ -310,7 +310,7 @@ class RegisterMe extends Component {
                       //       )
                       //     : Alert.alert(
                       //         "Oyespace",
-                      //         "Request Send to Admin Successfully",
+                      //         "Request sent to Admin",
                       //         [
                       //           {
                       //             text: "Ok",
@@ -534,7 +534,7 @@ class RegisterMe extends Component {
 
                       Alert.alert(
                         "Oyespace",
-                        "Request Send to Admin Successfully",
+                        "Request sent to Admin",
                         [
                           {
                             text: "Ok",
@@ -584,7 +584,7 @@ class RegisterMe extends Component {
                       //   this.state.unitofperson1 === true
                       //     ? Alert.alert(
                       //         "Oyespace",
-                      //         "Request Send to Admin Successfully",
+                      //         "Request sent to Admin",
                       //         [
                       //           {
                       //             text: "Ok",
@@ -598,7 +598,7 @@ class RegisterMe extends Component {
                       //       )
                       //     : Alert.alert(
                       //         "Oyespace",
-                      //         "Request Send to Admin Successfully",
+                      //         "Request sent to Admin",
                       //         [
                       //           {
                       //             text: "Ok",

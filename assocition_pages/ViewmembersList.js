@@ -166,7 +166,7 @@ class Resident extends Component {
     }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
     console.log(this.state);
     console.log(url);
-    requestBody = {
+    let requestBody = {
       ACMobile: this.state.selectedRoleData.uoMobile,
       UNUnitID: this.state.selectedRoleData.unitid,
       MRMRoleID: this.state.selectedRoleData.selRolId
@@ -310,7 +310,6 @@ class Resident extends Component {
             </View>
             <View style={{borderWidth: 1, borderColor: "orange"}}/>
           </SafeAreaView>
-
           <View style={styles.textWrapper}>
             <Text style={styles.residentialListTitle}> Resident List </Text>
             <View style={{flexDirection: "row"}}>
@@ -459,7 +458,6 @@ const styles = StyleSheet.create({
     width: wp("22%"),
     height: hp("12%"),
   },
-
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",

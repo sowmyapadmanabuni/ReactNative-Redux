@@ -500,10 +500,9 @@ class AddBlock extends Component {
                 <View style={styles.fillAssociationDetailline} />
               </View>
               <Card style={styles.myProfileCardsStyle}>
-                <Item style={styles.inputItem} floatingLabel>
+                <Item style={styles.inputItem}>
                   <Input
                     placeholder="Block Name"
-                    // underlineColorAndroid="orange"
                     autoCorrect={false}
                     autoCapitalize="characters"
                     keyboardType="default"
@@ -558,7 +557,7 @@ class AddBlock extends Component {
                 <View style={styles.fillAssociationDetailline} />
               </View>
               <Card style={styles.myProfileCardsStyle}>
-                <Item style={styles.inputItem} floatingLabel>
+                <Item style={styles.inputItem}>
                   <Input
                     placeholder="Manager Name"
                     // underlineColorAndroid="orange"
@@ -571,7 +570,7 @@ class AddBlock extends Component {
                     }
                   />
                 </Item>
-                <Item style={styles.inputItem} floatingLabel>
+                <Item style={styles.inputItem}>
                   <Input
                     placeholder="Mobile Number"
                     // underlineColorAndroid="orange"
@@ -582,7 +581,7 @@ class AddBlock extends Component {
                     onChangeText={mobNum => this.setState({ mobNum: mobNum })}
                   />
                 </Item>
-                <Item style={styles.inputItem} floatingLabel>
+                <Item style={styles.inputItem}>
                   <Input
                     placeholder="Email ID"
                     // underlineColorAndroid="orange"
@@ -651,7 +650,7 @@ class AddBlock extends Component {
                           />
                         }
                       />
-                      <Text>Flat Rate Value</Text>
+                      <Text style={{fontSize:hp('1.8%')}}>Flat Rate Value</Text>
                     </View>
                   </View>
                 </View>
@@ -721,7 +720,7 @@ class AddBlock extends Component {
                           />
                         }
                       />
-                      <Text>Dimension Based</Text>
+                      <Text style={{fontSize:hp('1.8%')}}>Dimension Based</Text>
                     </View>
                   </View>
                 </View>
@@ -1087,10 +1086,8 @@ const styles = StyleSheet.create({
   box8: {
     borderColor: "#696969",
     borderWidth: hp("0.1%"),
-    marginLeft: hp("1.5%"),
-    marginRight: hp("1.5%"),
+    marginLeft: hp("2%"),
     paddingLeft: hp("1.5%"),
-    paddingRight: hp("1.5%"),
     paddingTop: hp("1.5%"),
     height: hp("6%"),
     fontSize: hp("1.8%"),

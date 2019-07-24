@@ -113,6 +113,8 @@ class MyFamily extends Component {
                             data={this.state.relationList}
                             textColor={base.theme.colors.black}
                             inputContainerStyle={{}}
+                            label="Select Relationship"
+                            baseColor="rgba(0, 0, 0, 1)"
                             placeholder="Relationship*"
                             labelHeight={hp("4%")}
                             containerStyle={{
