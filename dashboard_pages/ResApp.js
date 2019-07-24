@@ -199,7 +199,7 @@ ResDashBoard:  {
   screen:FirstTab,
     navigationOptions: ({navigation}) =>({
       title: "Tabs Visitors",
-      header: props => <PatrollingCommonHeader navigation={navigation} isStaff={true} isReportVisible={false} isHidden={true} {...props}/>
+      header: props => <MyFamilyHeader isVisitors={true} {...props}/>
     }),
   },
   MyProfileScreen: {

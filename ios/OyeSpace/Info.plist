@@ -2,10 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSContactsUsageDescription</key>
-	<string>OyeSpace would like to access your contacts</string>
-	<key/>
-	<string/>
+	<key></key>
+	<string></string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>UILaunchStoryboardName</key>
@@ -14,13 +12,15 @@
 	<string>en</string>
 	<key>CFBundleVersion</key>
 	<string>34</string>
-	<key>NSCameraUsageDescription</key>
-	<string>OyeSpace would like to use your camera for profile image</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>OyeSpace would like to use your camera for profile image</string>
+	<key>CFBundleShortVersionString</key>
+	<string>9.1</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -38,8 +38,8 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
-			<key>NSDocumentClass</key>
-			<string>Document</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
 			<key>LSIsAppleDefaultForType</key>
 			<true/>
 			<key>CFBundleTypeName</key>
@@ -54,14 +54,12 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Alternate</string>
+			<key>NSDocumentClass</key>
+			<string>Document</string>
 		</dict>
 	</array>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>9.1</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -77,14 +75,16 @@
 	</dict>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>OyeSpace would like to save photos to your photo gallery</string>
+	<key>NSContactsUsageDescription</key>
+	<string>OyeSpace would like to access your contacts</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>UIAppFonts</key>

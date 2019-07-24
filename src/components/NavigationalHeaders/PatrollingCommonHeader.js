@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         paddingTop: 3
     },
     backButton: {
-        height: "50%"
+        height:'50%'
     },
     logoView: {
         height: 40,

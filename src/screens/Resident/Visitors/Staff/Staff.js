@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    View, Image, Text, TouchableOpacity,
+    View, Image, Text, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import base from "../../../../base";
 import {Dropdown} from "react-native-material-dropdown";
@@ -19,7 +19,7 @@ class Staff extends React.Component {
         super(props);
         this.props = props;
         this.state = {
-            isLoading: false,
+            isLoading:true,
             staffList: [],
             staffName: "",
             departmentName:"",
@@ -45,7 +45,6 @@ class Staff extends React.Component {
 
     async getListOfStaff() {
         let self = this;
-        self.setState({isLoading: true})
         console.log("StaffList Input",self.props.userReducer.SelectedAssociationID)
 
         let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID);// 1
@@ -61,6 +60,17 @@ class Staff extends React.Component {
                         staffNamesList.push({value: stat.data.worker[i].wkfName, staffDetails: stat.data.worker[i]})
                     }
                 }
+                staffNamesList.sort(function(a, b) {
+                    let nameA = a.value.toUpperCase();
+                    let nameB = b.value.toUpperCase();
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 self.setState({
                     staffName: staffNamesList[0].staffDetails.wkfName,
                     departmentName: staffNamesList[0].staffDetails.wkDesgn,
@@ -79,8 +89,10 @@ class Staff extends React.Component {
 
     render() {
         let staffList = this.state.staffList;
+        console.log('Add',this.state.staffPic)
         return (
-            <View style={StaffStyle.mainContainer}>
+            !this.state.isLoading?
+                <View style={StaffStyle.mainContainer}>
                 {this.state.staffList.length!==0?
                 <View style={StaffStyle.dropDownView}>
                     <Dropdown
@@ -198,14 +210,7 @@ class Staff extends React.Component {
                     <View style={StaffStyle.radioButtonView}>
                     <RadioForm formHorizontal={true} animation={true}>
                         {this.state.dayRadioProps.map((obj, i) => {
-                            let onPress = (value, index) => {
-                                this.setState({
-                                    daySelected: value,
-                                    isMonthSelected: false,
-                                    selectedInitialDate: moment(new Date()).format('DD-MM-YYYY'),
-                                    selectedEndDate: moment(new Date()).format('DD-MM-YYYY')
-                                })
-                            };
+                            let onPress = (value, index) => {this.setDateInCalendar(value,index)};
                             return (
                                 <View style={{width: '50%'}}>
                                     <RadioButton labelHorizontal={true} key={i.toString()}>
@@ -278,7 +283,34 @@ class Staff extends React.Component {
                     onButtonClick={() => this.getStaffReport()}/>
                     :<View/>}
             </View>
+                :
+                <View style={StaffStyle.activityIndicator}>
+                    <ActivityIndicator size="large" color={base.theme.colors.primary}/>
+                </View>
         )
+    }
+
+    setDateInCalendar(value,index){
+
+        if(value===0){
+            let initialDate = moment(new Date()).subtract(1, 'day').format('DD-MM-YYYY')
+            this.setState({
+                daySelected: value,
+                isMonthSelected: false,
+                selectedInitialDate: initialDate,
+                selectedEndDate: initialDate
+            })
+        }
+        else{
+            this.setState({
+                daySelected: value,
+                isMonthSelected: false,
+                selectedInitialDate: moment(new Date()).format('DD-MM-YYYY'),
+                selectedEndDate: moment(new Date()).format('DD-MM-YYYY')
+            })
+        }
+
+
     }
 
 

@@ -78,12 +78,6 @@ const StaffStyle = StyleSheet.create({
             marginTop: 25,
             marginBottom: 35,
         },
-       activityIndicator: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 80
-    },
     noStaffDataText:{
             fontSize:14,
         color:base.theme.colors.black
@@ -92,6 +86,11 @@ const StaffStyle = StyleSheet.create({
             alignItems:'center',
         justifyContent:'center',
         height:'100%'
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
     }
 
 

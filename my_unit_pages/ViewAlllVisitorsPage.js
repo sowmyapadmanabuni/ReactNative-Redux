@@ -139,12 +139,12 @@ class App extends React.Component {
         isLoading: false
       })
     }, 5000)
-    console.log("Association Id",this.props.dashBoardReducer.assId)
+    console.log("Association Id******",this.props.dashBoardReducer.assId,this.props.oyeURL,this.state.dobText,this.state.dobText1)
   }
-  myVisitorsGetList = () => {
+  myVisitorsGetList = () => {  //
     console.log("-----------------------") //2019/june/26
     fetch(
-      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
+      `https://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
 
       {
         method: "POST",
@@ -153,9 +153,9 @@ class App extends React.Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          StartDate: this.state.dobText,
-          EndDate: this.state.dobText1,
-          ASAssnID: this.props.dashBoardReducer.assId
+          StartDate: "2019-07-19",
+          EndDate: "2019-07-22",
+          ASAssnID: 3008
         })
       }
     )
