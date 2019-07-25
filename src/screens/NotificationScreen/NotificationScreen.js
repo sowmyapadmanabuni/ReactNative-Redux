@@ -518,11 +518,11 @@ class NotificationScreen extends Component {
                                 Entry On:{" "}
                               </Text>
                               <View style={{ flexDirection: "row" }}>
-                                <Text>
+                                {/* <Text>
                                   {this.state.Date !== null
                                     ? this.state.Date
                                     : ""}{" "}
-                                </Text>
+                                </Text> */}
                                 <Text>
                                   {/* {this.state.Time !== null
                                     ? this.state.Time
@@ -573,11 +573,11 @@ class NotificationScreen extends Component {
                                   Exit On:{" "}
                                 </Text>
                                 <View style={{ flexDirection: "row" }}>
-                                  <Text>
+                                  {/* <Text>
                                     {this.state.Date1 !== null
                                       ? this.state.Date1
                                       : ""}{" "}
-                                  </Text>
+                                  </Text> */}
                                   <Text>
                                     {/* {this.state.Time1 !== null
                                       ? this.state.Time1
