@@ -126,7 +126,7 @@ class MyProfile extends Component {
                       </Text>
                     </View>
 
-                    {/* <View style={styles.editButtonViewStyle}>
+                    <View style={styles.editButtonViewStyle}>
                       <TouchableOpacity
                           onPress={() => {
                             navigate("EditProfileScreen", {
@@ -186,7 +186,6 @@ class MyProfile extends Component {
                         />
                       </TouchableOpacity>
                     </View>
-                   */}
                   </View>
 
                   <View style={styles.containerView_ForProfilePicViewStyle}>
