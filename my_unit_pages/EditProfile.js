@@ -341,7 +341,7 @@ class EditProfile extends Component {
               ACISDCode:
                   callingCode.length <= 0
                       ? profileDataSourceIsdCode + profileDataSourceCca2
-                      : callingCode + cca2,
+                      : callingCode,
               ACMobile1:
                   alternatemobilenumber.length <= 0
                       ? profileDataSourceAlternateMobileNum
@@ -349,7 +349,7 @@ class EditProfile extends Component {
               ACISDCode1:
                   callingCode1.length <= 0
                       ? profileDataSourceIsdCode1 + profileDataSourceCca3
-                      : callingCode1 + cca3,
+                      : callingCode1,
               ACMobile2: null,
               ACISDCode2: null,
               ACMobile3: null,
@@ -462,7 +462,7 @@ class EditProfile extends Component {
       }
     };
     //showImagePicker
-    ImagePicker.launchImageLibrary(options, response => {
+    ImagePicker.showImagePicker(options, response => {
       //console.log("Response = ", response)
 
       if (response.didCancel) {
@@ -793,7 +793,7 @@ class EditProfile extends Component {
                             }}
                         >
                           <Text style={{color: "black", fontSize: hp("2%")}}>
-                            {this.state.callingCode1}
+                            {this.state.countryName===""?"91":this.state.callingCode1}
                           </Text>
                         </View>
 
