@@ -97,9 +97,9 @@
     "redux-persist-filesystem-storage": "^1.3.2",
     "redux-thunk": "^2.3.0",
     "rn-fetch-blob": "^0.10.15",
+    "rn-progress-loader": "^1.0.8",
     "rn-viewpager": "^1.2.9",
-    "victory-native": "^32.0.2",
-    "rn-progress-loader": "^1.0.8"
+    "victory-native": "^32.0.2"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
