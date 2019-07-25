@@ -42,7 +42,8 @@ class RegisterMe extends Component {
       dobDate: "",
 
       unitofperson: false,
-      unitofperson1: false
+      unitofperson1: false,
+      sent: false,
     };
   }
 
@@ -76,7 +77,9 @@ class RegisterMe extends Component {
     } = this.props.navigation.state.params;
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
-    } else if (this.checkStatus()) {
+    } else if(this.state.sent) {
+      alert("Request already sent")
+    }else if (this.checkStatus()) {
       alert("You already requested to join this unit");
     } else {
       anu = {
@@ -94,7 +97,7 @@ class RegisterMe extends Component {
       };
 
       let champBaseURL = this.props.champBaseURL;
-
+      this.setState({ sent: true })
       axios
         .post(
           `${champBaseURL}/association/join`,
@@ -314,7 +317,7 @@ class RegisterMe extends Component {
                       // }
                     });
                 } else {
-                  this.setState({ loading: false });
+                  this.setState({ loading: false, sent: true });
                   Alert.alert(
                     "Alert",
                     "You have already requested to join previously, your request is under review. You would be notified once review is complete",
@@ -324,24 +327,26 @@ class RegisterMe extends Component {
                 }
               })
               .catch(error => {
-                this.setState({ loading: false });
+                this.setState({ loading: false, sent: false });
                 console.log("********");
                 console.log(error);
                 console.log("********");
+                this.setState({ sent: false });
               });
           } else {
-            this.setState({ loading: false });
+            this.setState({ loading: false, sent: false });
             Alert.alert(
               "Alert",
               "Request not sent..!",
               [{ text: "Ok", onPress: () => {} }],
               { cancelable: false }
             );
+            this.setState({ sent: false });
           }
         })
         .catch(error => {
           console.log("second error", error);
-          this.setState({ loading: false });
+          this.setState({ loading: false , sent: false });
           Alert.alert(
             "Alert",
             "Request not sent..!",
@@ -362,6 +367,8 @@ class RegisterMe extends Component {
 
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
+    } else if (this.state.sent) {
+      alert("Request already sent");
     } else if (this.checkStatus()) {
       alert("You already requested to join this unit");
     } else {
@@ -381,6 +388,7 @@ class RegisterMe extends Component {
 
       let champBaseURL = this.props.champBaseURL;
       console.log(champBaseURL);
+      this.setState({ sent: true });
 
       axios
         .post(
@@ -602,7 +610,7 @@ class RegisterMe extends Component {
                       // }
                     });
                 } else {
-                  this.setState({ loading: false });
+                  this.setState({ loading: false, sent: true });
                   Alert.alert(
                     "Alert",
                     "You have already requested to join previously, your request is under review. You would be notified once review is complete",
@@ -612,13 +620,13 @@ class RegisterMe extends Component {
                 }
               })
               .catch(error => {
-                this.setState({ loading: false });
+                this.setState({ loading: false, sent: false });
                 console.log("********");
                 console.log(error);
                 console.log("********");
               });
           } else {
-            this.setState({ loading: false });
+            this.setState({ loading: false, sent: false });
             Alert.alert(
               "Alert",
               "Request not sent..!",
@@ -629,7 +637,7 @@ class RegisterMe extends Component {
         })
         .catch(error => {
           console.log("second error", error);
-          this.setState({ loading: false });
+          this.setState({ loading: false, sent: false });
           Alert.alert(
             "Alert",
             "Request not sent..!",

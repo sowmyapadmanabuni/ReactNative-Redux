@@ -19,7 +19,6 @@ import {
 } from "../../actions";
 
 import _ from "lodash";
-// import {connect} from 'react-redux';
 
 class NotificationDetailScreen extends Component {
   state = {
@@ -66,7 +65,8 @@ class NotificationDetailScreen extends Component {
               ntTitle: "Request Approved",
               ntDesc:
                 "Your request to join " +
-                item.mrRolName + " " +
+                item.mrRolName +
+                " " +
                 " unit in " +
                 item.asAsnName +
                 " association as " +
@@ -128,8 +128,8 @@ class NotificationDetailScreen extends Component {
                       );
                       StatusUpdate = {
                         NTID: item.ntid,
-                        // NTStatDesc: "Request Sent"
-                        NTStatDesc: responseJson_2.data.string
+                        NTStatDesc: "Request Sent"
+                        // NTStatDesc: responseJson_2.data.string
                       };
 
                       fetch(
@@ -252,8 +252,9 @@ class NotificationDetailScreen extends Component {
                   sbSubID: item.sbSubID,
                   ntTitle: "Request Declined",
                   ntDesc:
-                    "Your request to join " +
-                    item.mrRolName + " "+
+                    "Your request to join" +
+                    item.mrRolName +
+                    " " +
                     " unit in " +
                     item.asAsnName +
                     " association as " +
