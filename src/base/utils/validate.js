@@ -152,4 +152,14 @@ export class validate{
     static strToArray(str){
         return str.split(" ")
     }
+
+    static compareAssociationNames(a, b){
+        if ( a.value < b.value ){
+            return -1;
+        }
+        if ( a.value > b.value ){
+            return 1;
+        }
+        return 0;
+    }
 }
