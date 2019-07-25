@@ -462,7 +462,7 @@ class EditProfile extends Component {
       }
     };
     //showImagePicker
-    ImagePicker.launchImageLibrary(options, response => {
+    ImagePicker.showImagePicker(options, response => {
       //console.log("Response = ", response)
 
       if (response.didCancel) {
