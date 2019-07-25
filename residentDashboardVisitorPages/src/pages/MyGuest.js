@@ -44,7 +44,10 @@ class MyGuests extends Component {
     let self = this;
     setTimeout(() => {
       self.getInvitationList();
-    }, 2500);
+      this.setState({
+        isLoading: false
+      });
+    }, 1500);
   }
 
   getInvitationList = () => {

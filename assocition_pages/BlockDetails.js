@@ -42,7 +42,7 @@ class BlockDetail extends React.Component {
       this.setState({
         isLoading: false
       });
-    }, 3000);
+    }, 2000);
     this.blockDetailsLimitation();
   }
   blockDetailsLimitation = () => {
@@ -74,7 +74,6 @@ class BlockDetail extends React.Component {
   };
 
   myBlockDetailListGetData = () => {
-    // console.log("________")
     this.setState({ loading: true })
     let assid = this.props.navigation.state.params.associd
     fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Block/GetBlockListByAssocID/${assid}`, {
@@ -186,7 +185,7 @@ class BlockDetail extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation
-    console.log("The Association id: ---- ", this.props.navigation.state.params.associd)
+    // console.log("The Association id: ---- ", this.props.navigation.state.params.associd)
     let associationId = this.props.navigation.state.params.associd
     if (this.state.isLoading) {
       return (
@@ -240,7 +239,8 @@ class BlockDetail extends React.Component {
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                position: "absolute"
+                position: 'relative',
+                marginTop:hp('1%')
               }}
             >
               <Text>Please Wait</Text>

@@ -218,17 +218,19 @@ const Style = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
-  image1: {
-    width: wp("17%"),
+   image1: {
+    width: wp("22%"),
     height: hp("12%"),
     marginRight: hp("3%")
   },
- viewDetails1: {
+
+ 
+  viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
     justifyContent: "center",
@@ -243,6 +245,8 @@ const Style = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
+
+
 });
 
 export default Style;

@@ -158,7 +158,7 @@ class NotificationScreen extends Component {
   renderCollapseData = (type, id) => {
     const { gateDetails } = this.state;
     let value = "";
-    console.log("gateDetails", gateDetails);
+    // console.log("gateDetails", gateDetails);
 
     if (gateDetails.length <= 0) {
       value = "";
@@ -181,7 +181,22 @@ class NotificationScreen extends Component {
       } else if (type === "vlEntryImg") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlEntryImg : "";
+      } else if (type === "vlEntryT") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlEntryT : "";
+      } else if (type === "vlExitT") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlExitT : "";
+      }//vlengName
+      else if (type === "vlengName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlengName : "";
+      }//vlexgName
+      else if (type === "vlexgName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlexgName : "";
       }
+
     }
 
     return value;
@@ -248,8 +263,9 @@ class NotificationScreen extends Component {
             />
           ) : (
             <View style={{ flex: 1 }}>
-              <View>
-                <Text>Gate App Notification</Text>
+              <View style={{ flexDirection: "column" }}>
+                <Text>{item.ntDesc}</Text>
+                <Text> {item.ntdCreated}</Text>
               </View>
               <Collapsible
                 duration={100}
@@ -257,12 +273,12 @@ class NotificationScreen extends Component {
                 collapsed={item.open}
               >
                 <View style={{ backgroundColor: "#ED8A19" }}>
-                  <Text> {item.ntDesc}</Text>
+                  {/* <Text> {item.ntDesc}</Text> */}
                 </View>
               </Collapsible>
             </View>
           )}
-          <Text> {item.ntdCreated}</Text>
+          {/* <Text> {item.ntdCreated}</Text> */}
         </Card>
       );
     } else {
@@ -291,8 +307,9 @@ class NotificationScreen extends Component {
               />
             ) : (
               <View style={{ flex: 1 }}>
-                <View>
-                  <Text>Gate App Notification</Text>
+                <View style={{ flexDirection: "column" }}>
+                  <Text>{item.ntDesc}</Text>
+                  <Text>{item.ntdUpdated}</Text>
                 </View>
                 <Collapsible
                   duration={300}
@@ -494,9 +511,13 @@ class NotificationScreen extends Component {
                                     : ""}{" "}
                                 </Text>
                                 <Text>
-                                  {this.state.Time !== null
+                                  {/* {this.state.Time !== null
                                     ? this.state.Time
-                                    : ""}
+                                    : ""} */}
+                                  {this.renderCollapseData(
+                                    "vlEntryT",
+                                    item.sbMemID
+                                  )}
                                 </Text>
                               </View>
                             </View>
@@ -509,9 +530,13 @@ class NotificationScreen extends Component {
                             >
                               <Text style={{ color: "#ff8c00" }}>From: </Text>
                               <Text>
-                                {this.state.gateDetails !== null
+                                {/* {this.state.gateDetails !== null
                                   ? this.state.gateDetails.vlengName
-                                  : ""}
+                                  : ""} */}
+                                  {this.renderCollapseData(
+                                    "vlengName",
+                                    item.sbMemID
+                                  )}
                               </Text>
                             </View>
                           </View>
@@ -541,9 +566,13 @@ class NotificationScreen extends Component {
                                       : ""}{" "}
                                   </Text>
                                   <Text>
-                                    {this.state.Time1 !== null
+                                    {/* {this.state.Time1 !== null
                                       ? this.state.Time1
-                                      : ""}
+                                      : ""} */}
+                                    {this.renderCollapseData(
+                                      "vlExitT",
+                                      item.sbMemID
+                                    )}
                                   </Text>
                                 </View>
                               </View>
@@ -556,9 +585,13 @@ class NotificationScreen extends Component {
                               >
                                 <Text style={{ color: "#ff8c00" }}>From: </Text>
                                 <Text>
-                                  {this.state.gateDetails !== null
+                                  {/* {this.state.gateDetails !== null
                                     ? this.state.gateDetails.vlexgName
-                                    : ""}
+                                    : ""} */}
+                                    {this.renderCollapseData(
+                                      "vlexgName",
+                                      item.sbMemID
+                                    )}
                                 </Text>
                               </View>
                             </View>
@@ -572,7 +605,7 @@ class NotificationScreen extends Component {
                 </Collapsible>
               </View>
             )}
-            <Text> {item.ntdUpdated}</Text>
+            {/* <Text> {item.ntdUpdated}</Text> */}
           </Card>
         </TouchableWithoutFeedback>
       );

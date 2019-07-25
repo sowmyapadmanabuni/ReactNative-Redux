@@ -24,7 +24,6 @@ class MyFamilyHeader extends React.Component {
                     onPress={() => goBack(null)}
                     style={styles.buttonView}>
                     <Image
-                        resizeMode={'center'}
                         style={styles.backButton}
                         source={require('../../../icons/arrowBack.png')}
                     />
@@ -37,10 +36,10 @@ class MyFamilyHeader extends React.Component {
                     />
                 </View>
 
-                <TouchableOpacity onPress={() => this.onNextButtonClick()}
+               {/* <TouchableOpacity onPress={() => this.onNextButtonClick()}
                                           style={styles.scheduleReport}>
                             <Text style={styles.scheduleTextStyle}>Next</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
             </View>
         )
     }
@@ -67,10 +66,12 @@ const styles = StyleSheet.create({
         width: "17%",
         justifyContent: 'center',
         height: "90%",
-        paddingTop: 3
+        paddingTop: 3,
+        alignItems:'center'
     },
     backButton: {
-        height: "50%"
+        height: "30%",
+        width:"30%"
     },
     logoView: {
         height: 40,
@@ -105,11 +106,5 @@ const styles = StyleSheet.create({
 });
 
 
-const mapStateToProps = state => {
-    return {
-        //selectedCheckPoints: state.PatrollingReducer
-    }
-};
-
-export default connect(mapStateToProps)(MyFamilyHeader);
+export default MyFamilyHeader;
 

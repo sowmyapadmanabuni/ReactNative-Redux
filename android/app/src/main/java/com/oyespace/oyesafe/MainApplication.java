@@ -3,7 +3,6 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.lynxit.contactswrapper.ContactsWrapperPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
@@ -55,7 +54,6 @@ public class MainApplication extends Application implements ShareApplication,Rea
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new ContactsWrapperPackage(),
             new ReactNativeRestartPackage(),
                     new RNVersionNumberPackage(),
                     new CheckPackageInstallationPackage(),

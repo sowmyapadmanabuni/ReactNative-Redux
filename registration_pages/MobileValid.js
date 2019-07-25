@@ -293,7 +293,7 @@ class MobileValid extends Component {
                                                     style={{ fontSize: hp("1.45%"), color: "#ff8c00" }}
                                                     onPress={() => {
                                                         Linking.openURL(
-                                                            "https://www.oyespace.com/PrivacyPolicy.html"
+                                                            "https://www.oyespace.com/privacy"
                                                         );
                                                     }}
                                                 >
@@ -304,7 +304,7 @@ class MobileValid extends Component {
                                                     style={{ fontSize: hp("1.45%"), color: "#ff8c00" }}
                                                     onPress={() => {
                                                         Linking.openURL(
-                                                            "https://www.oyespace.com/TermsCond.html"
+                                                            "https://www.oyespace.com/terms"
                                                         );
                                                     }}
                                                 >

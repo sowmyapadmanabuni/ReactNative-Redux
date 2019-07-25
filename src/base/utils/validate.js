@@ -6,8 +6,6 @@ import moment from "moment";
 export class validate{
     static handleNullImg(img) {
         try{
-            console.log("Validate",img,strings.StaffImageLink,strings.StaffImageLink+img)
-
             let mImg = (img && img != "" ) ? strings.StaffImageLink+img: strings.staffPlaceHolder;
             return mImg;
         }

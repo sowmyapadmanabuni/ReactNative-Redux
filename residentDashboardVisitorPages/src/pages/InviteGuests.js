@@ -264,22 +264,23 @@ else{
                 </View>
                 <View style={{flexDirection:'row',}}>
                   
-                  <Item style={{flex:1}} floatingLabel>
-                      <Label style={{fontSize:hp('1.5%')}}>First Name</Label>
+                  <Item style={{flex:1}} >
+                      {/* <Label style={{fontSize:hp('1.5%')}}>First Name</Label> */}
                       <Input style={{fontSize:hp('2%')}}
                         autoCorrect={false}
                         autoCapitalize="words"
                         keyboardType="default"
+                        placeholder="First Name"
                         onChangeText={fname => this.setState({ fname : fname })}
                       />
                     </Item>
-                  <Item style={{flex:1}} floatingLabel>
-                        <Label style={{fontSize:hp('1.5%')}}>Last Name</Label>
+                  <Item style={{flex:1}}>
+                        {/* <Label style={{fontSize:hp('1.5%')}}>Last Name</Label> */}
                         <Input style={{fontSize:hp('2%')}}
                           autoCorrect={false}
                           autoCapitalize="words"
                           keyboardType="default"
-                          
+                          placeholder="Last Name"
                           onChangeText={lname => this.setState({ lname : lname})}
                         />
                       </Item>
@@ -301,44 +302,48 @@ else{
                           </View>
                         </View>
                         
-                        <Item style={{flex:0.5,marginLeft:hp('0.1%')}} floatingLabel>
-                          <Label style={{fontSize:hp('1.5%')}}>Mobile Number</Label>
+                        <Item style={{flex:0.5,marginLeft:hp('0.1%')}} >
+                          {/* <Label style={{fontSize:hp('1.5%')}}>Mobile Number</Label> */}
                           <Input style={{fontSize:hp('2%')}}
                             autoCorrect={false}
                             autoCapitalize="words"
                             keyboardType="number-pad"
+                            placeholder="Mobile Number"
                             maxLength= {10}
                             onChangeText={mobNo => this.setState({ mobNo : mobNo })}
                           />
                         </Item>
-                        <Item style={{flex:0.5}} floatingLabel>
-                        <Label style={{fontSize:hp('1.5%')}}>Vehicle No.</Label>
+                        <Item style={{flex:0.5}}>
+                        {/* <Label style={{fontSize:hp('1.5%')}}>Vehicle No.</Label> */}
                         <Input style={{fontSize:hp('2%')}}
                           autoCorrect={false}
                           autoCapitalize="characters"
                           keyboardType="default"
+                          placeholder="Vehicle No."
                           onChangeText={vehNo => this.setState({ vehNo : vehNo})}
                         />
                       </Item>
                               
                 </View>
 
-                <Item style={{flex:1}} floatingLabel>
-                  <Label style={{fontSize:hp('1.5%')}}>Email Address</Label>
+                <Item style={{flex:1}}>
+                  {/* <Label style={{fontSize:hp('1.5%')}}>Email Address</Label> */}
                   <Input style={{fontSize:hp('2%')}}
                     autoCorrect={false}
                     autoCapitalize="none"
                     keyboardType="email-address"
+                    placeholder="Email Address"
                     onChangeText={emailId => this.setState({ emailId : emailId })}
                   />
                 </Item>
               
-                <Item style={{flex:1}} floatingLabel>
-                  <Label style={{fontSize:hp('1.5%')}}>Purpose of Invitation</Label>
+                <Item style={{flex:1}}>
+                  {/* <Label style={{fontSize:hp('1.5%')}}>Purpose of Invitation</Label> */}
                   <Input style={{fontSize:hp('2%')}}
                     autoCorrect={false}
                     autoCapitalize="words"
                     keyboardType="default"
+                    placeholder="Purpose of Invitation"
                     onChangeText={purpose => this.setState({ purpose : purpose })}
                   />
                 </Item>                         

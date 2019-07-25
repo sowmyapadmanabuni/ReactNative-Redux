@@ -128,8 +128,8 @@ class NotificationDetailScreen extends Component {
                       );
                       StatusUpdate = {
                         NTID: item.ntid,
-                        NTStatDesc: "Request Sent"
-                        // NTStatDesc: responseJson_2.data.string
+                        // NTStatDesc: "Request Sent"
+                        NTStatDesc: responseJson_2.data.string
                       };
 
                       fetch(

@@ -18,6 +18,7 @@ import {
 } from "react-native-responsive-screen";
 import { NavigationEvents } from "react-navigation";
 import { connect } from "react-redux";
+import { Card, CardItem, Form, Item, Input, Icon } from "native-base"
 
 class BlockDetail extends React.Component {
   static navigationOptions = {
@@ -38,6 +39,12 @@ class BlockDetail extends React.Component {
 
   componentDidMount() {
     this.myJoinAssociationListGetData();
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 3000);
+    
   }
 
   searchFilterFunction = text => {
@@ -172,6 +179,10 @@ class BlockDetail extends React.Component {
                       id: item.asAssnID,
                       associationName: item.asAsnName
                     });
+                    this.setState({
+                      dataSource:[],
+                      arrayholder:[]
+                    })
                   }}
                 >
                   <Text style={styles.addUnitText}>Join</Text>
@@ -191,47 +202,47 @@ class BlockDetail extends React.Component {
       return (
         <View style={styles.container}>
           <SafeAreaView style={{ backgroundColor: "orange" }}>
-            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-              <View style={styles.viewDetails1}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.goBack();
-                  }}
-                >
-                  <View
-                    style={{
-                      height: hp("4%"),
-                      width: wp("15%"),
-                      alignItems: "flex-start",
-                      justifyContent: "center"
-                    }}
-                  >
-                    <Image
-                      resizeMode="contain"
-                      source={require("../icons/back.png")}
-                      style={styles.viewDetails2}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center"
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
                 }}
               >
-                <Image
-                  style={[styles.image1]}
-                  source={require("../icons/OyeSpace.png")}
-                />
-              </View>
-              <View style={{ flex: 0.2 }}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-              </View>
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
 
           <Text style={styles.titleOfScreenStyle}>Join association</Text>
 
@@ -277,7 +288,7 @@ class BlockDetail extends React.Component {
             >
               <Image
                 style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
+                source={require("../icons/headerLogo.png")}
               />
             </View>
             <View style={{ flex: 0.2 }}>
@@ -295,15 +306,28 @@ class BlockDetail extends React.Component {
         <View style={styles.containerViewStyle}>
           <Text style={styles.titleOfScreenStyle}>Join association</Text>
 
-          <TextInput
+          <Form style={styles.formSearch}>
+            <Item style={styles.inputItem}>
+              <Input
+                marginBottom={hp("-1%")}
+                placeholder="Search...."
+                multiline={false}
+                onChangeText={this.searchFilterFunction}
+              />
+
+              <Icon style={styles.icon} name="search" size={14} />
+            </Item>
+          </Form>
+
+          {/* <TextInput
             style={styles.searchTextStyle}
             placeholder="Search by Country/Name/Pincode..."
             round
             onChangeText={this.searchFilterFunction}
-          />
+          /> */}
 
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
           <View style={styles.lineAboveAndBelowFlatList} />
+          
           <FlatList
             data={this.state.dataSource.sort((a, b) =>
               a.asAsnName.localeCompare(b.asAsnName)
@@ -359,16 +383,36 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center"
   },
+  formSearch: {
+    marginBottom: hp("1%")
+  },
+  icon: {
+    color: "orange"
+  },
+  inputItem: {
+    marginTop: wp("1%"),
+    marginLeft: wp("4%"),
+    marginRight: wp("4%"),
+    //borderColor: "#909091"
+    borderColor: "#000000"
+  },
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
+   image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
+ 
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
@@ -384,11 +428,7 @@ const styles = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
-  image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
-  },
+
   mainView: {
     flex: 1
   },

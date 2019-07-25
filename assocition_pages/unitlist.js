@@ -42,6 +42,11 @@ class UnitList extends Component {
   }
 
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 1500);
     this.getUnitList();
   }
 

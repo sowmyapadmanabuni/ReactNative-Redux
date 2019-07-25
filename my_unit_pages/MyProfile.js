@@ -126,7 +126,7 @@ class MyProfile extends Component {
                       </Text>
                     </View>
 
-                    <View style={styles.editButtonViewStyle}>
+                    {/* <View style={styles.editButtonViewStyle}>
                       <TouchableOpacity
                           onPress={() => {
                             navigate("EditProfileScreen", {
@@ -186,6 +186,7 @@ class MyProfile extends Component {
                         />
                       </TouchableOpacity>
                     </View>
+                   */}
                   </View>
 
                   <View style={styles.containerView_ForProfilePicViewStyle}>
@@ -267,10 +268,10 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                      <Button bordered style={styles.button1}
+                      {/* <Button bordered style={styles.button1}
                               onPress={() => this.props.navigation.navigate('CreateAssnScreen')}>
                         <Text>Create Association</Text>
-                      </Button>
+                      </Button> */}
                       <View/>
                       <View style={{marginTop: hp("2%")}}>
                         <Button bordered style={styles.button1}

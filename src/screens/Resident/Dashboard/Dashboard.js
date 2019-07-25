@@ -732,7 +732,7 @@ class Dashboard extends React.Component {
 
 
                 let sortedArr = assocList.sort(base.utils.validate.compareAssociationNames);
-                console.log("DJBHVD:",sortedArr,assocList);
+                console.log("DJBHVD:", sortedArr, assocList);
 
                 self.setState({
                     assocList: sortedArr,
@@ -798,19 +798,20 @@ class Dashboard extends React.Component {
             if (stat && stat.data) {
                 let unitList = [];
                 for (let i = 0; i < stat.data.members.length; i++) {
-                    if (stat.data.members[i].unUniName !== "") {
-                        let Unit = "";
-                        if (
-                            !stat.data.members[i].unUniName ||
-                            stat.data.members[i].unUniName === ""
-                        ) {
-                            console.log("No Unit name", stat.data.members[i].unUniName);
-                            Unit = "Unit" + i;
-                        } else {
-                            Unit = stat.data.members[i].unUniName;
-                        }
-                        unitList.push({value: Unit, details: stat.data.members[i]});
+                    //if (stat.data.members[i].unUniName) {
+                    let Unit = "";
+                    if (
+                        !stat.data.members[i].unUniName ||
+                        stat.data.members[i].unUniName === ""
+                    ) {
+                        console.log("No Unit name", stat.data.members[i].unUniName);
+                        // Unit = "Unit" + i;
+                        Unit = stat.data.members[i].unUniName;
+                    } else {
+                        Unit = stat.data.members[i].unUniName;
                     }
+                    unitList.push({value: Unit, details: stat.data.members[i]});
+                    //}
                 }
                 console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
 
