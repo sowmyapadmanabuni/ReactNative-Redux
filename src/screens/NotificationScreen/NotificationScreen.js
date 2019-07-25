@@ -187,16 +187,15 @@ class NotificationScreen extends Component {
       } else if (type === "vlExitT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlExitT : "";
-      }//vlengName
+      } //vlengName
       else if (type === "vlengName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlengName : "";
-      }//vlexgName
+      } //vlexgName
       else if (type === "vlexgName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlexgName : "";
       }
-
     }
 
     return value;
@@ -278,7 +277,7 @@ class NotificationScreen extends Component {
               </Collapsible>
             </View>
           )}
-          {/* <Text> {item.ntdCreated}</Text> */}
+          <Text>{item.ntdUpdated}</Text>
         </Card>
       );
     } else {
@@ -546,10 +545,10 @@ class NotificationScreen extends Component {
                                 {/* {this.state.gateDetails !== null
                                   ? this.state.gateDetails.vlengName
                                   : ""} */}
-                                  {this.renderCollapseData(
-                                    "vlengName",
-                                    item.sbMemID
-                                  )}
+                                {this.renderCollapseData(
+                                  "vlengName",
+                                  item.sbMemID
+                                )}
                               </Text>
                             </View>
                           </View>
@@ -601,10 +600,10 @@ class NotificationScreen extends Component {
                                   {/* {this.state.gateDetails !== null
                                     ? this.state.gateDetails.vlexgName
                                     : ""} */}
-                                    {this.renderCollapseData(
-                                      "vlexgName",
-                                      item.sbMemID
-                                    )}
+                                  {this.renderCollapseData(
+                                    "vlexgName",
+                                    item.sbMemID
+                                  )}
                                 </Text>
                               </View>
                             </View>
