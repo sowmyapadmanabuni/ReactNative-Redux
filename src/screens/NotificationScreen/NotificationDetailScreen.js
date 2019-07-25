@@ -230,7 +230,7 @@ class NotificationDetailScreen extends Component {
           }
         )
         .then(() => {
-          let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
+          let roleName = item.sbRoleID === 2 ? "Owner" : "Tenant";
           axios
             .get(
               `http://${
@@ -253,7 +253,7 @@ class NotificationDetailScreen extends Component {
                   ntTitle: "Request Declined",
                   ntDesc:
                     "Your request to join" +
-                    item.mrRolName +
+                    item.mrRolName + " "+
                     " unit in " +
                     item.asAsnName +
                     " association as " +
