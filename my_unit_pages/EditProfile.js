@@ -328,7 +328,7 @@ class EditProfile extends Component {
 
     axios
         .post(
-            "http://apidev.oyespace.com/oyeliving/api/v1/AccountDetails/Update",
+            `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
             {
               ACFName:
                   firstname.length <= 0 ? profileDataSourceFirstName : firstname,

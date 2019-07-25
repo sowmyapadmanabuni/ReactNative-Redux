@@ -49,13 +49,13 @@ class Dashboard extends React.Component {
     super(props);
     this.props = props;
     this.state = {
-      myUnitCardHeight: "80%",
-      myUnitCardWidth: "25%",
-      adminCardHeight: "60%",
-      adminCardWidth: "20%",
-      offersCardHeight: "60%",
-      offersCardWidth: "20%",
-      isSelectedCard: "UNIT",
+        myUnitCardHeight: "80%",
+        myUnitCardWidth: "25%",
+        adminCardHeight: "60%",
+        adminCardWidth: "20%",
+        offersCardHeight: "60%",
+        offersCardWidth: "20%",
+        isSelectedCard: "UNIT",
       isLoading: false,
       assocList: [],
       assocName: "",
@@ -76,7 +76,8 @@ class Dashboard extends React.Component {
 
   componentWillMount() {
     this.setState({
-      isDataLoading: true
+      isDataLoading: true,
+      isDataVisible: true,
     });
     this.getListOfAssociation();
     this.getVehicleList();
@@ -418,7 +419,7 @@ class Dashboard extends React.Component {
 
         let sortedArr = assocList.sort(
           base.utils.validate.compareAssociationNames
-        );
+        );//open chrome
         console.log("DJBHVD:", sortedArr, assocList);
 
         self.setState({
@@ -701,6 +702,8 @@ class Dashboard extends React.Component {
                 height={this.state.myUnitCardHeight}
                 width={this.state.myUnitCardWidth}
                 cardText={"My Unit"}
+                iconWidth={Platform.OS==='ios'?35:16}
+                iconHeight={Platform.OS==='ios'?35:16}
                 cardIcon={require("../../../../icons/my_unit.png")}
                 onCardClick={() => this.changeCardStatus("UNIT")}
                 disabled={this.state.isSelectedCard === "UNIT"}
@@ -710,6 +713,8 @@ class Dashboard extends React.Component {
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
                   cardText={"Admin"}
+                  iconWidth={Platform.OS==='ios'?35:16}
+                  iconHeight={Platform.OS==='ios'?35:16}
                   onCardClick={() => this.changeCardStatus("ADMIN")}
                   cardIcon={require("../../../../icons/user.png")}
                   disabled={this.state.isSelectedCard === "ADMIN"}
@@ -785,9 +790,9 @@ class Dashboard extends React.Component {
       this.setState({
         myUnitCardHeight: "80%",
         myUnitCardWidth: "25%",
-        adminCardHeight: "60%",
+        adminCardHeight: "70%",
         adminCardWidth: "20%",
-        offersCardHeight: "60%",
+        offersCardHeight: "70%",
         offersCardWidth: "20%",
 
         assdNameHide: false,
@@ -795,11 +800,11 @@ class Dashboard extends React.Component {
       });
     } else if (status == "ADMIN") {
       this.setState({
-        myUnitCardHeight: "60%",
+        myUnitCardHeight: "70%",
         myUnitCardWidth: "20%",
         adminCardHeight: "80%",
         adminCardWidth: "25%",
-        offersCardHeight: "60%",
+        offersCardHeight: "70%",
         offersCardWidth: "20%",
 
         assdNameHide: true,
@@ -807,9 +812,9 @@ class Dashboard extends React.Component {
       });
     } else if (status == "OFFERS") {
       this.setState({
-        myUnitCardHeight: "60%",
+        myUnitCardHeight: "70%",
         myUnitCardWidth: "20%",
-        adminCardHeight: "60%",
+        adminCardHeight: "70%",
         adminCardWidth: "20%",
         offersCardHeight: "80%",
         offersCardWidth: "25%"
@@ -846,8 +851,8 @@ class Dashboard extends React.Component {
             cardIcon={require("../../../../icons/view_all_visitors.png")}
             // cardCount={5}
             marginTop={20}
-            iconWidth={20}
-            iconHeight={20}
+            iconWidth={Platform.OS==='ios'?40:35}
+            iconHeight={Platform.OS==='ios'?40:20}
             onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
             backgroundColor={base.theme.colors.cardBackground}
           />
@@ -855,8 +860,8 @@ class Dashboard extends React.Component {
             height={"100%"}
             width={"25%"}
             cardText={"Vehicles"}
-            iconWidth={20}
-            iconHeight={20}
+            iconWidth={Platform.OS==='ios'?40:25}
+            iconHeight={Platform.OS==='ios'?40:20}
             cardIcon={require("../../../../icons/vehicle.png")}
             cardCount={this.state.vechiclesCount}
             marginTop={20}
@@ -872,8 +877,8 @@ class Dashboard extends React.Component {
             cardIcon={require("../../../../icons/view_all_visitors.png")}
             // cardCount={2}
             marginTop={20}
-            iconWidth={20}
-            iconHeight={20}
+            iconWidth={Platform.OS==='ios'?40:35}
+            iconHeight={Platform.OS==='ios'?40:20}
             iconBorderRadius={0}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.goToFirstTab()}

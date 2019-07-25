@@ -258,10 +258,10 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                       <Button bordered warning style={styles.button1}
+                       {/* <Button bordered warning style={styles.button1}
                               onPress={() => this.props.navigation.navigate('CreateAssnScreen')}>
                         <Text>Create Association</Text>
-                      </Button>
+                      </Button> */}
                       <View/>
                       <View style={{marginTop: hp("2%")}}>
                         <Button bordered warning style={styles.button1}
