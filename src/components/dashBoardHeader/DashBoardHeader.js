@@ -18,6 +18,8 @@ class DashBoardHeader extends React.Component {
       datasource: null,
       myFirstName: ""
     };
+
+    this.myProfile = this.myProfile.bind(this);
   }
 
   // renderBadge = () => {
@@ -42,6 +44,10 @@ class DashBoardHeader extends React.Component {
   //     />
   //   );
   // };
+
+  componentWillMount() {
+    this.myProfile();
+  }
 
   renderBadge = () => {
     const { notifications } = this.props;
@@ -84,18 +90,11 @@ class DashBoardHeader extends React.Component {
     // );
   };
 
-  componentDidMount() {
-    let self = this;
-    setTimeout(() => {
-      self.myProfile();
-    }, 500);
-  }
-
   myProfile = async () => {
     const response = await base.services.OyeLivingApi.getProfileFromAccount(
       this.props.MyAccountID
     );
-    console.log(response);
+    console.log("Ressdsc:",response);
     this.setState({
       datasource: response,
       ImageSource: response.data.account[0].acImgName

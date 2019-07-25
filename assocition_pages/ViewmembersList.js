@@ -287,8 +287,8 @@ class Resident extends React.Component {
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
                             <View style={{alignItems: "flex-end", marginEnd: hp("2%")}}>
-                                {this.state.selectedRoleData.selRolId == 1 ||
-                                this.state.selectedRoleData.selRolId == 2 ? (
+                                {this.state.selectedRoleData.selRolId === 1 ||
+                                this.state.selectedRoleData.selRolId === 2 ? (
                                     <Button
                                         rounded
                                         warning
