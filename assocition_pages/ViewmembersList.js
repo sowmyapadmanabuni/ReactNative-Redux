@@ -13,7 +13,7 @@ import {Dropdown} from "react-native-material-dropdown";
 import {connect} from "react-redux";
 import {getDashUnits} from "../src/actions";
 import base from "../src/base";
-
+import OSButton from '../src/components/osButton/OSButton'
 let data = [
     {
         value: "Admin",
@@ -287,29 +287,10 @@ class Resident extends React.Component {
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
                             <View style={{alignItems: "flex-end", marginEnd: hp("2%")}}>
-                                {this.state.selectedRoleData.selRolId == 1 ||
-                                this.state.selectedRoleData.selRolId == 2 ? (
-                                    <Button
-                                        rounded
-                                        warning
-                                        style={{height: hp("5.5%"), width: wp("19%")}}
-                                        onPress={() => {
-                                            this.changeRole();
-                                        }}
-                                    >
-                                        <Text style={{color: "white", paddingStart: hp(" 0.9%")}}>
-                                            {" "}
-                                            Update
-                                        </Text>
-                                    </Button>
-                                ) : (
-                                    <Button rounded style={styles.viewDetails4}>
-                                        <Text style={{color: "white", paddingStart: hp("0.9%")}}>
-                                            {" "}
-                                            Update
-                                        </Text>
-                                    </Button>
-                                )}
+                               <OSButton height={hp('3%')} onButtonClick={()=>this.changeRole()} width={hp('8%')} oSBText={"Update"} oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
+                               this.state.selectedRoleData.selRolId === 2 ?base.theme.colors.primary:base.theme.colors.grey
+                            
+                            } />
                             </View>
                         </View>
                     </View>
@@ -448,7 +429,8 @@ const styles = StyleSheet.create({
     viewDetails4: {
         height: hp("5.5%"),
         width: wp("19%"),
-        backgroundColor: "#DCDCDC",
+        // backgroundColor: "#DCDCDC",
         alignContent: "center"
     }
 });
+
