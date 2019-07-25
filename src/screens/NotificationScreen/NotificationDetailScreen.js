@@ -65,7 +65,8 @@ class NotificationDetailScreen extends Component {
               ntTitle: "Request Approved",
               ntDesc:
                 "Your request to join " +
-                item.mrRolName + " " +
+                item.mrRolName +
+                " " +
                 " unit in " +
                 item.asAsnName +
                 " association as " +
@@ -251,14 +252,9 @@ class NotificationDetailScreen extends Component {
                   sbSubID: item.sbSubID,
                   ntTitle: "Request Declined",
                   ntDesc:
-<<<<<<< HEAD
                     "Your request to join" +
                     item.mrRolName +
                     " " +
-=======
-                    "Your request to join " +
-                    item.mrRolName + " "+
->>>>>>> 59743c9bc8138b0d4f9c58a6ab14ba4e18e95fa0
                     " unit in " +
                     item.asAsnName +
                     " association as " +
