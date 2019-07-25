@@ -1875,7 +1875,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
 				PRODUCT_NAME = OyeSpace;
-				PROVISIONING_PROFILE_SPECIFIER = OyeSafe_mac_sarthak;
+				PROVISIONING_PROFILE_SPECIFIER = Oyespace_sarthak_mac2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
