@@ -47,6 +47,7 @@ import {
     updateIdDashboard
 } from "../../../actions";
 import { NavigationEvents } from "react-navigation";
+import CheckInternet from "../../../base/services/CheckInternet";
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -1163,8 +1164,8 @@ class Dashboard extends React.Component {
                         marginTop={20}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() =>
-                           this.props.navigation.navigate("MyVehicleListScreen")
-                            //this.props.navigation.navigate("subscriptionManagement")
+                           //this.props.navigation.navigate("MyVehicleListScreen")
+                            this.props.navigation.navigate("subscriptionManagement")
 
                         }
                     />

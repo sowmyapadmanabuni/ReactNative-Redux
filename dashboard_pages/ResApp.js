@@ -241,16 +241,6 @@ ResDashBoard:  {
       headerTintColor: "#ffffff"
     }
   },
-  // SubscriptionScreen:  {
-  //   screen: Subscription,
-  //   navigationOptions: {
-  //     title: 'Subscription',
-  //     header: null,
-  //     //title: 'ResidentDashBoard Drawer ',
-  //     headerStyle: { backgroundColor: '#FA9917' },
-  //     headerTintColor: '#ffffff',
-  //   },
-  // },
 
   MyFamilyList: {
     screen: MyFamilyList,
@@ -813,7 +803,7 @@ addCheckPoint: {
   subscriptionManagement: {
     screen: SubscriptionManagement,
     navigationOptions: {
-      header: props => <PatrollingCommonHeader isReportVisible={false} isHidden={true} {...props}/>
+      header: props => <MyFamilyHeader {...props}/>
     }
   },
 },{
