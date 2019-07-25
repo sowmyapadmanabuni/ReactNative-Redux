@@ -354,10 +354,23 @@ class NotificationScreen extends Component {
                             item.sbMemID
                           ) ? (
                             // this.state.gateDetails.vlEntryImg == "" ? (
+                            // <Image
+                            //   style={styles.img}
+                            //   // style={styles.img}
+                            //   source={require("../../../icons/placeholderImg.png")}
+                            // />
                             <Image
                               style={styles.img}
                               // style={styles.img}
-                              source={require("../../../icons/placeholderImg.png")}
+                              source={{
+                                uri:
+                                  "http://mediaupload.oyespace.com" +
+                                  // this.state.gateDetails.vlEntryImg
+                                  this.renderCollapseData(
+                                    "vlEntryImg",
+                                    item.sbMemID
+                                  )
+                              }}
                             />
                           ) : (
                             <Image
