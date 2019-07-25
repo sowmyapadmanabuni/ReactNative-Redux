@@ -75,7 +75,7 @@ class Dashboard extends React.Component {
     componentWillMount() {
        this.setState({
             isDataLoading: true
-        })
+        });
         this.getListOfAssociation();
         this.getVehicleList();
     }

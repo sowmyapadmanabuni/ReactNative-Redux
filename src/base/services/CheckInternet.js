@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, NetInfo, Dimensions, StyleSheet } from 'react-native';
+import {View, Text, NetInfo, Dimensions, StyleSheet, Platform} from 'react-native';
 import base from "../index";
 
 const { width } = Dimensions.get('window');
@@ -52,8 +52,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         width,
-        //position: 'absolute',
-       // top: 30
+        marginTop:Platform.OS==='ios' ? 20:0
     },
     offlineText: { color: '#fff' }
 });

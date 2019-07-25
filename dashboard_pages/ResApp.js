@@ -161,7 +161,6 @@ import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader'
 import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport"
 import FirstTab from "../residentDashboardVisitorPages/FirstTab";
 import Subscription from "../assocition_pages/Subscription";
-import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement";
 import MyFamilyHeader from "../src/components/NavigationalHeaders/MyFamilyHeader";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
@@ -798,12 +797,6 @@ addCheckPoint: {
     navigationOptions: {
       header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
                                                isHidden={true} {...props}/>
-    }
-  },
-  subscriptionManagement: {
-    screen: SubscriptionManagement,
-    navigationOptions: {
-      header: props => <MyFamilyHeader {...props}/>
     }
   },
 },{
