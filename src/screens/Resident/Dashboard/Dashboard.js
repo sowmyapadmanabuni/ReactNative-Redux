@@ -49,9 +49,9 @@ class Dashboard extends React.Component {
         this.state = {
             myUnitCardHeight: "80%",
             myUnitCardWidth: "25%",
-            adminCardHeight: "60%",
+            adminCardHeight: "70%",
             adminCardWidth: "20%",
-            offersCardHeight: "60%",
+            offersCardHeight: "70%",
             offersCardWidth: "20%",
             isSelectedCard: "UNIT",
             isLoading: false,
@@ -73,9 +73,9 @@ class Dashboard extends React.Component {
     }
 
     componentWillMount() {
-        this.setState({
+       this.setState({
             isDataLoading: true
-        })
+        });
         this.getListOfAssociation();
         this.getVehicleList();
     }
@@ -668,9 +668,9 @@ class Dashboard extends React.Component {
         fetch(
             `http://${
                 this.props.oyeURL
-                }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
+            }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
                 this.state.assocId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -753,6 +753,7 @@ class Dashboard extends React.Component {
                 getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
             }
             self.getUnitListByAssoc();
+            self.roleCheckForAdmin();
         } catch (error) {
             base.utils.logger.log(error);
         }
@@ -782,6 +783,7 @@ class Dashboard extends React.Component {
         const {getDashUnits} = this.props;
         getDashUnits(assocId, oyeURL);
         self.getUnitListByAssoc();
+        self.roleCheckForAdmin();
     }
 
     async getUnitListByAssoc() {
@@ -857,9 +859,9 @@ class Dashboard extends React.Component {
 
     getVehicleList = () => {
         fetch(
-            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
                 this.props.dashBoardReducer.assId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -887,7 +889,7 @@ class Dashboard extends React.Component {
         fetch(
             `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
                 this.props.dashBoardReducer.assId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -915,7 +917,7 @@ class Dashboard extends React.Component {
         fetch(
             `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
                 this.props.dashBoardReducer.assId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -957,6 +959,7 @@ class Dashboard extends React.Component {
 
 
         let associationList = this.state.assocList;
+       // let associationList = [{assocName : "assocList[i].details.asAsnName", assocId : "assocList[i].details.asAssnID"}]
         let unitList = this.state.unitList;
         return (
             <View style={{height: "100%", width: "100%"}}>
@@ -965,7 +968,8 @@ class Dashboard extends React.Component {
                         <NavigationEvents onDidFocus={() => this.didMount()}/>
                         <View style={Style.dropDownContainer}>
                             <View style={Style.leftDropDown}>
-                                {this.state.assdNameHide === false ? (
+                                {associationList.length===1?<Text style={{top:20,color:base.theme.colors.black}}>Association: {this.state.assocName}</Text>:
+                                (this.state.assdNameHide) === false ? (
                                     <Dropdown
                                         value={this.state.assocName}
                                         label="Association Name"
@@ -985,7 +989,8 @@ class Dashboard extends React.Component {
                                 )}
                             </View>
                             <View style={Style.rightDropDown}>
-                                {this.state.unitNameHide === false ? (
+                                {unitList.length===1?<Text style={{top:20,color:base.theme.colors.black}}>Unit: {this.state.unitName}</Text>:
+                                this.state.unitNameHide === false ? (
                                     <Dropdown
                                         value={this.state.unitName}
                                         label="Unit"
@@ -1015,6 +1020,8 @@ class Dashboard extends React.Component {
                                 height={this.state.myUnitCardHeight}
                                 width={this.state.myUnitCardWidth}
                                 cardText={"My Unit"}
+                                iconWidth={Platform.OS === "ios" ? 22 : 18}
+                                iconHeight={Platform.OS === "ios" ? 22 : 16}
                                 cardIcon={require("../../../../icons/my_unit.png")}
                                 onCardClick={() => this.changeCardStatus("UNIT")}
                                 disabled={this.state.isSelectedCard === "UNIT"}
@@ -1024,6 +1031,8 @@ class Dashboard extends React.Component {
                                     height={this.state.adminCardHeight}
                                     width={this.state.adminCardWidth}
                                     cardText={"Admin"}
+                                    iconWidth={Platform.OS === "ios" ? 22 : 18}
+                                    iconHeight={Platform.OS === "ios" ? 22 : 18}
                                     onCardClick={() => this.changeCardStatus("ADMIN")}
                                     cardIcon={require("../../../../icons/user.png")}
                                     disabled={this.state.isSelectedCard === "ADMIN"}
@@ -1036,6 +1045,8 @@ class Dashboard extends React.Component {
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
+                        iconWidth={Platform.OS==='ios'?18:18}
+                        iconHeight={Platform.OS==='ios'?16:16}
                         cardIcon={require("../../../../icons/offers.png")}
                         backgroundColor={base.theme.colors.rosePink}
                         onCardClick={() => this.changeCardStatus("OFFERS")}
@@ -1093,9 +1104,9 @@ class Dashboard extends React.Component {
             this.setState({
                 myUnitCardHeight: "80%",
                 myUnitCardWidth: "25%",
-                adminCardHeight: "60%",
+                adminCardHeight: "70%",
                 adminCardWidth: "20%",
-                offersCardHeight: "60%",
+                offersCardHeight: "70%",
                 offersCardWidth: "20%",
 
                 assdNameHide: false,
@@ -1103,11 +1114,11 @@ class Dashboard extends React.Component {
             });
         } else if (status == "ADMIN") {
             this.setState({
-                myUnitCardHeight: "60%",
+                myUnitCardHeight: "70%",
                 myUnitCardWidth: "20%",
                 adminCardHeight: "80%",
                 adminCardWidth: "25%",
-                offersCardHeight: "60%",
+                offersCardHeight: "70%",
                 offersCardWidth: "20%",
 
                 assdNameHide: true,
@@ -1115,9 +1126,9 @@ class Dashboard extends React.Component {
             });
         } else if (status == "OFFERS") {
             this.setState({
-                myUnitCardHeight: "60%",
+                myUnitCardHeight: "70%",
                 myUnitCardWidth: "20%",
-                adminCardHeight: "60%",
+                adminCardHeight: "70%",
                 adminCardWidth: "20%",
                 offersCardHeight: "80%",
                 offersCardWidth: "25%"
@@ -1154,8 +1165,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={5}
                         marginTop={20}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS==='ios'?35:35}
+                        iconHeight={Platform.OS==='ios'?20:20}
                         onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
@@ -1163,8 +1174,8 @@ class Dashboard extends React.Component {
                         height={"100%"}
                         width={"25%"}
                         cardText={"Vehicles"}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS==='ios'?30:30}
+                        iconHeight={Platform.OS==='ios'?30:30}
                         cardIcon={require("../../../../icons/vehicle.png")}
                         cardCount={this.state.vechiclesCount}
                         marginTop={20}
@@ -1180,8 +1191,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={2}
                         marginTop={20}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS==='ios'?35:35}
+                        iconHeight={Platform.OS==='ios'?20:20}
                         iconBorderRadius={0}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() => this.goToFirstTab()}
@@ -1212,7 +1223,6 @@ class Dashboard extends React.Component {
                         </TouchableOpacity>
                     </View>
                     {invoiceList.length > 0 ?
-
                         <ScrollView style={Style.scrollView}>
                             <FlatList
                                 data={invoiceList}
@@ -1227,7 +1237,6 @@ class Dashboard extends React.Component {
                             <Text style={Style.noDataMsg}>No Invoices</Text>
                         </View>
                     }
-
                 </ElevatedView>
             */}
             </ElevatedView>
@@ -1251,7 +1260,6 @@ class Dashboard extends React.Component {
         </View> */}
 
                 {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
-
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
                       <View style={{ flexDirection: "column" }}>
@@ -1263,7 +1271,6 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/ww.png")}
                           />
                         </View>
-
                         <View>
                           <VictoryPie
                             colorScale={["#ff8c00", "#D0D0D0"]}
@@ -1274,7 +1281,6 @@ class Dashboard extends React.Component {
                             height={hp("22%")}
                             labels={() => null}
                           />
-
                           <View style={styles.gauge}>
                             <Text
                               style={[styles.gaugeText, { color: "#FF8C00" }]}
@@ -1297,7 +1303,6 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/hhhh.png")}
                           />
                         </View>
-
                         <View>
                           <VictoryPie
                             colorScale={["#45B591", "#D0D0D0"]}
@@ -1330,7 +1335,7 @@ class Dashboard extends React.Component {
                     }}
                 >
                     <Button
-                        bordered
+                        bordered warning
                         style={styles.button1}
                         onPress={() => this.props.navigation.navigate("ViewmembersScreen")}
                     >
@@ -1338,7 +1343,7 @@ class Dashboard extends React.Component {
                     </Button>
 
                     <Button
-                        bordered
+                        bordered warning
                         style={styles.button1}
                         onPress={() =>
                             this.props.navigation.navigate("ViewAlllVisitorsPage")
@@ -1590,4 +1595,3 @@ export default connect(
         updateIdDashboard
     }
 )(Dashboard);
-
