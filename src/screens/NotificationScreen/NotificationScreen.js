@@ -187,7 +187,16 @@ class NotificationScreen extends Component {
       } else if (type === "vlExitT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlExitT : "";
+      }//vlengName
+      else if (type === "vlengName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlengName : "";
+      }//vlexgName
+      else if (type === "vlexgName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlexgName : "";
       }
+
     }
 
     return value;
@@ -521,9 +530,13 @@ class NotificationScreen extends Component {
                             >
                               <Text style={{ color: "#ff8c00" }}>From: </Text>
                               <Text>
-                                {this.state.gateDetails !== null
+                                {/* {this.state.gateDetails !== null
                                   ? this.state.gateDetails.vlengName
-                                  : ""}
+                                  : ""} */}
+                                  {this.renderCollapseData(
+                                    "vlengName",
+                                    item.sbMemID
+                                  )}
                               </Text>
                             </View>
                           </View>
@@ -572,9 +585,13 @@ class NotificationScreen extends Component {
                               >
                                 <Text style={{ color: "#ff8c00" }}>From: </Text>
                                 <Text>
-                                  {this.state.gateDetails !== null
+                                  {/* {this.state.gateDetails !== null
                                     ? this.state.gateDetails.vlexgName
-                                    : ""}
+                                    : ""} */}
+                                    {this.renderCollapseData(
+                                      "vlexgName",
+                                      item.sbMemID
+                                    )}
                                 </Text>
                               </View>
                             </View>
