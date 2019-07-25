@@ -40,6 +40,7 @@ const HeaderStyles = StyleSheet.create({
         fontWeight:'600'
     },
     imageStyles: {
+        alignSelf:'center',
         height: 32,
         width: 32,
         borderRadius: 32 / 2

@@ -158,7 +158,7 @@ class NotificationScreen extends Component {
   renderCollapseData = (type, id) => {
     const { gateDetails } = this.state;
     let value = "";
-    console.log("gateDetails", gateDetails);
+    // console.log("gateDetails", gateDetails);
 
     if (gateDetails.length <= 0) {
       value = "";
@@ -181,7 +181,22 @@ class NotificationScreen extends Component {
       } else if (type === "vlEntryImg") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlEntryImg : "";
+      } else if (type === "vlEntryT") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlEntryT : "";
+      } else if (type === "vlExitT") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlExitT : "";
+      }//vlengName
+      else if (type === "vlengName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlengName : "";
+      }//vlexgName
+      else if (type === "vlexgName") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlexgName : "";
       }
+
     }
 
     return value;
@@ -248,7 +263,7 @@ class NotificationScreen extends Component {
             />
           ) : (
             <View style={{ flex: 1 }}>
-              <View style={{flexDirection:'column'}}>
+              <View style={{ flexDirection: "column" }}>
                 <Text>{item.ntDesc}</Text>
                 <Text> {item.ntdCreated}</Text>
               </View>
@@ -292,7 +307,7 @@ class NotificationScreen extends Component {
               />
             ) : (
               <View style={{ flex: 1 }}>
-                <View style={{flexDirection:'column'}}>
+                <View style={{ flexDirection: "column" }}>
                   <Text>{item.ntDesc}</Text>
                   <Text>{item.ntdUpdated}</Text>
                 </View>
@@ -339,10 +354,23 @@ class NotificationScreen extends Component {
                             item.sbMemID
                           ) ? (
                             // this.state.gateDetails.vlEntryImg == "" ? (
+                            // <Image
+                            //   style={styles.img}
+                            //   // style={styles.img}
+                            //   source={require("../../../icons/placeholderImg.png")}
+                            // />
                             <Image
                               style={styles.img}
                               // style={styles.img}
-                              source={require("../../../icons/placeholderImg.png")}
+                              source={{
+                                uri:
+                                  "http://mediaupload.oyespace.com" +
+                                  // this.state.gateDetails.vlEntryImg
+                                  this.renderCollapseData(
+                                    "vlEntryImg",
+                                    item.sbMemID
+                                  )
+                              }}
                             />
                           ) : (
                             <Image
@@ -496,9 +524,13 @@ class NotificationScreen extends Component {
                                     : ""}{" "}
                                 </Text>
                                 <Text>
-                                  {this.state.Time !== null
+                                  {/* {this.state.Time !== null
                                     ? this.state.Time
-                                    : ""}
+                                    : ""} */}
+                                  {this.renderCollapseData(
+                                    "vlEntryT",
+                                    item.sbMemID
+                                  )}
                                 </Text>
                               </View>
                             </View>
@@ -511,9 +543,13 @@ class NotificationScreen extends Component {
                             >
                               <Text style={{ color: "#ff8c00" }}>From: </Text>
                               <Text>
-                                {this.state.gateDetails !== null
+                                {/* {this.state.gateDetails !== null
                                   ? this.state.gateDetails.vlengName
-                                  : ""}
+                                  : ""} */}
+                                  {this.renderCollapseData(
+                                    "vlengName",
+                                    item.sbMemID
+                                  )}
                               </Text>
                             </View>
                           </View>
@@ -543,9 +579,13 @@ class NotificationScreen extends Component {
                                       : ""}{" "}
                                   </Text>
                                   <Text>
-                                    {this.state.Time1 !== null
+                                    {/* {this.state.Time1 !== null
                                       ? this.state.Time1
-                                      : ""}
+                                      : ""} */}
+                                    {this.renderCollapseData(
+                                      "vlExitT",
+                                      item.sbMemID
+                                    )}
                                   </Text>
                                 </View>
                               </View>
@@ -558,9 +598,13 @@ class NotificationScreen extends Component {
                               >
                                 <Text style={{ color: "#ff8c00" }}>From: </Text>
                                 <Text>
-                                  {this.state.gateDetails !== null
+                                  {/* {this.state.gateDetails !== null
                                     ? this.state.gateDetails.vlexgName
-                                    : ""}
+                                    : ""} */}
+                                    {this.renderCollapseData(
+                                      "vlexgName",
+                                      item.sbMemID
+                                    )}
                                 </Text>
                               </View>
                             </View>

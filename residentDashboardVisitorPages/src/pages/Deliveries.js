@@ -1,516 +1,914 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
-  AppRegistry, TouchableHighlight, Platform, Alert, TouchableOpacity,
-  ScrollView, PermissionsAndroid, StyleSheet, Button, Text, Image, View, FlatList, ActivityIndicator
-} from 'react-native';
-import { DatePickerDialog } from 'react-native-datepicker-dialog'
-import moment from 'moment';
-import Communications from 'react-native-communications';
-import ImageLoad from 'react-native-image-placeholder';
-//import { Fonts } from '../pages/src/utils/Fonts';
-import {connect} from 'react-redux';
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  AppRegistry,
+  TouchableOpacity,
+  Linking,
+  Keyboard,
+  Alert,
+  ActivityIndicator,
+  TextInput,
+  Easing,
+  SafeAreaView,
+  Dimensions
+} from "react-native";
+// import Header from "./src/components/common/Header"
+import { Card, CardItem, Button, Form, Item, Input, Icon } from "native-base";
+import DatePicker from "react-native-datepicker";
+import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { DatePickerDialog } from "react-native-datepicker-dialog";
+import ImageLoad from "react-native-image-placeholder";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
+import ZoomImage from "react-native-zoom-image";
+import { connect } from "react-redux";
 
-var date = new Date().getDate();
-var month = new Date().getMonth() + 1;
-var year = new Date().getFullYear();
-
-class ViewVisitorsList extends Component {
-  static navigationOptions = {
-    tabBarLabel: 'ViewVisitorsList',
-    drawerIcon: ({tintColor}) => {
-      return (
-          <Image source={require('../../../icons/OyeSpace.png')}
-                 style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-      );
-    }
-  }
-  ShowCurrentDate = () => {
-    Alert.alert(date + '-' + month + '-' + year);
-  }
-
-  async componentDidMount() {
-    await request_location_runtime_permission()
-  }
-
-  static navigationOptions = {
-    title: 'View VisitorList',
-    headerStyle: { backgroundColor: '#696969', },
-    headerTitleStyle: { color: '#fff', }
-  };
-
-  constructor() {
-    super()
+class App extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
       dataSource: [],
       isLoading: true,
-      dobText:  moment(new Date()).format('YYYY-MM-DD'),//year + '-' + month + '-' + date,
+
+      //search bar
+      loading: false,
+      error: null,
+
+      datetime: moment(new Date()).format("HH:mm:ss a"),
+
+      //date picker
+      dobText: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
       dobDate: null,
-      imageLoading: true,
-      chosenDate: new Date(),
+      isDateTimePickerVisible: false,
 
-    }
+      dobText1: moment(new Date()).format("YYYY-MM-DD"),
+      dobDate1: null,
+      isDateTimePickerVisible1: false,
 
-    this.setDate = this.setDate.bind(this);
-    this.onDateChange = this.onDateChange.bind(this);
-    console.log('anu123', 'constructor');
+      switch: false,
 
+      count: 1
+    };
+    this.arrayholder = [];
   }
 
-  updatePersssion = (peermissionStatus, visitorId, assnID) => {
-    console.log('anu123', peermissionStatus + ' ' + visitorId + ' ' + assnID);
-
-    member = {
-      "VLCmnts": peermissionStatus,
-      "VLCmntImg": "",
-      "FMID": 4,
-      "VLVisLgID": visitorId
-    }
-    console.log('member', member);
-    //http://122.166.168.160/oyesafe/api/v1/VisitorCommentAndFMID/Update
-    fetch('http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorCommentAndFMID/Update',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-          },
-          body: JSON.stringify(member)
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          if (responseJson.success) {
-            console.log('response', responseJson);
-            //alert('member added suceefully !')
-            ///FCM Start
-            fcmMsg = {
-              "data": {
-                "activt": "childExitApproved",
-                "name": this.props.MyFirstName + " " + this.props.MyLastName,
-                "nr_id": visitorId,
-                "entry_type": peermissionStatus,
-                "mobile": this.props.MyMobileNumber,
-              },
-              "to": "/topics/AllGuards" + assnID,
-            }
-            console.log('fcmMsg ', fcmMsg);
-            fetch('https://fcm.googleapis.com/fcm/send',
-                {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": "key=AAAAZFz1cFA:APA91bHV9vd8g4zSMR13q_IYrNmza0e0m0EgG4BJxzaQOcH3Nc3RRrTfYNyRryEgz0iDQwXhP-XYHAGOIcgYjLOf2KnwYp-6_9XKNdiYzjakfnFFruYz89BXpc474OWJBU_ZzCScV6Zy",
-                  },
-                  body: JSON.stringify(fcmMsg)
-                })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                  console.log('response fcmMsg', responseJson);
-                  if (responseJson.success) {
-                    //alert('member added suceefully !')
-                  } else {
-                    console.log('hiii', responseJson);
-                    // alert('fcmMsg failed  !')
-                  }
-                })
-                .catch((error) => {
-                  console.error(error);
-                  alert('caught error in fcmMsg');
-                });
-            ///FCM end
-          }
-          else {
-            console.log('hiii', responseJson);
-            alert('failed to add member !');
-          }
-          console.log('suvarna', 'hi');
-        })
-        .catch((error) => {
-          console.error(error);
-          alert('caught error in adding member');
-        });
-  }
-
+  //Date Picker 1
   onDOBPress = () => {
     let dobDate = this.state.dobDate;
-
     if (!dobDate || dobDate == null) {
       dobDate = new Date();
       this.setState({
         dobDate: dobDate
       });
-      this.makeRemoteRequest();
     }
-
     this.refs.dobDialog.open({
       date: dobDate,
-      maxDate: new Date() //To restirct future date
+      maxDate: new Date() //To restirct past dates
     });
+  };
 
-  }
-
-  onDOBDatePicked = (date) => {
+  onDOBDatePicked = date => {
     this.setState({
       dobDate: date,
-      dobText: moment(date).format('YYYY-MM-DD')
+      dobText: moment(date).format("YYYY-MM-DD")
     });
+  };
 
-    this.makeRemoteRequest();
-  }
+  //Date Piker 2
 
-  onDateChange(date) {
+  onDOBPress1 = () => {
+    let dobDate = this.state.dobDate1;
+    if (!dobDate || dobDate == null) {
+      dobDate = new Date();
+      this.setState({
+        dobDate1: dobDate
+      });
+    }
+    this.refs.dobDialog1.open({
+      date: dobDate,
+      maxDate: new Date() //To restirct past dates
+    });
+  };
 
+  onDOBDatePicked1 = date => {
     this.setState({
-      selectedStartDate: date,
+      dobDate1: date,
+      dobText1: moment(date).format("YYYY-MM-DD")
+    });
+  };
+
+  // //Time Picker
+  // _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+  // _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+  // _handleDatePicked = (dataSource.data.visitorlogbydate.vlEntryT[0]) => {
+  //   this.setState({
+  //     datetime: moment(
+  //       responseJson.data.visitorlogbydate.vlEntryT.substring(11, 16)
+  //     ).format("HH:mm:ss a")
+  //   });
+  // };
+
+  searchFilterFunction = text => {
+    this.setState({
+      value: text
     });
 
-    this.makeRemoteRequest();
-  }
+    const newData = this.arrayholder.filter(item => {
+      const itemData = `${item.vlfName.toUpperCase()} ${item.vlComName.toUpperCase()}`;
+      const textData = text.toUpperCase();
 
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
-    this.makeRemoteRequest();
-  }
-
-  renderItem = ({ item }) => {
-
-    console.log('renderitem ' + this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg');
-
-    const { navigate } = this.props.navigation;
-    const timeMessage = <View style={{ flexDirection: 'row' }}>
-      {/* <Image
-        source={require('../../../icons/enter.png')}
-        style={{ height: 15, width: 15, marginRight: 5, alignItems: "center" }} /> */}
-      <Text style={styles.text}>
-        {item.vlEntryT.substring(11, 16)}</Text>
-      {/* <Image
-        source={require('../../../icons/exit.png')}
-        style={{ height: 15, width: 15, marginRight: 5, paddingRight: 5, alignItems: "center", marginLeft: 30 }} /> */}
-      <Text style={styles.text}>{item.vlExitT.substring(11, 16)}</Text>
-    </View>;
-    const childExitOptions = <View style={{ flexDirection: 'row' }}><TouchableOpacity
-        style={styles.mybutton1}
-        onPress={this.updatePersssion.bind(this, "Approved", item.vlVisLgID, item.asAssnID)}
-
-        /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
-      <Text style={styles.lighttext}> Allow </Text>
-    </TouchableOpacity><TouchableOpacity
-        style={styles.mybutton1}
-        onPress={this.updatePersssion.bind(this, "Rejected", item.vlVisLgID, item.asAssnID)}  /*Products is navigation name*/>
-      <Text style={styles.lighttext}> Reject </Text>
-    </TouchableOpacity></View>;
-    const courierEntryOptions = <View style={{ flexDirection: 'row' }}><TouchableOpacity
-        style={styles.mybutton1}
-        onPress={this.updatePersssion.bind(this, "Approved", item.vlVisLgID, item.asAssnID)}
-
-        /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
-      <Text style={styles.lighttext}> Allow </Text>
-    </TouchableOpacity><TouchableOpacity
-        style={styles.mybutton1}
-        onPress={this.updatePersssion.bind(this, "Leave at Guard", item.vlVisLgID, item.asAssnID)}  /*Products is navigation name*/>
-      <Text style={styles.lighttext}> Reject </Text>
-    </TouchableOpacity></View>;
-    const buttonUpdateDetails = <View style={{ flexDirection: 'row' }}><TouchableOpacity
-        style={styles.mybutton1}
-        onPress={() => navigate('UpdateDetailsScreen', { vlVisLgID: item.vlVisLgID, asAssnID: item.asAssnID })}
-
-        /*Products is navigation name  onPress={() => navigate('Unit', { id: item.asAssnID })} */>
-      <Text style={styles.lighttext}> Update Details </Text>
-    </TouchableOpacity></View>;
-    //PERSON+"Association"+prefManager.getAssociationId()+NONREGULAR+movie.getOYERegularVisitorID()+".jpg"
-    //http://cohapi.careofhomes.com/Images/PERSONAssociation30NONREGULAR97.jpg
-    //  console.log('NONREGULAR '+item.vlfName, 'http://cohapi.careofhomes.com/Images/PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg  ' );
-    return (
-        <View style={{
-          flex: 1, backgroundColor: 'white', padding: 5, borderColor: 'orange',
-          marginLeft: 5, marginRight: 5, marginTop: 5, borderRadius: 2, borderWidth: 1,
-        }}>
-          <View style={{ flex: 3, flexDirection: 'row', padding: 1 }}>
-            <View style={{ flex: 1, flexDirection: 'column' }}>
-
-              <TouchableHighlight
-                  style={[styles.profileImgContainer, { borderColor: 'orange', borderWidth: 1 }]} >
-                { item.vlVisType === 'STAFF' ?
-                    <ImageLoad
-                        style={{ width: 100, height: 100, marginRight: 10 }}
-                        style={styles.profileImg}
-                        loadingStyle={{ size: 'large', color: 'blue' }}
-                        source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'STAFF' + item.reRgVisID + '.jpg' }} />
-                    :
-                    <ImageLoad
-                        style={{ width: 100, height: 100, marginRight: 10 }}
-                        style={styles.profileImg}
-                        loadingStyle={{ size: 'large', color: 'blue' }}
-                        source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} />
-                }
-                {/* <ImageLoad
-                style={{ width: 70, height: 70, marginRight: 10 }}
-                style={styles.profileImg}
-                loadingStyle={{ size: 'large', color: 'blue' }}
-                source={{ uri: this.props.viewImageURL + 'PERSONAssociation' + item.asAssnID + 'NONREGULAR' + item.vlVisLgID + '.jpg' }} /> */}
-
-              </TouchableHighlight>
-              <TouchableHighlight style={[styles.vehicleNum, {width:100}]}
-                                  underlayColor='#fff'>
-                <Text>{item.vlVehNum}</Text>
-              </TouchableHighlight>
-            </View>
-
-            <View style={{ flex: 2, flexDirection: 'column', marginLeft: 5 }}>
-              <Text style={styles.title}>{item.vlfName + ' ' + item.vllName}</Text>
-              {item.vlEntryT.substring(11, 16) === '00:00' && item.vlVisType === 'Child_Exit'
-              && item.vlCmnts === '' ? childExitOptions : item.vlEntryT.substring(11, 16) === '00:00'
-              && item.vlVisType === 'Service Provider'
-              && item.vlCmnts === '' ? courierEntryOptions : timeMessage}
-
-              <Text style={styles.text}>Visiting : {item.unUniName}</Text>
-              <TouchableOpacity onPress={() =>
-                  Communications.phonecall(item.vlMobile, true)}>
-                <View
-                    style={{ flex: 1, flexDirection: 'row' }}>
-                  {/* <Image
-                  source={require('../../../icons/call_answer_green.png')}
-                  style={{ height: 15, width: 15, alignItems: "center" }} /> */}
-                  <Text style={styles.text}>{item.vlMobile}</Text>
-                </View>
-              </TouchableOpacity>
-              <View
-                  style={{ flex: 1, flexDirection: 'row' }}>
-                <Text style={styles.text}>Visitor Type : {item.vlVisType}  </Text>
-                {item.vlEntryT.substring(11, 16) === '00:00' && item.vlVisType === 'Child_Exit'
-                && item.vlCmnts === '' ? <Text style={styles.text}> </Text> : <Text style={styles.text}>{item.vlCmnts}  </Text>}
-              </View>
-              <Text style={styles.text}>Number of persons : {item.vlVisCnt}</Text>
-              {/* <Image source={require('./team.png')}  /> */}
-              {item.vlExitT.substring(11, 16) === '00:00' && item.vlVisType === 'Regular'
-              && item.vlCmnts === '' ? buttonUpdateDetails : <Text style={styles.text}> </Text>}
-              {item.vlExitT.substring(11, 16) === '00:00' && item.vlVisType === 'ServiceProvider'
-              && item.vlCmnts === '' ? buttonUpdateDetails : <Text style={styles.text}> </Text>}
-
-            </View>
-            {/* <View style={{ backgroundColor: 'lightgrey', flexDirection: "column", width: 1, height:'80%', justifyContent:'center' }}></View> */}
-            {/* <View style={{flex:.6, justifyContent:'center'}}>
-          <TouchableOpacity onPress={() =>
-              Communications.phonecall(item.vlMobile, true)}>
-        <Image
-                 style={{margin:10, height:40, width:40}}
-                source={require('../pages/assets/images/call_answer_green.png')}
-
-                 />
-             </TouchableOpacity>
-          </View>   */}
-          </View>
-
-          {/* <Image source={{uri: 'http://cohapi.careofhomes.com/Images/PERSONAssociation30NONREGULAR'+item.oyeNonRegularVisitorID+'.jpg'}}
-       style={{width: 40, height: 40,resizeMode : 'stretch'}} /> */}
-        </View>
-    )
-
-  }
-
-  renderSeparator = () => {
-    return (
-        <View style={{ height: 2, width: '100%', backgroundColor: '#fff' }}>
-        </View>
-    )
-
-  }
+      return itemData.indexOf(textData) > -1;
+    });
+    this.setState({
+      dataSource: newData
+    });
+  };
 
   componentDidMount() {
-    console.log('anu', this.state.dobText.toString);
-    this.makeRemoteRequest();
-
+    this.myVisitorsGetList();
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 5000);
+    console.log("Association Id", this.props.dashBoardReducer.assId);
   }
-
-  makeRemoteRequest = () => {
-
-    const { } = this.props.navigation.state;
+  myVisitorsGetList = () => {
     this.setState({
-      isLoading: true
+      isLoading:true
     })
-    console.log('ff')
-    console.log('componentdidmount')
-    // http://api.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/1/2018-11-26
-    const url = 'http://' + this.props.oyeURL + '/oyesafe/api/v1/VisitorLog/GetVisitorLogListByDCreatedAndAssocID/' + this.props.dashBoardReducer.assId + '/' + this.state.dobText;
-    console.log(url)
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-      },
-    })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log('vievisitorlist ', responseJson);
-          this.setState({
-            dataSource: responseJson.data.visitorlogbydate.filter(x => x.unUnitID == this.props.SelectedUnitID && x.vlVisType === 'Delivery' ),
-            // dataSource: responseJson.data.visitorlogbydate,
-            isLoading: false
+    if (this.state.dobDate > this.state.dobDate1) {
+      Alert.alert("From Date should be less than To Date.");
+      this.setState({
+        isLoading:false
+      })
+      return false;
+    } else {
+      fetch(
+          `http://${
+              this.props.oyeURL
+          }/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
+
+          {
+            method: "POST",
+            headers: {
+              "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              StartDate: this.state.dobText,
+              EndDate: this.state.dobText1,
+              ASAssnID: this.props.dashBoardReducer.assId
+            })
+          }
+      )
+          .then(response => response.json())
+          .then(responseJson => {
+            //var count = Object.keys(responseJson.data.visitorlogbydate).length;
+            //console.log("fsbkfh", count);
+            console.log(
+                responseJson,
+                "*******************************************"
+            );
+            this.setState({
+              isLoading: false,
+              dataSource: responseJson.data.visitorlog,
+              error: responseJson.error || null,
+              loading: false,
+              dobDate: null,
+              dobDate1: null
+            });
+            this.arrayholder = responseJson.data.visitorlog;
           })
-          // console.log('anu', dataSource);
-        })
-        .catch((error) => {
-          console.log('err ' + error)
-          this.setState({
-            isLoading: false
-          })
-          Alert.alert("No Data for Selected Date");
-        })
 
-  }
+          .catch(error => {
+            this.setState({ error, loading: false });
+            console.log(error, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+          });
+    }
+  };
 
-  SampleFunction = () => {
-    // Write your own code here, Which you want to execute on Floating Button Click Event.
-    this.props.navigation.navigate('Unit');
-    // Alert.alert("Floating Button Clicked");
-  }
-
-  render() {
-    console.log('ravi', this.state.dobText.toString())
-    const { navigate } = this.props.navigation;
-
+  renderItem = ({ item }) => {
+    console.log(item);
+    // const time = item.vlEntryT;
+    // const entertiming = time.subString();
+    // console.log(entertiming);
     return (
-        <View style={{ backgroundColor: '#FFF', height: '100%' }}>
-          <View>
-            {/* <View style={{flexDirection:'row',}}> */}
-            {/* <View style={{flex:1, marginTop:43,marginRight:0, justifyContent:'center',marginLeft:10}}>
-                        <TouchableOpacity onPress={() => navigate(('ResDashBoard'), { cat: '' })}
-                        >
-                        <Image source={require('../../../icons/back.png')}
-                        style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                        </TouchableOpacity>
-                    </View> */}
-            {/* <TouchableOpacity
-                        style={{paddingTop: 2, paddingRight: 2, paddingLeft: 2, flex: 1, alignItems: 'center', flexDirection: 'row',
-                            paddingBottom: 2, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',marginTop:'6%'}}
-                            onPress={() => this.props.navigation.navigate('SideMenu')}>
-                        <Image source={require('../pages/assets/images/menu_button.png')}
-                            style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
-                    </TouchableOpacity> */}
-            {/* <View style={{ flex: 5, alignItems:'center', justifyContent:'center'}}> */}
-            {/* <Image source={require('../../../icons/OyespaceRebrandingLogo.png')}
-                        style={{height: 40, width: 95, marginTop: 45,marginBottom:5}} /> */}
-            {/* </View>
-                    <View style={{flex:1,marginTop:45, marginRight:10, justifyContent:'center',}}>
-                    </View>
-                </View>
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-                <Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',margin:10 }}>My Visitors</Text> */}
+        <View style={styles.tableView}>
+          <View style={styles.lineForCellView} />
+          <View style={styles.cellView}>
+            <View style={styles.containerImageView}>
+              {item.vlEntryImg == "" ? (
+                  <ZoomImage
+                      source={require("../../../icons/img.png")}
+                      imgStyle={{
+                        height: wp("20%"),
+                        width: wp("20%"),
+                        borderRadius: wp("20%") / 2,
+                        borderColor: "orange",
+                        borderWidth: hp("0.1%")
+                      }}
+                      //style={styles.mainCardItemImage}
+                      //style={styles.dummyImageForProfile}
+                      duration={300}
+                      enableScaling={true}
+                      easingFunc={Easing.bounce}
+                  />
+              ) : (
+                  // <Image
+                  //   style={styles.dummyImageForProfile}
+                  //   source={require("./src/components/images/profile_img@png.png")}
+                  // />
+                  <ZoomImage
+                      source={{
+                        uri:
+                            "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                      }}
+                      imgStyle={{
+                        height: wp("20%"),
+                        width: wp("20%"),
+                        borderRadius: wp("20%") / 2,
+                        borderColor: "orange",
+                        borderWidth: hp("0.1%")
+                      }}
+                      //style={styles.mainCardItemImage}
+                      duration={300}
+                      enableScaling={true}
+                      easingFunc={Easing.bounce}
+                  />
+                  // <Image
+                  //   style={styles.mainCardItemImage}
+                  //   source={{
+                  //     uri:
+                  //       "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                  //   }}
 
-            <View style={{ flexDirection: 'row', justify: 'center', margin: 5 }}>
-              <View style={{ flex: 1, flexDirection: 'row' }}>
-                <Text style={{ fontSize: 15, color: 'black', margin: 5 }}>Select Date: </Text>
-                <TouchableOpacity onPress={this.onDOBPress.bind(this)} >
-                  <View style={styles.datePickerBox}>
-                    <Text style={styles.datePickerText}>{this.state.dobText}</Text>
+                  // />
+              )}
+            </View>
+            <View style={styles.textViewContainer}>
+              <Text style={styles.nameTextStyle}>
+                {item.vlfName}
+                {/* {this.state.dataSource[0].vlfName} */}
+              </Text>
+              <View style={styles.viewTextStyle}>
+                <Image
+                    style={styles.viewImageStyle}
+                    source={require("../../../icons/user.png")}
+                />
+                <Text style={styles.subNameTextStyleOne}>{item.vlComName} </Text>
+              </View>
+              <View style={styles.viewTextStyle}>
+                <Image
+                    style={styles.viewImageStyle}
+                    source={require("../../../icons/entry_time.png")}
+                />
+                {/* <Text style={styles.subNameTextStyleTwo}>
+                Entry: {item.vlEntryT.substring(5, 10)},
+                {item.vlEntryT.substring(11, 16)} Exit:{" "}
+                {item.vlExitT.substring(5, 10)},{item.vlExitT.substring(11, 16)}
+                </Text>  */}
+                {/* <Text style={styles.subNameTextStyleTwo}>
+                Entry:
+                {item.vlEntryT.substring(11, 16)} Exit:{" "}
+                {item.vlExitT.substring(11, 16)}
+              </Text> */}
+
+                <Text style={styles.subNameTextStyleTwo}>
+                  Entry:
+                  {item.vlEntryT.substring(11, 19)}
+                </Text>
+                <Image
+                    style={styles.viewImageStyle}
+                    source={require("../../../icons/entry_time.png")}
+                />
+                <Text style={styles.subNameTextStyleTwo}>
+                  Exit: {item.vlExitT.substring(11, 19)}
+                </Text>
+                {/* {moment(newDate(item.vlExitT.substring(11, 16))).format(
+                "HH:mm:ss a"
+              )} */}
+                {/* {moment(
+              newDate({item.vlExitT.substring(11, 16)}, "Hmm")).format("hh:mm")} */}
+                {/* datetime: moment(new Date()).format("HH:mm:ss a") */}
+              </View>
+            </View>
+            <View style={styles.cellEndIcons}>
+              <Card>
+                <TouchableOpacity
+                    onPress={() => {
+                      {
+                        Platform.OS === "android"
+                            ? Linking.openURL(`tel:${item.vlMobile}`)
+                            : Linking.openURL(`telprompt:${item.vlMobile}`);
+                      }
+                    }}
+                >
+                  <View
+                      style={{
+                        width: hp("5.5%"),
+                        height: hp("5.5%"),
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                  >
+                    <Image
+                        style={styles.smallCardItemImage}
+                        source={require("../../../icons/call.png")}
+                    />
                   </View>
                 </TouchableOpacity>
-                <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
-              </View>
+              </Card>
             </View>
           </View>
-          {/*  <View style={{ height: '10%' }}>
-          <View style={{ flex: 1, justify: 'center', flexDirection: 'row' , margin: 5}}>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Text style={{ fontSize: 15, color: 'black', marginTop: 10 }}>Select Date: </Text>
-              <TouchableOpacity onPress={this.onDOBPress.bind(this)} >
-                <View style={styles.datePickerBox}>
-                  <Text style={styles.datePickerText}>{this.state.dobText}</Text>
-                </View>
-              </TouchableOpacity>
-              <DatePickerDialog ref="dobDialog" onDatePicked={this.onDOBDatePicked.bind(this)} />
-            </View>
-          </View>
-        </View> */}
-          {this.state.isLoading
-              ?
-              <View style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white'
-              }}>
-                <ActivityIndicator
-                    size="large"
-                    color="#330066"
-                    animating />
-              </View>
-              :
-              this.state.dataSource.length == 0 ?
-                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-                    <Text style={{ backgroundColor: 'white' }}>No Visitors for Selected Date</Text>
-                  </View>
-                  :
-                  <View style={{ backgroundColor: '#FFF' }}>
-                    <View style={{ height: '90%' }}>
-                      <FlatList
-                          data={this.state.dataSource}
-                          renderItem={this.renderItem}
-                          keyExtractor={(item, index) => item.name}
-                          ItemSeparatorComponent={this.renderSeparator}
+          <View style={styles.lineForCellView} />
+        </View>
+    );
+  };
+  render() {
+    console.log("View All Visitor", this.props.dashBoardReducer.assId);
+    if (this.state.isLoading) {
+      return (
+          <View style={styles.container}>
+            {/* <Header /> */}
+            {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
+              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+                <View style={styles.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.goBack();
+                      }}
+                  >
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: "flex-start",
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../../../icons/back.png")}
+                          style={styles.viewDetails2}
                       />
-                      {/*  <TouchableOpacity activeOpacity={0.5} onPress={this.SampleFunction} style={styles.TouchableOpacityStyle} >
-              <Image source={{ uri: 'https://reactnativecode.com/wp-content/uploads/2017/11/Floating_Button.png' }}
-                style={styles.FloatingButtonStyle} />
-            </TouchableOpacity> */}
                     </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                >
+                  <Image
+                      style={[styles.image1]}
+                      source={require("../../../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={{ flex: 0.2 }}>
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            </SafeAreaView> */}
+
+            <Text style={styles.titleOfScreen}>Visitors</Text>
+
+            {/* <TextInput
+            //source={require("./src/components/images/call.png")}
+            style={styles.textinput}
+            placeholder="Search by Name...."
+            // lightTheme
+            round
+            onChangeText={this.searchFilterFunction}
+          /> */}
+
+            <Form>
+              <Item style={styles.inputItem}>
+                <Input
+                    marginBottom={hp("-1%")}
+                    placeholder="Search...."
+                    multiline={false}
+                    onChangeText={this.searchFilterFunction}
+                />
+                <Icon style={{ color: "orange" }} name="search" size={14} />
+              </Item>
+            </Form>
+
+            <View style={styles.datePickerButtonView}>
+              <View
+                  style={{
+                    flex: 0.8,
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: hp("-1%")
+                  }}
+              >
+                <View>
+                  <Text style={{ color: "#38BCDB" }}>From</Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText}{" "}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog"
+                        onDatePicked={this.onDOBDatePicked.bind(this)}
+                    />
+
+                    <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                      <Image
+                          style={[styles.viewDatePickerImageStyle]}
+                          source={require("../../../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
                   </View>
-          }
+                </TouchableOpacity>
+
+                {/* </View> */}
+                <View>
+                  <Text style={{ color: "#38BCDB" }}> To </Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText1}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog1"
+                        onDatePicked={this.onDOBDatePicked1.bind(this)}
+                    />
+                    <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                      <Image
+                          style={styles.viewDatePickerImageStyle}
+                          source={require("../../../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+
+                {/* </View> */}
+              </View>
+
+              <View
+                  style={{
+                    flex: 0.2,
+
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                    marginRight: hp("-1.5%")
+                  }}
+              >
+                <Button
+                    bordered
+                    warning
+                    style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
+                    onPress={() => this.myVisitorsGetList()}
+                >
+                  <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: hp("1.6%")
+                      }}
+                  >
+                    Get
+                  </Text>
+                </Button>
+              </View>
+            </View>
+
+            <View style={styles.progress}>
+              <ActivityIndicator size="large" color="#01CBC6" />
+            </View>
+          </View>
+      );
+    }
+    console.log(this.state.dataSource, "*******************************");
+    console.log("ekjfhkwrghj");
+    return (
+        <View style={styles.mainView}>
+          {/* <Header /> */}
+          {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
+                >
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../../../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../../../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+              </View>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView> */}
+
+          <View style={styles.textWrapper}>
+            <Text style={styles.titleOfScreen}> Visitors </Text>
+
+            {/* <TextInput
+            //source={require("./src/components/images/call.png")}
+            style={styles.textinput}
+            placeholder="Search by Name...."
+            // lightTheme
+            round
+            onChangeText={this.searchFilterFunction}
+          /> */}
+
+            <Form>
+              <Item style={styles.inputItem}>
+                <Input
+                    marginBottom={hp("-1%")}
+                    placeholder="Search...."
+                    multiline={false}
+                    onChangeText={this.searchFilterFunction}
+                />
+                <Icon style={{ color: "orange" }} name="search" size={14} />
+              </Item>
+            </Form>
+
+            <View style={styles.datePickerButtonView}>
+              <View
+                  style={{
+                    flex: 0.8,
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    marginLeft: hp("-1%")
+                  }}
+              >
+                <View>
+                  <Text style={{ color: "#38BCDB" }}>From</Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText}{" "}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog"
+                        onDatePicked={this.onDOBDatePicked.bind(this)}
+                    />
+
+                    <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                      <Image
+                          style={[styles.viewDatePickerImageStyle]}
+                          source={require("../../../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+
+                {/* </View> */}
+                <View>
+                  <Text style={{ color: "#38BCDB" }}> To </Text>
+                </View>
+                {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+                <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                  <View style={styles.datePickerBox}>
+                    <Text style={styles.datePickerText}>
+                      {this.state.dobText1}
+                    </Text>
+                    <DatePickerDialog
+                        ref="dobDialog1"
+                        onDatePicked={this.onDOBDatePicked1.bind(this)}
+                    />
+                    <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                      <Image
+                          style={styles.viewDatePickerImageStyle}
+                          source={require("../../../icons/calender.png")}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+
+                {/* </View> */}
+              </View>
+
+              <View
+                  style={{
+                    flex: 0.2,
+
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                    marginRight: hp("-1.5%")
+                  }}
+              >
+                <Button
+                    bordered
+                    warning
+                    style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
+                    onPress={() => this.myVisitorsGetList()}
+                >
+                  <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: hp("2%")
+                      }}
+                  >
+                    Get
+                  </Text>
+                </Button>
+              </View>
+            </View>
+
+            {/* <TouchableOpacity onPress={this._showDateTimePicker}>
+          <DateTimePicker
+            isVisible={this.state.isDateTimePickerVisible}
+            onConfirm={this._handleDatePicked}
+            mode="time"
+            is24Hour={false}
+            onCancel={this._hideDateTimePicker}
+          />
+          <View style={styles.datePickerBox}>
+            <Text style={styles.subtext1}>{this.state.datetime}</Text>
+          </View>
+        </TouchableOpacity> */}
+            {this.state.dataSource.length == 0 ? (
+                <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "white"
+                    }}
+                >
+                  <Text
+                      style={{
+                        backgroundColor: "white",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: hp("2%")
+                      }}
+                  >
+                    No Entries for selected Date
+                  </Text>
+                  {/* <Text
+                style={{
+                  backgroundColor: "white",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: hp("2%")
+                }}
+              >
+                Choose other date please.
+              </Text> */}
+                </View>
+            ) : (
+                <FlatList
+                    style={{ marginTop: hp("2%") }}
+                    data={this.state.dataSource.sort((a, b) =>
+                        a.vlfName.localeCompare(b.vlfName)
+                    )}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item, index) => item.fmid.toString()}
+                />
+            )}
+          </View>
         </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-
-  text: { fontSize: 14,  color: 'black', },
-  title: { fontSize: 15, color: 'black', marginBottom: 2, fontWeight: 'bold' },
-
-  lighttext: { fontSize: 13,  color: 'white', },
-
-  TouchableOpacityStyle: {
-    position: 'absolute', width: 50, height: 50, alignItems: 'center',
-    justifyContent: 'center', right: 30, bottom: 30,
+  textWrapper: {
+    height: hp("85%"),
+    width: wp("100%")
   },
-
-  mybutton1: {
-    backgroundColor: 'orange', paddingTop: 8, paddingRight: 12, paddingLeft: 12,
-    paddingBottom: 8, borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
+  datePickerButtonView: {
+    marginTop: hp("1.5%"),
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    justifyContent: "space-around",
+    marginHorizontal: hp("2%")
   },
-
+  container: {
+    flex: 1,
+    //backgroundColor: "#fff",
+    flexDirection: "column"
+  },
+  progress: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  mainView: {
+    flex: 1
+  },
+  titleOfScreen: {
+    marginTop: hp("2%"),
+    marginBottom: hp("1%"),
+    textAlign: "center",
+    fontSize: hp("3%"),
+    fontWeight: "500",
+    color: "#FF8C00"
+  },
+  tableView: {
+    flexDirection: "column"
+  },
+  lineForCellView: {
+    backgroundColor: "lightgray",
+    height: hp("0.1%")
+  },
+  cellView: {
+    flexDirection: "row",
+    paddingRight: 0,
+    paddingLeft: hp("0.2"),
+    paddingTop: hp("0.8%"),
+    marginBottom: hp("0.8%"),
+    justifyContent: "space-between"
+  },
+  containerImageView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+    //margin: 5
+  },
+  mainCardItemImage: {
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    borderColor: "orange",
+    borderWidth: hp("0.1%")
+  },
+  dummyImageForProfile: {
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    borderColor: "orange",
+    borderWidth: hp("0.1%")
+  },
+  textViewContainer: {
+    flex: 3,
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "center"
+  },
+  viewTextStyle: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: hp("1.3%")
+  },
+  viewImageStyle: {
+    flexDirection: "row",
+    width: hp("2%"),
+    height: hp("2%")
+  },
+  viewDatePickerImageStyle: {
+    width: wp("3%"),
+    height: hp("2.2%"),
+    marginRight: hp("0.5%")
+  },
+  cellEndIcons: {
+    flex: 0.6,
+    alignItems: "flex-end",
+    justifyContent: "flex-start",
+    flexDirection: "column",
+    paddingTop: hp("0.3%")
+  },
+  smallCardItemImage: {
+    width: hp("2.8%"),
+    height: hp("2.8%")
+  },
+  nameTextStyle: {
+    padding: hp("0.5%"),
+    fontSize: hp("2%"),
+    fontWeight: "600"
+  },
+  subNameTextStyleOne: {
+    padding: hp("0.5%"),
+    fontSize: hp("1.7%"),
+    color: "#909091"
+  },
+  subNameTextStyleTwo: {
+    padding: hp("0.5%"),
+    fontSize: hp("1.7%"),
+    color: "#909091"
+  },
+  textinput: {
+    height: hp("5%"),
+    borderWidth: hp("0.2%"),
+    borderRadius: hp("3%"),
+    borderColor: "#f4f4f4",
+    marginHorizontal: hp("1.2%"),
+    paddingLeft: hp("3%"),
+    fontSize: hp("1.8%"),
+    backgroundColor: "#f4f4f4"
+  },
   datePickerBox: {
-    margin: 5, borderColor: '#ABABAB', borderWidth: 0.5, padding: 0,
-    borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4,
-    justifyContent: 'center'
+    margin: hp("1.0%"),
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    borderWidth: hp("0.2%"),
+    height: hp("4%"),
+    borderColor: "#bfbfbf",
+    padding: 0
   },
 
-  datePickerText: { fontSize: 15, marginLeft: 5, marginRight: 5, borderWidth: 0, color: '#121212', },
+  datePickerText: {
+    fontSize: hp("1.5%"),
+    marginLeft: 5,
+    marginRight: 5,
+    color: "#474749"
+  },
 
-  profileImgContainer: { marginLeft: 3, width: 80, marginTop: 5, borderRadius: 40, },
+  buttonUpdateStyle: {
+    width: wp("16%"),
+    borderRadius: hp("3%"),
+    borderWidth: wp("2%"),
+    height: hp("5%"),
+    marginRight: hp("1%"),
+    backgroundColor: "orange",
+    borderColor: "orange"
+  },
+  inputItem: {
+    marginTop: wp("1%"),
+    marginLeft: wp("4%"),
+    marginRight: wp("4%"),
+    //borderColor: "#909091"
+    borderColor: "#000000"
+  },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  image1: {
+    width: wp("22%"),
+    height: hp("12%")
+  },
 
-  profileImg: { height: 120, width: 80, borderRadius: 40, },
-
-  vehicleNum: { backgroundColor: '#E0E0E0', padding:5, borderRadius: 2, borderWidth: 1, borderColor: '#fff',alignSelf:"flex-start" },
-
-  FloatingButtonStyle: { resizeMode: 'contain', width: 50, height: 50, }
-
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  }
 });
-
-AppRegistry.registerComponent('createassociation', () => createassociation);
 
 const mapStateToProps = state => {
   return {
-    oyeURL: state.OyespaceReducer.oyeURL,
-    MyFirstName: state.UserReducer.MyFirstName,
-    MyLastName: state.UserReducer.MyLastName,
-    MyMobileNumber: state.UserReducer.MyMobileNumber,
-    viewImageURL: state.OyespaceReducer.viewImageURL,
-    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-    SelectedUnitID: state.UserReducer.SelectedUnitID,
-    dashBoardReducer:state.DashboardReducer
-
+    dashBoardReducer: state.DashboardReducer,
+    oyeURL: state.OyespaceReducer.oyeURL
   };
 };
 
-export default connect(mapStateToProps)(ViewVisitorsList);
+export default connect(mapStateToProps)(App);

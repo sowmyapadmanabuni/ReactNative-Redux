@@ -124,25 +124,14 @@ class DashBoardHeader extends React.Component {
   };
 
   render() {
-
-    base.utils.logger.log(
-      this.props.viewImageURL +
-        "PERSON" +
-        this.props.MyAccountID +
-        ".jpg" +
-        "?random_number=" +
-        new Date().getTime()
-    );
+    console.log("State in dashboard header:",this.state);
     return (
       <View style={HeaderStyles.container}>
         <View style={HeaderStyles.subContainerLeft}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("MyProfileScreen")}
           >
-            {/* <Image style={HeaderStyles.imageStyles}
-                               source={{uri:'https://via.placeholder.com/150/ff8c00/FFFFFF'}}>
-                        </Image> */}
-            {this.state.ImageSource === null ? (
+            {this.state.ImageSource === null || this.state.ImageSource === "" ? (
               <Image
                 style={HeaderStyles.imageStyles}
                 source={{
@@ -154,7 +143,7 @@ class DashBoardHeader extends React.Component {
                 style={HeaderStyles.imageStyles}
                 source={{
                   uri:
-                    "http://mediauploaddev.oyespace.com/Images/" +
+                    "http://mediaupload.oyespace.com/" +
                     this.state.ImageSource
                 }}
               />

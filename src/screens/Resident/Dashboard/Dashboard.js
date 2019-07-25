@@ -1,53 +1,46 @@
-import React, { Component } from "react";
+import React from "react";
 import {
-    View,
-    Text,
-    FlatList,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    TouchableHighlight,
-    StyleSheet,
     Dimensions,
+    Image,
+    Linking,
     Platform,
-    Linking
+    StyleSheet,
+    Text,
+    TouchableHighlight,
+    TouchableOpacity,
+    View
 } from "react-native";
 import base from "../../../base";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import CardView from "../../../components/cardView/CardView";
-import { Dropdown } from "react-native-material-dropdown";
+import {Dropdown} from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
-import _ from "lodash";
-import { VictoryPie } from "victory-native";
-import { Card, CardItem, Button } from "native-base";
+import {Button} from "native-base";
 
 
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-import {
-    newNotifInstance,
     createNotification,
-    getNotifications,
-    updateJoinedAssociation,
-    getDashSub,
-    getDashAssociation,
-    getDashUnits,
-    updateUserInfo,
-    updateApproveAdmin,
-    getAssoMembers,
-    updateDropDownIndex,
     createUserNotification,
+    getAssoMembers,
+    getDashAssociation,
+    getDashSub,
+    getDashUnits,
+    getNotifications,
+    newNotifInstance,
     refreshNotifications,
-    updateIdDashboard
+    updateApproveAdmin,
+    updateDropDownIndex,
+    updateIdDashboard,
+    updateJoinedAssociation,
+    updateUserInfo,
 } from "../../../actions";
-import { NavigationEvents } from "react-navigation";
-import CheckInternet from "../../../base/services/CheckInternet";
+import {NavigationEvents} from "react-navigation";
+import ProgressLoader from "rn-progress-loader";
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -56,33 +49,33 @@ class Dashboard extends React.Component {
         this.state = {
             myUnitCardHeight: "80%",
             myUnitCardWidth: "25%",
-            adminCardHeight: "70%",
+            adminCardHeight: "60%",
             adminCardWidth: "20%",
-            offersCardHeight: "70%",
+            offersCardHeight: "60%",
             offersCardWidth: "20%",
             isSelectedCard: "UNIT",
-
             isLoading: false,
             assocList: [],
             assocName: "",
             assocId: "",
-
             unitList: [],
             unitName: "",
             unitId: null,
-
             falmilyMemebCount: null,
             vechiclesCount: null,
             visitorCount: null,
-
             role: "",
-
             assdNameHide: false,
-            unitNameHide: false
+            unitNameHide: false,
+            isDataLoading: false,
+            isDataVisible: false
         };
     }
 
     componentWillMount() {
+       this.setState({
+            isDataLoading: true
+        })
         this.getListOfAssociation();
         this.getVehicleList();
     }
@@ -502,7 +495,7 @@ class Dashboard extends React.Component {
             .android.setPriority(firebase.notifications.Android.Priority.Max);
 
         firebase.notifications().displayNotification(notificationBuild);
-        this.setState({ foregroundNotif: notification._data });
+        this.setState({foregroundNotif: notification._data});
     };
 
     listenForNotif = () => {
@@ -533,8 +526,8 @@ class Dashboard extends React.Component {
             });
 
         firebase.notifications().onNotificationOpened(notificationOpen => {
-            const { MyAccountID } = this.props.userReducer;
-            const { oyeURL } = this.props.oyespaceReducer;
+            const {MyAccountID} = this.props.userReducer;
+            const {oyeURL} = this.props.oyespaceReducer;
             let details = notificationOpen.notification._data;
             if (notificationOpen.notification._data.admin === "true") {
                 if (notificationOpen.action) {
@@ -609,10 +602,9 @@ class Dashboard extends React.Component {
     };
 
     didMount = () => {
-        const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-        const { oyeURL } = this.props.oyespaceReducer;
-        // this.props.updateApproveAdmin([]);
+        const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
+        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
+        const {oyeURL} = this.props.oyespaceReducer;
 
         getDashSub(oyeURL, SelectedAssociationID);
         getDashAssociation(oyeURL, MyAccountID);
@@ -624,9 +616,9 @@ class Dashboard extends React.Component {
 
     componentDidMount() {
         console.log("Notification");
-        const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-        const { oyeURL } = this.props.oyespaceReducer;
+        const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
+        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
+        const {oyeURL} = this.props.oyespaceReducer;
         // this.props.updateApproveAdmin([]);
 
         getDashSub(oyeURL, SelectedAssociationID);
@@ -635,8 +627,8 @@ class Dashboard extends React.Component {
         this.requestNotifPermission();
         // this.getBlockList();
         this.props.getNotifications(oyeURL, MyAccountID);
-        this.getVehicleList();
     }
+
     //   onAssociationChange = (value, index) => {
     //     const {
     //       associationid,
@@ -676,9 +668,9 @@ class Dashboard extends React.Component {
         fetch(
             `http://${
                 this.props.oyeURL
-                }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
+            }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
                 this.state.assocId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -706,52 +698,61 @@ class Dashboard extends React.Component {
                 });
             })
             .catch(error => {
-                this.setState({ error, loading: false });
+                this.setState({error, loading: false});
             });
     };
+
+
+    static getAssociationList() {
+        this.getAssociationList();
+    }
 
 
     async getListOfAssociation() {
         let self = this;
         let oyeURL = this.props.oyeURL;
-        self.setState({ isLoading: true });
+        self.setState({isLoading: true});
         console.log("APi", base.utils.strings.oyeLivingDashBoard);
         let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
             this.props.userReducer.MyAccountID
         );
         console.log("data from stat", stat);
-        //self.setState({isLoading: false})
+
         try {
             if (stat && stat.data) {
                 let assocList = [];
                 for (let i = 0; i < stat.data.memberListByAccount.length; i++) {
-                    if (stat.data.memberListByAccount[i]) {
+                    if (stat.data.memberListByAccount[i].asAsnName !== "") {
                         assocList.push({
                             value: stat.data.memberListByAccount[i].asAsnName,
                             details: stat.data.memberListByAccount[i]
                         });
                     }
                 }
+
+
+                let sortedArr = assocList.sort(base.utils.validate.compareAssociationNames);
+                console.log("DJBHVD:", sortedArr, assocList);
+
                 self.setState({
-                    assocList: assocList,
-                    assocName: assocList[0].details.asAsnName,
-                    assocId: assocList[0].details.asAssnID
+                    assocList: sortedArr,
+                    assocName: sortedArr[0].details.asAsnName,
+                    assocId: sortedArr[0].details.asAssnID
                 });
-                const { updateIdDashboard } = this.props;
+                const {updateIdDashboard} = this.props;
                 console.log("updateIdDashboard1", this.props);
                 updateIdDashboard({
                     prop: "assId",
-                    value: assocList[0].details.asAssnID
+                    value: sortedArr[0].details.asAssnID
                 });
-                updateIdDashboard({ prop: "memberList", value: assocList });
-                const {  updateUserInfo } = this.props;
-                updateUserInfo({ prop: "SelectedAssociationID", value:assocList[0].details.asAssnID});
+                updateIdDashboard({prop: "memberList", value: sortedArr});
+                const {updateUserInfo} = this.props;
+                updateUserInfo({prop: "SelectedAssociationID", value: sortedArr[0].details.asAssnID});
 
-                const { getDashUnits } = this.props;
-                getDashUnits(assocList[0].details.asAssnID, oyeURL);
+                const {getDashUnits} = this.props;
+                getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
             }
             self.getUnitListByAssoc();
-            self.getVehicleList();
         } catch (error) {
             base.utils.logger.log(error);
         }
@@ -773,15 +774,14 @@ class Dashboard extends React.Component {
             assocName: value,
             assocId: assocId
         });
-        const { updateIdDashboard } = this.props;
+        const {updateIdDashboard} = this.props;
         console.log("updateIdDashboard2", this.props);
-        updateIdDashboard({ prop: "assId", value: assocId });
-        const {  updateUserInfo } = this.props;
-        updateUserInfo({ prop: "SelectedAssociationID", value:assocId});
-        const { getDashUnits } = this.props;
+        updateIdDashboard({prop: "assId", value: assocId});
+        const {updateUserInfo} = this.props;
+        updateUserInfo({prop: "SelectedAssociationID", value: assocId});
+        const {getDashUnits} = this.props;
         getDashUnits(assocId, oyeURL);
         self.getUnitListByAssoc();
-        self.getVehicleList();
     }
 
     async getUnitListByAssoc() {
@@ -791,35 +791,37 @@ class Dashboard extends React.Component {
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
             this.state.assocId
         );
-        self.setState({ isLoading: false });
+        self.setState({isLoading: false, isDataLoading: false});
         console.log("STAT123", stat);
 
         try {
             if (stat && stat.data) {
                 let unitList = [];
                 for (let i = 0; i < stat.data.members.length; i++) {
-                    if (stat.data.members[i]) {
-                        let Unit = "";
-                        // if (
-                        //     !stat.data.members[i].unUniName ||
-                        //     stat.data.members[i].unUniName === ""
-                        // ) {
-                        //     console.log("No Unit name", stat.data.members[i].unUniName);
-                        //     Unit = "Unit" + i;
-                        // } else {
-                        //     Unit = stat.data.members[i].unUniName;
-                        // }
-                        unitList.push({ value: Unit, details: stat.data.members[i] });
+                    //if (stat.data.members[i].unUniName) {
+                    let Unit = "";
+                    if (
+                        !stat.data.members[i].unUniName ||
+                        stat.data.members[i].unUniName === ""
+                    ) {
+                        console.log("No Unit name", stat.data.members[i].unUniName);
+                        // Unit = "Unit" + i;
+                        Unit = stat.data.members[i].unUniName;
+                    } else {
+                        Unit = stat.data.members[i].unUniName;
                     }
+                    unitList.push({value: Unit, details: stat.data.members[i]});
+                    //}
                 }
                 console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
 
                 self.setState({
                     unitList: unitList,
                     unitName: unitList[0].value,
-                    unitId: unitList[0].details.unUnitID
+                    unitId: unitList[0].details.unUnitID,
+                    isDataVisible: true
                 });
-                const { updateIdDashboard } = this.props;
+                const {updateIdDashboard} = this.props;
                 console.log("updateIdDashboard3", this.props);
                 updateIdDashboard({
                     prop: "uniID",
@@ -848,41 +850,16 @@ class Dashboard extends React.Component {
             unitName: value,
             unitId: unitId
         });
-        const { updateIdDashboard } = this.props;
+        const {updateIdDashboard} = this.props;
         console.log("updateIdDashboard5", this.props);
-        updateIdDashboard({ prop: "uniID", value: unitId });
+        updateIdDashboard({prop: "uniID", value: unitId});
     }
 
     getVehicleList = () => {
         fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log("Manas", responseJson);
-                this.setState({
-                    //Object.keys(responseJson.data.unitsByBlockID).length
-                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID).length
-                });
-            })
-            .catch(error => {
-                this.setState({ loading: false });
-                console.log(error);
-            });
-    };
-
-    getFamilyMemberList = () => {
-        fetch(
             `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
                 this.props.dashBoardReducer.assId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -901,16 +878,16 @@ class Dashboard extends React.Component {
                 });
             })
             .catch(error => {
-                this.setState({ loading: false });
+                this.setState({loading: false});
                 console.log(error);
             });
     };
 
-    getVisitorList = () => {
+    getFamilyMemberList = () => {
         fetch(
             `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
                 this.props.dashBoardReducer.assId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -924,11 +901,40 @@ class Dashboard extends React.Component {
                 console.log("Manas", responseJson);
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
-                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID).length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+                        .length
                 });
             })
             .catch(error => {
-                this.setState({ loading: false });
+                this.setState({loading: false});
+                console.log(error);
+            });
+    };
+
+    getVisitorList = () => {
+        fetch(
+            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+                this.props.dashBoardReducer.assId
+            }`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                }
+            }
+        )
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log("Manas", responseJson);
+                this.setState({
+                    //Object.keys(responseJson.data.unitsByBlockID).length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+                        .length
+                });
+            })
+            .catch(error => {
+                this.setState({loading: false});
                 console.log(error);
             });
     };
@@ -953,127 +959,127 @@ class Dashboard extends React.Component {
         let associationList = this.state.assocList;
         let unitList = this.state.unitList;
         return (
-            <View style={Style.container}>
-                <NavigationEvents onDidFocus={() => this.didMount()} />
-                <View style={Style.dropDownContainer}>
-                    <View style={Style.leftDropDown}>
-                        {this.state.assdNameHide === false ? (
-                            <Dropdown
-                                value={this.state.assocName}
-                                label="Association Name"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={associationList}
-                                textColor={base.theme.colors.black}
-                                inputContainerStyle={{ borderBottomColor: "transparent" }}
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={-4}
-                                rippleOpacity={0}
-                                onChangeText={(value, index) =>
-                                    this.onAssociationChange(value, index)
-                                }
+            <View style={{height: "100%", width: "100%"}}>
+                {this.state.isDataVisible ?
+                    <View style={Style.container}>
+                        <NavigationEvents onDidFocus={() => this.didMount()}/>
+                        <View style={Style.dropDownContainer}>
+                            <View style={Style.leftDropDown}>
+                                {this.state.assdNameHide === false ? (
+                                    <Dropdown
+                                        value={this.state.assocName}
+                                        label="Association Name"
+                                        baseColor="rgba(0, 0, 0, 1)"
+                                        data={associationList}
+                                        textColor={base.theme.colors.black}
+                                        inputContainerStyle={{borderBottomColor: "transparent"}}
+                                        dropdownOffset={{top: 10, left: 0}}
+                                        dropdownPosition={-4}
+                                        rippleOpacity={0}
+                                        onChangeText={(value, index) =>
+                                            this.onAssociationChange(value, index)
+                                        }
+                                    />
+                                ) : (
+                                    <View/>
+                                )}
+                            </View>
+                            <View style={Style.rightDropDown}>
+                                {this.state.unitNameHide === false ? (
+                                    <Dropdown
+                                        value={this.state.unitName}
+                                        label="Unit"
+                                        baseColor="rgba(0, 0, 0, 1)"
+                                        data={unitList}
+                                        inputContainerStyle={{borderBottomColor: "transparent"}}
+                                        textColor="#000"
+                                        dropdownOffset={{top: 10, left: 0}}
+                                        dropdownPosition={-3}
+                                        rippleOpacity={0}
+                                        onChangeText={(value, index) => {
+                                            this.updateUnit(value, index);
+                                        }}
+                                    />
+                                ) : (
+                                    <View/>
+                                )}
+                            </View>
+                        </View>
+                        {this.state.isSelectedCard === "UNIT"
+                            ? this.myUnitCard()
+                            : this.state.isSelectedCard === "ADMIN"
+                                ? this.adminCard()
+                                : this.offersZoneCard()}
+                        <View style={Style.bottomCards}>
+                            <CardView
+                                height={this.state.myUnitCardHeight}
+                                width={this.state.myUnitCardWidth}
+                                cardText={"My Unit"}
+                                cardIcon={require("../../../../icons/my_unit.png")}
+                                onCardClick={() => this.changeCardStatus("UNIT")}
+                                disabled={this.state.isSelectedCard === "UNIT"}
                             />
-                        ) : (
-                            <View />
-                        )}
-                    </View>
-                    <View style={Style.rightDropDown}>
-                        {this.state.unitNameHide === false ? (
-                            <Dropdown
-                                value={this.state.unitName}
-                                label="Unit"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={unitList}
-                                inputContainerStyle={{ borderBottomColor: "transparent" }}
-                                textColor="#000"
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={-3}
-                                rippleOpacity={0}
-                                onChangeText={(value, index) => {
-                                    this.updateUnit(value, index);
-                                }}
-                            />
-                        ) : (
-                            <View />
-                        )}
-                    </View>
-                </View>
-                {this.state.isSelectedCard === "UNIT"
-                    ? this.myUnitCard()
-                    : this.state.isSelectedCard === "ADMIN"
-                        ? this.adminCard()
-                        : this.offersZoneCard()}
-                <View style={Style.bottomCards}>
-                    <CardView
-                        height={this.state.myUnitCardHeight}
-                        width={this.state.myUnitCardWidth}
-                        cardText={"My Unit"}
-                        iconWidth={Platform.OS==='ios'?22:18}
-                        iconHeight={Platform.OS==='ios'?22:16}
-                        cardIcon={require("../../../../icons/my_unit.png")}
-                        onCardClick={() => this.changeCardStatus("UNIT")}
-                        disabled={this.state.isSelectedCard === "UNIT"}
-                    />
-                    {this.state.role === 1 ? (
-                        <CardView
-                            height={this.state.adminCardHeight}
-                            width={this.state.adminCardWidth}
-                            cardText={"Admin"}
-                            iconWidth={Platform.OS==='ios'?22:18}
-                            iconHeight={Platform.OS==='ios'?22:18}
-                            onCardClick={() => this.changeCardStatus("ADMIN")}
-                            cardIcon={require("../../../../icons/user.png")}
-                            disabled={this.state.isSelectedCard === "ADMIN"}
-                        />
-                    ) : (
-                        <View />
-                    )}
+                            {this.state.role === 1 ? (
+                                <CardView
+                                    height={this.state.adminCardHeight}
+                                    width={this.state.adminCardWidth}
+                                    cardText={"Admin"}
+                                    onCardClick={() => this.changeCardStatus("ADMIN")}
+                                    cardIcon={require("../../../../icons/user.png")}
+                                    disabled={this.state.isSelectedCard === "ADMIN"}
+                                />
+                            ) : (
+                                <View/>
+                            )}
 
-                    {/* <CardView
+                            {/* <CardView
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
-                        iconWidth={Platform.OS==='ios'?18:18}
-                        iconHeight={Platform.OS==='ios'?16:16}
                         cardIcon={require("../../../../icons/offers.png")}
                         backgroundColor={base.theme.colors.rosePink}
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-                </View>
-                <View style={Style.supportContainer}>
-                    <View style={Style.subSupportView}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                {
-                                    Platform.OS === "android"
-                                        ? Linking.openURL(`tel:+919343121121`)
-                                        : Linking.openURL(`tel:+919343121121`);
-                                }
-                            }}
-                        >
-                            <Image
-                                style={[Style.supportIcon]}
-                                source={require("../../../../icons/call1.png")}
-                            />
-                        </TouchableOpacity>
-                        {/* <TouchableOpacity>
+                        </View>
+                        <View style={Style.supportContainer}>
+                            <View style={Style.subSupportView}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        {
+                                            Platform.OS === "android"
+                                                ? Linking.openURL(`tel:+919343121121`)
+                                                : Linking.openURL(`tel:+919343121121`);
+                                        }
+                                    }}
+                                >
+                                    <Image
+                                        style={[Style.supportIcon]}
+                                        source={require("../../../../icons/call1.png")}
+                                    />
+                                </TouchableOpacity>
+                                {/* <TouchableOpacity>
               <Image
                 style={Style.supportIcon}
                 source={require("../../../../icons/chat.png")}
               />
             </TouchableOpacity> */}
-                        <TouchableOpacity
-                            onPress={() => {
-                                Linking.openURL("mailto:happy@oyespace.com");
-                            }}
-                        >
-                            <Image
-                                style={Style.supportIcon}
-                                source={require("../../../../icons/Group771.png")}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        Linking.openURL("mailto:happy@oyespace.com");
+                                    }}
+                                >
+                                    <Image
+                                        style={Style.supportIcon}
+                                        source={require("../../../../icons/Group771.png")}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View> : <View/>}
+                <ProgressLoader isHUD={true} isModal={true} visible={this.state.isDataLoading}
+                                color={base.theme.colors.primary}
+                                hudColor={"#FFFFFF"}/>
             </View>
         );
     }
@@ -1087,9 +1093,9 @@ class Dashboard extends React.Component {
             this.setState({
                 myUnitCardHeight: "80%",
                 myUnitCardWidth: "25%",
-                adminCardHeight: "70%",
+                adminCardHeight: "60%",
                 adminCardWidth: "20%",
-                offersCardHeight: "70%",
+                offersCardHeight: "60%",
                 offersCardWidth: "20%",
 
                 assdNameHide: false,
@@ -1097,11 +1103,11 @@ class Dashboard extends React.Component {
             });
         } else if (status == "ADMIN") {
             this.setState({
-                myUnitCardHeight: "70%",
+                myUnitCardHeight: "60%",
                 myUnitCardWidth: "20%",
                 adminCardHeight: "80%",
                 adminCardWidth: "25%",
-                offersCardHeight: "70%",
+                offersCardHeight: "60%",
                 offersCardWidth: "20%",
 
                 assdNameHide: true,
@@ -1109,9 +1115,9 @@ class Dashboard extends React.Component {
             });
         } else if (status == "OFFERS") {
             this.setState({
-                myUnitCardHeight: "70%",
+                myUnitCardHeight: "60%",
                 myUnitCardWidth: "20%",
-                adminCardHeight: "70%",
+                adminCardHeight: "60%",
                 adminCardWidth: "20%",
                 offersCardHeight: "80%",
                 offersCardWidth: "25%"
@@ -1148,8 +1154,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={5}
                         marginTop={20}
-                        iconWidth={Platform.OS==='ios'?35:35}
-                        iconHeight={Platform.OS==='ios'?20:20}
+                        iconWidth={20}
+                        iconHeight={20}
                         onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
@@ -1157,16 +1163,14 @@ class Dashboard extends React.Component {
                         height={"100%"}
                         width={"25%"}
                         cardText={"Vehicles"}
-                        iconWidth={Platform.OS==='ios'?30:30}
-                        iconHeight={Platform.OS==='ios'?30:30}
+                        iconWidth={20}
+                        iconHeight={20}
                         cardIcon={require("../../../../icons/vehicle.png")}
                         cardCount={this.state.vechiclesCount}
                         marginTop={20}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() =>
-                           //this.props.navigation.navigate("MyVehicleListScreen")
-                            this.props.navigation.navigate("subscriptionManagement")
-
+                            this.props.navigation.navigate("MyVehicleListScreen")
                         }
                     />
                     <CardView
@@ -1176,8 +1180,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={2}
                         marginTop={20}
-                        iconWidth={Platform.OS==='ios'?35:35}
-                        iconHeight={Platform.OS==='ios'?20:20}
+                        iconWidth={20}
+                        iconHeight={20}
                         iconBorderRadius={0}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() => this.goToFirstTab()}
@@ -1208,7 +1212,6 @@ class Dashboard extends React.Component {
                         </TouchableOpacity>
                     </View>
                     {invoiceList.length > 0 ?
-
                         <ScrollView style={Style.scrollView}>
                             <FlatList
                                 data={invoiceList}
@@ -1223,7 +1226,6 @@ class Dashboard extends React.Component {
                             <Text style={Style.noDataMsg}>No Invoices</Text>
                         </View>
                     }
-
                 </ElevatedView>
             */}
             </ElevatedView>
@@ -1247,7 +1249,6 @@ class Dashboard extends React.Component {
         </View> */}
 
                 {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
-
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
                       <View style={{ flexDirection: "column" }}>
@@ -1259,7 +1260,6 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/ww.png")}
                           />
                         </View>
-
                         <View>
                           <VictoryPie
                             colorScale={["#ff8c00", "#D0D0D0"]}
@@ -1270,7 +1270,6 @@ class Dashboard extends React.Component {
                             height={hp("22%")}
                             labels={() => null}
                           />
-
                           <View style={styles.gauge}>
                             <Text
                               style={[styles.gaugeText, { color: "#FF8C00" }]}
@@ -1293,7 +1292,6 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/hhhh.png")}
                           />
                         </View>
-
                         <View>
                           <VictoryPie
                             colorScale={["#45B591", "#D0D0D0"]}
@@ -1389,15 +1387,16 @@ class Dashboard extends React.Component {
         );
     }
 
-    myUnit() {}
+    myUnit() {
+    }
 
     goToFirstTab() {
-        const { updateIdDashboard } = this.props;
+        const {updateIdDashboard} = this.props;
         console.log("updateIdDashboard", this.props);
-        updateIdDashboard({ prop: "assId", value: this.state.assocId });
-        updateIdDashboard({ prop: "uniID", value: this.state.unitId });
-        const {  updateUserInfo } = this.props;
-        updateUserInfo({ prop: "SelectedAssociationID", value: this.state.assocId });
+        updateIdDashboard({prop: "assId", value: this.state.assocId});
+        updateIdDashboard({prop: "uniID", value: this.state.unitId});
+        const {updateUserInfo} = this.props;
+        updateUserInfo({prop: "SelectedAssociationID", value: this.state.assocId});
 
 
         this.props.navigation.navigate("firstTab");
@@ -1585,4 +1584,3 @@ export default connect(
         updateIdDashboard
     }
 )(Dashboard);
-

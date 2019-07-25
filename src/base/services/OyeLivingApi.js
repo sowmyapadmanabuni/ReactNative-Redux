@@ -47,30 +47,33 @@ instance.interceptors.response.use((response) => {
 });
 
 
-export default class OyeLivingApi{
+export default class OyeLivingApi {
 
 
-    static async login(detail){
-        return await instance.post('Account/GetAccountDetailsByMobileNumber',detail);
+    static async login(detail) {
+        return await instance.post('Account/GetAccountDetailsByMobileNumber', detail);
     }
 
-    static async getAssociationListByAccountId(accountId){ 
-        console.log("ASD",accountId)
-
-        return await instance.get('Member/GetMemberListByAccountID/'+accountId)
+    static async getAssociationListByAccountId(accountId) {
+        return await instance.get('Member/GetMemberListByAccountID/' + accountId)
     }
 
-    static async getUnitListByAssoc(assocId){ 
-        console.log("UNIT",assocId)
-
-        return await instance.get('Member/GetMemUniOwnerTenantListByAssoc/'+assocId)
+    static async getUnitListByAssoc(assocId) {
+        return await instance.get('Member/GetMemUniOwnerTenantListByAssoc/' + assocId)
     }
 
-    static async getProfileFromAccount(assocId){ 
-        return await instance.get('GetAccountListByAccountID/'+assocId)
+    static async getProfileFromAccount(assocId) {
+        return await instance.get('GetAccountListByAccountID/' + assocId)
     }
 
-    static async getUnitDetailByUnitId(unitId){
-        console.log("Detail:",unitId);
-        return await instance.get('Unit/GetUnitListByUnitID/'+unitId)
-    }}
+    static async getUnitDetailByUnitId(unitId) {
+        return await instance.get('Unit/GetUnitListByUnitID/' + unitId)
+    };
+
+
+    static async getUnitListByAssociationId(associationId){
+        return await instance.get("Unit/GetUnitListByAssocID/"+associationId)
+    }
+
+
+}

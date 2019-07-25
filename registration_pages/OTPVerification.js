@@ -387,7 +387,7 @@ class OTPVerification extends Component {
                       justifyContent: "center",
                       letterSpacing: hp("1.5%"),
                       width: wp("50%"),
-                      fontSize: hp("3%"),
+                      fontSize: hp("2%"),
                       alignSelf: "center",
                       backgroundColor: "white",
                       borderBottomWidth: 1,

@@ -42,7 +42,7 @@ class MyProfile extends Component {
     )
         .then(response => response.json())
         .then(responseJson => {
-          console.log(responseJson)
+          console.log(responseJson);
           this.setState({
             datasource: responseJson,
             ImageSource: responseJson.data.account[0].acImgName
@@ -57,6 +57,7 @@ class MyProfile extends Component {
 
   render() {
     // YellowBox.ignoreWarnings(["Warning:"])
+    console.log("State in My Profile:",this.state);
     const {navigate} = this.props.navigation
     return (
         <TouchableWithoutFeedback
@@ -174,7 +175,8 @@ class MyProfile extends Component {
                                 : "",
                               profileDataSourceImageName: this.state.datasource
                                 ? this.state.datasource.data.account[0].acImgName
-                                : ""
+                                : "",
+                              profileDataSourceCountryName:this.state.datasource.data.account[0].acCrtyCode
                             })
                           }}
                       >
@@ -199,7 +201,7 @@ class MyProfile extends Component {
                               style={styles.profilePicImageStyle}
                               source={{
                                 uri:
-                                    "http://mediauploaddev.oyespace.com/Images/" +
+                                    "http://mediaupload.oyespace.com/" +
                                     this.state.ImageSource
                               }}
                           />
@@ -266,10 +268,10 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                      <Button bordered style={styles.button1}
+                      {/* <Button bordered style={styles.button1}
                               onPress={() => this.props.navigation.navigate('CreateAssnScreen')}>
                         <Text>Create Association</Text>
-                      </Button>
+                      </Button> */}
                       <View/>
                       <View style={{marginTop: hp("2%")}}>
                         <Button bordered style={styles.button1}

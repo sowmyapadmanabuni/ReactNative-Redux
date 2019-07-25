@@ -270,7 +270,7 @@ class MyFamily extends Component {
 
     async uploadImage(response) {
         let self = this;
-        let source = (Platform.OS === 'ios') ? response.uri : response.uri
+        let source = (Platform.OS === 'ios') ? response.uri : response.uri;
         const form = new FormData();
         let imgObj = {
             name: (response.fileName !== undefined) ? response.fileName : "XXXXX.jpg",
@@ -315,8 +315,8 @@ class MyFamily extends Component {
     }
 
     async getTheContact() {
-        console.log('Get details')
-        let isGranted=false
+        console.log('Get details');
+        let isGranted=false;
         if(Platform.OS==='android'){
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.READ_CONTACTS
