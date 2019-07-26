@@ -95,7 +95,7 @@ class DashBoardHeader extends React.Component {
     const response = await base.services.OyeLivingApi.getProfileFromAccount(
       this.props.MyAccountID
     );
-    console.log(response);
+    console.log("Joe",response);
     this.setState({
       datasource: response,
       ImageSource: response.data.account[0].acImgName
