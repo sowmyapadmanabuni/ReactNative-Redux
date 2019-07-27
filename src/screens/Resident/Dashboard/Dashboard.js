@@ -20,11 +20,12 @@ import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
 import { Button } from "native-base";
-
+import _ from "lodash";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
+
 import {
   createNotification,
   createUserNotification,
@@ -48,14 +49,15 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
+
     this.state = {
-        myUnitCardHeight: "80%",
-        myUnitCardWidth: "25%",
-        adminCardHeight: "60%",
-        adminCardWidth: "20%",
-        offersCardHeight: "60%",
-        offersCardWidth: "20%",
-        isSelectedCard: "UNIT",
+      myUnitCardHeight: "80%",
+      myUnitCardWidth: "25%",
+      adminCardHeight: "60%",
+      adminCardWidth: "20%",
+      offersCardHeight: "60%",
+      offersCardWidth: "20%",
+      isSelectedCard: "UNIT",
       isLoading: false,
       assocList: [],
       assocName: "",
@@ -77,7 +79,7 @@ class Dashboard extends React.Component {
   componentWillMount() {
     this.setState({
       isDataLoading: true,
-      isDataVisible: true,
+      isDataVisible: true
     });
     this.getListOfAssociation();
     this.getVehicleList();
@@ -123,6 +125,31 @@ class Dashboard extends React.Component {
     };
 
     axios
+      .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
+        headers: headers
+      })
+      .then(response => {
+        let responseData = response.data.data;
+
+        responseData.associationByAccount.map(association => {
+          // console.log('***********')
+          // console.log(association.asAsnName)
+          // console.log(association.asAssnID)
+          // console.log('***********')
+          if (receiveNotifications) {
+            firebase
+              .messaging()
+              .subscribeToTopic(association.asAssnID + "admin");
+            // console.log(association.asAssnID);
+          } else if (!receiveNotifications) {
+            firebase
+              .messaging()
+              .unsubscribeFromTopic(association.asAssnID + "admin");
+          }
+        });
+      });
+
+    axios
       .get(
         `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
         {
@@ -145,9 +172,6 @@ class Dashboard extends React.Component {
             firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
           }
         });
-      })
-      .catch(error => {
-        console.log(error);
       });
   };
 
@@ -287,9 +311,7 @@ class Dashboard extends React.Component {
     });
   };
 
-  onChangeText = () => {
-    // console.log("hhhhhhhhhhhhhh",this.state.data1)
-  };
+  onChangeText = () => {};
 
   didMount = () => {
     const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
@@ -305,7 +327,7 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    console.log("Notification");
+    // console.log("Notification");
     const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
@@ -318,39 +340,6 @@ class Dashboard extends React.Component {
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
   }
-
-  //   onAssociationChange = (value, index) => {
-  //     const {
-  //       associationid,
-  //       getDashUnits,
-  //       updateUserInfo,
-  //       memberList,
-  //       notifications,
-  //       dropdown
-  //     } = this.props;
-  //     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-  //     const { oyeURL } = this.props.oyespaceReducer;
-
-  //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
-  //     updateUserInfo({
-  //       prop: "SelectedAssociationID",
-  //       value: dropdown[index].associationId
-  //     });
-
-  //     let memId = _.find(memberList, function(o) {
-  //       return o.asAssnID === dropdown[index].associationId;
-  //     });
-
-  //     updateUserInfo({
-  //       prop: "MyOYEMemberID",
-  //       value: memId.meMemID
-  //     });
-
-  //     updateUserInfo({
-  //       prop: "SelectedMemberID",
-  //       value: dropdown[index].memberId
-  //     });
-  //   };
 
   roleCheckForAdmin = () => {
     console.log("Association id123123123123", this.state.assocId);
@@ -419,11 +408,13 @@ class Dashboard extends React.Component {
 
         let sortedArr = assocList.sort(
           base.utils.validate.compareAssociationNames
-        );//open chrome
+        ); //open chrome
         console.log("DJBHVD:", sortedArr, assocList);
 
+        removedDuplicates = _.uniqBy(sortedArr, "value");
+
         self.setState({
-          assocList: sortedArr,
+          assocList: removedDuplicates,
           assocName: sortedArr[0].details.asAsnName,
           assocId: sortedArr[0].details.asAssnID
         });
@@ -496,8 +487,8 @@ class Dashboard extends React.Component {
             stat.data.members[i].unUniName === ""
           ) {
             console.log("No Unit name", stat.data.members[i].unUniName);
-             Unit = "Unit" + i;
-           // Unit = stat.data.members[i].unUniName;
+            Unit = "Unit" + i;
+            // Unit = stat.data.members[i].unUniName;
           } else {
             Unit = stat.data.members[i].unUniName;
           }
@@ -645,6 +636,7 @@ class Dashboard extends React.Component {
 
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
+    // console.log()
     return (
       <View style={{ height: "100%", width: "100%" }}>
         {this.state.isDataVisible ? (
@@ -654,18 +646,27 @@ class Dashboard extends React.Component {
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    value={this.state.assocName}
+                    // value={this.state.assocName}
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
-                    data={associationList}
+                    data={dropdown}
                     textColor={base.theme.colors.black}
-                    inputContainerStyle={{ borderBottomColor: "transparent" }}
+                    inputContainerStyle={{
+                      borderBottomColor: "transparent"
+                    }}
                     dropdownOffset={{ top: 10, left: 0 }}
                     dropdownPosition={-4}
                     rippleOpacity={0}
-                    onChangeText={(value, index) =>
-                      this.onAssociationChange(value, index)
-                    }
+                    // onChangeText={(value, index) =>
+                    //   this.onAssociationChange(value, index)
+                    // }
+                    onChangeText={(value, index) => {
+                      this.onAssociationChange(value, index);
+                      updateDropDownIndex(index);
+                      this.setState({
+                        associationSelected: true
+                      });
+                    }}
                   />
                 ) : (
                   <View />
@@ -674,17 +675,29 @@ class Dashboard extends React.Component {
               <View style={Style.rightDropDown}>
                 {this.state.unitNameHide === false ? (
                   <Dropdown
-                    value={this.state.unitName}
+                    // value={this.state.unitName}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
-                    data={unitList}
-                    inputContainerStyle={{ borderBottomColor: "transparent" }}
+                    data={dropdown1}
+                    inputContainerStyle={{
+                      borderBottomColor: "transparent"
+                    }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
                     dropdownPosition={-3}
                     rippleOpacity={0}
+                    // onChangeText={(value, index) => {
+                    //   this.updateUnit(value, index);
+                    // }}
                     onChangeText={(value, index) => {
                       this.updateUnit(value, index);
+                      updateUserInfo({
+                        prop: "SelectedUnitID",
+                        value: dropdown1[index].unitId
+                      });
+
+                      // console.log(value);
+                      // console.log(index);
                     }}
                   />
                 ) : (
@@ -702,8 +715,8 @@ class Dashboard extends React.Component {
                 height={this.state.myUnitCardHeight}
                 width={this.state.myUnitCardWidth}
                 cardText={"My Unit"}
-                iconWidth={Platform.OS==='ios'?35:16}
-                iconHeight={Platform.OS==='ios'?35:16}
+                iconWidth={Platform.OS === "ios" ? 35 : 16}
+                iconHeight={Platform.OS === "ios" ? 35 : 16}
                 cardIcon={require("../../../../icons/my_unit.png")}
                 onCardClick={() => this.changeCardStatus("UNIT")}
                 disabled={this.state.isSelectedCard === "UNIT"}
@@ -713,8 +726,8 @@ class Dashboard extends React.Component {
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
                   cardText={"Admin"}
-                  iconWidth={Platform.OS==='ios'?35:16}
-                  iconHeight={Platform.OS==='ios'?35:16}
+                  iconWidth={Platform.OS === "ios" ? 35 : 16}
+                  iconHeight={Platform.OS === "ios" ? 35 : 16}
                   onCardClick={() => this.changeCardStatus("ADMIN")}
                   cardIcon={require("../../../../icons/user.png")}
                   disabled={this.state.isSelectedCard === "ADMIN"}
@@ -851,8 +864,8 @@ class Dashboard extends React.Component {
             cardIcon={require("../../../../icons/view_all_visitors.png")}
             // cardCount={5}
             marginTop={20}
-            iconWidth={Platform.OS==='ios'?40:35}
-            iconHeight={Platform.OS==='ios'?40:20}
+            iconWidth={Platform.OS === "ios" ? 40 : 35}
+            iconHeight={Platform.OS === "ios" ? 40 : 20}
             onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
             backgroundColor={base.theme.colors.cardBackground}
           />
@@ -860,8 +873,8 @@ class Dashboard extends React.Component {
             height={"100%"}
             width={"25%"}
             cardText={"Vehicles"}
-            iconWidth={Platform.OS==='ios'?40:25}
-            iconHeight={Platform.OS==='ios'?40:20}
+            iconWidth={Platform.OS === "ios" ? 40 : 25}
+            iconHeight={Platform.OS === "ios" ? 40 : 20}
             cardIcon={require("../../../../icons/vehicle.png")}
             cardCount={this.state.vechiclesCount}
             marginTop={20}
@@ -877,8 +890,8 @@ class Dashboard extends React.Component {
             cardIcon={require("../../../../icons/view_all_visitors.png")}
             // cardCount={2}
             marginTop={20}
-            iconWidth={Platform.OS==='ios'?40:35}
-            iconHeight={Platform.OS==='ios'?40:20}
+            iconWidth={Platform.OS === "ios" ? 40 : 35}
+            iconHeight={Platform.OS === "ios" ? 40 : 20}
             iconBorderRadius={0}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.goToFirstTab()}
@@ -946,10 +959,6 @@ class Dashboard extends React.Component {
         </View> */}
 
         {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
-<<<<<<< HEAD
-=======
-
->>>>>>> 047e162df8c2040830aaa673c55c0ee992ec3f09
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
                       <View style={{ flexDirection: "column" }}>
