@@ -43,11 +43,10 @@ class RegisterMe extends Component {
 
       unitofperson: false,
       unitofperson1: false,
-      sent: false,
+      sent: false
     };
   }
 
-  //Date Picker
   onDOBPress = () => {
     let dobDate = this.state.dobDate;
     if (!dobDate || dobDate == null) {
@@ -77,9 +76,11 @@ class RegisterMe extends Component {
     } = this.props.navigation.state.params;
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
-    } else if(this.state.sent) {
-      alert("Request already sent")
-    }else if (this.checkStatus()) {
+    } else if (this.state.sent) {
+      alert("Request already sent");
+    } else if (this.checkForOwner()) {
+      alert("You are the owner and can't join");
+    } else if (this.checkStatus()) {
       alert("You already requested to join this unit");
     } else {
       anu = {
@@ -97,7 +98,7 @@ class RegisterMe extends Component {
       };
 
       let champBaseURL = this.props.champBaseURL;
-      this.setState({ sent: true })
+      this.setState({ sent: true });
       axios
         .post(
           `${champBaseURL}/association/join`,
@@ -191,7 +192,7 @@ class RegisterMe extends Component {
                   let occupancyDate = this.state.dobText;
 
                   firebase.messaging().subscribeToTopic(sbSubID);
-                  
+
                   // Send a push notification to the admin here
                   axios
                     .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
@@ -317,7 +318,10 @@ class RegisterMe extends Component {
                       // }
                     });
                 } else {
-                  this.setState({ loading: false, sent: true });
+                  this.setState({
+                    loading: false,
+                    sent: true
+                  });
                   Alert.alert(
                     "Alert",
                     "You have already requested to join previously, your request is under review. You would be notified once review is complete",
@@ -327,7 +331,10 @@ class RegisterMe extends Component {
                 }
               })
               .catch(error => {
-                this.setState({ loading: false, sent: false });
+                this.setState({
+                  loading: false,
+                  sent: false
+                });
                 console.log("********");
                 console.log(error);
                 console.log("********");
@@ -346,7 +353,7 @@ class RegisterMe extends Component {
         })
         .catch(error => {
           console.log("second error", error);
-          this.setState({ loading: false , sent: false });
+          this.setState({ loading: false, sent: false });
           Alert.alert(
             "Alert",
             "Request not sent..!",
@@ -363,289 +370,312 @@ class RegisterMe extends Component {
       associationName,
       unitList
     } = this.props.navigation.state.params;
-    // this.checkStatus();
 
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
     } else if (this.state.sent) {
-      alert("Request already sent");
-    } else if (this.checkStatus()) {
-      alert("You already requested to join this unit");
-    } else {
-      anu = {
-        ASAssnID: unitList.asAssnID,
-        BLBlockID: unitList.blBlockID,
-        UNUnitID: unitList.unUnitID,
-        MRMRoleID: parseInt("7"),
-        FirstName: this.props.MyFirstName,
-        MobileNumber: this.props.MyMobileNumber,
-        ISDCode: this.props.MyISDCode,
-        LastName: this.props.MyLastName,
-        Email: this.props.MyEmail,
-        SoldDate: this.state.dobText,
-        OccupancyDate: this.state.dobText
-      };
+             alert("Request already sent");
+           } else if (this.checkForOwner()) {
+             alert("You are the owner and can't join");
+           } else if (this.checkStatus()) {
+             alert("You already requested to join this unit");
+           } else {
+             anu = {
+               ASAssnID: unitList.asAssnID,
+               BLBlockID: unitList.blBlockID,
+               UNUnitID: unitList.unUnitID,
+               MRMRoleID: parseInt("7"),
+               FirstName: this.props.MyFirstName,
+               MobileNumber: this.props.MyMobileNumber,
+               ISDCode: this.props.MyISDCode,
+               LastName: this.props.MyLastName,
+               Email: this.props.MyEmail,
+               SoldDate: this.state.dobText,
+               OccupancyDate: this.state.dobText
+             };
 
-      let champBaseURL = this.props.champBaseURL;
-      console.log(champBaseURL);
-      this.setState({ sent: true });
+             let champBaseURL = this.props.champBaseURL;
+             console.log(champBaseURL);
+             this.setState({ sent: true });
 
-      axios
-        .post(
-          `${champBaseURL}/association/join`,
-          {
-            ASAssnID: unitList.asAssnID,
-            BLBlockID: unitList.blBlockID,
-            UNUnitID: unitList.unUnitID,
-            MRMRoleID: parseInt("7"),
-            FirstName: this.props.MyFirstName,
-            MobileNumber: this.props.MyMobileNumber,
-            ISDCode: this.props.MyISDCode,
-            LastName: this.props.MyLastName,
-            Email: this.props.MyEmail,
-            SoldDate: this.state.dobText,
-            OccupancyDate: this.state.dobText
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-            }
-          }
-        )
-        .then(response => {
-          console.log("*******");
-          console.log("here_1 ");
-          console.log("*******");
-          let responseData_1 = response.data;
-          if (responseData_1.success) {
-            let headers_2 = {
-              "Content-Type": "application/json",
-              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-            };
+             axios
+               .post(
+                 `${champBaseURL}/association/join`,
+                 {
+                   ASAssnID: unitList.asAssnID,
+                   BLBlockID: unitList.blBlockID,
+                   UNUnitID: unitList.unUnitID,
+                   MRMRoleID: parseInt("7"),
+                   FirstName: this.props.MyFirstName,
+                   MobileNumber: this.props.MyMobileNumber,
+                   ISDCode: this.props.MyISDCode,
+                   LastName: this.props.MyLastName,
+                   Email: this.props.MyEmail,
+                   SoldDate: this.state.dobText,
+                   OccupancyDate: this.state.dobText
+                 },
+                 {
+                   headers: {
+                     "Content-Type": "application/json",
+                     "X-Champ-APIKey":
+                       "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                   }
+                 }
+               )
+               .then(response => {
+                 console.log("*******");
+                 console.log("here_1 ");
+                 console.log("*******");
+                 let responseData_1 = response.data;
+                 if (responseData_1.success) {
+                   let headers_2 = {
+                     "Content-Type": "application/json",
+                     "X-Champ-APIKey":
+                       "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                   };
 
-            let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
-            console.log(mobileNo);
-            axios
-              .post(
-                "http://" +
-                  this.props.oyeURL +
-                  "/oyeliving/api/v1/Member/GetRequestorDetails",
-                {
-                  ACMobile: mobileNo,
-                  ASAssnID: this.props.navigation.state.params.AssnId,
-                  UNUnitID: unitList.unUnitID,
-                  MRMRoleID: parseInt("7")
-                },
-                {
-                  headers: headers_2
-                }
-              )
-              .then(response_2 => {
-                let responseData_2 = response_2.data.data.member;
-                console.log("*******");
-                console.log("here_2 ", responseData_2);
+                   let mobileNo =
+                     this.props.MyISDCode +
+                     this.props.MyMobileNumber;
+                   console.log(mobileNo);
+                   axios
+                     .post(
+                       "http://" +
+                         this.props.oyeURL +
+                         "/oyeliving/api/v1/Member/GetRequestorDetails",
+                       {
+                         ACMobile: mobileNo,
+                         ASAssnID: this.props.navigation.state.params
+                           .AssnId,
+                         UNUnitID: unitList.unUnitID,
+                         MRMRoleID: parseInt("7")
+                       },
+                       {
+                         headers: headers_2
+                       }
+                     )
+                     .then(response_2 => {
+                       let responseData_2 =
+                         response_2.data.data.member;
+                       console.log("*******");
+                       console.log("here_2 ", responseData_2);
 
-                if (!_.isEmpty(responseData_2)) {
-                  let userID = this.props.MyAccountID;
-                  let adminAccId = unitList.acAccntID;
-                  let sbUnitID = unitList.unUnitID;
-                  let unitName = unitList.unUniName;
-                  let sbSubID =
-                    this.props.MyAccountID.toString() +
-                    unitList.unUnitID.toString() +
-                    "usernotif";
-                  let sbRoleId = "3";
-                  let sbMemID = responseData_2.meMemID;
-                  let sbName =
-                    this.props.MyFirstName + " " + this.props.MyLastName;
-                  let associationID = AssnId;
-                  let ntType = "Join";
-                  let ntTitle =
-                    "Request to join" +
-                    " " +
-                    associationName +
-                    " " +
-                    "Association";
-                  let roleName = "Tenant";
-                  let ntDesc =
-                    sbName +
-                    " " +
-                    "requested to join " +
-                    unitName +
-                    " " +
-                    "unit in " +
-                    associationName +
-                    " " +
-                    "association as " +
-                    roleName;
-                  let soldDate = this.state.dobText;
-                  let occupancyDate = this.state.dobText;
+                       if (!_.isEmpty(responseData_2)) {
+                         let userID = this.props.MyAccountID;
+                         let adminAccId = unitList.acAccntID;
+                         let sbUnitID = unitList.unUnitID;
+                         let unitName = unitList.unUniName;
+                         let sbSubID =
+                           this.props.MyAccountID.toString() +
+                           unitList.unUnitID.toString() +
+                           "usernotif";
+                         let sbRoleId = "3";
+                         let sbMemID = responseData_2.meMemID;
+                         let sbName =
+                           this.props.MyFirstName +
+                           " " +
+                           this.props.MyLastName;
+                         let associationID = AssnId;
+                         let ntType = "Join";
+                         let ntTitle =
+                           "Request to join" +
+                           " " +
+                           associationName +
+                           " " +
+                           "Association";
+                         let roleName = "Tenant";
+                         let ntDesc =
+                           sbName +
+                           " " +
+                           "requested to join " +
+                           unitName +
+                           " " +
+                           "unit in " +
+                           associationName +
+                           " " +
+                           "association as " +
+                           roleName;
+                         let soldDate = this.state.dobText;
+                         let occupancyDate = this.state.dobText;
 
-                  firebase.messaging().subscribeToTopic(sbSubID);
-                  // alert(sbSubID)
-                  // Send a push notification to the admin here
-                  axios
-                    .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
-                      userID: userID.toString(),
-                      sbUnitID: sbUnitID.toString(),
-                      unitName: unitName.toString(),
-                      sbSubID: sbSubID.toString(),
-                      sbRoleId: sbRoleId,
-                      sbMemID: sbMemID.toString(),
-                      sbName: sbName,
-                      associationID: this.props.navigation.state.params.AssnId.toString(),
-                      associationName: this.props.navigation.state.params
-                        .associationName,
-                      ntType: ntType,
-                      ntTitle: ntTitle,
-                      ntDesc: ntDesc,
-                      roleName: roleName,
-                      soldDate: soldDate,
-                      occupancyDate: occupancyDate
-                    })
-                    .then(response_3 => {
-                      this.setState({ loading: false });
-                      this.props.createUserNotification(
-                        ntType,
-                        this.props.oyeURL,
-                        adminAccId,
-                        this.props.navigation.state.params.AssnId.toString(),
-                        ntDesc,
-                        sbUnitID.toString(),
-                        sbMemID.toString(),
-                        sbSubID.toString(),
-                        sbRoleId,
-                        this.props.navigation.state.params.associationName,
-                        unitName.toString(),
-                        occupancyDate,
-                        soldDate
-                        // this.props.navigation
-                      );
+                         firebase
+                           .messaging()
+                           .subscribeToTopic(sbSubID);
+                         // alert(sbSubID)
+                         // Send a push notification to the admin here
+                         axios
+                           .post(
+                             `${CLOUD_FUNCTION_URL}/sendAdminNotification`,
+                             {
+                               userID: userID.toString(),
+                               sbUnitID: sbUnitID.toString(),
+                               unitName: unitName.toString(),
+                               sbSubID: sbSubID.toString(),
+                               sbRoleId: sbRoleId,
+                               sbMemID: sbMemID.toString(),
+                               sbName: sbName,
+                               associationID: this.props.navigation.state.params.AssnId.toString(),
+                               associationName: this.props.navigation
+                                 .state.params.associationName,
+                               ntType: ntType,
+                               ntTitle: ntTitle,
+                               ntDesc: ntDesc,
+                               roleName: roleName,
+                               soldDate: soldDate,
+                               occupancyDate: occupancyDate
+                             }
+                           )
+                           .then(response_3 => {
+                             this.setState({ loading: false });
+                             this.props.createUserNotification(
+                               ntType,
+                               this.props.oyeURL,
+                               adminAccId,
+                               this.props.navigation.state.params.AssnId.toString(),
+                               ntDesc,
+                               sbUnitID.toString(),
+                               sbMemID.toString(),
+                               sbSubID.toString(),
+                               sbRoleId,
+                               this.props.navigation.state.params
+                                 .associationName,
+                               unitName.toString(),
+                               occupancyDate,
+                               soldDate
+                               // this.props.navigation
+                             );
 
-                      // this.props.navigation.navigate("SplashScreen");
-                      this.props.updateJoinedAssociation(
-                        this.props.joinedAssociations,
-                        unitList.unUnitID
-                      );
+                             // this.props.navigation.navigate("SplashScreen");
+                             this.props.updateJoinedAssociation(
+                               this.props.joinedAssociations,
+                               unitList.unUnitID
+                             );
 
-                      Alert.alert(
-                        "Oyespace",
-                        "Request sent to Admin",
-                        [
-                          {
-                            text: "Ok",
-                            onPress: () =>
-                              this.props.navigation.navigate("ResDashBoard")
-                          }
-                        ],
-                        { cancelable: false }
-                      );
-                      // fetch(
-                      //   `http://${
-                      //     this.props.oyeURL
-                      //   }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
-                      //     this.props.MyAccountID
-                      //   }`,
-                      //   {
-                      //     method: "GET",
-                      //     headers: headers_2
-                      //   }
-                      // )
-                      //   .then(response => response.json())
-                      //   .then(responseJson => {
-                      //     console.log(
-                      //       "2312#!@$@#%$#24235346$^#$^#",
-                      //       this.state.unitofperson1
-                      //     );
+                             Alert.alert(
+                               "Oyespace",
+                               "Request sent to Admin",
+                               [
+                                 {
+                                   text: "Ok",
+                                   onPress: () =>
+                                     this.props.navigation.navigate(
+                                       "ResDashBoard"
+                                     )
+                                 }
+                               ],
+                               { cancelable: false }
+                             );
+                             // fetch(
+                             //   `http://${
+                             //     this.props.oyeURL
+                             //   }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
+                             //     this.props.MyAccountID
+                             //   }`,
+                             //   {
+                             //     method: "GET",
+                             //     headers: headers_2
+                             //   }
+                             // )
+                             //   .then(response => response.json())
+                             //   .then(responseJson => {
+                             //     console.log(
+                             //       "2312#!@$@#%$#24235346$^#$^#",
+                             //       this.state.unitofperson1
+                             //     );
 
-                      //     let count = Object.keys(
-                      //       responseJson.data.memberListByAccount
-                      //     ).length;
-                      //     for (let i = 0; i < count; i++) {
-                      //       if (
-                      //         responseJson.data.memberListByAccount[i]
-                      //           .unUnitID ===
-                      //         this.props.navigation.state.params.unitList
-                      //           .unUnitID
-                      //       ) {
-                      //         this.setState({ unitofperson1: true });
-                      //       }
-                      //     }
-                      //     console.log("@$!@$!@$2$41242$@$@#$@#4", count);
-                      //   })
-                      //   .catch(error => {
-                      //     console.log("second error", error);
-                      //   });
-                      // {
-                      //   this.state.unitofperson1 === true
-                      //     ? Alert.alert(
-                      //         "Oyespace",
-                      //         "Request sent to Admin",
-                      //         [
-                      //           {
-                      //             text: "Ok",
-                      //             onPress: () =>
-                      //               this.props.navigation.navigate(
-                      //                 "ResDashBoard"
-                      //               )
-                      //           }
-                      //         ],
-                      //         { cancelable: false }
-                      //       )
-                      //     : Alert.alert(
-                      //         "Oyespace",
-                      //         "Request sent to Admin",
-                      //         [
-                      //           {
-                      //             text: "Ok",
-                      //             onPress: () =>
-                      //               this.props.navigation.navigate(
-                      //                 "CreateOrJoinScreen"
-                      //               )
-                      //           }
-                      //         ],
-                      //         { cancelable: false }
-                      //       );
-                      // }
-                    });
-                } else {
-                  this.setState({ loading: false, sent: true });
-                  Alert.alert(
-                    "Alert",
-                    "You have already requested to join previously, your request is under review. You would be notified once review is complete",
-                    [{ text: "Ok", onPress: () => {} }],
-                    { cancelable: false }
-                  );
-                }
-              })
-              .catch(error => {
-                this.setState({ loading: false, sent: false });
-                console.log("********");
-                console.log(error);
-                console.log("********");
-              });
-          } else {
-            this.setState({ loading: false, sent: false });
-            Alert.alert(
-              "Alert",
-              "Request not sent..!",
-              [{ text: "Ok", onPress: () => {} }],
-              { cancelable: false }
-            );
-          }
-        })
-        .catch(error => {
-          console.log("second error", error);
-          this.setState({ loading: false, sent: false });
-          Alert.alert(
-            "Alert",
-            "Request not sent..!",
-            [{ text: "Ok", onPress: () => {} }],
-            { cancelable: false }
-          );
-        });
-    }
+                             //     let count = Object.keys(
+                             //       responseJson.data.memberListByAccount
+                             //     ).length;
+                             //     for (let i = 0; i < count; i++) {
+                             //       if (
+                             //         responseJson.data.memberListByAccount[i]
+                             //           .unUnitID ===
+                             //         this.props.navigation.state.params.unitList
+                             //           .unUnitID
+                             //       ) {
+                             //         this.setState({ unitofperson1: true });
+                             //       }
+                             //     }
+                             //     console.log("@$!@$!@$2$41242$@$@#$@#4", count);
+                             //   })
+                             //   .catch(error => {
+                             //     console.log("second error", error);
+                             //   });
+                             // {
+                             //   this.state.unitofperson1 === true
+                             //     ? Alert.alert(
+                             //         "Oyespace",
+                             //         "Request sent to Admin",
+                             //         [
+                             //           {
+                             //             text: "Ok",
+                             //             onPress: () =>
+                             //               this.props.navigation.navigate(
+                             //                 "ResDashBoard"
+                             //               )
+                             //           }
+                             //         ],
+                             //         { cancelable: false }
+                             //       )
+                             //     : Alert.alert(
+                             //         "Oyespace",
+                             //         "Request sent to Admin",
+                             //         [
+                             //           {
+                             //             text: "Ok",
+                             //             onPress: () =>
+                             //               this.props.navigation.navigate(
+                             //                 "CreateOrJoinScreen"
+                             //               )
+                             //           }
+                             //         ],
+                             //         { cancelable: false }
+                             //       );
+                             // }
+                           });
+                       } else {
+                         this.setState({
+                           loading: false,
+                           sent: true
+                         });
+                         Alert.alert(
+                           "Alert",
+                           "You have already requested to join previously, your request is under review. You would be notified once review is complete",
+                           [{ text: "Ok", onPress: () => {} }],
+                           { cancelable: false }
+                         );
+                       }
+                     })
+                     .catch(error => {
+                       this.setState({
+                         loading: false,
+                         sent: false
+                       });
+                       console.log("********");
+                       console.log(error);
+                       console.log("********");
+                     });
+                 } else {
+                   this.setState({ loading: false, sent: false });
+                   Alert.alert(
+                     "Alert",
+                     "Request not sent..!",
+                     [{ text: "Ok", onPress: () => {} }],
+                     { cancelable: false }
+                   );
+                 }
+               })
+               .catch(error => {
+                 console.log("second error", error);
+                 this.setState({ loading: false, sent: false });
+                 Alert.alert(
+                   "Alert",
+                   "Request not sent..!",
+                   [{ text: "Ok", onPress: () => {} }],
+                   { cancelable: false }
+                 );
+               });
+           }
   };
 
   checkStatus = () => {
@@ -655,23 +685,20 @@ class RegisterMe extends Component {
 
     let joinStat = _.includes(joinedAssociations, unitID);
     let status;
-    console.log(memberList, "memberList");
+    // console.log(memberList, "memberList");
 
     let matchUnit = _.find(memberList, function(o) {
       console.log(o, "values");
-      return o.unUnitID === unitID;
+      return o.details.unUnitID === unitID;
     });
 
-    // alert("called");
-
-    // console.log(unitID);
     console.log(matchUnit, "matchUnit");
 
     if (matchUnit) {
       if (
-        matchUnit.meJoinStat === "Approved" ||
-        matchUnit.meJoinStat === "Requested" ||
-        matchUnit.meJoinStat === "Accepted"
+        matchUnit.details.meJoinStat === "Approved" ||
+        matchUnit.details.meJoinStat === "Requested" ||
+        matchUnit.details.meJoinStat === "Accepted"
       ) {
         status = true;
       } else if (joinStat) {
@@ -685,13 +712,38 @@ class RegisterMe extends Component {
       status = false;
     }
 
-
-
     return status;
 
     // return false;
-    // console.log("unitId", unitID);
-    // console.log(_.includes(joinedAssociations, unitID));
+  };
+
+  checkForOwner = () => {
+    const { memberList } = this.props;
+    const { unitList } = this.props.navigation.state.params;
+
+    let unitID = unitList.unUnitID;
+    let status;
+
+    // console.log(unitID, "unitID");
+
+    let matchUnit = _.find(memberList, function(o) {
+      // console.log(o, "values");
+      return o.details.unUnitID === unitID;
+    });
+
+    // console.log(matchUnit);
+
+    if (matchUnit) {
+      if (matchUnit.details.mrmRoleID === 2) {
+        status = true;
+      } else {
+        status = false;
+      }
+    } else {
+      status = false;
+    }
+
+    return status;
   };
 
   render() {
