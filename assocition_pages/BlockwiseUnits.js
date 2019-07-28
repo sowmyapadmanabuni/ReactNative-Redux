@@ -30,7 +30,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
 var Unitlist = [];
 
@@ -78,9 +78,7 @@ class UnitDetails extends Component {
 
   componentDidMount = () => {
     this.UnitDetail();
-    const {
-      unitid,
-    } = this.props.navigation.state.params
+    const { unitid } = this.props.navigation.state.params;
     // console.log("2424298749812749712947912",unitid)
     setTimeout(() => {
       this.setState({
@@ -89,15 +87,15 @@ class UnitDetails extends Component {
     }, 5000);
   };
   UnitDetail = () => {
-    const {
-      blockid,
-    } = this.props.navigation.state.params
+    const { blockid } = this.props.navigation.state.params;
 
-console.log("2424298749812749712947912",blockid)
+    console.log("2424298749812749712947912", blockid);
     // this.setState({ isLoading1: true });
 
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByBlockID/${blockid}`,
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/Unit/GetUnitListByBlockID/${blockid}`,
       {
         method: "GET",
         headers: {
@@ -305,7 +303,7 @@ console.log("2424298749812749712947912",blockid)
   // }
 
   render() {
-    const {blockName, blockid} = this.props.navigation.state.params; 
+    const { blockName, blockid } = this.props.navigation.state.params;
     // console.log("The Assocn Id -------$@#@#%@#$!@>", this.props.navigation.state.params.associationId)
     // console.log('!@#!@#@$@#%#%@#$!@$@', blockName, blockid)
     // Alert.alert("The Association: -", this.props.navigation.state.params.associationId)
@@ -364,8 +362,8 @@ console.log("2424298749812749712947912",blockid)
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                position: 'relative',
-                marginTop:hp('1%')
+                position: "relative",
+                marginTop: hp("1%")
               }}
             >
               <Text>Please Wait</Text>
@@ -633,43 +631,43 @@ console.log("2424298749812749712947912",blockid)
                 )}
               />
             </View>
-            {this.state.unitlist.length === this.props.navigation.state.params.noOfUnits ?
-            
-            <View/>
-          
-            :
-
-            <TouchableOpacity
-            style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-            onPress={() => this.props.navigation.navigate("AddUnit", {
-              blockname: blockName,
-              unit:  blockid,
-              assocID:assocId
-            })}
-          >
-            <Text
-              style={{
-                fontSize: hp('5%'),
-                color: "#fff",
-                fontWeight: "bold",
-                justifyContent: "center",
-                alignItems: "center",
-                alignSelf: "center",
-                marginBottom: hp('0.5%')
-              }}
-            >
-              +
-            </Text>
-            {/* <Entypo 
+            {this.state.unitlist.length ===
+            this.props.navigation.state.params.noOfUnits ? (
+              <View />
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.floatButton,
+                  { alignSelf: "center", marginLeft: 2 }
+                ]}
+                onPress={() =>
+                  this.props.navigation.navigate("AddUnit", {
+                    blockname: blockName,
+                    unit: blockid,
+                    assocID: assocId
+                  })
+                }
+              >
+                <Text
+                  style={{
+                    fontSize: hp("5%"),
+                    color: "#fff",
+                    fontWeight: "bold",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    alignSelf: "center",
+                    marginBottom: hp("0.5%")
+                  }}
+                >
+                  +
+                </Text>
+                {/* <Entypo 
                       name="plus"
                       size={30}
                       color="#fff"
                   /> */}
-          </TouchableOpacity>
-            
-          
-          }
-           
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>
@@ -763,11 +761,11 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    width: hp('8%'),
+    width: hp("8%"),
     position: "absolute",
-    bottom: hp('2.5%'),
-    right: hp('2.5%'),
-    height: hp('8%'),
+    bottom: hp("2.5%"),
+    right: hp("2.5%"),
+    height: hp("8%"),
     backgroundColor: "#FF8C00",
     borderRadius: 100,
     // shadowColor: '#000000',
@@ -790,7 +788,7 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     MyAccountID: state.UserReducer.MyAccountID,
-    oyeURL: state.OyespaceReducer.oyeURL  
+    oyeURL: state.OyespaceReducer.oyeURL
   };
 };
 
