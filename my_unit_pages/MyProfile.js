@@ -18,6 +18,10 @@ import {NavigationEvents} from "react-navigation";
 import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import base from "../src/base";
+import DashBoardHeader from "../src/components/dashBoardHeader/DashBoardHeader";
+import {
+  updateUserInfo
+} from "../src/actions";
 
 class MyProfile extends Component {
   state = {
@@ -48,6 +52,15 @@ class MyProfile extends Component {
             datasource: responseJson,
             ImageSource: responseJson.data.account[0].acImgName
           })
+          const { updateUserInfo } = this.props;
+          updateUserInfo({
+            prop: "userData",
+            value: responseJson
+          });
+          updateUserInfo({
+            prop: "userProfilePic",
+            value: responseJson.data.account[0].acImgName
+          });
         })
         .catch(error => console.log(error))
   }
@@ -423,4 +436,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(MyProfile);
+export default connect(mapStateToProps,{updateUserInfo})(MyProfile);

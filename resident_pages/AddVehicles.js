@@ -413,10 +413,9 @@ const styles = StyleSheet.create({
   titleOfScreen: {
     marginTop: hp("1.6%"),
     textAlign: "center",
-    fontSize: hp("2%"),
-    fontWeight: "bold",
-    color: "#ff8c00",
-    marginBottom: hp("1.6%")
+    fontSize: 18,
+    color: base.theme.colors.primary,
+    marginBottom: hp("4%")
   },
   inputItem: {
     marginLeft: wp("5%"),
