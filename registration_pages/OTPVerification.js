@@ -29,6 +29,7 @@ import {
 import { Button } from "native-base";
 import { connect } from "react-redux";
 import { updateUserInfo } from "../src/actions";
+import base from "../src/base";
 
 class OTPVerification extends Component {
   static navigationOptions = {
@@ -44,8 +45,10 @@ class OTPVerification extends Component {
       isLoading: false,
       timer: 60,
       dobTextDMY: "",
-      loginTime: moment(new Date()).format("DD-MM-YYYY HH:mm:ss")
+      loginTime: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
     };
+
+    this.getOTP = this.getOTP.bind(this);
   }
 
   componentDidUpdate() {
@@ -67,7 +70,7 @@ class OTPVerification extends Component {
   };
 
   verifyOTP = otp_number1 => {
-    otp_number = this.state.OTPNumber;
+    let otp_number = this.state.OTPNumber;
 
     //const reg = /^[0]?[789]\d{9}$/;
     console.log("ravii", otp_number.length + " " + " ");
@@ -77,7 +80,7 @@ class OTPVerification extends Component {
       alert("Enter 6 digit OTP Number");
       return false;
     } else {
-      anu = {
+      let anu = {
         CountryCode: this.props.MyISDCode,
         MobileNumber: this.props.MyMobileNumber,
         OTPnumber: otp_number
@@ -104,7 +107,7 @@ class OTPVerification extends Component {
               } else {
                 const login = moment(new Date()).format("DD-MM-YYYY HH:mm:ss");
                 var today = new Date();
-                date =
+                let date =
                     today.getDate() +
                     "/" +
                     parseInt(today.getMonth() + 1) +
@@ -169,15 +172,19 @@ class OTPVerification extends Component {
     this.props.navigation.navigate("MobileReg");
   };
 
-  getOtp = mobilenumber => {
+  getOTP(){
     const reg = /^[0]?[6789]\d{9}$/;
 
-    anu = {
+   let anu = {
       CountryCode: this.props.MyISDCode,
       MobileNumber: this.props.MyMobileNumber
     };
 
-    url =
+    console.log('CALL@@@@',anu);
+    let count=this.state.count
+
+
+    let url =
         "http://control.msg91.com/api/retryotp.php?authkey=261622AtznpKYJ5c5ab60e&mobile=" +
         this.props.MyISDCode +
         this.props.MyMobileNumber +
@@ -198,11 +205,11 @@ class OTPVerification extends Component {
     })
         .then(response => response.json())
         .then(responseJson => {
-          console.log("bf responseJson Account", responseJson);
+          console.log("bf responseJson Account", responseJson,responseJson.type);
 
-          if (responseJson.success) {
+          if (responseJson.type=== "success") {
             this.setState({
-              loginTime: new Date()
+              loginTime: new Date(),
             });
             console.log("responseJson Account if", this.state.loginTime);
             // this.insert_OTP(mobilenumber, this.props.MyISDCode,'2019-02-03');
@@ -212,7 +219,7 @@ class OTPVerification extends Component {
           } else {
             console.log("responseJson Account else", responseJson.data);
 
-            // alert('OTP not Sent');
+           alert("Sorry OTP not sent, Maximum number of attempts are exceeded");
             // this.props.navigation.navigate('CreateOrJoinScreen');
           }
           console.log("suvarna", "hi");
@@ -231,7 +238,7 @@ class OTPVerification extends Component {
   getOtp1 = mobilenumber => {
     const reg = /^[0]?[6789]\d{9}$/;
 
-    anu = {
+    let anu = {
       CountryCode: this.props.MyISDCode,
       MobileNumber: this.props.MyMobileNumber
     };
@@ -242,7 +249,7 @@ class OTPVerification extends Component {
        });
      }); */
 
-    url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/resendotp`;
+    let url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/resendotp`;
     //  http://122.166.168.160/champ/api/v1/Account/GetAccountDetailsByMobileNumber
     console.log(
         "anu",
@@ -276,7 +283,7 @@ class OTPVerification extends Component {
           } else {
             console.log("responseJson Account else", responseJson.data);
 
-            alert("OTP not Sent");
+            alert("Sorry OTP not sent, Maximum number of attempts are exceeded");
             // this.props.navigation.navigate('CreateOrJoinScreen');
           }
           console.log("suvarna", "hi");
@@ -294,6 +301,7 @@ class OTPVerification extends Component {
   };
 
   render() {
+    console.log('Count',this.state.count)
     return (
         <View
             style={{ flex: 1, flexDirection: "column", backgroundColor: "#fff" }}
@@ -405,7 +413,7 @@ class OTPVerification extends Component {
                 />
               </View>
               <View>
-                {this.state.timer === 1 ? (
+            {this.state.timer === 1 ? (
                     <Text> </Text>
                 ) : (
                     <Text
@@ -419,40 +427,35 @@ class OTPVerification extends Component {
                       Resend OTP in {this.state.timer} seconds{" "}
                     </Text>
                 )}
-                {this.state.timer == 1 ? (
-                    <TouchableOpacity
-                        style={styles.mybutton}
-                        onPress={this.getOtp1.bind(this, this.state.OTPNumber)}
-                    >
-                      <Text style={styles.submitButtonText}>Resend OTP</Text>
-                    </TouchableOpacity>
-                ) : (
-                    <TouchableOpacity style={styles.mybuttonDisable}>
-                      <Text style={styles.submitButtonText}>Resend OTP</Text>
-                    </TouchableOpacity>
-                )}
+                <TouchableOpacity
+                    style={[styles.mybutton,{borderColor: this.state.timer === 1? "#ff8c00":base.theme.colors.grey,
+                      backgroundColor:this.state.timer === 1 ?base.theme.colors.primary:base.theme.colors.grey,}]}
+                    onPress={this.getOtp1.bind(this, this.state.OTPNumber)}
+                    disabled={this.state.timer !== 1}
+                >
+                  <Text style={[styles.submitButtonText,{color:base.theme.colors.white,
+                  }]}>
+                    Resend OTP <Image />
+                  </Text>
+                </TouchableOpacity>
+
 
                 <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
-                  {this.state.timer == 1 ? (
-                      <TouchableOpacity
-                          style={styles.mybutton}
-                          onPress={this.getOtp.bind(this, this.state.OTPNumber)}
-                      >
-                        <Text style={styles.submitButtonText}>
-                          Receive OTP By Call <Image />
-                        </Text>
-                      </TouchableOpacity>
-                  ) : (
-                      <TouchableOpacity style={styles.mybuttonDisable}>
-                        <Text style={styles.submitButtonText}>
-                          Receive OTP By Call <Image />
-                        </Text>
-                      </TouchableOpacity>
-                  )}
+                  <TouchableOpacity
+                      style={[styles.mybutton,{borderColor: this.state.timer === 1 ? "#ff8c00":base.theme.colors.grey,
+                        backgroundColor:this.state.timer === 1 ?base.theme.colors.primary:base.theme.colors.grey,}]}
+                      onPress={()=>this.getOTP()}
+                      disabled={this.state.timer !== 1}
+                  >
+                    <Text style={[styles.submitButtonText,{color:base.theme.colors.white,
+                    }]}>
+                      Receive OTP By Call <Image />
+                    </Text>
+                  </TouchableOpacity>
                 </View>
 
                 <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
-                  {this.state.OTPNumber.length == 6 ? (
+                  {this.state.OTPNumber.length === 6 ? (
                       <Button
                           onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}
                           style={{
@@ -535,7 +538,6 @@ const styles = StyleSheet.create({
     height: 40
   },
   submitButtonText: {
-    color: "#ff8c00",
     textAlign: "center"
   },
   container: {
@@ -582,11 +584,9 @@ const styles = StyleSheet.create({
   mybutton: {
     alignSelf: "center",
     width: wp("50%"),
-    backgroundColor: "#fff",
     borderRadius: hp("5%"),
     borderWidth: 1,
     justifyContent: "center",
-    borderColor: "#ff8c00",
     height: hp("4.5%")
   },
   verifyButton: {

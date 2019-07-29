@@ -32,7 +32,8 @@ class BlockDetail extends React.Component {
       dataSource: [],
       query: "",
       loading: false,
-      error: null
+      error: null,
+      searchText:""
     };
     this.arrayholder = [];
   }
@@ -55,6 +56,7 @@ class BlockDetail extends React.Component {
       return itemData.indexOf(textData) > -1;
     });
     this.setState({
+      searchText:text,
       dataSource: newData
     });
   };
@@ -181,7 +183,8 @@ class BlockDetail extends React.Component {
                     });
                     this.setState({
                       dataSource:[],
-                      arrayholder:[]
+                      arrayholder:[],
+                      searchText:''
                     })
                   }}
                 >
@@ -309,6 +312,7 @@ class BlockDetail extends React.Component {
           <Form style={styles.formSearch}>
             <Item style={styles.inputItem}>
               <Input
+                  value={this.state.searchText}
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
                 multiline={false}

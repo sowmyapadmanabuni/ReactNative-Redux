@@ -84,15 +84,31 @@ class DashBoardHeader extends React.Component {
     // );
   };
 
-  componentDidMount() {
+ /* componentDidMount() {
     let self = this;
     setTimeout(() => {
-      self.myProfile();
+      self.myProfileNet();
     }, 500);
-  }
+  }*/
 
-  myProfile = async () => {
-    const response = await base.services.OyeLivingApi.getProfileFromAccount(
+
+
+ /* async myProfile(){
+    console.log('AccId@@@@@',this.props)
+
+    let response = await base.services.OyeLivingApi.getProfileFromAccount(
+        this.props.MyAccountID
+    );
+    console.log("Joe",response);
+    this.setState({
+      datasource: response,
+      ImageSource: response.data.account[0].acImgName
+    });
+  }*/
+
+ myProfileNet = async () => {
+    console.log('AccId@@@@@',this.props)
+    let response = await base.services.OyeLivingApi.getProfileFromAccount(
       this.props.MyAccountID
     );
     console.log("Joe",response);
@@ -124,14 +140,14 @@ class DashBoardHeader extends React.Component {
   };
 
   render() {
-    console.log("State in dashboard header:",this.state);
+    console.log("State in dashboard header:",this.props.userReducer.userData,this.props.userReducer.userProfilePic);
     return (
       <View style={HeaderStyles.container}>
         <View style={HeaderStyles.subContainerLeft}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("MyProfileScreen")}
           >
-            {this.state.ImageSource === null || this.state.ImageSource === "" ? (
+            {this.props.userReducer.userProfilePic === null || this.props.userReducer.userProfilePic === "" ? (
               <Image
                 style={HeaderStyles.imageStyles}
                 source={{
@@ -144,7 +160,7 @@ class DashBoardHeader extends React.Component {
                 source={{
                   uri:
                     "http://mediaupload.oyespace.com/" +
-                    this.state.ImageSource
+                      this.props.userReducer.userProfilePic
                 }}
               />
             )}
@@ -152,14 +168,14 @@ class DashBoardHeader extends React.Component {
           <TouchableOpacity>
             <View style={HeaderStyles.textContainer}>
             <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("MyProfileScreen")}
+            onPress={() => { this.props.navigation.navigate("MyProfileScreen")}}
           >
               <Text
                 style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
                 numberOfLines={1}
               >
-                {this.state.datasource
-                  ? this.state.datasource.data.account[0].acfName
+                {this.props.userReducer.userData
+                  ? this.props.userReducer.userData.data.account[0].acfName
                   : null}
               </Text>
               </TouchableOpacity>
@@ -179,16 +195,18 @@ class DashBoardHeader extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("NotificationScreen")}
           >
-            {/* <Image
+             <Image
               style={HeaderStyles.logoStyles}
               source={require("../../../icons/notifications.png")}
-            /> */}
+            />
             {this.renderBadge()}
           </TouchableOpacity>
         </View>
       </View>
     );
   }
+
+
 }
 
 const mapStateToProps = state => {
@@ -198,7 +216,9 @@ const mapStateToProps = state => {
     MyAccountID: state.UserReducer.MyAccountID,
     MyFirstName: state.UserReducer.MyFirstName,
     viewImageURL: state.OyespaceReducer.viewImageURL,
-    notifications: state.NotificationReducer.notifications
+    notifications: state.NotificationReducer.notifications,
+    userReducer: state.UserReducer,
+
   };
 };
 

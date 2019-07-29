@@ -40,6 +40,7 @@ class EditProfile extends Component {
       cca3: "",
       callingCode: "",
       callingCode1: "",
+      countryName1:"",
 
       Email: "",
       AlternateEmail: "",
@@ -328,7 +329,7 @@ class EditProfile extends Component {
 
     axios
         .post(
-            "http://apidev.oyespace.com/oyeliving/api/v1/AccountDetails/Update",
+            `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
             {
               ACFName:
                   firstname.length <= 0 ? profileDataSourceFirstName : firstname,
@@ -341,7 +342,7 @@ class EditProfile extends Component {
               ACISDCode:
                   callingCode.length <= 0
                       ? profileDataSourceIsdCode + profileDataSourceCca2
-                      : callingCode + cca2,
+                      : callingCode,
               ACMobile1:
                   alternatemobilenumber.length <= 0
                       ? profileDataSourceAlternateMobileNum
@@ -349,7 +350,7 @@ class EditProfile extends Component {
               ACISDCode1:
                   callingCode1.length <= 0
                       ? profileDataSourceIsdCode1 + profileDataSourceCca3
-                      : callingCode1 + cca3,
+                      : callingCode1,
               ACMobile2: null,
               ACISDCode2: null,
               ACMobile3: null,
@@ -770,15 +771,15 @@ class EditProfile extends Component {
                         >
                           <CountryPicker
                               onChange={value => {
-                                console.log("CCA:",value);
+                                console.log("CCA11:",value);
                                 this.setState({
                                   cca3: value.cca2,
                                   callingCode1: "+" + value.callingCode,
-                                  countryName:value.cca2
+                                  countryName1:value.cca2
                                 })
                               }}
-                              cca2={this.state.countryName===""?'IN':this.state.countryName}
-                              flag={this.state.countryName===""?'IN':this.state.countryName}
+                              cca2={this.state.countryName1===""?'IN':this.state.countryName1}
+                              flag={this.state.countryName1===""?'IN':this.state.countryName1}
                               translation="eng"
                           />
                         </View>
@@ -793,7 +794,7 @@ class EditProfile extends Component {
                             }}
                         >
                           <Text style={{color: "black", fontSize: hp("2%")}}>
-                            {this.state.callingCode1}
+                            {this.state.countryName1===""?"91":this.state.callingCode1}
                           </Text>
                         </View>
 
@@ -1080,4 +1081,5 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps)(EditProfile);
+
 

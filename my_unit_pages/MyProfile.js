@@ -17,6 +17,11 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 import {NavigationEvents} from "react-navigation";
 import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
+import base from "../src/base";
+import DashBoardHeader from "../src/components/dashBoardHeader/DashBoardHeader";
+import {
+  updateUserInfo
+} from "../src/actions";
 
 class MyProfile extends Component {
   state = {
@@ -47,6 +52,15 @@ class MyProfile extends Component {
             datasource: responseJson,
             ImageSource: responseJson.data.account[0].acImgName
           })
+          const { updateUserInfo } = this.props;
+          updateUserInfo({
+            prop: "userData",
+            value: responseJson
+          });
+          updateUserInfo({
+            prop: "userProfilePic",
+            value: responseJson.data.account[0].acImgName
+          });
         })
         .catch(error => console.log(error))
   }
@@ -137,19 +151,9 @@ class MyProfile extends Component {
                                 ? this.state.datasource.data.account[0].aclName
                                 : "",
                               profileDataSourceIsdCode: this.state.datasource
-                                ? this.state.datasource.data.account[0].acisdCode.substring(
-                                    0,
-                                    this.state.datasource.data.account[0].acisdCode
-                                      .length - 2
-                                  )
-                                : "",
+                                ? this.state.datasource.data.account[0].acisdCode : "",
                               profileDataSourceIsdCode1: this.state.datasource
-                                ? this.state.datasource.data.account[0].acisdCode1.substring(
-                                    0,
-                                    this.state.datasource.data.account[0].acisdCode1
-                                      .length - 2
-                                  )
-                                : "",
+                                ? this.state.datasource.data.account[0].acisdCode1 : "",
                               profileDataSourceCca2: this.state.datasource
                                 ? this.state.datasource.data.account[0].acisdCode
                                     .toString()
@@ -267,13 +271,13 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                      {/* <Button bordered style={styles.button1}
+                       {/* <Button bordered warning style={styles.button1}
                               onPress={() => this.props.navigation.navigate('CreateAssnScreen')}>
                         <Text>Create Association</Text>
                       </Button> */}
                       <View/>
                       <View style={{marginTop: hp("2%")}}>
-                        <Button bordered style={styles.button1}
+                        <Button bordered warning style={styles.button1}
                                 onPress={() => this.props.navigation.navigate('AssnListScreen')}>
                           <Text>Join Existing Association</Text>
                         </Button>
@@ -432,4 +436,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(MyProfile);
+export default connect(mapStateToProps,{updateUserInfo})(MyProfile);

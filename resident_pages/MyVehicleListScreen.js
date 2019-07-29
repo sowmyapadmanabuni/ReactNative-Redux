@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    dashBoardReducer:state.DashboardReducer, //u have to call this in file where u need ids
+    dashBoardReducer:state.DashboardReducer,
     oyeURL: state.OyespaceReducer.oyeURL,
 
   };
