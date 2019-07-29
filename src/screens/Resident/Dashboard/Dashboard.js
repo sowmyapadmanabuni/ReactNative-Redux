@@ -464,6 +464,7 @@ class Dashboard extends React.Component {
     const { getDashUnits } = this.props;
     getDashUnits(assocId, oyeURL);
     self.getUnitListByAssoc();
+    self.roleCheckForAdmin();
   }
 
   async getUnitListByAssoc() {
