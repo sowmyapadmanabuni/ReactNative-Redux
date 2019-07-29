@@ -578,7 +578,7 @@ class Dashboard extends React.Component {
     getVehicleList = () => {
         console.log('Get ID for vehicle', this.props)
         fetch(
-            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`, // 1
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`, // 1
             {
                 method: "GET",
                 headers: {
