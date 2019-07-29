@@ -431,8 +431,8 @@ class Dashboard extends React.Component {
           value: sortedArr[0].details.asAssnID
         });
 
-        const { getDashUnits } = this.props;
-        getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
+        // const { getDashUnits } = this.props;
+        // getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
       }
       self.getUnitListByAssoc();
     } catch (error) {
@@ -440,31 +440,68 @@ class Dashboard extends React.Component {
     }
   }
 
-  onAssociationChange(value, index) {
-    console.log("on Aschange", value, index);
-    let self = this;
-    let oyeURL = this.props.oyeURL;
-    let assocList = self.state.assocList;
-    let assocName, assocId;
-    for (let i = 0; i < assocList.length; i++) {
-      if (i === index) {
-        assocName = assocList[i].details.asAsnName;
-        assocId = assocList[i].details.asAssnID;
-      }
-    }
-    self.setState({
-      assocName: value,
-      assocId: assocId
+  // onAssociationChange(value, index) {
+  //   console.log("on Aschange", value, index);
+  //   let self = this;
+  //   let oyeURL = this.props.oyeURL;
+  //   let assocList = self.state.assocList;
+  //   let assocName, assocId;
+  //   for (let i = 0; i < assocList.length; i++) {
+  //     if (i === index) {
+  //       assocName = assocList[i].details.asAsnName;
+  //       assocId = assocList[i].details.asAssnID;
+  //     }
+  //   }
+  //   self.setState({
+  //     assocName: value,
+  //     assocId: assocId
+  //   });
+  //   const { updateIdDashboard } = this.props;
+  //   console.log("updateIdDashboard2", this.props);
+  //   updateIdDashboard({ prop: "assId", value: assocId });
+  //   const { updateUserInfo } = this.props;
+  //   updateUserInfo({ prop: "SelectedAssociationID", value: assocId });
+  //   const { getDashUnits } = this.props;
+  //   getDashUnits(assocId, oyeURL);
+  //   self.getUnitListByAssoc();
+  // }
+
+  onAssociationChange = (value, index) => {
+    const {
+      associationid,
+      getDashUnits,
+      updateUserInfo,
+      memberList,
+      notifications,
+      dropdown
+    } = this.props;
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
+    getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
+
+    updateUserInfo({
+      prop: "SelectedAssociationID",
+      value: dropdown[index].associationId
     });
-    const { updateIdDashboard } = this.props;
-    console.log("updateIdDashboard2", this.props);
-    updateIdDashboard({ prop: "assId", value: assocId });
-    const { updateUserInfo } = this.props;
-    updateUserInfo({ prop: "SelectedAssociationID", value: assocId });
-    const { getDashUnits } = this.props;
-    getDashUnits(assocId, oyeURL);
-    self.getUnitListByAssoc();
-  }
+
+    // let memId = _.find(memberList, function(o) {
+    //   return o.asAssnID === dropdown[index].associationId;
+    // });
+
+    updateUserInfo({
+      prop: "MyOYEMemberID",
+      value: dropdown[index].memberId
+    });
+
+    updateUserInfo({
+      prop: "SelectedMemberID",
+      value: dropdown[index].memberId
+    });
+
+    this.setState({ role: dropdown[index].roleId });
+    // console.log(dropdown[index].roleId, "role");
+  };
 
   async getUnitListByAssoc() {
     let self = this;
