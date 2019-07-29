@@ -72,7 +72,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               value: data.asAsnName,
               name: data.asAsnName,
               id: index,
-              associationId: data.asAssnID,
+              associationId: `${data.asAssnID}`,
               memberId: data.meMemID,
               roleId: data.mrmRoleID
             });
@@ -81,22 +81,25 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
             });
           });
 
+          console.log(drop_down_data, "drop_down_data");
+
+          let withoutString = [];
+
+          drop_down_data.map((data, index) => {
+            if (data.name.length >= 1) {
+              withoutString.push({ ...data });
+            }
+          });
           // drop_down_data.map((data, index) => {
           //   associationIds.push({ id: data.associationId });
           // });
 
           // console.log("associations", associations);
-
-          let removeDuplicates = [];
-
-          removeDuplicates = _.uniqBy(drop_down_data, "associationId");
-          removeidDuplicates = _.uniqBy(associationIds, "id");
-
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
-              dropdown: removeDuplicates,
-              associationid: removeidDuplicates
+              dropdown: withoutString,
+              associationid: associationIds
             }
           });
         } else {
