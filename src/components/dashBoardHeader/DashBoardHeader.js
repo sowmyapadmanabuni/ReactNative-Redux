@@ -195,10 +195,10 @@ class DashBoardHeader extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("NotificationScreen")}
           >
-             <Image
+            {/* <Image
               style={HeaderStyles.logoStyles}
               source={require("../../../icons/notifications.png")}
-            />
+            />*/}
             {this.renderBadge()}
           </TouchableOpacity>
         </View>

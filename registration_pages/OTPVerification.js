@@ -46,6 +46,8 @@ class OTPVerification extends Component {
       timer: 60,
       dobTextDMY: "",
       loginTime: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
+      isCallLimit:true,
+      isSmsLimit:true,
     };
 
     this.getOTP = this.getOTP.bind(this);
@@ -181,7 +183,6 @@ class OTPVerification extends Component {
     };
 
     console.log('CALL@@@@',anu);
-    let count=this.state.count
 
 
     let url =
@@ -218,6 +219,7 @@ class OTPVerification extends Component {
             });
           } else {
             console.log("responseJson Account else", responseJson.data);
+            this.setState({ isCallLimit:false})
 
            alert("Sorry OTP not sent, Maximum number of attempts are exceeded");
             // this.props.navigation.navigate('CreateOrJoinScreen');
@@ -283,6 +285,8 @@ class OTPVerification extends Component {
           } else {
             console.log("responseJson Account else", responseJson.data);
 
+            this.setState({isSmsLimit:false
+            })
             alert("Sorry OTP not sent, Maximum number of attempts are exceeded");
             // this.props.navigation.navigate('CreateOrJoinScreen');
           }
@@ -428,10 +432,10 @@ class OTPVerification extends Component {
                     </Text>
                 )}
                 <TouchableOpacity
-                    style={[styles.mybutton,{borderColor: this.state.timer === 1? "#ff8c00":base.theme.colors.grey,
-                      backgroundColor:this.state.timer === 1 ?base.theme.colors.primary:base.theme.colors.grey,}]}
+                    style={[styles.mybutton,{borderColor: this.state.timer === 1 && this.state.isSmsLimit? "#ff8c00":base.theme.colors.grey,
+                      backgroundColor:this.state.timer === 1 && this.state.isSmsLimit ?base.theme.colors.primary:base.theme.colors.grey,}]}
                     onPress={this.getOtp1.bind(this, this.state.OTPNumber)}
-                    disabled={this.state.timer !== 1}
+                    disabled={this.state.timer !== 1 || !this.state.isSmsLimit}
                 >
                   <Text style={[styles.submitButtonText,{color:base.theme.colors.white,
                   }]}>
@@ -442,10 +446,10 @@ class OTPVerification extends Component {
 
                 <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
                   <TouchableOpacity
-                      style={[styles.mybutton,{borderColor: this.state.timer === 1 ? "#ff8c00":base.theme.colors.grey,
-                        backgroundColor:this.state.timer === 1 ?base.theme.colors.primary:base.theme.colors.grey,}]}
+                      style={[styles.mybutton,{borderColor: this.state.timer === 1 && this.state.isCallLimit ? "#ff8c00":base.theme.colors.grey,
+                        backgroundColor:this.state.timer === 1 && this.state.isCallLimit ?base.theme.colors.primary:base.theme.colors.grey,}]}
                       onPress={()=>this.getOTP()}
-                      disabled={this.state.timer !== 1}
+                      disabled={this.state.timer !== 1 || !this.state.isCallLimit}
                   >
                     <Text style={[styles.submitButtonText,{color:base.theme.colors.white,
                     }]}>
