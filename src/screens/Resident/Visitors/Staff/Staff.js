@@ -326,7 +326,7 @@ class Staff extends React.Component {
                 fromDate = moment().format(),
                     toDate = fromDate;
             }
-            const {updateStaffInfo} = this.props;  //Copy Rights @Sarthak Mishra
+            const {updateStaffInfo} = this.props;
             updateStaffInfo({prop: "startDate", value: fromDate})
             updateStaffInfo({prop: "endDate", value: toDate})
             updateStaffInfo({prop: "staffName", value: self.state.staffName})
@@ -346,7 +346,7 @@ class Staff extends React.Component {
             if (difference > 31) {
                 alert('Maximum Limit is 31 Days. You can not select more than that')
             } else {
-                const {updateStaffInfo} = this.props;  //Copy Rights @Sarthak Mishra
+                const {updateStaffInfo} = this.props;
                 updateStaffInfo({prop: "startDate", value: fromDate})
                 updateStaffInfo({prop: "endDate", value: toDate})
                 updateStaffInfo({prop: "staffName", value: self.state.staffName})

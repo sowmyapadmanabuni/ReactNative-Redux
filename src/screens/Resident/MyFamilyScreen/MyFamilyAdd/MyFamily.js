@@ -113,9 +113,10 @@ class MyFamily extends Component {
                             data={this.state.relationList}
                             textColor={base.theme.colors.black}
                             inputContainerStyle={{}}
-                            label="Select Relationship"
+                          //  label="Select Relationship"
                             baseColor="rgba(0, 0, 0, 1)"
                             placeholder="Relationship*"
+                            placeholderTextColor={base.theme.colors.black}
                             labelHeight={hp("4%")}
                             containerStyle={{
                                 width: wp("85%"),
@@ -128,25 +129,25 @@ class MyFamily extends Component {
                             onChangeText={(value, index) => this.changeFamilyMember(value, index)}
                         />
                         <View style={Style.textInputView}>
-                            <Text style={{fontSize: 14, color: base.theme.colors.grey, textAlign: 'left'}}>First Name
+                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>First Name
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({firstName: text})}
                                 value={this.state.firstName}
                                 placeholder="First Name"
-                                placeholderTextColor={base.theme.colors.black}
+                                placeholderTextColor={base.theme.colors.grey}
                             />
                         </View>
                         <View style={Style.textInputView}>
-                            <Text style={{fontSize: 14, color: base.theme.colors.grey, textAlign: 'left'}}>Last Name
+                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Last Name
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({lastName: text})}
                                 value={this.state.lastName}
                                 placeholder="Last Name"
-                                placeholderTextColor={base.theme.colors.black}
+                                placeholderTextColor={base.theme.colors.grey}
                                 keyboardType={'default'}
                             />
                         </View>
@@ -194,7 +195,7 @@ class MyFamily extends Component {
                             : <View/>}
                         {this.state.isMinor && this.state.isMinorSelected === 0 ?
                             <View style={Style.textInputView}>
-                                <Text style={{fontSize: 14, color: base.theme.colors.grey, textAlign: 'left'}}>Guardian's
+                                <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Guardian's
                                     Name
                                     <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                 <TextInput
@@ -202,7 +203,7 @@ class MyFamily extends Component {
                                     onChangeText={(text) => this.setState({guardianName: text})}
                                     value={this.state.guardianName}
                                     placeholder="Guardian's Name"
-                                    placeholderTextColor={base.theme.colors.black}
+                                    placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'default'}
                                 />
                             </View>
@@ -211,24 +212,22 @@ class MyFamily extends Component {
                             borderColor: base.theme.colors.lightgrey, marginBottom:10}]}>
                             <Text style={{
                                 fontSize: 14,
-                                color: base.theme.colors.grey,
+                                color: base.theme.colors.black,
                                 textAlign: 'left'
                             }}>{mobPlaceHolder}
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <View style={Style.mobNumView}>
                                 <TextInput
-                                    style={{height: 50, width: '90%'}}
+                                    style={{height: 50, width: '80%',}}
                                     onChangeText={(text) => this.setState({mobileNumber: text})}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
-                                    placeholderTextColor={base.theme.colors.black}
+                                    placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'phone-pad'}
                                 />
-                                <TouchableOpacity onPress={() => {
-                                    this.getTheContact()
-                                }}>
+                                <TouchableOpacity  style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
-                                           style={{width: 25, height: 25, alignSelf: 'center'}}/>
+                                           style={{width: 25, height: 25,}}/>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -315,7 +314,7 @@ class MyFamily extends Component {
     }
 
     async getTheContact() {
-        console.log('Get details');
+        console.log('Get details',Platform.OS);
         let isGranted=false;
         if(Platform.OS==='android'){
             const granted = await PermissionsAndroid.request(
@@ -419,7 +418,7 @@ class MyFamily extends Component {
             try {
                 self.props.navigation.navigate('MyFamilyList')
             } catch (err) {
-
+                console.log('Error in adding Family Member')
             }
         }
     }
