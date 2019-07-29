@@ -689,16 +689,16 @@ class RegisterMe extends Component {
 
     let matchUnit = _.find(memberList, function(o) {
       console.log(o, "values");
-      return o.details.unUnitID === unitID;
+      return o.unUnitID === unitID;
     });
 
     console.log(matchUnit, "matchUnit");
 
     if (matchUnit) {
       if (
-        matchUnit.details.meJoinStat === "Approved" ||
-        matchUnit.details.meJoinStat === "Requested" ||
-        matchUnit.details.meJoinStat === "Accepted"
+        matchUnit.meJoinStat === "Approved" ||
+        matchUnit.meJoinStat === "Requested" ||
+        matchUnit.meJoinStat === "Accepted"
       ) {
         status = true;
       } else if (joinStat) {
@@ -727,14 +727,14 @@ class RegisterMe extends Component {
     // console.log(unitID, "unitID");
 
     let matchUnit = _.find(memberList, function(o) {
-      // console.log(o, "values");
-      return o.details.unUnitID === unitID;
+      console.log(o, "values");
+      return o.unUnitID === unitID;
     });
 
-    // console.log(matchUnit);
+    console.log(matchUnit, "matchUnit");
 
     if (matchUnit) {
-      if (matchUnit.details.mrmRoleID === 2) {
+      if (matchUnit.mrmRoleID === 2) {
         status = true;
       } else {
         status = false;

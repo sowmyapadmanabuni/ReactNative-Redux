@@ -328,17 +328,17 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     // console.log("Notification");
-    const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
-    // this.props.updateApproveAdmin([]);
+    // const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+    // const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    // const { oyeURL } = this.props.oyespaceReducer;
+    // // this.props.updateApproveAdmin([]);
 
-    getDashSub(oyeURL, SelectedAssociationID);
-    getDashAssociation(oyeURL, MyAccountID);
-    getAssoMembers(oyeURL, MyAccountID);
-    this.requestNotifPermission();
-    // this.getBlockList();
-    this.props.getNotifications(oyeURL, MyAccountID);
+    // getDashSub(oyeURL, SelectedAssociationID);
+    // getDashAssociation(oyeURL, MyAccountID);
+    // getAssoMembers(oyeURL, MyAccountID);
+    // this.requestNotifPermission();
+    // // this.getBlockList();
+    // this.props.getNotifications(oyeURL, MyAccountID);
   }
 
   roleCheckForAdmin = () => {
@@ -550,6 +550,7 @@ class Dashboard extends React.Component {
       }
     } catch (error) {
       base.utils.logger.log(error);
+      
     }
   }
 
@@ -676,9 +677,9 @@ class Dashboard extends React.Component {
     // console.log()
     return (
       <View style={{ height: "100%", width: "100%" }}>
-        {this.state.isDataVisible ? (
+        <NavigationEvents onDidFocus={() => this.didMount()} />
+        {!this.props.isLoading ? (
           <View style={Style.container}>
-            <NavigationEvents onDidFocus={() => this.didMount()} />
             <View style={Style.dropDownContainer}>
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
@@ -824,7 +825,7 @@ class Dashboard extends React.Component {
         <ProgressLoader
           isHUD={true}
           isModal={true}
-          visible={this.state.isDataLoading}
+          visible={this.props.isLoading}
           color={base.theme.colors.primary}
           hudColor={"#FFFFFF"}
         />
