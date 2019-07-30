@@ -30,6 +30,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 import ZoomImage from "react-native-zoom-image";
+import moment from 'moment';
 
 class NotificationScreen extends Component {
   constructor(props) {
@@ -158,9 +159,15 @@ class NotificationScreen extends Component {
   renderCollapseData = (type, id) => {
     const { gateDetails } = this.state;
     let value = "";
-    // console.log("gateDetails", gateDetails);
+   
+    // console.log("Date1: ",  moment("2019-07-08T12:30:54").format('DD-MM-YYYY') )
+    // console.log("Date2: ",  moment("2019-07-08T12:30:54","YYYY-MM-DD").format("DD-MM-YYYY") )
+    // console.log("Date3: ",  moment("1900-01-01T12:48:16").format('HH:mm A') )
+  
+
 
     if (gateDetails.length <= 0) {
+      
       value = "";
     } else {
       if (type === "vlGtName") {
@@ -183,11 +190,20 @@ class NotificationScreen extends Component {
         value = foundData ? foundData.vlEntryImg : "";
       } else if (type === "vlEntryT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? foundData.vlEntryT : "";
+        value = foundData ? moment(foundData.vlEntryT).format('HH:mm A') : "";
       } else if (type === "vlExitT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? foundData.vlExitT : "";
-      } //vlengName
+        value = foundData ? moment(foundData.vlExitT).format('HH:mm A') : "";
+      }else if (type === "vldCreated") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? moment(foundData.vldCreated,"YYYY-MM-DD").format("DD-MM-YYYY") : "";
+      } else if (type === "vldUpdated") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? moment(foundData.vldUpdated,"YYYY-MM-DD").format("DD-MM-YYYY") : "";
+      }
+      //moment("2019-07-08T12:30:54","YYYY-MM-DD").format("DD-MM-YYYY")
+      //moment("1900-01-01T12:48:16").format('HH:mm A')
+       //vlengName
       else if (type === "vlengName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlengName : "";
@@ -209,11 +225,8 @@ class NotificationScreen extends Component {
       if (data.ntType === "gate_app") {
         axios
           .get(
-            `http://${
-              this.props.oyeURL
-            }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
-              data.sbMemID
-            }`,
+            `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+              //data.sbMemID`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -277,7 +290,7 @@ class NotificationScreen extends Component {
               </Collapsible>
             </View>
           )}
-          <Text>{item.ntdUpdated}</Text>
+          <Text>{moment(item.ntdUpdated,"YYYY-MM-DD").format("DD-MM-YYYY")}  {moment(item.ntdUpdated).format('HH:mm A')}</Text>
         </Card>
       );
     } else {
@@ -308,7 +321,7 @@ class NotificationScreen extends Component {
               <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: "column" }}>
                   <Text>{item.ntDesc}</Text>
-                  <Text>{item.ntdUpdated}</Text>
+                  <Text>{moment(item.ntdUpdated,"YYYY-MM-DD").format("DD-MM-YYYY")}  {moment(item.ntdUpdated).format('HH:mm A')}</Text>
                 </View>
                 <Collapsible
                   duration={300}
@@ -527,10 +540,21 @@ class NotificationScreen extends Component {
                                     ? this.state.Time
                                     : ""} */}
                                   {this.renderCollapseData(
+                                    "vldCreated",
+                                    item.sbMemID
+                                  )}
+                                </Text>
+
+                                <Text>
+                                  {/* {this.state.Time !== null
+                                    ? this.state.Time
+                                    : ""} */}
+                                  {this.renderCollapseData(
                                     "vlEntryT",
                                     item.sbMemID
                                   )}
                                 </Text>
+
                               </View>
                             </View>
 
@@ -577,6 +601,16 @@ class NotificationScreen extends Component {
                                       ? this.state.Date1
                                       : ""}{" "}
                                   </Text> */}
+                                  
+                                  <Text>
+                                    {/* {this.state.Time1 !== null
+                                      ? this.state.Time1
+                                      : ""} */}
+                                    {this.renderCollapseData(
+                                      "vldUpdated",
+                                      item.sbMemID
+                                    )}
+                                  </Text>
                                   <Text>
                                     {/* {this.state.Time1 !== null
                                       ? this.state.Time1

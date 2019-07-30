@@ -25,7 +25,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
-
+import moment from 'moment';
 import {
   createNotification,
   createUserNotification,
@@ -384,6 +384,9 @@ class Dashboard extends React.Component {
   }
 
   async getListOfAssociation() {
+
+    
+    
     let self = this;
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
