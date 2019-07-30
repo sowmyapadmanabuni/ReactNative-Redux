@@ -23,7 +23,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import all basic components
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { withBadge } from "react-native-elements";
 import {
   DrawerNavigator,
   StackNavigator,

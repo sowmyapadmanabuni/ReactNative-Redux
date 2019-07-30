@@ -191,6 +191,16 @@ class RegisterMe extends Component {
                   let soldDate = this.state.dobText;
                   let occupancyDate = this.state.dobText;
 
+                  // console.log("userId", userID);
+                  // console.log("sbUnitID", sbUnitID);
+                  // console.log("sbSubID", sbSubID);
+                  // console.log("sbRoleId", sbRoleId);
+                  // console.log("sbMemID", sbMemID);
+                  // console.log("sbName", sbName);
+                  // console.log("associationID", associationID);
+                  // console.log("ntType", ntType);
+                  // console.log("ntTitle", ntTitle);
+                  console.log("ntDesc", ntDesc);
                   firebase.messaging().subscribeToTopic(sbSubID);
 
                   // Send a push notification to the admin here
@@ -229,11 +239,18 @@ class RegisterMe extends Component {
                         occupancyDate,
                         soldDate
                       );
-
-                      this.props.updateJoinedAssociation(
-                        this.props.joinedAssociations,
-                        unitList.unUnitID
-                      );
+                      this.props.navigation.navigate("SplashScreen");
+                      this.props
+                        .updateJoinedAssociation(
+                          this.props.joinedAssociations,
+                          unitList.unUnitID
+                        )
+                        .then(succ => {
+                          console.log("succ", succ);
+                        })
+                        .catch(error => {
+                          console.log(error);
+                        });
 
                       // this.props.navigation.navigate("SplashScreen");
                       Alert.alert(
@@ -380,7 +397,7 @@ class RegisterMe extends Component {
            } else if (this.checkStatus()) {
              alert("You already requested to join this unit");
            } else {
-             anu = {
+             let anu = {
                ASAssnID: unitList.asAssnID,
                BLBlockID: unitList.blBlockID,
                UNUnitID: unitList.unUnitID,
@@ -717,24 +734,30 @@ class RegisterMe extends Component {
     // return false;
   };
 
-  checkForOwner = () => {
-    const { memberList } = this.props;
-    const { unitList } = this.props.navigation.state.params;
-
+  checkStatus = () => {
+    const { unitList, AssnId } = this.props.navigation.state.params;
+    const { joinedAssociations, memberList } = this.props;
     let unitID = unitList.unUnitID;
-    let status;
 
-    // console.log(unitID, "unitID");
+    // let status = _.includes(joinedAssociations, unitID);
+    let status;
+    console.log(memberList, "memberList");
 
     let matchUnit = _.find(memberList, function(o) {
-      // console.log(o, "values");
-      return o.details.unUnitID === unitID;
+      console.log(o, "values");
+      return o.unUnitID === unitID;
     });
 
-    // console.log(matchUnit);
+    // alert("called");
+
+    console.log(unitID);
+    console.log(matchUnit, "matchUnit");
 
     if (matchUnit) {
-      if (matchUnit.details.mrmRoleID === 2) {
+      if (
+        matchUnit.meJoinStat === "Approved" ||
+        matchUnit.meJoinStat === "Requested"
+      ) {
         status = true;
       } else {
         status = false;
@@ -744,6 +767,10 @@ class RegisterMe extends Component {
     }
 
     return status;
+
+    // return false;
+    // console.log("unitId", unitID);
+    // console.log(_.includes(joinedAssociations, unitID));
   };
 
   render() {

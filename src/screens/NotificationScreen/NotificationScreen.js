@@ -32,22 +32,7 @@ import axios from "axios";
 import ZoomImage from "react-native-zoom-image";
 
 class NotificationScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      gateDetails: [],
-      Date: [],
-      Time: [],
-      Date1: [],
-      Time1: []
-    };
-  }
 
-  componentDidMount() {
-    // console.log("didmount");
-    // this.gateAppNotif()
-    this.doNetwork(null, this.props.notifications);
-  }
   keyExtractor = (item, index) => index.toString();
 
   onPress = (item, index) => {
@@ -68,22 +53,22 @@ class NotificationScreen extends Component {
 
   renderIcons = (type, item, index) => {
     const { savedNoifId } = this.props;
-    // let status = _.includes(savedNoifId, item.ntid);
+    let status = _.includes(savedNoifId, item.ntid);
 
     if (type === "name") {
-      if (!item.ntIsActive) {
+      if (status || item.ntIsActive) {
         return "mail-read";
       } else {
         return "ios-mail-unread";
       }
     } else if (type === "type") {
-      if (!item.ntIsActive) {
+      if (status || item.ntIsActive) {
         return "octicon";
       } else {
         return "ionicon";
       }
     } else if (type === "style") {
-      if (!item.ntIsActive) {
+      if (status || item.ntIsActive) {
         return { backgroundColor: "#fff" };
       } else {
         return { backgroundColor: "#eee" };

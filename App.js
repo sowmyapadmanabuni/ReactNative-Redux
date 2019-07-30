@@ -1,16 +1,12 @@
 import React, { Component, Fragment } from "react";
 import {
-  Platform,
-  TextInput,
   StyleSheet,
   Text,
   View,
   Image,
-  ActivityIndicator,
-  TouchableOpacity,
-  Alert,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,
+  AppState
 } from "react-native";
 import { connect } from "react-redux";
 import SplashScreen from "./splash_screen_pages/SplashScreen";

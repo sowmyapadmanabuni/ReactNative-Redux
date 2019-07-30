@@ -230,7 +230,7 @@ class NotificationDetailScreen extends Component {
           }
         )
         .then(() => {
-          let roleName = item.sbRoleID === 2 ? "Owner" : "Tenant";
+          let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
           axios
             .get(
               `http://${

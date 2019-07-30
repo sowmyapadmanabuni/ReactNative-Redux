@@ -109,6 +109,10 @@ export const getNotifications = (oyeURL, MyAccountID) => {
         //   }
         // });
 
+        sorted.map(data => {
+          console.log(data.ntIsActive);
+        });
+
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
           payload: sorted

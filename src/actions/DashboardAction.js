@@ -90,7 +90,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
           let removeDuplicates = [];
 
           removeDuplicates = _.uniqBy(drop_down_data, "associationId");
-          removeidDuplicates = _.uniqBy(associationIds, "id");
+          let removeidDuplicates = _.uniqBy(associationIds, "id");
 
           dispatch({
             type: DASHBOARD_ASSOCIATION,
@@ -335,7 +335,10 @@ export const getAssoMembers = (oyeURL, id) => {
       )
       .then(response => {
         let resData = response.data.data.memberListByAccount;
-        console.log(resData, "resData");
+
+        resData.map((data, index) => {
+          console.log(data.meJoinStat + index);
+        });
         dispatch({
           type: GET_MEMBERLIST_SUCCESS,
           payload: resData
