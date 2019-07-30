@@ -379,16 +379,24 @@ class MyFamily extends Component {
     }
 
     validation() {
+        console.log('Props**!!!',this.props);
+
         let self = this;
-        if (self.state.firstName === '') {
-            alert('First Name is required')
-        } else if (self.state.relationName === '') {
+        if (self.state.relationName === '') {
             alert('Please Select relation')
-        }  else if(self.state.isMinor && self.state.isMinorSelected===0 && self.state.guardianName ===''){
+        }else if (self.state.firstName === '') {
+            alert('First Name is required')
+        } else if(self.state.isMinor && self.state.isMinorSelected===0 && self.state.guardianName ===''){
             alert('Guardian name is Mandatory')
         }
         else if (self.state.mobileNumber === '') {
             alert('Please enter mobile number')
+        }
+        else if(self.props.dashBoardReducer.uniID===null){
+            alert('Unit id is null')
+        }
+        else if(self.props.dashBoardReducer.assId===null){
+            alert('Association id is null')
         }
         else {
             self.addRelativeDetails()
@@ -399,10 +407,16 @@ class MyFamily extends Component {
     async addRelativeDetails() {
         console.log('Props**',this.props);
         let self = this;
+        let mobNum=self.state.sendNum
+        let cCode=self.state.cCode
+        if(cCode===""){
+             cCode="+91"
+            mobNum=self.state.mobileNumber
+        }
         let input = {
             "FMName"    : self.state.firstName,
-            "FMMobile"  : self.state.sendNum,
-            "FMISDCode" : self.state.cCode,
+            "FMMobile"  : mobNum,
+            "FMISDCode" : cCode,
             "UNUnitID"  : self.props.dashBoardReducer.uniID,
             "FMRltn"    : self.state.relationName,
             "ASAssnID"  : self.props.dashBoardReducer.assId,

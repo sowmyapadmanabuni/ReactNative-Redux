@@ -48,7 +48,7 @@ export default (state = INITIAL_STATE, action) => {
       };
 
     case DASHBOARD_UNITS_START:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: false };
 
     case DASHBOARD_UNITS_STOP:
       return {

@@ -1,7 +1,7 @@
 import { UPDATE_USER_INFO } from "../actions/types";
 
-const oyeURL = "apidev.oyespace.com";
-// const oyeURL = "apiuat.oyespace.com";
+ //const oyeURL = "apidev.oyespace.com";
+const oyeURL = "apiuat.oyespace.com";
 // const oyeURL = "api.oyespace.com";
 const oyeBaseURL = "http://" + oyeURL + "/oye247/api/v1/";
 
@@ -9,7 +9,7 @@ const INITIAL_STATE = {
   oyeURL,
   champBaseURL: "http://" + oyeURL + "/oyeliving/api/v1/",
   oye247BaseURL: "https://" + oyeURL + "/oye247/api/v1/",
-
+  
   oyeBaseURL,
   viewImageURL: "http://" + oyeBaseURL + "/Images/",
   uploadImageURL:

@@ -111,13 +111,11 @@ class MyFamilyList extends React.Component {
   }
 
   async myFamilyListGetData() {
-    let self = this
-    var familylist = ""
-    console.log(base.utils.strings.oyeSafeUrlF)
     this.setState({ loading: true })
-    // let family = await base.services.OyeSafeApiFamily.myFamilyList(4, 2)
-    myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
-    console.log(myFamilyList.data.familyMembers, "kljfksdjfksa")
+    console.log("Data sending to get family",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList( this.props.dashBoardReducer.uniID,this.props.dashBoardReducer.assId)
+    console.log("Get Family Data", myFamilyList);
+
     this.setState({ myfamily11: myFamilyList.data.familyMembers })
     this.setState({ familyData: myFamilyList })
     try {

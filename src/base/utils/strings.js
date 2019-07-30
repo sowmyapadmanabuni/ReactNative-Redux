@@ -10,11 +10,12 @@ const isMandatory = " is required";
 
 const api = {
     oyeSafeApiDomainFamily: isDev
-        ? "apidev.oyespace.com/oyesafe/api/v1/"
-        : "apidev.oyespace.com/oyesafe/api/v1/",
-    oyeSafeDomain:isDev?"apidev.oyespace.com/oye247":"apidev.oyespace.com/oye247",
-    oyeDomain:isDev?"apidev.oyespace.com/oyeliving":"apidev.oyespace.com/oyeliving",
-    oyeLivingDomain:isDev?"apidev.oyespace.com":"OyeLivingApi.oyespace.com",
+        ? "apiuat.oyespace.com/oyesafe/api/v1/"
+        : "apiuat.oyespace.com/oyesafe/api/v1/",
+    oyeSafeDomain:isDev?"apiuat.oyespace.com/oye247":"apiuat.oyespace.com/oye247",
+    oyeDomain:isDev?"apiuat.oyespace.com/oyeliving":"apiuat.oyespace.com/oyeliving",
+    oyeLivingDomain:isDev?"apiuat.oyespace.com":"OyeLivingApi.oyespace.com",
+    mediaupload:isDev?"https://mediauploaddev.oyespace.com/":"http://mediauploaduat.oyespace.com/",
     protocol:isSecure?"https://":"http://",
     oyeSafeApiPath:"/api/v1/",
     oyeLivingApiPath:"/oyeliving/OyeLivingApi/v1/",
@@ -23,6 +24,10 @@ const api = {
     CLOUD_FUNCTION_URL : 'https://us-central1-oyespace-dc544.cloudfunctions.net',
     GATE_CLOUD_FUNCTION_URL :'https://us-central1-oyespace-b7e2d.cloudfunctions.net'
 };
+
+////public static final String IMAGE_BASE_URL = "http://mediaupload.oyespace.com/";
+// public static final String IMAGE_BASE_URL = "https://mediauploaddev.oyespace.com/";
+//public static final String IMAGE_BASE_URL = "https://mediauploaduat.oyespace.com/";
 
 const strings = {
   appName: "OyeSpace",

@@ -64,7 +64,10 @@ class Resident extends React.Component {
         let self = this;
         let associationId = self.props.selectedAssociation;
 
+        console.log('get association',associationId)
+
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
+        console.log('Get the details####',stat)
 
         try {
             if (stat) {
@@ -188,12 +191,23 @@ class Resident extends React.Component {
         this.setState({query: text});
         let sortResident = this.state.residentData;
         let filteredArray = [];
+        let roleId="";
         if (text.length === 0) {
             filteredArray.push(this.state.clonedList)
         } else {
             for (let i in sortResident) {
                 console.log("Sort:", sortResident[i])
-                if (sortResident[i].name.includes(text) || sortResident[i].unitName.includes(text)) {
+                if(sortResident[i].uoRoleID===1){
+                    roleId="Admin"
+            }
+            else if(sortResident[i].uoRoleID===2){
+                    roleId="Owner"
+                }
+            else if(sortResident[i].uoRoleID===3){
+                    roleId="Tenant"
+                }
+
+            if (sortResident[i].name.includes(text) || sortResident[i].unitName.includes(text) || roleId.includes(text)) {
                     filteredArray.push(sortResident[i])
                 }
             }
@@ -211,6 +225,7 @@ class Resident extends React.Component {
     };
 
     render() {
+        console.log('Data inside####',this.state.residentData)
         let residentList = this.props.dashBoardReducer.residentList;
         const {params} = this.props.navigation.state;
         return (
@@ -260,7 +275,7 @@ class Resident extends React.Component {
                         >
                             <Image
                                 style={[styles.image1]}
-                                source={require("../icons/OyeSpace.png")}
+                                source={require("../icons/headerLogo.png")}
                             />
                         </View>
                         <View style={{flex: 0.2}}>
@@ -295,8 +310,10 @@ class Resident extends React.Component {
                         </View>
                     </View>
                     <View style={styles.viewDetails}>
-                        <View style={{flex: 1}}>
-                            {/* {this.state.loading ? <Text> Loding </Text> :  */}
+                        {this.state.residentData.length !==0?
+                        <View style={{flex: 1,}}>
+                                <Text style={{color: base.theme.colors.black, margin: 20}}>* You can update only one at
+                                    a time</Text>
                             <FlatList
                                 data={this.state.residentData}
                                 keyExtractor={(item, index) => index.toString()}
@@ -333,8 +350,11 @@ class Resident extends React.Component {
                                     </Card>
                                 )}
                             />
-                            {/* } */}
-                        </View>
+
+                        </View>:
+                        <View style={{flex: 1, alignItems:'center',justifyContent:'center'}}>
+                                <Text >No Data for the selected association </Text>
+                        </View>}
                     </View>
                 </View>
             </View>

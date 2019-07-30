@@ -131,9 +131,7 @@ class AddVehicle extends Component {
     } else if (oyeNonSpecialRegex.test(parkingSlotNum) === true) {
       Alert.alert("Parking Slot Number should not contain special character");
       return false;
-    } else if (value == "") {
-      Alert.alert("Please select Vehicle type");
-    } else {
+    }  else {
       if (this.state.parkingLotDetail.length !== 0) {
         for (let i in this.state.parkingLotDetail) {
           console.log(
@@ -172,11 +170,11 @@ class AddVehicle extends Component {
         .then(response => response.json())
         .then(responseJson => {
           console.log("Manas", responseJson);
-          if (responseJson.success) {
+          this.props.navigation.navigate("MyVehicleListScreen");
+
+          /*if (responseJson.success) {
             this.props.navigation.navigate("MyVehicleListScreen");
-          } else {
-            alert("Something went wrong !!!");
-          }
+          } */
         })
         .catch(error => Alert.alert("Data not saved", error));
     }
@@ -329,7 +327,7 @@ class AddVehicle extends Component {
                   containerStyle={styles.box1}
                   dropdownPosition={-1}
                   style={{
-                    color: base.theme.colors.gray,
+                    color:base.theme.colors.gray,
                     right: 19,
                     textAlign: "left",
                     fontFamily: base.theme.fonts.light,
@@ -475,7 +473,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    dashBoardReducer: state.DashboardReducer, //u have to call this in file where u need ids
+    dashBoardReducer: state.DashboardReducer,
     userReducer: state.UserReducer,
     oyeURL: state.OyespaceReducer.oyeURL
   };
