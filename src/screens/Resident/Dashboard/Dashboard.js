@@ -25,7 +25,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
-import moment from 'moment';
 import {
   createNotification,
   createUserNotification,
@@ -40,7 +39,8 @@ import {
   updateDropDownIndex,
   updateIdDashboard,
   updateJoinedAssociation,
-  updateUserInfo
+  updateUserInfo,
+  updateSelectedDropDown
 } from "../../../actions";
 import { NavigationEvents } from "react-navigation";
 import ProgressLoader from "rn-progress-loader";
@@ -384,9 +384,6 @@ class Dashboard extends React.Component {
   }
 
   async getListOfAssociation() {
-
-    
-    
     let self = this;
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
@@ -577,7 +574,9 @@ class Dashboard extends React.Component {
 
   getVehicleList = () => {
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+      `http://${
+        this.props.oyeURL
+      }/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
         this.props.dashBoardReducer.assId
       }`,
       {
@@ -670,7 +669,9 @@ class Dashboard extends React.Component {
       sold2,
       unsold2,
       updateUserInfo,
-      updateDropDownIndex
+      updateDropDownIndex,
+      selectedDropdown,
+      selectedDropdown1
     } = this.props;
 
     let associationList = this.state.assocList;
@@ -685,7 +686,7 @@ class Dashboard extends React.Component {
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    // value={this.state.assocName}
+                    value={selectedDropdown}
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
@@ -705,6 +706,10 @@ class Dashboard extends React.Component {
                       this.setState({
                         associationSelected: true
                       });
+                      updateSelectedDropDown({
+                        prop: "selectedDropdown",
+                        value: value.value
+                      });
                     }}
                   />
                 ) : (
@@ -715,6 +720,7 @@ class Dashboard extends React.Component {
                 {this.state.unitNameHide === false ? (
                   <Dropdown
                     // value={this.state.unitName}
+                    value={selectedDropdown1}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
@@ -733,6 +739,10 @@ class Dashboard extends React.Component {
                       updateUserInfo({
                         prop: "SelectedUnitID",
                         value: dropdown1[index].unitId
+                      });
+                      updateSelectedDropDown({
+                        prop: "selectedDropdown1",
+                        value: value.value
                       });
 
                       // console.log(value);
@@ -1292,6 +1302,8 @@ const mapStateToProps = state => {
     dropdown1: state.DashboardReducer.dropdown1,
     associationid: state.DashboardReducer.associationid,
     residentList: state.DashboardReducer.residentList,
+    selectedDropdown: state.DashboardReducer.selectedDropdown,
+    selectedDropdown1: state.DashboardReducer.selectedDropdown1,
     sold: state.DashboardReducer.sold,
     unsold: state.DashboardReducer.unsold,
     sold2: state.DashboardReducer.sold2,
@@ -1330,6 +1342,7 @@ export default connect(
     updateDropDownIndex,
     createUserNotification,
     refreshNotifications,
-    updateIdDashboard
+    updateIdDashboard,
+    updateSelectedDropDown
   }
 )(Dashboard);

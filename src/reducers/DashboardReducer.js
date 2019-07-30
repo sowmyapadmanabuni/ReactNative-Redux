@@ -10,7 +10,8 @@ import {
   GET_MEMBERLIST_SUCCESS,
   GET_MEMBERLIST_FAILED,
   UPDATE_ID_DASHBOARD,
-  UPDATE_DROPDOWN_INDEX
+  UPDATE_DROPDOWN_INDEX,
+  UPDATE_SELECTED_DROPDOWN
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -28,7 +29,9 @@ const INITIAL_STATE = {
   memberList: [],
   assId: null,
   uniID: null,
-  selectedAssociationIndex: null
+  selectedAssociationIndex: null,
+  selectedDropdown: "",
+  selectedDropdown1: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -48,7 +51,12 @@ export default (state = INITIAL_STATE, action) => {
       };
 
     case DASHBOARD_UNITS_START:
-      return { ...state, isLoading: false };
+      return {
+        ...state,
+        isLoading: false,
+        dropdown1: [],
+        selectedDropdown1: ""
+      };
 
     case DASHBOARD_UNITS_STOP:
       return {
@@ -88,6 +96,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_DROPDOWN_INDEX:
       return { ...state, selectedAssociationIndex: action.payload };
+
+    case UPDATE_SELECTED_DROPDOWN:
+      return { ...state, [action.payload.prop]: action.payload.value };
 
     default:
       return state;
