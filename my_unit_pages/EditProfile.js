@@ -5,7 +5,6 @@ import {
   Image,
   Keyboard,
   PixelRatio,
-  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -22,7 +21,6 @@ import {connect} from 'react-redux';
 import ImagePicker from "react-native-image-picker"
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
-import RNFetchBlob from "rn-fetch-blob"
 import axios from "axios"
 import CountryPicker from "react-native-country-picker-modal"
 import base from "../src/base";
@@ -40,24 +38,26 @@ class EditProfile extends Component {
       cca3: "",
       callingCode: "",
       callingCode1: "",
-      countryName1:"",
+      countryName1: "",
 
       Email: "",
       AlternateEmail: "",
 
       Image: "",
-      countryName:"",
+      countryName: "",
 
       // cca2: "",
       // callingCode: "",
       data1: [],
       photo: null,
-      photoDetails: null
+      photoDetails: null,
+      isPhotoAvailable: false
     }
 
-    console.log("Props in Edit profile:",this.props);
+    console.log("Props in Edit profile:", this.props);
 
   }
+
 
   FName = firstName => {
     this.setState({FirstName: firstName})
@@ -149,7 +149,7 @@ class EditProfile extends Component {
     } else if (regemail.test(email) === false) {
       Alert.alert("Enter valid primary email id")
       //"Please check your email-id"
-    } else if (photo === null) {
+    } else if (this.state.photo == null) {
       Alert.alert("Upload photo")
     } else if (!alternatemobilenumber.length == 0) {
       this.alternateMobile()
@@ -170,7 +170,7 @@ class EditProfile extends Component {
     cca3 = this.state.cca3
     callingCode1 = this.state.callingCode1
 
-    const reg = /^[0]?[6789]\d{9}$/
+    const reg = /^[0]?[6789]\d{9}$/;
     if (cca3.length == 0) {
       Alert.alert("Please select country")
       return
@@ -180,12 +180,7 @@ class EditProfile extends Component {
     } else if (alternatemobilenumber.length < 10) {
       Alert.alert("Alternate mobile number should contain 10 numerics.")
       return
-    } else if (reg.test(alternatemobilenumber) === false) {
-      Alert.alert(
-          "Alternate mobile number should not contain special characters."
-      )
-      return
-    } else if (!this.alternateEmail.length == 0) {
+    }  else if (!this.alternateEmail.length == 0) {
       this.alternateEmail()
       return
     } else {
@@ -210,7 +205,7 @@ class EditProfile extends Component {
     }
   }
 
-  async editProfileUpdate(){
+  async editProfileUpdate() {
     const {
       profileDataSourceFirstName,
       profileDataSourceLastName,
@@ -234,7 +229,8 @@ class EditProfile extends Component {
     alternateemail = this.state.AlternateEmail;
     cca3 = this.state.cca3;
     callingCode1 = this.state.callingCode1;
-    let countryName = this.state.countryName===""?'IN':this.state.countryName;
+    let countryName = this.state.countryName === "" ? 'IN' : this.state.countryName;
+    let countryName1 = this.state.countryName1;
 
     // photo = this.state.photo
     // console.log(data)
@@ -242,57 +238,66 @@ class EditProfile extends Component {
     const {photo} = this.state
     const data = new FormData();
 
-    console.log("DKNKJF:",this.state.photoDetails);
+    console.log("DKNKJF:", this.state.photoDetails, this.state.photo);
 
-    let imgObj = {
-      name: (this.state.photoDetails.fileName !== undefined) ? this.state.photoDetails.fileName : "XXXXX.jpg",
-      uri: this.state.photoDetails.uri,
-      type: (this.state.photoDetails.type !== undefined || this.state.photoDetails.type != null) ? this.state.photoDetails.type : "image/jpeg"
-    };
+    let statForMediaUpload = "";
 
-    data.append('oyespace',imgObj);
-    console.log("Form Data:",data);
-    let statForMediaUpload = await base.services.MediaUploadApi.uploadRelativeImage(data);
-    console.log("Stat in Media Upload:",statForMediaUpload);
+    if (this.state.photoDetails === null) {
+      statForMediaUpload = this.state.photo;
+    } else {
+      let imgObj = {
+        name: (this.state.photoDetails.fileName !== undefined) ? this.state.photoDetails.fileName : "XXXXX.jpg",
+        uri: this.state.photoDetails.uri,
+        type: (this.state.photoDetails.type !== undefined || this.state.photoDetails.type != null) ? this.state.photoDetails.type : "image/jpeg"
+      };
+
+      data.append('oyespace', imgObj);
+      console.log("Form Data:", data);
+      statForMediaUpload = await base.services.MediaUploadApi.uploadRelativeImage(data);
+      console.log("Stat in Media Upload:", statForMediaUpload);
+    }
+
 
     let payloadData = {
-                ACFName:
-                    firstname.length <= 0 ? profileDataSourceFirstName : firstname,
-                ACLName: lastname.length <= 0 ? profileDataSourceLastName : lastname,
-                ACMobile:
-                    mobilenumber.length <= 0
-                        ? profileDataSourceMobileNumber
-                        : mobilenumber,
-                ACEmail: email.length <= 0 ? profileDataSourceEmail : email,
-                ACISDCode:
-                    callingCode.length <= 0
-                        ? profileDataSourceIsdCode + profileDataSourceCca2
-                        : callingCode + cca2,
-                ACMobile1:
-                    alternatemobilenumber.length <= 0
-                        ? profileDataSourceAlternateMobileNum
-                        : alternatemobilenumber,
-                ACISDCode1:
-                    callingCode1.length <= 0
-                        ? profileDataSourceIsdCode1 + profileDataSourceCca3
-                        : callingCode1 + cca3,
-                ACMobile2: null,
-                ACISDCode2: null,
-                ACMobile3: null,
-                ACISDCode3: null,
-                ACMobile4: null,
-                ACISDCode4: null,
-                ACEmail1:
-                    alternateemail.length <= 0
-                        ? profileDataSourceAlternateEmail
-                        : alternateemail,
-                ACEmail2: null,
-                ACEmail3: null,
-                ACEmail4: null,
-                ACImgName:statForMediaUpload,
-                ACAccntID: 1,
-                acCrtyCode: countryName
-              };
+      ACFName:
+          firstname.length <= 0 ? profileDataSourceFirstName : firstname,
+      ACLName: lastname.length <= 0 ? profileDataSourceLastName : lastname,
+      ACMobile:
+          mobilenumber.length <= 0
+              ? profileDataSourceMobileNumber
+              : mobilenumber,
+      ACEmail: email.length <= 0 ? profileDataSourceEmail : email,
+      ACISDCode:
+          callingCode.length <= 0
+              ? profileDataSourceIsdCode + profileDataSourceCca2
+              : callingCode + cca2,
+      ACMobile1:
+          alternatemobilenumber.length <= 0
+              ? profileDataSourceAlternateMobileNum
+              : alternatemobilenumber,
+      ACISDCode1:
+          callingCode1.length <= 0
+              ? profileDataSourceIsdCode1 + profileDataSourceCca3
+              : callingCode1 + cca3,
+      ACMobile2: null,
+      ACISDCode2: null,
+      ACMobile3: null,
+      ACISDCode3: null,
+      ACMobile4: null,
+      ACISDCode4: null,
+      ACEmail1:
+          alternateemail.length <= 0
+              ? profileDataSourceAlternateEmail
+              : alternateemail,
+      ACEmail2: null,
+      ACEmail3: null,
+      ACEmail4: null,
+      ACImgName: statForMediaUpload,
+      ACAccntID: 1,
+      acCrtyCode: countryName,
+      acCrtyCode1: countryName1
+
+    };
 
 
     this.updateProfile(payloadData);
@@ -300,8 +305,8 @@ class EditProfile extends Component {
 
   };
 
-  async updateProfile(payloadData){
-    console.log("payload Data:",payloadData);
+  async updateProfile(payloadData) {
+    console.log("payload Data:", payloadData);
     const {
       profileDataSourceFirstName,
       profileDataSourceLastName,
@@ -325,7 +330,7 @@ class EditProfile extends Component {
     let alternateemail = this.state.AlternateEmail;
     let cca3 = this.state.cca3;
     let callingCode1 = this.state.callingCode1;
-    let countryName = this.state.countryName===""?"IN":this.state.countryName;
+    let countryName = this.state.countryName === "" ? "IN" : this.state.countryName;
 
     axios
         .post(
@@ -364,9 +369,10 @@ class EditProfile extends Component {
               ACEmail2: null,
               ACEmail3: null,
               ACEmail4: null,
-              ACImgName:payloadData.ACImgName,
+              ACImgName: payloadData.ACImgName,
               ACAccntID: this.props.MyAccountID,
-              acCrtyCode: countryName
+              acCrtyCode: countryName,
+              acCrtyCode1: payloadData.acCrtyCode1
             },
             {
               headers: {
@@ -378,7 +384,7 @@ class EditProfile extends Component {
 
         .then(response => {
           this.props.navigation.goBack();
-          console.log("Respo:",response);
+          console.log("Respo:", response,payloadData.acCrtyCode1);
         })
         .catch(error => {
           console.log(error)
@@ -447,10 +453,17 @@ class EditProfile extends Component {
           .profileDataSourceAlternateEmail
           ? this.props.navigation.state.params.profileDataSourceAlternateEmail
           : ""
-    })
+    });
     this.setState({
       countryName: this.props.navigation.state.params.profileDataSourceCountryName
-    })
+    });
+    this.setState({
+      countryName1: this.props.navigation.state.params.profileDataSourceCountryName1
+    });
+
+    this.setState({
+      photo: this.props.navigation.state.params.profileDataSourceImageName
+    });
   }
 
   selectPhotoTapped() {
@@ -479,7 +492,7 @@ class EditProfile extends Component {
 
         // CameraRoll.saveToCameraRoll(data.uri)
 
-        this.setState({photo: response, photoDetails: response})
+        this.setState({photo: response.uri, photoDetails: response, isPhotoAvailable: true});
         console.log(response)
         //this.setState({ photo: response })
       }
@@ -489,7 +502,7 @@ class EditProfile extends Component {
   render() {
     //const { navigate } = this.props.navigation
     const {photo} = this.state;
-    console.log("State:",this.state);
+    console.log("State:", this.state);
 
     return (
         <TouchableWithoutFeedback
@@ -555,7 +568,8 @@ class EditProfile extends Component {
                           onPress={this.selectPhotoTapped.bind(this)}
                       >
                         <View style={styles.viewForProfilePicImageStyle}>
-                          {this.state.photo === null ? (
+                          {this.props.navigation.state.params
+                              .profileDataSourceImageName !== null && !this.state.isPhotoAvailable ? (
                               <Image
                                   style={styles.profilePicImageStyle}
                                   source={{
@@ -568,32 +582,9 @@ class EditProfile extends Component {
                           ) : (
                               <Image
                                   style={styles.profilePicImageStyle}
-                                  source={{uri: photo.uri}}
+                                  source={{uri: photo}}
                               />
                           )}
-                          {/* {this.state.photo === null ? (
-                          <Image
-                            style={styles.profilePicImageStyle}
-                            source={{
-                              uri:
-                                "http://mediauploaddev.oyespace.com/Images/" +
-                                this.props.navigation.state.params
-                                  .profileDataSourceImageName
-                            }}
-                          />
-                        ) : (
-                          // : (<Image
-                          //       style={styles.profilePicImageStyle}
-                          //        source={require("../icons/camwithgradientbg.png")}
-                          //      />
-                          //    )
-                          <Image
-                            style={styles.profilePicImageStyle}
-                            //source={this.state.ImageSource}
-                            source={{ uri: photo.uri }}
-                            //defaultSource={require("../icons/camwithgradientbg.png")}
-                          />
-                        )} */}
                         </View>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -707,16 +698,16 @@ class EditProfile extends Component {
                         >
                           <CountryPicker
                               onChange={value => {
-                                console.log("CCA:",value);
+                                console.log("CCA:", value);
                                 this.setState({
                                   cca2: value.cca2,
                                   callingCode: "+" + value.callingCode,
-                                  countryName:value.cca2
+                                  countryName: value.cca2
                                 })
                               }}
                               //cca2={this.state.cca2}
-                              cca2={this.state.countryName===""?'IN':this.state.countryName}
-                              flag={this.state.countryName===""?'IN':this.state.countryName}
+                              cca2={this.state.countryName === "" ? 'IN' : this.state.countryName}
+                              flag={this.state.countryName === "" ? 'IN' : this.state.countryName}
                               translation="eng"
                           />
                         </View>
@@ -771,15 +762,15 @@ class EditProfile extends Component {
                         >
                           <CountryPicker
                               onChange={value => {
-                                console.log("CCA11:",value);
+                                console.log("CCA11:", value);
                                 this.setState({
                                   cca3: value.cca2,
                                   callingCode1: "+" + value.callingCode,
-                                  countryName1:value.cca2
+                                  countryName1: value.cca2
                                 })
                               }}
-                              cca2={this.state.countryName1===""?'IN':this.state.countryName1}
-                              flag={this.state.countryName1===""?'IN':this.state.countryName1}
+                              cca2={this.state.countryName1 === "" ? 'IN' : this.state.countryName1}
+                              flag={this.state.countryName1 === "" ? 'IN' : this.state.countryName1}
                               translation="eng"
                           />
                         </View>
@@ -794,7 +785,7 @@ class EditProfile extends Component {
                             }}
                         >
                           <Text style={{color: "black", fontSize: hp("2%")}}>
-                            {this.state.countryName1===""?"91":this.state.callingCode1}
+                            {this.state.countryName1 === "" ? "91" : this.state.callingCode1}
                           </Text>
                         </View>
 
@@ -1081,5 +1072,3 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps)(EditProfile);
-
-

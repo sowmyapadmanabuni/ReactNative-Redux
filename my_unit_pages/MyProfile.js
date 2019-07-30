@@ -180,7 +180,8 @@ class MyProfile extends Component {
                               profileDataSourceImageName: this.state.datasource
                                 ? this.state.datasource.data.account[0].acImgName
                                 : "",
-                              profileDataSourceCountryName:this.state.datasource.data.account[0].acCrtyCode
+                              profileDataSourceCountryName:this.state.datasource.data.account[0].acCrtyCode,
+                              profileDataSourceCountryName1:this.state.datasource.data.account[0].acCrtyCode1
                             })
                           }}
                       >
