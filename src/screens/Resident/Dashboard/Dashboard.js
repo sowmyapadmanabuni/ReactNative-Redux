@@ -470,12 +470,7 @@ class Dashboard extends React.Component {
     const { oyeURL } = this.props.oyespaceReducer;
 
     // console.log(value, "Valuessss");
-    getDashUnits(
-      dropdown[index].associationId,
-      oyeURL,
-      notifications,
-      MyAccountID
-    );
+    getDashUnits(dropdown[index].associationId, oyeURL, MyAccountID);
     const { updateIdDashboard } = this.props;
     console.log("updateIdDashboard1", this.props);
     updateIdDashboard({
