@@ -358,15 +358,8 @@ class Dashboard extends React.Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(
-          "Manas",
-          responseJson,
-          responseJson.data,
-        );
-        console.log(
-          "MRMRoleid",
-          responseJson.data.members[0].mrmRoleID,
-        );
+        console.log("Manas", responseJson, responseJson.data);
+        console.log("MRMRoleid", responseJson.data.members[0].mrmRoleID);
 
         this.setState({
           role: responseJson.data.members[0].mrmRoleID
@@ -476,7 +469,13 @@ class Dashboard extends React.Component {
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
-    getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
+    // console.log(value, "Valuessss");
+    getDashUnits(
+      dropdown[index].associationId,
+      oyeURL,
+      notifications,
+      MyAccountID
+    );
     const { updateIdDashboard } = this.props;
     console.log("updateIdDashboard1", this.props);
     updateIdDashboard({
@@ -520,7 +519,7 @@ class Dashboard extends React.Component {
         let unitList = [];
         for (let i = 0; i < stat.data.members.length; i++) {
           //if (stat.data.members[i].unUniName) {
-         /* let Unit = "";
+          /* let Unit = "";
           if (
             !stat.data.members[i].unUniName ||
             stat.data.members[i].unUniName === ""
@@ -533,9 +532,15 @@ class Dashboard extends React.Component {
           }
           unitList.push({ value: Unit, details: stat.data.members[i] });*/
 
-         if(stat.data.members[i].unUniName !== "" && stat.data.members[i].unUnitID !==0 ){
-           unitList.push({ value: stat.data.members[i].unUniName, details: stat.data.members[i] });
-         }
+          if (
+            stat.data.members[i].unUniName !== "" &&
+            stat.data.members[i].unUnitID !== 0
+          ) {
+            unitList.push({
+              value: stat.data.members[i].unUniName,
+              details: stat.data.members[i]
+            });
+          }
         }
         console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
 
@@ -553,7 +558,7 @@ class Dashboard extends React.Component {
         });
 
         self.roleCheckForAdmin();
-        self.getVehicleList()
+        self.getVehicleList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -577,41 +582,47 @@ class Dashboard extends React.Component {
     });
     const { updateIdDashboard } = this.props;
     updateIdDashboard({ prop: "uniID", value: unitId });
-    self.getVehicleList()
+    self.getVehicleList();
   }
 
   getVehicleList = () => {
-    console.log('Get ID for vehicle', this.props)
+    console.log("Get ID for vehicle", this.props);
     fetch(
-        `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`, //${this.props.dashBoardReducer.uniID}
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-          }
+      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
+        this.props.dashBoardReducer.uniID
+      }`, //${this.props.dashBoardReducer.uniID}
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
         }
+      }
     )
-        .then(response =>response.json())
-        .then(responseJson => {
-          console.log("VehicleRespponse####",responseJson, responseJson.data.vehicleListByUnitID.length);
-          this.setState({
-            //Object.keys(responseJson.data.unitsByBlockID).length
-            vehiclesCount:responseJson.data.vehicleListByUnitID.length
-          });
-        })
-        .catch(error => {
-          this.setState({ loading: false });
-          console.log("error in net call",error);
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(
+          "VehicleRespponse####",
+          responseJson,
+          responseJson.data.vehicleListByUnitID.length
+        );
+        this.setState({
+          //Object.keys(responseJson.data.unitsByBlockID).length
+          vehiclesCount: responseJson.data.vehicleListByUnitID.length
         });
+      })
+      .catch(error => {
+        this.setState({ loading: false });
+        console.log("error in net call", error);
+      });
   };
 
   myProfileNet = async () => {
-    console.log('AccId@@@@@',this.props)
+    console.log("AccId@@@@@", this.props);
     let response = await base.services.OyeLivingApi.getProfileFromAccount(
-        this.props.userReducer.MyAccountID
+      this.props.userReducer.MyAccountID
     );
-    console.log("Joe",response);
+    console.log("Joe", response);
     const { updateUserInfo } = this.props;
     updateUserInfo({
       prop: "userData",
@@ -621,7 +632,6 @@ class Dashboard extends React.Component {
       prop: "userProfilePic",
       value: response.data.account[0].acImgName
     });
-
   };
 
   getFamilyMemberList = () => {
@@ -698,7 +708,7 @@ class Dashboard extends React.Component {
 
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-    console.log("Drp1",dropdown1)
+    console.log("Drp1", dropdown1);
     return (
       <View style={{ height: "100%", width: "100%" }}>
         <NavigationEvents onDidFocus={() => this.didMount()} />
@@ -731,7 +741,7 @@ class Dashboard extends React.Component {
                       });
                       updateSelectedDropDown({
                         prop: "selectedDropdown",
-                        value: value.value
+                        value: value
                       });
                     }}
                   />

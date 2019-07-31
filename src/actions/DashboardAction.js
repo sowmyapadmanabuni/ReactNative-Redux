@@ -59,7 +59,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Response in DasActions",responseJson);
+        console.log("Response in DasActions", responseJson);
         if (responseJson.success) {
           let associations = responseJson.data.memberListByAccount;
 
@@ -99,8 +99,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
 
           let removeDuplicates = _.uniqBy(withoutString, "associationId");
 
-           console.log(removeDuplicates, "removeDuplicates");
-           console.log( associationIds, "assIds");
+          console.log(removeDuplicates, "removeDuplicates");
+          console.log(associationIds, "assIds");
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
@@ -422,16 +422,15 @@ export const getDashUnits = (unit, oyeURL) => {
             }
           }
         )
-          .then(response => response.json())
+          .then(res => res.json())
           .then(responseJson => {
             if (responseJson.success) {
               let count = Object.keys(responseJson.data.unit).length;
               let sold_data = [];
-              let name = [];
               let sold1 = 0;
               let unsold1 = 0;
               let totalunits = 0;
-              Residentlist = name;
+              Residentlist = [];
 
               for (var i = 0; i < count; i++) {
                 sold_data.push({ value: responseJson.data.unit[i].unOcStat });
@@ -498,7 +497,7 @@ export const getDashUnits = (unit, oyeURL) => {
               let units = [];
 
               responseJson.data.unit.map((data, index) => {
-                // console.log(data);
+                console.log(data, "data");
                 units.push({
                   value: data.unUniName,
                   name: data.unUniName,
