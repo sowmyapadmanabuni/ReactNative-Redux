@@ -150,12 +150,12 @@ class GetStaffReport extends React.Component {
         console.log('Staff Report Input', this.props)
 
         let input = {
-            "ASAssnID": this.props.userReducer.selectedAssociationId,
+            "ASAssnID": this.props.userReducer.SelectedAssociationID,
             "WKWorkID": this.props.staffReducer.staffId,
             "FromDate":this.props.staffReducer.startDate,
             "ToDate": this.props.staffReducer.endDate
         }
-
+         console.log('Staff Data',input)
         let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
 
         self.setState({isLoading: false})
