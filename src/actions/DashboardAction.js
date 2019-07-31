@@ -112,7 +112,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               axios
                 .get(
                   // `http://${oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${unit}`,
-                  `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAccountIDAndAssocID/${accountId}/${unit}`,
+                  // `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAccountIDAndAssocID/${accountId}/${unit}`,
+                  `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${accountId}/${unit}`,
                   {
                     headers: {
                       "Content-Type": "application/json",
@@ -125,7 +126,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
 
                   let units = [];
 
-                  responseDataUnits.unit.map((data, index) => {
+                  responseDataUnits.memberListByAccount.map((data, index) => {
                     units.push({
                       value: data.unUniName,
                       name: data.unUniName,
@@ -334,7 +335,7 @@ export const getDashUnits = (unit, oyeURL, MyAccountID) => {
 
     axios
       .get(
-        `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAccountIDAndAssocID/${MyAccountID}/${unit}`,
+        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -347,7 +348,7 @@ export const getDashUnits = (unit, oyeURL, MyAccountID) => {
 
         let units = [];
 
-        responseData.unit.map((data, index) => {
+        responseData.memberListByAccount.map((data, index) => {
           // console.log(data, "data");
           units.push({
             value: data.unUniName,
