@@ -129,7 +129,7 @@ class NotificationDetailScreen extends Component {
                       StatusUpdate = {
                         NTID: item.ntid,
                         NTStatDesc: "Request Sent"
-                        // NTStatDesc: responseJson_2.data.string
+                        //NTStatDesc: responseJson_2.data.string
                       };
 
                       fetch(
@@ -374,7 +374,7 @@ class NotificationDetailScreen extends Component {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam("details", "NO-ID");
-    // console.log(this.state);
+     console.log("Get the Details",details);
     return (
       <View style={styles.container}>
         <Header

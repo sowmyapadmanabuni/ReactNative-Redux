@@ -47,7 +47,8 @@ class MyFamilyList extends React.Component {
       error: null,
       myFamilyList: [],
       myfamily11: [],
-      isModelVisible: true
+      isModelVisible: true,
+      searchText:""
     }
 
     this.arrayholder = []
@@ -252,6 +253,26 @@ class MyFamilyList extends React.Component {
     )
   }
 
+  handleSearch(text) {
+    this.setState({searchText: text});
+    let sortList = this.state.myfamily11;
+    let filteredArray = [];
+    if (text.length === 0) {
+      filteredArray.push(this.state.clonedList)
+    } else {
+      for (let i in sortList) {
+        console.log("Sort:", sortList[i])
+
+        if (sortList[i].fmName.includes(text) || sortList[i].fmRltn.includes(text) || sortList[i].fmMobile.includes(text)) {
+          filteredArray.push(sortList[i])
+        }
+      }
+    }
+    this.setState({
+      myfamily11: text.length === 0 ? filteredArray[0] : filteredArray
+    });
+  };
+
   render() {
     const { navigate } = this.props.navigation
 
@@ -365,7 +386,8 @@ class MyFamilyList extends React.Component {
           <Text style={Style.titleOfScreenStyle}>Family Members</Text>
 
           <Form style={Style.formSearch}>
-            <Item style={Style.inputItem}>
+           {/* <Item style={Style.inputItem}>
+
               <Input
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
@@ -374,7 +396,23 @@ class MyFamilyList extends React.Component {
               />
 
               <Icon style={Style.icon} name="search" size={14} />
-            </Item>
+            </Item>*/}
+            <View
+                style={{flex: 0.8, height: hp("5.5%"), marginStart: hp("2%"), marginBottom:50}}
+            >
+              <TextInput
+                  value={this.state.searchText}
+                  style={{ height: hp("5.5%"),
+                    backgroundColor: "#F5F5F5",
+                    borderRadius: hp("7%"),
+                    fontSize: hp("1.8%"),
+                    paddingLeft: hp("2%")}}
+                  placeholder="  search...."
+                  round
+                  autoCapitalize="characters"
+                  onChangeText={(text) => this.handleSearch(text)}
+              />
+            </View>
           </Form>
           {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
 

@@ -199,12 +199,10 @@ if (fname.length == 0 || fname == '') {
 } else if (mobNum.length < 10) {
   Alert.alert('Mobile number should not be less than 10 digits');
   return false;
-}else if(regemail.test(emailId) === false) {
-  Alert.alert("Check your email.")
 }else if(dobDate>dobDate1){
   Alert.alert('Enter valid start date to till date')
   return false;
-}else if(time==time1){
+}else if(time==time1 && dobDate ==dobDate1){
   Alert.alert('Enter valid start time to till time')
   return false;  
 } else if(purpose.length == 0 || purpose == ''){

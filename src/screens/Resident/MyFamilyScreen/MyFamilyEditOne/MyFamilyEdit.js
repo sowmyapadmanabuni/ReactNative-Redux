@@ -102,6 +102,8 @@ class MyFamilyEdit extends Component {
   }
 
   async myFamilyUpdate() {
+
+    console.log("Props in Edit Mem",this.props)
     const {
       myFamilyName,
       myFamilyMobileNo,
@@ -130,7 +132,6 @@ class MyFamilyEdit extends Component {
       uri:
         Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
     })
-    //validations
     const reg = /^[0]?[6789]\d{9}$/
     const OyeFullName = /^[a-zA-Z ]+$/
 
@@ -174,7 +175,9 @@ class MyFamilyEdit extends Component {
         FMFlag: cca2.length <= 0 ? myFamilyCca2 : cca2
       }
 
-      let editFamilyMember = await base.services.OyeSafeApiFamily.myFamilyEditMember(
+      console.log("Details sending in Edit:",input)
+
+    /*  let editFamilyMember = await base.services.OyeSafeApiFamily.myFamilyEditMember(
         input
       )
       console.log("Edit Family Member", editFamilyMember)
@@ -208,7 +211,7 @@ class MyFamilyEdit extends Component {
               console.log("RNFetchBlob err = ", err)
             })
         }
-      } catch {}
+      } catch {}*/
     }
   }
 
@@ -290,12 +293,9 @@ class MyFamilyEdit extends Component {
   }
 
   render() {
-    const { photo } = this.state
-    console.log("photo_____")
+    const { photo } = this.state;
     return (
       <View style={{ flex: 1 }}>
-        {/* <Header /> */}
-
         <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[Style.viewStyle, { flexDirection: "row" }]}>
             <View

@@ -712,9 +712,10 @@ class Dashboard extends React.Component {
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
+                    containerStyle={{width:'90%'}}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
-                      borderBottomColor: "transparent"
+                      borderBottomColor: "transparent",
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
                     dropdownPosition={-4}
@@ -770,6 +771,8 @@ class Dashboard extends React.Component {
                       // console.log(value);
                       // console.log(index);
                     }}
+                   // itemTextStyle={{}}
+
                   />
                 ) : (
                   <View />
