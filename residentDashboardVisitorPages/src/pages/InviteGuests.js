@@ -94,13 +94,17 @@ onDOBPress1 = () => {
 }
 onDOBDatePicked = (date) => {
       console.log('Date selected First',date)
-  this.setState({
+    console.log('Date selected First',moment(date).format('YYYY-MM-DD'))
+
+    this.setState({
     dobDate: date,
     dobText: moment(date).format('YYYY-MM-DD'),
   });
 }
 onDOBDatePicked1 = (date) => {
     console.log('Date selected Second',date)
+    console.log('Date selected Second Comp',moment(date).format('YYYY-MM-DD'))
+
 
     this.setState({
     dobDate1: date,
@@ -156,6 +160,8 @@ toggleSwitch = (value) => {
 
 
 sendInvitation = () => {
+
+    console.log("Send Invitation List", this.state)
 
   fname=this.state.fname;
   lname=this.state.lname;
@@ -226,7 +232,7 @@ else{
       },
       body: JSON.stringify({
 
-        "UnUnitID"  :  this.props.dashBoardReducer.uniID,
+          "UnUnitID"  :  this.props.dashBoardReducer.uniID,
         "INFName"   : fname,
         "INLName"   : lname,
         "INMobile"  : "+"+ callingCode + mobNum,
@@ -245,7 +251,7 @@ else{
       .then(response => response.json())
       .then(responseJson => {
         console.log("Manas",responseJson)
-        Alert.alert("Data Saved")
+          Alert.alert("Invitation created, please share the invitation using the share button")
         this.props.navigation.goBack()
       })
       .catch(error=>console.log(error))
