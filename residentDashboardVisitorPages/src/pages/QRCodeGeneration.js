@@ -185,6 +185,7 @@ class QRCodeGeneration extends Component {
       // url: "http://facebook.github.io/react-native/",
       subject: "Welcome" //  for email
     };
+    console.log('QR scan Details',params)
 
     let wholeData =
       params.value.infName +

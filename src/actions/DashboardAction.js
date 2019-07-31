@@ -15,6 +15,7 @@ import {
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
+import base from "../base";
 
 export const getDashSub = (oyeURL, SelectedAssociationID) => {
   return dispatch => {
@@ -82,7 +83,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
             });
           });
 
-          // console.log(drop_down_data, "drop_down_data");
+           console.log(drop_down_data, "drop_down_data");
 
           let withoutString = [];
 
@@ -99,12 +100,17 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
 
           let removeDuplicates = _.uniqBy(withoutString, "associationId");
 
+
+
           console.log(removeDuplicates, "removeDuplicates");
           console.log(associationIds, "assIds");
+
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
-              dropdown: removeDuplicates,
+              dropdown:removeDuplicates.sort(
+                  base.utils.validate.compareAssociationNames
+              ),
               associationid: associationIds
             }
           });
@@ -546,6 +552,7 @@ export const getDashUnits = (unit, oyeURL) => {
                   withoutString.push({ ...data });
                 }
               });
+              console.log('UnitListDp::',withoutString)
 
               if (withoutString.length > 0) {
                 dispatch({

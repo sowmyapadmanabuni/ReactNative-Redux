@@ -63,6 +63,7 @@ class InviteGuests extends Component {
 
  //Date Picker
  onDOBPress = () => {
+      console.log('Date First selected ')
 
   let dobDate = this.state.dobDate;
   if (!dobDate || dobDate == null) {
@@ -77,8 +78,9 @@ class InviteGuests extends Component {
   });
 }
 onDOBPress1 = () => {
+    console.log('Date Second selected ')
 
-  let dobDate = this.state.dobDate1;
+    let dobDate = this.state.dobDate1;
   if (!dobDate || dobDate == null) {
     dobDate = new Date();
     this.setState({
@@ -87,17 +89,20 @@ onDOBPress1 = () => {
   }
   this.refs.dobDialog1.open({
     date: dobDate,
-    minDate: new Date() //To restirct future date
+    minDate: new Date()
   });
 }
 onDOBDatePicked = (date) => {
+      console.log('Date selected First',date)
   this.setState({
     dobDate: date,
     dobText: moment(date).format('YYYY-MM-DD'),
   });
 }
 onDOBDatePicked1 = (date) => {
-  this.setState({
+    console.log('Date selected Second',date)
+
+    this.setState({
     dobDate1: date,
     dobText1: moment(date).format('YYYY-MM-DD'),
   });

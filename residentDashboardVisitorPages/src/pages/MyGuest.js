@@ -57,7 +57,7 @@ class MyGuests extends Component {
         this.props.oyeURL
       }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${
         this.props.dashBoardReducer.assId
-      }/True/${this.props.dashBoardReducer.assId
+      }/True/${this.props.dashBoardReducer.uniID
       }`,
       {
         method: "GET",

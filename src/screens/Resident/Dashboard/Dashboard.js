@@ -469,7 +469,7 @@ class Dashboard extends React.Component {
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
-    // console.log(value, "Valuessss");
+    console.log(value,dropdown[index].associationId, "Valuessss");
     getDashUnits(
       dropdown[index].associationId,
       oyeURL,
@@ -588,7 +588,7 @@ class Dashboard extends React.Component {
   getVehicleList = () => {
     console.log("Get ID for vehicle", this.props);
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
         this.props.dashBoardReducer.uniID
       }`, //${this.props.dashBoardReducer.uniID}
       {
@@ -754,6 +754,7 @@ class Dashboard extends React.Component {
                   <Dropdown
                     // value={this.state.unitName}
                     value={selectedDropdown1}
+                    containerStyle={{width:'100%'}}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
@@ -762,7 +763,7 @@ class Dashboard extends React.Component {
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-3}
+                    dropdownPosition={-4}
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
