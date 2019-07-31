@@ -59,31 +59,17 @@ target 'OyeSpace' do
   pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
 
   pod 'react-native-version-number', :path => '../node_modules/react-native-version-number'
+  
+  pod 'react-native-maps', path: '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', path: '../node_modules/react-native-maps'
+  pod 'GoogleMaps'
+  pod 'Google-Maps-iOS-Utils'
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
-  pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
 
-  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-
-  target 'OyeSpaceTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
+  
 end
-
-target 'OyeSpace-tvOS' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-
-  # Pods for OyeSpace-tvOS
-
-  target 'OyeSpace-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
-
+  
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     if target.name == "React"
