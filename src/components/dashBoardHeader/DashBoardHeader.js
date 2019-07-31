@@ -56,6 +56,7 @@ class DashBoardHeader extends React.Component {
 
     const BadgedIcon = withBadge(count)(Icon);
 
+    console.log(count, "count");
     if (count >= 1) {
       return (
         <BadgedIcon
@@ -84,16 +85,14 @@ class DashBoardHeader extends React.Component {
     // );
   };
 
- /* componentDidMount() {
+  /* componentDidMount() {
     let self = this;
     setTimeout(() => {
       self.myProfileNet();
     }, 500);
   }*/
 
-
-
- /* async myProfile(){
+  /* async myProfile(){
     console.log('AccId@@@@@',this.props)
 
     let response = await base.services.OyeLivingApi.getProfileFromAccount(
@@ -106,12 +105,12 @@ class DashBoardHeader extends React.Component {
     });
   }*/
 
- myProfileNet = async () => {
-    console.log('AccId@@@@@',this.props)
+  myProfileNet = async () => {
+    console.log("AccId@@@@@", this.props);
     let response = await base.services.OyeLivingApi.getProfileFromAccount(
       this.props.MyAccountID
     );
-    console.log("Joe",response);
+    console.log("Joe", response);
     this.setState({
       datasource: response,
       ImageSource: response.data.account[0].acImgName
@@ -140,14 +139,19 @@ class DashBoardHeader extends React.Component {
   };
 
   render() {
-    console.log("State in dashboard header:",this.props.userReducer.userData,this.props.userReducer.userProfilePic);
+    console.log(
+      "State in dashboard header:",
+      this.props.userReducer.userData,
+      this.props.userReducer.userProfilePic
+    );
     return (
       <View style={HeaderStyles.container}>
         <View style={HeaderStyles.subContainerLeft}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("MyProfileScreen")}
           >
-            {this.props.userReducer.userProfilePic === null || this.props.userReducer.userProfilePic === "" ? (
+            {this.props.userReducer.userProfilePic === null ||
+            this.props.userReducer.userProfilePic === "" ? (
               <Image
                 style={HeaderStyles.imageStyles}
                 source={{
@@ -160,24 +164,26 @@ class DashBoardHeader extends React.Component {
                 source={{
                   uri:
                     "http://mediaupload.oyespace.com/" +
-                      this.props.userReducer.userProfilePic
+                    this.props.userReducer.userProfilePic
                 }}
               />
             )}
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={HeaderStyles.textContainer}>
-            <TouchableOpacity
-            onPress={() => { this.props.navigation.navigate("MyProfileScreen")}}
-          >
-              <Text
-                style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
-                numberOfLines={1}
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("MyProfileScreen");
+                }}
               >
-                {this.props.userReducer.userData
-                  ? this.props.userReducer.userData.data.account[0].acfName
-                  : null}
-              </Text>
+                <Text
+                  style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
+                  numberOfLines={1}
+                >
+                  {this.props.userReducer.userData
+                    ? this.props.userReducer.userData.data.account[0].acfName
+                    : null}
+                </Text>
               </TouchableOpacity>
               <Text style={HeaderStyles.statusText} numberOfLines={1}>
                 Owner
@@ -205,8 +211,6 @@ class DashBoardHeader extends React.Component {
       </View>
     );
   }
-
-
 }
 
 const mapStateToProps = state => {
@@ -217,8 +221,7 @@ const mapStateToProps = state => {
     MyFirstName: state.UserReducer.MyFirstName,
     viewImageURL: state.OyespaceReducer.viewImageURL,
     notifications: state.NotificationReducer.notifications,
-    userReducer: state.UserReducer,
-
+    userReducer: state.UserReducer
   };
 };
 
