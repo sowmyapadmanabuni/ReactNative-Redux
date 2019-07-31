@@ -10,11 +10,11 @@ const isMandatory = " is required";
 
 const api = {
     oyeSafeApiDomainFamily: isDev
-        ? "apiuat.oyespace.com/oyesafe/api/v1/"
-        : "apiuat.oyespace.com/oyesafe/api/v1/",
-    oyeSafeDomain:isDev?"apiuat.oyespace.com/oye247":"apiuat.oyespace.com/oye247",
-    oyeDomain:isDev?"apiuat.oyespace.com/oyeliving":"apiuat.oyespace.com/oyeliving",
-    oyeLivingDomain:isDev?"apiuat.oyespace.com":"OyeLivingApi.oyespace.com",
+        ? "apidev.oyespace.com/oyesafe/api/v1/"
+        : "apidev.oyespace.com/oyesafe/api/v1/",
+    oyeSafeDomain:isDev?"apidev.oyespace.com/oye247":"apidev.oyespace.com/oye247",
+    oyeDomain:isDev?"apidev.oyespace.com/oyeliving":"apidev.oyespace.com/oyeliving",
+    oyeLivingDomain:isDev?"apidev.oyespace.com":"OyeLivingApi.oyespace.com",
     mediaupload:isDev?"https://mediauploaddev.oyespace.com/":"http://mediauploaduat.oyespace.com/",
     protocol:isSecure?"https://":"http://",
     oyeSafeApiPath:"/api/v1/",

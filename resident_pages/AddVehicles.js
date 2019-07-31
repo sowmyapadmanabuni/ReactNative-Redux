@@ -45,7 +45,7 @@ class AddVehicle extends Component {
     super(props);
     this.state = {
       value: 0,
-      text: "",
+      text: "Two Wheeler",
       vehName: "",
       vehNum: "",
       vehStickerNum: "",
@@ -64,7 +64,7 @@ class AddVehicle extends Component {
   async getUnitDetail() {
     let self = this;
     let stat = await OyeLivingApi.getUnitDetailByUnitId(
-      this.props.dashBoardReducer.uniID
+        this.props.dashBoardReducer.uniID
     );
     //let stat = await OyeLivingApi.getUnitDetailByUnitId(497);
     console.log("Stat in unit detail:", stat);
@@ -125,7 +125,7 @@ class AddVehicle extends Component {
       return false;
     } else if (oyeNonSpecialRegex.test(vehStickerNum) === true) {
       Alert.alert(
-        "Vehicle Sticker Number should not contain special character"
+          "Vehicle Sticker Number should not contain special character"
       );
       return false;
     } else if (oyeNonSpecialRegex.test(parkingSlotNum) === true) {
@@ -135,16 +135,17 @@ class AddVehicle extends Component {
       if (this.state.parkingLotDetail.length !== 0) {
         for (let i in this.state.parkingLotDetail) {
           console.log(
-            this.state.selectedData,
-            this.state.parkingLotDetail[i].value
+              this.state.selectedData,
+              this.state.parkingLotDetail[i].value
           );
           if (
-            this.state.selectedData === this.state.parkingLotDetail[i].value
+              this.state.selectedData === this.state.parkingLotDetail[i].value
           ) {
             upID = this.state.parkingLotDetail[i].id;
           }
         }
       }
+     console.log('ValValVal',value)
 
       let payloadData = {
         VERegNo: vehNum,
@@ -167,16 +168,16 @@ class AddVehicle extends Component {
         },
         body: JSON.stringify(payloadData)
       })
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log("Manas", responseJson);
-          this.props.navigation.navigate("MyVehicleListScreen");
-
-          /*if (responseJson.success) {
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log("Manas", responseJson);
             this.props.navigation.navigate("MyVehicleListScreen");
-          } */
-        })
-        .catch(error => Alert.alert("Data not saved", error));
+
+            /*if (responseJson.success) {
+              this.props.navigation.navigate("MyVehicleListScreen");
+            } */
+          })
+          .catch(error => Alert.alert("Data not saved", error));
     }
   };
 
@@ -189,63 +190,63 @@ class AddVehicle extends Component {
   render() {
     console.log("State:", this.state);
     return (
-      <View style={styles.container}>
-        {/* <Header/> */}
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: "flex-start",
-                    justifyContent: "center"
-                  }}
+        <View style={styles.container}>
+          {/* <Header/> */}
+          <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/headerLogo.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
 
-        <Text style={styles.titleOfScreen}>Add Vehicle</Text>
-        <View style={[styles.containers, { flex: 1, flexDirection: "column" }]}>
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "space-around",
-              flexDirection: "row",
-              backgroundColor: "#DAE0E2",
-              height: hp("7%")
-            }}
-          >
-            {/* <RadioForm style={{marginTop:hp('1%')}}
+          <Text style={styles.titleOfScreen}>Add Vehicle</Text>
+          <View style={[styles.containers, { flex: 1, flexDirection: "column" }]}>
+            <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  flexDirection: "row",
+                  backgroundColor: "#DAE0E2",
+                  height: hp("7%")
+                }}
+            >
+              {/* <RadioForm style={{marginTop:hp('1%')}}
                       radio_props={radio_props}
                       initial={0}
                       formHorizontal={true}
@@ -258,115 +259,111 @@ class AddVehicle extends Component {
                       labelStyle={{fontSize:hp('1.5%')}}
                       onPress={(value) => {this.setState({value:value})}}
                     /> */}
-            <RadioGroup
-              style={{ flexDirection: "row" }}
-              selectedIndex={0}
-              onSelect={(index, value) => this.onSelect(index, value)}
-            >
-              <RadioButton value={"Two Wheeler"}>
-                <Text>Two Wheeler</Text>
-              </RadioButton>
-              <RadioButton value={"Four Wheeler"}>
-                <Text>Four Wheeler</Text>
-              </RadioButton>
-            </RadioGroup>
-          </View>
-          <KeyboardAwareScrollView>
-            <Form>
-              <Item style={styles.inputItem}>
-                {/* <Label>Vehicle Name</Label> */}
-                <Input
-                  // underlineColorAndroid="orange"
-                  autoCorrect={false}
-                  autoCapitalize="characters"
-                  keyboardType="default"
-                  placeholder="Vehicle Name"
-                  onChangeText={vehName => this.setState({ vehName: vehName })}
-                />
-              </Item>
-              <Item style={styles.inputItem}>
-                {/* <Label>Vehicle Number</Label> */}
-                <Input
-                  // underlineColorAndroid="orange"
-                  autoCorrect={false}
-                  autoCapitalize="characters"
-                  keyboardType="default"
-                  placeholder="Vehicle Number"
-                  onChangeText={vehNum => this.setState({ vehNum: vehNum })}
-                />
-              </Item>
-              <Item style={styles.inputItem}>
-                {/* <Label>Vehicle Sticker Number</Label> */}
-                <Input
-                  // underlineColorAndroid="orange"
-                  autoCorrect={false}
-                  autoCapitalize="characters"
-                  maxLength={10}
-                  keyboardType="default"
-                  placeholder="Vehicle Sticker Number"
-                  onChangeText={vehStickerNum =>
-                    this.setState({ vehStickerNum: vehStickerNum })
-                  }
-                />
-              </Item>
-              <Item style={styles.inputItem}>
-                {/* <Label>Parking Slot Number</Label> */}
-                <Input
-                  // underlineColorAndroid="orange"
-                  autoCorrect={false}
-                  autoCapitalize="characters"
-                  keyboardType="default"
-                  placeholder="Parking Slot Number"
-                  onChangeText={parkingSlotNum =>
-                    this.setState({ parkingSlotNum: parkingSlotNum })
-                  }
-                />
-              </Item>
-              {this.state.parkingLotDetail.length !== 0 ? (
-                <Dropdown
-                  containerStyle={styles.box1}
-                  dropdownPosition={-1}
-                  style={{
-                    color:base.theme.colors.gray,
-                    right: 19,
-                    textAlign: "left",
-                    fontFamily: base.theme.fonts.light,
-                    fontSize: hp("2.5%")
-                  }}
-                  value={"Select Parking lot"}
-                  textColor="#3A3A3C"
-                  labelHeight={hp("0.7%")}
-                  data={this.state.parkingLotDetail}
-                  inputContainerStyle={{ borderBottomColor: "transparent" }}
-                  onChangeText={data => this.setState({ selectedData: data })}
-                />
-              ) : (
-                <View style={styles.noData}>
-                  <Text>No parking slot available</Text>
-                </View>
-              )}
-            </Form>
-            <View style={styles.buttonStyle}>
-              <Button
-                bordered
-                info
-                style={styles.buttonCancel}
-                onPress={() => this.props.navigation.goBack()}
+              <RadioGroup
+                  style={{ flexDirection: "row" }}
+                  selectedIndex={0}
+                  onSelect={(index, value) => this.onSelect(index, value)}
               >
-                <Text style={styles.textFamilyVehicle}>Cancel</Text>
-              </Button>
-              <Button
-                bordered
-                warning
-                style={styles.buttonAdd}
-                onPress={() => this.createVehicle()}
-              >
-                <Text style={styles.textFamilyVehicle}>Add Vehicle</Text>
-              </Button>
+                <RadioButton value={"Two Wheeler"}>
+                  <Text>Two Wheeler</Text>
+                </RadioButton>
+                <RadioButton value={"Four Wheeler"}>
+                  <Text>Four Wheeler</Text>
+                </RadioButton>
+              </RadioGroup>
             </View>
-          </KeyboardAwareScrollView>
+            <KeyboardAwareScrollView>
+              <Form>
+                <Item style={styles.inputItem}>
+                  {/* <Label>Vehicle Name</Label> */}
+                  <Input
+                      autoCorrect={false}
+                      autoCapitalize="characters"
+                      keyboardType="default"
+                      placeholder="Vehicle Name"
+                      onChangeText={vehName => this.setState({ vehName: vehName })}
+                  />
+                </Item>
+                <Item style={styles.inputItem}>
+                  {/* <Label>Vehicle Number</Label> */}
+                  <Input
+                      autoCorrect={false}
+                      autoCapitalize="characters"
+                      keyboardType="default"
+                      placeholder="Vehicle Number"
+                      onChangeText={vehNum => this.setState({ vehNum: vehNum })}
+                  />
+                </Item>
+                <Item style={styles.inputItem}>
+                  {/* <Label>Vehicle Sticker Number</Label> */}
+                  <Input
+                      autoCorrect={false}
+                      autoCapitalize="characters"
+                      maxLength={10}
+                      keyboardType="default"
+                      placeholder="Vehicle Sticker Number"
+                      onChangeText={vehStickerNum =>
+                          this.setState({ vehStickerNum: vehStickerNum })
+                      }
+                  />
+                </Item>
+                <Item style={styles.inputItem}>
+                  {/* <Label>Parking Slot Number</Label> */}
+                  <Input
+                      autoCorrect={false}
+                      autoCapitalize="characters"
+                      keyboardType="default"
+                      placeholder="Parking Slot Number"
+                      onChangeText={parkingSlotNum =>
+                          this.setState({ parkingSlotNum: parkingSlotNum })
+                      }
+                  />
+                </Item>
+                {this.state.parkingLotDetail.length !== 0 ? (
+                    <Dropdown
+                        containerStyle={styles.box1}
+                        dropdownPosition={-1}
+                        style={{
+                          color: "#ff8c00",
+                          right: 19,
+                          textAlign: "left",
+                          fontFamily: base.theme.fonts.light,
+                          fontSize: hp("2.5%")
+                        }}
+                        value={"Select Parking lot"}
+                        textColor="#3A3A3C"
+                        labelHeight={hp("0.7%")}
+                        data={this.state.parkingLotDetail}
+                        inputContainerStyle={{ borderBottomColor: "transparent" }}
+                        onChangeText={data => this.setState({ selectedData: data })}
+                    />
+                ) : (
+                    <View style={styles.noData}>
+                      <Text>No parking slot available</Text>
+                    </View>
+                )}
+              </Form>
+              <View style={styles.buttonStyle}>
+                <Button
+                    bordered
+                    info
+                    style={styles.buttonCancel}
+                    onPress={() => this.props.navigation.goBack()}
+                >
+                  <Text style={styles.textFamilyVehicle}>Cancel</Text>
+                </Button>
+                <Button
+                    bordered
+                    warning
+                    style={styles.buttonAdd}
+                    onPress={() => this.createVehicle()}
+                >
+                  <Text style={styles.textFamilyVehicle}>Add Vehicle</Text>
+                </Button>
+              </View>
+            </KeyboardAwareScrollView>
+          </View>
         </View>
-      </View>
     );
   }
 }
@@ -412,7 +409,7 @@ const styles = StyleSheet.create({
     marginTop: hp("1.6%"),
     textAlign: "center",
     fontSize: 18,
-    color: base.theme.colors.primary,
+    color: "#ff8c00",
     marginBottom: hp("4%")
   },
   inputItem: {
@@ -451,13 +448,13 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   box1: {
-    borderBottomColor: base.theme.colors.primary,
+    borderBottomColor: "#ff8c00",
     borderBottomWidth: hp("0.2%"),
     marginLeft: wp("5%"),
     marginRight: wp("5%"),
     paddingLeft: wp("5%"),
     height: hp("5%"),
-    backgroundColor: base.theme.colors.transparent,
+    backgroundColor: "#ff8c00",
     width: hp("50%"),
     marginTop: hp("4%")
   },
@@ -465,7 +462,7 @@ const styles = StyleSheet.create({
     marginLeft: wp("5%"),
     marginRight: wp("5%"),
     height: hp("5%"),
-    backgroundColor: base.theme.colors.transparent,
+    backgroundColor: "#ff8c00",
     width: hp("50%"),
     marginTop: hp("4%")
   }
@@ -480,3 +477,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(AddVehicle);
+
+

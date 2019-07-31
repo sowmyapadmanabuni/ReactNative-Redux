@@ -25,7 +25,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
-import moment from 'moment';
 import {
   createNotification,
   createUserNotification,
@@ -40,7 +39,8 @@ import {
   updateDropDownIndex,
   updateIdDashboard,
   updateJoinedAssociation,
-  updateUserInfo
+  updateUserInfo,
+  updateSelectedDropDown
 } from "../../../actions";
 import { NavigationEvents } from "react-navigation";
 import ProgressLoader from "rn-progress-loader";
@@ -362,12 +362,10 @@ class Dashboard extends React.Component {
           "Manas",
           responseJson,
           responseJson.data,
-          responseJson.data.members
         );
         console.log(
           "MRMRoleid",
           responseJson.data.members[0].mrmRoleID,
-          responseJson.data.members.mrmRoleID
         );
 
         this.setState({
@@ -384,7 +382,6 @@ class Dashboard extends React.Component {
   }
 
   async getListOfAssociation() {
-
     let self = this;
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
@@ -392,7 +389,7 @@ class Dashboard extends React.Component {
     let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
       this.props.userReducer.MyAccountID
     );
-    console.log("data from stat", stat);
+    console.log("data from stat All Asc1", stat);
 
     try {
       if (stat && stat.data) {
@@ -409,9 +406,10 @@ class Dashboard extends React.Component {
         let sortedArr = assocList.sort(
           base.utils.validate.compareAssociationNames
         ); //open chrome
-        console.log("DJBHVD:", sortedArr, assocList);
+        console.log("Sorted and All Asc List", sortedArr, assocList);
 
-        removedDuplicates = _.uniqBy(sortedArr, "value");
+        let removedDuplicates = _.uniqBy(sortedArr, "value");
+        console.log("Removed duplicates", sortedArr, assocList);
 
         self.setState({
           assocList: removedDuplicates,
@@ -435,7 +433,6 @@ class Dashboard extends React.Component {
         // getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
       }
       self.getUnitListByAssoc();
-      self.getVehicleList()
     } catch (error) {
       base.utils.logger.log(error);
     }
@@ -500,16 +497,12 @@ class Dashboard extends React.Component {
       prop: "MyOYEMemberID",
       value: dropdown[index].memberId
     });
-
-
-
     updateUserInfo({
       prop: "SelectedMemberID",
       value: dropdown[index].memberId
     });
 
     this.setState({ role: dropdown[index].roleId });
-    // console.log(dropdown[index].roleId, "role");
   };
 
   async getUnitListByAssoc() {
@@ -527,7 +520,7 @@ class Dashboard extends React.Component {
         let unitList = [];
         for (let i = 0; i < stat.data.members.length; i++) {
           //if (stat.data.members[i].unUniName) {
-          let Unit = "";
+         /* let Unit = "";
           if (
             !stat.data.members[i].unUniName ||
             stat.data.members[i].unUniName === ""
@@ -538,7 +531,11 @@ class Dashboard extends React.Component {
           } else {
             Unit = stat.data.members[i].unUniName;
           }
-          unitList.push({ value: Unit, details: stat.data.members[i] });
+          unitList.push({ value: Unit, details: stat.data.members[i] });*/
+
+         if(stat.data.members[i].unUniName !== "" && stat.data.members[i].unUnitID !==0 ){
+           unitList.push({ value: stat.data.members[i].unUniName, details: stat.data.members[i] });
+         }
         }
         console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
 
@@ -556,6 +553,7 @@ class Dashboard extends React.Component {
         });
 
         self.roleCheckForAdmin();
+        self.getVehicleList()
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -579,12 +577,13 @@ class Dashboard extends React.Component {
     });
     const { updateIdDashboard } = this.props;
     updateIdDashboard({ prop: "uniID", value: unitId });
+    self.getVehicleList()
   }
 
   getVehicleList = () => {
     console.log('Get ID for vehicle', this.props)
     fetch(
-        `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/1`, //${this.props.dashBoardReducer.uniID}
+        `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`, //${this.props.dashBoardReducer.uniID}
         {
           method: "GET",
           headers: {
@@ -623,28 +622,6 @@ class Dashboard extends React.Component {
       value: response.data.account[0].acImgName
     });
 
-
-    // fetch(
-    //   `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
-    //   {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-    //     }
-    //   }
-    // )
-    //   .then(response => response.json())
-    //   .then(responseJson => {
-    //     console.log(responseJson);
-
-    //     this.setState({
-    //       datasource: responseJson,
-    //       ImageSource: responseJson.data.account[0].acImgName
-    //     });
-    //     console.log("gggg", datasource);
-    //   })
-    //   .catch(error => console.log(error));
   };
 
   getFamilyMemberList = () => {
@@ -714,12 +691,14 @@ class Dashboard extends React.Component {
       sold2,
       unsold2,
       updateUserInfo,
-      updateDropDownIndex
+      updateDropDownIndex,
+      selectedDropdown,
+      selectedDropdown1
     } = this.props;
 
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-    // console.log()
+    console.log("Drp1",dropdown1)
     return (
       <View style={{ height: "100%", width: "100%" }}>
         <NavigationEvents onDidFocus={() => this.didMount()} />
@@ -729,7 +708,7 @@ class Dashboard extends React.Component {
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    value={this.state.assocName}
+                    value={selectedDropdown}
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
@@ -749,6 +728,10 @@ class Dashboard extends React.Component {
                       this.setState({
                         associationSelected: true
                       });
+                      updateSelectedDropDown({
+                        prop: "selectedDropdown",
+                        value: value.value
+                      });
                     }}
                   />
                 ) : (
@@ -758,7 +741,8 @@ class Dashboard extends React.Component {
               <View style={Style.rightDropDown}>
                 {this.state.unitNameHide === false ? (
                   <Dropdown
-                     value={this.state.unitName}
+                    // value={this.state.unitName}
+                    value={selectedDropdown1}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
@@ -777,6 +761,10 @@ class Dashboard extends React.Component {
                       updateUserInfo({
                         prop: "SelectedUnitID",
                         value: dropdown1[index].unitId
+                      });
+                      updateSelectedDropDown({
+                        prop: "selectedDropdown1",
+                        value: value.value
                       });
 
                       // console.log(value);
@@ -1182,16 +1170,6 @@ class Dashboard extends React.Component {
   myUnit() {}
 
   goToFirstTab() {
-    const { updateIdDashboard } = this.props;
-    console.log("updateIdDashboard", this.props);
-    updateIdDashboard({ prop: "assId", value: this.state.assocId });
-    updateIdDashboard({ prop: "uniID", value: this.state.unitId });
-    const { updateUserInfo } = this.props;
-    updateUserInfo({
-      prop: "SelectedAssociationID",
-      value: this.state.assocId
-    });
-
     this.props.navigation.navigate("firstTab");
   }
 }
@@ -1336,6 +1314,8 @@ const mapStateToProps = state => {
     dropdown1: state.DashboardReducer.dropdown1,
     associationid: state.DashboardReducer.associationid,
     residentList: state.DashboardReducer.residentList,
+    selectedDropdown: state.DashboardReducer.selectedDropdown,
+    selectedDropdown1: state.DashboardReducer.selectedDropdown1,
     sold: state.DashboardReducer.sold,
     unsold: state.DashboardReducer.unsold,
     sold2: state.DashboardReducer.sold2,
@@ -1374,6 +1354,7 @@ export default connect(
     updateDropDownIndex,
     createUserNotification,
     refreshNotifications,
-    updateIdDashboard
+    updateIdDashboard,
+    updateSelectedDropDown
   }
 )(Dashboard);

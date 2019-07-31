@@ -45,7 +45,7 @@ class Staff extends React.Component {
 
     async getListOfStaff() {
         let self = this;
-        console.log("StaffList Input",self.props.userReducer.SelectedAssociationID)
+        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID)
 
         let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID);// 1
         self.setState({isLoading: false})
