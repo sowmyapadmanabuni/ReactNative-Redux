@@ -127,29 +127,40 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         const {getDashUnits, selectedAssociation} = this.props;
+        console.log('Props in role managment', this.props)
 
-        const url = `http://${
-            this.props.oyeURL
-            }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
-        console.log("selectedUser:", this.state.selectedUser);
+        const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
+        console.log("selectedUser:", this.state.selectedUser ); //+91
+
+       // let mobile=this.state.selectedUser.uoMobile.split(" ")
+        let mobile = this.state.selectedUser.uoMobile.split('')
+        let mobNumber=this.state.selectedUser.uoMobile
+        console.log('Mob Array',mobile)
+
+        if (mobile[0] === '+') {
+            console.log('No need to add')
+        }
+        else{
+            console.log('Add')
+            mobNumber='+91'+mobNumber
+        }
+
         let requestBody = {
-            ACMobile: this.state.selectedUser.uoMobile,
+            ACMobile: mobNumber,
             UNUnitID: this.state.selectedUser.unUnitID,
             MRMRoleID: this.state.selectedRoleData.selRolId
         };
+        console.log('reqBody role managment',requestBody)
 
         fetch(url, {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json",
-
                 "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
             },
             body: JSON.stringify(requestBody)
         })
             .then(response => response.json())
-
             .then(responseJson => {
                 console.log("%%%%%%%%%%", responseJson, requestBody);
                 this.props.navigation.goBack();
@@ -163,7 +174,6 @@ class Resident extends React.Component {
         let sortedList = this.state.residentList.sort((a, b) =>
             a.unit.localeCompare(b.unit)
         );
-        // console.log(sortedList)
         return (
             <Dropdown
                 label="Select Role"
@@ -185,12 +195,11 @@ class Resident extends React.Component {
         );
     };
 
-    //handleSearch Code Change By Sarthak Mishra At Synclovis System Pvt. Ltd. on July 20, 2019
-
     handleSearch(text) {
         this.setState({query: text});
-        let sortResident = this.state.residentData;
+        let sortResident = this.state.clonedList; //search from entire list
         let filteredArray = [];
+        console.log('Res List',sortResident)
         let roleId="";
         if (text.length === 0) {
             filteredArray.push(this.state.clonedList)
@@ -207,8 +216,8 @@ class Resident extends React.Component {
                     roleId="Tenant"
                 }
 
-            if (sortResident[i].name.includes(text) || sortResident[i].unitName.includes(text) || roleId.includes(text)) {
-                    filteredArray.push(sortResident[i])
+            if (sortResident[i].name.includes(text)   || sortResident[i].unitName.includes(text)  || roleId.includes(text) ) {
+                    filteredArray.push(sortResident[i]) //make case insensitive
                 }
             }
         }
@@ -294,7 +303,6 @@ class Resident extends React.Component {
                                 style={styles.viewDetails3}
                                 placeholder="  search...."
                                 round
-                                autoCapitalize="characters"
                                 onChangeText={(text) => this.handleSearch(text)}
                             />
                         </View>

@@ -30,7 +30,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 import ZoomImage from "react-native-zoom-image";
-import moment from 'moment';
+import moment from "moment";
 
 class NotificationScreen extends Component {
   constructor(props) {
@@ -164,10 +164,7 @@ class NotificationScreen extends Component {
     // console.log("Date2: ",  moment("2019-07-08T12:30:54","YYYY-MM-DD").format("DD-MM-YYYY") )
     // console.log("Date3: ",  moment("1900-01-01T12:48:16").format('HH:mm A') )
 
-
-
     if (gateDetails.length <= 0) {
-
       value = "";
     } else {
       if (type === "vlGtName") {
@@ -190,24 +187,25 @@ class NotificationScreen extends Component {
         value = foundData ? foundData.vlEntryImg : "";
       } else if (type === "vlEntryT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? moment(foundData.vlEntryT).format('HH:mm A') : "";
+        value = foundData ? moment(foundData.vlEntryT).format("hh:mm A") : "";
       } else if (type === "vlExitT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? moment(foundData.vlExitT).format('HH:mm A') : "";
-      }else if (type === "vldCreated") {
+        value = foundData ? moment(foundData.vlExitT).format("hh:mm A") : "";
+      } else if (type === "vldCreated") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? moment(foundData.vldCreated,"YYYY-MM-DD").format("DD-MM-YYYY") : "";
+        value = foundData
+            ? moment(foundData.vldCreated, "YYYY-MM-DD").format("DD-MM-YYYY")
+            : "";
       } else if (type === "vldUpdated") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? moment(foundData.vldUpdated,"YYYY-MM-DD").format("DD-MM-YYYY") : "";
+        value = foundData
+            ? moment(foundData.vldUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")
+            : "";
       }
-      //moment("2019-07-08T12:30:54","YYYY-MM-DD").format("DD-MM-YYYY")
-      //moment("1900-01-01T12:48:16").format('HH:mm A')
-      //vlengName
       else if (type === "vlengName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlengName : "";
-      } //vlexgName
+      }
       else if (type === "vlexgName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlexgName : "";
@@ -225,7 +223,11 @@ class NotificationScreen extends Component {
       if (data.ntType === "gate_app") {
         axios
             .get(
-                `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+                `http://${
+                    this.props.oyeURL
+                }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
+                    data.sbMemID
+                }`,
                 //data.sbMemID`,
                 {
                   headers: {
@@ -290,7 +292,10 @@ class NotificationScreen extends Component {
                   </Collapsible>
                 </View>
             )}
-            <Text>{moment(item.ntdUpdated,"YYYY-MM-DD").format("DD-MM-YYYY")}  {moment(item.ntdUpdated).format('HH:mm A')}</Text>
+            <Text>
+              {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+              {moment(item.ntdUpdated).format("HH:mm A")}
+            </Text>
           </Card>
       );
     } else {
@@ -321,7 +326,10 @@ class NotificationScreen extends Component {
                   <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: "column" }}>
                       <Text>{item.ntDesc}</Text>
-                      <Text>{moment(item.ntdUpdated,"YYYY-MM-DD").format("DD-MM-YYYY")}  {moment(item.ntdUpdated).format('HH:mm A')}</Text>
+                      <Text>
+                        {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+                        {moment(item.ntdUpdated).format("HH:mm A")}
+                      </Text>
                     </View>
                     <Collapsible
                         duration={300}
@@ -361,51 +369,24 @@ class NotificationScreen extends Component {
                                     justifyContent: "flex-start"
                                   }}
                               >
-                                {this.renderCollapseData(
-                                    "vlEntryImg",
-                                    item.sbMemID
-                                ) ? (
-                                    // this.state.gateDetails.vlEntryImg == "" ? (
-
-                                    <Image
-                                        style={styles.img}
-                                        // style={styles.img}
-                                        source={{
-                                          uri:
-                                              "http://mediauploaduat.oyespace.com" +
-                                              // this.state.gateDetails.vlEntryImg
-                                              this.renderCollapseData(
-                                                  "vlEntryImg",
-                                                  item.sbMemID
-                                              )
-                                        }}
-                                    />
-                                ) : (
-                                    // <Image
-                                    //   style={styles.img}
-                                    //   // style={styles.img}
-                                    //   source={{
-                                    //     uri:
-                                    //       "http://mediauploaddev.oyespace.com" +
-                                    //       // this.state.gateDetails.vlEntryImg
-                                    //       this.renderCollapseData(
-                                    //         "vlEntryImg",
-                                    //         item.sbMemID
-                                    //       )
-                                    //   }}
-                                    // />
-                                    <Image
-                                        style={styles.img}
-                                        // style={styles.img}
-                                        source={require("../../../icons/placeholderImg.png")}
-                                    />
-                                )}
+                                <Image
+                                    style={styles.img}
+                                    // style={styles.img}
+                                    source={{
+                                      uri:
+                                          `https://mediauploaduat.oyespace.com/Images/` +
+                                          this.renderCollapseData(
+                                              "vlEntryImg",
+                                              item.sbMemID
+                                          )
+                                    }}
+                                />
                               </View>
                               <View
                                   style={{
                                     flexDirection: "row",
                                     justifyContent: "flex-start",
-                                    alignItems: "flex-start"
+                                    alignItems: "flex-start",
                                   }}
                               >
                                 <View
@@ -414,12 +395,78 @@ class NotificationScreen extends Component {
                                       flexDirection: "column"
                                     }}
                                 >
-                                  <Text style={{ fontSize: hp("2%") }}>
-                                    {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
-                                    {/* {this.state.gateDetails !== null
+                                  <View style={{flexDirection:'row'}}>
+                                    <View>
+                                      <Text style={{ fontSize: hp("2%") }}>
+                                        {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
+                                        {/* {this.state.gateDetails !== null
                                 ? this.state.gateDetails.vlfName
                                 : ""} */}
-                                  </Text>
+                                      </Text>
+                                    </View>
+                                    <View>
+                                      <TouchableOpacity
+                                          onPress={() => {
+                                            {
+                                              Platform.OS === "android"
+                                                  ? Linking.openURL(
+                                                  `tel:${
+                                                      this.renderCollapseData(
+                                                          "vlMobile",
+                                                          item.sbMemID
+                                                      )
+                                                      // this.state.gateDetails
+                                                      //   .vlMobile
+                                                  }`
+                                                  )
+                                                  : Linking.openURL(
+                                                  `tel:${
+                                                      // this.state.gateDetails.vlMobile
+                                                      this.renderCollapseData(
+                                                          "vlMobile",
+                                                          item.sbMemID
+                                                      )
+                                                  }`
+                                                  );
+                                            }
+                                          }}
+                                      >
+                                        <View style={{ flexDirection: "row" }}>
+                                          <View>
+                                            <Text style={{ color: "#ff8c00" }}>
+                                              {this.renderCollapseData(
+                                                  "vlMobile",
+                                                  item.sbMemID
+                                              )}
+                                              {/* {this.state.gateDetails !== null
+                                        ? this.state.gateDetails.vlMobile
+                                        : ""} */}
+                                            </Text>
+                                          </View>
+                                          <View
+                                              style={{
+                                                width: hp("2.5%"),
+                                                height: hp("2.5%"),
+                                              }}
+                                          >
+                                            <Image
+                                                style={{
+                                                  width: hp("2.5%"),
+                                                  height: hp("2.5%")
+                                                }}
+                                                source={require("../../../icons/call.png")}
+                                            />
+                                          </View>
+                                        </View>
+                                      </TouchableOpacity>
+
+                                    </View>
+
+                                  </View>
+
+
+
+
                                   <View style={{ flexDirection: "row" }}>
                                     <Text style={{ color: "#000" }}>
                                       {this.renderCollapseData(
@@ -439,72 +486,14 @@ class NotificationScreen extends Component {
                                   ? this.state.gateDetails.vlComName
                                   : ""}{" "} */}
                                     </Text>
+
                                   </View>
+
                                 </View>
-                                <View
-                                    style={{
-                                      width: hp("18%"),
-                                      alignItems: "flex-end"
-                                    }}
-                                >
-                                  <View style={{}}>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                          {
-                                            Platform.OS === "android"
-                                                ? Linking.openURL(
-                                                `tel:${
-                                                    this.renderCollapseData(
-                                                        "vlMobile",
-                                                        item.sbMemID
-                                                    )
-                                                    // this.state.gateDetails
-                                                    //   .vlMobile
-                                                }`
-                                                )
-                                                : Linking.openURL(
-                                                `tel:${
-                                                    // this.state.gateDetails.vlMobile
-                                                    this.renderCollapseData(
-                                                        "vlMobile",
-                                                        item.sbMemID
-                                                    )
-                                                }`
-                                                );
-                                          }
-                                        }}
-                                    >
-                                      <View style={{ flexDirection: "row" }}>
-                                        <View>
-                                          <Text style={{ color: "#ff8c00" }}>
-                                            {this.renderCollapseData(
-                                                "vlMobile",
-                                                item.sbMemID
-                                            )}
-                                            {/* {this.state.gateDetails !== null
-                                        ? this.state.gateDetails.vlMobile
-                                        : ""} */}
-                                          </Text>
-                                        </View>
-                                        <View
-                                            style={{
-                                              width: hp("2%"),
-                                              height: hp("2%"),
-                                              marginLeft: hp("0.5%")
-                                            }}
-                                        >
-                                          <Image
-                                              style={{
-                                                width: hp("2%"),
-                                                height: hp("2%")
-                                              }}
-                                              source={require("../../../icons/call.png")}
-                                          />
-                                        </View>
-                                      </View>
-                                    </TouchableOpacity>
-                                  </View>
-                                </View>
+
+
+
+
                               </View>
                             </View>
 
@@ -516,14 +505,11 @@ class NotificationScreen extends Component {
                               <View
                                   style={{
                                     flexDirection: "row",
-                                    justifyContent: "space-between"
                                   }}
                               >
                                 <View
                                     style={{
                                       flexDirection: "row",
-                                      margin: hp("3%"),
-                                      alignItems: "stretch"
                                     }}
                                 >
                                   <View style={{ flexDirection: "row" }}>
@@ -543,8 +529,7 @@ class NotificationScreen extends Component {
                                         {this.renderCollapseData(
                                             "vldCreated",
                                             item.sbMemID
-                                        )}
-                                      </Text>
+                                        )}  </Text>
 
                                       <Text>
                                         {/* {this.state.Time !== null
@@ -555,7 +540,6 @@ class NotificationScreen extends Component {
                                             item.sbMemID
                                         )}
                                       </Text>
-
                                     </View>
                                   </View>
 
@@ -576,20 +560,23 @@ class NotificationScreen extends Component {
                                       )}
                                     </Text>
                                   </View>
+
                                 </View>
                               </View>
 
                               <View
                                   style={{
                                     flexDirection: "row",
-                                    justifyContent: "space-between"
                                   }}
                               >
-                                {this.state.gateDetails.vlExitT !== null ? (
+                                {this.renderCollapseData(
+                                    "vlexgName",
+                                    item.sbMemID
+                                ) !== "" ?
+
                                     <View
                                         style={{
                                           flexDirection: "row",
-                                          marginLeft: hp("3%")
                                         }}
                                     >
                                       <View style={{ flexDirection: "row" }}>
@@ -610,8 +597,7 @@ class NotificationScreen extends Component {
                                             {this.renderCollapseData(
                                                 "vldUpdated",
                                                 item.sbMemID
-                                            )}
-                                          </Text>
+                                            )}  </Text>
                                           <Text>
                                             {/* {this.state.Time1 !== null
                                       ? this.state.Time1
@@ -641,10 +627,12 @@ class NotificationScreen extends Component {
                                           )}
                                         </Text>
                                       </View>
+
                                     </View>
-                                ) : (
-                                    ""
-                                )}
+
+                                    :
+                                    <View></View>
+                                }
                               </View>
                             </View>
                           </View>

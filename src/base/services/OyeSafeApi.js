@@ -104,7 +104,7 @@ export default class OyeSafeApi{
 
     static async getStaffReportByDate(input){
         console.log("Data", input)
-        return await instance.post('/Worker/GetWorkerListByDates/',input)
+        return await instance.post('Worker/GetWorkerListByDates/',input)
     }
 
 }

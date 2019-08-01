@@ -43,6 +43,9 @@ import store from "./src/store";
 import { persistStore } from "redux-persist";
 
 import Spinner from "react-native-spinkit";
+import PrivacyPolicy from "./src/screens/Policy/PrivacyPolicy";
+import TermsAndConditions from "./src/screens/Policy/TermsAndConditions";
+import MyFamilyHeader from "./src/components/NavigationalHeaders/MyFamilyHeader";
 
 const AuthStack = createStackNavigator(
     {
@@ -80,8 +83,21 @@ const AuthStack = createStackNavigator(
           headerStyle: { backgroundColor: "#f05555" },
           headerTintColor: "#ffffff"
         }
-      }
+      },
+      privacyPolicy: {
+        screen: PrivacyPolicy,
+        navigationOptions: {
+          header: null
+        }
+      },
+      termsAndConditions: {
+        screen: TermsAndConditions,
+        navigationOptions: {
+          header: null
+        }
+      },
     },
+
     {
       headerMode: "none"
     }

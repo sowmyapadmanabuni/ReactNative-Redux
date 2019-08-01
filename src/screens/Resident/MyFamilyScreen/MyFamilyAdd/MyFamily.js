@@ -49,19 +49,19 @@ class MyFamily extends Component {
                     value: "Other",
                     id: 5
                 }],
-            relationName: '',
+            relationName: "",
             cCode: '',
-            mobileNumber: '',
-            sendNum:'',
+            mobileNumber: "",
+            sendNum:"",
             isMinor: false,
-            firstName: '',
-            lastName: '',
+            firstName: "",
+            lastName: "",
             minorProps: [{label: 'Yes', value: 0},
                 {label: 'No', value: 1}],
             isMinorSelected: 0,
-            guardianName: '',
-            relativeImage: '',
-            imageUrl:'',
+            guardianName: "",
+            relativeImage: "",
+            imageUrl:"",
         }
     }
 
@@ -301,7 +301,7 @@ class MyFamily extends Component {
         if (value === 'Child') {
             this.setState({
                 isMinor: true,
-                firsName:'',
+                firstName:'',
                 lastName:'',
                 mobileNumber:'',
                 guardianName:''
@@ -379,17 +379,17 @@ class MyFamily extends Component {
     }
 
     validation() {
-        console.log('Props**!!!',this.props);
+        console.log('Props**!!!',this.props,this.state);
 
         let self = this;
-        if (self.state.relationName === '') {
+        if (self.state.relationName === "") {
             alert('Please Select relation')
-        }else if (self.state.firstName === '') {
+        }else if (self.state.firstName === "") {
             alert('First Name is required')
         } else if(self.state.isMinor && self.state.isMinorSelected===0 && self.state.guardianName ===''){
             alert('Guardian name is Mandatory')
         }
-        else if (self.state.mobileNumber === '') {
+        else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
         }
         else if(self.props.dashBoardReducer.uniID===null){
@@ -399,7 +399,7 @@ class MyFamily extends Component {
             alert('Association id is null')
         }
         else {
-            self.addRelativeDetails()
+           self.addRelativeDetails()
 
         }
     }

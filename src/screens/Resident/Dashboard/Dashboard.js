@@ -8,7 +8,7 @@ import {
   Text,
   TouchableHighlight,
   TouchableOpacity,
-  View
+  View,Alert
 } from "react-native";
 import base from "../../../base";
 import { connect } from "react-redux";
@@ -72,7 +72,8 @@ class Dashboard extends React.Component {
       assdNameHide: false,
       unitNameHide: false,
       isDataLoading: false,
-      isDataVisible: false
+      isDataVisible: false,
+      isNoAssJoin:false
     };
   }
 
@@ -385,7 +386,11 @@ class Dashboard extends React.Component {
     console.log("data from stat All Asc1", stat);
 
     try {
+
       if (stat && stat.data) {
+        this.setState({
+          isNoAssJoin:false
+        });
         let assocList = [];
         for (let i = 0; i < stat.data.memberListByAccount.length; i++) {
           if (stat.data.memberListByAccount[i].asAsnName !== "") {
@@ -395,7 +400,6 @@ class Dashboard extends React.Component {
             });
           }
         }
-
         let sortedArr = assocList.sort(
           base.utils.validate.compareAssociationNames
         ); //open chrome
@@ -424,8 +428,24 @@ class Dashboard extends React.Component {
 
         // const { getDashUnits } = this.props;
         // getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
+        self.getUnitListByAssoc();
+
       }
-      self.getUnitListByAssoc();
+      else if(stat===null){
+        this.setState({
+          isNoAssJoin:true
+        });
+        Alert.alert(
+            'Join association',
+
+            'Please join in any association to access Data  ?',
+            [
+              {text: 'Yes', onPress: () => this.props.navigation.navigate("CreateOrJoinScreen")},
+              {text: 'No', style: 'cancel'}
+
+            ]
+        )
+      }
     } catch (error) {
       base.utils.logger.log(error);
     }
@@ -947,7 +967,7 @@ class Dashboard extends React.Component {
             marginTop={20}
             iconWidth={Platform.OS === "ios" ? 40 : 35}
             iconHeight={Platform.OS === "ios" ? 40 : 20}
-            onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
+            onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):this.props.navigation.navigate("MyFamilyList")}
             backgroundColor={base.theme.colors.cardBackground}
           />
           <CardView
@@ -960,7 +980,7 @@ class Dashboard extends React.Component {
             cardCount={this.state.vehiclesCount}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
-            onCardClick={() =>
+            onCardClick={() =>this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
               this.props.navigation.navigate("MyVehicleListScreen")
             }
           />
@@ -1180,6 +1200,7 @@ class Dashboard extends React.Component {
   myUnit() {}
 
   goToFirstTab() {
+    this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
     this.props.navigation.navigate("firstTab");
   }
 }

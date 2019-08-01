@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
     Image, Text, TouchableOpacity,
-    View, FlatList, Platform, PermissionsAndroid, ScrollView, ActivityIndicator
+    View, FlatList, Platform, PermissionsAndroid, ScrollView, ActivityIndicator, Alert
 
 } from 'react-native';
 import base from "../../../../base";
@@ -14,6 +14,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from "react-native-share";
 import RNFetchBlob from 'rn-fetch-blob'
 import moment from "moment";
+import utils from "../../../../base/utils";
 
 let RNFS = require('react-native-fs');
 
@@ -147,18 +148,21 @@ class GetStaffReport extends React.Component {
 
     async getTheReport(props) {
         let self = this;
-        console.log('Staff Report Input', this.props)
-
+        console.log('Get Date',moment(this.props.staffReducer.startDate).format('YYYY-MM-DD'))
         let input = {
             "ASAssnID": this.props.userReducer.SelectedAssociationID,
             "WKWorkID": this.props.staffReducer.staffId,
-            "FromDate":this.props.staffReducer.startDate,
-            "ToDate": this.props.staffReducer.endDate
+            "FromDate":moment(this.props.staffReducer.startDate).format('YYYY-MM-DD'),
+            "ToDate":moment(this.props.staffReducer.endDate).format('YYYY-MM-DD')
         }
          console.log('Staff Data',input)
-        let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
+
+       let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
 
         self.setState({isLoading: false})
+
+        console.log("GetStaffData",stat)
+
 
         let initialDate = input.FromDate;
         let endDate = input.ToDate;
@@ -167,7 +171,6 @@ class GetStaffReport extends React.Component {
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days())
         let difference=duration.as('days');
-        console.log("GetStaffData",stat)
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
@@ -404,7 +407,8 @@ class GetStaffReport extends React.Component {
 const mapStateToProps = state => {
     return {
         userReducer: state.UserReducer,
-        staffReducer: state.StaffReducer
+        staffReducer: state.StaffReducer,
+        oyeURL: state.OyespaceReducer.oyeURL,
     };
 };
 

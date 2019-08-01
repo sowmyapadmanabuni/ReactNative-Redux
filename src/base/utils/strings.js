@@ -29,6 +29,8 @@ const api = {
 // public static final String IMAGE_BASE_URL = "https://mediauploaddev.oyespace.com/";
 //public static final String IMAGE_BASE_URL = "https://mediauploaduat.oyespace.com/";
 
+//http://localhost:64284/oye247/api/v1/Worker/GetWorkerListByDates
+
 const strings = {
   appName: "OyeSpace",
   //oyeSafeUrl:api.protocol+api.oyeSafeDomain, Patrolling it is like this
@@ -48,7 +50,8 @@ const strings = {
   patrolId: "PATROL_ID",
   rupeeIconCode: "\u20B9",
   mediaUploadUrl: "http://mediaupload.oyespace.com/oyeliving/api/V1",
-  oyeImageUploadKey: "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+  oyeImageUploadKey: "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+
 };
 
 export default strings;

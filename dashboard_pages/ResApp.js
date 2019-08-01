@@ -162,6 +162,8 @@ import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffRepor
 import FirstTab from "../residentDashboardVisitorPages/FirstTab";
 import Subscription from "../assocition_pages/Subscription";
 import MyFamilyHeader from "../src/components/NavigationalHeaders/MyFamilyHeader";
+import PrivacyPolicy from "../src/screens/Policy/PrivacyPolicy";
+import TermsAndConditions from "../src/screens/Policy/TermsAndConditions";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
