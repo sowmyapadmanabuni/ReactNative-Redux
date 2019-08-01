@@ -326,16 +326,16 @@ class Staff extends React.Component {
                     toDate = fromDate;
             }
             const {updateStaffInfo} = this.props;
-            updateStaffInfo({prop: "startDate", value: fromDate})
-            updateStaffInfo({prop: "endDate", value: toDate})
+            updateStaffInfo({prop: "startDate", value: moment(fromDate).format('YYYY-MM-DD')})
+            updateStaffInfo({prop: "endDate", value:  moment(toDate).format('YYYY-MM-DD')})
             updateStaffInfo({prop: "staffName", value: self.state.staffName})
             updateStaffInfo({prop: "staffId", value: self.state.staffId})
             updateStaffInfo({prop: "staffProfilePic", value: self.state.staffPic})
             updateStaffInfo({prop: "staffDesignation", value: self.state.departmentName})
             updateStaffInfo({prop: "joinedDate", value: self.state.minDate})
 
-
             this.props.navigation.navigate('getStaffReports',)
+
         } else {
             let initialDateString = moment(fromDate);
             let endDateString = moment(toDate)
@@ -346,14 +346,13 @@ class Staff extends React.Component {
                 alert('Maximum Limit is 31 Days. You can not select more than that')
             } else {
                 const {updateStaffInfo} = this.props;
-                updateStaffInfo({prop: "startDate", value: fromDate})
-                updateStaffInfo({prop: "endDate", value: toDate})
+                updateStaffInfo({prop: "startDate", value: moment(fromDate).format('YYYY-MM-DD')})
+                updateStaffInfo({prop: "endDate", value:  moment(toDate).format('YYYY-MM-DD')})
                 updateStaffInfo({prop: "staffName", value: self.state.staffName})
                 updateStaffInfo({prop: "staffId", value: self.state.staffId})
                 updateStaffInfo({prop: "staffProfilePic", value: self.state.staffPic})
                 updateStaffInfo({prop: "staffDesignation", value: self.state.departmentName})
                 updateStaffInfo({prop: "joinedDate", value: self.state.minDate})
-
                 this.props.navigation.navigate('getStaffReports')
             }
         }

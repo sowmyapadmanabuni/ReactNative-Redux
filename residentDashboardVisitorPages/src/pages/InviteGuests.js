@@ -171,8 +171,8 @@ sendInvitation = () => {
   vehNo=this.state.vehNo;
   emailId=this.state.emailId;
   purpose=this.state.purpose;
-  dobDate=this.state.dobDate;
-  dobDate1=this.state.dobDate1;
+  dobDate=this.state.dobText;
+  dobDate1=this.state.dobText1;
   time=this.state.datetime;
   time1=this.state.datetime1;
   switches=this.state.switch;
@@ -230,23 +230,24 @@ else{
         'Content-Type': 'application/json',
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
-      body: JSON.stringify({
-
-          "UnUnitID"  :  this.props.dashBoardReducer.uniID,
-        "INFName"   : fname,
-        "INLName"   : lname,
-        "INMobile"  : "+"+ callingCode + mobNum,
-        "INEmail"   : emailId,
-        "INVchlNo"  : vehNo,
-        "INVisCnt"  : count,
-        "INPhoto"   : "SD",
-        "INSDate"   : dobDate + time,
-        "INEDate"   : dobDate1 + time1,
-        "INPOfInv"  : purpose,
-        "INMultiEy" : switches,
-        "ASAssnID"  : this.props.dashBoardReducer.assId,
-        "INQRCode"  : 1
-      })
+      body: JSON.stringify(
+          {
+              //"MeMemID"   :  4,
+              "UnUnitID"  :  this.props.dashBoardReducer.uniID,
+              "INFName"   : fname,
+              "INLName"   : lname,
+              "INMobile"  : "+"+ callingCode + mobNum,
+              "INEmail"   : emailId,
+              "INVchlNo"  : vehNo,
+              "INVisCnt"  :count,
+              "INPhoto"   : "SD",
+              "INSDate"   : dobDate,
+              "INEDate"   : dobDate1,
+              "INPOfInv"  : purpose,
+              "INMultiEy" : switches,
+              "ASAssnID"  :this.props.dashBoardReducer.assId,
+              "INQRCode"  : 1
+          })
     })
       .then(response => response.json())
       .then(responseJson => {

@@ -148,16 +148,16 @@ class GetStaffReport extends React.Component {
 
     async getTheReport(props) {
         let self = this;
-        console.log('Get Date',moment(this.props.staffReducer.startDate).format('YYYY-MM-DD'))
+        console.log('Get Date',this.props.staffReducer)
         let input = {
             "ASAssnID": this.props.userReducer.SelectedAssociationID,
-            "WKWorkID": this.props.staffReducer.staffId,
-            "FromDate":moment(this.props.staffReducer.startDate).format('YYYY-MM-DD'),
-            "ToDate":moment(this.props.staffReducer.endDate).format('YYYY-MM-DD')
+            "WKWorkID": this.props.staffReducer.staffId.toString(),
+            "FromDate":this.props.staffReducer.startDate,
+            "ToDate":this.props.staffReducer.endDate
         }
          console.log('Staff Data',input)
 
-       let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
+        let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
 
         self.setState({isLoading: false})
 
@@ -186,9 +186,9 @@ class GetStaffReport extends React.Component {
                         } else {
                             rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                             rowData.push(reportsData[i].vlengName)
-                            rowData.push(moment(reportsData[i].vlEntryT).format('HH:mm' + ' A'))
+                            rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
                             rowData.push(reportsData[i].vlexgName)
-                            rowData.push(moment(reportsData[i].vlExitT).format('HH:mm' + ' A'))
+                            rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
                         }
                         if (initialDate !== endDate) {
                             initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
@@ -201,9 +201,9 @@ class GetStaffReport extends React.Component {
                     let rowData = [];
                     rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                     rowData.push(reportsData[0].vlengName)
-                    rowData.push(moment(reportsData[0].vlEntryT).format('HH:mm' + ' A'))
+                    rowData.push(moment(reportsData[0].vlEntryT).format('hh:mm' + ' A'))
                     rowData.push(reportsData[0].vlexgName)
-                    rowData.push(moment(reportsData[0].vlExitT).format('HH:mm' + ' A'))
+                    rowData.push(moment(reportsData[0].vlExitT).format('hh:mm' + ' A'))
                     tableData.push(rowData)
                 }
 
