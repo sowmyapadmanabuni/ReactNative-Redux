@@ -328,18 +328,18 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    // console.log("Notification");
-    // const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    // const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    // const { oyeURL } = this.props.oyespaceReducer;
-    // // this.props.updateApproveAdmin([]);
-    // getDashSub(oyeURL, SelectedAssociationID);
-    // getDashAssociation(oyeURL, MyAccountID);
+    const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
     // getAssoMembers(oyeURL, MyAccountID);
-    // this.requestNotifPermission();
-    // // this.getBlockList();
-    // this.props.getNotifications(oyeURL, MyAccountID);
-    this.didMount();
+    this.requestNotifPermission();
+    // this.getBlockList();
+    this.props.getNotifications(oyeURL, MyAccountID);
+
+    if (!this.props.called) {
+      this.didMount();
+    }
   }
 
   roleCheckForAdmin = () => {
@@ -459,7 +459,8 @@ class Dashboard extends React.Component {
       updateUserInfo,
       memberList,
       notifications,
-      dropdown
+      dropdown,
+      updateSelectedDropDown
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
@@ -477,6 +478,11 @@ class Dashboard extends React.Component {
     updateUserInfo({
       prop: "SelectedAssociationID",
       value: dropdown[index].associationId
+    });
+
+    updateSelectedDropDown({
+      prop: "selectedDropdown",
+      value: dropdown[index].value
     });
 
     // let memId = _.find(memberList, function(o) {
@@ -679,7 +685,8 @@ class Dashboard extends React.Component {
       updateUserInfo,
       updateDropDownIndex,
       selectedDropdown,
-      selectedDropdown1
+      selectedDropdown1,
+      called
     } = this.props;
 
     let associationList = this.state.assocList;
@@ -714,10 +721,6 @@ class Dashboard extends React.Component {
                       updateDropDownIndex(index);
                       this.setState({
                         associationSelected: true
-                      });
-                      updateSelectedDropDown({
-                        prop: "selectedDropdown",
-                        value: value
                       });
                     }}
                   />
@@ -1313,6 +1316,7 @@ const mapStateToProps = state => {
     unsold2: state.DashboardReducer.unsold2,
     isLoading: state.DashboardReducer.isLoading,
     memberList: state.DashboardReducer.memberList,
+    called: state.DashboardReducer.called,
 
     // Oyespace variables and user variables
     MyFirstName: state.UserReducer.MyFirstName,

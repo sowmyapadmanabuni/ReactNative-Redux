@@ -31,7 +31,8 @@ const INITIAL_STATE = {
   uniID: null,
   selectedAssociationIndex: null,
   selectedDropdown: "",
-  selectedDropdown1: ""
+  selectedDropdown1: "",
+  called: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -47,7 +48,8 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         dropdown: action.payload.dropdown,
         associationid: action.payload.associationid,
-        isLoading: false
+        isLoading: false,
+        called: true
       };
 
     case DASHBOARD_UNITS_START:
