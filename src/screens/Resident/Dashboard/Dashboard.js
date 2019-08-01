@@ -342,14 +342,10 @@ class Dashboard extends React.Component {
     }
   }
 
-  roleCheckForAdmin = () => {
-    console.log("Association id123123123123", this.state.assocId);
+  roleCheckForAdmin = (index) => {
+    console.log("Association id123123123123", this.state.assocId,index);
     fetch(
-      `http://${
-        this.props.oyeURL
-      }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
-        this.state.assocId
-      }`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${this.state.assocId}`,
       {
         method: "GET",
         headers: {
@@ -360,11 +356,17 @@ class Dashboard extends React.Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Manas", responseJson, responseJson.data);
-        console.log("MRMRoleid", responseJson.data.members[0].mrmRoleID);
-
+        console.log("Manas", responseJson, responseJson.data,responseJson.data.members.length);
+        let role=''
+        for(let i=0; i<responseJson.data.members.length;i++){
+          console.log("Get Ids",this.props.userReducer.MyAccountID,responseJson.data.members[i].acAccntID,this.state.assocId,responseJson.data.members[i].asAssnID)
+          if(this.props.userReducer.MyAccountID===responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID===1 && parseInt(this.state.assocId)===responseJson.data.members[i].asAssnID){
+            console.log('Id eq',this.props.userReducer.MyAccountID,responseJson.data.members[i].acAccntID,responseJson.data.members[i].mrmRoleID)
+            role=responseJson.data.members[i].mrmRoleID
+          }
+        }
         this.setState({
-          role: responseJson.data.members[0].mrmRoleID
+          role:role
         });
       })
       .catch(error => {
@@ -453,6 +455,7 @@ class Dashboard extends React.Component {
   }
 
   onAssociationChange = (value, index) => {
+    console.log('Ass index',value,index)
     const {
       associationid,
       getDashUnits,
@@ -464,6 +467,7 @@ class Dashboard extends React.Component {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
+    this.setState({assocId:dropdown[index].associationId})
 
     // console.log(value, "Valuessss");
     getDashUnits(dropdown[index].associationId, oyeURL, MyAccountID);
@@ -497,8 +501,10 @@ class Dashboard extends React.Component {
       prop: "SelectedMemberID",
       value: dropdown[index].memberId
     });
+    this.roleCheckForAdmin(dropdown[index].associationId)
+    this.getVehicleList()
 
-    this.setState({ role: dropdown[index].roleId });
+   // this.setState({ role:dropdown[index].roleId });
   };
 
   async getUnitListByAssoc() {
@@ -540,7 +546,7 @@ class Dashboard extends React.Component {
           value: unitList[0].details.unUnitID
         });
 
-        self.roleCheckForAdmin();
+       self.roleCheckForAdmin(this.state.assocId);
         self.getVehicleList();
       }
     } catch (error) {
@@ -594,7 +600,11 @@ class Dashboard extends React.Component {
         });
       })
       .catch(error => {
-        this.setState({ loading: false });
+        this.setState({ loading: false ,});
+        this.setState({
+          //Object.keys(responseJson.data.unitsByBlockID).length
+          vehiclesCount: responseJson.data.vehicleListByUnitID.length
+        });
         console.log("error in net call", error);
       });
   };
@@ -1114,6 +1124,27 @@ class Dashboard extends React.Component {
           >
             <Text>View All Visitors</Text>
           </Button>
+
+          <Button
+              bordered
+              style={styles.button1}
+              onPress={() =>
+                  this.props.navigation.navigate("ViewAlllVisitorsPage")
+              }
+          >
+            <Text>View All Visitors</Text>
+          </Button>
+
+
+         {/* <Button
+              bordered
+              style={styles.button1}
+              onPress={() =>
+                  this.props.navigation.navigate('patrollingCheckPoint')
+              }
+          >
+            <Text>Patrolling</Text>
+          </Button>*/}
         </View>
       </ElevatedView>
     );

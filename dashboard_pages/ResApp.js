@@ -164,6 +164,8 @@ import Subscription from "../assocition_pages/Subscription";
 import MyFamilyHeader from "../src/components/NavigationalHeaders/MyFamilyHeader";
 import PrivacyPolicy from "../src/screens/Policy/PrivacyPolicy";
 import TermsAndConditions from "../src/screens/Policy/TermsAndConditions";
+
+import PatrolSchedule from "../src/screens/Patrolling/PatrolSchedule";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
@@ -796,6 +798,13 @@ addCheckPoint: {
   },
   reportScreen: {
     screen: ReportScreen,
+    navigationOptions: {
+      header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
+                                               isHidden={true} {...props}/>
+    }
+  },
+  PatrolSchedule: {
+    screen:PatrolSchedule,
     navigationOptions: {
       header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
                                                isHidden={true} {...props}/>
