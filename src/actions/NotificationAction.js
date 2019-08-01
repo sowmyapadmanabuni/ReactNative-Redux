@@ -35,7 +35,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        // console.log(responseJson);
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];
@@ -68,46 +68,13 @@ export const getNotifications = (oyeURL, MyAccountID) => {
         //   "ntdUpdated"
         // ]).reverse();
 
-        const sorted = _.sortBy(allNotifs, ["ntdUpdated"]).reverse();
+        const sorted = _.sortBy(allNotifs, ["ntdCreated"]).reverse();
 
         sorted.map(data => {
           console.log(data.ntIsActive);
         });
 
         let gateDetailsArr = [];
-
-        // sorted.map((data, index) => {
-        //   if (data.ntType === "gate_app") {
-        //     axios
-        //       .get(
-        //         `http://${
-        //           this.props.oyeURL
-        //         }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
-        //           data.sbMemID
-        //         }`,
-        //         {
-        //           headers: {
-        //             "Content-Type": "application/json",
-        //             "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-        //           }
-        //         }
-        //       )
-        //       .then(res => {
-        //         let responseData = res.data.data;
-        //         console.log(responseData, "responseData");
-        //         gateDetailsArr.push(responseData);
-
-        //         // dispatch({
-        //         //   type: GET_GATE_APP
-        //         // })
-        //       })
-        //       .catch(error => {
-        //         console.log(error, "ben");
-        //       });
-
-        //     console.log(gateDetailsArr, "gateDetailsArr");
-        //   }
-        // });
 
         sorted.map(data => {
           console.log(data.ntIsActive);
@@ -516,7 +483,6 @@ export const refreshNotifications = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        // console.log(responseJson.data.notificationListByAcctID);
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];
@@ -544,11 +510,8 @@ export const refreshNotifications = (oyeURL, MyAccountID) => {
         const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
         let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
 
-        // const sorted = _.sortBy(allNotifs, [
-        //   "ntdCreated",
-        //   "ntdUpdated"
-        // ]).reverse();
-        const sorted = _.sortBy(allNotifs, ["ntdUpdated"]).reverse();
+        // const sorted = _.sortBy(allNotifs, ["ntdUpdated"]);
+        const sorted = _.sortBy(allNotifs, ["ntdCreated"]).reverse();
 
         dispatch({
           type: REFRESH_NOTIFICATION_SUCCESS,
