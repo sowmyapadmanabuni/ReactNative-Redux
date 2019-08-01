@@ -339,6 +339,7 @@ class Dashboard extends React.Component {
     // this.requestNotifPermission();
     // // this.getBlockList();
     // this.props.getNotifications(oyeURL, MyAccountID);
+    this.didMount();
   }
 
   roleCheckForAdmin = () => {
@@ -451,32 +452,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  // onAssociationChange(value, index) {
-  //   console.log("on Aschange", value, index);
-  //   let self = this;
-  //   let oyeURL = this.props.oyeURL;
-  //   let assocList = self.state.assocList;
-  //   let assocName, assocId;
-  //   for (let i = 0; i < assocList.length; i++) {
-  //     if (i === index) {
-  //       assocName = assocList[i].details.asAsnName;
-  //       assocId = assocList[i].details.asAssnID;
-  //     }
-  //   }
-  //   self.setState({
-  //     assocName: value,
-  //     assocId: assocId
-  //   });
-  //   const { updateIdDashboard } = this.props;
-  //   console.log("updateIdDashboard2", this.props);
-  //   updateIdDashboard({ prop: "assId", value: assocId });
-  //   const { updateUserInfo } = this.props;
-  //   updateUserInfo({ prop: "SelectedAssociationID", value: assocId });
-  //   const { getDashUnits } = this.props;
-  //   getDashUnits(assocId, oyeURL);
-  //   self.getUnitListByAssoc();
-  // }
-
   onAssociationChange = (value, index) => {
     const {
       associationid,
@@ -534,20 +509,6 @@ class Dashboard extends React.Component {
       if (stat && stat.data) {
         let unitList = [];
         for (let i = 0; i < stat.data.members.length; i++) {
-          //if (stat.data.members[i].unUniName) {
-          /* let Unit = "";
-          if (
-            !stat.data.members[i].unUniName ||
-            stat.data.members[i].unUniName === ""
-          ) {
-            console.log("No Unit name", stat.data.members[i].unUniName);
-            Unit = "Unit" + i;
-            // Unit = stat.data.members[i].unUniName;
-          } else {
-            Unit = stat.data.members[i].unUniName;
-          }
-          unitList.push({ value: Unit, details: stat.data.members[i] });*/
-
           if (
             stat.data.members[i].unUniName !== "" &&
             stat.data.members[i].unUnitID !== 0
@@ -582,7 +543,6 @@ class Dashboard extends React.Component {
   }
 
   updateUnit(value, index) {
-    console.log("Unit123", value, index, this.state.unitList);
     let self = this;
     let unitList = self.state.unitList;
     let unitName, unitId;
@@ -727,7 +687,7 @@ class Dashboard extends React.Component {
     console.log("Drp1", dropdown1);
     return (
       <View style={{ height: "100%", width: "100%" }}>
-        <NavigationEvents onDidFocus={() => this.didMount()} />
+        {/* <NavigationEvents onDidFocus={() => this.didMount()} /> */}
         {!this.props.isLoading ? (
           <View style={Style.container}>
             <View style={Style.dropDownContainer}>
