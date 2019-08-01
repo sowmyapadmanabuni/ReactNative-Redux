@@ -230,7 +230,7 @@ class App extends React.Component {
                   <ZoomImage
                       source={{
                         uri:
-                            "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                            "http://mediauploaduat.oyespace.com/Images/" + item.vlEntryImg
                       }}
                       imgStyle={{
                         height: wp("20%"),
