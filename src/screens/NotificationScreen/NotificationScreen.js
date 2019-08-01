@@ -259,6 +259,7 @@ class NotificationScreen extends Component {
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
+    console.log('hghfhgfghfgfhgfh',item.ntdUpdated,moment(item.ntdUpdated).format("HH:mm A"))
 
     if (item.ntType !== "gate_app") {
       return (

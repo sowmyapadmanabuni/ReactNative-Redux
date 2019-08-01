@@ -35,7 +35,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        // console.log(responseJson);
+         console.log("Check list of notif",responseJson);
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];
