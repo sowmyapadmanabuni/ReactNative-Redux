@@ -230,7 +230,7 @@ class App extends React.Component {
                   <ZoomImage
                       source={{
                         uri:
-                            "http://mediauploaduat.oyespace.com/Images/" + item.vlEntryImg
+                            `${this.props.mediaupload}` + item.vlEntryImg
                       }}
                       imgStyle={{
                         height: wp("20%"),
@@ -248,7 +248,7 @@ class App extends React.Component {
                   //   style={styles.mainCardItemImage}
                   //   source={{
                   //     uri:
-                  //       "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                  //       `${this.props.mediaupload}` + item.vlEntryImg
                   //   }}
 
                   // />
@@ -907,7 +907,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     dashBoardReducer: state.DashboardReducer,
-    oyeURL: state.OyespaceReducer.oyeURL
+    oyeURL: state.OyespaceReducer.oyeURL,
+    mediaupload:state.OyespaceReducer.mediaupload,
   };
 };
 

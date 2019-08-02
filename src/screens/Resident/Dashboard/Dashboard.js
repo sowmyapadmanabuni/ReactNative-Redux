@@ -721,7 +721,7 @@ class Dashboard extends React.Component {
                       borderBottomColor: "transparent",
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-4}
+                    dropdownPosition={Platform.OS === 'ios'?  -4:-5}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -752,7 +752,7 @@ class Dashboard extends React.Component {
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-4}
+                    dropdownPosition={Platform.OS === 'ios'?  -3:-4}
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
@@ -1121,16 +1121,6 @@ class Dashboard extends React.Component {
             onPress={() =>
               this.props.navigation.navigate("ViewAlllVisitorsPage")
             }
-          >
-            <Text>View All Visitors</Text>
-          </Button>
-
-          <Button
-              bordered
-              style={styles.button1}
-              onPress={() =>
-                  this.props.navigation.navigate("ViewAlllVisitorsPage")
-              }
           >
             <Text>View All Visitors</Text>
           </Button>

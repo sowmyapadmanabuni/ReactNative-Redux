@@ -69,7 +69,7 @@ class MyGuests extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Manas", responseJson);
+        console.log("Invitation List -", responseJson);
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.invitation,
@@ -137,6 +137,7 @@ class MyGuests extends Component {
   renderItem = ({ item, index }) => {
       console.log(item,index)
     console.log("Data Sources",this.state.dataSource)
+    
     return (
       <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
         <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
@@ -207,6 +208,7 @@ class MyGuests extends Component {
 
   render() {
     console.log("Dashboard", this.props.dashBoardReducer);
+    console.log("Association Id and unit id", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>

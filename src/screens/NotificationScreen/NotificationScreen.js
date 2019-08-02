@@ -264,6 +264,10 @@ class NotificationScreen extends Component {
     if (item.ntType !== "gate_app") {
       return (
           <Card>
+            <Text style={{fontSize:hp('2.5%'), color:'#000'}}>
+              {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+              {moment(item.ntdUpdated).format("hh:mm A")}
+            </Text>
             {item.ntType !== "gate_app" ? (
                 <ListItem
                     onPress={() => this.onPress(item, index)}
@@ -293,10 +297,7 @@ class NotificationScreen extends Component {
                   </Collapsible>
                 </View>
             )}
-            <Text>
-              {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
-              {moment(item.ntdUpdated).format("hh:mm A")}
-            </Text>
+            
           </Card>
       );
     } else {
@@ -326,13 +327,25 @@ class NotificationScreen extends Component {
               ) : (
                   <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: "column" }}>
-                      <Text>{item.ntDesc}</Text>
-                      <Text>
+                      <Text style={{marginTop:10,fontSize:hp('2.5%'), color:'#000'}}>
                         {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
                         {moment(item.ntdUpdated).format("hh:mm A")}
                       </Text>
+                      <Text style={{marginBottom:10}}>{item.ntDesc}</Text>
+                      <View style={{flex:1,}}>
+                        {item.open ? 
+                          <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
+                            <Text style={{color:'#ff8c00'}}>More</Text>
+                            {/* <Image source={require('../../../icons/view_more')}/> */}
+                          </View>:
+                          <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
+                            <Text style={{color:'#ff8c00'}}>Less</Text>
+                            {/* <Image source={require('../../../icons/view_less')} /> */}
+                          </View>}
+                      </View>
+                      
                     </View>
-                    <Collapsible
+                    <Collapsible 
                         duration={300}
                         style={{ flex: 1 }}
                         collapsed={item.open}
@@ -347,65 +360,54 @@ class NotificationScreen extends Component {
                           </View>
                       ) : (
                           <View style={{ flexDirection: "column" }}>
-                            <View
-                                style={{
-                                  justifyContent: "center",
-                                  alignItems: "center"
-                                }}
-                            >
-                              {/* {this.state.gateDetails !== null
-                          ? this.state.gateDetails.vlGtName
-                          : ""} */}
-                              <View style={{ flexDirection: "row" }}>
-                                <Text style={{ fontSize: hp("2%") }}>
-                                  {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
-                                  Association
-                                </Text>
-                              </View>
-                            </View>
-                            <View style={{ flexDirection: "row" }}>
-                              <View
-                                  style={{
-                                    alignItems: "flex-start",
-                                    justifyContent: "flex-start"
-                                  }}
-                              >
+                            <View style={{flexDirection:'row'}}>
+                              <View>
                                 <Image
-                                    style={styles.img}
-                                    // style={styles.img}
-                                    source={{
-                                      uri:
-                                          `https://mediauploaduat.oyespace.com/Images/` +
-                                          this.renderCollapseData(
-                                              "vlEntryImg",
-                                              item.sbMemID
-                                          )
-                                    }}
-                                />
+                                      style={styles.img}
+                                      // style={styles.img}
+                                      source={{
+                                        uri:
+                                            `${this.props.mediaupload}` +
+                                            this.renderCollapseData(
+                                                "vlEntryImg",
+                                                item.sbMemID
+                                            )
+                                      }}
+                                  />
                               </View>
-                              <View
-                                  style={{
-                                    flexDirection: "row",
-                                    justifyContent: "flex-start",
-                                    alignItems: "flex-start",
-                                  }}
-                              >
-                                <View
-                                    style={{
-                                      marginLeft: hp("1%"),
-                                      flexDirection: "column"
-                                    }}
-                                >
+                              <View style={{flexDirection:'column', marginLeft:hp('1%')}}>
+                                <View style={{marginBottom:5}}>
+                                  <Text style={{ fontSize: hp("2%"), fontWeight:'500' }}>
+                                    {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
+                                    Association
+                                  </Text>
+                                </View>
+                                
+                                <View style={{marginBottom:5}}>
+                                  <Text style={{ fontSize: hp("2%") }}>
+                                    {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
+                                      
+                                  </Text>
+                                </View>
+                                
+                                <View style={{ flexDirection: "row", marginBottom:5 }}>
+                                    <Text style={{ color: "#000" }}>
+                                      {this.renderCollapseData(
+                                          "vlVisType",
+                                          item.sbMemID
+                                      )}{" "}
+                                      
+                                    </Text>
+                                    <Text style={{ color: "#38bcdb" }}>
+                                      {this.renderCollapseData(
+                                          "vlComName",
+                                          item.sbMemID
+                                      )}{" "}
+                                      
+                                    </Text>
+
+                                  </View>
                                   <View style={{flexDirection:'row'}}>
-                                    <View>
-                                      <Text style={{ fontSize: hp("2%") }}>
-                                        {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
-                                        {/* {this.state.gateDetails !== null
-                                ? this.state.gateDetails.vlfName
-                                : ""} */}
-                                      </Text>
-                                    </View>
-                                    <View>
                                       <TouchableOpacity
                                           onPress={() => {
                                             {
@@ -462,80 +464,26 @@ class NotificationScreen extends Component {
                                       </TouchableOpacity>
 
                                     </View>
-
-                                  </View>
-
-
-
-
-                                  <View style={{ flexDirection: "row" }}>
-                                    <Text style={{ color: "#000" }}>
-                                      {this.renderCollapseData(
-                                          "vlVisType",
-                                          item.sbMemID
-                                      )}{" "}
-                                      {/* {this.state.gateDetails !== null
-                                  ? this.state.gateDetails.vlVisType
-                                  : ""}{" "} */}
-                                    </Text>
-                                    <Text style={{ color: "#38bcdb" }}>
-                                      {this.renderCollapseData(
-                                          "vlComName",
-                                          item.sbMemID
-                                      )}{" "}
-                                      {/* {this.state.gateDetails !== null
-                                  ? this.state.gateDetails.vlComName
-                                  : ""}{" "} */}
-                                    </Text>
-
-                                  </View>
-
-                                </View>
-
-
-
-
+                                
                               </View>
                             </View>
 
-                            <View
-                                style={{
-                                  flexDirection: "column"
-                                }}
-                            >
-                              <View
-                                  style={{
-                                    flexDirection: "row",
-                                  }}
-                              >
-                                <View
-                                    style={{
-                                      flexDirection: "row",
-                                    }}
-                                >
+                            <View style={{flexDirection:'row'}}>
                                   <View style={{ flexDirection: "row" }}>
                                     <Text style={{ color: "#ff8c00" }}>
                                       Entry On:{" "}
                                     </Text>
                                     <View style={{ flexDirection: "row" }}>
-                                      {/* <Text>
-                                  {this.state.Date !== null
-                                    ? this.state.Date
-                                    : ""}{" "}
-                                </Text> */}
+                                      
                                       <Text>
-                                        {/* {this.state.Time !== null
-                                    ? this.state.Time
-                                    : ""} */}
+                                        
                                         {this.renderCollapseData(
                                             "vldCreated",
                                             item.sbMemID
                                         )}  </Text>
 
                                       <Text>
-                                        {/* {this.state.Time !== null
-                                    ? this.state.Time
-                                    : ""} */}
+                                        
                                         {this.renderCollapseData(
                                             "vlEntryT",
                                             item.sbMemID
@@ -543,7 +491,6 @@ class NotificationScreen extends Component {
                                       </Text>
                                     </View>
                                   </View>
-
                                   <View
                                       style={{
                                         flexDirection: "row",
@@ -552,20 +499,16 @@ class NotificationScreen extends Component {
                                   >
                                     <Text style={{ color: "#ff8c00" }}>From: </Text>
                                     <Text>
-                                      {/* {this.state.gateDetails !== null
-                                  ? this.state.gateDetails.vlengName
-                                  : ""} */}
+                                      
                                       {this.renderCollapseData(
                                           "vlengName",
                                           item.sbMemID
                                       )}
                                     </Text>
                                   </View>
-
-                                </View>
-                              </View>
-
-                              <View
+                            </View>
+                            <View>
+                            <View
                                   style={{
                                     flexDirection: "row",
                                   }}
@@ -585,24 +528,16 @@ class NotificationScreen extends Component {
                                           Exit On:{" "}
                                         </Text>
                                         <View style={{ flexDirection: "row" }}>
-                                          {/* <Text>
-                                    {this.state.Date1 !== null
-                                      ? this.state.Date1
-                                      : ""}{" "}
-                                  </Text> */}
+                                          
 
                                           <Text>
-                                            {/* {this.state.Time1 !== null
-                                      ? this.state.Time1
-                                      : ""} */}
+                                            
                                             {this.renderCollapseData(
                                                 "vldUpdated",
                                                 item.sbMemID
                                             )}  </Text>
                                           <Text>
-                                            {/* {this.state.Time1 !== null
-                                      ? this.state.Time1
-                                      : ""} */}
+                                            
                                             {this.renderCollapseData(
                                                 "vlExitT",
                                                 item.sbMemID
@@ -619,9 +554,7 @@ class NotificationScreen extends Component {
                                       >
                                         <Text style={{ color: "#ff8c00" }}>From: </Text>
                                         <Text>
-                                          {/* {this.state.gateDetails !== null
-                                    ? this.state.gateDetails.vlexgName
-                                    : ""} */}
+                                          
                                           {this.renderCollapseData(
                                               "vlexgName",
                                               item.sbMemID
@@ -636,6 +569,8 @@ class NotificationScreen extends Component {
                                 }
                               </View>
                             </View>
+                           
+                            
                           </View>
                       )}
                     </Collapsible>
@@ -732,10 +667,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   img: {
-    width: hp("5%"),
-    height: hp("5%"),
+    width: hp("12%"),
+    height: hp("12%"),
     borderColor: "orange",
-    borderRadius: hp("2.5%"),
+    borderRadius: hp("6%"),
     // marginTop: hp("3%"),
     borderWidth: hp("0.2%")
   }
@@ -748,6 +683,7 @@ const mapStateToProps = state => {
     loading: state.NotificationReducer.loading,
     savedNoifId: state.AppReducer.savedNoifId,
     oyeURL: state.OyespaceReducer.oyeURL,
+    mediaupload:state.OyespaceReducer.mediaupload,
     MyAccountID: state.UserReducer.MyAccountID,
     refresh: state.NotificationReducer.refresh
   };
