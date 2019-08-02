@@ -684,19 +684,19 @@ class Dashboard extends React.Component {
 
     render() {
         const {
-            dropdown,
-            dropdown1,
-            residentList,
-            sold,
-            unsold,
-            isLoading,
-            sold2,
-            unsold2,
-            updateUserInfo,
-            updateDropDownIndex,
-            selectedDropdown,
-            selectedDropdown1,
-            called
+          dropdown,
+          dropdown1,
+          residentList,
+          sold,
+          unsold,
+          isLoading,
+          sold2,
+          unsold2,
+          updateUserInfo,
+          updateDropDownIndex,
+          selectedDropdown,
+          selectedDropdown1,
+          updateSelectedDropDown
         } = this.props;
 
         let associationList = this.state.assocList;
@@ -763,10 +763,21 @@ class Dashboard extends React.Component {
                                                 prop: "SelectedUnitID",
                                                 value: dropdown1[index].unitId
                                             });
-                                            updateSelectedDropDown({
-                                                prop: "selectedDropdown1",
-                                                value: value.value
-                                            });
+                                            updateSelectedDropDown(
+                                              {
+                                                prop:
+                                                  "selectedDropdown1",
+                                                value:
+                                                  dropdown1[
+                                                    index
+                                                  ]
+                                                    .value
+                                              }
+                                            );
+
+                                            
+
+                                            
 
                                             // console.log(value);
                                             // console.log(index);
