@@ -38,7 +38,7 @@ target 'OyeSpace' do
   
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   
-  
+
   pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
   
   pod 'Fabric'

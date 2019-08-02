@@ -18,6 +18,7 @@ import {NavigationEvents} from "react-navigation";
 import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import base from "../src/base";
+import DashBoardHeader from "../src/components/dashBoardHeader/DashBoardHeader";
 
 class MyProfile extends Component {
   state = {
@@ -73,6 +74,7 @@ class MyProfile extends Component {
                 <View style={styles.viewDetails1}>
                   <TouchableOpacity
                       onPress={() => {
+                        DashBoardHeader.refreshProfile();
                         this.props.navigation.navigate("ResDashBoard")
                       }}
                   >
@@ -167,7 +169,8 @@ class MyProfile extends Component {
                               profileDataSourceImageName: this.state.datasource
                                 ? this.state.datasource.data.account[0].acImgName
                                 : "",
-                              profileDataSourceCountryName:this.state.datasource.data.account[0].acCrtyCode
+                              profileDataSourceCountryName:this.state.datasource.data.account[0].acCrtyCode,
+                              profileDataSourceCountryName1:this.state.datasource.data.account[0].acCrtyCode1
                             })
                           }}
                       >

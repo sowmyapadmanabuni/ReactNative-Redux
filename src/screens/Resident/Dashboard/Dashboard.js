@@ -11,18 +11,20 @@ import {
     View
 } from "react-native";
 import base from "../../../base";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import CardView from "../../../components/cardView/CardView";
-import {Dropdown} from "react-native-material-dropdown";
+import { Dropdown } from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
-import {Button} from "native-base";
+import { Button } from "native-base";
 
-
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+} from "react-native-responsive-screen";
 import {
     createNotification,
     createUserNotification,
@@ -37,9 +39,9 @@ import {
     updateDropDownIndex,
     updateIdDashboard,
     updateJoinedAssociation,
-    updateUserInfo,
+    updateUserInfo
 } from "../../../actions";
-import {NavigationEvents} from "react-navigation";
+import { NavigationEvents } from "react-navigation";
 import ProgressLoader from "rn-progress-loader";
 
 class Dashboard extends React.Component {
@@ -74,302 +76,12 @@ class Dashboard extends React.Component {
 
     componentWillMount() {
         this.setState({
-            isDataLoading: true
-        })
+            isDataLoading: true,
+            isDataVisible:true,
+        });
         this.getListOfAssociation();
         this.getVehicleList();
     }
-
-    // requestNotifPermission = () => {
-    //   const {
-    //     MyAccountID,
-    //     champBaseURL,
-    //     receiveNotifications,
-    //     oyeURL
-    //   } = this.props;
-
-    //   firebase
-    //     .messaging()
-    //     .hasPermission()
-    //     .then(enabled => {
-    //       if (enabled) {
-    //         if (receiveNotifications) {
-    //           this.listenForNotif();
-    //         }
-    //         // user has permissions
-    //       } else {
-    //         firebase
-    //           .messaging()
-    //           .requestPermission()
-    //           .then(() => {
-    //             if (receiveNotifications) {
-    //               this.listenForNotif();
-    //             }
-    //             // User has authorised
-    //           })
-    //           .catch(error => {
-    //             // User has rejected permissions
-    //           });
-    //         // user doesn't have permission
-    //       }
-    //     });
-
-    //   var headers = {
-    //     "Content-Type": "application/json",
-    //     "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-    //   };
-
-    //   axios
-    //     .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
-    //       headers: headers
-    //     })
-    //     .then(response => {
-    //       let responseData = response.data.data;
-
-    //       responseData.associationByAccount.map(association => {
-    //         // console.log('***********')
-    //         // console.log(association.asAsnName)
-    //         // console.log(association.asAssnID)
-    //         // console.log('***********')
-    //         if (receiveNotifications) {
-    //           firebase
-    //             .messaging()
-    //             .subscribeToTopic(association.asAssnID + "admin");
-    //           // console.log(association.asAssnID);
-    //         } else if (!receiveNotifications) {
-    //           firebase
-    //             .messaging()
-    //             .unsubscribeFromTopic(association.asAssnID + "admin");
-    //         }
-    //       });
-    //     });
-
-    //   axios
-    //     .get(
-    //       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
-    //       {
-    //         headers: headers
-    //       }
-    //     )
-    //     .then(response => {
-    //       let data = response.data.data.memberListByAccount;
-    //       // console.log("dataoye", data);
-    //       data.map(units => {
-    //         // console.log(units.unUnitID + "admin");
-    //         // console.log(units.mrmRoleID + "role");
-    //         if (receiveNotifications) {
-    //           if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-    //             // console.log(units.unUnitID + "admin");
-    //             firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
-    //           }
-    //         } else if (!receiveNotifications) {
-    //           firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
-    //         }
-    //       });
-    //     });
-    // };
-
-    // showLocalNotification = notification => {
-    //   // console.log(notification);
-    //   const channel = new firebase.notifications.Android.Channel(
-    //     "channel_id",
-    //     "Oyespace",
-    //     firebase.notifications.Android.Importance.Max
-    //   ).setDescription("Oyespace channel");
-    //   channel.enableLights(true);
-    //   // channel.enableVibration(true);
-    //   // channel.vibrationPattern([500]);
-    //   firebase.notifications().android.createChannel(channel);
-
-    //   const notificationBuild = new firebase.notifications.Notification({
-    //     sound: "default",
-    //     show_in_foreground: true
-    //   })
-    //     .setTitle(notification._title)
-    //     .setBody(notification._body)
-    //     .setNotificationId(notification._notificationId)
-    //     // .setSound('default')
-    //     .setData({
-    //       ...notification._data,
-    //       foreground: true
-    //     })
-    //     .android.setColor("#FF9100")
-    //     .android.setLargeIcon("ic_notif")
-    //     .android.setAutoCancel(true)
-    //     .android.setSmallIcon("ic_stat_ic_notification")
-    //     .android.setChannelId("channel_id")
-    //     .android.setVibrate("default")
-    //     // .android.setChannelId('notification-action')
-    //     .android.setPriority(firebase.notifications.Android.Priority.Max);
-
-    //   firebase.notifications().displayNotification(notificationBuild);
-    //   this.setState({ foregroundNotif: notification._data });
-    // };
-
-    // listenForNotif = () => {
-    //   let navigationInstance = this.props.navigation;
-
-    //   this.notificationDisplayedListener = firebase
-    //     .notifications()
-    //     .onNotificationDisplayed(notification => {
-    //       // console.log('___________')
-    //       // console.log(notification)
-    //       // console.log('____________')
-    //       // Process your notification as required
-    //       // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-    //     });
-
-    //   this.notificationListener = firebase
-    //     .notifications()
-    //     .onNotification(notification => {
-    //       // console.log('___________')
-    //       // console.log(notification)
-    //       // console.log('____________')
-
-    //       if (notification._data.associationID) {
-    //         // this.props.createNotification(notification._data, navigationInstance, false)
-    //       }
-
-    //       this.showLocalNotification(notification);
-    //     });
-
-    //   firebase.notifications().onNotificationOpened(notificationOpen => {
-    //     const { MyAccountID } = this.props.userReducer;
-    //     const { oyeURL } = this.props.oyespaceReducer;
-    //     let details = notificationOpen.notification._data;
-    //     if (notificationOpen.notification._data.admin === "true") {
-    //       if (notificationOpen.action) {
-    //         // this.props.newNotifInstance(notificationOpen.notification);
-    //         // this.props.createNotification(
-    //         //   notificationOpen.notification._data,
-    //         //   navigationInstance,
-    //         //   true,
-    //         //   "true",
-    //         //   this.props.oyeURL,
-    //         //   this.props.MyAccountID
-    //         // );
-    //         // this.props.createNotification(notificationOpen.notification)
-    //       }
-    //       // this.props.newNotifInstance(notificationOpen.notification);
-    //       // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-    //     } else if (notificationOpen.notification._data.admin === "false") {
-    //       this.props.createUserNotification(
-    //         "Join_Status",
-    //         oyeURL,
-    //         MyAccountID,
-    //         1,
-    //         details.ntDesc,
-    //         "resident_user",
-    //         "resident_user",
-    //         details.sbSubID,
-    //         "resident_user",
-    //         "resident_user",
-    //         "resident_user",
-    //         "resident_user",
-    //         "resident_user",
-    //         true
-    //       );
-    //       // this.props.navigation.navigate("NotificationScreen");
-    //     }
-
-    //     if (notificationOpen.notification._data.admin === "true") {
-    //       this.props.refreshNotifications(oyeURL, MyAccountID);
-    //       if (notificationOpen.notification._data.foreground) {
-    //         // this.props.newNotifInstance(notificationOpen.notification);
-    //         // this.props.createNotification(
-    //         //   notificationOpen.notification._data,
-    //         //   navigationInstance,
-    //         //   true,
-    //         //   "true",
-    //         //   this.props.oyeURL,
-    //         //   this.props.MyAccountID
-    //         // );
-    //       }
-    //     } else if (notificationOpen.notification._data.admin === "gate_app") {
-    //       this.props.refreshNotifications(oyeURL, MyAccountID);
-    //       // this.props.newNotifInstance(notificationOpen.notification);
-    //       // this.props.createNotification(
-    //       //   notificationOpen.notification._data,
-    //       //   navigationInstance,
-    //       //   true,
-    //       //   "gate_app",
-    //       //   this.props.oyeURL,
-    //       //   this.props.MyAccountID
-    //       // );
-    //       // this.props.newNotifInstance(notificationOpen.notification);
-    //       // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-    //     } else if (notificationOpen.notification._data.admin === "false") {
-    //     }
-    //     // this.props.getNotifications(oyeURL, MyAccountID);
-    //     this.props.navigation.navigate("NotificationScreen");
-    //   });
-    // };
-
-    // onChangeText = () => {
-    //   // console.log("hhhhhhhhhhhhhh",this.state.data1)
-    // };
-
-    // didMount = () => {
-    //   const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    //   const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //   const { oyeURL } = this.props.oyespaceReducer;
-    //   // this.props.updateApproveAdmin([]);
-
-    //   getDashSub(oyeURL, SelectedAssociationID);
-    //   getDashAssociation(oyeURL, MyAccountID);
-    //   getAssoMembers(oyeURL, MyAccountID);
-    //   this.requestNotifPermission();
-    //   // this.getBlockList();
-    //   this.props.getNotifications(oyeURL, MyAccountID);
-    //   console.log("Notification");
-    // };
-
-    // componentDidMount() {
-    //   console.log("Notification");
-    //   const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    //   const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //   const { oyeURL } = this.props.oyespaceReducer;
-    //   // this.props.updateApproveAdmin([]);
-
-    //   getDashSub(oyeURL, SelectedAssociationID);
-    //   getDashAssociation(oyeURL, MyAccountID);
-    //   getAssoMembers(oyeURL, MyAccountID);
-    //   this.requestNotifPermission();
-    //   // this.getBlockList();
-    //   this.props.getNotifications(oyeURL, MyAccountID);
-    // }
-    //   onAssociationChange = (value, index) => {
-    //     const {
-    //       associationid,
-    //       getDashUnits,
-    //       updateUserInfo,
-    //       memberList,
-    //       notifications,
-    //       dropdown
-    //     } = this.props;
-    //     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //     const { oyeURL } = this.props.oyespaceReducer;
-
-    //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
-    //     updateUserInfo({
-    //       prop: "SelectedAssociationID",
-    //       value: dropdown[index].associationId
-    //     });
-
-    //     let memId = _.find(memberList, function(o) {
-    //       return o.asAssnID === dropdown[index].associationId;
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "MyOYEMemberID",
-    //       value: memId.meMemID
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "SelectedMemberID",
-    //       value: dropdown[index].memberId
-    //     });
-    //   };
 
     requestNotifPermission = () => {
         const {
@@ -411,30 +123,6 @@ class Dashboard extends React.Component {
         };
 
         axios
-            .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
-                headers: headers
-            })
-            .then(response => {
-                let responseData = response.data.data;
-
-                responseData.associationByAccount.map(association => {
-                    // console.log('***********')
-                    // console.log(association.asAsnName)
-                    // console.log(association.asAssnID)
-                    // console.log('***********')
-                    if (receiveNotifications) {
-                        firebase
-                            .messaging()
-                            .subscribeToTopic(association.asAssnID + "admin");
-                    } else if (!receiveNotifications) {
-                        firebase
-                            .messaging()
-                            .unsubscribeFromTopic(association.asAssnID + "admin");
-                    }
-                });
-            });
-
-        axios
             .get(
                 `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
                 {
@@ -445,6 +133,8 @@ class Dashboard extends React.Component {
                 let data = response.data.data.memberListByAccount;
                 // console.log("dataoye", data);
                 data.map(units => {
+                    // console.log(units.unUnitID + "admin");
+                    // console.log(units.mrmRoleID + "role");
                     if (receiveNotifications) {
                         if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
                             if (units.meIsActive) {
@@ -495,7 +185,7 @@ class Dashboard extends React.Component {
             .android.setPriority(firebase.notifications.Android.Priority.Max);
 
         firebase.notifications().displayNotification(notificationBuild);
-        this.setState({foregroundNotif: notification._data});
+        this.setState({ foregroundNotif: notification._data });
     };
 
     listenForNotif = () => {
@@ -526,8 +216,8 @@ class Dashboard extends React.Component {
             });
 
         firebase.notifications().onNotificationOpened(notificationOpen => {
-            const {MyAccountID} = this.props.userReducer;
-            const {oyeURL} = this.props.oyespaceReducer;
+            const { MyAccountID } = this.props.userReducer;
+            const { oyeURL } = this.props.oyespaceReducer;
             let details = notificationOpen.notification._data;
             if (notificationOpen.notification._data.admin === "true") {
                 if (notificationOpen.action) {
@@ -602,9 +292,9 @@ class Dashboard extends React.Component {
     };
 
     didMount = () => {
-        const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
-        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
-        const {oyeURL} = this.props.oyespaceReducer;
+        const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+        const { oyeURL } = this.props.oyespaceReducer;
 
         getDashSub(oyeURL, SelectedAssociationID);
         getDashAssociation(oyeURL, MyAccountID);
@@ -616,9 +306,9 @@ class Dashboard extends React.Component {
 
     componentDidMount() {
         console.log("Notification");
-        const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
-        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
-        const {oyeURL} = this.props.oyespaceReducer;
+        const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
+        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+        const { oyeURL } = this.props.oyespaceReducer;
         // this.props.updateApproveAdmin([]);
 
         getDashSub(oyeURL, SelectedAssociationID);
@@ -662,7 +352,6 @@ class Dashboard extends React.Component {
     //     });
     //   };
 
-
     roleCheckForAdmin = () => {
         console.log("Association id123123123123", this.state.assocId);
         fetch(
@@ -698,25 +387,22 @@ class Dashboard extends React.Component {
                 });
             })
             .catch(error => {
-                this.setState({error, loading: false});
+                this.setState({ error, loading: false });
             });
     };
-
 
     static getAssociationList() {
         this.getAssociationList();
     }
 
-
     async getListOfAssociation() {
         let self = this;
         let oyeURL = this.props.oyeURL;
-        self.setState({isLoading: true});
-        console.log("APi", base.utils.strings.oyeLivingDashBoard);
+        self.setState({ isLoading: true });
         let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
             this.props.userReducer.MyAccountID
         );
-        console.log("data from stat", stat);
+            console.log("data from stat", stat,this.props);
 
         try {
             if (stat && stat.data) {
@@ -730,8 +416,9 @@ class Dashboard extends React.Component {
                     }
                 }
 
-
-                let sortedArr = assocList.sort(base.utils.validate.compareAssociationNames);
+                let sortedArr = assocList.sort(
+                    base.utils.validate.compareAssociationNames
+                );
                 console.log("DJBHVD:", sortedArr, assocList);
 
                 self.setState({
@@ -739,16 +426,20 @@ class Dashboard extends React.Component {
                     assocName: sortedArr[0].details.asAsnName,
                     assocId: sortedArr[0].details.asAssnID
                 });
-                const {updateIdDashboard} = this.props;
+                const { updateIdDashboard } = this.props;
+                console.log("updateIdDashboard1", this.props);
                 updateIdDashboard({
                     prop: "assId",
                     value: sortedArr[0].details.asAssnID
                 });
-                updateIdDashboard({prop: "memberList", value: sortedArr});
-                const {updateUserInfo} = this.props;
-                updateUserInfo({prop: "SelectedAssociationID", value: sortedArr[0].details.asAssnID});
+                updateIdDashboard({ prop: "memberList", value: sortedArr });
+                const { updateUserInfo } = this.props;
+                updateUserInfo({
+                    prop: "SelectedAssociationID",
+                    value: sortedArr[0].details.asAssnID
+                });
 
-                const {getDashUnits} = this.props;
+                const { getDashUnits } = this.props;
                 getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
             }
             self.getUnitListByAssoc();
@@ -773,24 +464,21 @@ class Dashboard extends React.Component {
             assocName: value,
             assocId: assocId
         });
-        const {updateIdDashboard} = this.props;
+        const { updateIdDashboard } = this.props;
         console.log("updateIdDashboard2", this.props);
-        updateIdDashboard({prop: "assId", value: assocId});
-        const {updateUserInfo} = this.props;
-        updateUserInfo({prop: "SelectedAssociationID", value: assocId});
-        const {getDashUnits} = this.props;
+        updateIdDashboard({ prop: "assId", value: assocId });
+        const { updateUserInfo } = this.props;
+        updateUserInfo({ prop: "SelectedAssociationID", value: assocId });
+        const { getDashUnits } = this.props;
         getDashUnits(assocId, oyeURL);
         self.getUnitListByAssoc();
     }
 
     async getUnitListByAssoc() {
         let self = this;
-        //self.setState({isLoading: true})
         console.log("APi1233", self.state.assocId);
-        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
-            this.state.assocId
-        );
-        self.setState({isLoading: false, isDataLoading: false});
+        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(self.state.assocId);
+        self.setState({ isLoading: false, isDataLoading: false });
         console.log("STAT123", stat);
 
         try {
@@ -799,18 +487,12 @@ class Dashboard extends React.Component {
                 for (let i = 0; i < stat.data.members.length; i++) {
                     //if (stat.data.members[i].unUniName) {
                     let Unit = "";
-                    if (
-                        !stat.data.members[i].unUniName ||
-                        stat.data.members[i].unUniName === ""
-                    ) {
-                        console.log("No Unit name", stat.data.members[i].unUniName);
-                        // Unit = "Unit" + i;
-                        Unit = stat.data.members[i].unUniName;
+                    if (!stat.data.members[i].unUniName || stat.data.members[i].unUniName === "") {
+                        Unit = "Unit" + i;
                     } else {
                         Unit = stat.data.members[i].unUniName;
                     }
-                    unitList.push({value: Unit, details: stat.data.members[i]});
-                    //}
+                    unitList.push({ value: Unit, details: stat.data.members[i] });
                 }
                 console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
 
@@ -820,7 +502,7 @@ class Dashboard extends React.Component {
                     unitId: unitList[0].details.unUnitID,
                     isDataVisible: true
                 });
-                const {updateIdDashboard} = this.props;
+                const { updateIdDashboard } = this.props;
                 console.log("updateIdDashboard3", this.props);
                 updateIdDashboard({
                     prop: "uniID",
@@ -849,9 +531,9 @@ class Dashboard extends React.Component {
             unitName: value,
             unitId: unitId
         });
-        const {updateIdDashboard} = this.props;
+        const { updateIdDashboard } = this.props;
         console.log("updateIdDashboard5", this.props);
-        updateIdDashboard({prop: "uniID", value: unitId});
+        updateIdDashboard({ prop: "uniID", value: unitId });
     }
 
     getVehicleList = () => {
@@ -877,7 +559,7 @@ class Dashboard extends React.Component {
                 });
             })
             .catch(error => {
-                this.setState({loading: false});
+                this.setState({ loading: false });
                 console.log(error);
             });
     };
@@ -905,7 +587,7 @@ class Dashboard extends React.Component {
                 });
             })
             .catch(error => {
-                this.setState({loading: false});
+                this.setState({ loading: false });
                 console.log(error);
             });
     };
@@ -933,14 +615,12 @@ class Dashboard extends React.Component {
                 });
             })
             .catch(error => {
-                this.setState({loading: false});
+                this.setState({ loading: false });
                 console.log(error);
             });
     };
 
-
     render() {
-
         const {
             dropdown,
             dropdown1,
@@ -954,14 +634,13 @@ class Dashboard extends React.Component {
             updateDropDownIndex
         } = this.props;
 
-
         let associationList = this.state.assocList;
         let unitList = this.state.unitList;
         return (
-            <View style={{height: "100%", width: "100%"}}>
-                {this.state.isDataVisible ?
+            <View style={{ height: "100%", width: "100%" }}>
+                {this.state.isDataVisible ? (
                     <View style={Style.container}>
-                        <NavigationEvents onDidFocus={() => this.didMount()}/>
+                        <NavigationEvents onDidFocus={() => this.didMount()} />
                         <View style={Style.dropDownContainer}>
                             <View style={Style.leftDropDown}>
                                 {this.state.assdNameHide === false ? (
@@ -971,8 +650,8 @@ class Dashboard extends React.Component {
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={associationList}
                                         textColor={base.theme.colors.black}
-                                        inputContainerStyle={{borderBottomColor: "transparent"}}
-                                        dropdownOffset={{top: 10, left: 0}}
+                                        inputContainerStyle={{ borderBottomColor: "transparent" }}
+                                        dropdownOffset={{ top: 10, left: 0 }}
                                         dropdownPosition={-4}
                                         rippleOpacity={0}
                                         onChangeText={(value, index) =>
@@ -980,7 +659,7 @@ class Dashboard extends React.Component {
                                         }
                                     />
                                 ) : (
-                                    <View/>
+                                    <View />
                                 )}
                             </View>
                             <View style={Style.rightDropDown}>
@@ -990,9 +669,9 @@ class Dashboard extends React.Component {
                                         label="Unit"
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={unitList}
-                                        inputContainerStyle={{borderBottomColor: "transparent"}}
+                                        inputContainerStyle={{ borderBottomColor: "transparent" }}
                                         textColor="#000"
-                                        dropdownOffset={{top: 10, left: 0}}
+                                        dropdownOffset={{ top: 10, left: 0 }}
                                         dropdownPosition={-3}
                                         rippleOpacity={0}
                                         onChangeText={(value, index) => {
@@ -1000,7 +679,7 @@ class Dashboard extends React.Component {
                                         }}
                                     />
                                 ) : (
-                                    <View/>
+                                    <View />
                                 )}
                             </View>
                         </View>
@@ -1028,7 +707,7 @@ class Dashboard extends React.Component {
                                     disabled={this.state.isSelectedCard === "ADMIN"}
                                 />
                             ) : (
-                                <View/>
+                                <View />
                             )}
 
                             {/* <CardView
@@ -1075,10 +754,17 @@ class Dashboard extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </View> : <View/>}
-                <ProgressLoader isHUD={true} isModal={true} visible={this.state.isDataLoading}
-                                color={base.theme.colors.primary}
-                                hudColor={"#FFFFFF"}/>
+                    </View>
+                ) : (
+                    <View />
+                )}
+                <ProgressLoader
+                    isHUD={true}
+                    isModal={true}
+                    visible={this.state.isDataLoading}
+                    color={base.theme.colors.primary}
+                    hudColor={"#FFFFFF"}
+                />
             </View>
         );
     }
@@ -1088,7 +774,6 @@ class Dashboard extends React.Component {
             isSelectedCard: status
         });
         if (status == "UNIT") {
-
             this.setState({
                 myUnitCardHeight: "80%",
                 myUnitCardWidth: "25%",
@@ -1211,7 +896,6 @@ class Dashboard extends React.Component {
                         </TouchableOpacity>
                     </View>
                     {invoiceList.length > 0 ?
-
                         <ScrollView style={Style.scrollView}>
                             <FlatList
                                 data={invoiceList}
@@ -1226,7 +910,6 @@ class Dashboard extends React.Component {
                             <Text style={Style.noDataMsg}>No Invoices</Text>
                         </View>
                     }
-
                 </ElevatedView>
             */}
             </ElevatedView>
@@ -1250,7 +933,10 @@ class Dashboard extends React.Component {
         </View> */}
 
                 {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
+<<<<<<< HEAD
+=======
 
+>>>>>>> 047e162df8c2040830aaa673c55c0ee992ec3f09
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
                       <View style={{ flexDirection: "column" }}>
@@ -1262,7 +948,6 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/ww.png")}
                           />
                         </View>
-
                         <View>
                           <VictoryPie
                             colorScale={["#ff8c00", "#D0D0D0"]}
@@ -1273,7 +958,6 @@ class Dashboard extends React.Component {
                             height={hp("22%")}
                             labels={() => null}
                           />
-
                           <View style={styles.gauge}>
                             <Text
                               style={[styles.gaugeText, { color: "#FF8C00" }]}
@@ -1296,7 +980,6 @@ class Dashboard extends React.Component {
                             source={require("../../../../icons/hhhh.png")}
                           />
                         </View>
-
                         <View>
                           <VictoryPie
                             colorScale={["#45B591", "#D0D0D0"]}
@@ -1345,7 +1028,6 @@ class Dashboard extends React.Component {
                     >
                         <Text>View All Visitors</Text>
                     </Button>
-
                 </View>
             </ElevatedView>
         );
@@ -1392,17 +1074,18 @@ class Dashboard extends React.Component {
         );
     }
 
-    myUnit() {
-    }
+    myUnit() {}
 
     goToFirstTab() {
-        const {updateIdDashboard} = this.props;
+        const { updateIdDashboard } = this.props;
         console.log("updateIdDashboard", this.props);
-        updateIdDashboard({prop: "assId", value: this.state.assocId});
-        updateIdDashboard({prop: "uniID", value: this.state.unitId});
-        const {updateUserInfo} = this.props;
-        updateUserInfo({prop: "SelectedAssociationID", value: this.state.assocId});
-
+        updateIdDashboard({ prop: "assId", value: this.state.assocId });
+        updateIdDashboard({ prop: "uniID", value: this.state.unitId });
+        const { updateUserInfo } = this.props;
+        updateUserInfo({
+            prop: "SelectedAssociationID",
+            value: this.state.assocId
+        });
 
         this.props.navigation.navigate("firstTab");
     }

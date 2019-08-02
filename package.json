@@ -13,7 +13,7 @@
     "lodash": "^4.17.11",
     "logdecor": "^1.0.2",
     "moment": "^2.24.0",
-    "native-base": "^2.12.1",
+    "native-base": "^2.13.1",
     "papaparse": "^4.6.3",
     "prop-types": "^15.7.2",
     "react": "16.6.3",
