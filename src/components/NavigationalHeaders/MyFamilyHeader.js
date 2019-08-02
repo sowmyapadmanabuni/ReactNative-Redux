@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         //justifyContent: 'center',
         paddingLeft: 10,
-        marginTop: Platform.OS === 'ios' ? 20 : 0
+        //marginTop: Platform.OS === 'ios' ? 20 : 0
     },
     buttonView: {
         width: "17%",

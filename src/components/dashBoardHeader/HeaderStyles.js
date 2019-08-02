@@ -9,7 +9,7 @@ const HeaderStyles = StyleSheet.create({
         backgroundColor: base.theme.colors.white,
         borderBottomWidth: 1,
         borderBottomColor: base.theme.colors.primary,
-        marginTop: Platform.OS === 'ios' ? 20 : 0,
+       //marginTop: Platform.OS === 'ios' ? 20 : 0,
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',

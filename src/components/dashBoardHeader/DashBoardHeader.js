@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, View, TouchableOpacity, Image } from "react-native";
+import {Text, View, TouchableOpacity, Image, StatusBar} from "react-native";
 import base from "../../base";
-import { connect } from "react-redux";
+import {connect, Provider} from "react-redux";
 import HeaderStyles from "./HeaderStyles";
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import { NavigationEvents } from "react-navigation";
@@ -137,6 +137,7 @@ class DashBoardHeader extends React.Component {
     //   })
     //   .catch(error => console.log(error));
   };
+
 
   render() {
     console.log(

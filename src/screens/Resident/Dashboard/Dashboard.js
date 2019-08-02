@@ -1129,22 +1129,11 @@ class Dashboard extends React.Component {
               bordered
               style={styles.button1}
               onPress={() =>
-                  this.props.navigation.navigate("ViewAlllVisitorsPage")
-              }
-          >
-            <Text>View All Visitors</Text>
-          </Button>
-
-
-         {/* <Button
-              bordered
-              style={styles.button1}
-              onPress={() =>
-                  this.props.navigation.navigate('patrollingCheckPoint')
+                  this.props.navigation.navigate('PatrolSchedule')
               }
           >
             <Text>Patrolling</Text>
-          </Button>*/}
+          </Button>
         </View>
       </ElevatedView>
     );

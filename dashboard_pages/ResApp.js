@@ -191,7 +191,7 @@ const NotificationStack = createStackNavigator({
 });
 
 const ResApp = createStackNavigator({
-ResDashBoard:  {
+  ResDashBoard:  {
         screen: Dashboard ,
         navigationOptions: {
           title: 'Dashboard',

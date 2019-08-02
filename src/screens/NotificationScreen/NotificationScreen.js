@@ -259,7 +259,7 @@ class NotificationScreen extends Component {
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
-    console.log('hghfhgfghfgfhgfh',item.ntdUpdated,moment(item.ntdUpdated).format("HH:mm A"))
+    console.log('hghfhgfghfgfhgfh',item.ntdUpdated,moment(item.ntdUpdated).format("hh:mm A"))
 
     if (item.ntType !== "gate_app") {
       return (
@@ -295,7 +295,7 @@ class NotificationScreen extends Component {
             )}
             <Text>
               {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
-              {moment(item.ntdUpdated).format("HH:mm A")}
+              {moment(item.ntdUpdated).format("hh:mm A")}
             </Text>
           </Card>
       );
@@ -329,7 +329,7 @@ class NotificationScreen extends Component {
                       <Text>{item.ntDesc}</Text>
                       <Text>
                         {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
-                        {moment(item.ntdUpdated).format("HH:mm A")}
+                        {moment(item.ntdUpdated).format("hh:mm A")}
                       </Text>
                     </View>
                     <Collapsible
