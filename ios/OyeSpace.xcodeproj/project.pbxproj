@@ -76,7 +76,6 @@
 		DF3551DC4E6C4FB2A81A6A87 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C5F442386F8645E7A7018261 /* EvilIcons.ttf */; };
 		E0DD5A639E34485C8EDFA30C /* HelveticaNeue BlackCond.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75C9C0A45548447EAD86EAB6 /* HelveticaNeue BlackCond.ttf */; };
 		E19FC83F61CC45458AAD835B /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CB7A8783201D4585B6F2B1D1 /* Foundation.ttf */; };
-		EBB80693EAA64A81B3E5BB48 /* libRCTRestart.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20F2D98A0FC24BE2ABE2D1FD /* libRCTRestart.a */; };
 		EF564E8C5B354C6AA75BA602 /* HelveticaNeueMed.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0B2FCB7F1B84CCA869C108E /* HelveticaNeueMed.ttf */; };
 		F0D76AD689F1208DBD46DFD1 /* libPods-OyeSpace.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49D901667F8B689A62B2BB4C /* libPods-OyeSpace.a */; };
 		F12C89A5946E4D56B497B889 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2328DDF9544647CC922A4556 /* Ionicons.ttf */; };
@@ -466,20 +465,6 @@
 			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
 			remoteInfo = "RNSpinkit-tvOS";
 		};
-		FDB80C8522E9CDB3007CBD44 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 117405FA1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDFTests;
-		};
-		FDB80CFB22E9D4A6007CBD44 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 28B49C3FAAE242EEB336925C /* RCTRestart.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3245CDED1BFEE35C00EABF68;
-			remoteInfo = RCTRestart;
-		};
 		FDC53A8E229FABA80095F5B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EA84CBBF5AD40688D7FE07D /* reactnativeuilib.xcodeproj */;
@@ -527,13 +512,11 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = OyeSpace/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		15D244A9D5F44951A3FE136F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		20F2D98A0FC24BE2ABE2D1FD /* libRCTRestart.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTRestart.a; sourceTree = "<group>"; };
 		227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Helvetica Neu Bold.ttf"; path = "../fonts/Helvetica Neu Bold.ttf"; sourceTree = "<group>"; };
 		22FE5082DA494D888B11412A /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		2328DDF9544647CC922A4556 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		253DDAA8919E4C8FA81CB155 /* HelveticaNeue Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNeue Thin.ttf"; path = "../fonts/HelveticaNeue Thin.ttf"; sourceTree = "<group>"; };
 		2889CF3CB5DC45A686BC8893 /* HelveticaNeueIt.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueIt.ttf; path = ../fonts/HelveticaNeueIt.ttf; sourceTree = "<group>"; };
-		28B49C3FAAE242EEB336925C /* RCTRestart.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTRestart.xcodeproj; path = "../node_modules/react-native-restart/ios/RCTRestart.xcodeproj"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3029C82C989345A69908B653 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		33D3B05148DA40A9A06D53D5 /* HelveticaNeue.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeue.ttf; path = ../fonts/HelveticaNeue.ttf; sourceTree = "<group>"; };
@@ -651,7 +634,6 @@
 				1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */,
 				9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */,
 				8E5B63D0E9364CDFB36AE5DF /* libreactnativeuilib.a in Frameworks */,
-				EBB80693EAA64A81B3E5BB48 /* libRCTRestart.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,7 +900,6 @@
 				B1F463979FCD4374B4C15313 /* RNFirebase.xcodeproj */,
 				6EA84CBBF5AD40688D7FE07D /* reactnativeuilib.xcodeproj */,
 				CC36C29DFEB94E1C86A11A53 /* RazorpayCheckout.xcodeproj */,
-				28B49C3FAAE242EEB336925C /* RCTRestart.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -991,7 +972,6 @@
 				ABFFB196DC0E42B4BB763D18 /* libRNFirebase.a */,
 				F0B486FF7B9B46EE84A1B4BA /* libRazorpayCheckout.a */,
 				042936001371409F9D67B5D8 /* libreactnativeuilib.a */,
-				20F2D98A0FC24BE2ABE2D1FD /* libRCTRestart.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1051,7 +1031,6 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-				FDB80C8622E9CDB3007CBD44 /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1078,14 +1057,6 @@
 			children = (
 				FD57EA4D22E98F05009A1AC7 /* libRNSpinkit.a */,
 				FD57EA4F22E98F05009A1AC7 /* libRNSpinkit.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		FDB80CF822E9D4A5007CBD44 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FDB80CFC22E9D4A6007CBD44 /* libRCTRestart.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1135,7 +1106,7 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = K5NJYU4T6K;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1208,10 +1179,6 @@
 				{
 					ProductGroup = 00C302D41ABCB9D200DB3ED1 /* Products */;
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
-				},
-				{
-					ProductGroup = FDB80CF822E9D4A5007CBD44 /* Products */;
-					ProjectRef = 28B49C3FAAE242EEB336925C /* RCTRestart.xcodeproj */;
 				},
 				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
@@ -1664,20 +1631,6 @@
 			remoteRef = FD57EA4E22E98F05009A1AC7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FDB80C8622E9CDB3007CBD44 /* RNHTMLtoPDFTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = FDB80C8522E9CDB3007CBD44 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		FDB80CFC22E9D4A6007CBD44 /* libRCTRestart.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTRestart.a;
-			remoteRef = FDB80CFB22E9D4A6007CBD44 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		FDC53A8F229FABA80095F5B5 /* libreactnativeuilib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1887,10 +1840,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = OyeSpace/OyeSpace.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = K5NJYU4T6K;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1907,7 +1860,6 @@
 					"$(SRCROOT)/../node_modules/react-native-ui-lib/lib/ios/reactnativeuilib/**",
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-view-shot",
-					"$(SRCROOT)/../node_modules/react-native-restart/ios/RCTRestart",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1915,7 +1867,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"\"$(SRCROOT)/OyeSpace\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1924,7 +1875,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
 				PRODUCT_NAME = OyeSpace;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = Oyespace_sarthak_mac2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1937,7 +1888,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = OyeSpace/OyeSpace.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
@@ -1956,7 +1907,6 @@
 					"$(SRCROOT)/../node_modules/react-native-ui-lib/lib/ios/reactnativeuilib/**",
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-view-shot",
-					"$(SRCROOT)/../node_modules/react-native-restart/ios/RCTRestart",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1964,7 +1914,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"\"$(SRCROOT)/OyeSpace\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
