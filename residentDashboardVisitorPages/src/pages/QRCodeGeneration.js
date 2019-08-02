@@ -279,7 +279,7 @@ class QRCodeGeneration extends Component {
       return (
           <View style={styles.contaianer}>
             {/* <Header/> */}
-            <SafeAreaView style={{ backgroundColor: "orange" }}>
+            {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
               <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
                 <View style={styles.viewDetails1}>
                   <TouchableOpacity
@@ -316,11 +316,10 @@ class QRCodeGeneration extends Component {
                   />
                 </View>
                 <View style={{ flex: 0.2 }}>
-                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                 </View>
               </View>
               <View style={{ borderWidth: 1, borderColor: "orange" }} />
-            </SafeAreaView>
+            </SafeAreaView> */}
 
             <Text style={styles.titleOfScreen}>QR Code Generation </Text>
             <View style={styles.progress}>
@@ -334,7 +333,7 @@ class QRCodeGeneration extends Component {
         <View style={{ flex: 1 }}>
           {/* <Header/> */}
           <ScrollView>
-            <SafeAreaView style={{ backgroundColor: "orange" }}>
+            {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
               <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
                 <View style={styles.viewDetails1}>
                   <TouchableOpacity
@@ -371,11 +370,10 @@ class QRCodeGeneration extends Component {
                   />
                 </View>
                 <View style={{ flex: 0.2 }}>
-                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                 </View>
               </View>
               <View style={{ borderWidth: 1, borderColor: "orange" }} />
-            </SafeAreaView>
+            </SafeAreaView> */}
 
             <NavigationEvents
                 onWillFocus={payload => this.qrGeneration()}
@@ -464,15 +462,9 @@ class QRCodeGeneration extends Component {
                   }}
               >
                 <QRCode
-                    style={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: hp("10%"),
-                      borderWidth: hp("2%"),
-                      backgroundColor: "black"
-                    }}
                     logo={require("../icons/logo_QR.png")}
-                    logoSize={80}
+                    logoSize={hp('8%')}
+                    size={hp('20%')}
                     content={this.state.qrText}
                     codeStyle="square"
                     outerEyeStyle="square"

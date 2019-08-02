@@ -326,7 +326,8 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
-    dashBoardReducer:state.DashboardReducer 
+    dashBoardReducer:state.DashboardReducer,
+    mediaupload:state.OyespaceReducer.mediaupload, 
 
   };
 };

@@ -923,6 +923,7 @@ this.checkUnitIsThere()
     }
 
     myUnitCard() {
+        const {dropdown1}=this.props;
         let invoiceList = [
             {
                 invoiceNumber: 528,
@@ -949,7 +950,7 @@ this.checkUnitIsThere()
                         marginTop={20}
                         iconWidth={Platform.OS === "ios" ? 40 : 35}
                         iconHeight={Platform.OS === "ios" ? 40 : 20}
-                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):this.props.navigation.navigate("MyFamilyList")}
+                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"): dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
                     <CardView
@@ -963,7 +964,7 @@ this.checkUnitIsThere()
                         marginTop={20}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() =>this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
-                            this.props.navigation.navigate("MyVehicleListScreen")
+                            dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("MyVehicleListScreen")
                         }
                     />
                     <CardView
@@ -1133,16 +1134,6 @@ this.checkUnitIsThere()
           >
             <Text>View All Visitors</Text>
           </Button>
-
-          <Button
-              bordered
-              style={styles.button1}
-              onPress={() =>
-                  this.props.navigation.navigate('PatrolSchedule')
-              }
-          >
-            <Text>Patrolling</Text>
-          </Button>
         </View>
       </ElevatedView>
     );
@@ -1192,8 +1183,9 @@ this.checkUnitIsThere()
   myUnit() {}
 
   goToFirstTab() {
+        const{dropdown1}=this.props
     this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
-    this.props.navigation.navigate("firstTab");
+        dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("firstTab");
   }
 
 }
