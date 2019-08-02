@@ -30,6 +30,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 import ZoomImage from "react-native-zoom-image";
+import moment from "moment";
 
 class NotificationScreen extends Component {
   constructor(props) {
@@ -53,9 +54,9 @@ class NotificationScreen extends Component {
   onPress = (item, index) => {
     const { notifications, savedNoifId, oyeURL } = this.props;
     if (
-      item.ntType === "Join" ||
-      item.ntType === "Join_Status" ||
-      item.ntType === "gate_app"
+        item.ntType === "Join" ||
+        item.ntType === "Join_Status" ||
+        item.ntType === "gate_app"
     ) {
       this.props.navigation.navigate("NotificationDetailScreen", {
         details: item
@@ -111,54 +112,57 @@ class NotificationScreen extends Component {
     const { details } = this.props.navigation.state.params;
     console.log("@#@$#$#@%#%#%#%@#%@#%", details.sbMemID);
     fetch(
-      `http://${
-        this.props.oyeURL
-      }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
+        `http://${
+            this.props.oyeURL
+        }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
         details.sbMemID,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          }
         }
-      }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("Manas", responseJson);
-        this.setState({
-          gateDetails: responseJson.data.visitorLog,
-          Date:
-            responseJson.data.visitorLog.vldCreated.substring(8, 10) +
-            "-" +
-            responseJson.data.visitorLog.vldCreated.substring(5, 7) +
-            "-" +
-            responseJson.data.visitorLog.vldCreated.substring(0, 4),
-          Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
-          Date1:
-            responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
-            "-" +
-            responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
-            "-" +
-            responseJson.data.visitorLog.vldUpdated.substring(0, 4),
-          Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("Manas", responseJson);
+          this.setState({
+            gateDetails: responseJson.data.visitorLog,
+            Date:
+                responseJson.data.visitorLog.vldCreated.substring(8, 10) +
+                "-" +
+                responseJson.data.visitorLog.vldCreated.substring(5, 7) +
+                "-" +
+                responseJson.data.visitorLog.vldCreated.substring(0, 4),
+            Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
+            Date1:
+                responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
+                "-" +
+                responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
+                "-" +
+                responseJson.data.visitorLog.vldUpdated.substring(0, 4),
+            Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
+          });
+          console.log(
+              "@#!@$@#%#%#$^$^$%^$%^Gate Details",
+              this.state.gateDetails,
+              this.state.Date,
+              this.state.Time
+          );
+        })
+        .catch(error => {
+          console.log(error);
         });
-        console.log(
-          "@#!@$@#%#%#$^$^$%^$%^Gate Details",
-          this.state.gateDetails,
-          this.state.Date,
-          this.state.Time
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
   };
 
   renderCollapseData = (type, id) => {
     const { gateDetails } = this.state;
     let value = "";
-    // console.log("gateDetails", gateDetails);
+
+    // console.log("Date1: ",  moment("2019-07-08T12:30:54").format('DD-MM-YYYY') )
+    // console.log("Date2: ",  moment("2019-07-08T12:30:54","YYYY-MM-DD").format("DD-MM-YYYY") )
+    // console.log("Date3: ",  moment("1900-01-01T12:48:16").format('HH:mm A') )
 
     if (gateDetails.length <= 0) {
       value = "";
@@ -183,15 +187,25 @@ class NotificationScreen extends Component {
         value = foundData ? foundData.vlEntryImg : "";
       } else if (type === "vlEntryT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? foundData.vlEntryT : "";
+        value = foundData ? moment(foundData.vlEntryT).format("hh:mm A") : "";
       } else if (type === "vlExitT") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? foundData.vlExitT : "";
-      } //vlengName
+        value = foundData ? moment(foundData.vlExitT).format("hh:mm A") : "";
+      } else if (type === "vldCreated") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData
+            ? moment(foundData.vldCreated, "YYYY-MM-DD").format("DD-MM-YYYY")
+            : "";
+      } else if (type === "vldUpdated") {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData
+            ? moment(foundData.vldUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")
+            : "";
+      }
       else if (type === "vlengName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlengName : "";
-      } //vlexgName
+      }
       else if (type === "vlexgName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlexgName : "";
@@ -208,35 +222,36 @@ class NotificationScreen extends Component {
     this.props.notifications.map((data, index) => {
       if (data.ntType === "gate_app") {
         axios
-          .get(
-            `http://${
-              this.props.oyeURL
-            }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
-              data.sbMemID
-            }`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-              }
-            }
-          )
-          .then(res => {
-            let responseData = res.data.data;
-            console.log(responseData, "responseData");
+            .get(
+                `http://${
+                    this.props.oyeURL
+                }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
+                    data.sbMemID
+                }`,
+                //data.sbMemID`,
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                  }
+                }
+            )
+            .then(res => {
+              let responseData = res.data.data;
+              console.log(responseData, "responseData");
 
-            this.setState(
-              (prevState, newEmployer) => ({
-                gateDetails: prevState.gateDetails.concat([
-                  { ...responseData.visitorLog, ...data }
-                ])
-              }),
-              () => {}
-            );
-          })
-          .catch(error => {
-            console.log(error, "ben");
-          });
+              this.setState(
+                  (prevState, newEmployer) => ({
+                    gateDetails: prevState.gateDetails.concat([
+                      { ...responseData.visitorLog, ...data }
+                    ])
+                  }),
+                  () => {}
+              );
+            })
+            .catch(error => {
+              console.log(error, "ben");
+            });
       }
     });
   };
@@ -244,382 +259,391 @@ class NotificationScreen extends Component {
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
+    console.log('hghfhgfghfgfhgfh',item.ntdUpdated,moment(item.ntdUpdated).format("HH:mm A"))
 
     if (item.ntType !== "gate_app") {
       return (
-        <Card>
-          {item.ntType !== "gate_app" ? (
-            <ListItem
-              onPress={() => this.onPress(item, index)}
-              title={this.renderTitle(item.ntType, item)}
-              subtitle={item.ntDesc}
-              leftIcon={{
-                name: this.renderIcons("name", item, index),
-                type: this.renderIcons("type", item, index),
-                color: "#ED8A19"
-              }}
-              containerStyle={this.renderIcons("style", item, index)}
-            />
-          ) : (
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: "column" }}>
-                <Text>{item.ntDesc}</Text>
-                <Text> {item.ntdCreated}</Text>
-              </View>
-              <Collapsible
-                duration={100}
-                style={{ flex: 1 }}
-                collapsed={item.open}
-              >
-                <View style={{ backgroundColor: "#ED8A19" }}>
-                  {/* <Text> {item.ntDesc}</Text> */}
+          <Card>
+            {item.ntType !== "gate_app" ? (
+                <ListItem
+                    onPress={() => this.onPress(item, index)}
+                    title={this.renderTitle(item.ntType, item)}
+                    subtitle={item.ntDesc}
+                    leftIcon={{
+                      name: this.renderIcons("name", item, index),
+                      type: this.renderIcons("type", item, index),
+                      color: "#ED8A19"
+                    }}
+                    containerStyle={this.renderIcons("style", item, index)}
+                />
+            ) : (
+                <View style={{ flex: 1 }}>
+                  <View style={{ flexDirection: "column" }}>
+                    <Text>{item.ntDesc}</Text>
+                    <Text> {item.ntdCreated}</Text>
+                  </View>
+                  <Collapsible
+                      duration={100}
+                      style={{ flex: 1 }}
+                      collapsed={item.open}
+                  >
+                    <View style={{ backgroundColor: "#ED8A19" }}>
+                      {/* <Text> {item.ntDesc}</Text> */}
+                    </View>
+                  </Collapsible>
                 </View>
-              </Collapsible>
-            </View>
-          )}
-          <Text>{item.ntdUpdated}</Text>
-        </Card>
+            )}
+            <Text>
+              {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+              {moment(item.ntdUpdated).format("HH:mm A")}
+            </Text>
+          </Card>
       );
     } else {
       return (
-        <TouchableWithoutFeedback
-          onPress={() => {
-            console.log(item.ntIsActive);
-            if (item.ntIsActive) {
-              this.props.onNotificationOpen(notifications, index, oyeURL);
-            }
-            this.props.toggleCollapsible(notifications, item.open, index);
-          }}
-        >
-          <Card containerStyle={this.renderStyle(item.ntIsActive)}>
-            {item.ntType !== "gate_app" ? (
-              <ListItem
-                onPress={() => this.onPress(item, index)}
-                title={this.renderTitle(item.ntType, item)}
-                subtitle={item.ntDesc}
-                leftIcon={{
-                  name: this.renderIcons("name", item, index),
-                  type: this.renderIcons("type", item, index),
-                  color: "#ED8A19"
-                }}
-                containerStyle={this.renderIcons("style", item, index)}
-              />
-            ) : (
-              <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: "column" }}>
-                  <Text>{item.ntDesc}</Text>
-                  <Text>{item.ntdUpdated}</Text>
-                </View>
-                <Collapsible
-                  duration={300}
-                  style={{ flex: 1 }}
-                  collapsed={item.open}
-                  align="center"
-                  // onAnimationEnd={() =>
-                  //   this.doNetwork(item.ntid, notifications)
-                  // }
-                >
-                  {item.sbMemID === 0 ? (
-                    <View>
-                      <Text>No Data</Text>
-                    </View>
-                  ) : (
+          <TouchableWithoutFeedback
+              onPress={() => {
+                console.log(item.ntIsActive);
+                if (item.ntIsActive) {
+                  this.props.onNotificationOpen(notifications, index, oyeURL);
+                }
+                this.props.toggleCollapsible(notifications, item.open, index);
+              }}
+          >
+            <Card containerStyle={this.renderStyle(item.ntIsActive)}>
+              {item.ntType !== "gate_app" ? (
+                  <ListItem
+                      onPress={() => this.onPress(item, index)}
+                      title={this.renderTitle(item.ntType, item)}
+                      subtitle={item.ntDesc}
+                      leftIcon={{
+                        name: this.renderIcons("name", item, index),
+                        type: this.renderIcons("type", item, index),
+                        color: "#ED8A19"
+                      }}
+                      containerStyle={this.renderIcons("style", item, index)}
+                  />
+              ) : (
+                  <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: "column" }}>
-                      <View
-                        style={{
-                          justifyContent: "center",
-                          alignItems: "center"
-                        }}
-                      >
-                        {/* {this.state.gateDetails !== null
+                      <Text>{item.ntDesc}</Text>
+                      <Text>
+                        {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+                        {moment(item.ntdUpdated).format("HH:mm A")}
+                      </Text>
+                    </View>
+                    <Collapsible
+                        duration={300}
+                        style={{ flex: 1 }}
+                        collapsed={item.open}
+                        align="center"
+                        // onAnimationEnd={() =>
+                        //   this.doNetwork(item.ntid, notifications)
+                        // }
+                    >
+                      {item.sbMemID === 0 ? (
+                          <View>
+                            <Text>No Data</Text>
+                          </View>
+                      ) : (
+                          <View style={{ flexDirection: "column" }}>
+                            <View
+                                style={{
+                                  justifyContent: "center",
+                                  alignItems: "center"
+                                }}
+                            >
+                              {/* {this.state.gateDetails !== null
                           ? this.state.gateDetails.vlGtName
                           : ""} */}
-                        <View style={{ flexDirection: "row" }}>
-                          <Text style={{ fontSize: hp("2%") }}>
-                            {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
-                            Association
-                          </Text>
-                        </View>
-                      </View>
-                      <View style={{ flexDirection: "row" }}>
-                        <View
-                          style={{
-                            alignItems: "flex-start",
-                            justifyContent: "flex-start"
-                          }}
-                        >
-                          {this.renderCollapseData(
-                            "vlEntryImg",
-                            item.sbMemID
-                          ) ? (
-                            // this.state.gateDetails.vlEntryImg == "" ? (
-                            // <Image
-                            //   style={styles.img}
-                            //   // style={styles.img}
-                            //   source={require("../../../icons/placeholderImg.png")}
-                            // />
-                            <Image
-                              style={styles.img}
-                              // style={styles.img}
-                              source={{
-                                uri:
-                                  "http://mediaupload.oyespace.com" +
-                                  // this.state.gateDetails.vlEntryImg
-                                  this.renderCollapseData(
-                                    "vlEntryImg",
-                                    item.sbMemID
-                                  )
-                              }}
-                            />
-                          ) : (
-                            <Image
-                              style={styles.img}
-                              // style={styles.img}
-                              source={{
-                                uri:
-                                  "http://mediaupload.oyespace.com" +
-                                  // this.state.gateDetails.vlEntryImg
-                                  this.renderCollapseData(
-                                    "vlEntryImg",
-                                    item.sbMemID
-                                  )
-                              }}
-                            />
-                          )}
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "flex-start",
-                            alignItems: "flex-start"
-                          }}
-                        >
-                          <View
-                            style={{
-                              marginLeft: hp("1%"),
-                              flexDirection: "column"
-                            }}
-                          >
-                            <Text style={{ fontSize: hp("2%") }}>
-                              {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
-                              {/* {this.state.gateDetails !== null
+                              <View style={{ flexDirection: "row" }}>
+                                <Text style={{ fontSize: hp("2%") }}>
+                                  {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
+                                  Association
+                                </Text>
+                              </View>
+                            </View>
+                            <View style={{ flexDirection: "row" }}>
+                              <View
+                                  style={{
+                                    alignItems: "flex-start",
+                                    justifyContent: "flex-start"
+                                  }}
+                              >
+                                <Image
+                                    style={styles.img}
+                                    // style={styles.img}
+                                    source={{
+                                      uri:
+                                          `https://mediauploaduat.oyespace.com/Images/` +
+                                          this.renderCollapseData(
+                                              "vlEntryImg",
+                                              item.sbMemID
+                                          )
+                                    }}
+                                />
+                              </View>
+                              <View
+                                  style={{
+                                    flexDirection: "row",
+                                    justifyContent: "flex-start",
+                                    alignItems: "flex-start",
+                                  }}
+                              >
+                                <View
+                                    style={{
+                                      marginLeft: hp("1%"),
+                                      flexDirection: "column"
+                                    }}
+                                >
+                                  <View style={{flexDirection:'row'}}>
+                                    <View>
+                                      <Text style={{ fontSize: hp("2%") }}>
+                                        {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
+                                        {/* {this.state.gateDetails !== null
                                 ? this.state.gateDetails.vlfName
                                 : ""} */}
-                            </Text>
-                            <View style={{ flexDirection: "row" }}>
-                              <Text style={{ color: "#000" }}>
-                                {this.renderCollapseData(
-                                  "vlVisType",
-                                  item.sbMemID
-                                )}{" "}
-                                {/* {this.state.gateDetails !== null
-                                  ? this.state.gateDetails.vlVisType
-                                  : ""}{" "} */}
-                              </Text>
-                              <Text style={{ color: "#38bcdb" }}>
-                                {this.renderCollapseData(
-                                  "vlComName",
-                                  item.sbMemID
-                                )}{" "}
-                                {/* {this.state.gateDetails !== null
-                                  ? this.state.gateDetails.vlComName
-                                  : ""}{" "} */}
-                              </Text>
-                            </View>
-                          </View>
-                          <View
-                            style={{
-                              width: hp("18%"),
-                              alignItems: "flex-end"
-                            }}
-                          >
-                            <View style={{}}>
-                              <TouchableOpacity
-                                onPress={() => {
-                                  {
-                                    Platform.OS === "android"
-                                      ? Linking.openURL(
-                                          `tel:${
-                                            this.renderCollapseData(
-                                              "vlMobile",
-                                              item.sbMemID
-                                            )
-                                            // this.state.gateDetails
-                                            //   .vlMobile
-                                          }`
-                                        )
-                                      : Linking.openURL(
-                                          `tel:${
-                                            // this.state.gateDetails.vlMobile
-                                            this.renderCollapseData(
-                                              "vlMobile",
-                                              item.sbMemID
-                                            )
-                                          }`
-                                        );
-                                  }
-                                }}
-                              >
-                                <View style={{ flexDirection: "row" }}>
-                                  <View>
-                                    <Text style={{ color: "#ff8c00" }}>
-                                      {this.renderCollapseData(
-                                        "vlMobile",
-                                        item.sbMemID
-                                      )}
-                                      {/* {this.state.gateDetails !== null
+                                      </Text>
+                                    </View>
+                                    <View>
+                                      <TouchableOpacity
+                                          onPress={() => {
+                                            {
+                                              Platform.OS === "android"
+                                                  ? Linking.openURL(
+                                                  `tel:${
+                                                      this.renderCollapseData(
+                                                          "vlMobile",
+                                                          item.sbMemID
+                                                      )
+                                                      // this.state.gateDetails
+                                                      //   .vlMobile
+                                                  }`
+                                                  )
+                                                  : Linking.openURL(
+                                                  `tel:${
+                                                      // this.state.gateDetails.vlMobile
+                                                      this.renderCollapseData(
+                                                          "vlMobile",
+                                                          item.sbMemID
+                                                      )
+                                                  }`
+                                                  );
+                                            }
+                                          }}
+                                      >
+                                        <View style={{ flexDirection: "row" }}>
+                                          <View>
+                                            <Text style={{ color: "#ff8c00" }}>
+                                              {this.renderCollapseData(
+                                                  "vlMobile",
+                                                  item.sbMemID
+                                              )}
+                                              {/* {this.state.gateDetails !== null
                                         ? this.state.gateDetails.vlMobile
                                         : ""} */}
-                                    </Text>
-                                  </View>
-                                  <View
-                                    style={{
-                                      width: hp("2%"),
-                                      height: hp("2%"),
-                                      marginLeft: hp("0.5%")
-                                    }}
-                                  >
-                                    <Image
-                                      style={{
-                                        width: hp("2%"),
-                                        height: hp("2%")
-                                      }}
-                                      source={require("../../../icons/call.png")}
-                                    />
-                                  </View>
-                                </View>
-                              </TouchableOpacity>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
+                                            </Text>
+                                          </View>
+                                          <View
+                                              style={{
+                                                width: hp("2.5%"),
+                                                height: hp("2.5%"),
+                                              }}
+                                          >
+                                            <Image
+                                                style={{
+                                                  width: hp("2.5%"),
+                                                  height: hp("2.5%")
+                                                }}
+                                                source={require("../../../icons/call.png")}
+                                            />
+                                          </View>
+                                        </View>
+                                      </TouchableOpacity>
 
-                      <View
-                        style={{
-                          flexDirection: "column"
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between"
-                          }}
-                        >
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              margin: hp("3%"),
-                              alignItems: "stretch"
-                            }}
-                          >
-                            <View style={{ flexDirection: "row" }}>
-                              <Text style={{ color: "#ff8c00" }}>
-                                Entry On:{" "}
-                              </Text>
-                              <View style={{ flexDirection: "row" }}>
-                                {/* <Text>
+                                    </View>
+
+                                  </View>
+
+
+
+
+                                  <View style={{ flexDirection: "row" }}>
+                                    <Text style={{ color: "#000" }}>
+                                      {this.renderCollapseData(
+                                          "vlVisType",
+                                          item.sbMemID
+                                      )}{" "}
+                                      {/* {this.state.gateDetails !== null
+                                  ? this.state.gateDetails.vlVisType
+                                  : ""}{" "} */}
+                                    </Text>
+                                    <Text style={{ color: "#38bcdb" }}>
+                                      {this.renderCollapseData(
+                                          "vlComName",
+                                          item.sbMemID
+                                      )}{" "}
+                                      {/* {this.state.gateDetails !== null
+                                  ? this.state.gateDetails.vlComName
+                                  : ""}{" "} */}
+                                    </Text>
+
+                                  </View>
+
+                                </View>
+
+
+
+
+                              </View>
+                            </View>
+
+                            <View
+                                style={{
+                                  flexDirection: "column"
+                                }}
+                            >
+                              <View
+                                  style={{
+                                    flexDirection: "row",
+                                  }}
+                              >
+                                <View
+                                    style={{
+                                      flexDirection: "row",
+                                    }}
+                                >
+                                  <View style={{ flexDirection: "row" }}>
+                                    <Text style={{ color: "#ff8c00" }}>
+                                      Entry On:{" "}
+                                    </Text>
+                                    <View style={{ flexDirection: "row" }}>
+                                      {/* <Text>
                                   {this.state.Date !== null
                                     ? this.state.Date
                                     : ""}{" "}
                                 </Text> */}
-                                <Text>
-                                  {/* {this.state.Time !== null
+                                      <Text>
+                                        {/* {this.state.Time !== null
                                     ? this.state.Time
                                     : ""} */}
-                                  {this.renderCollapseData(
-                                    "vlEntryT",
-                                    item.sbMemID
-                                  )}
-                                </Text>
-                              </View>
-                            </View>
+                                        {this.renderCollapseData(
+                                            "vldCreated",
+                                            item.sbMemID
+                                        )}  </Text>
 
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                marginLeft: hp("3%")
-                              }}
-                            >
-                              <Text style={{ color: "#ff8c00" }}>From: </Text>
-                              <Text>
-                                {/* {this.state.gateDetails !== null
+                                      <Text>
+                                        {/* {this.state.Time !== null
+                                    ? this.state.Time
+                                    : ""} */}
+                                        {this.renderCollapseData(
+                                            "vlEntryT",
+                                            item.sbMemID
+                                        )}
+                                      </Text>
+                                    </View>
+                                  </View>
+
+                                  <View
+                                      style={{
+                                        flexDirection: "row",
+                                        marginLeft: hp("3%")
+                                      }}
+                                  >
+                                    <Text style={{ color: "#ff8c00" }}>From: </Text>
+                                    <Text>
+                                      {/* {this.state.gateDetails !== null
                                   ? this.state.gateDetails.vlengName
                                   : ""} */}
-                                {this.renderCollapseData(
-                                  "vlengName",
-                                  item.sbMemID
-                                )}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
+                                      {this.renderCollapseData(
+                                          "vlengName",
+                                          item.sbMemID
+                                      )}
+                                    </Text>
+                                  </View>
 
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between"
-                          }}
-                        >
-                          {this.state.gateDetails.vlExitT !== null ? (
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                marginLeft: hp("3%")
-                              }}
-                            >
-                              <View style={{ flexDirection: "row" }}>
-                                <Text style={{ color: "#ff8c00" }}>
-                                  Exit On:{" "}
-                                </Text>
-                                <View style={{ flexDirection: "row" }}>
-                                  {/* <Text>
-                                    {this.state.Date1 !== null
-                                      ? this.state.Date1
-                                      : ""}{" "}
-                                  </Text> */}
-                                  <Text>
-                                    {/* {this.state.Time1 !== null
-                                      ? this.state.Time1
-                                      : ""} */}
-                                    {this.renderCollapseData(
-                                      "vlExitT",
-                                      item.sbMemID
-                                    )}
-                                  </Text>
                                 </View>
                               </View>
 
                               <View
-                                style={{
-                                  flexDirection: "row",
-                                  marginLeft: hp("4.5%")
-                                }}
+                                  style={{
+                                    flexDirection: "row",
+                                  }}
                               >
-                                <Text style={{ color: "#ff8c00" }}>From: </Text>
-                                <Text>
-                                  {/* {this.state.gateDetails !== null
-                                    ? this.state.gateDetails.vlexgName
-                                    : ""} */}
-                                  {this.renderCollapseData(
+                                {this.renderCollapseData(
                                     "vlexgName",
                                     item.sbMemID
-                                  )}
-                                </Text>
+                                ) !== "" ?
+
+                                    <View
+                                        style={{
+                                          flexDirection: "row",
+                                        }}
+                                    >
+                                      <View style={{ flexDirection: "row" }}>
+                                        <Text style={{ color: "#ff8c00" }}>
+                                          Exit On:{" "}
+                                        </Text>
+                                        <View style={{ flexDirection: "row" }}>
+                                          {/* <Text>
+                                    {this.state.Date1 !== null
+                                      ? this.state.Date1
+                                      : ""}{" "}
+                                  </Text> */}
+
+                                          <Text>
+                                            {/* {this.state.Time1 !== null
+                                      ? this.state.Time1
+                                      : ""} */}
+                                            {this.renderCollapseData(
+                                                "vldUpdated",
+                                                item.sbMemID
+                                            )}  </Text>
+                                          <Text>
+                                            {/* {this.state.Time1 !== null
+                                      ? this.state.Time1
+                                      : ""} */}
+                                            {this.renderCollapseData(
+                                                "vlExitT",
+                                                item.sbMemID
+                                            )}
+                                          </Text>
+                                        </View>
+                                      </View>
+
+                                      <View
+                                          style={{
+                                            flexDirection: "row",
+                                            marginLeft: hp("4.5%")
+                                          }}
+                                      >
+                                        <Text style={{ color: "#ff8c00" }}>From: </Text>
+                                        <Text>
+                                          {/* {this.state.gateDetails !== null
+                                    ? this.state.gateDetails.vlexgName
+                                    : ""} */}
+                                          {this.renderCollapseData(
+                                              "vlexgName",
+                                              item.sbMemID
+                                          )}
+                                        </Text>
+                                      </View>
+
+                                    </View>
+
+                                    :
+                                    <View></View>
+                                }
                               </View>
                             </View>
-                          ) : (
-                            ""
-                          )}
-                        </View>
-                      </View>
-                    </View>
-                  )}
-                </Collapsible>
-              </View>
-            )}
-            {/* <Text> {item.ntdUpdated}</Text> */}
-          </Card>
-        </TouchableWithoutFeedback>
+                          </View>
+                      )}
+                    </Collapsible>
+                  </View>
+              )}
+              {/* <Text> {item.ntdUpdated}</Text> */}
+            </Card>
+          </TouchableWithoutFeedback>
       );
     }
   };
@@ -638,34 +662,34 @@ class NotificationScreen extends Component {
     // console.log(isCreateLoading)
     if (loading) {
       return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#fff"
-          }}
-        >
-          <ActivityIndicator />
-        </View>
+          <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#fff"
+              }}
+          >
+            <ActivityIndicator />
+          </View>
       );
     } else {
       return (
-        <FlatList
-          keyExtractor={this.keyExtractor}
-          data={notifications}
-          renderItem={this.renderItem}
-          extraData={this.props.notifications}
-          refreshControl={
-            <RefreshControl
-              refreshing={refresh}
-              onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
-              progressBackgroundColor="#fff"
-              tintColor="#ED8A19"
-              colors={["#ED8A19"]}
-            />
-          }
-        />
+          <FlatList
+              keyExtractor={this.keyExtractor}
+              data={notifications}
+              renderItem={this.renderItem}
+              extraData={this.props.notifications}
+              refreshControl={
+                <RefreshControl
+                    refreshing={refresh}
+                    onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
+                    progressBackgroundColor="#fff"
+                    tintColor="#ED8A19"
+                    colors={["#ED8A19"]}
+                />
+              }
+          />
       );
     }
   };
@@ -673,31 +697,31 @@ class NotificationScreen extends Component {
   render() {
     const { navigation, notifications, oyeURL, MyAccountID } = this.props;
     // const refresh = navigation.getParam("refresh", "NO-ID");
-    console.log(this.state.gateDetails, "gateDetails");
+    // console.log(this.state.gateDetails, "gateDetails");
     return (
-      <View style={styles.container}>
-        <NavigationEvents />
-        <Header
-          leftComponent={{
-            icon: "arrow-left",
-            color: "#ED8A19",
-            type: "material-community",
-            onPress: () => navigation.pop()
-          }}
-          containerStyle={{
-            borderBottomColor: "#ED8A19",
-            borderBottomWidth: 2
-          }}
-          centerComponent={
-            <Image
-              source={require("../../../pages/assets/images/OyeSpace.png")}
-              style={{ height: 90, width: 90 }}
-            />
-          }
-          backgroundColor="#fff"
-        />
-        {this.renderComponent()}
-      </View>
+        <View style={styles.container}>
+          <NavigationEvents />
+          <Header
+              leftComponent={{
+                icon: "arrow-left",
+                color: "#ED8A19",
+                type: "material-community",
+                onPress: () => navigation.pop()
+              }}
+              containerStyle={{
+                borderBottomColor: "#ED8A19",
+                borderBottomWidth: 2
+              }}
+              centerComponent={
+                <Image
+                    source={require("../../../pages/assets/images/OyeSpace.png")}
+                    style={{ height: 90, width: 90 }}
+                />
+              }
+              backgroundColor="#fff"
+          />
+          {this.renderComponent()}
+        </View>
     );
   }
 }
@@ -730,12 +754,13 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-  mapStateToProps,
-  {
-    onNotificationOpen,
-    storeOpenedNotif,
-    getNotifications,
-    refreshNotifications,
-    toggleCollapsible
-  }
+    mapStateToProps,
+    {
+      onNotificationOpen,
+      storeOpenedNotif,
+      getNotifications,
+      refreshNotifications,
+      toggleCollapsible
+    }
 )(NotificationScreen);
+

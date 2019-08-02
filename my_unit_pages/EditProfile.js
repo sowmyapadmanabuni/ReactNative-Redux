@@ -1069,7 +1069,6 @@ const mapStateToProps = state => {
     imageUrl: state.OyespaceReducer.imageUrl,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
   }
-}
-
+};
 export default connect(mapStateToProps)(EditProfile);
 

@@ -8,7 +8,7 @@ import {
     Text,
     TouchableHighlight,
     TouchableOpacity,
-    View
+    View,Alert
 } from "react-native";
 import base from "../../../base";
 import { connect } from "react-redux";
@@ -20,7 +20,7 @@ import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
 import { Button } from "native-base";
-
+import _ from "lodash";
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp
@@ -39,7 +39,8 @@ import {
     updateDropDownIndex,
     updateIdDashboard,
     updateJoinedAssociation,
-    updateUserInfo
+    updateUserInfo,
+    updateSelectedDropDown
 } from "../../../actions";
 import { NavigationEvents } from "react-navigation";
 import ProgressLoader from "rn-progress-loader";
@@ -48,6 +49,7 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.props = props;
+
         this.state = {
             myUnitCardHeight: "80%",
             myUnitCardWidth: "25%",
@@ -64,23 +66,24 @@ class Dashboard extends React.Component {
             unitName: "",
             unitId: null,
             falmilyMemebCount: null,
-            vechiclesCount: null,
+            vehiclesCount: null,
             visitorCount: null,
             role: "",
             assdNameHide: false,
             unitNameHide: false,
             isDataLoading: false,
-            isDataVisible: false
+            isDataVisible: false,
+            isNoAssJoin:false
         };
     }
 
     componentWillMount() {
         this.setState({
             isDataLoading: true,
-            isDataVisible:true,
+            isDataVisible: true
         });
         this.getListOfAssociation();
-        this.getVehicleList();
+        this.myProfileNet();
     }
 
     requestNotifPermission = () => {
@@ -123,6 +126,31 @@ class Dashboard extends React.Component {
         };
 
         axios
+            .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
+                headers: headers
+            })
+            .then(response => {
+                let responseData = response.data.data;
+
+                responseData.associationByAccount.map(association => {
+                    // console.log('***********')
+                    // console.log(association.asAsnName)
+                    // console.log(association.asAssnID)
+                    // console.log('***********')
+                    if (receiveNotifications) {
+                        firebase
+                            .messaging()
+                            .subscribeToTopic(association.asAssnID + "admin");
+                        // console.log(association.asAssnID);
+                    } else if (!receiveNotifications) {
+                        firebase
+                            .messaging()
+                            .unsubscribeFromTopic(association.asAssnID + "admin");
+                    }
+                });
+            });
+
+        axios
             .get(
                 `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
                 {
@@ -145,9 +173,6 @@ class Dashboard extends React.Component {
                         firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
                     }
                 });
-            })
-            .catch(error => {
-                console.log(error);
             });
     };
 
@@ -287,9 +312,7 @@ class Dashboard extends React.Component {
         });
     };
 
-    onChangeText = () => {
-        // console.log("hhhhhhhhhhhhhh",this.state.data1)
-    };
+    onChangeText = () => {};
 
     didMount = () => {
         const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
@@ -305,61 +328,24 @@ class Dashboard extends React.Component {
     };
 
     componentDidMount() {
-        console.log("Notification");
         const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
         const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
         const { oyeURL } = this.props.oyespaceReducer;
-        // this.props.updateApproveAdmin([]);
 
-        getDashSub(oyeURL, SelectedAssociationID);
-        getDashAssociation(oyeURL, MyAccountID);
-        getAssoMembers(oyeURL, MyAccountID);
+        // getAssoMembers(oyeURL, MyAccountID);
         this.requestNotifPermission();
         // this.getBlockList();
         this.props.getNotifications(oyeURL, MyAccountID);
+
+        if (!this.props.called) {
+            this.didMount();
+        }
     }
 
-    //   onAssociationChange = (value, index) => {
-    //     const {
-    //       associationid,
-    //       getDashUnits,
-    //       updateUserInfo,
-    //       memberList,
-    //       notifications,
-    //       dropdown
-    //     } = this.props;
-    //     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    //     const { oyeURL } = this.props.oyespaceReducer;
-
-    //     getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
-    //     updateUserInfo({
-    //       prop: "SelectedAssociationID",
-    //       value: dropdown[index].associationId
-    //     });
-
-    //     let memId = _.find(memberList, function(o) {
-    //       return o.asAssnID === dropdown[index].associationId;
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "MyOYEMemberID",
-    //       value: memId.meMemID
-    //     });
-
-    //     updateUserInfo({
-    //       prop: "SelectedMemberID",
-    //       value: dropdown[index].memberId
-    //     });
-    //   };
-
-    roleCheckForAdmin = () => {
-        console.log("Association id123123123123", this.state.assocId);
+    roleCheckForAdmin = (index) => {
+        console.log("Association id123123123123", this.state.assocId,index);
         fetch(
-            `http://${
-                this.props.oyeURL
-                }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
-                this.state.assocId
-                }`,
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${this.state.assocId}`,
             {
                 method: "GET",
                 headers: {
@@ -370,20 +356,17 @@ class Dashboard extends React.Component {
         )
             .then(response => response.json())
             .then(responseJson => {
-                console.log(
-                    "Manas",
-                    responseJson,
-                    responseJson.data,
-                    responseJson.data.members
-                );
-                console.log(
-                    "MRMRoleid",
-                    responseJson.data.members[0].mrmRoleID,
-                    responseJson.data.members.mrmRoleID
-                );
-
+                console.log("Manas", responseJson, responseJson.data,responseJson.data.members.length);
+                let role=''
+                for(let i=0; i<responseJson.data.members.length;i++){
+                    console.log("Get Ids",this.props.userReducer.MyAccountID,responseJson.data.members[i].acAccntID,this.state.assocId,responseJson.data.members[i].asAssnID)
+                    if(this.props.userReducer.MyAccountID===responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID===1 && parseInt(this.state.assocId)===responseJson.data.members[i].asAssnID){
+                        console.log('Id eq',this.props.userReducer.MyAccountID,responseJson.data.members[i].acAccntID,responseJson.data.members[i].mrmRoleID)
+                        role=responseJson.data.members[i].mrmRoleID
+                    }
+                }
                 this.setState({
-                    role: responseJson.data.members[0].mrmRoleID
+                    role:role
                 });
             })
             .catch(error => {
@@ -399,13 +382,18 @@ class Dashboard extends React.Component {
         let self = this;
         let oyeURL = this.props.oyeURL;
         self.setState({ isLoading: true });
+        console.log("APi", base.utils.strings.oyeLivingDashBoard);
         let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
             this.props.userReducer.MyAccountID
         );
-            console.log("data from stat", stat,this.props);
+        console.log("data from stat All Asc1", stat);
 
         try {
+
             if (stat && stat.data) {
+                this.setState({
+                    isNoAssJoin:false
+                });
                 let assocList = [];
                 for (let i = 0; i < stat.data.memberListByAccount.length; i++) {
                     if (stat.data.memberListByAccount[i].asAsnName !== "") {
@@ -415,14 +403,16 @@ class Dashboard extends React.Component {
                         });
                     }
                 }
-
                 let sortedArr = assocList.sort(
                     base.utils.validate.compareAssociationNames
-                );
-                console.log("DJBHVD:", sortedArr, assocList);
+                ); //open chrome
+                console.log("Sorted and All Asc List", sortedArr, assocList);
+
+                let removedDuplicates = _.uniqBy(sortedArr, "value");
+                console.log("Removed duplicates", sortedArr, assocList);
 
                 self.setState({
-                    assocList: sortedArr,
+                    assocList: removedDuplicates,
                     assocName: sortedArr[0].details.asAsnName,
                     assocId: sortedArr[0].details.asAssnID
                 });
@@ -439,45 +429,91 @@ class Dashboard extends React.Component {
                     value: sortedArr[0].details.asAssnID
                 });
 
-                const { getDashUnits } = this.props;
-                getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
+                // const { getDashUnits } = this.props;
+                // getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
+                self.getUnitListByAssoc();
+
             }
-            self.getUnitListByAssoc();
+            else if(stat===null){
+                this.setState({
+                    isNoAssJoin:true
+                });
+                Alert.alert(
+                    'Join association',
+
+                    'Please join in any association to access Data  ?',
+                    [
+                        {text: 'Yes', onPress: () => this.props.navigation.navigate("CreateOrJoinScreen")},
+                        {text: 'No', style: 'cancel'}
+
+                    ]
+                )
+            }
         } catch (error) {
             base.utils.logger.log(error);
         }
     }
 
-    onAssociationChange(value, index) {
-        console.log("on Aschange", value, index);
-        let self = this;
-        let oyeURL = this.props.oyeURL;
-        let assocList = self.state.assocList;
-        let assocName, assocId;
-        for (let i = 0; i < assocList.length; i++) {
-            if (i === index) {
-                assocName = assocList[i].details.asAsnName;
-                assocId = assocList[i].details.asAssnID;
-            }
-        }
-        self.setState({
-            assocName: value,
-            assocId: assocId
-        });
+    onAssociationChange = (value, index) => {
+        console.log('Ass index',value,index)
+        const {
+            associationid,
+            getDashUnits,
+            updateUserInfo,
+            memberList,
+            notifications,
+            dropdown,
+            updateSelectedDropDown
+        } = this.props;
+        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+        const { oyeURL } = this.props.oyespaceReducer;
+        this.setState({assocId:dropdown[index].associationId})
+
+        // console.log(value, "Valuessss");
+        getDashUnits(dropdown[index].associationId, oyeURL, MyAccountID);
+
         const { updateIdDashboard } = this.props;
-        console.log("updateIdDashboard2", this.props);
-        updateIdDashboard({ prop: "assId", value: assocId });
-        const { updateUserInfo } = this.props;
-        updateUserInfo({ prop: "SelectedAssociationID", value: assocId });
-        const { getDashUnits } = this.props;
-        getDashUnits(assocId, oyeURL);
-        self.getUnitListByAssoc();
-    }
+        console.log("updateIdDashboard1", this.props);
+        updateIdDashboard({
+            prop: "assId",
+            value: dropdown[index].associationId
+        });
+
+        updateUserInfo({
+            prop: "SelectedAssociationID",
+            value: dropdown[index].associationId
+        });
+
+        updateSelectedDropDown({
+            prop: "selectedDropdown",
+            value: dropdown[index].value
+        });
+
+        // let memId = _.find(memberList, function(o) {
+        //   return o.asAssnID === dropdown[index].associationId;
+        // });
+
+        updateUserInfo({
+            prop: "MyOYEMemberID",
+            value: dropdown[index].memberId
+        });
+        updateUserInfo({
+            prop: "SelectedMemberID",
+            value: dropdown[index].memberId
+        });
+        this.roleCheckForAdmin(dropdown[index].associationId)
+        this.getVehicleList()
+
+        // this.setState({ role:dropdown[index].roleId });
+    };
 
     async getUnitListByAssoc() {
         let self = this;
+        //self.setState({isLoading: true})
         console.log("APi1233", self.state.assocId);
-        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(self.state.assocId);
+        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
+            this.state.assocId
+        );
         self.setState({ isLoading: false, isDataLoading: false });
         console.log("STAT123", stat);
 
@@ -485,14 +521,15 @@ class Dashboard extends React.Component {
             if (stat && stat.data) {
                 let unitList = [];
                 for (let i = 0; i < stat.data.members.length; i++) {
-                    //if (stat.data.members[i].unUniName) {
-                    let Unit = "";
-                    if (!stat.data.members[i].unUniName || stat.data.members[i].unUniName === "") {
-                        Unit = "Unit" + i;
-                    } else {
-                        Unit = stat.data.members[i].unUniName;
+                    if (
+                        stat.data.members[i].unUniName !== "" &&
+                        stat.data.members[i].unUnitID !== 0
+                    ) {
+                        unitList.push({
+                            value: stat.data.members[i].unUniName,
+                            details: stat.data.members[i]
+                        });
                     }
-                    unitList.push({ value: Unit, details: stat.data.members[i] });
                 }
                 console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
 
@@ -509,7 +546,8 @@ class Dashboard extends React.Component {
                     value: unitList[0].details.unUnitID
                 });
 
-                self.roleCheckForAdmin();
+                self.roleCheckForAdmin(this.state.assocId);
+                self.getVehicleList();
             }
         } catch (error) {
             base.utils.logger.log(error);
@@ -517,7 +555,6 @@ class Dashboard extends React.Component {
     }
 
     updateUnit(value, index) {
-        console.log("Unit123", value, index, this.state.unitList);
         let self = this;
         let unitList = self.state.unitList;
         let unitName, unitId;
@@ -532,15 +569,16 @@ class Dashboard extends React.Component {
             unitId: unitId
         });
         const { updateIdDashboard } = this.props;
-        console.log("updateIdDashboard5", this.props);
         updateIdDashboard({ prop: "uniID", value: unitId });
+        self.getVehicleList();
     }
 
     getVehicleList = () => {
+        console.log("Get ID for vehicle", this.props);
         fetch(
-            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
-                this.props.dashBoardReducer.assId
-                }`,
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
+                this.props.dashBoardReducer.uniID
+                }`, //${this.props.dashBoardReducer.uniID}
             {
                 method: "GET",
                 headers: {
@@ -551,17 +589,41 @@ class Dashboard extends React.Component {
         )
             .then(response => response.json())
             .then(responseJson => {
-                console.log("Manas", responseJson);
+                console.log(
+                    "VehicleRespponse####",
+                    responseJson,
+                    responseJson.data.vehicleListByUnitID.length
+                );
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
-                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-                        .length
+                    vehiclesCount: responseJson.data.vehicleListByUnitID.length
                 });
             })
             .catch(error => {
-                this.setState({ loading: false });
-                console.log(error);
+                this.setState({ loading: false ,});
+                this.setState({
+                    //Object.keys(responseJson.data.unitsByBlockID).length
+                    vehiclesCount: responseJson.data.vehicleListByUnitID.length
+                });
+                console.log("error in net call", error);
             });
+    };
+
+    myProfileNet = async () => {
+        console.log("AccId@@@@@", this.props);
+        let response = await base.services.OyeLivingApi.getProfileFromAccount(
+            this.props.userReducer.MyAccountID
+        );
+        console.log("Joe", response);
+        const { updateUserInfo } = this.props;
+        updateUserInfo({
+            prop: "userData",
+            value: response
+        });
+        updateUserInfo({
+            prop: "userProfilePic",
+            value: response.data.account[0].acImgName
+        });
     };
 
     getFamilyMemberList = () => {
@@ -631,32 +693,46 @@ class Dashboard extends React.Component {
             sold2,
             unsold2,
             updateUserInfo,
-            updateDropDownIndex
+            updateDropDownIndex,
+            selectedDropdown,
+            selectedDropdown1,
+            called
         } = this.props;
 
         let associationList = this.state.assocList;
         let unitList = this.state.unitList;
+        console.log("Drp1", dropdown1);
         return (
             <View style={{ height: "100%", width: "100%" }}>
-                {this.state.isDataVisible ? (
+                {/* <NavigationEvents onDidFocus={() => this.didMount()} /> */}
+                {!this.props.isLoading ? (
                     <View style={Style.container}>
-                        <NavigationEvents onDidFocus={() => this.didMount()} />
                         <View style={Style.dropDownContainer}>
                             <View style={Style.leftDropDown}>
                                 {this.state.assdNameHide === false ? (
                                     <Dropdown
-                                        value={this.state.assocName}
+                                        value={selectedDropdown}
                                         label="Association Name"
                                         baseColor="rgba(0, 0, 0, 1)"
-                                        data={associationList}
+                                        data={dropdown}
+                                        containerStyle={{width:'90%'}}
                                         textColor={base.theme.colors.black}
-                                        inputContainerStyle={{ borderBottomColor: "transparent" }}
+                                        inputContainerStyle={{
+                                            borderBottomColor: "transparent",
+                                        }}
                                         dropdownOffset={{ top: 10, left: 0 }}
                                         dropdownPosition={-4}
                                         rippleOpacity={0}
-                                        onChangeText={(value, index) =>
-                                            this.onAssociationChange(value, index)
-                                        }
+                                        // onChangeText={(value, index) =>
+                                        //   this.onAssociationChange(value, index)
+                                        // }
+                                        onChangeText={(value, index) => {
+                                            this.onAssociationChange(value, index);
+                                            updateDropDownIndex(index);
+                                            this.setState({
+                                                associationSelected: true
+                                            });
+                                        }}
                                     />
                                 ) : (
                                     <View />
@@ -665,18 +741,38 @@ class Dashboard extends React.Component {
                             <View style={Style.rightDropDown}>
                                 {this.state.unitNameHide === false ? (
                                     <Dropdown
-                                        value={this.state.unitName}
+                                        // value={this.state.unitName}
+                                        value={selectedDropdown1}
+                                        containerStyle={{width:'100%'}}
                                         label="Unit"
                                         baseColor="rgba(0, 0, 0, 1)"
-                                        data={unitList}
-                                        inputContainerStyle={{ borderBottomColor: "transparent" }}
+                                        data={dropdown1}
+                                        inputContainerStyle={{
+                                            borderBottomColor: "transparent"
+                                        }}
                                         textColor="#000"
                                         dropdownOffset={{ top: 10, left: 0 }}
-                                        dropdownPosition={-3}
+                                        dropdownPosition={-4}
                                         rippleOpacity={0}
+                                        // onChangeText={(value, index) => {
+                                        //   this.updateUnit(value, index);
+                                        // }}
                                         onChangeText={(value, index) => {
                                             this.updateUnit(value, index);
+                                            updateUserInfo({
+                                                prop: "SelectedUnitID",
+                                                value: dropdown1[index].unitId
+                                            });
+                                            updateSelectedDropDown({
+                                                prop: "selectedDropdown1",
+                                                value: value.value
+                                            });
+
+                                            // console.log(value);
+                                            // console.log(index);
                                         }}
+                                        // itemTextStyle={{}}
+
                                     />
                                 ) : (
                                     <View />
@@ -693,6 +789,8 @@ class Dashboard extends React.Component {
                                 height={this.state.myUnitCardHeight}
                                 width={this.state.myUnitCardWidth}
                                 cardText={"My Unit"}
+                                iconWidth={Platform.OS === "ios" ? 35 : 16}
+                                iconHeight={Platform.OS === "ios" ? 35 : 16}
                                 cardIcon={require("../../../../icons/my_unit.png")}
                                 onCardClick={() => this.changeCardStatus("UNIT")}
                                 disabled={this.state.isSelectedCard === "UNIT"}
@@ -702,6 +800,8 @@ class Dashboard extends React.Component {
                                     height={this.state.adminCardHeight}
                                     width={this.state.adminCardWidth}
                                     cardText={"Admin"}
+                                    iconWidth={Platform.OS === "ios" ? 35 : 16}
+                                    iconHeight={Platform.OS === "ios" ? 35 : 16}
                                     onCardClick={() => this.changeCardStatus("ADMIN")}
                                     cardIcon={require("../../../../icons/user.png")}
                                     disabled={this.state.isSelectedCard === "ADMIN"}
@@ -761,7 +861,7 @@ class Dashboard extends React.Component {
                 <ProgressLoader
                     isHUD={true}
                     isModal={true}
-                    visible={this.state.isDataLoading}
+                    visible={this.props.isLoading}
                     color={base.theme.colors.primary}
                     hudColor={"#FFFFFF"}
                 />
@@ -777,9 +877,9 @@ class Dashboard extends React.Component {
             this.setState({
                 myUnitCardHeight: "80%",
                 myUnitCardWidth: "25%",
-                adminCardHeight: "60%",
+                adminCardHeight: "70%",
                 adminCardWidth: "20%",
-                offersCardHeight: "60%",
+                offersCardHeight: "70%",
                 offersCardWidth: "20%",
 
                 assdNameHide: false,
@@ -787,11 +887,11 @@ class Dashboard extends React.Component {
             });
         } else if (status == "ADMIN") {
             this.setState({
-                myUnitCardHeight: "60%",
+                myUnitCardHeight: "70%",
                 myUnitCardWidth: "20%",
                 adminCardHeight: "80%",
                 adminCardWidth: "25%",
-                offersCardHeight: "60%",
+                offersCardHeight: "70%",
                 offersCardWidth: "20%",
 
                 assdNameHide: true,
@@ -799,9 +899,9 @@ class Dashboard extends React.Component {
             });
         } else if (status == "OFFERS") {
             this.setState({
-                myUnitCardHeight: "60%",
+                myUnitCardHeight: "70%",
                 myUnitCardWidth: "20%",
-                adminCardHeight: "60%",
+                adminCardHeight: "70%",
                 adminCardWidth: "20%",
                 offersCardHeight: "80%",
                 offersCardWidth: "25%"
@@ -838,22 +938,22 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={5}
                         marginTop={20}
-                        iconWidth={20}
-                        iconHeight={20}
-                        onCardClick={() => this.props.navigation.navigate("MyFamilyList")}
+                        iconWidth={Platform.OS === "ios" ? 40 : 35}
+                        iconHeight={Platform.OS === "ios" ? 40 : 20}
+                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
                     <CardView
                         height={"100%"}
                         width={"25%"}
                         cardText={"Vehicles"}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS === "ios" ? 40 : 25}
+                        iconHeight={Platform.OS === "ios" ? 40 : 20}
                         cardIcon={require("../../../../icons/vehicle.png")}
-                        cardCount={this.state.vechiclesCount}
+                        cardCount={this.state.vehiclesCount}
                         marginTop={20}
                         backgroundColor={base.theme.colors.cardBackground}
-                        onCardClick={() =>
+                        onCardClick={() =>this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
                             this.props.navigation.navigate("MyVehicleListScreen")
                         }
                     />
@@ -864,8 +964,8 @@ class Dashboard extends React.Component {
                         cardIcon={require("../../../../icons/view_all_visitors.png")}
                         // cardCount={2}
                         marginTop={20}
-                        iconWidth={20}
-                        iconHeight={20}
+                        iconWidth={Platform.OS === "ios" ? 40 : 35}
+                        iconHeight={Platform.OS === "ios" ? 40 : 20}
                         iconBorderRadius={0}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() => this.goToFirstTab()}
@@ -933,10 +1033,6 @@ class Dashboard extends React.Component {
         </View> */}
 
                 {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
-<<<<<<< HEAD
-=======
-
->>>>>>> 047e162df8c2040830aaa673c55c0ee992ec3f09
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
                       <View style={{ flexDirection: "column" }}>
@@ -1028,6 +1124,27 @@ class Dashboard extends React.Component {
                     >
                         <Text>View All Visitors</Text>
                     </Button>
+
+                    <Button
+                        bordered
+                        style={styles.button1}
+                        onPress={() =>
+                            this.props.navigation.navigate("ViewAlllVisitorsPage")
+                        }
+                    >
+                        <Text>View All Visitors</Text>
+                    </Button>
+
+
+                    {/* <Button
+              bordered
+              style={styles.button1}
+              onPress={() =>
+                  this.props.navigation.navigate('patrollingCheckPoint')
+              }
+          >
+            <Text>Patrolling</Text>
+          </Button>*/}
                 </View>
             </ElevatedView>
         );
@@ -1077,17 +1194,8 @@ class Dashboard extends React.Component {
     myUnit() {}
 
     goToFirstTab() {
-        const { updateIdDashboard } = this.props;
-        console.log("updateIdDashboard", this.props);
-        updateIdDashboard({ prop: "assId", value: this.state.assocId });
-        updateIdDashboard({ prop: "uniID", value: this.state.unitId });
-        const { updateUserInfo } = this.props;
-        updateUserInfo({
-            prop: "SelectedAssociationID",
-            value: this.state.assocId
-        });
-
-        this.props.navigation.navigate("firstTab");
+        this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
+            this.props.navigation.navigate("firstTab");
     }
 }
 
@@ -1231,12 +1339,15 @@ const mapStateToProps = state => {
         dropdown1: state.DashboardReducer.dropdown1,
         associationid: state.DashboardReducer.associationid,
         residentList: state.DashboardReducer.residentList,
+        selectedDropdown: state.DashboardReducer.selectedDropdown,
+        selectedDropdown1: state.DashboardReducer.selectedDropdown1,
         sold: state.DashboardReducer.sold,
         unsold: state.DashboardReducer.unsold,
         sold2: state.DashboardReducer.sold2,
         unsold2: state.DashboardReducer.unsold2,
         isLoading: state.DashboardReducer.isLoading,
         memberList: state.DashboardReducer.memberList,
+        called: state.DashboardReducer.called,
 
         // Oyespace variables and user variables
         MyFirstName: state.UserReducer.MyFirstName,
@@ -1269,6 +1380,7 @@ export default connect(
         updateDropDownIndex,
         createUserNotification,
         refreshNotifications,
-        updateIdDashboard
+        updateIdDashboard,
+        updateSelectedDropDown
     }
 )(Dashboard);

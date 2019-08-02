@@ -64,7 +64,10 @@ class Resident extends React.Component {
         let self = this;
         let associationId = self.props.selectedAssociation;
 
+        console.log('get association',associationId)
+
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
+        console.log('Get the details####',stat)
 
         try {
             if (stat) {
@@ -124,29 +127,40 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         const {getDashUnits, selectedAssociation} = this.props;
+        console.log('Props in role managment', this.props)
 
-        const url = `http://${
-            this.props.oyeURL
-            }/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
-        console.log("selectedUser:", this.state.selectedUser);
+        const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
+        console.log("selectedUser:", this.state.selectedUser ); //+91
+
+       // let mobile=this.state.selectedUser.uoMobile.split(" ")
+        let mobile = this.state.selectedUser.uoMobile.split('')
+        let mobNumber=this.state.selectedUser.uoMobile
+        console.log('Mob Array',mobile)
+
+        if (mobile[0] === '+') {
+            console.log('No need to add')
+        }
+        else{
+            console.log('Add')
+            mobNumber='+91'+mobNumber
+        }
+
         let requestBody = {
-            ACMobile: this.state.selectedUser.uoMobile,
+            ACMobile: mobNumber,
             UNUnitID: this.state.selectedUser.unUnitID,
             MRMRoleID: this.state.selectedRoleData.selRolId
         };
+        console.log('reqBody role managment',requestBody)
 
         fetch(url, {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json",
-
                 "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
             },
             body: JSON.stringify(requestBody)
         })
             .then(response => response.json())
-
             .then(responseJson => {
                 console.log("%%%%%%%%%%", responseJson, requestBody);
                 this.props.navigation.goBack();
@@ -160,7 +174,6 @@ class Resident extends React.Component {
         let sortedList = this.state.residentList.sort((a, b) =>
             a.unit.localeCompare(b.unit)
         );
-        // console.log(sortedList)
         return (
             <Dropdown
                 label="Select Role"
@@ -182,19 +195,29 @@ class Resident extends React.Component {
         );
     };
 
-    //handleSearch Code Change By Sarthak Mishra At Synclovis System Pvt. Ltd. on July 20, 2019
-
     handleSearch(text) {
         this.setState({query: text});
-        let sortResident = this.state.residentData;
+        let sortResident = this.state.clonedList; //search from entire list
         let filteredArray = [];
+        console.log('Res List',sortResident)
+        let roleId="";
         if (text.length === 0) {
             filteredArray.push(this.state.clonedList)
         } else {
             for (let i in sortResident) {
                 console.log("Sort:", sortResident[i])
-                if (sortResident[i].name.includes(text) || sortResident[i].unitName.includes(text)) {
-                    filteredArray.push(sortResident[i])
+                if(sortResident[i].uoRoleID===1){
+                    roleId="Admin"
+            }
+            else if(sortResident[i].uoRoleID===2){
+                    roleId="Owner"
+                }
+            else if(sortResident[i].uoRoleID===3){
+                    roleId="Tenant"
+                }
+
+            if (sortResident[i].name.includes(text)   || sortResident[i].unitName.includes(text)  || roleId.includes(text) ) {
+                    filteredArray.push(sortResident[i]) //make case insensitive
                 }
             }
         }
@@ -211,6 +234,7 @@ class Resident extends React.Component {
     };
 
     render() {
+        console.log('Data inside####',this.state.residentData)
         let residentList = this.props.dashBoardReducer.residentList;
         const {params} = this.props.navigation.state;
         return (
@@ -260,7 +284,7 @@ class Resident extends React.Component {
                         >
                             <Image
                                 style={[styles.image1]}
-                                source={require("../icons/OyeSpace.png")}
+                                source={require("../icons/headerLogo.png")}
                             />
                         </View>
                         <View style={{flex: 0.2}}>
@@ -279,7 +303,6 @@ class Resident extends React.Component {
                                 style={styles.viewDetails3}
                                 placeholder="  search...."
                                 round
-                                autoCapitalize="characters"
                                 onChangeText={(text) => this.handleSearch(text)}
                             />
                         </View>
@@ -295,8 +318,10 @@ class Resident extends React.Component {
                         </View>
                     </View>
                     <View style={styles.viewDetails}>
-                        <View style={{flex: 1}}>
-                            {/* {this.state.loading ? <Text> Loding </Text> :  */}
+                        {this.state.residentData.length !==0?
+                        <View style={{flex: 1,}}>
+                                <Text style={{color: base.theme.colors.black, margin: 20}}>* You can update only one at
+                                    a time</Text>
                             <FlatList
                                 data={this.state.residentData}
                                 keyExtractor={(item, index) => index.toString()}
@@ -333,8 +358,11 @@ class Resident extends React.Component {
                                     </Card>
                                 )}
                             />
-                            {/* } */}
-                        </View>
+
+                        </View>:
+                        <View style={{flex: 1, alignItems:'center',justifyContent:'center'}}>
+                                <Text >No Data for the selected association </Text>
+                        </View>}
                     </View>
                 </View>
             </View>

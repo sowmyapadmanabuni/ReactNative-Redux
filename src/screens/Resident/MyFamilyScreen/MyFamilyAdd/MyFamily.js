@@ -49,19 +49,19 @@ class MyFamily extends Component {
                     value: "Other",
                     id: 5
                 }],
-            relationName: '',
+            relationName: "",
             cCode: '',
-            mobileNumber: '',
-            sendNum:'',
+            mobileNumber: "",
+            sendNum:"",
             isMinor: false,
-            firstName: '',
-            lastName: '',
+            firstName: "",
+            lastName: "",
             minorProps: [{label: 'Yes', value: 0},
                 {label: 'No', value: 1}],
             isMinorSelected: 0,
-            guardianName: '',
-            relativeImage: '',
-            imageUrl:'',
+            guardianName: "",
+            relativeImage: "",
+            imageUrl:"",
         }
     }
 
@@ -113,9 +113,10 @@ class MyFamily extends Component {
                             data={this.state.relationList}
                             textColor={base.theme.colors.black}
                             inputContainerStyle={{}}
-                            label="Select Relationship"
+                          //  label="Select Relationship"
                             baseColor="rgba(0, 0, 0, 1)"
                             placeholder="Relationship*"
+                            placeholderTextColor={base.theme.colors.black}
                             labelHeight={hp("4%")}
                             containerStyle={{
                                 width: wp("85%"),
@@ -128,25 +129,25 @@ class MyFamily extends Component {
                             onChangeText={(value, index) => this.changeFamilyMember(value, index)}
                         />
                         <View style={Style.textInputView}>
-                            <Text style={{fontSize: 14, color: base.theme.colors.grey, textAlign: 'left'}}>First Name
+                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>First Name
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({firstName: text})}
                                 value={this.state.firstName}
                                 placeholder="First Name"
-                                placeholderTextColor={base.theme.colors.black}
+                                placeholderTextColor={base.theme.colors.grey}
                             />
                         </View>
                         <View style={Style.textInputView}>
-                            <Text style={{fontSize: 14, color: base.theme.colors.grey, textAlign: 'left'}}>Last Name
+                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Last Name
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({lastName: text})}
                                 value={this.state.lastName}
                                 placeholder="Last Name"
-                                placeholderTextColor={base.theme.colors.black}
+                                placeholderTextColor={base.theme.colors.grey}
                                 keyboardType={'default'}
                             />
                         </View>
@@ -194,7 +195,7 @@ class MyFamily extends Component {
                             : <View/>}
                         {this.state.isMinor && this.state.isMinorSelected === 0 ?
                             <View style={Style.textInputView}>
-                                <Text style={{fontSize: 14, color: base.theme.colors.grey, textAlign: 'left'}}>Guardian's
+                                <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Guardian's
                                     Name
                                     <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                 <TextInput
@@ -202,7 +203,7 @@ class MyFamily extends Component {
                                     onChangeText={(text) => this.setState({guardianName: text})}
                                     value={this.state.guardianName}
                                     placeholder="Guardian's Name"
-                                    placeholderTextColor={base.theme.colors.black}
+                                    placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'default'}
                                 />
                             </View>
@@ -211,24 +212,22 @@ class MyFamily extends Component {
                             borderColor: base.theme.colors.lightgrey, marginBottom:10}]}>
                             <Text style={{
                                 fontSize: 14,
-                                color: base.theme.colors.grey,
+                                color: base.theme.colors.black,
                                 textAlign: 'left'
                             }}>{mobPlaceHolder}
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <View style={Style.mobNumView}>
                                 <TextInput
-                                    style={{height: 50, width: '90%'}}
+                                    style={{height: 50, width: '80%',}}
                                     onChangeText={(text) => this.setState({mobileNumber: text})}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
-                                    placeholderTextColor={base.theme.colors.black}
+                                    placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'phone-pad'}
                                 />
-                                <TouchableOpacity onPress={() => {
-                                    this.getTheContact()
-                                }}>
+                                <TouchableOpacity  style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
-                                           style={{width: 25, height: 25, alignSelf: 'center'}}/>
+                                           style={{width: 25, height: 25,}}/>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -302,7 +301,7 @@ class MyFamily extends Component {
         if (value === 'Child') {
             this.setState({
                 isMinor: true,
-                firsName:'',
+                firstName:'',
                 lastName:'',
                 mobileNumber:'',
                 guardianName:''
@@ -315,7 +314,7 @@ class MyFamily extends Component {
     }
 
     async getTheContact() {
-        console.log('Get details');
+        console.log('Get details',Platform.OS);
         let isGranted=false;
         if(Platform.OS==='android'){
             const granted = await PermissionsAndroid.request(
@@ -380,19 +379,27 @@ class MyFamily extends Component {
     }
 
     validation() {
+        console.log('Props**!!!',this.props,this.state);
+
         let self = this;
-        if (self.state.firstName === '') {
-            alert('First Name is required')
-        } else if (self.state.relationName === '') {
+        if (self.state.relationName === "") {
             alert('Please Select relation')
-        }  else if(self.state.isMinor && self.state.isMinorSelected===0 && self.state.guardianName ===''){
+        }else if (self.state.firstName === "") {
+            alert('First Name is required')
+        } else if(self.state.isMinor && self.state.isMinorSelected===0 && self.state.guardianName ===''){
             alert('Guardian name is Mandatory')
         }
-        else if (self.state.mobileNumber === '') {
+        else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
         }
+        else if(self.props.dashBoardReducer.uniID===null){
+            alert('Unit id is null')
+        }
+        else if(self.props.dashBoardReducer.assId===null){
+            alert('Association id is null')
+        }
         else {
-            self.addRelativeDetails()
+           self.addRelativeDetails()
 
         }
     }
@@ -400,10 +407,16 @@ class MyFamily extends Component {
     async addRelativeDetails() {
         console.log('Props**',this.props);
         let self = this;
+        let mobNum=self.state.sendNum
+        let cCode=self.state.cCode
+        if(cCode===""){
+             cCode="+91"
+            mobNum=self.state.mobileNumber
+        }
         let input = {
             "FMName"    : self.state.firstName,
-            "FMMobile"  : self.state.sendNum,
-            "FMISDCode" : self.state.cCode,
+            "FMMobile"  : mobNum,
+            "FMISDCode" : cCode,
             "UNUnitID"  : self.props.dashBoardReducer.uniID,
             "FMRltn"    : self.state.relationName,
             "ASAssnID"  : self.props.dashBoardReducer.assId,
@@ -419,7 +432,7 @@ class MyFamily extends Component {
             try {
                 self.props.navigation.navigate('MyFamilyList')
             } catch (err) {
-
+                console.log('Error in adding Family Member')
             }
         }
     }

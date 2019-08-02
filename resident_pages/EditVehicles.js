@@ -213,14 +213,14 @@ class EditVehicle extends Component {
             >
               <Image
                 style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
+                source={require("../icons/headerLogo.png")}
               />
             </View>
             <View style={{ flex: 0.2 }} />
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
-        <Text style={styles.titleOfScreen}>Add Vehicle</Text>
+        <Text style={styles.titleOfScreen}>Edit Vehicle</Text>
         <View style={[styles.containers, { flex: 1, flexDirection: "column" ,}]}>
           <View
             style={{
@@ -337,7 +337,7 @@ class EditVehicle extends Component {
                 style={styles.buttonAdd}
                 onPress={() => this.editVehicle()}
               >
-                <Text style={styles.textFamilyVehicle}>Edit Vehicle</Text>
+                <Text style={styles.textFamilyVehicle}>Update</Text>
               </Button>
             </View>
           </KeyboardAwareScrollView>

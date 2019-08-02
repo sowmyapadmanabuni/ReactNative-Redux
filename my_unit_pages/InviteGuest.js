@@ -55,6 +55,8 @@ class InviteGuests extends Component {
 
     //Date Picker
     onDOBPress = () => {
+        console.log('Date in invitation On date press')
+
 
         let dobDate = this.state.dobDate;
         if (!dobDate || dobDate == null) {
@@ -70,6 +72,8 @@ class InviteGuests extends Component {
     }
     onDOBPress1 = () => {
 
+        console.log('Date in invitation On date press')
+
         let dobDate = this.state.dobDate1;
         if (!dobDate || dobDate == null) {
             dobDate = new Date();
@@ -83,12 +87,14 @@ class InviteGuests extends Component {
         });
     }
     onDOBDatePicked = (date) => {
+
         this.setState({
             dobDate: date,
             dobText: moment(date).format('YYYY-MM-DD'),
         });
     }
     onDOBDatePicked1 = (date) => {
+
         this.setState({
             dobDate1: date,
             dobText1: moment(date).format('YYYY-MM-DD'),
@@ -143,6 +149,7 @@ class InviteGuests extends Component {
 
 
     sendInvitation = () => {
+        console.log("Date send for invitation",this.state)
 
         fname=this.state.fname;
         lname=this.state.lname;
@@ -233,7 +240,7 @@ class InviteGuests extends Component {
                 .then(response => response.json())
                 .then(responseJson => {
                     console.log("Manas",responseJson)
-                    Alert.alert("Data Saved")
+                    Alert.alert("Invitation created, please share the invitation using the share button")
                     this.props.navigation.goBack()
                 })
                 .catch(error=>console.log(error))
@@ -292,7 +299,7 @@ class InviteGuests extends Component {
 
                 <KeyboardAwareScrollView >
 
-                    <Text style={styles.titleOfScreen}> Invite Guests </Text>
+                    <Text style={styles.titleOfScreen}> Invite</Text>
                     <Form style={{marginRight:hp('1.5%')}}>
                         <View style={{width:'100%',alignSelf:'center'}}>
                             <Image source={require('../icons/illusn_bg.jpg')}

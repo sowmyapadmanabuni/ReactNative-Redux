@@ -23,7 +23,8 @@ import _ from "lodash";
 class NotificationDetailScreen extends Component {
   state = {
     loading: false,
-    date: ""
+    date: "",
+      reqStatus:""
   };
 
   approve = (item, status) => {
@@ -129,7 +130,7 @@ class NotificationDetailScreen extends Component {
                       StatusUpdate = {
                         NTID: item.ntid,
                         NTStatDesc: "Request Sent"
-                        // NTStatDesc: responseJson_2.data.string
+                        //NTStatDesc: responseJson_2.data.string
                       };
 
                       fetch(
@@ -146,7 +147,8 @@ class NotificationDetailScreen extends Component {
                           body: JSON.stringify(StatusUpdate)
                         }
                       )
-                        .then(response => response.json())
+                        .then(response =>{response.json()
+                        console.log('Response',response)})
                         .then(responseJson_3 => {
                           this.props.getNotifications(
                             this.props.oyeURL,
@@ -230,7 +232,7 @@ class NotificationDetailScreen extends Component {
           }
         )
         .then(() => {
-          let roleName = item.sbRoleID === 2 ? "Owner" : "Tenant";
+          let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
           axios
             .get(
               `http://${
@@ -320,7 +322,17 @@ class NotificationDetailScreen extends Component {
         return null;
       } else {
         if (status === true) {
-          return <Text> {this.state.date || details.ntStatDesc}</Text>;
+            let reqStatus="";
+            if(details.ntStatDesc===""){
+                reqStatus="Request Rejected"
+            }
+            else{
+                reqStatus="Request Accepted"
+            }
+
+          return(<View style={{alignItems:'center',justifyContent: 'center'}}>
+              <Text> {this.state.date || reqStatus}</Text>
+          </View>);
         } else {
           return (
             <View style={styles.buttonContainer}>
@@ -374,7 +386,7 @@ class NotificationDetailScreen extends Component {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam("details", "NO-ID");
-    // console.log(this.state);
+     console.log("Get the Details",details);
     return (
       <View style={styles.container}>
         <Header

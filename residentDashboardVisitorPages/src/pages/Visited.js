@@ -73,7 +73,6 @@ class MyGuests extends Component {
       })
       .catch(error => {
         this.setState({ error, loading: false });
-        console.log(error);
       });
   };
 

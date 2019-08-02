@@ -130,7 +130,9 @@ class AddRegularVisitor extends Component {
             updateUserInfo({ prop: "MyISDCode", value: acisdCode });
             updateUserInfo({ prop: "signedIn", value: true });
 
-            this.props.navigation.navigate("App");
+            console.log('Association check',responseJson.success)
+
+            this.props.navigation.navigate("App"); // Navigate to Join Association
           } else {
             console.log("hiii", "failed");
             alert("failed to add user !");
@@ -144,6 +146,7 @@ class AddRegularVisitor extends Component {
     } else {
       console.log("Validation", "Failed");
     }
+    //583506
   };
 
   Validate(first, last, email) {

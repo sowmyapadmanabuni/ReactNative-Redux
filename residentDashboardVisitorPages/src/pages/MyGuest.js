@@ -57,7 +57,8 @@ class MyGuests extends Component {
         this.props.oyeURL
       }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${
         this.props.dashBoardReducer.assId
-      }/True`,
+      }/True/${this.props.dashBoardReducer.uniID
+      }`,
       {
         method: "GET",
         headers: {
@@ -78,8 +79,8 @@ class MyGuests extends Component {
         this.arrayholder = responseJson.data.invitation;
       })
       .catch(error => {
-        this.setState({ error, loading: false });
         console.log(error);
+        this.setState({ error, loading: false });
       });
   };
 
@@ -134,9 +135,10 @@ class MyGuests extends Component {
   }
 
   renderItem = ({ item, index }) => {
-    // console.log(item,index)
+      console.log(item,index)
+    console.log("Data Sources",this.state.dataSource)
     return (
-      <View style={{ flexDirection: "column" }}>
+      <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
         <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
         <View
           style={[

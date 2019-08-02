@@ -63,6 +63,7 @@ class InviteGuests extends Component {
 
  //Date Picker
  onDOBPress = () => {
+      console.log('Date First selected ')
 
   let dobDate = this.state.dobDate;
   if (!dobDate || dobDate == null) {
@@ -77,8 +78,9 @@ class InviteGuests extends Component {
   });
 }
 onDOBPress1 = () => {
+    console.log('Date Second selected ')
 
-  let dobDate = this.state.dobDate1;
+    let dobDate = this.state.dobDate1;
   if (!dobDate || dobDate == null) {
     dobDate = new Date();
     this.setState({
@@ -87,17 +89,24 @@ onDOBPress1 = () => {
   }
   this.refs.dobDialog1.open({
     date: dobDate,
-    minDate: new Date() //To restirct future date
+    minDate: new Date()
   });
 }
 onDOBDatePicked = (date) => {
-  this.setState({
+      console.log('Date selected First',date)
+    console.log('Date selected First',moment(date).format('YYYY-MM-DD'))
+
+    this.setState({
     dobDate: date,
     dobText: moment(date).format('YYYY-MM-DD'),
   });
 }
 onDOBDatePicked1 = (date) => {
-  this.setState({
+    console.log('Date selected Second',date)
+    console.log('Date selected Second Comp',moment(date).format('YYYY-MM-DD'))
+
+
+    this.setState({
     dobDate1: date,
     dobText1: moment(date).format('YYYY-MM-DD'),
   });
@@ -152,6 +161,8 @@ toggleSwitch = (value) => {
 
 sendInvitation = () => {
 
+    console.log("Send Invitation List", this.state)
+
   fname=this.state.fname;
   lname=this.state.lname;
   cca2 = this.state.cca2;
@@ -160,8 +171,8 @@ sendInvitation = () => {
   vehNo=this.state.vehNo;
   emailId=this.state.emailId;
   purpose=this.state.purpose;
-  dobDate=this.state.dobDate;
-  dobDate1=this.state.dobDate1;
+  dobDate=this.state.dobText;
+  dobDate1=this.state.dobText1;
   time=this.state.datetime;
   time1=this.state.datetime1;
   switches=this.state.switch;
@@ -199,12 +210,10 @@ if (fname.length == 0 || fname == '') {
 } else if (mobNum.length < 10) {
   Alert.alert('Mobile number should not be less than 10 digits');
   return false;
-}else if(regemail.test(emailId) === false) {
-  Alert.alert("Check your email.")
 }else if(dobDate>dobDate1){
   Alert.alert('Enter valid start date to till date')
   return false;
-}else if(time==time1){
+}else if(time==time1 && dobDate ==dobDate1){
   Alert.alert('Enter valid start time to till time')
   return false;  
 } else if(purpose.length == 0 || purpose == ''){
@@ -221,28 +230,29 @@ else{
         'Content-Type': 'application/json',
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
       },
-      body: JSON.stringify({
-
-        "UnUnitID"  :  this.props.dashBoardReducer.uniID,
-        "INFName"   : fname,
-        "INLName"   : lname,
-        "INMobile"  : "+"+ callingCode + mobNum,
-        "INEmail"   : emailId,
-        "INVchlNo"  : vehNo,
-        "INVisCnt"  : count,
-        "INPhoto"   : "SD",
-        "INSDate"   : dobDate + time,
-        "INEDate"   : dobDate1 + time1,
-        "INPOfInv"  : purpose,
-        "INMultiEy" : switches,
-        "ASAssnID"  : this.props.dashBoardReducer.assId,
-        "INQRCode"  : 1
-      })
+      body: JSON.stringify(
+          {
+              //"MeMemID"   :  4,
+              "UnUnitID"  :  this.props.dashBoardReducer.uniID,
+              "INFName"   : fname,
+              "INLName"   : lname,
+              "INMobile"  : "+"+ callingCode + mobNum,
+              "INEmail"   : emailId,
+              "INVchlNo"  : vehNo,
+              "INVisCnt"  :count,
+              "INPhoto"   : "SD",
+              "INSDate"   : dobDate,
+              "INEDate"   : dobDate1,
+              "INPOfInv"  : purpose,
+              "INMultiEy" : switches,
+              "ASAssnID"  :this.props.dashBoardReducer.assId,
+              "INQRCode"  : 1
+          })
     })
       .then(response => response.json())
       .then(responseJson => {
         console.log("Manas",responseJson)
-        Alert.alert("Data Saved")
+          Alert.alert("Invitation created, please share the invitation using the share button")
         this.props.navigation.goBack()
       })
       .catch(error=>console.log(error))

@@ -12,7 +12,9 @@ const INITIAL_STATE = {
   SelectedUnitID: null,
   MyOYEMemberID: null,
   SelectedRole: null,
-  SelectedMemberID: null
+  SelectedMemberID: null,
+  userData:null,
+  userProfilePic:null
 };
 
 export default (state = INITIAL_STATE, action) => {

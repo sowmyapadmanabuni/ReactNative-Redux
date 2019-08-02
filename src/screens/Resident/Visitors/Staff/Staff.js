@@ -45,8 +45,7 @@ class Staff extends React.Component {
 
     async getListOfStaff() {
         let self = this;
-        console.log("StaffList Input",self.props.userReducer.SelectedAssociationID)
-
+        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID)
         let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID);// 1
         self.setState({isLoading: false})
 
@@ -327,16 +326,16 @@ class Staff extends React.Component {
                     toDate = fromDate;
             }
             const {updateStaffInfo} = this.props;
-            updateStaffInfo({prop: "startDate", value: fromDate})
-            updateStaffInfo({prop: "endDate", value: toDate})
+            updateStaffInfo({prop: "startDate", value: moment(fromDate).format('YYYY-MM-DD')})
+            updateStaffInfo({prop: "endDate", value:  moment(toDate).format('YYYY-MM-DD')})
             updateStaffInfo({prop: "staffName", value: self.state.staffName})
             updateStaffInfo({prop: "staffId", value: self.state.staffId})
             updateStaffInfo({prop: "staffProfilePic", value: self.state.staffPic})
             updateStaffInfo({prop: "staffDesignation", value: self.state.departmentName})
             updateStaffInfo({prop: "joinedDate", value: self.state.minDate})
 
-
             this.props.navigation.navigate('getStaffReports',)
+
         } else {
             let initialDateString = moment(fromDate);
             let endDateString = moment(toDate)
@@ -346,15 +345,14 @@ class Staff extends React.Component {
             if (difference > 31) {
                 alert('Maximum Limit is 31 Days. You can not select more than that')
             } else {
-                const {updateStaffInfo} = this.props;  //Copy Rights @Sarthak Mishra
-                updateStaffInfo({prop: "startDate", value: fromDate})
-                updateStaffInfo({prop: "endDate", value: toDate})
+                const {updateStaffInfo} = this.props;
+                updateStaffInfo({prop: "startDate", value: moment(fromDate).format('YYYY-MM-DD')})
+                updateStaffInfo({prop: "endDate", value:  moment(toDate).format('YYYY-MM-DD')})
                 updateStaffInfo({prop: "staffName", value: self.state.staffName})
                 updateStaffInfo({prop: "staffId", value: self.state.staffId})
                 updateStaffInfo({prop: "staffProfilePic", value: self.state.staffPic})
                 updateStaffInfo({prop: "staffDesignation", value: self.state.departmentName})
                 updateStaffInfo({prop: "joinedDate", value: self.state.minDate})
-
                 this.props.navigation.navigate('getStaffReports')
             }
         }

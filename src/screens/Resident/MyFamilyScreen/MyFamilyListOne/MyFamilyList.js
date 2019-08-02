@@ -47,7 +47,8 @@ class MyFamilyList extends React.Component {
       error: null,
       myFamilyList: [],
       myfamily11: [],
-      isModelVisible: true
+      isModelVisible: true,
+      searchText:""
     }
 
     this.arrayholder = []
@@ -111,27 +112,20 @@ class MyFamilyList extends React.Component {
   }
 
   async myFamilyListGetData() {
-    let self = this
-    var familylist = ""
-    console.log(base.utils.strings.oyeSafeUrlF)
     this.setState({ loading: true })
-    // let family = await base.services.OyeSafeApiFamily.myFamilyList(4, 2)
-    myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
-    console.log(myFamilyList.data.familyMembers, "kljfksdjfksa")
-    this.setState({ myfamily11: myFamilyList.data.familyMembers })
-    this.setState({ familyData: myFamilyList })
+    console.log("Data sending to get family",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList( this.props.dashBoardReducer.uniID,this.props.dashBoardReducer.assId)
+    console.log("Get Family Data", myFamilyList);
+
+   // for(let i=0;i<myFamilyList.length;i++)
+    //let arr=
+
+    this.setState({ isLoading: false, loading: false })
     try {
       if (myFamilyList && myFamilyList.data) {
-        this.setState({ isLoading: false, loading: false })
-        for (let i = 0; i < myFamilyList.data.familyMembers.length; i++) {
-          // familylist.push({
-          //   value: MyFamilyList.data.familyMembers[i].fmName
-          // })
-          console.log(
-            "hhghghjhjgfhj",
-            myFamilyList.data.familyMembers[i].fmName
-          )
-        }
+        this.setState({ myfamily11: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1),
+          clonedList:myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1) })
+        this.setState({ familyData: myFamilyList })
       }
     } catch (error) {
       base.utils.logger.log(error)
@@ -149,6 +143,7 @@ class MyFamilyList extends React.Component {
   }
 
   renderItem = ({ item }) => {
+    console.log('List of the Data',item)
     let itemID = item.id
     return (
       <View style={Style.tableView}>
@@ -205,13 +200,21 @@ class MyFamilyList extends React.Component {
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate("MyFamilyEdit", {
-                    myFamilyName: item.fmName,
                     myFamilyMobileNo: item.fmMobile.replace(item.fmisdCode, ""),
-                    myFamilyAge: item.fmAge,
-                    myFamilyRelation: item.fmRltn,
-                    myFamilyFmid: item.fmid,
-                    myFamilyCallingcode: item.fmisdCode,
-                    myFamilyCca2: item.fmFlag
+                    acAccntID:item.acAccntID,
+                    asAssnID:item.asAssnID,
+                    fmGurName:item.fmGurName,
+                    fmImgName:item.fmImgName,
+                    fmIsActive:item.fmIsActive,
+                    fmMinor:item.fmMinor,
+                    fmMobile:item.fmMobile,
+                    fmName:item.fmName,
+                    fmRltn:item.fmRltn,
+                    fmid:item.fmid,
+                    fmisdCode:item.fmisdCode,
+                    fmlName:item.fmlName,
+                    meMemID:item.meMemID,
+                    unUnitID:item.unUnitID
                   })
                 }}
               >
@@ -253,6 +256,25 @@ class MyFamilyList extends React.Component {
       </View>
     )
   }
+
+  handleSearch(text) {
+    this.setState({searchText:text});
+    console.log('Text',text)
+    let sortList = this.state.clonedList;
+    let filteredArray = [];
+    if (text.length === 0) {
+      filteredArray.push(this.state.clonedList)
+    } else {
+      for (let i in sortList) {
+        if (sortList[i].fmName.includes(text) || sortList[i].fmRltn.includes(text) || sortList[i].fmMobile.includes(text)) {
+          filteredArray.push(sortList[i])
+        }
+      }
+    }
+    this.setState({
+      myfamily11: text.length === 0 ? filteredArray[0] : filteredArray
+    });
+  };
 
   render() {
     const { navigate } = this.props.navigation
@@ -366,8 +388,9 @@ class MyFamilyList extends React.Component {
         <View style={Style.containerViewStyle}>
           <Text style={Style.titleOfScreenStyle}>Family Members</Text>
 
-          <Form style={Style.formSearch}>
-            <Item style={Style.inputItem}>
+          <View style={{flexDirection:'row'}}>
+           {/* <Item style={Style.inputItem}>
+
               <Input
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
@@ -376,8 +399,24 @@ class MyFamilyList extends React.Component {
               />
 
               <Icon style={Style.icon} name="search" size={14} />
-            </Item>
-          </Form>
+            </Item>*/}
+            <View
+                style={{flex: 0.9, height: hp("5.5%"), marginStart: hp("2%"), marginBottom:50}}
+            >
+              <TextInput
+                 // value={this.state.searchText}
+                  style={{ height: hp("5.5%"),
+                    backgroundColor: "#F5F5F5",
+                    borderRadius: hp("7%"),
+                    fontSize: hp("1.8%"),
+                    paddingLeft: hp("2%")}}
+                  placeholder="  search...."
+                  round
+                  //autoCapitalize="characters"
+                  onChangeText={(text) => this.handleSearch(text)}
+              />
+            </View>
+          </View>
           {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
 
           {this.state.familyData.length == 0 ?
@@ -390,9 +429,7 @@ class MyFamilyList extends React.Component {
             // data={this.state.dataSource.sort((a, b) =>
             //   a.fmName.localeCompare(b.fmName)
             // )}
-            data={this.state.myfamily11.sort((a, b) =>
-              a.fmName.localeCompare(b.fmName)
-            )}
+            data={this.state.myfamily11}
             extraData={this.state}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.fmid.toString()}

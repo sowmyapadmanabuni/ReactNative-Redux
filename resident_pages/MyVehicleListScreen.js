@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import { NavigationEvents } from 'react-navigation';
 // import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
+import base from "../src/base";
 
 class VehicleList extends Component {
 
@@ -289,7 +290,7 @@ deleteCell = () => {
         <TouchableOpacity style= {[styles.floatButton]} 
                 onPress = {() => this.props.navigation.navigate('AddVehiclesScreen')}>
                 <View style={{ alignItems:'center', justifyContent:'center',aspectRatio:1,paddingBottom:hp('0.8%')}}>
-                  <Text style={{fontSize:hp('5%'), color:"#fff", fontWeight:'700'}}>+</Text>
+                  <Text style={{fontSize:hp('5%'), color:base.theme.colors.white, fontWeight:'700'}}>+</Text>
                 </View>
         </TouchableOpacity>
       </View>
@@ -433,7 +434,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    dashBoardReducer:state.DashboardReducer, //u have to call this in file where u need ids
+    dashBoardReducer:state.DashboardReducer,
     oyeURL: state.OyespaceReducer.oyeURL,
 
   };

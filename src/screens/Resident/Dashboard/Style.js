@@ -21,7 +21,7 @@ const Style = StyleSheet.create({
         width: '60%'
     },
     rightDropDown: {
-        width: '30%'
+        width: '40%'
     },
     bottomCards: {
         height: '13%',

@@ -19,6 +19,9 @@ import {connect} from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import base from "../src/base";
 import DashBoardHeader from "../src/components/dashBoardHeader/DashBoardHeader";
+import {
+  updateUserInfo
+} from "../src/actions";
 
 class MyProfile extends Component {
   state = {
@@ -49,6 +52,15 @@ class MyProfile extends Component {
             datasource: responseJson,
             ImageSource: responseJson.data.account[0].acImgName
           })
+          const { updateUserInfo } = this.props;
+          updateUserInfo({
+            prop: "userData",
+            value: responseJson
+          });
+          updateUserInfo({
+            prop: "userProfilePic",
+            value: responseJson.data.account[0].acImgName
+          });
         })
         .catch(error => console.log(error))
   }
@@ -261,10 +273,10 @@ class MyProfile extends Component {
                       }}
                   >
                     <View>
-                       <Button bordered warning style={styles.button1}
+                       {/* <Button bordered warning style={styles.button1}
                               onPress={() => this.props.navigation.navigate('CreateAssnScreen')}>
                         <Text>Create Association</Text>
-                      </Button>
+                      </Button> */}
                       <View/>
                       <View style={{marginTop: hp("2%")}}>
                         <Button bordered warning style={styles.button1}
@@ -426,4 +438,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(MyProfile);
+export default connect(mapStateToProps,{updateUserInfo})(MyProfile);

@@ -49,7 +49,8 @@ class MobileValid extends Component {
             cca2: "IN",
             callingCode: "91",
             isLoading: false,
-            checked: true
+            checked: true,
+            isChecked:true
         };
     }
     componentDidMount() {
@@ -263,7 +264,7 @@ class MobileValid extends Component {
                                             <CheckBox
                                                 onClick={() => {
                                                     this.setState({
-                                                        isChecked: !this.state.isChecked
+                                                        isChecked:!this.state.isChecked
                                                     });
                                                 }}
                                                 isChecked={this.state.isChecked}
@@ -292,9 +293,10 @@ class MobileValid extends Component {
                                                 <Text
                                                     style={{ fontSize: hp("1.45%"), color: "#ff8c00" }}
                                                     onPress={() => {
-                                                        Linking.openURL(
+                                                        this.props.navigation.navigate("privacyPolicy")
+                                                        /*Linking.openURL(
                                                             "https://www.oyespace.com/privacy"
-                                                        );
+                                                        );*/
                                                     }}
                                                 >
                                                     privacy policy{" "}
@@ -303,9 +305,11 @@ class MobileValid extends Component {
                                                 <Text
                                                     style={{ fontSize: hp("1.45%"), color: "#ff8c00" }}
                                                     onPress={() => {
-                                                        Linking.openURL(
+                                                        this.props.navigation.navigate("termsAndConditions")
+
+                                                        /*Linking.openURL(
                                                             "https://www.oyespace.com/terms"
-                                                        );
+                                                        );*/
                                                     }}
                                                 >
                                                     {" "}
