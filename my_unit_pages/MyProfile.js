@@ -86,6 +86,7 @@ class MyProfile extends Component {
                 <View style={styles.viewDetails1}>
                   <TouchableOpacity
                       onPress={() => {
+                        DashBoardHeader.refreshProfile();
                         this.props.navigation.navigate("ResDashBoard")
                       }}
                   >

@@ -21,6 +21,7 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import  {connect} from "react-redux";
+import base from "../../../src/base";
 
 var multipleEntries = "FALSE";
 
@@ -50,8 +51,9 @@ class InviteGuests extends Component {
 
     isDateTimePickerVisible: false,
     isDateTimePickerVisible1: false,
-    datetime: moment(new Date()).format('HH:mm:ss a'),
-    datetime1: moment(new Date()).format('HH:mm:ss a'),
+    datetime: moment(new Date()).format('HH:mm:ss'),
+    datetime1: moment(new Date()).format('HH:mm:ss'),
+       datetimeString: new Date(),
 
     switch: false,
 
@@ -118,18 +120,49 @@ _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
 _handleDatePicked = (datetime) => {
         console.log('A date has been picked: ', datetime);
         this._hideDateTimePicker();
-        this.setState({
-            datetime: moment(datetime).format('HH:mm:ss a'),
-        });
+        if(this.state.dobText===moment(new Date()).format('YYYY-MM-DD')){
+            if(moment(datetime).format('HH') < moment(new Date()).format('HH')){
+                alert('Invalid time')
+            }
+            else{
+                this.setState({
+                    datetime: moment(datetime).format('HH:mm:ss'),
+                    datetimeString:datetime
+                });
+            }
+        }
+        else{
+            this.setState({
+                datetime: moment(datetime).format('HH:mm:ss'),
+                datetimeString:datetime
+            });
+        }
+
     };
 _showDateTimePicker1 = () => this.setState({ isDateTimePickerVisible1: true });
 _hideDateTimePicker1 = () => this.setState({ isDateTimePickerVisible1: false });
 _handleDatePicked1 = (datetime1) => {
-    console.log('A date has been picked: ', datetime1);
     this._hideDateTimePicker1();
-    this.setState({
-    datetime1: moment(datetime1).format('HH:mm:ss a'),
-  });
+    console.log('A date has been picked: ', datetime1,this.state.datetime);
+    console.log('A date has been picked: ', this.state.datetime.split(':'));
+    let dateArray=this.state.datetime.split(':')
+    if(this.state.dobText=== this.state.dobText1){
+        if(dateArray[0]>moment(datetime1).format('HH')){
+            alert('Invalid end date')
+        }
+        else{
+            this.setState({
+                datetime1: moment(datetime1).format('HH:mm:ss'),
+            });
+        }
+    }
+    else{
+        this.setState({
+            datetime1: moment(datetime1).format('HH:mm:ss'),
+        });
+    }
+
+
 };
 
 
@@ -161,7 +194,10 @@ toggleSwitch = (value) => {
 
 sendInvitation = () => {
 
-    console.log("Send Invitation List", this.state)
+    console.log("Send Invitation List", this.state,this.props)
+
+    let startDate=this.state.dobText+' '+this.state.datetime
+    let endDate=this.state.dobText1+' '+this.state.datetime1
 
   fname=this.state.fname;
   lname=this.state.lname;
@@ -222,7 +258,7 @@ if (fname.length == 0 || fname == '') {
 }
 else{
 
-
+console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)
   
   fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
       method: 'POST',
@@ -241,8 +277,8 @@ else{
               "INVchlNo"  : vehNo,
               "INVisCnt"  :count,
               "INPhoto"   : "SD",
-              "INSDate"   : dobDate,
-              "INEDate"   : dobDate1,
+              "INSDate"   : startDate,
+              "INEDate"   : endDate,
               "INPOfInv"  : purpose,
               "INMultiEy" : switches,
               "ASAssnID"  :this.props.dashBoardReducer.assId,
@@ -251,7 +287,7 @@ else{
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Manas",responseJson)
+        console.log("Manas",responseJson,)
           Alert.alert("Invitation created, please share the invitation using the share button")
         this.props.navigation.goBack()
       })

@@ -797,9 +797,9 @@ class RegisterMe extends Component {
                 <Text style={styles.titleOfScreen}>Register Me</Text>
                 {/* {unitList.owner.length > 0 ? ( */}
                 <View style={{ flexDirection: "column" }}>
-                    <View style={styles.box}>
+                   {/* <View style={styles.box}>
                         <Text style={{ color: "#fff", fontSize: hp("2.2%") }}>Join Us</Text>
-                    </View>
+                    </View>*/}
                     <View style={styles.View}>
                         <Card style={styles.DateCard}>
                             <View style={{ justifyContent: "center", alignItems: "center" }}>

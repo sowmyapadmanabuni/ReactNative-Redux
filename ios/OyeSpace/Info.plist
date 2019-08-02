@@ -4,8 +4,8 @@
 <dict>
 	<key>NSContactsUsageDescription</key>
 	<string>OyeSpace would like to access your contacts</string>
-	<key/>
-	<string/>
+	<key></key>
+	<string></string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>UILaunchStoryboardName</key>

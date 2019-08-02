@@ -13,7 +13,7 @@ import utils from '../utils';
 
 let instance = axios.create({
     baseURL: utils.strings.oyeLivingDashBoard,
-    timeout: 10000,
+    timeout: 30000,
     headers: {
         'Content-Type': 'application/json',
         "X-Champ-APIKey": utils.strings.oyeLivingApiKey

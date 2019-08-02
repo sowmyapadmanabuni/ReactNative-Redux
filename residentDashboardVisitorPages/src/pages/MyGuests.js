@@ -68,7 +68,7 @@ export default class MyGuests extends Component {
       
     });
 
-    const AppContainer = createAppContainer(AppTabNavigator)
+    const AppContainer = createAppContainer(AppTabNavigator);
     return <AppContainer />
   }
 }

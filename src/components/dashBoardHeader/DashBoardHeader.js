@@ -6,74 +6,97 @@ import HeaderStyles from "./HeaderStyles";
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import { NavigationEvents } from "react-navigation";
 import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 
 class DashBoardHeader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ImageSource: null,
-      datasource: null,
-      myFirstName: ""
+    constructor(props) {
+        super(props);
+        this.state = {
+            ImageSource: null,
+            datasource: null,
+            myFirstName: ""
+        };
+    }
+
+    // renderBadge = () => {
+    //   const { notifications } = this.props;
+
+    //   let count = 0;
+
+    //   notifications.map((data, index) => {
+    //     if (!data.read) {
+    //       count += 1;
+    //     }
+    //   });
+
+    //   const BadgedIcon = withBadge(count)(Icon);
+
+    //   return (
+    //     <Icon
+    //       color="#FF8C00"
+    //       type="material"
+    //       name="notifications"
+    //       size={hp("4%")}
+    //     />
+    //   );
+    // };
+
+    renderBadge = () => {
+        const { notifications } = this.props;
+
+        let count = 0;
+
+        notifications.map((data, index) => {
+            if (data.ntIsActive) {
+                count += 1;
+            }
+        });
+
+        const BadgedIcon = withBadge(count)(Icon);
+
+        console.log(count, "count");
+        if (count >= 1) {
+            return (
+                <BadgedIcon
+                    color="#FF8C00"
+                    type="material"
+                    name="notifications"
+                    size={hp("4%")}
+                />
+            );
+        } else
+            return (
+                <Icon
+                    color="#FF8C00"
+                    type="material"
+                    name="notifications"
+                    size={hp("4%")}
+                />
+            );
+        // return (
+        //   <Icon
+        //     color="#FF8C00"
+        //     type="material"
+        //     name="notifications"
+        //     size={hp("4%")}
+        //   />
+        // );
     };
-  }
 
-  // renderBadge = () => {
-  //   const { notifications } = this.props;
+    /* componentDidMount() {
+      let self = this;
+      setTimeout(() => {
+        self.myProfileNet();
+      }, 500);
+    }*/
 
-  //   let count = 0;
+    /* async myProfile(){
+      console.log('AccId@@@@@',this.props)
 
-  //   notifications.map((data, index) => {
-  //     if (!data.read) {
-  //       count += 1;
-  //     }
-  //   });
-
-  //   const BadgedIcon = withBadge(count)(Icon);
-
-  //   return (
-  //     <Icon
-  //       color="#FF8C00"
-  //       type="material"
-  //       name="notifications"
-  //       size={hp("4%")}
-  //     />
-  //   );
-  // };
-
-  renderBadge = () => {
-    const { notifications } = this.props;
-
-    let count = 0;
-
-    notifications.map((data, index) => {
-      if (data.ntIsActive) {
-        count += 1;
-      }
-    });
-
-    const BadgedIcon = withBadge(count)(Icon);
-
-    console.log(count, "count");
-    if (count >= 1) {
-      return (
-        <BadgedIcon
-          color="#FF8C00"
-          type="material"
-          name="notifications"
-          size={hp("4%")}
-        />
-      );
-    } else
-      return (
-        <Icon
-          color="#FF8C00"
-          type="material"
-          name="notifications"
-          size={hp("4%")}
-        />
+      let response = await base.services.OyeLivingApi.getProfileFromAccount(
+          this.props.MyAccountID
       );
     // return (
     //   <Icon
@@ -206,24 +229,24 @@ class DashBoardHeader extends React.Component {
               style={HeaderStyles.logoStyles}
               source={require("../../../icons/notifications.png")}
             />*/}
-            {this.renderBadge()}
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
+                        {this.renderBadge()}
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
+    }
 }
 
 const mapStateToProps = state => {
-  return {
-    OyespaceReducer: state.OyespaceReducer,
-    oyeURL: state.OyespaceReducer.oyeURL,
-    MyAccountID: state.UserReducer.MyAccountID,
-    MyFirstName: state.UserReducer.MyFirstName,
-    viewImageURL: state.OyespaceReducer.viewImageURL,
-    notifications: state.NotificationReducer.notifications,
-    userReducer: state.UserReducer
-  };
+    return {
+        OyespaceReducer: state.OyespaceReducer,
+        oyeURL: state.OyespaceReducer.oyeURL,
+        MyAccountID: state.UserReducer.MyAccountID,
+        MyFirstName: state.UserReducer.MyFirstName,
+        viewImageURL: state.OyespaceReducer.viewImageURL,
+        notifications: state.NotificationReducer.notifications,
+        userReducer: state.UserReducer
+    };
 };
 
 export default connect(mapStateToProps)(DashBoardHeader);

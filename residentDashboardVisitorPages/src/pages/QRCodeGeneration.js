@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import {
-  Platform,
-  AppRegistry,
-  View,
-  StyleSheet,
-  Text,
-  Clipboard,
-  Image,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  SafeAreaView,
-  Dimensions,
-  ScrollView
+    Platform,
+    AppRegistry,
+    View,
+    StyleSheet,
+    Text,
+    Clipboard,
+    Image,
+    TouchableOpacity,
+    Alert,
+    ActivityIndicator,
+    SafeAreaView,
+    Dimensions,
+    ScrollView, TouchableHighlight
 } from "react-native";
 // import Header from './src/components/common/Header'
 import { QRCode } from "react-native-custom-qr-codes";
@@ -23,8 +23,12 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import RNFS from "react-native-fs";
-import { captureScreen } from "react-native-view-shot";
+import {captureRef, captureScreen} from "react-native-view-shot";
 import {connect} from'react-redux';
+
+const catsSource = {
+    uri: "https://i.imgur.com/5EOyTDQ.jpg"
+};
 
 class QRCodeGeneration extends Component {
   static navigationOptions = {
@@ -39,8 +43,17 @@ class QRCodeGeneration extends Component {
       qrShare: "initial_share",
       imageURI: "",
       dataBase64: "",
-
-      association: ""
+      association: "",
+        value: {
+            format: "png",
+            quality: 0.9,
+            result: "data-uri",
+            snapshotContentContainer: false
+        },
+        previewSource: catsSource,
+        error: null,
+        res: null,
+        isCapturing: false
     };
   }
 
@@ -176,6 +189,54 @@ class QRCodeGeneration extends Component {
         })
         .catch(error => console.log(error));
   };
+
+
+    snapshot = refname => () =>
+        (refname
+                ? captureRef(this.refs[refname], this.state.value)
+                : captureScreen(this.state.value)
+        )
+            .then(
+                res =>
+                    new Promise((success, failure) =>
+                        Image.getSize(res, (width, height) => (
+                            console.log(res, width, height), success(res)
+                        ), failure))).then(res => this.setState({
+                error: null, res, previewSource: {
+                    uri: this.state.value.result === "base64" ? "data:image/" + this.state.value.format + ";base64," + res : res
+                }
+            }, () => this.share())
+        )
+            .catch(
+                error => (
+                    console.warn(error),
+                        this.setState({error, res: null, previewSource: null})
+                )
+            );
+
+
+    share(){
+        const { params } = this.props.navigation.state;
+        let shareImageBase64 = {
+            title: "Invitation",
+            message:
+                params.value.infName +
+                " invites you to " + //global.AssociationUnitName + ' in ' +
+                // params.value.asAssnID
+                this.state.association +
+                " for " +
+                params.value.inpOfInv +
+                " on " +
+                params.value.insDate.substring(0, 10) +
+                " at " +
+                params.value.insDate.substring(11, 16) +
+                "  ",
+            url: this.state.previewSource.uri
+        };
+        Share.open(shareImageBase64).then((response) => {
+            console.log(response)
+        });
+    }
 
   render() {
     const { params } = this.props.navigation.state;
@@ -323,7 +384,7 @@ class QRCodeGeneration extends Component {
             <Text style={styles.titleOfScreen}>Share QR Code</Text>
             {/* <Text>{this.state.qrShare}</Text> */}
 
-            <View
+            <View  ref='View'
                 style={{
                   flex: 1,
                   backgroundColor: "#F4F4F4",
@@ -435,10 +496,7 @@ class QRCodeGeneration extends Component {
         </TouchableOpacity> */}
 
                 <TouchableOpacity
-                    onPress={() => {
-                      this.takeScreenShot();
-                      // this.takeScreenShot
-                    }}
+                    onPress={this.snapshot("View")}
                 >
                   <View
                       style={{

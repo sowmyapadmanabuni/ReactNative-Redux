@@ -72,7 +72,7 @@ class MyGuests extends Component {
         console.log("Manas", responseJson);
         this.setState({
           isLoading: false,
-          dataSource: responseJson.data.invitation,
+          dataSource:responseJson.data.invitation,
           error: responseJson.error || null,
           loading: false
         });
