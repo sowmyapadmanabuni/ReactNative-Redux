@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, View, TouchableOpacity, Image } from "react-native";
+import {Text, View, TouchableOpacity, Image, StatusBar} from "react-native";
 import base from "../../base";
-import { connect } from "react-redux";
+import {connect, Provider} from "react-redux";
 import HeaderStyles from "./HeaderStyles";
 import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import { NavigationEvents } from "react-navigation";
@@ -98,110 +98,134 @@ class DashBoardHeader extends React.Component {
       let response = await base.services.OyeLivingApi.getProfileFromAccount(
           this.props.MyAccountID
       );
-      console.log("Joe",response);
-      this.setState({
-        datasource: response,
-        ImageSource: response.data.account[0].acImgName
-      });
-    }*/
+    // return (
+    //   <Icon
+    //     color="#FF8C00"
+    //     type="material"
+    //     name="notifications"
+    //     size={hp("4%")}
+    //   />
+    // );
+  };
 
-    myProfileNet = async () => {
-        console.log("AccId@@@@@", this.props);
-        let response = await base.services.OyeLivingApi.getProfileFromAccount(
-            this.props.MyAccountID
-        );
-        console.log("Joe", response);
-        this.setState({
-            datasource: response,
-            ImageSource: response.data.account[0].acImgName
-        });
-        // fetch(
-        //   `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
-        //   {
-        //     method: "GET",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-        //     }
-        //   }
-        // )
-        //   .then(response => response.json())
-        //   .then(responseJson => {
-        //     console.log(responseJson);
+  /* componentDidMount() {
+    let self = this;
+    setTimeout(() => {
+      self.myProfileNet();
+    }, 500);
+  }*/
 
-        //     this.setState({
-        //       datasource: responseJson,
-        //       ImageSource: responseJson.data.account[0].acImgName
-        //     });
-        //     console.log("gggg", datasource);
-        //   })
-        //   .catch(error => console.log(error));
-    };
+  /* async myProfile(){
+    console.log('AccId@@@@@',this.props)
 
-    render() {
-        console.log(
-            "State in dashboard header:",
-            this.props.userReducer.userData,
-            this.props.userReducer.userProfilePic
-        );
-        return (
-            <View style={HeaderStyles.container}>
-                <View style={HeaderStyles.subContainerLeft}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate("MyProfileScreen")}
-                    >
-                        {this.props.userReducer.userProfilePic === null ||
-                        this.props.userReducer.userProfilePic === "" ? (
-                            <Image
-                                style={HeaderStyles.imageStyles}
-                                source={{
-                                    uri: "https://via.placeholder.com/150/ff8c00/FFFFFF"
-                                }}
-                            />
-                        ) : (
-                            <Image
-                                style={HeaderStyles.imageStyles}
-                                source={{
-                                    uri:
-                                        "http://mediaupload.oyespace.com/" +
-                                        this.props.userReducer.userProfilePic
-                                }}
-                            />
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <View style={HeaderStyles.textContainer}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.navigate("MyProfileScreen");
-                                }}
-                            >
-                                <Text
-                                    style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
-                                    numberOfLines={1}
-                                >
-                                    {this.props.userReducer.userData
-                                        ? this.props.userReducer.userData.data.account[0].acfName
-                                        : null}
-                                </Text>
-                            </TouchableOpacity>
-                            <Text style={HeaderStyles.statusText} numberOfLines={1}>
-                                Owner
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                <View style={HeaderStyles.subContainerRight}>
-                    <Image
-                        style={HeaderStyles.appLogoStyles}
-                        source={require("../../../icons/headerLogo.png")}
-                    />
-                </View>
-                <View style={HeaderStyles.subContainerRight}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate("NotificationScreen")}
-                    >
-                        {/* <Image
+    let response = await base.services.OyeLivingApi.getProfileFromAccount(
+        this.props.MyAccountID
+    );
+    console.log("Joe",response);
+    this.setState({
+      datasource: response,
+      ImageSource: response.data.account[0].acImgName
+    });
+  }*/
+
+  myProfileNet = async () => {
+    console.log("AccId@@@@@", this.props);
+    let response = await base.services.OyeLivingApi.getProfileFromAccount(
+      this.props.MyAccountID
+    );
+    console.log("Joe", response);
+    this.setState({
+      datasource: response,
+      ImageSource: response.data.account[0].acImgName
+    });
+    // fetch(
+    //   `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
+    //   {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+    //     }
+    //   }
+    // )
+    //   .then(response => response.json())
+    //   .then(responseJson => {
+    //     console.log(responseJson);
+
+    //     this.setState({
+    //       datasource: responseJson,
+    //       ImageSource: responseJson.data.account[0].acImgName
+    //     });
+    //     console.log("gggg", datasource);
+    //   })
+    //   .catch(error => console.log(error));
+  };
+
+
+  render() {
+    console.log(
+      "State in dashboard header:",
+      this.props.userReducer.userData,
+      this.props.userReducer.userProfilePic
+    );
+    return (
+      <View style={HeaderStyles.container}>
+        <View style={HeaderStyles.subContainerLeft}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("MyProfileScreen")}
+          >
+            {this.props.userReducer.userProfilePic === null ||
+            this.props.userReducer.userProfilePic === "" ? (
+              <Image
+                style={HeaderStyles.imageStyles}
+                source={{
+                  uri: "https://via.placeholder.com/150/ff8c00/FFFFFF"
+                }}
+              />
+            ) : (
+              <Image
+                style={HeaderStyles.imageStyles}
+                source={{
+                  uri:
+                    "http://mediaupload.oyespace.com/" +
+                    this.props.userReducer.userProfilePic
+                }}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={HeaderStyles.textContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("MyProfileScreen");
+                }}
+              >
+                <Text
+                  style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
+                  numberOfLines={1}
+                >
+                  {this.props.userReducer.userData
+                    ? this.props.userReducer.userData.data.account[0].acfName
+                    : null}
+                </Text>
+              </TouchableOpacity>
+              <Text style={HeaderStyles.statusText} numberOfLines={1}>
+                Owner
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={HeaderStyles.subContainerRight}>
+          <Image
+            style={HeaderStyles.appLogoStyles}
+            source={require("../../../icons/headerLogo.png")}
+          />
+        </View>
+        <View style={HeaderStyles.subContainerRight}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("NotificationScreen")}
+          >
+            {/* <Image
               style={HeaderStyles.logoStyles}
               source={require("../../../icons/notifications.png")}
             />*/}

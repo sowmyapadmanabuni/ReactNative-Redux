@@ -19,6 +19,7 @@ import _ from "lodash";
 
 export const getNotifications = (oyeURL, MyAccountID) => {
   return dispatch => {
+      console.log('Notification URLS',oyeURL,MyAccountID)
     dispatch({ type: GET_NOTIFICATIONS });
     fetch(
       "http://" +
@@ -35,7 +36,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-         console.log("Check list of notif",responseJson);
+         console.log("Check list",responseJson);
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];

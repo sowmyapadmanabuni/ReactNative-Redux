@@ -161,7 +161,7 @@ class MyFamilyList extends React.Component {
               <ZoomImage
                 source={{
                   uri:
-                    "http://mediaupload.oyespace.com/Images/" + item.fmImgName
+                    `${this.props.mediaupload}` + item.fmImgName
                 }}
                 imgStyle={Style.placeholderImage}
                 duration={300}
@@ -455,6 +455,7 @@ const mapStateToProps = state => {
     associationid: state.DashboardReducer.associationid,
     selectedAssociation: state.DashboardReducer.selectedAssociation,
     oyeURL: state.OyespaceReducer.oyeURL,
+    mediaupload:state.OyespaceReducer.mediaupload,
     dashBoardReducer:state.DashboardReducer
   };
 };

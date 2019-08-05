@@ -435,6 +435,7 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     imageUrl: state.OyespaceReducer.imageUrl,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    mediaupload:state.OyespaceReducer.mediaupload,
   }
 }
 

@@ -502,10 +502,22 @@ class Dashboard extends React.Component {
             value: dropdown[index].memberId
         });
         this.roleCheckForAdmin(dropdown[index].associationId)
-        this.getVehicleList()
-
+this.checkUnitIsThere()
         // this.setState({ role:dropdown[index].roleId });
     };
+
+    checkUnitIsThere(){
+        const {dropdown1}=this.props
+        console.log('CheckUnit;s is there',dropdown1,dropdown1.length)
+        if(dropdown1.length===0){
+            this.setState({
+                vehiclesCount:0
+            })
+        }
+        else{
+            this.getVehicleList()
+        }
+    }
 
     async getUnitListByAssoc() {
         let self = this;
@@ -521,10 +533,7 @@ class Dashboard extends React.Component {
             if (stat && stat.data) {
                 let unitList = [];
                 for (let i = 0; i < stat.data.members.length; i++) {
-                    if (
-                        stat.data.members[i].unUniName !== "" &&
-                        stat.data.members[i].unUnitID !== 0
-                    ) {
+                    if (stat.data.members[i].unUniName !== "") {
                         unitList.push({
                             value: stat.data.members[i].unUniName,
                             details: stat.data.members[i]
@@ -569,15 +578,15 @@ class Dashboard extends React.Component {
             unitId: unitId
         });
         const { updateIdDashboard } = this.props;
-        updateIdDashboard({ prop: "uniID", value: unitId });
+        updateIdDashboard({ prop: "uniID", value:unitId });
         self.getVehicleList();
     }
 
     getVehicleList = () => {
-        console.log("Get ID for vehicle", this.props);
+        console.log("Get ID for vehicle", this.props,this.state.unitId);
         fetch(
             `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
-                this.props.dashBoardReducer.uniID
+                this.state.unitId
                 }`, //${this.props.dashBoardReducer.uniID}
             {
                 method: "GET",
@@ -684,19 +693,19 @@ class Dashboard extends React.Component {
 
     render() {
         const {
-            dropdown,
-            dropdown1,
-            residentList,
-            sold,
-            unsold,
-            isLoading,
-            sold2,
-            unsold2,
-            updateUserInfo,
-            updateDropDownIndex,
-            selectedDropdown,
-            selectedDropdown1,
-            called
+          dropdown,
+          dropdown1,
+          residentList,
+          sold,
+          unsold,
+          isLoading,
+          sold2,
+          unsold2,
+          updateUserInfo,
+          updateDropDownIndex,
+          selectedDropdown,
+          selectedDropdown1,
+          updateSelectedDropDown
         } = this.props;
 
         let associationList = this.state.assocList;
@@ -715,7 +724,7 @@ class Dashboard extends React.Component {
                                         label="Association Name"
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={dropdown}
-                                        containerStyle={{width:'90%'}}
+                                        containerStyle={{width:'100%'}}
                                         textColor={base.theme.colors.black}
                                         inputContainerStyle={{
                                             borderBottomColor: "transparent",
@@ -751,8 +760,8 @@ class Dashboard extends React.Component {
                                             borderBottomColor: "transparent"
                                         }}
                                         textColor="#000"
-                                        dropdownOffset={{ top: 10, left: 0 }}
-                                        dropdownPosition={-4}
+                                        dropdownOffset={{ top:10, left: 0 }}
+                                        dropdownPosition={0}
                                         rippleOpacity={0}
                                         // onChangeText={(value, index) => {
                                         //   this.updateUnit(value, index);
@@ -763,10 +772,21 @@ class Dashboard extends React.Component {
                                                 prop: "SelectedUnitID",
                                                 value: dropdown1[index].unitId
                                             });
-                                            updateSelectedDropDown({
-                                                prop: "selectedDropdown1",
-                                                value: value.value
-                                            });
+                                            updateSelectedDropDown(
+                                              {
+                                                prop:
+                                                  "selectedDropdown1",
+                                                value:
+                                                  dropdown1[
+                                                    index
+                                                  ]
+                                                    .value
+                                              }
+                                            );
+
+                                            
+
+                                            
 
                                             // console.log(value);
                                             // console.log(index);
@@ -914,6 +934,7 @@ class Dashboard extends React.Component {
     }
 
     myUnitCard() {
+        const {dropdown1}=this.props;
         let invoiceList = [
             {
                 invoiceNumber: 528,
@@ -940,7 +961,7 @@ class Dashboard extends React.Component {
                         marginTop={20}
                         iconWidth={Platform.OS === "ios" ? 40 : 35}
                         iconHeight={Platform.OS === "ios" ? 40 : 20}
-                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):this.props.navigation.navigate("MyFamilyList")}
+                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"): dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
                     <CardView
@@ -954,7 +975,7 @@ class Dashboard extends React.Component {
                         marginTop={20}
                         backgroundColor={base.theme.colors.cardBackground}
                         onCardClick={() =>this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
-                            this.props.navigation.navigate("MyVehicleListScreen")
+                            dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("MyVehicleListScreen")
                         }
                     />
                     <CardView
@@ -1099,104 +1120,85 @@ class Dashboard extends React.Component {
                   </Card>
                 </View> */}
 
-                <View
-                    style={{
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        alignSelf: "center"
-                    }}
-                >
-                    <Button
-                        bordered
-                        style={styles.button1}
-                        onPress={() => this.props.navigation.navigate("ViewmembersScreen")}
-                    >
-                        <Text>Role Management</Text>
-                    </Button>
-
-                    <Button
-                        bordered
-                        style={styles.button1}
-                        onPress={() =>
-                            this.props.navigation.navigate("ViewAlllVisitorsPage")
-                        }
-                    >
-                        <Text>View All Visitors</Text>
-                    </Button>
-
-                    <Button
-                        bordered
-                        style={styles.button1}
-                        onPress={() =>
-                            this.props.navigation.navigate("ViewAlllVisitorsPage")
-                        }
-                    >
-                        <Text>View All Visitors</Text>
-                    </Button>
-
-
-                    {/* <Button
-              bordered
-              style={styles.button1}
-              onPress={() =>
-                  this.props.navigation.navigate('patrollingCheckPoint')
-              }
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            alignSelf: "center"
+          }}
+        >
+          <Button
+            bordered
+            style={styles.button1}
+            onPress={() => this.props.navigation.navigate("ViewmembersScreen")}
           >
-            <Text>Patrolling</Text>
-          </Button>*/}
-                </View>
-            </ElevatedView>
-        );
-    }
+            <Text>Role Management</Text>
+          </Button>
 
-    offersZoneCard() {
-        return (
-            <ElevatedView elevation={6} style={Style.mainElevatedView}>
-                <Text>OFFERS ZONE</Text>
-            </ElevatedView>
-        );
-    }
+          <Button
+            bordered
+            style={styles.button1}
+            onPress={() =>
+              this.props.navigation.navigate("ViewAlllVisitorsPage")
+            }
+          >
+            <Text>View All Visitors</Text>
+          </Button>
+        </View>
+      </ElevatedView>
+    );
+  }
 
-    listOfInvoices(item) {
-        base.utils.logger.log(item);
-        return (
-            <TouchableHighlight underlayColor={"transparent"}>
-                <View style={Style.invoiceView}>
-                    <View style={Style.invoiceSubView}>
-                        <Text style={Style.invoiceNumberText}>
-                            Invoice No. {item.item.invoiceNumber}
-                        </Text>
-                        <Text style={Style.billText}>
-                            <Text style={Style.rupeeIcon}>{"\u20B9"}</Text>
-                            {item.item.bill}
-                        </Text>
-                    </View>
-                    <View style={Style.invoiceSubView}>
-                        <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
-                        <OSButton
-                            height={"80%"}
-                            width={"25%"}
-                            borderRadius={15}
-                            oSBBackground={
-                                item.item.status === "PAID"
-                                    ? base.theme.colors.grey
-                                    : base.theme.colors.primary
-                            }
-                            oSBText={item.item.status === "PAID" ? "Paid" : "Pay Now"}
-                        />
-                    </View>
-                </View>
-            </TouchableHighlight>
-        );
-    }
+  offersZoneCard() {
+    return (
+      <ElevatedView elevation={6} style={Style.mainElevatedView}>
+        <Text>OFFERS ZONE</Text>
+      </ElevatedView>
+    );
+  }
 
-    myUnit() {}
+  listOfInvoices(item) {
+    base.utils.logger.log(item);
+    return (
+      <TouchableHighlight underlayColor={"transparent"}>
+        <View style={Style.invoiceView}>
+          <View style={Style.invoiceSubView}>
+            <Text style={Style.invoiceNumberText}>
+              Invoice No. {item.item.invoiceNumber}
+            </Text>
+            <Text style={Style.billText}>
+              <Text style={Style.rupeeIcon}>{"\u20B9"}</Text>
+              {item.item.bill}
+            </Text>
+          </View>
+          <View style={Style.invoiceSubView}>
+            <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
+            <OSButton
+              height={"80%"}
+              width={"25%"}
+              borderRadius={15}
+              oSBBackground={
+                item.item.status === "PAID"
+                  ? base.theme.colors.grey
+                  : base.theme.colors.primary
+              }
+              oSBText={item.item.status === "PAID" ? "Paid" : "Pay Now"}
+            />
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  }
 
-    goToFirstTab() {
-        this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
-            this.props.navigation.navigate("firstTab");
-    }
+  myUnit() {}
+
+  goToFirstTab() {
+        const{dropdown1}=this.props
+    this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
+        dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("firstTab");
+  }
+
 }
 
 const styles = StyleSheet.create({

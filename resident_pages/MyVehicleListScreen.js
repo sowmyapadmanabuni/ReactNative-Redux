@@ -38,7 +38,7 @@ class VehicleList extends Component {
         })
           .then(response => response.json())
           .then(responseJson => {
-            console.log("Manas",responseJson)
+            console.log("Vehicle List ------",responseJson)
             this.setState({
               isLoading: false,
               dataSource: responseJson.data.vehicleListByUnitID,

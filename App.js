@@ -6,9 +6,9 @@ import {
   Image,
   Dimensions,
   SafeAreaView,
-  AppState
+  AppState,StatusBar,Platform
 } from "react-native";
-import { connect } from "react-redux";
+import {connect, Provider} from "react-redux";
 import SplashScreen from "./splash_screen_pages/SplashScreen";
 import {
   createStackNavigator,
@@ -46,6 +46,7 @@ import Spinner from "react-native-spinkit";
 import PrivacyPolicy from "./src/screens/Policy/PrivacyPolicy";
 import TermsAndConditions from "./src/screens/Policy/TermsAndConditions";
 import MyFamilyHeader from "./src/components/NavigationalHeaders/MyFamilyHeader";
+import base from "./src/base";
 
 const AuthStack = createStackNavigator(
     {
@@ -235,12 +236,13 @@ class Loading extends Component {
 
 
   render() {
+      StatusBar.setBackgroundColor(base.theme.colors.primary,true)
     return (
         <Fragment>
           <SafeAreaView style={{ flex: 0, backgroundColor: "#ff8c00" }} />
           <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <View style={styles.container}>
-              <View style={{ flex: 1, flexDirection: "column" }}>
+                <View style={{ flex: 1, flexDirection: "column" }}>
                 <View style={styles.ImageContainer}>
                   <Image
                       source={require("./icons/headerLogo.png")}

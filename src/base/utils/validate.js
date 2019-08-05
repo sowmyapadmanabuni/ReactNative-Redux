@@ -160,4 +160,27 @@ export class validate{
         }
         return 0;
     }
+
+    static validateTime(startTime,endTime,callback){
+        try{
+            let startTime=startTime;
+            let endTime=endTime;
+
+            let diff =moment(endTime).diff(startTime)
+
+            let isValid=false
+
+            if(diff >0){
+
+               isValid =true;
+            }
+            else{
+                isValid=false;
+            }
+            callback(isValid,diff);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 }
