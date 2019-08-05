@@ -259,14 +259,14 @@ class NotificationScreen extends Component {
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
-    console.log('hghfhgfghfgfhgfh',item.ntdUpdated,moment(item.ntdUpdated).format("hh:mm A"))
+    console.log('hghfhgfghfgfhgfh',item.ntdCreated,moment(item.ntdCreated).format("hh:mm A"))
 
     if (item.ntType !== "gate_app") {
       return (
           <Card>
             <Text style={{fontSize:hp('2.5%'), color:'#000'}}>
-              {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
-              {moment(item.ntdUpdated).format("hh:mm A")}
+              {moment(item.ntdCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+              {moment(item.ntdCreated).format("hh:mm A")}
             </Text>
             {item.ntType !== "gate_app" ? (
                 <ListItem
@@ -327,8 +327,8 @@ class NotificationScreen extends Component {
                   <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: "column" }}>
                       <Text style={{marginTop:10,fontSize:hp('2.5%'), color:'#000'}}>
-                        {moment(item.ntdUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
-                        {moment(item.ntdUpdated).format("hh:mm A")}
+                        {moment(item.ntdCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+                        {moment(item.ntdCreated).format("hh:mm A")}
                       </Text>
                       <Text style={{marginBottom:10}}>{item.ntDesc}</Text>
                       <View style={{flex:1,}}>

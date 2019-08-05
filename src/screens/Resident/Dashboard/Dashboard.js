@@ -49,7 +49,6 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.props = props;
-
         this.state = {
             myUnitCardHeight: "80%",
             myUnitCardWidth: "25%",
@@ -87,6 +86,8 @@ class Dashboard extends React.Component {
     }
 
     requestNotifPermission = () => {
+
+        console.log('Get Notification');
         const {
             MyAccountID,
             champBaseURL,
@@ -133,15 +134,15 @@ class Dashboard extends React.Component {
                 let responseData = response.data.data;
 
                 responseData.associationByAccount.map(association => {
-                    // console.log('***********')
-                    // console.log(association.asAsnName)
-                    // console.log(association.asAssnID)
-                    // console.log('***********')
+                     console.log('***********',association)
+                     console.log(association.asAsnName)
+                    console.log(association.asAssnID)
+                     console.log('***********')
                     if (receiveNotifications) {
                         firebase
                             .messaging()
                             .subscribeToTopic(association.asAssnID + "admin");
-                        // console.log(association.asAssnID);
+                        console.log(association.asAssnID);
                     } else if (!receiveNotifications) {
                         firebase
                             .messaging()
@@ -159,10 +160,10 @@ class Dashboard extends React.Component {
             )
             .then(response => {
                 let data = response.data.data.memberListByAccount;
-                // console.log("dataoye", data);
+                 console.log("dataoye", data);
                 data.map(units => {
-                    // console.log(units.unUnitID + "admin");
-                    // console.log(units.mrmRoleID + "role");
+                     console.log(units.unUnitID + "admin");
+                     console.log(units.mrmRoleID + "role");
                     if (receiveNotifications) {
                         if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
                             if (units.meIsActive) {
@@ -502,14 +503,14 @@ class Dashboard extends React.Component {
             value: dropdown[index].memberId
         });
         this.roleCheckForAdmin(dropdown[index].associationId)
-this.checkUnitIsThere()
+     //this.checkUnitIsThere()
+        this.getUnitListByAssoc()
         // this.setState({ role:dropdown[index].roleId });
     };
 
-    checkUnitIsThere(){
-        const {dropdown1}=this.props
-        console.log('CheckUnit;s is there',dropdown1,dropdown1.length)
-        if(dropdown1.length===0){
+    checkUnitIsThere(unitList){
+
+        if(unitList.length===0){
             this.setState({
                 vehiclesCount:0
             })
@@ -556,7 +557,8 @@ this.checkUnitIsThere()
                 });
 
                 self.roleCheckForAdmin(this.state.assocId);
-                self.getVehicleList();
+                //self.getVehicleList();
+                self.checkUnitIsThere(unitList)
             }
         } catch (error) {
             base.utils.logger.log(error);
@@ -724,13 +726,14 @@ this.checkUnitIsThere()
                                         label="Association Name"
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={dropdown}
-                                        containerStyle={{width:'100%'}}
+                                        containerStyle={{width:'95%'}}
                                         textColor={base.theme.colors.black}
                                         inputContainerStyle={{
                                             borderBottomColor: "transparent",
+                                            width:'90%', justifyContent:'flex-start',
                                         }}
                                         dropdownOffset={{ top: 10, left: 0 }}
-                                        dropdownPosition={-4}
+                                        dropdownPosition={-1}
                                         rippleOpacity={0}
                                         // onChangeText={(value, index) =>
                                         //   this.onAssociationChange(value, index)
