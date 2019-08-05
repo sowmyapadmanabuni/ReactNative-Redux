@@ -215,19 +215,30 @@ class RegisterMe extends Component {
                                         .then(response_3 => {
                                             this.setState({ loading: false });
                                             this.props.createUserNotification(
-                                                ntType,
-                                                this.props.oyeURL,
-                                                adminAccId,
-                                                this.props.navigation.state.params.AssnId.toString(),
-                                                ntDesc,
-                                                sbUnitID.toString(),
-                                                sbMemID.toString(),
-                                                sbSubID.toString(),
-                                                sbRoleId,
-                                                this.props.navigation.state.params.associationName,
-                                                unitName.toString(),
-                                                occupancyDate,
-                                                soldDate
+                                              ntType,
+                                              this
+                                                .props
+                                                .oyeURL,
+                                              adminAccId,
+                                              this.props.navigation.state.params.AssnId.toString(),
+                                              ntDesc,
+                                              sbUnitID.toString(),
+                                              sbMemID.toString(),
+                                              sbSubID.toString(),
+                                              sbRoleId,
+                                              this
+                                                .props
+                                                .navigation
+                                                .state
+                                                .params
+                                                .associationName,
+                                              unitName.toString(),
+                                              occupancyDate,
+                                              soldDate,
+                                              false,
+                                              this
+                                                .props
+                                                .MyAccountID
                                             );
 
                                             this.props.updateJoinedAssociation(
@@ -528,21 +539,31 @@ class RegisterMe extends Component {
                                         .then(response_3 => {
                                             this.setState({ loading: false });
                                             this.props.createUserNotification(
-                                                ntType,
-                                                this.props.oyeURL,
-                                                adminAccId,
-                                                this.props.navigation.state.params.AssnId.toString(),
-                                                ntDesc,
-                                                sbUnitID.toString(),
-                                                sbMemID.toString(),
-                                                sbSubID.toString(),
-                                                sbRoleId,
-                                                this.props.navigation.state.params
-                                                    .associationName,
-                                                unitName.toString(),
-                                                occupancyDate,
-                                                soldDate
-                                                // this.props.navigation
+                                              ntType,
+                                              this
+                                                .props
+                                                .oyeURL,
+                                              adminAccId,
+                                              this.props.navigation.state.params.AssnId.toString(),
+                                              ntDesc,
+                                              sbUnitID.toString(),
+                                              sbMemID.toString(),
+                                              sbSubID.toString(),
+                                              sbRoleId,
+                                              this
+                                                .props
+                                                .navigation
+                                                .state
+                                                .params
+                                                .associationName,
+                                              unitName.toString(),
+                                              occupancyDate,
+                                              soldDate,
+                                              false,
+                                              this
+                                                .props
+                                                .MyAccountID
+                                              // this.props.navigation
                                             );
 
                                             // this.props.navigation.navigate("SplashScreen");
