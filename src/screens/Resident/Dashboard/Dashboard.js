@@ -340,6 +340,7 @@ class Dashboard extends React.Component {
         if (!this.props.called) {
             this.didMount();
         }
+        console.log("UNIT ID ---->",this.state.unitId)
     }
 
     roleCheckForAdmin = (index) => {
@@ -516,6 +517,7 @@ this.checkUnitIsThere()
         }
         else{
             this.getVehicleList()
+            
         }
     }
 
@@ -523,9 +525,7 @@ this.checkUnitIsThere()
         let self = this;
         //self.setState({isLoading: true})
         console.log("APi1233", self.state.assocId);
-        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
-            this.state.assocId
-        );
+        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(this.props.dashBoardReducer.assId);
         self.setState({ isLoading: false, isDataLoading: false });
         console.log("STAT123", stat);
 
@@ -584,10 +584,9 @@ this.checkUnitIsThere()
 
     getVehicleList = () => {
         console.log("Get ID for vehicle", this.props,this.state.unitId);
+        
         fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
-                this.state.unitId
-                }`, //${this.props.dashBoardReducer.uniID}
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.state.unitList}`,
             {
                 method: "GET",
                 headers: {
@@ -635,61 +634,8 @@ this.checkUnitIsThere()
         });
     };
 
-    getFamilyMemberList = () => {
-        fetch(
-            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
-                this.props.dashBoardReducer.assId
-                }`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log("Manas", responseJson);
-                this.setState({
-                    //Object.keys(responseJson.data.unitsByBlockID).length
-                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-                        .length
-                });
-            })
-            .catch(error => {
-                this.setState({ loading: false });
-                console.log(error);
-            });
-    };
-
-    getVisitorList = () => {
-        fetch(
-            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
-                this.props.dashBoardReducer.assId
-                }`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log("Manas", responseJson);
-                this.setState({
-                    //Object.keys(responseJson.data.unitsByBlockID).length
-                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-                        .length
-                });
-            })
-            .catch(error => {
-                this.setState({ loading: false });
-                console.log(error);
-            });
-    };
+   
+   
 
     render() {
         const {
@@ -707,7 +653,7 @@ this.checkUnitIsThere()
           selectedDropdown1,
           updateSelectedDropDown
         } = this.props;
-
+        console.log("UNIT ID ---->",this.props.dashBoardReducer.uniID)
         let associationList = this.state.assocList;
         let unitList = this.state.unitList;
         console.log("Drp1", dropdown1);
