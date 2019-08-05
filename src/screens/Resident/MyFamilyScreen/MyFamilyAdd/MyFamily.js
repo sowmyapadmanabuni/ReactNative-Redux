@@ -430,7 +430,13 @@ class MyFamily extends Component {
         console.log('Stat in Add family',stat)
         if (stat && stat.data && stat.success) {
             try {
-                self.props.navigation.navigate('MyFamilyList')
+                if(stat.success){
+                    self.props.navigation.navigate('MyFamilyList')
+                }
+                else {
+                    alert(stat.data.message)
+                }
+
             } catch (err) {
                 console.log('Error in adding Family Member')
             }

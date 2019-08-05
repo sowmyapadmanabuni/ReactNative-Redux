@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Alert,
     Dimensions,
     Image,
     Linking,
@@ -8,23 +9,20 @@ import {
     Text,
     TouchableHighlight,
     TouchableOpacity,
-    View,Alert
+    View
 } from "react-native";
 import base from "../../../base";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import CardView from "../../../components/cardView/CardView";
-import { Dropdown } from "react-native-material-dropdown";
+import {Dropdown} from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
-import { Button } from "native-base";
+import {Button} from "native-base";
 import _ from "lodash";
-import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp
-} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {
     createNotification,
     createUserNotification,
@@ -39,10 +37,9 @@ import {
     updateDropDownIndex,
     updateIdDashboard,
     updateJoinedAssociation,
-    updateUserInfo,
-    updateSelectedDropDown
+    updateSelectedDropDown,
+    updateUserInfo
 } from "../../../actions";
-import { NavigationEvents } from "react-navigation";
 import ProgressLoader from "rn-progress-loader";
 
 class Dashboard extends React.Component {
@@ -73,7 +70,7 @@ class Dashboard extends React.Component {
             unitNameHide: false,
             isDataLoading: false,
             isDataVisible: false,
-            isNoAssJoin:false
+            isNoAssJoin: false
         };
     }
 
@@ -210,7 +207,7 @@ class Dashboard extends React.Component {
             .android.setPriority(firebase.notifications.Android.Priority.Max);
 
         firebase.notifications().displayNotification(notificationBuild);
-        this.setState({ foregroundNotif: notification._data });
+        this.setState({foregroundNotif: notification._data});
     };
 
     listenForNotif = () => {
@@ -241,8 +238,8 @@ class Dashboard extends React.Component {
             });
 
         firebase.notifications().onNotificationOpened(notificationOpen => {
-            const { MyAccountID } = this.props.userReducer;
-            const { oyeURL } = this.props.oyespaceReducer;
+            const {MyAccountID} = this.props.userReducer;
+            const {oyeURL} = this.props.oyespaceReducer;
             let details = notificationOpen.notification._data;
             if (notificationOpen.notification._data.admin === "true") {
                 if (notificationOpen.action) {
@@ -312,12 +309,13 @@ class Dashboard extends React.Component {
         });
     };
 
-    onChangeText = () => {};
+    onChangeText = () => {
+    };
 
     didMount = () => {
-        const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-        const { oyeURL } = this.props.oyespaceReducer;
+        const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
+        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
+        const {oyeURL} = this.props.oyespaceReducer;
 
         getDashSub(oyeURL, SelectedAssociationID);
         getDashAssociation(oyeURL, MyAccountID);
@@ -328,9 +326,9 @@ class Dashboard extends React.Component {
     };
 
     componentDidMount() {
-        const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-        const { oyeURL } = this.props.oyespaceReducer;
+        const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
+        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
+        const {oyeURL} = this.props.oyespaceReducer;
 
         // getAssoMembers(oyeURL, MyAccountID);
         this.requestNotifPermission();
@@ -344,7 +342,7 @@ class Dashboard extends React.Component {
     }
 
     roleCheckForAdmin = (index) => {
-        console.log("Association id123123123123", this.state.assocId,index);
+        console.log("Association id123123123123", this.state.assocId, index);
         fetch(
             `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${this.state.assocId}`,
             {
@@ -357,21 +355,21 @@ class Dashboard extends React.Component {
         )
             .then(response => response.json())
             .then(responseJson => {
-                console.log("Manas", responseJson, responseJson.data,responseJson.data.members.length);
-                let role=''
-                for(let i=0; i<responseJson.data.members.length;i++){
-                    console.log("Get Ids",this.props.userReducer.MyAccountID,responseJson.data.members[i].acAccntID,this.state.assocId,responseJson.data.members[i].asAssnID)
-                    if(this.props.userReducer.MyAccountID===responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID===1 && parseInt(this.state.assocId)===responseJson.data.members[i].asAssnID){
-                        console.log('Id eq',this.props.userReducer.MyAccountID,responseJson.data.members[i].acAccntID,responseJson.data.members[i].mrmRoleID)
-                        role=responseJson.data.members[i].mrmRoleID
+                console.log("Manas", responseJson, responseJson.data, responseJson.data.members.length);
+                let role = ''
+                for (let i = 0; i < responseJson.data.members.length; i++) {
+                    console.log("Get Ids", this.props.userReducer.MyAccountID, responseJson.data.members[i].acAccntID, this.state.assocId, responseJson.data.members[i].asAssnID)
+                    if (this.props.userReducer.MyAccountID === responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID === 1 && parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID) {
+                        console.log('Id eq', this.props.userReducer.MyAccountID, responseJson.data.members[i].acAccntID, responseJson.data.members[i].mrmRoleID)
+                        role = responseJson.data.members[i].mrmRoleID
                     }
                 }
                 this.setState({
-                    role:role
+                    role: role
                 });
             })
             .catch(error => {
-                this.setState({ error, loading: false });
+                this.setState({error, loading: false});
             });
     };
 
@@ -382,7 +380,7 @@ class Dashboard extends React.Component {
     async getListOfAssociation() {
         let self = this;
         let oyeURL = this.props.oyeURL;
-        self.setState({ isLoading: true });
+        self.setState({isLoading: true});
         console.log("APi", base.utils.strings.oyeLivingDashBoard);
         let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
             this.props.userReducer.MyAccountID
@@ -393,7 +391,7 @@ class Dashboard extends React.Component {
 
             if (stat && stat.data) {
                 this.setState({
-                    isNoAssJoin:false
+                    isNoAssJoin: false
                 });
                 let assocList = [];
                 for (let i = 0; i < stat.data.memberListByAccount.length; i++) {
@@ -417,14 +415,14 @@ class Dashboard extends React.Component {
                     assocName: sortedArr[0].details.asAsnName,
                     assocId: sortedArr[0].details.asAssnID
                 });
-                const { updateIdDashboard } = this.props;
+                const {updateIdDashboard} = this.props;
                 console.log("updateIdDashboard1", this.props);
                 updateIdDashboard({
                     prop: "assId",
                     value: sortedArr[0].details.asAssnID
                 });
-                updateIdDashboard({ prop: "memberList", value: sortedArr });
-                const { updateUserInfo } = this.props;
+                updateIdDashboard({prop: "memberList", value: sortedArr});
+                const {updateUserInfo} = this.props;
                 updateUserInfo({
                     prop: "SelectedAssociationID",
                     value: sortedArr[0].details.asAssnID
@@ -434,10 +432,9 @@ class Dashboard extends React.Component {
                 // getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
                 self.getUnitListByAssoc();
 
-            }
-            else if(stat===null){
+            } else if (stat === null) {
                 this.setState({
-                    isNoAssJoin:true
+                    isNoAssJoin: true
                 });
                 Alert.alert(
                     'Join association',
@@ -456,7 +453,6 @@ class Dashboard extends React.Component {
     }
 
     onAssociationChange = (value, index) => {
-        console.log('Ass index',value,index)
         const {
             associationid,
             getDashUnits,
@@ -466,14 +462,15 @@ class Dashboard extends React.Component {
             dropdown,
             updateSelectedDropDown
         } = this.props;
-        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-        const { oyeURL } = this.props.oyespaceReducer;
-        this.setState({assocId:dropdown[index].associationId})
+        console.log('Ass index', value, index, dropdown[index])
+        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
+        const {oyeURL} = this.props.oyespaceReducer;
+        this.setState({assocId: dropdown[index].associationId})
 
         // console.log(value, "Valuessss");
         getDashUnits(dropdown[index].associationId, oyeURL, MyAccountID);
 
-        const { updateIdDashboard } = this.props;
+        const {updateIdDashboard} = this.props;
         console.log("updateIdDashboard1", this.props);
         updateIdDashboard({
             prop: "assId",
@@ -503,19 +500,19 @@ class Dashboard extends React.Component {
             value: dropdown[index].memberId
         });
         this.roleCheckForAdmin(dropdown[index].associationId)
-this.checkUnitIsThere()
+        this.checkUnitIsThere()
+        this.getUnitListByAssoc()
         // this.setState({ role:dropdown[index].roleId });
     };
 
-    checkUnitIsThere(){
-        const {dropdown1}=this.props
-        console.log('CheckUnit;s is there',dropdown1,dropdown1.length)
-        if(dropdown1.length===0){
+    checkUnitIsThere() {
+        const {dropdown1} = this.props
+        console.log('CheckUnit;s is there', dropdown1, dropdown1.length)
+        if (dropdown1.length === 0) {
             this.setState({
-                vehiclesCount:0
+                vehiclesCount: 0
             })
-        }
-        else{
+        } else {
             this.getVehicleList()
             
         }
@@ -524,9 +521,12 @@ this.checkUnitIsThere()
     async getUnitListByAssoc() {
         let self = this;
         //self.setState({isLoading: true})
-        console.log("APi1233", self.state.assocId);
-        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(this.props.dashBoardReducer.assId);
-        self.setState({ isLoading: false, isDataLoading: false });
+
+        console.log("APi1233", self.state.assocId, self.props.dashBoardReducer.dropdown1);
+        let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
+            self.state.assocId
+        );
+        self.setState({isLoading: false, isDataLoading: false});
         console.log("STAT123", stat);
 
         try {
@@ -548,7 +548,7 @@ this.checkUnitIsThere()
                     unitId: unitList[0].details.unUnitID,
                     isDataVisible: true
                 });
-                const { updateIdDashboard } = this.props;
+                const {updateIdDashboard} = this.props;
                 console.log("updateIdDashboard3", this.props);
                 updateIdDashboard({
                     prop: "uniID",
@@ -567,8 +567,9 @@ this.checkUnitIsThere()
         let self = this;
         let unitList = self.state.unitList;
         let unitName, unitId;
+        console.log("DKVMKODVND:", unitList, value, index)
         for (let i = 0; i < unitList.length; i++) {
-            if (i === index) {
+            if (value === unitList[i].value) {
                 unitName = unitList[i].details.asAsnName;
                 unitId = unitList[i].details.unUnitID;
             }
@@ -577,8 +578,8 @@ this.checkUnitIsThere()
             unitName: value,
             unitId: unitId
         });
-        const { updateIdDashboard } = this.props;
-        updateIdDashboard({ prop: "uniID", value:unitId });
+        const {updateIdDashboard} = this.props;
+        updateIdDashboard({prop: "uniID", value: unitId});
         self.getVehicleList();
     }
 
@@ -598,9 +599,9 @@ this.checkUnitIsThere()
             .then(response => response.json())
             .then(responseJson => {
                 console.log(
+                    this.state.unitId,
                     "VehicleRespponse####",
                     responseJson,
-                    responseJson.data.vehicleListByUnitID.length
                 );
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
@@ -608,7 +609,7 @@ this.checkUnitIsThere()
                 });
             })
             .catch(error => {
-                this.setState({ loading: false ,});
+                this.setState({loading: false,});
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
                     vehiclesCount: responseJson.data.vehicleListByUnitID.length
@@ -623,7 +624,7 @@ this.checkUnitIsThere()
             this.props.userReducer.MyAccountID
         );
         console.log("Joe", response);
-        const { updateUserInfo } = this.props;
+        const {updateUserInfo} = this.props;
         updateUserInfo({
             prop: "userData",
             value: response
@@ -634,31 +635,84 @@ this.checkUnitIsThere()
         });
     };
 
-   
-   
+    getFamilyMemberList = () => {
+        fetch(
+            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+                this.props.dashBoardReducer.assId
+                }`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                }
+            }
+        )
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log("Manas", responseJson);
+                this.setState({
+                    //Object.keys(responseJson.data.unitsByBlockID).length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+                        .length
+                });
+            })
+            .catch(error => {
+                this.setState({loading: false});
+                console.log(error);
+            });
+    };
+
+    getVisitorList = () => {
+        fetch(
+            `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
+                this.props.dashBoardReducer.assId
+                }`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                }
+            }
+        )
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log("Manas", responseJson);
+                this.setState({
+                    //Object.keys(responseJson.data.unitsByBlockID).length
+                    vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+                        .length
+                });
+            })
+            .catch(error => {
+                this.setState({loading: false});
+                console.log(error);
+            });
+    };
 
     render() {
         const {
-          dropdown,
-          dropdown1,
-          residentList,
-          sold,
-          unsold,
-          isLoading,
-          sold2,
-          unsold2,
-          updateUserInfo,
-          updateDropDownIndex,
-          selectedDropdown,
-          selectedDropdown1,
-          updateSelectedDropDown
+            dropdown,
+            dropdown1,
+            residentList,
+            sold,
+            unsold,
+            isLoading,
+            sold2,
+            unsold2,
+            updateUserInfo,
+            updateDropDownIndex,
+            selectedDropdown,
+            selectedDropdown1,
+            updateSelectedDropDown
         } = this.props;
         console.log("UNIT ID ---->",this.props.dashBoardReducer.uniID)
         let associationList = this.state.assocList;
         let unitList = this.state.unitList;
         console.log("Drp1", dropdown1);
         return (
-            <View style={{ height: "100%", width: "100%" }}>
+            <View style={{height: "100%", width: "100%"}}>
                 {/* <NavigationEvents onDidFocus={() => this.didMount()} /> */}
                 {!this.props.isLoading ? (
                     <View style={Style.container}>
@@ -670,12 +724,12 @@ this.checkUnitIsThere()
                                         label="Association Name"
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={dropdown}
-                                        containerStyle={{width:'100%'}}
+                                        containerStyle={{width: '100%'}}
                                         textColor={base.theme.colors.black}
                                         inputContainerStyle={{
                                             borderBottomColor: "transparent",
                                         }}
-                                        dropdownOffset={{ top: 10, left: 0 }}
+                                        dropdownOffset={{top: 10, left: 0}}
                                         dropdownPosition={-4}
                                         rippleOpacity={0}
                                         // onChangeText={(value, index) =>
@@ -690,7 +744,7 @@ this.checkUnitIsThere()
                                         }}
                                     />
                                 ) : (
-                                    <View />
+                                    <View/>
                                 )}
                             </View>
                             <View style={Style.rightDropDown}>
@@ -698,7 +752,7 @@ this.checkUnitIsThere()
                                     <Dropdown
                                         // value={this.state.unitName}
                                         value={selectedDropdown1}
-                                        containerStyle={{width:'100%'}}
+                                        containerStyle={{width: '100%'}}
                                         label="Unit"
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={dropdown1}
@@ -706,7 +760,7 @@ this.checkUnitIsThere()
                                             borderBottomColor: "transparent"
                                         }}
                                         textColor="#000"
-                                        dropdownOffset={{ top:10, left: 0 }}
+                                        dropdownOffset={{top: 10, left: 0}}
                                         dropdownPosition={0}
                                         rippleOpacity={0}
                                         // onChangeText={(value, index) => {
@@ -719,20 +773,17 @@ this.checkUnitIsThere()
                                                 value: dropdown1[index].unitId
                                             });
                                             updateSelectedDropDown(
-                                              {
-                                                prop:
-                                                  "selectedDropdown1",
-                                                value:
-                                                  dropdown1[
-                                                    index
-                                                  ]
-                                                    .value
-                                              }
+                                                {
+                                                    prop:
+                                                        "selectedDropdown1",
+                                                    value:
+                                                    dropdown1[
+                                                        index
+                                                        ]
+                                                        .value
+                                                }
                                             );
 
-                                            
-
-                                            
 
                                             // console.log(value);
                                             // console.log(index);
@@ -741,7 +792,7 @@ this.checkUnitIsThere()
 
                                     />
                                 ) : (
-                                    <View />
+                                    <View/>
                                 )}
                             </View>
                         </View>
@@ -773,7 +824,7 @@ this.checkUnitIsThere()
                                     disabled={this.state.isSelectedCard === "ADMIN"}
                                 />
                             ) : (
-                                <View />
+                                <View/>
                             )}
 
                             {/* <CardView
@@ -822,7 +873,7 @@ this.checkUnitIsThere()
                         </View>
                     </View>
                 ) : (
-                    <View />
+                    <View/>
                 )}
                 <ProgressLoader
                     isHUD={true}
@@ -880,7 +931,7 @@ this.checkUnitIsThere()
     }
 
     myUnitCard() {
-        const {dropdown1}=this.props;
+        const {dropdown1} = this.props;
         let invoiceList = [
             {
                 invoiceNumber: 528,
@@ -907,7 +958,7 @@ this.checkUnitIsThere()
                         marginTop={20}
                         iconWidth={Platform.OS === "ios" ? 40 : 35}
                         iconHeight={Platform.OS === "ios" ? 40 : 20}
-                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"): dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("MyFamilyList")}
+                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen") : dropdown1.length === 0 ? alert('Unit is not available') : this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
                     />
                     <CardView
@@ -920,8 +971,8 @@ this.checkUnitIsThere()
                         cardCount={this.state.vehiclesCount}
                         marginTop={20}
                         backgroundColor={base.theme.colors.cardBackground}
-                        onCardClick={() =>this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
-                            dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("MyVehicleListScreen")
+                        onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen") :
+                            dropdown1.length === 0 ? alert('Unit is not available') : this.props.navigation.navigate("MyVehicleListScreen")
                         }
                     />
                     <CardView
@@ -1066,84 +1117,85 @@ this.checkUnitIsThere()
                   </Card>
                 </View> */}
 
-        <View
-          style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            alignSelf: "center"
-          }}
-        >
-          <Button
-            bordered
-            style={styles.button1}
-            onPress={() => this.props.navigation.navigate("ViewmembersScreen")}
-          >
-            <Text>Role Management</Text>
-          </Button>
+                <View
+                    style={{
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "center"
+                    }}
+                >
+                    <Button
+                        bordered
+                        style={styles.button1}
+                        onPress={() => this.props.navigation.navigate("ViewmembersScreen")}
+                    >
+                        <Text>Role Management</Text>
+                    </Button>
 
-          <Button
-            bordered
-            style={styles.button1}
-            onPress={() =>
-              this.props.navigation.navigate("ViewAlllVisitorsPage")
-            }
-          >
-            <Text>View All Visitors</Text>
-          </Button>
-        </View>
-      </ElevatedView>
-    );
-  }
+                    <Button
+                        bordered
+                        style={styles.button1}
+                        onPress={() =>
+                            this.props.navigation.navigate("ViewAlllVisitorsPage")
+                        }
+                    >
+                        <Text>View All Visitors</Text>
+                    </Button>
+                </View>
+            </ElevatedView>
+        );
+    }
 
-  offersZoneCard() {
-    return (
-      <ElevatedView elevation={6} style={Style.mainElevatedView}>
-        <Text>OFFERS ZONE</Text>
-      </ElevatedView>
-    );
-  }
+    offersZoneCard() {
+        return (
+            <ElevatedView elevation={6} style={Style.mainElevatedView}>
+                <Text>OFFERS ZONE</Text>
+            </ElevatedView>
+        );
+    }
 
-  listOfInvoices(item) {
-    base.utils.logger.log(item);
-    return (
-      <TouchableHighlight underlayColor={"transparent"}>
-        <View style={Style.invoiceView}>
-          <View style={Style.invoiceSubView}>
-            <Text style={Style.invoiceNumberText}>
-              Invoice No. {item.item.invoiceNumber}
-            </Text>
-            <Text style={Style.billText}>
-              <Text style={Style.rupeeIcon}>{"\u20B9"}</Text>
-              {item.item.bill}
-            </Text>
-          </View>
-          <View style={Style.invoiceSubView}>
-            <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
-            <OSButton
-              height={"80%"}
-              width={"25%"}
-              borderRadius={15}
-              oSBBackground={
-                item.item.status === "PAID"
-                  ? base.theme.colors.grey
-                  : base.theme.colors.primary
-              }
-              oSBText={item.item.status === "PAID" ? "Paid" : "Pay Now"}
-            />
-          </View>
-        </View>
-      </TouchableHighlight>
-    );
-  }
+    listOfInvoices(item) {
+        base.utils.logger.log(item);
+        return (
+            <TouchableHighlight underlayColor={"transparent"}>
+                <View style={Style.invoiceView}>
+                    <View style={Style.invoiceSubView}>
+                        <Text style={Style.invoiceNumberText}>
+                            Invoice No. {item.item.invoiceNumber}
+                        </Text>
+                        <Text style={Style.billText}>
+                            <Text style={Style.rupeeIcon}>{"\u20B9"}</Text>
+                            {item.item.bill}
+                        </Text>
+                    </View>
+                    <View style={Style.invoiceSubView}>
+                        <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
+                        <OSButton
+                            height={"80%"}
+                            width={"25%"}
+                            borderRadius={15}
+                            oSBBackground={
+                                item.item.status === "PAID"
+                                    ? base.theme.colors.grey
+                                    : base.theme.colors.primary
+                            }
+                            oSBText={item.item.status === "PAID" ? "Paid" : "Pay Now"}
+                        />
+                    </View>
+                </View>
+            </TouchableHighlight>
+        );
+    }
 
-  myUnit() {}
+    myUnit() {
+    }
 
-  goToFirstTab() {
-        const{dropdown1}=this.props
-    this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen"):
-        dropdown1.length===0? alert('Unit is not available'): this.props.navigation.navigate("firstTab");
-  }
+    goToFirstTab() {
+        const {dropdown1} = this.props
+        this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen") :
+            dropdown1.length === 0 ? alert('Unit is not available') : this.props.navigation.navigate("firstTab");
+    }
 
 }
 

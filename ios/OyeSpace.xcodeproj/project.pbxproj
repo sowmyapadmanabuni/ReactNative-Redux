@@ -395,6 +395,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RazorpayCheckout;
 		};
+		FD19270C22F851FA00B4633E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 117405FA1B9954BF004425E1;
+			remoteInfo = RNHTMLtoPDFTests;
+		};
 		FD2B2A52223F82850061AB68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
@@ -464,13 +471,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
 			remoteInfo = "RNSpinkit-tvOS";
-		};
-		FD6BA0B022F7214100B2BD99 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 117405FA1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDFTests;
 		};
 		FDC53A8E229FABA80095F5B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1038,7 +1038,7 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-				FD6BA0B122F7214100B2BD99 /* RNHTMLtoPDFTests.xctest */,
+				FD19270D22F851FA00B4633E /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1569,6 +1569,13 @@
 			remoteRef = FD0DCFC422B26DF90018C3F7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		FD19270D22F851FA00B4633E /* RNHTMLtoPDFTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNHTMLtoPDFTests.xctest;
+			remoteRef = FD19270C22F851FA00B4633E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1637,13 +1644,6 @@
 			fileType = archive.ar;
 			path = libRNSpinkit.a;
 			remoteRef = FD57EA4E22E98F05009A1AC7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		FD6BA0B122F7214100B2BD99 /* RNHTMLtoPDFTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = FD6BA0B022F7214100B2BD99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		FDC53A8F229FABA80095F5B5 /* libreactnativeuilib.a */ = {

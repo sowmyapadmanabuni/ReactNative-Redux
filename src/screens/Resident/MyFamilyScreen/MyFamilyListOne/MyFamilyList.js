@@ -143,7 +143,6 @@ class MyFamilyList extends React.Component {
   }
 
   renderItem = ({ item }) => {
-    console.log('List of the Data',item)
     let itemID = item.id
     return (
       <View style={Style.tableView}>
