@@ -338,6 +338,7 @@ class Dashboard extends React.Component {
         if (!this.props.called) {
             this.didMount();
         }
+        console.log("UNIT ID ---->",this.state.unitId)
     }
 
     roleCheckForAdmin = (index) => {
@@ -513,6 +514,7 @@ class Dashboard extends React.Component {
             })
         } else {
             this.getVehicleList()
+            
         }
     }
 
@@ -582,11 +584,10 @@ class Dashboard extends React.Component {
     }
 
     getVehicleList = () => {
-        console.log("Get ID for vehicle", this.state.unitId);
+        console.log("Get ID for vehicle", this.props,this.state.unitId);
+        
         fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
-                this.state.unitId
-                }`, //${this.props.dashBoardReducer.uniID}
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.state.unitList}`,
             {
                 method: "GET",
                 headers: {
@@ -706,7 +707,7 @@ class Dashboard extends React.Component {
             selectedDropdown1,
             updateSelectedDropDown
         } = this.props;
-
+        console.log("UNIT ID ---->",this.props.dashBoardReducer.uniID)
         let associationList = this.state.assocList;
         let unitList = this.state.unitList;
         console.log("Drp1", dropdown1);

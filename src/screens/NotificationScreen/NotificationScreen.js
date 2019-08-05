@@ -260,8 +260,6 @@ class NotificationScreen extends Component {
     const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
 
-    console.log('hghfhgfghfgfhgfh',item.ntdUpdated,moment(item.ntdUpdated).format("hh:mm A"))
-
     if (item.ntType !== "gate_app") {
       return (
           <Card>
@@ -336,11 +334,11 @@ class NotificationScreen extends Component {
                         {item.open ? 
                           <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
                             <Text style={{color:'#ff8c00'}}>More</Text>
-                            {/* <Image source={require('../../../icons/view_more')}/> */}
+                            <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_more.png')}/>
                           </View>:
                           <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
                             <Text style={{color:'#ff8c00'}}>Less</Text>
-                            {/* <Image source={require('../../../icons/view_less')} /> */}
+                            <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_less.png')} />
                           </View>}
                       </View>
                       
@@ -576,7 +574,7 @@ class NotificationScreen extends Component {
                     </Collapsible>
                   </View>
               )}
-              {/* <Text> {item.ntdUpdated}</Text> */}
+              {/* <Text> {item.ntdCreated}</Text> */}
             </Card>
           </TouchableWithoutFeedback>
       );

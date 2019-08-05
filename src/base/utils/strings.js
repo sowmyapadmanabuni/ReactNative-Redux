@@ -1,4 +1,4 @@
-/**
+6/**
  * Created by Anooj Krishnan at Synclovis Systems Pvt. Ltd. on 2019-06-24
  */
 
@@ -15,7 +15,6 @@ const api = {
     oyeSafeDomain:isDev?"apiuat.oyespace.com/oye247":"apiuat.oyespace.com/oye247",
     oyeDomain:isDev?"apiuat.oyespace.com/oyeliving":"apiuat.oyespace.com/oyeliving",
     oyeLivingDomain:isDev?"apiuat.oyespace.com":"OyeLivingApi.oyespace.com",
-    mediaupload:isDev?"https://mediauploaddev.oyespace.com/":"http://mediauploaduat.oyespace.com/",
     protocol:isSecure?"https://":"http://",
     oyeSafeApiPath:"/api/v1/",
     oyeLivingApiPath:"/oyeliving/OyeLivingApi/v1/",

@@ -55,10 +55,7 @@ class MyGuests extends Component {
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${
-        this.props.dashBoardReducer.assId
-      }/True/${this.props.dashBoardReducer.uniID
-      }`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}`,
       {
         method: "GET",
         headers: {
@@ -137,7 +134,7 @@ class MyGuests extends Component {
   renderItem = ({ item, index }) => {
       console.log(item,index)
     console.log("Data Sources",this.state.dataSource)
-    
+    console.log("The Association Id and Unit id:",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
     return (
       <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
         <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
