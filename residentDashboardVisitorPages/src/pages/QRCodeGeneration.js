@@ -217,6 +217,7 @@ class QRCodeGeneration extends Component {
 
     share(){
         const { params } = this.props.navigation.state;
+        console.log("Params:",params);
         let shareImageBase64 = {
             title: "Invitation",
             message:
