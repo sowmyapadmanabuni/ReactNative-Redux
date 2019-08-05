@@ -149,7 +149,7 @@ class MyFamilyList extends React.Component {
       <View style={Style.tableView}>
         <View style={Style.cellView}>
           <View style={Style.imageContainerViewStyle}>
-            {item.fmImgName == "" ? (
+            {item.fmImgName == "" ? 
               <ZoomImage
                 source={require("../../../../../icons/placeholderImg.png")}
                 imgStyle={Style.placeholderImage}
@@ -157,7 +157,7 @@ class MyFamilyList extends React.Component {
                 enableScaling={true}
                 easingFunc={Easing.bounce}
               />
-            ) : (
+             : 
               <ZoomImage
                 source={{
                   uri:
@@ -168,7 +168,7 @@ class MyFamilyList extends React.Component {
                 enableScaling={true}
                 easingFunc={Easing.bounce}
               />
-            )}
+            }
           </View>
           <View style={Style.middleFlexBlockForMemberDetailsViewContainer}>
             <Text style={Style.familyMemberNameTextStyle}>{item.fmName}</Text>
