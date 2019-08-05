@@ -260,22 +260,26 @@ class Dashboard extends React.Component {
                 // this.props.newNotifInstance(notificationOpen.notification);
                 // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             } else if (notificationOpen.notification._data.admin === "false") {
-                this.props.createUserNotification(
-                    "Join_Status",
-                    oyeURL,
-                    MyAccountID,
-                    1,
-                    details.ntDesc,
-                    "resident_user",
-                    "resident_user",
-                    details.sbSubID,
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    true
+                this.props.refreshNotifications(
+                  oyeURL,
+                  MyAccountID
                 );
+                // this.props.createUserNotification(
+                //     "Join_Status",
+                //     oyeURL,
+                //     MyAccountID,
+                //     1,
+                //     details.ntDesc,
+                //     "resident_user",
+                //     "resident_user",
+                //     details.sbSubID,
+                //     "resident_user",
+                //     "resident_user",
+                //     "resident_user",
+                //     "resident_user",
+                //     "resident_user",
+                //     true
+                // );
                 // this.props.navigation.navigate("NotificationScreen");
             }
 
@@ -487,6 +491,11 @@ class Dashboard extends React.Component {
         updateSelectedDropDown({
             prop: "selectedDropdown",
             value: dropdown[index].value
+        });
+
+        updateSelectedDropDown({
+          prop: "assId",
+          value: dropdown[index].associationId
         });
 
         // let memId = _.find(memberList, function(o) {
@@ -741,6 +750,7 @@ this.checkUnitIsThere()
                                             this.setState({
                                                 associationSelected: true
                                             });
+
                                         }}
                                     />
                                 ) : (
@@ -772,6 +782,18 @@ this.checkUnitIsThere()
                                                 prop: "SelectedUnitID",
                                                 value: dropdown1[index].unitId
                                             });
+
+                                            updateSelectedDropDown(
+                                              {
+                                                prop:
+                                                  "uniID",
+                                                value:
+                                                  dropdown1[
+                                                    index
+                                                  ]
+                                                    .unitId
+                                              }
+                                            );
                                             updateSelectedDropDown(
                                               {
                                                 prop:
