@@ -559,10 +559,10 @@ class Dashboard extends React.Component {
                 });
                 const {updateIdDashboard} = this.props;
                 console.log("updateIdDashboard3", this.props);
-                updateIdDashboard({
-                    prop: "uniID",
-                    value: unitList[0].details.unUnitID
-                });
+                // updateIdDashboard({
+                //     prop: "uniID",
+                //     value: unitList[0].details.unUnitID
+                // });
 
                 self.roleCheckForAdmin(this.state.assocId);
                 self.getVehicleList();
@@ -588,7 +588,7 @@ class Dashboard extends React.Component {
             unitId: unitId
         });
         const {updateIdDashboard} = this.props;
-        updateIdDashboard({prop: "uniID", value: unitId});
+        // updateIdDashboard({prop: "uniID", value: unitId});
         self.getVehicleList();
     }
 

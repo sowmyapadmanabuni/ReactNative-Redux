@@ -175,6 +175,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                         value: withoutString_units[0].unitId
                       }
                     });
+
+                    console.log(withoutString_units[0].unitId, "jdjdjdj");
                   }
 
                   dispatch({
@@ -395,6 +397,14 @@ export const getDashUnits = (unit, oyeURL, MyAccountID) => {
             payload: {
               prop: "selectedDropdown1",
               value: withoutString[0].value
+            }
+          });
+
+          dispatch({
+            type: UPDATE_SELECTED_DROPDOWN,
+            payload: {
+              prop: "uniID",
+              value: withoutString[0].unitId
             }
           });
         }
