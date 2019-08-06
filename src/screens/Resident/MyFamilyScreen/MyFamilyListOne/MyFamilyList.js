@@ -99,7 +99,6 @@ class MyFamilyList extends React.Component {
     this.setState({
       value: text
     })
-
     const newData = this.arrayholder.filter(item => {
       const itemData = `${item.fmName.toUpperCase()} ${item.fmName.toUpperCase()} ${item.fmName.toUpperCase()}`
       const textData = text.toUpperCase()
