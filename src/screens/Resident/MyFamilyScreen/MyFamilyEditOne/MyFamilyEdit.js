@@ -65,9 +65,17 @@ class MyFamilyEdit extends Component {
     }
   }
 
+  componentWillMount() {
+    this.setState({
+      firstName:this.props.navigation.state.params.fmName,
+      lastName:this.props.navigation.state.params.fmlName,
+      mobileNumber:this.props.navigation.state.params.fmMobile
+    })
+  }
+
   render(){
     console.log('Isminor',this.state,this.props, this.props.navigation.state.params) //check the data and show according to it
-    let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number"
+    let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number";
     return (
         <SafeAreaView style={Style.container}>
           <View style={Style.headerStyles}>
@@ -134,7 +142,7 @@ class MyFamilyEdit extends Component {
                 <TextInput
                     style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                     onChangeText={(text) => this.setState({firstName: text})}
-                    value={this.props.navigation.state.params.fmName}
+                    value={this.state.firstName}
                     placeholder="First Name"
                     placeholderTextColor={base.theme.colors.grey}
                 />
@@ -145,7 +153,7 @@ class MyFamilyEdit extends Component {
                 <TextInput
                     style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                     onChangeText={(text) => this.setState({lastName: text})}
-                    value={this.props.navigation.state.params.fmlName}
+                    value={this.state.lastName}
                     placeholder="Last Name"
                     placeholderTextColor={base.theme.colors.grey}
                     keyboardType={'default'}
@@ -220,7 +228,7 @@ class MyFamilyEdit extends Component {
                   <TextInput
                       style={{height: 50, width: '80%',}}
                       onChangeText={(text) => this.setState({mobileNumber: text})}
-                      value={this.props.navigation.state.params.fmMobile}
+                      value={this.state.mobileNumber}
                       placeholder={mobPlaceHolder}
                       placeholderTextColor={base.theme.colors.grey}
                       keyboardType={'phone-pad'}
