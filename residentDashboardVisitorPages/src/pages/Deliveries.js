@@ -180,7 +180,7 @@ class App extends React.Component {
             );
             this.setState({
               isLoading: false,
-              dataSource: responseJson.data.visitorlog,
+              dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),
               error: responseJson.error || null,
               loading: false,
               dobDate: null,
