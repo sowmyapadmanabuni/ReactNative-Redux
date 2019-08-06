@@ -1,4 +1,4 @@
-x/*Screen to register the user*/
+/*Screen to register the user*/
 import React from 'react';
 import { View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import Mytextinput from './components/Mytextinput';
