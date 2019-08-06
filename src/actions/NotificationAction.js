@@ -19,7 +19,7 @@ import _ from "lodash";
 
 export const getNotifications = (oyeURL, MyAccountID) => {
   return dispatch => {
-      console.log('Notification URLS',oyeURL,MyAccountID)
+    console.log("Notification URLS", oyeURL, MyAccountID);
     dispatch({ type: GET_NOTIFICATIONS });
     fetch(
       "http://" +
@@ -36,7 +36,7 @@ export const getNotifications = (oyeURL, MyAccountID) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-         console.log("Check list",responseJson);
+        console.log("Check list", responseJson);
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];
@@ -542,7 +542,8 @@ export const createUserNotification = (
   unitName,
   occupancyDate,
   soldDate,
-  refresh
+  refresh,
+  senderId
 ) => {
   return dispatch => {
     let headers = {
@@ -573,7 +574,8 @@ export const createUserNotification = (
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
             UNOcSDate: occupancyDate,
-            UNSldDate: soldDate
+            UNSldDate: soldDate,
+            ACNotifyID: senderId
           },
           {
             headers: headers
@@ -702,7 +704,8 @@ export const createUserNotification = (
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
             UNOcSDate: occupancyDate,
-            UNSldDate: soldDate
+            UNSldDate: soldDate,
+            ACNotifyID: senderId
           },
           {
             headers: headers

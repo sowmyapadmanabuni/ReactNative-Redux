@@ -11,7 +11,8 @@ import {
   GET_MEMBERLIST_FAILED,
   UPDATE_ID_DASHBOARD,
   UPDATE_DROPDOWN_INDEX,
-  UPDATE_SELECTED_DROPDOWN
+  UPDATE_SELECTED_DROPDOWN,
+  UPDATE_USER_INFO
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
@@ -93,8 +94,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
-              dropdown:removeDuplicates.sort(
-                  base.utils.validate.compareAssociationNames
+              dropdown: removeDuplicates.sort(
+                base.utils.validate.compareAssociationNames
               ),
               associationid: associationIds
             }
@@ -109,8 +110,16 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               }
             });
 
+            dispatch({
+              type: UPDATE_SELECTED_DROPDOWN,
+              payload: {
+                prop: "assId",
+                value: removeDuplicates[0].associationId
+              }
+            });
+
             getDashUnits_s = (unit, oyeURL, accountId) => {
-              console.log('Data to get the units', unit, oyeURL, accountId)
+              console.log("Data to get the units", unit, oyeURL, accountId);
               dispatch({ type: DASHBOARD_UNITS_START });
 
               axios
@@ -126,7 +135,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                   }
                 )
                 .then(resUnits => {
-                  console.log("Response in Get Units",resUnits)
+                  console.log("Response in Get Units", resUnits);
                   let responseDataUnits = resUnits.data.data;
 
                   let units = [];
@@ -158,6 +167,16 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                         value: withoutString_units[0].value
                       }
                     });
+
+                    dispatch({
+                      type: UPDATE_SELECTED_DROPDOWN,
+                      payload: {
+                        prop: "uniID",
+                        value: withoutString_units[0].unitId
+                      }
+                    });
+
+                    console.log(withoutString_units[0].unitId, "jdjdjdj");
                   }
 
                   dispatch({
@@ -349,7 +368,7 @@ export const getDashUnits = (unit, oyeURL, MyAccountID) => {
         }
       )
       .then(response => {
-        console.log('response in Units by My Account Id',response)
+        console.log("response in Units by My Account Id", response);
         let responseData = response.data.data;
 
         let units = [];
@@ -378,6 +397,14 @@ export const getDashUnits = (unit, oyeURL, MyAccountID) => {
             payload: {
               prop: "selectedDropdown1",
               value: withoutString[0].value
+            }
+          });
+
+          dispatch({
+            type: UPDATE_SELECTED_DROPDOWN,
+            payload: {
+              prop: "uniID",
+              value: withoutString[0].unitId
             }
           });
         }
@@ -419,7 +446,6 @@ export const getDashUnits = (unit, oyeURL, MyAccountID) => {
             )
               .then(res => res.json())
               .then(responseJson => {
-
                 if (responseJson.success) {
                   let count = Object.keys(responseJson.data.unit).length;
 

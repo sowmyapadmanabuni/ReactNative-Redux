@@ -257,22 +257,26 @@ class Dashboard extends React.Component {
                 // this.props.newNotifInstance(notificationOpen.notification);
                 // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
             } else if (notificationOpen.notification._data.admin === "false") {
-                this.props.createUserNotification(
-                    "Join_Status",
-                    oyeURL,
-                    MyAccountID,
-                    1,
-                    details.ntDesc,
-                    "resident_user",
-                    "resident_user",
-                    details.sbSubID,
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    true
+                this.props.refreshNotifications(
+                  oyeURL,
+                  MyAccountID
                 );
+                // this.props.createUserNotification(
+                //     "Join_Status",
+                //     oyeURL,
+                //     MyAccountID,
+                //     1,
+                //     details.ntDesc,
+                //     "resident_user",
+                //     "resident_user",
+                //     details.sbSubID,
+                //     "resident_user",
+                //     "resident_user",
+                //     "resident_user",
+                //     "resident_user",
+                //     "resident_user",
+                //     true
+                // );
                 // this.props.navigation.navigate("NotificationScreen");
             }
 
@@ -487,6 +491,11 @@ class Dashboard extends React.Component {
             value: dropdown[index].value
         });
 
+        updateSelectedDropDown({
+          prop: "assId",
+          value: dropdown[index].associationId
+        });
+
         // let memId = _.find(memberList, function(o) {
         //   return o.asAssnID === dropdown[index].associationId;
         // });
@@ -550,10 +559,10 @@ class Dashboard extends React.Component {
                 });
                 const {updateIdDashboard} = this.props;
                 console.log("updateIdDashboard3", this.props);
-                updateIdDashboard({
-                    prop: "uniID",
-                    value: unitList[0].details.unUnitID
-                });
+                // updateIdDashboard({
+                //     prop: "uniID",
+                //     value: unitList[0].details.unUnitID
+                // });
 
                 self.roleCheckForAdmin(this.state.assocId);
                 self.getVehicleList();
@@ -579,7 +588,7 @@ class Dashboard extends React.Component {
             unitId: unitId
         });
         const {updateIdDashboard} = this.props;
-        updateIdDashboard({prop: "uniID", value: unitId});
+        // updateIdDashboard({prop: "uniID", value: unitId});
         self.getVehicleList();
     }
 
@@ -741,6 +750,7 @@ class Dashboard extends React.Component {
                                             this.setState({
                                                 associationSelected: true
                                             });
+
                                         }}
                                     />
                                 ) : (
@@ -772,6 +782,18 @@ class Dashboard extends React.Component {
                                                 prop: "SelectedUnitID",
                                                 value: dropdown1[index].unitId
                                             });
+
+                                            updateSelectedDropDown(
+                                              {
+                                                prop:
+                                                  "uniID",
+                                                value:
+                                                  dropdown1[
+                                                    index
+                                                  ]
+                                                    .unitId
+                                              }
+                                            );
                                             updateSelectedDropDown(
                                                 {
                                                     prop:
