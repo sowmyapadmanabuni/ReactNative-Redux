@@ -24,7 +24,7 @@ class NotificationDetailScreen extends Component {
   state = {
     loading: false,
     date: "",
-      reqStatus:""
+    reqStatus: ""
   };
 
   approve = (item, status) => {
@@ -91,6 +91,31 @@ class NotificationDetailScreen extends Component {
                 MRMRoleID: item.sbRoleID
               };
 
+              this.props.createUserNotification(
+                "Join_Status",
+                this.props.oyeURL,
+                item.ACNotifyID,
+                1,
+                "Your request to join " +
+                  item.mrRolName +
+                  " " +
+                  " unit in " +
+                  item.asAsnName +
+                  " association as " +
+                  roleName +
+                  " has been approved",
+                "resident_user",
+                "resident_user",
+                item.sbSubID,
+                "resident_user",
+                "resident_user",
+                "resident_user",
+                "resident_user",
+                "resident_user",
+                false,
+                this.props.MyAccountID
+              );
+
               fetch(
                 `${this.props.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
                 {
@@ -147,8 +172,10 @@ class NotificationDetailScreen extends Component {
                           body: JSON.stringify(StatusUpdate)
                         }
                       )
-                        .then(response =>{response.json()
-                        console.log('Response',response)})
+                        .then(response => {
+                          response.json();
+                          console.log("Response", response);
+                        })
                         .then(responseJson_3 => {
                           this.props.getNotifications(
                             this.props.oyeURL,
@@ -158,6 +185,7 @@ class NotificationDetailScreen extends Component {
                             this.props.approvedAdmins,
                             item.sbSubID
                           );
+
                           this.setState({
                             loading: false,
                             date: StatusUpdate.NTStatDesc
@@ -265,6 +293,30 @@ class NotificationDetailScreen extends Component {
                   ntType: "Join_Status"
                 })
                 .then(() => {
+                  this.props.createUserNotification(
+                    "Join_Status",
+                    this.props.oyeURL,
+                    item.ACNotifyID,
+                    1,
+                    "Your request to join" +
+                      item.mrRolName +
+                      " " +
+                      " unit in " +
+                      item.asAsnName +
+                      " association as " +
+                      roleName +
+                      " has been declined",
+                    "resident_user",
+                    "resident_user",
+                    item.sbSubID,
+                    "resident_user",
+                    "resident_user",
+                    "resident_user",
+                    "resident_user",
+                    "resident_user",
+                    false,
+                    this.props.MyAccountID
+                  );
                   this.setState({ loading: false });
                   this.props.updateApproveAdmin(
                     this.props.approvedAdmins,
@@ -322,17 +374,18 @@ class NotificationDetailScreen extends Component {
         return null;
       } else {
         if (status === true) {
-            let reqStatus="";
-            if(details.ntStatDesc===""){
-                reqStatus="Request Rejected"
-            }
-            else{
-                reqStatus="Request Accepted"
-            }
+          let reqStatus = "";
+          if (details.ntStatDesc === "") {
+            reqStatus = "Request Rejected";
+          } else {
+            reqStatus = "Request Accepted";
+          }
 
-          return(<View style={{alignItems:'center',justifyContent: 'center'}}>
+          return (
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
               <Text> {this.state.date || reqStatus}</Text>
-          </View>);
+            </View>
+          );
         } else {
           return (
             <View style={styles.buttonContainer}>
@@ -386,7 +439,6 @@ class NotificationDetailScreen extends Component {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam("details", "NO-ID");
-     console.log("Get the Details",details);
     return (
       <View style={styles.container}>
         <Header
