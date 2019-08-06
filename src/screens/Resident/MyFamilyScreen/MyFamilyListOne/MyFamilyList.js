@@ -1,34 +1,26 @@
-import React, { Component } from "react"
+import React from "react"
 import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Platform,
-  FlatList,
-  TouchableOpacity,
-  Linking,
   ActivityIndicator,
-  TextInput,
-  Dimensions,
-  Animated,
   Easing,
-  SafeAreaView
+  FlatList,
+  Image,
+  Linking,
+  Platform,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native"
-import { Card, CardItem, Form, Item, Input, Icon } from "native-base"
 
-import { NavigationEvents } from "react-navigation"
+import {NavigationEvents} from "react-navigation"
 
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from "react-native-responsive-screen"
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 
 import ZoomImage from "react-native-zoom-image"
 import Style from "./Style"
-import OyeSafeApiFamily from "../../../../base/services/OyeSafeApiFamily"
 import base from "../../../../base"
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 
 class MyFamilyList extends React.Component {
   static navigationOptions = {
@@ -48,7 +40,7 @@ class MyFamilyList extends React.Component {
       myFamilyList: [],
       myfamily11: [],
       isModelVisible: true,
-      searchText:""
+      searchText: ""
     }
 
     this.arrayholder = []
@@ -58,9 +50,9 @@ class MyFamilyList extends React.Component {
     let itemID = item.id
 
     return (
-      <TouchableHighlight onPress={() => this.deleteData(item.id)}>
-        //some code
-      </TouchableHighlight>
+        <TouchableHighlight onPress={() => this.deleteData(item.id)}>
+          //some code
+        </TouchableHighlight>
     )
   }
 
@@ -69,30 +61,30 @@ class MyFamilyList extends React.Component {
     let itemId = itemID
 
     fetch(
-      `http://${this.props.oyeURL}/oyesafe/api/v1/FamilyMemberDetailsDelete/update`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-        },
-        body: JSON.stringify({
-          FMID: itemId
-        })
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson)
-        let data = responseJson
-        if (data.success) {
-          this.myFamilyListGetData()
+        `http://${this.props.oyeURL}/oyesafe/api/v1/FamilyMemberDetailsDelete/update`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          },
+          body: JSON.stringify({
+            FMID: itemId
+          })
         }
-      })
-      .catch(error => {
-        console.log("error", error)
-        alert("error")
-      })
+    )
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log(responseJson)
+          let data = responseJson
+          if (data.success) {
+            this.myFamilyListGetData()
+          }
+        })
+        .catch(error => {
+          console.log("error", error)
+          alert("error")
+        })
   }
 
   searchFilterFunction = text => {
@@ -112,24 +104,26 @@ class MyFamilyList extends React.Component {
   }
 
   async myFamilyListGetData() {
-    this.setState({ loading: true })
-    console.log("Data sending to get family",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
-    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList( this.props.dashBoardReducer.uniID,this.props.dashBoardReducer.assId)
+    this.setState({loading: true})
+    console.log("Data sending to get family", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.uniID, this.props.dashBoardReducer.assId)
     console.log("Get Family Data", myFamilyList);
 
-   // for(let i=0;i<myFamilyList.length;i++)
+    // for(let i=0;i<myFamilyList.length;i++)
     //let arr=
 
-    this.setState({ isLoading: false, loading: false })
+    this.setState({isLoading: false, loading: false})
     try {
       if (myFamilyList && myFamilyList.data) {
-        this.setState({ myfamily11: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1),
-          clonedList:myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1) })
-        this.setState({ familyData: myFamilyList })
+        this.setState({
+          myfamily11: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1),
+          clonedList: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1)
+        })
+        this.setState({familyData: myFamilyList})
       }
     } catch (error) {
       base.utils.logger.log(error)
-      this.setState({ error, loading: false })
+      this.setState({error, loading: false})
     }
   }
 
@@ -142,130 +136,130 @@ class MyFamilyList extends React.Component {
     this.myFamilyListGetData()
   }
 
-  renderItem = ({ item }) => {
+  renderItem = ({item}) => {
     let itemID = item.id
     return (
-      <View style={Style.tableView}>
-        <View style={Style.cellView}>
-          <View style={Style.imageContainerViewStyle}>
-            {item.fmImgName == "" ? (
-              <ZoomImage
-                source={require("../../../../../icons/placeholderImg.png")}
-                imgStyle={Style.placeholderImage}
-                duration={300}
-                enableScaling={true}
-                easingFunc={Easing.bounce}
-              />
-            ) : (
-              <ZoomImage
-                source={{
-                  uri:
-                    `${this.props.mediaupload}` + item.fmImgName
-                }}
-                imgStyle={Style.placeholderImage}
-                duration={300}
-                enableScaling={true}
-                easingFunc={Easing.bounce}
-              />
-            )}
-          </View>
-          <View style={Style.middleFlexBlockForMemberDetailsViewContainer}>
-            <Text style={Style.familyMemberNameTextStyle}>{item.fmName}</Text>
-            <View style={Style.memberDetailFlexViewStyle}>
-              <Image
-                style={Style.memberDetailIconImageStyle}
-                source={require("../../../../../icons/user.png")}
-              />
-              <Text style={Style.memberDetailsTextStyle}>{item.fmRltn}</Text>
+        <View style={Style.tableView}>
+          <View style={Style.cellView}>
+            <View style={Style.imageContainerViewStyle}>
+              {item.fmImgName == "" ? (
+                  <ZoomImage
+                      source={require("../../../../../icons/placeholderImg.png")}
+                      imgStyle={Style.placeholderImage}
+                      duration={300}
+                      enableScaling={true}
+                      easingFunc={Easing.bounce}
+                  />
+              ) : (
+                  <ZoomImage
+                      source={{
+                        uri:
+                            `${this.props.mediaupload}` + item.fmImgName
+                      }}
+                      imgStyle={Style.placeholderImage}
+                      duration={300}
+                      enableScaling={true}
+                      easingFunc={Easing.bounce}
+                  />
+              )}
             </View>
-
-            <View style={Style.memberDetailFlexViewStyle}>
-              <Image
-                style={Style.memberDetailIconImageStyle}
-                source={require("../../../../../icons/age.png")}
-              />
-              <Text style={Style.memberDetailsTextStyle}>{item.fmAge}</Text>
-            </View>
-            <View style={Style.memberDetailFlexViewStyle}>
-              <Image
-                style={Style.memberDetailIconImageStyle}
-                source={require("../../../../../icons/call.png")}
-              />
-              <Text style={Style.memberDetailsTextStyle}>{item.fmMobile}</Text>
-            </View>
-          </View>
-          <View style={Style.editAndCallIconsFlexStyle}>
-            <View style={Style.threeBtnStyle}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("MyFamilyEdit", {
-                    myFamilyMobileNo: item.fmMobile.replace(item.fmisdCode, ""),
-                    acAccntID:item.acAccntID,
-                    asAssnID:item.asAssnID,
-                    fmGurName:item.fmGurName,
-                    fmImgName:item.fmImgName,
-                    fmIsActive:item.fmIsActive,
-                    fmMinor:item.fmMinor,
-                    fmMobile:item.fmMobile,
-                    fmName:item.fmName,
-                    fmRltn:item.fmRltn,
-                    fmid:item.fmid,
-                    fmisdCode:item.fmisdCode,
-                    fmlName:item.fmlName,
-                    meMemID:item.meMemID,
-                    unUnitID:item.unUnitID
-                  })
-                }}
-              >
+            <View style={Style.middleFlexBlockForMemberDetailsViewContainer}>
+              <Text style={Style.familyMemberNameTextStyle}>{item.fmName}</Text>
+              <View style={Style.memberDetailFlexViewStyle}>
                 <Image
-                  style={Style.editAndCallButtonIconImageStyle}
-                  source={require("../../../../../icons/edit.png")}
+                    style={Style.memberDetailIconImageStyle}
+                    source={require("../../../../../icons/user.png")}
                 />
-              </TouchableOpacity>
-            </View>
+                <Text style={Style.memberDetailsTextStyle}>{item.fmRltn}</Text>
+              </View>
 
-            <View style={Style.threeBtnStyle}>
-              <TouchableOpacity
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`tel:${item.fmMobile}`)
-                      : Linking.openURL(`tel:${item.fmMobile}`)
-                  }
-                }}
-              >
+              <View style={Style.memberDetailFlexViewStyle}>
                 <Image
-                  style={Style.editAndCallButtonIconImageStyle}
-                  source={require("../../../../../icons/call.png")}
+                    style={Style.memberDetailIconImageStyle}
+                    source={require("../../../../../icons/age.png")}
                 />
-              </TouchableOpacity>
+                <Text style={Style.memberDetailsTextStyle}>{item.fmAge}</Text>
+              </View>
+              <View style={Style.memberDetailFlexViewStyle}>
+                <Image
+                    style={Style.memberDetailIconImageStyle}
+                    source={require("../../../../../icons/call.png")}
+                />
+                <Text style={Style.memberDetailsTextStyle}>{item.fmMobile}</Text>
+              </View>
             </View>
+            <View style={Style.editAndCallIconsFlexStyle}>
+              <View style={Style.threeBtnStyle}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate("MyFamilyEdit", {
+                        myFamilyMobileNo: item.fmMobile.replace(item.fmisdCode, ""),
+                        acAccntID: item.acAccntID,
+                        asAssnID: item.asAssnID,
+                        fmGurName: item.fmGurName,
+                        fmImgName: item.fmImgName,
+                        fmIsActive: item.fmIsActive,
+                        fmMinor: item.fmMinor,
+                        fmMobile: item.fmMobile,
+                        fmName: item.fmName,
+                        fmRltn: item.fmRltn,
+                        fmid: item.fmid,
+                        fmisdCode: item.fmisdCode,
+                        fmlName: item.fmlName,
+                        meMemID: item.meMemID,
+                        unUnitID: item.unUnitID
+                      })
+                    }}
+                >
+                  <Image
+                      style={Style.editAndCallButtonIconImageStyle}
+                      source={require("../../../../../icons/edit.png")}
+                  />
+                </TouchableOpacity>
+              </View>
 
-            <View style={Style.threeBtnStyle}>
-              <TouchableOpacity onPress={() => this.deleteData(item.fmid)}>
-                <Image
-                  style={Style.editAndCallButtonIconImageStyle}
-                  source={require("../../../../../icons/delete.png")}
-                />
-              </TouchableOpacity>
+              <View style={Style.threeBtnStyle}>
+                <TouchableOpacity
+                    onPress={() => {
+                      {
+                        Platform.OS === "android"
+                            ? Linking.openURL(`tel:${item.fmMobile}`)
+                            : Linking.openURL(`tel:${item.fmMobile}`)
+                      }
+                    }}
+                >
+                  <Image
+                      style={Style.editAndCallButtonIconImageStyle}
+                      source={require("../../../../../icons/call.png")}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={Style.threeBtnStyle}>
+                <TouchableOpacity onPress={() => this.deleteData(item.fmid)}>
+                  <Image
+                      style={Style.editAndCallButtonIconImageStyle}
+                      source={require("../../../../../icons/delete.png")}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
+          <View style={Style.lineAboveAndBelowFlatList}/>
         </View>
-        <View style={Style.lineAboveAndBelowFlatList} />
-      </View>
     )
   }
 
   handleSearch(text) {
-    this.setState({searchText:text});
-    console.log('Text',text)
+    this.setState({searchText: text});
+    console.log('Text', text)
     let sortList = this.state.clonedList;
     let filteredArray = [];
     if (text.length === 0) {
       filteredArray.push(this.state.clonedList)
     } else {
       for (let i in sortList) {
-        if (sortList[i].fmName.includes(text) || sortList[i].fmRltn.includes(text) || sortList[i].fmMobile.includes(text)) {
+        if ((sortList[i].fmName.toLowerCase()).includes(text.toLowerCase()) || (sortList[i].fmRltn.toLowerCase()).includes(text.toLowerCase()) || (sortList[i].fmMobile.toLowerCase()).includes(text.toLowerCase())) {
           filteredArray.push(sortList[i])
         }
       }
@@ -276,68 +270,68 @@ class MyFamilyList extends React.Component {
   };
 
   render() {
-    const { navigate } = this.props.navigation
+    const {navigate} = this.props.navigation
 
     if (this.state.isLoading) {
       return (
-        <View style={Style.mainView}>
-        {/* <Header /> */}
+          <View style={Style.mainView}>
+            {/* <Header /> */}
 
 
-        <SafeAreaView style={{backgroundColor: "orange"}}>
-            <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
-              <View style={Style.viewDetails1}>
-                <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.goBack();
-                    }}
-                >
-                  <View
-                      style={{
-                        height: hp("4%"),
-                        width: wp("15%"),
-                        alignItems: 'flex-start',
-                        justifyContent: "center"
+            <SafeAreaView style={{backgroundColor: "orange"}}>
+              <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
+                <View style={Style.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.goBack();
                       }}
                   >
-                    <Image
-                        resizeMode="contain"
-                        source={require("../../../../../icons/back.png")}
-                        style={Style.viewDetails2}
-                    />
-                  </View>
-                </TouchableOpacity>
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: 'flex-start',
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../../../../../icons/back.png")}
+                          style={Style.viewDetails2}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                >
+                  <Image
+                      style={[Style.image1]}
+                      source={require("../../../../../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={{flex: 0.2}}>
+                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                </View>
               </View>
-              <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-              >
-                <Image
-                    style={[Style.image1]}
-                    source={require("../../../../../icons/headerLogo.png")}
-                />
-              </View>
-              <View style={{flex: 0.2}}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-              </View>
-            </View>
-            <View style={{borderWidth: 1, borderColor: "orange"}}/>
-          </SafeAreaView>
+              <View style={{borderWidth: 1, borderColor: "orange"}}/>
+            </SafeAreaView>
 
-        <View style={Style.progressViewStyle}>
-          <ActivityIndicator size="large" color="#01CBC6" />
-        </View>
-        </View>
+            <View style={Style.progressViewStyle}>
+              <ActivityIndicator size="large" color="#01CBC6"/>
+            </View>
+          </View>
       )
     }
     return (
-      <View style={Style.mainView}>
-        {/* <Header /> */}
+        <View style={Style.mainView}>
+          {/* <Header /> */}
 
-        <SafeAreaView style={{backgroundColor: "orange"}}>
+          <SafeAreaView style={{backgroundColor: "orange"}}>
             <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
               <View style={Style.viewDetails1}>
                 <TouchableOpacity
@@ -380,15 +374,15 @@ class MyFamilyList extends React.Component {
             <View style={{borderWidth: 1, borderColor: "orange"}}/>
           </SafeAreaView>
 
-        <NavigationEvents
-          onDidFocus={payload => this.myFamilyListGetData()}
-          onWillBlur={payload => this.myFamilyListGetData()}
-        />
-        <View style={Style.containerViewStyle}>
-          <Text style={Style.titleOfScreenStyle}>Family Members</Text>
+          <NavigationEvents
+              onDidFocus={payload => this.myFamilyListGetData()}
+              onWillBlur={payload => this.myFamilyListGetData()}
+          />
+          <View style={Style.containerViewStyle}>
+            <Text style={Style.titleOfScreenStyle}>Family Members</Text>
 
-          <View style={{flexDirection:'row'}}>
-           {/* <Item style={Style.inputItem}>
+            <View style={{flexDirection: 'row'}}>
+              {/* <Item style={Style.inputItem}>
 
               <Input
                 marginBottom={hp("-1%")}
@@ -399,52 +393,64 @@ class MyFamilyList extends React.Component {
 
               <Icon style={Style.icon} name="search" size={14} />
             </Item>*/}
-            <View
-                style={{flex: 0.9, height: hp("5.5%"), marginStart: hp("2%"), marginBottom:50}}
-            >
-              <TextInput
-                 // value={this.state.searchText}
-                  style={{ height: hp("5.5%"),
-                    backgroundColor: "#F5F5F5",
-                    borderRadius: hp("7%"),
-                    fontSize: hp("1.8%"),
-                    paddingLeft: hp("2%")}}
-                  placeholder="  search...."
-                  round
-                  //autoCapitalize="characters"
-                  onChangeText={(text) => this.handleSearch(text)}
-              />
+              <View
+                  style={{flex: 0.9, height: hp("5.5%"), marginStart: hp("2%"), marginBottom: 50}}
+              >
+                <TextInput
+                    // value={this.state.searchText}
+                    style={{
+                      height: hp("5.5%"),
+                      backgroundColor: "#F5F5F5",
+                      borderRadius: hp("7%"),
+                      fontSize: hp("1.8%"),
+                      paddingLeft: hp("2%")
+                    }}
+                    placeholder="  search...."
+                    round
+                    //autoCapitalize="characters"
+                    onChangeText={(text) => this.handleSearch(text)}
+                />
+              </View>
             </View>
-          </View>
-          {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
+            {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
 
-          {this.state.familyData.length == 0 ?
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>No Family Data Available.</Text>
-              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Add your family details.</Text>
-            </View>
-          :  
-          <FlatList
-            // data={this.state.dataSource.sort((a, b) =>
-            //   a.fmName.localeCompare(b.fmName)
-            // )}
-            data={this.state.myfamily11}
-            extraData={this.state}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item.fmid.toString()}
-          />
+            {this.state.familyData.length == 0 ?
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white'}}>
+                  <Text style={{
+                    backgroundColor: 'white',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: hp('1.6%')
+                  }}>No Family Data Available.</Text>
+                  <Text style={{
+                    backgroundColor: 'white',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: hp('1.6%')
+                  }}>Add your family details.</Text>
+                </View>
+                :
+                <FlatList
+                    // data={this.state.dataSource.sort((a, b) =>
+                    //   a.fmName.localeCompare(b.fmName)
+                    // )}
+                    data={this.state.myfamily11}
+                    extraData={this.state}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item, index) => item.fmid.toString()}
+                />
 
             }
-          <TouchableOpacity
-            style={Style.floatButton}
-            onPress={() => {
-              this.props.navigation.navigate("MyFamily")
-            }}
-          >
-            <Text style={Style.plusTextStyle}>+</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+                style={Style.floatButton}
+                onPress={() => {
+                  this.props.navigation.navigate("MyFamily")
+                }}
+            >
+              <Text style={Style.plusTextStyle}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
     )
   }
 }
@@ -454,8 +460,8 @@ const mapStateToProps = state => {
     associationid: state.DashboardReducer.associationid,
     selectedAssociation: state.DashboardReducer.selectedAssociation,
     oyeURL: state.OyespaceReducer.oyeURL,
-    mediaupload:state.OyespaceReducer.mediaupload,
-    dashBoardReducer:state.DashboardReducer
+    mediaupload: state.OyespaceReducer.mediaupload,
+    dashBoardReducer: state.DashboardReducer
   };
 };
 

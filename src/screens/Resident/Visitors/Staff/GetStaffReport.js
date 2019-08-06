@@ -176,10 +176,13 @@ class GetStaffReport extends React.Component {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-                if (difference !== 0) {
-                    for (let i = 0; i < difference; i++) {
-                        let rowData = []
-                        if (initialDate !== reportsData[i].vlEntryT || !reportsData[i]) {
+                console.log("Diffrence:",initialDate);
+               // if (difference !== 0) {
+                let rowData = [];
+                let selectedDate = initialDate;
+                    for (let i = 0; i < reportsData.length; i++) {
+
+                        if (initialDate !== moment(reportsData[i].vldUpdated).format("YYYY-MM-DD") || !reportsData[i]) {
                             rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                             rowData.push('No Entry on this Date')
 
@@ -190,22 +193,24 @@ class GetStaffReport extends React.Component {
                             rowData.push(reportsData[i].vlexgName)
                             rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
                         }
+
                         if (initialDate !== endDate) {
                             initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
                         }
                         tableData.push(rowData);
+
                     }
 
 
-                } else {
-                    let rowData = [];
-                    rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                    rowData.push(reportsData[0].vlengName)
-                    rowData.push(moment(reportsData[0].vlEntryT).format('hh:mm' + ' A'))
-                    rowData.push(reportsData[0].vlexgName)
-                    rowData.push(moment(reportsData[0].vlExitT).format('hh:mm' + ' A'))
-                    tableData.push(rowData)
-                }
+                //} else {
+                //     let rowData = [];
+                //     rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+                //     rowData.push(reportsData[0].vlengName)
+                //     rowData.push(moment(reportsData[0].vlEntryT).format('hh:mm' + ' A'))
+                //     rowData.push(reportsData[0].vlexgName)
+                //     rowData.push(moment(reportsData[0].vlExitT).format('hh:mm' + ' A'))
+                //     tableData.push(rowData)
+              //  }
 
                 let numberOfPages=tableData.length/self.state.pageLimit;
                 let dataBottomList=[]
