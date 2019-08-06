@@ -23,9 +23,15 @@ class VehicleList extends Component {
     }
 
     componentDidMount() {
-      this.getVehicleList()
-      // this.deleteCell()
+      let self = this;
+      setTimeout(() => {
+        self.getVehicleList();
+        this.setState({
+          isLoading: false
+        });
+      }, 1500);
     }
+
     getVehicleList = () => {
       console.log("props in vehicle list:",this.props);
       fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`
@@ -43,7 +49,9 @@ class VehicleList extends Component {
               isLoading: false,
               dataSource: responseJson.data.vehicleListByUnitID,
             })
+            
           })
+          
           .catch(error=>{
             this.setState({ loading: false });
             console.log(error)})
@@ -161,6 +169,7 @@ deleteCell = () => {
     }
     
   render() {
+    console.log("The Unit Id is coming?",this.props.dashBoardReducer.uniID )
     if(this.state.isLoading) {
       return(
         <View style = { styles.container }>
