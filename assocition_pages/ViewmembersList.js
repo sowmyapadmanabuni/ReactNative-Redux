@@ -5,7 +5,7 @@
 
 import React from "react";
 import {Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {Button, Card} from "native-base";
+import {Card} from "native-base";
 import {TextInput} from "react-native-gesture-handler";
 import {NavigationEvents} from "react-navigation";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
@@ -14,6 +14,7 @@ import {connect} from "react-redux";
 import {getDashUnits} from "../src/actions";
 import base from "../src/base";
 import OSButton from '../src/components/osButton/OSButton'
+
 let data = [
     {
         value: "Admin",
@@ -64,10 +65,10 @@ class Resident extends React.Component {
         let self = this;
         let associationId = self.props.selectedAssociation;
 
-        console.log('get association',associationId)
+        console.log('get association', associationId)
 
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
-        console.log('Get the details####',stat)
+        console.log('Get the details####', stat)
 
         try {
             if (stat) {
@@ -126,48 +127,60 @@ class Resident extends React.Component {
 
 
     changeRole = (title, message) => {
-        const {getDashUnits, selectedAssociation} = this.props;
-        console.log('Props in role managment', this.props)
+        try {
+            if(this.state.selectedRoleData === 0){
+                alert("Please change the role");
+            }
+            else {
+                const {getDashUnits, selectedAssociation} = this.props;
+                console.log('Props in role managment', this.props)
 
-        const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
-        console.log("selectedUser:", this.state.selectedUser ); //+91
+                const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
+                console.log("selectedUser:", this.state.selectedUser); //+91
 
-       // let mobile=this.state.selectedUser.uoMobile.split(" ")
-        let mobile = this.state.selectedUser.uoMobile.split('')
-        let mobNumber=this.state.selectedUser.uoMobile
-        console.log('Mob Array',mobile)
+                // let mobile=this.state.selectedUser.uoMobile.split(" ")
+                let mobile = this.state.selectedUser.uoMobile.split('')
+                let mobNumber = this.state.selectedUser.uoMobile
+                console.log('Mob Array', mobile)
 
-        if (mobile[0] === '+') {
-            console.log('No need to add')
+                if (mobile[0] === '+') {
+                    console.log('No need to add')
+                } else {
+                    console.log('Add')
+                    mobNumber = '+91' + mobNumber
+                }
+
+                let requestBody = {
+                    ACMobile: mobNumber,
+                    UNUnitID: this.state.selectedUser.unUnitID,
+                    MRMRoleID: this.state.selectedRoleData.selRolId
+                };
+                console.log('reqBody role managment', requestBody)
+
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                    },
+                    body: JSON.stringify(requestBody)
+                })
+                    .then(response => response.json())
+                    .then(responseJson => {
+                        console.log("%%%%%%%%%%", responseJson, requestBody);
+                        this.props.navigation.goBack();
+                    })
+                    .catch(error => {
+                        console.log("err " + error);
+                    });
+            }
+
+
         }
-        else{
-            console.log('Add')
-            mobNumber='+91'+mobNumber
+        catch (e) {
+            console.log("STATE:",this.state);
         }
 
-        let requestBody = {
-            ACMobile: mobNumber,
-            UNUnitID: this.state.selectedUser.unUnitID,
-            MRMRoleID: this.state.selectedRoleData.selRolId
-        };
-        console.log('reqBody role managment',requestBody)
-
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-            },
-            body: JSON.stringify(requestBody)
-        })
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log("%%%%%%%%%%", responseJson, requestBody);
-                this.props.navigation.goBack();
-            })
-            .catch(error => {
-                console.log("err " + error);
-            });
     };
 
     selectRole = (item, index) => {
@@ -199,24 +212,22 @@ class Resident extends React.Component {
         this.setState({query: text});
         let sortResident = this.state.clonedList; //search from entire list
         let filteredArray = [];
-        console.log('Res List',sortResident)
-        let roleId="";
+        console.log('Res List', sortResident);
+        let roleId = "";
         if (text.length === 0) {
             filteredArray.push(this.state.clonedList)
         } else {
             for (let i in sortResident) {
                 console.log("Sort:", sortResident[i])
-                if(sortResident[i].uoRoleID===1){
-                    roleId="Admin"
-            }
-            else if(sortResident[i].uoRoleID===2){
-                    roleId="Owner"
-                }
-            else if(sortResident[i].uoRoleID===3){
-                    roleId="Tenant"
+                if (sortResident[i].uoRoleID === 1) {
+                    roleId = "Admin"
+                } else if (sortResident[i].uoRoleID === 2) {
+                    roleId = "Owner"
+                } else if (sortResident[i].uoRoleID === 3) {
+                    roleId = "Tenant"
                 }
 
-            if (sortResident[i].name.includes(text)   || sortResident[i].unitName.includes(text)  || roleId.includes(text) ) {
+                if ((sortResident[i].name.toLowerCase()).includes(text.toLowerCase()) || sortResident[i].unitName.includes(text) || (roleId.toLowerCase()).includes(text.toLowerCase())) {
                     filteredArray.push(sortResident[i]) //make case insensitive
                 }
             }
@@ -234,7 +245,7 @@ class Resident extends React.Component {
     };
 
     render() {
-        console.log('Data inside####',this.state.residentData)
+        console.log('Data inside####', this.state.residentData)
         let residentList = this.props.dashBoardReducer.residentList;
         const {params} = this.props.navigation.state;
         return (
@@ -310,68 +321,61 @@ class Resident extends React.Component {
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
                             <View style={{alignItems: "flex-end", marginEnd: hp("2%")}}>
-                                {this.state.selectedRoleData.selRolId === 1 || this.state.selectedRoleData.selRolId === 2?
-                                
-                                <View>
-                                    <OSButton height={hp('3%')} onButtonClick={()=>this.changeRole()} width={hp('8%')} oSBText={"Update"} oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
-                                this.state.selectedRoleData.selRolId === 2 ?base.theme.colors.primary:base.theme.colors.grey}/>
-                                </View>
-                               :
-                                <View>
-                                    <OSButton height={hp('3%')} onButtonClick={()=>alert("Please Select Atleast One.")} width={hp('8%')} oSBText={"Update"} oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
-                                this.state.selectedRoleData.selRolId === 2 ?base.theme.colors.primary:base.theme.colors.grey}
-                             />
-                                </View>
-                            } 
+                                <OSButton height={hp('3%')} onButtonClick={() => this.changeRole()} width={hp('8%')}
+                                          oSBText={"Update"}
+                                          oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
+                                          this.state.selectedRoleData.selRolId === 2 ? base.theme.colors.primary : base.theme.colors.grey
+
+                                          }/>
                             </View>
                         </View>
                     </View>
                     <View style={styles.viewDetails}>
-                        {this.state.residentData.length !==0?
-                        <View style={{flex: 1,}}>
+                        {this.state.residentData.length !== 0 ?
+                            <View style={{flex: 1,}}>
                                 <Text style={{color: base.theme.colors.black, margin: 20}}>* You can update only one at
                                     a time</Text>
-                            <FlatList
-                                data={this.state.residentData}
-                                keyExtractor={(item, index) => index.toString()}
-                                extraData={this.state}
-                                renderItem={({item, index}) => (
-                                    <Card style={{height: hp("14%")}}>
-                                        <View style={{height: 1, backgroundColor: "lightgray"}}/>
-                                        <View style={{flexDirection: "row", flex: 1}}>
-                                            <View style={{flex: 1}}>
-                                                <View Style={{flexDirection: "column"}}>
-                                                    <Text style={styles.textDetails}>{`Name: ${
-                                                        item.name
-                                                        }`}</Text>
-                                                    <Text style={styles.textDetails}>{`Unit: ${
-                                                        item.unitName
-                                                        }`}</Text>
-                                                    <Text style={styles.textDetails}>{`Role: ${
-                                                        item.uoRoleID === 1 ? "Admin" : item.uoRoleID === 2 ? "Owner" : "Tenant"
-                                                        }`}</Text>
+                                <FlatList
+                                    data={this.state.residentData}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    extraData={this.state}
+                                    renderItem={({item, index}) => (
+                                        <Card style={{height: hp("14%")}}>
+                                            <View style={{height: 1, backgroundColor: "lightgray"}}/>
+                                            <View style={{flexDirection: "row", flex: 1}}>
+                                                <View style={{flex: 1}}>
+                                                    <View Style={{flexDirection: "column"}}>
+                                                        <Text style={styles.textDetails}>{`Name: ${
+                                                            item.name
+                                                            }`}</Text>
+                                                        <Text style={styles.textDetails}>{`Unit: ${
+                                                            item.unitName
+                                                            }`}</Text>
+                                                        <Text style={styles.textDetails}>{`Role: ${
+                                                            item.uoRoleID === 1 ? "Admin" : item.uoRoleID === 2 ? "Owner" : "Tenant"
+                                                            }`}</Text>
+                                                    </View>
+                                                </View>
+
+                                                <View style={{flex: 0.5, marginRight: hp("3%")}}>
+                                                    {item.uoRoleID === 1 || item.uoRoleID === 2 ? (
+                                                        this.selectRole(item, index)
+                                                    ) : (
+                                                        <Text> </Text>
+                                                    )}
+                                                    {/*{this.renderAdminStatus(item)}*/}
+                                                    {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
                                                 </View>
                                             </View>
+                                            <View style={{height: 1, backgroundColor: "lightgray"}}/>
+                                        </Card>
+                                    )}
+                                />
 
-                                            <View style={{flex: 0.5, marginRight: hp("3%")}}>
-                                                {item.uoRoleID === 1 || item.uoRoleID === 2 ? (
-                                                    this.selectRole(item, index)
-                                                ) : (
-                                                    <Text> </Text>
-                                                )}
-                                                {/*{this.renderAdminStatus(item)}*/}
-                                                {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
-                                            </View>
-                                        </View>
-                                        <View style={{height: 1, backgroundColor: "lightgray"}}/>
-                                    </Card>
-                                )}
-                            />
-
-                        </View>:
-                        <View style={{flex: 1, alignItems:'center',justifyContent:'center'}}>
-                                <Text >No Data for the selected association </Text>
-                        </View>}
+                            </View> :
+                            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                                <Text>No Data for the selected association </Text>
+                            </View>}
                     </View>
                 </View>
             </View>
