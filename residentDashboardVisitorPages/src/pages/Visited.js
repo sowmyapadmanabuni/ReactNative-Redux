@@ -62,7 +62,7 @@ class MyGuests extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Manas", responseJson);
+        console.log("Visited for the Without QRCode", responseJson);
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.invitation,

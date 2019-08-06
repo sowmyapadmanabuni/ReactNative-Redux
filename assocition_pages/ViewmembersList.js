@@ -310,10 +310,19 @@ class Resident extends React.Component {
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
                             <View style={{alignItems: "flex-end", marginEnd: hp("2%")}}>
-                               <OSButton height={hp('3%')} onButtonClick={()=>this.changeRole()} width={hp('8%')} oSBText={"Update"} oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
-                               this.state.selectedRoleData.selRolId === 2 ?base.theme.colors.primary:base.theme.colors.grey
-                            
-                            } />
+                                {this.state.selectedRoleData.selRolId === 1 || this.state.selectedRoleData.selRolId === 2?
+                                
+                                <View>
+                                    <OSButton height={hp('3%')} onButtonClick={()=>this.changeRole()} width={hp('8%')} oSBText={"Update"} oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
+                                this.state.selectedRoleData.selRolId === 2 ?base.theme.colors.primary:base.theme.colors.grey}/>
+                                </View>
+                               :
+                                <View>
+                                    <OSButton height={hp('3%')} onButtonClick={()=>alert("Please Select Atleast One.")} width={hp('8%')} oSBText={"Update"} oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
+                                this.state.selectedRoleData.selRolId === 2 ?base.theme.colors.primary:base.theme.colors.grey}
+                             />
+                                </View>
+                            } 
                             </View>
                         </View>
                     </View>
