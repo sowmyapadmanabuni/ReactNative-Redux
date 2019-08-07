@@ -122,30 +122,34 @@ class Dashboard extends React.Component {
             "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
         };
 
-        axios
-            .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
-                headers: headers
-            })
-            .then(response => {
-                let responseData = response.data.data;
+        console.log(
+          `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
+        );
 
-                responseData.associationByAccount.map(association => {
-                    // console.log('***********')
-                    // console.log(association.asAsnName)
-                    // console.log(association.asAssnID)
-                    // console.log('***********')
-                    if (receiveNotifications) {
-                        firebase
-                            .messaging()
-                            .subscribeToTopic(association.asAssnID + "admin");
-                        // console.log(association.asAssnID);
-                    } else if (!receiveNotifications) {
-                        firebase
-                            .messaging()
-                            .unsubscribeFromTopic(association.asAssnID + "admin");
-                    }
-                });
-            });
+        // axios
+        //     .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
+        //         headers: headers
+        //     })
+        //     .then(response => {
+        //         let responseData = response.data.data;
+
+        //         responseData.associationByAccount.map(association => {
+        //             // console.log('***********')
+        //             console.log(association.asAsnName, "assssooo")
+        //             // console.log(association.asAssnID)
+        //             // console.log('***********')
+        //             if (receiveNotifications) {
+        //                 firebase
+        //                     .messaging()
+        //                     .subscribeToTopic(association.asAssnID + "admin");
+        //                 // console.log(association.asAssnID);
+        //             } else if (!receiveNotifications) {
+        //                 firebase
+        //                     .messaging()
+        //                     .unsubscribeFromTopic(association.asAssnID + "admin");
+        //             }
+        //         });
+        //     });
 
         axios
             .get(
@@ -155,19 +159,38 @@ class Dashboard extends React.Component {
                 }
             )
             .then(response => {
+                console.log(response, "fetched");
                 let data = response.data.data.memberListByAccount;
                 // console.log("dataoye", data);
                 data.map(units => {
-                    // console.log(units.unUnitID + "admin");
+                    console.log(
+                      units.asAsnName +
+                        units.asAssnID +
+                        "admin"
+                    );
+
+    
                     // console.log(units.mrmRoleID + "role");
                     if (receiveNotifications) {
                         if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
                             if (units.meIsActive) {
                                 firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
                             }
+                        } else if(units.mrmRoleID === 1) {
+                            firebase
+                              .messaging()
+                              .subscribeToTopic(
+                                units.asAssnID +
+                                  "admin"
+                              );
                         }
                     } else if (!receiveNotifications) {
                         firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
+                        irebase
+                          .messaging()
+                          .unsubscribeFromTopic(
+                            units.asAssnID + "admin"
+                          );
                     }
                 });
             });
