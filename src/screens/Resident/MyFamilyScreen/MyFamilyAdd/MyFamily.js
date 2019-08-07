@@ -443,8 +443,8 @@ class MyFamily extends Component {
         };
         console.log('MyFam', input)
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
-        console.log('Stat in Add family', stat)
-        if (stat) {
+        console.log('Stat in Add family',stat)
+            if (stat) {
             try {
                 if (stat.success) {
                     self.props.navigation.navigate('MyFamilyList')
@@ -456,6 +456,7 @@ class MyFamily extends Component {
                     //         onPress: () => console.log('Cancel Pressed'),
                     //         style: 'cancel',
                     //     },], {cancelable: false});
+
                 }
 
             } catch (err) {
@@ -474,3 +475,5 @@ const mapStateToProps = state => {
     };
 };
 export default connect(mapStateToProps)(MyFamily);
+
+

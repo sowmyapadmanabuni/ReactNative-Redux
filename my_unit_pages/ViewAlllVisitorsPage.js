@@ -176,7 +176,7 @@ class App extends React.Component {
             //console.log("fsbkfh", count);
             console.log(
                 responseJson,
-                "*******************************************"
+                "View Alll Visitors"
             );
             this.setState({
               isLoading: false,

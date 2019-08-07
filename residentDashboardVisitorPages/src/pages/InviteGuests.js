@@ -181,15 +181,16 @@ decrementCount = () => {
 
 //Switch
 toggleSwitch = (value) => {
-  this.setState({ switch: value })
+  this.setState({ switch: value },()=>{
+    console.log("DJFHEG:",this.state.switch)
+  })
   if (value == true) {
     multipleEntries = "TRUE";
   } else {
     multipleEntries = "FALSE";
   }
-  console.log('Switch doNotDisturb is: ' + multipleEntries)
+  console.log('Switch doNotDisturb is: ' + multipleEntries )
 }
-
 
 
 sendInvitation = () => {
@@ -280,14 +281,30 @@ console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)
               "INSDate"   : startDate,
               "INEDate"   : endDate,
               "INPOfInv"  : purpose,
-              "INMultiEy" : switches,
+              "INMultiEy" : this.state.switch,
               "ASAssnID"  :this.props.dashBoardReducer.assId,
               "INQRCode"  : 1
           })
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Manas",responseJson,)
+        console.log("Invite Guests Data",responseJson,JSON.stringify({
+          //"MeMemID"   :  4,
+          "UnUnitID"  :  this.props.dashBoardReducer.uniID,
+          "INFName"   : fname,
+          "INLName"   : lname,
+          "INMobile"  : "+"+ callingCode + mobNum,
+          "INEmail"   : emailId,
+          "INVchlNo"  : vehNo,
+          "INVisCnt"  :count,
+          "INPhoto"   : "SD",
+          "INSDate"   : startDate,
+          "INEDate"   : endDate,
+          "INPOfInv"  : purpose,
+          "INMultiEy" : this.state.switch,
+          "ASAssnID"  :this.props.dashBoardReducer.assId,
+          "INQRCode"  : 1
+      }))
           Alert.alert("Invitation created, please share the invitation using the share button")
         this.props.navigation.goBack()
       })

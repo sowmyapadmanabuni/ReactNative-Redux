@@ -153,7 +153,7 @@ class MyFamilyList extends React.Component {
                   <ZoomImage
                       source={{
                         uri:
-                            `${this.props.mediaupload}` + item.fmImgName
+                            `https://mediaupload.oyespace.com/` + item.fmImgName
                       }}
                       imgStyle={Style.placeholderImage}
                       duration={300}

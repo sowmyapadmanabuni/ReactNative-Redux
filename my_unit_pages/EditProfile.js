@@ -476,7 +476,6 @@ class EditProfile extends Component {
                 ? this.props.navigation.state.params.profileDataSourceEmail
                 : ""
         })
-
         this.setState({
             AlternateEmail: this.props.navigation.state.params
                 .profileDataSourceAlternateEmail

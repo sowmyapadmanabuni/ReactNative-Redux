@@ -75,11 +75,10 @@ class OTPVerification extends Component {
     let otp_number = this.state.OTPNumber;
 
     //const reg = /^[0]?[789]\d{9}$/;
-    console.log("ravii", otp_number.length + " " + " ");
     if (otp_number == 0) {
-      alert("OTP Number cannot be Empty");
+      Alert.alert("OTP Number cannot be Empty");
     } else if (otp_number.length < 6) {
-      alert("Enter 6 digit OTP Number");
+      Alert.alert("Enter 6 digit OTP Number");
       return false;
     } else {
       let anu = {

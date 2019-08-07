@@ -154,10 +154,11 @@ class App extends React.Component {
       })
       return false;
     } else {
+      //http://apiuat.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID
       fetch(
           `http://${
               this.props.oyeURL
-          }/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
+          }/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
 
           {
             method: "POST",
@@ -168,7 +169,8 @@ class App extends React.Component {
             body: JSON.stringify({
               StartDate: this.state.dobText,
               EndDate: this.state.dobText1,
-              ASAssnID: this.props.dashBoardReducer.assId
+              ASAssnID: this.props.dashBoardReducer.assId,
+              UNUnitID : this.props.dashBoardReducer.uniID
             })
           }
       )
@@ -180,7 +182,6 @@ class App extends React.Component {
                 responseJson,
                 "*******************************************"
             );
-
             this.setState({
               isLoading: false,
               dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),
@@ -211,7 +212,7 @@ class App extends React.Component {
             <View style={styles.containerImageView}>
               {item.vlEntryImg == "" ? (
                   <ZoomImage
-                      source={require("../../../icons/img.png")}
+                      source={require("../../../icons/placeholderImg.png")}
                       imgStyle={{
                         height: wp("20%"),
                         width: wp("20%"),
