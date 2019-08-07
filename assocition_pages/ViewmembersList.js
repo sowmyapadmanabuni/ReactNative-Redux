@@ -133,15 +133,15 @@ class Resident extends React.Component {
             }
             else {
                 const {getDashUnits, selectedAssociation} = this.props;
-                console.log('Props in role managment', this.props)
+                console.log('Props in role managment', this.props);
 
                 const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
                 console.log("selectedUser:", this.state.selectedUser); //+91
 
                 // let mobile=this.state.selectedUser.uoMobile.split(" ")
-                let mobile = this.state.selectedUser.uoMobile.split('')
-                let mobNumber = this.state.selectedUser.uoMobile
-                console.log('Mob Array', mobile)
+                let mobile = this.state.selectedUser.uoMobile.split('');
+                let mobNumber = this.state.selectedUser.uoMobile;
+                console.log('Mob Array', mobile);
 
                 if (mobile[0] === '+') {
                     console.log('No need to add')

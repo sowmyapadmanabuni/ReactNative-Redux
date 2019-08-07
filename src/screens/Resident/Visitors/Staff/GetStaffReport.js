@@ -49,7 +49,7 @@ class GetStaffReport extends React.Component {
             pageLimit:10,
             pageNumber:1
         };
-            this.getTheReport = this.getTheReport.bind(this);
+        this.getTheReport = this.getTheReport.bind(this);
 
 
     }
@@ -155,7 +155,7 @@ class GetStaffReport extends React.Component {
             "FromDate":this.props.staffReducer.startDate,
             "ToDate":this.props.staffReducer.endDate
         }
-         console.log('Staff Data',input)
+        console.log('Staff Data',input)
 
         let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
 
@@ -171,35 +171,50 @@ class GetStaffReport extends React.Component {
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days())
         let difference=duration.as('days');
+        let selectedDate=input.FromDate;
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-                console.log("Diffrence:",initialDate);
-               // if (difference !== 0) {
-                let rowData = [];
-                let selectedDate = initialDate;
-                    for (let i = 0; i < reportsData.length; i++) {
+                for (let i = 0; i < reportsData.length; i++) {
+                    let rowData = [];
+                    /*if (initialDate !== moment(reportsData[i].vldUpdated).format("YYYY-MM-DD") || !reportsData[i]) {
+                        rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+                        rowData.push('No Entry on this Date')
 
-                        if (initialDate !== moment(reportsData[i].vldUpdated).format("YYYY-MM-DD") || !reportsData[i]) {
-                            rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                            rowData.push('No Entry on this Date')
-
-                        } else {
-                            rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                            rowData.push(reportsData[i].vlengName)
-                            rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
-                            rowData.push(reportsData[i].vlexgName)
-                            rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
-                        }
-
-                        if (initialDate !== endDate) {
-                            initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
-                        }
-                        tableData.push(rowData);
-
+                    } else {*/
+                        rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+                        rowData.push(reportsData[i].vlengName)
+                        rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
+                        rowData.push(reportsData[i].vlexgName)
+                        rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
+                            //  }
+                    if (initialDate !== endDate) {
+                        initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
                     }
+                   tableData.push(rowData);
+                    console.log('hghfhgfhgfh',tableData)
+                }
+                let tableData2=[]
+             for(let i=0;i<tableData.length;i++){
+                      let rowData=[]
+                 console.log('ujgjgjhghgj',selectedDate,i,tableData[i][i])
+                         if (selectedDate !==tableData[i][i]) {
+                        rowData.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+                        rowData.push('No Entry on this Date')
+                         }
+                         else{
+                         rowData.push(tableData[i])
+                         }
+                         if (selectedDate !== endDate) {
+                         selectedDate= moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
+                    }
+                    tableData2.push(rowData)
+
+                }
+                console.log('ROW DATA',tableData2)
+
 
 
                 //} else {
@@ -210,7 +225,7 @@ class GetStaffReport extends React.Component {
                 //     rowData.push(reportsData[0].vlexgName)
                 //     rowData.push(moment(reportsData[0].vlExitT).format('hh:mm' + ' A'))
                 //     tableData.push(rowData)
-              //  }
+                //  }
 
                 let numberOfPages=tableData.length/self.state.pageLimit;
                 let dataBottomList=[]
@@ -249,70 +264,70 @@ class GetStaffReport extends React.Component {
         return (
             !this.state.isLoading?
                 <View style={StaffReportStyle.mainContainer}>
-                <View style={StaffReportStyle.detailsMainView}>
-                    <View style={StaffStyle.detailsLeftView}>
-                        <Image style={StaffStyle.staffImg}
-                               source={{uri: base.utils.validate.handleNullImg(this.props.staffReducer.staffProfilePic)}}
-                        />
-                        <View style={StaffStyle.textView}>
-                            <Text style={StaffStyle.staffText}
-                                  numberofLines={1} ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
-                        </View>
-                        {this.props.staffReducer.staffDesignation?
-
-                        <Text style={StaffStyle.desigText}> ({this.props.staffReducer.staffDesignation})</Text>
-                            :<View/>}
-                    </View>
-                    <View style={StaffStyle.detailsRightView}>
-                        {this.state.tableData.length !==0 ?
-                        <TouchableOpacity
-                            onPress={() => this.state.isPermitted ? this.createPDF() : alert('Please Provide permissions to share report')}>
-                            <Image style={StaffStyle.shareImg}
-                                   source={require('../../../../../icons/share.png')}
+                    <View style={StaffReportStyle.detailsMainView}>
+                        <View style={StaffStyle.detailsLeftView}>
+                            <Image style={StaffStyle.staffImg}
+                                   source={{uri: base.utils.validate.handleNullImg(this.props.staffReducer.staffProfilePic)}}
                             />
-                        </TouchableOpacity>
-                            :
-                            <View/>}
+                            <View style={StaffStyle.textView}>
+                                <Text style={StaffStyle.staffText}
+                                      numberofLines={1} ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
+                            </View>
+                            {this.props.staffReducer.staffDesignation?
+
+                                <Text style={StaffStyle.desigText}> ({this.props.staffReducer.staffDesignation})</Text>
+                                :<View/>}
+                        </View>
+                        <View style={StaffStyle.detailsRightView}>
+                            {this.state.tableData.length !==0 ?
+                                <TouchableOpacity
+                                    onPress={() => this.state.isPermitted ? this.createPDF() : alert('Please Provide permissions to share report')}>
+                                    <Image style={StaffStyle.shareImg}
+                                           source={require('../../../../../icons/share.png')}
+                                    />
+                                </TouchableOpacity>
+                                :
+                                <View/>}
+                        </View>
                     </View>
+
+
+                    <ScrollView style={StaffReportStyle.scrollViewTable}>
+                        {this.renderViewPagerData()}
+                    </ScrollView>
+
+                    {this.state.numberOfPages>1 ?
+                        <View style={StaffReportStyle.bottomView}>
+                            <TouchableOpacity style={{alignItems: 'center'}}
+                                              onPress={() => this.changeTheData(this.state.pageNumber - 1)}
+                                              disabled={this.state.pageNumber===1}>
+                                <Image style={StaffReportStyle.arrowIcon}
+                                       source={this.state.pageNumber===1?inActiveLeftIcon:activeLeftIcon}
+                                />
+                            </TouchableOpacity>
+                            <View style={StaffReportStyle.viewPagerIcons}>
+                                <FlatList
+                                    data={this.state.bottomPageIndicator}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={(item) => this.arrangeBottomTab(item)}
+                                    extraData={this.state}
+                                    horizontal={true}
+                                />
+                            </View>
+                            <TouchableOpacity style={{alignItems: 'center'}}
+                                              onPress={() => this.changeTheData(this.state.pageNumber + 1)}
+                                              disabled={this.state.pageNumber===this.state.numberOfPages}>
+                                <Image style={StaffReportStyle.arrowIcon}
+                                       source={this.state.pageNumber===this.state.numberOfPages?inActiveRightIcon:activeRightIcon}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        <View/>}
+                </View>:
+                <View style={StaffStyle.activityIndicator}>
+                    <ActivityIndicator size="large" color={base.theme.colors.primary}/>
                 </View>
-
-
-                <ScrollView style={StaffReportStyle.scrollViewTable}>
-                    {this.renderViewPagerData()}
-                </ScrollView>
-
-                {this.state.numberOfPages>1 ?
-                <View style={StaffReportStyle.bottomView}>
-                    <TouchableOpacity style={{alignItems: 'center'}}
-                                      onPress={() => this.changeTheData(this.state.pageNumber - 1)}
-                    disabled={this.state.pageNumber===1}>
-                        <Image style={StaffReportStyle.arrowIcon}
-                               source={this.state.pageNumber===1?inActiveLeftIcon:activeLeftIcon}
-                        />
-                    </TouchableOpacity>
-                    <View style={StaffReportStyle.viewPagerIcons}>
-                        <FlatList
-                            data={this.state.bottomPageIndicator}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={(item) => this.arrangeBottomTab(item)}
-                            extraData={this.state}
-                            horizontal={true}
-                        />
-                    </View>
-                    <TouchableOpacity style={{alignItems: 'center'}}
-                                      onPress={() => this.changeTheData(this.state.pageNumber + 1)}
-                                      disabled={this.state.pageNumber===this.state.numberOfPages}>
-                        <Image style={StaffReportStyle.arrowIcon}
-                               source={this.state.pageNumber===this.state.numberOfPages?inActiveRightIcon:activeRightIcon}
-                        />
-                    </TouchableOpacity>
-                </View>
-                    :
-                    <View/>}
-            </View>:
-        <View style={StaffStyle.activityIndicator}>
-            <ActivityIndicator size="large" color={base.theme.colors.primary}/>
-        </View>
         )
     }
 
@@ -341,29 +356,29 @@ class GetStaffReport extends React.Component {
             <View Style={StaffReportStyle.tableMainView}>
                 {state.tableData.length !==0?
                     <Table borderStyle={StaffReportStyle.tableView}>
-                    <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
-                         textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
-                         {state.tableData.map((rowData, index) => (
-                        <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
-                            {
-                                rowData.map((cellData, cellIndex) => (
-                                    <Cell key={cellIndex} style={{
-                                        width: rowData.length < 3 && cellIndex === 1 ? '80%' : '20%',
-                                        borderWidth: 1,
-                                        backgroundColor: rowData.length < 3 && cellIndex === 1 ? 'red' : base.theme.colors.white
-                                    }} data={cellData}
-                                          textStyle={[StaffReportStyle.cellData, {color: rowData.length < 3 && cellIndex === 1 ? base.theme.colors.white : base.theme.colors.black}]}>
-                                    </Cell>
+                        <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
+                             textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
+                        {state.tableData.map((rowData, index) => (
+                            <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
+                                {
+                                    rowData.map((cellData, cellIndex) => (
+                                        <Cell key={cellIndex} style={{
+                                            width: rowData.length < 3 && cellIndex === 1 ? '80%' : '20%',
+                                            borderWidth: 1,
+                                            backgroundColor: rowData.length < 3 && cellIndex === 1 ? 'red' : base.theme.colors.white
+                                        }} data={cellData}
+                                              textStyle={[StaffReportStyle.cellData, {color: rowData.length < 3 && cellIndex === 1 ? base.theme.colors.white : base.theme.colors.black}]}>
+                                        </Cell>
 
-                                ))
-                            }
-                        </TableWrapper>
-                    ))
-                    }
-                </Table>
+                                    ))
+                                }
+                            </TableWrapper>
+                        ))
+                        }
+                    </Table>
                     :
                     <View style={{alignItems:'center'}}>
-                    <Text>No report exist for the selected worker</Text>
+                        <Text>No report exist for the selected worker</Text>
                     </View>}
             </View>
         );
@@ -377,16 +392,16 @@ class GetStaffReport extends React.Component {
         if(datToReversOrder){
             staffReportData=datToReversOrder
         }
-          let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
-            let pageEndData=pageNumber*(self.state.pageLimit)
+        let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
+        let pageEndData=pageNumber*(self.state.pageLimit)
         if (pageEndData>staffReportData.length){
             pageEndData=staffReportData.length
         }
-            let j=0;
-            for(let i=pageStartData-1; i<pageEndData;i++){
-                tableData[j]=staffReportData[i]
-                j=j+1
-            }
+        let j=0;
+        for(let i=pageStartData-1; i<pageEndData;i++){
+            tableData[j]=staffReportData[i]
+            j=j+1
+        }
         self.setState({tableData:tableData,pageNumber:pageNumber})
     }
 

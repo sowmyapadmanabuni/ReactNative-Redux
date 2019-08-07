@@ -472,7 +472,9 @@ class EditProfile extends Component {
       maxWidth: 250,
       maxHeight: 250,
       storageOptions: {
-        skipBackup: true
+        skipBackup: true,
+        // path: null,
+        // cameraRoll:false
       }
     };
     //showImagePicker
