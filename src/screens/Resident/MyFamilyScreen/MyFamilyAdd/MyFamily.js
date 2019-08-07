@@ -8,7 +8,7 @@ import {
     TextInput,
     ScrollView,
     PermissionsAndroid,
-    SafeAreaView
+    SafeAreaView,Alert
 } from "react-native"
 
 import ImagePicker from "react-native-image-picker"
@@ -428,13 +428,26 @@ class MyFamily extends Component {
         console.log('MyFam',input)
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
         console.log('Stat in Add family',stat)
-        if (stat && stat.data && stat.success) {
+            if (stat) {
             try {
                 if(stat.success){
                     self.props.navigation.navigate('MyFamilyList')
                 }
                 else {
-                    alert(stat.data.message)
+                    // Alert.alert(stat.error.message)
+                    setTimeout(()=>{
+                        Alert.alert(
+                            'Attention',
+                            stat.error.message,
+                            [
+                                {
+                                    text: 'Ok',
+                                    onPress: () => console.log('Cancel Pressed'),
+                                    style: 'cancel',
+                                },],
+                            {cancelable: false},
+                        );
+                    },1000)
                 }
 
             } catch (err) {
@@ -452,3 +465,5 @@ const mapStateToProps = state => {
     };
 };
 export default connect(mapStateToProps)(MyFamily);
+
+

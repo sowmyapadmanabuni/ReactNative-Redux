@@ -50,8 +50,9 @@ class MyGuests extends Component {
   }
 
   getInvitationList = () => {
+    //http://localhost:64284/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{IsQRCodeGenerated}/{UnitID}
     fetch(
-      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/False`,
+      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/False/${this.props.dashBoardReducer.uniID}`,
       {
         method: "GET",
         headers: {
