@@ -171,6 +171,7 @@ dependencies {
     implementation project(':react-native-image-picker')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-firebase')
+    implementation project(':react-native-contacts-wrapper')
 
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.1.0"

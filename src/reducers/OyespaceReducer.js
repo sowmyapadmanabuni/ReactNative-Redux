@@ -1,8 +1,8 @@
 import { UPDATE_USER_INFO } from "../actions/types";
 
 //DB
-const oyeURL = "apidev.oyespace.com"; //Development
-// const oyeURL = "apiuat.oyespace.com";  //Validation
+//const oyeURL = "apidev.oyespace.com"; //Development
+ const oyeURL = "apiuat.oyespace.com";  //Validation
 // const oyeURL = "api.oyespace.com";  //Production
 
 //Image Domains

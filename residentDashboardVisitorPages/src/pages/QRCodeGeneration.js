@@ -234,6 +234,7 @@ class QRCodeGeneration extends Component {
                 "  ",
             url: this.state.previewSource.uri
         };
+        console.log("Sharing data:",shareImageBase64);
         Share.open(shareImageBase64).then((response) => {
             console.log(response)
         });
