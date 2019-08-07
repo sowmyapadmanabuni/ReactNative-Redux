@@ -175,13 +175,6 @@ class MyFamilyList extends React.Component {
               <View style={Style.memberDetailFlexViewStyle}>
                 <Image
                     style={Style.memberDetailIconImageStyle}
-                    source={require("../../../../../icons/age.png")}
-                />
-                <Text style={Style.memberDetailsTextStyle}>{item.fmAge}</Text>
-              </View>
-              <View style={Style.memberDetailFlexViewStyle}>
-                <Image
-                    style={Style.memberDetailIconImageStyle}
                     source={require("../../../../../icons/call.png")}
                 />
                 <Text style={Style.memberDetailsTextStyle}>{item.fmMobile}</Text>

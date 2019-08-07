@@ -46,11 +46,11 @@ class App extends React.Component {
 
       //date picker
       dobText: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
-      dobDate: null,
+      dobDate: moment(new Date()).format("YYYY-MM-DD"),
       isDateTimePickerVisible: false,
 
       dobText1: moment(new Date()).format("YYYY-MM-DD"),
-      dobDate1: null,
+      dobDate1: moment(new Date()).format("YYYY-MM-DD"),
       isDateTimePickerVisible1: false,
 
       switch: false,
@@ -145,7 +145,9 @@ class App extends React.Component {
     this.setState({
       isLoading:true
     })
-    if (this.state.dobDate > this.state.dobDate1) {
+    console.log("Dates are -",this.state.dobDate, this.state.dobDate1)
+    //moment(new Date()).format("YYYY-MM-DD")
+    if (moment(this.state.dobDate).format("YYYY-MM-DD") > moment(this.state.dobDate1).format("YYYY-MM-DD")) {
       Alert.alert("From Date should be less than To Date.");
       this.setState({
         isLoading:false
@@ -178,6 +180,7 @@ class App extends React.Component {
                 responseJson,
                 "*******************************************"
             );
+
             this.setState({
               isLoading: false,
               dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),
