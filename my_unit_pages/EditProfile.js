@@ -391,7 +391,7 @@ class EditProfile extends Component {
                 if (Platform.OS === 'android') {
                     this.deleteImage();
                 }
-                  this.props.navigation.goBack();
+                this.props.navigation.goBack();
                 console.log("Respo:", response, payloadData.acCrtyCode1);
             })
             .catch(error => {
@@ -1104,4 +1104,3 @@ const mapStateToProps = state => {
     }
 };
 export default connect(mapStateToProps)(EditProfile);
-

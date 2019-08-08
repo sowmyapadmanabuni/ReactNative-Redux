@@ -192,7 +192,7 @@ class AddVehicle extends Component {
     return (
         <View style={styles.container}>
           {/* <Header/> */}
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -275,7 +275,6 @@ class AddVehicle extends Component {
             <KeyboardAwareScrollView>
               <Form>
                 <Item style={styles.inputItem}>
-                  {/* <Label>Vehicle Name</Label> */}
                   <Input
                       autoCorrect={false}
                       autoCapitalize="characters"
@@ -285,7 +284,6 @@ class AddVehicle extends Component {
                   />
                 </Item>
                 <Item style={styles.inputItem}>
-                  {/* <Label>Vehicle Number</Label> */}
                   <Input
                       autoCorrect={false}
                       autoCapitalize="characters"

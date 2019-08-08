@@ -303,8 +303,8 @@ class MyFamily extends Component {
         if (value === 'Child') {
             this.setState({
                 isMinor: true,
-                firstName: '',
-                lastName: '',
+                //firstName: '',
+               // lastName: '',
                 mobileNumber: '',
                 guardianName: ''
             })

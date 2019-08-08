@@ -965,7 +965,7 @@ class Dashboard extends React.Component {
         return (
             <ElevatedView elevation={6} style={Style.mainElevatedView}>
                 <View style={Style.elevatedView}>
-                    <CardView
+                    {/*<CardView
                         height={"100%"}
                         width={"25%"}
                         cardText={" Family Members"}
@@ -976,7 +976,7 @@ class Dashboard extends React.Component {
                         iconHeight={Platform.OS === "ios" ? 40 : 20}
                         onCardClick={() => this.state.isNoAssJoin ? this.props.navigation.navigate("CreateOrJoinScreen") : dropdown1.length === 0 ? alert('Unit is not available') : this.props.navigation.navigate("MyFamilyList")}
                         backgroundColor={base.theme.colors.cardBackground}
-                    />
+                    />*/}
                     <CardView
                         height={"100%"}
                         width={"25%"}

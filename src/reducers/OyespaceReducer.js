@@ -1,15 +1,21 @@
 import { UPDATE_USER_INFO } from "../actions/types";
 
 //DB
+<<<<<<< HEAD
 const oyeURL = "apidev.oyespace.com"; //Development
 // const oyeURL = "apiuat.oyespace.com"; //Validation
+=======
+
+// const oyeURL = "apidev.oyespace.com"; //Development
+ const oyeURL = "apiuat.oyespace.com";  //Validation
+>>>>>>> b50228b7f43a481cfa8ae5522fa764ba735fb65d
 //const oyeURL = "api.oyespace.com";  //Production
 
 //Image Domains
 // const mediaUpload = "https://mediauploaddev.oyespace.com/Images/"  //Development
 
-const mediaUpload = "https://mediauploaduat.oyespace.com/Images/"; //Validation
-// const mediaUpload = "https://mediaupload.oyespace.com/Images/"   //Production
+ const mediaUpload = "https://mediauploaduat.oyespace.com/Images/"; //Validation
+ //const mediaUpload = "https://mediaupload.oyespace.com/Images/"   //Production
 
 const oyeBaseURL = "http://" + oyeURL + "/oye247/api/v1/";
 

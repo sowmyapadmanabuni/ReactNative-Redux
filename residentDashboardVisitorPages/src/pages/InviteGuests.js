@@ -405,6 +405,7 @@ console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)
                   <Input style={{fontSize:hp('2%')}}
                     autoCorrect={false}
                     autoCapitalize="words"
+                    maxLength={30}
                     keyboardType="default"
                     placeholder="Purpose of Invitation"
                     onChangeText={purpose => this.setState({ purpose : purpose })}

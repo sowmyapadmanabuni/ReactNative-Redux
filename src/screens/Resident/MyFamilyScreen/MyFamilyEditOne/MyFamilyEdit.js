@@ -1,29 +1,24 @@
 import React, {Component} from "react"
 import {
-  View,
-  Text,
   Image,
-  TouchableOpacity,
-  Platform,
-  TextInput,
-  ScrollView,
   PermissionsAndroid,
-  SafeAreaView
-} from "react-native"
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
 
-import ImagePicker from "react-native-image-picker"
-import {Dropdown} from "react-native-material-dropdown"
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from "react-native-responsive-screen"
-import base from "../../../../base"
+import ImagePicker from "react-native-image-picker";
+import {Dropdown} from "react-native-material-dropdown";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import base from "../../../../base";
 import {connect} from "react-redux";
-import ContactsWrapper from "react-native-contacts-wrapper"
+import ContactsWrapper from "react-native-contacts-wrapper";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-import Style from '../MyFamilyAdd/Style'
-
+import Style from '../MyFamilyAdd/Style';
 
 class MyFamilyEdit extends Component {
   constructor(props) {
@@ -52,7 +47,7 @@ class MyFamilyEdit extends Component {
       relationName: '',
       cCode: '',
       mobileNumber: '',
-      sendNum:'',
+      sendNum: '',
       isMinor: false,
       firstName: '',
       lastName: '',
@@ -61,20 +56,20 @@ class MyFamilyEdit extends Component {
       isMinorSelected: 0,
       guardianName: '',
       relativeImage: '',
-      imageUrl:'',
+      imageUrl: '',
     }
   }
 
   componentWillMount() {
     this.setState({
-      firstName:this.props.navigation.state.params.fmName,
-      lastName:this.props.navigation.state.params.fmlName,
-      mobileNumber:this.props.navigation.state.params.fmMobile
+      firstName: this.props.navigation.state.params.fmName,
+      lastName: this.props.navigation.state.params.fmlName,
+      mobileNumber: this.props.navigation.state.params.fmMobile
     })
   }
 
-  render(){
-    console.log('Isminor',this.state,this.props, this.props.navigation.state.params) //check the data and show according to it
+  render() {
+    console.log('Isminor', this.state, this.props, this.props.navigation.state.params) //check the data and show according to it
     let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number";
     return (
         <SafeAreaView style={Style.container}>
@@ -102,13 +97,13 @@ class MyFamilyEdit extends Component {
           <ScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
-                {this.state.relativeImage === '' ?
+                {this.props.navigation.state.params.fmImgName === '' ?
                     <Image style={{height: 40, width: 40, alignSelf: 'center'}}
                            source={require('../../../../../icons/camera.png')}
                     />
                     :
                     <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
-                           source={{uri: base.utils.validate.handleNullImg(this.props.navigation.state.params.fmImgName)}}/>
+                           source={{uri: this.state.relativeImage===''?"http://mediaupload.oyespace.com/" +this.props.navigation.state.params.fmImgName:this.state.relativeImage}}/>
                 }
               </TouchableOpacity>
             </View>
@@ -216,8 +211,10 @@ class MyFamilyEdit extends Component {
                     />
                   </View>
                   : <View/>}
-              <View style={[Style.textInputView,{borderBottomWidth: 1,
-                borderColor: base.theme.colors.lightgrey, marginBottom:10}]}>
+              <View style={[Style.textInputView, {
+                borderBottomWidth: 1,
+                borderColor: base.theme.colors.lightgrey, marginBottom: 10
+              }]}>
                 <Text style={{
                   fontSize: 14,
                   color: base.theme.colors.black,
@@ -233,7 +230,7 @@ class MyFamilyEdit extends Component {
                       placeholderTextColor={base.theme.colors.grey}
                       keyboardType={'phone-pad'}
                   />
-                  <TouchableOpacity  style={{width: 35, height: 35,}} onPress={() => this.getTheContactList()}>
+                  <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
                     <Image source={require("../../../../../icons/phone-book.png")}
                            style={{width: 25, height: 25,}}/>
                   </TouchableOpacity>
@@ -266,7 +263,7 @@ class MyFamilyEdit extends Component {
           console.log(response);
           self.uploadImage(response);
         } else {
-          console.log('response',response);
+          console.log('response', response);
           self.uploadImage(response);
         }
 
@@ -290,7 +287,7 @@ class MyFamilyEdit extends Component {
     if (stat) {
       try {
         self.setState({
-          relativeImage: response.uri,
+          relativeImage:response.uri,
           imageUrl:stat
         })
       } catch (err) {
@@ -309,8 +306,8 @@ class MyFamilyEdit extends Component {
     if (value === 'Child') {
       this.setState({
         isMinor: true,
-        firsName:'',
-        lastName:'',
+       // firsName:'',
+        //lastName:'',
         mobileNumber:'',
         guardianName:''
       })
@@ -321,49 +318,47 @@ class MyFamilyEdit extends Component {
     }
   }
 
-  async getTheContactList() {
-    console.log('Get details',Platform.OS);
-    let isGranted=false;
-    if(Platform.OS==='android'){
+  async getTheContact() {
+    console.log('Get details', Platform.OS);
+    let isGranted = false;
+    if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.READ_CONTACTS
       )
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        isGranted=true
+        isGranted = true
       }
 
-    }
-    else{
-      isGranted=true
+    } else {
+      isGranted = true
     }
 
-    if(isGranted){
+    if (isGranted) {
       ContactsWrapper.getContact()
           .then((contact) => {
             console.log('Details for mob', contact)
             let name = contact.name.split(" ")
             let mobCode = contact.phone.split('')
             let mobNum = contact.phone.replaceAll(/[ !@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?]/, '')
-            let sendMob=contact.phone.split(" ")
+            let sendMob = contact.phone.split(" ")
 
             if (mobCode[0] === '+') {
               console.log('plus')
               let mobCode2 = contact.phone.split(" ")
-              console.log('mobCode',sendMob, mobCode, mobCode2, mobCode2[0])
-              let arr='';
-              for(let i=1;i<sendMob.length;i++){
-                arr=arr+sendMob[i]
+              console.log('mobCode', sendMob, mobCode, mobCode2, mobCode2[0])
+              let arr = '';
+              for (let i = 1; i < sendMob.length; i++) {
+                arr = arr + sendMob[i]
               }
-              console.log('mobbbbbb',arr)
+              console.log('mobbbbbb', arr)
               this.setState({
                 cCode: mobCode2[0],
-                sendNum:arr
+                sendNum: arr
               })
 
-            }
-            else{
+            } else {
               this.setState({
-                sendNum:mobNum
+                sendNum: mobNum
               })
             }
             if (this.state.isMinor && this.state.isMinorSelected === 0) {
@@ -387,7 +382,7 @@ class MyFamilyEdit extends Component {
   }
 
   validation() {
-    console.log('Props**!!!',this.props);
+    console.log('Props**!!!', this.props);
 
     let self = this;
     /*if (self.props.navigation.state.params.fmRltn === '') {
@@ -407,33 +402,35 @@ class MyFamilyEdit extends Component {
       alert('Association id is null')
     }
     else {*/
-      self.editRelativeDetails()
+    self.editRelativeDetails()
 
-   // }
+    // }
   }
 
   async editRelativeDetails() {
-    console.log('Props**',this.props);
+    console.log('Props**',this.props,this.state);
+    console.log('hjhhjhjhj',this.state.mobileNumber,this.state.sendNum,this.state.cCode)
     let self = this;
-    let mobNum=self.state.sendNum
-    let cCode=self.state.cCode
-    if(cCode===""){
-      cCode="+91"
-      mobNum=self.state.mobileNumber
-    }
-  let relationName=self.state.relationName==="" ||self.state.relationName ===null ? self.props.navigation.state.params.fmRltn :self.state.relationName
-  let  cCodeSend=self.state.cCode==="" ||self.state.cCode ===null ? self.props.navigation.state.params.fmisdCode :self.state.cCode
-    let mobileNumber=self.state.sendNum==="" || self.state.sendNum ===null ? self.props.navigation.state.params.fmMobile :self.state.sendNum
+
+    let relationName=self.state.relationName==="" ||self.state.relationName ===null ? self.props.navigation.state.params.fmRltn :self.state.relationName
+  //let  cCodeSend=self.state.cCode==="" ||self.state.cCode ===null ? self.props.navigation.state.params.fmisdCode :self.state.cCode
+  //  let mobileNumber=self.state.sendNum==="" || self.state.sendNum ===null ? self.props.navigation.state.params.fmMobile :self.state.sendNum
     let  isMinor=self.state.isMinor===false ? self.props.navigation.state.params.fmMinor :self.state.isMinor
         let firstName=self.state.firstName===""||  self.state.firstName ===null ? self.props.navigation.state.params.fmName :self.state.firstName
     let lastName=self.state.lastName==="" || self.state.lastName ===null ? self.props.navigation.state.params.fmlName :self.state.lastName
     let imgUrl=self.state.imageUrl==="" || self.state.imageUrl ===null ? self.props.navigation.state.params.fmImgName :self.state.imageUrl
     let guardianName=self.state.guardianName==="" || self.state.cCode ===null ? self.props.navigation.state.params.fmGurName :self.state.guardianName
 
+    let mobCode = this.state.mobileNumber.split('')
+    console.log('hhghfh',mobCode)
+    let cCodeSend=this.state.cCode
+    if(mobCode[0]==='+'){
+      cCodeSend=''
+    }
 
     let input = {
       "FMName"    :firstName,
-      "FMMobile"  : mobileNumber,
+      "FMMobile"  : self.state.mobileNumber,
       "FMISDCode" : cCodeSend,
       "UNUnitID"  : self.props.dashBoardReducer.uniID,
       "FMRltn"    : relationName,
@@ -445,10 +442,10 @@ class MyFamilyEdit extends Component {
       "MEMemID":self.props.navigation.state.params.meMemID,
       "FMID":self.props.navigation.state.params.fmid
     };
-    console.log("HGhjgjhgjh",input)
+    console.log("HGhjgjhgjh", input)
     let stat = await base.services.OyeSafeApiFamily.myFamilyEditMember(input)
-    console.log('Stat in Add family',stat)
-    if ( stat.success) {
+    console.log('Stat in Add family', stat)
+    if (stat.success) {
       try {
         this.props.navigation.goBack()
       } catch (err) {
@@ -465,7 +462,7 @@ const mapStateToProps = state => {
     associationid: state.DashboardReducer.associationid,
     selectedAssociation: state.DashboardReducer.selectedAssociation,
     oyeURL: state.OyespaceReducer.oyeURL,
-    dashBoardReducer:state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer
   };
 }
 
