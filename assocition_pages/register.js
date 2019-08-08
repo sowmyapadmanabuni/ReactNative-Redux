@@ -225,13 +225,14 @@ class RegisterMe extends Component {
                                         })
                                         .then(response_3 => {
                                             this.setState({ loading: false });
+                                            
                                               axios
                                                 .get(
                                                   "http://" +
                                                     this
                                                       .props
                                                       .oyeURL +
-                                                    `oyeliving/api/v1/Member/GetMemberListByAssocID/${AssnId.toString()}`,
+                                                    `/oyeliving/api/v1/Member/GetMemberListByAssocID/${AssnId}`,
                                                   {
                                                     headers: {
                                                       "X-Champ-APIKey":
@@ -255,6 +256,7 @@ class RegisterMe extends Component {
                                                           data.mrmRoleID ===
                                                           1
                                                         ) {
+                                                            console.log("adminssss", data)
                                                             this.props.createUserNotification(
                                                               ntType,
                                                               this
@@ -407,6 +409,7 @@ class RegisterMe extends Component {
             unitList
         } = this.props.navigation.state.params;
 
+        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
         if (this.state.dobText == "Select Date of Occupancy") {
             alert("Select Date of Occupancy");
         } else if (this.state.sent) {
@@ -563,55 +566,134 @@ class RegisterMe extends Component {
                                         )
                                         .then(response_3 => {
                                             this.setState({ loading: false });
-                                            this.getAdminIds()
-                                            this.props.createUserNotification(
-                                              ntType,
-                                              this
-                                                .props
-                                                .oyeURL,
-                                              adminAccId,
-                                              this.props.navigation.state.params.AssnId.toString(),
-                                              ntDesc,
-                                              sbUnitID.toString(),
-                                              sbMemID.toString(),
-                                              sbSubID.toString(),
-                                              sbRoleId,
-                                              this
-                                                .props
-                                                .navigation
-                                                .state
-                                                .params
-                                                .associationName,
-                                              unitName.toString(),
-                                              occupancyDate,
-                                              soldDate,
-                                              false,
-                                              this
-                                                .props
-                                                .MyAccountID
-                                              // this.props.navigation
-                                            );
+
+                                            axios
+                                              .get(
+                                                "http://" +
+                                                  this
+                                                    .props
+                                                    .oyeURL +
+                                                  `/oyeliving/api/v1/Member/GetMemberListByAssocID/${AssnId}`,
+                                                {
+                                                  headers: {
+                                                    "X-Champ-APIKey":
+                                                      "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                                                    "Content-Type":
+                                                      "application/json"
+                                                  }
+                                                }
+                                              )
+                                              .then(
+                                                res => {
+                                                  let memberList =
+                                                    res
+                                                      .data
+                                                      .data
+                                                      .memberListByAssociation;
+
+                                                  memberList.map(
+                                                    data => {
+                                                      if (
+                                                        data.mrmRoleID ===
+                                                        1
+                                                      ) {
+                                                        console.log(
+                                                          "adminssss",
+                                                          data
+                                                        );
+                                                        this.props.createUserNotification(
+                                                          ntType,
+                                                          this
+                                                            .props
+                                                            .oyeURL,
+                                                          data.acAccntID,
+                                                          this.props.navigation.state.params.AssnId.toString(),
+                                                          ntDesc,
+                                                          sbUnitID.toString(),
+                                                          sbMemID.toString(),
+                                                          sbSubID.toString(),
+                                                          sbRoleId,
+                                                          this
+                                                            .props
+                                                            .navigation
+                                                            .state
+                                                            .params
+                                                            .associationName,
+                                                          unitName.toString(),
+                                                          occupancyDate,
+                                                          soldDate,
+                                                          false,
+                                                          this
+                                                            .props
+                                                            .MyAccountID
+                                                        );
+                                                      }
+                                                    }
+                                                  );
+
+                                                  getAssoMembers(
+                                                    oyeURL,
+                                                    MyAccountID
+                                                  );
+
+                                                  this.props.updateJoinedAssociation(
+                                                    this
+                                                      .props
+                                                      .joinedAssociations,
+                                                    unitList.unUnitID
+                                                  );
+                                                  Alert.alert(
+                                                    "Oyespace",
+                                                    "Request sent to Admin",
+                                                    [
+                                                      {
+                                                        text:
+                                                          "Ok",
+                                                        onPress: () =>
+                                                          this.props.navigation.navigate(
+                                                            "ResDashBoard"
+                                                          )
+                                                      }
+                                                    ],
+                                                    {
+                                                      cancelable: false
+                                                    }
+                                                  );
+                                                }
+                                              )
+                                              .catch(
+                                                error => {
+                                                  getAssoMembers(
+                                                    oyeURL,
+                                                    MyAccountID
+                                                  );
+                                                  this.setState(
+                                                    {
+                                                      loading: false
+                                                    }
+                                                  );
+                                                  Alert.alert(
+                                                    "Alert",
+                                                    "Request not sent..!",
+                                                    [
+                                                      {
+                                                        text:
+                                                          "Ok",
+                                                        onPress: () => {}
+                                                      }
+                                                    ],
+                                                    {
+                                                      cancelable: false
+                                                    }
+                                                  );
+                                                  console.log(
+                                                    error,
+                                                    "errorAdmin"
+                                                  );
+                                                }
+                                              );
 
                                             // this.props.navigation.navigate("SplashScreen");
-                                            this.props.updateJoinedAssociation(
-                                                this.props.joinedAssociations,
-                                                unitList.unUnitID
-                                            );
-
-                                            Alert.alert(
-                                                "Oyespace",
-                                                "Request sent to Admin",
-                                                [
-                                                    {
-                                                        text: "Ok",
-                                                        onPress: () =>
-                                                            this.props.navigation.navigate(
-                                                                "ResDashBoard"
-                                                            )
-                                                    }
-                                                ],
-                                                { cancelable: false }
-                                            );
                                         });
                                 } else {
                                     this.setState({
