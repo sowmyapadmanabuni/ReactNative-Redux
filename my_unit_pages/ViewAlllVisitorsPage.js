@@ -176,7 +176,7 @@ class App extends React.Component {
             //console.log("fsbkfh", count);
             console.log(
                 responseJson,
-                "*******************************************"
+                "View Alll Visitors"
             );
             this.setState({
               isLoading: false,
@@ -208,7 +208,7 @@ class App extends React.Component {
             <View style={styles.containerImageView}>
               {item.vlEntryImg == "" ? (
                   <ZoomImage
-                      source={require("../icons/img.png")}
+                      source={require("../icons/placeholderImg.png")}
                       imgStyle={{
                         height: wp("20%"),
                         width: wp("20%"),

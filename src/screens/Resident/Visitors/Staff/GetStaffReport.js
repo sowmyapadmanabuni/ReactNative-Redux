@@ -171,6 +171,9 @@ class GetStaffReport extends React.Component {
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days())
         let difference=duration.as('days');
+        let selectedDate = input.FromDate;
+        console.log('hghgfghfgf',difference,difference+1)
+
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 

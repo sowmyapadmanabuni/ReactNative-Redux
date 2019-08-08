@@ -59,6 +59,7 @@ class QRCodeGeneration extends Component {
 
   componentDidMount() {
     this.associationName();
+    this.qrGeneration();
   }
   onCancel() {
     console.log("CANCEL");
@@ -95,7 +96,7 @@ class QRCodeGeneration extends Component {
         "," +
         params.value.asAssnID +
         "," +
-        params.value.inIsActive;
+        params.value.inMultiEy;
     // let txt1 = "You are invited to " + params.value.infName + "'s home @ " + params.value.unUnitID + " " + params.value.insDate;
     let txt1 =
         params.value.infName +
@@ -119,7 +120,7 @@ class QRCodeGeneration extends Component {
     "," +
     params.value.asAssnID +
     "," +
-    params.value.inIsActive;
+    params.value.inMultiEy;
     this.setState({
       qrText: txt,
       qrShare: txt1
@@ -218,7 +219,7 @@ class QRCodeGeneration extends Component {
     share(){
         const { params } = this.props.navigation.state;
         console.log("Params:",params);
-        let shareImageBase64 = {
+        let sharingDetail = {
             title: "Invitation",
             message:
                 params.value.infName +
@@ -234,8 +235,8 @@ class QRCodeGeneration extends Component {
                 "  ",
             url: this.state.previewSource.uri
         };
-        console.log("Sharing data:",shareImageBase64);
-        Share.open(shareImageBase64).then((response) => {
+        console.log("Sharing data:",sharingDetail);
+        Share.open(sharingDetail).then((response) => {
             console.log(response)
         });
     }
@@ -330,7 +331,7 @@ class QRCodeGeneration extends Component {
           </View>
       );
     }
-    console.log(this.state.qrText);
+    console.log("Complete QRText Data -",this.state.qrText);
     return (
         <View style={{ flex: 1 }}>
           {/* <Header/> */}

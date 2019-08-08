@@ -41,7 +41,6 @@ import com.facebook.soloader.SoLoader;
 
 import org.pgsqlite.SQLitePluginPackage;
 
-import cl.json.ShareApplication;
 
 import java.util.Arrays;
 import java.util.List;

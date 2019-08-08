@@ -154,36 +154,36 @@ class UnitList extends Component {
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.goBack();
-                  }}
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
                 >
                   <View
-                    style={{
-                      height: hp("4%"),
-                      width: wp("15%"),
-                      alignItems: "flex-start",
-                      justifyContent: "center"
-                    }}
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
                   >
                     <Image
-                      resizeMode="contain"
-                      source={require("../icons/back.png")}
-                      style={styles.viewDetails2}
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
                     />
                   </View>
                 </TouchableOpacity>
               </View>
               <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
               >
                 <Image
-                  style={[styles.image1]}
-                  source={require("../icons/OyeSpace.png")}
+                    style={[styles.image1]}
+                    source={require("../icons/headerLogo.png")}
                 />
               </View>
               <View style={{ flex: 0.2 }}>
@@ -210,47 +210,47 @@ class UnitList extends Component {
           // onWillBlur={payload => this.getUnitList()}
         />
         <SafeAreaView style={{ backgroundColor: "orange" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: "flex-start",
-                    justifyContent: "center"
-                  }}
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/OyeSpace.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-        </SafeAreaView>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView>
 
         <Text style={styles.titleOfScreen}>Unit List</Text>
 
@@ -320,11 +320,18 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
+   image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
+ 
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
@@ -339,11 +346,6 @@ const styles = StyleSheet.create({
     height: hp("3%"),
     marginTop: 5
     // marginLeft: 10
-  },
-  image1: {
-    width: wp("17%"),
-    height: hp("12%"),
-    marginRight: hp("3%")
   },
   titleOfScreen: {
     marginTop: hp("1.6%"),

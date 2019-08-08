@@ -12,13 +12,14 @@ const Style = StyleSheet.create({
         marginTop:hp('2.8%')
     },
     dropDownContainer: {
+       // flex:1,
         height: '7.5%',
-        width: '90%',
+        marginLeft:10,
+        width: '95%',
         flexDirection: 'row',
-        justifyContent: 'space-between',
     },
     leftDropDown: {
-        width: '60%'
+        width: '60%',
     },
     rightDropDown: {
         width: '40%'

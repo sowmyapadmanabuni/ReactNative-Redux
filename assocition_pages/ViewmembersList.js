@@ -96,7 +96,6 @@ class Resident extends React.Component {
         }
     }
 
-
     async addUnitDetail(memberArr, associationId) {
         let self = this;
         let stat = await base.services.OyeLivingApi.getUnitListByAssociationId(associationId);
@@ -111,7 +110,7 @@ class Resident extends React.Component {
                         }
                     }
                 }
-                console.log("MemberArr:", memberArr);
+
                 self.setState({
                     residentData: memberArr,
                     clonedList: memberArr
@@ -128,10 +127,9 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         try {
-            if(this.state.selectedRoleData === 0){
+            if (this.state.selectedRoleData === 0) {
                 alert("Please change the role");
-            }
-            else {
+            } else {
                 const {getDashUnits, selectedAssociation} = this.props;
                 console.log('Props in role managment', this.props);
 
@@ -176,9 +174,8 @@ class Resident extends React.Component {
             }
 
 
-        }
-        catch (e) {
-            console.log("STATE:",this.state);
+        } catch (e) {
+            console.log("STATE:", this.state);
         }
 
     };
@@ -262,7 +259,7 @@ class Resident extends React.Component {
                         this.setState({units: residentList});
                     }}
                 />
-                <SafeAreaView style={{backgroundColor: "orange"}}>
+                <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
                     <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity
@@ -310,19 +307,28 @@ class Resident extends React.Component {
                         <View
                             style={{flex: 0.8, height: hp("5.5%"), marginStart: hp("2%")}}
                         >
-                            <TextInput
-                                style={styles.viewDetails3}
-                                placeholder="  search...."
-                                round
-                                onChangeText={(text) => this.handleSearch(text)}
-                            />
+                            <View style={{
+                                flexDirection: 'row', borderBottomWidth: 0.7,
+                            }}>
+                                <TextInput
+                                    style={styles.viewDetails3}
+                                    placeholder="Search...."
+                                    round
+                                    onChangeText={(text) => this.handleSearch(text)}
+                                />
+                                <Image
+                                    style={{top:10}}
+                                    source={require('../icons/search.png')}
+                                />
+                            </View>
                         </View>
                         <View
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
-                            <View style={{alignItems: "flex-end", marginEnd: hp("2%")}}>
+                            <View style={{alignItems: "flex-end", marginEnd: hp("2%"),top:15}}>
                                 <OSButton height={hp('3%')} onButtonClick={() => this.changeRole()} width={hp('8%')}
                                           oSBText={"Update"}
+                                          borderRadius={hp('20%')}
                                           oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
                                           this.state.selectedRoleData.selRolId === 2 ? base.theme.colors.primary : base.theme.colors.grey
 
@@ -426,6 +432,28 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "black"
     },
+
+
+    textWrapper: {
+        height: hp("85%"), // 70% of height device screen
+        width: wp("100%") // 80% of width device screen
+    },
+
+    viewDetails3: {
+        height: hp("5.5%"),
+        width: wp('60%'),
+        backgroundColor: base.theme.colors.transparent,
+        paddingTop: 10,
+        paddingRight: 2,
+        fontSize: hp("1.8%"),
+    },
+    viewDetails4: {
+        height: hp("5.5%"),
+        width: wp("19%"),
+        // backgroundColor: "#DCDCDC",
+        alignContent: "center"
+    },
+
     viewStyle1: {
         backgroundColor: "#fff",
         height: hp("7%"),
@@ -437,14 +465,12 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image1: {
-        width: wp("17%"),
+        width: wp("22%"),
         height: hp("12%"),
         marginRight: hp("3%")
     },
-    textWrapper: {
-        height: hp("85%"), // 70% of height device screen
-        width: wp("100%") // 80% of width device screen
-    },
+
+
     viewDetails1: {
         flex: 0.3,
         flexDirection: "row",
@@ -460,18 +486,5 @@ const styles = StyleSheet.create({
         marginTop: 5
         // marginLeft: 10
     },
-    viewDetails3: {
-        height: hp("5.5%"),
-        backgroundColor: "#F5F5F5",
-        borderRadius: hp("7%"),
-        fontSize: hp("1.8%"),
-        paddingLeft: hp("2%")
-    },
-    viewDetails4: {
-        height: hp("5.5%"),
-        width: wp("19%"),
-        // backgroundColor: "#DCDCDC",
-        alignContent: "center"
-    }
 });
 

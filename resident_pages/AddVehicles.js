@@ -322,7 +322,7 @@ class AddVehicle extends Component {
                         containerStyle={styles.box1}
                         dropdownPosition={-1}
                         style={{
-                          color: "#ff8c00",
+                          
                           right: 19,
                           textAlign: "left",
                           fontFamily: base.theme.fonts.light,
@@ -460,7 +460,6 @@ const styles = StyleSheet.create({
     marginLeft: wp("5%"),
     marginRight: wp("5%"),
     height: hp("5%"),
-    backgroundColor: "#ff8c00",
     width: hp("50%"),
     marginTop: hp("4%")
   }
