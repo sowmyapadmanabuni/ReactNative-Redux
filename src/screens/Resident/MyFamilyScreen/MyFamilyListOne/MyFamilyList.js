@@ -80,6 +80,9 @@ class MyFamilyList extends React.Component {
           if (data.success) {
             this.myFamilyListGetData()
           }
+          else {
+              alert(data.error.message)
+          }
         })
         .catch(error => {
           console.log("error", error)

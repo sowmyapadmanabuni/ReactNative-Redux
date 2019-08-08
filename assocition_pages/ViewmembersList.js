@@ -96,7 +96,6 @@ class Resident extends React.Component {
         }
     }
 
-
     async addUnitDetail(memberArr, associationId) {
         let self = this;
         let stat = await base.services.OyeLivingApi.getUnitListByAssociationId(associationId);
@@ -111,7 +110,7 @@ class Resident extends React.Component {
                         }
                     }
                 }
-                console.log("MemberArr:", memberArr);
+
                 self.setState({
                     residentData: memberArr,
                     clonedList: memberArr
@@ -128,20 +127,19 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         try {
-            if(this.state.selectedRoleData === 0){
+            if (this.state.selectedRoleData === 0) {
                 alert("Please change the role");
-            }
-            else {
+            } else {
                 const {getDashUnits, selectedAssociation} = this.props;
-                console.log('Props in role managment', this.props)
+                console.log('Props in role managment', this.props);
 
                 const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
                 console.log("selectedUser:", this.state.selectedUser); //+91
 
                 // let mobile=this.state.selectedUser.uoMobile.split(" ")
-                let mobile = this.state.selectedUser.uoMobile.split('')
-                let mobNumber = this.state.selectedUser.uoMobile
-                console.log('Mob Array', mobile)
+                let mobile = this.state.selectedUser.uoMobile.split('');
+                let mobNumber = this.state.selectedUser.uoMobile;
+                console.log('Mob Array', mobile);
 
                 if (mobile[0] === '+') {
                     console.log('No need to add')
@@ -176,9 +174,8 @@ class Resident extends React.Component {
             }
 
 
-        }
-        catch (e) {
-            console.log("STATE:",this.state);
+        } catch (e) {
+            console.log("STATE:", this.state);
         }
 
     };
@@ -310,19 +307,28 @@ class Resident extends React.Component {
                         <View
                             style={{flex: 0.8, height: hp("5.5%"), marginStart: hp("2%")}}
                         >
-                            <TextInput
-                                style={styles.viewDetails3}
-                                placeholder="  search...."
-                                round
-                                onChangeText={(text) => this.handleSearch(text)}
-                            />
+                            <View style={{
+                                flexDirection: 'row', borderBottomWidth: 0.7,
+                            }}>
+                                <TextInput
+                                    style={styles.viewDetails3}
+                                    placeholder="Search...."
+                                    round
+                                    onChangeText={(text) => this.handleSearch(text)}
+                                />
+                                <Image
+                                    style={{top:10}}
+                                    source={require('../icons/search.png')}
+                                />
+                            </View>
                         </View>
                         <View
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
-                            <View style={{alignItems: "flex-end", marginEnd: hp("2%")}}>
+                            <View style={{alignItems: "flex-end", marginEnd: hp("2%"),top:15}}>
                                 <OSButton height={hp('3%')} onButtonClick={() => this.changeRole()} width={hp('8%')}
                                           oSBText={"Update"}
+                                          borderRadius={hp('20%')}
                                           oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
                                           this.state.selectedRoleData.selRolId === 2 ? base.theme.colors.primary : base.theme.colors.grey
 
@@ -426,19 +432,20 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "black"
     },
-    
-    
+
+
     textWrapper: {
         height: hp("85%"), // 70% of height device screen
         width: wp("100%") // 80% of width device screen
     },
-    
+
     viewDetails3: {
         height: hp("5.5%"),
-        backgroundColor: "#F5F5F5",
-        borderRadius: hp("7%"),
+        width: wp('60%'),
+        backgroundColor: base.theme.colors.transparent,
+        paddingTop: 10,
+        paddingRight: 2,
         fontSize: hp("1.8%"),
-        paddingLeft: hp("2%")
     },
     viewDetails4: {
         height: hp("5.5%"),
@@ -456,28 +463,28 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         elevation: 2,
         position: "relative"
-      },
-       image1: {
+    },
+    image1: {
         width: wp("22%"),
         height: hp("12%"),
         marginRight: hp("3%")
-      },
-    
-     
-      viewDetails1: {
+    },
+
+
+    viewDetails1: {
         flex: 0.3,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
         marginLeft: 3
-      },
-      viewDetails2: {
+    },
+    viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
         width: hp("3%"),
         height: hp("3%"),
         marginTop: 5
         // marginLeft: 10
-      },
+    },
 });
 

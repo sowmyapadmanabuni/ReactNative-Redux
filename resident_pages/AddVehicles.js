@@ -275,7 +275,6 @@ class AddVehicle extends Component {
             <KeyboardAwareScrollView>
               <Form>
                 <Item style={styles.inputItem}>
-                  {/* <Label>Vehicle Name</Label> */}
                   <Input
                       autoCorrect={false}
                       autoCapitalize="characters"
@@ -285,7 +284,6 @@ class AddVehicle extends Component {
                   />
                 </Item>
                 <Item style={styles.inputItem}>
-                  {/* <Label>Vehicle Number</Label> */}
                   <Input
                       autoCorrect={false}
                       autoCapitalize="characters"

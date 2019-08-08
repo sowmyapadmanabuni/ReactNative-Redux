@@ -219,7 +219,7 @@ class QRCodeGeneration extends Component {
     share(){
         const { params } = this.props.navigation.state;
         console.log("Params:",params);
-        let shareImageBase64 = {
+        let sharingDetail = {
             title: "Invitation",
             // message:
             //     params.value.infName +
@@ -235,7 +235,8 @@ class QRCodeGeneration extends Component {
             //     "  ",
             url: this.state.previewSource.uri
         };
-        Share.open(shareImageBase64).then((response) => {
+        console.log("Sharing data:",sharingDetail);
+        Share.open(sharingDetail).then((response) => {
             console.log(response)
         });
     }

@@ -179,60 +179,30 @@ class GetStaffReport extends React.Component {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-                console.log("Diffrence:",initialDate,reportsData);
+                console.log("Diffrence:",initialDate);
                 // if (difference !== 0) {
-
+                let rowData = [];
+                let selectedDate = initialDate;
                 for (let i = 0; i < reportsData.length; i++) {
-                    let rowData = [];
-                    /*if (initialDate !== moment(reportsData[i].vldUpdated).format("YYYY-MM-DD") || !reportsData[i]) {
+
+                    if (initialDate !== moment(reportsData[i].vldUpdated).format("YYYY-MM-DD") || !reportsData[i]) {
                         rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
                         rowData.push('No Entry on this Date')
 
-                   } else {*/
+                    } else {
+                        rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+                        rowData.push(reportsData[i].vlengName)
+                        rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
+                        rowData.push(reportsData[i].vlexgName)
+                        rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
+                    }
 
-                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                    rowData.push(reportsData[i].vlengName)
-                    rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
-                    rowData.push(reportsData[i].vlexgName)
-                    rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
-                    //  }
                     if (initialDate !== endDate) {
                         initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
                     }
                     tableData.push(rowData);
-                }
-                console.log('Table Data',tableData)
-
-
-               /* let missing = tableData;
-                for(let i=0; i<difference+1;i++){
-                let rowData=[]
-                    console.log('hghjgjhghjgjg',i,tableData.indexOf(i))
-                    /!*if(tableData[i] - tableData[i-1] !== 1) {
-                        //Not consecutive sequence, here you can break or do whatever you want
-                        rowData.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                        rowData.push('No Entry on this Date')
-                    }*!/
-        /!*        if(tableData.indexOf(i) === -1){
-                       rowData.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                        rowData.push('No Entry on this Date')
-                    if (selectedDate !== endDate) {
-                        selectedDate = moment(selectedDate).add(1, 'day').format('YYYY-MM-DD')
-                    }
-        }*!/
-                    tableData.push(rowData);
 
                 }
-                console.log("jhghghghjghj",tableData)*/
-
-
-
-
-
-
-
-
-
 
 
                 //} else {
