@@ -233,7 +233,7 @@ class MyFamilyEdit extends Component {
                       placeholderTextColor={base.theme.colors.grey}
                       keyboardType={'phone-pad'}
                   />
-                  <TouchableOpacity  style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
+                  <TouchableOpacity  style={{width: 35, height: 35,}} onPress={() => this.getTheContactList()}>
                     <Image source={require("../../../../../icons/phone-book.png")}
                            style={{width: 25, height: 25,}}/>
                   </TouchableOpacity>
@@ -321,7 +321,7 @@ class MyFamilyEdit extends Component {
     }
   }
 
-  async getTheContact() {
+  async getTheContactList() {
     console.log('Get details',Platform.OS);
     let isGranted=false;
     if(Platform.OS==='android'){

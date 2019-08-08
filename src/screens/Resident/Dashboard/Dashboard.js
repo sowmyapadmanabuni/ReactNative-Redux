@@ -500,29 +500,30 @@ class Dashboard extends React.Component {
             value: dropdown[index].memberId
         });
         this.roleCheckForAdmin(dropdown[index].associationId)
-        this.checkUnitIsThere()
         this.getUnitListByAssoc()
         // this.setState({ role:dropdown[index].roleId });
     };
 
     checkUnitIsThere() {
         const {dropdown1} = this.props
-        console.log('CheckUnit;s is there', dropdown1, dropdown1.length)
+        console.log('CheckUnit;s is there', this.props.dashBoardReducer.uniID,dropdown1, dropdown1.length)
         if (dropdown1.length === 0) {
             this.setState({
                 vehiclesCount: 0
             })
         } else {
             this.getVehicleList()
-            
+
         }
     }
 
     async getUnitListByAssoc() {
         let self = this;
         //self.setState({isLoading: true})
+        const {updateIdDashboard} = this.props;
 
-        console.log("APi1233", self.state.assocId, self.props.dashBoardReducer.dropdown1);
+
+        console.log("APi1233", self.state.assocId);
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
             self.state.assocId
         );
@@ -545,10 +546,9 @@ class Dashboard extends React.Component {
                 self.setState({
                     unitList: unitList,
                     unitName: unitList[0].value,
-                    unitId: unitList[0].details.unUnitID,
+                   // unitId: unitList[0].details.unUnitID,
                     isDataVisible: true
                 });
-                const {updateIdDashboard} = this.props;
                 console.log("updateIdDashboard3", this.props);
                 // updateIdDashboard({
                 //     prop: "uniID",
@@ -556,7 +556,8 @@ class Dashboard extends React.Component {
                 // });
 
                 self.roleCheckForAdmin(this.state.assocId);
-                self.getVehicleList();
+                this.checkUnitIsThere()
+                //self.getVehicleList();
             }
         } catch (error) {
             base.utils.logger.log(error);
@@ -574,20 +575,22 @@ class Dashboard extends React.Component {
                 unitId = unitList[i].details.unUnitID;
             }
         }
+        console.log('DKVMhghgghhgh',value,unitId)
         self.setState({
             unitName: value,
             unitId: unitId
         });
-        const {updateIdDashboard} = this.props;
+      //  const {updateIdDashboard} = this.props;
         // updateIdDashboard({prop: "uniID", value: unitId});
-        self.getVehicleList();
+        this.checkUnitIsThere()
+      //  self.getVehicleList();
     }
 
-    getVehicleList = () => {
-        console.log("Get ID for vehicle", this.props,this.state.unitId);
-        
+    getVehicleList = (unitId) => {
+        console.log("Get ID for vehicle", this.props.dashBoardReducer.uniID);
+
         fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.state.unitList}`,
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
             {
                 method: "GET",
                 headers: {
@@ -599,9 +602,7 @@ class Dashboard extends React.Component {
             .then(response => response.json())
             .then(responseJson => {
                 console.log(
-                    this.state.unitId,
-                    "VehicleRespponse####",
-                    responseJson,
+                    "VehicleRespponse####",this.props.dashBoardReducer.uniID, responseJson,
                 );
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
@@ -612,7 +613,7 @@ class Dashboard extends React.Component {
                 this.setState({loading: false,});
                 this.setState({
                     //Object.keys(responseJson.data.unitsByBlockID).length
-                    vehiclesCount: responseJson.data.vehicleListByUnitID.length
+                    vehiclesCount:responseJson.data.vehicleListByUnitID.length
                 });
                 console.log("error in net call", error);
             });
@@ -639,7 +640,7 @@ class Dashboard extends React.Component {
         fetch(
             `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
                 this.props.dashBoardReducer.assId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -667,7 +668,7 @@ class Dashboard extends React.Component {
         fetch(
             `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
                 this.props.dashBoardReducer.assId
-                }`,
+            }`,
             {
                 method: "GET",
                 headers: {
@@ -705,7 +706,8 @@ class Dashboard extends React.Component {
             updateDropDownIndex,
             selectedDropdown,
             selectedDropdown1,
-            updateSelectedDropDown
+            updateSelectedDropDown,
+            updateIdDashboard
         } = this.props;
         console.log("UNIT ID ---->",this.props.dashBoardReducer.uniID)
         let associationList = this.state.assocList;
@@ -768,12 +770,11 @@ class Dashboard extends React.Component {
                                         //   this.updateUnit(value, index);
                                         // }}
                                         onChangeText={(value, index) => {
-                                            this.updateUnit(value, index);
                                             updateUserInfo({
                                                 prop: "SelectedUnitID",
                                                 value: dropdown1[index].unitId
                                             });
-
+                                            updateIdDashboard({prop: "uniID", value:dropdown1[index].unitId });
                                             updateSelectedDropDown(
                                               {
                                                 prop:
@@ -796,6 +797,8 @@ class Dashboard extends React.Component {
                                                         .value
                                                 }
                                             );
+                                            this.updateUnit(value, index);
+
 
 
                                             // console.log(value);
