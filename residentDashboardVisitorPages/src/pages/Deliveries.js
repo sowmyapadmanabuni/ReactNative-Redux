@@ -712,6 +712,7 @@ class App extends React.Component {
                     keyExtractor={(item, index) => item.fmid.toString()}
                 />
             )}
+            <View style={{height:hp('7%')}}></View>
           </View>
         </View>
     );

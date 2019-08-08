@@ -278,7 +278,7 @@ class MyFamilyList extends React.Component {
             {/* <Header /> */}
 
 
-            <SafeAreaView style={{backgroundColor: "orange"}}>
+            <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
               <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
                 <View style={Style.viewDetails1}>
                   <TouchableOpacity
@@ -318,7 +318,7 @@ class MyFamilyList extends React.Component {
                   {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                 </View>
               </View>
-              <View style={{borderWidth: 1, borderColor: "orange"}}/>
+              <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
             </SafeAreaView>
 
             <View style={Style.progressViewStyle}>
@@ -331,7 +331,7 @@ class MyFamilyList extends React.Component {
         <View style={Style.mainView}>
           {/* <Header /> */}
 
-          <SafeAreaView style={{backgroundColor: "orange"}}>
+          <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
             <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
               <View style={Style.viewDetails1}>
                 <TouchableOpacity
@@ -371,7 +371,7 @@ class MyFamilyList extends React.Component {
                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
               </View>
             </View>
-            <View style={{borderWidth: 1, borderColor: "orange"}}/>
+            <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
           </SafeAreaView>
 
           <NavigationEvents

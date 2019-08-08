@@ -157,7 +157,7 @@ deleteCell = () => {
                   VehType:item.veType,
                   Veid: item.veid
                 })}}>
-                  <Image style={{width:wp('7%'), height:hp('5%')}} source={require('../icons/edit.png')}/>
+                  <Image style={{width:hp('5%'), height:hp('5%')}} source={require('../icons/edit.png')}/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -175,7 +175,7 @@ deleteCell = () => {
         <View style = { styles.container }>
         {/* <Header/> */}
 
-        <SafeAreaView style={{backgroundColor: "orange"}}>
+        <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
             <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -231,7 +231,7 @@ deleteCell = () => {
       <View style={styles.container}>
         {/* <Header/> */}
 
-        <SafeAreaView style={{backgroundColor: "orange"}}>
+        <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
             <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -295,6 +295,7 @@ deleteCell = () => {
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.veid.toString()}
           />}
+          <View style={{height:hp('7%')}}></View>
         
         <TouchableOpacity style= {[styles.floatButton]} 
                 onPress = {() => this.props.navigation.navigate('AddVehiclesScreen')}>
