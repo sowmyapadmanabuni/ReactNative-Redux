@@ -96,7 +96,7 @@ class MyGuests extends Component {
     // console.log(item,index)
     return (
       <View style={{ flexDirection: "column" }}>
-        <View style={{ borderColor: "#707070", borderWidth: hp("0.03%")  }} />
+        <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
         <View
           style={[
             styles.listItem,
@@ -141,7 +141,7 @@ class MyGuests extends Component {
             </Card>
           </View>
         </View>
-        <View style={{ borderColor: "#707070", borderWidth: hp("0.03%")  }} />
+        <View style={{ borderColor: "#707070", borderWidth: wp("0.05%") }} />
       </View>
     );
   };

@@ -187,6 +187,7 @@ class GetStaffReport extends React.Component {
                     rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
                     rowData.push(reportsData[i].vlexgName)
                     rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
+
                     if (initialDate !== endDate) {
                         initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
                     }
@@ -224,6 +225,7 @@ class GetStaffReport extends React.Component {
                 })
                 console.log('Final Data',tableData )
 
+
                 let numberOfPages=tableData.length/self.state.pageLimit;
                 let dataBottomList=[]
                 if(numberOfPages !==parseInt(numberOfPages)){
@@ -243,7 +245,6 @@ class GetStaffReport extends React.Component {
                 this.changeTheData(self.state.pageNumber)
 
             } else {
-                //let tableData = 'No report exist'
 
                 self.setState({
                     tableData: []

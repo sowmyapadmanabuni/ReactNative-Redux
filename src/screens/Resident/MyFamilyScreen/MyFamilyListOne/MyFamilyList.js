@@ -80,6 +80,9 @@ class MyFamilyList extends React.Component {
           if (data.success) {
             this.myFamilyListGetData()
           }
+          else {
+              alert(data.error.message)
+          }
         })
         .catch(error => {
           console.log("error", error)
@@ -270,7 +273,7 @@ class MyFamilyList extends React.Component {
             {/* <Header /> */}
 
 
-            <SafeAreaView style={{backgroundColor: "orange"}}>
+            <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
               <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
                 <View style={Style.viewDetails1}>
                   <TouchableOpacity
@@ -310,7 +313,7 @@ class MyFamilyList extends React.Component {
                   {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                 </View>
               </View>
-              <View style={{borderWidth: 1, borderColor: "orange"}}/>
+              <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
             </SafeAreaView>
 
             <View style={Style.progressViewStyle}>
@@ -323,7 +326,7 @@ class MyFamilyList extends React.Component {
         <View style={Style.mainView}>
           {/* <Header /> */}
 
-          <SafeAreaView style={{backgroundColor: "orange"}}>
+          <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
             <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
               <View style={Style.viewDetails1}>
                 <TouchableOpacity
@@ -363,7 +366,7 @@ class MyFamilyList extends React.Component {
                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
               </View>
             </View>
-            <View style={{borderWidth: 1, borderColor: "orange"}}/>
+            <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
           </SafeAreaView>
 
           <NavigationEvents
@@ -374,18 +377,18 @@ class MyFamilyList extends React.Component {
             <Text style={Style.titleOfScreenStyle}>Family Members</Text>
 
             <View style={{flexDirection: 'row'}}>
-              {/* <Item style={Style.inputItem}>
+              <Item style={Style.inputItem}>
 
               <Input
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
                 multiline={false}
-                onChangeText={this.searchFilterFunction}
+                onChangeText={(text) => this.handleSearch(text)}
               />
 
               <Icon style={Style.icon} name="search" size={14} />
-            </Item>*/}
-              <View
+            </Item>
+              {/* <View
                   style={{flex: 0.9, height: hp("5.5%"), marginStart: hp("2%"), marginBottom: 50}}
               >
                 <TextInput
@@ -403,6 +406,7 @@ class MyFamilyList extends React.Component {
                     onChangeText={(text) => this.handleSearch(text)}
                 />
               </View>
+             */}
             </View>
             {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
 

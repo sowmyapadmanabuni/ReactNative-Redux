@@ -219,23 +219,24 @@ class QRCodeGeneration extends Component {
     share(){
         const { params } = this.props.navigation.state;
         console.log("Params:",params);
-        let shareImageBase64 = {
+        let sharingDetail = {
             title: "Invitation",
-            message:
-                params.value.infName +
-                " invites you to " + //global.AssociationUnitName + ' in ' +
-                // params.value.asAssnID
-                this.state.association +
-                " for " +
-                params.value.inpOfInv +
-                " on " +
-                params.value.insDate.substring(0, 10) +
-                " at " +
-                params.value.insDate.substring(11, 16) +
-                "  ",
+            // message:
+            //     params.value.infName +
+            //     " invites you to " + //global.AssociationUnitName + ' in ' +
+            //     // params.value.asAssnID
+            //     this.state.association +
+            //     " for " +
+            //     params.value.inpOfInv +
+            //     " on " +
+            //     params.value.insDate.substring(0, 10) +
+            //     " at " +
+            //     params.value.insDate.substring(11, 16) +
+            //     "  ",
             url: this.state.previewSource.uri
         };
-        Share.open(shareImageBase64).then((response) => {
+        console.log("Sharing data:",sharingDetail);
+        Share.open(sharingDetail).then((response) => {
             console.log(response)
         });
     }
@@ -414,6 +415,10 @@ class QRCodeGeneration extends Component {
                     </Text>
                   </View>
                 </View>
+                
+                
+                
+
                 <View style={{ flexDirection: "row", flex: 1 }}>
                   <View style={{ flex: 0.9,marginLeft:hp('2%') }}>
                     <Text style={{color:'grey'}}>Invited On</Text>
@@ -431,6 +436,7 @@ class QRCodeGeneration extends Component {
                     </Text>
                   </View>
                 </View>
+                
                 <View style={{ flexDirection: "row", flex: 1 }}>
                   {this.props.navigation.state.params.value.inVisCnt === 1 ? (
                       <View style={{ flex: 1, flexDirection: "row" }}>
@@ -455,6 +461,18 @@ class QRCodeGeneration extends Component {
                       </View>
                   )}
                 </View>
+
+                {/* <View style={{ flexDirection: "row", flex: 1 }}>
+                  <View style={{ flex: 0.9,marginLeft:hp('2%')  }}>
+                    <Text style={{color:'grey'}}>Message</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{color:'black',fontWeight:'500'}}>
+                            {params.value.infName} invites you to {params.value.asAssnID} for {params.value.inpOfInv} on {params.value.insDate.substring(0, 10)} at {params.value.insDate.substring(11, 16)}
+                    </Text>
+                  </View>
+                </View>
+               */}
               </View>
               <View
                   style={{
