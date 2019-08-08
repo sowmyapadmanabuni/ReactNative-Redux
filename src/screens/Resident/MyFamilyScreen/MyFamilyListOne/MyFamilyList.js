@@ -91,7 +91,6 @@ class MyFamilyList extends React.Component {
     this.setState({
       value: text
     })
-
     const newData = this.arrayholder.filter(item => {
       const itemData = `${item.fmName.toUpperCase()} ${item.fmName.toUpperCase()} ${item.fmName.toUpperCase()}`
       const textData = text.toUpperCase()
@@ -173,13 +172,6 @@ class MyFamilyList extends React.Component {
                 <Text style={Style.memberDetailsTextStyle}>{item.fmRltn}</Text>
               </View>
 
-              <View style={Style.memberDetailFlexViewStyle}>
-                <Image
-                    style={Style.memberDetailIconImageStyle}
-                    source={require("../../../../../icons/age.png")}
-                />
-                <Text style={Style.memberDetailsTextStyle}>{item.fmAge}</Text>
-              </View>
               <View style={Style.memberDetailFlexViewStyle}>
                 <Image
                     style={Style.memberDetailIconImageStyle}

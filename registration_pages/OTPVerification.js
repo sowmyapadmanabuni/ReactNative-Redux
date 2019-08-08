@@ -415,7 +415,6 @@ class OTPVerification extends Component {
                     keyboardType={"numeric"}
                 />
                 <View style={{ alignSelf: "center", marginTop: hp("4%") }}>
-                  {this.state.OTPNumber.length === 6 ? (
                       <Button
                           onPress={this.verifyOTP.bind(this, this.state.OTPNumber)}
                           style={{
@@ -431,30 +430,6 @@ class OTPVerification extends Component {
                           Submit
                         </Text>
                       </Button>
-                  ) : (
-                      // <Button
-                      //     style={{
-                      //       width: wp("30%"),
-                      //       height: hp("4.8%"),
-                      //       justifyContent: "center",
-                      //       alignItems: "center",
-                      //       backgroundColor: "#ff8c00"
-                      //     }}
-                      //     rounded
-                      // >
-                      //   <Text style={{ color: "white", fontSize: hp("2%") }}>
-                      //     Submit
-                      //   </Text>
-                      // </Button>
-                      <View style={{
-                              width: wp("30%"),
-                              height: hp("4.8%"),
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}>
-                              
-                            </View>
-                  )}
                 </View>
               </View>
 

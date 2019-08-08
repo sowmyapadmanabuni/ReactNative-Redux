@@ -200,8 +200,8 @@ const Style = StyleSheet.create({
     borderWidth: hp("0.1%")
   },
   threeBtnStyle: {
-    borderColor: "gray",
-    borderWidth: hp("0.03%"),
+   // borderColor: "gray",
+   // borderWidth: hp("0.03%"),
     width: hp("3%"),
     height: hp("3%"),
     justifyContent: "center",

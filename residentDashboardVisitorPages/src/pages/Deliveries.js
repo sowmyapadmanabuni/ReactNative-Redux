@@ -182,7 +182,6 @@ class App extends React.Component {
                 responseJson,
                 "*******************************************"
             );
-            
             this.setState({
               isLoading: false,
               dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),

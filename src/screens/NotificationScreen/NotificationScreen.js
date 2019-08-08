@@ -331,19 +331,19 @@ class NotificationScreen extends Component {
                       </Text>
                       <Text style={{marginBottom:10}}>{item.ntDesc}</Text>
                       <View style={{flex:1,}}>
-                        {item.open ? 
-                          <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
-                            <Text style={{color:'#ff8c00'}}>More</Text>
-                            <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_more.png')}/>
-                          </View>:
-                          <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
-                            <Text style={{color:'#ff8c00'}}>Less</Text>
-                            <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_less.png')} />
-                          </View>}
+                        {item.open ?
+                            <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
+                              <Text style={{color:'#ff8c00'}}>More</Text>
+                              <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_more.png')}/>
+                            </View>:
+                            <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
+                              <Text style={{color:'#ff8c00'}}>Less</Text>
+                              <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_less.png')} />
+                            </View>}
                       </View>
-                      
+
                     </View>
-                    <Collapsible 
+                    <Collapsible
                         duration={300}
                         style={{ flex: 1 }}
                         collapsed={item.open}
@@ -361,17 +361,17 @@ class NotificationScreen extends Component {
                             <View style={{flexDirection:'row'}}>
                               <View>
                                 <Image
-                                      style={styles.img}
-                                      // style={styles.img}
-                                      source={{
-                                        uri:
-                                            `${this.props.mediaupload}` +
-                                            this.renderCollapseData(
-                                                "vlEntryImg",
-                                                item.sbMemID
-                                            )
-                                      }}
-                                  />
+                                    style={styles.img}
+                                    // style={styles.img}
+                                    source={{
+                                      uri:
+                                          `${this.props.mediaupload}` +
+                                          this.renderCollapseData(
+                                              "vlEntryImg",
+                                              item.sbMemID
+                                          )
+                                    }}
+                                />
                               </View>
                               <View style={{flexDirection:'column', marginLeft:hp('1%')}}>
                                 <View style={{marginBottom:5}}>
@@ -380,133 +380,133 @@ class NotificationScreen extends Component {
                                     Association
                                   </Text>
                                 </View>
-                                
+
                                 <View style={{marginBottom:5}}>
                                   <Text style={{ fontSize: hp("2%") }}>
                                     {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
-                                      
+
                                   </Text>
                                 </View>
-                                
-                                <View style={{ flexDirection: "row", marginBottom:5 }}>
-                                    <Text style={{ color: "#000" }}>
-                                      {this.renderCollapseData(
-                                          "vlVisType",
-                                          item.sbMemID
-                                      )}{" "}
-                                      
-                                    </Text>
-                                    <Text style={{ color: "#38bcdb" }}>
-                                      {this.renderCollapseData(
-                                          "vlComName",
-                                          item.sbMemID
-                                      )}{" "}
-                                      
-                                    </Text>
 
-                                  </View>
-                                  <View style={{flexDirection:'row'}}>
-                                      <TouchableOpacity
-                                          onPress={() => {
-                                            {
-                                              Platform.OS === "android"
-                                                  ? Linking.openURL(
-                                                  `tel:${
-                                                      this.renderCollapseData(
-                                                          "vlMobile",
-                                                          item.sbMemID
-                                                      )
-                                                      // this.state.gateDetails
-                                                      //   .vlMobile
-                                                  }`
+                                <View style={{ flexDirection: "row", marginBottom:5 }}>
+                                  <Text style={{ color: "#000" }}>
+                                    {this.renderCollapseData(
+                                        "vlVisType",
+                                        item.sbMemID
+                                    )}{" "}
+
+                                  </Text>
+                                  <Text style={{ color: "#38bcdb" }}>
+                                    {this.renderCollapseData(
+                                        "vlComName",
+                                        item.sbMemID
+                                    )}{" "}
+
+                                  </Text>
+
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                  <TouchableOpacity
+                                      onPress={() => {
+                                        {
+                                          Platform.OS === "android"
+                                              ? Linking.openURL(
+                                              `tel:${
+                                                  this.renderCollapseData(
+                                                      "vlMobile",
+                                                      item.sbMemID
                                                   )
-                                                  : Linking.openURL(
-                                                  `tel:${
-                                                      // this.state.gateDetails.vlMobile
-                                                      this.renderCollapseData(
-                                                          "vlMobile",
-                                                          item.sbMemID
-                                                      )
-                                                  }`
-                                                  );
-                                            }
-                                          }}
-                                      >
-                                        <View style={{ flexDirection: "row" }}>
-                                          <View>
-                                            <Text style={{ color: "#ff8c00" }}>
-                                              {this.renderCollapseData(
-                                                  "vlMobile",
-                                                  item.sbMemID
-                                              )}
-                                              {/* {this.state.gateDetails !== null
+                                                  // this.state.gateDetails
+                                                  //   .vlMobile
+                                              }`
+                                              )
+                                              : Linking.openURL(
+                                              `tel:${
+                                                  // this.state.gateDetails.vlMobile
+                                                  this.renderCollapseData(
+                                                      "vlMobile",
+                                                      item.sbMemID
+                                                  )
+                                              }`
+                                              );
+                                        }
+                                      }}
+                                  >
+                                    <View style={{ flexDirection: "row" }}>
+                                      <View>
+                                        <Text style={{ color: "#ff8c00" }}>
+                                          {this.renderCollapseData(
+                                              "vlMobile",
+                                              item.sbMemID
+                                          )}
+                                          {/* {this.state.gateDetails !== null
                                         ? this.state.gateDetails.vlMobile
                                         : ""} */}
-                                            </Text>
-                                          </View>
-                                          <View
-                                              style={{
-                                                width: hp("2.5%"),
-                                                height: hp("2.5%"),
-                                              }}
-                                          >
-                                            <Image
-                                                style={{
-                                                  width: hp("2.5%"),
-                                                  height: hp("2.5%")
-                                                }}
-                                                source={require("../../../icons/call.png")}
-                                            />
-                                          </View>
-                                        </View>
-                                      </TouchableOpacity>
-
+                                        </Text>
+                                      </View>
+                                      <View
+                                          style={{
+                                            width: hp("2.5%"),
+                                            height: hp("2.5%"),
+                                          }}
+                                      >
+                                        <Image
+                                            style={{
+                                              width: hp("2.5%"),
+                                              height: hp("2.5%")
+                                            }}
+                                            source={require("../../../icons/call.png")}
+                                        />
+                                      </View>
                                     </View>
-                                
+                                  </TouchableOpacity>
+
+                                </View>
+
                               </View>
                             </View>
 
                             <View style={{flexDirection:'row'}}>
-                                  <View style={{ flexDirection: "row" }}>
-                                    <Text style={{ color: "#ff8c00" }}>
-                                      Entry On:{" "}
-                                    </Text>
-                                    <View style={{ flexDirection: "row" }}>
-                                      
-                                      <Text>
-                                        
-                                        {this.renderCollapseData(
-                                            "vldCreated",
-                                            item.sbMemID
-                                        )}  </Text>
+                              <View style={{ flexDirection: "row" }}>
+                                <Text style={{ color: "#ff8c00" }}>
+                                  Entry On:{" "}
+                                </Text>
+                                <View style={{ flexDirection: "row" }}>
 
-                                      <Text>
-                                        
-                                        {this.renderCollapseData(
-                                            "vlEntryT",
-                                            item.sbMemID
-                                        )}
-                                      </Text>
-                                    </View>
-                                  </View>
-                                  <View
-                                      style={{
-                                        flexDirection: "row",
-                                        marginLeft: hp("3%")
-                                      }}
-                                  >
-                                    <Text style={{ color: "#ff8c00" }}>From: </Text>
-                                    <Text>
-                                      
-                                      {this.renderCollapseData(
-                                          "vlengName",
-                                          item.sbMemID
-                                      )}
-                                    </Text>
-                                  </View>
+                                  <Text>
+
+                                    {this.renderCollapseData(
+                                        "vldCreated",
+                                        item.sbMemID
+                                    )}  </Text>
+
+                                  <Text>
+
+                                    {this.renderCollapseData(
+                                        "vlEntryT",
+                                        item.sbMemID
+                                    )}
+                                  </Text>
+                                </View>
+                              </View>
+                              <View
+                                  style={{
+                                    flexDirection: "row",
+                                    marginLeft: hp("3%")
+                                  }}
+                              >
+                                <Text style={{ color: "#ff8c00" }}>From: </Text>
+                                <Text>
+
+                                  {this.renderCollapseData(
+                                      "vlengName",
+                                      item.sbMemID
+                                  )}
+                                </Text>
+                              </View>
                             </View>
                             <View>
-                            <View
+                              <View
                                   style={{
                                     flexDirection: "row",
                                   }}
@@ -526,16 +526,16 @@ class NotificationScreen extends Component {
                                           Exit On:{" "}
                                         </Text>
                                         <View style={{ flexDirection: "row" }}>
-                                          
+
 
                                           <Text>
-                                            
+
                                             {this.renderCollapseData(
                                                 "vldUpdated",
                                                 item.sbMemID
                                             )}  </Text>
                                           <Text>
-                                            
+
                                             {this.renderCollapseData(
                                                 "vlExitT",
                                                 item.sbMemID
@@ -552,7 +552,7 @@ class NotificationScreen extends Component {
                                       >
                                         <Text style={{ color: "#ff8c00" }}>From: </Text>
                                         <Text>
-                                          
+
                                           {this.renderCollapseData(
                                               "vlexgName",
                                               item.sbMemID
@@ -567,8 +567,8 @@ class NotificationScreen extends Component {
                                 }
                               </View>
                             </View>
-                           
-                            
+
+
                           </View>
                       )}
                     </Collapsible>
@@ -697,4 +697,3 @@ export default connect(
       toggleCollapsible
     }
 )(NotificationScreen);
-

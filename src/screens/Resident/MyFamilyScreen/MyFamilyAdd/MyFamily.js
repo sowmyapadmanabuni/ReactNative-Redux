@@ -8,7 +8,7 @@ import {
     TextInput,
     ScrollView,
     PermissionsAndroid,
-    SafeAreaView,Alert
+    SafeAreaView, Alert, ToastAndroid
 } from "react-native"
 
 import ImagePicker from "react-native-image-picker"
@@ -52,7 +52,7 @@ class MyFamily extends Component {
             relationName: "",
             cCode: '',
             mobileNumber: "",
-            sendNum:"",
+            sendNum: "",
             isMinor: false,
             firstName: "",
             lastName: "",
@@ -61,12 +61,12 @@ class MyFamily extends Component {
             isMinorSelected: 0,
             guardianName: "",
             relativeImage: "",
-            imageUrl:"",
+            imageUrl: "",
         }
     }
 
-    render(){
-        console.log('Isminor',this.state)
+    render() {
+        console.log('Isminor', this.state)
         let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number"
         return (
             <SafeAreaView style={Style.container}>
@@ -113,7 +113,7 @@ class MyFamily extends Component {
                             data={this.state.relationList}
                             textColor={base.theme.colors.black}
                             inputContainerStyle={{}}
-                          //  label="Select Relationship"
+                            //  label="Select Relationship"
                             baseColor="rgba(0, 0, 0, 1)"
                             placeholder="Relationship*"
                             placeholderTextColor={base.theme.colors.black}
@@ -208,8 +208,10 @@ class MyFamily extends Component {
                                 />
                             </View>
                             : <View/>}
-                        <View style={[Style.textInputView,{borderBottomWidth: 1,
-                            borderColor: base.theme.colors.lightgrey, marginBottom:10}]}>
+                        <View style={[Style.textInputView, {
+                            borderBottomWidth: 1,
+                            borderColor: base.theme.colors.lightgrey, marginBottom: 10
+                        }]}>
                             <Text style={{
                                 fontSize: 14,
                                 color: base.theme.colors.black,
@@ -225,7 +227,7 @@ class MyFamily extends Component {
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'phone-pad'}
                                 />
-                                <TouchableOpacity  style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
+                                <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
                                            style={{width: 25, height: 25,}}/>
                                 </TouchableOpacity>
@@ -258,7 +260,7 @@ class MyFamily extends Component {
                     console.log(response);
                     self.uploadImage(response);
                 } else {
-                    console.log('response',response);
+                    console.log('response', response);
                     self.uploadImage(response);
                 }
 
@@ -283,7 +285,7 @@ class MyFamily extends Component {
             try {
                 self.setState({
                     relativeImage: response.uri,
-                    imageUrl:stat
+                    imageUrl: stat
                 })
             } catch (err) {
                 console.log('err', err)
@@ -301,10 +303,10 @@ class MyFamily extends Component {
         if (value === 'Child') {
             this.setState({
                 isMinor: true,
-                firstName:'',
-                lastName:'',
-                mobileNumber:'',
-                guardianName:''
+                firstName: '',
+                lastName: '',
+                mobileNumber: '',
+                guardianName: ''
             })
         } else {
             this.setState({
@@ -314,48 +316,46 @@ class MyFamily extends Component {
     }
 
     async getTheContact() {
-        console.log('Get details',Platform.OS);
-        let isGranted=false;
-        if(Platform.OS==='android'){
+        console.log('Get details', Platform.OS);
+        let isGranted = false;
+        if (Platform.OS === 'android') {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.READ_CONTACTS
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                isGranted=true
+                isGranted = true
             }
 
-        }
-        else{
-            isGranted=true
+        } else {
+            isGranted = true
         }
 
-        if(isGranted){
+        if (isGranted) {
             ContactsWrapper.getContact()
                 .then((contact) => {
                     console.log('Details for mob', contact)
                     let name = contact.name.split(" ")
                     let mobCode = contact.phone.split('')
                     let mobNum = contact.phone.replaceAll(/[ !@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?]/, '')
-                    let sendMob=contact.phone.split(" ")
+                    let sendMob = contact.phone.split(" ")
 
                     if (mobCode[0] === '+') {
                         console.log('plus')
                         let mobCode2 = contact.phone.split(" ")
-                        console.log('mobCode',sendMob, mobCode, mobCode2, mobCode2[0])
-                         let arr='';
-                        for(let i=1;i<sendMob.length;i++){
-                            arr=arr+sendMob[i]
+                        console.log('mobCode', sendMob, mobCode, mobCode2, mobCode2[0])
+                        let arr = '';
+                        for (let i = 1; i < sendMob.length; i++) {
+                            arr = arr + sendMob[i]
                         }
-                        console.log('mobbbbbb',arr)
+                        console.log('mobbbbbb', arr)
                         this.setState({
                             cCode: mobCode2[0],
-                            sendNum:arr
+                            sendNum: arr
                         })
 
-                    }
-                 else{
+                    } else {
                         this.setState({
-                            sendNum:mobNum
+                            sendNum: mobNum
                         })
                     }
                     if (this.state.isMinor && this.state.isMinorSelected === 0) {
@@ -379,75 +379,84 @@ class MyFamily extends Component {
     }
 
     validation() {
-        console.log('Props**!!!',this.props,this.state);
+        console.log('Props**!!!', this.props, this.state);
 
         let self = this;
         if (self.state.relationName === "") {
             alert('Please Select relation')
-        }else if (self.state.firstName === "") {
+        } else if (self.state.firstName === "") {
             alert('First Name is required')
-        } else if(self.state.isMinor && self.state.isMinorSelected===0 && self.state.guardianName ===''){
+        } else if (self.state.isMinor && self.state.isMinorSelected === 0 && self.state.guardianName === '') {
             alert('Guardian name is Mandatory')
-        }
-        else if (self.state.mobileNumber === "") {
+        } else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
-        }
-        else if(self.props.dashBoardReducer.uniID===null){
+        } else if (self.props.dashBoardReducer.uniID === null) {
             alert('Unit id is null')
-        }
-        else if(self.props.dashBoardReducer.assId===null){
+        } else if (self.props.dashBoardReducer.assId === null) {
             alert('Association id is null')
-        }
-        else {
-           self.addRelativeDetails()
+        } else {
+            self.addRelativeDetails()
 
         }
     }
 
-    async addRelativeDetails() {
-        console.log('Props**',this.props);
+    showAlert(msg, ispop) {
         let self = this;
-        let mobNum=self.state.sendNum
-        let cCode=self.state.cCode
-        if(cCode===""){
-             cCode="+91"
-            mobNum=self.state.mobileNumber
+        setTimeout(() => {
+            this.showMessage(this, "", msg, "OK", function () {
+
+            });
+        }, 500)
+    }
+
+    showMessage(self, title, message, btn, callback) {
+        Alert.alert(title, message, [
+            {
+                text: btn, onPress: () => {
+                    self.setState({isLoading: false});
+                    callback()
+                }
+            }
+        ])
+    }
+
+    async addRelativeDetails(title, message) {
+        console.log('Props**', this.props);
+        let self = this;
+        let mobNum = self.state.sendNum
+        let cCode = self.state.cCode
+        if (cCode === "") {
+            cCode = "+91"
+            mobNum = self.state.mobileNumber
         }
         let input = {
-            "FMName"    : self.state.firstName,
-            "FMMobile"  : mobNum,
-            "FMISDCode" : cCode,
-            "UNUnitID"  : self.props.dashBoardReducer.uniID,
-            "FMRltn"    : self.state.relationName,
-            "ASAssnID"  : self.props.dashBoardReducer.assId,
-            "FMImgName" :self.state.imageUrl ,
-            "FMMinor"   :self.state.isMinor,
-            "FMLName"   : self.state.lastName,
-            "FMGurName" : self.state.guardianName
+            "FMName": self.state.firstName,
+            "FMMobile": mobNum,
+            "FMISDCode": cCode,
+            "UNUnitID": self.props.dashBoardReducer.uniID,
+            "FMRltn": self.state.relationName,
+            "ASAssnID": self.props.dashBoardReducer.assId,
+            "FMImgName": self.state.imageUrl,
+            "FMMinor": self.state.isMinor,
+            "FMLName": self.state.lastName,
+            "FMGurName": self.state.guardianName
         };
-        console.log('MyFam',input)
+        console.log('MyFam', input)
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
         console.log('Stat in Add family',stat)
             if (stat) {
             try {
-                if(stat.success){
+                if (stat.success) {
                     self.props.navigation.navigate('MyFamilyList')
-                }
-                else {
-                    // Alert.alert(stat.error.message)
-                    setTimeout(()=>{
-                        Alert.alert(
-                            'Attention',
-                            stat.error.message,
-                            [
-                                {
-                                    text: 'Ok',
-                                    onPress: () => console.log('Cancel Pressed'),
-                                    style: 'cancel',
-                                },],
-                            {cancelable: false},
-                        );
-                    },1000)
+                } else {
+                    this.showAlert(stat.error.message,true)
+                    // Alert.alert('Attention', stat.error.message, [
+                    //     {
+                    //         text: 'Ok',
+                    //         onPress: () => console.log('Cancel Pressed'),
+                    //         style: 'cancel',
+                    //     },], {cancelable: false});
+
                 }
 
             } catch (err) {
@@ -457,6 +466,7 @@ class MyFamily extends Component {
     }
 
 }
+
 const mapStateToProps = state => {
     return {
         selectedAssociation: state.DashboardReducer.selectedAssociation,
