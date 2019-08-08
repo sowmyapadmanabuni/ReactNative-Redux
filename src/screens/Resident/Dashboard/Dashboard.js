@@ -126,31 +126,6 @@ class Dashboard extends React.Component {
           `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
         );
 
-        // axios
-        //     .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
-        //         headers: headers
-        //     })
-        //     .then(response => {
-        //         let responseData = response.data.data;
-
-        //         responseData.associationByAccount.map(association => {
-        //             // console.log('***********')
-        //             console.log(association.asAsnName, "assssooo")
-        //             // console.log(association.asAssnID)
-        //             // console.log('***********')
-        //             if (receiveNotifications) {
-        //                 firebase
-        //                     .messaging()
-        //                     .subscribeToTopic(association.asAssnID + "admin");
-        //                 // console.log(association.asAssnID);
-        //             } else if (!receiveNotifications) {
-        //                 firebase
-        //                     .messaging()
-        //                     .unsubscribeFromTopic(association.asAssnID + "admin");
-        //             }
-        //         });
-        //     });
-
         axios
             .get(
                 `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
@@ -163,13 +138,6 @@ class Dashboard extends React.Component {
                 let data = response.data.data.memberListByAccount;
                 // console.log("dataoye", data);
                 data.map(units => {
-                    console.log(
-                      units.asAsnName +
-                        units.asAssnID +
-                        "admin"
-                    );
-
-    
                     // console.log(units.mrmRoleID + "role");
                     if (receiveNotifications) {
                         if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
@@ -190,7 +158,7 @@ class Dashboard extends React.Component {
                           .messaging()
                           .unsubscribeFromTopic(
                             units.asAssnID + "admin"
-                          );
+                        );
                     }
                 });
             });
