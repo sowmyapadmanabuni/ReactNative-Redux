@@ -102,13 +102,13 @@ class MyFamilyEdit extends Component {
           <ScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
-                {this.state.relativeImage === '' ?
+                {this.props.navigation.state.params.fmImgName === '' ?
                     <Image style={{height: 40, width: 40, alignSelf: 'center'}}
                            source={require('../../../../../icons/camera.png')}
                     />
                     :
                     <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
-                           source={{uri: base.utils.validate.handleNullImg(this.props.navigation.state.params.fmImgName)}}/>
+                           source={{uri: this.state.relativeImage===''?"http://mediaupload.oyespace.com/" +this.props.navigation.state.params.fmImgName:this.state.relativeImage}}/>
                 }
               </TouchableOpacity>
             </View>
@@ -290,7 +290,7 @@ class MyFamilyEdit extends Component {
     if (stat) {
       try {
         self.setState({
-          relativeImage: response.uri,
+          relativeImage:response.uri,
           imageUrl:stat
         })
       } catch (err) {
@@ -309,8 +309,8 @@ class MyFamilyEdit extends Component {
     if (value === 'Child') {
       this.setState({
         isMinor: true,
-        firsName:'',
-        lastName:'',
+       // firsName:'',
+        //lastName:'',
         mobileNumber:'',
         guardianName:''
       })
@@ -413,27 +413,29 @@ class MyFamilyEdit extends Component {
   }
 
   async editRelativeDetails() {
-    console.log('Props**',this.props);
+    console.log('Props**',this.props,this.state);
+    console.log('hjhhjhjhj',this.state.mobileNumber,this.state.sendNum,this.state.cCode)
     let self = this;
-    let mobNum=self.state.sendNum
-    let cCode=self.state.cCode
-    if(cCode===""){
-      cCode="+91"
-      mobNum=self.state.mobileNumber
-    }
-  let relationName=self.state.relationName==="" ||self.state.relationName ===null ? self.props.navigation.state.params.fmRltn :self.state.relationName
-  let  cCodeSend=self.state.cCode==="" ||self.state.cCode ===null ? self.props.navigation.state.params.fmisdCode :self.state.cCode
-    let mobileNumber=self.state.sendNum==="" || self.state.sendNum ===null ? self.props.navigation.state.params.fmMobile :self.state.sendNum
+
+    let relationName=self.state.relationName==="" ||self.state.relationName ===null ? self.props.navigation.state.params.fmRltn :self.state.relationName
+  //let  cCodeSend=self.state.cCode==="" ||self.state.cCode ===null ? self.props.navigation.state.params.fmisdCode :self.state.cCode
+  //  let mobileNumber=self.state.sendNum==="" || self.state.sendNum ===null ? self.props.navigation.state.params.fmMobile :self.state.sendNum
     let  isMinor=self.state.isMinor===false ? self.props.navigation.state.params.fmMinor :self.state.isMinor
         let firstName=self.state.firstName===""||  self.state.firstName ===null ? self.props.navigation.state.params.fmName :self.state.firstName
     let lastName=self.state.lastName==="" || self.state.lastName ===null ? self.props.navigation.state.params.fmlName :self.state.lastName
     let imgUrl=self.state.imageUrl==="" || self.state.imageUrl ===null ? self.props.navigation.state.params.fmImgName :self.state.imageUrl
     let guardianName=self.state.guardianName==="" || self.state.cCode ===null ? self.props.navigation.state.params.fmGurName :self.state.guardianName
 
+    let mobCode = this.state.mobileNumber.split('')
+    console.log('hhghfh',mobCode)
+    let cCodeSend=this.state.cCode
+    if(mobCode[0]==='+'){
+      cCodeSend=''
+    }
 
     let input = {
       "FMName"    :firstName,
-      "FMMobile"  : mobileNumber,
+      "FMMobile"  : self.state.mobileNumber,
       "FMISDCode" : cCodeSend,
       "UNUnitID"  : self.props.dashBoardReducer.uniID,
       "FMRltn"    : relationName,
