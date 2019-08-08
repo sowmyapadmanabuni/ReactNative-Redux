@@ -377,18 +377,18 @@ class MyFamilyList extends React.Component {
             <Text style={Style.titleOfScreenStyle}>Family Members</Text>
 
             <View style={{flexDirection: 'row'}}>
-              {/* <Item style={Style.inputItem}>
+              <Item style={Style.inputItem}>
 
               <Input
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
                 multiline={false}
-                onChangeText={this.searchFilterFunction}
+                onChangeText={(text) => this.handleSearch(text)}
               />
 
               <Icon style={Style.icon} name="search" size={14} />
-            </Item>*/}
-              <View
+            </Item>
+              {/* <View
                   style={{flex: 0.9, height: hp("5.5%"), marginStart: hp("2%"), marginBottom: 50}}
               >
                 <TextInput
@@ -406,6 +406,7 @@ class MyFamilyList extends React.Component {
                     onChangeText={(text) => this.handleSearch(text)}
                 />
               </View>
+             */}
             </View>
             {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
 
