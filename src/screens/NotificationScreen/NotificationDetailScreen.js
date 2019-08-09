@@ -19,7 +19,7 @@ import {
 } from "../../actions";
 
 import _ from "lodash";
-
+("ntJoinStat");
 class NotificationDetailScreen extends Component {
   state = {
     loading: false,
@@ -364,7 +364,7 @@ class NotificationDetailScreen extends Component {
       } else if (details.ntType === "gate_app") {
         return null;
       } else {
-        if (status === true) {
+        if (details.ntJoinStat) {
           let reqStatus = "";
           if (details.ntStatDesc === "") {
             reqStatus = "Request Rejected";
