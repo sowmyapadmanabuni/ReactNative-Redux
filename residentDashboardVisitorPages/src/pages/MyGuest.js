@@ -55,7 +55,7 @@ class MyGuests extends Component {
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}/${this.props.accountId}`,
       {
         method: "GET",
         headers: {
@@ -133,7 +133,6 @@ class MyGuests extends Component {
 
   renderItem = ({ item, index }) => {
       console.log(item,index)
-    console.log("Data Sources",this.state.dataSource)
     console.log("The Association Id and Unit id:",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
     return (
       <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
@@ -206,6 +205,7 @@ class MyGuests extends Component {
   render() {
     console.log("Dashboard", this.props.dashBoardReducer);
     console.log("Association Id and unit id", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    console.log("My Account Id -", this.props.accountId)
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -248,7 +248,7 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-        {this.state.dataSource.length == 0 ? (
+        {this.state.dataSource.length === 0 ? (
           <View
             style={{
               flex: 1,
@@ -436,7 +436,8 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
-    dashBoardReducer: state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer,
+    accountId: state.UserReducer.MyAccountID
   };
 };
 
