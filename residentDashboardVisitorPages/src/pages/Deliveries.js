@@ -31,6 +31,10 @@ import {
 import ZoomImage from "react-native-zoom-image";
 import { connect } from "react-redux";
 
+let dt = new Date();
+dt.setDate(dt.getDate());
+let _dt = dt;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -45,12 +49,12 @@ class App extends React.Component {
       datetime: moment(new Date()).format("HH:mm:ss a"),
 
       //date picker
-      dobText: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
-      dobDate: moment(new Date()).format("YYYY-MM-DD"),
+      dobText: _dt, //year + '-' + month + '-' + date,
+      dobDate: _dt,
       isDateTimePickerVisible: false,
 
-      dobText1: moment(new Date()).format("YYYY-MM-DD"),
-      dobDate1: moment(new Date()).format("YYYY-MM-DD"),
+      dobText1: _dt,
+      dobDate1: _dt,
       isDateTimePickerVisible1: false,
 
       switch: false,
@@ -76,6 +80,8 @@ class App extends React.Component {
   };
 
   onDOBDatePicked = date => {
+    console.log("Date Piceked !:",date)
+
     this.setState({
       dobDate: date,
       dobText: moment(date).format("YYYY-MM-DD")
@@ -99,6 +105,7 @@ class App extends React.Component {
   };
 
   onDOBDatePicked1 = date => {
+    console.log("Date Piceked !:",date)
     this.setState({
       dobDate1: date,
       dobText1: moment(date).format("YYYY-MM-DD")
@@ -425,7 +432,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText}{" "}
+                      {moment(this.state.dobText).format("YYYY-MM-DD")}{" "}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog"
@@ -449,7 +456,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText1}
+                      {moment(this.state.dobText1).format("YYYY-MM-DD")}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog1"
@@ -589,7 +596,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText}{" "}
+                      {moment(this.state.dobText).format("YYYY-MM-DD")}{" "}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog"
@@ -613,7 +620,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText1}
+                      {moment(this.state.dobText1).format("YYYY-MM-DD")}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog1"

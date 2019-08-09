@@ -55,7 +55,7 @@ class MyGuests extends Component {
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}/${this.props.accountId}`,
       {
         method: "GET",
         headers: {
@@ -73,7 +73,7 @@ class MyGuests extends Component {
           error: responseJson.error || null,
           loading: false
         });
-        this.arrayholder = responseJson.data.invitation;
+        this.arrayholder = responseJson.data.inviation;
       })
       .catch(error => {
         console.log(error);
@@ -204,8 +204,9 @@ class MyGuests extends Component {
   };
 
   render() {
-    console.log("Dashboard", this.props.dashBoardReducer);
-    console.log("Association Id and unit id", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    // console.log("Dashboard", this.props.dashBoardReducer);
+    // console.log("Association Id and unit id", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    // console.log("My Account Id -", this.props.accountId)
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -248,42 +249,15 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-        {this.state.dataSource.length === 0 ? (
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white"
-            }}
-          >
-            <Text
-              style={{
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: hp("1.8%")
-              }}
-            >
-              No Guest invited.
-            </Text>
-            <Text
-              style={{
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: hp("1.6%")
-              }}
-            >
-              Please invite.
-            </Text>
+        {this.state.dataSource.length == 0 ? (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text>
+            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite.</Text>
           </View>
         ) : (
           <FlatList
             style={{ marginTop: hp("1.5%") }}
-            data={this.state.dataSource.sort((a, b) =>
-              a.infName.localeCompare(b.infName)
-            )}
+            data={this.state.dataSource.sort((a,b) => a.infName.localeCompare(b.infName))}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.inInvtID.toString()}
           />
@@ -437,7 +411,7 @@ const mapStateToProps = state => {
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
     dashBoardReducer: state.DashboardReducer,
-    userReducer: state.UserReducer
+    accountId: state.UserReducer.MyAccountID
   };
 };
 

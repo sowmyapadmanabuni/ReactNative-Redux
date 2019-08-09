@@ -1,6 +1,9 @@
 import {Platform, StyleSheet} from "react-native";
 import base from "../../base";
-
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
 const HeaderStyles = StyleSheet.create({
     container: {
@@ -55,8 +58,10 @@ const HeaderStyles = StyleSheet.create({
         color: base.theme.colors.mediumGrey,
     },
     appLogoStyles: {
-        height: 80,
-        width: 80,
+        width: wp("22%"),
+    height: hp("12%"),
+        // height: 80,
+        // width: 80,
         alignSelf: 'center'
     }
 
