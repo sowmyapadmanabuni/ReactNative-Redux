@@ -181,10 +181,10 @@ class NotificationDetailScreen extends Component {
                             this.props.oyeURL,
                             this.props.MyAccountID
                           );
-                          this.props.updateApproveAdmin(
-                            this.props.approvedAdmins,
-                            item.sbSubID
-                          );
+                          // this.props.updateApproveAdmin(
+                          //   this.props.approvedAdmins,
+                          //   item.sbSubID
+                          // );
 
                           this.setState({
                             loading: false,
@@ -238,15 +238,6 @@ class NotificationDetailScreen extends Component {
         "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
         "Content-Type": "application/json"
       };
-
-      // axios
-      //   .get(
-      //     this.props.champBaseURL + `GetMemberListByMemberID/${item.sbMemID}`,
-      //     {
-      //       headers: headers
-      //     }
-      //   )
-      //   .then(() => {
       axios
         .get(
           `http://${
@@ -296,7 +287,7 @@ class NotificationDetailScreen extends Component {
                   this.props.createUserNotification(
                     "Join_Status",
                     this.props.oyeURL,
-                    item.ACNotifyID,
+                    item.acNotifyID,
                     1,
                     "Your request to join" +
                       item.mrRolName +
@@ -318,10 +309,10 @@ class NotificationDetailScreen extends Component {
                     this.props.MyAccountID
                   );
                   this.setState({ loading: false });
-                  this.props.updateApproveAdmin(
-                    this.props.approvedAdmins,
-                    item.sbSubID
-                  );
+                  // this.props.updateApproveAdmin(
+                  //   this.props.approvedAdmins,
+                  //   item.sbSubID
+                  // );
                   setTimeout(() => {
                     this.props.navigation.navigate("ResDashBoard");
                   }, 300);
@@ -332,12 +323,12 @@ class NotificationDetailScreen extends Component {
                 });
             })
             .catch(error => {
-              console.log("updated didn't work", error);
+              console.log("update didn't work", error);
             });
         })
         .catch(error => {
           // Alert.alert("******************", error.message);
-          console.log(error);
+          console.log(error, "first api");
           this.setState({ loading: false });
         });
       // })

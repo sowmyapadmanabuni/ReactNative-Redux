@@ -20,8 +20,9 @@ import {
 } from "react-native-responsive-screen";
 import { connect } from "react-redux";
 import {
-    updateJoinedAssociation,
-    createUserNotification
+  updateJoinedAssociation,
+  createUserNotification,
+  getAssoMembers
 } from "../src/actions";
 import _ from "lodash";
 import { CLOUD_FUNCTION_URL } from "../constant";
@@ -43,9 +44,17 @@ class RegisterMe extends Component {
 
             unitofperson: false,
             unitofperson1: false,
-            sent: false
+            sent: false,
+            loading: false
         };
     }
+
+
+    componentDidMount() {
+        const { getAssoMembers, oyeURL , MyAccountID } = this.props;
+        getAssoMembers(oyeURL, MyAccountID);
+    }
+
 
     onDOBPress = () => {
         let dobDate = this.state.dobDate;
@@ -74,6 +83,8 @@ class RegisterMe extends Component {
             associationName,
             unitList
         } = this.props.navigation.state.params;
+
+        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
         if (this.state.dobText == "Select Date of Occupancy") {
             alert("Select Date of Occupancy");
         } else if (this.state.sent) {
@@ -98,7 +109,7 @@ class RegisterMe extends Component {
             };
 
             let champBaseURL = this.props.champBaseURL;
-            this.setState({ sent: true });
+            this.setState({ sent: true, loading: true });
             axios
                 .post(
                     `${champBaseURL}/association/join`,
@@ -214,119 +225,135 @@ class RegisterMe extends Component {
                                         })
                                         .then(response_3 => {
                                             this.setState({ loading: false });
-                                            this.props.createUserNotification(
-                                              ntType,
-                                              this
-                                                .props
-                                                .oyeURL,
-                                              adminAccId,
-                                              this.props.navigation.state.params.AssnId.toString(),
-                                              ntDesc,
-                                              sbUnitID.toString(),
-                                              sbMemID.toString(),
-                                              sbSubID.toString(),
-                                              sbRoleId,
-                                              this
-                                                .props
-                                                .navigation
-                                                .state
-                                                .params
-                                                .associationName,
-                                              unitName.toString(),
-                                              occupancyDate,
-                                              soldDate,
-                                              false,
-                                              this
-                                                .props
-                                                .MyAccountID
-                                            );
+                                            
+                                              axios
+                                                .get(
+                                                  "http://" +
+                                                    this
+                                                      .props
+                                                      .oyeURL +
+                                                    `/oyeliving/api/v1/Member/GetMemberListByAssocID/${AssnId}`,
+                                                  {
+                                                    headers: {
+                                                      "X-Champ-APIKey":
+                                                        "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                                                      "Content-Type":
+                                                        "application/json"
+                                                    }
+                                                  }
+                                                )
+                                                .then(
+                                                  res => {
+                                                    let memberList =
+                                                      res
+                                                        .data
+                                                        .data
+                                                        .memberListByAssociation;
 
-                                            this.props.updateJoinedAssociation(
-                                                this.props.joinedAssociations,
-                                                unitList.unUnitID
-                                            );
+                                                    memberList.map(
+                                                      data => {
+                                                        if (
+                                                          data.mrmRoleID ===
+                                                          1
+                                                        ) {
+                                                            console.log("adminssss", data)
+                                                            this.props.createUserNotification(
+                                                              ntType,
+                                                              this
+                                                                .props
+                                                                .oyeURL,
+                                                              data.acAccntID,
+                                                              this.props.navigation.state.params.AssnId.toString(),
+                                                              ntDesc,
+                                                              sbUnitID.toString(),
+                                                              sbMemID.toString(),
+                                                              sbSubID.toString(),
+                                                              sbRoleId,
+                                                              this
+                                                                .props
+                                                                .navigation
+                                                                .state
+                                                                .params
+                                                                .associationName,
+                                                              unitName.toString(),
+                                                              occupancyDate,
+                                                              soldDate,
+                                                              false,
+                                                              this
+                                                                .props
+                                                                .MyAccountID
+                                                            );
+                                                            
+                                                          }
+                                                      }
+                                                    );
+
+                                                    getAssoMembers(
+                                                      oyeURL,
+                                                      MyAccountID
+                                                    );
+
+                                                    this.props.updateJoinedAssociation(
+                                                      this
+                                                        .props
+                                                        .joinedAssociations,
+                                                      unitList.unUnitID
+                                                    );
+                                                    Alert.alert(
+                                                      "Oyespace",
+                                                      "Request sent to Admin",
+                                                      [
+                                                        {
+                                                          text:
+                                                            "Ok",
+                                                          onPress: () =>
+                                                            this.props.navigation.navigate(
+                                                              "ResDashBoard"
+                                                            )
+                                                        }
+                                                      ],
+                                                      {
+                                                        cancelable: false
+                                                      }
+                                                    );
+                                                  }
+                                                )
+                                                .catch(
+                                                  error => {
+                                                      getAssoMembers(
+                                                        oyeURL,
+                                                        MyAccountID
+                                                      );
+                                                      this.setState(
+                                                        {
+                                                          loading: false
+                                                        }
+                                                      );
+                                                      Alert.alert(
+                                                        "Alert",
+                                                        "Request not sent..!",
+                                                        [
+                                                          {
+                                                            text:
+                                                              "Ok",
+                                                            onPress: () => {}
+                                                          }
+                                                        ],
+                                                        {
+                                                          cancelable: false
+                                                        }
+                                                      );
+                                                    console.log(
+                                                      error,
+                                                      "errorAdmin"
+                                                    );
+                                                  }
+                                                );
 
                                             // this.props.navigation.navigate("SplashScreen");
-                                            Alert.alert(
-                                                "Oyespace",
-                                                "Request sent to Admin",
-                                                [
-                                                    {
-                                                        text: "Ok",
-                                                        onPress: () =>
-                                                            this.props.navigation.navigate("ResDashBoard")
-                                                    }
-                                                ],
-                                                { cancelable: false }
-                                            );
+                                            
 
-                                            // fetch(
-                                            //   `http://${
-                                            //     this.props.oyeURL
-                                            //   }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
-                                            //     this.props.MyAccountID
-                                            //   }`,
-                                            //   {
-                                            //     method: "GET",
-                                            //     headers: headers_2
-                                            //   }
-                                            // )
-                                            //   .then(response => response.json())
-                                            //   .then(responseJson => {
-                                            //     console.log(
-                                            //       "2312#!@$@#%$#24235346$^#$^#",
-                                            //       this.state.unitofperson
-                                            //     );
-
-                                            //     let count = Object.keys(
-                                            //       responseJson.data.memberListByAccount
-                                            //     ).length;
-                                            //     for (let i = 0; i < count; i++) {
-                                            //       if (
-                                            //         responseJson.data.memberListByAccount[i]
-                                            //           .unUnitID ===
-                                            //         this.props.navigation.state.params.unitList
-                                            //           .unUnitID
-                                            //       ) {
-                                            //         this.setState({ unitofperson: true });
-                                            //       }
-                                            //     }
-                                            //     console.log("@$!@$!@$2$41242$@$@#$@#4", count);
-                                            //   })
-                                            //   .catch(error => {
-                                            //     console.log("second error", error);
-                                            //   });
-                                            // {
-                                            //   this.state.unitofperson === true
-                                            //     ? Alert.alert(
-                                            //         "Oyespace",
-                                            //         "Request sent to Admin",
-                                            //         [
-                                            //           {
-                                            //             text: "Ok",
-                                            //             onPress: () =>
-                                            //               this.props.navigation.navigate(
-                                            //                 "ResDashBoard"
-                                            //               )
-                                            //           }
-                                            //         ],
-                                            //         { cancelable: false }
-                                            //       )
-                                            //     : Alert.alert(
-                                            //         "Oyespace",
-                                            //         "Request sent to Admin",
-                                            //         [
-                                            //           {
-                                            //             text: "Ok",
-                                            //             onPress: () =>
-                                            //               this.props.navigation.navigate(
-                                            //                 "CreateOrJoinScreen"
-                                            //               )
-                                            //           }
-                                            //         ],
-                                            //         { cancelable: false }
-                                            //       );
-                                            // }
+                                          
                                         });
                                 } else {
                                     this.setState({
@@ -382,6 +409,7 @@ class RegisterMe extends Component {
             unitList
         } = this.props.navigation.state.params;
 
+        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
         if (this.state.dobText == "Select Date of Occupancy") {
             alert("Select Date of Occupancy");
         } else if (this.state.sent) {
@@ -538,121 +566,134 @@ class RegisterMe extends Component {
                                         )
                                         .then(response_3 => {
                                             this.setState({ loading: false });
-                                            this.props.createUserNotification(
-                                              ntType,
-                                              this
-                                                .props
-                                                .oyeURL,
-                                              adminAccId,
-                                              this.props.navigation.state.params.AssnId.toString(),
-                                              ntDesc,
-                                              sbUnitID.toString(),
-                                              sbMemID.toString(),
-                                              sbSubID.toString(),
-                                              sbRoleId,
-                                              this
-                                                .props
-                                                .navigation
-                                                .state
-                                                .params
-                                                .associationName,
-                                              unitName.toString(),
-                                              occupancyDate,
-                                              soldDate,
-                                              false,
-                                              this
-                                                .props
-                                                .MyAccountID
-                                              // this.props.navigation
-                                            );
+
+                                            axios
+                                              .get(
+                                                "http://" +
+                                                  this
+                                                    .props
+                                                    .oyeURL +
+                                                  `/oyeliving/api/v1/Member/GetMemberListByAssocID/${AssnId}`,
+                                                {
+                                                  headers: {
+                                                    "X-Champ-APIKey":
+                                                      "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                                                    "Content-Type":
+                                                      "application/json"
+                                                  }
+                                                }
+                                              )
+                                              .then(
+                                                res => {
+                                                  let memberList =
+                                                    res
+                                                      .data
+                                                      .data
+                                                      .memberListByAssociation;
+
+                                                  memberList.map(
+                                                    data => {
+                                                      if (
+                                                        data.mrmRoleID ===
+                                                        1
+                                                      ) {
+                                                        console.log(
+                                                          "adminssss",
+                                                          data
+                                                        );
+                                                        this.props.createUserNotification(
+                                                          ntType,
+                                                          this
+                                                            .props
+                                                            .oyeURL,
+                                                          data.acAccntID,
+                                                          this.props.navigation.state.params.AssnId.toString(),
+                                                          ntDesc,
+                                                          sbUnitID.toString(),
+                                                          sbMemID.toString(),
+                                                          sbSubID.toString(),
+                                                          sbRoleId,
+                                                          this
+                                                            .props
+                                                            .navigation
+                                                            .state
+                                                            .params
+                                                            .associationName,
+                                                          unitName.toString(),
+                                                          occupancyDate,
+                                                          soldDate,
+                                                          false,
+                                                          this
+                                                            .props
+                                                            .MyAccountID
+                                                        );
+                                                      }
+                                                    }
+                                                  );
+
+                                                  getAssoMembers(
+                                                    oyeURL,
+                                                    MyAccountID
+                                                  );
+
+                                                  this.props.updateJoinedAssociation(
+                                                    this
+                                                      .props
+                                                      .joinedAssociations,
+                                                    unitList.unUnitID
+                                                  );
+                                                  Alert.alert(
+                                                    "Oyespace",
+                                                    "Request sent to Admin",
+                                                    [
+                                                      {
+                                                        text:
+                                                          "Ok",
+                                                        onPress: () =>
+                                                          this.props.navigation.navigate(
+                                                            "ResDashBoard"
+                                                          )
+                                                      }
+                                                    ],
+                                                    {
+                                                      cancelable: false
+                                                    }
+                                                  );
+                                                }
+                                              )
+                                              .catch(
+                                                error => {
+                                                  getAssoMembers(
+                                                    oyeURL,
+                                                    MyAccountID
+                                                  );
+                                                  this.setState(
+                                                    {
+                                                      loading: false
+                                                    }
+                                                  );
+                                                  Alert.alert(
+                                                    "Alert",
+                                                    "Request not sent..!",
+                                                    [
+                                                      {
+                                                        text:
+                                                          "Ok",
+                                                        onPress: () => {}
+                                                      }
+                                                    ],
+                                                    {
+                                                      cancelable: false
+                                                    }
+                                                  );
+                                                  console.log(
+                                                    error,
+                                                    "errorAdmin"
+                                                  );
+                                                }
+                                              );
 
                                             // this.props.navigation.navigate("SplashScreen");
-                                            this.props.updateJoinedAssociation(
-                                                this.props.joinedAssociations,
-                                                unitList.unUnitID
-                                            );
-
-                                            Alert.alert(
-                                                "Oyespace",
-                                                "Request sent to Admin",
-                                                [
-                                                    {
-                                                        text: "Ok",
-                                                        onPress: () =>
-                                                            this.props.navigation.navigate(
-                                                                "ResDashBoard"
-                                                            )
-                                                    }
-                                                ],
-                                                { cancelable: false }
-                                            );
-                                            // fetch(
-                                            //   `http://${
-                                            //     this.props.oyeURL
-                                            //   }/oyeliving/api/v1/Member/GetMemberListByAccountID/${
-                                            //     this.props.MyAccountID
-                                            //   }`,
-                                            //   {
-                                            //     method: "GET",
-                                            //     headers: headers_2
-                                            //   }
-                                            // )
-                                            //   .then(response => response.json())
-                                            //   .then(responseJson => {
-                                            //     console.log(
-                                            //       "2312#!@$@#%$#24235346$^#$^#",
-                                            //       this.state.unitofperson1
-                                            //     );
-
-                                            //     let count = Object.keys(
-                                            //       responseJson.data.memberListByAccount
-                                            //     ).length;
-                                            //     for (let i = 0; i < count; i++) {
-                                            //       if (
-                                            //         responseJson.data.memberListByAccount[i]
-                                            //           .unUnitID ===
-                                            //         this.props.navigation.state.params.unitList
-                                            //           .unUnitID
-                                            //       ) {
-                                            //         this.setState({ unitofperson1: true });
-                                            //       }
-                                            //     }
-                                            //     console.log("@$!@$!@$2$41242$@$@#$@#4", count);
-                                            //   })
-                                            //   .catch(error => {
-                                            //     console.log("second error", error);
-                                            //   });
-                                            // {
-                                            //   this.state.unitofperson1 === true
-                                            //     ? Alert.alert(
-                                            //         "Oyespace",
-                                            //         "Request sent to Admin",
-                                            //         [
-                                            //           {
-                                            //             text: "Ok",
-                                            //             onPress: () =>
-                                            //               this.props.navigation.navigate(
-                                            //                 "ResDashBoard"
-                                            //               )
-                                            //           }
-                                            //         ],
-                                            //         { cancelable: false }
-                                            //       )
-                                            //     : Alert.alert(
-                                            //         "Oyespace",
-                                            //         "Request sent to Admin",
-                                            //         [
-                                            //           {
-                                            //             text: "Ok",
-                                            //             onPress: () =>
-                                            //               this.props.navigation.navigate(
-                                            //                 "CreateOrJoinScreen"
-                                            //               )
-                                            //           }
-                                            //         ],
-                                            //         { cancelable: false }
-                                            //       );
-                                            // }
                                         });
                                 } else {
                                     this.setState({
@@ -715,27 +756,40 @@ class RegisterMe extends Component {
 
         console.log(matchUnit, "matchUnit");
 
-        if (matchUnit) {
-            if (
-                matchUnit.meJoinStat === "Approved" ||
-                matchUnit.meJoinStat === "Requested" ||
-                matchUnit.meJoinStat === "Accepted"
-            ) {
-                status = true;
-            } else if (joinStat) {
-                status = true;
-            } else {
+        if(matchUnit) {
+            if(matchUnit.meJoinStat === "Accepted" && !matchUnit.meIsActive) {
                 status = false;
+            } else if (
+                matchUnit.meJoinStat === "Accepted" &&
+                matchUnit.meIsActive
+            ) {
+                status = true
+            } else if(matchUnit.meJoinStat === "Requested" ){
+                status = true
             }
-        } else if (joinStat) {
-            status = true;
         } else {
             status = false;
         }
 
-        return status;
+        // if (matchUnit) {
+        //     if (
+        //         matchUnit.meJoinStat === "Approved" ||
+        //         matchUnit.meJoinStat === "Requested" ||
+        //         matchUnit.meJoinStat === "Accepted"
+        //     ) {
+        //         status = true;
+        //     } else if (joinStat) {
+        //         status = true;
+        //     } else {
+        //         status = false;
+        //     }
+        // } else if (joinStat) {
+        //     status = true;
+        // } else {
+        //     status = false;
+        // }
 
-        // return false;
+        return status;
     };
 
     checkForOwner = () => {
@@ -766,6 +820,41 @@ class RegisterMe extends Component {
 
         return status;
     };
+
+    getAdminIds = (id) => {
+        const { oyeURL } = this.props;
+
+        axios
+          .get(
+            "http://" +
+              oyeURL +
+            `oyeliving/api/v1/Member/GetMemberListByAssocID/${id}`
+          , {
+              headers: {
+                  "X-Champ-APIKey":"1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+"Content-Type":"application/json"
+              }
+          })
+          .then(res => {
+              let memberList =
+                res.data.data.memberListByAssociation;
+                let ids = [];
+
+                memberList.map(data => {
+                    if(data.mrmRoleID === 1) {
+                        ids.push(data.acAccntID);
+                    }
+                })
+
+                
+
+          })
+          .catch(error => {
+              console.log(error, "errorAdmin")
+            });
+
+            return ids;
+    }
 
     render() {
         const { unitList, AssnId } = this.props.navigation.state.params;
@@ -1000,6 +1089,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-    mapStateToProps,
-    { updateJoinedAssociation, createUserNotification }
+  mapStateToProps,
+  { updateJoinedAssociation, createUserNotification, getAssoMembers }
 )(RegisterMe);

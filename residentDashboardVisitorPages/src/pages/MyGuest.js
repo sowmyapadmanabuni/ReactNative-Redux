@@ -133,6 +133,7 @@ class MyGuests extends Component {
 
   renderItem = ({ item, index }) => {
       console.log(item,index)
+    console.log("Data Sources",this.state.dataSource)
     console.log("The Association Id and Unit id:",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
     return (
       <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
@@ -203,9 +204,9 @@ class MyGuests extends Component {
   };
 
   render() {
-    console.log("Dashboard", this.props.dashBoardReducer);
-    console.log("Association Id and unit id", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
-    console.log("My Account Id -", this.props.accountId)
+    // console.log("Dashboard", this.props.dashBoardReducer);
+    // console.log("Association Id and unit id", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    // console.log("My Account Id -", this.props.accountId)
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -248,7 +249,7 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-        {this.state.dataSource.length === 0 ? (
+        {this.state.dataSource.length == 0 ? (
           <View
             style={{
               flex: 1,

@@ -179,41 +179,52 @@ class GetStaffReport extends React.Component {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-                console.log("Diffrence:",initialDate);
-                // if (difference !== 0) {
-                let rowData = [];
-                let selectedDate = initialDate;
+                console.log("Diffrence:",initialDate,reportsData);
                 for (let i = 0; i < reportsData.length; i++) {
-
-                    if (initialDate !== moment(reportsData[i].vldUpdated).format("YYYY-MM-DD") || !reportsData[i]) {
-                        rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                        rowData.push('No Entry on this Date')
-
-                    } else {
-                        rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                        rowData.push(reportsData[i].vlengName)
-                        rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
-                        rowData.push(reportsData[i].vlexgName)
-                        rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
-                    }
+                    let rowData = [];
+                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+                    rowData.push(reportsData[i].vlengName)
+                    rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
+                    rowData.push(reportsData[i].vlexgName)
+                    rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
 
                     if (initialDate !== endDate) {
                         initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
                     }
                     tableData.push(rowData);
+                }
+                console.log('Table Data',tableData)
+                let datesArr=[];
+                for(let i=0;i<difference+1;i++){
+                    let tempArr=[]
+                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
+                    tempArr.push('No Entry on this Date')
+                    datesArr.push(tempArr)
+
+                    if (selectedDate !== endDate) {
+                        selectedDate = moment(selectedDate).add(1, 'day').format('YYYY-MM-DD')
+                    }
 
                 }
+                console.log('Dates Arr',datesArr)
 
+                for(let i=0; i<datesArr.length;i++){
+                    let dataMatched = false;
+                    for(let j=0; j<tableData.length; j++){
+                        if(datesArr[i][0] == tableData[j][0]){
+                            dataMatched = true;
+                        }
+                    }
+                    if(!dataMatched){
+                        tableData.push(datesArr[i]);
+                        console.log("data not matched with", datesArr[i]);
+                    }
+                }
+                tableData.sort(function (a, b) {
+                    return new Date(a[0]) - new Date(b[0])
+                })
+                console.log('Final Data',tableData )
 
-                //} else {
-                //     let rowData = [];
-                //     rowData.push(moment(initialDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                //     rowData.push(reportsData[0].vlengName)
-                //     rowData.push(moment(reportsData[0].vlEntryT).format('hh:mm' + ' A'))
-                //     rowData.push(reportsData[0].vlexgName)
-                //     rowData.push(moment(reportsData[0].vlExitT).format('hh:mm' + ' A'))
-                //     tableData.push(rowData)
-                //  }
 
                 let numberOfPages=tableData.length/self.state.pageLimit;
                 let dataBottomList=[]
@@ -234,7 +245,6 @@ class GetStaffReport extends React.Component {
                 this.changeTheData(self.state.pageNumber)
 
             } else {
-                //let tableData = 'No report exist'
 
                 self.setState({
                     tableData: []
