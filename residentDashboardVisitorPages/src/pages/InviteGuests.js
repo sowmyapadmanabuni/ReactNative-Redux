@@ -299,6 +299,7 @@ console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)
 
 
   render() {
+    console.log("My Account Id -", this.props.accountId)
     return (
       <View style={styles.container}>
         {/* <Header/> */}
@@ -560,8 +561,6 @@ const mapStateToProps = state => {
     SelectedUnitID: state.UserReducer.SelectedUnitID,
     dashBoardReducer:state.DashboardReducer,
       userReducer: state.UserReducer
-
-
   };
 };
 

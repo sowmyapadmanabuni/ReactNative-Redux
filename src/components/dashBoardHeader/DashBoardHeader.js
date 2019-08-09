@@ -1,5 +1,5 @@
 import React from "react";
-import {Text, View, TouchableOpacity, Image, StatusBar} from "react-native";
+import {Text, View, TouchableOpacity, Image, StatusBar, SafeAreaView} from "react-native";
 import base from "../../base";
 import {connect, Provider} from "react-redux";
 import HeaderStyles from "./HeaderStyles";
@@ -169,8 +169,9 @@ class DashBoardHeader extends React.Component {
       this.props.userReducer.userProfilePic
     );
     return (
-      <View style={HeaderStyles.container}>
-        <View style={HeaderStyles.subContainerLeft}>
+      <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+        <View style={HeaderStyles.container}>
+          <View style={HeaderStyles.subContainerLeft}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("MyProfileScreen")}
           >
@@ -215,13 +216,13 @@ class DashBoardHeader extends React.Component {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={HeaderStyles.subContainerRight}>
+          <View style={HeaderStyles.subContainerRight}>
           <Image
             style={HeaderStyles.appLogoStyles}
             source={require("../../../icons/headerLogo.png")}
           />
         </View>
-        <View style={HeaderStyles.subContainerRight}>
+          <View style={HeaderStyles.subContainerRight}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("NotificationScreen")}
           >
@@ -232,7 +233,9 @@ class DashBoardHeader extends React.Component {
                         {this.renderBadge()}
                     </TouchableOpacity>
                 </View>
-            </View>
+        </View>
+      </SafeAreaView>
+
         );
     }
 }

@@ -170,7 +170,8 @@ class App extends React.Component {
               StartDate: this.state.dobText,
               EndDate: this.state.dobText1,
               ASAssnID: this.props.dashBoardReducer.assId,
-              UNUnitID : this.props.dashBoardReducer.uniID
+              UNUnitID : this.props.dashBoardReducer.uniID,
+              ACAccntID:this.props.userReducer.MyAccountID
             })
           }
       )
@@ -914,6 +915,8 @@ const mapStateToProps = state => {
     dashBoardReducer: state.DashboardReducer,
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload:state.OyespaceReducer.mediaupload,
+    userReducer: state.UserReducer
+
   };
 };
 

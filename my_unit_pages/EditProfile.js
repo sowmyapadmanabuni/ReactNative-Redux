@@ -544,7 +544,7 @@ class EditProfile extends Component {
                 }}
             >
                 <View style={styles.mainViewStyle}>
-                    <SafeAreaView style={{backgroundColor: "orange"}}>
+                    <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
                         <View style={[styles.viewStyle, {flexDirection: "row"}]}>
                             <View
                                 style={{
@@ -582,7 +582,7 @@ class EditProfile extends Component {
                             </View>
                             <View style={styles.emptyViewStyle}/>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                        <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
                     </SafeAreaView>
                     <KeyboardAwareScrollView>
                         <View style={styles.mainContainer}>
