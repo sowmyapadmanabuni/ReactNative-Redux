@@ -73,7 +73,7 @@ class MyGuests extends Component {
           error: responseJson.error || null,
           loading: false
         });
-        this.arrayholder = responseJson.data.invitation;
+        this.arrayholder = responseJson.data.inviation;
       })
       .catch(error => {
         console.log(error);
@@ -250,41 +250,14 @@ class MyGuests extends Component {
         /> */}
 
         {this.state.dataSource.length == 0 ? (
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white"
-            }}
-          >
-            <Text
-              style={{
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: hp("1.8%")
-              }}
-            >
-              No Guest invited.
-            </Text>
-            <Text
-              style={{
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: hp("1.6%")
-              }}
-            >
-              Please invite.
-            </Text>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text>
+            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite.</Text>
           </View>
         ) : (
           <FlatList
             style={{ marginTop: hp("1.5%") }}
-            data={this.state.dataSource.sort((a, b) =>
-              a.infName.localeCompare(b.infName)
-            )}
+            data={this.state.dataSource.sort((a,b) => a.infName.localeCompare(b.infName))}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.inInvtID.toString()}
           />
