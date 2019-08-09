@@ -174,7 +174,8 @@ class App extends React.Component {
               StartDate: this.state.dobText,
               EndDate: this.state.dobText1,
               ASAssnID: this.props.dashBoardReducer.assId,
-              UNUnitID : this.props.dashBoardReducer.uniID
+              UNUnitID : this.props.dashBoardReducer.uniID,
+              ACAccntID:this.props.userReducer.MyAccountID
             })
           }
       )
@@ -186,15 +187,21 @@ class App extends React.Component {
                 responseJson,
                 "*******************************************"
             );
-            this.setState({
-              isLoading: false,
-              dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),
-              error: responseJson.error || null,
-              loading: false,
-              dobDate: null,
-              dobDate1: null
-            });
-            this.arrayholder = responseJson.data.visitorlog;
+            if(responseJson.success){
+              this.setState({
+                isLoading: false,
+                dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),
+                error: responseJson.error || null,
+                loading: false,
+                dobDate: null,
+                dobDate1: null
+              });
+              this.arrayholder = responseJson.data.visitorlog;
+            }
+            else{
+              //alert('No data for the selected combination of association and unit')
+            }
+
           })
 
           .catch(error => {
@@ -918,6 +925,8 @@ const mapStateToProps = state => {
     dashBoardReducer: state.DashboardReducer,
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload:state.OyespaceReducer.mediaupload,
+    userReducer: state.UserReducer
+
   };
 };
 

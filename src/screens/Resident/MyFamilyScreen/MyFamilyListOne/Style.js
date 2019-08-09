@@ -190,7 +190,8 @@ const Style = StyleSheet.create({
     marginLeft: wp("4%"),
     marginRight: wp("4%"),
     //borderColor: "#909091"
-    borderColor: "#000000"
+    borderColor: "#000000",
+    width:'90%'
   },
   placeholderImage: {
     height: wp("20%"),

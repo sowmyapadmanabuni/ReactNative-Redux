@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import {
+  Alert,
   Image,
   PermissionsAndroid,
   Platform,
@@ -442,9 +443,8 @@ class MyFamilyEdit extends Component {
       "MEMemID":self.props.navigation.state.params.meMemID,
       "FMID":self.props.navigation.state.params.fmid
     };
-    console.log("HGhjgjhgjh", input)
     let stat = await base.services.OyeSafeApiFamily.myFamilyEditMember(input)
-    console.log('Stat in Add family', stat)
+    console.log('Stat in Add family', stat,input)
     if (stat.success) {
       try {
         this.props.navigation.goBack()
@@ -452,6 +452,36 @@ class MyFamilyEdit extends Component {
         console.log('Error in adding Family Member')
       }
     }
+    else {
+      this.showAlert(stat.error.message,true)
+      // Alert.alert('Attention', stat.error.message, [
+      //     {
+      //         text: 'Ok',
+      //         onPress: () => console.log('Cancel Pressed'),
+      //         style: 'cancel',
+      //     },], {cancelable: false});
+
+    }
+  }
+
+  showAlert(msg, ispop) {
+    let self = this;
+    setTimeout(() => {
+      this.showMessage(this, "", msg, "OK", function () {
+
+      });
+    }, 500)
+  }
+
+  showMessage(self, title, message, btn, callback) {
+    Alert.alert(title, message, [
+      {
+        text: btn, onPress: () => {
+          self.setState({isLoading: false});
+          callback()
+        }
+      }
+    ])
   }
 
 }
