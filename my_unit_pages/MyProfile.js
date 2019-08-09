@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     flex: 3
   },
   viewForMyProfileText: {
-    flex: 4,
+    flex: 3,
     justifyContent: "center",
     alignSelf: "center"
   },

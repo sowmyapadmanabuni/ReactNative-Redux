@@ -439,7 +439,8 @@ class MyFamily extends Component {
             "FMImgName": self.state.imageUrl,
             "FMMinor": self.state.isMinor,
             "FMLName": self.state.lastName,
-            "FMGurName": self.state.guardianName
+            "FMGurName": self.state.guardianName,
+            "PAccntID":self.props.userReducer.MyAccountID
         };
         console.log('MyFam', input)
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
@@ -472,6 +473,7 @@ const mapStateToProps = state => {
         selectedAssociation: state.DashboardReducer.selectedAssociation,
         oyeURL: state.OyespaceReducer.oyeURL,
         dashBoardReducer: state.DashboardReducer,
+        userReducer: state.UserReducer,
     };
 };
 export default connect(mapStateToProps)(MyFamily);

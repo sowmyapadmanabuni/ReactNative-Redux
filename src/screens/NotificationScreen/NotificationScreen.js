@@ -10,7 +10,7 @@ import {
   Linking,
   RefreshControl,
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback, Dimensions, SafeAreaView
 } from "react-native";
 import { connect } from "react-redux";
 import { ListItem, Header, Card } from "react-native-elements";
@@ -54,9 +54,9 @@ class NotificationScreen extends Component {
   onPress = (item, index) => {
     const { notifications, savedNoifId, oyeURL } = this.props;
     if (
-        item.ntType === "Join" ||
-        item.ntType === "Join_Status" ||
-        item.ntType === "gate_app"
+      item.ntType === "Join" ||
+      item.ntType === "Join_Status" ||
+      item.ntType === "gate_app"
     ) {
       this.props.navigation.navigate("NotificationDetailScreen", {
         details: item
@@ -112,48 +112,48 @@ class NotificationScreen extends Component {
     const { details } = this.props.navigation.state.params;
     console.log("@#@$#$#@%#%#%#%@#%@#%", details.sbMemID);
     fetch(
-        `http://${
-            this.props.oyeURL
-        }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
-        details.sbMemID,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-          }
+      `http://${
+      this.props.oyeURL
+      }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
+      details.sbMemID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
         }
+      }
     )
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log("Manas", responseJson);
-          this.setState({
-            gateDetails: responseJson.data.visitorLog,
-            Date:
-                responseJson.data.visitorLog.vldCreated.substring(8, 10) +
-                "-" +
-                responseJson.data.visitorLog.vldCreated.substring(5, 7) +
-                "-" +
-                responseJson.data.visitorLog.vldCreated.substring(0, 4),
-            Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
-            Date1:
-                responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
-                "-" +
-                responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
-                "-" +
-                responseJson.data.visitorLog.vldUpdated.substring(0, 4),
-            Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
-          });
-          console.log(
-              "@#!@$@#%#%#$^$^$%^$%^Gate Details",
-              this.state.gateDetails,
-              this.state.Date,
-              this.state.Time
-          );
-        })
-        .catch(error => {
-          console.log(error);
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Manas", responseJson);
+        this.setState({
+          gateDetails: responseJson.data.visitorLog,
+          Date:
+            responseJson.data.visitorLog.vldCreated.substring(8, 10) +
+            "-" +
+            responseJson.data.visitorLog.vldCreated.substring(5, 7) +
+            "-" +
+            responseJson.data.visitorLog.vldCreated.substring(0, 4),
+          Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
+          Date1:
+            responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
+            "-" +
+            responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
+            "-" +
+            responseJson.data.visitorLog.vldUpdated.substring(0, 4),
+          Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
         });
+        console.log(
+          "@#!@$@#%#%#$^$^$%^$%^Gate Details",
+          this.state.gateDetails,
+          this.state.Date,
+          this.state.Time
+        );
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   renderCollapseData = (type, id) => {
@@ -194,13 +194,13 @@ class NotificationScreen extends Component {
       } else if (type === "vldCreated") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData
-            ? moment(foundData.vldCreated, "YYYY-MM-DD").format("DD-MM-YYYY")
-            : "";
+          ? moment(foundData.vldCreated, "YYYY-MM-DD").format("DD-MM-YYYY")
+          : "";
       } else if (type === "vldUpdated") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData
-            ? moment(foundData.vldUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")
-            : "";
+          ? moment(foundData.vldUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")
+          : "";
       }
       else if (type === "vlengName") {
         let foundData = _.find(gateDetails, { sbMemID: id });
@@ -222,36 +222,36 @@ class NotificationScreen extends Component {
     this.props.notifications.map((data, index) => {
       if (data.ntType === "gate_app") {
         axios
-            .get(
-                `http://${
-                    this.props.oyeURL
-                }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
-                    data.sbMemID
-                }`,
-                //data.sbMemID`,
-                {
-                  headers: {
-                    "Content-Type": "application/json",
-                    "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-                  }
-                }
-            )
-            .then(res => {
-              let responseData = res.data.data;
-              console.log(responseData, "responseData");
+          .get(
+            `http://${
+            this.props.oyeURL
+            }/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${
+            data.sbMemID
+            }`,
+            //data.sbMemID`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+              }
+            }
+          )
+          .then(res => {
+            let responseData = res.data.data;
+            console.log(responseData, "responseData");
 
-              this.setState(
-                  (prevState, newEmployer) => ({
-                    gateDetails: prevState.gateDetails.concat([
-                      { ...responseData.visitorLog, ...data }
-                    ])
-                  }),
-                  () => {}
-              );
-            })
-            .catch(error => {
-              console.log(error, "ben");
-            });
+            this.setState(
+              (prevState, newEmployer) => ({
+                gateDetails: prevState.gateDetails.concat([
+                  { ...responseData.visitorLog, ...data }
+                ])
+              }),
+              () => { }
+            );
+          })
+          .catch(error => {
+            console.log(error, "ben");
+          });
       }
     });
   };
@@ -262,321 +262,321 @@ class NotificationScreen extends Component {
 
     if (item.ntType !== "gate_app") {
       return (
-          <Card>
-            <Text style={{fontSize:hp('2.5%'), color:'#000'}}>
-              {moment(item.ntdCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
-              {moment(item.ntdCreated).format("hh:mm A")}
-            </Text>
-            {item.ntType !== "gate_app" ? (
-                <ListItem
-                    onPress={() => this.onPress(item, index)}
-                    title={this.renderTitle(item.ntType, item)}
-                    subtitle={item.ntDesc}
-                    leftIcon={{
-                      name: this.renderIcons("name", item, index),
-                      type: this.renderIcons("type", item, index),
-                      color: "#ED8A19"
-                    }}
-                    containerStyle={this.renderIcons("style", item, index)}
-                />
-            ) : (
-                <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: "column" }}>
-                    <Text>{item.ntDesc}</Text>
-                    <Text> {item.ntdCreated}</Text>
-                  </View>
-                  <Collapsible
-                      duration={100}
-                      style={{ flex: 1 }}
-                      collapsed={item.open}
-                  >
-                    <View style={{ backgroundColor: "#ED8A19" }}>
-                      {/* <Text> {item.ntDesc}</Text> */}
-                    </View>
-                  </Collapsible>
+        <Card>
+          <Text style={{ fontSize: hp('2.5%'), color: '#000' }}>
+            {moment(item.ntdCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+            {moment(item.ntdCreated).format("hh:mm A")}
+          </Text>
+          {item.ntType !== "gate_app" ? (
+            <ListItem
+              onPress={() => this.onPress(item, index)}
+              title={this.renderTitle(item.ntType, item)}
+              subtitle={item.ntDesc}
+              leftIcon={{
+                name: this.renderIcons("name", item, index),
+                type: this.renderIcons("type", item, index),
+                color: "#ED8A19"
+              }}
+              containerStyle={this.renderIcons("style", item, index)}
+            />
+          ) : (
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: "column" }}>
+                  <Text>{item.ntDesc}</Text>
+                  <Text> {item.ntdCreated}</Text>
                 </View>
+                <Collapsible
+                  duration={100}
+                  style={{ flex: 1 }}
+                  collapsed={item.open}
+                >
+                  <View style={{ backgroundColor: "#ED8A19" }}>
+                    {/* <Text> {item.ntDesc}</Text> */}
+                  </View>
+                </Collapsible>
+              </View>
             )}
-          </Card>
+        </Card>
       );
     } else {
       return (
-          <TouchableWithoutFeedback
-              onPress={() => {
-                console.log(item.ntIsActive);
-                if (item.ntIsActive) {
-                  this.props.onNotificationOpen(notifications, index, oyeURL);
-                }
-                this.props.toggleCollapsible(notifications, item.open, index);
-              }}
-          >
-            <Card containerStyle={this.renderStyle(item.ntIsActive)}>
-              {item.ntType !== "gate_app" ? (
-                  <ListItem
-                      onPress={() => this.onPress(item, index)}
-                      title={this.renderTitle(item.ntType, item)}
-                      subtitle={item.ntDesc}
-                      leftIcon={{
-                        name: this.renderIcons("name", item, index),
-                        type: this.renderIcons("type", item, index),
-                        color: "#ED8A19"
-                      }}
-                      containerStyle={this.renderIcons("style", item, index)}
-                  />
-              ) : (
-                  <View style={{ flex: 1 }}>
-                    <View style={{ flexDirection: "column" }}>
-                      <Text style={{marginTop:10,fontSize:hp('2.5%'), color:'#000'}}>
-                        {moment(item.ntdCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
-                        {moment(item.ntdCreated).format("hh:mm A")}
-                      </Text>
-                      <Text style={{marginBottom:10}}>{item.ntDesc}</Text>
-                      <View style={{flex:1,}}>
-                        {item.open ?
-                            <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
-                              <Text style={{color:'#ff8c00'}}>More</Text>
-                              <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_more.png')}/>
-                            </View>:
-                            <View style={{alignItems:'flex-end', justifyContent:'flex-end',flexDirection:'row'}}>
-                              <Text style={{color:'#ff8c00'}}>Less</Text>
-                              <Image style={{width:hp('2%'), height:hp('2%')}} source={require('../../../icons/view_less.png')} />
-                            </View>}
-                      </View>
-
+        <TouchableWithoutFeedback
+          onPress={() => {
+            console.log(item.ntIsActive);
+            if (item.ntIsActive) {
+              this.props.onNotificationOpen(notifications, index, oyeURL);
+            }
+            this.props.toggleCollapsible(notifications, item.open, index);
+          }}
+        >
+          <Card containerStyle={this.renderStyle(item.ntIsActive)}>
+            {item.ntType !== "gate_app" ? (
+              <ListItem
+                onPress={() => this.onPress(item, index)}
+                title={this.renderTitle(item.ntType, item)}
+                subtitle={item.ntDesc}
+                leftIcon={{
+                  name: this.renderIcons("name", item, index),
+                  type: this.renderIcons("type", item, index),
+                  color: "#ED8A19"
+                }}
+                containerStyle={this.renderIcons("style", item, index)}
+              />
+            ) : (
+                <View style={{ flex: 1 }}>
+                  <View style={{ flexDirection: "column" }}>
+                    <Text style={{ marginTop: 10, fontSize: hp('2.5%'), color: '#000' }}>
+                      {moment(item.ntdCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"     "}
+                      {moment(item.ntdCreated).format("hh:mm A")}
+                    </Text>
+                    <Text style={{ marginBottom: 10 }}>{item.ntDesc}</Text>
+                    <View style={{ flex: 1, }}>
+                      {item.open ?
+                        <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flexDirection: 'row' }}>
+                          <Text style={{ color: '#ff8c00' }}>More</Text>
+                          <Image style={{ width: hp('2%'), height: hp('2%') }} source={require('../../../icons/view_more.png')} />
+                        </View> :
+                        <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flexDirection: 'row' }}>
+                          <Text style={{ color: '#ff8c00' }}>Less</Text>
+                          <Image style={{ width: hp('2%'), height: hp('2%') }} source={require('../../../icons/view_less.png')} />
+                        </View>}
                     </View>
-                    <Collapsible
-                        duration={300}
-                        style={{ flex: 1 }}
-                        collapsed={item.open}
-                        align="center"
-                        // onAnimationEnd={() =>
-                        //   this.doNetwork(item.ntid, notifications)
-                        // }
-                    >
-                      {item.sbMemID === 0 ? (
-                          <View>
-                            <Text>No Data</Text>
-                          </View>
-                      ) : (
-                          <View style={{ flexDirection: "column" }}>
-                            <View style={{flexDirection:'row'}}>
-                              <View>
-                                <Image
-                                    style={styles.img}
-                                    // style={styles.img}
-                                    source={{
-                                      uri:
-                                          `${this.props.mediaupload}` +
-                                          this.renderCollapseData(
-                                              "vlEntryImg",
-                                              item.sbMemID
-                                          )
-                                    }}
-                                />
+
+                  </View>
+                  <Collapsible
+                    duration={300}
+                    style={{ flex: 1 }}
+                    collapsed={item.open}
+                    align="center"
+                  // onAnimationEnd={() =>
+                  //   this.doNetwork(item.ntid, notifications)
+                  // }
+                  >
+                    {item.sbMemID === 0 ? (
+                      <View>
+                        <Text>No Data</Text>
+                      </View>
+                    ) : (
+                        <View style={{ flexDirection: "column" }}>
+                          <View style={{ flexDirection: 'row' }}>
+                            <View>
+                              <Image
+                                style={styles.img}
+                                // style={styles.img}
+                                source={{
+                                  uri:
+                                    `${this.props.mediaupload}` +
+                                    this.renderCollapseData(
+                                      "vlEntryImg",
+                                      item.sbMemID
+                                    )
+                                }}
+                              />
+                            </View>
+                            <View style={{ flexDirection: 'column', marginLeft: hp('1%') }}>
+                              <View style={{ marginBottom: 5 }}>
+                                <Text style={{ fontSize: hp("2%"), fontWeight: '500' }}>
+                                  {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
+                                  Association
+                                  </Text>
                               </View>
-                              <View style={{flexDirection:'column', marginLeft:hp('1%')}}>
-                                <View style={{marginBottom:5}}>
-                                  <Text style={{ fontSize: hp("2%"), fontWeight:'500' }}>
-                                    {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
-                                    Association
-                                  </Text>
-                                </View>
 
-                                <View style={{marginBottom:5}}>
-                                  <Text style={{ fontSize: hp("2%") }}>
-                                    {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
+                              <View style={{ marginBottom: 5 }}>
+                                <Text style={{ fontSize: hp("2%") }}>
+                                  {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
 
-                                  </Text>
-                                </View>
+                                </Text>
+                              </View>
 
-                                <View style={{ flexDirection: "row", marginBottom:5 }}>
-                                  <Text style={{ color: "#000" }}>
-                                    {this.renderCollapseData(
-                                        "vlVisType",
-                                        item.sbMemID
-                                    )}{" "}
+                              <View style={{ flexDirection: "row", marginBottom: 5 }}>
+                                <Text style={{ color: "#000" }}>
+                                  {this.renderCollapseData(
+                                    "vlVisType",
+                                    item.sbMemID
+                                  )}{" "}
 
-                                  </Text>
-                                  <Text style={{ color: "#38bcdb" }}>
-                                    {this.renderCollapseData(
-                                        "vlComName",
-                                        item.sbMemID
-                                    )}{" "}
+                                </Text>
+                                <Text style={{ color: "#38bcdb" }}>
+                                  {this.renderCollapseData(
+                                    "vlComName",
+                                    item.sbMemID
+                                  )}{" "}
 
-                                  </Text>
+                                </Text>
 
-                                </View>
-                                <View style={{flexDirection:'row'}}>
-                                  <TouchableOpacity
-                                      onPress={() => {
-                                        {
-                                          Platform.OS === "android"
-                                              ? Linking.openURL(
-                                              `tel:${
-                                                  this.renderCollapseData(
-                                                      "vlMobile",
-                                                      item.sbMemID
-                                                  )
-                                                  // this.state.gateDetails
-                                                  //   .vlMobile
-                                              }`
-                                              )
-                                              : Linking.openURL(
-                                              `tel:${
-                                                  // this.state.gateDetails.vlMobile
-                                                  this.renderCollapseData(
-                                                      "vlMobile",
-                                                      item.sbMemID
-                                                  )
-                                              }`
-                                              );
-                                        }
-                                      }}
-                                  >
-                                    <View style={{ flexDirection: "row" }}>
-                                      <View>
-                                        <Text style={{ color: "#ff8c00" }}>
-                                          {this.renderCollapseData(
-                                              "vlMobile",
-                                              item.sbMemID
-                                          )}
-                                          {/* {this.state.gateDetails !== null
+                              </View>
+                              <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    {
+                                      Platform.OS === "android"
+                                        ? Linking.openURL(
+                                          `tel:${
+                                          this.renderCollapseData(
+                                            "vlMobile",
+                                            item.sbMemID
+                                          )
+                                          // this.state.gateDetails
+                                          //   .vlMobile
+                                          }`
+                                        )
+                                        : Linking.openURL(
+                                          `tel:${
+                                          // this.state.gateDetails.vlMobile
+                                          this.renderCollapseData(
+                                            "vlMobile",
+                                            item.sbMemID
+                                          )
+                                          }`
+                                        );
+                                    }
+                                  }}
+                                >
+                                  <View style={{ flexDirection: "row" }}>
+                                    <View>
+                                      <Text style={{ color: "#ff8c00" }}>
+                                        {this.renderCollapseData(
+                                          "vlMobile",
+                                          item.sbMemID
+                                        )}
+                                        {/* {this.state.gateDetails !== null
                                         ? this.state.gateDetails.vlMobile
                                         : ""} */}
-                                        </Text>
-                                      </View>
-                                      <View
-                                          style={{
-                                            width: hp("2.5%"),
-                                            height: hp("2.5%"),
-                                          }}
-                                      >
-                                        <Image
-                                            style={{
-                                              width: hp("2.5%"),
-                                              height: hp("2.5%")
-                                            }}
-                                            source={require("../../../icons/call.png")}
-                                        />
-                                      </View>
+                                      </Text>
                                     </View>
-                                  </TouchableOpacity>
-
-                                </View>
+                                    <View
+                                      style={{
+                                        width: hp("2.5%"),
+                                        height: hp("2.5%"),
+                                      }}
+                                    >
+                                      <Image
+                                        style={{
+                                          width: hp("2.5%"),
+                                          height: hp("2.5%")
+                                        }}
+                                        source={require("../../../icons/call.png")}
+                                      />
+                                    </View>
+                                  </View>
+                                </TouchableOpacity>
 
                               </View>
+
                             </View>
+                          </View>
 
-                            <View style={{flexDirection:'row'}}>
+                          <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flexDirection: "row" }}>
+                              <Text style={{ color: "#ff8c00" }}>
+                                Entry On:{" "}
+                              </Text>
                               <View style={{ flexDirection: "row" }}>
-                                <Text style={{ color: "#ff8c00" }}>
-                                  Entry On:{" "}
-                                </Text>
-                                <View style={{ flexDirection: "row" }}>
 
-                                  <Text>
-
-                                    {this.renderCollapseData(
-                                        "vldCreated",
-                                        item.sbMemID
-                                    )}  </Text>
-
-                                  <Text>
-
-                                    {this.renderCollapseData(
-                                        "vlEntryT",
-                                        item.sbMemID
-                                    )}
-                                  </Text>
-                                </View>
-                              </View>
-                              <View
-                                  style={{
-                                    flexDirection: "row",
-                                    marginLeft: hp("3%")
-                                  }}
-                              >
-                                <Text style={{ color: "#ff8c00" }}>From: </Text>
                                 <Text>
 
                                   {this.renderCollapseData(
-                                      "vlengName",
-                                      item.sbMemID
+                                    "vldCreated",
+                                    item.sbMemID
+                                  )}  </Text>
+
+                                <Text>
+
+                                  {this.renderCollapseData(
+                                    "vlEntryT",
+                                    item.sbMemID
                                   )}
                                 </Text>
                               </View>
                             </View>
-                            <View>
-                              <View
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                marginLeft: hp("3%")
+                              }}
+                            >
+                              <Text style={{ color: "#ff8c00" }}>From: </Text>
+                              <Text>
+
+                                {this.renderCollapseData(
+                                  "vlengName",
+                                  item.sbMemID
+                                )}
+                              </Text>
+                            </View>
+                          </View>
+                          <View>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                              }}
+                            >
+                              {this.renderCollapseData(
+                                "vlexgName",
+                                item.sbMemID
+                              ) !== "" ?
+
+                                <View
                                   style={{
                                     flexDirection: "row",
                                   }}
-                              >
-                                {this.renderCollapseData(
-                                    "vlexgName",
-                                    item.sbMemID
-                                ) !== "" ?
-
-                                    <View
-                                        style={{
-                                          flexDirection: "row",
-                                        }}
-                                    >
-                                      <View style={{ flexDirection: "row" }}>
-                                        <Text style={{ color: "#ff8c00" }}>
-                                          Exit On:{" "}
-                                        </Text>
-                                        <View style={{ flexDirection: "row" }}>
+                                >
+                                  <View style={{ flexDirection: "row" }}>
+                                    <Text style={{ color: "#ff8c00" }}>
+                                      Exit On:{" "}
+                                    </Text>
+                                    <View style={{ flexDirection: "row" }}>
 
 
-                                          <Text>
+                                      <Text>
 
-                                            {this.renderCollapseData(
-                                                "vldUpdated",
-                                                item.sbMemID
-                                            )}  </Text>
-                                          <Text>
+                                        {this.renderCollapseData(
+                                          "vldUpdated",
+                                          item.sbMemID
+                                        )}  </Text>
+                                      <Text>
 
-                                            {this.renderCollapseData(
-                                                "vlExitT",
-                                                item.sbMemID
-                                            )}
-                                          </Text>
-                                        </View>
-                                      </View>
-
-                                      <View
-                                          style={{
-                                            flexDirection: "row",
-                                            marginLeft: hp("4.5%")
-                                          }}
-                                      >
-                                        <Text style={{ color: "#ff8c00" }}>From: </Text>
-                                        <Text>
-
-                                          {this.renderCollapseData(
-                                              "vlexgName",
-                                              item.sbMemID
-                                          )}
-                                        </Text>
-                                      </View>
-
+                                        {this.renderCollapseData(
+                                          "vlExitT",
+                                          item.sbMemID
+                                        )}
+                                      </Text>
                                     </View>
+                                  </View>
 
-                                    :
-                                    <View></View>
-                                }
-                              </View>
+                                  <View
+                                    style={{
+                                      flexDirection: "row",
+                                      marginLeft: hp("4.5%")
+                                    }}
+                                  >
+                                    <Text style={{ color: "#ff8c00" }}>From: </Text>
+                                    <Text>
+
+                                      {this.renderCollapseData(
+                                        "vlexgName",
+                                        item.sbMemID
+                                      )}
+                                    </Text>
+                                  </View>
+
+                                </View>
+
+                                :
+                                <View></View>
+                              }
                             </View>
-
-
                           </View>
+
+
+                        </View>
                       )}
-                    </Collapsible>
-                  </View>
+                  </Collapsible>
+                </View>
               )}
-              {/* <Text> {item.ntdCreated}</Text> */}
-            </Card>
-          </TouchableWithoutFeedback>
+            {/* <Text> {item.ntdCreated}</Text> */}
+          </Card>
+        </TouchableWithoutFeedback>
       );
     }
   };
@@ -595,34 +595,34 @@ class NotificationScreen extends Component {
     // console.log(isCreateLoading)
     if (loading) {
       return (
-          <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#fff"
-              }}
-          >
-            <ActivityIndicator />
-          </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#fff"
+          }}
+        >
+          <ActivityIndicator />
+        </View>
       );
     } else {
       return (
-          <FlatList
-              keyExtractor={this.keyExtractor}
-              data={notifications}
-              renderItem={this.renderItem}
-              extraData={this.props.notifications}
-              refreshControl={
-                <RefreshControl
-                    refreshing={refresh}
-                    onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
-                    progressBackgroundColor="#fff"
-                    tintColor="#ED8A19"
-                    colors={["#ED8A19"]}
-                />
-              }
-          />
+        <FlatList
+          keyExtractor={this.keyExtractor}
+          data={notifications}
+          renderItem={this.renderItem}
+          extraData={this.props.notifications}
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
+              progressBackgroundColor="#fff"
+              tintColor="#ED8A19"
+              colors={["#ED8A19"]}
+            />
+          }
+        />
       );
     }
   };
@@ -632,9 +632,9 @@ class NotificationScreen extends Component {
     // const refresh = navigation.getParam("refresh", "NO-ID");
     // console.log(this.state.gateDetails, "gateDetails");
     return (
-        <View style={styles.container}>
-          <NavigationEvents />
-          <Header
+      <View style={styles.container}>
+        <NavigationEvents />
+        {/* <Header
               leftComponent={{
                 icon: "arrow-left",
                 color: "#ED8A19",
@@ -652,9 +652,54 @@ class NotificationScreen extends Component {
                 />
               }
               backgroundColor="#fff"
-          />
+          /> */}
+
+        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('ResDashBoard');
+                }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: 'flex-start',
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../../../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../../../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+        <View style={{ flex: 1 }}>
           {this.renderComponent()}
         </View>
+
+      </View>
     );
   }
 }
@@ -671,7 +716,40 @@ const styles = StyleSheet.create({
     borderRadius: hp("6%"),
     // marginTop: hp("3%"),
     borderWidth: hp("0.2%")
-  }
+  },
+
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
+
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
 });
 
 const mapStateToProps = state => {
@@ -681,19 +759,19 @@ const mapStateToProps = state => {
     loading: state.NotificationReducer.loading,
     savedNoifId: state.AppReducer.savedNoifId,
     oyeURL: state.OyespaceReducer.oyeURL,
-    mediaupload:state.OyespaceReducer.mediaupload,
+    mediaupload: state.OyespaceReducer.mediaupload,
     MyAccountID: state.UserReducer.MyAccountID,
     refresh: state.NotificationReducer.refresh
   };
 };
 
 export default connect(
-    mapStateToProps,
-    {
-      onNotificationOpen,
-      storeOpenedNotif,
-      getNotifications,
-      refreshNotifications,
-      toggleCollapsible
-    }
+  mapStateToProps,
+  {
+    onNotificationOpen,
+    storeOpenedNotif,
+    getNotifications,
+    refreshNotifications,
+    toggleCollapsible
+  }
 )(NotificationScreen);

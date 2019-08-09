@@ -50,12 +50,14 @@ class MyGuests extends Component {
     }, 1500);
   }
 
+  //http://apidev.oyespace.com/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{QRCodeUsed}/{UnitID}/{AccountID}
+
   getInvitationList = () => {
     console.log("association id in guest", this.props);
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
       {
         method: "GET",
         headers: {
@@ -66,7 +68,7 @@ class MyGuests extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Invitation List -", responseJson);
+        console.log("Invitation List -@@@@@@", responseJson,responseJson.data.invitation);
         this.setState({
           isLoading: false,
           dataSource:responseJson.data.invitation,
@@ -133,7 +135,7 @@ class MyGuests extends Component {
 
   renderItem = ({ item, index }) => {
       console.log(item,index)
-    console.log("Data Sources",this.state.dataSource)
+    console.log("Data Sources@@@@@@@",this.state.dataSource)
     console.log("The Association Id and Unit id:",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
     return (
       <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
@@ -204,8 +206,8 @@ class MyGuests extends Component {
   };
 
   render() {
-    console.log("Dashboard", this.props.dashBoardReducer);
-    console.log("Association Id and unit id", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    console.log("Data Sources",this.state.dataSource)
+
     if (this.state.isLoading) {
       return (
         <View style={styles.contaianer}>
@@ -248,46 +250,19 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-        {this.state.dataSource.length == 0 ? (
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white"
-            }}
-          >
-            <Text
-              style={{
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: hp("1.8%")
-              }}
-            >
-              No Guest invited.
-            </Text>
-            <Text
-              style={{
-                backgroundColor: "white",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: hp("1.6%")
-              }}
-            >
-              Please invite.
-            </Text>
+        {this.state.dataSource.length === 0 ?
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text>
+            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite.</Text>
           </View>
-        ) : (
+         :
           <FlatList
             style={{ marginTop: hp("1.5%") }}
-            data={this.state.dataSource.sort((a, b) =>
-              a.infName.localeCompare(b.infName)
-            )}
+            data={this.state.dataSource.sort((a,b) => a.infName.localeCompare(b.infName))}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.inInvtID.toString()}
           />
-        )}
+        }
         <TouchableOpacity
           style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
           onPress={() => this.props.navigation.navigate("InviteGuests")}
@@ -436,7 +411,9 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
-    dashBoardReducer: state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer,
+    userReducer: state.UserReducer
+
   };
 };
 
