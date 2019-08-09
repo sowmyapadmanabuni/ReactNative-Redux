@@ -50,12 +50,14 @@ class MyGuests extends Component {
     }, 1500);
   }
 
+  //http://apidev.oyespace.com/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{QRCodeUsed}/{UnitID}/{AccountID}
+
   getInvitationList = () => {
     console.log("association id in guest", this.props);
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
       {
         method: "GET",
         headers: {
@@ -248,7 +250,7 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-        {this.state.dataSource.length == 0 ? (
+        {this.state.dataSource.length == 0 ?
           <View
             style={{
               flex: 1,
@@ -278,7 +280,7 @@ class MyGuests extends Component {
               Please invite.
             </Text>
           </View>
-        ) : (
+         :
           <FlatList
             style={{ marginTop: hp("1.5%") }}
             data={this.state.dataSource.sort((a, b) =>
@@ -287,7 +289,7 @@ class MyGuests extends Component {
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.inInvtID.toString()}
           />
-        )}
+        }
         <TouchableOpacity
           style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
           onPress={() => this.props.navigation.navigate("InviteGuests")}
@@ -436,7 +438,9 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
-    dashBoardReducer: state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer,
+    userReducer: state.UserReducer
+
   };
 };
 

@@ -52,7 +52,7 @@ class MyGuests extends Component {
   getInvitationList = () => {
     //http://localhost:64284/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{IsQRCodeGenerated}/{UnitID}
     fetch(
-      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/False/${this.props.dashBoardReducer.uniID}`,
+      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/False/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
       {
         method: "GET",
         headers: {
@@ -190,7 +190,7 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-        {this.state.dataSource.length == 0 ?
+        {this.state.dataSource.length === 0 ?
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
               <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Data Available.</Text>
             </View>
@@ -328,8 +328,8 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
     dashBoardReducer:state.DashboardReducer,
-    mediaupload:state.OyespaceReducer.mediaupload, 
-
+    mediaupload:state.OyespaceReducer.mediaupload,
+    userReducer: state.UserReducer
   };
 };
 

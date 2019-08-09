@@ -258,7 +258,7 @@ if (fname.length == 0 || fname == '') {
   return false;
 }
 else{
-
+//http://apidev.oyespace.com/oye247/api/v1/Invitation/create
 console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)
   
   fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
@@ -283,28 +283,13 @@ console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)
               "INPOfInv"  : purpose,
               "INMultiEy" : this.state.switch,
               "ASAssnID"  :this.props.dashBoardReducer.assId,
-              "INQRCode"  : 1
+              "INQRCode"  : 1,
+              "ACAccntID":this.props.userReducer.MyAccountID
           })
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Invite Guests Data",responseJson,JSON.stringify({
-          //"MeMemID"   :  4,
-          "UnUnitID"  :  this.props.dashBoardReducer.uniID,
-          "INFName"   : fname,
-          "INLName"   : lname,
-          "INMobile"  : "+"+ callingCode + mobNum,
-          "INEmail"   : emailId,
-          "INVchlNo"  : vehNo,
-          "INVisCnt"  :count,
-          "INPhoto"   : "SD",
-          "INSDate"   : startDate,
-          "INEDate"   : endDate,
-          "INPOfInv"  : purpose,
-          "INMultiEy" : this.state.switch,
-          "ASAssnID"  :this.props.dashBoardReducer.assId,
-          "INQRCode"  : 1
-      }))
+          console.log('Response JSON',responseJson)
           Alert.alert("Invitation created, please share the invitation using the share button")
         this.props.navigation.goBack()
       })
@@ -573,7 +558,9 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     SelectedUnitID: state.UserReducer.SelectedUnitID,
-    dashBoardReducer:state.DashboardReducer
+    dashBoardReducer:state.DashboardReducer,
+      userReducer: state.UserReducer
+
 
   };
 };
