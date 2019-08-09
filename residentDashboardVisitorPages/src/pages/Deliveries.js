@@ -31,6 +31,10 @@ import {
 import ZoomImage from "react-native-zoom-image";
 import { connect } from "react-redux";
 
+let dt = new Date();
+dt.setDate(dt.getDate());
+let _dt = dt;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -45,12 +49,12 @@ class App extends React.Component {
       datetime: moment(new Date()).format("HH:mm:ss a"),
 
       //date picker
-      dobText: moment(new Date()).format("YYYY-MM-DD"), //year + '-' + month + '-' + date,
-      dobDate: moment(new Date()).format("YYYY-MM-DD"),
+      dobText: _dt, //year + '-' + month + '-' + date,
+      dobDate: _dt,
       isDateTimePickerVisible: false,
 
-      dobText1: moment(new Date()).format("YYYY-MM-DD"),
-      dobDate1: moment(new Date()).format("YYYY-MM-DD"),
+      dobText1: _dt,
+      dobDate1: _dt,
       isDateTimePickerVisible1: false,
 
       switch: false,
@@ -76,6 +80,8 @@ class App extends React.Component {
   };
 
   onDOBDatePicked = date => {
+    console.log("Date Piceked !:",date)
+
     this.setState({
       dobDate: date,
       dobText: moment(date).format("YYYY-MM-DD")
@@ -99,6 +105,7 @@ class App extends React.Component {
   };
 
   onDOBDatePicked1 = date => {
+    console.log("Date Piceked !:",date)
     this.setState({
       dobDate1: date,
       dobText1: moment(date).format("YYYY-MM-DD")
@@ -183,15 +190,21 @@ class App extends React.Component {
                 responseJson,
                 "*******************************************"
             );
-            this.setState({
-              isLoading: false,
-              dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),
-              error: responseJson.error || null,
-              loading: false,
-              dobDate: null,
-              dobDate1: null
-            });
-            this.arrayholder = responseJson.data.visitorlog;
+            if(responseJson.success){
+              this.setState({
+                isLoading: false,
+                dataSource: responseJson.data.visitorlog.filter(x => x.vlVisType === "Delivery"),
+                error: responseJson.error || null,
+                loading: false,
+                dobDate: null,
+                dobDate1: null
+              });
+              this.arrayholder = responseJson.data.visitorlog;
+            }
+            else{
+              //alert('No data for the selected combination of association and unit')
+            }
+
           })
 
           .catch(error => {
@@ -343,50 +356,9 @@ class App extends React.Component {
     if (this.state.isLoading) {
       return (
           <View style={styles.container}>
-            {/* <Header /> */}
-            {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
-              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-                <View style={styles.viewDetails1}>
-                  <TouchableOpacity
-                      onPress={() => {
-                        this.props.navigation.goBack();
-                      }}
-                  >
-                    <View
-                        style={{
-                          height: hp("4%"),
-                          width: wp("15%"),
-                          alignItems: "flex-start",
-                          justifyContent: "center"
-                        }}
-                    >
-                      <Image
-                          resizeMode="contain"
-                          source={require("../../../icons/back.png")}
-                          style={styles.viewDetails2}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center"
-                    }}
-                >
-                  <Image
-                      style={[styles.image1]}
-                      source={require("../../../icons/headerLogo.png")}
-                  />
-                </View>
-                <View style={{ flex: 0.2 }}>
-                </View>
-              </View>
-              <View style={{ borderWidth: 1, borderColor: "orange" }} />
-            </SafeAreaView> */}
+            
 
-            <Text style={styles.titleOfScreen}>Visitors</Text>
+            {/* <Text style={styles.titleOfScreen}>Visitors</Text> */}
 
             {/* <TextInput
             //source={require("./src/components/images/call.png")}
@@ -426,7 +398,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText}{" "}
+                      {moment(this.state.dobText).format("YYYY-MM-DD")}{" "}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog"
@@ -450,7 +422,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText1}
+                      {moment(this.state.dobText1).format("YYYY-MM-DD")}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog1"
@@ -506,51 +478,9 @@ class App extends React.Component {
     console.log("ekjfhkwrghj");
     return (
         <View style={styles.mainView}>
-          {/* <Header /> */}
-          {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
-            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-              <View style={styles.viewDetails1}>
-                <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.goBack();
-                    }}
-                >
-                  <View
-                      style={{
-                        height: hp("4%"),
-                        width: wp("15%"),
-                        alignItems: "flex-start",
-                        justifyContent: "center"
-                      }}
-                  >
-                    <Image
-                        resizeMode="contain"
-                        source={require("../../../icons/back.png")}
-                        style={styles.viewDetails2}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-              >
-                <Image
-                    style={[styles.image1]}
-                    source={require("../../../icons/headerLogo.png")}
-                />
-              </View>
-              <View style={{ flex: 0.2 }}>
-              </View>
-            </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView> */}
-
+          
           <View style={styles.textWrapper}>
-            <Text style={styles.titleOfScreen}> Visitors </Text>
+            {/* <Text style={styles.titleOfScreen}> Visitors </Text> */}
 
             {/* <TextInput
             //source={require("./src/components/images/call.png")}
@@ -590,7 +520,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText}{" "}
+                      {moment(this.state.dobText).format("YYYY-MM-DD")}{" "}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog"
@@ -614,7 +544,7 @@ class App extends React.Component {
                 <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
                   <View style={styles.datePickerBox}>
                     <Text style={styles.datePickerText}>
-                      {this.state.dobText1}
+                      {moment(this.state.dobText1).format("YYYY-MM-DD")}
                     </Text>
                     <DatePickerDialog
                         ref="dobDialog1"
