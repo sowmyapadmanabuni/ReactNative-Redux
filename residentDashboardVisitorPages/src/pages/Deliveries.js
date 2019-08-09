@@ -553,7 +553,7 @@ class App extends React.Component {
           </SafeAreaView> */}
 
           <View style={styles.textWrapper}>
-            <Text style={styles.titleOfScreen}> Visitors </Text>
+            {/* <Text style={styles.titleOfScreen}> Visitors </Text> */}
 
             {/* <TextInput
             //source={require("./src/components/images/call.png")}

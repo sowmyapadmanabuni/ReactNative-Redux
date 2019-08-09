@@ -695,6 +695,7 @@ class NotificationScreen extends Component {
           </View>
           <View style={{ borderWidth: 1, borderColor: "orange" }} />
         </SafeAreaView>
+       
         <View style={{ flex: 1 }}>
           {this.renderComponent()}
         </View>
