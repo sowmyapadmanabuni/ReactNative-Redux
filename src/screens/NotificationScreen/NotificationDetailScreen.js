@@ -174,22 +174,25 @@ class NotificationDetailScreen extends Component {
                           console.log("Response", response);
                         })
                         .then(responseJson_3 => {
+                          console.log(item.ntid, "ntid");
+                          console.log("NTJoinStat");
                           axios
                             .post(
-                              `http://${oyeURL}/oyeliving/api/v1/Notification/NotificationJoinStatusUpdate`,
+                              `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                               {
                                 NTID: item.ntid,
                                 NTJoinStat: "Accepted"
                               },
                               {
                                 headers: {
-                                  "Content-Type": "application/json",
-                                  "X-Champ-APIKey":
-                                    "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                                  "X-OYE247-APIKey":
+                                    "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                                  "Content-Type": "application/json"
                                 }
                               }
                             )
                             .then(() => {
+                              console.log("updated suc");
                               this.props.getNotifications(
                                 this.props.oyeURL,
                                 this.props.MyAccountID
@@ -333,16 +336,16 @@ class NotificationDetailScreen extends Component {
 
                   axios
                     .post(
-                      `http://${oyeURL}/oyeliving/api/v1/Notification/NotificationJoinStatusUpdate`,
+                      `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                       {
                         NTID: item.ntid,
-                        NTJoinStat: "Accepted"
+                        NTJoinStat: ""
                       },
                       {
                         headers: {
-                          "Content-Type": "application/json",
-                          "X-Champ-APIKey":
-                            "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                          "X-OYE247-APIKey":
+                            "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                          "Content-Type": "application/json"
                         }
                       }
                     )
