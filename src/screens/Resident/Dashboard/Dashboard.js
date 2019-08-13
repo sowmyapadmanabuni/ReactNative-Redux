@@ -128,6 +128,12 @@ class Dashboard extends React.Component {
           `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
         );
 
+        if(receiveNotifications) {
+            firebase.messaging().subscribeToTopic(MyAccountID + "admin")
+        } else {
+            firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin")
+        }
+
         axios
             .get(
                 `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,

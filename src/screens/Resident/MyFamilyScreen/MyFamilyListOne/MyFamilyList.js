@@ -1,21 +1,23 @@
 import React from "react"
 import {
-  ActivityIndicator,
-  Easing,
-  FlatList,
-  Image,
-  Linking,
-  Platform,
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    ActivityIndicator, Alert,
+    Easing,
+    FlatList,
+    Image,
+    Linking,
+    Platform,
+    SafeAreaView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from "react-native"
 
 import {NavigationEvents} from "react-navigation"
 
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
+import { Card, CardItem, Form, Item, Input, Icon } from "native-base"
+
 
 import ZoomImage from "react-native-zoom-image"
 import Style from "./Style"
@@ -107,27 +109,48 @@ class MyFamilyList extends React.Component {
 
   async myFamilyListGetData() {
     this.setState({loading: true})
-    console.log("Data sending to get family", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
-    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.uniID, this.props.dashBoardReducer.assId)
-    console.log("Get Family Data", myFamilyList);
+    console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
+   let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.uniID, this.props.dashBoardReducer.assId,this.props.userReducer.MyAccountID)
+    console.log("Get Family Data", myFamilyList); //this.props.userReducer.MyAccountID
 
-    // for(let i=0;i<myFamilyList.length;i++)
-    //let arr=
 
     this.setState({isLoading: false, loading: false})
     try {
-      if (myFamilyList && myFamilyList.data) {
+      if (myFamilyList.success && myFamilyList.data) {
         this.setState({
           myfamily11: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1),
           clonedList: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1)
         })
         this.setState({familyData: myFamilyList})
       }
+      else{
+          this.showAlert(stat.error.message,true)
+
+      }
     } catch (error) {
       base.utils.logger.log(error)
       this.setState({error, loading: false})
     }
   }
+    showAlert(msg, ispop) {
+        let self = this;
+        setTimeout(() => {
+            this.showMessage(this, "", msg, "OK", function () {
+
+            });
+        }, 500)
+    }
+
+    showMessage(self, title, message, btn, callback) {
+        Alert.alert(title, message, [
+            {
+                text: btn, onPress: () => {
+                    self.setState({isLoading: false});
+                    callback()
+                }
+            }
+        ])
+    }
 
   componentDidMount() {
     setTimeout(() => {
@@ -410,7 +433,7 @@ class MyFamilyList extends React.Component {
             </View>
             {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
 
-            {this.state.familyData.length == 0 ?
+            {this.state.myfamily11.length === 0 ?
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white'}}>
                   <Text style={{
                     backgroundColor: 'white',
@@ -457,8 +480,8 @@ const mapStateToProps = state => {
     selectedAssociation: state.DashboardReducer.selectedAssociation,
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
-    dashBoardReducer: state.DashboardReducer
-  };
+    dashBoardReducer: state.DashboardReducer,
+      userReducer: state.UserReducer  };
 };
 
 export default connect(mapStateToProps)(MyFamilyList);
