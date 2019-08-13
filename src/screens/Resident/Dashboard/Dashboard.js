@@ -122,18 +122,6 @@ class Dashboard extends React.Component {
             "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
         };
 
-        console.log(
-          `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
-        );
-
-        if (receiveNotifications) {
-          firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-        } else {
-          firebase
-            .messaging()
-            .unsubscribeFromTopic(MyAccountID + "admin");
-        }
-
         axios
             .get(
                 `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
@@ -155,6 +143,11 @@ class Dashboard extends React.Component {
     
                     // console.log(units.mrmRoleID + "role");
                     if (receiveNotifications) {
+                        firebase
+                          .messaging()
+                          .subscribeToTopic(
+                            MyAccountID + "admin"
+                          );
                         if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
                             if (units.meIsActive) {
                                 // firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
@@ -169,6 +162,11 @@ class Dashboard extends React.Component {
                         }
                     } else if (!receiveNotifications) {
                         // firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
+                        firebase
+                          .messaging()
+                          .unsubscribeFromTopic(
+                            MyAccountID + "admin"
+                          );
                         firebase
                           .messaging()
                           .unsubscribeFromTopic(
