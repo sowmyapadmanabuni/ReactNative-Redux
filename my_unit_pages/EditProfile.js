@@ -730,6 +730,7 @@ class EditProfile extends Component {
                                                 }}
                                             >
                                                 <CountryPicker
+                                                hideAlphabetFilter={true}
                                                     onChange={value => {
                                                         console.log("CCA:", value);
                                                         this.setState({
