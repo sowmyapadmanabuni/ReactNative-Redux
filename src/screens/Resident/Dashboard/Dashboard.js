@@ -344,8 +344,11 @@ class Dashboard extends React.Component {
         // this.getBlockList();
         this.props.getNotifications(oyeURL, MyAccountID);
 
+        console.log("receive")
+
         if (receiveNotifications) {
           firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+          console.log(MyAccountID+"admin")
         } else {
           firebase
             .messaging()
