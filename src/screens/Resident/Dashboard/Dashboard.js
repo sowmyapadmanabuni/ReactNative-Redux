@@ -144,11 +144,11 @@ class Dashboard extends React.Component {
           `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
         );
 
-        // if(receiveNotifications) {
-        //     firebase.messaging().subscribeToTopic(MyAccountID + "admin")
-        // } else {
-        //     firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin")
-        // }
+        if(receiveNotifications) {
+            firebase.messaging().subscribeToTopic(MyAccountID + "admin")
+        } else {
+            firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin")
+        }
 
         axios
             .get(
@@ -358,17 +358,6 @@ class Dashboard extends React.Component {
         this.requestNotifPermission();
         // this.getBlockList();
         this.props.getNotifications(oyeURL, MyAccountID);
-
-        console.log("receive")
-
-        if (receiveNotifications) {
-          firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-          console.log(MyAccountID+"admin")
-        } else {
-          firebase
-            .messaging()
-            .unsubscribeFromTopic(MyAccountID + "admin");
-        }
 
         if (!this.props.called) {
             this.didMount();
