@@ -171,11 +171,12 @@ class AddVehicle extends Component {
           .then(response => response.json())
           .then(responseJson => {
             console.log("Manas", responseJson);
-            this.props.navigation.navigate("MyVehicleListScreen");
-
-            /*if (responseJson.success) {
+            if (responseJson.success) {
               this.props.navigation.navigate("MyVehicleListScreen");
-            } */
+            } 
+            else{
+              alert("Something went wrong. Please check your data & try again");
+            }
           })
           .catch(error => Alert.alert("Data not saved", error));
     }
