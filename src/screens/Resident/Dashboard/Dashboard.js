@@ -75,12 +75,21 @@ class Dashboard extends React.Component {
     }
 
     componentWillMount() {
+        const { receiveNotifications, MyAccountID } = this.props;
         this.setState({
             isDataLoading: true,
             isDataVisible: true
         });
         this.getListOfAssociation();
         this.myProfileNet();
+
+        if (receiveNotifications) {
+          firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        } else {
+          firebase
+            .messaging()
+            .unsubscribeFromTopic(MyAccountID + "admin");
+        }
     }
 
     requestNotifPermission = () => {
@@ -126,11 +135,11 @@ class Dashboard extends React.Component {
           `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
         );
 
-        if(receiveNotifications) {
-            firebase.messaging().subscribeToTopic(MyAccountID + "admin")
-        } else {
-            firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin")
-        }
+        // if(receiveNotifications) {
+        //     firebase.messaging().subscribeToTopic(MyAccountID + "admin")
+        // } else {
+        //     firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin")
+        // }
 
         axios
             .get(
