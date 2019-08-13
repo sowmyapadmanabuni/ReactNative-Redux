@@ -126,30 +126,13 @@ class Dashboard extends React.Component {
           `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
         );
 
-        // axios
-        //     .get(`${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`, {
-        //         headers: headers
-        //     })
-        //     .then(response => {
-        //         let responseData = response.data.data;
-
-        //         responseData.associationByAccount.map(association => {
-        //             // console.log('***********')
-        //             console.log(association.asAsnName, "assssooo")
-        //             // console.log(association.asAssnID)
-        //             // console.log('***********')
-        //             if (receiveNotifications) {
-        //                 firebase
-        //                     .messaging()
-        //                     .subscribeToTopic(association.asAssnID + "admin");
-        //                 // console.log(association.asAssnID);
-        //             } else if (!receiveNotifications) {
-        //                 firebase
-        //                     .messaging()
-        //                     .unsubscribeFromTopic(association.asAssnID + "admin");
-        //             }
-        //         });
-        //     });
+        if (receiveNotifications) {
+          firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        } else {
+          firebase
+            .messaging()
+            .unsubscribeFromTopic(MyAccountID + "admin");
+        }
 
         axios
             .get(
@@ -174,7 +157,7 @@ class Dashboard extends React.Component {
                     if (receiveNotifications) {
                         if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
                             if (units.meIsActive) {
-                                firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
+                                // firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
                             }
                         } else if(units.mrmRoleID === 1) {
                             firebase
@@ -185,8 +168,8 @@ class Dashboard extends React.Component {
                               );
                         }
                     } else if (!receiveNotifications) {
-                        firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
-                        irebase
+                        // firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
+                        firebase
                           .messaging()
                           .unsubscribeFromTopic(
                             units.asAssnID + "admin"
