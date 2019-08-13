@@ -61,6 +61,8 @@ class EditProfile extends Component {
 
         console.log("Props in Edit profile:", this.props);
 
+        this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
+
     }
 
 
@@ -402,7 +404,6 @@ class EditProfile extends Component {
 
     deleteImage() {
         let filePath = this.state.photo;
-
         RNFS.exists(filePath).then((result) => {
             if (result) {
                 return RNFS.unlink(filePath).then(() => {
@@ -548,7 +549,7 @@ class EditProfile extends Component {
                         <View style={[styles.viewStyle, {flexDirection: "row"}]}>
                             <View
                                 style={{
-                                    flex: 1,
+                                    width:'30%',
                                     flexDirection: "row",
                                     justifyContent: "flex-start",
                                     alignItems: "center",
@@ -570,7 +571,7 @@ class EditProfile extends Component {
 
                             <View
                                 style={{
-                                    flex: 3,
+                                    width:'30%',
                                     justifyContent: "center",
                                     alignItems: "center"
                                 }}
@@ -596,11 +597,11 @@ class EditProfile extends Component {
                                 </View>
 
                                 <ScrollView>
+                                    <TouchableOpacity
+                                        onPress={()=>this.selectPhotoTapped()}
+                                    >
                                     <View style={styles.containerView_ForProfilePicViewStyle}>
-                                        <TouchableOpacity
-                                            onPress={this.selectPhotoTapped.bind(this)}
-                                        >
-                                            <View style={styles.viewForProfilePicImageStyle}>
+                                          <View style={styles.viewForProfilePicImageStyle}>
                                                 {this.props.navigation.state.params
                                                     .profileDataSourceImageName !== null && !this.state.isPhotoAvailable ? (
                                                     <Image
@@ -619,18 +620,15 @@ class EditProfile extends Component {
                                                     />
                                                 )}
                                             </View>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={this.selectPhotoTapped.bind(this)}
-                                        >
+
                                             <View style={styles.imagesmallCircle}>
                                                 <Image
                                                     style={[styles.smallImage]}
                                                     source={require("../icons/cam_with_gray_bg.png")}
                                                 />
                                             </View>
-                                        </TouchableOpacity>
                                     </View>
+                                    </TouchableOpacity>
 
                                     <View
                                         style={{alignItems: "center", marginBottom: hp("4%")}}
@@ -730,7 +728,7 @@ class EditProfile extends Component {
                                                 }}
                                             >
                                                 <CountryPicker
-                                                hideAlphabetFilter={true}
+                                                    hideAlphabetFilter={true}
                                                     onChange={value => {
                                                         console.log("CCA:", value);
                                                         this.setState({
@@ -938,7 +936,7 @@ const styles = StyleSheet.create({
     viewStyle: {
         backgroundColor: "#fff",
         height: hp("8%"),
-        width: Dimensions.get("screen").width,
+        width:'100%',
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.2,
@@ -1088,14 +1086,14 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        width: hp("2.5%"),
+        height: hp("2.5%"),
         marginTop: 5
         // marginLeft: 10
     }
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = state => {``
     return {
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,

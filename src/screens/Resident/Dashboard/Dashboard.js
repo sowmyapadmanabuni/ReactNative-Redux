@@ -11,7 +11,8 @@ import {
     Text,
     TouchableHighlight,
     TouchableOpacity,
-    View
+    View,
+    BackHandler
 } from "react-native";
 import base from "../../../base";
 import {connect} from "react-redux";
@@ -74,6 +75,8 @@ class Dashboard extends React.Component {
             isDataVisible: false,
             isNoAssJoin: false
         };
+       // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
     }
 
     componentWillMount() {
@@ -83,7 +86,19 @@ class Dashboard extends React.Component {
         });
         this.getListOfAssociation();
         this.myProfileNet();
+       // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
     }
+
+
+   /* componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }*/
 
     requestNotifPermission = () => {
         const {
@@ -362,7 +377,7 @@ class Dashboard extends React.Component {
                 let role = ''
                 for (let i = 0; i < responseJson.data.members.length; i++) {
                     console.log("Get Ids", this.props.userReducer.MyAccountID, responseJson.data.members[i].acAccntID, this.state.assocId, responseJson.data.members[i].asAssnID)
-                    if (this.props.userReducer.MyAccountID === responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID === 1 && parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID) {
+                    if (responseJson.data.members[i].unUniName !== "" && this.props.userReducer.MyAccountID === responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID === 1 && parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID) {
                         console.log('Id eq', this.props.userReducer.MyAccountID, responseJson.data.members[i].acAccntID, responseJson.data.members[i].mrmRoleID)
                         role = responseJson.data.members[i].mrmRoleID
                     }

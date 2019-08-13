@@ -175,7 +175,7 @@ class AddVehicle extends Component {
               this.props.navigation.navigate("MyVehicleListScreen");
             } 
             else{
-              alert("Something went wrong. Please check your data & try again");
+              alert(responseJson.error.message);
             }
           })
           .catch(error => Alert.alert("Data not saved", error));

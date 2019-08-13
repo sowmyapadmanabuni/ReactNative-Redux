@@ -245,6 +245,7 @@ class Resident extends React.Component {
         console.log('Data inside####', this.state.residentData)
         let residentList = this.props.dashBoardReducer.residentList;
         const {params} = this.props.navigation.state;
+        let currentUserID = this.props.userReducer.MyAccountID;
         return (
             <View style={{flex: 1, flexDirection: "column"}}>
                 <NavigationEvents
@@ -364,7 +365,7 @@ class Resident extends React.Component {
                                                 </View>
 
                                                 <View style={{flex: 0.5, marginRight: hp("3%")}}>
-                                                    {item.uoRoleID === 1 || item.uoRoleID === 2 ? (
+                                                    {(item.uoRoleID === 1 || item.uoRoleID === 2) && currentUserID !== item.acAccntID ? (
                                                         this.selectRole(item, index)
                                                     ) : (
                                                         <Text> </Text>
