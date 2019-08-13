@@ -1093,7 +1093,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = state => {``
     return {
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,

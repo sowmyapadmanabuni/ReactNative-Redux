@@ -1,3 +1,5 @@
+
+
 import React from "react";
 import {
     Alert,
@@ -140,6 +142,12 @@ class Dashboard extends React.Component {
         console.log(
           `${champBaseURL}/GetAssociationListByAccountID/${MyAccountID}`
         );
+
+        if(receiveNotifications) {
+            firebase.messaging().subscribeToTopic(MyAccountID + "admin")
+        } else {
+            firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin")
+        }
 
         axios
             .get(
@@ -369,7 +377,7 @@ class Dashboard extends React.Component {
                 let role = ''
                 for (let i = 0; i < responseJson.data.members.length; i++) {
                     console.log("Get Ids", this.props.userReducer.MyAccountID, responseJson.data.members[i].acAccntID, this.state.assocId, responseJson.data.members[i].asAssnID)
-                    if (this.props.userReducer.MyAccountID === responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID === 1 && parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID) {
+                    if (responseJson.data.members[i].unUniName !== "" && this.props.userReducer.MyAccountID === responseJson.data.members[i].acAccntID && responseJson.data.members[i].mrmRoleID === 1 && parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID) {
                         console.log('Id eq', this.props.userReducer.MyAccountID, responseJson.data.members[i].acAccntID, responseJson.data.members[i].mrmRoleID)
                         role = responseJson.data.members[i].mrmRoleID
                     }

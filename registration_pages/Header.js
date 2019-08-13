@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Text, View, SafeAreaView, Dimensions, Image } from "react-native";
 import {

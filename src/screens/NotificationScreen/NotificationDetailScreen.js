@@ -19,7 +19,7 @@ import {
 } from "../../actions";
 
 import _ from "lodash";
-
+// ("ntJoinStat");
 class NotificationDetailScreen extends Component {
   state = {
     loading: false,
@@ -28,6 +28,7 @@ class NotificationDetailScreen extends Component {
   };
 
   approve = (item, status) => {
+    const { oyeURL } = this.props;
     if (status) {
       Alert.alert(
         "Oyespace",
@@ -147,11 +148,7 @@ class NotificationDetailScreen extends Component {
                     .then(responseJson_2 => {
                       console.log(JSON.stringify(UpdateTenant));
                       console.log(responseJson_2);
-                      console.log(
-                        `https://${
-                          this.props.oyeURL
-                        }/oyeliving/api/v1/NotificationAcceptanceRejectStatusUpdate`
-                      );
+
                       StatusUpdate = {
                         NTID: item.ntid,
                         NTStatDesc: "Request Sent"
@@ -177,19 +174,46 @@ class NotificationDetailScreen extends Component {
                           console.log("Response", response);
                         })
                         .then(responseJson_3 => {
-                          this.props.getNotifications(
-                            this.props.oyeURL,
-                            this.props.MyAccountID
-                          );
+                          console.log(item.ntid, "ntid");
+                          console.log("NTJoinStat");
+                          axios
+                            .post(
+                              `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
+                              {
+                                NTID: item.ntid,
+                                NTJoinStat: "Accepted"
+                              },
+                              {
+                                headers: {
+                                  "X-OYE247-APIKey":
+                                    "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                                  "Content-Type": "application/json"
+                                }
+                              }
+                            )
+                            .then(() => {
+                              console.log("updated suc");
+                              this.props.getNotifications(
+                                this.props.oyeURL,
+                                this.props.MyAccountID
+                              );
+                              this.setState({
+                                loading: false,
+                                date: StatusUpdate.NTStatDesc
+                              });
+                            })
+                            .catch(error => {
+                              console.log("Join Status", error);
+                              Alert.alert("Join Status", error.message);
+                              this.setState({
+                                loading: false
+                              });
+                            });
+
                           // this.props.updateApproveAdmin(
                           //   this.props.approvedAdmins,
                           //   item.sbSubID
                           // );
-
-                          this.setState({
-                            loading: false,
-                            date: StatusUpdate.NTStatDesc
-                          });
                         })
                         .catch(error => {
                           console.log("StatusUpdate", error);
@@ -224,6 +248,7 @@ class NotificationDetailScreen extends Component {
   };
 
   reject = (item, status) => {
+    const { oyeURL } = this.props;
     if (status) {
       Alert.alert(
         "Oyespace",
@@ -308,14 +333,44 @@ class NotificationDetailScreen extends Component {
                     false,
                     this.props.MyAccountID
                   );
-                  this.setState({ loading: false });
-                  // this.props.updateApproveAdmin(
-                  //   this.props.approvedAdmins,
-                  //   item.sbSubID
-                  // );
-                  setTimeout(() => {
-                    this.props.navigation.navigate("ResDashBoard");
-                  }, 300);
+
+                  axios
+                    .post(
+                      `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
+                      {
+                        NTID: item.ntid,
+                        NTJoinStat: ""
+                      },
+                      {
+                        headers: {
+                          "X-OYE247-APIKey":
+                            "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                          "Content-Type": "application/json"
+                        }
+                      }
+                    )
+                    .then(() => {
+                      this.props.getNotifications(
+                        this.props.oyeURL,
+                        this.props.MyAccountID
+                      );
+
+                      this.setState({ loading: false });
+                      // this.props.updateApproveAdmin(
+                      //   this.props.approvedAdmins,
+                      //   item.sbSubID
+                      // );
+                      setTimeout(() => {
+                        this.props.navigation.navigate("ResDashBoard");
+                      }, 300);
+                    })
+                    .catch(error => {
+                      console.log("Join Status", error);
+                      Alert.alert("Join Status", error.message);
+                      this.setState({
+                        loading: false
+                      });
+                    });
                 })
                 .catch(error => {
                   Alert.alert("@@@@@@@@@@@@@@@", error.message);
@@ -346,9 +401,10 @@ class NotificationDetailScreen extends Component {
     const details = navigation.getParam("details", "NO-ID");
 
     let subId = details.sbSubID;
-    let status = _.includes(approvedAdmins, subId);
+    // let status = _.includes(approvedAdmins, subId);
     // let status = false;
-    // console.log(status);
+
+    let status;
 
     if (loading) {
       return (
@@ -364,21 +420,32 @@ class NotificationDetailScreen extends Component {
       } else if (details.ntType === "gate_app") {
         return null;
       } else {
-        if (status === true) {
-          let reqStatus = "";
-          if (details.ntStatDesc === "") {
-            reqStatus = "Request Rejected";
-          } else {
-            reqStatus = "Request Accepted";
+        if (details.ntJoinStat) {
+          if (details.ntJoinStat === "Accepted") {
+            status = (
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <Text> {this.state.date || "Request Accepted"} </Text>
+              </View>
+            );
+          } else if (details.ntJoinStat === "Rejected") {
+            status = (
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <Text>{this.state.date || "Rejected"}</Text>
+              </View>
+            );
           }
-
-          return (
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Text> {this.state.date || reqStatus}</Text>
-            </View>
-          );
         } else {
-          return (
+          status = (
             <View style={styles.buttonContainer}>
               <View
                 style={{
@@ -388,7 +455,7 @@ class NotificationDetailScreen extends Component {
                 }}
               >
                 <Avatar
-                  onPress={() => this.reject(details, status)}
+                  onPress={() => this.reject(details)}
                   overlayContainerStyle={{ backgroundColor: "red" }}
                   rounded
                   icon={{
@@ -408,8 +475,10 @@ class NotificationDetailScreen extends Component {
                 }}
               >
                 <Avatar
-                  onPress={() => this.approve(details, status)}
-                  overlayContainerStyle={{ backgroundColor: "orange" }}
+                  onPress={() => this.approve(details)}
+                  overlayContainerStyle={{
+                    backgroundColor: "orange"
+                  }}
                   rounded
                   icon={{
                     name: "check",
@@ -424,6 +493,8 @@ class NotificationDetailScreen extends Component {
           );
         }
       }
+
+      return status;
     }
   };
 

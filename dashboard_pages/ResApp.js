@@ -810,6 +810,8 @@ addCheckPoint: {
                                                isHidden={true} {...props}/>
     }
   },
+  
+
 },{
   initialRouteName: "ResDashBoard",
   headerMode:"screen"

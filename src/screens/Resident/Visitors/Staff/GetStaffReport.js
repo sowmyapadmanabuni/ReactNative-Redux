@@ -148,12 +148,14 @@ class GetStaffReport extends React.Component {
 
     async getTheReport(props) {
         let self = this;
-        console.log('Get Date',this.props.staffReducer)
+        console.log('Get Date',this.props.staffReducer,this.props.userReducer)
         let input = {
             "ASAssnID": this.props.userReducer.SelectedAssociationID,
             "WKWorkID": this.props.staffReducer.staffId.toString(),
             "FromDate":this.props.staffReducer.startDate,
-            "ToDate":this.props.staffReducer.endDate
+            "ToDate":this.props.staffReducer.endDate,
+            "ACAccntID":this.props.userReducer.MyAccountID,
+            "UNUnitID":this.props.dashBoardReducer.uniID
         }
         console.log('Staff Data',input)
 
@@ -427,6 +429,7 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         staffReducer: state.StaffReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
+        dashBoardReducer: state.DashboardReducer
     };
 };
 
