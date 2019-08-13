@@ -61,7 +61,8 @@ const Style = StyleSheet.create({
     fontSize: 16, color: base.theme.colors.primary
   },
   subMainView:{
-    height: '72%', width: '100%', alignItems: 'center'
+    height: '64%', width: '100%', alignItems: 'center',
+    marginBottom:100
   },
   textInputView:{
     height: '15%', width: '90%', marginTop: 20,
