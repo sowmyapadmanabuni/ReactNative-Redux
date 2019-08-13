@@ -76,4 +76,9 @@ export default class OyeLivingApi {
     }
 
 
+    static async deleteVehicle(data){
+        return await instance.post('Vehicle/VehicleStatusUpdate',data);
+    }
+
+
 }

@@ -107,7 +107,7 @@ class MyProfile extends Component {
                 </View>
                 <View
                     style={{
-                      flex: 1,
+                      width:'35%',
                       justifyContent: "center",
                       alignItems: "center"
                     }}
@@ -117,7 +117,7 @@ class MyProfile extends Component {
                       source={require("../icons/headerLogo.png")}
                   />
                 </View>
-                <View style={{flex: 0.2}}>
+                <View style={{width:'35%'}}>
                   {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                 </View>
               </View>
@@ -135,11 +135,10 @@ class MyProfile extends Component {
                   <View style={styles.myProfileFlexStyle}>
                     <View style={styles.emptyViewStyle}/>
                     <View style={styles.viewForMyProfileText}>
-                      <Text style={{fontSize: hp("2.5%"), color: "#ff8c00"}}>
+                      <Text style={{fontSize: hp("2.5%"), color: "#ff8c00",textAlign: 'center'}}>
                         My Profile
                       </Text>
                     </View>
-
                     <View style={styles.editButtonViewStyle}>
                       <TouchableOpacity
                           onPress={() => {
@@ -318,16 +317,17 @@ const styles = StyleSheet.create({
   },
   myProfileFlexStyle: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginTop: hp("2%")
+    justifyContent: "space-between",
+    marginTop: hp("2%"),
+    width:'100%'
   },
   emptyViewStyle: {
-    flex: 3
+    width:'30%',
   },
   viewForMyProfileText: {
-    flex: 3,
+    width:'35%',
     justifyContent: "center",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   myProfileTitleStyle: {
     textAlign: "center",
@@ -335,17 +335,20 @@ const styles = StyleSheet.create({
     fontWeight: "500"
   },
   editButtonViewStyle: {
-    flex: 1.5,
-    alignItems: "center",
-    justifyContent: "center"
+    width:'30%',
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
   editButtonImageStyle: {
     width: hp("3.5%"),
-    height: hp("3.5%")
+    height: hp("3.5%"),
+    marginRight:10
+
   },
   editButtonImageStyle1: {
     width: hp("3.5%"),
-    height: hp("3.5%")
+    height: hp("3.5%"),
+
   },
   containerView_ForProfilePicViewStyle: {
     justifyContent: "center",
@@ -392,7 +395,7 @@ const styles = StyleSheet.create({
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
-    width: Dimensions.get("screen").width,
+    width: '100%',
     shadowColor: "#000",
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
@@ -418,11 +421,11 @@ const styles = StyleSheet.create({
     // marginLeft: 10
   },
   viewDetails1: {
-    flex: 0.3,
+    width:'30%',
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
-    marginLeft: 3
+    marginLeft:10
   }
 })
 

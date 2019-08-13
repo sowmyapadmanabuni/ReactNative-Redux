@@ -302,13 +302,15 @@ class App extends React.Component {
               </View>
             </View>
             <View style={styles.cellEndIcons}>
+              {item.vlMobile === ""?<View/>:
               <Card>
                 <TouchableOpacity
                     onPress={() => {
                       {
-                        Platform.OS === "android"
-                            ? Linking.openURL(`tel:${item.vlMobile}`)
-                            : Linking.openURL(`telprompt:${item.vlMobile}`);
+                      
+                          Platform.OS === "android"
+                          ? Linking.openURL(`tel:${item.vlMobile}`)
+                          : Linking.openURL(`telprompt:${item.vlMobile}`);
                       }
                     }}
                 >
@@ -326,7 +328,7 @@ class App extends React.Component {
                     />
                   </View>
                 </TouchableOpacity>
-              </Card>
+              </Card>}
             </View>
           </View>
           <View style={styles.lineForCellView} />

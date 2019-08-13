@@ -19,6 +19,8 @@ import base from "../../../../base";
 import {connect} from "react-redux";
 import ContactsWrapper from "react-native-contacts-wrapper";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+const RNFS = require('react-native-fs');
+
 import Style from '../MyFamilyAdd/Style';
 
 class MyFamilyEdit extends Component {
@@ -98,7 +100,7 @@ class MyFamilyEdit extends Component {
           <ScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
-                {this.props.navigation.state.params.fmImgName === '' ?
+                {this.props.navigation.state.params.fmImgName === '' && this.state.relativeImage ==='' ?
                     <Image style={{height: 40, width: 40, alignSelf: 'center'}}
                            source={require('../../../../../icons/camera.png')}
                     />
@@ -291,11 +293,32 @@ class MyFamilyEdit extends Component {
           relativeImage:response.uri,
           imageUrl:stat
         })
+
       } catch (err) {
         console.log('err', err)
       }
     }
 
+  }
+
+  deleteImage() {
+    let filePath = this.state.relativeImage;
+    RNFS.exists(filePath).then((result) => {
+      if (result) {
+        return RNFS.unlink(filePath).then(() => {
+          console.log("File deleted", filePath)
+          RNFS.scanFile(filePath)
+              .then(() => {
+                console.log('scanned');
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }).catch((err) => {
+          console.log(err)
+        })
+      }
+    })
   }
 
 
@@ -447,6 +470,8 @@ class MyFamilyEdit extends Component {
     console.log('Stat in Add family', stat,input)
     if (stat.success) {
       try {
+        this.deleteImage()
+
         this.props.navigation.goBack()
       } catch (err) {
         console.log('Error in adding Family Member')

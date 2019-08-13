@@ -9,16 +9,16 @@ import FlashMessage from "react-native-flash-message";
 import $ from 'logdecor';
 import CheckInternet from "./src/base/services/CheckInternet"
 import base from "./src/base";
-// import firebase from 'firebase';
-// import {firebaseDetails} from './constant';
-//
-//
-// let config = {
-//     databaseURL: firebaseDetails.databaseURL,
-//     projectID: firebaseDetails.projectID
-// };
-//
-// firebase.initializeApp(config);
+import firebase from 'firebase';
+import {firebaseDetails} from './constant';
+
+
+let config = {
+    databaseURL: firebaseDetails.databaseURL,
+    projectID: firebaseDetails.projectID
+};
+
+firebase.initializeApp(config);
 import {StatusBarPlaceHolder}from '../ReactNative-Redux/src/components/StatusBar'
 
 
