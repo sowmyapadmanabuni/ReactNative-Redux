@@ -75,7 +75,7 @@ class Dashboard extends React.Component {
     }
 
     componentWillMount() {
-        const { receiveNotifications, MyAccountID } = this.props;
+        // const { receiveNotifications, MyAccountID } = this.props;
         this.setState({
             isDataLoading: true,
             isDataVisible: true
@@ -83,13 +83,7 @@ class Dashboard extends React.Component {
         this.getListOfAssociation();
         this.myProfileNet();
 
-        if (receiveNotifications) {
-          firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-        } else {
-          firebase
-            .messaging()
-            .unsubscribeFromTopic(MyAccountID + "admin");
-        }
+        
     }
 
     requestNotifPermission = () => {
@@ -344,6 +338,14 @@ class Dashboard extends React.Component {
         this.requestNotifPermission();
         // this.getBlockList();
         this.props.getNotifications(oyeURL, MyAccountID);
+
+        if (receiveNotifications) {
+          firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        } else {
+          firebase
+            .messaging()
+            .unsubscribeFromTopic(MyAccountID + "admin");
+        }
 
         if (!this.props.called) {
             this.didMount();
