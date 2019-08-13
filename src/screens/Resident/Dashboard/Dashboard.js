@@ -87,13 +87,8 @@ class Dashboard extends React.Component {
         });
         this.getListOfAssociation();
         this.myProfileNet();
-<<<<<<< HEAD
-
-        
-=======
        // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
->>>>>>> 408503b063248e77092a87723c4e004a57737f93
     }
 
 
