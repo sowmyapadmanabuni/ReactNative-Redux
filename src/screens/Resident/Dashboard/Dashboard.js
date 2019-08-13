@@ -330,7 +330,12 @@ class Dashboard extends React.Component {
     };
 
     componentDidMount() {
-        const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
+        const {
+          getDashSub,
+          getDashAssociation,
+          getAssoMembers,
+          receiveNotifications
+        } = this.props;
         const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
         const {oyeURL} = this.props.oyespaceReducer;
 
