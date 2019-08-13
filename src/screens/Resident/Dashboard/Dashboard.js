@@ -9,7 +9,8 @@ import {
     Text,
     TouchableHighlight,
     TouchableOpacity,
-    View
+    View,
+    BackHandler
 } from "react-native";
 import base from "../../../base";
 import {connect} from "react-redux";
@@ -72,6 +73,8 @@ class Dashboard extends React.Component {
             isDataVisible: false,
             isNoAssJoin: false
         };
+       // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
     }
 
     componentWillMount() {
@@ -81,7 +84,19 @@ class Dashboard extends React.Component {
         });
         this.getListOfAssociation();
         this.myProfileNet();
+       // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
     }
+
+
+   /* componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }*/
 
     requestNotifPermission = () => {
         const {
