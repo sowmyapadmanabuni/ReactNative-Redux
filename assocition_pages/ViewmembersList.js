@@ -127,9 +127,7 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         try {
-            if (this.state.selectedRoleData === 0) {
-                alert("Please change the role");
-            } else {
+        
                 const {getDashUnits, selectedAssociation} = this.props;
                 console.log('Props in role managment', this.props);
 
@@ -151,7 +149,8 @@ class Resident extends React.Component {
                 let requestBody = {
                     ACMobile: mobNumber,
                     UNUnitID: this.state.selectedUser.unUnitID,
-                    MRMRoleID: this.state.selectedRoleData.selRolId
+                    MRMRoleID: this.state.selectedRoleData.selRolId,
+                    ASAssnID:this.props.selectedAssociation
                 };
                 console.log('reqBody role managment', requestBody)
 
@@ -171,9 +170,6 @@ class Resident extends React.Component {
                     .catch(error => {
                         console.log("err " + error);
                     });
-            }
-
-
         } catch (e) {
             console.log("STATE:", this.state);
         }
