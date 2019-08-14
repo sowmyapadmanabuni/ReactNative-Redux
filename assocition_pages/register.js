@@ -254,37 +254,40 @@ class RegisterMe extends Component {
                                                       data => {
                                                         if (
                                                           data.mrmRoleID ===
-                                                          1
+                                                            1 &&
+                                                          data.meIsActive
                                                         ) {
-                                                            console.log("adminssss", data)
-                                                            this.props.createUserNotification(
-                                                              ntType,
-                                                              this
-                                                                .props
-                                                                .oyeURL,
-                                                              data.acAccntID,
-                                                              this.props.navigation.state.params.AssnId.toString(),
-                                                              ntDesc,
-                                                              sbUnitID.toString(),
-                                                              sbMemID.toString(),
-                                                              sbSubID.toString(),
-                                                              sbRoleId,
-                                                              this
-                                                                .props
-                                                                .navigation
-                                                                .state
-                                                                .params
-                                                                .associationName,
-                                                              unitName.toString(),
-                                                              occupancyDate,
-                                                              soldDate,
-                                                              false,
-                                                              this
-                                                                .props
-                                                                .MyAccountID
-                                                            );
-                                                            
-                                                          }
+                                                          console.log(
+                                                            "adminssss",
+                                                            data
+                                                          );
+                                                          this.props.createUserNotification(
+                                                            ntType,
+                                                            this
+                                                              .props
+                                                              .oyeURL,
+                                                            data.acAccntID,
+                                                            this.props.navigation.state.params.AssnId.toString(),
+                                                            ntDesc,
+                                                            sbUnitID.toString(),
+                                                            sbMemID.toString(),
+                                                            sbSubID.toString(),
+                                                            sbRoleId,
+                                                            this
+                                                              .props
+                                                              .navigation
+                                                              .state
+                                                              .params
+                                                              .associationName,
+                                                            unitName.toString(),
+                                                            occupancyDate,
+                                                            soldDate,
+                                                            false,
+                                                            this
+                                                              .props
+                                                              .MyAccountID
+                                                          );
+                                                        }
                                                       }
                                                     );
 

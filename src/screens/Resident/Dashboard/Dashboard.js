@@ -161,6 +161,10 @@ class Dashboard extends React.Component {
             } else if (units.mrmRoleID === 1) {
               if (units.meIsActive) {
                 firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
+              } else {
+                firebase
+                  .messaging()
+                  .unsubscribeFromTopic(units.asAssnID + "admin");
               }
             }
           } else if (!receiveNotifications) {
