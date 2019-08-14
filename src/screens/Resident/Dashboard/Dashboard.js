@@ -1,47 +1,48 @@
-
-
 import React from "react";
 import {
-    Alert,
-    Dimensions,
-    Image,
-    Linking,
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableHighlight,
-    TouchableOpacity,
-    View,
-    BackHandler
+  Alert,
+  Dimensions,
+  Image,
+  Linking,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+  BackHandler
 } from "react-native";
 import base from "../../../base";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import CardView from "../../../components/cardView/CardView";
-import {Dropdown} from "react-native-material-dropdown";
+import { Dropdown } from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
-import {Button} from "native-base";
+import { Button } from "native-base";
 import _ from "lodash";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {
-    createNotification,
-    createUserNotification,
-    getAssoMembers,
-    getDashAssociation,
-    getDashSub,
-    getDashUnits,
-    getNotifications,
-    newNotifInstance,
-    refreshNotifications,
-    updateApproveAdmin,
-    updateDropDownIndex,
-    updateIdDashboard,
-    updateJoinedAssociation,
-    updateSelectedDropDown,
-    updateUserInfo
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp
+} from "react-native-responsive-screen";
+import {
+  createNotification,
+  createUserNotification,
+  getAssoMembers,
+  getDashAssociation,
+  getDashSub,
+  getDashUnits,
+  getNotifications,
+  newNotifInstance,
+  refreshNotifications,
+  updateApproveAdmin,
+  updateDropDownIndex,
+  updateIdDashboard,
+  updateJoinedAssociation,
+  updateSelectedDropDown,
+  updateUserInfo
 } from "../../../actions";
 import ProgressLoader from "rn-progress-loader";
 
@@ -153,7 +154,7 @@ class Dashboard extends React.Component {
 
           // console.log(units.mrmRoleID + "role");
           if (receiveNotifications) {
-            alert(MyAccountID + "admin");
+            // alert(MyAccountID + "admin");
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
               if (units.meIsActive) {
@@ -1257,187 +1258,187 @@ class Dashboard extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: "column",
-        backgroundColor: "#fff",
-        paddingLeft: hp("0.7%")
-    },
-    progress: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    button1: {
-        width: hp("30%"),
-        justifyContent: "center",
-        marginBottom: hp("2%")
-    },
-    card: {
-        borderBottomWidth: 1,
-        flexDirection: "column",
-        width: Dimensions.get("window").width / 4 - 10,
-        height: hp("9%"),
-        alignItems: "center"
-    },
-    cardItem: {
-        flexDirection: "column",
-        borderColor: "orange",
-        borderWidth: hp("10%")
-        // borderBottomWidth:30,
-    },
-    textWrapper: {
-        height: hp("85%"), // 70% of height device screen
-        width: wp("97%") // 80% of width device screen
-    },
-    gaugeText: {
-        backgroundColor: "transparent",
-        color: "#000",
-        fontSize: hp("3%")
-    },
-    image1: {
-        width: wp("6%"),
-        height: hp("3%"),
-        marginRight: 10,
-        justifyContent: "space-between"
-    },
-    image2: {
-        height: hp("2%"),
-        width: hp("2%"),
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        marginBottom: hp("2.4%"),
-        marginTop: hp("2.4%")
-    },
-    text1: {
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        flex: 5,
-        color: "#FF8C00",
-        marginBottom: hp("2.4%"),
-        marginTop: hp("2.4%")
-    },
-    text2: {
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        color: "#FF8C00",
-        marginBottom: hp("2.4%"),
-        marginTop: hp("2.4%")
-    },
-    text3: {
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        flex: 1,
-        color: "#45B591",
-        marginBottom: hp("2.4%"),
-        marginTop: hp("2.4%")
-    },
-    text4: {
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        color: "#45B591",
-        marginBottom: hp("2.4%"),
-        marginTop: hp("2.4%")
-    },
-    image3: {
-        height: hp("2%"),
-        width: hp("2%"),
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        marginBottom: hp("2.4%"),
-        marginTop: hp("2.4%")
-    },
-    image4: {
-        width: wp("5%"),
-        height: hp("2%"),
-        justifyContent: "flex-start",
-        marginLeft: hp("1%"),
-        marginRight: hp("1%")
-    },
-    view1: {
-        flexDirection: "row",
-        margin: hp("0.5%"),
-        alignItems: "center",
-        justifyContent: "center",
-        bottom: 0,
-        height: hp("12%")
-    },
-    view2: {
-        borderWidth: hp("0.8%"),
-        borderBottomEndRadius: hp("0.8%"),
-        borderBottomStartRadius: hp("0.8%"),
-        borderColor: "orange",
-        width: Dimensions.get("window").width / 4 - 10,
-        marginTop: hp("0.8%")
-    },
-    card1: {
-        height: hp("4%"),
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#fff6e5",
-        marginBottom: hp("2%")
-    },
-    gauge: {
-        position: "absolute",
-        width: wp("40%"),
-        height: hp("22%"),
-        alignItems: "center",
-        justifyContent: "center"
-    }
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#fff",
+    paddingLeft: hp("0.7%")
+  },
+  progress: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  button1: {
+    width: hp("30%"),
+    justifyContent: "center",
+    marginBottom: hp("2%")
+  },
+  card: {
+    borderBottomWidth: 1,
+    flexDirection: "column",
+    width: Dimensions.get("window").width / 4 - 10,
+    height: hp("9%"),
+    alignItems: "center"
+  },
+  cardItem: {
+    flexDirection: "column",
+    borderColor: "orange",
+    borderWidth: hp("10%")
+    // borderBottomWidth:30,
+  },
+  textWrapper: {
+    height: hp("85%"), // 70% of height device screen
+    width: wp("97%") // 80% of width device screen
+  },
+  gaugeText: {
+    backgroundColor: "transparent",
+    color: "#000",
+    fontSize: hp("3%")
+  },
+  image1: {
+    width: wp("6%"),
+    height: hp("3%"),
+    marginRight: 10,
+    justifyContent: "space-between"
+  },
+  image2: {
+    height: hp("2%"),
+    width: hp("2%"),
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text1: {
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    flex: 5,
+    color: "#FF8C00",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text2: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    color: "#FF8C00",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text3: {
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    flex: 1,
+    color: "#45B591",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  text4: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    color: "#45B591",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  image3: {
+    height: hp("2%"),
+    width: hp("2%"),
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    marginBottom: hp("2.4%"),
+    marginTop: hp("2.4%")
+  },
+  image4: {
+    width: wp("5%"),
+    height: hp("2%"),
+    justifyContent: "flex-start",
+    marginLeft: hp("1%"),
+    marginRight: hp("1%")
+  },
+  view1: {
+    flexDirection: "row",
+    margin: hp("0.5%"),
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: 0,
+    height: hp("12%")
+  },
+  view2: {
+    borderWidth: hp("0.8%"),
+    borderBottomEndRadius: hp("0.8%"),
+    borderBottomStartRadius: hp("0.8%"),
+    borderColor: "orange",
+    width: Dimensions.get("window").width / 4 - 10,
+    marginTop: hp("0.8%")
+  },
+  card1: {
+    height: hp("4%"),
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff6e5",
+    marginBottom: hp("2%")
+  },
+  gauge: {
+    position: "absolute",
+    width: wp("40%"),
+    height: hp("22%"),
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
 
 const mapStateToProps = state => {
-    return {
-        isCreateLoading: state.NotificationReducer.isCreateLoading,
-        notificationCount: state.NotificationReducer.notificationCount,
-        notifications: state.NotificationReducer.notifications,
-        joinedAssociations: state.AppReducer.joinedAssociations,
-        datasource: state.DashboardReducer.datasource,
-        dropdown: state.DashboardReducer.dropdown,
-        dropdown1: state.DashboardReducer.dropdown1,
-        associationid: state.DashboardReducer.associationid,
-        residentList: state.DashboardReducer.residentList,
-        selectedDropdown: state.DashboardReducer.selectedDropdown,
-        selectedDropdown1: state.DashboardReducer.selectedDropdown1,
-        sold: state.DashboardReducer.sold,
-        unsold: state.DashboardReducer.unsold,
-        sold2: state.DashboardReducer.sold2,
-        unsold2: state.DashboardReducer.unsold2,
-        isLoading: state.DashboardReducer.isLoading,
-        memberList: state.DashboardReducer.memberList,
-        called: state.DashboardReducer.called,
+  return {
+    isCreateLoading: state.NotificationReducer.isCreateLoading,
+    notificationCount: state.NotificationReducer.notificationCount,
+    notifications: state.NotificationReducer.notifications,
+    joinedAssociations: state.AppReducer.joinedAssociations,
+    datasource: state.DashboardReducer.datasource,
+    dropdown: state.DashboardReducer.dropdown,
+    dropdown1: state.DashboardReducer.dropdown1,
+    associationid: state.DashboardReducer.associationid,
+    residentList: state.DashboardReducer.residentList,
+    selectedDropdown: state.DashboardReducer.selectedDropdown,
+    selectedDropdown1: state.DashboardReducer.selectedDropdown1,
+    sold: state.DashboardReducer.sold,
+    unsold: state.DashboardReducer.unsold,
+    sold2: state.DashboardReducer.sold2,
+    unsold2: state.DashboardReducer.unsold2,
+    isLoading: state.DashboardReducer.isLoading,
+    memberList: state.DashboardReducer.memberList,
+    called: state.DashboardReducer.called,
 
-        // Oyespace variables and user variables
-        MyFirstName: state.UserReducer.MyFirstName,
-        MyAccountID: state.UserReducer.MyAccountID,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-        userReducer: state.UserReducer,
+    // Oyespace variables and user variables
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyAccountID: state.UserReducer.MyAccountID,
+    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    userReducer: state.UserReducer,
 
-        // Oyespace urls
-        oyeURL: state.OyespaceReducer.oyeURL,
-        champBaseURL: state.OyespaceReducer.champBaseURL,
-        oyespaceReducer: state.OyespaceReducer,
-        receiveNotifications: state.NotificationReducer.receiveNotifications,
-        dashBoardReducer: state.DashboardReducer
-    };
+    // Oyespace urls
+    oyeURL: state.OyespaceReducer.oyeURL,
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    oyespaceReducer: state.OyespaceReducer,
+    receiveNotifications: state.NotificationReducer.receiveNotifications,
+    dashBoardReducer: state.DashboardReducer
+  };
 };
 
 export default connect(
-    mapStateToProps,
-    {
-        newNotifInstance,
-        createNotification,
-        getNotifications,
-        updateJoinedAssociation,
-        getDashSub,
-        getDashAssociation,
-        getDashUnits,
-        updateUserInfo,
-        getAssoMembers,
-        updateApproveAdmin,
-        updateDropDownIndex,
-        createUserNotification,
-        refreshNotifications,
-        updateIdDashboard,
-        updateSelectedDropDown
-    }
+  mapStateToProps,
+  {
+    newNotifInstance,
+    createNotification,
+    getNotifications,
+    updateJoinedAssociation,
+    getDashSub,
+    getDashAssociation,
+    getDashUnits,
+    updateUserInfo,
+    getAssoMembers,
+    updateApproveAdmin,
+    updateDropDownIndex,
+    createUserNotification,
+    refreshNotifications,
+    updateIdDashboard,
+    updateSelectedDropDown
+  }
 )(Dashboard);
