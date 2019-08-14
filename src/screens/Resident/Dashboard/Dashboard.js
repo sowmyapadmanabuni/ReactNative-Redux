@@ -373,7 +373,7 @@ class Dashboard extends React.Component {
         )
             .then(response => response.json())
             .then(responseJson => {
-                console.log("Manas", responseJson, responseJson.data, responseJson.data.members.length);
+                console.log("In Role Management Funtion", responseJson, this.state.assocId);
                 let role = ''
                 for (let i = 0; i < responseJson.data.members.length; i++) {
                     console.log("Get Ids", this.props.userReducer.MyAccountID, responseJson.data.members[i].acAccntID, this.state.assocId, responseJson.data.members[i].asAssnID)

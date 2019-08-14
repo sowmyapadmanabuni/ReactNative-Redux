@@ -146,6 +146,15 @@ class EditVehicle extends Component {
             Alert.alert("Parking Slot Number should not contain special character");
             return false;
         } else {
+            let body = JSON.stringify({
+                VEType: this.state.text === "Two Wheeler" ? "Two Wheeler" : "Four Wheeler",
+                VERegNo: vehNum.length <= 0 ? VehNum : vehNum.toString(),
+                VEMakeMdl: vehName.length <= 0 ? VehName : vehName,
+                VEStickNo: vehStickerNum.length <= 0 ? VehStickerNum : vehStickerNum.toString(),
+                UPLNum: parkingSlotNum.length <= 0 ? VehParkingSlotNum : parkingSlotNum.toString(),
+                VEID: this.props.navigation.state.params.Veid,
+                ASAssnID:this.props.dashBoardReducer.selectedAssociation
+            });
             fetch(
                 `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/VehicleUpdate`,
                 {
@@ -154,21 +163,12 @@ class EditVehicle extends Component {
                         "Content-Type": "application/json",
                         "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
                     },
-                    body: JSON.stringify({
-                        VEType: this.state.text === "Two Wheeler" ? "Two Wheeler" : "Four Wheeler",
-                        VERegNo: vehNum.length <= 0 ? VehNum : vehNum.toString(),
-                        VEMakeMdl: vehName.length <= 0 ? VehName : vehName,
-                        VEStickNo: vehStickerNum.length <= 0 ? VehStickerNum : vehStickerNum.toString(),
-                        UPLNum: parkingSlotNum.length <= 0 ? VehParkingSlotNum : parkingSlotNum.toString(),
-                        VEID: this.props.navigation.state.params.Veid,
-
-
-                    })
+                    body: body
                 }
             )
                 .then(responseData => responseData.json())
                 .then(responseJson => {
-                    console.log("Respo::", responseJson,vehNum);
+                    console.log("Respo::", responseJson,this.props.dashBoardReducer);
                     //Alert.alert("Saved");
                     if (responseJson.success) {
                         this.props.navigation.navigate("MyVehicleListScreen");
@@ -196,6 +196,16 @@ class EditVehicle extends Component {
     }
 
     render() {
+
+        console.log("Props:",this.props.navigation.state.params);
+        console.log("State:",this.state);
+        let propsData = this.props.navigation.state.params;
+        let stateData = this.state;
+        let isEdited = (propsData.VehName !== stateData.vehName || propsData.VehName !== stateData.vehName || propsData.VehType !== stateData.text 
+            || propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum || propsData.VehStickerNum !== stateData.vehStickerNum) ;
+console.log(propsData.VehName !== stateData.vehName , propsData.VehName !== stateData.vehName , propsData.VehType !== stateData.text 
+    ,propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum , propsData.VehStickerNum !== stateData.vehStickerNum)
+            console.log("isEdited:",isEdited)
 
         return (
             <View style={styles.container}>
@@ -355,6 +365,7 @@ class EditVehicle extends Component {
                             >
                                 <Text style={styles.textFamilyVehicle}>Cancel</Text>
                             </Button>
+                            {isEdited?
                             <Button
                                 bordered
                                 warning
@@ -362,7 +373,15 @@ class EditVehicle extends Component {
                                 onPress={() => this.editVehicle()}
                             >
                                 <Text style={styles.textFamilyVehicle}>Update</Text>
-                            </Button>
+                            </Button>:
+                            <Button
+                            bordered
+                            info
+                            style={styles.buttonCancel}
+                            onPress={() => alert("Please Edit the details to update")}
+                        >
+                            <Text style={styles.textFamilyVehicle}>Update</Text>
+                        </Button>}
                         </View>
                     </KeyboardAwareScrollView>
                 </View>
