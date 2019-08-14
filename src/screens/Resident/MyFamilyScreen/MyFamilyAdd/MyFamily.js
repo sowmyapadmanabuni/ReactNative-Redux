@@ -165,7 +165,7 @@ class MyFamily extends Component {
                                     {this.state.minorProps.map((obj, i) => {
                                         let onPress = (value, index) => {
                                             this.setState({
-                                                isMinorSelected: value
+                                                isMinorSelected: value,
                                             })
                                         };
                                         return (
@@ -504,7 +504,7 @@ class MyFamily extends Component {
     }
 
     async addRelativeDetails(title, message) {
-        console.log('Props**', this.props);
+        console.log('Props**', this.props,this.state);
         let self = this;
         let mobNum = self.state.sendNum
         let cCode = self.state.cCode
@@ -520,7 +520,7 @@ class MyFamily extends Component {
             "FMRltn": self.state.relationName,
             "ASAssnID": self.props.dashBoardReducer.assId,
             "FMImgName": self.state.imageUrl,
-            "FMMinor": self.state.isMinor,
+            "FMMinor": self.state.isMinorSelected===0,
             "FMLName": self.state.lastName,
             "FMGurName": self.state.guardianName,
             "PAccntID":self.props.userReducer.MyAccountID
@@ -531,7 +531,7 @@ class MyFamily extends Component {
             if (stat) {
             try {
                 if (stat.success) {
-                    self.deleteImage()
+                   // self.deleteImage()
                     self.props.navigation.navigate('MyFamilyList')
                 } else {
                     this.showAlert(stat.error.message,true)
