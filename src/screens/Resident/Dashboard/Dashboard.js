@@ -143,7 +143,7 @@ class Dashboard extends React.Component {
     
                     // console.log(units.mrmRoleID + "role");
                     if (receiveNotifications) {
-                        alert(MyAccountID + "admin");
+                        // alert(MyAccountID + "admin");
                         firebase
                           .messaging()
                           .subscribeToTopic(
