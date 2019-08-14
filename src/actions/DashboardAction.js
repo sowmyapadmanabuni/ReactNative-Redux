@@ -567,11 +567,13 @@ export const getAssoMembers = (oyeURL, id) => {
         let resData = response.data.data.memberListByAccount;
 
         resData.map((data, index) => {
-          console.log(data.meJoinStat + index);
+          // console.log(data.meJoinStat + index);
         });
+
+        let removedDuplicates = _.uniqBy(resData, "unUnitID");
         dispatch({
           type: GET_MEMBERLIST_SUCCESS,
-          payload: resData
+          payload: removedDuplicates
         });
       })
       .catch(error => {

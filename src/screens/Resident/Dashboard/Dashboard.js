@@ -155,9 +155,6 @@ class Dashboard extends React.Component {
             // alert(MyAccountID + "admin");
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-              if (units.meIsActive) {
-                // firebase.messaging().subscribeToTopic(units.unUnitID + "admin");
-              }
             } else if (units.mrmRoleID === 1) {
               if (units.meIsActive) {
                 firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
@@ -455,7 +452,7 @@ class Dashboard extends React.Component {
           prop: "assId",
           value: sortedArr[0].details.asAssnID
         });
-        updateIdDashboard({ prop: "memberList", value: sortedArr });
+        // updateIdDashboard({ prop: "memberList", value: sortedArr });
         const { updateUserInfo } = this.props;
         updateUserInfo({
           prop: "SelectedAssociationID",
