@@ -287,7 +287,7 @@ class App extends React.Component {
               <View style={styles.viewTextStyle}>
                 <Image
                     style={styles.viewImageStyle}
-                    source={require("../icons/entry_time.png")}
+                    source={require("../icons/location.png")}
                 />
                 <Text style={styles.subNameTextStyleTwo}>
                   Entry Gate:
@@ -827,7 +827,7 @@ const styles = StyleSheet.create({
   },
   unitTextStyle: {
     fontSize: hp("1.5%"),
-    fontFamily:base.theme.fonts.bold
+    fontFamily:base.theme.fonts.bold,marginBottom:10
   },
   subNameTextStyleOne: {
     padding: hp("0.5%"),
