@@ -21,7 +21,8 @@ import {
 import { connect } from "react-redux";
 import {
   updateJoinedAssociation,
-  createUserNotification
+  createUserNotification,
+  getAssoMembers
 } from "../src/actions";
 import _ from "lodash";
 import { CLOUD_FUNCTION_URL } from "../constant";
@@ -44,6 +45,11 @@ class RegisterMe extends Component {
       unitofperson1: false,
       sent: false
     };
+  }
+
+  componentDidMount() {
+    const { getAssoMembers, oyeURL, MyAccountID } = this.props;
+    getAssoMembers(oyeURL, MyAccountID);
   }
 
   onDOBPress = () => {
@@ -1069,5 +1075,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { updateJoinedAssociation, createUserNotification }
+  { updateJoinedAssociation, createUserNotification, getAssoMembers }
 )(RegisterMe);

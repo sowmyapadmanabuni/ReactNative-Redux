@@ -573,7 +573,7 @@ export const getAssoMembers = (oyeURL, id) => {
         let removedDuplicates = _.uniqBy(resData, "unUnitID");
         dispatch({
           type: GET_MEMBERLIST_SUCCESS,
-          payload: removedDuplicates
+          payload: resData
         });
       })
       .catch(error => {
