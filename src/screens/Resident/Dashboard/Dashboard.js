@@ -150,8 +150,6 @@ class Dashboard extends React.Component {
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
         data.map(units => {
-          console.log(units.asAsnName + units.asAssnID + "admin");
-
           // console.log(units.mrmRoleID + "role");
           if (receiveNotifications) {
             // alert(MyAccountID + "admin");
