@@ -267,7 +267,7 @@ class GetStaffReport extends React.Component {
                     <View style={StaffReportStyle.detailsMainView}>
                         <View style={StaffStyle.detailsLeftView}>
                             <Image style={StaffStyle.staffImg}
-                                   source={{uri: base.utils.validate.handleNullImg(this.props.staffReducer.staffProfilePic)}}
+                                   source={{uri:base.utils.strings.imageUrl+this.props.staffReducer.staffProfilePic}}
                             />
                             <View style={StaffStyle.textView}>
                                 <Text style={StaffStyle.staffText}

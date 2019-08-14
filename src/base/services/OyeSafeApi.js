@@ -96,15 +96,15 @@ export default class OyeSafeApi{
         return await instance.post('oye247/api/v1/GetPatrollingReportByDates',detail)
     }
 
-    static async getStaffListByAssociationId(associationId){
+    static async getStaffListByAssociationId(associationId,accountId){
         console.log("AsId",associationId);
-        return await instance.get('/GetWorkerListByAssocID/'+associationId)
+        return await instance.get('GetListByAssocIDAndAccountID/'+associationId + '/' + accountId)
 
     }
 
     static async getStaffReportByDate(input){
         console.log("Data", input)
-        return await instance.post('Worker/GetWorkerListByDates',input)
+        return await instance.post('Worker/GetWorkerListByDatesAssocAndUnitID',input)
     }
 
 }

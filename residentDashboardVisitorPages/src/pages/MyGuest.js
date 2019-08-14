@@ -50,7 +50,6 @@ class MyGuests extends Component {
     }, 1500);
   }
 
-  //http://apidev.oyespace.com/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{QRCodeUsed}/{UnitID}/{AccountID}
 
   getInvitationList = () => {
     console.log("association id in guest", this.props);
@@ -68,7 +67,7 @@ class MyGuests extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Invitation List -@@@@@@", responseJson,responseJson.data.invitation);
+        console.log("Invitation List -@@@@@@", responseJson);
         this.setState({
           isLoading: false,
           dataSource:responseJson.data.invitation,

@@ -45,12 +45,11 @@ class Staff extends React.Component {
 
     async getListOfStaff() {
         let self = this;
-        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID)
-        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID);// 1
+        //http://apidev.oyespace.com/oye247/api/v1/GetWorkerListByAssocIDAndAccountID/{AssociationID}/{AccountID}
+        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID)
+        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID);// 1
         self.setState({isLoading: false})
-
         console.log("Check Data",stat)
-
         try {
             if (stat && stat.data) {
                 let staffNamesList = [];
@@ -113,7 +112,7 @@ class Staff extends React.Component {
                 <View style={StaffStyle.detailsMainView}>
                     <View style={StaffStyle.detailsLeftView}>
                         <Image style={StaffStyle.staffImg}
-                               source={{uri: base.utils.validate.handleNullImg(this.state.staffPic)}}
+                               source={{uri:base.utils.strings.imageUrl+this.state.staffPic}}
                         />
                         <View style={StaffStyle.textView}>
                             <Text style={StaffStyle.staffText}

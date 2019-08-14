@@ -50,7 +50,8 @@ class MyGuests extends Component {
   }
 
   getInvitationList = () => {
-    //http://localhost:64284/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{IsQRCodeGenerated}/{UnitID}
+    //http://apidev.oyespace.com/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{QRCodeUsed}/{UnitID}/{AccountID}
+    console.log("JGjhghjg",this.props.oyeURL,this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
     fetch(
       `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/False/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
       {

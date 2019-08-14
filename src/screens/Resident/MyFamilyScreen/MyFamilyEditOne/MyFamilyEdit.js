@@ -164,7 +164,7 @@ class MyFamilyEdit extends Component {
                     keyboardType={'default'}
                 />
               </View>
-              {this.state.isMinor || this.state.relationName==='Child'?
+              {this.state.relationName==='Child'?
                   <View style={{
                     flexDirection: 'row',
                     height: '6%',
@@ -511,6 +511,9 @@ class MyFamilyEdit extends Component {
     if(mobCode[0]==='+'){
       cCodeSend=''
     }
+    else{
+      cCodeSend='+91'
+    }
 
     let input = {
       "FMName"    :self.state.firstName,
@@ -520,7 +523,7 @@ class MyFamilyEdit extends Component {
       "FMRltn"    : self.state.relationName,
       "ASAssnID"  : self.props.dashBoardReducer.assId,
       "FMImgName" :self.state.imageUrl ,
-      "FMMinor"   :self.state.isMinorSelected===0,
+      "FMMinor"   :self.state.isMinor,
       "FMLName"   : self.state.lastName,
       "FMGurName" : self.state.guardianName,
       "MEMemID":self.props.navigation.state.params.meMemID,

@@ -49,11 +49,11 @@ class App extends React.Component {
       datetime: moment(new Date()).format("HH:mm:ss a"),
 
       //date picker
-      dobText: _dt, //year + '-' + month + '-' + date,
+      dobText: moment(_dt).format('YYYY-MM-DD'), //year + '-' + month + '-' + date,
       dobDate: _dt,
       isDateTimePickerVisible: false,
 
-      dobText1: _dt,
+      dobText1: moment(_dt).format('YYYY-MM-DD'),
       dobDate1: _dt,
       isDateTimePickerVisible1: false,
 
@@ -186,10 +186,7 @@ class App extends React.Component {
           .then(responseJson => {
             //var count = Object.keys(responseJson.data.visitorlogbydate).length;
             //console.log("fsbkfh", count);
-            console.log(
-                responseJson,
-                "*******************************************"
-            );
+            console.log(  "*******************************************", responseJson,this.state.dobText,this.state.dobText1,this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
             if(responseJson.success){
               this.setState({
                 isLoading: false,
