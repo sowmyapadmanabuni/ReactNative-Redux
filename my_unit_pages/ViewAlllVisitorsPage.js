@@ -30,6 +30,8 @@ import {
 } from "react-native-responsive-screen";
 import ZoomImage from "react-native-zoom-image";
 import { connect } from "react-redux";
+import base from "../src/base";
+import EmptyView from "../src/components/common/EmptyView";
 
 class App extends React.Component {
   constructor(props) {
@@ -206,15 +208,18 @@ class App extends React.Component {
           <View style={styles.lineForCellView} />
           <View style={styles.cellView}>
             <View style={styles.containerImageView}>
+              <Text style={styles.unitTextStyle}>Unit - {item.unUniName}</Text>
+              <EmptyView height={hp('1%')}/>
               {item.vlEntryImg == "" ? (
                   <ZoomImage
                       source={require("../icons/placeholderImg.png")}
                       imgStyle={{
-                        height: wp("20%"),
-                        width: wp("20%"),
-                        borderRadius: wp("20%") / 2,
+                        height: wp("8%"),
+                        width: wp("8%"),
+                        borderRadius: wp("8%") / 2,
                         borderColor: "orange",
-                        borderWidth: hp("0.1%")
+                        borderWidth: hp("0.1%"),
+                        marginTop:14
                       }}
                       //style={styles.mainCardItemImage}
                       //style={styles.dummyImageForProfile}
@@ -233,9 +238,9 @@ class App extends React.Component {
                             `${this.props.mediaupload}` + item.vlEntryImg
                       }}
                       imgStyle={{
-                        height: wp("20%"),
-                        width: wp("20%"),
-                        borderRadius: wp("20%") / 2,
+                        height: wp("15%"),
+                        width: wp("15%"),
+                        borderRadius: wp("15%") / 2,
                         borderColor: "orange",
                         borderWidth: hp("0.1%")
                       }}
@@ -271,37 +276,33 @@ class App extends React.Component {
                     style={styles.viewImageStyle}
                     source={require("../icons/entry_time.png")}
                 />
-                {/* <Text style={styles.subNameTextStyleTwo}>
-                Entry: {item.vlEntryT.substring(5, 10)},
-                {item.vlEntryT.substring(11, 16)} Exit:{" "}
-                {item.vlExitT.substring(5, 10)},{item.vlExitT.substring(11, 16)}
-                </Text>  */}
-                {/* <Text style={styles.subNameTextStyleTwo}>
-                Entry:
-                {item.vlEntryT.substring(11, 16)} Exit:{" "}
-                {item.vlExitT.substring(11, 16)}
-              </Text> */}
-
                 <Text style={styles.subNameTextStyleTwo}>
                   Entry:
                   {item.vlEntryT.substring(11, 19)}
                 </Text>
+                <Text style={styles.subNameTextStyleTwo}>
+                  {item.vlExitT.substring(11, 19)}
+                </Text>
+              </View>
+              <View style={styles.viewTextStyle}>
                 <Image
                     style={styles.viewImageStyle}
                     source={require("../icons/entry_time.png")}
                 />
                 <Text style={styles.subNameTextStyleTwo}>
-                  Exit: {item.vlExitT.substring(11, 19)}
+                  Entry Gate:
+                  {item.vlengName}
                 </Text>
-                {/* {moment(newDate(item.vlExitT.substring(11, 16))).format(
-                "HH:mm:ss a"
-              )} */}
-                {/* {moment(
-              newDate({item.vlExitT.substring(11, 16)}, "Hmm")).format("hh:mm")} */}
-                {/* datetime: moment(new Date()).format("HH:mm:ss a") */}
+                <Text style={styles.subNameTextStyleTwo}>
+                Exit Gate:
+                  {item.vlexgName}
+                </Text>
               </View>
             </View>
             <View style={styles.cellEndIcons}>
+            <Text style={{color:base.theme.colors.primary}}>
+                  {moment(item.vldCreated).format("DD-MM-YYYY")}
+                </Text>
               {item.vlMobile === ""?<View/>:
               <Card>
                 <TouchableOpacity
@@ -658,6 +659,7 @@ class App extends React.Component {
                 </Button>
               </View>
             </View>
+          
 
             {/* <TouchableOpacity onPress={this._showDateTimePicker}>
           <DateTimePicker
@@ -755,7 +757,7 @@ const styles = StyleSheet.create({
   },
   lineForCellView: {
     backgroundColor: "lightgray",
-    height: hp("0.1%")
+    //height: hp("0.1%")
   },
   cellView: {
     flexDirection: "row",
@@ -763,7 +765,8 @@ const styles = StyleSheet.create({
     paddingLeft: hp("0.2"),
     paddingTop: hp("0.8%"),
     marginBottom: hp("0.8%"),
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    borderBottomWidth:hp("0.1%")
   },
   containerImageView: {
     flex: 1,
@@ -807,7 +810,7 @@ const styles = StyleSheet.create({
     marginRight: hp("0.5%")
   },
   cellEndIcons: {
-    flex: 0.6,
+    flex: 1.2,
     alignItems: "flex-end",
     justifyContent: "flex-start",
     flexDirection: "column",
@@ -821,6 +824,10 @@ const styles = StyleSheet.create({
     padding: hp("0.5%"),
     fontSize: hp("2%"),
     fontWeight: "600"
+  },
+  unitTextStyle: {
+    fontSize: hp("1.5%"),
+    fontFamily:base.theme.fonts.bold
   },
   subNameTextStyleOne: {
     padding: hp("0.5%"),
