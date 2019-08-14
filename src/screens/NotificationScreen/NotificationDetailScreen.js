@@ -95,7 +95,7 @@ class NotificationDetailScreen extends Component {
               this.props.createUserNotification(
                 "Join_Status",
                 this.props.oyeURL,
-                item.ACNotifyID,
+                item.acNotifyID,
                 1,
                 "Your request to join " +
                   item.mrRolName +

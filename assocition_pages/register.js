@@ -806,11 +806,15 @@ class RegisterMe extends Component {
             return o.unUnitID === unitID;
         });
 
-        console.log(matchUnit, "matchUnit");
+        // console.log(matchUnit, "matchUnit");
 
         if (matchUnit) {
             if (matchUnit.mrmRoleID === 2) {
-                status = true;
+                if (matchUnit.meIsActive) {
+                    status = true;
+                } else {
+                    status = false;
+                }
             } else {
                 status = false;
             }
