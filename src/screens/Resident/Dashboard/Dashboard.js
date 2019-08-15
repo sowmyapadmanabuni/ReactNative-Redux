@@ -45,6 +45,7 @@ import {
   updateUserInfo
 } from "../../../actions";
 import ProgressLoader from "rn-progress-loader";
+import { NavigationEvents } from "react-navigation";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -156,6 +157,7 @@ class Dashboard extends React.Component {
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
             } else if (units.mrmRoleID === 1) {
+              console.log(units, "units");
               if (units.meIsActive) {
                 firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
               } else {
@@ -766,7 +768,7 @@ class Dashboard extends React.Component {
     let unitList = this.state.unitList;
     return (
       <View style={{ height: "100%", width: "100%" }}>
-        {/* <NavigationEvents onDidFocus={() => this.didMount()} /> */}
+        <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
         {!this.props.isLoading ? (
           <View style={Style.container}>
             <View style={Style.dropDownContainer}>
