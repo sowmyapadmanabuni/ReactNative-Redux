@@ -347,7 +347,8 @@ class Dashboard extends React.Component {
   }
 
   roleCheckForAdmin = index => {
-    console.log("Association id123123123123", this.state.assocId, index);
+    // console.log("Association id123123123123", this.state.assocId, index);
+
     fetch(
       `http://${
         this.props.oyeURL
@@ -377,10 +378,12 @@ class Dashboard extends React.Component {
             this.props.userReducer.MyAccountID,
             responseJson.data.members[i].acAccntID,
             this.state.assocId,
-            responseJson.data.members[i].asAssnID
+            responseJson.data.members[i].asAssnID,
+            responseJson.data.members[i].mrmRoleID,
+            responseJson.data.members[i].unUniName + "name"
           );
           if (
-            responseJson.data.members[i].unUniName !== "" &&
+            responseJson.data.members[i].meIsActive &&
             this.props.userReducer.MyAccountID ===
               responseJson.data.members[i].acAccntID &&
             responseJson.data.members[i].mrmRoleID === 1 &&
@@ -396,6 +399,8 @@ class Dashboard extends React.Component {
             role = responseJson.data.members[i].mrmRoleID;
           }
         }
+
+        console.log(role, "role");
         this.setState({
           role: role
         });
@@ -756,10 +761,9 @@ class Dashboard extends React.Component {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    console.log("UNIT ID ---->", this.props.dashBoardReducer.uniID);
+    console.log(this.state.role, "state");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-    console.log("Drp1", dropdown1);
     return (
       <View style={{ height: "100%", width: "100%" }}>
         {/* <NavigationEvents onDidFocus={() => this.didMount()} /> */}

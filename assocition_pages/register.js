@@ -717,7 +717,7 @@ class RegisterMe extends Component {
       if (
         matchUnit.meJoinStat === "Approved" ||
         matchUnit.meJoinStat === "Requested" ||
-        matchUnit.meJoinStat === "Accepted"
+        (matchUnit.meJoinStat === "Accepted" && matchUnit.meIsActive)
       ) {
         status = true;
       } else {
