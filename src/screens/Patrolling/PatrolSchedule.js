@@ -75,7 +75,7 @@ class PatrolSchedule extends React.Component {
 
         let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
         //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
-        console.log("Stat:",stat);
+        console.log("Stat:",stat,);
         try {
             if (stat.success) {
                 self.setState({
