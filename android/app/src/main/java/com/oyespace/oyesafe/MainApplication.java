@@ -13,6 +13,8 @@ import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.lynxit.contactswrapper.ContactsWrapperPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+
 
 
 import cl.json.ShareApplication;
@@ -85,7 +87,9 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new SQLitePluginPackage(),
                     new RNFirebaseMessagingPackage(),
                     new RNFirebaseNotificationsPackage(),
-                    new ContactsWrapperPackage()
+                    new ContactsWrapperPackage(),
+                    new MapsPackage()
+
 
             );
         }

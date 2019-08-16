@@ -199,6 +199,13 @@ class App extends React.Component {
               this.arrayholder = responseJson.data.visitorlog;
             }
             else{
+              this.setState({
+                isLoading: false,
+                dataSource: [],
+                loading: false,
+                dobDate: null,
+                dobDate1: null
+              });
               //alert('No data for the selected combination of association and unit')
             }
 
