@@ -95,7 +95,7 @@ class NotificationDetailScreen extends Component {
               this.props.createUserNotification(
                 "Join_Status",
                 this.props.oyeURL,
-                item.ACNotifyID,
+                item.acNotifyID,
                 1,
                 "Your request to join " +
                   item.mrRolName +
@@ -201,6 +201,10 @@ class NotificationDetailScreen extends Component {
                                 loading: false,
                                 date: StatusUpdate.NTStatDesc
                               });
+
+                              setTimeout(() => {
+                                this.props.navigation.navigate("ResDashBoard");
+                              }, 300);
                             })
                             .catch(error => {
                               console.log("Join Status", error);
@@ -339,7 +343,7 @@ class NotificationDetailScreen extends Component {
                       `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                       {
                         NTID: item.ntid,
-                        NTJoinStat: ""
+                        NTJoinStat: "Rejected"
                       },
                       {
                         headers: {
@@ -456,7 +460,9 @@ class NotificationDetailScreen extends Component {
               >
                 <Avatar
                   onPress={() => this.reject(details)}
-                  overlayContainerStyle={{ backgroundColor: "red" }}
+                  overlayContainerStyle={{
+                    backgroundColor: "red"
+                  }}
                   rounded
                   icon={{
                     name: "close",
@@ -491,6 +497,67 @@ class NotificationDetailScreen extends Component {
               </View>
             </View>
           );
+          // if (details.ntJoinStat.length <= 0) {
+          //   status = (
+          //     <View
+          //       style={{
+          //         alignItems: "center",
+          //         justifyContent: "center"
+          //       }}
+          //     >
+          //       <Text>{this.state.date || "Rejected"}</Text>
+          //     </View>
+          //   );
+          // } else {
+          //   status = (
+          //     <View style={styles.buttonContainer}>
+          //       <View
+          //         style={{
+          //           flexDirection: "column",
+          //           justifyContent: "flex-start",
+          //           alignItems: "center"
+          //         }}
+          //       >
+          //         <Avatar
+          //           onPress={() => this.reject(details)}
+          //           overlayContainerStyle={{
+          //             backgroundColor: "red"
+          //           }}
+          //           rounded
+          //           icon={{
+          //             name: "close",
+          //             type: "font-awesome",
+          //             size: 15,
+          //             color: "#fff"
+          //           }}
+          //         />
+          //         <Text style={{ color: "red" }}> Reject </Text>
+          //       </View>
+          //       <View
+          //         style={{
+          //           flexDirection: "column",
+          //           justifyContent: "flex-start",
+          //           alignItems: "center"
+          //         }}
+          //       >
+          //         <Avatar
+          //           onPress={() => this.approve(details)}
+          //           overlayContainerStyle={{
+          //             backgroundColor: "orange"
+          //           }}
+          //           rounded
+          //           icon={{
+          //             name: "check",
+          //             type: "font-awesome",
+          //             size: 15,
+          //             color: "#fff"
+          //           }}
+          //         />
+          //         <Text style={{ color: "orange" }}> Approve </Text>
+          //       </View>
+          //     </View>
+          //   );
+          // }
         }
       }
 

@@ -211,17 +211,18 @@ class App extends React.Component {
     }
   };
 
-  renderItem = ({ item }) => {
-    console.log(item);
+  renderItem = ({ item,index }) => {
+    console.log("Deliveries Items",item,this.props.mediaupload,index);
     // const time = item.vlEntryT;
     // const entertiming = time.subString();
     // console.log(entertiming);
     return (
-        <View style={styles.tableView}>
+        <View style={[styles.tableView,{marginBottom:index===this.state.dataSource.length-1?80:0
+           }]}>
           <View style={styles.lineForCellView} />
           <View style={styles.cellView}>
             <View style={styles.containerImageView}>
-              {item.vlEntryImg == "" ? (
+              {item.vlEntryImg === '' ? (
                   <ZoomImage
                       source={require("../../../icons/placeholderImg.png")}
                       imgStyle={{

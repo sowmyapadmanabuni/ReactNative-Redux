@@ -91,7 +91,7 @@ class MyGuests extends Component {
     });
 
     const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.infName.toUpperCase()} ${item.inlName.toUpperCase()}`;
+      const itemData = `${item.vlfName.toUpperCase()} ${item.vllName.toUpperCase()}`;
       const textData = text.toUpperCase();
 
       return itemData.indexOf(textData) > -1;
@@ -101,7 +101,7 @@ class MyGuests extends Component {
     });
   };
   renderItem = ({ item, index }) => {
-    // console.log(item,index)
+    console.log("List in visited ",item,index)
     return (
       <View style={{ flexDirection: "column" }}>
         <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
@@ -117,15 +117,15 @@ class MyGuests extends Component {
         >
           <View style={styles.iconContainer}>
             <Text style={styles.contactIcon}>
-              {item.infName[0].toUpperCase()}
+              {item.vlfName[0].toUpperCase()}
             </Text>
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoText}>
-              {item.infName} {item.inlName}
+              {item.vlfName} {item.vllName}
             </Text>
             <View style={{ flexDirection: "column" }}>
-              <Text style={styles.infoNumber}>{item.inMobile}</Text>
+              <Text style={styles.infoNumber}>{item.vlMobile}</Text>
             </View>
           </View>
           <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
@@ -134,8 +134,8 @@ class MyGuests extends Component {
                 onPress={() => {
                   {
                     Platform.OS === "android"
-                      ? Linking.openURL(`tel:${item.inMobile}`)
-                      : Linking.openURL(`telprompt:${item.inMobile}`);
+                      ? Linking.openURL(`tel:${item.vlMobile}`)
+                      : Linking.openURL(`telprompt:${item.vlMobile}`);
                   }
                 }}
               >
@@ -206,10 +206,10 @@ class MyGuests extends Component {
         <FlatList
           style={{ marginTop: hp('1.5%') }}
           data={this.state.dataSource.sort((a, b) =>
-            a.infName.localeCompare(b.infName)
+            a.vlfName.localeCompare(b.vlfName)
           )}
           renderItem={this.renderItem}
-          keyExtractor={(item, index) => item.inInvtID.toString()}
+          keyExtractor={(item, index) => item.vlVisLgID.toString()}
         />
           }
         

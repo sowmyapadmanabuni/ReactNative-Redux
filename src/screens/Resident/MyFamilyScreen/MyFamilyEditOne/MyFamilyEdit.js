@@ -181,8 +181,6 @@ class MyFamilyEdit extends Component {
                             guardianName:'',
                             mobileNumber:'',
                             cCode:'',
-                            isMinor:value===0
-
                           })
                         };
                         return (

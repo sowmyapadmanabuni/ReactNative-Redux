@@ -117,7 +117,7 @@ class Staff extends React.Component {
                             />
                             :
                             <Image style={StaffStyle.staffImg}
-                                   source={{uri: base.utils.strings.imageUrl + this.state.staffPic}}
+                                   source={{uri:base.utils.strings.imageUrl + this.state.staffPic}}
                             />
                         }
                         <View style={StaffStyle.textView}>
