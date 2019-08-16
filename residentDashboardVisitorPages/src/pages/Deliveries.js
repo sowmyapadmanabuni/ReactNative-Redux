@@ -186,7 +186,7 @@ class App extends React.Component {
           .then(responseJson => {
             //var count = Object.keys(responseJson.data.visitorlogbydate).length;
             //console.log("fsbkfh", count);
-            console.log(  "*******************************************", responseJson,this.state.dobText,this.state.dobText1,this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
+            console.log(  "Deliveries*******************************************", responseJson,this.state.dobText,this.state.dobText1,this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
             if(responseJson.success){
               this.setState({
                 isLoading: false,
@@ -244,8 +244,7 @@ class App extends React.Component {
                   // />
                   <ZoomImage
                       source={{
-                        uri:
-                            `${this.props.mediaupload}` + item.vlEntryImg
+                        uri:this.props.mediaupload + item.vlEntryImg
                       }}
                       imgStyle={{
                         height: wp("20%"),
@@ -472,7 +471,7 @@ class App extends React.Component {
       );
     }
     console.log(this.state.dataSource, "*******************************");
-    console.log("ekjfhkwrghj");
+    console.log("123123123#####",this.props);
     return (
         <View style={styles.mainView}>
           

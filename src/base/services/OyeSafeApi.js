@@ -98,7 +98,7 @@ export default class OyeSafeApi{
 
     static async getStaffListByAssociationId(associationId,accountId){
         console.log("AsId",associationId);
-        return await instance.get('GetListByAssocIDAndAccountID/'+associationId + '/' + accountId)
+        return await instance.get('GetWorkerListByAssocIDAndAccountID/'+associationId + '/' + accountId)
 
     }
 

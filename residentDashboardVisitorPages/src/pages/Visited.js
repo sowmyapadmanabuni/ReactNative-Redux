@@ -50,21 +50,28 @@ class MyGuests extends Component {
   }
 
   getInvitationList = () => {
-    //http://apidev.oyespace.com/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{QRCodeUsed}/{UnitID}/{AccountID}
-    console.log("JGjhghjg",this.props.oyeURL,this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
+    //      //http://localhost:64284/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated
+
+    console.log("Visitighfghfghfg@@@@@@@@@", this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
     fetch(
-      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/False/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
+      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-        }
+        },
+        body: JSON.stringify({
+          ASAssnID : this.props.dashBoardReducer.assId,
+          INInvVis : "Visited",
+          UNUnitID : this.props.dashBoardReducer.uniID,
+          ACAccntID: this.props.userReducer.MyAccountID
+        })
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Visited for the Without QRCode", responseJson);
+        console.log("Visitighfghfghfg@@@@@@@@@", responseJson,this.props.userReducer.SelectedAssociationID,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.invitation,

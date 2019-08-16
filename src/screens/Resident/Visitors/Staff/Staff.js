@@ -45,7 +45,7 @@ class Staff extends React.Component {
 
     async getListOfStaff() {
         let self = this;
-        //http://apidev.oyespace.com/oye247/api/v1/GetWorkerListByAssocIDAndAccountID/{AssociationID}/{AccountID}
+        //http://apiuat.oyespace.com/oye247/api/v1/GetWorkerListByAssocIDAndAccountID/70/21
         console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID)
         let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID);// 1
         self.setState({isLoading: false})
@@ -111,9 +111,15 @@ class Staff extends React.Component {
                 {this.state.staffList.length!==0?
                 <View style={StaffStyle.detailsMainView}>
                     <View style={StaffStyle.detailsLeftView}>
-                        <Image style={StaffStyle.staffImg}
-                               source={{uri:base.utils.strings.imageUrl+this.state.staffPic}}
-                        />
+                        {this.state.staffPic ==='' ?
+                            <Image style={StaffStyle.staffImg}
+                                   source={{uri:base.utils.strings.staffPlaceHolder}}
+                            />
+                            :
+                            <Image style={StaffStyle.staffImg}
+                                   source={{uri: base.utils.strings.imageUrl + this.state.staffPic}}
+                            />
+                        }
                         <View style={StaffStyle.textView}>
                             <Text style={StaffStyle.staffText}
                                   numberofLines={1} ellipsizeMode={'tail'}>{this.state.staffName} </Text>
