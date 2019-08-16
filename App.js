@@ -106,8 +106,6 @@ const AuthStack = createStackNavigator(
 
 const DashStack = createStackNavigator(
     {
-
-
       AssnListScreen: {
         screen: associationlist,
         navigationOptions: {
@@ -116,7 +114,6 @@ const DashStack = createStackNavigator(
           headerTintColor: "#ffffff"
         }
       },
-
       CreateAssnScreen: {
         screen: CreateAssociation,
         navigationOptions: {
@@ -126,7 +123,6 @@ const DashStack = createStackNavigator(
           headerTintColor: "#ffffff"
         }
       },
-
       Unit: {
         screen: unitlist,
         navigationOptions: {
@@ -135,7 +131,6 @@ const DashStack = createStackNavigator(
           headerTintColor: "#ffffff"
         }
       },
-
       CreateUnitsScreen: {
         screen: CreateUnitsPotrait, //CreateUnits,
         navigationOptions: {
@@ -144,7 +139,6 @@ const DashStack = createStackNavigator(
           headerTintColor: "#ffffff"
         }
       },
-
       View: {
         screen: ViewUser,
         navigationOptions: {
