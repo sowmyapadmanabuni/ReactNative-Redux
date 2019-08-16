@@ -168,7 +168,7 @@ class EditVehicle extends Component {
             )
                 .then(responseData => responseData.json())
                 .then(responseJson => {
-                    console.log("Respo::", responseJson,this.props.dashBoardReducer);
+                    console.log("Respo::", responseJson,body);
                     //Alert.alert("Saved");
                     if (responseJson.success) {
                         this.props.navigation.navigate("MyVehicleListScreen");
@@ -201,7 +201,7 @@ class EditVehicle extends Component {
         console.log("State:",this.state);
         let propsData = this.props.navigation.state.params;
         let stateData = this.state;
-        let isEdited = (propsData.VehName !== stateData.vehName || propsData.VehName !== stateData.vehName || propsData.VehType !== stateData.text 
+        let isEdited = (propsData.VehName !== stateData.vehName || propsData.VehNum !== stateData.vehNum || propsData.VehType !== stateData.text 
             || propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum || propsData.VehStickerNum !== stateData.vehStickerNum) ;
 console.log(propsData.VehName !== stateData.vehName , propsData.VehName !== stateData.vehName , propsData.VehType !== stateData.text 
     ,propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum , propsData.VehStickerNum !== stateData.vehStickerNum)

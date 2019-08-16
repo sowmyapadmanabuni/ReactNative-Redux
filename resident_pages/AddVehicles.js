@@ -170,7 +170,7 @@ class AddVehicle extends Component {
       })
           .then(response => response.json())
           .then(responseJson => {
-            console.log("Manas", responseJson);
+            console.log("Manas", responseJson,payloadData);
             if (responseJson.success) {
               this.props.navigation.navigate("MyVehicleListScreen");
             } 
@@ -184,7 +184,7 @@ class AddVehicle extends Component {
 
   onSelect(index, value) {
     this.setState({
-      text: `${value}`
+      text: `${value}`,
     });
   }
 

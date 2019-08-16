@@ -57,13 +57,19 @@ class MyGuests extends Component {
     fetch(
       `http://${
         this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/True/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
+      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-        }
+        },
+        body:JSON.stringify({
+              ASAssnID : this.props.dashBoardReducer.assId,
+              INInvVis : "Invited",
+              UNUnitID : this.props.dashBoardReducer.uniID,
+              ACAccntID: this.props.userReducer.MyAccountID
+        })
       }
     )
       .then(response => response.json())

@@ -67,6 +67,9 @@ class Resident extends React.Component {
 
         console.log('get association', associationId)
 
+        console.log(
+          base.services.OyeLivingApi.getUnitListByAssoc(associationId)
+        );
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
         console.log('Get the details####', stat)
 

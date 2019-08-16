@@ -588,6 +588,23 @@ export const createUserNotification = (
           console.log("notification not created succ", error);
         });
     } else if (notifType === "Join_Status") {
+      console.log(
+        notifType,
+        oyeURL,
+        accountID,
+        associationID,
+        ntDesc,
+        sbUnitID,
+        sbMemID,
+        sbSubID,
+        sbRoleId,
+        associationName,
+        unitName,
+        occupancyDate,
+        soldDate,
+        refresh,
+        senderId
+      );
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
@@ -605,14 +622,15 @@ export const createUserNotification = (
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
             UNOcSDate: occupancyDate,
-            UNSldDate: soldDate
+            UNSldDate: soldDate,
+            ACNotifyID: senderId
           },
           {
             headers: headers
           }
         )
         .then(res => {
-          // console.log("notification joinstatus succ", res.data.data);
+          console.log("notification joinstatus succ", res.data.data);
           refreshNotifications(oyeURL, accountID);
           if (refresh) {
             dispatch({
