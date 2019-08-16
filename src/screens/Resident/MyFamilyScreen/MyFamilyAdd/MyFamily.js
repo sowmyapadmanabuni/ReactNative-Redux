@@ -520,7 +520,7 @@ class MyFamily extends Component {
             "FMRltn": self.state.relationName,
             "ASAssnID": self.props.dashBoardReducer.assId,
             "FMImgName": self.state.imageUrl,
-            "FMMinor": self.state.isMinorSelected===0,
+            "FMMinor": self.state.isMinor,
             "FMLName": self.state.lastName,
             "FMGurName": self.state.guardianName,
             "PAccntID":self.props.userReducer.MyAccountID
