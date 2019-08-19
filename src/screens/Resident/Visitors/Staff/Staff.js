@@ -51,7 +51,7 @@ class Staff extends React.Component {
         self.setState({isLoading: false})
         console.log("Check Data",stat)
         try {
-            if (stat && stat.data) {
+            if (stat && stat.data && !stat.data.errorResponse) {
                 let staffNamesList = [];
                 for (let i = 0; i < stat.data.worker.length; i++) {
                     if (stat.data.worker[i].wkIsActive) {
@@ -217,7 +217,7 @@ class Staff extends React.Component {
                             let onPress = (value, index) => {this.setDateInCalendar(value,index)};
                             return (
                                 <View style={{width: '50%'}}>
-                                    <RadioButton labelHorizontal={true} key={i.toString()}>
+                                    <RadioButton labelHorizontal={true} key={i}>
                                         <RadioButtonInput
                                             obj={obj}
                                             index={i.toString()}
