@@ -1206,7 +1206,7 @@ class Dashboard extends React.Component {
           >
             <Text>View All Visitors</Text>
           </Button>
-          <Button
+         {/* <Button
             bordered
             style={styles.button1}
             onPress={() =>
@@ -1214,7 +1214,7 @@ class Dashboard extends React.Component {
                   }
           >
             <Text>Patrolling</Text>
-          </Button>
+          </Button>*/}
         </View>
       </ElevatedView>
     );
