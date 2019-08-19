@@ -19,6 +19,8 @@ import base from "../../../../base";
 import {connect} from "react-redux";
 import ContactsWrapper from "react-native-contacts-wrapper";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+const RNFS = require('react-native-fs');
+
 import Style from '../MyFamilyAdd/Style';
 
 class MyFamilyEdit extends Component {
@@ -62,15 +64,24 @@ class MyFamilyEdit extends Component {
   }
 
   componentWillMount() {
+    console.log('Props in Edit Family',this.props.navigation.state.params)
     this.setState({
       firstName: this.props.navigation.state.params.fmName,
       lastName: this.props.navigation.state.params.fmlName,
-      mobileNumber: this.props.navigation.state.params.fmMobile
+      mobileNumber: this.props.navigation.state.params.fmMobile, //myFamilyMobileNo
+      relationName:this.props.navigation.state.params.fmRltn,
+      relativeImage:this.props.navigation.state.params.fmImgName !=='' ? "http://mediaupload.oyespace.com/" +this.props.navigation.state.params.fmImgName:'',
+       isMinor:this.props.navigation.state.params.fmMinor,
+       guardianName:this.props.navigation.state.params.fmGurName,
+        cCode:this.props.navigation.state.params.fmisdCode,
+       isMinorSelected:this.props.navigation.state.params.fmMinor?0:1,
+      imageUrl:this.props.navigation.state.params.fmImgName
+
     })
   }
 
   render() {
-    console.log('Isminor', this.state, this.props, this.props.navigation.state.params) //check the data and show according to it
+
     let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number";
     return (
         <SafeAreaView style={Style.container}>
@@ -86,9 +97,7 @@ class MyFamilyEdit extends Component {
                      style={{width: 50, height: 50}}/>
             </View>
             <View style={Style.nextView}>
-              <TouchableOpacity style={Style.nextButton} onPress={() => this.validation()}>
-                <Text style={Style.nextText}>NEXT</Text>
-              </TouchableOpacity>
+
             </View>
 
           </View>
@@ -98,13 +107,13 @@ class MyFamilyEdit extends Component {
           <ScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
-                {this.props.navigation.state.params.fmImgName === '' ?
+                {this.state.relativeImage ==='' ?
                     <Image style={{height: 40, width: 40, alignSelf: 'center'}}
                            source={require('../../../../../icons/camera.png')}
                     />
                     :
                     <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
-                           source={{uri: this.state.relativeImage===''?"http://mediaupload.oyespace.com/" +this.props.navigation.state.params.fmImgName:this.state.relativeImage}}/>
+                           source={{uri:this.state.relativeImage}}/>
                 }
               </TouchableOpacity>
             </View>
@@ -113,7 +122,7 @@ class MyFamilyEdit extends Component {
             </View>
             <View style={Style.subMainView}>
               <Dropdown
-                  value={this.props.navigation.state.params.fmRltn}
+                  value={this.state.relationName}
                   data={this.state.relationList}
                   textColor={base.theme.colors.black}
                   inputContainerStyle={{}}
@@ -155,7 +164,7 @@ class MyFamilyEdit extends Component {
                     keyboardType={'default'}
                 />
               </View>
-              {this.state.isMinor ?
+              {this.state.relationName==='Child'?
                   <View style={{
                     flexDirection: 'row',
                     height: '6%',
@@ -168,7 +177,10 @@ class MyFamilyEdit extends Component {
                       {this.state.minorProps.map((obj, i) => {
                         let onPress = (value, index) => {
                           this.setState({
-                            isMinorSelected: value
+                            isMinorSelected: value,
+                            guardianName:'',
+                            mobileNumber:'',
+                            cCode:'',
                           })
                         };
                         return (
@@ -205,7 +217,7 @@ class MyFamilyEdit extends Component {
                     <TextInput
                         style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                         onChangeText={(text) => this.setState({guardianName: text})}
-                        value={this.props.navigation.state.params.fmGurName}
+                        value={this.state.guardianName}
                         placeholder="Guardian's Name"
                         placeholderTextColor={base.theme.colors.grey}
                         keyboardType={'default'}
@@ -236,6 +248,50 @@ class MyFamilyEdit extends Component {
                            style={{width: 25, height: 25,}}/>
                   </TouchableOpacity>
                 </View>
+              </View>
+              <View style={{
+                flexDirection: "row",
+                justifyContent: "space-around",
+                marginTop: hp("4%"),
+                marginBottom: hp("2%"),
+                marginHorizontal: hp("2%")
+              }}>
+                <TouchableOpacity
+                    bordered
+                    dark
+                    style={{  width: wp("22%"),
+                      height: hp("4%"),
+                      borderRadius: hp("2.5%"),
+                      borderWidth: hp("0.2%"),
+                      borderColor: "#EF3939",
+                      backgroundColor: "#EF3939",
+                      alignItems:'center',
+                      justifyContent: "center"}}
+                    onPress={() => {
+                      this.resetAllFields()
+                    }}
+                >
+                  <Text style={{ color: "white",
+                    fontWeight: "600",
+                    fontSize: hp("2%")}}>Reset</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    bordered
+                    dark
+                    style={{width: wp("22%"),
+                      height: hp("4%"),
+                      borderRadius: hp("2.5%"),
+                      borderWidth: hp("0.2%"),
+                      borderColor: "orange",
+                      backgroundColor: "orange",
+                      alignItems:'center',
+                      justifyContent: "center", marginLeft:20}}
+                    onPress={() => this.validation()}
+                >
+                  <Text style={{ color: "white",
+                    fontWeight: "600",
+                    fontSize: hp("2%")}}>Update</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </ScrollView>
@@ -291,11 +347,32 @@ class MyFamilyEdit extends Component {
           relativeImage:response.uri,
           imageUrl:stat
         })
+
       } catch (err) {
         console.log('err', err)
       }
     }
 
+  }
+
+  deleteImage() {
+    let filePath = this.state.relativeImage;
+    RNFS.exists(filePath).then((result) => {
+      if (result) {
+        return RNFS.unlink(filePath).then(() => {
+          console.log("File deleted", filePath)
+          RNFS.scanFile(filePath)
+              .then(() => {
+                console.log('scanned');
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }).catch((err) => {
+          console.log(err)
+        })
+      }
+    })
   }
 
 
@@ -381,65 +458,72 @@ class MyFamilyEdit extends Component {
           });
     }
   }
+  resetAllFields(){
+
+    //Should we need to show alert ?
+
+    this.setState({
+      relationName:"",
+      cCode: '',
+      mobileNumber: "",
+      sendNum: "",
+      isMinor: false,
+      firstName: "",
+      lastName: "",
+      isMinorSelected: 0,
+      guardianName: "",
+      relativeImage: "",
+      imageUrl: "",
+    })
+  }
 
   validation() {
-    console.log('Props**!!!', this.props);
+    console.log('Props**!!!', this.props);  //Validation for mobileNumber length
 
     let self = this;
-    /*if (self.props.navigation.state.params.fmRltn === '') {
+    if (self.state.relationName === "") {
       alert('Please Select relation')
-    }else if (self.state.firstName === '') {
+    } else if (self.state.firstName === "") {
       alert('First Name is required')
-    } else if(self.state.isMinor && self.state.isMinorSelected===0 && self.state.guardianName ===''){
+    } else if (self.state.isMinor && self.state.isMinorSelected === 0 && self.state.guardianName === '') {
       alert('Guardian name is Mandatory')
-    }
-    else if (self.state.mobileNumber === '') {
+    } else if (self.state.mobileNumber === "") {
       alert('Please enter mobile number')
-    }
-    else if(self.props.dashBoardReducer.uniID===null){
+    } else if (self.props.dashBoardReducer.uniID === null) {
       alert('Unit id is null')
-    }
-    else if(self.props.dashBoardReducer.assId===null){
+    } else if (self.props.dashBoardReducer.assId === null) {
       alert('Association id is null')
-    }
-    else {*/
-    self.editRelativeDetails()
+    } else {
+        self.editRelativeDetails()
 
-    // }
+     }
   }
 
   async editRelativeDetails() {
     console.log('Props**',this.props,this.state);
-    console.log('hjhhjhjhj',this.state.mobileNumber,this.state.sendNum,this.state.cCode)
     let self = this;
 
-    let relationName=self.state.relationName==="" ||self.state.relationName ===null ? self.props.navigation.state.params.fmRltn :self.state.relationName
-  //let  cCodeSend=self.state.cCode==="" ||self.state.cCode ===null ? self.props.navigation.state.params.fmisdCode :self.state.cCode
-  //  let mobileNumber=self.state.sendNum==="" || self.state.sendNum ===null ? self.props.navigation.state.params.fmMobile :self.state.sendNum
-    let  isMinor=self.state.isMinor===false ? self.props.navigation.state.params.fmMinor :self.state.isMinor
-        let firstName=self.state.firstName===""||  self.state.firstName ===null ? self.props.navigation.state.params.fmName :self.state.firstName
-    let lastName=self.state.lastName==="" || self.state.lastName ===null ? self.props.navigation.state.params.fmlName :self.state.lastName
-    let imgUrl=self.state.imageUrl==="" || self.state.imageUrl ===null ? self.props.navigation.state.params.fmImgName :self.state.imageUrl
-    let guardianName=self.state.guardianName==="" || self.state.cCode ===null ? self.props.navigation.state.params.fmGurName :self.state.guardianName
-
     let mobCode = this.state.mobileNumber.split('')
-    console.log('hhghfh',mobCode)
+    console.log('MobCode Array',mobCode)
     let cCodeSend=this.state.cCode
     if(mobCode[0]==='+'){
       cCodeSend=''
     }
+    else{
+      cCodeSend='+91'
+    }
 
     let input = {
-      "FMName"    :firstName,
+      "FMName"    :self.state.firstName,
       "FMMobile"  : self.state.mobileNumber,
       "FMISDCode" : cCodeSend,
       "UNUnitID"  : self.props.dashBoardReducer.uniID,
-      "FMRltn"    : relationName,
+      "FMRltn"    : self.state.relationName,
       "ASAssnID"  : self.props.dashBoardReducer.assId,
-      "FMImgName" :imgUrl ,
-      "FMMinor"   :isMinor,
-      "FMLName"   : lastName,
-      "FMGurName" : guardianName,
+      "FMImgName" :self.state.imageUrl ,
+      "FMMinor"   :self.state.isMinor,
+      "FMLName"   : self.state.lastName,
+      "FMGurName" : self.state.guardianName,
       "MEMemID":self.props.navigation.state.params.meMemID,
       "FMID":self.props.navigation.state.params.fmid
     };
@@ -447,6 +531,8 @@ class MyFamilyEdit extends Component {
     console.log('Stat in Add family', stat,input)
     if (stat.success) {
       try {
+      //  this.deleteImage()
+
         this.props.navigation.goBack()
       } catch (err) {
         console.log('Error in adding Family Member')

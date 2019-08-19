@@ -1,5 +1,6 @@
 import {Platform, StyleSheet} from "react-native"
 import base from "../../../../base";
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 const Style = StyleSheet.create({
   container:{
@@ -17,9 +18,11 @@ const Style = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? 20 : 0,
   },
   backIcon:{
-    width: 15,
-    height: 15,
-    marginLeft: 10
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("2%"),
+    height: hp("2%"),
+    marginLeft:10
   },
   nextView:{
     width: '30%', alignItems: 'flex-end'
@@ -58,7 +61,8 @@ const Style = StyleSheet.create({
     fontSize: 16, color: base.theme.colors.primary
   },
   subMainView:{
-    height: '72%', width: '100%', alignItems: 'center'
+    height: '64%', width: '100%', alignItems: 'center',
+    marginBottom:100
   },
   textInputView:{
     height: '15%', width: '90%', marginTop: 20,

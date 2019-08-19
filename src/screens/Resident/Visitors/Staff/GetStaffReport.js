@@ -148,12 +148,14 @@ class GetStaffReport extends React.Component {
 
     async getTheReport(props) {
         let self = this;
-        console.log('Get Date',this.props.staffReducer)
+        console.log('Get Date',this.props.staffReducer,this.props.userReducer)
         let input = {
             "ASAssnID": this.props.userReducer.SelectedAssociationID,
             "WKWorkID": this.props.staffReducer.staffId.toString(),
             "FromDate":this.props.staffReducer.startDate,
-            "ToDate":this.props.staffReducer.endDate
+            "ToDate":this.props.staffReducer.endDate,
+            "ACAccntID":this.props.userReducer.MyAccountID,
+            "UNUnitID":this.props.dashBoardReducer.uniID
         }
         console.log('Staff Data',input)
 
@@ -264,9 +266,15 @@ class GetStaffReport extends React.Component {
                 <View style={StaffReportStyle.mainContainer}>
                     <View style={StaffReportStyle.detailsMainView}>
                         <View style={StaffStyle.detailsLeftView}>
-                            <Image style={StaffStyle.staffImg}
-                                   source={{uri: base.utils.validate.handleNullImg(this.props.staffReducer.staffProfilePic)}}
-                            />
+                            {this.props.staffReducer.staffProfilePic === '' ?
+                                <Image style={StaffStyle.staffImg}
+                                       source={{uri: base.utils.strings.staffPlaceHolder}}
+                                />
+                                :
+                                <Image style={StaffStyle.staffImg}
+                                       source={{uri: base.utils.strings.imageUrl + this.props.staffReducer.staffProfilePic}}
+                                />
+                            }
                             <View style={StaffStyle.textView}>
                                 <Text style={StaffStyle.staffText}
                                       numberofLines={1} ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
@@ -427,6 +435,7 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         staffReducer: state.StaffReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
+        dashBoardReducer: state.DashboardReducer
     };
 };
 

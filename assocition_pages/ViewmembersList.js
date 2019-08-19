@@ -67,6 +67,9 @@ class Resident extends React.Component {
 
         console.log('get association', associationId)
 
+        console.log(
+          base.services.OyeLivingApi.getUnitListByAssoc(associationId)
+        );
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
         console.log('Get the details####', stat)
 
@@ -127,9 +130,7 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         try {
-            if (this.state.selectedRoleData === 0) {
-                alert("Please change the role");
-            } else {
+        
                 const {getDashUnits, selectedAssociation} = this.props;
                 console.log('Props in role managment', this.props);
 
@@ -151,7 +152,8 @@ class Resident extends React.Component {
                 let requestBody = {
                     ACMobile: mobNumber,
                     UNUnitID: this.state.selectedUser.unUnitID,
-                    MRMRoleID: this.state.selectedRoleData.selRolId
+                    MRMRoleID: this.state.selectedRoleData.selRolId,
+                    ASAssnID:this.props.selectedAssociation
                 };
                 console.log('reqBody role managment', requestBody)
 
@@ -171,9 +173,6 @@ class Resident extends React.Component {
                     .catch(error => {
                         console.log("err " + error);
                     });
-            }
-
-
         } catch (e) {
             console.log("STATE:", this.state);
         }
@@ -245,6 +244,7 @@ class Resident extends React.Component {
         console.log('Data inside####', this.state.residentData)
         let residentList = this.props.dashBoardReducer.residentList;
         const {params} = this.props.navigation.state;
+        let currentUserID = this.props.userReducer.MyAccountID;
         return (
             <View style={{flex: 1, flexDirection: "column"}}>
                 <NavigationEvents
@@ -364,7 +364,7 @@ class Resident extends React.Component {
                                                 </View>
 
                                                 <View style={{flex: 0.5, marginRight: hp("3%")}}>
-                                                    {item.uoRoleID === 1 || item.uoRoleID === 2 ? (
+                                                    {(item.uoRoleID === 1 || item.uoRoleID === 2) && currentUserID !== item.acAccntID ? (
                                                         this.selectRole(item, index)
                                                     ) : (
                                                         <Text> </Text>

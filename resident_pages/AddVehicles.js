@@ -170,12 +170,13 @@ class AddVehicle extends Component {
       })
           .then(response => response.json())
           .then(responseJson => {
-            console.log("Manas", responseJson);
-            this.props.navigation.navigate("MyVehicleListScreen");
-
-            /*if (responseJson.success) {
+            console.log("Manas", responseJson,payloadData);
+            if (responseJson.success) {
               this.props.navigation.navigate("MyVehicleListScreen");
-            } */
+            } 
+            else{
+              alert(responseJson.error.message);
+            }
           })
           .catch(error => Alert.alert("Data not saved", error));
     }
@@ -183,7 +184,7 @@ class AddVehicle extends Component {
 
   onSelect(index, value) {
     this.setState({
-      text: `${value}`
+      text: `${value}`,
     });
   }
 

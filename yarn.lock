@@ -4404,7 +4404,7 @@ lodash@4.17.14:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
 
-lodash@^4.17.15:
+lodash@^4.17.14:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -4975,18 +4975,19 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-base-shoutem-theme@GeekyAnts/theme#master:
-  version "0.2.3"
-  resolved "https://codeload.github.com/GeekyAnts/theme/tar.gz/51fcc2334ca225bdcc7a4cb2efcacc7bcbf3e2ef"
+native-base-shoutem-theme@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/native-base-shoutem-theme/-/native-base-shoutem-theme-0.3.0.tgz#9431b52cca7af9db2e2d0f5a864acb48d48dc4de"
+  integrity sha512-guf5IKeMaQERJlD/QYlgxnsrxCeKNqC4vGwFyA8OetanxGt+oNxR5SQhLxM28CIS1D4OCqVl+u8znBdlqsIkZQ==
   dependencies:
     hoist-non-react-statics "^1.0.5"
     lodash "4.17.11"
     prop-types "^15.5.10"
 
-native-base@^2.12.2:
-  version "2.12.2"
-  resolved "https://registry.yarnpkg.com/native-base/-/native-base-2.12.2.tgz#09c0a34d60d14435c53c60bc53568ca458f6c631"
-  integrity sha512-LMSdIJq110Lzn9mJNawNwYQdGjHqtwPdYIwlXXvgVHIhu8115+fcd5wQDDxWpKmmAPvJsLrKrhLgpWywRxYEfQ==
+native-base@^2.13.1:
+  version "2.13.4"
+  resolved "https://registry.yarnpkg.com/native-base/-/native-base-2.13.4.tgz#c1752d0bb016355b088adc5d6790b1dd678864ac"
+  integrity sha512-qgGW8qWFGVRnfPUgEgN/RC+8uM417H2rH+S9V8+Gg/3ef8RYcSc9wrrX2f+OauSvgfvnWwrPeFPzkBNp7iu3PQ==
   dependencies:
     blueimp-md5 "^2.5.0"
     clamp "^1.0.1"
@@ -4995,8 +4996,8 @@ native-base@^2.12.2:
     eslint-config-prettier "^6.0.0"
     fs-extra "^2.0.0"
     jest-react-native "^18.0.0"
-    lodash "4.17.11"
-    native-base-shoutem-theme GeekyAnts/theme#master
+    lodash "^4.17.14"
+    native-base-shoutem-theme "0.3.0"
     opencollective-postinstall "^2.0.2"
     print-message "^2.1.0"
     prop-types "^15.5.10"
@@ -6019,13 +6020,13 @@ react-native-file-viewer@^1.0.10:
   resolved "https://registry.yarnpkg.com/react-native-file-viewer/-/react-native-file-viewer-1.0.14.tgz#a2b8916882dea7de9f6580d70089c3f9ec20364f"
   integrity sha512-WW3gOH86XiiNATZGoxWK6FhD0LJ4lsmsv+1P+/FiSOSyDbkSPRlWgOYnW+5A4oW8+tFt3FxVnZ6kLOn2HnpBSA==
 
-react-native-firebase@^5.3.0:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/react-native-firebase/-/react-native-firebase-5.3.1.tgz#cfd295f562249f6fcf5e3fb2c62894575ece2c7f"
-  integrity sha512-eOuSqIl+DZPNmN5ivSLgkEcsl5m0sXxttoPBn3bOHfI+apEd4I8F+9fcbHerUFUvLzesXmHR9locjhR6IJ+q3w==
+react-native-firebase@^5.5.6:
+  version "5.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-firebase/-/react-native-firebase-5.5.6.tgz#17b34ec0d5dc39afaaf0e159fd160f6339e0f707"
+  integrity sha512-AdbpGwKEEiMFgaRar9WOPc8Li4sfxR//WOyNQzxYsQ1fpARC908j7feqy2gu73SLqk4wzIrnlfJWakOe0/Bclg==
   dependencies:
     opencollective-postinstall "^2.0.0"
-    prop-types "^15.6.2"
+    prop-types "^15.7.2"
 
 react-native-flash-message@^0.1.13:
   version "0.1.13"
@@ -6933,6 +6934,11 @@ rn-fetch-blob@^0.10.0, rn-fetch-blob@^0.10.15:
   dependencies:
     base-64 "0.1.0"
     glob "7.0.6"
+
+rn-progress-loader@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/rn-progress-loader/-/rn-progress-loader-1.0.8.tgz#c670a690106c0be0d4346f651da11409865cd14c"
+  integrity sha512-Cg071qopEOL0pSzN0EL2U7TCZ0Z25ZSRWi5387aqeTU/38JjTpAtDaZ2nJ/tfaM3fZqOHMeLr20FiOHB1RwQTQ==
 
 rn-viewpager@^1.2.9:
   version "1.2.9"

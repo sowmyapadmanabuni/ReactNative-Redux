@@ -57,29 +57,6 @@ class VehicleList extends Component {
             console.log(error)})
     }
     
-deleteCell = () => {
-  fetch(`http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/VehicleStatusUpdate`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-          },
-          body: JSON.stringify({
-            "VEIsActive"  : "False",
-            "VEID"        : this.state.dataSource.veid 
-            })
-      })
-          .then(response => response.json())
-          .then(responseJson => {
-            // Alert.alert("Data Deleted")
-            // if(this.state.dataSource.veIsActive == false ) {
-            //   this.setState({dataSource: responseJson})
-            // }
-          })
-          .catch(error=>
-            Alert.alert("Data not saved", error)
-          )
-  }
     renderItem = ({ item, index }) => {
       const swipeSettings = {
         autoClose : true,
@@ -103,7 +80,7 @@ deleteCell = () => {
                 ],
                 {
                   cancelable : true
-                }
+                } 
               );
             },
             text: 'Delete', type:'delete'
@@ -148,8 +125,12 @@ deleteCell = () => {
               </View>
             </View>
             <View style={styles.thirdRow}>
-              <View style={{  }}>
-                <TouchableOpacity onPress={()=> {this.props.navigation.navigate('EditVehiclesScreen', {
+              <View style={{flexDirection:'row'}}> 
+                <TouchableOpacity 
+                style={{
+                  right:15,
+                }}
+                onPress={()=> {this.props.navigation.navigate('EditVehiclesScreen', {
                   VehName:item.veMakeMdl.toString(),
                   VehNum:item.veRegNo.toString(),
                   VehStickerNum:item.veStickNo.toString(),
@@ -157,7 +138,14 @@ deleteCell = () => {
                   VehType:item.veType,
                   Veid: item.veid
                 })}}>
-                  <Image style={{width:hp('5%'), height:hp('5%')}} source={require('../icons/edit.png')}/>
+                  <Image style={{width:hp('3%'), height:hp('3%')}} source={require('../icons/edit.png')}/>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                 style={{
+                  right:10,
+                }}
+                onPress={()=> this.deleteVehicle(item.veid)}>
+                  <Image style={{width:hp('3%'), height:hp('3%')}} source={require('../icons/delete.png')}/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -166,6 +154,32 @@ deleteCell = () => {
         // </Swipeout>
         
       )
+    }
+
+    async deleteVehicle(vehicleId){
+          let self = this;
+
+          let detail = {
+            VEIsActive :"False",
+            VEID       : vehicleId
+          };
+
+          let stat = await base.services.OyeLivingApi.deleteVehicle(detail);
+
+          console.log("Stat in delete API:",stat);
+
+          try{
+              if(stat.success){
+                self.getVehicleList(); 
+              }
+              else{
+                alert("Something Went Wrong !!!")
+              }
+          }
+          catch(e){
+            console.log("Error:",e)
+          }
+
     }
     
   render() {
@@ -299,9 +313,11 @@ deleteCell = () => {
         
         <TouchableOpacity style= {[styles.floatButton]} 
                 onPress = {() => this.props.navigation.navigate('AddVehiclesScreen')}>
-                <View style={{ alignItems:'center', justifyContent:'center',aspectRatio:1,paddingBottom:hp('0.8%')}}>
-                  <Text style={{fontSize:hp('5%'), color:base.theme.colors.white, fontWeight:'700'}}>+</Text>
-                </View>
+                  <Image
+                  style={{height:hp('8%'),width:hp('8%'),top:10}}
+                  resizeMode={'contain'}
+                    source={require('../icons/add_btn.png')}
+                  />
         </TouchableOpacity>
       </View>
     );
@@ -391,13 +407,13 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,0,0,0)",
     alignItems: "center",
     justifyContent: "center",
-    width: hp('8%'),
+    width: hp('5%'),
     position: "absolute",
     bottom: 20,
     right: 20,
-    height: hp('8%'),
-    backgroundColor: "#FF8C00",
-    borderRadius: hp('5%'),
+    height: hp('5%'),
+    backgroundColor: "rgba(0,0,0,0)",
+    borderRadius: hp('2.5%'),
     // shadowColor: '#000000',
     shadowOffset: {
      width: 0,

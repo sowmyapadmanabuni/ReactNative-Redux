@@ -23,6 +23,9 @@ import {connect} from "react-redux";
 import ContactsWrapper from "react-native-contacts-wrapper"
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Style from './Style'
+import {Button} from "native-base";
+const RNFS = require('react-native-fs');
+
 
 
 class MyFamily extends Component {
@@ -79,12 +82,10 @@ class MyFamily extends Component {
                     </TouchableOpacity>
                     <View style={{width: '30%', alignItems: 'center'}}>
                         <Image source={require("../../../../../icons/headerLogo.png")}
-                               style={{width: 50, height: 50}}/>
+                               style={{ width: wp("24%"),
+                                   height: hp("10%")}}/>
                     </View>
                     <View style={Style.nextView}>
-                        <TouchableOpacity style={Style.nextButton} onPress={() => this.validation()}>
-                            <Text style={Style.nextText}>NEXT</Text>
-                        </TouchableOpacity>
                     </View>
 
                 </View>
@@ -115,7 +116,7 @@ class MyFamily extends Component {
                             inputContainerStyle={{}}
                             //  label="Select Relationship"
                             baseColor="rgba(0, 0, 0, 1)"
-                            placeholder="Relationship*"
+                            placeholder="Relationship *"
                             placeholderTextColor={base.theme.colors.black}
                             labelHeight={hp("4%")}
                             containerStyle={{
@@ -164,7 +165,7 @@ class MyFamily extends Component {
                                     {this.state.minorProps.map((obj, i) => {
                                         let onPress = (value, index) => {
                                             this.setState({
-                                                isMinorSelected: value
+                                                isMinorSelected: value,
                                             })
                                         };
                                         return (
@@ -233,6 +234,50 @@ class MyFamily extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        <View style={{
+                                flexDirection: "row",
+                                justifyContent: "space-around",
+                                marginTop: hp("4%"),
+                                marginBottom: hp("2%"),
+                                marginHorizontal: hp("2%")
+                         }}>
+                            <TouchableOpacity
+                                bordered
+                                dark
+                                style={{  width: wp("22%"),
+                                    height: hp("4%"),
+                                    borderRadius: hp("2.5%"),
+                                    borderWidth: hp("0.2%"),
+                                    borderColor: "#EF3939",
+                                    backgroundColor: "#EF3939",
+                                    alignItems:'center',
+                                    justifyContent: "center"}}
+                                onPress={() => {
+                                    this.resetAllFields()
+                                }}
+                            >
+                                <Text style={{ color: "white",
+                                    fontWeight: "600",
+                                    fontSize: hp("2%")}}>Reset</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                bordered
+                                dark
+                                style={{width: wp("22%"),
+                                    height: hp("4%"),
+                                    borderRadius: hp("2.5%"),
+                                    borderWidth: hp("0.2%"),
+                                    borderColor: "orange",
+                                    backgroundColor: "orange",
+                                    alignItems:'center',
+                                    justifyContent: "center", marginLeft:20}}
+                                onPress={() => this.validation()}
+                            >
+                                <Text style={{ color: "white",
+                                    fontWeight: "600",
+                                    fontSize: hp("2%")}}>Add</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -267,6 +312,24 @@ class MyFamily extends Component {
             }
         });
 
+    }
+    resetAllFields(){
+
+        //Should we need to show alert ?
+
+        this.setState({
+            relationName: "",
+            cCode: '',
+            mobileNumber: "",
+            sendNum: "",
+            isMinor: false,
+            firstName: "",
+            lastName: "",
+            isMinorSelected: 0,
+            guardianName: "",
+            relativeImage: "",
+            imageUrl: "",
+        })
     }
 
     async uploadImage(response) {
@@ -313,6 +376,26 @@ class MyFamily extends Component {
                 isMinor: false
             })
         }
+    }
+
+    deleteImage() {
+        let filePath = this.state.photo;
+        RNFS.exists(filePath).then((result) => {
+            if (result) {
+                return RNFS.unlink(filePath).then(() => {
+                    console.log("File deleted", filePath)
+                    RNFS.scanFile(filePath)
+                        .then(() => {
+                            console.log('scanned');
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
+        })
     }
 
     async getTheContact() {
@@ -421,7 +504,7 @@ class MyFamily extends Component {
     }
 
     async addRelativeDetails(title, message) {
-        console.log('Props**', this.props);
+        console.log('Props**', this.props,this.state);
         let self = this;
         let mobNum = self.state.sendNum
         let cCode = self.state.cCode
@@ -448,6 +531,7 @@ class MyFamily extends Component {
             if (stat) {
             try {
                 if (stat.success) {
+                   // self.deleteImage()
                     self.props.navigation.navigate('MyFamilyList')
                 } else {
                     this.showAlert(stat.error.message,true)

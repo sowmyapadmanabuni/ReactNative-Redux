@@ -238,7 +238,7 @@ class NotificationScreen extends Component {
           )
           .then(res => {
             let responseData = res.data.data;
-            console.log(responseData, "responseData");
+            // console.log(responseData, "responseData");
 
             this.setState(
               (prevState, newEmployer) => ({
