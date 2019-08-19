@@ -21,6 +21,7 @@ import { NavigationEvents } from "react-navigation";
 import { Button } from "native-base";
 // import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
+import axios from "axios";
 
 class UnitList extends Component {
   static navigationOptions = {
@@ -79,13 +80,60 @@ class UnitList extends Component {
       .then(response => response.json())
       .then(responseJson => {
         console.log("Manas", responseJson);
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.data.unit,
-          error: responseJson.error || null,
-          loading: false
-        });
-        this.arrayholder = responseJson.data.unit;
+
+        if (responseJson.data.unit[0]) {
+          let blockId = responseJson.data.unit[0].blBlockID;
+          // console.log(blockId, "blockid");
+          axios
+            .get(
+              `https://${
+                this.props.oyeURL
+              }/oyeliving/api/v1/Block/GetBlockListByBlockID/${blockId}`,
+              {
+                headers: {
+                  " X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                  "Content-Type": "application/json"
+                }
+              }
+            )
+            .then(res => {
+              console.log(res.data.data, "blockdetails");
+              let blockName = res.data.data.blocksByBlockID[0].blBlkName;
+
+              let units = responseJson.data.unit;
+
+              let unitBlocks = [];
+
+              units.map(data => {
+                unitBlocks.push({
+                  ...data,
+                  blockName: blockName
+                });
+              });
+
+              this.setState({
+                isLoading: false,
+                // dataSource: responseJson.data.unit,
+                dataSource: unitBlocks,
+                error: responseJson.error || null,
+                loading: false
+              });
+              this.arrayholder = unitBlocks;
+              // this.arrayholder = responseJson.data.unit;
+            })
+            .catch(error => {
+              this.setState({ loading: false });
+              console.log(error);
+            });
+        } else {
+          this.setState({
+            isLoading: false,
+            dataSource: responseJson.data.unit,
+            error: responseJson.error || null,
+            loading: false
+          });
+          this.arrayholder = responseJson.data.unit;
+        }
       })
       .catch(error => {
         this.setState({ loading: false });
@@ -94,6 +142,7 @@ class UnitList extends Component {
   };
 
   renderItem = ({ item, index }) => {
+    console.log(item, "item");
     return (
       <View style={styles.tableView}>
         <View style={styles.lineAboveAndBelowFlatList} />
@@ -104,7 +153,14 @@ class UnitList extends Component {
                 style={styles.memberDetailIconImageStyle}
                 source={require("../icons/buil.png")}
               />
-              <Text style={styles.blockNameTextStyle}>{item.unUniName}</Text>
+              <View style={{ flexDirection: "column" }}>
+                <Text style={styles.blockNameTextStyle}>{item.unUniName}</Text>
+                {item.blockName ? (
+                  <Text style={styles.blockNameTextStyle}>
+                    {item.blockName}
+                  </Text>
+                ) : null}
+              </View>
             </View>
             <View style={styles.noOfUnitsFlex}>
               <View style={styles.viewForNoOfUnitsText}>
@@ -130,7 +186,8 @@ class UnitList extends Component {
                       this.props.navigation.navigate("RegisterUser", {
                         unitList: item,
                         AssnId: this.props.navigation.state.params.id,
-                        associationName: this.props.navigation.state.params.associationName
+                        associationName: this.props.navigation.state.params
+                          .associationName
                       })
                     }
                   >
@@ -154,36 +211,36 @@ class UnitList extends Component {
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.goBack();
-                    }}
+                  onPress={() => {
+                    this.props.navigation.goBack();
+                  }}
                 >
                   <View
-                      style={{
-                        height: hp("4%"),
-                        width: wp("15%"),
-                        alignItems: "flex-start",
-                        justifyContent: "center"
-                      }}
+                    style={{
+                      height: hp("4%"),
+                      width: wp("15%"),
+                      alignItems: "flex-start",
+                      justifyContent: "center"
+                    }}
                   >
                     <Image
-                        resizeMode="contain"
-                        source={require("../icons/back.png")}
-                        style={styles.viewDetails2}
+                      resizeMode="contain"
+                      source={require("../icons/back.png")}
+                      style={styles.viewDetails2}
                     />
                   </View>
                 </TouchableOpacity>
               </View>
               <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
               >
                 <Image
-                    style={[styles.image1]}
-                    source={require("../icons/headerLogo.png")}
+                  style={[styles.image1]}
+                  source={require("../icons/headerLogo.png")}
                 />
               </View>
               <View style={{ flex: 0.2 }}>
@@ -210,47 +267,47 @@ class UnitList extends Component {
           // onWillBlur={payload => this.getUnitList()}
         />
         <SafeAreaView style={{ backgroundColor: "orange" }}>
-            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-              <View style={styles.viewDetails1}>
-                <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.goBack();
-                    }}
-                >
-                  <View
-                      style={{
-                        height: hp("4%"),
-                        width: wp("15%"),
-                        alignItems: "flex-start",
-                        justifyContent: "center"
-                      }}
-                  >
-                    <Image
-                        resizeMode="contain"
-                        source={require("../icons/back.png")}
-                        style={styles.viewDetails2}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
               >
-                <Image
-                    style={[styles.image1]}
-                    source={require("../icons/headerLogo.png")}
-                />
-              </View>
-              <View style={{ flex: 0.2 }}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-              </View>
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
 
         <Text style={styles.titleOfScreen}>Unit List</Text>
 
@@ -320,18 +377,17 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
-   image1: {
+  image1: {
     width: wp("22%"),
     height: hp("12%"),
     marginRight: hp("3%")
   },
 
- 
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",
