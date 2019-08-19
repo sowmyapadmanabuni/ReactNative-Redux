@@ -23,9 +23,6 @@ import { StatusBarPlaceHolder } from "../ReactNative-Redux/src/components/Status
 class RootApp extends Component {
   render() {
     $.logTitle("O Y E S P A C E - R E S I D E N T");
-    $.logTable([{name:"Anooj",department:"Mobile"},{name:"Sarthak",department:"R & D"},{name:"Jyothi",department:"Mobile"}])
-
-
     return (
       <Provider store={store}>
         <CheckInternet />
