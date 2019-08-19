@@ -42,7 +42,6 @@ class MobileValid extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading1: true,
 
             Mobilenumber: "",
             OTPNumber: "",
@@ -56,9 +55,9 @@ class MobileValid extends Component {
     componentDidMount() {
         setTimeout(() => {
             this.setState({
-                isLoading1: false
+                isLoading: false
             });
-        }, 3000);
+        }, 1500);
     }
 
     handleMobile = mobilenumber => {
@@ -181,13 +180,13 @@ class MobileValid extends Component {
                                         </View>
                                     </View>
 
-                                    {this.state.isLoading ? (
+                                    {/* {this.state.isLoading ? (
                                         <View style={{ height: hp("5%") }}>
                                             <ActivityIndicator />
                                         </View>
                                     ) : (
                                             <Text style={{ height: hp("5%") }}> </Text>
-                                        )}
+                                        )} */}
                                     <View style={styles.mobilenumberverification}>
                                         <Text style={{ fontSize: hp("2%") }}>
                                             Enter your mobile number to get{" "}

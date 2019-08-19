@@ -124,6 +124,7 @@ class EditProfile extends Component {
         const reg = /^[0]?[6789]\d{9}$/
         const OyeFullName = /^[a-zA-Z ]+$/
         const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
+        console.log("Mobile number, alt number",mobilenumber, alternatemobilenumber)
 
         if (firstname.length == 0) {
             Alert.alert("First name cannot not be empty")
@@ -164,7 +165,10 @@ class EditProfile extends Component {
         } else if (!alternateemail.length == 0) {
             this.alternateEmail()
             return
-        } else {
+        }else if(mobilenumber === alternatemobilenumber){
+            Alert.alert("Primary and alternate mobile number should be different")
+        }
+         else {
             this.editProfileUpdate()
         }
     }
@@ -235,7 +239,7 @@ class EditProfile extends Component {
         cca3 = this.state.cca3;
         callingCode1 = this.state.callingCode1;
         let countryName = this.state.countryName === "" ? 'IN' : this.state.countryName;
-        let countryName1 = this.state.countryName1;
+        let countryName1 = this.state.countryName1 === "" ? 'IN' : this.state.countryName1;
 
         // photo = this.state.photo
         // console.log(data)
@@ -400,24 +404,20 @@ class EditProfile extends Component {
 
     }
 
-    deleteImage() {
-        let filePath = this.state.photo;
-        RNFS.exists(filePath).then((result) => {
-            if (result) {
-                return RNFS.unlink(filePath).then(() => {
-                    console.log("File deleted", filePath)
-                    RNFS.scanFile(filePath)
-                        .then(() => {
-                            console.log('scanned');
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
-                }).catch((err) => {
-                    console.log(err)
-                })
-            }
+     deleteImage() {
+        let file = this.state.photo.split('///').pop();
+        const filePath = file.substring(0, file.lastIndexOf('/'));
+        console.warn("File Path: " + filePath);
+        console.warn("File to DELETE: " + file);
+        RNFS.readDir(filePath).then(files => {
+          for(let t of files) {
+            RNFS.unlink(t.path);
+          }
+  
         })
+        .catch(err => {
+          console.error(err)
+        });
     }
 
     static navigationOptions = {
@@ -498,9 +498,11 @@ class EditProfile extends Component {
             quality: 0.5,
             maxWidth: 250,
             maxHeight: 250,
+            cameraRoll: false,
             storageOptions: {
                 skipBackup: true,
-            }
+                path: 'tmp_files'
+              },
         };
         //showImagePicker
         ImagePicker.showImagePicker(options, response => {
@@ -583,6 +585,7 @@ class EditProfile extends Component {
                         </View>
                         <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
                     </SafeAreaView>
+                    
                     <KeyboardAwareScrollView>
                         <View style={styles.mainContainer}>
                             <View style={styles.textWrapper}>
@@ -816,7 +819,7 @@ class EditProfile extends Component {
                                                 }}
                                             >
                                                 <Text style={{color: "black", fontSize: hp("2%")}}>
-                                                    {this.state.countryName1 === "" ? "91" : this.state.callingCode1}
+                                                    {this.state.countryName1 === "" ? "+91" : this.state.callingCode1}
                                                 </Text>
                                             </View>
 

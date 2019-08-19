@@ -334,7 +334,7 @@ class OTPVerification extends Component {
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.goBack();
+                      this.props.navigation.navigate('MobileValid');
                     }}
                 >
                   <View

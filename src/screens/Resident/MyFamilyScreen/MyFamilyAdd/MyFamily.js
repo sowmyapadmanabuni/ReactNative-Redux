@@ -64,6 +64,10 @@ class MyFamily extends Component {
             guardianName: "",
             relativeImage: "",
             imageUrl: "",
+            photo: null,
+            photoDetails: null,
+            isPhotoAvailable: false,
+            filePath: '',
         }
     }
 
@@ -164,6 +168,7 @@ class MyFamily extends Component {
                                 onChangeText={(text) => this.setState({ firstName: text })}
                                 value={this.state.firstName}
                                 placeholder="First Name"
+                                keyboardType="ascii-capable"
                                 placeholderTextColor={base.theme.colors.grey}
                             />
                         </View>
@@ -175,8 +180,8 @@ class MyFamily extends Component {
                                 onChangeText={(text) => this.setState({ lastName: text })}
                                 value={this.state.lastName}
                                 placeholder="Last Name"
+                                keyboardType="ascii-capable"
                                 placeholderTextColor={base.theme.colors.grey}
-                                keyboardType={'default'}
                             />
                         </View>
                         {this.state.isMinor ?
@@ -324,12 +329,14 @@ class MyFamily extends Component {
     setImage() {
         console.log('Set Image')
         const options = {
-            quality: (Platform.OS === 'ios' ? 0 : 1),
-            maxWidth: 1000,
-            maxHeight: 1000,
-            storageOptons: {
-                skipBackup: true
-            }
+            quality: 0.5,
+            maxWidth: 250,
+            maxHeight: 250,
+            cameraRoll: false,
+            storageOptions: {
+                skipBackup: true,
+                path: 'tmp_files'
+              },
         };
         let self = this;
         ImagePicker.showImagePicker(options, (response) => {
@@ -338,13 +345,12 @@ class MyFamily extends Component {
             } else if (response.customButton) {
             } else {
                 console.log('ImagePicker : ', response);
-                if (Platform.OS === 'ios') {
-                    console.log(response);
-                    self.uploadImage(response);
-                } else {
-                    console.log('response', response);
-                    self.uploadImage(response);
-                }
+                this.setState({
+                    photo: response.uri,
+                    photoDetails: response,
+                    isPhotoAvailable: true,
+                    imagePath: response.path
+                },()=>self.uploadImage(response));
 
             }
         });
@@ -416,23 +422,19 @@ class MyFamily extends Component {
     }
 
     deleteImage() {
-        let filePath = this.state.photo;
-        RNFS.exists(filePath).then((result) => {
-            if (result) {
-                return RNFS.unlink(filePath).then(() => {
-                    console.log("File deleted", filePath)
-                    RNFS.scanFile(filePath)
-                        .then(() => {
-                            console.log('scanned');
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
-                }).catch((err) => {
-                    console.log(err)
-                })
-            }
+        let file = this.state.photo.split('///').pop();
+        const filePath = file.substring(0, file.lastIndexOf('/'));
+        console.warn("File Path: " + filePath);
+        console.warn("File to DELETE: " + file);
+        RNFS.readDir(filePath).then(files => {
+          for(let t of files) {
+            RNFS.unlink(t.path);
+          }
+  
         })
+        .catch(err => {
+          console.error(err)
+        });
     }
 
     async getTheContact() {
@@ -568,7 +570,9 @@ class MyFamily extends Component {
         if (stat) {
             try {
                 if (stat.success) {
-                    // self.deleteImage()
+                    if(Platform.OS === "android"){
+                        self.deleteImage()
+                    }
                     self.props.navigation.navigate('MyFamilyList')
                 } else {
                     this.showAlert(stat.error.message, true)
