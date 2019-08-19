@@ -1,7 +1,9 @@
-import {Platform, StyleSheet} from "react-native"
+import {Platform, StyleSheet, Dimensions} from "react-native"
 import base from "../../../../base";
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen"
 const Style = StyleSheet.create({
   container:{
     height: '100%', width: '100%',alignItems:'center'
@@ -72,7 +74,47 @@ const Style = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between'
-  }
+  },
+  titleOfScreen: {
+    marginTop:hp("1.6%"),
+    textAlign: 'center',
+    fontSize: hp('2%'),
+    fontWeight:'bold',
+    color:'#ff8c00',
+    marginBottom: hp("1.6%"),
+  },
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: Dimensions.get("screen").width,
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+   image1: {
+    width: wp("22%"),
+    height: hp("12%"),
+    marginRight: hp("3%")
+  },
+
+ 
+  viewDetails1: {
+    flex: 0.3,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 3
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
 
 });
 

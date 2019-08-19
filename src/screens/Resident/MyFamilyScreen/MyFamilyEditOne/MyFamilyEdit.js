@@ -85,27 +85,56 @@ class MyFamilyEdit extends Component {
 
     let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number";
     return (
-        <SafeAreaView style={Style.container}>
-          <View style={Style.headerStyles}>
-            <TouchableOpacity style={{width: '30%'}} onPress={() => {
-              this.props.navigation.goBack()
-            }}>
-              <Image source={require("../../../../../icons/backBtn.png")}
-                     style={Style.backIcon}/>
-            </TouchableOpacity>
-            <View style={{width: '30%', alignItems: 'center'}}>
-              <Image source={require("../../../../../icons/headerLogo.png")}
-                     style={{width: 50, height: 50}}/>
-            </View>
-            <View style={Style.nextView}>
+      <View style={Style.container}>
 
-            </View>
+      <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
+          <View style={[Style.viewStyle1, { flexDirection: "row" }]}>
+              <View style={Style.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                          this.props.navigation.goBack();
+                      }}
+                  >
+                      <View
+                          style={{
+                              height: hp("4%"),
+                              width: wp("15%"),
+                              alignItems: 'flex-start',
+                              justifyContent: "center"
+                          }}
+                      >
+                          <Image
+                              resizeMode="contain"
+                              source={require("../../../../../icons/backBtn.png")}
+                              style={Style.viewDetails2}
+                          />
+                      </View>
+                  </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
+                  }}
+              >
+                  <Image
+                      style={[Style.image1]}
+                      source={require("../../../../../icons/headerLogo.png")}
+                  />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+      </SafeAreaView>
 
-          </View>
-          <View style={Style.addFamilyMem}>
-            <Text style={Style.addFamilyText}>Edit Family Member</Text>
-          </View>
-          <KeyboardAwareScrollView>
+
+      <Text style={Style.titleOfScreen}>Edit Family Member</Text>
+
+
+<KeyboardAwareScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                 {this.state.relativeImage ==='' ?
@@ -296,7 +325,8 @@ class MyFamilyEdit extends Component {
               </View>
             </View>
           </KeyboardAwareScrollView>
-        </SafeAreaView>
+        
+        </View>
     )
   }
 

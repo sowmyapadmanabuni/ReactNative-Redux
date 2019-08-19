@@ -150,7 +150,7 @@ class UnitList extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -209,7 +209,7 @@ class UnitList extends Component {
           onDidFocus={payload => this.getUnitList()}
           // onWillBlur={payload => this.getUnitList()}
         />
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
+        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity

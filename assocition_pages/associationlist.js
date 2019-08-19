@@ -204,7 +204,7 @@ class BlockDetail extends React.Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
@@ -244,7 +244,7 @@ class BlockDetail extends React.Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
         </SafeAreaView>
 
           <Text style={styles.titleOfScreenStyle}>Join association</Text>
@@ -258,7 +258,7 @@ class BlockDetail extends React.Component {
     return (
       <View style={styles.mainView}>
         {/* <Header /> */}
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
+        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
@@ -298,7 +298,7 @@ class BlockDetail extends React.Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
         </SafeAreaView>
 
         <NavigationEvents
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     marginBottom: hp("1%")
   },
   icon: {
-    color: "orange"
+    color: "#ff8c00"
   },
   inputItem: {
     marginTop: wp("1%"),
@@ -565,8 +565,8 @@ const styles = StyleSheet.create({
     height: hp("3.6%"),
     borderRadius: hp("2%"),
     //borderWidth: hp("0.2%"),
-    borderColor: "orange",
-    backgroundColor: "orange",
+    borderColor: "#ff8c00",
+    backgroundColor: "#ff8c00",
     justifyContent: "center"
   },
   addUnitText: {
