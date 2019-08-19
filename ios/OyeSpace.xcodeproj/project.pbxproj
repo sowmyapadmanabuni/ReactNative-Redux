@@ -488,13 +488,6 @@
 			remoteGlobalIDString = D8D93E6420161A7F00A39331;
 			remoteInfo = reactnativeuilib;
 		};
-		FDF07766230A679D004C0482 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 117405FA1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDFTests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1061,11 +1054,7 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-<<<<<<< HEAD
 				A42CB1CF2306BE780005DE35 /* RNHTMLtoPDFTests.xctest */,
-=======
-				FDF07767230A679D004C0482 /* RNHTMLtoPDFTests.xctest */,
->>>>>>> fe4c0ee67c4ac807120f2b4ba5abe68c6c765e7f
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1685,13 +1674,6 @@
 			fileType = archive.ar;
 			path = libreactnativeuilib.a;
 			remoteRef = FDC53A8E229FABA80095F5B5 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		FDF07767230A679D004C0482 /* RNHTMLtoPDFTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = FDF07766230A679D004C0482 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
