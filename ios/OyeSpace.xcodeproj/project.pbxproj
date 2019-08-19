@@ -83,7 +83,6 @@
 		F12C89A5946E4D56B497B889 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2328DDF9544647CC922A4556 /* Ionicons.ttf */; };
 		F6AC63031EDA4ADEACA79D56 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22FE5082DA494D888B11412A /* Entypo.ttf */; };
 		F86D2FF2019D49F593E73243 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 102944E29C634BF6AAFA7678 /* FontAwesome5_Regular.ttf */; };
-		FD0D64F922FC60C60066D973 /* libRNViewShot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F14D5EA22D5C9FE00306418 /* libRNViewShot.a */; };
 		FD2B2A64223F841A0061AB68 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2B2A61223F84080061AB68 /* libRNSVG.a */; };
 		FD57EA5322E98F37009A1AC7 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD57EA4D22E98F05009A1AC7 /* libRNSpinkit.a */; };
 		FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */; };
@@ -335,13 +334,6 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		9F14D5E922D5C9FE00306418 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F14D5B322D5C9FD00306418 /* RNViewShot.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNViewShot;
-		};
 		9F675E3922E5C98800D175F9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9F675E3322E5C98700D175F9 /* ContactsWrapper.xcodeproj */;
@@ -369,6 +361,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNGestureHandler;
+		};
+		A42CB1CA2306BE780005DE35 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A1E6D7B221E0EB2A006FE22F /* RNGestureHandler.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5C32A36220C603B000FFB8D;
+			remoteInfo = "RNGestureHandler-tvOS";
+		};
+		A42CB1CE2306BE780005DE35 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 117405FA1B9954BF004425E1;
+			remoteInfo = RNHTMLtoPDFTests;
 		};
 		ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -581,7 +587,6 @@
 		962DB82BDD1249AB8E425B06 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		9829F0B4AFED38BA79B920FC /* Pods-OyeSpaceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OyeSpaceTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OyeSpaceTests/Pods-OyeSpaceTests.release.xcconfig"; sourceTree = "<group>"; };
 		9F06026B22C4FF5200DA17C8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		9F14D5B322D5C9FD00306418 /* RNViewShot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNViewShot.xcodeproj; path = "../node_modules/react-native-view-shot/ios/RNViewShot.xcodeproj"; sourceTree = "<group>"; };
 		9F675E3322E5C98700D175F9 /* ContactsWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ContactsWrapper.xcodeproj; path = "../node_modules/react-native-contacts-wrapper/ios/ContactsWrapper.xcodeproj"; sourceTree = "<group>"; };
 		9FCBB84822FB060100C2E0AF /* RNShare.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShare.xcodeproj; path = "../node_modules/react-native-share/ios/RNShare.xcodeproj"; sourceTree = "<group>"; };
 		9FCBB88522FB068100C2E0AF /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -633,7 +638,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD0D64F922FC60C60066D973 /* libRNViewShot.a in Frameworks */,
 				9FCBB88822FB068F00C2E0AF /* MessageUI.framework in Frameworks */,
 				9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */,
 				9FCBB88422FB063300C2E0AF /* libRNShare.a in Frameworks */,
@@ -909,7 +913,6 @@
 				9FCBB84822FB060100C2E0AF /* RNShare.xcodeproj */,
 				FD57EA1522E98F05009A1AC7 /* RNSpinkit.xcodeproj */,
 				9F675E3322E5C98700D175F9 /* ContactsWrapper.xcodeproj */,
-				9F14D5B322D5C9FD00306418 /* RNViewShot.xcodeproj */,
 				FD2B2A5B223F84080061AB68 /* RNSVG.xcodeproj */,
 				C90F2A7D2202D2180093B309 /* RNFS.xcodeproj */,
 				A10286B321E3730300CB1BC5 /* RNImagePicker.xcodeproj */,
@@ -971,14 +974,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9F14D5B422D5C9FD00306418 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9F14D5EA22D5C9FE00306418 /* libRNViewShot.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		9F675E3422E5C98700D175F9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1021,7 +1016,7 @@
 			isa = PBXGroup;
 			children = (
 				A1E6D7B721E0EB2A006FE22F /* libRNGestureHandler.a */,
-				04A8F7022306C3DD00582740 /* libRNGestureHandler-tvOS.a */,
+				A42CB1CB2306BE780005DE35 /* libRNGestureHandler-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1073,7 +1068,7 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-				04A8F7062306C3DD00582740 /* RNHTMLtoPDFTests.xctest */,
+				A42CB1CF2306BE780005DE35 /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1286,10 +1281,6 @@
 				{
 					ProductGroup = FD2B2A5C223F84080061AB68 /* Products */;
 					ProjectRef = FD2B2A5B223F84080061AB68 /* RNSVG.xcodeproj */;
-				},
-				{
-					ProductGroup = 9F14D5B422D5C9FD00306418 /* Products */;
-					ProjectRef = 9F14D5B322D5C9FD00306418 /* RNViewShot.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1545,13 +1536,6 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		9F14D5EA22D5C9FE00306418 /* libRNViewShot.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNViewShot.a;
-			remoteRef = 9F14D5E922D5C9FE00306418 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		9F675E3A22E5C98800D175F9 /* libRCTContactsWrapper.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1578,6 +1562,20 @@
 			fileType = archive.ar;
 			path = libRNGestureHandler.a;
 			remoteRef = A1E6D7B621E0EB2A006FE22F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A42CB1CB2306BE780005DE35 /* libRNGestureHandler-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNGestureHandler-tvOS.a";
+			remoteRef = A42CB1CA2306BE780005DE35 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A42CB1CF2306BE780005DE35 /* RNHTMLtoPDFTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNHTMLtoPDFTests.xctest;
+			remoteRef = A42CB1CE2306BE780005DE35 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */ = {
@@ -1927,7 +1925,6 @@
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ui-lib/lib/ios/reactnativeuilib/**",
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-view-shot",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1974,7 +1971,6 @@
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-ui-lib/lib/ios/reactnativeuilib/**",
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-view-shot",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2041,7 +2037,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2087,7 +2083,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

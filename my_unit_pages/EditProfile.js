@@ -167,8 +167,6 @@ class EditProfile extends Component {
         } else {
             this.editProfileUpdate()
         }
-
-        //   else {}
     }
 
     alternateMobile = () => {
@@ -402,24 +400,20 @@ class EditProfile extends Component {
 
     }
 
-    deleteImage() {
-        let filePath = this.state.photo;
-        RNFS.exists(filePath).then((result) => {
-            if (result) {
-                return RNFS.unlink(filePath).then(() => {
-                    console.log("File deleted", filePath)
-                    RNFS.scanFile(filePath)
-                        .then(() => {
-                            console.log('scanned');
-                        })
-                        .catch(err => {
-                            console.log(err);
-                        });
-                }).catch((err) => {
-                    console.log(err)
-                })
-            }
+     deleteImage() {
+        let file = this.state.photo.split('///').pop();
+        const filePath = file.substring(0, file.lastIndexOf('/'));
+        console.warn("File Path: " + filePath);
+        console.warn("File to DELETE: " + file);
+        RNFS.readDir(filePath).then(files => {
+          for(let t of files) {
+            RNFS.unlink(t.path);
+          }
+  
         })
+        .catch(err => {
+          console.error(err)
+        });
     }
 
     static navigationOptions = {
@@ -500,9 +494,11 @@ class EditProfile extends Component {
             quality: 0.5,
             maxWidth: 250,
             maxHeight: 250,
+            cameraRoll: false,
             storageOptions: {
                 skipBackup: true,
-            }
+                path: 'tmp_files'
+              },
         };
         //showImagePicker
         ImagePicker.showImagePicker(options, response => {
@@ -793,6 +789,7 @@ class EditProfile extends Component {
                                                 }}
                                             >
                                                 <CountryPicker
+                                                    hideAlphabetFilter={true}
                                                     onChange={value => {
                                                         console.log("CCA11:", value);
                                                         this.setState({

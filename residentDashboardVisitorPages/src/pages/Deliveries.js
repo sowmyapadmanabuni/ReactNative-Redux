@@ -49,11 +49,11 @@ class App extends React.Component {
       datetime: moment(new Date()).format("HH:mm:ss a"),
 
       //date picker
-      dobText: _dt, //year + '-' + month + '-' + date,
+      dobText: moment(_dt).format('YYYY-MM-DD'), //year + '-' + month + '-' + date,
       dobDate: _dt,
       isDateTimePickerVisible: false,
 
-      dobText1: _dt,
+      dobText1: moment(_dt).format('YYYY-MM-DD'),
       dobDate1: _dt,
       isDateTimePickerVisible1: false,
 
@@ -163,10 +163,7 @@ class App extends React.Component {
     } else {
       //http://apiuat.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID
       fetch(
-          `http://${
-              this.props.oyeURL
-          }/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
-
+          `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
           {
             method: "POST",
             headers: {
@@ -186,10 +183,7 @@ class App extends React.Component {
           .then(responseJson => {
             //var count = Object.keys(responseJson.data.visitorlogbydate).length;
             //console.log("fsbkfh", count);
-            console.log(
-                responseJson,
-                "*******************************************"
-            );
+            console.log(  "Deliveries*******************************************", responseJson,this.state.dobText,this.state.dobText1,this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
             if(responseJson.success){
               this.setState({
                 isLoading: false,
@@ -221,17 +215,18 @@ class App extends React.Component {
     }
   };
 
-  renderItem = ({ item }) => {
-    console.log(item);
+  renderItem = ({ item,index }) => {
+    console.log("Deliveries Items",item,this.props.mediaupload,index);
     // const time = item.vlEntryT;
     // const entertiming = time.subString();
     // console.log(entertiming);
     return (
-        <View style={styles.tableView}>
+        <View style={[styles.tableView,{marginBottom:index===this.state.dataSource.length-1?80:0
+           }]}>
           <View style={styles.lineForCellView} />
           <View style={styles.cellView}>
             <View style={styles.containerImageView}>
-              {item.vlEntryImg == "" ? (
+              {item.vlEntryImg === '' ? (
                   <ZoomImage
                       source={require("../../../icons/placeholderImg.png")}
                       imgStyle={{
@@ -254,8 +249,7 @@ class App extends React.Component {
                   // />
                   <ZoomImage
                       source={{
-                        uri:
-                            `${this.props.mediaupload}` + item.vlEntryImg
+                        uri:this.props.mediaupload + item.vlEntryImg
                       }}
                       imgStyle={{
                         height: wp("20%"),
@@ -363,7 +357,48 @@ class App extends React.Component {
     if (this.state.isLoading) {
       return (
           <View style={styles.container}>
-            
+            {/* <Header /> */}
+            {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
+              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+                <View style={styles.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.goBack();
+                      }}
+                  >
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: "flex-start",
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../../../icons/back.png")}
+                          style={styles.viewDetails2}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                >
+                  <Image
+                      style={[styles.image1]}
+                      source={require("../../../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={{ flex: 0.2 }}>
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            </SafeAreaView> */}
 
             {/* <Text style={styles.titleOfScreen}>Visitors</Text> */}
 
@@ -482,10 +517,52 @@ class App extends React.Component {
       );
     }
     console.log(this.state.dataSource, "*******************************");
-    console.log("ekjfhkwrghj");
+    console.log("123123123#####",this.props);
     return (
         <View style={styles.mainView}>
-          
+          {/* <Header /> */}
+          {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
+                >
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../../../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../../../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+              </View>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView> */}
+
           <View style={styles.textWrapper}>
             {/* <Text style={styles.titleOfScreen}> Visitors </Text> */}
 

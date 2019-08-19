@@ -68,6 +68,7 @@ pod 'Firebase/Messaging', '~> 5.19.0'
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
 
+
   
 end
   

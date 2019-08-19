@@ -17,6 +17,7 @@ import {Dropdown} from "react-native-material-dropdown";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../../../base";
 import {connect} from "react-redux";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import ContactsWrapper from "react-native-contacts-wrapper";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 const RNFS = require('react-native-fs');
@@ -60,6 +61,10 @@ class MyFamilyEdit extends Component {
       guardianName: '',
       relativeImage: '',
       imageUrl: '',
+      photo: null,
+      photoDetails: null,
+      isPhotoAvailable: false,
+      filePath: '',
     }
   }
 
@@ -104,7 +109,7 @@ class MyFamilyEdit extends Component {
           <View style={Style.addFamilyMem}>
             <Text style={Style.addFamilyText}>Edit Family Member</Text>
           </View>
-          <ScrollView>
+          <KeyboardAwareScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                 {this.state.relativeImage ==='' ?
@@ -164,7 +169,7 @@ class MyFamilyEdit extends Component {
                     keyboardType={'default'}
                 />
               </View>
-              {this.state.isMinor || this.state.relationName==='Child'?
+              {this.state.relationName==='Child'?
                   <View style={{
                     flexDirection: 'row',
                     height: '6%',
@@ -181,8 +186,6 @@ class MyFamilyEdit extends Component {
                             guardianName:'',
                             mobileNumber:'',
                             cCode:'',
-                            isMinor:value===0
-
                           })
                         };
                         return (
@@ -296,7 +299,7 @@ class MyFamilyEdit extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
     )
   }
@@ -304,13 +307,15 @@ class MyFamilyEdit extends Component {
   setImage() {
     console.log('Set Image')
     const options = {
-      quality: (Platform.OS === 'ios' ? 0 : 1),
-      maxWidth: 1000,
-      maxHeight: 1000,
-      storageOptons: {
-        skipBackup: true
-      }
-    };
+      quality: 0.5,
+      maxWidth: 250,
+      maxHeight: 250,
+      cameraRoll: false,
+      storageOptions: {
+          skipBackup: true,
+          path: 'tmp_files'
+        },
+  };
     let self = this;
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
@@ -318,15 +323,14 @@ class MyFamilyEdit extends Component {
       } else if (response.customButton) {
       } else {
         console.log('ImagePicker : ', response);
-        if (Platform.OS === 'ios') {
-          console.log(response);
-          self.uploadImage(response);
-        } else {
           console.log('response', response);
-          self.uploadImage(response);
+          this.setState({
+            photo: response.uri,
+            photoDetails: response,
+            isPhotoAvailable: true,
+            imagePath: response.path
+        },()=>self.uploadImage(response));
         }
-
-      }
     });
 
   }
@@ -358,23 +362,19 @@ class MyFamilyEdit extends Component {
   }
 
   deleteImage() {
-    let filePath = this.state.relativeImage;
-    RNFS.exists(filePath).then((result) => {
-      if (result) {
-        return RNFS.unlink(filePath).then(() => {
-          console.log("File deleted", filePath)
-          RNFS.scanFile(filePath)
-              .then(() => {
-                console.log('scanned');
-              })
-              .catch(err => {
-                console.log(err);
-              });
-        }).catch((err) => {
-          console.log(err)
-        })
+    let file = this.state.photo.split('///').pop();
+    const filePath = file.substring(0, file.lastIndexOf('/'));
+    console.warn("File Path: " + filePath);
+    console.warn("File to DELETE: " + file);
+    RNFS.readDir(filePath).then(files => {
+      for(let t of files) {
+        RNFS.unlink(t.path);
       }
+
     })
+    .catch(err => {
+      console.error(err)
+    });
   }
 
 
@@ -511,6 +511,9 @@ class MyFamilyEdit extends Component {
     if(mobCode[0]==='+'){
       cCodeSend=''
     }
+    else{
+      cCodeSend='+91'
+    }
 
     let input = {
       "FMName"    :self.state.firstName,
@@ -520,18 +523,19 @@ class MyFamilyEdit extends Component {
       "FMRltn"    : self.state.relationName,
       "ASAssnID"  : self.props.dashBoardReducer.assId,
       "FMImgName" :self.state.imageUrl ,
-      "FMMinor"   :self.state.isMinorSelected===0,
+      "FMMinor"   :self.state.isMinor,
       "FMLName"   : self.state.lastName,
       "FMGurName" : self.state.guardianName,
       "MEMemID":self.props.navigation.state.params.meMemID,
       "FMID":self.props.navigation.state.params.fmid
     };
     let stat = await base.services.OyeSafeApiFamily.myFamilyEditMember(input)
-    console.log('Stat in Add family', stat,input)
+    console.log('Stat in Add family', stat)
     if (stat.success) {
       try {
-      //  this.deleteImage()
-
+        if(Platform.OS === 'android'){
+          this.deleteImage();
+        }
         this.props.navigation.goBack()
       } catch (err) {
         console.log('Error in adding Family Member')

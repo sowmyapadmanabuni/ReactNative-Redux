@@ -169,7 +169,6 @@ class EditVehicle extends Component {
                 .then(responseData => responseData.json())
                 .then(responseJson => {
                     console.log("Respo::", responseJson,body);
-                    //Alert.alert("Saved");
                     if (responseJson.success) {
                         this.props.navigation.navigate("MyVehicleListScreen");
                     } else {
@@ -183,8 +182,7 @@ class EditVehicle extends Component {
                 })
 
                 .catch(error => {
-                    console.log(error)
-                    // Alert.alert("Upload Fail");
+                    console.log(responseJson.error.message)
                 })
         }
     }

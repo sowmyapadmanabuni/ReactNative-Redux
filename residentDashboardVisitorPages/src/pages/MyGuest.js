@@ -50,43 +50,40 @@ class MyGuests extends Component {
     }, 1500);
   }
 
-  //http://apidev.oyespace.com/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{QRCodeUsed}/{UnitID}/{AccountID}
 
   getInvitationList = () => {
-    console.log("association id in guest", this.props);
+
     fetch(
-      `http://${
-        this.props.oyeURL
-      }/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-        },
-        body:JSON.stringify({
-              ASAssnID : this.props.dashBoardReducer.assId,
-              INInvVis : "Invited",
-              UNUnitID : this.props.dashBoardReducer.uniID,
-              ACAccntID: this.props.userReducer.MyAccountID
-        })
-      }
+        `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          },
+          body: JSON.stringify({
+            ASAssnID : this.props.dashBoardReducer.assId,
+            INInvVis : "Invited",
+            UNUnitID : this.props.dashBoardReducer.uniID,
+            ACAccntID: this.props.userReducer.MyAccountID
+          })
+        }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("Invitation List -@@@@@@", responseJson,responseJson.data.invitation);
-        this.setState({
-          isLoading: false,
-          dataSource:responseJson.data.invitation,
-          error: responseJson.error || null,
-          loading: false
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("1234565656565 -@@@@@@", responseJson,this.props.userReducer.SelectedAssociationID,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
+          this.setState({
+            isLoading: false,
+            dataSource:responseJson.data.invitation,
+            error: responseJson.error || null,
+            loading: false
+          });
+          this.arrayholder = responseJson.data.invitation;
+        })
+        .catch(error => {
+          console.log(error);
+          this.setState({ error, loading: false });
         });
-        this.arrayholder = responseJson.data.invitation;
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({ error, loading: false });
-      });
   };
 
   searchFilterFunction = text => {
@@ -107,107 +104,105 @@ class MyGuests extends Component {
 
   associationName = () => {
     fetch(
-      `http://${
-        this.props.oyeURL
-      }/oyeliving/api/v1/association/getAssociationList/${
-        this.props.dashBoardReducer.assId
-      }`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        `http://${
+            this.props.oyeURL
+        }/oyeliving/api/v1/association/getAssociationList/${
+            this.props.dashBoardReducer.assId
+        }`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          }
         }
-      }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState({
-          association: responseJson.data.association.asAsnName
-        });
-        console.log("!@#!@#!@$@#%@#$!@$@$!@$!@", this.state.association);
-      })
-      .catch(error => console.log(error));
+        .then(response => response.json())
+        .then(responseJson => {
+          this.setState({
+            association: responseJson.data.association.asAsnName
+          });
+          console.log("!@#!@#!@$@#%@#$!@$@$!@$!@", this.state.association);
+        })
+        .catch(error => console.log(error));
   };
 
   setData(data) {
     this.setState(
-      {
-        selectedData: data
-      },
-      () => this.Modal()
+        {
+          selectedData: data
+        },
+        () => this.Modal()
     );
   }
 
   renderItem = ({ item, index }) => {
-      console.log(item,index)
-    console.log("Data Sources@@@@@@@",this.state.dataSource)
-    console.log("The Association Id and Unit id:",this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID)
+    console.log(item,index)
     return (
-      <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
-        <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
-        <View
-          style={[
-            styles.listItem,
-            {
-              justifyContent: "space-between",
-              paddingRight: 0,
-              height: hp("15%")
-            }
-          ]}
-        >
-          <View style={styles.iconContainer}>
-            <Text style={styles.contactIcon}>
-              {item.infName[0].toUpperCase()}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>
-              {item.infName} {item.inlName}
-            </Text>
-            <View style={{ flexDirection: "column" }}>
-              <Text style={styles.infoNumber}>{item.inMobile}</Text>
+        <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
+          <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
+          <View
+              style={[
+                styles.listItem,
+                {
+                  justifyContent: "space-between",
+                  paddingRight: 0,
+                  height: hp("15%")
+                }
+              ]}
+          >
+            <View style={styles.iconContainer}>
+              <Text style={styles.contactIcon}>
+                {item.infName[0].toUpperCase()}
+              </Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>
+                {item.infName} {item.inlName}
+              </Text>
+              <View style={{ flexDirection: "column" }}>
+                <Text style={styles.infoNumber}>{item.inMobile}</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
+              <Card style={{ paddingTop: 0 }}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate("QRCodeGeneration", {
+                        value: this.state.dataSource[index]
+                      });
+                    }}
+                >
+                  <CardItem bordered>
+                    <Image
+                        style={styles.images}
+                        source={require("../icons/share.png")}
+                    />
+                  </CardItem>
+                </TouchableOpacity>
+              </Card>
+              <Card style={{ marginTop: 0 }}>
+                <TouchableOpacity
+                    onPress={() => {
+                      {
+                        Platform.OS === "android"
+                            ? Linking.openURL(`tel:${item.inMobile}`)
+                            : Linking.openURL(`telprompt:${item.inMobile}`);
+                      }
+                    }}
+                >
+                  <CardItem bordered>
+                    <Image
+                        style={styles.images}
+                        source={require("../icons/phone.png")}
+                    />
+                  </CardItem>
+                </TouchableOpacity>
+              </Card>
             </View>
           </View>
-          <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
-            <Card style={{ paddingTop: 0 }}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("QRCodeGeneration", {
-                    value: this.state.dataSource[index]
-                  });
-                }}
-              >
-                <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/share.png")}
-                  />
-                </CardItem>
-              </TouchableOpacity>
-            </Card>
-            <Card style={{ marginTop: 0 }}>
-              <TouchableOpacity
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`tel:${item.inMobile}`)
-                      : Linking.openURL(`telprompt:${item.inMobile}`);
-                  }
-                }}
-              >
-                <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/phone.png")}
-                  />
-                </CardItem>
-              </TouchableOpacity>
-            </Card>
-          </View>
+          <View style={{ borderColor: "#707070", borderWidth: wp("0.05%") }} />
         </View>
-        <View style={{ borderColor: "#707070", borderWidth: wp("0.05%") }} />
-      </View>
     );
   };
 
@@ -216,39 +211,39 @@ class MyGuests extends Component {
 
     if (this.state.isLoading) {
       return (
-        <View style={styles.contaianer}>
-          {/* <Header /> */}
+          <View style={styles.contaianer}>
+            {/* <Header /> */}
 
-          {/* <Text style={styles.titleOfScreen}>My Guests</Text> */}
+            {/* <Text style={styles.titleOfScreen}>My Guests</Text> */}
 
-          <View style={styles.progress}>
-            <ActivityIndicator size="large" color="#F3B431" />
+            <View style={styles.progress}>
+              <ActivityIndicator size="large" color="#F3B431" />
+            </View>
           </View>
-        </View>
       );
     }
     return (
-      <View style={{ flex: 1, marginTop: hp("1%") }}>
-        {/* <Header /> */}
-        <NavigationEvents
-          onDidFocus={payload => this.getInvitationList()}
-          onWillBlur={payload => this.getInvitationList()}
-        />
-        {/* <Text style={styles.titleOfScreen}> My Guests </Text> */}
+        <View style={{ flex: 1, marginTop: hp("1%") }}>
+          {/* <Header /> */}
+          <NavigationEvents
+              onDidFocus={payload => this.getInvitationList()}
+              onWillBlur={payload => this.getInvitationList()}
+          />
+          {/* <Text style={styles.titleOfScreen}> My Guests </Text> */}
 
-        <Form style={styles.formSearch}>
+          <Form style={styles.formSearch}>
             <Item style={styles.inputItem}>
               <Input
-                marginBottom={hp("-1%")}
-                placeholder="Search...."
-                multiline={false}
-                onChangeText={this.searchFilterFunction}
+                  marginBottom={hp("-1%")}
+                  placeholder="Search...."
+                  multiline={false}
+                  onChangeText={this.searchFilterFunction}
               />
 
               <Icon style={styles.icon} name="search" size={14} />
             </Item>
           </Form>
-        {/* <TextInput
+          {/* <TextInput
           style={styles.textinput}
           placeholder="search...."
           // lightTheme
@@ -256,43 +251,43 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-        {this.state.dataSource.length === 0 ?
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text>
-            <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite.</Text>
-          </View>
-         :
-          <FlatList
-            style={{ marginTop: hp("1.5%") }}
-            data={this.state.dataSource.sort((a,b) => a.infName.localeCompare(b.infName))}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item.inInvtID.toString()}
-          />
-        }
-        <TouchableOpacity
-          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-          onPress={() => this.props.navigation.navigate("InviteGuests")}
-        >
-          <Text
-            style={{
-              fontSize: hp("5%"),
-              color: "#fff",
-              fontWeight: "bold",
-              justifyContent: "center",
-              alignItems: "center",
-              alignSelf: "center",
-              marginBottom: hp("0.5%")
-            }}
+          {this.state.dataSource.length === 0 ?
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+                <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text>
+                <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite.</Text>
+              </View>
+              :
+              <FlatList
+                  style={{ marginTop: hp("1.5%") }}
+                  data={this.state.dataSource.sort((a,b) => a.infName.localeCompare(b.infName))}
+                  renderItem={this.renderItem}
+                  keyExtractor={(item, index) => item.inInvtID.toString()}
+              />
+          }
+          <TouchableOpacity
+              style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+              onPress={() => this.props.navigation.navigate("InviteGuests")}
           >
-            +
-          </Text>
-          {/* <Entypo 
+            <Text
+                style={{
+                  fontSize: hp("5%"),
+                  color: "#fff",
+                  fontWeight: "bold",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignSelf: "center",
+                  marginBottom: hp("0.5%")
+                }}
+            >
+              +
+            </Text>
+            {/* <Entypo
                     name="plus"
                     size={30}
                     color="#fff"
                 /> */}
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
     );
   }
 }
@@ -400,7 +395,7 @@ const styles = StyleSheet.create({
     //borderColor: "#909091"
     borderColor: "#000000"
   },
-formSearch: {
+  formSearch: {
     marginBottom: hp("1%")
   },
   icon: {
