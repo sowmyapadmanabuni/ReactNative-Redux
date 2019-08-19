@@ -44,10 +44,9 @@ class Staff extends React.Component {
     }
 
     async getListOfStaff() {
-        let self = this;
-        //http://apiuat.oyespace.com/oye247/api/v1/GetWorkerListByAssocIDAndAccountID/70/21
-        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID)
-        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID);// 1
+        let self = this; //dashboardReducer.uniID
+        console.log("StaffList Input@#@#@#@#",self.props.dashboardReducer.uniID,self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID)
+        let stat = await base.services.OyeSafeApi.getStaffListByAssociationIdAndUnitId(self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID,self.props.dashboardReducer.uniID);// 1
         self.setState({isLoading: false})
         console.log("Check Data",stat)
         try {
@@ -409,7 +408,8 @@ class Staff extends React.Component {
 const mapStateToProps = state => {
     return {
         userReducer: state.UserReducer,
-        staffReducer: state.StaffReducer
+        staffReducer: state.StaffReducer,
+        dashboardReducer:state.DashboardReducer
     };
 };
 

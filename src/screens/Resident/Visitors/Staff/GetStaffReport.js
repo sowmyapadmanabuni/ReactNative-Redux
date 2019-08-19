@@ -188,7 +188,7 @@ class GetStaffReport extends React.Component {
                     rowData.push(reportsData[i].vlengName)
                     rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
                     rowData.push(reportsData[i].vlexgName)
-                    rowData.push(moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
+                    rowData.push(reportsData[i].vlexgName ==='' ? '': moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
 
                     if (initialDate !== endDate) {
                         initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
@@ -222,8 +222,9 @@ class GetStaffReport extends React.Component {
                         console.log("data not matched with", datesArr[i]);
                     }
                 }
-                tableData.sort(function (a, b) {
-                    return new Date(a[0]) - new Date(b[0])
+                tableData.sort(function(a, b){
+                    console.log('@@@@@@@@@',a[0],b[0], moment(a[0]).format(),new Date(moment(a[0]).format()) ,new Date(a[0]),new Date(b[0]))
+                    return new Date(moment(a[0]).format()) - new Date(moment(b[0]).format());
                 })
                 console.log('Final Data',tableData )
 
