@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
-  Image
+  Image, SafeAreaView, Dimensions, TouchableOpacity
 } from "react-native";
 import { Button, Header, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -17,6 +17,7 @@ import {
   getNotifications,
   createUserNotification
 } from "../../actions";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 import _ from "lodash";
 // ("ntJoinStat");
@@ -570,7 +571,7 @@ class NotificationDetailScreen extends Component {
     const details = navigation.getParam("details", "NO-ID");
     return (
       <View style={styles.container}>
-        <Header
+        {/* <Header
           leftComponent={{
             icon: "arrow-left",
             color: "#ED8A19",
@@ -588,9 +589,52 @@ class NotificationDetailScreen extends Component {
             />
           }
           backgroundColor="#fff"
-        />
-        <Text style={styles.titleStyle}> {details.ntDesc} </Text>
-        {/* {this.renderButton()} */}
+        /> */}
+
+
+        <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+              <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
+                <View style={styles.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.goBack()
+                      }}
+                  >
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: "flex-start",
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../../../icons/back.png")}
+                          style={styles.viewDetails2}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                    style={{
+                      width:'35%',
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                >
+                  <Image
+                      style={[styles.image]}
+                      source={require("../../../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={{width:'35%'}}>
+                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                </View>
+              </View>
+              <View style={{borderWidth: 1, borderColor: "orange"}}/>
+            </SafeAreaView>
+            <Text style={styles.titleStyle}> {details.ntDesc} </Text>
         {details.ntType === "Join_Status" ? null : this.renderButton()}
       </View>
     );
@@ -601,6 +645,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
     // marginTop: 15,
+  },
+
+  viewStyle1: {
+    backgroundColor: "#fff",
+    height: hp("7%"),
+    width: '100%',
+    shadowColor: "#000",
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    elevation: 2,
+    position: "relative"
+  },
+  viewDetails1: {
+    width:'30%',
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginLeft:10
+  },
+  viewDetails2: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    width: hp("3%"),
+    height: hp("3%"),
+    marginTop: 5
+    // marginLeft: 10
+  },
+  image: {
+    width: wp("24%"),
+    height: hp("10%")
   },
 
   buttonContainer: {
