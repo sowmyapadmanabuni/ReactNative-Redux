@@ -763,8 +763,7 @@ class Dashboard extends React.Component {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    console.log(this.props.dashBoardReducer.dropdown1, "tate123455");
-    unitDropdown1 = _.orderBy(dropdown1,['name'],['asc']);
+    console.log(this.props.dashBoardReducer,dropdown1, "tate123455");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     return (
@@ -811,7 +810,7 @@ class Dashboard extends React.Component {
                     containerStyle={{ width: "100%" }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
-                    data={unitDropdown1}
+                    data={dropdown1}
                     inputContainerStyle={{
                       borderBottomColor: "transparent"
                     }}
