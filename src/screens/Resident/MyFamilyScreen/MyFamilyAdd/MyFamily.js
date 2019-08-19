@@ -356,10 +356,7 @@ class MyFamily extends Component {
         });
 
     }
-    resetAllFields() {
-
-        //Should we need to show alert ?
-
+    resetAllFields(){
         this.setState({
             relationName: "",
             cCode: '',

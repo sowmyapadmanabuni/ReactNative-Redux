@@ -763,7 +763,7 @@ class Dashboard extends React.Component {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    console.log(this.state.role, "state");
+    console.log(this.props.dashBoardReducer,dropdown1, "tate123455");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     return (
