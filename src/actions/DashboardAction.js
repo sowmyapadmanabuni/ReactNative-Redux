@@ -151,7 +151,11 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
 
                   let withoutString_units = [];
 
-                  units.map((data, index) => {
+                  let sortedUnits = _.sortBy(units,['value'],['asc'])
+
+                  console.log("Sorted unit list:",sortedUnits);
+
+                  sortedUnits.map((data, index) => {
                     if (data.name.length >= 1) {
                       withoutString_units.push({
                         ...data
@@ -383,9 +387,13 @@ export const getDashUnits = (unit, oyeURL, MyAccountID) => {
           });
         });
 
+        let sortedUnit  = _.sortBy(units,['value'],['asc']);
+
+        console.log("Sorted Unit:",sortedUnit)
+
         let withoutString = [];
 
-        units.map((data, index) => {
+        sortedUnit.map((data, index) => {
           if (data.name.length >= 1) {
             withoutString.push({ ...data });
           }
