@@ -50,20 +50,28 @@ class MyGuests extends Component {
   }
 
   getInvitationList = () => {
-    //http://localhost:64284/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/{AssociationID}/{IsQRCodeGenerated}/{UnitID}
+    //      //http://localhost:64284/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated
+
+    console.log("Visitighfghfghfg@@@@@@@@@", this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
     fetch(
-      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated/${this.props.dashBoardReducer.assId}/False/${this.props.dashBoardReducer.uniID}/${this.props.userReducer.MyAccountID}`,
+      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-        }
+        },
+        body: JSON.stringify({
+          ASAssnID : this.props.dashBoardReducer.assId,
+          INInvVis : "Visited",
+          UNUnitID : this.props.dashBoardReducer.uniID,
+          ACAccntID: this.props.userReducer.MyAccountID
+        })
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Visited for the Without QRCode", responseJson);
+        console.log("Visitighfghfghfg@@@@@@@@@", responseJson,this.props.userReducer.SelectedAssociationID,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.invitation,
@@ -83,7 +91,7 @@ class MyGuests extends Component {
     });
 
     const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.infName.toUpperCase()} ${item.inlName.toUpperCase()}`;
+      const itemData = `${item.vlfName.toUpperCase()} ${item.vllName.toUpperCase()}`;
       const textData = text.toUpperCase();
 
       return itemData.indexOf(textData) > -1;
@@ -93,7 +101,7 @@ class MyGuests extends Component {
     });
   };
   renderItem = ({ item, index }) => {
-    // console.log(item,index)
+    console.log("List in visited ",item,index)
     return (
       <View style={{ flexDirection: "column" }}>
         <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
@@ -109,15 +117,15 @@ class MyGuests extends Component {
         >
           <View style={styles.iconContainer}>
             <Text style={styles.contactIcon}>
-              {item.infName[0].toUpperCase()}
+              {item.vlfName[0].toUpperCase()}
             </Text>
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.infoText}>
-              {item.infName} {item.inlName}
+              {item.vlfName} {item.vllName}
             </Text>
             <View style={{ flexDirection: "column" }}>
-              <Text style={styles.infoNumber}>{item.inMobile}</Text>
+              <Text style={styles.infoNumber}>{item.vlMobile}</Text>
             </View>
           </View>
           <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
@@ -126,8 +134,8 @@ class MyGuests extends Component {
                 onPress={() => {
                   {
                     Platform.OS === "android"
-                      ? Linking.openURL(`tel:${item.inMobile}`)
-                      : Linking.openURL(`telprompt:${item.inMobile}`);
+                      ? Linking.openURL(`tel:${item.vlMobile}`)
+                      : Linking.openURL(`telprompt:${item.vlMobile}`);
                   }
                 }}
               >
@@ -198,10 +206,10 @@ class MyGuests extends Component {
         <FlatList
           style={{ marginTop: hp('1.5%') }}
           data={this.state.dataSource.sort((a, b) =>
-            a.infName.localeCompare(b.infName)
+            a.vlfName.localeCompare(b.vlfName)
           )}
           renderItem={this.renderItem}
-          keyExtractor={(item, index) => item.inInvtID.toString()}
+          keyExtractor={(item, index) => item.vlVisLgID.toString()}
         />
           }
         

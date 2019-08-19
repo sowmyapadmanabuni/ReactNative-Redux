@@ -1,10 +1,15 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - Crashlytics (3.13.1):
-    - Fabric (~> 1.10.1)
+  - Crashlytics (3.13.4):
+    - Fabric (~> 1.10.2)
   - DoubleConversion (1.1.5)
+<<<<<<< HEAD
   - Fabric (1.10.1)
   - Firebase/Core (5.19.0):
+=======
+  - Fabric (1.10.2)
+  - Firebase/Core (5.15.0):
+>>>>>>> fe4c0ee67c4ac807120f2b4ba5abe68c6c765e7f
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 5.8.0)
   - Firebase/CoreOnly (5.19.0):
@@ -21,9 +26,14 @@ PODS:
     - GoogleUtilities/Network (~> 5.2)
     - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
+<<<<<<< HEAD
   - FirebaseAnalyticsInterop (1.2.0)
   - FirebaseCore (5.4.0):
     - GoogleUtilities/Environment (~> 5.2)
+=======
+  - FirebaseAnalyticsInterop (1.3.0)
+  - FirebaseCore (5.1.10):
+>>>>>>> fe4c0ee67c4ac807120f2b4ba5abe68c6c765e7f
     - GoogleUtilities/Logger (~> 5.2)
   - FirebaseInstanceID (3.8.1):
     - FirebaseCore (~> 5.2)
@@ -280,8 +290,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  Crashlytics: 5aa8e90dcbf2f34898b4f5a0037787531246cca0
+  Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
+<<<<<<< HEAD
   Fabric: f6f21452846788bb44595d73e9909d79d328e617
   Firebase: c60d49e9c2630875a96207d15e2affb8364996d1
   FirebaseAnalytics: fd72a26bf8dac84cefba2f0864366f718555a5b0
@@ -289,6 +300,15 @@ SPEC CHECKSUMS:
   FirebaseCore: 22a79a961c3951ef2f77b67bfbc99e454247b319
   FirebaseInstanceID: a122b0c258720cf250551bb2bedf48c699f80d90
   FirebaseMessaging: 2d53d08d752fbe63ce0820428d70be5ab87c11fb
+=======
+  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
+  Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
+  FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
+  FirebaseAnalyticsInterop: 0f250d71e8741352407a8db351e6de78c5c56d35
+  FirebaseCore: 35747502d9e8c6ee217385ad04446c7c2aaf9c5c
+  FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
+  FirebaseMessaging: b412996f6a09337d232bb3a6676ce4d1f353d024
+>>>>>>> fe4c0ee67c4ac807120f2b4ba5abe68c6c765e7f
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
@@ -314,6 +334,10 @@ SPEC CHECKSUMS:
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
+<<<<<<< HEAD
 PODFILE CHECKSUM: 4df3decf026b35070b0fd3d45d57cce6015e6173
+=======
+PODFILE CHECKSUM: 1a3de36eeafd47c9e8fbd57f781276d85f2e61c6
+>>>>>>> fe4c0ee67c4ac807120f2b4ba5abe68c6c765e7f
 
 COCOAPODS: 1.7.5

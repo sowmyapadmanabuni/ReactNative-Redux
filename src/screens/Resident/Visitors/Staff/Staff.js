@@ -45,14 +45,13 @@ class Staff extends React.Component {
 
     async getListOfStaff() {
         let self = this;
-        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID)
-        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID);// 1
+        //http://apiuat.oyespace.com/oye247/api/v1/GetWorkerListByAssocIDAndAccountID/70/21
+        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID)
+        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID);// 1
         self.setState({isLoading: false})
-
         console.log("Check Data",stat)
-
         try {
-            if (stat && stat.data) {
+            if (stat && stat.data && !stat.data.errorResponse) {
                 let staffNamesList = [];
                 for (let i = 0; i < stat.data.worker.length; i++) {
                     if (stat.data.worker[i].wkIsActive) {
@@ -112,9 +111,15 @@ class Staff extends React.Component {
                 {this.state.staffList.length!==0?
                 <View style={StaffStyle.detailsMainView}>
                     <View style={StaffStyle.detailsLeftView}>
-                        <Image style={StaffStyle.staffImg}
-                               source={{uri: base.utils.validate.handleNullImg(this.state.staffPic)}}
-                        />
+                        {this.state.staffPic ==='' ?
+                            <Image style={StaffStyle.staffImg}
+                                   source={{uri:base.utils.strings.staffPlaceHolder}}
+                            />
+                            :
+                            <Image style={StaffStyle.staffImg}
+                                   source={{uri:base.utils.strings.imageUrl + this.state.staffPic}}
+                            />
+                        }
                         <View style={StaffStyle.textView}>
                             <Text style={StaffStyle.staffText}
                                   numberofLines={1} ellipsizeMode={'tail'}>{this.state.staffName} </Text>
@@ -212,7 +217,7 @@ class Staff extends React.Component {
                             let onPress = (value, index) => {this.setDateInCalendar(value,index)};
                             return (
                                 <View style={{width: '50%'}}>
-                                    <RadioButton labelHorizontal={true} key={i.toString()}>
+                                    <RadioButton labelHorizontal={true} key={i}>
                                         <RadioButtonInput
                                             obj={obj}
                                             index={i.toString()}

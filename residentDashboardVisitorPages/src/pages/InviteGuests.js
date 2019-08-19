@@ -247,16 +247,17 @@ if (fname.length == 0 || fname == '') {
 } else if (mobNum.length < 10) {
   Alert.alert('Mobile number should not be less than 10 digits');
   return false;
+}
+else if(purpose.length == 0 || purpose == ''){
+  Alert.alert('Enter Purpose');
+  return false;
 }else if(dobDate>dobDate1){
   Alert.alert('Enter valid start date to till date')
   return false;
 }else if(time==time1 && dobDate ==dobDate1){
   Alert.alert('Enter valid start time to till time')
   return false;  
-} else if(purpose.length == 0 || purpose == ''){
-  Alert.alert('Enter Purpose');
-  return false;
-}
+} 
 else{
 //http://apidev.oyespace.com/oye247/api/v1/Invitation/create
 console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)

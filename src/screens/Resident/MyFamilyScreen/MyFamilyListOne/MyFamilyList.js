@@ -88,7 +88,7 @@ class MyFamilyList extends React.Component {
         })
         .catch(error => {
           console.log("error", error)
-          alert("error")
+          alert(data.error.message)
         })
   }
 

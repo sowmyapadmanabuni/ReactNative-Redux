@@ -17,6 +17,7 @@ import {Dropdown} from "react-native-material-dropdown";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../../../base";
 import {connect} from "react-redux";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import ContactsWrapper from "react-native-contacts-wrapper";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 const RNFS = require('react-native-fs');
@@ -104,7 +105,7 @@ class MyFamilyEdit extends Component {
           <View style={Style.addFamilyMem}>
             <Text style={Style.addFamilyText}>Edit Family Member</Text>
           </View>
-          <ScrollView>
+          <KeyboardAwareScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                 {this.state.relativeImage ==='' ?
@@ -164,7 +165,7 @@ class MyFamilyEdit extends Component {
                     keyboardType={'default'}
                 />
               </View>
-              {this.state.isMinor || this.state.relationName==='Child'?
+              {this.state.relationName==='Child'?
                   <View style={{
                     flexDirection: 'row',
                     height: '6%',
@@ -181,8 +182,6 @@ class MyFamilyEdit extends Component {
                             guardianName:'',
                             mobileNumber:'',
                             cCode:'',
-                            isMinor:value===0
-
                           })
                         };
                         return (
@@ -296,7 +295,7 @@ class MyFamilyEdit extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
     )
   }
@@ -511,6 +510,9 @@ class MyFamilyEdit extends Component {
     if(mobCode[0]==='+'){
       cCodeSend=''
     }
+    else{
+      cCodeSend='+91'
+    }
 
     let input = {
       "FMName"    :self.state.firstName,
@@ -520,7 +522,7 @@ class MyFamilyEdit extends Component {
       "FMRltn"    : self.state.relationName,
       "ASAssnID"  : self.props.dashBoardReducer.assId,
       "FMImgName" :self.state.imageUrl ,
-      "FMMinor"   :self.state.isMinorSelected===0,
+      "FMMinor"   :self.state.isMinor,
       "FMLName"   : self.state.lastName,
       "FMGurName" : self.state.guardianName,
       "MEMemID":self.props.navigation.state.params.meMemID,

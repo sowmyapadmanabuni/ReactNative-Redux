@@ -92,7 +92,7 @@ class MyFamily extends Component {
                 <View style={Style.addFamilyMem}>
                     <Text style={Style.addFamilyText}>Add Family Member</Text>
                 </View>
-                <ScrollView>
+                <KeyboardAwareScrollView>
                     <View style={Style.subContainer}>
                         <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                             {this.state.relativeImage === '' ?
@@ -279,7 +279,7 @@ class MyFamily extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </ScrollView>
+                </KeyboardAwareScrollView>
             </SafeAreaView>
         )
     }
@@ -520,7 +520,7 @@ class MyFamily extends Component {
             "FMRltn": self.state.relationName,
             "ASAssnID": self.props.dashBoardReducer.assId,
             "FMImgName": self.state.imageUrl,
-            "FMMinor": self.state.isMinorSelected===0,
+            "FMMinor": self.state.isMinor,
             "FMLName": self.state.lastName,
             "FMGurName": self.state.guardianName,
             "PAccntID":self.props.userReducer.MyAccountID
