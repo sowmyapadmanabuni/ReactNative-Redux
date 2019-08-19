@@ -17,6 +17,7 @@ import {Dropdown} from "react-native-material-dropdown";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../../../base";
 import {connect} from "react-redux";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import ContactsWrapper from "react-native-contacts-wrapper";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 const RNFS = require('react-native-fs');
@@ -104,7 +105,7 @@ class MyFamilyEdit extends Component {
           <View style={Style.addFamilyMem}>
             <Text style={Style.addFamilyText}>Edit Family Member</Text>
           </View>
-          <ScrollView>
+          <KeyboardAwareScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                 {this.state.relativeImage ==='' ?
@@ -294,7 +295,7 @@ class MyFamilyEdit extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
     )
   }

@@ -50,7 +50,7 @@ class MobileValid extends Component {
             callingCode: "91",
             isLoading: false,
             checked: true,
-            isChecked:true
+            isChecked: true
         };
     }
     componentDidMount() {
@@ -78,7 +78,7 @@ class MobileValid extends Component {
         } else if (reg.test(mobilenumber) === false) {
             alert("Enter valid Mobile Number");
             return false;
-        }  else {
+        } else {
             anu = {
                 CountryCode: countryCode,
                 MobileNumber: mobilenumber
@@ -186,8 +186,8 @@ class MobileValid extends Component {
                                             <ActivityIndicator />
                                         </View>
                                     ) : (
-                                        <Text style={{ height: hp("5%") }}> </Text>
-                                    )}
+                                            <Text style={{ height: hp("5%") }}> </Text>
+                                        )}
                                     <View style={styles.mobilenumberverification}>
                                         <Text style={{ fontSize: hp("2%") }}>
                                             Enter your mobile number to get{" "}
@@ -206,6 +206,7 @@ class MobileValid extends Component {
                                             }}
                                         >
                                             <CountryPicker
+                                                hideAlphabetFilter={true}
                                                 onChange={value => {
                                                     this.setState({
                                                         cca2: value.cca2,
@@ -264,7 +265,7 @@ class MobileValid extends Component {
                                             <CheckBox
                                                 onClick={() => {
                                                     this.setState({
-                                                        isChecked:!this.state.isChecked
+                                                        isChecked: !this.state.isChecked
                                                     });
                                                 }}
                                                 isChecked={this.state.isChecked}

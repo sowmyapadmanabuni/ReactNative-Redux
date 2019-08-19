@@ -178,7 +178,7 @@ class AddVehicle extends Component {
               alert(responseJson.error.message);
             }
           })
-          .catch(error => Alert.alert("Data not saved", error));
+          .catch(error => Alert.alert(responseJson.error.message));
     }
   };
 
