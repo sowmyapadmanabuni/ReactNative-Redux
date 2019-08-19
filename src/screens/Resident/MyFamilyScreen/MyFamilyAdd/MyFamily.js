@@ -96,7 +96,7 @@ class MyFamily extends Component {
                 <View style={Style.addFamilyMem}>
                     <Text style={Style.addFamilyText}>Add Family Member</Text>
                 </View>
-                <ScrollView>
+                <KeyboardAwareScrollView>
                     <View style={Style.subContainer}>
                         <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                             {this.state.relativeImage === '' ?
@@ -283,7 +283,7 @@ class MyFamily extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </ScrollView>
+                </KeyboardAwareScrollView>
             </SafeAreaView>
         )
     }

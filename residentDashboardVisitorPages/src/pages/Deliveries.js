@@ -163,10 +163,7 @@ class App extends React.Component {
     } else {
       //http://apiuat.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID
       fetch(
-          `http://${
-              this.props.oyeURL
-          }/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
-
+          `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
           {
             method: "POST",
             headers: {
@@ -360,7 +357,48 @@ class App extends React.Component {
     if (this.state.isLoading) {
       return (
           <View style={styles.container}>
-            
+            {/* <Header /> */}
+            {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
+              <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+                <View style={styles.viewDetails1}>
+                  <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.goBack();
+                      }}
+                  >
+                    <View
+                        style={{
+                          height: hp("4%"),
+                          width: wp("15%"),
+                          alignItems: "flex-start",
+                          justifyContent: "center"
+                        }}
+                    >
+                      <Image
+                          resizeMode="contain"
+                          source={require("../../../icons/back.png")}
+                          style={styles.viewDetails2}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                >
+                  <Image
+                      style={[styles.image1]}
+                      source={require("../../../icons/headerLogo.png")}
+                  />
+                </View>
+                <View style={{ flex: 0.2 }}>
+                </View>
+              </View>
+              <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            </SafeAreaView> */}
 
             {/* <Text style={styles.titleOfScreen}>Visitors</Text> */}
 
@@ -482,7 +520,49 @@ class App extends React.Component {
     console.log("123123123#####",this.props);
     return (
         <View style={styles.mainView}>
-          
+          {/* <Header /> */}
+          {/* <SafeAreaView style={{ backgroundColor: "orange" }}>
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
+                >
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: "flex-start",
+                        justifyContent: "center"
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require("../../../icons/back.png")}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require("../../../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+              </View>
+            </View>
+            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          </SafeAreaView> */}
+
           <View style={styles.textWrapper}>
             {/* <Text style={styles.titleOfScreen}> Visitors </Text> */}
 
