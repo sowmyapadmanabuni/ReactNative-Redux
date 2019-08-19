@@ -167,8 +167,6 @@ class EditProfile extends Component {
         } else {
             this.editProfileUpdate()
         }
-
-        //   else {}
     }
 
     alternateMobile = () => {
