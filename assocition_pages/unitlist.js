@@ -109,9 +109,9 @@ class UnitList extends Component {
               />
               <View style={{ flexDirection: "column" }}>
                 <Text style={styles.blockNameTextStyle}>
-                  {item.block.blBlkName ? (
+                  {/* {item.block.blBlkName ? (
                     <Text> {item.block.blBlkName + " > "}</Text>
-                  ) : null}
+                  ) : null} */}
                   {item.unUniName}
                 </Text>
               </View>
