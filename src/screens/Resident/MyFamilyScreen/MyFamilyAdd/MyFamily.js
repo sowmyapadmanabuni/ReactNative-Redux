@@ -254,7 +254,7 @@ class MyFamily extends Component {
                             <View style={Style.mobNumView}>
                                 <TextInput
                                     style={{ height: 50, width: '80%', }}
-                                    onChangeText={(text) => this.setState({ mobileNumber: isNaN(text) })}
+                                    onChangeText={(text) => this.setState({ mobileNumber: text })}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
                                     placeholderTextColor={base.theme.colors.grey}
@@ -567,8 +567,10 @@ class MyFamily extends Component {
         if (stat) {
             try {
                 if (stat.success) {
-                    if(Platform.OS === "android"){
-                        self.deleteImage()
+                    if(self.state.imageUrl !==''){
+                        if(Platform.OS === "android"){
+                            self.deleteImage()
+                        }
                     }
                     self.props.navigation.navigate('MyFamilyList')
                 } else {

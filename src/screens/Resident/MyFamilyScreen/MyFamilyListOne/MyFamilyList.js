@@ -109,12 +109,10 @@ class MyFamilyList extends React.Component {
 
   async myFamilyListGetData() {
     this.setState({loading: true})
-    console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
+    //console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.uniID, this.props.dashBoardReducer.assId,this.props.userReducer.MyAccountID)
-    console.log("Get Family Data", myFamilyList); //this.props.userReducer.MyAccountID
-
-
-    this.setState({isLoading: false, loading: false})
+    //console.log("Get Family Data", myFamilyList); //this.props.userReducer.MyAccountID
+      this.setState({isLoading: false, loading: false})
     try {
       if (myFamilyList.success && myFamilyList.data) {
         this.setState({
@@ -163,6 +161,7 @@ class MyFamilyList extends React.Component {
 
   renderItem = ({item}) => {
     let itemID = item.id
+      console.log('Image issue',item)
     return (
         <View style={Style.tableView}>
           <View style={Style.cellView}>
@@ -179,7 +178,7 @@ class MyFamilyList extends React.Component {
                   <ZoomImage
                       source={{
                         uri:
-                            `https://mediaupload.oyespace.com/` + item.fmImgName
+                            this.props.mediaupload + item.fmImgName
                       }}
                       imgStyle={Style.placeholderImage}
                       duration={300}
@@ -289,6 +288,8 @@ class MyFamilyList extends React.Component {
 
   render() {
     const {navigate} = this.props.navigation
+
+      console.log('Item issue', this.props)
 
     if (this.state.isLoading) {
       return (
@@ -481,7 +482,8 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
     dashBoardReducer: state.DashboardReducer,
-      userReducer: state.UserReducer  };
+      userReducer: state.UserReducer
+  };
 };
 
 export default connect(mapStateToProps)(MyFamilyList);

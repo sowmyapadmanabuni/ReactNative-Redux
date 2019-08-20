@@ -207,7 +207,7 @@ sendInvitation = () => {
   mobNum=this.state.mobNo;
   vehNo=this.state.vehNo;
   emailId=this.state.emailId;
-  purpose=this.state.purpose;
+  let purpose=this.state.purpose;
   dobDate=this.state.dobText;
   dobDate1=this.state.dobText1;
   time=this.state.datetime;
@@ -251,7 +251,12 @@ if (fname.length == 0 || fname == '') {
 else if(purpose.length == 0 || purpose == ''){
   Alert.alert('Enter Purpose');
   return false;
-}else if(dobDate>dobDate1){
+}
+/*else if(!base.utils.validate.alphabetValidation(purpose)){
+    Alert.alert('Special characters not allowed in purpose');
+    return false;
+}*/
+else if(dobDate>dobDate1){
   Alert.alert('Enter valid start date to till date')
   return false;
 }else if(time==time1 && dobDate ==dobDate1){

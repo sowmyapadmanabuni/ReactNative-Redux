@@ -183,4 +183,14 @@ export class validate{
             console.log(err)
         }
     }
+
+    static mobileNumberValidation=(mobNumber) =>{
+        let re=/^(\d{8,10})$/;
+        return re.test(mobNumber);
+    };
+
+    static alphabetValidation=(text) =>{
+        let re=/^[A-Za-z]+$/;
+        return re.test(text);
+    };
 }

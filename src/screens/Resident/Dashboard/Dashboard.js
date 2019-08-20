@@ -559,10 +559,12 @@ class Dashboard extends React.Component {
     );
     if (dropdown1.length === 0) {
       this.setState({
-        vehiclesCount: 0
+        vehiclesCount: 0,
+        falmilyMemebCount:0
       });
     } else {
       this.getVehicleList();
+      this.myFamilyListGetData();
     }
   }
 
@@ -605,7 +607,6 @@ class Dashboard extends React.Component {
 
         self.roleCheckForAdmin(this.state.assocId);
         self.checkUnitIsThere();
-        //self.getVehicleList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -631,7 +632,6 @@ class Dashboard extends React.Component {
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
     self.checkUnitIsThere();
-    //  self.getVehicleList();
   }
 
   getVehicleList = unitId => {
@@ -667,7 +667,7 @@ class Dashboard extends React.Component {
         this.setState({ loading: false });
         this.setState({
           //Object.keys(responseJson.data.unitsByBlockID).length
-          vehiclesCount: responseJson.data.vehicleListByUnitID.length
+          vehiclesCount:0
         });
         console.log("error in net call", error);
       });
@@ -690,33 +690,30 @@ class Dashboard extends React.Component {
     });
   };
 
-  getFamilyMemberList = () => {
-    fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
-        this.props.dashBoardReducer.assId
-      }`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-        }
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("Manas", responseJson);
+  async myFamilyListGetData() {
+    this.setState({loading: true})
+    console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
+    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.uniID, this.props.dashBoardReducer.assId,this.props.userReducer.MyAccountID)
+    console.log("Get Family Data", myFamilyList);
+
+
+    this.setState({isLoading: false, loading: false})
+    try {
+      if (myFamilyList.success && myFamilyList.data) {
         this.setState({
-          //Object.keys(responseJson.data.unitsByBlockID).length
-          vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-            .length
-        });
+          falmilyMemebCount:myFamilyList.data.familyMembers.length
+        })
+
+    } }
+    catch (error) {
+      this.setState({
+        falmilyMemebCount:0,
+        loading: false
       })
-      .catch(error => {
-        this.setState({ loading: false });
-        console.log(error);
-      });
-  };
+    }
+  }
+
+
 
   getVisitorList = () => {
     fetch(
@@ -1008,7 +1005,7 @@ class Dashboard extends React.Component {
             width={"25%"}
             cardText={" Family Members"}
             cardIcon={require("../../../../icons/view_all_visitors.png")}
-            // cardCount={5}
+            cardCount={this.state.falmilyMemebCount}
             marginTop={20}
             iconWidth={Platform.OS === "ios" ? 40 : 35}
             iconHeight={Platform.OS === "ios" ? 40 : 20}
@@ -1044,7 +1041,6 @@ class Dashboard extends React.Component {
             width={"25%"}
             cardText={"Visitors"}
             cardIcon={require("../../../../icons/view_all_visitors.png")}
-            // cardCount={2}
             marginTop={20}
             iconWidth={Platform.OS === "ios" ? 40 : 35}
             iconHeight={Platform.OS === "ios" ? 40 : 20}
@@ -1206,7 +1202,7 @@ class Dashboard extends React.Component {
           >
             <Text>View All Visitors</Text>
           </Button>
-         {/* <Button
+        <Button
             bordered
             style={styles.button1}
             onPress={() =>
@@ -1214,7 +1210,7 @@ class Dashboard extends React.Component {
                   }
           >
             <Text>Patrolling</Text>
-          </Button>*/}
+          </Button>
         </View>
       </ElevatedView>
     );
