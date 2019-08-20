@@ -154,12 +154,14 @@ class UnitList extends Component {
                 source={require("../icons/buil.png")}
               />
               <View style={{ flexDirection: "column" }}>
-                <Text style={styles.blockNameTextStyle}>{item.unUniName}</Text>
-                {item.blockName ? (
-                  <Text style={styles.blockNameTextStyle}>
-                    {item.blockName}
-                  </Text>
-                ) : null}
+                <Text style={styles.blockNameTextStyle}>
+                  {item.unUniName} >
+                  {item.blockName ? (
+                    <Text style={styles.blockNameTextStyle}>
+                      {" " + item.blockName}
+                    </Text>
+                  ) : null}
+                </Text>
               </View>
             </View>
             <View style={styles.noOfUnitsFlex}>
