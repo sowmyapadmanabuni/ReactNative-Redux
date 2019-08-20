@@ -91,48 +91,48 @@ class MyFamilyEdit extends Component {
     return (
       <View style={Style.container}>
 
-      <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
-          <View style={[Style.viewStyle1, { flexDirection: "row" }]}>
+<SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+            <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
               <View style={Style.viewDetails1}>
-                  <TouchableOpacity
-                      onPress={() => {
-                          this.props.navigation.goBack();
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.goBack();
+                    }}
+                >
+                  <View
+                      style={{
+                        height: hp("4%"),
+                        width: wp("15%"),
+                        alignItems: 'flex-start',
+                        justifyContent: "center"
                       }}
                   >
-                      <View
-                          style={{
-                              height: hp("4%"),
-                              width: wp("15%"),
-                              alignItems: 'flex-start',
-                              justifyContent: "center"
-                          }}
-                      >
-                          <Image
-                              resizeMode="contain"
-                              source={require("../../../../../icons/backBtn.png")}
-                              style={Style.viewDetails2}
-                          />
-                      </View>
-                  </TouchableOpacity>
+                    <Image
+                        resizeMode="contain"
+                        source={require("../../../../../icons/back.png")}
+                        style={Style.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
               </View>
               <View
                   style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center"
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
                   }}
               >
-                  <Image
-                      style={[Style.image1]}
-                      source={require("../../../../../icons/headerLogo.png")}
-                  />
+                <Image
+                    style={[Style.image1]}
+                    source={require("../../../../../icons/headerLogo.png")}
+                />
               </View>
-              <View style={{ flex: 0.2 }}>
-                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              <View style={{flex: 0.2}}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
               </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
-      </SafeAreaView>
+            </View>
+            <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+          </SafeAreaView>
 
 
       <Text style={Style.titleOfScreen}>Edit Family Member</Text>

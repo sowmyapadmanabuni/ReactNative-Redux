@@ -9,7 +9,8 @@ import {
     ScrollView,
     PermissionsAndroid, Dimensions,
     SafeAreaView, Alert, ToastAndroid
-} from "react-native"
+} from "react-native";
+import ProgressLoader from "rn-progress-loader";
 import ImagePicker from "react-native-image-picker"
 import { Dropdown } from "react-native-material-dropdown"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
@@ -68,6 +69,8 @@ class MyFamily extends Component {
             photoDetails: null,
             isPhotoAvailable: false,
             filePath: '',
+
+            isLoading: false
         }
     }
 
@@ -95,7 +98,7 @@ class MyFamily extends Component {
                                 >
                                     <Image
                                         resizeMode="contain"
-                                        source={require("../../../../../icons/backBtn.png")}
+                                        source={require("../../../../../icons/back.png")}
                                         style={Style.viewDetails2}
                                     />
                                 </View>
@@ -117,8 +120,9 @@ class MyFamily extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{ borderWidth: 1, borderColor: "orange" }} />
+                    <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
                 </SafeAreaView>
+
 
 
                 <Text style={Style.titleOfScreen}>Add Family Member</Text>
@@ -319,8 +323,15 @@ class MyFamily extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <ProgressLoader
+                    isHUD={true}
+                    isModal={true}
+                    visible={this.state.isLoading}
+                    color={base.theme.colors.primary}
+                    hudColor={"#FFFFFF"}
+                />            
                 </KeyboardAwareScrollView>
-
+                
 
             </View>
         )
@@ -336,7 +347,7 @@ class MyFamily extends Component {
             storageOptions: {
                 skipBackup: true,
                 path: 'tmp_files'
-              },
+            },
         };
         let self = this;
         ImagePicker.showImagePicker(options, (response) => {
@@ -350,13 +361,13 @@ class MyFamily extends Component {
                     photoDetails: response,
                     isPhotoAvailable: true,
                     imagePath: response.path
-                },()=>self.uploadImage(response));
+                }, () => self.uploadImage(response));
 
             }
         });
 
     }
-    resetAllFields(){
+    resetAllFields() {
         this.setState({
             relationName: "",
             cCode: '',
@@ -424,14 +435,14 @@ class MyFamily extends Component {
         console.warn("File Path: " + filePath);
         console.warn("File to DELETE: " + file);
         RNFS.readDir(filePath).then(files => {
-          for(let t of files) {
-            RNFS.unlink(t.path);
-          }
-  
+            for (let t of files) {
+                RNFS.unlink(t.path);
+            }
+
         })
-        .catch(err => {
-          console.error(err)
-        });
+            .catch(err => {
+                console.error(err)
+            });
     }
 
     async getTheContact() {
@@ -564,13 +575,19 @@ class MyFamily extends Component {
         console.log('MyFam', input)
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
         console.log('Stat in Add family', stat)
+        this.setState({
+            isLoading: true
+        });
         if (stat) {
             try {
                 if (stat.success) {
-                    if(Platform.OS === "android"){
+                    if (Platform.OS === "android") {
                         self.deleteImage()
                     }
                     self.props.navigation.navigate('MyFamilyList')
+                    this.setState({
+                        isLoading: true
+                    })
                 } else {
                     this.showAlert(stat.error.message, true)
                     // Alert.alert('Attention', stat.error.message, [
@@ -579,11 +596,17 @@ class MyFamily extends Component {
                     //         onPress: () => console.log('Cancel Pressed'),
                     //         style: 'cancel',
                     //     },], {cancelable: false});
+                    this.setState({
+                        isLoading: false
+                    })
 
                 }
 
             } catch (err) {
                 console.log('Error in adding Family Member')
+                this.setState({
+                    isLoading: false
+                })
             }
         }
     }

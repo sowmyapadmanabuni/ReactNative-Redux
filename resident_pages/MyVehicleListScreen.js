@@ -232,7 +232,7 @@ class VehicleList extends Component {
           </SafeAreaView>
 
         
-        <Text style={styles.titleOfScreen}>My Vehicle</Text>
+        <Text style={styles.titleOfScreen}>Vehicles</Text>
         
         <View style={styles.progress}>
             <ActivityIndicator size="large" color="#F3B431"/>

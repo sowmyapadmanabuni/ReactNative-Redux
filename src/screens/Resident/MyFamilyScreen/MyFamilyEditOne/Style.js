@@ -265,6 +265,7 @@ const Style = StyleSheet.create({
     color:'#ff8c00',
     marginBottom: hp("1.6%"),
   },
+  
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
@@ -297,6 +298,7 @@ const Style = StyleSheet.create({
     marginTop: 5
     // marginLeft: 10
   },
+
 })
 
 export default Style

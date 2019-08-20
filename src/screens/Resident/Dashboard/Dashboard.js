@@ -605,7 +605,7 @@ class Dashboard extends React.Component {
 
         self.roleCheckForAdmin(this.state.assocId);
         self.checkUnitIsThere();
-        //self.getVehicleList();
+        self.getVehicleList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -631,7 +631,7 @@ class Dashboard extends React.Component {
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
     self.checkUnitIsThere();
-    //  self.getVehicleList();
+     self.getVehicleList();
   }
 
   getVehicleList = unitId => {

@@ -181,7 +181,7 @@ class NotificationScreen extends Component {
         value = foundData ? foundData.vlComName : " ";
       } else if (type === "vlMobile") {
         let foundData = _.find(gateDetails, { sbMemID: id });
-        value = foundData ? foundData.vlMobile : " ";
+        value = foundData ? foundData.vlMobile : "";
       } else if (type === "vlEntryImg") {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlEntryImg : "";
@@ -375,28 +375,28 @@ class NotificationScreen extends Component {
                             </View>
                             <View style={{ flexDirection: 'column', marginLeft: hp('1%') }}>
                               <View style={{ marginBottom: 5 }}>
-                                <Text style={{ fontSize: hp("2%"), fontWeight: '500' }}>
+                                <Text style={{ fontSize: hp("1.8%"), fontWeight: '500' }}>
                                   {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
                                   Association
                                   </Text>
                               </View>
 
                               <View style={{ marginBottom: 5 }}>
-                                <Text style={{ fontSize: hp("2%") }}>
+                                <Text style={{ fontSize: hp("1.8%") }}>
                                   {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
 
                                 </Text>
                               </View>
 
                               <View style={{ flexDirection: "row", marginBottom: 5 }}>
-                                <Text style={{ color: "#000" }}>
+                                <Text style={{ fontSize: hp("1.8%"),color: "#000" }}>
                                   {this.renderCollapseData(
                                     "vlVisType",
                                     item.sbMemID
                                   )}{" "}
 
                                 </Text>
-                                <Text style={{ color: "#38bcdb" }}>
+                                <Text style={{fontSize: hp("1.8%"), color: "#38bcdb" }}>
                                   {this.renderCollapseData(
                                     "vlComName",
                                     item.sbMemID
@@ -405,6 +405,11 @@ class NotificationScreen extends Component {
                                 </Text>
 
                               </View>
+                              {this.renderCollapseData(
+                                "vlMobile",
+                                item.sbMemID
+                              ) !== "" ?
+
                               <View style={{ flexDirection: 'row' }}>
                                 <TouchableOpacity
                                   onPress={() => {
@@ -434,26 +439,24 @@ class NotificationScreen extends Component {
                                 >
                                   <View style={{ flexDirection: "row" }}>
                                     <View>
-                                      <Text style={{ color: "#ff8c00" }}>
+                                      <Text style={{fontSize: hp("1.8%"), color: "#ff8c00" }}>
                                         {this.renderCollapseData(
                                           "vlMobile",
                                           item.sbMemID
                                         )}
-                                        {/* {this.state.gateDetails !== null
-                                        ? this.state.gateDetails.vlMobile
-                                        : ""} */}
+                                        
                                       </Text>
                                     </View>
                                     <View
                                       style={{
-                                        width: hp("2.5%"),
-                                        height: hp("2.5%"),
+                                        width: hp("2.2%"),
+                                        height: hp("2.2%"),
                                       }}
                                     >
                                       <Image
                                         style={{
-                                          width: hp("2.5%"),
-                                          height: hp("2.5%")
+                                          width: hp("2.2%"),
+                                          height: hp("2.2%")
                                         }}
                                         source={require("../../../icons/call.png")}
                                       />
@@ -462,25 +465,27 @@ class NotificationScreen extends Component {
                                 </TouchableOpacity>
 
                               </View>
-
+                              :
+                                      <View></View>
+                                      }    
                             </View>
                           </View>
 
                           <View style={{ flexDirection: 'row' }}>
                             <View style={{ flexDirection: "row" }}>
-                              <Text style={{ color: "#ff8c00" }}>
+                              <Text style={{fontSize: hp("1.8%"), color: "#ff8c00" }}>
                                 Entry On:{" "}
                               </Text>
                               <View style={{ flexDirection: "row" }}>
 
-                                <Text>
+                                <Text style={{fontSize: hp("1.8%") }}>
 
                                   {this.renderCollapseData(
                                     "vldCreated",
                                     item.sbMemID
                                   )}  </Text>
 
-                                <Text>
+                                <Text style={{fontSize: hp("1.8%") }}>
 
                                   {this.renderCollapseData(
                                     "vlEntryT",
@@ -492,11 +497,11 @@ class NotificationScreen extends Component {
                             <View
                               style={{
                                 flexDirection: "row",
-                                marginLeft: hp("3%")
+                                marginLeft: hp("2%")
                               }}
                             >
-                              <Text style={{ color: "#ff8c00" }}>From: </Text>
-                              <Text>
+                              <Text style={{fontSize: hp("1.8%") , color: "#ff8c00" }}>From: </Text>
+                              <Text style={{fontSize: hp("1.8%")}}>
 
                                 {this.renderCollapseData(
                                   "vlengName",
@@ -522,19 +527,19 @@ class NotificationScreen extends Component {
                                   }}
                                 >
                                   <View style={{ flexDirection: "row" }}>
-                                    <Text style={{ color: "#ff8c00" }}>
+                                    <Text style={{fontSize: hp("1.8%"), color: "#ff8c00" }}>
                                       Exit On:{" "}
                                     </Text>
                                     <View style={{ flexDirection: "row" }}>
 
 
-                                      <Text>
+                                      <Text style={{fontSize: hp("1.8%") }}>
 
                                         {this.renderCollapseData(
                                           "vldUpdated",
                                           item.sbMemID
                                         )}  </Text>
-                                      <Text>
+                                      <Text style={{fontSize: hp("1.8%") }}>
 
                                         {this.renderCollapseData(
                                           "vlExitT",
@@ -547,11 +552,11 @@ class NotificationScreen extends Component {
                                   <View
                                     style={{
                                       flexDirection: "row",
-                                      marginLeft: hp("4.5%")
+                                      marginLeft: hp("3.3%")
                                     }}
                                   >
-                                    <Text style={{ color: "#ff8c00" }}>From: </Text>
-                                    <Text>
+                                    <Text style={{fontSize: hp("1.8%"), color: "#ff8c00" }}>From: </Text>
+                                    <Text style={{fontSize: hp("1.8%")}}>
 
                                       {this.renderCollapseData(
                                         "vlexgName",
