@@ -96,7 +96,7 @@ class UnitList extends Component {
   };
 
   renderItem = ({ item, index }) => {
-    console.log(item, "item");
+    console.log( "item",item);
     return (
       <View style={styles.tableView}>
         <View style={styles.lineAboveAndBelowFlatList} />
