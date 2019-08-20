@@ -81,59 +81,13 @@ class UnitList extends Component {
       .then(responseJson => {
         console.log("Manas", responseJson);
 
-        if (responseJson.data.unit[0]) {
-          let blockId = responseJson.data.unit[0].blBlockID;
-          // console.log(blockId, "blockid");
-          axios
-            .get(
-              `https://${
-                this.props.oyeURL
-              }/oyeliving/api/v1/Block/GetBlockListByBlockID/${blockId}`,
-              {
-                headers: {
-                  " X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-                  "Content-Type": "application/json"
-                }
-              }
-            )
-            .then(res => {
-              console.log(res.data.data, "blockdetails");
-              let blockName = res.data.data.blocksByBlockID[0].blBlkName;
-
-              let units = responseJson.data.unit;
-
-              let unitBlocks = [];
-
-              units.map(data => {
-                unitBlocks.push({
-                  ...data,
-                  blockName: blockName
-                });
-              });
-
-              this.setState({
-                isLoading: false,
-                // dataSource: responseJson.data.unit,
-                dataSource: unitBlocks,
-                error: responseJson.error || null,
-                loading: false
-              });
-              this.arrayholder = unitBlocks;
-              // this.arrayholder = responseJson.data.unit;
-            })
-            .catch(error => {
-              this.setState({ loading: false });
-              console.log(error);
-            });
-        } else {
-          this.setState({
-            isLoading: false,
-            dataSource: responseJson.data.unit,
-            error: responseJson.error || null,
-            loading: false
-          });
-          this.arrayholder = responseJson.data.unit;
-        }
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson.data.unit,
+          error: responseJson.error || null,
+          loading: false
+        });
+        this.arrayholder = responseJson.data.unit;
       })
       .catch(error => {
         this.setState({ loading: false });
