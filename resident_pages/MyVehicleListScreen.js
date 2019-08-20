@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableOpacity,Dimensions,SafeAreaView, ActivityIndicator,Image, FlatList, Alert} from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { NavigationEvents } from 'react-navigation';
-// import Swipeout from 'react-native-swipeout';
 import { connect } from "react-redux";
 import base from "../src/base";
 

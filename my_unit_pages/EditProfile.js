@@ -124,6 +124,7 @@ class EditProfile extends Component {
         const reg = /^[0]?[6789]\d{9}$/
         const OyeFullName = /^[a-zA-Z ]+$/
         const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
+        console.log("Mobile number, alt number",mobilenumber, alternatemobilenumber)
 
         if (firstname.length == 0) {
             Alert.alert("First name cannot not be empty")
@@ -164,7 +165,10 @@ class EditProfile extends Component {
         } else if (!alternateemail.length == 0) {
             this.alternateEmail()
             return
-        } else {
+        }else if(mobilenumber === alternatemobilenumber){
+            Alert.alert("Primary and alternate mobile number should be different")
+        }
+         else {
             this.editProfileUpdate()
         }
     }
@@ -235,7 +239,7 @@ class EditProfile extends Component {
         cca3 = this.state.cca3;
         callingCode1 = this.state.callingCode1;
         let countryName = this.state.countryName === "" ? 'IN' : this.state.countryName;
-        let countryName1 = this.state.countryName1;
+        let countryName1 = this.state.countryName1 === "" ? 'IN' : this.state.countryName1;
 
         // photo = this.state.photo
         // console.log(data)
@@ -581,6 +585,7 @@ class EditProfile extends Component {
                         </View>
                         <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
                     </SafeAreaView>
+                    
                     <KeyboardAwareScrollView>
                         <View style={styles.mainContainer}>
                             <View style={styles.textWrapper}>

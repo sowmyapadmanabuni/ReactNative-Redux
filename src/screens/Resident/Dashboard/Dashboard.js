@@ -604,7 +604,7 @@ class Dashboard extends React.Component {
         // });
 
         self.roleCheckForAdmin(this.state.assocId);
-        this.checkUnitIsThere();
+        self.checkUnitIsThere();
         //self.getVehicleList();
       }
     } catch (error) {
@@ -630,7 +630,7 @@ class Dashboard extends React.Component {
     });
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
-    this.checkUnitIsThere();
+    self.checkUnitIsThere();
     //  self.getVehicleList();
   }
 
@@ -763,7 +763,7 @@ class Dashboard extends React.Component {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    console.log(this.state.role, "state");
+    console.log(this.props.dashBoardReducer,dropdown1, "tate123455");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     return (
