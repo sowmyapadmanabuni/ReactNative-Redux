@@ -116,6 +116,7 @@ const Style = StyleSheet.create({
     // marginLeft: 10
   },
 
+
 });
 
 export default Style

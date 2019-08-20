@@ -12,7 +12,10 @@ import DatePicker from 'react-native-datepicker'
 import {connect} from "react-redux";
 import {updateStaffInfo} from "../../../../actions";
 import StaffStyle from "./StaffStyle";
-
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
 
 class Staff extends React.Component {
     constructor(props) {
@@ -138,6 +141,7 @@ class Staff extends React.Component {
                 </View>
                     :
                     <View style={StaffStyle.noStaffData}>
+                        <Image source={require('../../../../../icons/service.png')} style={{width:hp('10%'), height:hp('10%'), margin:hp('1%')}}/>
                         <Text style={StaffStyle.noStaffDataText}> No staff is there in the Selected Association </Text>
                     </View>}
                 {this.state.staffList.length!==0?

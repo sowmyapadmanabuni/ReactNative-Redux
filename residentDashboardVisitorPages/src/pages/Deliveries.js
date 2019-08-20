@@ -689,22 +689,23 @@ class App extends React.Component {
             {this.state.dataSource.length == 0 ? (
                 <View
                     style={{
-                      flex: 1,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      backgroundColor: "white"
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: "white",
+                      flex:1
                     }}
                 >
+                  <View style={{ flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+                  <Image source={require('../../../icons/delivery-man.png')} style={{width:hp('10%'), height:hp('10%'), margin:hp('1%')}}/>
                   <Text
                       style={{
                         backgroundColor: "white",
-                        alignItems: "center",
-                        justifyContent: "center",
                         fontSize: hp("2%")
                       }}
                   >
                     No Entries for selected Date
                   </Text>
+                  </View>
                   {/* <Text
                 style={{
                   backgroundColor: "white",

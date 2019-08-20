@@ -21,6 +21,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
+import ProgressLoader from "rn-progress-loader";
 import { Button, Form, Input, Item, Label } from "native-base";
 // import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -51,7 +52,9 @@ class AddVehicle extends Component {
       vehStickerNum: "",
       parkingSlotNum: "",
       parkingLotDetail: [],
-      selectedData: ""
+      selectedData: "",
+
+      isLoading: false
     };
 
     this.getUnitDetail = this.getUnitDetail.bind(this);
@@ -64,7 +67,7 @@ class AddVehicle extends Component {
   async getUnitDetail() {
     let self = this;
     let stat = await OyeLivingApi.getUnitDetailByUnitId(
-        this.props.dashBoardReducer.uniID
+      this.props.dashBoardReducer.uniID
     );
     //let stat = await OyeLivingApi.getUnitDetailByUnitId(497);
     console.log("Stat in unit detail:", stat);
@@ -88,7 +91,7 @@ class AddVehicle extends Component {
           parkingLotDetail: []
         });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   createVehicle = () => {
@@ -125,27 +128,27 @@ class AddVehicle extends Component {
       return false;
     } else if (oyeNonSpecialRegex.test(vehStickerNum) === true) {
       Alert.alert(
-          "Vehicle Sticker Number should not contain special character"
+        "Vehicle Sticker Number should not contain special character"
       );
       return false;
     } else if (oyeNonSpecialRegex.test(parkingSlotNum) === true) {
       Alert.alert("Parking Slot Number should not contain special character");
       return false;
-    }  else {
+    } else {
       if (this.state.parkingLotDetail.length !== 0) {
         for (let i in this.state.parkingLotDetail) {
           console.log(
-              this.state.selectedData,
-              this.state.parkingLotDetail[i].value
+            this.state.selectedData,
+            this.state.parkingLotDetail[i].value
           );
           if (
-              this.state.selectedData === this.state.parkingLotDetail[i].value
+            this.state.selectedData === this.state.parkingLotDetail[i].value
           ) {
             upID = this.state.parkingLotDetail[i].id;
           }
         }
       }
-     console.log('ValValVal',value)
+      console.log('ValValVal', value)
 
       let payloadData = {
         VERegNo: vehNum,
@@ -158,6 +161,9 @@ class AddVehicle extends Component {
         ASAssnID: this.props.dashBoardReducer.assId
       };
 
+      this.setState({
+        isLoading:true
+      })
       console.log("Payload Data:", payloadData);
 
       fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/Create`, {
@@ -168,17 +174,27 @@ class AddVehicle extends Component {
         },
         body: JSON.stringify(payloadData)
       })
-          .then(response => response.json())
-          .then(responseJson => {
-            console.log("Manas", responseJson,payloadData);
-            if (responseJson.success) {
-              this.props.navigation.navigate("MyVehicleListScreen");
-            } 
-            else{
-              alert(responseJson.error.message);
-            }
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("Manas", responseJson, payloadData);
+          if (responseJson.success) {
+            this.props.navigation.navigate("MyVehicleListScreen");
+            this.setState({
+              isLoading: true
+            })
+          }
+          else {
+            alert(responseJson.error.message);
+            this.setState({
+              isLoading: false
+            })
+          }
+        })
+        .catch(error => Alert.alert(responseJson.error.message),
+          this.setState({
+            isLoading: false
           })
-          .catch(error => Alert.alert(responseJson.error.message));
+        );
     }
   };
 
@@ -191,63 +207,63 @@ class AddVehicle extends Component {
   render() {
     console.log("State:", this.state);
     return (
-        <View style={styles.container}>
-          {/* <Header/> */}
-          <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
-            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-              <View style={styles.viewDetails1}>
-                <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.goBack();
-                    }}
-                >
-                  <View
-                      style={{
-                        height: hp("4%"),
-                        width: wp("15%"),
-                        alignItems: "flex-start",
-                        justifyContent: "center"
-                      }}
-                  >
-                    <Image
-                        resizeMode="contain"
-                        source={require("../icons/back.png")}
-                        style={styles.viewDetails2}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-              >
-                <Image
-                    style={[styles.image1]}
-                    source={require("../icons/headerLogo.png")}
-                />
-              </View>
-              <View style={{ flex: 0.2 }}>
-                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-              </View>
-            </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
-          </SafeAreaView>
-
-          <Text style={styles.titleOfScreen}>Add Vehicle</Text>
-          <View style={[styles.containers, { flex: 1, flexDirection: "column" }]}>
-            <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                  flexDirection: "row",
-                  backgroundColor: "#DAE0E2",
-                  height: hp("7%")
+      <View style={styles.container}>
+        {/* <Header/> */}
+        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
                 }}
+              >
+                <View
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require("../icons/back.png")}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
             >
-              {/* <RadioForm style={{marginTop:hp('1%')}}
+              <Image
+                style={[styles.image1]}
+                source={require("../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ flex: 0.2 }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+
+        <Text style={styles.titleOfScreen}>Add Vehicle</Text>
+        <View style={[styles.containers, { flex: 1, flexDirection: "column" }]}>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "space-around",
+              flexDirection: "row",
+              backgroundColor: "#DAE0E2",
+              height: hp("7%")
+            }}
+          >
+            {/* <RadioForm style={{marginTop:hp('1%')}}
                       radio_props={radio_props}
                       initial={0}
                       formHorizontal={true}
@@ -260,109 +276,117 @@ class AddVehicle extends Component {
                       labelStyle={{fontSize:hp('1.5%')}}
                       onPress={(value) => {this.setState({value:value})}}
                     /> */}
-              <RadioGroup
-                  style={{ flexDirection: "row" }}
-                  selectedIndex={0}
-                  onSelect={(index, value) => this.onSelect(index, value)}
-              >
-                <RadioButton value={"Two Wheeler"}>
-                  <Text>Two Wheeler</Text>
-                </RadioButton>
-                <RadioButton value={"Four Wheeler"}>
-                  <Text>Four Wheeler</Text>
-                </RadioButton>
-              </RadioGroup>
-            </View>
-            <KeyboardAwareScrollView>
-              <Form>
-                <Item style={styles.inputItem}>
-                  <Input
-                      autoCorrect={false}
-                      autoCapitalize="characters"
-                      keyboardType="default"
-                      placeholder="Vehicle Name"
-                      onChangeText={vehName => this.setState({ vehName: vehName })}
-                  />
-                </Item>
-                <Item style={styles.inputItem}>
-                  <Input
-                      autoCorrect={false}
-                      autoCapitalize="characters"
-                      keyboardType="default"
-                      placeholder="Vehicle Number"
-                      onChangeText={vehNum => this.setState({ vehNum: vehNum })}
-                  />
-                </Item>
-                <Item style={styles.inputItem}>
-                  {/* <Label>Vehicle Sticker Number</Label> */}
-                  <Input
-                      autoCorrect={false}
-                      autoCapitalize="characters"
-                      maxLength={10}
-                      keyboardType="default"
-                      placeholder="Vehicle Sticker Number"
-                      onChangeText={vehStickerNum =>
-                          this.setState({ vehStickerNum: vehStickerNum })
-                      }
-                  />
-                </Item>
-                <Item style={styles.inputItem}>
-                  {/* <Label>Parking Slot Number</Label> */}
-                  <Input
-                      autoCorrect={false}
-                      autoCapitalize="characters"
-                      keyboardType="default"
-                      placeholder="Parking Slot Number"
-                      onChangeText={parkingSlotNum =>
-                          this.setState({ parkingSlotNum: parkingSlotNum })
-                      }
-                  />
-                </Item>
-                {this.state.parkingLotDetail.length !== 0 ? (
-                    <Dropdown
-                        containerStyle={styles.box1}
-                        dropdownPosition={-1}
-                        style={{
-                          
-                          right: 19,
-                          textAlign: "left",
-                          fontFamily: base.theme.fonts.light,
-                          fontSize: hp("2.5%")
-                        }}
-                        value={"Select Parking lot"}
-                        textColor="#3A3A3C"
-                        labelHeight={hp("0.7%")}
-                        data={this.state.parkingLotDetail}
-                        inputContainerStyle={{ borderBottomColor: "transparent" }}
-                        onChangeText={data => this.setState({ selectedData: data })}
-                    />
-                ) : (
-                    <View style={styles.noData}>
-                      <Text>No parking slot available</Text>
-                    </View>
-                )}
-              </Form>
-              <View style={styles.buttonStyle}>
-                <Button
-                    bordered
-                    info
-                    style={styles.buttonCancel}
-                    onPress={() => this.props.navigation.goBack()}
-                >
-                  <Text style={styles.textFamilyVehicle}>Cancel</Text>
-                </Button>
-                <Button
-                    bordered
-                    warning
-                    style={styles.buttonAdd}
-                    onPress={() => this.createVehicle()}
-                >
-                  <Text style={styles.textFamilyVehicle}>Add Vehicle</Text>
-                </Button>
-              </View>
-            </KeyboardAwareScrollView>
+            <RadioGroup
+              style={{ flexDirection: "row" }}
+              selectedIndex={0}
+              onSelect={(index, value) => this.onSelect(index, value)}
+            >
+              <RadioButton value={"Two Wheeler"}>
+                <Text>Two Wheeler</Text>
+              </RadioButton>
+              <RadioButton value={"Four Wheeler"}>
+                <Text>Four Wheeler</Text>
+              </RadioButton>
+            </RadioGroup>
           </View>
+          <KeyboardAwareScrollView>
+            <Form>
+              <Item style={styles.inputItem}>
+                <Input
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  keyboardType="default"
+                  placeholder="Vehicle Name"
+                  onChangeText={vehName => this.setState({ vehName: vehName })}
+                />
+              </Item>
+              <Item style={styles.inputItem}>
+                <Input
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  keyboardType="default"
+                  placeholder="Vehicle Number"
+                  onChangeText={vehNum => this.setState({ vehNum: vehNum })}
+                />
+              </Item>
+              <Item style={styles.inputItem}>
+                {/* <Label>Vehicle Sticker Number</Label> */}
+                <Input
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  maxLength={10}
+                  keyboardType="default"
+                  placeholder="Vehicle Sticker Number"
+                  onChangeText={vehStickerNum =>
+                    this.setState({ vehStickerNum: vehStickerNum })
+                  }
+                />
+              </Item>
+              <Item style={styles.inputItem}>
+                {/* <Label>Parking Slot Number</Label> */}
+                <Input
+                  autoCorrect={false}
+                  autoCapitalize="characters"
+                  keyboardType="default"
+                  placeholder="Parking Slot Number"
+                  onChangeText={parkingSlotNum =>
+                    this.setState({ parkingSlotNum: parkingSlotNum })
+                  }
+                />
+              </Item>
+              {this.state.parkingLotDetail.length !== 0 ? (
+                <Dropdown
+                  containerStyle={styles.box1}
+                  dropdownPosition={-1}
+                  style={{
+
+                    right: 19,
+                    textAlign: "left",
+                    fontFamily: base.theme.fonts.light,
+                    fontSize: hp("2.5%")
+                  }}
+                  value={"Select Parking lot"}
+                  textColor="#3A3A3C"
+                  labelHeight={hp("0.7%")}
+                  data={this.state.parkingLotDetail}
+                  inputContainerStyle={{ borderBottomColor: "transparent" }}
+                  onChangeText={data => this.setState({ selectedData: data })}
+                />
+              ) : (
+                  <View style={styles.noData}>
+                    <Text>No parking slot available</Text>
+                  </View>
+                )}
+            </Form>
+            <View style={styles.buttonStyle}>
+              <Button
+                bordered
+                info
+                style={styles.buttonCancel}
+                onPress={() => this.props.navigation.goBack()}
+              >
+                <Text style={styles.textFamilyVehicle}>Cancel</Text>
+              </Button>
+              <Button
+                bordered
+                warning
+                style={styles.buttonAdd}
+                onPress={() => this.createVehicle()}
+              >
+                <Text style={styles.textFamilyVehicle}>Add Vehicle</Text>
+              </Button>
+            </View>
+          </KeyboardAwareScrollView>
         </View>
+
+        <ProgressLoader
+          isHUD={true}
+          isModal={true}
+          visible={this.state.isLoading}
+          color={base.theme.colors.primary}
+          hudColor={"#FFFFFF"}
+        />
+      </View>
     );
   }
 }
