@@ -11,7 +11,8 @@ import {
   GET_MEMBERLIST_FAILED,
   UPDATE_ID_DASHBOARD,
   UPDATE_DROPDOWN_INDEX,
-  UPDATE_SELECTED_DROPDOWN
+  UPDATE_SELECTED_DROPDOWN,
+  USER_ROLE
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -32,7 +33,8 @@ const INITIAL_STATE = {
   selectedAssociationIndex: null,
   selectedDropdown: "",
   selectedDropdown1: "",
-  called: false
+  called: false,
+  role:""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -101,6 +103,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_SELECTED_DROPDOWN:
       return { ...state, [action.payload.prop]: action.payload.value };
+
+      case USER_ROLE:
+        return {...state,userRole:action.payload}
 
     default:
       return state;
