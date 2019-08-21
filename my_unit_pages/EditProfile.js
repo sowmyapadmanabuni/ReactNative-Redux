@@ -824,7 +824,7 @@ class EditProfile extends Component {
                                                 }}
                                             >
                                                 <Text style={{color: "black", fontSize: hp("2%")}}>
-                                                    {this.state.countryName1 === "" ? "+91" : this.state.callingCode1}
+                                                    {this.state.callingCode}
                                                 </Text>
                                             </View>
 
