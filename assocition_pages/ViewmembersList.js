@@ -326,13 +326,18 @@ class Resident extends React.Component {
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
                             <View style={{alignItems: "flex-end", marginEnd: hp("2%"),top:15}}>
+                                {this.state.selectedRoleData.selRolId === 1 ||
+                                          this.state.selectedRoleData.selRolId === 2?
                                 <OSButton height={hp('3%')} onButtonClick={() => this.changeRole()} width={hp('8%')}
                                           oSBText={"Update"}
                                           borderRadius={hp('20%')}
                                           oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
                                           this.state.selectedRoleData.selRolId === 2 ? base.theme.colors.primary : base.theme.colors.grey
 
-                                          }/>
+                                          }/>:
+                                          <View style={{alignItems:'center',justifyContent:'center',height:hp("3%"),borderRadius:hp("3%"),width:hp('8%'),backgroundColor:base.theme.colors.grey}}>
+                                              <Text>Update</Text>
+                                          </View>}
                             </View>
                         </View>
                     </View>

@@ -74,6 +74,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentWillMount() {
+        console.log("SCDMVD:",this.props.navigation.state.params);
         let params = this.props.navigation.state.params !== undefined ? this.props.navigation.state.params.data.item : null;
         if (params === null) {
             if (Platform.OS === 'ios' ? this.getUserLocation() : this.requestLocationPermission())
@@ -92,7 +93,7 @@ class AddAndEditCheckPoints extends React.Component {
                 },
                 selectedIndex: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 0,
                 checkPointId: params.cpChkPntID
-            })
+            },()=>this.getAllCheckPoints())
         }
         console.log("Params:", params);
 
@@ -211,6 +212,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     validateCP(){
+        console.log("Hitting", this.state.cpArray)
         let allCPArray = this.state.cpArray;
         let selectedLatitude = parseFloat(this.state.region.latitude);
         let selectedLongitude = parseFloat(this.state.region.longitude);
@@ -289,9 +291,10 @@ class AddAndEditCheckPoints extends React.Component {
         try {
             if (stat !== undefined && stat !== null) {
                 if (stat.success) {
+                    let message = self.state.isEditing?"Check Point has been edited successfully":"Check Point has added been successfully"
                     Alert.alert(
                         'Success',
-                        'Check Point has been added successfully',
+                        message,
                         [
                             {
                                 text: 'See Checkpoints',
