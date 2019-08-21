@@ -9,6 +9,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import Dashboard from "../../screens/Resident/Dashboard/Dashboard";
 
 class DashBoardHeader extends React.Component {
     constructor(props) {
@@ -16,32 +17,10 @@ class DashBoardHeader extends React.Component {
         this.state = {
             ImageSource: null,
             datasource: null,
-            myFirstName: ""
+            myFirstName: "",
+            role:''
         };
     }
-
-    // renderBadge = () => {
-    //   const { notifications } = this.props;
-
-    //   let count = 0;
-
-    //   notifications.map((data, index) => {
-    //     if (!data.read) {
-    //       count += 1;
-    //     }
-    //   });
-
-    //   const BadgedIcon = withBadge(count)(Icon);
-
-    //   return (
-    //     <Icon
-    //       color="#FF8C00"
-    //       type="material"
-    //       name="notifications"
-    //       size={hp("4%")}
-    //     />
-    //   );
-    // };
 
     renderBadge = () => {
         const { notifications } = this.props;
@@ -75,98 +54,17 @@ class DashBoardHeader extends React.Component {
                     size={hp("4%")}
                 />
             );
-        // return (
-        //   <Icon
-        //     color="#FF8C00"
-        //     type="material"
-        //     name="notifications"
-        //     size={hp("4%")}
-        //   />
-        // );
+      
     };
 
-    /* componentDidMount() {
-      let self = this;
-      setTimeout(() => {
-        self.myProfileNet();
-      }, 500);
-    }*/
 
-    /* async myProfile(){
-      console.log('AccId@@@@@',this.props)
 
-      let response = await base.services.OyeLivingApi.getProfileFromAccount(
-          this.props.MyAccountID
-      );
-    // return (
-    //   <Icon
-    //     color="#FF8C00"
-    //     type="material"
-    //     name="notifications"
-    //     size={hp("4%")}
-    //   />
-    // );
-  };
 
-  /* componentDidMount() {
-    let self = this;
-    setTimeout(() => {
-      self.myProfileNet();
-    }, 500);
-  }*/
-
-  /* async myProfile(){
-    console.log('AccId@@@@@',this.props)
-
-    let response = await base.services.OyeLivingApi.getProfileFromAccount(
-        this.props.MyAccountID
-    );
-    console.log("Joe",response);
-    this.setState({
-      datasource: response,
-      ImageSource: response.data.account[0].acImgName
-    });
-  }*/
-
-  myProfileNet = async () => {
-    console.log("AccId@@@@@", this.props);
-    let response = await base.services.OyeLivingApi.getProfileFromAccount(
-      this.props.MyAccountID
-    );
-    console.log("Joe", response);
-    this.setState({
-      datasource: response,
-      ImageSource: response.data.account[0].acImgName
-    });
-    // fetch(
-    //   `https://apiuat.oyespace.com/oyeliving/api/v1/GetAccountListByAccountID/1`,
-    //   {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-    //     }
-    //   }
-    // )
-    //   .then(response => response.json())
-    //   .then(responseJson => {
-    //     console.log(responseJson);
-
-    //     this.setState({
-    //       datasource: responseJson,
-    //       ImageSource: responseJson.data.account[0].acImgName
-    //     });
-    //     console.log("gggg", datasource);
-    //   })
-    //   .catch(error => console.log(error));
-  };
-
+  
 
   render() {
     console.log(
-      "State in dashboard header:",
-      this.props.userReducer.userData,
-      this.props.userReducer.userProfilePic
+      "State in dashboard header:",this.state
     );
     return (
       <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
@@ -248,7 +146,8 @@ const mapStateToProps = state => {
         MyFirstName: state.UserReducer.MyFirstName,
         viewImageURL: state.OyespaceReducer.viewImageURL,
         notifications: state.NotificationReducer.notifications,
-        userReducer: state.UserReducer
+        userReducer: state.UserReducer,
+        dashboardReducer: state.DashboardReducer
     };
 };
 

@@ -26,6 +26,7 @@ import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import RadioForm, {RadioButton} from 'react-native-simple-radio-button';
 import OyeSafeApi from "../../base/services/OyeSafeApi";
 import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles"
+import PatrollingCheckPoints from './PatrollingCheckPoints';
 
 
 const {width, height} = Dimensions.get('window');
@@ -58,7 +59,8 @@ class AddAndEditCheckPoints extends React.Component {
             selectedIndex: 0,
             checkPointType: "StartPoint",
             isEditing: false,
-            checkPointId: ''
+            checkPointId: '',
+            cpArray:[]
         });
         this.getUserLocation = this.getUserLocation.bind(this)
 
@@ -83,8 +85,10 @@ class AddAndEditCheckPoints extends React.Component {
                 checkPointName: params.cpCkPName,
                 gpsLocation: params.cpgpsPnt,
                 region: {
-                    latitude: gpsLocationArr[0],
-                    longitude: gpsLocationArr[1]
+                    latitude: parseFloat(gpsLocationArr[0]),
+                    longitude: parseFloat(gpsLocationArr[1]),
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
                 },
                 selectedIndex: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 0,
                 checkPointId: params.cpChkPntID
@@ -128,14 +132,31 @@ class AddAndEditCheckPoints extends React.Component {
                         longitudeDelta:LONGITUDE_DELTA,
                         latitudeDelta:LATITUDE_DELTA
                     }
-                })
+                },()=>this.getAllCheckPoints())
             });
         } catch (e) {
             console.log("Error:", e);
         }
     }
 
-    log(data, val) {
+    async getAllCheckPoints(){
+        let self = this;
+        base.utils.logger.log(self.props);
+
+        let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
+        //let stat = await OyeSafeApi.getCheckPointList(8);
+        console.log("Stat:", stat);
+        try {
+            if (stat && stat !== undefined) {
+                let cpList = stat.data.checkPointListByAssocID;
+                self.setState({
+                    cpArray:cpList
+                })
+            }
+        } catch (e) {
+            base.utils.logger.log(e);
+        }
+
     }
 
     renderUserLocation() {
@@ -182,15 +203,67 @@ class AddAndEditCheckPoints extends React.Component {
         } else if (this.state.gpsLocation === "Set GPS Location") {
             alert("Please Select a location")
         } else {
-            this.addCheckPoint()
+            //this.addCheckPoint()
+
+            this.validateCP()
+        
         }
     }
+
+    validateCP(){
+        let allCPArray = this.state.cpArray;
+        let selectedLatitude = parseFloat(this.state.region.latitude);
+        let selectedLongitude = parseFloat(this.state.region.longitude);
+        let isDistanceValid = 'yes';
+
+
+        if(allCPArray.length !== 0){
+        for(let i in allCPArray){
+            let gpsLocationArr = allCPArray[i].cpgpsPnt.split(" ");;
+            let lat1 = parseFloat(gpsLocationArr[0]);
+            let long1 = parseFloat(gpsLocationArr[1]);
+
+            let distanceMeasured =base.utils.validate.distanceMeasurement(selectedLatitude,lat1,selectedLongitude,long1);
+
+            console.log("Distance Measured:",distanceMeasured);
+
+            if (distanceMeasured === 'less') {
+                isDistanceValid = 'less';
+            } else if (distanceMeasured === 'more') {
+                isDistanceValid = 'more';
+            }
+            else{
+                isDistanceValid = 'yes';
+            }
+        }
+
+
+        if(isDistanceValid === 'less'){
+            alert("Distance between two Checkpoints must be minimum 10 ft");
+        }
+        else if(isDistanceValid == 'more'){
+            alert("Distance between two Checkpoints must be maximum 20 ft");
+        }
+        else{
+            console.log("Adding Checkpoint");
+            this.addCheckPoint();
+        }
+
+
+
+    }
+    else{
+            this.addCheckPoint();
+        }
+    }
+
+    
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);
         let self = this;
 
-        let gpsLocation = this.state.region.latitude + " " + this.state.region.longitude;
+        let gpsLocation = parseFloat(this.state.region.latitude).toFixed(5) + " " + parseFloat(this.state.region.longitude).toFixed(5);
 
         let details = {};
 
@@ -246,7 +319,7 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     render() {
-        base.utils.logger.logArgs("",this.state);
+        console.log("State",this.state);
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
         return (
             <ScrollView onPress={() => Keyboard.dismiss()}>

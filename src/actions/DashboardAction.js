@@ -12,7 +12,8 @@ import {
   UPDATE_ID_DASHBOARD,
   UPDATE_DROPDOWN_INDEX,
   UPDATE_SELECTED_DROPDOWN,
-  UPDATE_USER_INFO
+  UPDATE_USER_INFO,
+  USER_ROLE
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
@@ -615,4 +616,11 @@ export const updateSelectedDropDown = ({ prop, value }) => {
   return dispatch => {
     dispatch({ type: UPDATE_SELECTED_DROPDOWN, payload: { prop, value } });
   };
-};
+}
+
+
+  export const updateuserRole = ({prop, value}) => {
+      return dispatch => {
+        dispatch({type:USER_ROLE,payload:{prop:value}})
+      }
+  }
