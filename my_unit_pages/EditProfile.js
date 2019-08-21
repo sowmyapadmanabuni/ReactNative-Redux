@@ -124,10 +124,10 @@ class EditProfile extends Component {
 
         photo = this.state.photo
 
-        const regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        const regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const reg = /^[0]?[6789]\d{9}$/
         const OyeFullName = /^[a-zA-Z ]+$/
-        const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
+        const oyeNonSpecialRegex = /[^A-Za-z]/
         console.log("Mobile number, alt number",mobilenumber, alternatemobilenumber)
 
         if (firstname.length == 0) {
@@ -179,11 +179,11 @@ class EditProfile extends Component {
 
     alternateMobile = () => {
         alternatemobilenumber = this.state.AlternateMobileNumber
-
+        const reg = /^[0]?[6789]\d{9}$/;
         cca3 = this.state.cca3
         callingCode1 = this.state.callingCode1
 
-        const reg = /^[0]?[6789]\d{9}$/;
+        
         if (cca3.length == 0) {
             Alert.alert("Please select country")
             return
@@ -193,6 +193,8 @@ class EditProfile extends Component {
         } else if (alternatemobilenumber.length < 10) {
             Alert.alert("Alternate mobile number should contain 10 numerics.")
             return
+        } else if (reg.test(alternatemobilenumber) === false) {
+            Alert.alert("Alternate Mobile number should not contain special characters.")
         } else if (!this.alternateEmail.length == 0) {
             this.alternateEmail()
             return
@@ -204,14 +206,13 @@ class EditProfile extends Component {
 
     alternateEmail = () => {
         alternateemail = this.state.AlternateEmail
-        const regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        const regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
         if (alternateemail.length == 0) {
             Alert.alert("Alternate email cannot be empty")
             return
         } else if (regemail.test(alternateemail) === false) {
             Alert.alert("Please Enter a Valid Alternate Email Id")
-            return
         } else {
             this.editProfileUpdate();
             return
@@ -667,7 +668,7 @@ class EditProfile extends Component {
                                                 // underlineColorAndroid="orange"
                                                 autoCorrect={false}
                                                 autoCapitalize="words"
-                                                keyboardType="default"
+                                                keyboardType='ascii-capable'
                                                 maxLength={50}
                                                 defaultValue={
                                                     this.props.navigation.state.params
@@ -707,7 +708,7 @@ class EditProfile extends Component {
                                                 // underlineColorAndroid="orange"
                                                 autoCorrect={false}
                                                 autoCapitalize="words"
-                                                keyboardType="default"
+                                                keyboardType='ascii-capable'
                                                 maxLength={50}
                                                 defaultValue={
                                                     this.props.navigation.state.params
