@@ -261,8 +261,8 @@ class MyFamily extends Component {
                                     onChangeText={(text) => this.setState({ mobileNumber: text })}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
+                                    keyboardType='numeric'
                                     placeholderTextColor={base.theme.colors.grey}
-                                    keyboardType={'phone-pad'}
                                 />
                                 <TouchableOpacity style={{ width: 35, height: 35, }} onPress={() => this.getTheContact()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
@@ -512,14 +512,28 @@ class MyFamily extends Component {
         console.log('Props**!!!', this.props, this.state);
 
         let self = this;
+        const OyeFirstName=/^[a-zA-Z ]+$/ ;
+        const OyeLastName=/^[a-zA-Z ]+$/ ;
+        const reg = /^[0]?[6789]\d{9}$/;
+
         if (self.state.relationName === "") {
             alert('Please Select relation')
         } else if (self.state.firstName === "") {
             alert('First Name is required')
         } else if (self.state.isMinor && self.state.isMinorSelected === 0 && self.state.guardianName === '') {
             alert('Guardian name is Mandatory')
+        } else if (OyeFirstName.test(self.state.firstName) === false) {
+            Alert.alert('First Name should not contain Special Character & numbers');
+            return false
+        } else if (self.state.lastName === "") {
+            alert('Last Name is required')
+        } else if (OyeLastName.test(self.state.lastName) === false) {
+            Alert.alert('Last Name should not contain Special Character & numbers');
+            return false
         } else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
+        } else if (reg.test(self.state.mobileNumber) === false) {
+            Alert.alert("Mobile number should not contain special characters.")
         } else if (self.props.dashBoardReducer.uniID === null) {
             alert('Unit id is null')
         } else if (self.props.dashBoardReducer.assId === null) {
