@@ -110,6 +110,7 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
         width: wp('20%'),
+        left:50
     },
     modalText:{
         alignSelf: 'center',

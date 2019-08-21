@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, Text, TouchableHighlight, View} from 'react-native';
+import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert} from 'react-native';
 import {connect} from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
@@ -21,6 +21,7 @@ const {height, width} = Dimensions.get('screen');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+let isRefreshing = false;
 
 
 class PatrollingCheckPoints extends React.Component {
@@ -36,6 +37,7 @@ class PatrollingCheckPoints extends React.Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
+            cpName:'',
             isEditing: false,
             selectedArray: [],
             checkedArray: []
@@ -44,26 +46,29 @@ class PatrollingCheckPoints extends React.Component {
     };
 
     componentWillMount() {
-        this.getCheckPoints();
+        this.getCheckPoints(false);
 
         if (this.props.navigation.state.params !== undefined) {
             this.setState({isEditing: true})
         }
 
-        this.updateStore();
+       // this.updateStore();
 
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) { 
+        console.log("Next Props:",nextProps);
         if (nextProps.navigation.state.params !== undefined) {
             if (nextProps.navigation.state.params.isRefreshing === true) {
-                this.getCheckPoints();
+                nextProps.navigation.state.params.isRefreshing  = false
+                this.getCheckPoints(true);
             }
 
         }
     }
 
-    async getCheckPoints() {
+
+    async getCheckPoints(isRefreshing) {
         let self = this;
         base.utils.logger.log(self.props);
 
@@ -72,8 +77,8 @@ class PatrollingCheckPoints extends React.Component {
         base.utils.logger.logArgs("Stat:", stat);
         try {
             if (stat && stat !== undefined) {
-                let cpList = stat.data.checkPointListByAssocID
-                self.updateCheckList(cpList)
+                let cpList = stat.data.checkPointListByAssocID;
+                    self.updateCheckList(cpList);
             }
         } catch (e) {
             base.utils.logger.log(e);
@@ -83,32 +88,35 @@ class PatrollingCheckPoints extends React.Component {
 
     updateCheckList(cpList) {
         let cpListArr = [];
-        if (this.props.navigation.state.params !== undefined) {
-            if (this.props.navigation.state.params.isRefreshing) {
-                cpListArr = cpList
-            } else {
-                let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
-                let cpListIDArr = cpListIDs.split(",");
-                for (let i in cpList) {
-                    for (let j in cpListIDArr) {
-                        if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
-                            cpList[i].isChecked = true
+            if (this.props.navigation.state.params !== undefined) {
+                if (this.props.navigation.state.params.isRefreshing !== undefined) {
+                    cpListArr = cpList
+                } else {
+                    let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
+                    let cpListIDArr = cpListIDs.split(",");
+                    for (let i in cpList) {
+                        for (let j in cpListIDArr) {
+                            if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
+                                cpList[i].isChecked = true
+                            }
                         }
                     }
+                    cpListArr = cpList;
                 }
-                cpListArr = cpList;
+            } else {
+                cpListArr = cpList
             }
-        } else {
-            cpListArr = cpList
-        }
 
+            console.log("CPLISTARR:",cpListArr,cpList)
         this.setState({
             checkPointArray: cpListArr
         })
 
-        if (this.props.navigation.state.params !== undefined) {
-            this.updateStore();
-        }
+    //     if (this.props.navigation.state.params !== undefined) {
+    //     if (this.props.navigation.state.params.isRefreshing === true) {
+    //         this.updateStore();
+    //     }
+    // }
 
     }
 
@@ -117,6 +125,7 @@ class PatrollingCheckPoints extends React.Component {
     }
 
     render() {
+        console.log("State:",this.state.checkPointArray);
         return (
             <View style={PatrollingCheckPointsStyles.container}>
                 <View style={PatrollingCheckPointsStyles.header}>
@@ -144,16 +153,19 @@ class PatrollingCheckPoints extends React.Component {
     }
 
 
-    updateStore() {
-        let cpList = this.state.checkPointArray;
+    updateStore(cpListArray) {
+        let cpList = cpListArray;
         const {updateSelectedCheckPoints} = this.props;
+        console.log("CP List Array:",cpListArray,this.props);
         let selectedCPArr = [];
         for (let i in cpList) {
             if (cpList[i].isChecked) {
                 selectedCPArr.push(cpList[i]);
             }
         }
+        console.log("Selected CP:",cpListArray)
         updateSelectedCheckPoints({value: selectedCPArr});
+        this.updateCheckList(cpListArray)
     }
 
     openMapModal() {
@@ -162,12 +174,17 @@ class PatrollingCheckPoints extends React.Component {
                    style={PatrollingCheckPointsStyles.mapViewModal}>
                 <View
                     style={PatrollingCheckPointsStyles.modalView}>
+                        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
+                        <View>
+                            <Text  style={PatrollingCheckPointsStyles.modalText}>{this.state.cpName}</Text>
+                        </View>
                     <TouchableHighlight
                         underlayColor={base.theme.colors.transparent}
                         style={PatrollingCheckPointsStyles.modalTouchable}
                         onPress={() => this.setState({isModalOpen: false})}>
                         <Text style={PatrollingCheckPointsStyles.modalText}>Close</Text>
                     </TouchableHighlight>
+                    </View>
                     <MapView
                         ref={map => {
                             this.map = map
@@ -209,18 +226,24 @@ class PatrollingCheckPoints extends React.Component {
 
 
     mapModal(data) {
+        console.log("Data:",data);
         let res = data.item.cpgpsPnt.split(" ");
+        console.log("Res:",parseFloat(res[0]),parseFloat(res[1]));
         this.setState({
             isModalOpen: !this.state.isModalOpen,
             region: {
-                latitude: res[0],
-                longitude: res[1]
-            }
+                latitude: parseFloat(res[0]),
+                longitude: parseFloat(res[1]),
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
+            },
+            cpName:data.item.cpCkPName
         })
     }
 
     _renderCheckPoints(item) {
         let data = item;
+        console.log("Item:",item.item)
         return (
             <View style={PatrollingCheckPointsStyles.checkBoxView}>
                 <View style={PatrollingCheckPointsStyles.checkPoint}>
@@ -271,7 +294,9 @@ class PatrollingCheckPoints extends React.Component {
                     </ElevatedView>
                     <EmptyView height={10}/>
                     <ElevatedView elevation={0}>
-                        <TouchableHighlight onPress={() => this.editCheckPoint(data)}>
+                        <TouchableHighlight 
+                        underlayColor={base.theme.colors.transparent}
+                        onPress={() => this.editCheckPoint(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                    source={require('../../../icons/edit.png')}/>
                         </TouchableHighlight>
@@ -280,7 +305,7 @@ class PatrollingCheckPoints extends React.Component {
                     <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.deleteCP(data)}>
+                            onPress={() => this.deleteCheckPoint(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                    source={require('../../../icons/delete.png')}/>
                         </TouchableHighlight>
@@ -289,6 +314,22 @@ class PatrollingCheckPoints extends React.Component {
                 {this.openMapModal()}
             </View>
         )
+    }
+
+    deleteCheckPoint(data){
+        Alert.alert(
+            'Attention',
+            'Are you sure you want to delete this checkpoint ?',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Deletion Cancelled'),
+                style: 'cancel',
+              },
+              {text: 'Yes', onPress: () => this.deleteCP(data)},
+            ],
+            {cancelable: false},
+          );
     }
 
     async deleteCP(data) {
@@ -304,7 +345,7 @@ class PatrollingCheckPoints extends React.Component {
             if (stat) {
                 if (stat.success) {
                     alert("Check Point Deleted Successfully");
-                    self.getCheckPoints();
+                    self.getCheckPoints(true);
                 }
             }
         } catch (e) {
@@ -312,63 +353,20 @@ class PatrollingCheckPoints extends React.Component {
         }
     }
 
-    setCheckVal(item) {
-        let cpList = this.state.checkPointArray;
-        let selectedArr = this.state.selectedArray;
-        if (selectedArr.length === 0) {
-            selectedArr.push(item);
-            for (let i in cpList) {
-                if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
+    setCheckVal(item){
+            let cpList = this.state.checkPointArray;
+
+            for(let i in cpList){
+                if(item.item.cpChkPntID === cpList[i].cpChkPntID){
                     cpList[i].isChecked = !item.item.isChecked
                 }
             }
-            this.setState({
-                checkPointArray: cpList
-            }, () => this.updateStore())
-        } else {
-            let splitLatLongArr = [];
-            for (let i in cpList) {
-                if (cpList[i].isChecked) {
-                    splitLatLongArr.push(cpList[i])
-                }
-            }
-            for (let i in selectedArr) {
-                splitLatLongArr = base.utils.validate.strToArray(selectedArr[selectedArr.length - 1].item.cpgpsPnt);
-            }
 
-            let splitNewLatLongArr = base.utils.validate.strToArray(item.item.cpgpsPnt);
-            let lat1 = parseFloat(splitLatLongArr[0]);
-            let lat2 = parseFloat(splitNewLatLongArr[0]);
-            let long1 = parseFloat(splitLatLongArr[1]);
-            let long2 = parseFloat(splitNewLatLongArr[1]);
-            let pcpStatus = base.utils.validate.distanceMeasurement(lat1, lat2, long1, long2);
-            console.log("PCP Status:", pcpStatus, lat1, lat2, long1, long2);
-            if (pcpStatus === true) {
-                for (let i in cpList) {
-                    if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
-                        cpList[i].isChecked = !item.item.isChecked
-                    }
-                }
-                this.setState({
-                    checkPointArray: cpList
-                }, () => this.updateStore())
-            } else {
-                if (pcpStatus === 'less') {
-                    alert("Distance between two Checkpoints must be minimum 10 ft")
-                } else if (pcpStatus === 'more') {
-                    alert("Distance between two Checkpoints must be maximum 20 ft")
-                } else {
-                    for (let i in cpList) {
-                        if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
-                            cpList[i].isChecked = !item.item.isChecked
-                        }
-                        this.setState({
-                            checkPointArray: cpList
-                        }, () => this.updateStore())
-                    }
-                }
-            }
-        }
+            console.log("CP LIST:",cpList)
+
+            this.setState({
+                checkPointArray:cpList
+            },()=>this.updateStore(cpList))
     }
 
 }

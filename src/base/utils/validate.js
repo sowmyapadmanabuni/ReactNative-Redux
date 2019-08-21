@@ -114,6 +114,7 @@ export class validate{
 
 
     static distanceMeasurement(lati1,lati2,longi1,longi2){
+        console.log(lati1,lati2,longi1,longi2);
         Number.prototype.toRad = function() {
             return this * Math.PI / 180;
         };
@@ -132,6 +133,8 @@ export class validate{
             Math.sin(dLon/2) * Math.sin(dLon/2);
         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         let d = R * c * 3280.84;  // Converting Km to Ft
+
+        console.log("Distance between tow lat & long in ft:",d," ft")
 
         if(d<10 && d !== 0){
             return "less"
