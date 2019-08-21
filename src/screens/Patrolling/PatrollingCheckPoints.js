@@ -241,6 +241,17 @@ class PatrollingCheckPoints extends React.Component {
         })
     }
 
+    navigateToQRScree(data){
+        console.log("Data on Sharing:",data.item);
+        let dataForQR = data.item;
+        let slicedGPSPNTS = dataForQR.cpgpsPnt.split(" ");
+        console.log("Sliced GPS Point:",slicedGPSPNTS);
+        let dataToBeSent = `${dataForQR.cpCkPName}, ${slicedGPSPNTS[0]},${slicedGPSPNTS[1]},${dataForQR.asAssnID},${dataForQR.cpChkPntID},QR_CODE`;
+        console.log("Data To Be Sent:",dataToBeSent);
+        this.props.navigation.navigate('qrScreen', {dataToBeSent})
+        
+    }
+
     _renderCheckPoints(item) {
         let data = item;
         console.log("Item:",item.item)
@@ -287,7 +298,7 @@ class PatrollingCheckPoints extends React.Component {
                     <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.props.navigation.navigate('qrScreen', {latLongData: data.item.cpgpsPnt})}>
+                            onPress={() => this.navigateToQRScree(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                    source={require('../../../icons/qr-codes.png')}/>
                         </TouchableHighlight>

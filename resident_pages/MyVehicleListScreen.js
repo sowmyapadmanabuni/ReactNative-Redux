@@ -232,7 +232,7 @@ class VehicleList extends Component {
           </SafeAreaView>
 
         
-        <Text style={styles.titleOfScreen}>My Vehicle</Text>
+        <Text style={styles.titleOfScreen}>Vehicles</Text>
         
         <View style={styles.progress}>
             <ActivityIndicator size="large" color="#F3B431"/>
@@ -298,8 +298,9 @@ class VehicleList extends Component {
       
         {this.state.dataSource.length == 0 ?
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Vehicle Data Available.</Text>
-              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Add your vehicle details.</Text>
+              <Image source={require('../icons/car.png')} style={{width:hp('10%'), height:hp('10%'),}}/>
+              {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Vehicle Data Available.</Text> */}
+              <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Add your vehicle details</Text>
             </View>
           :  
           <FlatList

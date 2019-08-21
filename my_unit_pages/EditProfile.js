@@ -100,10 +100,14 @@ class EditProfile extends Component {
     }
 
     AEmail = aEmail => {
+        console.log('HGHghghj',aEmail)
+
         this.setState({AlternateEmail: aEmail})
     }
 
     myEditProfile = () => {
+
+        console.log("!@#$%%GGGG",this.state)
         firstname = this.state.FirstName
         lastname = this.state.LastName
         callingCode = this.state.callingCode
@@ -113,7 +117,7 @@ class EditProfile extends Component {
         email = this.state.Email
 
         cca2 = this.state.cca2
-        alternatemobilenumber = this.state.AlternateMobileNumber
+        let alternatemobilenumber = this.state.AlternateMobileNumber
         alternateemail = this.state.AlternateEmail
         cca3 = this.state.cca3
         callingCode1 = this.state.callingCode1
@@ -124,29 +128,30 @@ class EditProfile extends Component {
         const reg = /^[0]?[6789]\d{9}$/
         const OyeFullName = /^[a-zA-Z ]+$/
         const oyeNonSpecialRegex = /[^0-9A-Za-z ,]/
+        console.log("Mobile number, alt number",mobilenumber, alternatemobilenumber)
 
         if (firstname.length == 0) {
-            Alert.alert("First name cannot not be empty")
+            Alert.alert("Please Enter First name")
         } else if (oyeNonSpecialRegex.test(firstname) === true) {
             Alert.alert("First name should not contain special characters")
         } else if (firstname.length < 3) {
-            Alert.alert("First name should be more than 3 characters")
-        } else if (firstname > 50) {
-            Alert.alert("First name should be less than 50 characters")
+            Alert.alert("First name should be minimum 2 characters (eg. OM)")
+        } else if (firstname.length > 20) {
+            Alert.alert("Maximum limit should be 20 characters")
         } else if (lastname.length == 0) {
-            Alert.alert("Last name should not be empty")
+            Alert.alert("Please Enter Last Name")
         } else if (oyeNonSpecialRegex.test(lastname) === true) {
             Alert.alert("Last name should not contain special characters")
         } else if (lastname.length < 3) {
-            Alert.alert("Last name should be more than 3 characters")
-        } else if (lastname > 50) {
-            Alert.alert("Last name should be less than 50 characters")
+            Alert.alert("Last name should be minimum 2 characters (eg. OM)")
+        } else if (lastname.length > 20) {
+            Alert.alert("Maximum limit should be 20 characters")
         } else if (cca2.length == 0) {
             Alert.alert("Please select country")
         } else if (mobilenumber.length == 0) {
-            Alert.alert("Primary mobile number cannot be empty")
+            Alert.alert("Please Enter Primary mobile number")
         } else if (mobilenumber.length < 10) {
-            Alert.alert("Primary mobile number should contain 10 numerics.")
+            Alert.alert("Please enter a valid (10 digit) Mobile no")
         } else if (reg.test(mobilenumber) === false) {
             Alert.alert(
                 "Primary mobile number should not contain special characters."
@@ -154,7 +159,7 @@ class EditProfile extends Component {
         } else if (email.length == 0) {
             Alert.alert("Primary email cannot be empty")
         } else if (regemail.test(email) === false) {
-            Alert.alert("Enter valid primary email id")
+            Alert.alert("Please Enter a Valid Email Id")
             //"Please check your email-id"
         } else if (this.state.photo == null) {
             Alert.alert("Upload photo")
@@ -164,7 +169,10 @@ class EditProfile extends Component {
         } else if (!alternateemail.length == 0) {
             this.alternateEmail()
             return
-        } else {
+        }else if(mobilenumber === alternatemobilenumber){
+            Alert.alert("Primary and alternate mobile number should be different")
+        }
+         else {
             this.editProfileUpdate()
         }
     }
@@ -202,7 +210,7 @@ class EditProfile extends Component {
             Alert.alert("Alternate email cannot be empty")
             return
         } else if (regemail.test(alternateemail) === false) {
-            Alert.alert("Enter valid alternative email id.")
+            Alert.alert("Please Enter a Valid Alternate Email Id")
             return
         } else {
             this.editProfileUpdate();
@@ -231,11 +239,11 @@ class EditProfile extends Component {
         email = this.state.Email;
         cca2 = this.state.cca2;
         alternatemobilenumber = this.state.AlternateMobileNumber;
-        alternateemail = this.state.AlternateEmail;
+        let alternateemail = this.state.AlternateEmail;
         cca3 = this.state.cca3;
         callingCode1 = this.state.callingCode1;
         let countryName = this.state.countryName === "" ? 'IN' : this.state.countryName;
-        let countryName1 = this.state.countryName1;
+        let countryName1 = this.state.countryName1 === "" ? 'IN' : this.state.countryName1;
 
         // photo = this.state.photo
         // console.log(data)
@@ -290,10 +298,7 @@ class EditProfile extends Component {
             ACISDCode3: null,
             ACMobile4: null,
             ACISDCode4: null,
-            ACEmail1:
-                alternateemail.length <= 0
-                    ? profileDataSourceAlternateEmail
-                    : alternateemail,
+            ACEmail1:alternateemail,
             ACEmail2: null,
             ACEmail3: null,
             ACEmail4: null,
@@ -532,7 +537,7 @@ class EditProfile extends Component {
     render() {
         //const { navigate } = this.props.navigation
         const {photo} = this.state;
-        console.log("State:", this.state);
+        console.log('AGHGHGHGH',this.props.navigation.state.params.profileDataSourceImageName,this.state.isPhotoAvailable)
 
         return (
             <TouchableWithoutFeedback
@@ -581,6 +586,7 @@ class EditProfile extends Component {
                         </View>
                         <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
                     </SafeAreaView>
+                    
                     <KeyboardAwareScrollView>
                         <View style={styles.mainContainer}>
                             <View style={styles.textWrapper}>
@@ -599,22 +605,22 @@ class EditProfile extends Component {
                                     <View style={styles.containerView_ForProfilePicViewStyle}>
                                           <View style={styles.viewForProfilePicImageStyle}>
                                                 {this.props.navigation.state.params
-                                                    .profileDataSourceImageName !== null && !this.state.isPhotoAvailable ? (
+                                                    .profileDataSourceImageName !== null && !this.state.isPhotoAvailable ?
                                                     <Image
                                                         style={styles.profilePicImageStyle}
                                                         source={{
                                                             uri:
-                                                                "http://mediaupload.oyespace.com/" +
+                                                                "https://mediaupload.oyespace.com/" +
                                                                 this.props.navigation.state.params
                                                                     .profileDataSourceImageName
                                                         }}
                                                     />
-                                                ) : (
+                                                :
                                                     <Image
                                                         style={styles.profilePicImageStyle}
                                                         source={{uri: photo}}
                                                     />
-                                                )}
+                                                }
                                             </View>
 
                                             <View style={styles.imagesmallCircle}>
@@ -765,7 +771,7 @@ class EditProfile extends Component {
                                                     //marginTop={hp("-0.5%")}
                                                     placeholder="Mobile Number"
                                                     autoCorrect={false}
-                                                    keyboardType="number-pad"
+                                                    keyboardType="phone-pad"
                                                     maxLength={20}
                                                     defaultValue={
                                                         this.props.navigation.state.params
@@ -774,8 +780,14 @@ class EditProfile extends Component {
                                                                 .profileDataSourceMobileNumber
                                                             : ""
                                                     }
-                                                    onChangeText={this.MNumber}
-                                                    value={this.state.MNumber}
+                                                    onChangeText={(value)=>{
+                                                        let num = value.replace(".", '');
+                                                        if (isNaN(num)) {
+                                                        // Its not a number
+                                                    } else {
+                                                        this.setState({MobileNumber:num})
+                                                    }}}
+                                                    value={this.state.MobileNumber}
                                                 />
                                             </Item>
                                         </View>
@@ -814,7 +826,7 @@ class EditProfile extends Component {
                                                 }}
                                             >
                                                 <Text style={{color: "black", fontSize: hp("2%")}}>
-                                                    {this.state.countryName1 === "" ? "91" : this.state.callingCode1}
+                                                    {this.state.countryName1 === "" ? "+91" : this.state.callingCode1}
                                                 </Text>
                                             </View>
 
@@ -833,7 +845,7 @@ class EditProfile extends Component {
                                                             : ""
                                                     }
                                                     onChangeText={this.AMNumber}
-                                                    value={this.state.AMNumber}
+                                                    value={this.state.AlternateMobileNumber}
                                                 />
                                             </Item>
                                         </View>
@@ -888,7 +900,7 @@ class EditProfile extends Component {
                                                         : ""
                                                 }
                                                 onChangeText={this.AEmail}
-                                                value={this.state.AEmail}
+                                                value={this.state.AlternateEmail}
                                             />
                                         </Item>
                                     </Form>
@@ -1097,6 +1109,8 @@ const mapStateToProps = state => {``
         viewImageURL: state.OyespaceReducer.viewImageURL,
         imageUrl: state.OyespaceReducer.imageUrl,
         SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        mediaupload: state.OyespaceReducer.mediaupload,
+
     }
 };
 export default connect(mapStateToProps)(EditProfile);

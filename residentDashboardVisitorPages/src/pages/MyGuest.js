@@ -253,8 +253,9 @@ class MyGuests extends Component {
 
           {this.state.dataSource.length === 0 ?
               <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-                <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text>
-                <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite.</Text>
+                <Image source={require('../../../icons/guest.png')} style={{width:hp('10%'), height:hp('10%'), margin:hp('1%')}}/>
+                {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text> */}
+                <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite Guest</Text>
               </View>
               :
               <FlatList

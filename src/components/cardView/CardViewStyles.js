@@ -34,12 +34,13 @@ const CardViewStyles = StyleSheet.create({
     },
     imageStyles: {
         alignSelf: 'center',
-        marginBottom: 2
+        marginBottom: 2,
     },
     subView: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '65%',
+        width: '55%',
+        justifyContent:'space-between'
     },
     count: {
         fontSize: 15,
@@ -49,6 +50,8 @@ const CardViewStyles = StyleSheet.create({
     cardText: {
         fontSize: 10,
         color: base.theme.colors.black,
+        textAlign: 'left',
+
     }
 
 });

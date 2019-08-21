@@ -25,7 +25,8 @@ class CreateOrJoin extends React.Component {
             </View>
             <View style={{margin:hp('1.5%')}}>
               <Text style={styles.thereisnorecordofthisnum} >
-                Please proceed with by Joining Association(join an existing association) or Enrol Association (Onboard your current association on OyeSpace)</Text>
+                Please proceed with by Joining Association(join an existing association)</Text>
+                 {/* or Enroll Association (Onboard your current association on OyeSpace) */}
             </View>
 
            {/* <View style={{ marginTop: 30, justifyContent:'center', alignItems:'center' }}>

@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, { Component } from "react"
 import {
     View,
     Text,
@@ -7,23 +7,23 @@ import {
     Platform,
     TextInput,
     ScrollView,
-    PermissionsAndroid,
+    PermissionsAndroid, Dimensions,
     SafeAreaView, Alert, ToastAndroid
-} from "react-native"
-
+} from "react-native";
+import ProgressLoader from "rn-progress-loader";
 import ImagePicker from "react-native-image-picker"
-import {Dropdown} from "react-native-material-dropdown"
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import { Dropdown } from "react-native-material-dropdown"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from "react-native-responsive-screen"
 import base from "../../../../base"
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import ContactsWrapper from "react-native-contacts-wrapper"
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import Style from './Style'
-import {Button} from "native-base";
+import { Button } from "native-base";
 const RNFS = require('react-native-fs');
 
 
@@ -59,8 +59,8 @@ class MyFamily extends Component {
             isMinor: false,
             firstName: "",
             lastName: "",
-            minorProps: [{label: 'Yes', value: 0},
-                {label: 'No', value: 1}],
+            minorProps: [{ label: 'Yes', value: 0 },
+            { label: 'No', value: 1 }],
             isMinorSelected: 0,
             guardianName: "",
             relativeImage: "",
@@ -69,6 +69,8 @@ class MyFamily extends Component {
             photoDetails: null,
             isPhotoAvailable: false,
             filePath: '',
+
+            isLoading: false
         }
     }
 
@@ -76,36 +78,65 @@ class MyFamily extends Component {
         console.log('Isminor', this.state)
         let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number"
         return (
-            <SafeAreaView style={Style.container}>
-                <View style={Style.headerStyles}>
-                    <TouchableOpacity style={{width: '30%'}} onPress={() => {
-                        this.props.navigation.goBack()
-                    }}>
-                        <Image source={require("../../../../../icons/backBtn.png")}
-                               style={Style.backIcon}/>
-                    </TouchableOpacity>
-                    <View style={{width: '30%', alignItems: 'center'}}>
-                        <Image source={require("../../../../../icons/headerLogo.png")}
-                               style={{ width: wp("24%"),
-                                   height: hp("10%")}}/>
-                    </View>
-                    <View style={Style.nextView}>
-                    </View>
+            <View style={Style.container}>
 
-                </View>
-                <View style={Style.addFamilyMem}>
-                    <Text style={Style.addFamilyText}>Add Family Member</Text>
-                </View>
+                <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
+                    <View style={[Style.viewStyle1, { flexDirection: "row" }]}>
+                        <View style={Style.viewDetails1}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.goBack();
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        height: hp("4%"),
+                                        width: wp("15%"),
+                                        alignItems: 'flex-start',
+                                        justifyContent: "center"
+                                    }}
+                                >
+                                    <Image
+                                        resizeMode="contain"
+                                        source={require("../../../../../icons/back.png")}
+                                        style={Style.viewDetails2}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}
+                        >
+                            <Image
+                                style={[Style.image1]}
+                                source={require("../../../../../icons/headerLogo.png")}
+                            />
+                        </View>
+                        <View style={{ flex: 0.2 }}>
+                            {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                        </View>
+                    </View>
+                    <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
+                </SafeAreaView>
+
+
+
+                <Text style={Style.titleOfScreen}>Add Family Member</Text>
+
                 <KeyboardAwareScrollView>
                     <View style={Style.subContainer}>
                         <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                             {this.state.relativeImage === '' ?
-                                <Image style={{height: 40, width: 40, alignSelf: 'center'}}
-                                       source={require('../../../../../icons/camera.png')}
+                                <Image style={{ height: 40, width: 40, alignSelf: 'center' }}
+                                    source={require('../../../../../icons/camera.png')}
                                 />
                                 :
-                                <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
-                                       source={{uri: this.state.relativeImage}}/>
+                                <Image style={{ height: 90, width: 90, borderRadius: 45, alignSelf: 'center' }}
+                                    source={{ uri: this.state.relativeImage }} />
                             }
                         </TouchableOpacity>
                     </View>
@@ -129,31 +160,32 @@ class MyFamily extends Component {
                             }}
                             rippleOpacity={0}
                             dropdownPosition={-6}
-                            dropdownOffset={{top: 0, left: 0,}}
-                            style={{fontSize: hp("2.2%")}}
+                            dropdownOffset={{ top: 0, left: 0, }}
+                            style={{ fontSize: hp("2.2%") }}
                             onChangeText={(value, index) => this.changeFamilyMember(value, index)}
                         />
                         <View style={Style.textInputView}>
-                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>First Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                            <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'left' }}>First Name
+                                <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
                             <TextInput
-                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
-                                onChangeText={(text) => this.setState({firstName: text})}
+                                style={{ height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey }}
+                                onChangeText={(text) => this.setState({ firstName: text })}
                                 value={this.state.firstName}
                                 placeholder="First Name"
+                                keyboardType="ascii-capable"
                                 placeholderTextColor={base.theme.colors.grey}
                             />
                         </View>
                         <View style={Style.textInputView}>
-                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Last Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                            <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'left' }}>Last Name
+                                <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
                             <TextInput
-                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
-                                onChangeText={(text) => this.setState({lastName: text})}
+                                style={{ height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey }}
+                                onChangeText={(text) => this.setState({ lastName: text })}
                                 value={this.state.lastName}
                                 placeholder="Last Name"
+                                keyboardType="ascii-capable"
                                 placeholderTextColor={base.theme.colors.grey}
-                                keyboardType={'default'}
                             />
                         </View>
                         {this.state.isMinor ?
@@ -164,7 +196,7 @@ class MyFamily extends Component {
                                 justifyContent: 'flex-start',
                                 marginTop: 25,
                             }}>
-                                <Text style={{fontSize: 14, color: base.theme.colors.black}}>Minor</Text>
+                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>Minor</Text>
                                 <RadioForm formHorizontal={true} animation={true}>
                                     {this.state.minorProps.map((obj, i) => {
                                         let onPress = (value, index) => {
@@ -182,37 +214,37 @@ class MyFamily extends Component {
                                                     buttonInnerColor={base.theme.colors.primary}
                                                     buttonOuterColor={base.theme.colors.primary}
                                                     buttonSize={10}
-                                                    buttonStyle={{borderWidth: 0.7}}
-                                                    buttonWrapStyle={{marginLeft: 40}}
+                                                    buttonStyle={{ borderWidth: 0.7 }}
+                                                    buttonWrapStyle={{ marginLeft: 40 }}
                                                 />
                                                 <RadioButtonLabel
                                                     obj={obj}
                                                     index={i.toString()}
                                                     onPress={onPress}
-                                                    labelStyle={{color: base.theme.colors.black}}
-                                                    labelWrapStyle={{marginLeft: 10}}
+                                                    labelStyle={{ color: base.theme.colors.black }}
+                                                    labelWrapStyle={{ marginLeft: 10 }}
                                                 />
                                             </RadioButton>
                                         )
                                     })}
                                 </RadioForm>
                             </View>
-                            : <View/>}
+                            : <View />}
                         {this.state.isMinor && this.state.isMinorSelected === 0 ?
                             <View style={Style.textInputView}>
-                                <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Guardian's
+                                <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'left' }}>Guardian's
                                     Name
-                                    <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
                                 <TextInput
-                                    style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
-                                    onChangeText={(text) => this.setState({guardianName: text})}
+                                    style={{ height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey }}
+                                    onChangeText={(text) => this.setState({ guardianName: text })}
                                     value={this.state.guardianName}
                                     placeholder="Guardian's Name"
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'default'}
                                 />
                             </View>
-                            : <View/>}
+                            : <View />}
                         <View style={[Style.textInputView, {
                             borderBottomWidth: 1,
                             borderColor: base.theme.colors.lightgrey, marginBottom: 10
@@ -222,69 +254,86 @@ class MyFamily extends Component {
                                 color: base.theme.colors.black,
                                 textAlign: 'left'
                             }}>{mobPlaceHolder}
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
                             <View style={Style.mobNumView}>
                                 <TextInput
-                                    style={{height: 50, width: '80%',}}
-                                    onChangeText={(text) => this.setState({mobileNumber: text})}
+                                    style={{ height: 50, width: '80%', }}
+                                    onChangeText={(text) => this.setState({ mobileNumber: text })}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'phone-pad'}
                                 />
-                                <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
+                                <TouchableOpacity style={{ width: 35, height: 35, }} onPress={() => this.getTheContact()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
-                                           style={{width: 25, height: 25,}}/>
+                                        style={{ width: 25, height: 25, }} />
                                 </TouchableOpacity>
                             </View>
                         </View>
                         <View style={{
-                                flexDirection: "row",
-                                justifyContent: "space-around",
-                                marginTop: hp("4%"),
-                                marginBottom: hp("2%"),
-                                marginHorizontal: hp("2%")
-                         }}>
+                            flexDirection: "row",
+                            justifyContent: "space-around",
+                            marginTop: hp("4%"),
+                            marginBottom: hp("2%"),
+                            marginHorizontal: hp("2%")
+                        }}>
                             <TouchableOpacity
                                 bordered
                                 dark
-                                style={{  width: wp("22%"),
+                                style={{
+                                    width: wp("22%"),
                                     height: hp("4%"),
                                     borderRadius: hp("2.5%"),
                                     borderWidth: hp("0.2%"),
                                     borderColor: "#EF3939",
                                     backgroundColor: "#EF3939",
-                                    alignItems:'center',
-                                    justifyContent: "center"}}
+                                    alignItems: 'center',
+                                    justifyContent: "center"
+                                }}
                                 onPress={() => {
                                     this.resetAllFields()
                                 }}
                             >
-                                <Text style={{ color: "white",
+                                <Text style={{
+                                    color: "white",
                                     fontWeight: "600",
-                                    fontSize: hp("2%")}}>Reset</Text>
+                                    fontSize: hp("2%")
+                                }}>Reset</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 bordered
                                 dark
-                                style={{width: wp("22%"),
+                                style={{
+                                    width: wp("22%"),
                                     height: hp("4%"),
                                     borderRadius: hp("2.5%"),
                                     borderWidth: hp("0.2%"),
                                     borderColor: "orange",
                                     backgroundColor: "orange",
-                                    alignItems:'center',
-                                    justifyContent: "center", marginLeft:20}}
+                                    alignItems: 'center',
+                                    justifyContent: "center", marginLeft: 20
+                                }}
                                 onPress={() => this.validation()}
                             >
-                                <Text style={{ color: "white",
+                                <Text style={{
+                                    color: "white",
                                     fontWeight: "600",
-                                    fontSize: hp("2%")}}>Add</Text>
+                                    fontSize: hp("2%")
+                                }}>Add</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <ProgressLoader
+                    isHUD={true}
+                    isModal={true}
+                    visible={this.state.isLoading}
+                    color={base.theme.colors.primary}
+                    hudColor={"#FFFFFF"}
+                />            
                 </KeyboardAwareScrollView>
-            </SafeAreaView>
+                
+
+            </View>
         )
     }
 
@@ -298,7 +347,7 @@ class MyFamily extends Component {
             storageOptions: {
                 skipBackup: true,
                 path: 'tmp_files'
-              },
+            },
         };
         let self = this;
         ImagePicker.showImagePicker(options, (response) => {
@@ -312,13 +361,13 @@ class MyFamily extends Component {
                     photoDetails: response,
                     isPhotoAvailable: true,
                     imagePath: response.path
-                },()=>self.uploadImage(response));
+                }, () => self.uploadImage(response));
 
             }
         });
 
     }
-    resetAllFields(){
+    resetAllFields() {
         this.setState({
             relationName: "",
             cCode: '',
@@ -369,7 +418,7 @@ class MyFamily extends Component {
             this.setState({
                 isMinor: true,
                 //firstName: '',
-               // lastName: '',
+                // lastName: '',
                 mobileNumber: '',
                 guardianName: ''
             })
@@ -386,14 +435,14 @@ class MyFamily extends Component {
         console.warn("File Path: " + filePath);
         console.warn("File to DELETE: " + file);
         RNFS.readDir(filePath).then(files => {
-          for(let t of files) {
-            RNFS.unlink(t.path);
-          }
-  
+            for (let t of files) {
+                RNFS.unlink(t.path);
+            }
+
         })
-        .catch(err => {
-          console.error(err)
-        });
+            .catch(err => {
+                console.error(err)
+            });
     }
 
     async getTheContact() {
@@ -494,7 +543,7 @@ class MyFamily extends Component {
         Alert.alert(title, message, [
             {
                 text: btn, onPress: () => {
-                    self.setState({isLoading: false});
+                    self.setState({ isLoading: false });
                     callback()
                 }
             }
@@ -502,7 +551,7 @@ class MyFamily extends Component {
     }
 
     async addRelativeDetails(title, message) {
-        console.log('Props**', this.props,this.state);
+        console.log('Props**', this.props, this.state);
         let self = this;
         let mobNum = self.state.sendNum
         let cCode = self.state.cCode
@@ -521,31 +570,45 @@ class MyFamily extends Component {
             "FMMinor": self.state.isMinor,
             "FMLName": self.state.lastName,
             "FMGurName": self.state.guardianName,
-            "PAccntID":self.props.userReducer.MyAccountID
+            "PAccntID": self.props.userReducer.MyAccountID
         };
         console.log('MyFam', input)
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
-        console.log('Stat in Add family',stat)
-            if (stat) {
+        console.log('Stat in Add family', stat)
+        this.setState({
+            isLoading: true
+        });
+        if (stat) {
             try {
                 if (stat.success) {
-                    if(Platform.OS === "android"){
-                        self.deleteImage()
+                    if(self.state.imageUrl !==''){
+                        if(Platform.OS === "android"){
+                            self.deleteImage()
+                        }
                     }
                     self.props.navigation.navigate('MyFamilyList')
+                    this.setState({
+                        isLoading: true
+                    })
                 } else {
-                    this.showAlert(stat.error.message,true)
+                    this.showAlert(stat.error.message, true)
                     // Alert.alert('Attention', stat.error.message, [
                     //     {
                     //         text: 'Ok',
                     //         onPress: () => console.log('Cancel Pressed'),
                     //         style: 'cancel',
                     //     },], {cancelable: false});
+                    this.setState({
+                        isLoading: false
+                    })
 
                 }
 
             } catch (err) {
                 console.log('Error in adding Family Member')
+                this.setState({
+                    isLoading: false
+                })
             }
         }
     }

@@ -18,6 +18,8 @@ import {
     TextInput,
     Dimensions
 } from "react-native";
+import ProgressLoader from "rn-progress-loader";
+import base from "../src/base";
 // import SplashScreen from "./SplashScreen.js";
 import CheckBox from "react-native-check-box";
 import { TextField } from "react-native-material-textfield";
@@ -42,7 +44,6 @@ class MobileValid extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading1: true,
 
             Mobilenumber: "",
             OTPNumber: "",
@@ -56,9 +57,9 @@ class MobileValid extends Component {
     componentDidMount() {
         setTimeout(() => {
             this.setState({
-                isLoading1: false
+                isLoading: false
             });
-        }, 3000);
+        }, 1500);
     }
 
     handleMobile = mobilenumber => {
@@ -70,13 +71,13 @@ class MobileValid extends Component {
         const countryCode = "+" + this.state.callingCode; //this.phone.getValue();
 
         if (mobilenumber == 0) {
-            alert("Mobile Number cannot be Empty");
+            alert("Mobile Number is a mandatory field");
         } else if (!this.state.isChecked) {
             alert(
-                "Please read and accept Terms and Conditions and Privacy Policy to proceed"
+                "Please read and accept our Terms and Conditions and Privacy Policy to proceed"
             );
         } else if (reg.test(mobilenumber) === false) {
-            alert("Enter valid Mobile Number");
+            alert("Please enter a valid (10 digit) Mobile number");
             return false;
         } else {
             anu = {
@@ -112,15 +113,11 @@ class MobileValid extends Component {
                         // global.MyMobileNumber = mobilenumber;
                         // global.MyISDCode = countryCode;
                         this.props.navigation.navigate("OTPVerificationScreen");
-                    } else {
-                        console.log("responseJson Account else", responseJson.data);
                         this.setState({
                             isLoading: false
                         });
-                        alert("OTP not Sent");
-                        // this.props.navigation.navigate('CreateOrJoinScreen');
-                    }
-                    console.log("suvarna", "hi");
+
+                    } 
                 })
                 .catch(error => {
                     console.log(error);
@@ -132,6 +129,7 @@ class MobileValid extends Component {
         }
     };
 
+    
     render() {
         return (
             <Fragment>
@@ -181,13 +179,13 @@ class MobileValid extends Component {
                                         </View>
                                     </View>
 
-                                    {this.state.isLoading ? (
+                                    {/* {this.state.isLoading ? (
                                         <View style={{ height: hp("5%") }}>
                                             <ActivityIndicator />
                                         </View>
                                     ) : (
                                             <Text style={{ height: hp("5%") }}> </Text>
-                                        )}
+                                        )} */}
                                     <View style={styles.mobilenumberverification}>
                                         <Text style={{ fontSize: hp("2%") }}>
                                             Enter your mobile number to get{" "}
@@ -259,7 +257,7 @@ class MobileValid extends Component {
                                                 marginLeft: hp("1.8%"),
                                                 flexDirection: "row",
                                                 marginTop: hp("3%"),
-                                                width:'90%'
+                                                width: '90%'
                                             }}
                                         >
                                             <CheckBox
@@ -337,9 +335,17 @@ class MobileValid extends Component {
                                         </Button>
                                     </View>
                                 </View>
+                                <ProgressLoader
+                                    isHUD={true}
+                                    isModal={true}
+                                    visible={this.state.isLoading}
+                                    color={base.theme.colors.primary}
+                                    hudColor={"#FFFFFF"}
+                                />
                             </KeyboardAwareScrollView>
                         </View>
                     </View>
+
                 </SafeAreaView>
             </Fragment>
         );

@@ -27,29 +27,7 @@ const Style = StyleSheet.create({
   emptyViewStyle: {
     flex: 1
   },
-  viewStyle1: {
-    backgroundColor: "#fff",
-    height: hp("8%"),
-    width: Dimensions.get("screen").width,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    position: "relative",
-    flexDirection: "row"
-  },
-  viewDetails1: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginLeft: 20
-  },
-
-  image1: {
-    width: wp("24%"),
-    height: hp("10%")
-  },
+  
   mainView: {
     flex: 1
   },

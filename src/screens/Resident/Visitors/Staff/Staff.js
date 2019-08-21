@@ -12,7 +12,10 @@ import DatePicker from 'react-native-datepicker'
 import {connect} from "react-redux";
 import {updateStaffInfo} from "../../../../actions";
 import StaffStyle from "./StaffStyle";
-
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+  } from "react-native-responsive-screen";
 
 class Staff extends React.Component {
     constructor(props) {
@@ -44,10 +47,9 @@ class Staff extends React.Component {
     }
 
     async getListOfStaff() {
-        let self = this;
-        //http://apiuat.oyespace.com/oye247/api/v1/GetWorkerListByAssocIDAndAccountID/70/21
-        console.log("StaffList Input@#@#@#@#",self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID)
-        let stat = await base.services.OyeSafeApi.getStaffListByAssociationId(self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID);// 1
+        let self = this; //dashboardReducer.uniID
+        console.log("StaffList Input@#@#@#@#",self.props.dashboardReducer.uniID,self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID)
+        let stat = await base.services.OyeSafeApi.getStaffListByAssociationIdAndUnitId(self.props.userReducer.SelectedAssociationID,self.props.userReducer.MyAccountID,self.props.dashboardReducer.uniID);// 1
         self.setState({isLoading: false})
         console.log("Check Data",stat)
         try {
@@ -139,6 +141,7 @@ class Staff extends React.Component {
                 </View>
                     :
                     <View style={StaffStyle.noStaffData}>
+                        <Image source={require('../../../../../icons/service.png')} style={{width:hp('10%'), height:hp('10%'), margin:hp('1%')}}/>
                         <Text style={StaffStyle.noStaffDataText}> No staff is there in the Selected Association </Text>
                     </View>}
                 {this.state.staffList.length!==0?
@@ -409,7 +412,8 @@ class Staff extends React.Component {
 const mapStateToProps = state => {
     return {
         userReducer: state.UserReducer,
-        staffReducer: state.StaffReducer
+        staffReducer: state.StaffReducer,
+        dashboardReducer:state.DashboardReducer
     };
 };
 

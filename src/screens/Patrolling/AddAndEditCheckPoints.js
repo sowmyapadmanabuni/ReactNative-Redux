@@ -212,8 +212,8 @@ class AddAndEditCheckPoints extends React.Component {
 
     validateCP(){
         let allCPArray = this.state.cpArray;
-        let selectedLatitude = this.state.region.latitude;
-        let selectedLongitude = this.state.region.longitude;
+        let selectedLatitude = parseFloat(this.state.region.latitude);
+        let selectedLongitude = parseFloat(this.state.region.longitude);
         let isDistanceValid = 'yes';
 
 
@@ -263,7 +263,7 @@ class AddAndEditCheckPoints extends React.Component {
         base.utils.logger.log(this.props);
         let self = this;
 
-        let gpsLocation = this.state.region.latitude + " " + this.state.region.longitude;
+        let gpsLocation = parseFloat(this.state.region.latitude).toFixed(5) + " " + parseFloat(this.state.region.longitude).toFixed(5);
 
         let details = {};
 

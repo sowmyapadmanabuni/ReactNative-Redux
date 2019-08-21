@@ -107,4 +107,12 @@ export default class OyeSafeApi{
         return await instance.post('Worker/GetWorkerListByDatesAssocAndUnitID',input)
     }
 
+    static async getStaffListByAssociationIdAndUnitId(associationId,accountId,unitId){
+        console.log("AsId@@@@@",associationId,accountId,unitId);
+        return await instance.get('GetWorkerListByAssocIDAccountIDAndUnitID/'+associationId + '/' + accountId+'/'+unitId)
+
+    }
+
+
+
 }
