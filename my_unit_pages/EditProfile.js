@@ -153,9 +153,7 @@ class EditProfile extends Component {
         } else if (mobilenumber.length < 10) {
             Alert.alert("Please enter a valid (10 digit) Mobile no")
         } else if (reg.test(mobilenumber) === false) {
-            Alert.alert(
-                "Primary mobile number should not contain special characters."
-            )
+            Alert.alert("Primary mobile number should not contain special characters.")
         } else if (email.length == 0) {
             Alert.alert("Primary email cannot be empty")
         } else if (regemail.test(email) === false) {
@@ -163,13 +161,15 @@ class EditProfile extends Component {
             //"Please check your email-id"
         } else if (this.state.photo == null) {
             Alert.alert("Upload photo")
-        } else if (!alternatemobilenumber.length == 0) {
-            this.alternateMobile()
-            return
-        } else if (!alternateemail.length == 0) {
-            this.alternateEmail()
-            return
-        }else if(mobilenumber === alternatemobilenumber){
+        } 
+        // else if (!alternatemobilenumber.length == 0) {
+        //     this.alternateMobile()
+        //     return
+        // } else if (!alternateemail.length == 0) {
+        //     this.alternateEmail()
+        //     return
+        // }
+        else if(mobilenumber === alternatemobilenumber){
             Alert.alert("Primary and alternate mobile number should be different")
         }
          else {
@@ -195,9 +195,6 @@ class EditProfile extends Component {
             return
         } else if (reg.test(alternatemobilenumber) === false) {
             Alert.alert("Alternate Mobile number should not contain special characters.")
-        } else if (!this.alternateEmail.length == 0) {
-            this.alternateEmail()
-            return
         } else {
             this.editProfileUpdate()
             return
