@@ -466,8 +466,6 @@ class Dashboard extends React.Component {
           value: sortedArr[0].details.asAssnID
         });
 
-        // const { getDashUnits } = this.props;
-        // getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
         self.getUnitListByAssoc();
       } else if (stat === null) {
         this.setState({
@@ -500,7 +498,8 @@ class Dashboard extends React.Component {
       memberList,
       notifications,
       dropdown,
-      updateSelectedDropDown
+      updateSelectedDropDown,
+      dropdown1
     } = this.props;
     console.log("Ass index", value, index, dropdown[index]);
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
@@ -508,7 +507,14 @@ class Dashboard extends React.Component {
     this.setState({ assocId: dropdown[index].associationId });
 
     // console.log(value, "Valuessss");
-    getDashUnits(dropdown[index].associationId, oyeURL, MyAccountID);
+    getDashUnits(
+      dropdown[index].associationId,
+      oyeURL,
+      MyAccountID,
+      dropdown,
+      dropdown[index].associationId,
+      dropdown1
+    );
 
     const { updateIdDashboard } = this.props;
     console.log("updateIdDashboard1", this.props);
@@ -560,7 +566,7 @@ class Dashboard extends React.Component {
     if (dropdown1.length === 0) {
       this.setState({
         vehiclesCount: 0,
-        falmilyMemebCount:0
+        falmilyMemebCount: 0
       });
     } else {
       this.getVehicleList();
@@ -633,7 +639,7 @@ class Dashboard extends React.Component {
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
     self.checkUnitIsThere();
-     self.getVehicleList();
+    self.getVehicleList();
   }
 
   getVehicleList = unitId => {
@@ -669,7 +675,7 @@ class Dashboard extends React.Component {
         this.setState({ loading: false });
         this.setState({
           //Object.keys(responseJson.data.unitsByBlockID).length
-          vehiclesCount:0
+          vehiclesCount: 0
         });
         console.log("error in net call", error);
       });
@@ -693,29 +699,35 @@ class Dashboard extends React.Component {
   };
 
   async myFamilyListGetData() {
-    this.setState({loading: true})
-    console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
-    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.uniID, this.props.dashBoardReducer.assId,this.props.userReducer.MyAccountID)
+    this.setState({ loading: true });
+    console.log(
+      "Data sending to get family",
+      this.props,
+      this.props.dashBoardReducer.assId,
+      this.props.dashBoardReducer.uniID,
+      this.props.userReducer.MyAccountID
+    );
+    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
+      this.props.dashBoardReducer.uniID,
+      this.props.dashBoardReducer.assId,
+      this.props.userReducer.MyAccountID
+    );
     console.log("Get Family Data", myFamilyList);
 
-
-    this.setState({isLoading: false, loading: false})
+    this.setState({ isLoading: false, loading: false });
     try {
       if (myFamilyList.success && myFamilyList.data) {
         this.setState({
-          falmilyMemebCount:myFamilyList.data.familyMembers.length
-        })
-
-    } }
-    catch (error) {
+          falmilyMemebCount: myFamilyList.data.familyMembers.length
+        });
+      }
+    } catch (error) {
       this.setState({
-        falmilyMemebCount:0,
+        falmilyMemebCount: 0,
         loading: false
-      })
+      });
     }
   }
-
-
 
   getVisitorList = () => {
     fetch(
@@ -762,7 +774,7 @@ class Dashboard extends React.Component {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    console.log(this.props.dashBoardReducer,dropdown1, "tate123455");
+    console.log(this.props.dashBoardReducer, dropdown1, "tate123455");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     return (
@@ -1204,12 +1216,10 @@ class Dashboard extends React.Component {
           >
             <Text>View All Visitors</Text>
           </Button>
-        <Button
+          <Button
             bordered
             style={styles.button1}
-            onPress={() =>
-                    this.props.navigation.navigate('schedulePatrolling')
-                  }
+            onPress={() => this.props.navigation.navigate("schedulePatrolling")}
           >
             <Text>Patrolling</Text>
           </Button>

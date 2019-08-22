@@ -11,6 +11,7 @@ import {
   GET_MEMBERLIST_FAILED,
   UPDATE_ID_DASHBOARD,
   UPDATE_DROPDOWN_INDEX,
+  DASHBOARD_NO_UNITS,
   UPDATE_SELECTED_DROPDOWN
 } from "../actions/types";
 
@@ -101,6 +102,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_SELECTED_DROPDOWN:
       return { ...state, [action.payload.prop]: action.payload.value };
+
+    case DASHBOARD_NO_UNITS:
+      return { ...state, dropdown: action.payload };
 
     default:
       return state;
