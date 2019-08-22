@@ -43,10 +43,12 @@ import {
   updateJoinedAssociation,
   updateSelectedDropDown,
   updateUserInfo,
-  updateuserRole
+  updateuserRole,
+  getDashAssoSync
 } from "../../../actions";
 import ProgressLoader from "rn-progress-loader";
 import { NavigationEvents } from "react-navigation";
+import timer from "react-native-timer";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -82,25 +84,13 @@ class Dashboard extends React.Component {
   }
 
   componentWillMount() {
-    // const { receiveNotifications, MyAccountID } = this.props;
     this.setState({
       isDataLoading: true,
       isDataVisible: true
     });
     this.getListOfAssociation();
     this.myProfileNet();
-    
-    // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
-
-  /* componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    }
-
-    handleBackButtonClick() {
-        this.props.navigation.goBack(null);
-        return true;
-    }*/
 
   requestNotifPermission = () => {
     const {
@@ -329,6 +319,26 @@ class Dashboard extends React.Component {
     this.props.getNotifications(oyeURL, MyAccountID);
   };
 
+  syncData = () => {
+    const {
+      getDashAssociation,
+      getAssoMembers,
+      getDashSub,
+      getDashAssoSync
+    } = this.props;
+
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
+    this.requestNotifPermission();
+    // this.props.getNotifications(oyeURL, MyAccountID);
+
+    // getDashSub(oyeURL, SelectedAssociationID);
+    getDashAssoSync(oyeURL, MyAccountID);
+    // getAssoMembers(oyeURL, MyAccountID);
+    this.requestNotifPermission();
+  };
+
   componentDidMount() {
     const {
       getDashSub,
@@ -347,7 +357,16 @@ class Dashboard extends React.Component {
     if (!this.props.called) {
       this.didMount();
     }
-    console.log("UNIT ID ---->", this.state.unitId);
+
+    timer.setInterval(
+      this,
+      "syncData",
+      () => {
+        this.syncData();
+        // alert("hererereerrrereer");
+      },
+      5000
+    );
   }
 
   roleCheckForAdmin = index => {
@@ -405,16 +424,19 @@ class Dashboard extends React.Component {
         }
 
         console.log(role, "role");
-        this.setState({
-          role: role
-        },()=>{
-          const {updateuserRole} = this.props;
-          console.log("Role123456:",updateuserRole)
-          updateuserRole({
-            prop: "role",
-            value: role
-          });
-        });
+        this.setState(
+          {
+            role: role
+          },
+          () => {
+            const { updateuserRole } = this.props;
+            console.log("Role123456:", updateuserRole);
+            updateuserRole({
+              prop: "role",
+              value: role
+            });
+          }
+        );
       })
       .catch(error => {
         this.setState({ error, loading: false });
@@ -1473,6 +1495,7 @@ export default connect(
     refreshNotifications,
     updateIdDashboard,
     updateSelectedDropDown,
-    updateuserRole
+    updateuserRole,
+    getDashAssoSync
   }
 )(Dashboard);

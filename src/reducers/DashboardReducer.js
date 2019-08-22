@@ -13,8 +13,10 @@ import {
   UPDATE_DROPDOWN_INDEX,
   DASHBOARD_NO_UNITS,
   UPDATE_SELECTED_DROPDOWN,
-  USER_ROLE
+  USER_ROLE,
+  DASHBOARD_ASSOCIATION_SYNC
 } from "../actions/types";
+import { stat } from "react-native-fs";
 
 const INITIAL_STATE = {
   datasource: null,
@@ -109,6 +111,13 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, dropdown: action.payload };
     case USER_ROLE:
       return { ...state, userRole: action.payload };
+
+    case DASHBOARD_ASSOCIATION_SYNC:
+      return {
+        ...state,
+        dropdown: action.payload.dropdown,
+        associationid: action.payload.associationid
+      };
 
     default:
       return state;

@@ -36,6 +36,7 @@ export const UPDATE_ID_DASHBOARD = "update_id_dashboard";
 export const UPDATE_SELECTED_DROPDOWN = "update_selected_dropdown";
 export const DASHBOARD_NO_UNITS = "dashboard_no_units";
 export const USER_ROLE = "user_role";
+export const DASHBOARD_ASSOCIATION_SYNC = "dashboard_association_sync";
 
 // User Reducer
 export const UPDATE_USER_INFO = "update_user_info";

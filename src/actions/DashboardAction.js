@@ -14,11 +14,70 @@ import {
   UPDATE_SELECTED_DROPDOWN,
   DASHBOARD_NO_UNITS,
   UPDATE_USER_INFO,
-  USER_ROLE
+  USER_ROLE,
+  DASHBOARD_ASSOCIATION_SYNC
 } from "./types";
 import axios from "axios";
 import _ from "lodash";
 import base from "../base";
+
+export const getDashAssoSync = (oyeURL, MyAccountID) => {
+  return dispatch => {
+    fetch(
+      `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.success) {
+          let associations = responseJson.data.memberListByAccount;
+
+          let associationIds = [];
+          let drop_down_data = [];
+
+          associations.map((data, index) => {
+            drop_down_data.push({
+              value: data.asAsnName,
+              name: data.asAsnName,
+              id: index,
+              associationId: `${data.asAssnID}`,
+              memberId: data.meMemID,
+              roleId: data.mrmRoleID
+            });
+            associationIds.push({
+              id: data.asAssnID
+            });
+          });
+
+          let withoutString = [];
+
+          drop_down_data.map((data, index) => {
+            if (data.name.length >= 1) {
+              withoutString.push({ ...data });
+            }
+          });
+
+          let removeDuplicates = _.uniqBy(withoutString, "associationId");
+
+          dispatch({
+            type: DASHBOARD_ASSOCIATION_SYNC,
+            payload: {
+              dropdown: removeDuplicates.sort(
+                base.utils.validate.compareAssociationNames
+              ),
+              associationid: associationIds
+            }
+          });
+        }
+      });
+  };
+};
 
 export const getDashSub = (oyeURL, SelectedAssociationID) => {
   return dispatch => {
