@@ -42,7 +42,8 @@ import {
   updateIdDashboard,
   updateJoinedAssociation,
   updateSelectedDropDown,
-  updateUserInfo
+  updateUserInfo,
+  updateuserRole
 } from "../../../actions";
 import ProgressLoader from "rn-progress-loader";
 import { NavigationEvents } from "react-navigation";
@@ -88,6 +89,7 @@ class Dashboard extends React.Component {
     });
     this.getListOfAssociation();
     this.myProfileNet();
+    
     // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
@@ -405,6 +407,13 @@ class Dashboard extends React.Component {
         console.log(role, "role");
         this.setState({
           role: role
+        },()=>{
+          const {updateuserRole} = this.props;
+          console.log("Role123456:",updateuserRole)
+          updateuserRole({
+            prop: "role",
+            value: role
+          });
         });
       })
       .catch(error => {
@@ -1463,6 +1472,7 @@ export default connect(
     createUserNotification,
     refreshNotifications,
     updateIdDashboard,
-    updateSelectedDropDown
+    updateSelectedDropDown,
+    updateuserRole
   }
 )(Dashboard);

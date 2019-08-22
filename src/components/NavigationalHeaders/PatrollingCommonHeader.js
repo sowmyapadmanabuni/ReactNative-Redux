@@ -11,6 +11,9 @@ import EmptyView from "../common/EmptyView";
 import {widthPercentageToDP} from "react-native-responsive-screen";
 import {connect} from 'react-redux';
 import Share from 'react-native-share';
+import {updateSelectedCheckPoints} from '../../actions';
+import QRScreen from '../../screens/Patrolling/QRScreen';
+
 
 
 class PatrollingCommonHeader extends React.Component {
@@ -31,6 +34,27 @@ class PatrollingCommonHeader extends React.Component {
         isShareVisible: false
     };
 
+
+    navigateBack(){
+        let isHidden = this.props.isHidden;
+        let isReportVisible = this.props.isReportVisible;
+        let isShareVisible = this.props.isShareVisible;
+        const {goBack} = this.props.navigation;
+
+        if(!isHidden && !isReportVisible){
+            this.resetPatrolReducer()
+        }else{
+            goBack(null)
+        }
+    }
+
+    resetPatrolReducer(){
+        const {goBack} = this.props.navigation;
+            const {updateSelectedCheckPoints} = this.props;
+            updateSelectedCheckPoints({value:null})
+            goBack(null);
+    }
+
     render() {
         let isHidden = this.props.isHidden;
         let isReportVisible = this.props.isReportVisible;
@@ -39,7 +63,8 @@ class PatrollingCommonHeader extends React.Component {
         return (
             <View style={styles.container}>
                 <TouchableOpacity
-                    onPress={() => goBack(null)}   //Passing null for as a parameter in the case of nested StackNavigators   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
+                onPress={()=>this.navigateBack()}
+                   // onPress={() => goBack(null)}   //Passing null for as a parameter in the case of nested StackNavigators   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
                     style={styles.buttonView}>
                     <Image
                         resizeMode={'center'}
@@ -70,12 +95,13 @@ class PatrollingCommonHeader extends React.Component {
         )
     }
 
-    handleIconPress(isShareVisible) {
+ handleIconPress(isShareVisible) {
         if (isShareVisible) {
-            let base64Image = this.props.selectedCheckPoints.qrBase64.value;
+            console.log("Base 64:",this.props)
+                let base64Image = this.props.selectedCheckPoints.qrBase64.value;
             let shareImageBase64 = {
                 title: "Check Point QR",
-                message: "Share Check Point QR",
+                message: "Association Name: "+this.props.dashboardReducer.selectedDropdown,
                 url: 'data:image/png;base64,'+base64Image
             };
             console.log("base 64:",shareImageBase64);
@@ -190,9 +216,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        selectedCheckPoints: state.PatrollingReducer
+        selectedCheckPoints: state.PatrollingReducer,
+        dashboardReducer : state.DashboardReducer
     }
 };
 
-export default connect(mapStateToProps)(PatrollingCommonHeader);
+export default connect(mapStateToProps,{updateSelectedCheckPoints})(PatrollingCommonHeader);
 

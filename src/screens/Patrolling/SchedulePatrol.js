@@ -259,7 +259,7 @@ class SchedulePatrol extends React.Component {
                     <TouchableHighlight
                         underlayColor={base.theme.colors.transparent}
                         onPress={() => this.openTimeSpinner(0)}
-                        style={SchedulePatrolStyles.timeText}>
+                        style={SchedulePatrolStyles.endTimeText}>
                         <Text
                             style={{color: base.theme.colors.primary}}>{moment(this.state.startTime).format("hh:mm A")}</Text>
                     </TouchableHighlight>
@@ -425,7 +425,7 @@ class SchedulePatrol extends React.Component {
         let selectedDate = this.state.selType === 0 ? sTime:eTime;
 
         return (
-            <Modal isVisible={this.state.isSpinnerOpen}
+            <Modal isVisible={Platform.OS === 'ios'?this.state.isSpinnerOpen:false}
                    style={SchedulePatrolStyles.spinModal}
             >
                 <View

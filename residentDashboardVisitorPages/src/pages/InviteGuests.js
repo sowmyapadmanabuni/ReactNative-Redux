@@ -345,6 +345,7 @@ console.log('Dates',dobDate+' '+time,dobDate1+' '+time1)
                     
                         <View style={{ flex: 0.35, flexDirection: 'row', alignItems: 'center',justifyContent:'center', }}>
                           <CountryPicker
+                              hideAlphabetFilter={true}
                               onChange={value => {
                                 this.setState({ cca2: value.cca2, callingCode: value.callingCode })
                               }}
