@@ -103,7 +103,6 @@ class AddAndEditCheckPoints extends React.Component {
                 selectedIndex: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 2 : 1,
                 checkPointId: params.cpChkPntID,
                 selectedValue: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 2 : 1,
-                selectedIndex: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 2 : 1,
             })
         }
             this.getAllCheckPoints()
@@ -230,12 +229,11 @@ class AddAndEditCheckPoints extends React.Component {
         } else if(!this.state.isDataCorrect) {
             console.log("Some Message",this.state.distance)
             if(this.state.distance>20){
-                alert("Please Select a location")
+                alert("Distance from the nearest point is more than 20 ft. Expected distance should be between 10 to 20 ft.")
             }
             else if(this.state.distance<10){
                 alert("Distance from the nearest point is less than 10ft. Expected distance should be between 10 to 20 ft")
             }
-            alert("Distance from the nearest point is more than 20 ft. Expected distance should be between 10 to 20 ft.")
         }
         else{
             this.addCheckPoint();
