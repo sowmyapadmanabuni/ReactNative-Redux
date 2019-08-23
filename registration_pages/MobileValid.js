@@ -63,7 +63,13 @@ class MobileValid extends Component {
     }
 
     handleMobile = mobilenumber => {
-        this.setState({ Mobilenumber: mobilenumber });
+        let num = mobilenumber.replace(".", '');
+        if (isNaN(num)) {
+            // Its not a number
+        } else {
+            this.setState({ Mobilenumber: mobilenumber });
+        }
+        
     };
 
     getOtp = mobilenumber => {

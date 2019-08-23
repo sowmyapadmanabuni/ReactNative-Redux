@@ -35,7 +35,7 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
     },
     gpsView: {
         marginTop: 20,
-        width: '50%',
+        width: '90%',
         marginLeft: "5%",
         borderBottomWidth: 0.6,
         flexDirection: 'row',
@@ -43,7 +43,8 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
     },
     gpsIcon: {
         height: Platform.OS === 'ios'? 30:20,
-        width: Platform.OS === 'ios'? 30:20,
+        width: Platform.OS === 'ios'? 60:20,
+        borderWidth:1
     },
     gpsButtonView: {
         borderWidth: 1,
@@ -69,7 +70,7 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
     },
     radioView: {
-        height: "20%",
+        height: "15%",
         width: "90%",
         alignSelf: 'center'
     },

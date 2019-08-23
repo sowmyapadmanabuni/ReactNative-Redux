@@ -44,6 +44,7 @@
     "react-native-flash-message": "^0.1.13",
     "react-native-flexi-radio-button": "^0.2.2",
     "react-native-fs": "^2.13.3",
+    "react-native-geolocation-service": "^3.0.0",
     "react-native-gesture-handler": "^1.0.16",
     "react-native-html-to-pdf": "^0.6.0",
     "react-native-image-picker": "^0.28.0",

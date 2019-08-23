@@ -20,6 +20,7 @@ import {
     AsyncStorage
 } from 'react-native';
 import {connect} from 'react-redux';
+import axios from "axios";
 import base from "../../base";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {updateSelectedCheckPoints} from '../../../src/actions';
@@ -67,6 +68,7 @@ class SchedulePatrol extends React.Component {
             patrolData:{}
         });
 
+        console.log("TIME:",currentDate,moment().format())
         this.getDeviceList = this.getDeviceList.bind(this);
       //  this.openTimePicker = this.openTimePicker.bind(this);
 
@@ -120,29 +122,63 @@ class SchedulePatrol extends React.Component {
     setData(){
         //moment.utc(yourDate).format()
         let data = this.state.patrolData;
+        console.log("DATA:",data)
+
         let sdt = new Date(data.pssTime);
         let edt = new Date(data.pseTime);
         sdt.setDate(sdt.getDate());
         edt.setDate(edt.getDate());
         let _sdt = sdt;
         let _edt = edt;
+        let days = this.state.days;
+        let receivedDays = data.psRepDays.split(',');
+        console.log("Days:",days,receivedDays);
+        for(let i in days){
+            for(let j in receivedDays){
+                if(days[i].day === receivedDays[j]){
+                    console.log(days[i].day, receivedDays[j])
+                    days[i].isSelected = true
+                }
+            }
+            
+        }
         this.setState({
             startTime: _sdt,
             endTime: _edt,
             slotName:data.psSltName,
-            isSnoozeEnabled:data.psSnooze
+            isSnoozeEnabled:data.psSnooze,
+            days:days
         })
     }
 
     async getDeviceList() {
         let self = this;
 
-        //let associationId = this.props.SelectedAssociationID;
-        let associationId = 8;
-        let stat = await base.services.OyeSafeApi.getDeviceList(associationId);
+        const {
+            oyeURL
+          } = this.props;
+
+        let associationId = this.props.SelectedAssociationID;
+        var headers = {
+            "Content-Type": "application/json",
+            "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
+        }
+
+        console.log("OyeURL:",oyeURL)
+
+        //let stat = await base.services.OyeSafeApi.getDeviceList(associationId);
+        axios
+      .get(
+        `http://${oyeURL}/oyesafe/api/v1/Device/GetDeviceListByAssocID/${associationId}`,
+        {
+          headers: headers
+        }
+      )
+      .then(stat => {
+          console.log("Stat:",stat)
         try {
             if (stat) {
-                let dataReceived = stat.data.deviceListByAssocID;
+                let dataReceived = stat.data.data.deviceListByAssocID;
                 let deviceName = [];
                 for (let i in dataReceived) {
                     let deviceDetail = {
@@ -160,10 +196,13 @@ class SchedulePatrol extends React.Component {
         } catch (e) {
             console.log(e)
         }
+      })
+        
     };
 
     async schedulePatrol(days, patrolCheckPointID) {
         let self = this;
+
 
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
@@ -199,6 +238,10 @@ class SchedulePatrol extends React.Component {
 
     async updatePatrol(days, patrolCheckPointID){
         let self = this;
+
+
+        console.log("Start:",moment(self.state.startTime).format("hh:mm:ss"))
+        console.log("End",moment(self.state.endTime).format("hh:mm:ss"))
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
             PSSTime: moment(self.state.startTime).format("hh:mm:ss"),
@@ -361,7 +404,17 @@ class SchedulePatrol extends React.Component {
         } else if (base.utils.validate.isBlank(this.state.slotName)) {
             alert("Please enter slot name");
         } else {
+            let startTime = moment(this.state.startTime);
+            let endTime = moment(this.state.endTime);
+            let diff = endTime.isBefore(startTime);
+            console.log('State:',(this.state.startTime),(this.state.endTime));
+            console.log('State:',diff);
+            if(diff){
+                alert("End Time can not be bofore Start Time");
+            }
+            else{
            this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
+        }
         }
     }
 
@@ -410,9 +463,12 @@ class SchedulePatrol extends React.Component {
     openTimePicker() {
         let self = this;
         let isOpen  = self.state.isSpinnerOpen;
+        let hr = moment().get('hour');
+        let min =moment().get('minute');
+        console.log("JDHH:",hr,min)
         Platform.OS === 'ios' ? self.renderTimeSpinnerModal() : isOpen? self.renderTimePicker(this.state.selType, {
-            hour: 0,
-            minute: 0,
+            hour: hr,
+            minute: min,
             is24Hour: false,
             mode: 'spinner',
         }):null
@@ -464,6 +520,7 @@ class SchedulePatrol extends React.Component {
                     let hrs = moment(time).add(hour,'hours');
                     let minu = moment(hrs).add(minute,'minutes');
                     let selectedTime = minu._d;
+                    console.log("")
                     this.changeTime(selectedTime);
                 }
 
@@ -473,10 +530,13 @@ class SchedulePatrol extends React.Component {
     }
 
     changeTime(time) {
+        console.log("Old Time:",time);
+        let selTime = time=="Invalid Date"?(currentDate):moment(time).toISOString();
+        console.log("Time:",selTime,currentDate);
         if (this.state.selType === 0) {
-            this.setState({startTime: time,isSpinnerOpen:false})
+            this.setState({startTime: selTime,isSpinnerOpen:false})
         } else {
-            this.setState({endTime: time,isSpinnerOpen:false})
+            this.setState({endTime: selTime,isSpinnerOpen:false})
         }
     }
 
@@ -485,7 +545,7 @@ class SchedulePatrol extends React.Component {
 const mapStateToProps = state => {
     return {
         SelectedAssociationID: state.DashboardReducer.assId,
-        selectedCheckPoints: state.PatrollingReducer
+        selectedCheckPoints: state.PatrollingReducer,oyeURL: state.OyespaceReducer.oyeURL,
     }
 };
 

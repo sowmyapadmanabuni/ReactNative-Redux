@@ -70,7 +70,8 @@ class MyFamily extends Component {
             isPhotoAvailable: false,
             filePath: '',
 
-            isLoading: false
+            isLoading: false,
+            isPhoneBookOpened:false
         }
     }
 
@@ -153,6 +154,7 @@ class MyFamily extends Component {
                             baseColor="rgba(0, 0, 0, 1)"
                             placeholder="Relationship *"
                             placeholderTextColor={base.theme.colors.black}
+                            placeholderStyle={{ fontWeight:'bold' }}
                             labelHeight={hp("4%")}
                             containerStyle={{
                                 width: wp("85%"),
@@ -500,6 +502,10 @@ class MyFamily extends Component {
                             mobileNumber: mobNum,
                         })
                     }
+                    this.setState({
+                        isPhoneBookOpened:true
+                    })
+
                 })
                 .catch((error) => {
                     console.log("ERROR CODE: ", error.code);
@@ -532,9 +538,8 @@ class MyFamily extends Component {
             return false
         } else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
-        } else if (reg.test(self.state.mobileNumber) === false) {
-            Alert.alert("Mobile number should not contain special characters.")
-        } else if (self.props.dashBoardReducer.uniID === null) {
+        }
+        else if (self.props.dashBoardReducer.uniID === null) {
             alert('Unit id is null')
         } else if (self.props.dashBoardReducer.assId === null) {
             alert('Association id is null')
@@ -543,6 +548,10 @@ class MyFamily extends Component {
 
         }
     }
+
+    /*else if (reg.test(self.state.mobileNumber) === false) {
+            Alert.alert("Mobile number should not contain special characters.")
+        }*/
 
     showAlert(msg, ispop) {
         let self = this;
