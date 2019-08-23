@@ -14,7 +14,7 @@ import {
     StyleSheet,
     Text,
     TouchableHighlight,
-    View
+    View,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
@@ -25,8 +25,8 @@ import EmptyView from "../../components/common/EmptyView";
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import RadioForm, {RadioButton} from 'react-native-simple-radio-button';
 import OyeSafeApi from "../../base/services/OyeSafeApi";
-import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles"
-import PatrollingCheckPoints from './PatrollingCheckPoints';
+import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
+import Geolocation from 'react-native-geolocation-service';
 
 
 const {width, height} = Dimensions.get('window');
@@ -60,11 +60,20 @@ class AddAndEditCheckPoints extends React.Component {
             checkPointType: "StartPoint",
             isEditing: false,
             checkPointId: '',
-            cpArray:[]
+            cpArray:[],
+            distance:0,
+            isDataCorrect:true,
+            latitude:0,
+            longitude:0,
+            isSet:false
         });
+
+        
         this.getUserLocation = this.getUserLocation.bind(this)
 
     }
+
+    
 
 
     setPointName(text) {
@@ -91,13 +100,51 @@ class AddAndEditCheckPoints extends React.Component {
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                 },
-                selectedIndex: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 0,
-                checkPointId: params.cpChkPntID
-            },()=>this.getAllCheckPoints())
+                selectedIndex: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 2 : 1,
+                checkPointId: params.cpChkPntID,
+                selectedValue: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 2 : 1,
+                selectedIndex: params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 2 : 1,
+            })
         }
+            this.getAllCheckPoints()
         console.log("Params:", params);
 
     };
+
+    componentDidMount(){
+        this.watchuserPosition();
+    }
+
+    watchuserPosition(){
+        this.watchId = Geolocation.watchPosition(
+            (position) => {
+              console.log("sdvdfgddhdgs",this.state.cpArray);
+              let LocationData = position.coords;
+                this.setState({
+                    region: {
+                        latitude: LocationData.latitude,
+                        longitude: LocationData.longitude,
+                        longitudeDelta:LONGITUDE_DELTA,
+                        latitudeDelta:LATITUDE_DELTA,
+                    },
+                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
+                  },()=>this.validateAllCP())  
+                
+            },
+            (error) => {
+              console.log(error);
+            },
+            { enableHighAccuracy: true, distanceFilter: 0, interval: 1, fastestInterval: 5000 }
+          );
+    }
+    
+
+    componentWillUnmount(){
+        if (this.watchId !== null) {
+            Geolocation.clearWatch(this.watchId);
+        }
+    }
+    
 
     async requestLocationPermission() {
         try {
@@ -131,9 +178,11 @@ class AddAndEditCheckPoints extends React.Component {
                         latitude: LocationData.latitude,
                         longitude: LocationData.longitude,
                         longitudeDelta:LONGITUDE_DELTA,
-                        latitudeDelta:LATITUDE_DELTA
-                    }
-                },()=>this.getAllCheckPoints())
+                        latitudeDelta:LATITUDE_DELTA,
+                        
+                    },
+                    gpsLocation: LocationData.latitude + "," + LocationData.longitude
+                },()=>this.validateAllCP())
             });
         } catch (e) {
             console.log("Error:", e);
@@ -175,91 +224,87 @@ class AddAndEditCheckPoints extends React.Component {
         )
     }
 
-    onRegionChange(region) {
-        let self = this;
-
-        self.setState({
-            region: {
-                latitude: region.latitude,
-                longitude: region.longitude,
-                latitudeDelta: region.latitudeDelta,
-                longitudeDelta: region.longitudeDelta,
-            },
-            gpsLocation: region.latitude.toFixed(4) + "," + region.longitude.toFixed(4),
-            buttonVisibility: false
-        });
-    };
-
-    getCurrentLocation() {
-
-        this.state.buttonVisibility ? this.getUserLocation() : null;
-        this.setState({
-            gpsLocation: this.state.region.latitude.toFixed(4) + "," + this.state.region.longitude.toFixed(4)
-        })
-    };
-
     validateFields() {
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
-        } else if (this.state.gpsLocation === "Set GPS Location") {
-            alert("Please Select a location")
-        } else {
-            //this.addCheckPoint()
-
-            this.validateCP()
-        
+        } else if(!this.state.isDataCorrect) {
+            console.log("Some Message",this.state.distance)
+            if(this.state.distance>20){
+                alert("Please Select a location")
+            }
+            else if(this.state.distance<10){
+                alert("Distance from the nearest point is less than 10ft. Expected distance should be between 10 to 20 ft")
+            }
+            alert("Distance from the nearest point is more than 20 ft. Expected distance should be between 10 to 20 ft.")
+        }
+        else{
+            this.addCheckPoint();
         }
     }
 
-    validateCP(){
-        console.log("Hitting", this.state.cpArray)
+    validateCheckPoint(){
         let allCPArray = this.state.cpArray;
         let selectedLatitude = parseFloat(this.state.region.latitude);
         let selectedLongitude = parseFloat(this.state.region.longitude);
-        let isDistanceValid = 'yes';
-
 
         if(allCPArray.length !== 0){
+            let latestCP =allCPArray[allCPArray.length-1];
+            console.log("Latest CP:",latestCP)
         for(let i in allCPArray){
-            let gpsLocationArr = allCPArray[i].cpgpsPnt.split(" ");;
+            let gpsLocationArr = latestCP.cpgpsPnt.split(" ");;
             let lat1 = parseFloat(gpsLocationArr[0]);
             let long1 = parseFloat(gpsLocationArr[1]);
 
             let distanceMeasured =base.utils.validate.distanceMeasurement(selectedLatitude,lat1,selectedLongitude,long1);
 
             console.log("Distance Measured:",distanceMeasured);
-
-            if (distanceMeasured === 'less') {
-                isDistanceValid = 'less';
-            } else if (distanceMeasured === 'more') {
-                isDistanceValid = 'more';
+            if(distanceMeasured >= 10 && distanceMeasured <= 20){
+                this.setState({
+                    distance:parseInt(distanceMeasured),
+                    isDataCorrect:true
+                })
             }
             else{
-                isDistanceValid = 'yes';
+                this.setState({
+                    distance:parseInt(distanceMeasured),
+                    isDataCorrect:false
+                })
+            }
+            
+        }
+        }
+        
+    }
+
+
+    validateAllCP(){
+        let allCPArray = this.state.cpArray;
+        let selectedLatitude = parseFloat(this.state.region.latitude);
+        let selectedLongitude = parseFloat(this.state.region.longitude);
+
+        if(allCPArray.length !== 0){
+            for(let i in allCPArray){
+                let gpsLocationArr = allCPArray[i].cpgpsPnt.split(" ");;
+                let lat1 = parseFloat(gpsLocationArr[0]);
+                let long1 = parseFloat(gpsLocationArr[1]);
+                let distanceMeasured =base.utils.validate.distanceMeasurement(selectedLatitude,lat1,selectedLongitude,long1);
+                console.log("Distance Measured:",distanceMeasured)
+                if(distanceMeasured>10){
+                    console.log("true")
+                   this.setState({
+                    distance:parseInt(distanceMeasured)
+                   },()=>this.validateCheckPoint())
+                }
+                else{
+                    console.log("false")
+                    this.setState({
+                        distance:parseInt(distanceMeasured)
+                    })
+                }
             }
         }
 
-
-        if(isDistanceValid === 'less'){
-            alert("Distance between two Checkpoints must be minimum 10 ft");
-        }
-        else if(isDistanceValid == 'more'){
-            alert("Distance between two Checkpoints must be maximum 20 ft");
-        }
-        else{
-            console.log("Adding Checkpoint");
-            this.addCheckPoint();
-        }
-
-
-
     }
-    else{
-            this.addCheckPoint();
-        }
-    }
-
-    
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);
@@ -280,7 +325,6 @@ class AddAndEditCheckPoints extends React.Component {
             details = {
                 "CPCkPName": self.state.checkPointName,
                 "CPGPSPnt": gpsLocation,
-              //  "MEMemID": self.props.userReducer.MyOYEMemberID,
                 "ASAssnID": self.props.SelectedAssociationID,
                 "CPCPntAt": self.state.checkPointType
             };
@@ -313,6 +357,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     setRadioButtonValue(val, index) {
+        console.log("VAL & index:",val,index)
         this.setState({
             selectedValue: val,
             selectedIndex: index,
@@ -339,7 +384,8 @@ class AddAndEditCheckPoints extends React.Component {
                             showsBuildings={true}
                             zoomEnabled={true}
                             minZoomLevel={19}
-                            onRegionChange={(region) => this.onRegionChange(region)}
+                            scrollEnabled={false}
+                           // onRegionChangeComplete={(region) => this.onRegionChange(region)}
                         >
                             {this.renderUserLocation()}
                         </MapView>
@@ -365,16 +411,13 @@ class AddAndEditCheckPoints extends React.Component {
                                 style={AddAndEditCheckPointStyles.gpsIcon}
                                 source={require('../../../icons/location.png')}
                             />
-                            <Text>{this.state.gpsLocation}</Text>
+                            <Text style={{fontFamily:base.theme.fonts.medium,fontSize:hp('2.5%')}}>{this.state.gpsLocation}</Text>
                         </View>
-                        <TouchableHighlight
-                            underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.getCurrentLocation()} style={[AddAndEditCheckPointStyles.setGPS,{borderColor: this.state.buttonVisibility ? base.theme.colors.primary : base.theme.colors.grey
-                        }]}>
-                            <Text
-                                style={{color: this.state.buttonVisibility ? base.theme.colors.primary : base.theme.colors.grey}}>Set
-                                GPS</Text>
-                        </TouchableHighlight>
+                    </View>
+                
+                    <View style={{height:hp('5%'),alignItems:'center',marginTop:20,width:hp('45%'),alignSelf:'center',flexDirection:'row'}}>
+                        <View style={{height:hp('1%'),width:hp('1%'),borderRadius:hp('0.5%'),backgroundColor: (this.state.distance >= 10 && this.state.distance <=20)?base.theme.colors.green:base.theme.colors.red,alignSelf:'center'}}/>
+                        <Text style={{left:10,borderRadius:hp('0.5%'),alignSelf:'center'}}>Distance : {this.state.distance} ft</Text>
                     </View>
                     <EmptyView height={35}/>
                     <View style={AddAndEditCheckPointStyles.radioView}>
@@ -412,7 +455,7 @@ class AddAndEditCheckPoints extends React.Component {
                                   height={30} borderRadius={10}/>
                         <OSButton onButtonClick={() => this.validateFields()}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  oSBBackground={base.theme.colors.primary}
+                                  oSBBackground={this.state.isDataCorrect?base.theme.colors.primary:base.theme.colors.grey}
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>

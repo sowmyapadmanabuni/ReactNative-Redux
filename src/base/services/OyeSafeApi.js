@@ -68,7 +68,7 @@ export default class OyeSafeApi{
     }
 
     static async getDeviceList(associationId){
-        return await instance.get('oyesafe/api/v1/Device/GetDeviceListByAssocID/'+associationId);
+        return await instance.get('Device/GetDeviceListByAssocID/'+associationId);
     }
 
     static async schedulePatrol(detail){
@@ -85,15 +85,15 @@ export default class OyeSafeApi{
 
     static async deletePatrolSlot(detail){
         console.log("djnskvnvn",detail);
-        return await instance.post('oye247/api/v1/PatrollingShiftSlotDelete/Update',detail)
+        return await instance.post('PatrollingShiftSlotDelete/Update',detail)
     }
 
     static async updateSnooze(detail){
-        return await instance.post('oye247/api/v1/PatrollingShiftSlot/Update',detail)
+        return await instance.post('PatrollingShiftSlot/Update',detail)
     };
 
     static async getReport(detail){
-        return await instance.post('oye247/api/v1/GetPatrollingReportByDates',detail)
+        return await instance.post('GetPatrollingReportByDates',detail)
     }
 
     static async getStaffListByAssociationId(associationId,accountId){

@@ -55,12 +55,13 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
         marginLeft: wp('4%')
     },
     centerTextView: {
-        height: hp('5%'),
-        justifyContent: 'center'
+        height: hp('3%'),
+        justifyContent: 'center',
+        width:hp('40%')
     },
     centerTextStyle: {
         fontFamily: base.theme.fonts.bold,
-        fontSize: 15
+        fontSize: 15,
     },
     locationView: {
         flexDirection: 'row',

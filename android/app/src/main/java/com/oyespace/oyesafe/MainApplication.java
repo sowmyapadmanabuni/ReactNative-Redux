@@ -14,6 +14,7 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.lynxit.contactswrapper.ContactsWrapperPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 
 
 
@@ -88,7 +89,9 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new RNFirebaseMessagingPackage(),
                     new RNFirebaseNotificationsPackage(),
                     new ContactsWrapperPackage(),
-                    new MapsPackage()
+                    new MapsPackage(),
+                    new RNFusedLocationPackage()
+
 
 
             );

@@ -10,7 +10,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
-  BackHandler
+  BackHandler,ToastAndroid
 } from "react-native";
 import base from "../../../base";
 import { connect } from "react-redux";
@@ -78,6 +78,9 @@ class Dashboard extends React.Component {
       isDataVisible: false,
       isNoAssJoin: false
     };
+    this.backButtonListener = null;
+    this.currentRouteName = 'Main';
+    this.lastBackButtonPress = null;
     // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
@@ -93,14 +96,36 @@ class Dashboard extends React.Component {
     // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
-  /* componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  componentDidUpdate() {
+    if (Platform.OS === 'android') {
+      this.backButtonListener = BackHandler.addEventListener('hardwareBackPress', () => {
+          if (this.currentRouteName !== 'Main') {
+              return false;
+          }
+
+          if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
+              BackHandler.exitApp();
+              return true;
+          }
+          if(this.state.isSelectedCard === "UNIT"){
+                BackHandler.exitApp();
+          }
+          else{
+            this.changeCardStatus("UNIT")
+          }
+          
+          this.lastBackButtonPress = new Date().getTime();
+
+          return true;
+      });
+    }
     }
 
     handleBackButtonClick() {
-        this.props.navigation.goBack(null);
-        return true;
-    }*/
+        console.log("DNDJVL")
+        // this.props.navigation.goBack(null);
+        // return true;
+    }
 
   requestNotifPermission = () => {
     const {
@@ -923,7 +948,8 @@ class Dashboard extends React.Component {
             </TouchableOpacity> */}
                 <TouchableOpacity
                   onPress={() => {
-                    Linking.openURL("mailto:happy@oyespace.com");
+                    this.props.navigation.navigate('schedulePatrolling')
+                    //Linking.openURL("mailto:happy@oyespace.com");
                   }}
                 >
                   <Image
@@ -955,7 +981,7 @@ class Dashboard extends React.Component {
     if (status == "UNIT") {
       this.setState({
         myUnitCardHeight: "80%",
-        myUnitCardWidth: "25%",
+        myUnitCardWidth: "26%",
         adminCardHeight: "70%",
         adminCardWidth: "20%",
         offersCardHeight: "70%",
