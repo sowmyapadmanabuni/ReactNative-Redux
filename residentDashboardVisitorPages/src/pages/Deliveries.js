@@ -305,13 +305,17 @@ class App extends React.Component {
                   Entry:
                   {item.vlEntryT.substring(11, 19)}
                 </Text>
-                <Image
+                {item.vlexgName !==''?
+                    <Image
                     style={styles.viewImageStyle}
                     source={require("../../../icons/entry_time.png")}
-                />
-                <Text style={styles.subNameTextStyleTwo}>
-                  Exit: {item.vlExitT.substring(11, 19)}
-                </Text>
+                />: <View/>}
+                {item.vlexgName !==''?
+                    <Text style={styles.subNameTextStyleTwo}>
+                      Exit: {item.vlExitT.substring(11, 19)}
+                    </Text>
+                    :<View/>}
+
                 {/* {moment(newDate(item.vlExitT.substring(11, 16))).format(
                 "HH:mm:ss a"
               )} */}

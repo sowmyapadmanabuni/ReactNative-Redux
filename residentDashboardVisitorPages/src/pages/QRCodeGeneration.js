@@ -72,6 +72,7 @@ class QRCodeGeneration extends Component {
 
   qrGeneration = () => {
     const { params } = this.props.navigation.state;
+    console.log('Params@!@#!@#!@#',params)
     // let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
     //   +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inpOfInv +params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
     let txt =
@@ -88,15 +89,18 @@ class QRCodeGeneration extends Component {
         "," +
         params.value.insDate.substring(0, 10) +
         "," +
-        params.value.insDate.substring(11, 15) +
+        params.value.insDate.substring(11, 16) +
         ",," +
         params.value.inVisCnt +
         "," +
-        params.value.insDate.substring(0, 10) +
+        params.value.ineDate.substring(0, 10) +
         "," +
         params.value.asAssnID +
         "," +
         params.value.inMultiEy;
+
+    /*  params.value.ineDate.substring(11, 16) +
+        "," +*/ //For time being we are not sending as shalini needs to change from gate app @jyothi
     // let txt1 = "You are invited to " + params.value.infName + "'s home @ " + params.value.unUnitID + " " + params.value.insDate;
     let txt1 =
         params.value.infName +
@@ -112,11 +116,11 @@ class QRCodeGeneration extends Component {
     "," +
     params.value.insDate.substring(0, 10) +
     "," +
-    params.value.insDate.substring(11, 15) +
+    params.value.insDate.substring(11, 16) +
     ",," +
     params.value.inVisCnt +
     "," +
-    params.value.insDate.substring(0, 10) +
+    params.value.ineDate.substring(0, 10) +
     "," +
     params.value.asAssnID +
     "," +
@@ -394,11 +398,11 @@ class QRCodeGeneration extends Component {
             >
               <View style={{ flexDirection: "column",marginTop:hp('2%'),backgroundColor:'#fff',height:hp('16%') }}>
                 <View style={{ flexDirection: "row", flex: 1,marginTop:hp('1.4%') }}>
-                  <View style={{ flex: 0.9,marginLeft:hp('2%') }}>
+                  <View style={{ width:'40%',marginLeft:hp('2%'), }}>
                     <Text style={{color:'grey'}}>Association Name</Text>
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{color:'black',fontWeight:'500'}}>
+                  <View style={{height:'100%',width:'55%',}}>
+                    <Text style={{color:'black',fontWeight:'500',}} numberOfLines={1}>
                       {this.state.association === ""
                           ? ""
                           : this.state.association}
@@ -406,11 +410,11 @@ class QRCodeGeneration extends Component {
                   </View>
                 </View>
                 <View style={{ flexDirection: "row", flex: 1 }}>
-                  <View style={{ flex: 0.9,marginLeft:hp('2%')  }}>
+                  <View style={{ width:'40%',marginLeft:hp('2%')  }}>
                     <Text style={{color:'grey'}}>Purpose of Visit</Text>
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{color:'black',fontWeight:'500'}}>
+                  <View style={{ height:'100%',width:'55%',}}>
+                    <Text style={{color:'black',fontWeight:'500'}} numberOfLines={1}>
                       {this.props.navigation.state.params.value.inpOfInv}
                     </Text>
                   </View>
@@ -420,10 +424,10 @@ class QRCodeGeneration extends Component {
                 
 
                 <View style={{ flexDirection: "row", flex: 1 }}>
-                  <View style={{ flex: 0.9,marginLeft:hp('2%') }}>
+                  <View style={{ width:'40%',marginLeft:hp('2%') }}>
                     <Text style={{color:'grey'}}>Invited On</Text>
                   </View>
-                  <View style={{ flex: 1 }}>
+                  <View style={{ height:'100%',width:'55%',}}>
                     <Text style={{color:'#38BCDB',fontWeight:'500'}}>
                       {this.props.navigation.state.params.value.insDate.substring(
                           0,
@@ -440,10 +444,10 @@ class QRCodeGeneration extends Component {
                 <View style={{ flexDirection: "row", flex: 1 }}>
                   {this.props.navigation.state.params.value.inVisCnt === 1 ? (
                       <View style={{ flex: 1, flexDirection: "row" }}>
-                        <View style={{ flex: 0.9,marginLeft:hp('2%') }}>
+                        <View style={{ width:'40%',marginLeft:hp('2%') }}>
                           <Text style={{color:'grey'}}>Total Guest</Text>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ height:'100%',width:'55%', }}>
                           <Text style={{color:'black',fontWeight:'500'}}> {this.props.navigation.state.params.value.inVisCnt}
                           </Text>
                         </View>
