@@ -11,17 +11,30 @@ import {
   FlatList,
   TextInput,
   Dimensions,
-  Alert
+  Alert,
+  Modal,
+  TouchableHighlight
 } from "react-native";
+import { Button, Card, CardItem } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import { NavigationEvents } from "react-navigation";
-import { Button } from "native-base";
 // import Swipeout from 'react-native-swipeout';
-import { connect } from "react-redux";
 import axios from "axios";
+import moment from "moment";
+import { DatePickerDialog } from "react-native-datepicker-dialog";
+import { connect } from "react-redux";
+import {
+  updateJoinedAssociation,
+  createUserNotification,
+  getAssoMembers
+} from "../src/actions";
+import _ from "lodash";
+import { CLOUD_FUNCTION_URL } from "../constant";
+import firebase from "react-native-firebase";
+import unitlist from "./unitlist";
 
 class UnitList extends Component {
   static navigationOptions = {
@@ -36,10 +49,26 @@ class UnitList extends Component {
       dataSource: [],
       query: "",
       loading: false,
-      error: null
+      error: null,
+      modalVisible: false,
+
+      //date picker
+      dobText: "Select Date of Occupancy", //year + '-' + month + '-' + date,
+      dobDate: "",
+
+      unitofperson: false,
+      unitofperson1: false,
+      sent: false,
+
+      unitlist: []
+
       // value:""
     };
     this.arrayholder = [];
+  }
+
+  setModalVisible(visible, item) {
+    this.setState({ modalVisible: visible, unitlist: item });
   }
 
   componentDidMount() {
@@ -61,6 +90,708 @@ class UnitList extends Component {
     this.setState({
       dataSource: newData
     });
+  };
+
+  onDOBPress = () => {
+    let dobDate = this.state.dobDate;
+    if (!dobDate || dobDate == null) {
+      dobDate = new Date();
+      this.setState({
+        dobDate: dobDate
+      });
+    }
+    this.refs.dobDialog.open({
+      date: dobDate,
+      minDate: new Date() //To restirct past dates
+    });
+  };
+
+  onDOBDatePicked = date => {
+    this.setState({
+      dobDate: date,
+      dobText: moment(date).format("YYYY-MM-DD")
+    });
+  };
+
+  submitForOwnwer = () => {
+    const {
+      AssnId,
+      associationName
+      // unitList
+    } = this.props.navigation.state.params;
+    // console.log("Unit Data", this.state.unitlist.unUnitID);
+    // console.log(AssnId, associationName, "names");
+
+    const { getAssoMembers, oyeURL, MyAccountID } = this.props;
+    if (this.state.dobText == "Select Date of Occupancy") {
+      alert("Select Date of Occupancy");
+    } else if (this.state.sent) {
+      alert("Request already sent");
+    } else if (this.checkForOwner()) {
+      alert("You are an active member and can't join");
+    } else if (this.checkStatus()) {
+      alert("You already requested to join this unit");
+    } else {
+      anu = {
+        ASAssnID: this.state.unitlist.asAssnID,
+        BLBlockID: this.state.unitlist.blBlockID,
+        UNUnitID: this.state.unitlist.unUnitID,
+        MRMRoleID: parseInt("6"),
+        FirstName: this.props.MyFirstName,
+        MobileNumber: this.props.MyMobileNumber,
+        ISDCode: this.props.MyISDCode,
+        LastName: this.props.MyLastName,
+        Email: this.props.MyEmail,
+        SoldDate: this.state.dobText,
+        OccupancyDate: this.state.dobText
+      };
+
+      let champBaseURL = this.props.champBaseURL;
+      this.setState({ sent: true, loading: true });
+      axios
+        .post(
+          `${champBaseURL}/association/join`,
+          {
+            ASAssnID: this.state.unitlist.asAssnID,
+            BLBlockID: this.state.unitlist.blBlockID,
+            UNUnitID: this.state.unitlist.unUnitID,
+            MRMRoleID: parseInt("6"),
+            FirstName: this.props.MyFirstName,
+            MobileNumber: this.props.MyMobileNumber,
+            ISDCode: this.props.MyISDCode,
+            LastName: this.props.MyLastName,
+            Email: this.props.MyEmail,
+            SoldDate: this.state.dobText,
+            OccupancyDate: this.state.dobText
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            }
+          }
+        )
+        .then(response => {
+          // console.log("*******");
+          // console.log("here_1 ");
+          // console.log("*******");
+          let responseData_1 = response.data;
+          if (responseData_1.success) {
+            let headers_2 = {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            };
+            let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
+            // console.log(mobileNo);
+            axios
+              .post(
+                "http://" +
+                  this.props.oyeURL +
+                  "/oyeliving/api/v1/Member/GetRequestorDetails",
+                {
+                  ACMobile: mobileNo,
+                  ASAssnID: this.state.unitlist.asAssnID,
+                  UNUnitID: this.state.unitlist.unUnitID,
+                  MRMRoleID: parseInt("6")
+                },
+                {
+                  headers: headers_2
+                }
+              )
+              .then(response_2 => {
+                let responseData_2 = response_2.data.data.member;
+                console.log("*******");
+                console.log("here_2 ", responseData_2);
+
+                if (!_.isEmpty(responseData_2)) {
+                  let userID = this.props.MyAccountID;
+                  let sbUnitID = this.state.unitlist.unUnitID;
+                  let unitName = this.state.unitlist.unUniName;
+                  let adminAccId = this.state.unitlist.acAccntID;
+                  let sbSubID =
+                    this.props.MyAccountID.toString() +
+                    this.state.unitlist.unUnitID.toString() +
+                    "usernotif";
+                  let sbRoleId = "2";
+                  let sbMemID = responseData_2.meMemID;
+                  let sbName =
+                    this.props.MyFirstName + " " + this.props.MyLastName;
+                  let ntType = "Join";
+                  let ntTitle =
+                    "Request to join" +
+                    " " +
+                    associationName +
+                    " " +
+                    "Association";
+                  let roleName = "Owner";
+                  let ntDesc =
+                    sbName +
+                    " " +
+                    "requested to join " +
+                    unitName +
+                    " " +
+                    "unit in " +
+                    associationName +
+                    " " +
+                    "association as " +
+                    roleName;
+                  let soldDate = this.state.dobText;
+                  let occupancyDate = this.state.dobText;
+
+                  firebase.messaging().subscribeToTopic(sbSubID);
+
+                  // Send a push notification to the admin here
+                  axios
+                    .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
+                      userID: userID.toString(),
+                      sbUnitID: sbUnitID.toString(),
+                      unitName: unitName.toString(),
+                      sbSubID: sbSubID.toString(),
+                      sbRoleId: sbRoleId,
+                      sbMemID: sbMemID.toString(),
+                      sbName: sbName,
+                      associationID: this.state.unitlist.asAssnID.toString(),
+                      associationName: associationName,
+                      ntType: ntType,
+                      ntTitle: ntTitle,
+                      ntDesc: ntDesc,
+                      roleName: roleName,
+                      soldDate: soldDate,
+                      occupancyDate: occupancyDate
+                    })
+                    .then(response_3 => {
+                      this.setState({ loading: false });
+
+                      axios
+                        .get(
+                          "http://" +
+                            this.props.oyeURL +
+                            `/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.state.unitlist.asAssnID.toString()}`,
+                          {
+                            headers: {
+                              "X-Champ-APIKey":
+                                "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                              "Content-Type": "application/json"
+                            }
+                          }
+                        )
+                        .then(res => {
+                          let memberList =
+                            res.data.data.memberListByAssociation;
+
+                          memberList.map(data => {
+                            if (data.mrmRoleID === 1 && data.meIsActive) {
+                              console.log("adminssss", data);
+                              this.props.createUserNotification(
+                                ntType,
+                                this.props.oyeURL,
+                                data.acAccntID,
+                                this.state.unitlist.asAssnID.toString(),
+                                ntDesc,
+                                sbUnitID.toString(),
+                                sbMemID.toString(),
+                                sbSubID.toString(),
+                                sbRoleId,
+                                this.props.navigation.state.params
+                                  .associationName,
+                                unitName.toString(),
+                                occupancyDate,
+                                soldDate,
+                                false,
+                                this.props.MyAccountID
+                              );
+                            }
+                          });
+
+                          getAssoMembers(oyeURL, MyAccountID);
+
+                          this.props.updateJoinedAssociation(
+                            this.props.joinedAssociations,
+                            this.state.unitlist.unUnitID
+                          );
+                          Alert.alert(
+                            "Oyespace",
+                            "Request sent to Admin",
+                            [
+                              {
+                                text: "Ok",
+                                onPress: () =>
+                                  this.props.navigation.navigate("ResDashBoard")
+                              }
+                            ],
+                            {
+                              cancelable: false
+                            }
+                          );
+                        })
+                        .catch(error => {
+                          getAssoMembers(oyeURL, MyAccountID);
+                          this.setState({
+                            loading: false
+                          });
+                          Alert.alert(
+                            "Alert",
+                            "Request not sent..!",
+                            [
+                              {
+                                text: "Ok",
+                                onPress: () => {}
+                              }
+                            ],
+                            {
+                              cancelable: false
+                            }
+                          );
+                          console.log(error, "errorAdmin");
+                        });
+
+                      // this.props.navigation.navigate("SplashScreen");
+                    });
+                } else {
+                  this.setState({
+                    loading: false,
+                    sent: true
+                  });
+                  Alert.alert(
+                    "Alert",
+                    "You have already requested to join previously, your request is under review. You would be notified once review is complete",
+                    [{ text: "Ok", onPress: () => {} }],
+                    { cancelable: false }
+                  );
+                }
+              })
+              .catch(error => {
+                this.setState({
+                  loading: false,
+                  sent: false
+                });
+                console.log("********");
+                console.log(error);
+                console.log("********");
+                this.setState({ sent: false });
+              });
+          } else {
+            this.setState({ loading: false, sent: false });
+            Alert.alert(
+              "Alert",
+              "Request not sent..!",
+              [{ text: "Ok", onPress: () => {} }],
+              { cancelable: false }
+            );
+            this.setState({ sent: false });
+          }
+        })
+        .catch(error => {
+          console.log("second error", error);
+          this.setState({ loading: false, sent: false });
+          Alert.alert(
+            "Alert",
+            "Request not sent..!",
+            [{ text: "Ok", onPress: () => {} }],
+            { cancelable: false }
+          );
+        });
+    }
+  };
+
+  submitForTenant = () => {
+    const {
+      AssnId,
+      associationName
+      // unitList
+    } = this.props.navigation.state.params;
+    console.log("Unit Data", this.state.unitlist.unUnitID);
+    const { getAssoMembers, oyeURL, MyAccountID } = this.props;
+    if (this.state.dobText == "Select Date of Occupancy") {
+      alert("Select Date of Occupancy");
+    } else if (this.state.sent) {
+      alert("Request already sent");
+    } else if (this.checkTenant()) {
+      alert("You are an active member and can't join");
+    } else if (this.checkStatus()) {
+      alert("You already requested to join this unit");
+    } else {
+      anu = {
+        ASAssnID: this.state.unitlist.asAssnID,
+        BLBlockID: this.state.unitlist.blBlockID,
+        UNUnitID: this.state.unitlist.unUnitID,
+        MRMRoleID: parseInt("7"),
+        FirstName: this.props.MyFirstName,
+        MobileNumber: this.props.MyMobileNumber,
+        ISDCode: this.props.MyISDCode,
+        LastName: this.props.MyLastName,
+        Email: this.props.MyEmail,
+        SoldDate: this.state.dobText,
+        OccupancyDate: this.state.dobText
+      };
+
+      let champBaseURL = this.props.champBaseURL;
+      console.log(champBaseURL);
+      this.setState({ sent: true });
+
+      axios
+        .post(
+          `${champBaseURL}/association/join`,
+          {
+            ASAssnID: this.state.unitlist.asAssnID,
+            BLBlockID: this.state.unitlist.blBlockID,
+            UNUnitID: this.state.unitlist.unUnitID,
+            MRMRoleID: parseInt("7"),
+            FirstName: this.props.MyFirstName,
+            MobileNumber: this.props.MyMobileNumber,
+            ISDCode: this.props.MyISDCode,
+            LastName: this.props.MyLastName,
+            Email: this.props.MyEmail,
+            SoldDate: this.state.dobText,
+            OccupancyDate: this.state.dobText
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            }
+          }
+        )
+        .then(response => {
+          console.log("*******");
+          console.log("here_1 ");
+          console.log("*******");
+          let responseData_1 = response.data;
+          if (responseData_1.success) {
+            let headers_2 = {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            };
+
+            let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
+            console.log(mobileNo);
+            axios
+              .post(
+                "http://" +
+                  this.props.oyeURL +
+                  "/oyeliving/api/v1/Member/GetRequestorDetails",
+                {
+                  ACMobile: mobileNo,
+                  ASAssnID: this.state.unitlist.asAssnID,
+                  UNUnitID: this.state.unitlist.unUnitID,
+                  MRMRoleID: parseInt("7")
+                },
+                {
+                  headers: headers_2
+                }
+              )
+              .then(response_2 => {
+                let responseData_2 = response_2.data.data.member;
+                console.log("*******");
+                console.log("here_2 ", responseData_2);
+
+                if (!_.isEmpty(responseData_2)) {
+                  let userID = this.props.MyAccountID;
+                  let adminAccId = this.state.unitlist.acAccntID;
+                  let sbUnitID = this.state.unitlist.unUnitID;
+                  let unitName = this.state.unitlist.unUniName;
+                  let sbSubID =
+                    this.props.MyAccountID.toString() +
+                    this.state.unitlist.unUnitID.toString() +
+                    "usernotif";
+                  let sbRoleId = "3";
+                  let sbMemID = responseData_2.meMemID;
+                  let sbName =
+                    this.props.MyFirstName + " " + this.props.MyLastName;
+                  let associationID = this.state.unitlist.asAssnID;
+                  let ntType = "Join";
+                  let ntTitle =
+                    "Request to join" +
+                    " " +
+                    associationName +
+                    " " +
+                    "Association";
+                  let roleName = "Tenant";
+                  let ntDesc =
+                    sbName +
+                    " " +
+                    "requested to join " +
+                    unitName +
+                    " " +
+                    "unit in " +
+                    associationName +
+                    " " +
+                    "association as " +
+                    roleName;
+                  let soldDate = this.state.dobText;
+                  let occupancyDate = this.state.dobText;
+
+                  firebase.messaging().subscribeToTopic(sbSubID);
+                  // alert(sbSubID)
+                  // Send a push notification to the admin here
+                  axios
+                    .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
+                      userID: userID.toString(),
+                      sbUnitID: sbUnitID.toString(),
+                      unitName: unitName.toString(),
+                      sbSubID: sbSubID.toString(),
+                      sbRoleId: sbRoleId,
+                      sbMemID: sbMemID.toString(),
+                      sbName: sbName,
+                      associationID: this.state.unitlist.asAssnID.toString(),
+                      associationName: this.props.navigation.state.params
+                        .associationName,
+                      ntType: ntType,
+                      ntTitle: ntTitle,
+                      ntDesc: ntDesc,
+                      roleName: roleName,
+                      soldDate: soldDate,
+                      occupancyDate: occupancyDate
+                    })
+                    .then(response_3 => {
+                      this.setState({ loading: false });
+
+                      axios
+                        .get(
+                          "http://" +
+                            this.props.oyeURL +
+                            `/oyeliving/api/v1/Member/GetMemberListByAssocID/${
+                              this.state.unitlist.asAssnID
+                            }`,
+                          {
+                            headers: {
+                              "X-Champ-APIKey":
+                                "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+                              "Content-Type": "application/json"
+                            }
+                          }
+                        )
+                        .then(res => {
+                          let memberList =
+                            res.data.data.memberListByAssociation;
+
+                          memberList.map(data => {
+                            if (data.mrmRoleID === 1 && data.meIsActive) {
+                              console.log("adminssss", data);
+                              this.props.createUserNotification(
+                                ntType,
+                                this.props.oyeURL,
+                                data.acAccntID,
+                                this.state.unitlist.asAssnID,
+                                ntDesc,
+                                sbUnitID.toString(),
+                                sbMemID.toString(),
+                                sbSubID.toString(),
+                                sbRoleId,
+                                this.props.navigation.state.params
+                                  .associationName,
+                                unitName.toString(),
+                                occupancyDate,
+                                soldDate,
+                                false,
+                                this.props.MyAccountID
+                              );
+                            }
+                          });
+
+                          getAssoMembers(oyeURL, MyAccountID);
+
+                          this.props.updateJoinedAssociation(
+                            this.props.joinedAssociations,
+                            this.state.unitlist.unUnitID
+                          );
+                          Alert.alert(
+                            "Oyespace",
+                            "Request sent to Admin",
+                            [
+                              {
+                                text: "Ok",
+                                onPress: () =>
+                                  this.props.navigation.navigate("ResDashBoard")
+                              }
+                            ],
+                            {
+                              cancelable: false
+                            }
+                          );
+                        })
+                        .catch(error => {
+                          getAssoMembers(oyeURL, MyAccountID);
+                          this.setState({
+                            loading: false
+                          });
+                          Alert.alert(
+                            "Alert",
+                            "Request not sent..!",
+                            [
+                              {
+                                text: "Ok",
+                                onPress: () => {}
+                              }
+                            ],
+                            {
+                              cancelable: false
+                            }
+                          );
+                          console.log(error, "errorAdmin");
+                        });
+
+                      // this.props.navigation.navigate("SplashScreen");
+                    });
+                } else {
+                  this.setState({
+                    loading: false,
+                    sent: true
+                  });
+                  Alert.alert(
+                    "Alert",
+                    "You have already requested to join previously, your request is under review. You would be notified once review is complete",
+                    [{ text: "Ok", onPress: () => {} }],
+                    { cancelable: false }
+                  );
+                }
+              })
+              .catch(error => {
+                this.setState({
+                  loading: false,
+                  sent: false
+                });
+                console.log("********");
+                console.log(error);
+                console.log("********");
+              });
+          } else {
+            this.setState({ loading: false, sent: false });
+            Alert.alert(
+              "Alert",
+              "Request not sent..!",
+              [{ text: "Ok", onPress: () => {} }],
+              { cancelable: false }
+            );
+          }
+        })
+        .catch(error => {
+          console.log("second error", error);
+          this.setState({ loading: false, sent: false });
+          Alert.alert(
+            "Alert",
+            "Request not sent..!",
+            [{ text: "Ok", onPress: () => {} }],
+            { cancelable: false }
+          );
+        });
+    }
+  };
+
+  checkStatus = () => {
+    // const { unitList, AssnId } = this.props.navigation.state.params;
+    const { joinedAssociations, memberList } = this.props;
+    let unitID = this.state.unitlist.unUnitID;
+    console.log("Unit Data", this.state.unitlist.unUnitID);
+    let joinStat = _.includes(joinedAssociations, unitID);
+    let status;
+    // console.log(memberList, "memberList");
+
+    let matchUnit = _.find(memberList, function(o) {
+      console.log(o, "values");
+      return o.unUnitID === unitID;
+    });
+
+    console.log(matchUnit, "matchUnit");
+
+    if (matchUnit) {
+      if (
+        matchUnit.meJoinStat === "Approved" ||
+        matchUnit.meJoinStat === "Requested" ||
+        (matchUnit.meJoinStat === "Accepted" && matchUnit.meIsActive)
+      ) {
+        status = true;
+      } else {
+        status = false;
+      }
+    } else {
+      status = false;
+    }
+
+    return status;
+
+    // return false;
+  };
+
+  checkForOwner = () => {
+    const { memberList } = this.props;
+    const { unitList } = this.state.unitlist;
+    console.log("Unit Data", this.state.unitlist.unUnitID);
+
+    let unitID = this.state.unitlist.unUnitID;
+    let status;
+
+    // console.log(unitID, "unitID");
+    console.log(memberList, "memberList");
+
+    let matchUnit = _.find(memberList, function(o) {
+      console.log(o, "values");
+      console.log(o.unUnitID, "member", unitID, "unitID");
+      return o.unUnitID === unitID;
+    });
+
+    console.log(matchUnit, "matchUnit");
+
+    if (matchUnit) {
+      if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
+        status = true;
+      } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        status = true;
+      } else {
+        status = false;
+      }
+    } else {
+      status = false;
+    }
+
+    return status;
+  };
+
+  checkTenant = () => {
+    const { memberList } = this.props;
+    const { unitList } = this.state;
+    console.log("Unit Data", this.state.unitlist.unUnitID);
+
+    let unitID = this.state.unitlist.unUnitID;
+    let status;
+
+    // console.log(unitID, "unitID");
+
+    let matchUnit = _.find(memberList, function(o) {
+      console.log(o, "values");
+      console.log(o.unUnitID, "member", unitID, "unitID");
+      return o.unUnitID === unitID;
+    });
+
+    console.log(matchUnit, "matchUnit");
+
+    if (matchUnit) {
+      if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
+        status = true;
+      } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        status = true;
+      } else {
+        status = false;
+      }
+    } else {
+      status = false;
+    }
+
+    return status;
+  };
+
+  checkCommon = () => {
+    let status;
+    const { unUniName } = this.state.unitlist;
+    console.log("Unit Data", this.state.unitlist.unUnitID);
+
+    if (unUniName === "Common" || unUniName === "common") {
+      status = true;
+    } else {
+      status = false;
+    }
+
+    return status;
   };
 
   getUnitList = () => {
@@ -95,8 +826,24 @@ class UnitList extends Component {
       });
   };
 
+  renderButton = () => {
+    let status;
+    console.log("Unit Data", this.state.unitlist.unUnitID);
+    const { unUniName } = this.state.unitlist;
+
+    let lowerCaseName = unUniName.toLowerCase();
+
+    if (lowerCaseName.includes("common")) {
+      status = true;
+    } else {
+      status = false;
+    }
+
+    return status;
+  };
+
   renderItem = ({ item, index }) => {
-    console.log( "item",item);
+    console.log("item", item);
     return (
       <View style={styles.tableView}>
         <View style={styles.lineAboveAndBelowFlatList} />
@@ -136,14 +883,7 @@ class UnitList extends Component {
                     bordered
                     dark
                     style={styles.addUnitButton}
-                    onPress={() =>
-                      this.props.navigation.navigate("RegisterUser", {
-                        unitList: item,
-                        AssnId: this.props.navigation.state.params.id,
-                        associationName: this.props.navigation.state.params
-                          .associationName
-                      })
-                    }
+                    onPress={() => this.setModalVisible(true, item)}
                   >
                     <Text style={styles.addUnitText}>Register Me</Text>
                   </Button>
@@ -300,9 +1040,139 @@ class UnitList extends Component {
             keyExtractor={(item, index) => item.unUnitID.toString()}
           />
         )}
+        {this.Modal()}
       </View>
     );
   }
+  Modal = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={this.state.modalVisible}
+        presentationStyle={"overFullScreen"}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={{ marginTop: hp("40%"), margin: 40 }}>
+          <View
+            style={{
+              width: wp("80%"),
+              height: hp("30%"),
+              backgroundColor: "#fff",
+              flexDirection: "column"
+            }}
+          >
+            <View style={{ flexDirection: "row", marginTop: hp("2%") }}>
+              <View style={{ flex: 1 }} />
+              <View style={{ flex: 2 }}>
+                <Text style={{ fontSize: hp("2%"), color: "#ff8c00" }}>
+                  Join Association
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 0.5,
+                  alignItems: "flex-end",
+                  marginRight: hp("1%")
+                }}
+              >
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                >
+                  <Text style={{ color: "#000", marginRight: hp("1%") }}>
+                    H
+                  </Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View style={{ marginTop: hp("5%") }}>
+              <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                <View style={styles.datePickerBox}>
+                  <Text style={styles.datePickerText}>
+                    {this.state.dobText}{" "}
+                  </Text>
+
+                  <DatePickerDialog
+                    ref="dobDialog"
+                    onDatePicked={this.onDOBDatePicked.bind(this)}
+                  />
+                  <View style={styles.calView}>
+                    <Image
+                      style={styles.viewDatePickerImageStyle}
+                      source={require("../icons/cal.png")}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <View
+                style={{
+                  flex: 0.1,
+                  marginTop: hp("5%"),
+                  flexDirection: "row",
+                  justifyContent: "space-between"
+                }}
+              >
+                {/* {this.renderButton() ? null : */}
+                <Button
+                  bordered
+                  info
+                  style={[styles.button, { backgroundColor: "#ff8c00" }]}
+                  onPress={() => this.submitForOwnwer()}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: hp("1.6%"),
+                      fontWeight: "500"
+                    }}
+                  >
+                    Join As Owner
+                  </Text>
+                </Button>
+                {/* } */}
+                {/* {this.renderButton() ? null : */}
+                <Button
+                  bordered
+                  warning
+                  style={[styles.button, { backgroundColor: "#ff8c00" }]}
+                  onPress={() => this.submitForTenant()}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: hp("1.6%"),
+                      fontWeight: "500"
+                    }}
+                  >
+                    Join As Tenant
+                  </Text>
+                </Button>
+                {/* } */}
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* <View style={{  }}>
+            <View>
+              <Text>Hello World!</Text>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View> */}
+      </Modal>
+    );
+  };
 }
 
 const styles = StyleSheet.create({
@@ -321,7 +1191,28 @@ const styles = StyleSheet.create({
     fontSize: hp("1.8%"),
     backgroundColor: "#f4f4f4"
   },
-
+  datePickerBox: {
+    margin: hp("1.0%"),
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    borderBottomWidth: hp("0.2%"),
+    height: hp("4%"),
+    borderBottomColor: "#bfbfbf",
+    // borderColor: "#bfbfbf",
+    padding: 0
+  },
+  datePickerText: {
+    fontSize: hp("1.5%"),
+    marginLeft: 5,
+    marginRight: 5,
+    color: "#474749"
+  },
+  viewDatePickerImageStyle: {
+    width: wp("3%"),
+    height: hp("2.2%"),
+    marginRight: hp("0.5%")
+  },
   progress: {
     justifyContent: "center",
     alignItems: "center"
@@ -365,7 +1256,18 @@ const styles = StyleSheet.create({
     color: "#ff8c00",
     marginBottom: hp("1.6%")
   },
-
+  button: {
+    width: hp("12%"),
+    height: hp("5%"),
+    borderRadius: 16,
+    borderWidth: 2,
+    backgroundColor: "white",
+    justifyContent: "center",
+    marginLeft: 30,
+    marginRight: 30,
+    borderColor: "#fff",
+    marginBottom: hp("2%")
+  },
   lineAboveAndBelowFlatList: {
     backgroundColor: "lightgray",
     height: hp("0.1%")
@@ -444,11 +1346,23 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    champBaseURL: state.OyespaceReducer.champBaseURL,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+
+    MyFirstName: state.UserReducer.MyFirstName,
+    MyLastName: state.UserReducer.MyLastName,
+    MyEmail: state.UserReducer.MyEmail,
+    MyMobileNumber: state.UserReducer.MyMobileNumber,
+    MyISDCode: state.UserReducer.MyISDCode,
+
+    joinedAssociations: state.JoinAssociationReducer.joinedAssociations,
+    champBaseURL: state.OyespaceReducer.champBaseURL,
+    oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
-    oyeURL: state.OyespaceReducer.oyeURL
+    memberList: state.DashboardReducer.memberList
   };
 };
 
-export default connect(mapStateToProps)(UnitList);
+export default connect(
+  mapStateToProps,
+  { updateJoinedAssociation, createUserNotification, getAssoMembers }
+)(UnitList);
