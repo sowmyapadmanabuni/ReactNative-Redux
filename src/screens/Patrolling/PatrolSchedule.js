@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, StyleSheet, Switch, Text, TouchableHighlight, View,AsyncStorage,Platform} from 'react-native';
+import {Dimensions, FlatList, Image, Alert, Switch, Text, TouchableHighlight, View,AsyncStorage,Platform,PermissionsAndroid} from 'react-native';
 import {Container, Subtitle} from 'native-base';
 import {connect} from 'react-redux';
 import base from '../../base';
@@ -57,11 +57,54 @@ class PatrolSchedule extends React.Component {
         };
 
         this.getPatrollingList = this.getPatrollingList.bind(this);
+        this.getUserLocation = this.getUserLocation.bind(this)
 
     }
 
     componentWillMount() {
+        if (Platform.OS === 'ios' ? this.getUserLocation() : this.requestLocationPermission())
         this.getPatrollingList();
+    }
+
+    async requestLocationPermission() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    'title': 'Location Permission Required',
+                    'message': 'OyeSpace needs access to your location'
+                }
+            )
+
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                this.getUserLocation();
+                console.log("Location permission granted")
+            } else {
+                console.log("Location permission denied")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+    }
+
+    async getUserLocation() {
+        let self = this;
+        try {
+            await navigator.geolocation.getCurrentPosition((data) => {
+                let LocationData = (data.coords);
+                self.setState({
+                    region: {
+                        latitude: LocationData.latitude,
+                        longitude: LocationData.longitude,
+                        longitudeDelta:LONGITUDE_DELTA,
+                        latitudeDelta:LATITUDE_DELTA,
+                        gpsLocation: LocationData.latitude.toFixed(4) + "," + LocationData.longitude.toFixed(4)
+                    }
+                })
+            });
+        } catch (e) {
+            console.log("Error:", e);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -92,6 +135,7 @@ class PatrolSchedule extends React.Component {
 
 
     render() {
+        console.log("State:",this.state)
         return (
             <Container style={PatrollingScheduleStyles.container}>
                 <Subtitle style={PatrollingScheduleStyles.subtitle}>Patrolling Schedule</Subtitle>
@@ -138,10 +182,18 @@ class PatrolSchedule extends React.Component {
             coordsObjArr.push(coordsObj)
         }
 
+        console.log("SBDVDVBK:",coordsObjArr)
+
         this.setState({
             isModalOpen: !this.state.isModalOpen,
             cpData: data,
-            splitCoords: coordsObjArr
+            splitCoords: coordsObjArr,
+            region: {
+                latitude: coordsObjArr[0].latitude,
+                longitude: coordsObjArr[0].longitude,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            },
         })
     }
 
@@ -263,7 +315,26 @@ class PatrolSchedule extends React.Component {
         this.props.navigation.navigate('patrollingCheckPoint', {data: data})
     }
 
-    async deletePatrolSlot(data) {
+    deletePatrolSlot(data){
+
+        Alert.alert(
+            'Attention',
+            'Are you sure you want to delete this Patrol ?',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Deletion Cancelled'),
+                style: 'cancel',
+              },
+              {text: 'Yes', onPress: () => this.deletePatrolSlot1(data)},
+            ],
+            {cancelable: false},
+          );
+    }
+
+    async deletePatrolSlot1(data) {
+
+        
         let self = this;
         let detail = {
             PSPtrlSID: data.psPtrlSID
@@ -308,8 +379,8 @@ class PatrolSchedule extends React.Component {
 
     share() {
         let shareImageBase64 = {
-            title: "Check Point QR",
-            message: "Share Check Point QR",
+            title: "Patrol Route",
+            message: "Patrol Route",
             url: this.state.previewSource.uri
         };
         Share.open(shareImageBase64).then((response) => {
@@ -366,7 +437,7 @@ class PatrolSchedule extends React.Component {
                             scrollEnabled={true}
                             minZoomLevel={19}
                             style={{flex: 1}}>
-                            <Polyline
+                          <Polyline
                                 strokeColor={base.theme.colors.primary}
                                 coordinates={this.state.splitCoords}
                                 strokeWidth={4}
@@ -381,6 +452,7 @@ class PatrolSchedule extends React.Component {
     }
 
     renderMarker(item, index) {
+        console.log("Item:", item.latitude,index);
         return (
             <Marker key={index}
                     coordinate={{latitude: item.latitude, longitude: item.longitude}}

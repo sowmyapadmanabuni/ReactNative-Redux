@@ -10,7 +10,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
-  BackHandler
+  BackHandler,ToastAndroid
 } from "react-native";
 import base from "../../../base";
 import { connect } from "react-redux";
@@ -43,10 +43,12 @@ import {
   updateJoinedAssociation,
   updateSelectedDropDown,
   updateUserInfo,
-  updateuserRole
+  updateuserRole,
+  getDashAssoSync
 } from "../../../actions";
 import ProgressLoader from "rn-progress-loader";
 import { NavigationEvents } from "react-navigation";
+import timer from "react-native-timer";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -78,29 +80,51 @@ class Dashboard extends React.Component {
       isDataVisible: false,
       isNoAssJoin: false
     };
+    this.backButtonListener = null;
+    this.currentRouteName = 'Main';
+    this.lastBackButtonPress = null;
     // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentWillMount() {
-    // const { receiveNotifications, MyAccountID } = this.props;
     this.setState({
       isDataLoading: true,
       isDataVisible: true
     });
     this.getListOfAssociation();
     this.myProfileNet();
-    
-    // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
-  /* componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  componentDidUpdate() {
+    if (Platform.OS === 'android') {
+      this.backButtonListener = BackHandler.addEventListener('hardwareBackPress', () => {
+          if (this.currentRouteName !== 'Main') {
+              return false;
+          }
+
+          if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
+              BackHandler.exitApp();
+              return true;
+          }
+          if(this.state.isSelectedCard === "UNIT"){
+                BackHandler.exitApp();
+          }
+          else{
+            this.changeCardStatus("UNIT")
+          }
+          
+          this.lastBackButtonPress = new Date().getTime();
+
+          return true;
+      });
+    }
     }
 
     handleBackButtonClick() {
-        this.props.navigation.goBack(null);
-        return true;
-    }*/
+        console.log("DNDJVL")
+        // this.props.navigation.goBack(null);
+        // return true;
+    }
 
   requestNotifPermission = () => {
     const {
@@ -329,6 +353,26 @@ class Dashboard extends React.Component {
     this.props.getNotifications(oyeURL, MyAccountID);
   };
 
+  syncData = () => {
+    const {
+      getDashAssociation,
+      getAssoMembers,
+      getDashSub,
+      getDashAssoSync
+    } = this.props;
+
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
+    this.requestNotifPermission();
+    // this.props.getNotifications(oyeURL, MyAccountID);
+
+    // getDashSub(oyeURL, SelectedAssociationID);
+    getDashAssoSync(oyeURL, MyAccountID);
+    // getAssoMembers(oyeURL, MyAccountID);
+    this.requestNotifPermission();
+  };
+
   componentDidMount() {
     const {
       getDashSub,
@@ -347,7 +391,16 @@ class Dashboard extends React.Component {
     if (!this.props.called) {
       this.didMount();
     }
-    console.log("UNIT ID ---->", this.state.unitId);
+
+    timer.setInterval(
+      this,
+      "syncData",
+      () => {
+        this.syncData();
+        // alert("hererereerrrereer");
+      },
+      5000
+    );
   }
 
   roleCheckForAdmin = index => {
@@ -405,16 +458,19 @@ class Dashboard extends React.Component {
         }
 
         console.log(role, "role");
-        this.setState({
-          role: role
-        },()=>{
-          const {updateuserRole} = this.props;
-          console.log("Role123456:",updateuserRole)
-          updateuserRole({
-            prop: "role",
-            value: role
-          });
-        });
+        this.setState(
+          {
+            role: role
+          },
+          () => {
+            const { updateuserRole } = this.props;
+            console.log("Role123456:", updateuserRole);
+            updateuserRole({
+              prop: "role",
+              value: role
+            });
+          }
+        );
       })
       .catch(error => {
         this.setState({ error, loading: false });
@@ -475,8 +531,6 @@ class Dashboard extends React.Component {
           value: sortedArr[0].details.asAssnID
         });
 
-        // const { getDashUnits } = this.props;
-        // getDashUnits(sortedArr[0].details.asAssnID, oyeURL);
         self.getUnitListByAssoc();
       } else if (stat === null) {
         this.setState({
@@ -509,7 +563,8 @@ class Dashboard extends React.Component {
       memberList,
       notifications,
       dropdown,
-      updateSelectedDropDown
+      updateSelectedDropDown,
+      dropdown1
     } = this.props;
     console.log("Ass index", value, index, dropdown[index]);
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
@@ -517,7 +572,14 @@ class Dashboard extends React.Component {
     this.setState({ assocId: dropdown[index].associationId });
 
     // console.log(value, "Valuessss");
-    getDashUnits(dropdown[index].associationId, oyeURL, MyAccountID);
+    getDashUnits(
+      dropdown[index].associationId,
+      oyeURL,
+      MyAccountID,
+      dropdown,
+      dropdown[index].associationId,
+      dropdown1
+    );
 
     const { updateIdDashboard } = this.props;
     console.log("updateIdDashboard1", this.props);
@@ -569,7 +631,7 @@ class Dashboard extends React.Component {
     if (dropdown1.length === 0) {
       this.setState({
         vehiclesCount: 0,
-        falmilyMemebCount:0
+        falmilyMemebCount: 0
       });
     } else {
       this.getVehicleList();
@@ -642,7 +704,7 @@ class Dashboard extends React.Component {
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
     self.checkUnitIsThere();
-     self.getVehicleList();
+    self.getVehicleList();
   }
 
   getVehicleList = unitId => {
@@ -678,7 +740,7 @@ class Dashboard extends React.Component {
         this.setState({ loading: false });
         this.setState({
           //Object.keys(responseJson.data.unitsByBlockID).length
-          vehiclesCount:0
+          vehiclesCount: 0
         });
         console.log("error in net call", error);
       });
@@ -702,29 +764,35 @@ class Dashboard extends React.Component {
   };
 
   async myFamilyListGetData() {
-    this.setState({loading: true})
-    console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
-    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(this.props.dashBoardReducer.uniID, this.props.dashBoardReducer.assId,this.props.userReducer.MyAccountID)
+    this.setState({ loading: true });
+    console.log(
+      "Data sending to get family",
+      this.props,
+      this.props.dashBoardReducer.assId,
+      this.props.dashBoardReducer.uniID,
+      this.props.userReducer.MyAccountID
+    );
+    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
+      this.props.dashBoardReducer.uniID,
+      this.props.dashBoardReducer.assId,
+      this.props.userReducer.MyAccountID
+    );
     console.log("Get Family Data", myFamilyList);
 
-
-    this.setState({isLoading: false, loading: false})
+    this.setState({ isLoading: false, loading: false });
     try {
       if (myFamilyList.success && myFamilyList.data) {
         this.setState({
-          falmilyMemebCount:myFamilyList.data.familyMembers.length
-        })
-
-    } }
-    catch (error) {
+          falmilyMemebCount: myFamilyList.data.familyMembers.length
+        });
+      }
+    } catch (error) {
       this.setState({
-        falmilyMemebCount:0,
+        falmilyMemebCount: 0,
         loading: false
-      })
+      });
     }
   }
-
-
 
   getVisitorList = () => {
     fetch(
@@ -771,7 +839,7 @@ class Dashboard extends React.Component {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    console.log(this.props.dashBoardReducer,dropdown1, "tate123455");
+    console.log(this.props.dashBoardReducer, dropdown1, "tate123455");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     return (
@@ -955,7 +1023,7 @@ class Dashboard extends React.Component {
     if (status == "UNIT") {
       this.setState({
         myUnitCardHeight: "80%",
-        myUnitCardWidth: "25%",
+        myUnitCardWidth: "26%",
         adminCardHeight: "70%",
         adminCardWidth: "20%",
         offersCardHeight: "70%",
@@ -1213,12 +1281,10 @@ class Dashboard extends React.Component {
           >
             <Text>View All Visitors</Text>
           </Button>
-        <Button
+          <Button
             bordered
             style={styles.button1}
-            onPress={() =>
-                    this.props.navigation.navigate('schedulePatrolling')
-                  }
+            onPress={() => this.props.navigation.navigate("schedulePatrolling")}
           >
             <Text>Patrolling</Text>
           </Button>
@@ -1463,6 +1529,7 @@ export default connect(
     refreshNotifications,
     updateIdDashboard,
     updateSelectedDropDown,
-    updateuserRole
+    updateuserRole,
+    getDashAssoSync
   }
 )(Dashboard);
