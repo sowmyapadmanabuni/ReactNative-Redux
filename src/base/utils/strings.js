@@ -2,7 +2,7 @@
  * Created by Anooj Krishnan at Synclovis Systems Pvt. Ltd. on 2019-06-24
  */
 
-const isDev = false;
+const isDev = true;
 
 const isSecure = true;
 
@@ -29,11 +29,9 @@ const api = {
     "https://us-central1-oyespace-b7e2d.cloudfunctions.net"
 };
 
-
 // const imageUrl = "https://mediauploaddev.oyespace.com/Images/"  //Development
 const imageUrl = "https://mediauploaduat.oyespace.com/Images/"; //Validation
 //const imageUrl = "https://mediaupload.oyespace.com/Images/"   //Production
-
 
 const strings = {
   appName: "OyeSpace",
@@ -55,7 +53,7 @@ const strings = {
   rupeeIconCode: "\u20B9",
   mediaUploadUrl: "http://mediaupload.oyespace.com/oyeliving/api/V1",
   oyeImageUploadKey: "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-  imageUrl:imageUrl
+  imageUrl: imageUrl
 };
 
 export default strings;
