@@ -20,8 +20,17 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import DatePicker from "react-native-datepicker";
+import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { DatePickerDialog } from "react-native-datepicker-dialog";
 import { connect } from "react-redux";
-import { Card, CardItem, Form, Item, Input, Icon } from "native-base"
+import { Card, CardItem, Form, Item, Input, Icon, Button } from "native-base"
+import Collapsible from "react-native-collapsible";
+
+let dt = new Date();
+dt.setDate(dt.getDate());
+let _dt = dt;
 
 class MyGuests extends Component {
   static navigationOptions = {
@@ -36,16 +45,36 @@ class MyGuests extends Component {
       ImageSource: null,
 
       loading: false,
-      error: null
+      error: null,
+
+      datetime: moment(new Date()).format("HH:mm:ss a"),
+
+      //date picker
+      dobText: moment(_dt).format('YYYY-MM-DD'), //year + '-' + month + '-' + date,
+      dobDate: _dt,
+      isDateTimePickerVisible: false,
+
+      dobText1: moment(_dt).format('YYYY-MM-DD'),
+      dobDate1: _dt,
+      isDateTimePickerVisible1: false,
+
+      open: false
+
     };
     this.arrayholder = [];
   }
   componentDidMount() {
     let self = this;
+    let newDataSource = [];
+    this.state.dataSource.map((data) => {
+      newDataSource.push({ ...data, open: false })
+    })
+
     setTimeout(() => {
       self.getInvitationList();
-      this.setState({
-        isLoading: false
+      self.setState({
+        isLoading: false,
+        dataSource: newDataSource
       });
     }, 1500);
   }
@@ -54,36 +83,36 @@ class MyGuests extends Component {
   getInvitationList = () => {
 
     fetch(
-        `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
-          },
-          body: JSON.stringify({
-            ASAssnID : this.props.dashBoardReducer.assId,
-            INInvVis : "Invited",
-            UNUnitID : this.props.dashBoardReducer.uniID,
-            ACAccntID: this.props.userReducer.MyAccountID
-          })
-        }
-    )
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log("1234565656565 -@@@@@@", responseJson,this.props.userReducer.SelectedAssociationID,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID);
-          this.setState({
-            isLoading: false,
-            dataSource:responseJson.data.invitation,
-            error: responseJson.error || null,
-            loading: false
-          });
-          this.arrayholder = responseJson.data.invitation;
+      `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+        },
+        body: JSON.stringify({
+          ASAssnID: this.props.dashBoardReducer.assId,
+          INInvVis: "Invited",
+          UNUnitID: this.props.dashBoardReducer.uniID,
+          ACAccntID: this.props.userReducer.MyAccountID
         })
-        .catch(error => {
-          console.log(error);
-          this.setState({ error, loading: false });
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("1234565656565 -@@@@@@", responseJson, this.props.userReducer.SelectedAssociationID, this.props.dashBoardReducer.uniID, this.props.userReducer.MyAccountID);
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson.data.invitation,
+          error: responseJson.error || null,
+          loading: false
         });
+        this.arrayholder = responseJson.data.invitation;
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({ error, loading: false });
+      });
   };
 
   searchFilterFunction = text => {
@@ -102,148 +131,295 @@ class MyGuests extends Component {
     });
   };
 
-  associationName = () => {
-    fetch(
-        `http://${
-            this.props.oyeURL
-        }/oyeliving/api/v1/association/getAssociationList/${
-            this.props.dashBoardReducer.assId
-        }`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-          }
-        }
-    )
-        .then(response => response.json())
-        .then(responseJson => {
-          this.setState({
-            association: responseJson.data.association.asAsnName
-          });
-          console.log("!@#!@#!@$@#%@#$!@$@$!@$!@", this.state.association);
-        })
-        .catch(error => console.log(error));
+
+  //Date Picker 1
+  onDOBPress = () => {
+    let dobDate = this.state.dobDate;
+    if (!dobDate || dobDate == null) {
+      dobDate = new Date();
+      this.setState({
+        dobDate: dobDate
+      });
+    }
+    this.refs.dobDialog.open({
+      date: dobDate,
+      maxDate: new Date() //To restirct past dates
+    });
   };
 
-  setData(data) {
-    this.setState(
-        {
-          selectedData: data
-        },
-        () => this.Modal()
-    );
-  }
+  onDOBDatePicked = date => {
+    console.log("Date Piceked !:", date)
+
+    this.setState({
+      dobDate: date,
+      dobText: moment(date).format("YYYY-MM-DD")
+    });
+  };
+
+  //Date Piker 2
+
+  onDOBPress1 = () => {
+    let dobDate = this.state.dobDate1;
+    if (!dobDate || dobDate == null) {
+      dobDate = new Date();
+      this.setState({
+        dobDate1: dobDate
+      });
+    }
+    this.refs.dobDialog1.open({
+      date: dobDate,
+      maxDate: new Date() //To restirct past dates
+    });
+  };
+
+  onDOBDatePicked1 = date => {
+    console.log("Date Piceked !:", date)
+    this.setState({
+      dobDate1: date,
+      dobText1: moment(date).format("YYYY-MM-DD")
+    });
+  };
+
+  associationName = () => {
+    fetch(
+      `http://${
+      this.props.oyeURL
+      }/oyeliving/api/v1/association/getAssociationList/${
+      this.props.dashBoardReducer.assId
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          association: responseJson.data.association.asAsnName
+        });
+        console.log("!@#!@#!@$@#%@#$!@$@$!@$!@", this.state.association);
+      })
+      .catch(error => console.log(error));
+  };
+
 
   renderItem = ({ item, index }) => {
-    console.log(item,index)
+    console.log("Item  Index", item, index)
     return (
-        <View style={{ flexDirection: "column" , marginBottom:index===this.state.dataSource.length-1? 80:0}}>
-          <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
-          <View
-              style={[
-                styles.listItem,
-                {
-                  justifyContent: "space-between",
-                  paddingRight: 0,
-                  height: hp("15%")
-                }
-              ]}
-          >
-            <View style={styles.iconContainer}>
-              <Text style={styles.contactIcon}>
-                {item.infName[0].toUpperCase()}
-              </Text>
-            </View>
+
+      <View style={{ flexDirection: "column", marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0 }}>
+        <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginTop: hp('1%') }}>Unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
+          </View>
+          <View style={{}}>
+            <Text style={{ color: '#ff8c00', fontSize: hp('1.6%'), marginRight: hp('1%'), marginTop: hp('1%') }}>{moment(item.indCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>
+          </View>
+        </View>
+        <View
+          style={[
+            styles.listItem,
+            {
+              justifyContent: "space-between",
+              paddingRight: 0,
+              height: hp("14%")
+            }
+          ]}
+        >
+          <View style={styles.iconContainer}>
+            <Text style={styles.contactIcon}>
+              {item.infName[0].toUpperCase()}
+            </Text>
+          </View>
+          <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}>
             <View style={styles.infoContainer}>
               <Text style={styles.infoText}>
                 {item.infName} {item.inlName}
               </Text>
-              <View style={{ flexDirection: "column" }}>
-                <Text style={styles.infoNumber}>{item.inMobile}</Text>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image source={require('../../../icons/phone.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                  <Text>{"  "}</Text>
+                </View>
+                <View>
+                  <Text style={styles.infoNumber}>{item.inMobile}</Text>
+                </View>
               </View>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                  <Text>{"  "}</Text>
+                </View>
+                <View>
+                  <Text style={{ fontSize: hp('1.2%') }}>Entry Date: {moment(item.indCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"  "}</Text>
+                </View>
+                <View>
+                  <Text style={{ fontSize: hp('1.2%') }}>Entry Time: {item.indCreated.substring(11, 16)}</Text>
+                </View>
+
+              </View>
+
+
+              {item.indUpdated === '0001-01-01T12:00:00' ?
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                    <Text>{"  "}</Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: hp('1.2%') }}>Exit Date: N.A.{"  "}</Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: hp('1.2%') }}>Exit Time: N.A.</Text>
+                  </View>
+                </View>
+                :
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                    <Text>{"  "}</Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: hp('1.2%') }}>Exit Date: {moment(item.indUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"  "}</Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: hp('1.2%') }}>Exit Time: {item.indUpdated.substring(11, 16)}</Text>
+                  </View>
+                </View>
+              }
+              {item.open ?
+                <View></View> :
+
+                <View style={{ marginTop: hp('2%') }}>
+                  <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center' }}>
+
+                  </View>
+                </View>
+              }
+
             </View>
-            <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
-              <Card style={{ paddingTop: 0 }}>
-                <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate("QRCodeGeneration", {
-                        value: this.state.dataSource[index]
-                      });
-                    }}
-                >
-                  <CardItem bordered>
-                    <Image
-                        style={styles.images}
-                        source={require("../icons/share.png")}
-                    />
-                  </CardItem>
-                </TouchableOpacity>
-              </Card>
-              <Card style={{ marginTop: 0 }}>
-                <TouchableOpacity
-                    onPress={() => {
-                      {
-                        Platform.OS === "android"
-                            ? Linking.openURL(`tel:${item.inMobile}`)
-                            : Linking.openURL(`telprompt:${item.inMobile}`);
-                      }
-                    }}
-                >
-                  <CardItem bordered>
-                    <Image
-                        style={styles.images}
-                        source={require("../icons/phone.png")}
-                    />
-                  </CardItem>
-                </TouchableOpacity>
-              </Card>
-            </View>
+          </TouchableOpacity>
+          <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
+            <Card style={{ paddingTop: 0 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("QRCodeGeneration", {
+                    value: this.state.dataSource[index]
+                  });
+                }}
+              >
+                <CardItem bordered>
+                  <Image
+                    style={styles.images}
+                    source={require("../icons/share.png")}
+                  />
+                </CardItem>
+              </TouchableOpacity>
+            </Card>
+            <Card style={{ marginTop: 0 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  {
+                    Platform.OS === "android"
+                      ? Linking.openURL(`tel:${item.inMobile}`)
+                      : Linking.openURL(`telprompt:${item.inMobile}`);
+                  }
+                }}
+              >
+                <CardItem bordered>
+                  <Image
+                    style={styles.images}
+                    source={require("../icons/phone.png")}
+                  />
+                </CardItem>
+              </TouchableOpacity>
+            </Card>
           </View>
-          <View style={{ borderColor: "#707070", borderWidth: wp("0.05%") }} />
         </View>
+        <View>
+          <Collapsible
+            duration={100}
+            collapsed={!item.open}>
+            <View style={{ flexDirection: 'column' }}>
+              <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
+                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%') }}>Invited On: <Text style={{ color: '#38bcdb' }}>{moment(item.insDate, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>{" "}</Text>
+                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), color: '#38bcdb' }}>{item.insDate.substring(11, 16)}</Text>
+              </View>
+              <View>
+                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Purpose of Invitation: {item.inpOfInv}</Text>
+              </View>
+              <View>
+                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Total Guests: {item.inVisCnt}</Text>
+              </View>
+
+              {!item.open ?
+                <View></View> :
+
+                <View style={{ marginBottom: hp('1%'), marginTop: hp('1%') }}>
+                  <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center', marginLeft: hp('3%') }}>
+
+                  </View>
+                </View>
+              }
+            </View>
+          </Collapsible>
+
+        </View>
+        <View style={{ borderColor: "#707070", borderBottomWidth: hp("0.1%") }} />
+      </View>
+
     );
   };
+  toggleCollapsible = (index, value) => {
+    let data = [...this.state.dataSource]
+
+    data[index].open = !value
+
+    this.setState({ dataSource: data })
+  }
 
   render() {
-    console.log("Data Sources",this.state.dataSource)
+    console.log("Data Sources", this.state.dataSource)
 
     if (this.state.isLoading) {
       return (
-          <View style={styles.contaianer}>
-            {/* <Header /> */}
+        <View style={styles.contaianer}>
+          {/* <Header /> */}
 
-            {/* <Text style={styles.titleOfScreen}>My Guests</Text> */}
+          {/* <Text style={styles.titleOfScreen}>My Guests</Text> */}
 
-            <View style={styles.progress}>
-              <ActivityIndicator size="large" color="#F3B431" />
-            </View>
+          <View style={styles.progress}>
+            <ActivityIndicator size="large" color="#F3B431" />
           </View>
+        </View>
       );
     }
     return (
-        <View style={{ flex: 1, marginTop: hp("1%") }}>
-          {/* <Header /> */}
-          <NavigationEvents
-              onDidFocus={payload => this.getInvitationList()}
-              onWillBlur={payload => this.getInvitationList()}
-          />
-          {/* <Text style={styles.titleOfScreen}> My Guests </Text> */}
+      <View style={{ flex: 1, marginTop: hp("1%") }}>
+        {/* <Header /> */}
+        <NavigationEvents
+          onDidFocus={payload => this.getInvitationList()}
+          onWillBlur={payload => this.getInvitationList()}
+        />
+        {/* <Text style={styles.titleOfScreen}> My Guests </Text> */}
 
-          <Form style={styles.formSearch}>
-            <Item style={styles.inputItem}>
-              <Input
-                  marginBottom={hp("-1%")}
-                  placeholder="Search...."
-                  multiline={false}
-                  onChangeText={this.searchFilterFunction}
-              />
+        <Form style={styles.formSearch}>
+          <Item style={styles.inputItem}>
+            <Input
+              marginBottom={hp("-1%")}
+              placeholder="Search...."
+              multiline={false}
+              onChangeText={this.searchFilterFunction}
+            />
 
-              <Icon style={styles.icon} name="search" size={14} />
-            </Item>
-          </Form>
-          {/* <TextInput
+            <Icon style={styles.icon} name="search" size={14} />
+          </Item>
+        </Form>
+        {/* <TextInput
           style={styles.textinput}
           placeholder="search...."
           // lightTheme
@@ -251,44 +427,131 @@ class MyGuests extends Component {
           onChangeText={this.searchFilterFunction}
         /> */}
 
-          {this.state.dataSource.length === 0 ?
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-                <Image source={require('../../../icons/guest.png')} style={{width:hp('10%'), height:hp('10%'), margin:hp('1%')}}/>
-                {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text> */}
-                <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Please invite Guest</Text>
-              </View>
-              :
-              <FlatList
-                  style={{ marginTop: hp("1.5%") }}
-                  data={this.state.dataSource.sort((a,b) => a.infName.localeCompare(b.infName))}
-                  renderItem={this.renderItem}
-                  keyExtractor={(item, index) => item.inInvtID.toString()}
-              />
-          }
-          <TouchableOpacity
-              style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
-              onPress={() => this.props.navigation.navigate("InviteGuests")}
+        <View style={styles.datePickerButtonView}>
+          <View
+            style={{
+              flex: 0.8,
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              marginLeft: hp("-1%")
+            }}
           >
-            <Text
-                style={{
-                  fontSize: hp("5%"),
-                  color: "#fff",
-                  fontWeight: "bold",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  alignSelf: "center",
-                  marginBottom: hp("0.5%")
-                }}
+            <View>
+              <Text style={{ color: "#38BCDB" }}>From</Text>
+            </View>
+            {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+            <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+              <View style={styles.datePickerBox}>
+                <Text style={styles.datePickerText}>
+                  {moment(this.state.dobText).format("YYYY-MM-DD")}{" "}
+                </Text>
+                <DatePickerDialog
+                  ref="dobDialog"
+                  onDatePicked={this.onDOBDatePicked.bind(this)}
+                />
+
+                <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
+                  <Image
+                    style={[styles.viewDatePickerImageStyle]}
+                    source={require("../../../icons/calender.png")}
+                  />
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+
+            {/* </View> */}
+            <View>
+              <Text style={{ color: "#38BCDB" }}> To </Text>
+            </View>
+            {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
+            <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+              <View style={styles.datePickerBox}>
+                <Text style={styles.datePickerText}>
+                  {moment(this.state.dobText1).format("YYYY-MM-DD")}
+                </Text>
+                <DatePickerDialog
+                  ref="dobDialog1"
+                  onDatePicked={this.onDOBDatePicked1.bind(this)}
+                />
+                <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
+                  <Image
+                    style={styles.viewDatePickerImageStyle}
+                    source={require("../../../icons/calender.png")}
+                  />
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+
+            {/* </View> */}
+          </View>
+
+          <View
+            style={{
+              flex: 0.2,
+
+              justifyContent: "flex-end",
+              alignItems: "flex-end",
+              marginRight: hp("-1.5%")
+            }}
+          >
+            <Button
+              bordered
+              warning
+              style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
+            // onPress={() => this.myVisitorsGetList()}
             >
-              +
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "600",
+                  fontSize: hp("2%")
+                }}
+              >
+                Get
+                  </Text>
+            </Button>
+          </View>
+        </View>
+
+        {this.state.dataSource.length === 0 ?
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
+            <Image source={require('../../../icons/guest.png')} style={{ width: hp('10%'), height: hp('10%'), margin: hp('1%') }} />
+            {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text> */}
+            <Text style={{ backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', fontSize: hp('1.6%') }}>Please invite Guest</Text>
+          </View>
+          :
+          <FlatList
+            style={{ marginTop: hp("1.5%") }}
+            data={this.state.dataSource.sort((a, b) => a.infName.localeCompare(b.infName))}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => item.inInvtID.toString()}
+          />
+        }
+        <TouchableOpacity
+          style={[styles.floatButton, { alignSelf: "center", marginLeft: 2 }]}
+          onPress={() => this.props.navigation.navigate("InviteGuests")}
+        >
+          <Text
+            style={{
+              fontSize: hp("5%"),
+              color: "#fff",
+              fontWeight: "bold",
+              justifyContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+              marginBottom: hp("0.5%")
+            }}
+          >
+            +
             </Text>
-            {/* <Entypo
+          {/* <Entypo
                     name="plus"
                     size={30}
                     color="#fff"
                 /> */}
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
@@ -315,6 +578,43 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f4f4",
     borderRadius: hp("4%")
   },
+  datePickerButtonView: {
+    marginTop: hp("1.5%"),
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    justifyContent: "space-around",
+    marginHorizontal: hp("2%")
+  },
+  datePickerBox: {
+    margin: hp("1.0%"),
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    borderWidth: hp("0.2%"),
+    height: hp("4%"),
+    borderColor: "#bfbfbf",
+    padding: 0
+  },
+  datePickerText: {
+    fontSize: hp("1.5%"),
+    marginLeft: 5,
+    marginRight: 5,
+    color: "#474749"
+  },
+  viewDatePickerImageStyle: {
+    width: wp("3%"),
+    height: hp("2.2%"),
+    marginRight: hp("0.5%")
+  },
+  buttonUpdateStyle: {
+    width: wp("16%"),
+    borderRadius: hp("3%"),
+    borderWidth: wp("2%"),
+    height: hp("5%"),
+    marginRight: hp("1%"),
+    backgroundColor: "orange",
+    borderColor: "orange"
+  },
   listItem: {
     flexDirection: "row",
     paddingLeft: hp("1.6%"),
@@ -323,13 +623,12 @@ const styles = StyleSheet.create({
     paddingTop: hp("1%")
   },
   iconContainer: {
-    width: hp("8%"),
-    height: hp("8%"),
+    width: hp("6.5%"),
+    height: hp("6.5%"),
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#ff8c00",
     borderRadius: 100,
-    marginTop: hp("2%")
   },
   contactIcon: {
     fontSize: hp("3.5%"),
@@ -338,20 +637,18 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "column",
     paddingLeft: hp("1.6%"),
-    paddingTop: hp("2%")
   },
   infoText: {
-    fontSize: hp("2.5%"),
+    fontSize: hp("2.2%"),
     fontWeight: "bold",
-    paddingLeft: hp("1%"),
-    color: "#000"
+    color: "#000",
+    marginBottom: hp('0.5%')
   },
   infoNumber: {
-    fontSize: hp("2%"),
+    fontSize: hp("1.6%"),
     fontWeight: "100",
-    paddingLeft: hp("1%"),
-    paddingTop: hp("1%"),
-    color: "grey"
+    color: "grey",
+    marginBottom: hp('0.5%')
   },
 
   titleOfScreen: {

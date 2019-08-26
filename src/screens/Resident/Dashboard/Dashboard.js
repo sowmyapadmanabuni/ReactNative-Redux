@@ -787,7 +787,7 @@ class Dashboard extends React.Component {
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
-                    containerStyle={{ width: "100%" }}
+                    containerStyle={{ width: "114%",borderBottomWidth:hp('0.05%'),borderBottomColor:'#474749' }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
                       borderBottomColor: "transparent"
@@ -815,7 +815,7 @@ class Dashboard extends React.Component {
                   <Dropdown
                     // value={this.state.unitName}
                     value={selectedDropdown1}
-                    containerStyle={{ width: "100%" }}
+                    containerStyle={{ width: "70%",marginLeft:'30%',borderBottomWidth:hp('0.05%'),borderBottomColor:'#474749' }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
