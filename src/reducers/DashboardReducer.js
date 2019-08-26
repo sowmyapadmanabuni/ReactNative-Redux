@@ -11,9 +11,12 @@ import {
   GET_MEMBERLIST_FAILED,
   UPDATE_ID_DASHBOARD,
   UPDATE_DROPDOWN_INDEX,
+  DASHBOARD_NO_UNITS,
   UPDATE_SELECTED_DROPDOWN,
-  USER_ROLE
+  USER_ROLE,
+  DASHBOARD_ASSOCIATION_SYNC
 } from "../actions/types";
+import { stat } from "react-native-fs";
 
 const INITIAL_STATE = {
   datasource: null,
@@ -34,7 +37,7 @@ const INITIAL_STATE = {
   selectedDropdown: "",
   selectedDropdown1: "",
   called: false,
-  role:""
+  role: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -104,8 +107,17 @@ export default (state = INITIAL_STATE, action) => {
     case UPDATE_SELECTED_DROPDOWN:
       return { ...state, [action.payload.prop]: action.payload.value };
 
-      case USER_ROLE:
-        return {...state,userRole:action.payload}
+    case DASHBOARD_NO_UNITS:
+      return { ...state, dropdown: action.payload };
+    case USER_ROLE:
+      return { ...state, userRole: action.payload };
+
+    case DASHBOARD_ASSOCIATION_SYNC:
+      return {
+        ...state,
+        dropdown: action.payload.dropdown,
+        associationid: action.payload.associationid
+      };
 
     default:
       return state;

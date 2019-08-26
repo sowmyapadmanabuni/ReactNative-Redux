@@ -142,44 +142,17 @@ class MyProfile extends Component {
                       <TouchableOpacity
                           onPress={() => {
                             navigate("EditProfileScreen", {
-                              profileDataSourceFirstName: this.state.datasource
-                                ? this.state.datasource.data.account[0].acfName
-                                : "",
-                              profileDataSourceLastName: this.state.datasource
-                                ? this.state.datasource.data.account[0].aclName
-                                : "",
-                              profileDataSourceIsdCode: this.state.datasource
-                                ? this.state.datasource.data.account[0].acisdCode : "",
-                              profileDataSourceIsdCode1: this.state.datasource
-                                ? this.state.datasource.data.account[0].acisdCode1 : "",
-                              profileDataSourceCca2: this.state.datasource
-                                ? this.state.datasource.data.account[0].acisdCode
-                                    .toString()
-                                    .slice(-2)
-                                : "",
-                              profileDataSourceCca3: this.state.datasource
-                                ? this.state.datasource.data.account[0].acisdCode1
-                                    .toString()
-                                    .slice(-2)
-                                : "",
-                              profileDataSourceMobileNumber: this.state.datasource
-                                ? this.state.datasource.data.account[0].acMobile
-                                : "",
-                              profileDataSourceAlternateMobileNum: this.state
-                                .datasource
-                                ? this.state.datasource.data.account[0].acMobile1
-                                : "",
-                              profileDataSourceEmail: this.state.datasource
-                                ? this.state.datasource.data.account[0].acEmail
-                                : "",
-                              profileDataSourceAlternateEmail: this.state.datasource
-                                ? this.state.datasource.data.account[0].acEmail1
-                                : "",
-                              profileDataSourceImageName: this.state.datasource
-                                ? this.state.datasource.data.account[0].acImgName
-                                : "",
-                              profileDataSourceCountryName:this.state.datasource.data.account[0].acCrtyCode,
-                              profileDataSourceCountryName1:this.state.datasource.data.account[0].acCrtyCode1
+                              firstName:this.state.datasource.data.account[0].acfName,
+                              lastName:this.state.datasource.data.account[0].aclName,
+                              primaryMobNum:this.state.datasource.data.account[0].acMobile,
+                              primeCCode:this.state.datasource.data.account[0].acisdCode,
+                              primeCName:this.state.datasource.data.account[0].acCrtyCode,
+                              alterMobNum:this.state.datasource.data.account[0].acMobile1,
+                              alterCCode:this.state.datasource.data.account[0].acisdCode1,
+                              alterCName:this.state.datasource.data.account[0].acCrtyCode1,
+                              primaryEmail:this.state.datasource.data.account[0].acEmail,
+                              alterEmail:this.state.datasource.data.account[0].acEmail1,
+                              myProfileImage:this.state.datasource.data.account[0].acImgName,
                             })
                           }}
                       >

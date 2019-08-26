@@ -563,8 +563,10 @@ class MyFamilyEdit extends Component {
     console.log('Stat in Add family', stat)
     if (stat.success) {
       try {
-        if(Platform.OS === 'android'){
-          this.deleteImage();
+        if(self.state.isPhotoAvailable) {
+          if (Platform.OS === 'android') {
+            self.deleteImage();
+          }
         }
         this.props.navigation.goBack()
       } catch (err) {

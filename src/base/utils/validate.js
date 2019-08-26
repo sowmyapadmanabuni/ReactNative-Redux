@@ -114,7 +114,6 @@ export class validate{
 
 
     static distanceMeasurement(lati1,lati2,longi1,longi2){
-        console.log(lati1,lati2,longi1,longi2);
         Number.prototype.toRad = function() {
             return this * Math.PI / 180;
         };
@@ -133,21 +132,20 @@ export class validate{
             Math.sin(dLon/2) * Math.sin(dLon/2);
         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         let d = R * c * 3280.84;  // Converting Km to Ft
+        return d;
 
-        console.log("Distance between tow lat & long in ft:",d," ft")
-
-        if(d<10 && d !== 0){
-            return "less"
-        }
-        else if(d>20){
-            return 'more'
-        }
-        else if (d === 0){
-            return 0;
-        }
-        else {
-            return true
-        }
+        // if(d<10 && d !== 0){
+        //     return "less",d
+        // }
+        // else if(d>20){
+        //     return 'more'
+        // }
+        // else if (d === 0){
+        //     return 0,d;
+        // }
+        // else {
+        //     return true,d
+        // }
     }
 
     static strToArray(str){
@@ -196,4 +194,18 @@ export class validate{
         let re=/^[A-Za-z]+$/;
         return re.test(text);
     };
+
+   static validateEmailId=(email)=>{
+      let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+   }
+
+   static isBlank=(field)=>{
+       field += "";
+       if(field !== "" && field.length > 0 && field !== "undefined"){
+           return false;
+       }else{
+           return true;
+       }
+   }
 }

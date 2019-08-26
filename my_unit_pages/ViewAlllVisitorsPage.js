@@ -250,14 +250,7 @@ class App extends React.Component {
                       enableScaling={true}
                       easingFunc={Easing.bounce}
                   />
-                  // <Image
-                  //   style={styles.mainCardItemImage}
-                  //   source={{
-                  //     uri:
-                  //       `${this.props.mediaupload}` + item.vlEntryImg
-                  //   }}
 
-                  // />
               )}
             </View>
             <View style={styles.textViewContainer}>
@@ -265,7 +258,7 @@ class App extends React.Component {
                 {item.vlfName}
                 {/* {this.state.dataSource[0].vlfName} */}
               </Text>
-              <View style={styles.viewTextStyle}>
+              <View style={[styles.viewTextStyle]}>
                 <Image
                     style={styles.viewImageStyle}
                     source={require("../icons/user.png")}
@@ -275,29 +268,49 @@ class App extends React.Component {
               <View style={styles.viewTextStyle}>
                 <Image
                     style={styles.viewImageStyle}
-                    source={require("../icons/entry_time.png")}
+                    source={require("../icons/datetime.png")}
                 />
                 <Text style={styles.subNameTextStyleTwo}>
-                  Entry:
-                  {item.vlEntryT.substring(11, 19)}
+                  Entry Date:
+                  {item.vldCreated.substring(0, 10)}
                 </Text>
                 <Text style={styles.subNameTextStyleTwo}>
-                  {item.vlExitT.substring(11, 19)}
+                  Entry Time:
+                  {item.vlEntryT.substring(11, 19)}
                 </Text>
               </View>
+              {item.vlexgName!=="" ?
               <View style={styles.viewTextStyle}>
                 <Image
                     style={styles.viewImageStyle}
+                    source={require("../icons/datetime.png")}
+                />
+                <Text style={styles.subNameTextStyleTwo}>
+                  Exit Date:
+                  {item.vldUpdated.substring(0, 10)}
+                </Text>
+                <Text style={styles.subNameTextStyleTwo}>
+                  Exit Time:
+                  {item.vlExitT.substring(11, 19)}
+                </Text>
+              </View>
+                  :<View/>}
+              <View style={styles.viewTextStyle}>
+                <Image
+                    style={styles.viewImageStyle}
+                    resizeMode={'center'}
                     source={require("../icons/location.png")}
                 />
                 <Text style={styles.subNameTextStyleTwo}>
                   Entry Gate:
                   {item.vlengName}
                 </Text>
+                {item.vlexgName!=="" ?
                 <Text style={styles.subNameTextStyleTwo}>
                 Exit Gate:
                   {item.vlexgName}
                 </Text>
+                    :<View/>}
               </View>
             </View>
             <View style={styles.cellEndIcons}>
@@ -318,10 +331,10 @@ class App extends React.Component {
                 >
                   <View
                       style={{
-                        width: hp("5.5%"),
-                        height: hp("5.5%"),
+                        width: hp("5%"),
+                        height: hp("5%"),
                         justifyContent: "center",
-                        alignItems: "center"
+                        alignItems: "center",
                       }}
                   >
                     <Image
@@ -660,21 +673,8 @@ class App extends React.Component {
                 </Button>
               </View>
             </View>
-          
 
-            {/* <TouchableOpacity onPress={this._showDateTimePicker}>
-          <DateTimePicker
-            isVisible={this.state.isDateTimePickerVisible}
-            onConfirm={this._handleDatePicked}
-            mode="time"
-            is24Hour={false}
-            onCancel={this._hideDateTimePicker}
-          />
-          <View style={styles.datePickerBox}>
-            <Text style={styles.subtext1}>{this.state.datetime}</Text>
-          </View>
-        </TouchableOpacity> */}
-            {this.state.dataSource.length == 0 ? (
+            {this.state.dataSource.length === 0 ? (
                 <View
                     style={{
                       flex: 1,
@@ -693,16 +693,6 @@ class App extends React.Component {
                   >
                     No Entries for selected Date
                   </Text>
-                  {/* <Text
-                style={{
-                  backgroundColor: "white",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: hp("2%")
-                }}
-              >
-                Choose other date please.
-              </Text> */}
                 </View>
             ) : (
                 <FlatList
@@ -754,7 +744,7 @@ const styles = StyleSheet.create({
     color: "#FF8C00"
   },
   tableView: {
-    flexDirection: "column"
+    flexDirection: "column",
   },
   lineForCellView: {
     backgroundColor: "lightgray",

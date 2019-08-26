@@ -78,7 +78,40 @@ class PatrollingCheckPoints extends React.Component {
         try {
             if (stat && stat !== undefined) {
                 let cpList = stat.data.checkPointListByAssocID;
+                if(this.props.navigation.state.params !== undefined && this.props.navigation.state.params.isRefreshing ){
+                    // let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
+                    //     let cpListIDArr = cpListIDs.split(",");
+                    //     let cpArr= [];
+                    //     for (let i in cpList) {
+                    //         for (let j in cpListIDArr) {
+                    //             if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
+                    //                 cpList[i].isChecked = true
+                    //             }
+                    //         }
+                    //     }
+                        this.setState({
+                            checkPointArray: cpList
+                        },()=>this.updateStore(cpList)) 
+                }
+                else if(this.props.navigation.state.params !== undefined && this.props.navigation.state.params.data !== undefined){
+                    let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
+                    let cpListIDArr = cpListIDs.split(",");
+                    let cpArr= [];
+                    for (let i in cpList) {
+                        for (let j in cpListIDArr) {
+                            if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
+                                cpList[i].isChecked = true
+                            }
+                        }
+                    }
+                    this.setState({
+                        checkPointArray: cpList
+                    },()=>this.updateStore(cpList)) 
+                }
+                else{
                     self.updateCheckList(cpList);
+                }
+                    
             }
         } catch (e) {
             base.utils.logger.log(e);
@@ -89,20 +122,22 @@ class PatrollingCheckPoints extends React.Component {
     updateCheckList(cpList) {
         let cpListArr = [];
             if (this.props.navigation.state.params !== undefined) {
-                if (this.props.navigation.state.params.isRefreshing !== undefined) {
-                    cpListArr = cpList
-                } else {
-                    let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
-                    let cpListIDArr = cpListIDs.split(",");
-                    for (let i in cpList) {
-                        for (let j in cpListIDArr) {
-                            if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
-                                cpList[i].isChecked = true
-                            }
-                        }
-                    }
-                    cpListArr = cpList;
-                }
+                // if (this.props.navigation.state.params.isRefreshing !== undefined) {
+                //     cpListArr = cpList
+                // } else {
+                //     let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
+                //     let cpListIDArr = cpListIDs.split(",");
+                //     for (let i in cpList) {
+                //         for (let j in cpListIDArr) {
+                //             if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
+                //                 cpList[i].isChecked = true
+                //             }
+                //         }
+                //     }
+                //     cpListArr = cpList;
+                // }
+                cpListArr = cpList
+
             } else {
                 cpListArr = cpList
             }
@@ -293,6 +328,9 @@ class PatrollingCheckPoints extends React.Component {
                         <Text numberOfLines={1}
                               style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>
                     </View>
+                    <View style={PatrollingCheckPointsStyles.centerTextView}>
+                        <Text style={PatrollingCheckPointsStyles.centerTextStyle}>Type:- {data.item.cpcPntAt}</Text>
+                    </View>
                 </View>
                 <View style={PatrollingCheckPointsStyles.rightView}>
                     <ElevatedView elevation={0}>
@@ -367,9 +405,11 @@ class PatrollingCheckPoints extends React.Component {
     setCheckVal(item){
             let cpList = this.state.checkPointArray;
 
+            console.log("CP:IS:",cpList,item)
             for(let i in cpList){
                 if(item.item.cpChkPntID === cpList[i].cpChkPntID){
-                    cpList[i].isChecked = !item.item.isChecked
+                    console.log("Slelc:",cpList[i])
+                    cpList[i].isChecked = !cpList[i].isChecked 
                 }
             }
 
@@ -377,7 +417,8 @@ class PatrollingCheckPoints extends React.Component {
 
             this.setState({
                 checkPointArray:cpList
-            },()=>this.updateStore(cpList))
+            })
+            this.updateStore(cpList)
     }
 
 }

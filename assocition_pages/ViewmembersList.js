@@ -4,7 +4,17 @@
 
 
 import React from "react";
-import {Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    Image,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {Card} from "native-base";
 import {TextInput} from "react-native-gesture-handler";
 import {NavigationEvents} from "react-navigation";
@@ -14,6 +24,7 @@ import {connect} from "react-redux";
 import {getDashUnits} from "../src/actions";
 import base from "../src/base";
 import OSButton from '../src/components/osButton/OSButton'
+import StaffStyle from "../src/screens/Resident/Visitors/Staff/StaffStyle";
 
 let data = [
     {
@@ -45,7 +56,8 @@ class Resident extends React.Component {
             loading: true,
             residentData: [],
             selectedUser: {},
-            clonedList: []
+            clonedList: [],
+            isLoading:true
         };
 
         this.getMemberList = this.getMemberList.bind(this);
@@ -92,10 +104,14 @@ class Resident extends React.Component {
                 let allMembers = [...unitOwner, ...unitTenant];
 
                 self.addUnitDetail(allMembers, associationId);
+
+
             }
 
         } catch (e) {
             console.log(e)
+            this.setState({isLoading:false})
+
         }
     }
 
@@ -118,10 +134,12 @@ class Resident extends React.Component {
                     residentData: memberArr,
                     clonedList: memberArr
                 })
+                self.setState({isLoading:false})
 
             }
         } catch (e) {
             console.log(e)
+            this.setState({isLoading:false})
         }
 
 
@@ -341,6 +359,7 @@ class Resident extends React.Component {
                             </View>
                         </View>
                     </View>
+                    {!this.state.isLoading?
                     <View style={styles.viewDetails}>
                         {this.state.residentData.length !== 0 ?
                             <View style={{flex: 1,}}>
@@ -387,10 +406,13 @@ class Resident extends React.Component {
                             <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                                 <Text>No Data for the selected association </Text>
                             </View>}
-                    </View>
+                    </View>:
+                        <View style={StaffStyle.activityIndicator}>
+                            <ActivityIndicator size="large" color={base.theme.colors.primary}/>
+                        </View>}
                 </View>
             </View>
-        );
+                        );
     }
 }
 

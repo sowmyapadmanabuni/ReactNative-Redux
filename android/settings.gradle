@@ -1,4 +1,6 @@
 rootProject.name = 'OyeSpace'
+include ':@react-native-community_geolocation'
+project(':@react-native-community_geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/geolocation/android')
 include ':react-native-restart'
 project(':react-native-restart').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-restart/android')
 include ':react-native-device-info'
@@ -45,4 +47,6 @@ include ':react-native-contacts-wrapper'
 project(':react-native-contacts-wrapper').projectDir = new File(settingsDir, '../node_modules/react-native-contacts-wrapper/android/app')
 include ':react-native-maps'
 project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
+include ':react-native-geolocation-service'
+project(':react-native-geolocation-service').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-geolocation-service/android')
 include ':app'

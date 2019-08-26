@@ -649,7 +649,8 @@ const styles = StyleSheet.create({
   progress: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop:hp('10%')
   },
   textinput: {
     height: hp("6%"),

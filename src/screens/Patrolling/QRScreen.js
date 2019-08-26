@@ -29,6 +29,7 @@ class QRScreen extends React.Component {
             error: null,
             res: null,
             imageURI: "",
+            cpName:"",
             value: {
                 format: "png",
                 quality: 0.9,
@@ -41,7 +42,11 @@ class QRScreen extends React.Component {
 
     componentWillMount() {
         console.log("DATA For QR:",this.props)
+        let splitData = this.props.navigation.state.params.dataToBeSent.split(",");
+        console.log("Split Data:",splitData)
+
         this.setState({
+            cpName:splitData[0],
             latLong: this.props.navigation.state.params.dataToBeSent
         })
     }
@@ -130,6 +135,9 @@ class QRScreen extends React.Component {
                     </View>
                     <Text style={{alignSelf:'center',marginTop:10,fontFamily:base.theme.fonts.bold,color:base.theme.colors.white}}>
                         Association Name : {this.props.dashboardReducer.selectedDropdown}
+                    </Text>
+                    <Text style={{alignSelf:'center',marginTop:10-3 ,fontFamily:base.theme.fonts.bold,color:base.theme.colors.white}}>
+                        Check Point Name : {this.state.cpName}
                     </Text>
                 </ViewShot>
                 <EmptyView height={30}/>
