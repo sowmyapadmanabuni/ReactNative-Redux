@@ -851,122 +851,122 @@ class Dashboard extends PureComponent {
     let unitList = this.state.unitList;
 
     return (
-      <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
-        <View style={{ height: "100%", width: "100%" }}>
-          <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
-          {!this.props.isLoading ? (
-            <View style={Style.container}>
-              <View style={Style.dropDownContainer}>
-                <View style={Style.leftDropDown}>
-                  {this.state.assdNameHide === false ? (
-                    <Dropdown
-                      value={selectedDropdown}
-                      label="Association Name"
-                      baseColor="rgba(0, 0, 0, 1)"
-                      data={dropdown}
-                      containerStyle={{ width: "100%" }}
-                      textColor={base.theme.colors.black}
-                      inputContainerStyle={{
-                        borderBottomColor: "transparent"
-                      }}
-                      dropdownOffset={{ top: 10, left: 0 }}
-                      dropdownPosition={-4}
-                      rippleOpacity={0}
-                      // onChangeText={(value, index) =>
-                      //   this.onAssociationChange(value, index)
-                      // }
-                      onChangeText={(value, index) => {
-                        this.onAssociationChange(value, index);
-                        updateDropDownIndex(index);
-                        this.setState({
-                          associationSelected: true
-                        });
-                      }}
-                    />
-                  ) : (
-                    <View />
-                  )}
-                </View>
-                <View style={Style.rightDropDown}>
-                  {this.state.unitNameHide === false ? (
-                    <Dropdown
-                      // value={this.state.unitName}
-                      value={selectedDropdown1}
-                      containerStyle={{ width: "100%" }}
-                      label="Unit"
-                      baseColor="rgba(0, 0, 0, 1)"
-                      data={dropdown1}
-                      inputContainerStyle={{
-                        borderBottomColor: "transparent"
-                      }}
-                      textColor="#000"
-                      dropdownOffset={{ top: 10, left: 0 }}
-                      dropdownPosition={0}
-                      rippleOpacity={0}
-                      // onChangeText={(value, index) => {
-                      //   this.updateUnit(value, index);
-                      // }}
-                      onChangeText={(value, index) => {
-                        updateUserInfo({
-                          prop: "SelectedUnitID",
-                          value: dropdown1[index].unitId
-                        });
-                        updateIdDashboard({
-                          prop: "uniID",
-                          value: dropdown1[index].unitId
-                        });
-                        updateSelectedDropDown({
-                          prop: "uniID",
-                          value: dropdown1[index].unitId
-                        });
-                        updateSelectedDropDown({
-                          prop: "selectedDropdown1",
-                          value: dropdown1[index].value
-                        });
-                        this.updateUnit(value, index);
-
-                        // console.log(value);
-                        // console.log(index);
-                      }}
-                      // itemTextStyle={{}}
-                    />
-                  ) : (
-                    <View />
-                  )}
-                </View>
-              </View>
-              {this.state.isSelectedCard === "UNIT"
-                ? this.myUnitCard()
-                : this.state.isSelectedCard === "ADMIN"
-                ? this.adminCard()
-                : this.offersZoneCard()}
-              <View style={Style.bottomCards}>
-                <CardView
-                  height={this.state.myUnitCardHeight}
-                  width={this.state.myUnitCardWidth}
-                  cardText={"My Unit"}
-                  iconWidth={Platform.OS === "ios" ? 35 : 16}
-                  iconHeight={Platform.OS === "ios" ? 35 : 16}
-                  cardIcon={require("../../../../icons/my_unit.png")}
-                  onCardClick={() => this.changeCardStatus("UNIT")}
-                  disabled={this.state.isSelectedCard === "UNIT"}
-                />
-                {this.state.role === 1 ? (
-                  <CardView
-                    height={this.state.adminCardHeight}
-                    width={this.state.adminCardWidth}
-                    cardText={"Admin"}
-                    iconWidth={Platform.OS === "ios" ? 35 : 16}
-                    iconHeight={Platform.OS === "ios" ? 35 : 16}
-                    onCardClick={() => this.changeCardStatus("ADMIN")}
-                    cardIcon={require("../../../../icons/user.png")}
-                    disabled={this.state.isSelectedCard === "ADMIN"}
+      // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
+      <View style={{ height: "100%", width: "100%" }}>
+        <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
+        {!this.props.isLoading ? (
+          <View style={Style.container}>
+            <View style={Style.dropDownContainer}>
+              <View style={Style.leftDropDown}>
+                {this.state.assdNameHide === false ? (
+                  <Dropdown
+                    value={selectedDropdown}
+                    label="Association Name"
+                    baseColor="rgba(0, 0, 0, 1)"
+                    data={dropdown}
+                    containerStyle={{ width: "100%" }}
+                    textColor={base.theme.colors.black}
+                    inputContainerStyle={{
+                      borderBottomColor: "transparent"
+                    }}
+                    dropdownOffset={{ top: 10, left: 0 }}
+                    dropdownPosition={-4}
+                    rippleOpacity={0}
+                    // onChangeText={(value, index) =>
+                    //   this.onAssociationChange(value, index)
+                    // }
+                    onChangeText={(value, index) => {
+                      this.onAssociationChange(value, index);
+                      updateDropDownIndex(index);
+                      this.setState({
+                        associationSelected: true
+                      });
+                    }}
                   />
                 ) : (
                   <View />
                 )}
+              </View>
+              <View style={Style.rightDropDown}>
+                {this.state.unitNameHide === false ? (
+                  <Dropdown
+                    // value={this.state.unitName}
+                    value={selectedDropdown1}
+                    containerStyle={{ width: "100%" }}
+                    label="Unit"
+                    baseColor="rgba(0, 0, 0, 1)"
+                    data={dropdown1}
+                    inputContainerStyle={{
+                      borderBottomColor: "transparent"
+                    }}
+                    textColor="#000"
+                    dropdownOffset={{ top: 10, left: 0 }}
+                    dropdownPosition={0}
+                    rippleOpacity={0}
+                    // onChangeText={(value, index) => {
+                    //   this.updateUnit(value, index);
+                    // }}
+                    onChangeText={(value, index) => {
+                      updateUserInfo({
+                        prop: "SelectedUnitID",
+                        value: dropdown1[index].unitId
+                      });
+                      updateIdDashboard({
+                        prop: "uniID",
+                        value: dropdown1[index].unitId
+                      });
+                      updateSelectedDropDown({
+                        prop: "uniID",
+                        value: dropdown1[index].unitId
+                      });
+                      updateSelectedDropDown({
+                        prop: "selectedDropdown1",
+                        value: dropdown1[index].value
+                      });
+                      this.updateUnit(value, index);
 
-                {/* <CardView
+                      // console.log(value);
+                      // console.log(index);
+                    }}
+                    // itemTextStyle={{}}
+                  />
+                ) : (
+                  <View />
+                )}
+              </View>
+            </View>
+            {this.state.isSelectedCard === "UNIT"
+              ? this.myUnitCard()
+              : this.state.isSelectedCard === "ADMIN"
+              ? this.adminCard()
+              : this.offersZoneCard()}
+            <View style={Style.bottomCards}>
+              <CardView
+                height={this.state.myUnitCardHeight}
+                width={this.state.myUnitCardWidth}
+                cardText={"My Unit"}
+                iconWidth={Platform.OS === "ios" ? 35 : 16}
+                iconHeight={Platform.OS === "ios" ? 35 : 16}
+                cardIcon={require("../../../../icons/my_unit.png")}
+                onCardClick={() => this.changeCardStatus("UNIT")}
+                disabled={this.state.isSelectedCard === "UNIT"}
+              />
+              {this.state.role === 1 ? (
+                <CardView
+                  height={this.state.adminCardHeight}
+                  width={this.state.adminCardWidth}
+                  cardText={"Admin"}
+                  iconWidth={Platform.OS === "ios" ? 35 : 16}
+                  iconHeight={Platform.OS === "ios" ? 35 : 16}
+                  onCardClick={() => this.changeCardStatus("ADMIN")}
+                  cardIcon={require("../../../../icons/user.png")}
+                  disabled={this.state.isSelectedCard === "ADMIN"}
+                />
+              ) : (
+                <View />
+              )}
+
+              {/* <CardView
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
@@ -975,54 +975,54 @@ class Dashboard extends PureComponent {
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-              </View>
-              <View style={Style.supportContainer}>
-                <View style={Style.subSupportView}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      {
-                        Platform.OS === "android"
-                          ? Linking.openURL(`tel:+919343121121`)
-                          : Linking.openURL(`tel:+919343121121`);
-                      }
-                    }}
-                  >
-                    <Image
-                      style={[Style.supportIcon]}
-                      source={require("../../../../icons/call1.png")}
-                    />
-                  </TouchableOpacity>
-                  {/* <TouchableOpacity>
+            </View>
+            <View style={Style.supportContainer}>
+              <View style={Style.subSupportView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    {
+                      Platform.OS === "android"
+                        ? Linking.openURL(`tel:+919343121121`)
+                        : Linking.openURL(`tel:+919343121121`);
+                    }
+                  }}
+                >
+                  <Image
+                    style={[Style.supportIcon]}
+                    source={require("../../../../icons/call1.png")}
+                  />
+                </TouchableOpacity>
+                {/* <TouchableOpacity>
               <Image
                 style={Style.supportIcon}
                 source={require("../../../../icons/chat.png")}
               />
             </TouchableOpacity> */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      Linking.openURL("mailto:happy@oyespace.com");
-                    }}
-                  >
-                    <Image
-                      style={Style.supportIcon}
-                      source={require("../../../../icons/Group771.png")}
-                    />
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openURL("mailto:happy@oyespace.com");
+                  }}
+                >
+                  <Image
+                    style={Style.supportIcon}
+                    source={require("../../../../icons/Group771.png")}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
-          ) : (
-            <View />
-          )}
-          <ProgressLoader
-            isHUD={true}
-            isModal={true}
-            visible={this.props.isLoading}
-            color={base.theme.colors.primary}
-            hudColor={"#FFFFFF"}
-          />
-        </View>
-      </Profiler>
+          </View>
+        ) : (
+          <View />
+        )}
+        <ProgressLoader
+          isHUD={true}
+          isModal={true}
+          visible={this.props.isLoading}
+          color={base.theme.colors.primary}
+          hudColor={"#FFFFFF"}
+        />
+      </View>
+      // </Profiler>
     );
   }
 
