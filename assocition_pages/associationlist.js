@@ -30,6 +30,7 @@ class BlockDetail extends React.Component {
     this.state = {
       isLoading: true,
       dataSource: [],
+      searchData:[],
       query: "",
       loading: false,
       error: null,
@@ -57,7 +58,8 @@ class BlockDetail extends React.Component {
     });
     this.setState({
       searchText:text,
-      dataSource: newData
+      searchData: newData,
+      // dataSource: newData
     });
   };
 
@@ -333,9 +335,10 @@ class BlockDetail extends React.Component {
           <View style={styles.lineAboveAndBelowFlatList} />
           
           <FlatList
-            data={this.state.dataSource.sort((a, b) =>
-              a.asAsnName.localeCompare(b.asAsnName)
-            )}
+            // data={this.state.dataSource.sort((a, b) =>
+            //   a.asAsnName.localeCompare(b.asAsnName)
+            // )}
+            data={this.state.searchData}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.asAssnID.toString()}
           />
