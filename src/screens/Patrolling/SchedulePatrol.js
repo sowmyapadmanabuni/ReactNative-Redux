@@ -100,7 +100,8 @@ class SchedulePatrol extends React.Component {
     async getPatrolData(){
         let self = this;
 
-        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
+        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
+        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
         try {
             if (stat.success) {
                 let patrollArr = stat.data.patrollingShifts;
@@ -158,7 +159,7 @@ class SchedulePatrol extends React.Component {
             oyeURL
           } = this.props;
 
-        let associationId = this.props.SelectedAssociationID;
+        
         var headers = {
             "Content-Type": "application/json",
             "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
@@ -167,6 +168,8 @@ class SchedulePatrol extends React.Component {
         console.log("OyeURL:",oyeURL)
 
         //let stat = await base.services.OyeSafeApi.getDeviceList(associationId);
+        //let associationId = this.props.SelectedAssociationID;
+        let associationId = 8;
         axios
       .get(
         `http://${oyeURL}/oyesafe/api/v1/Device/GetDeviceListByAssocID/${associationId}`,
@@ -206,14 +209,17 @@ class SchedulePatrol extends React.Component {
 
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
-            PSSTime: moment(self.state.startTime).format("hh:mm:ss"),
-            PSETime: moment(self.state.endTime).format("hh:mm:ss"),
+            PSSTime: moment(self.state.startTime).format("HH:mm:ss"),
+            PSETime: moment(self.state.endTime).format("HH:mm:ss"),
             PSRepDays: days,
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,
             PSSltName: self.state.slotName,
-            ASAssnID: self.props.SelectedAssociationID
+            //ASAssnID: self.props.SelectedAssociationI D,
+            ASAssnID: 8
         };
+
+        console.log("Detail for network call:",detail);
 
         let stat = await base.services.OyeSafeApi.schedulePatrol(detail);
         try {
@@ -244,13 +250,14 @@ class SchedulePatrol extends React.Component {
         console.log("End",moment(self.state.endTime).format("hh:mm:ss"))
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
-            PSSTime: moment(self.state.startTime).format("hh:mm:ss"),
-            PSETime: moment(self.state.endTime).format("hh:mm:ss"),
+            PSSTime: moment(self.state.startTime).format("HH:mm:ss"),
+            PSETime: moment(self.state.endTime).format("HH:mm:ss"),
             PSRepDays: days,
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,
             PSSltName: self.state.slotName,
-            ASAssnID: self.props.SelectedAssociationID,
+            //ASAssnID: self.props.SelectedAssociationID,
+            ASAssnID: 8,
             PSPtrlSID  : self.state.patrolId
         };
         let stat = await base.services.OyeSafeApi.updatePatrol(detail);
@@ -404,18 +411,52 @@ class SchedulePatrol extends React.Component {
         } else if (base.utils.validate.isBlank(this.state.slotName)) {
             alert("Please enter slot name");
         } else {
-            let startTime = moment(this.state.startTime);
-            let endTime = moment(this.state.endTime);
-            let diff = endTime.isBefore(startTime);
-            console.log('State:',(this.state.startTime),(this.state.endTime));
-            console.log('State:',diff);
-            if(diff){
-                alert("End Time can not be bofore Start Time");
+            let startTime = moment(this.state.startTime).format("HH:mm");
+            let endTime = moment(this.state.endTime).format("HH:mm");
+            console.log('Time at validation:',(this.state.startTime),(this.state.endTime));
+
+            console.log("Disfffff:",this.compareTime(startTime,endTime));
+             let diff = this.compareTime(startTime,endTime);
+            if(!diff){
+                alert("Patrol End Time can not be bofore or equal Patrol Start Time");
             }
             else{
            this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
         }
         }
+    }
+
+
+    compareTime(startTime,endTime){
+        let startTimeArr = startTime.split(":");
+        let endTimeArr = endTime.split(":");
+        console.log("Time Arr:",startTimeArr,endTimeArr);
+
+        if(startTimeArr[0]>endTimeArr[0]){
+            return false
+        }
+        else if(startTime[0]<endTime[0]){
+            return true
+        }
+        else{
+            if(startTimeArr[1]>endTimeArr[1]){
+                return false
+            }
+            else if(startTimeArr[0] === endTimeArr[0]){
+                if(startTimeArr[1] === endTimeArr[1]){
+                    return false
+                }
+                else{
+                    return true
+                }
+            }
+            else{
+                return true
+            }
+        }
+
+
+
     }
 
 
@@ -509,19 +550,18 @@ class SchedulePatrol extends React.Component {
                 let newState = {};
                 const {action, hour, minute} = await TimePickerAndroid.open(options);
                 if (action !== TimePickerAndroid.dismissedAction) {
-                    let time = new Date(hour,minute);
-                    let hrs = moment(time).add(hour,'hours');
-                    let minu = moment(hrs).add(minute,'minutes');
-                    let selectedTime = minu._d;
-                    this.changeTime(selectedTime);
+                    let newTime = new Date();
+                    newTime.setHours(hour);
+                    newTime.setMinutes(minute)
+                    console.log("SELELMEKVJBHEJV:",newTime);
+                    this.changeTime(newTime);
                 }
                 else {
-                    let time = new Date(hour,minute);
-                    let hrs = moment(time).add(hour,'hours');
-                    let minu = moment(hrs).add(minute,'minutes');
-                    let selectedTime = minu._d;
-                    console.log("")
-                    this.changeTime(selectedTime);
+                    let newTime = new Date();
+                    newTime.setHours(hour);
+                    newTime.setMinutes(minute)
+                    console.log("SELELMEKVJBHEJV",newTime)
+                    this.changeTime(newTime);
                 }
 
             } catch ({code, message}) {
@@ -531,8 +571,8 @@ class SchedulePatrol extends React.Component {
 
     changeTime(time) {
         console.log("Old Time:",time);
-        let selTime = time=="Invalid Date"?(currentDate):moment(time).toISOString();
-        console.log("Time:",selTime,currentDate);
+        let selTime = time==="Invalid Date"?(currentDate):(time);
+        console.log("Time:",selTime,(time),currentDate);
         if (this.state.selType === 0) {
             this.setState({startTime: selTime,isSpinnerOpen:false})
         } else {

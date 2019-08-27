@@ -72,8 +72,8 @@ class PatrollingCheckPoints extends React.Component {
         let self = this;
         base.utils.logger.log(self.props);
 
-        let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
-        //let stat = await OyeSafeApi.getCheckPointList(8);
+        //let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
+        let stat = await OyeSafeApi.getCheckPointList(8);
         base.utils.logger.logArgs("Stat:", stat);
         try {
             if (stat && stat !== undefined) {
@@ -94,13 +94,13 @@ class PatrollingCheckPoints extends React.Component {
                         },()=>this.updateStore(cpList)) 
                 }
                 else if(this.props.navigation.state.params !== undefined && this.props.navigation.state.params.data !== undefined){
-                    let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
-                    let cpListIDArr = cpListIDs.split(",");
+                    let cpListIDs = this.props.navigation.state.params.data.point;
+                    console.log("CPLISTID:",cpListIDs,cpList)
                     let cpArr= [];
-                    for (let i in cpList) {
-                        for (let j in cpListIDArr) {
-                            if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
-                                cpList[i].isChecked = true
+                    for (let i in cpListIDs) {
+                        for (let j in cpList) {
+                            if(cpListIDs[i].psChkPID === cpList[j].cpChkPntID){
+                                cpList[j].isChecked = true
                             }
                         }
                     }
@@ -234,7 +234,7 @@ class PatrollingCheckPoints extends React.Component {
                         pitchEnabled={false}
                         rotateEnabled={false}
                         followsUserLocation={true}
-                        minZoomLevel={10}
+                        minZoomLevel={20}
                     >
                         {this.renderUserLocation()}
                     </MapView>

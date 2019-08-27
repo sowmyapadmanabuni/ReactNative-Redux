@@ -861,7 +861,7 @@ class Dashboard extends React.Component {
                       borderBottomColor: "transparent"
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-4}
+                    dropdownPosition={-3}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -991,7 +991,8 @@ class Dashboard extends React.Component {
             </TouchableOpacity> */}
                 <TouchableOpacity
                   onPress={() => {
-                    Linking.openURL("mailto:happy@oyespace.com");
+                    this.props.navigation.navigate("schedulePatrolling")
+                   // Linking.openURL("mailto:happy@oyespace.com");
                   }}
                 >
                   <Image
