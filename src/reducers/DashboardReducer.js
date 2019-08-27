@@ -110,7 +110,8 @@ export default (state = INITIAL_STATE, action) => {
     case DASHBOARD_NO_UNITS:
       return { ...state, dropdown: action.payload };
     case USER_ROLE:
-      return { ...state, userRole: action.payload };
+      //return { ...state, userRole: action.payload };
+      return { ...state, [action.payload.prop]: action.payload.value };
 
     case DASHBOARD_ASSOCIATION_SYNC:
       return {
