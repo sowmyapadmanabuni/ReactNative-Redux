@@ -103,9 +103,11 @@ class RegisterMe extends Component {
         SoldDate: this.state.dobText,
         OccupancyDate: this.state.dobText
       };
-
+      console.log("ANU",anu);
+      console.log(this.props)
       let champBaseURL = this.props.champBaseURL;
       this.setState({ sent: true, loading: true });
+
       axios
         .post(
           `${champBaseURL}/association/join`,
@@ -997,12 +999,19 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
+  let userdata = state.UserReducer.userData;
+  const user = (userdata!=undefined && 
+                userdata.data!=undefined && 
+                userdata.data.account != undefined &&  
+                userdata.data.account.length != undefined &&
+                userdata.data.account.length > 0)?userdata.data.account[0]:null;
   return {
-    MyFirstName: state.UserReducer.MyFirstName,
-    MyLastName: state.UserReducer.MyLastName,
-    MyEmail: state.UserReducer.MyEmail,
-    MyMobileNumber: state.UserReducer.MyMobileNumber,
-    MyISDCode: state.UserReducer.MyISDCode,
+    MyFirstName: user!=null? user.acfName:state.UserReducer.MyFirstName,
+    MyLastName: user!=null? user.aclName:state.UserReducer.MyLastName,
+    MyEmail: user!=null? user.acEmail:state.UserReducer.MyEmail,
+    MyMobileNumber: user!=null? user.acMobile:state.UserReducer.MyMobileNumber,
+    MyISDCode: user!=null? user.acisdCode:state.UserReducer.MyISDCode,
+    userData: state.UserReducer,
 
     joinedAssociations: state.JoinAssociationReducer.joinedAssociations,
     champBaseURL: state.OyespaceReducer.champBaseURL,

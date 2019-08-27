@@ -478,6 +478,7 @@ class Dashboard extends PureComponent {
               prop: "role",
               value: role
             });
+            console.log("ROLE_UPDATE",role)
           }
         );
       })
@@ -495,10 +496,11 @@ class Dashboard extends PureComponent {
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
     console.log("APi", base.utils.strings.oyeLivingDashBoard);
+    console.log("Getting_Associations_of ",this.props.userReducer.MyAccountID);
     let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
       this.props.userReducer.MyAccountID
     );
-    console.log("data from stat All Asc1", stat);
+    console.log("Response_Association: ", stat);
 
     try {
       if (stat && stat.data) {

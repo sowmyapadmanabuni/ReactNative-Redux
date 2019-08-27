@@ -612,7 +612,10 @@ export const updateSelectedDropDown = ({ prop, value }) => {
 };
 
 export const updateuserRole = ({ prop, value }) => {
-  return dispatch => {
-    dispatch({ type: USER_ROLE, payload: { prop: value } });
+  return dispatch => {    
+    dispatch({
+      type: USER_ROLE,
+      payload: { prop, value }
+    });
   };
 };
