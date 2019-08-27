@@ -285,7 +285,7 @@ class EditProfile extends Component {
     render() {
 
         console.log('AGHGHGHGH',this.state,this.state.myProfileImage)
-
+        console.log("My Account Id", this.props.MyAccountID)
         return (
             <TouchableWithoutFeedback
                 onPress={() => {

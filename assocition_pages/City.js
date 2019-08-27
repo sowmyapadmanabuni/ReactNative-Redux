@@ -92,6 +92,7 @@ export default class City extends Component {
                   </Item>
                 </TouchableWithoutFeedback>
               </Form>
+              <View style={{ borderWidth: 0.5, borderColor: "#E5E5E5" }} />
               <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
                 <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
                   <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>POPULAR CITIES</Text>
@@ -162,7 +163,7 @@ export default class City extends Component {
                 <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
                   <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>OTHER CITIES</Text>
                 </View>
-                <View style={{ borderWidth: 0.5, borderColor: "#ff8c00" }} />
+                <View style={{ borderWidth: 0.5, borderColor: "#E5E5E5" }} />
               </View>
 
 
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     height: hp("10%")
   },
 
-  card: { flexDirection: 'column', width: Dimensions.get("window").width / 4, height: Dimensions.get("window").width / 3 - 30, borderTopWidth: 1, borderRightWidth: 1, borderColor: "#fafafa", alignItems: 'center', justifyContent: 'center' },
+  card: { flexDirection: 'column', width: Dimensions.get("window").width / 4, height: Dimensions.get("window").width / 3 - 30, borderTopWidth: 1, borderRightWidth: 1, borderColor: "#E5E5E5", alignItems: 'center', justifyContent: 'center' },
   formSearch: {
     marginBottom: hp("1%")
   },

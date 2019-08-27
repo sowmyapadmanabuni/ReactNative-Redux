@@ -79,7 +79,6 @@ class BlockDetail extends React.Component {
         filteredArray.push(newData[i])
       }
     }
-
     this.setState({
       searchText: text,
       filteredDataSource: filteredArray
