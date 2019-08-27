@@ -376,7 +376,7 @@ class BlockDetail extends React.Component {
           {this.state.filteredDataSource.length === 0 ?
             <FlatList
 
-              data={this.state.filteredDataSource}
+              data={this.state.dataSource}
               renderItem={this.renderItem}
               extraData={this.state}
               keyExtractor={(item, index) => item.asAssnID.toString()}
@@ -386,7 +386,7 @@ class BlockDetail extends React.Component {
               // data={this.state.dataSource.sort((a, b) =>
               //   a.asAsnName.localeCompare(b.asAsnName)
               // )}
-              data={this.state.filteredDataSource}
+              data={this.state.dataSource}
               renderItem={this.renderItem}
               extraData={this.state}
               keyExtractor={(item, index) => item.asAssnID.toString()}
