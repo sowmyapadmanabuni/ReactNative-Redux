@@ -70,7 +70,7 @@ class BlockDetail extends React.Component {
       return itemData.indexOf(textData) > -1;
     });
     let filteredArray = [];
-    if (newData.length === 0) {
+    if (text.length === 0) {
       this.setState({
         filteredDataSource: []
       })
@@ -374,7 +374,26 @@ class BlockDetail extends React.Component {
 
           <View style={styles.lineAboveAndBelowFlatList} />
 
-          <FlatList
+          {this.state.filteredDataSource.length === 0 ?
+            <FlatList
+
+              data={this.state.filteredDataSource}
+              renderItem={this.renderItem}
+              extraData={this.state}
+              keyExtractor={(item, index) => item.asAssnID.toString()}
+            />
+            :
+            <FlatList
+              // data={this.state.dataSource.sort((a, b) =>
+              //   a.asAsnName.localeCompare(b.asAsnName)
+              // )}
+              data={this.state.filteredDataSource}
+              renderItem={this.renderItem}
+              extraData={this.state}
+              keyExtractor={(item, index) => item.asAssnID.toString()}
+            />
+          }
+          {/* <FlatList
             // data={this.state.dataSource.sort((a, b) =>
             //   a.asAsnName.localeCompare(b.asAsnName)
             // )}
@@ -382,7 +401,7 @@ class BlockDetail extends React.Component {
             renderItem={this.renderItem}
             extraData={this.state}
             keyExtractor={(item, index) => item.asAssnID.toString()}
-          />
+          /> */}
 
           {/* <TouchableOpacity
             style={[styles.floatButton]}
