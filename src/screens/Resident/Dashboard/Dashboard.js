@@ -478,7 +478,7 @@ class Dashboard extends PureComponent {
               prop: "role",
               value: role
             });
-            console.log("ROLE_UPDATE",role)
+            console.log("ROLE_UPDATE", role);
           }
         );
       })
@@ -495,24 +495,34 @@ class Dashboard extends PureComponent {
     let self = this;
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
-    console.log("APi", base.utils.strings.oyeLivingDashBoard);
-    console.log("Getting_Associations_of ",this.props.userReducer.MyAccountID);
-    let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
-      this.props.userReducer.MyAccountID
+
+    // let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
+    //   this.props.userReducer.MyAccountID
+    // );
+
+    let stat = await axios.get(
+      `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
+      {
+        headers: {
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+          "Content-Type": "application/json"
+        }
+      }
     );
+
     console.log("Response_Association: ", stat);
 
     try {
-      if (stat && stat.data) {
+      if (stat && stat.data.success) {
         this.setState({
           isNoAssJoin: false
         });
         let assocList = [];
-        for (let i = 0; i < stat.data.memberListByAccount.length; i++) {
-          if (stat.data.memberListByAccount[i].asAsnName !== "") {
+        for (let i = 0; i < stat.data.data.memberListByAccount.length; i++) {
+          if (stat.data.data.memberListByAccount[i].asAsnName !== "") {
             assocList.push({
-              value: stat.data.memberListByAccount[i].asAsnName,
-              details: stat.data.memberListByAccount[i]
+              value: stat.data.data.memberListByAccount[i].asAsnName,
+              details: stat.data.data.memberListByAccount[i]
             });
           }
         }
@@ -543,7 +553,7 @@ class Dashboard extends PureComponent {
         });
 
         self.getUnitListByAssoc();
-      } else if (stat === null) {
+      } else if (!stat.data.success) {
         this.setState({
           isNoAssJoin: true
         });
@@ -866,7 +876,11 @@ class Dashboard extends PureComponent {
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
-                    containerStyle={{ width: "114%",borderBottomWidth:hp('0.05%'),borderBottomColor:'#474749' }}
+                    containerStyle={{
+                      width: "114%",
+                      borderBottomWidth: hp("0.05%"),
+                      borderBottomColor: "#474749"
+                    }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
                       borderBottomColor: "transparent"
@@ -894,7 +908,12 @@ class Dashboard extends PureComponent {
                   <Dropdown
                     // value={this.state.unitName}
                     value={selectedDropdown1}
-                    containerStyle={{ width: "70%",marginLeft:'30%',borderBottomWidth:hp('0.05%'),borderBottomColor:'#474749' }}
+                    containerStyle={{
+                      width: "70%",
+                      marginLeft: "30%",
+                      borderBottomWidth: hp("0.05%"),
+                      borderBottomColor: "#474749"
+                    }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
@@ -1001,7 +1020,8 @@ class Dashboard extends PureComponent {
               />
             </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('City')
+                  onPress={
+                    () => this.props.navigation.navigate("City")
                     // Linking.openURL("mailto:happy@oyespace.com");
                   }
                 >

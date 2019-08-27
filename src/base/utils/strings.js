@@ -2,9 +2,9 @@
  * Created by Anooj Krishnan at Synclovis Systems Pvt. Ltd. on 2019-06-24
  */
 
-const isDev = true;
+const isDev = false;
 
-const isSecure = true;
+const isSecure = false;
 
 const isMandatory = " is required";
 
