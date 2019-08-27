@@ -335,13 +335,13 @@ class NotificationScreen extends Component {
                       </View>
                       <View style={{ flex: 1, }}>
                         {item.open ?
-                          <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flexDirection: 'row' }}>
+                          <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flexDirection: 'row', marginTop:hp('3%') }}>
                             {/* <Text style={{ color: '#ff8c00' }}>More</Text> */}
-                            <Image style={{ width: hp('3%'), height: hp('3%') }} source={require('../../../icons/show_more.png')} />
+                            <Image style={{ width: hp('2%'), height: hp('2%') }} source={require('../../../icons/show_more.png')} />
                           </View> :
-                          <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flexDirection: 'row' }}>
+                          <View style={{ alignItems: 'flex-end', justifyContent: 'flex-end', flexDirection: 'row', marginTop:hp('3%') }}>
                             {/* <Text style={{ color: '#ff8c00' }}>Less</Text> */}
-                            <Image style={{ width: hp('3%'), height: hp('3%') }} source={require('../../../icons/show_less.png')} />
+                            <Image style={{ width: hp('2%'), height: hp('2%') }} source={require('../../../icons/show_less.png')} />
                           </View>}
                       </View>
 

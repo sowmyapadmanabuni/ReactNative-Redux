@@ -81,7 +81,18 @@ class MyGuests extends Component {
 
 
   getInvitationList = () => {
+    console.log("Sending Body", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID,this.state.dobText,this.state.dobText1)
 
+    this.setState({
+      isLoading: true
+    })
+    if (moment(this.state.dobDate).format("YYYY-MM-DD") > moment(this.state.dobDate1).format("YYYY-MM-DD")) {
+      Alert.alert("From Date should be less than To Date.");
+      this.setState({
+        isLoading: false
+      })
+      return false;
+    } else {
     fetch(
       `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
       {
@@ -110,11 +121,13 @@ class MyGuests extends Component {
           loading: false
         });
         this.arrayholder = responseJson.data.invitation;
+        console.log("Receiving Data", responseJson.data.invitation)
       })
       .catch(error => {
         console.log(error);
         this.setState({ error, loading: false });
       });
+    }
   };
 
   searchFilterFunction = text => {
@@ -336,7 +349,7 @@ class MyGuests extends Component {
           </View>
         </View>
         <View style={{ flexDirection: 'row',alignSelf: 'flex-end' }}>
-          <View style={{ alignItems: 'flex-end', backgroundColor: 'yellow', marginRight: hp('1%') }}>
+          <View style={{ alignItems: 'flex-end', marginRight: hp('1%') }}>
             {item.open ?
               <View /> :
               <View>
