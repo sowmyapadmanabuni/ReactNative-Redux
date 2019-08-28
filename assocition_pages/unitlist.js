@@ -881,8 +881,12 @@ class UnitList extends Component {
                     bordered
                     dark
                     style={styles.addUnitButton}
-                    onPress={() =>
-                      this.setModalVisible(true, item)
+                    onPress={() => 
+                      this.props.navigation.navigate("RegisterUser", {
+                        unitList: item,
+                        AssnId: this.props.navigation.state.params.id,
+                        associationName: this.props.navigation.state.params.associationName
+                      })
                     }
                   >
                     <Text style={styles.addUnitText}>Register Me</Text>
@@ -1040,7 +1044,7 @@ class UnitList extends Component {
               keyExtractor={(item, index) => item.unUnitID.toString()}
             />
           )}
-        {this.Modal()}
+        {/* {this.Modal()} */}
       </View>
     );
   }
