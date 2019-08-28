@@ -21,8 +21,91 @@ import axios from "axios";
 import _ from "lodash";
 import base from "../base";
 
-export const getDashAssoSync = (oyeURL, MyAccountID) => {
+export const getDashAssoSync = (
+  oyeURL,
+  MyAccountID,
+  selectedAsso,
+  selectedUnit
+) => {
   return dispatch => {
+    const getUnits = (unit, oyeURL, MyAccountID) => {
+      // dispatch({ type: DASHBOARD_UNITS_START });
+      // console.log("called from sync");
+      axios
+        .get(
+          `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            }
+          }
+        )
+        .then(response => {
+          console.log("response in Units by My Account Id", response);
+          let responseData = response.data.data;
+
+          let units = [];
+
+          responseData.memberListByAccount.map((data, index) => {
+            // console.log(data, "data");
+            units.push({
+              value: data.unUniName,
+              name: data.unUniName,
+              unitId: data.unUnitID,
+              id: index
+            });
+          });
+
+          let sortedUnit = _.sortBy(units, ["value"], ["asc"]);
+
+          console.log("Sorted Unit:", sortedUnit);
+
+          let withoutString = [];
+
+          sortedUnit.map((data, index) => {
+            if (data.name.length >= 1) {
+              withoutString.push({ ...data });
+            }
+          });
+
+          // alert(
+          //   selectedUnit,
+          //   withoutString[0].value,
+          //   selectedUnit !== withoutString[0].value
+          // );
+
+          if (selectedUnit !== withoutString[0].value) {
+            if (withoutString.length > 0) {
+              dispatch({
+                type: UPDATE_SELECTED_DROPDOWN,
+                payload: {
+                  prop: "selectedDropdown1",
+                  value: withoutString[0].value
+                }
+              });
+
+              dispatch({
+                type: UPDATE_SELECTED_DROPDOWN,
+                payload: {
+                  prop: "uniID",
+                  value: withoutString[0].unitId
+                }
+              });
+            }
+          }
+
+          dispatch({
+            type: DASHBOARD_UNITS,
+            payload: [...withoutString],
+            association: unit
+          });
+        })
+        .catch(error => {
+          console.log(error, "error while fetching units");
+        });
+    };
+
     fetch(
       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
       {
@@ -72,6 +155,42 @@ export const getDashAssoSync = (oyeURL, MyAccountID) => {
                 base.utils.validate.compareAssociationNames
               ),
               associationid: associationIds
+            }
+          });
+
+          if (removeDuplicates.length === 1) {
+            dispatch({
+              type: UPDATE_SELECTED_DROPDOWN,
+              payload: {
+                prop: "selectedDropdown",
+                value: removeDuplicates[0].value
+              }
+            });
+
+            getUnits(removeDuplicates[0].associationId, oyeURL, MyAccountID);
+          }
+        } else {
+          dispatch({
+            type: DASHBOARD_ASSOCIATION_SYNC,
+            payload: {
+              dropdown: [],
+              associationid: []
+            }
+          });
+
+          dispatch({
+            type: UPDATE_SELECTED_DROPDOWN,
+            payload: {
+              prop: "selectedDropdown",
+              value: ""
+            }
+          });
+
+          dispatch({
+            type: UPDATE_SELECTED_DROPDOWN,
+            payload: {
+              prop: "selectedDropdown1",
+              value: ""
             }
           });
         }
@@ -308,7 +427,7 @@ export const getDashUnits = (
 ) => {
   return dispatch => {
     dispatch({ type: DASHBOARD_UNITS_START });
-
+    console.log("called from sync");
     axios
       .get(
         `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`,
@@ -370,52 +489,6 @@ export const getDashUnits = (
           payload: [...withoutString],
           association: unit
         });
-
-        // if (withoutString.length <= 0) {
-        //   let allAssociations = associations;
-        //   let selectedAsso = selectedAssociation;
-
-        //   var newAssociations = _.remove(allAssociations, function(n) {
-        //     return n.associationId == selectedAsso;
-        //   });
-
-        //   dispatch({
-        //     type: DASHBOARD_NO_UNITS,
-        //     payload: allAssociations
-        //   });
-
-        //   dispatch({
-        //     type: UPDATE_SELECTED_DROPDOWN,
-        //     payload: {
-        //       prop: "selectedDropdown",
-        //       value: allAssociations[0].value
-        //     }
-        //   });
-
-        //   dispatch({
-        //     type: UPDATE_SELECTED_DROPDOWN,
-        //     payload: {
-        //       prop: "assId",
-        //       value: allAssociations[0].associationId
-        //     }
-        //   });
-
-        //   dispatch({
-        //     type: UPDATE_SELECTED_DROPDOWN,
-        //     payload: {
-        //       prop: "selectedDropdown1",
-        //       value: allUnits[0].value
-        //     }
-        //   });
-
-        //   dispatch({
-        //     type: UPDATE_SELECTED_DROPDOWN,
-        //     payload: {
-        //       prop: "uniID",
-        //       value: allUnits[0].unitId
-        //     }
-        //   });
-        // }
 
         console.log(responseData, "responseDatas");
 
@@ -588,7 +661,7 @@ export const getAssoMembers = (oyeURL, id) => {
 
 export const updateIdDashboard = ({ prop, value }) => {
   return dispatch => {
-    console.log("DASHBOARDAction", prop, value);
+    // console.log("DASHBOARDAction", prop, value);
     dispatch({
       type: UPDATE_ID_DASHBOARD,
       payload: { prop, value }
@@ -612,7 +685,7 @@ export const updateSelectedDropDown = ({ prop, value }) => {
 };
 
 export const updateuserRole = ({ prop, value }) => {
-  return dispatch => {    
+  return dispatch => {
     dispatch({
       type: USER_ROLE,
       payload: { prop, value }

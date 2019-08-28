@@ -219,7 +219,7 @@ class PatrollingReport extends React.Component {
                                                 underlayColor={base.theme.colors.transparent}
                                                 style={PatrollingReportStyles.radioView2}>
                                 <View style={[PatrollingReportStyles.radioButtonView, {
-                                    backgroundColor: this.state.isYesSelected ? base.theme.colors.grey : base.theme.colors.white
+                                    backgroundColor: this.state.isYesSelected ? base.theme.colors.primary : base.theme.colors.white
                                 }]}/>
                             </TouchableHighlight>
                             <Text style={PatrollingReportStyles.selType}>Yesterday</Text>
@@ -229,18 +229,18 @@ class PatrollingReport extends React.Component {
                                                 underlayColor={base.theme.colors.transparent}
                                                 style={PatrollingReportStyles.radioView2}>
                                 <View
-                                    style={[PatrollingReportStyles.radioButtonView, {backgroundColor: this.state.isTodaySelected ? base.theme.colors.grey : base.theme.colors.white}]}/>
+                                    style={[PatrollingReportStyles.radioButtonView, {backgroundColor: this.state.isTodaySelected ? base.theme.colors.primary : base.theme.colors.white}]}/>
                             </TouchableHighlight>
                             <Text style={PatrollingReportStyles.selType}>Today</Text>
                         </View>
                     </View>
-                    <View style={{alignSelf: 'flex-start', left: Platform.OS === 'ios' ? 44 : 70, top: 25}}>
+                    <View style={{alignSelf: 'flex-start', left: Platform.OS === 'ios' ? 44 : 55, top: 25}}>
                         <View style={PatrollingReportStyles.radioView_1}>
                             <TouchableHighlight onPress={() => this.selectTime(2)}
                                                 underlayColor={base.theme.colors.transparent}
                                                 style={PatrollingReportStyles.radioView2}>
                                 <View style={[PatrollingReportStyles.radioButtonView, {
-                                    backgroundColor: this.state.isMonthSelected ? base.theme.colors.grey : base.theme.colors.white
+                                    backgroundColor: this.state.isMonthSelected ? base.theme.colors.primary : base.theme.colors.white
                                 }]}/>
                             </TouchableHighlight>
                             <Text style={PatrollingReportStyles.selType}>Month Till Date</Text>
@@ -279,6 +279,7 @@ class PatrollingReport extends React.Component {
             slotName: this.state.slotName,
             slotTime: this.state.slotTime
         };
+        console.log("Detail:",detail)
         this.props.navigation.navigate('reportScreen', {detail})
 
     }
@@ -311,7 +312,7 @@ class PatrollingReport extends React.Component {
             if (slotArr[i].psSltName == args) {
                 this.setState({
                     slotName: slotArr[i].psSltName,
-                    slotTime: moment(slotArr[i].pseTime).format("hh:mmA") + " - " + moment(slotArr[i].pssTime).format("hh:mmA"),
+                    slotTime: moment(slotArr[i].pssTime).format("hh:mmA") + " - " + moment(slotArr[i].pseTime).format("hh:mmA"),
                     isSelected: true,
                     selectedSlotId: slotArr[i].psPtrlSID
                 })

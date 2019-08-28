@@ -363,17 +363,21 @@ class Dashboard extends PureComponent {
       getDashAssociation,
       getAssoMembers,
       getDashSub,
-      getDashAssoSync
+      getDashAssoSync,
+      selectedDropdown,
+      selectedDropdown1
     } = this.props;
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
     this.requestNotifPermission();
+
+    // alert(selectedDropdown1, "drop");
     // this.props.getNotifications(oyeURL, MyAccountID);
 
     // getDashSub(oyeURL, SelectedAssociationID);
-    getDashAssoSync(oyeURL, MyAccountID);
+    getDashAssoSync(oyeURL, MyAccountID, selectedDropdown, selectedDropdown1);
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
   };
@@ -878,7 +882,7 @@ class Dashboard extends PureComponent {
                       borderBottomColor: "transparent"
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-4}
+                    dropdownPosition={-3}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -1012,10 +1016,7 @@ class Dashboard extends PureComponent {
               />
             </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => {
-                    // this.props.navigation.navigate('City')
-                    Linking.openURL("mailto:happy@oyespace.com");
-                  }}
+                  onPress={() => Linking.openURL("mailto:happy@oyespace.com")}
                 >
                   <Image
                     style={Style.supportIcon}

@@ -477,7 +477,6 @@ const styles = StyleSheet.create({
     viewDetails4: {
         height: hp("5.5%"),
         width: wp("19%"),
-        // backgroundColor: "#DCDCDC",
         alignContent: "center"
     },
 
@@ -511,7 +510,6 @@ const styles = StyleSheet.create({
         width: hp("3%"),
         height: hp("3%"),
         marginTop: 5
-        // marginLeft: 10
     },
 });
 

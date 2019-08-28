@@ -29,19 +29,21 @@ const PatrollingScheduleStyles = StyleSheet.create({
     },
     mapImage: {
         height: "80%",
-        width: wp("20%")
+        width: wp("22%")
     },
     mapImage1: {
-        height: hp('20%'),
-        width: wp("15%"),
+        height: hp('10%'),
+        width: wp("10%"),
         position: "absolute",
-        alignSelf: 'flex-end'
+        alignSelf: 'center',
+        right:20,
+        top:50
     },
     centerView: {
         height: '70%',
         width: wp("50%"),
         alignSelf: 'center',
-        marginLeft: wp('1%')
+        marginLeft: wp('2%')
     },
     centerTextView: {
         height: hp('5%'),
