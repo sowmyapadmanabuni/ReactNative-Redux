@@ -43,7 +43,7 @@ class OTPVerification extends Component {
       Mobilenumber: "",
       OTPNumber: "",
       isLoading: false,
-      timer: 60,
+      timer: 180,
       dobTextDMY: "",
       loginTime: moment(new Date()).format("DD-MM-YYYY HH:mm:ss"),
       isCallLimit:true,

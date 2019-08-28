@@ -65,7 +65,8 @@ class SchedulePatrol extends React.Component {
             selectedDevice: "",
             isSnoozeEnabled: false,
             patrolId:null,
-            patrolData:{}
+            patrolData:{},
+            pcid:[]
         });
 
         console.log("TIME:",currentDate,moment().format())
@@ -90,9 +91,12 @@ class SchedulePatrol extends React.Component {
 
     async componentWillMount(){
         let key = base.utils.strings.patrolId;
+        let key1 = "PCID";
         let data = await AsyncStorage.getItem(key);
+        let pcid = await AsyncStorage.getItem(key1);
+        console.log("PCID:",pcid);
         if(data!==null || data !== undefined){
-            this.setState({patrolId:data},()=>this.getPatrolData())
+            this.setState({patrolId:data,pcid:pcid},()=>this.getPatrolData())
         }
         this.getDeviceList();
     }
@@ -244,10 +248,16 @@ class SchedulePatrol extends React.Component {
 
     async updatePatrol(days, patrolCheckPointID){
         let self = this;
+        let pcids = '';
 
+        let statePcid = JSON.parse(self.state.pcid);
 
-        console.log("Start:",moment(self.state.startTime).format("hh:mm:ss"))
-        console.log("End",moment(self.state.endTime).format("hh:mm:ss"))
+        for(let i in statePcid){
+            console.log("PCIS:",JSON.parse(self.state.pcid));
+            pcids = pcids === "" ? pcids + statePcid[i] : pcids + "," + statePcid[i]
+
+        }
+
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
             PSSTime: moment(self.state.startTime).format("HH:mm:ss"),
@@ -258,7 +268,8 @@ class SchedulePatrol extends React.Component {
             PSSltName: self.state.slotName,
             //ASAssnID: self.props.SelectedAssociationID,
             ASAssnID: 8,
-            PSPtrlSID  : self.state.patrolId
+            PSPtrlSID  : self.state.patrolId,
+            PCIDs:pcids
         };
         let stat = await base.services.OyeSafeApi.updatePatrol(detail);
         try {
@@ -585,7 +596,8 @@ class SchedulePatrol extends React.Component {
 const mapStateToProps = state => {
     return {
         SelectedAssociationID: state.DashboardReducer.assId,
-        selectedCheckPoints: state.PatrollingReducer,oyeURL: state.OyespaceReducer.oyeURL,
+        selectedCheckPoints: state.PatrollingReducer,
+        oyeURL: state.OyespaceReducer.oyeURL,
     }
 };
 

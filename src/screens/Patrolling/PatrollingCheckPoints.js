@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert} from 'react-native';
+import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert,AsyncStorage} from 'react-native';
 import {connect} from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
@@ -15,6 +15,7 @@ import {updateSelectedCheckPoints} from '../../../src/actions';
 import Modal from "react-native-modal";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
+import _ from 'lodash';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -40,7 +41,9 @@ class PatrollingCheckPoints extends React.Component {
             cpName:'',
             isEditing: false,
             selectedArray: [],
-            checkedArray: []
+            checkedArray: [],
+            points:[],
+            selectedCP:[]
         };
         this.getCheckPoints = this.getCheckPoints.bind(this);
     };
@@ -105,7 +108,8 @@ class PatrollingCheckPoints extends React.Component {
                         }
                     }
                     this.setState({
-                        checkPointArray: cpList
+                        checkPointArray: cpList,
+                        points:cpListIDs
                     },()=>this.updateStore(cpList)) 
                 }
                 else{
@@ -404,16 +408,27 @@ class PatrollingCheckPoints extends React.Component {
 
     setCheckVal(item){
             let cpList = this.state.checkPointArray;
+            let pointArr = this.state.points;
+            let unselectedData = [];
 
-            console.log("CP:IS:",cpList,item)
             for(let i in cpList){
                 if(item.item.cpChkPntID === cpList[i].cpChkPntID){
                     console.log("Slelc:",cpList[i])
-                    cpList[i].isChecked = !cpList[i].isChecked 
+                        cpList[i].isChecked = !cpList[i].isChecked   
+                    }
+                }
+            for(let i in pointArr){
+                for(let j in cpList){
+                    if(!cpList[j].isChecked){
+                        console.log("fdnfgdsdgb",cpList[j])
+                        if(cpList[j].cpChkPntID === pointArr[i].psChkPID){
+                            unselectedData.push(pointArr[i].pcid)
+                        }
+                    }
                 }
             }
+            AsyncStorage.setItem("PCID",JSON.stringify(unselectedData));
 
-            console.log("CP LIST:",cpList)
 
             this.setState({
                 checkPointArray:cpList

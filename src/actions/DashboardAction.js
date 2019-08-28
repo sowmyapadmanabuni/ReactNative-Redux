@@ -371,51 +371,51 @@ export const getDashUnits = (
           association: unit
         });
 
-        if (withoutString.length <= 0) {
-          let allAssociations = associations;
-          let selectedAsso = selectedAssociation;
+        // if (withoutString.length <= 0) {
+        //   let allAssociations = associations;
+        //   let selectedAsso = selectedAssociation;
 
-          var newAssociations = _.remove(allAssociations, function(n) {
-            return n.associationId == selectedAsso;
-          });
+        //   var newAssociations = _.remove(allAssociations, function(n) {
+        //     return n.associationId == selectedAsso;
+        //   });
 
-          dispatch({
-            type: DASHBOARD_NO_UNITS,
-            payload: allAssociations
-          });
+        //   dispatch({
+        //     type: DASHBOARD_NO_UNITS,
+        //     payload: allAssociations
+        //   });
 
-          dispatch({
-            type: UPDATE_SELECTED_DROPDOWN,
-            payload: {
-              prop: "selectedDropdown",
-              value: allAssociations[0].value
-            }
-          });
+        //   dispatch({
+        //     type: UPDATE_SELECTED_DROPDOWN,
+        //     payload: {
+        //       prop: "selectedDropdown",
+        //       value: allAssociations[0].value
+        //     }
+        //   });
 
-          dispatch({
-            type: UPDATE_SELECTED_DROPDOWN,
-            payload: {
-              prop: "assId",
-              value: allAssociations[0].associationId
-            }
-          });
+        //   dispatch({
+        //     type: UPDATE_SELECTED_DROPDOWN,
+        //     payload: {
+        //       prop: "assId",
+        //       value: allAssociations[0].associationId
+        //     }
+        //   });
 
-          dispatch({
-            type: UPDATE_SELECTED_DROPDOWN,
-            payload: {
-              prop: "selectedDropdown1",
-              value: allUnits[0].value
-            }
-          });
+        //   dispatch({
+        //     type: UPDATE_SELECTED_DROPDOWN,
+        //     payload: {
+        //       prop: "selectedDropdown1",
+        //       value: allUnits[0].value
+        //     }
+        //   });
 
-          dispatch({
-            type: UPDATE_SELECTED_DROPDOWN,
-            payload: {
-              prop: "uniID",
-              value: allUnits[0].unitId
-            }
-          });
-        }
+        //   dispatch({
+        //     type: UPDATE_SELECTED_DROPDOWN,
+        //     payload: {
+        //       prop: "uniID",
+        //       value: allUnits[0].unitId
+        //     }
+        //   });
+        // }
 
         console.log(responseData, "responseDatas");
 
@@ -612,7 +612,10 @@ export const updateSelectedDropDown = ({ prop, value }) => {
 };
 
 export const updateuserRole = ({ prop, value }) => {
-  return dispatch => {
-    dispatch({ type: USER_ROLE, payload: { prop: value } });
+  return dispatch => {    
+    dispatch({
+      type: USER_ROLE,
+      payload: { prop, value }
+    });
   };
 };
