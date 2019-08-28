@@ -44,7 +44,7 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
     gpsIcon: {
         height: Platform.OS === 'ios'? 30:20,
         width: Platform.OS === 'ios'? 60:20,
-        borderWidth:1
+        
     },
     gpsButtonView: {
         borderWidth: 1,
