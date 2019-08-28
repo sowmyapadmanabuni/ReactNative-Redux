@@ -429,7 +429,7 @@ class SchedulePatrol extends React.Component {
             console.log("Disfffff:",this.compareTime(startTime,endTime));
              let diff = this.compareTime(startTime,endTime);
             if(!diff){
-                alert("Patrol End Time can not be bofore or equal Patrol Start Time");
+                alert("Patrol End Time can not be earlier than or equal to Patrol Start Time");
             }
             else{
            this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
@@ -446,7 +446,7 @@ class SchedulePatrol extends React.Component {
         if(startTimeArr[0]>endTimeArr[0]){
             return false
         }
-        else if(startTime[0]<endTime[0]){
+        else if(startTimeArr[0]<endTimeArr[0]){
             return true
         }
         else{
@@ -571,8 +571,8 @@ class SchedulePatrol extends React.Component {
                     let newTime = new Date();
                     newTime.setHours(hour);
                     newTime.setMinutes(minute)
-                    console.log("SELELMEKVJBHEJV",newTime)
-                    this.changeTime(newTime);
+                    console.log("SELELMEKVJBHEJV111111",newTime,currentDate)
+                    this.changeTime(currentDate);
                 }
 
             } catch ({code, message}) {
@@ -582,7 +582,7 @@ class SchedulePatrol extends React.Component {
 
     changeTime(time) {
         console.log("Old Time:",time);
-        let selTime = time==="Invalid Date"?(currentDate):(time);
+        let selTime = time==="Invalid Date"?currentDate:time;
         console.log("Time:",selTime,(time),currentDate);
         if (this.state.selType === 0) {
             this.setState({startTime: selTime,isSpinnerOpen:false})
