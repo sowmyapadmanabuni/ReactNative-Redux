@@ -104,8 +104,8 @@ class SchedulePatrol extends React.Component {
     async getPatrolData(){
         let self = this;
 
-        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
-        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
+        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
+        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
         try {
             if (stat.success) {
                 let patrollArr = stat.data.patrollingShifts;
@@ -172,8 +172,8 @@ class SchedulePatrol extends React.Component {
         console.log("OyeURL:",oyeURL)
 
         //let stat = await base.services.OyeSafeApi.getDeviceList(associationId);
-        //let associationId = this.props.SelectedAssociationID;
-        let associationId = 8;
+        let associationId = this.props.SelectedAssociationID;
+        //let associationId = 8;
         axios
       .get(
         `http://${oyeURL}/oyesafe/api/v1/Device/GetDeviceListByAssocID/${associationId}`,
@@ -219,8 +219,8 @@ class SchedulePatrol extends React.Component {
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,
             PSSltName: self.state.slotName,
-            //ASAssnID: self.props.SelectedAssociationI D,
-            ASAssnID: 8
+            ASAssnID: self.props.SelectedAssociationID,
+            //ASAssnID: 8
         };
 
         console.log("Detail for network call:",detail);
@@ -266,8 +266,8 @@ class SchedulePatrol extends React.Component {
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,
             PSSltName: self.state.slotName,
-            //ASAssnID: self.props.SelectedAssociationID,
-            ASAssnID: 8,
+            ASAssnID: self.props.SelectedAssociationID,
+            //ASAssnID: 8,
             PSPtrlSID  : self.state.patrolId,
             PCIDs:pcids
         };

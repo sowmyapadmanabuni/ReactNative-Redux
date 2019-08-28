@@ -192,8 +192,8 @@ class AddAndEditCheckPoints extends React.Component {
         let self = this;
         base.utils.logger.log(self.props);
 
-        //let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
-        let stat = await OyeSafeApi.getCheckPointList(8);
+        let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
+        //let stat = await OyeSafeApi.getCheckPointList(8);
 
        
         
@@ -255,8 +255,7 @@ class AddAndEditCheckPoints extends React.Component {
             details = {
                 "CPCkPName": self.state.checkPointName,
                 "CPGPSPnt": gpsLocation,
-                //"ASAssnID": self.props.SelectedAssociationID,
-                "ASAssnID": 8,
+                "ASAssnID": self.props.SelectedAssociationID,
                 "CPCPntAt": self.state.checkPointType
             };
         }
