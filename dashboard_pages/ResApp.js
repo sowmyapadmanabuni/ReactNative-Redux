@@ -165,6 +165,8 @@ import MyFamilyHeader from "../src/components/NavigationalHeaders/MyFamilyHeader
 import PrivacyPolicy from "../src/screens/Policy/PrivacyPolicy";
 import TermsAndConditions from "../src/screens/Policy/TermsAndConditions";
 
+import City from '../assocition_pages/City.js';
+
 import PatrolSchedule from "../src/screens/Patrolling/PatrolSchedule";
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
@@ -289,6 +291,15 @@ const ResApp = createStackNavigator({
     screen: associationlist,
     navigationOptions: {
       title: "Association List",
+      header: null,
+      headerStyle: { backgroundColor: "#FA9917" },
+      headerTintColor: "#ffffff"
+    }
+  },
+  City:{
+    screen: City,
+    navigationOptions: {
+      title: "City",
       header: null,
       headerStyle: { backgroundColor: "#FA9917" },
       headerTintColor: "#ffffff"

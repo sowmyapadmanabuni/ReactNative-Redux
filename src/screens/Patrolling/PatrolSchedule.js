@@ -24,7 +24,7 @@ const catsSource = {
 };
 
 const {height, width} = Dimensions.get('screen');
-const ASPECT_RATIO = width / height;
+const ASPECT_RATIO =width/height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -53,7 +53,8 @@ class PatrolSchedule extends React.Component {
             previewSource: catsSource,
             error: null,
             res: null,
-            isCapturing: false
+            isCapturing: false,
+            cpArray:[]
         };
 
         this.getPatrollingList = this.getPatrollingList.bind(this);
@@ -116,21 +117,45 @@ class PatrolSchedule extends React.Component {
     async getPatrollingList() {
         let self = this;
 
-        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
+        console.log("Assocoatin:",self.props.SelectedAssociationID)
+        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(self.props.SelectedAssociationID);
         //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
-        console.log("Stat:",stat,);
+        console.log("Stat in Patrolling:",stat,);
         try {
             if (stat.success) {
                 self.setState({
                     patrollingCheckPoint: stat.data.patrollingShifts,
                     isDataVisible: true
-                })
+                },()=>this.getCheckPointList())
+            }else{
+                self.setState({
+                    patrollingCheckPoint: [],
+                    isDataVisible: true
+                }) 
             }
         } catch (e) {
             console.log(e)
         }
+    }
 
 
+    async getCheckPointList(){
+        let self = this;
+
+        let stat = await base.services.OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
+        //let stat = await base.services.OyeSafeApi.getCheckPointList(8);
+
+        console.log("Stat in CP List:",stat);
+        try{
+            if(stat.success){
+                self.setState({
+                    cpArray:stat.data.checkPointListByAssocID
+                })
+            }
+        }
+        catch(e){
+            console.log(e)
+        }
     }
 
 
@@ -163,38 +188,50 @@ class PatrolSchedule extends React.Component {
     }
 
     mapModal(data) {
-        let coords = data.cpgpsPnts;
-        let coordsArr = coords.split(';');
-        let coordSplit = [];
-        for (let i in coordsArr) {
-            if (coordsArr[i] !== "") {
-                coordSplit.push(coordsArr[i].split(' '));
+       let scheduledPCData = this.state.patrollingCheckPoint;
+       let splitCoordsArr = [];
+       let splitCoordsObj= {};
+       let allCpArray = this.state.cpArray;
+       console.log('Data:',data,allCpArray);
+       for (let i in scheduledPCData){
+           if(scheduledPCData[i].psPtrlSID === data.psPtrlSID){
+            let cp = scheduledPCData[i].point;
+            if(cp.length === 0){
+                splitCoordsObj = {
+                    latitude:parseFloat(this.state.region.latitude),
+                    longitude:parseFloat(this.state.region.longitude)
+                }
+ 
+                splitCoordsArr.push(splitCoordsObj)
             }
-        }
-        let coordsObj = {};
-        let coordsObjArr = [];
-        for (let i in coordSplit) {
-
-            coordsObj = {
-                latitude: parseFloat(coordSplit[i][0]),
-                longitude: parseFloat(coordSplit[i][1])
-            };
-            coordsObjArr.push(coordsObj)
-        }
-
-        console.log("SBDVDVBK:",coordsObjArr)
-
+            else{
+                for(let j in cp){
+                    let coords = cp[j].cpgpsPnts.split(" ");
+                        splitCoordsObj = {
+                                latitude:parseFloat(coords[0]),
+                                longitude:parseFloat(coords[1]),
+                    }
+                    splitCoordsArr.push(splitCoordsObj)
+                }  
+            }
+            
+           }
+           
+       }
+        console.log("DKHVH:",splitCoordsArr);
         this.setState({
+            splitCoords:splitCoordsArr,
             isModalOpen: !this.state.isModalOpen,
             cpData: data,
-            splitCoords: coordsObjArr,
             region: {
-                latitude: coordsObjArr[0].latitude,
-                longitude: coordsObjArr[0].longitude,
+                latitude: splitCoordsArr[0].latitude,
+                longitude: splitCoordsArr[0].longitude,
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA
             },
         })
+
+
     }
 
     changeSnooze(data) {
@@ -246,7 +283,7 @@ class PatrolSchedule extends React.Component {
                     </View>
                     <View style={PatrollingScheduleStyles.locationView}>
                         <View style={{flexDirection: 'column'}}>
-                            <View style={{flexDirection: 'row', marginTop: hp('1%')}}>
+                            <View style={{flexDirection: 'row', marginTop: hp('2%')}}>
                                 <Image
                                     style={PatrollingScheduleStyles.locationImageStyle}
                                     source={require('../../../icons/entry_time.png')}
@@ -299,7 +336,7 @@ class PatrolSchedule extends React.Component {
                     <EmptyView height={10}/>
                     <ElevatedView elevation={0}>
                         <Switch
-                            style={{width: wp('10%')}}
+                            style={{width:Platform.OS==='ios'?wp('12%'): wp('10%')}}
                             onValueChange={() => this.changeSnooze(data)}
                             value={data.psSnooze}/>
                     </ElevatedView>
@@ -341,6 +378,7 @@ class PatrolSchedule extends React.Component {
         };
 
         let stat = await base.services.OyeSafeApi.deletePatrolSlot(detail);
+        console.log("Delete Stat:",stat);
         try {
             if (stat) {
                 if (stat.success) {
@@ -379,8 +417,8 @@ class PatrolSchedule extends React.Component {
 
     share() {
         let shareImageBase64 = {
-            title: "Patrol Route",
-            message: "Patrol Route",
+            title: "Patrol Route: "+this.state.cpData.psSltName,
+            message: "Patrol Route: "+this.state.cpData.psSltName,
             url: this.state.previewSource.uri
         };
         Share.open(shareImageBase64).then((response) => {
@@ -407,7 +445,7 @@ class PatrolSchedule extends React.Component {
                             <Text>{data.psSltName}</Text>
                             <View style={PatrollingScheduleStyles.shareView}>
                                 <Text
-                                    style={{borderWidth: 0}}>Start: {moment(data.pseTime).format('hh:mm A')} Stop: {moment(data.pssTime).format('hh:mm A')}</Text>
+                                    style={{borderWidth: 0}}>Start: {moment(data.pssTime).format('HH:mm A')} Stop: {moment(data.pseTime).format('HH:mm A')}</Text>
                                 <TouchableHighlight
                                     style={PatrollingScheduleStyles.shareImageView}
                                     underlayColor={base.theme.colors.transparent}
@@ -435,7 +473,11 @@ class PatrolSchedule extends React.Component {
                             provider={PROVIDER_GOOGLE}
                             initialRegion={this.state.region}
                             scrollEnabled={true}
-                            minZoomLevel={19}
+                            minZoomLevel={20}
+                            maxZoomLevel={20}
+                            zoomTapEnabled={true}
+                            zoomEnabled={true}
+                            loadingEnabled={true}
                             style={{flex: 1}}>
                           <Polyline
                                 strokeColor={base.theme.colors.primary}
@@ -452,9 +494,9 @@ class PatrolSchedule extends React.Component {
     }
 
     renderMarker(item, index) {
-        console.log("Item:", item.latitude,index);
         return (
-            <Marker key={index}
+            <Marker
+                    description={item.description}
                     coordinate={{latitude: item.latitude, longitude: item.longitude}}
                     pinColor={base.theme.colors.transparent}
             >

@@ -148,7 +148,7 @@ class App extends React.Component {
       isLoading:true
     })
     console.log("SCNJDH:",this.state.dobDate ,this.state.dobDate1)
-    if (this.state.dobDate > this.state.dobDate1) {
+    if (moment(this.state.dobDate).format("YYYY-MM-DD") > moment(this.state.dobDate1).format("YYYY-MM-DD")) {
       Alert.alert("From Date should be less than To Date.");
       this.setState({
         isLoading:false
