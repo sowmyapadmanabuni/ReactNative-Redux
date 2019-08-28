@@ -33,7 +33,9 @@ class CardView extends React.Component {
         marginBottom: PropTypes.number,
         iconHeight:PropTypes.any,
         iconWidth:PropTypes.any,
-        iconBorderRadius:PropTypes.number
+        iconBorderRadius:PropTypes.number,
+        textWeight:PropTypes.string,
+        textFontSize:PropTypes.number
     }
 
     static defaultProps = {
@@ -51,9 +53,11 @@ class CardView extends React.Component {
         marginLeft: null,
         marginRight: null,
         marginBottom: null,
-        iconHeight:25,
-        iconWidth:25,
-        iconBorderRadius:0
+        iconHeight:20,
+        iconWidth:20,
+        iconBorderRadius:0,
+        textWeight:'normal',
+        textFontSize:10
     }
 
 
@@ -91,7 +95,9 @@ class CardView extends React.Component {
                         <Text style={CardViewStyles.count}>
                             {this.props.cardCount}
                         </Text>
-                        <Text style={CardViewStyles.cardText}
+                        <Text style={[CardViewStyles.cardText,{fontWeight:this.props.textWeight,fontSize:this.props.textFontSize,
+
+                        }]}
                               numberOfLines={2}>
                             {this.props.cardText}
                         </Text>

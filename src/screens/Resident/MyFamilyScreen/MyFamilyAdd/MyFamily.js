@@ -609,6 +609,7 @@ class MyFamily extends Component {
                             self.deleteImage()
                         }
                     }
+                    Alert.alert('Family member added to your list')
                     self.props.navigation.navigate('MyFamilyList')
                     this.setState({
                         isLoading: true

@@ -49,6 +49,7 @@ import {
 import ProgressLoader from "rn-progress-loader";
 import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
+import MarqueeText from "react-native-marquee";
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -842,6 +843,9 @@ class Dashboard extends React.Component {
     console.log(this.props.dashBoardReducer, dropdown1, "tate123455");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
+    let maxLen=25;
+    let maxLenUnit=10
+    let text='ALL THE GLITTERS IS NOT GOLD'
     return (
       <View style={{ height: "100%", width: "100%" }}>
         <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
@@ -851,17 +855,17 @@ class Dashboard extends React.Component {
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    value={selectedDropdown}
+                    value={selectedDropdown.length>maxLen?selectedDropdown.substring(0,maxLen-2) + '...':selectedDropdown}
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
                     containerStyle={{ width: "100%" }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
-                      borderBottomColor: "transparent"
+                      borderBottomColor: "transparent",
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-4}
+                   dropdownPosition={-2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -882,8 +886,8 @@ class Dashboard extends React.Component {
                 {this.state.unitNameHide === false ? (
                   <Dropdown
                     // value={this.state.unitName}
-                    value={selectedDropdown1}
-                    containerStyle={{ width: "100%" }}
+                    value={selectedDropdown1.length>maxLenUnit?selectedDropdown1.substring(0,maxLenUnit-3) + '...':selectedDropdown1}
+                    containerStyle={{ width: "95%" }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
@@ -892,7 +896,7 @@ class Dashboard extends React.Component {
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={0}
+                    dropdownPosition={-2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
@@ -936,10 +940,12 @@ class Dashboard extends React.Component {
                 height={this.state.myUnitCardHeight}
                 width={this.state.myUnitCardWidth}
                 cardText={"My Unit"}
-                iconWidth={Platform.OS === "ios" ? 35 : 16}
-                iconHeight={Platform.OS === "ios" ? 35 : 16}
+                iconWidth={Platform.OS === "ios" ? 35 : 20}
+                iconHeight={Platform.OS === "ios" ? 35 : 20}
                 cardIcon={require("../../../../icons/my_unit.png")}
                 onCardClick={() => this.changeCardStatus("UNIT")}
+                textWeight={'bold'}
+                textFontSize={10}
                 disabled={this.state.isSelectedCard === "UNIT"}
               />
               {this.state.role === 1 ? (
@@ -947,8 +953,9 @@ class Dashboard extends React.Component {
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
                   cardText={"Admin"}
-                  iconWidth={Platform.OS === "ios" ? 35 : 16}
-                  iconHeight={Platform.OS === "ios" ? 35 : 16}
+                  textWeight={'bold'}
+                  iconWidth={Platform.OS === "ios" ? 35 : 20}
+                  iconHeight={Platform.OS === "ios" ? 35 : 20}
                   onCardClick={() => this.changeCardStatus("ADMIN")}
                   cardIcon={require("../../../../icons/user.png")}
                   disabled={this.state.isSelectedCard === "ADMIN"}
@@ -1025,7 +1032,7 @@ class Dashboard extends React.Component {
         myUnitCardHeight: "80%",
         myUnitCardWidth: "26%",
         adminCardHeight: "70%",
-        adminCardWidth: "20%",
+        adminCardWidth: "22%",
         offersCardHeight: "70%",
         offersCardWidth: "20%",
 
@@ -1035,7 +1042,7 @@ class Dashboard extends React.Component {
     } else if (status == "ADMIN") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "80%",
         adminCardWidth: "25%",
         offersCardHeight: "70%",
@@ -1047,7 +1054,7 @@ class Dashboard extends React.Component {
     } else if (status == "OFFERS") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "70%",
         adminCardWidth: "20%",
         offersCardHeight: "80%",

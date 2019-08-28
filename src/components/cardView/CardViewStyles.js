@@ -48,7 +48,6 @@ const CardViewStyles = StyleSheet.create({
         marginRight: 5,
     },
     cardText: {
-        fontSize: 10,
         color: base.theme.colors.black,
         textAlign: 'left',
 

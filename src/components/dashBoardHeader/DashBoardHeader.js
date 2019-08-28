@@ -64,8 +64,7 @@ class DashBoardHeader extends React.Component {
 
   render() {
     console.log(
-      "State in dashboard header:",this.state
-    );
+      "State in dashboard header:",this.state,this.props);
     return (
       <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
         <View style={HeaderStyles.container}>
