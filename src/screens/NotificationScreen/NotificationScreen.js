@@ -368,7 +368,9 @@ class NotificationScreen extends Component {
                                 "vlEntryImg",
                                 item.sbMemID
                               ) === "" ?
-                                <Image style={{ width: hp('20%'), height: hp('20%') }} source={require('../../../icons/no_img_captured.png')} /> :
+                                <Image style={{ width: hp('20%'), height: hp('20%') }} source={require('../../../icons/no_img_captured.png')} /> 
+                                
+                                :
 
                                 <Image
                                   style={styles.img}
@@ -710,7 +712,7 @@ class NotificationScreen extends Component {
             <View style={{ flex: 0.2 }}>
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
         </SafeAreaView>
 
         <View style={{ flex: 1 }}>
