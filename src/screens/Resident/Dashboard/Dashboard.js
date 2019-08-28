@@ -98,14 +98,6 @@ class Dashboard extends PureComponent {
     this.myProfileNet();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // return (
-    return (
-      !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
-    );
-    // );
-  }
-
   componentDidUpdate() {
     if (Platform.OS === "android") {
       this.backButtonListener = BackHandler.addEventListener(
@@ -412,7 +404,7 @@ class Dashboard extends PureComponent {
         this.syncData();
         // alert("hererereerrrereer");
       },
-      5000
+      3000
     );
   }
 

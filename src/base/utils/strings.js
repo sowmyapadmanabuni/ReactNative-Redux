@@ -2,7 +2,7 @@
  * Created by Anooj Krishnan at Synclovis Systems Pvt. Ltd. on 2019-06-24
  */
 
-const isDev = false;
+const isDev = true;
 
 const isSecure = false;
 
@@ -10,15 +10,15 @@ const isMandatory = " is required";
 
 const api = {
   oyeSafeApiDomainFamily: isDev
-    ? "apidev.oyespace.com/oyesafe/api/v1/"
+    ? "apiuat.oyespace.com/oyesafe/api/v1/"
     : "apidev.oyespace.com/oyesafe/api/v1/",
   oyeSafeDomain: isDev
-    ? "apidev.oyespace.com/oye247"
+    ? "apiuat.oyespace.com/oye247"
     : "apidev.oyespace.com/oye247",
   oyeDomain: isDev
-    ? "apidev.oyespace.com/oyeliving"
+    ? "apiuat.oyespace.com/oyeliving"
     : "apidev.oyespace.com/oyeliving",
-  oyeLivingDomain: isDev ? "apidev.oyespace.com" : "OyeLivingApi.oyespace.com",
+  oyeLivingDomain: isDev ? "apiuat.oyespace.com" : "OyeLivingApi.oyespace.com",
   protocol: isSecure ? "https://" : "http://",
   oyeSafeApiPath: "/api/v1/",
   oyeLivingApiPath: "/oyeliving/OyeLivingApi/v1/",
