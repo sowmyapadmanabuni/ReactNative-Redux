@@ -20,6 +20,9 @@ import {
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 import _ from "lodash";
+import base from '../../base'
+
+
 // ("ntJoinStat");
 class NotificationDetailScreen extends Component {
   state = {
@@ -27,6 +30,71 @@ class NotificationDetailScreen extends Component {
     date: "",
     reqStatus: ""
   };
+
+  componentDidMount(){
+    this.manageJoinRequest()
+  }
+
+  /**
+   * @author
+   * Anooj Krishnan G
+   * 
+   * @method
+   * manageJoinRequest: Handles the Unit Join request.
+   * 
+   * @description
+   * Request will be handled based on occupancy status of Unit.
+   * 
+   * Occuppancy Status is as follows:
+   * 1. Sold Owner Occupied Unit (Only Owner will be there)
+	 * 2. Sold Tenant Occupied Unit (Owner & Tenant both)
+	 * 3. UnSold Vacant Unit (No Owner & Tenant- vacant)
+	 * 4. UnSold Tenant Occupied Unit (Only Tenant)
+	 * 5. Sold Vacant Unit ( Owner only but vacant) 
+   * 
+   * Approve/Replace option must be visible for 1, 2, 
+   * (4 if request is as tenant) 
+   * & ( 5 if request is as owner)
+   * 
+   * Rest of the cases will be handled in normal accept/reject method
+   * 
+   */
+  async manageJoinRequest(){
+    try{
+        const { navigation } = this.props;
+        const details = navigation.getParam("details", "NO-ID");
+        const role = details.sbRoleID;
+        base.utils.logger.logArgs("NotificationDetailScreen",details)
+        //if(details != undefined && details.ntType == "Join" && details.ntJoinStat == "" && details.ntIsActive){
+          this.setState({loading:true})
+          const response = await base.services.OyeLivingApi.getUnitDetailByUnitId(details.sbUnitID);
+          this.setState({loading:false})
+          base.utils.logger.logArgs("NotificationDetailScreen2",response);
+          if(response.success && response.data.unit != undefined){
+              let unitInfo = response.data.unit;
+              if(unitInfo.unOcStat == base.utils.strings.SOLD_OWNER_OCCUPIED_UNIT || 
+                unitInfo.unOcStat == base.utils.strings.SOLD_TENANT_OCCUPIED_UNIT){
+                this.showAppendReplaceUI(details, unitInfo, role)
+              }else if(unitInfo.unOcStat == base.utils.strings.UNSOLD_TENANT_OCCUPIED_UNIT 
+                && role==base.utils.strings.USER_TENANT){
+
+              }else if(unitInfo.unOcStat == base.utils.strings.SOLD_VACANT_UNIT 
+                && role==base.utils.strings.USER_OWNER){
+                
+              }
+          }else{
+            base.utils.logger.logArgs("manageJoinRequest","No Active Request")
+          }
+        // else{
+        // }
+    }catch(e){
+      base.utils.logger.logArgs(e);
+    }
+  }
+
+  showAppendReplaceUI(notification, unitInfo, accessedRole){
+
+  }
 
   approve = (item, status) => {
     const { oyeURL } = this.props;

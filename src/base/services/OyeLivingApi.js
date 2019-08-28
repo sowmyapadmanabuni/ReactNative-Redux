@@ -80,5 +80,4 @@ export default class OyeLivingApi {
         return await instance.post('Vehicle/VehicleStatusUpdate',data);
     }
 
-
 }

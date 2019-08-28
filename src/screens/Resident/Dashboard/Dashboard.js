@@ -186,12 +186,12 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");
+        console.log(response, "fetched");        
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
         data.map(units => {
           // console.log(units.mrmRoleID + "role");
-          if (receiveNotifications) {
+          if (receiveNotifications) {            
             // alert(MyAccountID + "admin");
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
