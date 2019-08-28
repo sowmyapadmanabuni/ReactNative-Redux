@@ -416,12 +416,6 @@ class SchedulePatrol extends React.Component {
         for (let i in this.props.selectedCheckPoints.selectedCheckPoints) {
             patrolCheckPointID = patrolCheckPointID === "" ? patrolCheckPointID + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID : patrolCheckPointID + "," + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID
         }
-
-        if (daysString.length === 0) {
-            alert("Please select patrolling days")
-        } else if (base.utils.validate.isBlank(this.state.slotName)) {
-            alert("Please enter slot name");
-        } else {
             let startTime = moment(this.state.startTime).format("HH:mm");
             let endTime = moment(this.state.endTime).format("HH:mm");
             console.log('Time at validation:',(this.state.startTime),(this.state.endTime));
@@ -431,9 +425,14 @@ class SchedulePatrol extends React.Component {
             if(!diff){
                 alert("Patrol End Time can not be earlier than or equal to Patrol Start Time");
             }
-            else{
-           this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
+            else if(daysString.length === 0){
+                alert("Please select patrolling days")
         }
+        else if(base.utils.validate.isBlank(this.state.slotName)){
+            alert("Please enter slot name");
+        }
+        else{
+            this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
         }
     }
 
