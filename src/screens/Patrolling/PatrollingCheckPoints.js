@@ -75,8 +75,8 @@ class PatrollingCheckPoints extends React.Component {
         let self = this;
         base.utils.logger.log(self.props);
 
-        //let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
-        let stat = await OyeSafeApi.getCheckPointList(8);
+        let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
+        //let stat = await OyeSafeApi.getCheckPointList(8);
         base.utils.logger.logArgs("Stat:", stat);
         try {
             if (stat && stat !== undefined) {

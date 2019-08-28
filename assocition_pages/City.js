@@ -27,7 +27,7 @@ export default class City extends Component {
   }
   FlatListItemSeparator = () => {
     return (
-      <View style={{ height: 1, width: "100%", backgroundColor: "#607D8B", marginBottom: hp('1%'), marginTop: hp('1%') }} />
+      <View style={{ height: 1, width: "100%", backgroundColor: "#E5E5E5", marginBottom: hp('1%'), marginTop: hp('1%') }} />
     );
   };
   render() {

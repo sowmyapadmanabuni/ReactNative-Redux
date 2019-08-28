@@ -188,8 +188,9 @@ class MyGuests extends Component {
   renderItem = ({ item, index }) => {
     console.log("List in visited ", item, index)
     return (
-      <View style={{ flexDirection: "column", marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0 }}>
+      <View style={{ flexDirection: 'column', marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0 }}>
         <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
+
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }}>
             <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginTop: hp('1%') }}>Unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
@@ -198,13 +199,13 @@ class MyGuests extends Component {
             <Text style={{ color: '#ff8c00', fontSize: hp('1.6%'), marginRight: hp('1%'), marginTop: hp('1%') }}>{moment(item.vldCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>
           </View>
         </View>
+
         <View
           style={[
             styles.listItem,
             {
               justifyContent: "space-between",
-              paddingRight: 0,
-              height: hp("16%")
+              paddingRight: 0
             }
           ]}
         >
@@ -249,14 +250,14 @@ class MyGuests extends Component {
                 <View style={{ flexDirection: 'row' }}>
                   <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
                   <Text>{"  "}</Text>
-                    <Text style={{ fontSize: hp('1.2%') }}>Exit Date: {moment(item.vldUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"  "}</Text>
-                    <Text style={{ fontSize: hp('1.2%') }}>Exit Time: {item.vlExitT.substring(11, 16)}</Text>
+                  <Text style={{ fontSize: hp('1.2%') }}>Exit Date: {moment(item.vldUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"  "}</Text>
+                  <Text style={{ fontSize: hp('1.2%') }}>Exit Time: {item.vlExitT.substring(11, 16)}</Text>
                 </View>
               }
               <View style={{ flexDirection: 'row' }}>
-                    <Image source={require('../../../icons/location.png')} style={{width:hp('2%'),height:hp('2%')}}/>
-                    <Text>{" "}</Text>
-                    <Text style={{ fontSize: hp('1.2%') }}>Entry Gate: {item.vlengName}{"  "}</Text>
+                <Image source={require('../../../icons/location.png')} style={{ width: hp('2%'), height: hp('2%') }} />
+                <Text>{" "}</Text>
+                <Text style={{ fontSize: hp('1.2%') }}>Entry Gate: {item.vlengName}{"  "}</Text>
                 {item.vlexgName === "" ? <View></View> :
                   <View>
                     <Text style={{ fontSize: hp('1.2%') }}>Exit Gate: {item.vlexgName}</Text>
@@ -265,14 +266,14 @@ class MyGuests extends Component {
 
               </View>
               {/* {item.open ?
-                <View></View> :
+                  <View></View> :
 
-                <View style={{ marginTop: hp('1%') }}>
-                  <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center' }}>
+                  <View style={{ marginTop: hp('1%') }}>
+                    <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center' }}>
 
+                    </View>
                   </View>
-                </View>
-              } */}
+                } */}
             </View>
           </TouchableOpacity>
           <View style={{ flex: 1, alignItems: "flex-end", paddingRight: 0 }}>
@@ -296,38 +297,35 @@ class MyGuests extends Component {
             </Card>
           </View>
         </View>
-        <View>
-          <Collapsible
-            duration={100}
-            collapsed={!item.open}>
-            <View style={{ flexDirection: 'column' }}>
-              <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
-                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%') }}>Visited On: <Text style={{ color: '#38bcdb' }}>{moment(item.vldCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>{" "}</Text>
-                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), color: '#38bcdb' }}>{item.vlEntryT.substring(11, 16)}</Text>
-              </View>
-              <View>
-                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Purpose of Visit: {item.vlpOfVis}</Text>
-              </View>
-              <View>
-                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Total Guests: {item.vlVisCnt}</Text>
-              </View>
 
-              {!item.open ?
-                <View></View> :
-
-                <View style={{ marginBottom: hp('1%'), marginTop: hp('1%') }}>
-                  <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center', marginLeft: hp('3%') }}>
-
-                  </View>
-                </View>
-              }
+        <Collapsible
+          duration={100}
+          collapsed={!item.open}>
+          <View style={{ flexDirection: 'column' }}>
+            <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%') }}>Visited On: <Text style={{ color: '#38bcdb' }}>{moment(item.vldCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>{" "}</Text>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), color: '#38bcdb' }}>{item.vlEntryT.substring(11, 16)}</Text>
             </View>
-          </Collapsible>
+            <View>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Purpose of Visit: {item.vlpOfVis}</Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Total Guests: {item.vlVisCnt}</Text>
+            </View>
 
-        </View>
-        <View style={{ borderColor: "#707070", borderBottomWidth: hp("0.1%") }} />
+            {!item.open ?
+              <View></View> :
+
+              <View style={{ marginBottom: hp('1%'), marginTop: hp('1%') }}>
+                <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center', marginLeft: hp('3%') }}>
+
+                </View>
+              </View>
+            }
+          </View>
+        </Collapsible>
+        <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
       </View>
-
     );
   };
 

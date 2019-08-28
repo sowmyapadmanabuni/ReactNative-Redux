@@ -118,8 +118,8 @@ class PatrolSchedule extends React.Component {
         let self = this;
 
         console.log("Assocoatin:",self.props.SelectedAssociationID)
-        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(self.props.SelectedAssociationID);
-        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
+        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(self.props.SelectedAssociationID);
+        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
         console.log("Stat in Patrolling:",stat,);
         try {
             if (stat.success) {
@@ -142,8 +142,8 @@ class PatrolSchedule extends React.Component {
     async getCheckPointList(){
         let self = this;
 
-        //let stat = await base.services.OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
-        let stat = await base.services.OyeSafeApi.getCheckPointList(8);
+        let stat = await base.services.OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
+        //let stat = await base.services.OyeSafeApi.getCheckPointList(8);
 
         console.log("Stat in CP List:",stat);
         try{
@@ -336,7 +336,7 @@ class PatrolSchedule extends React.Component {
                     <EmptyView height={10}/>
                     <ElevatedView elevation={0}>
                         <Switch
-                            style={{width: wp('10%')}}
+                            style={{width:Platform.OS==='ios'?wp('12%'): wp('10%')}}
                             onValueChange={() => this.changeSnooze(data)}
                             value={data.psSnooze}/>
                     </ElevatedView>
@@ -473,8 +473,8 @@ class PatrolSchedule extends React.Component {
                             provider={PROVIDER_GOOGLE}
                             initialRegion={this.state.region}
                             scrollEnabled={true}
-                            minZoomLevel={50}
-                            maxZoomLevel={57}
+                            minZoomLevel={20}
+                            maxZoomLevel={20}
                             zoomTapEnabled={true}
                             zoomEnabled={true}
                             loadingEnabled={true}

@@ -104,8 +104,8 @@ class SchedulePatrol extends React.Component {
     async getPatrolData(){
         let self = this;
 
-        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
-        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
+        let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
+        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
         try {
             if (stat.success) {
                 let patrollArr = stat.data.patrollingShifts;
@@ -172,8 +172,8 @@ class SchedulePatrol extends React.Component {
         console.log("OyeURL:",oyeURL)
 
         //let stat = await base.services.OyeSafeApi.getDeviceList(associationId);
-        //let associationId = this.props.SelectedAssociationID;
-        let associationId = 8;
+        let associationId = this.props.SelectedAssociationID;
+        //let associationId = 8;
         axios
       .get(
         `http://${oyeURL}/oyesafe/api/v1/Device/GetDeviceListByAssocID/${associationId}`,
@@ -219,8 +219,8 @@ class SchedulePatrol extends React.Component {
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,
             PSSltName: self.state.slotName,
-            //ASAssnID: self.props.SelectedAssociationI D,
-            ASAssnID: 8
+            ASAssnID: self.props.SelectedAssociationID,
+            //ASAssnID: 8
         };
 
         console.log("Detail for network call:",detail);
@@ -266,8 +266,8 @@ class SchedulePatrol extends React.Component {
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,
             PSSltName: self.state.slotName,
-            //ASAssnID: self.props.SelectedAssociationID,
-            ASAssnID: 8,
+            ASAssnID: self.props.SelectedAssociationID,
+            //ASAssnID: 8,
             PSPtrlSID  : self.state.patrolId,
             PCIDs:pcids
         };
@@ -416,12 +416,6 @@ class SchedulePatrol extends React.Component {
         for (let i in this.props.selectedCheckPoints.selectedCheckPoints) {
             patrolCheckPointID = patrolCheckPointID === "" ? patrolCheckPointID + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID : patrolCheckPointID + "," + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID
         }
-
-        if (daysString.length === 0) {
-            alert("Please select patrolling days")
-        } else if (base.utils.validate.isBlank(this.state.slotName)) {
-            alert("Please enter slot name");
-        } else {
             let startTime = moment(this.state.startTime).format("HH:mm");
             let endTime = moment(this.state.endTime).format("HH:mm");
             console.log('Time at validation:',(this.state.startTime),(this.state.endTime));
@@ -429,11 +423,16 @@ class SchedulePatrol extends React.Component {
             console.log("Disfffff:",this.compareTime(startTime,endTime));
              let diff = this.compareTime(startTime,endTime);
             if(!diff){
-                alert("Patrol End Time can not be bofore or equal Patrol Start Time");
+                alert("Patrol End Time can not be earlier than or equal to Patrol Start Time");
             }
-            else{
-           this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
+            else if(daysString.length === 0){
+                alert("Please select patrolling days")
         }
+        else if(base.utils.validate.isBlank(this.state.slotName)){
+            alert("Please enter slot name");
+        }
+        else{
+            this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
         }
     }
 
@@ -446,7 +445,7 @@ class SchedulePatrol extends React.Component {
         if(startTimeArr[0]>endTimeArr[0]){
             return false
         }
-        else if(startTime[0]<endTime[0]){
+        else if(startTimeArr[0]<endTimeArr[0]){
             return true
         }
         else{
@@ -571,8 +570,8 @@ class SchedulePatrol extends React.Component {
                     let newTime = new Date();
                     newTime.setHours(hour);
                     newTime.setMinutes(minute)
-                    console.log("SELELMEKVJBHEJV",newTime)
-                    this.changeTime(newTime);
+                    console.log("SELELMEKVJBHEJV111111",newTime,currentDate)
+                    this.changeTime(currentDate);
                 }
 
             } catch ({code, message}) {
@@ -582,7 +581,7 @@ class SchedulePatrol extends React.Component {
 
     changeTime(time) {
         console.log("Old Time:",time);
-        let selTime = time==="Invalid Date"?(currentDate):(time);
+        let selTime = time==="Invalid Date"?currentDate:time;
         console.log("Time:",selTime,(time),currentDate);
         if (this.state.selType === 0) {
             this.setState({startTime: selTime,isSpinnerOpen:false})
