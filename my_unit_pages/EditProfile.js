@@ -26,6 +26,10 @@ import axios from "axios"
 import CountryPicker from "react-native-country-picker-modal"
 import base from "../src/base";
 
+import {
+    updateUserInfo,
+  } from '../src/actions'
+
 const RNFS = require('react-native-fs');
 
 class EditProfile extends Component {
@@ -200,8 +204,24 @@ class EditProfile extends Component {
                         this.deleteImage();
                     }
                 }
+
+                
+                updateUserInfo({ prop: "MyEmail", value: this.state.primaryEmail });
+                updateUserInfo({
+                  prop: "MyMobileNumber",
+                  value: this.state.primaryMobNum
+                });
+                updateUserInfo({
+                  prop: "MyFirstName",
+                  value: this.state.firstName
+                });
+                updateUserInfo({
+                  prop: "MyLastName",
+                  value: this.state.lastName
+                });
+                
                 this.props.navigation.goBack();
-                console.log("Respo:", response, payloadData.acCrtyCode1);
+                console.log("Respo:", response);
             })
             .catch(error => {
                 console.log(error)
@@ -285,7 +305,7 @@ class EditProfile extends Component {
     render() {
 
         console.log('AGHGHGHGH',this.state,this.state.myProfileImage)
-
+        console.log("My Account Id", this.props.MyAccountID)
         return (
             <TouchableWithoutFeedback
                 onPress={() => {

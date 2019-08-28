@@ -30,10 +30,11 @@ class BlockDetail extends React.Component {
     this.state = {
       isLoading: true,
       dataSource: [],
+      filteredDataSource: [],
       query: "",
       loading: false,
       error: null,
-      searchText:""
+      searchText: ""
     };
     this.arrayholder = [];
   }
@@ -45,8 +46,21 @@ class BlockDetail extends React.Component {
         isLoading: false
       });
     }, 3000);
-    
+
   }
+
+  // searchFilterFunction = text => {
+  //   const newData = this.arrayholder.filter(item => {
+  //     const itemData = `${item.asCountry.toUpperCase()} ${item.asAsnName.toUpperCase()} ${item.asPinCode.toUpperCase()}`;
+  //     const textData = text.toUpperCase();
+
+  //     return itemData.indexOf(textData) > -1;
+  //   });
+  //   this.setState({
+  //     searchText: text,
+  //     // dataSource: newData
+  //   });
+  // };
 
   searchFilterFunction = text => {
     const newData = this.arrayholder.filter(item => {
@@ -55,11 +69,38 @@ class BlockDetail extends React.Component {
 
       return itemData.indexOf(textData) > -1;
     });
+    let filteredArray = [];
+    if (text.length === 0) {
+      this.setState({
+        filteredDataSource: []
+      })
+    } else {
+      for (let i in newData) {
+        filteredArray.push(newData[i])
+      }
+    }
     this.setState({
-      searchText:text,
-      dataSource: newData
+      searchText: text,
+      filteredDataSource: filteredArray
     });
   };
+
+
+  // setTextFuntion(text){
+  //   let text  = text.toUpperCase();
+  //   let data = this.state.dataSource;
+  //   let filteredArray = [];
+
+  //   for(let i in data){
+  //       if(data[i].asAsnName.toUpperCase().includes(text)){
+  //           filteredArray.push(data[i])
+  //       }
+  //   }
+  //   this.setState({
+  //       filteredDataSource:filteredArray
+  //   })
+
+  //   }
 
   myJoinAssociationListGetData = () => {
     // console.log("________")
@@ -67,7 +108,7 @@ class BlockDetail extends React.Component {
 
     fetch(
       `http://${
-        this.props.oyeURL
+      this.props.oyeURL
       }/oyeliving/api/v1/association/getassociationlist`,
       {
         method: "GET",
@@ -182,9 +223,9 @@ class BlockDetail extends React.Component {
                       associationName: item.asAsnName
                     });
                     this.setState({
-                      dataSource:[],
-                      arrayholder:[],
-                      searchText:''
+                      dataSource: [],
+                      arrayholder: [],
+                      searchText: ''
                     })
                   }}
                 >
@@ -205,47 +246,47 @@ class BlockDetail extends React.Component {
       return (
         <View style={styles.container}>
           <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: "flex-start",
-                    justifyContent: "center"
+            <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.goBack();
                   }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require("../icons/back.png")}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                    style={{
+                      height: hp("4%"),
+                      width: wp("15%"),
+                      alignItems: "flex-start",
+                      justifyContent: "center"
+                    }}
+                  >
+                    <Image
+                      resizeMode="contain"
+                      source={require("../icons/back.png")}
+                      style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Image
+                  style={[styles.image1]}
+                  source={require("../icons/headerLogo.png")}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}>
+                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+              </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require("../icons/headerLogo.png")}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}>
-              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
-        </SafeAreaView>
+            <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
+          </SafeAreaView>
 
           <Text style={styles.titleOfScreenStyle}>Join association</Text>
 
@@ -312,7 +353,7 @@ class BlockDetail extends React.Component {
           <Form style={styles.formSearch}>
             <Item style={styles.inputItem}>
               <Input
-                  value={this.state.searchText}
+                value={this.state.searchText}
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
                 multiline={false}
@@ -331,14 +372,35 @@ class BlockDetail extends React.Component {
           /> */}
 
           <View style={styles.lineAboveAndBelowFlatList} />
-          
-          <FlatList
-            data={this.state.dataSource.sort((a, b) =>
-              a.asAsnName.localeCompare(b.asAsnName)
-            )}
+
+          {this.state.filteredDataSource.length === 0 ?
+            <FlatList
+
+              data={this.state.filteredDataSource}
+              renderItem={this.renderItem}
+              extraData={this.state}
+              keyExtractor={(item, index) => item.asAssnID.toString()}
+            />
+            :
+            <FlatList
+              // data={this.state.dataSource.sort((a, b) =>
+              //   a.asAsnName.localeCompare(b.asAsnName)
+              // )}
+              data={this.state.filteredDataSource}
+              renderItem={this.renderItem}
+              extraData={this.state}
+              keyExtractor={(item, index) => item.asAssnID.toString()}
+            />
+          }
+          {/* <FlatList
+            // data={this.state.dataSource.sort((a, b) =>
+            //   a.asAsnName.localeCompare(b.asAsnName)
+            // )}
+            data={this.state.filteredDataSource}
             renderItem={this.renderItem}
+            extraData={this.state}
             keyExtractor={(item, index) => item.asAssnID.toString()}
-          />
+          /> */}
 
           {/* <TouchableOpacity
             style={[styles.floatButton]}
@@ -405,18 +467,18 @@ const styles = StyleSheet.create({
     height: hp("7%"),
     width: Dimensions.get("screen").width,
     shadowColor: "#000",
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
-   image1: {
+  image1: {
     width: wp("22%"),
     height: hp("12%"),
     marginRight: hp("3%")
   },
 
- 
+
   viewDetails1: {
     flex: 0.3,
     flexDirection: "row",

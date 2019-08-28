@@ -70,6 +70,8 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
 
   
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
 end
   
 post_install do |installer|

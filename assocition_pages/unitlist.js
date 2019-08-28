@@ -11,15 +11,14 @@ import {
   FlatList,
   TextInput,
   Dimensions,
-  Alert,
-  Modal,
-  TouchableHighlight
+  Alert, TouchableHighlight
 } from "react-native";
 import { Button, Card, CardItem } from "native-base";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import Modal from "react-native-modal";
 import { NavigationEvents } from "react-navigation";
 // import Swipeout from 'react-native-swipeout';
 import axios from "axios";
@@ -50,7 +49,7 @@ class UnitList extends Component {
       query: "",
       loading: false,
       error: null,
-      modalVisible: false,
+      isModalVisible: false,
 
       //date picker
       dobText: "Select Date of Occupancy", //year + '-' + month + '-' + date,
@@ -60,15 +59,16 @@ class UnitList extends Component {
       unitofperson1: false,
       sent: false,
 
-      unitlist: []
+      unitlist:[]
 
       // value:""
     };
     this.arrayholder = [];
   }
 
-  setModalVisible(visible, item) {
-    this.setState({ modalVisible: visible, unitlist: item });
+  setModalVisible(item) {
+    this.setState({ isModalVisible: !this.state.isModalVisible,unitlist: item });
+    
   }
 
   componentDidMount() {
@@ -91,6 +91,7 @@ class UnitList extends Component {
       dataSource: newData
     });
   };
+
 
   onDOBPress = () => {
     let dobDate = this.state.dobDate;
@@ -116,12 +117,10 @@ class UnitList extends Component {
   submitForOwnwer = () => {
     const {
       AssnId,
-      associationName
+      associationName,
       // unitList
     } = this.props.navigation.state.params;
-    // console.log("Unit Data", this.state.unitlist.unUnitID);
-    // console.log(AssnId, associationName, "names");
-
+    console.log('Unit Data', this.state.unitlist.unUnitID, associationName)
     const { getAssoMembers, oyeURL, MyAccountID } = this.props;
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
@@ -186,8 +185,8 @@ class UnitList extends Component {
             axios
               .post(
                 "http://" +
-                  this.props.oyeURL +
-                  "/oyeliving/api/v1/Member/GetRequestorDetails",
+                this.props.oyeURL +
+                "/oyeliving/api/v1/Member/GetRequestorDetails",
                 {
                   ACMobile: mobileNo,
                   ASAssnID: this.state.unitlist.asAssnID,
@@ -250,7 +249,7 @@ class UnitList extends Component {
                       sbRoleId: sbRoleId,
                       sbMemID: sbMemID.toString(),
                       sbName: sbName,
-                      associationID: this.state.unitlist.asAssnID.toString(),
+                      associationID: AssnId.toString(),
                       associationName: associationName,
                       ntType: ntType,
                       ntTitle: ntTitle,
@@ -265,8 +264,8 @@ class UnitList extends Component {
                       axios
                         .get(
                           "http://" +
-                            this.props.oyeURL +
-                            `/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.state.unitlist.asAssnID.toString()}`,
+                          this.props.oyeURL +
+                          `/oyeliving/api/v1/Member/GetMemberListByAssocID/${AssnId}`,
                           {
                             headers: {
                               "X-Champ-APIKey":
@@ -286,14 +285,13 @@ class UnitList extends Component {
                                 ntType,
                                 this.props.oyeURL,
                                 data.acAccntID,
-                                this.state.unitlist.asAssnID.toString(),
+                                this.props.navigation.state.params.AssnId.toString(),
                                 ntDesc,
                                 sbUnitID.toString(),
                                 sbMemID.toString(),
                                 sbSubID.toString(),
                                 sbRoleId,
-                                this.props.navigation.state.params
-                                  .associationName,
+                                this.props.navigation.state.params.associationName,
                                 unitName.toString(),
                                 occupancyDate,
                                 soldDate,
@@ -335,7 +333,7 @@ class UnitList extends Component {
                             [
                               {
                                 text: "Ok",
-                                onPress: () => {}
+                                onPress: () => { }
                               }
                             ],
                             {
@@ -355,7 +353,7 @@ class UnitList extends Component {
                   Alert.alert(
                     "Alert",
                     "You have already requested to join previously, your request is under review. You would be notified once review is complete",
-                    [{ text: "Ok", onPress: () => {} }],
+                    [{ text: "Ok", onPress: () => { } }],
                     { cancelable: false }
                   );
                 }
@@ -375,7 +373,7 @@ class UnitList extends Component {
             Alert.alert(
               "Alert",
               "Request not sent..!",
-              [{ text: "Ok", onPress: () => {} }],
+              [{ text: "Ok", onPress: () => { } }],
               { cancelable: false }
             );
             this.setState({ sent: false });
@@ -387,7 +385,7 @@ class UnitList extends Component {
           Alert.alert(
             "Alert",
             "Request not sent..!",
-            [{ text: "Ok", onPress: () => {} }],
+            [{ text: "Ok", onPress: () => { } }],
             { cancelable: false }
           );
         });
@@ -397,10 +395,10 @@ class UnitList extends Component {
   submitForTenant = () => {
     const {
       AssnId,
-      associationName
+      associationName,
       // unitList
     } = this.props.navigation.state.params;
-    console.log("Unit Data", this.state.unitlist.unUnitID);
+    console.log('Unit Data', this.state.unitlist.unUnitID)
     const { getAssoMembers, oyeURL, MyAccountID } = this.props;
     if (this.state.dobText == "Select Date of Occupancy") {
       alert("Select Date of Occupancy");
@@ -468,8 +466,8 @@ class UnitList extends Component {
             axios
               .post(
                 "http://" +
-                  this.props.oyeURL +
-                  "/oyeliving/api/v1/Member/GetRequestorDetails",
+                this.props.oyeURL +
+                "/oyeliving/api/v1/Member/GetRequestorDetails",
                 {
                   ACMobile: mobileNo,
                   ASAssnID: this.state.unitlist.asAssnID,
@@ -533,7 +531,7 @@ class UnitList extends Component {
                       sbRoleId: sbRoleId,
                       sbMemID: sbMemID.toString(),
                       sbName: sbName,
-                      associationID: this.state.unitlist.asAssnID.toString(),
+                      associationID: this.props.navigation.state.params.AssnId.toString(),
                       associationName: this.props.navigation.state.params
                         .associationName,
                       ntType: ntType,
@@ -549,10 +547,8 @@ class UnitList extends Component {
                       axios
                         .get(
                           "http://" +
-                            this.props.oyeURL +
-                            `/oyeliving/api/v1/Member/GetMemberListByAssocID/${
-                              this.state.unitlist.asAssnID
-                            }`,
+                          this.props.oyeURL +
+                          `/oyeliving/api/v1/Member/GetMemberListByAssocID/${AssnId}`,
                           {
                             headers: {
                               "X-Champ-APIKey":
@@ -572,7 +568,7 @@ class UnitList extends Component {
                                 ntType,
                                 this.props.oyeURL,
                                 data.acAccntID,
-                                this.state.unitlist.asAssnID,
+                                this.props.navigation.state.params.AssnId.toString(),
                                 ntDesc,
                                 sbUnitID.toString(),
                                 sbMemID.toString(),
@@ -621,7 +617,7 @@ class UnitList extends Component {
                             [
                               {
                                 text: "Ok",
-                                onPress: () => {}
+                                onPress: () => { }
                               }
                             ],
                             {
@@ -641,7 +637,7 @@ class UnitList extends Component {
                   Alert.alert(
                     "Alert",
                     "You have already requested to join previously, your request is under review. You would be notified once review is complete",
-                    [{ text: "Ok", onPress: () => {} }],
+                    [{ text: "Ok", onPress: () => { } }],
                     { cancelable: false }
                   );
                 }
@@ -660,7 +656,7 @@ class UnitList extends Component {
             Alert.alert(
               "Alert",
               "Request not sent..!",
-              [{ text: "Ok", onPress: () => {} }],
+              [{ text: "Ok", onPress: () => { } }],
               { cancelable: false }
             );
           }
@@ -671,7 +667,7 @@ class UnitList extends Component {
           Alert.alert(
             "Alert",
             "Request not sent..!",
-            [{ text: "Ok", onPress: () => {} }],
+            [{ text: "Ok", onPress: () => { } }],
             { cancelable: false }
           );
         });
@@ -682,12 +678,12 @@ class UnitList extends Component {
     // const { unitList, AssnId } = this.props.navigation.state.params;
     const { joinedAssociations, memberList } = this.props;
     let unitID = this.state.unitlist.unUnitID;
-    console.log("Unit Data", this.state.unitlist.unUnitID);
+    console.log('Unit Data', this.state.unitlist.unUnitID)
     let joinStat = _.includes(joinedAssociations, unitID);
     let status;
     // console.log(memberList, "memberList");
 
-    let matchUnit = _.find(memberList, function(o) {
+    let matchUnit = _.find(memberList, function (o) {
       console.log(o, "values");
       return o.unUnitID === unitID;
     });
@@ -716,7 +712,7 @@ class UnitList extends Component {
   checkForOwner = () => {
     const { memberList } = this.props;
     const { unitList } = this.state.unitlist;
-    console.log("Unit Data", this.state.unitlist.unUnitID);
+    console.log('Unit Data', this.state.unitlist.unUnitID)
 
     let unitID = this.state.unitlist.unUnitID;
     let status;
@@ -724,7 +720,7 @@ class UnitList extends Component {
     // console.log(unitID, "unitID");
     console.log(memberList, "memberList");
 
-    let matchUnit = _.find(memberList, function(o) {
+    let matchUnit = _.find(memberList, function (o) {
       console.log(o, "values");
       console.log(o.unUnitID, "member", unitID, "unitID");
       return o.unUnitID === unitID;
@@ -750,14 +746,14 @@ class UnitList extends Component {
   checkTenant = () => {
     const { memberList } = this.props;
     const { unitList } = this.state;
-    console.log("Unit Data", this.state.unitlist.unUnitID);
+    console.log('Unit Data', this.state.unitlist.unUnitID)
 
     let unitID = this.state.unitlist.unUnitID;
     let status;
 
     // console.log(unitID, "unitID");
 
-    let matchUnit = _.find(memberList, function(o) {
+    let matchUnit = _.find(memberList, function (o) {
       console.log(o, "values");
       console.log(o.unUnitID, "member", unitID, "unitID");
       return o.unUnitID === unitID;
@@ -783,7 +779,7 @@ class UnitList extends Component {
   checkCommon = () => {
     let status;
     const { unUniName } = this.state.unitlist;
-    console.log("Unit Data", this.state.unitlist.unUnitID);
+    console.log('Unit Data', this.state.unitlist.unUnitID)
 
     if (unUniName === "Common" || unUniName === "common") {
       status = true;
@@ -794,12 +790,14 @@ class UnitList extends Component {
     return status;
   };
 
+  
+
+
   getUnitList = () => {
     const { id, associationName } = this.props.navigation.state.params;
     fetch(
-      `https://${
-        this.props.oyeURL
-      }/oyeliving/api/v1/Unit/GetUnitListByAssocID/` + id,
+      `https://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/` +
+        id,
       {
         method: "GET",
         headers: {
@@ -828,7 +826,7 @@ class UnitList extends Component {
 
   renderButton = () => {
     let status;
-    console.log("Unit Data", this.state.unitlist.unUnitID);
+    console.log('Unit Data', this.state.unitlist.unUnitID)
     const { unUniName } = this.state.unitlist;
 
     let lowerCaseName = unUniName.toLowerCase();
@@ -883,7 +881,9 @@ class UnitList extends Component {
                     bordered
                     dark
                     style={styles.addUnitButton}
-                    onPress={() => this.setModalVisible(true, item)}
+                    onPress={() =>
+                      this.setModalVisible(true, item)
+                    }
                   >
                     <Text style={styles.addUnitText}>Register Me</Text>
                   </Button>
@@ -958,7 +958,7 @@ class UnitList extends Component {
       <View style={styles.container}>
         <NavigationEvents
           onDidFocus={payload => this.getUnitList()}
-          // onWillBlur={payload => this.getUnitList()}
+        // onWillBlur={payload => this.getUnitList()}
         />
         <SafeAreaView style={{ backgroundColor: "orange" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
@@ -1033,69 +1033,46 @@ class UnitList extends Component {
             </Text>
           </View>
         ) : (
-          <FlatList
-            style={{ marginTop: 15 }}
-            data={this.state.dataSource}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => item.unUnitID.toString()}
-          />
-        )}
+            <FlatList
+              style={{ marginTop: 15 }}
+              data={this.state.dataSource}
+              renderItem={this.renderItem}
+              keyExtractor={(item, index) => item.unUnitID.toString()}
+            />
+          )}
         {this.Modal()}
       </View>
     );
   }
   Modal = () => {
     return (
+      
       <Modal
-        animationType="fade"
-        transparent={true}
-        visible={this.state.modalVisible}
-        presentationStyle={"overFullScreen"}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={{ marginTop: hp("40%"), margin: 40 }}>
-          <View
-            style={{
-              width: wp("80%"),
-              height: hp("30%"),
-              backgroundColor: "#fff",
-              flexDirection: "column"
-            }}
-          >
-            <View style={{ flexDirection: "row", marginTop: hp("2%") }}>
-              <View style={{ flex: 1 }} />
-              <View style={{ flex: 2 }}>
-                <Text style={{ fontSize: hp("2%"), color: "#ff8c00" }}>
-                  Join Association
-                </Text>
-              </View>
-              <View
-                style={{
-                  flex: 0.5,
-                  alignItems: "flex-end",
-                  marginRight: hp("1%")
-                }}
-              >
+      isVisible={this.state.isModalVisible}
+      animationIn="bounceInUp">
+        <View style={{  marginLeft:hp('5%') }}>
+          <View style={{ width: wp('80%'), height: hp('30%'), backgroundColor: '#fff', flexDirection: 'column' }}>
+            <View style={{ flexDirection: 'row',marginTop:hp('2%')  }}>
+              <View style={{ flex: 1 }}></View>
+              <View style={{ flex: 2}}><Text style={{fontSize:hp('2%'), color:'#ff8c00'}}>Join Association</Text></View>
+              <View style={{ flex: 0.5, alignItems:'flex-end', marginRight:hp('1%') }}>
                 <TouchableHighlight
                   onPress={() => {
                     this.setModalVisible(!this.state.modalVisible);
-                  }}
-                >
-                  <Text style={{ color: "#000", marginRight: hp("1%") }}>
-                    H
-                  </Text>
+                  }}>
+                  <Text style={{ color: '#000', marginRight:hp('1%') }}>H</Text>
                 </TouchableHighlight>
               </View>
             </View>
-            <View style={{ marginTop: hp("5%") }}>
+            <View style={{marginTop:hp('5%')}}>
               <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                 <View style={styles.datePickerBox}>
+                  
+
                   <Text style={styles.datePickerText}>
                     {this.state.dobText}{" "}
                   </Text>
-
+                  
                   <DatePickerDialog
                     ref="dobDialog"
                     onDatePicked={this.onDOBDatePicked.bind(this)}
@@ -1110,70 +1087,29 @@ class UnitList extends Component {
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: "row" }}>
-              <View
-                style={{
-                  flex: 0.1,
-                  marginTop: hp("5%"),
-                  flexDirection: "row",
-                  justifyContent: "space-between"
-                }}
-              >
-                {/* {this.renderButton() ? null : */}
-                <Button
-                  bordered
-                  info
-                  style={[styles.button, { backgroundColor: "#ff8c00" }]}
-                  onPress={() => this.submitForOwnwer()}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: hp("1.6%"),
-                      fontWeight: "500"
-                    }}
-                  >
-                    Join As Owner
-                  </Text>
+              <View style={{ flex: 0.1,marginTop:hp('5%'), flexDirection: 'row', justifyContent: 'space-between' }}>
+              {/* {this.renderButton() ? null : */}
+                <Button bordered info style={[styles.button, { backgroundColor: '#ff8c00' }]} onPress={() => this.submitForOwnwer()}>
+                  <Text style={{ color: 'white', fontSize: hp('1.6%'), fontWeight: '500' }}>Join As Owner</Text>
                 </Button>
                 {/* } */}
-                {/* {this.renderButton() ? null : */}
-                <Button
-                  bordered
-                  warning
-                  style={[styles.button, { backgroundColor: "#ff8c00" }]}
-                  onPress={() => this.submitForTenant()}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      fontSize: hp("1.6%"),
-                      fontWeight: "500"
-                    }}
-                  >
-                    Join As Tenant
-                  </Text>
+              {/* {this.renderButton() ? null : */}
+                <Button bordered warning style={[styles.button, { backgroundColor: '#ff8c00' }]} onPress={() => this.submitForTenant()}>
+                  <Text style={{ color: 'white', fontSize: hp('1.6%'), fontWeight: '500' }}>Join As Tenant</Text>
                 </Button>
-                {/* } */}
+              {/* } */}
               </View>
             </View>
+
           </View>
         </View>
 
-        {/* <View style={{  }}>
-            <View>
-              <Text>Hello World!</Text>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
-            </View>
-          </View> */}
+        
       </Modal>
-    );
-  };
+    )
+  }
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -1198,7 +1134,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderBottomWidth: hp("0.2%"),
     height: hp("4%"),
-    borderBottomColor: "#bfbfbf",
+    borderBottomColor: '#bfbfbf',
     // borderColor: "#bfbfbf",
     padding: 0
   },
@@ -1257,16 +1193,16 @@ const styles = StyleSheet.create({
     marginBottom: hp("1.6%")
   },
   button: {
-    width: hp("12%"),
-    height: hp("5%"),
+    width: hp('12%'),
+    height: hp('5%'),
     borderRadius: 16,
     borderWidth: 2,
-    backgroundColor: "white",
-    justifyContent: "center",
+    backgroundColor: 'white',
+    justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,
-    borderColor: "#fff",
-    marginBottom: hp("2%")
+    borderColor: '#fff',
+    marginBottom: hp('2%')
   },
   lineAboveAndBelowFlatList: {
     backgroundColor: "lightgray",
@@ -1362,7 +1298,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { updateJoinedAssociation, createUserNotification, getAssoMembers }
-)(UnitList);
+export default connect(mapStateToProps, { updateJoinedAssociation, createUserNotification, getAssoMembers })(UnitList);

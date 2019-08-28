@@ -53,7 +53,8 @@ class ReportScreen extends React.Component {
             pageNumber: 1,
             slotName: '',
             slotTime: '',
-            patrollingReport: []
+            patrollingReport: [],
+            data:[]
         },
             this.getReport = this.getReport.bind(this);
 
@@ -219,6 +220,7 @@ class ReportScreen extends React.Component {
                     bottomPageIndicator: dataBottomList,
                     tableData: reprArr,
                     patrollingReport: reprArr,
+                    data:reprArr
 
                 });
 
@@ -233,7 +235,7 @@ class ReportScreen extends React.Component {
     }
 
     render() {
-        base.utils.logger.log(this.state.data);
+        console.log("Data:",this.state.data);
         return (
             <View style={StaffReportStyle.mainContainer}>
                 <View style={ReportScreenStyles.header}>
@@ -249,6 +251,7 @@ class ReportScreen extends React.Component {
                         <Text>{this.state.slotName}</Text>
                         <Text>{this.state.slotTime}</Text>
                     </View>
+                    {this.state.data === undefined || this.state.data.length !== 0?
                     <TouchableOpacity
                         underlayColor={base.theme.colors.transparent}
                         onPress={() => this.generatePDF()}
@@ -258,8 +261,9 @@ class ReportScreen extends React.Component {
                             style={ReportScreenStyles.shareIcon}
                             source={require('../../../icons/share.png')}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity>:<View style={ReportScreenStyles.shareIconView}/>}
                 </View>
+
                 <ScrollView style={StaffReportStyle.scrollViewTable}>
                     {this.renderViewPagerData()}
                 </ScrollView>
@@ -319,9 +323,10 @@ class ReportScreen extends React.Component {
     }
 
     renderViewPagerData() {
+        console.log("Data:",this.state.data)
         return (
             <View style={{height: hp('65%')}}>
-                {this.state.data !== null ?
+                { this.state.data.length !== 0 ?
                     <Table borderStyle={{borderWidth: 1, borderColor: base.theme.colors.grey}}>
                         <Row data={this.state.tableHead} style={ReportScreenStyles.headRow}
                              textStyle={ReportScreenStyles.textRow}
@@ -349,7 +354,7 @@ class ReportScreen extends React.Component {
                         }
                     </Table> :
                     <View style={{justifyContent: 'center', alignItems: 'center', height: hp('70%')}}>
-                        <Text>Report not available</Text>
+                        <Text style={{color:base.theme.colors.primary}}>Report not available for this patrol...</Text>
                     </View>}
             </View>
         );

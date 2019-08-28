@@ -2,9 +2,9 @@
  * Created by Anooj Krishnan at Synclovis Systems Pvt. Ltd. on 2019-06-24
  */
 
-const isDev = true;
+const isDev = false;
 
-const isSecure = true;
+const isSecure = false;
 
 const isMandatory = " is required";
 
@@ -29,9 +29,9 @@ const api = {
     "https://us-central1-oyespace-b7e2d.cloudfunctions.net"
 };
 
-// const imageUrl = "https://mediauploaddev.oyespace.com/Images/"  //Development
+ //const imageUrl = "https://mediauploaddev.oyespace.com/Images/"  //Development
 const imageUrl = "https://mediauploaduat.oyespace.com/Images/"; //Validation
-//const imageUrl = "https://mediaupload.oyespace.com/Images/"   //Production
+//const imageUrl = "https://mediaupload.oyespace.com/Images/"; //Production
 
 const strings = {
   appName: "OyeSpace",

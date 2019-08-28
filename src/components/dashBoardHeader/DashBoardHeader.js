@@ -57,14 +57,23 @@ class DashBoardHeader extends React.Component {
       
     };
 
-
-
+    getRoleName(roleId){
+        switch(roleId){
+          case 1:
+            return "Admin"
+          case 2:
+            return "Owner"
+          case 3:
+            return "Tenant"
+          default:
+            return ""
+        }
+    }
 
   
 
   render() {
-    console.log(
-      "State in dashboard header:",this.state,this.props);
+    console.log("State in dashboard header:",this.state,this.props);
     return (
       <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
         <View style={HeaderStyles.container}>
@@ -107,9 +116,15 @@ class DashBoardHeader extends React.Component {
                     : null}
                 </Text>
               </TouchableOpacity>
-              <Text style={HeaderStyles.statusText} numberOfLines={1}>
-                Owner
-              </Text>
+              {
+                this.props.userReducer.SelectedAssociationID!=null?
+                <Text style={HeaderStyles.statusText} numberOfLines={1}>
+                {
+                  this.props.userReducer.SelectedAssociationID!=null?this.getRoleName(this.props.dashboardReducer.role):""
+                }                
+              </Text>:<View/>
+              }
+              
             </View>
           </TouchableOpacity>
         </View>

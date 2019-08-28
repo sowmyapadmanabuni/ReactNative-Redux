@@ -538,8 +538,7 @@ class MyFamily extends Component {
             return false
         } else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
-        }
-        else if (self.props.dashBoardReducer.uniID === null) {
+        } else if (self.props.dashBoardReducer.uniID === null) {
             alert('Unit id is null')
         } else if (self.props.dashBoardReducer.assId === null) {
             alert('Association id is null')

@@ -138,6 +138,7 @@ class PatrollingCommonHeader extends React.Component {
                 isCP = true
             }
         }
+        console.log('Selected Chekp Points:',cpList)
         if (spCount === 1 && epCount === 1 && isCP) {
             this.props.navigation.navigate("schPatrolling");
         } else if (spCount > 1) {

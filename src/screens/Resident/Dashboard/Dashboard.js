@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import {
   Alert,
   Dimensions,
@@ -10,7 +10,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
-  BackHandler,ToastAndroid
+  BackHandler,
+  ToastAndroid
 } from "react-native";
 import base from "../../../base";
 import { connect } from "react-redux";
@@ -49,9 +50,10 @@ import {
 import ProgressLoader from "rn-progress-loader";
 import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
-import MarqueeText from "react-native-marquee";
 
-class Dashboard extends React.Component {
+const Profiler = React.unstable_Profiler;
+
+class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
     this.props = props;
@@ -82,7 +84,7 @@ class Dashboard extends React.Component {
       isNoAssJoin: false
     };
     this.backButtonListener = null;
-    this.currentRouteName = 'Main';
+    this.currentRouteName = "Main";
     this.lastBackButtonPress = null;
     // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
@@ -96,36 +98,46 @@ class Dashboard extends React.Component {
     this.myProfileNet();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // return (
+    return (
+      !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
+    );
+    // );
+  }
+
   componentDidUpdate() {
-    if (Platform.OS === 'android') {
-      this.backButtonListener = BackHandler.addEventListener('hardwareBackPress', () => {
-          if (this.currentRouteName !== 'Main') {
-              return false;
+    if (Platform.OS === "android") {
+      this.backButtonListener = BackHandler.addEventListener(
+        "hardwareBackPress",
+        () => {
+          if (this.currentRouteName !== "Main") {
+            return false;
           }
 
           if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-              BackHandler.exitApp();
-              return true;
+            BackHandler.exitApp();
+            return true;
           }
-          if(this.state.isSelectedCard === "UNIT"){
-                BackHandler.exitApp();
+          if (this.state.isSelectedCard === "UNIT") {
+            BackHandler.exitApp();
+          } else {
+            this.changeCardStatus("UNIT");
           }
-          else{
-            this.changeCardStatus("UNIT")
-          }
-          
+
           this.lastBackButtonPress = new Date().getTime();
 
           return true;
-      });
+        }
+      );
     }
-    }
+  }
 
-    handleBackButtonClick() {
-        console.log("DNDJVL")
-        // this.props.navigation.goBack(null);
-        // return true;
-    }
+  handleBackButtonClick() {
+    console.log("DNDJVL");
+    // this.props.navigation.goBack(null);
+    // return true;
+  }
 
   requestNotifPermission = () => {
     const {
@@ -408,11 +420,7 @@ class Dashboard extends React.Component {
     // console.log("Association id123123123123", this.state.assocId, index);
 
     fetch(
-      `http://${
-        this.props.oyeURL
-      }/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${
-        this.state.assocId
-      }`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${this.state.assocId}`,
       {
         method: "GET",
         headers: {
@@ -470,8 +478,11 @@ class Dashboard extends React.Component {
               prop: "role",
               value: role
             });
+            console.log("ROLE_UPDATE", role);
           }
         );
+        this.checkUnitIsThere();
+
       })
       .catch(error => {
         this.setState({ error, loading: false });
@@ -486,23 +497,34 @@ class Dashboard extends React.Component {
     let self = this;
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
-    console.log("APi", base.utils.strings.oyeLivingDashBoard);
-    let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
-      this.props.userReducer.MyAccountID
+
+    // let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
+    //   this.props.userReducer.MyAccountID
+    // );
+
+    let stat = await axios.get(
+      `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
+      {
+        headers: {
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+          "Content-Type": "application/json"
+        }
+      }
     );
-    console.log("data from stat All Asc1", stat);
+
+    console.log("Response_Association: ", stat);
 
     try {
-      if (stat && stat.data) {
+      if (stat && stat.data.success) {
         this.setState({
           isNoAssJoin: false
         });
         let assocList = [];
-        for (let i = 0; i < stat.data.memberListByAccount.length; i++) {
-          if (stat.data.memberListByAccount[i].asAsnName !== "") {
+        for (let i = 0; i < stat.data.data.memberListByAccount.length; i++) {
+          if (stat.data.data.memberListByAccount[i].asAsnName !== "") {
             assocList.push({
-              value: stat.data.memberListByAccount[i].asAsnName,
-              details: stat.data.memberListByAccount[i]
+              value: stat.data.data.memberListByAccount[i].asAsnName,
+              details: stat.data.data.memberListByAccount[i]
             });
           }
         }
@@ -533,7 +555,7 @@ class Dashboard extends React.Component {
         });
 
         self.getUnitListByAssoc();
-      } else if (stat === null) {
+      } else if (!stat.data.success) {
         this.setState({
           isNoAssJoin: true
         });
@@ -624,7 +646,7 @@ class Dashboard extends React.Component {
   checkUnitIsThere() {
     const { dropdown1 } = this.props;
     console.log(
-      "CheckUnit;s is there",
+      "CheckUnit;s is there",this.props,
       this.props.dashBoardReducer.uniID,
       dropdown1,
       dropdown1.length
@@ -678,8 +700,6 @@ class Dashboard extends React.Component {
         // });
 
         self.roleCheckForAdmin(this.state.assocId);
-        self.checkUnitIsThere();
-        self.getVehicleList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -712,11 +732,7 @@ class Dashboard extends React.Component {
     console.log("Get ID for vehicle", this.props.dashBoardReducer.uniID);
 
     fetch(
-      `http://${
-        this.props.oyeURL
-      }/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${
-        this.props.dashBoardReducer.uniID
-      }`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
       {
         method: "GET",
         headers: {
@@ -797,9 +813,7 @@ class Dashboard extends React.Component {
 
   getVisitorList = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${
-        this.props.dashBoardReducer.assId
-      }`,
+      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
       {
         method: "GET",
         headers: {
@@ -823,6 +837,11 @@ class Dashboard extends React.Component {
       });
   };
 
+  logMeasurement = async (id, phase, actualDuration, baseDuration) => {
+    // see output during DEV
+    if (__DEV__) console.log({ id, phase, actualDuration, baseDuration });
+  };
+
   render() {
     const {
       dropdown,
@@ -840,13 +859,14 @@ class Dashboard extends React.Component {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    console.log(this.props.dashBoardReducer, dropdown1, "tate123455");
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     let maxLen=25;
-    let maxLenUnit=10
-    let text='ALL THE GLITTERS IS NOT GOLD'
+    let maxLenUnit=10;
+    let text='ALL THE GLITTERS IS NOT GOLD';
+
     return (
+      // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
       <View style={{ height: "100%", width: "100%" }}>
         <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
         {!this.props.isLoading ? (
@@ -859,7 +879,9 @@ class Dashboard extends React.Component {
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
-                    containerStyle={{ width: "100%" }}
+                    containerStyle={{
+                      width: "100%",
+                    }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
                       borderBottomColor: "transparent",
@@ -887,7 +909,12 @@ class Dashboard extends React.Component {
                   <Dropdown
                     // value={this.state.unitName}
                     value={selectedDropdown1.length>maxLenUnit?selectedDropdown1.substring(0,maxLenUnit-3) + '...':selectedDropdown1}
-                    containerStyle={{ width: "95%" }}
+                    containerStyle={{ width: "95%",
+                      /*width: "70%",
+                      marginLeft: "30%",
+                      borderBottomWidth: hp("0.05%"),
+                      borderBottomColor: "#474749"*/
+                    }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
@@ -997,9 +1024,9 @@ class Dashboard extends React.Component {
               />
             </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => {
-                    Linking.openURL("mailto:happy@oyespace.com");
-                  }}
+                  onPress={() => this.props.navigation.navigate('schedulePatrolling')
+                    // Linking.openURL("mailto:happy@oyespace.com");
+                  }
                 >
                   <Image
                     style={Style.supportIcon}
@@ -1020,6 +1047,7 @@ class Dashboard extends React.Component {
           hudColor={"#FFFFFF"}
         />
       </View>
+      // </Profiler>
     );
   }
 
