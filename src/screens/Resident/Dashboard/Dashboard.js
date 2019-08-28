@@ -1020,8 +1020,7 @@ class Dashboard extends PureComponent {
               />
             </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('schedulePatrolling')
-                    // Linking.openURL("mailto:happy@oyespace.com");
+                  onPress={() => Linking.openURL("mailto:happy@oyespace.com")
                   }
                 >
                   <Image
