@@ -62,13 +62,14 @@ class MyGuests extends Component {
     this.arrayholder = [];
   }
   componentDidMount() {
-    this.getInvitationList();
+    let self = this;
     let newDataSource = [];
     this.state.dataSource.map((data) => {
       newDataSource.push({ ...data, open: false })
     })
     setTimeout(() => {
-      this.setState({
+      self.getInvitationList();
+      self.setState({
         isLoading: false,
         dataSource: newDataSource
       });
@@ -76,8 +77,6 @@ class MyGuests extends Component {
   }
 
   getInvitationList = () => {
-    //      //http://localhost:64284/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated
-
     console.log("Visitighfghfghfg@@@@@@@@@", this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID, this.props.userReducer.MyAccountID);
     fetch(
       `http://${this.props.oyeURL}/oye247/api/v1/GetInvitationListByAssocIDAndIsQRCodeGenerated`,
@@ -91,7 +90,9 @@ class MyGuests extends Component {
           ASAssnID: this.props.dashBoardReducer.assId,
           INInvVis: "Visited",
           UNUnitID: this.props.dashBoardReducer.uniID,
-          ACAccntID: this.props.userReducer.MyAccountID
+          ACAccntID: this.props.userReducer.MyAccountID,
+          StartDate: this.state.dobText,
+          ToDate: this.state.dobText1
         })
       }
     )
@@ -445,7 +446,7 @@ class MyGuests extends Component {
               bordered
               warning
               style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
-            // onPress={() => this.myVisitorsGetList()}
+            onPress={() => this.getInvitationList()}
             >
               <Text
                 style={{
