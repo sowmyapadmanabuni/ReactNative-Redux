@@ -423,7 +423,7 @@ class SchedulePatrol extends React.Component {
             console.log("Disfffff:",this.compareTime(startTime,endTime));
              let diff = this.compareTime(startTime,endTime);
             if(!diff){
-                alert("Patrol End Time can not be earlier than or equal to Patrol Start Time");
+                alert("Patrol end time can not be earlier than or equal to patrol start time");
             }
             else if(daysString.length === 0){
                 alert("Please select patrolling days")

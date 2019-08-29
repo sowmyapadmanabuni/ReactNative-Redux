@@ -889,6 +889,7 @@ try{
     let maxLen=25;
     let maxLenUnit=10;
     let text='ALL THE GLITTERS IS NOT GOLD';
+    console.log('Hfhfhgfhfhhgfhgfgh',dropdown.length,dropdown1.length)
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -912,7 +913,7 @@ try{
                       borderBottomColor: "transparent",
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                   dropdownPosition={-2}
+                   dropdownPosition={dropdown.length>2?-5:-2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -948,7 +949,7 @@ try{
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-2}
+                    dropdownPosition={dropdown1.length>2?-4:dropdown1.length<2 ?-2:-3}
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
