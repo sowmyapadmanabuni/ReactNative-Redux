@@ -19,6 +19,7 @@ import CardView from "../../../components/cardView/CardView";
 import { Dropdown } from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
@@ -52,7 +53,7 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-
+var counter = 0
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -209,8 +210,6 @@ class Dashboard extends PureComponent {
         firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
         data.map(units => {
 
-
-
            console.log( "role_units",units.mrmRoleID);
           if (receiveNotifications) {            
              //alert(MyAccountID + "admin");
@@ -250,6 +249,8 @@ class Dashboard extends PureComponent {
   };
 
   showLocalNotification = notification => {
+
+    try{
     // console.log(notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
@@ -274,21 +275,25 @@ class Dashboard extends PureComponent {
         foreground: true
       })
       .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")
-      .android.setAutoCancel(true)
+      .android.setLargeIcon("ic_notif")      
       .android.setSmallIcon("ic_stat_ic_notification")
       .android.setChannelId("channel_id")
       .android.setVibrate("default")
+      .setSound('default')
       // .android.setChannelId('notification-action')
       .android.setPriority(firebase.notifications.Android.Priority.Max);
 
     firebase.notifications().displayNotification(notificationBuild);
     this.setState({ foregroundNotif: notification._data });
+    }catch(e){
+      console.log("FAILED_NOTIF")
+    }
   };
 
-  listenForNotif = () => {
+  listenForNotif = () => {    
+    if(this.notificationDisplayedListener == undefined || this.notificationDisplayedListener==null){    
     let navigationInstance = this.props.navigation;
-
+      
     this.notificationDisplayedListener = firebase
       .notifications()
       .onNotificationDisplayed(notification => {
@@ -311,6 +316,16 @@ class Dashboard extends PureComponent {
         }
 
         this.showLocalNotification(notification);
+
+        showMessage({
+          message: notification.title,
+          description: notification.body,
+          type: "default",
+          backgroundColor: "#FF9100",
+          onPress: () => {
+            this.props.navigation.navigate("NotificationScreen")
+          },
+        });
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
@@ -384,6 +399,7 @@ class Dashboard extends PureComponent {
       // this.props.getNotifications(oyeURL, MyAccountID);
       this.props.navigation.navigate("NotificationScreen");
     });
+  }
   };
 
   onChangeText = () => {};
@@ -411,7 +427,7 @@ class Dashboard extends PureComponent {
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-
+    
     this.requestNotifPermission();
     // this.props.getNotifications(oyeURL, MyAccountID);
 
