@@ -113,7 +113,7 @@ class MyGuests extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("1234565656565 -@@@@@@", responseJson, this.props.userReducer.SelectedAssociationID, this.props.dashBoardReducer.uniID, this.props.userReducer.MyAccountID);
+        console.log("Response Json", responseJson)
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.invitation,
@@ -649,7 +649,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#ff8c00",
     borderRadius: 100,
-    marginLeft:hp('1%')
+    marginLeft:hp('1%'),
+    marginTop:hp('1%')
   },
   contactIcon: {
     fontSize: hp("3.5%"),

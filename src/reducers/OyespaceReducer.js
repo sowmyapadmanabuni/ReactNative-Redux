@@ -1,7 +1,11 @@
 import { UPDATE_USER_INFO } from "../actions/types";
 
 //DB
+<<<<<<< HEAD
 //const oyeURL = "apidev.oyespace.com"; //Development
+=======
+// const oyeURL = "apidev.oyespace.com"; //Development
+>>>>>>> e46a7cb59650639ad776437e1d1074a95307f454
 const oyeURL = "apiuat.oyespace.com"; //Validation/
 //const oyeURL = "api.oyespace.com"; //Production
 
@@ -9,7 +13,11 @@ const oyeURL = "apiuat.oyespace.com"; //Validation/
  //const mediaUpload = "https://mediauploaddev.oyespace.com/Images/"; //Development
 
 const mediaUpload = "https://mediauploaduat.oyespace.com/Images/"; //Validation
+<<<<<<< HEAD
 //const mediaUpload = "https://mediaupload.oyespace.com/Images/"; //Production
+=======
+// const mediaUpload = "https://mediaupload.oyespace.com/Images/"; //Production
+>>>>>>> e46a7cb59650639ad776437e1d1074a95307f454
 const oyeBaseURL = "http://" + oyeURL + "/oye247/api/v1/";
 
 const INITIAL_STATE = {

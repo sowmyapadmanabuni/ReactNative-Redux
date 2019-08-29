@@ -238,7 +238,7 @@ class NotificationScreen extends Component {
           )
           .then(res => {
             let responseData = res.data.data;
-            // console.log(responseData, "responseData");
+             console.log(responseData, "responseData");
 
             this.setState(
               (prevState, newEmployer) => ({
@@ -259,7 +259,7 @@ class NotificationScreen extends Component {
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
-
+    console.log("NOTIF_ITEM:: ",item)
     if (item.ntType !== "gate_app") {
       return (
         <Card>
