@@ -64,7 +64,12 @@ class Resident extends React.Component {
     }
 
     componentWillMount() {
-        this.getMemberList();
+        this.getMemberList();        
+    }
+
+    componentDidMount(){
+        
+        
     }
 
     static navigationOptions = {
@@ -145,13 +150,39 @@ class Resident extends React.Component {
 
     }
 
+    async updateRolesFRTDB(user, roleId){
+                
+        var dbref = base.services.frtdbservice.ref('rolechange/'+user.acAccntID);
+        dbref.set({            
+            associationID:user.asAssnID,
+            unit:user.unUnitID,
+            role:roleId,
+            user:user.acAccntID
+        }).then((data)=>{
+            //success callback
+            console.log('data ' , data)
+        }).catch((error)=>{
+            //error callback
+            console.log('error ' , error)
+        })
+        // let obj = {
+        //     sbSubID: ""+user.acAccntID+""+user.unUnitID+"usernotif",
+        //     ntTitle: "Role Changed",
+        //     ntDesc:
+        //       "Your role in unit has been changed",
+        //     ntType: "Role_Change",
+        //     associationID: user.asAssnID
+        //   }
+        // console.log("sendRoleNotification",obj)
+        // let notification = await base.services.residentfcmservice.sendUniqueResidentPN(obj)
+        // console.log("notificationResp",notification);
+    }
 
     changeRole = (title, message) => {
         try {
         
                 const {getDashUnits, selectedAssociation} = this.props;
-                console.log('Props in role managment', this.props);
-
+                console.log('Props in role managment', this.props);                
                 const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
                 console.log("selectedUser:", this.state.selectedUser); //+91
 
@@ -186,6 +217,7 @@ class Resident extends React.Component {
                     .then(response => response.json())
                     .then(responseJson => {
                         console.log("%%%%%%%%%%", responseJson, requestBody);
+                        this.updateRolesFRTDB(this.state.selectedUser,this.state.selectedRoleData.selRolId)
                         this.props.navigation.goBack();
                     })
                     .catch(error => {
