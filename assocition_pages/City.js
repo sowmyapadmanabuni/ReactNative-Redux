@@ -97,25 +97,25 @@ export default class City extends Component {
               </View>
             </View>
             <View style={{ flexDirection: 'row', }}>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"BANGALORE"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"Bangalore"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/bengaluru.png')} />
                   <Text>Bengaluru</Text>
                 </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"CHANDIGARH"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"Chandigarh"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/chandigarh.png')} />
                   <Text>Chandigarh</Text>
                 </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"DELHI"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Delhi"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/delhi-ncr.png')} />
                   <Text>Delhi-NCR</Text>
                 </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"INDORE"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Indore"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/indore.png')} />
                   <Text>Indore</Text>
@@ -125,25 +125,25 @@ export default class City extends Component {
 
 
             <View style={{ flexDirection: 'row', }}>
-            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"JAIPUR"})}>
+            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Jaipur"})}>
               <View style={styles.card}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/jaipur.png')} />
                 <Text>Jaipur</Text>
               </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"KANPUR"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Kanpur"})}>
               <View style={styles.card}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} />
                 <Text>Kanpur</Text>
               </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"LUCKNOW"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Lucknow"})}>
               <View style={styles.card}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/lucknow.png')} />
                 <Text>Lucknow</Text>
               </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"MUMBAI"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Mumbai"})}>
               <View style={styles.card}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/mumbai.png')} />
                 <Text>Mumbai</Text>
@@ -153,26 +153,26 @@ export default class City extends Component {
 
 
             <View style={{ flexDirection: 'row', }}>
-            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"NAGPUR"})}>
+            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Nagpur"})}>
               <View style={[styles.card, { borderBottomWidth: 1 }]}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/nagpur.png')} />
                 <Text>Nagpur</Text>
               </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"PRAYAGRAJ"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Prayagraj"})}>
               <View style={[styles.card, { borderBottomWidth: 1 }]}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} />
                 <Text>Prayagraj</Text>
                 <Text>(Allahabad)</Text>
               </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"PUNE"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Pune"})}>
               <View style={[styles.card, { borderBottomWidth: 1 }]}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/pune.png')} />
                 <Text>Pune</Text>
               </View>
               </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"VARANASI"})}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Varanasi"})}>
               <View style={[styles.card, { borderBottomWidth: 1 }]}>
                 <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/varanasi.png')} />
                 <Text>Varanasi</Text>

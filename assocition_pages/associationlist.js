@@ -375,7 +375,6 @@ class BlockDetail extends React.Component {
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
                 multiline={false}
-                
                 onChangeText={this.searchFilterFunction}
               />
 
