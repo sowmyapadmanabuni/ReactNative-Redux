@@ -68,7 +68,7 @@ const strings = {
   oyeSafeApiKey: api.oyeSafeKey,
   oyeLivingApiKey: api.oyeLivingKey,
   gatecloudfuncurl: api.GATE_CLOUD_FUNCTION_URL,
-  residentcloudfuncurl:api.CLOUD_FUNCTION_URL,
+  residentcloudfuncurl: api.CLOUD_FUNCTION_URL,
   mandatory: {
     firstName: "First Name" + isMandatory,
     lastName: "Last Name" + isMandatory
@@ -80,16 +80,15 @@ const strings = {
   mediaUploadUrl: "http://mediaupload.oyespace.com/oyeliving/api/V1",
   oyeImageUploadKey: "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
   imageUrl: imageUrl,
-  SOLD_OWNER_OCCUPIED_UNIT:"Sold Owner Occupied Unit",
-  SOLD_TENANT_OCCUPIED_UNIT:"Sold Tenant Occupied Unit",
-  UNSOLD_VACANT_UNIT:"UnSold Vacant Unit",
-  UNSOLD_TENANT_OCCUPIED_UNIT:"UnSold Tenant Occupied Unit",
-  SOLD_VACANT_UNIT:"Sold Vacant Unit",
+  SOLD_OWNER_OCCUPIED_UNIT: "Sold Owner Occupied Unit",
+  SOLD_TENANT_OCCUPIED_UNIT: "Sold Tenant Occupied Unit",
+  UNSOLD_VACANT_UNIT: "UnSold Vacant Unit",
+  UNSOLD_TENANT_OCCUPIED_UNIT: "UnSold Tenant Occupied Unit",
+  SOLD_VACANT_UNIT: "Sold Vacant Unit",
 
-  USER_ADMIN:1,
-  USER_OWNER:2,
-  USER_TENANT:3
-
+  USER_ADMIN: 1,
+  USER_OWNER: 2,
+  USER_TENANT: 3
 };
 
 export default strings;
