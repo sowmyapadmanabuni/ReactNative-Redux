@@ -13,7 +13,9 @@ import {
   REFRESH_NOTIFICATION_START,
   REFRESH_NOTIFICATION_SUCCESS,
   REFRESH_NOTIFICATION_FAILED,
-  TOGGLE_COLLAPSIBLE
+  TOGGLE_COLLAPSIBLE,
+  ON_END_START,
+  ON_END_SUCCESS
 } from "./types";
 import _ from "lodash";
 
@@ -768,4 +770,85 @@ export const toggleCollapsible = (prevData, value, index) => {
   };
 };
 
-export const onEndReached = (oye, page) => {};
+export const onEndReached = (
+  oyeURL,
+  prevPage,
+  prevNotifications,
+  MyAccountID
+) => {
+  return dispatch => {
+    dispatch({
+      type: ON_END_START
+    });
+    console.log(prevPage, "prevPage");
+    let page = prevPage + 1;
+
+    fetch(
+      "http://" +
+        oyeURL +
+        "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+        MyAccountID +
+        "/" +
+        page,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson, page, "redddd");
+        let resData = responseJson.data.notificationListByAcctID;
+
+        let activeNotifications = [];
+
+        _.forEach(resData, function(value) {
+          activeNotifications.push({ ...value, read: false });
+        });
+
+        // console.log("sorted", sorted);
+        let joinNotif = [];
+        let joinStatNotif = [];
+        let gateAppNotif = [];
+
+        activeNotifications.map((data, index) => {
+          if (data.ntType === "gate_app") {
+            gateAppNotif.push({ open: true, ...data });
+          } else if (data.ntType === "Join_Status") {
+            joinStatNotif.push(data);
+          } else if (data.ntType === "Join") {
+            joinNotif.push(data);
+          }
+        });
+
+        const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
+        const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+        let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
+
+        // const sorted = _.sortBy(allNotifs, [
+        //   "ntdCreated",
+        //   "ntdUpdated"
+        // ]).reverse();
+
+        let newNotifications = [...prevNotifications, ...allNotifs];
+
+        const sorted = _.sortBy(newNotifications, ["ntdCreated"]).reverse();
+
+        dispatch({
+          type: ON_END_SUCCESS,
+          payload: sorted,
+          page
+        });
+      })
+      .catch(error => {
+        console.log(error, "on end");
+        // dispatch({
+        //   type: GET_NOTIFICATIONS_FAILED,
+        //   payload: []
+        // });
+      });
+  };
+};

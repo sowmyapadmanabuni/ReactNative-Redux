@@ -18,8 +18,11 @@ import { connect } from "react-redux";
 import {
   updateApproveAdmin,
   getNotifications,
-  createUserNotification
+  createUserNotification,
+  storeOpenedNotif,
+  onNotificationOpen
 } from "../../actions";
+
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
@@ -37,6 +40,16 @@ class NotificationDetailScreen extends PureComponent {
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
+    // const details = navigation.getParam("details", "NO-ID");
+    const index = navigation.getParam("index", "NO-ID");
+    const notifications = navigation.getParam("notifications", "NO-ID");
+    const ntid = navigation.getParam("ntid", "NO-ID");
+    const oyeURL = navigation.getParam("oyeURL", "NO-ID");
+    const savedNoifId = navigation.getParam("savedNoifId", "NO-ID");
+    this.props.onNotificationOpen(notifications, index, oyeURL);
+    this.props.storeOpenedNotif(savedNoifId, ntid);
+
     this.manageJoinRequest();
   }
 
@@ -769,5 +782,11 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { updateApproveAdmin, getNotifications, createUserNotification }
+  {
+    updateApproveAdmin,
+    getNotifications,
+    createUserNotification,
+    onNotificationOpen,
+    storeOpenedNotif
+  }
 )(NotificationDetailScreen);
