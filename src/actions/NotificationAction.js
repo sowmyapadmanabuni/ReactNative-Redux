@@ -17,15 +17,26 @@ import {
 } from "./types";
 import _ from "lodash";
 
-export const getNotifications = (oyeURL, MyAccountID) => {
+export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
   return dispatch => {
-    console.log("Notification URLS", oyeURL, MyAccountID);
+    let page = 1;
+    // console.log("Notification URLS", oyeURL, MyAccountID);
+    // console.log(
+    //   "http://" +
+    //     oyeURL +
+    //     "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+    //     MyAccountID +
+    //     "/" +
+    //     page
+    // );
     dispatch({ type: GET_NOTIFICATIONS });
     fetch(
       "http://" +
         oyeURL +
         "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
-        MyAccountID,
+        MyAccountID +
+        "/" +
+        page,
       {
         method: "GET",
         headers: {
@@ -423,9 +434,7 @@ export const onNotificationOpen = (notif, index, oyeURL) => {
 
     axios
       .get(
-        `http://${oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${
-          newNotif[index].ntid
-        }`,
+        `http://${oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${newNotif[index].ntid}`,
         {
           headers: headers
         }
@@ -463,8 +472,14 @@ export const toggleAdminNotification = val => {
   };
 };
 
-export const refreshNotifications = (oyeURL, MyAccountID) => {
+export const refreshNotifications = (
+  oyeURL,
+  MyAccountID,
+  page,
+  notifications
+) => {
   return dispatch => {
+    let page = 1;
     dispatch({
       type: REFRESH_NOTIFICATION_START
     });
@@ -473,7 +488,9 @@ export const refreshNotifications = (oyeURL, MyAccountID) => {
       "http://" +
         oyeURL +
         "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
-        MyAccountID,
+        MyAccountID +
+        "/" +
+        page,
       {
         method: "GET",
         headers: {
@@ -750,3 +767,5 @@ export const toggleCollapsible = (prevData, value, index) => {
     });
   };
 };
+
+export const onEndReached = (oye, page) => {};

@@ -762,7 +762,8 @@ const mapStateToProps = state => {
     approvedAdmins: state.AppReducer.approvedAdmins,
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyeURL: state.OyespaceReducer.oyeURL,
-    MyAccountID: state.UserReducer.MyAccountID
+    MyAccountID: state.UserReducer.MyAccountID,
+    page: state.NotificationReducer.page
   };
 };
 

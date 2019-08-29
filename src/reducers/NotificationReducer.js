@@ -22,7 +22,8 @@ const INITIAL_STATE = {
   newNotifInstance: null,
   count: null,
   receiveNotifications: true,
-  refresh: false
+  refresh: false,
+  page: 1
 };
 
 export default (state = INITIAL_STATE, action) => {

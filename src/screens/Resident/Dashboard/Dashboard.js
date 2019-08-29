@@ -1554,6 +1554,7 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyespaceReducer: state.OyespaceReducer,
     receiveNotifications: state.NotificationReducer.receiveNotifications,
+    page: state.NotificationReducer.page,
     dashBoardReducer: state.DashboardReducer
   };
 };

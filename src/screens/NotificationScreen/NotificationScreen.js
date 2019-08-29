@@ -811,7 +811,8 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
     MyAccountID: state.UserReducer.MyAccountID,
-    refresh: state.NotificationReducer.refresh
+    refresh: state.NotificationReducer.refresh,
+    page: state.NotificationReducer.page
   };
 };
 
