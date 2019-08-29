@@ -43,11 +43,11 @@ class BlockDetail extends React.Component {
 
   componentDidMount() {
     // this.myJoinAssociationListGetData();
-    console.log("City Name:", this.props.navigation.state.params.name)
+    console.log("City Name:", this.props.navigation.state.params.id)
     setTimeout(() => {
       this.setState({
         isLoading: false,
-        city:this.props.navigation.state.params.name
+        city:this.props.navigation.state.params.id
       },()=>this.myJoinAssociationListGetData());
     }, 1000);
 
@@ -135,8 +135,9 @@ class BlockDetail extends React.Component {
         let self = this;
         for(let i in responseJson.data.associations){
           // console.log("i is:", i)
-          if(self.state.city === responseJson.data.associations[i].asCity){
+          if(self.state.city === responseJson.data.associations[i].asPinCode.substring(0,2)){
             console.log("City Wise Associations",responseJson.data.associations[i])
+            console.log("Pin Code",responseJson.data.associations[i].asPinCode.substring(0,2) )
             arr.push(responseJson.data.associations[i])
           }
         }

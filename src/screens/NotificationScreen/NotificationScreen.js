@@ -368,7 +368,7 @@ class NotificationScreen extends Component {
                                 "vlEntryImg",
                                 item.sbMemID
                               ) === "" ?
-                                <Image style={{ width: hp('20%'), height: hp('20%') }} source={require('../../../icons/no_img_captured.png')} /> 
+                                <Image style={{ width: hp('12%'), height: hp('12%') }} source={require('../../../icons/no_img_captured.png')} /> 
                                 
                                 :
 

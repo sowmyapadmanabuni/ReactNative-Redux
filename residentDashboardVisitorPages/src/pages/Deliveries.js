@@ -250,12 +250,7 @@ class App extends React.Component {
         </View>
         <View
           style={[
-            styles.listItem,
-            {
-              justifyContent: "space-between",
-              paddingRight: 0,
-              height: hp("14%")
-            }
+            styles.listItem
           ]}
         >
           <View style={styles.iconContainer}>
@@ -353,7 +348,16 @@ class App extends React.Component {
             </Card>
           </View>
         </View>
-        <View>
+        <View style={{ flexDirection: 'row',alignSelf: 'flex-end' }}>
+          <View style={{ alignItems: 'flex-end', marginRight: hp('1%') }}>
+            {item.open ?
+              <View /> :
+              <View>
+                <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_more.png')} />
+              </View>
+            }
+          </View>
+        </View>
           <Collapsible
             duration={100}
             collapsed={!item.open}>
@@ -370,7 +374,7 @@ class App extends React.Component {
                 <Image />
               </View> */}
 
-              {!item.open ?
+              {/* {!item.open ?
                 <View></View> :
 
                 <View style={{ marginBottom: hp('1%'), marginTop: hp('1%') }}>
@@ -378,13 +382,23 @@ class App extends React.Component {
 
                   </View>
                 </View>
-              }
+              } */}
+               <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'flex-end', marginRight: hp('1%') }}>
+                {!item.open ?
+                  <View>
+                  </View> :
+
+                  <View>
+                    <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_less.png')} />
+                  </View>
+                }
+              </View>
             </View>
           </Collapsible>
 
-        </View>
         <View style={{ borderColor: "#707070", borderBottomWidth: hp("0.1%") }} />
-      </View>
+        </View>
+
 
 
     );
@@ -625,7 +639,7 @@ class App extends React.Component {
             </View>
             : (
               <FlatList
-                style={{ marginTop: hp("2%") }}
+                style={{ marginTop: hp("2%"),marginBottom:hp('20%') }}
                 data={this.state.dataSource.sort((a, b) =>
                   a.vlfName.localeCompare(b.vlfName)
                 )}
@@ -633,7 +647,6 @@ class App extends React.Component {
                 keyExtractor={(item, index) => item.fmid.toString()}
               />
             )}
-          <View style={{ height: hp('7%') }}></View>
         </View>
       </View>
     );
