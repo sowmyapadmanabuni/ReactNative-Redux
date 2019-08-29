@@ -20,6 +20,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/noActionBar"
+        tools:replace="android:appComponentFactory"
         android:usesCleartextTraffic="true"
         tools:targetApi="28">
         <provider

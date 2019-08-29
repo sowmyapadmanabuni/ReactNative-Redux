@@ -121,8 +121,8 @@ android {
         applicationId "com.oyespace.oyesafe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "10.10"
+        versionCode 13
+        versionName "10.11"
         multiDexEnabled true
         ndk {
              abiFilters "armeabi-v7a", "x86"
@@ -160,8 +160,8 @@ android {
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            // def versionCodes = ["armeabi-v7a": 1, "x86": 2]
-            def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2]
+          //  def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -203,8 +203,9 @@ dependencies {
 
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.1.0"
-    implementation "com.google.firebase:firebase-core:16.0.8"
-    implementation "com.google.firebase:firebase-messaging:18.0.0"
+    implementation "com.google.firebase:firebase-core:17.0.0"
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    implementation "com.google.firebase:firebase-messaging:19.0.0"
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation project(':react-native-sqlite-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])

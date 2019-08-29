@@ -594,7 +594,7 @@ class MyFamily extends Component {
             "FMGurName": self.state.guardianName,
             "PAccntID": self.props.userReducer.MyAccountID
         };
-        console.log('MyFam', input)
+        console.log('MyFam', input);
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
         console.log('Stat in Add family', stat)
         this.setState({
