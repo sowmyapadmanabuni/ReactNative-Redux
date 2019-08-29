@@ -76,110 +76,131 @@ export default class City extends Component {
           <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
         </SafeAreaView>
         <ScrollView>
-          <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen')}>
-            <View>
+          <View>
               <Form style={styles.formSearch}>
-                <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen')}>
                   <Item style={styles.inputItem}>
 
                     <Input
                       marginBottom={hp("-1%")}
                       placeholder="Search for your city...."
-                      // pointerEvents="none"
-                      onTouchStart={() => this.props.navigation.navigate('AssnListScreen')}
+                      pointerEvents="none"
+                      // onTouchStart={() => this.props.navigation.navigate('AssnListScreen')}
                     />
-                    <Icon onPress={() => this.props.navigation.navigate('AssnListScreen')} style={styles.icon} name="search" size={14} />
+                    <Icon style={styles.icon} name="search" size={14} />
                   </Item>
-                </TouchableWithoutFeedback>
               </Form>
-              <View style={{ borderWidth: 0.5, borderColor: "#E5E5E5" }} />
-              <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
-                <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
-                  <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>POPULAR CITIES</Text>
-                </View>
+            <View style={{ borderWidth: 0.5, borderColor: "#E5E5E5" }} />
+
+            <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
+              <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
+                <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>POPULAR CITIES</Text>
               </View>
-              <View style={{ flexDirection: 'row', }}>
+            </View>
+            <View style={{ flexDirection: 'row', }}>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"Bangalore"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/bengaluru.png')} />
                   <Text>Bengaluru</Text>
                 </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"Chandigarh"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/chandigarh.png')} />
                   <Text>Chandigarh</Text>
                 </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Delhi"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/delhi-ncr.png')} />
                   <Text>Delhi-NCR</Text>
                 </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Indore"})}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/indore.png')} />
                   <Text>Indore</Text>
                 </View>
-              </View>
-
-
-              <View style={{ flexDirection: 'row', }}>
-                <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/jaipur.png')} />
-                  <Text>Jaipur</Text>
-                </View>
-                <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} />
-                  <Text>Kanpur</Text>
-                </View>
-                <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/lucknow.png')} />
-                  <Text>Lucknow</Text>
-                </View>
-                <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/mumbai.png')} />
-                  <Text>Mumbai</Text>
-                </View>
-              </View>
-
-
-              <View style={{ flexDirection: 'row', }}>
-                <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/nagpur.png')} />
-                  <Text>Nagpur</Text>
-                </View>
-                <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} />
-                  <Text>Prayagraj</Text>
-                  <Text>(Allahabad)</Text>
-                </View>
-                <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/pune.png')} />
-                  <Text>Pune</Text>
-                </View>
-                <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/varanasi.png')} />
-                  <Text>Varanasi</Text>
-                  <Text>(Benaras)</Text>
-                </View>
-              </View>
-
-              <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
-                <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
-                  <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>OTHER CITIES</Text>
-                </View>
-                <View style={{ borderWidth: 0.5, borderColor: "#E5E5E5" }} />
-              </View>
-
-
-              <FlatList
-                style={{ marginTop: hp('1.5%'), marginLeft: hp('1.5%'), marginBottom: hp('4%'),marginRight:hp('1%') }}
-                data={this.state.FlatListItems}
-                ItemSeparatorComponent={this.FlatListItemSeparator}
-                renderItem={({ item }) =>
-                  <Text style={styles.item}>
-                    {item.key}
-                  </Text>}
-
-              />
+              </TouchableWithoutFeedback>
             </View>
 
-          </TouchableWithoutFeedback>
+
+            <View style={{ flexDirection: 'row', }}>
+            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Jaipur"})}>
+              <View style={styles.card}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/jaipur.png')} />
+                <Text>Jaipur</Text>
+              </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Kanpur"})}>
+              <View style={styles.card}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} />
+                <Text>Kanpur</Text>
+              </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Lucknow"})}>
+              <View style={styles.card}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/lucknow.png')} />
+                <Text>Lucknow</Text>
+              </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Mumbai"})}>
+              <View style={styles.card}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/mumbai.png')} />
+                <Text>Mumbai</Text>
+              </View>
+              </TouchableWithoutFeedback>
+            </View>
+
+
+            <View style={{ flexDirection: 'row', }}>
+            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Nagpur"})}>
+              <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/nagpur.png')} />
+                <Text>Nagpur</Text>
+              </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Prayagraj"})}>
+              <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} />
+                <Text>Prayagraj</Text>
+                <Text>(Allahabad)</Text>
+              </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Pune"})}>
+              <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/pune.png')} />
+                <Text>Pune</Text>
+              </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Varanasi"})}>
+              <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/varanasi.png')} />
+                <Text>Varanasi</Text>
+                <Text>(Benaras)</Text>
+              </View>
+              </TouchableWithoutFeedback>
+            </View>
+
+            {/* <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
+              <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
+                <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>OTHER CITIES</Text>
+              </View>
+              <View style={{ borderWidth: 0.5, borderColor: "#E5E5E5" }} />
+            </View>
+
+
+            <FlatList
+              style={{ marginTop: hp('1.5%'), marginLeft: hp('1.5%'), marginBottom: hp('4%'), marginRight: hp('1%') }}
+              data={this.state.FlatListItems}
+              ItemSeparatorComponent={this.FlatListItemSeparator}
+              renderItem={({ item }) =>
+                <Text style={styles.item}>
+                  {item.key}
+                </Text>}
+
+            /> */}
+          </View>
+
         </ScrollView>
       </View>
     );

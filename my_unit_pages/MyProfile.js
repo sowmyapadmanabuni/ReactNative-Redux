@@ -248,7 +248,7 @@ class MyProfile extends Component {
                       <View/>
                       <View style={{marginTop: hp("2%")}}>
                         <Button bordered warning style={styles.button1}
-                                onPress={() => this.props.navigation.navigate('AssnListScreen')}>
+                                onPress={() => this.props.navigation.navigate('City')}>
                           <Text>Join Existing Association</Text>
                         </Button>
                       </View>

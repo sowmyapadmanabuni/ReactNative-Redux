@@ -42,6 +42,7 @@ class OSApiConnector{
     static async loginScreen(detail){
         return await instance.post('account/sendotp',detail);
     }
+    
 }
 
 
