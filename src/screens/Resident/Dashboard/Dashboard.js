@@ -206,9 +206,12 @@ class Dashboard extends PureComponent {
         console.log(response, "fetched");        
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
-        firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
         data.map(units => {
-          // console.log(units.mrmRoleID + "role");
+
+
+
+           console.log( "role_units",units.mrmRoleID);
           if (receiveNotifications) {            
              //alert(MyAccountID + "admin");
             firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
@@ -218,7 +221,8 @@ class Dashboard extends PureComponent {
             } else if (units.mrmRoleID === 1) {
               console.log(units, "units");
               if (units.meIsActive) {
-                firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
+                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
               } else {
                 firebase
                   .messaging()
@@ -232,14 +236,14 @@ class Dashboard extends PureComponent {
           }
         });
 
-        if(data != undefined && data!=null && data.length > 0){
-            let val = data.find(o => o.mrmRoleID === 1);
-            if(val == undefined || val == null){
-              //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
-              firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
-              firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
-            }
-        }
+        // if(data != undefined && data!=null && data.length > 0){
+        //     let val = data.find(o => o.mrmRoleID === 1);
+        //     if(val == undefined || val == null){
+        //       //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
+        //     }
+        // }
 
 
       });
@@ -450,9 +454,10 @@ class Dashboard extends PureComponent {
   async roleCheckForAdmin (index) {
  
 try{
+
         let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
         let role = "";
-        
+        console.log("roleCheckForAdmin_",responseJson)
         //responseJson.data.members.splice(0,1);
         console.log(
           "Manas",
@@ -473,8 +478,7 @@ try{
           if (
             responseJson.data.members[i].meIsActive &&
             this.props.userReducer.MyAccountID ===
-              responseJson.data.members[i].acAccntID &&
-            responseJson.data.members[i].mrmRoleID === 1 &&
+              responseJson.data.members[i].acAccntID &&            
             parseInt(this.state.assocId) ===
               responseJson.data.members[i].asAssnID
           ) {
@@ -509,6 +513,7 @@ try{
       // });
         }catch(err){
           //alert(err)
+          console.log("ROLECHECK_ERROR",err)
         }
   };
 
@@ -695,7 +700,7 @@ try{
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat);
+    console.log("STAT123", stat,self.state.assocId);
 
     try {
       if (stat && stat.data) {
@@ -838,7 +843,7 @@ try{
 
   getVisitorList = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
       {
         method: "GET",
         headers: {

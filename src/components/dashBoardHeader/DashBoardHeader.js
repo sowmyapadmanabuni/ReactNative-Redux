@@ -58,16 +58,23 @@ class DashBoardHeader extends React.Component {
     };
 
     getRoleName(roleId){
-        switch(roleId){
-          case 1:
-            return "Admin"
-          case 2:
-            return "Owner"
-          case 3:
-            return "Tenant"
-          default:
-            return ""
+      try{
+        roleId = parseInt(roleId);
+        if(roleId<=1){
+          return "Admin"
         }
+        else if(roleId == 2){
+          return "Owner"
+        }
+        else if(roleId >=3){
+          return "Tenant"
+        }
+        else{
+          return "";
+        }
+      }catch(e){
+        return "";
+      }
     }
 
   

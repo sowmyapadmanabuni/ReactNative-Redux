@@ -88,7 +88,7 @@ class Resident extends React.Component {
           base.services.OyeLivingApi.getUnitListByAssoc(associationId)
         );
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
-        console.log('Get the details####', stat)
+        console.log('getMemberList####', stat)
 
         try {
             if (stat) {
@@ -107,7 +107,7 @@ class Resident extends React.Component {
                 }
 
                 let allMembers = [...unitOwner, ...unitTenant];
-
+                console.log("ALLEMEMBERS",allMembers)
                 self.addUnitDetail(allMembers, associationId);
 
 
@@ -134,7 +134,7 @@ class Resident extends React.Component {
                         }
                     }
                 }
-
+                console.log("memberArr",memberArr)
                 self.setState({
                     residentData: memberArr,
                     clonedList: memberArr
