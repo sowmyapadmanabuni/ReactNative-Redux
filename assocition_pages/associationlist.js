@@ -77,7 +77,8 @@ class BlockDetail extends React.Component {
     console.log("Text", text)
     if(text.length === 0){
       this.setState({
-        filteredDataSource: []
+        filteredDataSource: [],
+        searchText: ""
       })
     }else{
       this.setState({
@@ -393,12 +394,7 @@ class BlockDetail extends React.Component {
             </Item>
           </Form>
 
-          {/* <TextInput
-            style={styles.searchTextStyle}
-            placeholder="Search by Country/Name/Pincode..."
-            round
-            onChangeText={this.searchFilterFunction}
-          /> */}
+          
 
           <View style={styles.lineAboveAndBelowFlatList} />
 
