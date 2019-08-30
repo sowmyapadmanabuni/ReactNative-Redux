@@ -6,7 +6,7 @@ import {
   Image,
   Dimensions,
   SafeAreaView,
-  AppState,StatusBar,Platform
+  AppState,StatusBar,Platform,BackHandler
 } from "react-native";
 import {connect, Provider} from "react-redux";
 import SplashScreen from "./splash_screen_pages/SplashScreen";
@@ -217,6 +217,7 @@ const DashStack = createStackNavigator(
 class Loading extends Component {
   constructor(props) {
     super(props);
+    this.onBackPress.bind(this)
   }
 
   componentDidMount() {
@@ -225,6 +226,22 @@ class Loading extends Component {
       this.props.navigation.navigate(signedIn ? "App" : "Auth");
 
     });
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress () {   
+    const { dispatch, nav } = this.props;
+    console.log("Back pressed", nav);
+    const activeRoute = nav.routes[nav.index];
+    if (activeRoute.index === 0) {
+      return false;
+    }
+    dispatch(NavigationActions.back());
+    return true;
   }
 
 

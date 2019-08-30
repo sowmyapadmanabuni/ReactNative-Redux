@@ -722,7 +722,7 @@ class RegisterMe extends Component {
       return o.unUnitID === unitID;
     });
 
-    console.log(matchUnit, "matchUnit");
+    console.log("matchUnit", matchUnit,memberList);
 
     if (matchUnit) {
       if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {

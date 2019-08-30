@@ -176,7 +176,7 @@ class EditProfile extends Component {
 
              if(this.state.isPhotoAvailable){
                     if (Platform.OS === 'android') {
-                        this.deleteImage();
+                       // this.deleteImage();
                     }
                 }
                 console.log("Respo22222:", response);
@@ -215,7 +215,7 @@ class EditProfile extends Component {
   
         })
         .catch(err => {
-          console.error(err)
+          console.error("Stat while deleting image:",err)
         });
     }
 
