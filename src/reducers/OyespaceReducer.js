@@ -26,8 +26,8 @@ const INITIAL_STATE = {
   oyeNonSpecialNameRegex: /[^0-9A-Za-z .]/,
   oyeEmailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   OyeFullName: /^[a-zA-Z ]+$/,
-  mediaupload: mediaUpload,
-  noImage: noImage
+  mediaupload: mediaUpload
+  // noImage: noImage
 };
 
 export default (state = INITIAL_STATE, action) => {
