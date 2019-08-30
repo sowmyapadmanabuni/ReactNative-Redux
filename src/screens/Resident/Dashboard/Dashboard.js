@@ -217,8 +217,14 @@ class Dashboard extends PureComponent {
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+              console.log("MyRole Id not admin",units.mrmRoleID);
+              firebase
+                  .messaging()
+                  .unsubscribeFromTopic(units.asAssnID + "admin");
             } else if (units.mrmRoleID === 1) {
               console.log(units, "units");
+              console.log("MyRole Id is admin",units.mrmRoleID);
+
               if (units.meIsActive) {
                 //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
                 firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
