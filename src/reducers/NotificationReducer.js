@@ -11,7 +11,9 @@ import {
   REFRESH_NOTIFICATION_START,
   REFRESH_NOTIFICATION_FAILED,
   REFRESH_NOTIFICATION_SUCCESS,
-  TOGGLE_COLLAPSIBLE
+  TOGGLE_COLLAPSIBLE,
+  ON_END_START,
+  ON_END_SUCCESS
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -22,7 +24,9 @@ const INITIAL_STATE = {
   newNotifInstance: null,
   count: null,
   receiveNotifications: true,
-  refresh: false
+  refresh: false,
+  page: 1,
+  footerLoading: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -71,6 +75,16 @@ export default (state = INITIAL_STATE, action) => {
     case TOGGLE_COLLAPSIBLE:
       return { ...state, notifications: action.payload };
 
+    case ON_END_START:
+      return { ...state, footerLoading: true };
+
+    case ON_END_SUCCESS:
+      return {
+        ...state,
+        notifications: action.payload,
+        page: action.page,
+        footerLoading: false
+      };
     default:
       return state;
   }

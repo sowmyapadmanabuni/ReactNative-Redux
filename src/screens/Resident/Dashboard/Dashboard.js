@@ -19,6 +19,7 @@ import CardView from "../../../components/cardView/CardView";
 import { Dropdown } from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
@@ -52,7 +53,7 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-
+var counter = 0
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -96,6 +97,23 @@ class Dashboard extends PureComponent {
     });
     this.getListOfAssociation();
     this.myProfileNet();
+    this.listenRoleChange()
+  }
+
+  listenRoleChange(){
+    const {
+      MyAccountID,
+      dropdown
+    } = this.props;
+      let path = 'rolechange/'+MyAccountID;
+      let roleRef =  base.services.frtdbservice.ref(path);
+      //roleRef.off(path);
+      let self = this;
+      roleRef.on('value', function (snapshot) { 
+        //alert(JSON.stringify(snapshot.val()))       
+        self.roleCheckForAdmin(self.state.assocId);
+        self.requestNotifPermission()
+      });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -186,19 +204,24 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");
+        console.log(response, "fetched");        
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
+        firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
         data.map(units => {
-          // console.log(units.mrmRoleID + "role");
-          if (receiveNotifications) {
-            // alert(MyAccountID + "admin");
+
+           console.log( "role_units",units.mrmRoleID);
+          if (receiveNotifications) {            
+             //alert(MyAccountID + "admin");
+            firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
+            //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
             } else if (units.mrmRoleID === 1) {
               console.log(units, "units");
               if (units.meIsActive) {
-                firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
+                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
               } else {
                 firebase
                   .messaging()
@@ -211,10 +234,23 @@ class Dashboard extends PureComponent {
             firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
           }
         });
+
+        // if(data != undefined && data!=null && data.length > 0){
+        //     let val = data.find(o => o.mrmRoleID === 1);
+        //     if(val == undefined || val == null){
+        //       //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
+        //     }
+        // }
+
+
       });
   };
 
   showLocalNotification = notification => {
+
+    try{
     // console.log(notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
@@ -239,21 +275,25 @@ class Dashboard extends PureComponent {
         foreground: true
       })
       .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")
-      .android.setAutoCancel(true)
+      .android.setLargeIcon("ic_notif")      
       .android.setSmallIcon("ic_stat_ic_notification")
       .android.setChannelId("channel_id")
       .android.setVibrate("default")
+      .setSound('default')
       // .android.setChannelId('notification-action')
       .android.setPriority(firebase.notifications.Android.Priority.Max);
 
     firebase.notifications().displayNotification(notificationBuild);
     this.setState({ foregroundNotif: notification._data });
+    }catch(e){
+      console.log("FAILED_NOTIF")
+    }
   };
 
-  listenForNotif = () => {
+  listenForNotif = () => {    
+    if(this.notificationDisplayedListener == undefined || this.notificationDisplayedListener==null){    
     let navigationInstance = this.props.navigation;
-
+      
     this.notificationDisplayedListener = firebase
       .notifications()
       .onNotificationDisplayed(notification => {
@@ -276,6 +316,16 @@ class Dashboard extends PureComponent {
         }
 
         this.showLocalNotification(notification);
+
+        showMessage({
+          message: notification.title,
+          description: notification.body,
+          type: "default",
+          backgroundColor: "#FF9100",
+          onPress: () => {
+            this.props.navigation.navigate("NotificationScreen")
+          },
+        });
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
@@ -349,6 +399,7 @@ class Dashboard extends PureComponent {
       // this.props.getNotifications(oyeURL, MyAccountID);
       this.props.navigation.navigate("NotificationScreen");
     });
+  }
   };
 
   onChangeText = () => {};
@@ -376,7 +427,7 @@ class Dashboard extends PureComponent {
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-
+    
     this.requestNotifPermission();
     // this.props.getNotifications(oyeURL, MyAccountID);
 
@@ -395,7 +446,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-
+    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this)
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
@@ -416,31 +467,23 @@ class Dashboard extends PureComponent {
     );
   }
 
-  roleCheckForAdmin = index => {
-    // console.log("Association id123123123123", this.state.assocId, index);
+  async roleCheckForAdmin (index) {
+ 
+try{
 
-    fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${this.state.assocId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-        }
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
+        let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
+        let role = "";
+        console.log("roleCheckForAdmin_",responseJson)
+        //responseJson.data.members.splice(0,1);
         console.log(
           "Manas",
           responseJson,
-          responseJson.data,
-          responseJson.data.members.length
+          responseJson.data          
         );
-        let role = "";
         for (let i = 0; i < responseJson.data.members.length; i++) {
+          //alert(responseJson.data.members[i].mrmRoleID)
           console.log(
-            "Get Ids",
+            "Get_Ids",
             this.props.userReducer.MyAccountID,
             responseJson.data.members[i].acAccntID,
             this.state.assocId,
@@ -451,17 +494,16 @@ class Dashboard extends PureComponent {
           if (
             responseJson.data.members[i].meIsActive &&
             this.props.userReducer.MyAccountID ===
-              responseJson.data.members[i].acAccntID &&
-            responseJson.data.members[i].mrmRoleID === 1 &&
+              responseJson.data.members[i].acAccntID &&            
             parseInt(this.state.assocId) ===
               responseJson.data.members[i].asAssnID
           ) {
             console.log(
-              "Id eq",
+              "Id_eq",
               this.props.userReducer.MyAccountID,
               responseJson.data.members[i].acAccntID,
               responseJson.data.members[i].mrmRoleID
-            );
+            );            
             role = responseJson.data.members[i].mrmRoleID;
           }
         }
@@ -481,10 +523,14 @@ class Dashboard extends PureComponent {
             console.log("ROLE_UPDATE", role);
           }
         );
-      })
-      .catch(error => {
-        this.setState({ error, loading: false });
-      });
+      // })
+      // .catch(error => {        
+      //   this.setState({ error, loading: false });
+      // });
+        }catch(err){
+          //alert(err)
+          console.log("ROLECHECK_ERROR",err)
+        }
   };
 
   static getAssociationList() {
@@ -670,7 +716,7 @@ class Dashboard extends PureComponent {
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat);
+    console.log("STAT123", stat,self.state.assocId);
 
     try {
       if (stat && stat.data) {
@@ -813,7 +859,7 @@ class Dashboard extends PureComponent {
 
   getVisitorList = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
       {
         method: "GET",
         headers: {

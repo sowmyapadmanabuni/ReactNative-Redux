@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   Alert,
-  Image, SafeAreaView, Dimensions, TouchableOpacity
+  Image,
+  SafeAreaView,
+  Dimensions,
+  TouchableOpacity
 } from "react-native";
 import { Button, Header, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -15,18 +18,105 @@ import { connect } from "react-redux";
 import {
   updateApproveAdmin,
   getNotifications,
-  createUserNotification
+  createUserNotification,
+  storeOpenedNotif,
+  onNotificationOpen
 } from "../../actions";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp
+} from "react-native-responsive-screen";
 
 import _ from "lodash";
+import base from "../../base";
+
 // ("ntJoinStat");
-class NotificationDetailScreen extends Component {
+class NotificationDetailScreen extends PureComponent {
   state = {
     loading: false,
     date: "",
     reqStatus: ""
   };
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    // const details = navigation.getParam("details", "NO-ID");
+    const index = navigation.getParam("index", "NO-ID");
+    const notifications = navigation.getParam("notifications", "NO-ID");
+    const ntid = navigation.getParam("ntid", "NO-ID");
+    const oyeURL = navigation.getParam("oyeURL", "NO-ID");
+    const savedNoifId = navigation.getParam("savedNoifId", "NO-ID");
+    this.props.onNotificationOpen(notifications, index, oyeURL);
+    this.props.storeOpenedNotif(savedNoifId, ntid);
+
+    this.manageJoinRequest();
+  }
+
+  /**
+   * @author
+   * Anooj Krishnan G
+   *
+   * @method
+   * manageJoinRequest: Handles the Unit Join request.
+   *
+   * @description
+   * Request will be handled based on occupancy status of Unit.
+   *
+   * Occuppancy Status is as follows:
+   * 1. Sold Owner Occupied Unit (Only Owner will be there)
+   * 2. Sold Tenant Occupied Unit (Owner & Tenant both)
+   * 3. UnSold Vacant Unit (No Owner & Tenant- vacant)
+   * 4. UnSold Tenant Occupied Unit (Only Tenant)
+   * 5. Sold Vacant Unit ( Owner only but vacant)
+   *
+   * Approve/Replace option must be visible for 1, 2,
+   * (4 if request is as tenant)
+   * & ( 5 if request is as owner)
+   *
+   * Rest of the cases will be handled in normal accept/reject method
+   *
+   */
+  async manageJoinRequest() {
+    try {
+      const { navigation } = this.props;
+      const details = navigation.getParam("details", "NO-ID");
+      const role = details.sbRoleID;
+      base.utils.logger.logArgs("NotificationDetailScreen", details);
+      //if(details != undefined && details.ntType == "Join" && details.ntJoinStat == "" && details.ntIsActive){
+      this.setState({ loading: true });
+      const response = await base.services.OyeLivingApi.getUnitDetailByUnitId(
+        details.sbUnitID
+      );
+      this.setState({ loading: false });
+      base.utils.logger.logArgs("NotificationDetailScreen2", response);
+      if (response.success && response.data.unit != undefined) {
+        let unitInfo = response.data.unit;
+        if (
+          unitInfo.unOcStat == base.utils.strings.SOLD_OWNER_OCCUPIED_UNIT ||
+          unitInfo.unOcStat == base.utils.strings.SOLD_TENANT_OCCUPIED_UNIT
+        ) {
+          this.showAppendReplaceUI(details, unitInfo, role);
+        } else if (
+          unitInfo.unOcStat == base.utils.strings.UNSOLD_TENANT_OCCUPIED_UNIT &&
+          role == base.utils.strings.USER_TENANT
+        ) {
+        } else if (
+          unitInfo.unOcStat == base.utils.strings.SOLD_VACANT_UNIT &&
+          role == base.utils.strings.USER_OWNER
+        ) {
+        }
+      } else {
+        base.utils.logger.logArgs("manageJoinRequest", "No Active Request");
+      }
+      // else{
+      // }
+    } catch (e) {
+      base.utils.logger.logArgs(e);
+    }
+  }
+
+  showAppendReplaceUI(notification, unitInfo, accessedRole) {}
 
   approve = (item, status) => {
     const { oyeURL } = this.props;
@@ -132,9 +222,7 @@ class NotificationDetailScreen extends Component {
                 .then(response => response.json())
                 .then(responseJson => {
                   fetch(
-                    `http://${
-                      this.props.oyeURL
-                    }/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
+                    `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
                     {
                       method: "POST",
                       headers: {
@@ -157,9 +245,7 @@ class NotificationDetailScreen extends Component {
                       };
 
                       fetch(
-                        `http://${
-                          this.props.oyeURL
-                        }/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
+                        `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
                         {
                           method: "POST",
                           headers: {
@@ -270,9 +356,7 @@ class NotificationDetailScreen extends Component {
       };
       axios
         .get(
-          `http://${
-            this.props.oyeURL
-          }/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
+          `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
           {
             headers: {
               "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
@@ -284,11 +368,7 @@ class NotificationDetailScreen extends Component {
           let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
           axios
             .get(
-              `http://${
-                this.props.oyeURL
-              }/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${
-                item.sbMemID
-              }`,
+              `http://${this.props.oyeURL}/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${item.sbMemID}`,
               {
                 headers: {
                   "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
@@ -591,50 +671,49 @@ class NotificationDetailScreen extends Component {
           backgroundColor="#fff"
         /> */}
 
-
-        <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
-              <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
-                <View style={styles.viewDetails1}>
-                  <TouchableOpacity
-                      onPress={() => {
-                        this.props.navigation.goBack()
-                      }}
-                  >
-                    <View
-                        style={{
-                          height: hp("4%"),
-                          width: wp("15%"),
-                          alignItems: "flex-start",
-                          justifyContent: "center"
-                        }}
-                    >
-                      <Image
-                          resizeMode="contain"
-                          source={require("../../../icons/back.png")}
-                          style={styles.viewDetails2}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
+        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
+          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
                 <View
-                    style={{
-                      width:'35%',
-                      justifyContent: "center",
-                      alignItems: "center"
-                    }}
+                  style={{
+                    height: hp("4%"),
+                    width: wp("15%"),
+                    alignItems: "flex-start",
+                    justifyContent: "center"
+                  }}
                 >
                   <Image
-                      style={[styles.image]}
-                      source={require("../../../icons/headerLogo.png")}
+                    resizeMode="contain"
+                    source={require("../../../icons/back.png")}
+                    style={styles.viewDetails2}
                   />
                 </View>
-                <View style={{width:'35%'}}>
-                  {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-                </View>
-              </View>
-              <View style={{borderWidth: 1, borderColor: "orange"}}/>
-            </SafeAreaView>
-            <Text style={styles.titleStyle}> {details.ntDesc} </Text>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                width: "35%",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                style={[styles.image]}
+                source={require("../../../icons/headerLogo.png")}
+              />
+            </View>
+            <View style={{ width: "35%" }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+        </SafeAreaView>
+        <Text style={styles.titleStyle}> {details.ntDesc} </Text>
         {details.ntType === "Join_Status" ? null : this.renderButton()}
       </View>
     );
@@ -650,19 +729,19 @@ const styles = StyleSheet.create({
   viewStyle1: {
     backgroundColor: "#fff",
     height: hp("7%"),
-    width: '100%',
+    width: "100%",
     shadowColor: "#000",
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
     position: "relative"
   },
   viewDetails1: {
-    width:'30%',
+    width: "30%",
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    marginLeft:10
+    marginLeft: 10
   },
   viewDetails2: {
     alignItems: "flex-start",
@@ -696,11 +775,18 @@ const mapStateToProps = state => {
     approvedAdmins: state.AppReducer.approvedAdmins,
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyeURL: state.OyespaceReducer.oyeURL,
-    MyAccountID: state.UserReducer.MyAccountID
+    MyAccountID: state.UserReducer.MyAccountID,
+    page: state.NotificationReducer.page
   };
 };
 
 export default connect(
   mapStateToProps,
-  { updateApproveAdmin, getNotifications, createUserNotification }
+  {
+    updateApproveAdmin,
+    getNotifications,
+    createUserNotification,
+    onNotificationOpen,
+    storeOpenedNotif
+  }
 )(NotificationDetailScreen);

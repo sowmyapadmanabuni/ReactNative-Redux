@@ -31,6 +31,8 @@ class BlockDetail extends React.Component {
       isLoading: true,
       dataSource: [],
       filteredDataSource: [],
+      city:"",
+      filteredArr:[],
       query: "",
       loading: false,
       error: null,
@@ -40,12 +42,14 @@ class BlockDetail extends React.Component {
   }
 
   componentDidMount() {
-    this.myJoinAssociationListGetData();
+    // this.myJoinAssociationListGetData();
+    console.log("City Name:", this.props.navigation.state.params.id)
     setTimeout(() => {
       this.setState({
-        isLoading: false
-      });
-    }, 3000);
+        isLoading: false,
+        city:this.props.navigation.state.params.id
+      },()=>this.myJoinAssociationListGetData());
+    }, 1000);
 
   }
 
@@ -63,20 +67,26 @@ class BlockDetail extends React.Component {
   // };
 
   searchFilterFunction = text => {
-    const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.asCountry.toUpperCase()} ${item.asAsnName.toUpperCase()} ${item.asPinCode.toUpperCase()}`;
-      const textData = text.toUpperCase();
+    // const newData = this.arrayholder.filter(item => {
+    //   const itemData = `${item.asCountry.toUpperCase()} ${item.asAsnName.toUpperCase()} ${item.asPinCode.toUpperCase()}`;
+    //   const textData = text.toUpperCase();
 
-      return itemData.indexOf(textData) > -1;
-    });
+    //   return itemData.indexOf(textData) > -1;
+    // });
     let filteredArray = [];
+    console.log("Text", text)
+    let newData = this.state.filteredArr
+    console.log("kjsnak", newData)
     if (text.length === 0) {
       this.setState({
         filteredDataSource: []
       })
     } else {
       for (let i in newData) {
-        filteredArray.push(newData[i])
+        if(text.toUpperCase().includes(newData[i].asAsnName.toUpperCase())){
+          console.log("New Data",newData[i])
+          filteredArray.push(newData[i])
+        }
       }
     }
     this.setState({
@@ -120,19 +130,25 @@ class BlockDetail extends React.Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
-
+        console.log("Response Json",responseJson);
+        let arr = []
+        let self = this;
+        for(let i in responseJson.data.associations){
+          // console.log("i is:", i)
+          if(self.state.city === responseJson.data.associations[i].asPinCode.substring(0,2)){
+            console.log("City Wise Associations",responseJson.data.associations[i])
+            console.log("Pin Code",responseJson.data.associations[i].asPinCode.substring(0,2) )
+            arr.push(responseJson.data.associations[i])
+          }
+        }
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.associations,
+          filteredArr:arr,
           error: responseJson.error || null,
           loading: false
         });
         this.arrayholder = responseJson.data.associations;
-        console.log(
-          this.state.dataSource,
-          "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-        );
       })
       .catch(error => {
         this.setState({ error, loading: false });
@@ -166,21 +182,21 @@ class BlockDetail extends React.Component {
                 }}
               >
                 {/* <TouchableOpacity
-                  onPress={() => {
-                    // console.log(item)
-                    console.log(item, "kjhgfhiljkhgfdsghjkhgfg");
-
-                    this.props.navigation.navigate("EditAssociation", {
-                      associationDetails: item,
-                      associationDetails1: item.asCountry
-                    });
-                  }}
-                >
-                  <Image
-                    style={styles.pencilBtnStyle}
-                    source={require("../icons/pencil120.png")}
-                  />
-                </TouchableOpacity> */}
+                      onPress={() => {
+                        // console.log(item)
+                        console.log(item, "kjhgfhiljkhgfdsghjkhgfg");
+    
+                        this.props.navigation.navigate("EditAssociation", {
+                          associationDetails: item,
+                          associationDetails1: item.asCountry
+                        });
+                      }}
+                    >
+                      <Image
+                        style={styles.pencilBtnStyle}
+                        source={require("../icons/pencil120.png")}
+                      />
+                    </TouchableOpacity> */}
               </View>
             </View>
             <View style={styles.blockTypeFlexStyle}>
@@ -225,6 +241,8 @@ class BlockDetail extends React.Component {
                     this.setState({
                       dataSource: [],
                       arrayholder: [],
+                      filteredDataSource: [],
+                      filteredArr:[],
                       searchText: ''
                     })
                   }}
@@ -242,6 +260,7 @@ class BlockDetail extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    console.log("I is......", this.props.navigation.state.params.name)
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>

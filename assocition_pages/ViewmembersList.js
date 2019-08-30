@@ -65,7 +65,12 @@ class Resident extends React.Component {
     }
 
     componentWillMount() {
-        this.getMemberList();
+        this.getMemberList();        
+    }
+
+    componentDidMount(){
+        
+        
     }
 
     static navigationOptions = {
@@ -84,7 +89,7 @@ class Resident extends React.Component {
           base.services.OyeLivingApi.getUnitListByAssoc(associationId)
         );
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
-        console.log('Get the details####', stat)
+        console.log('getMemberList####', stat)
 
         try {
             if (stat) {
@@ -103,9 +108,7 @@ class Resident extends React.Component {
                 }
 
                 let allMembers = [...unitOwner, ...unitTenant];
-
-                console.log("FONREONKRVNRKVNLJRV;",allMembers)
-
+                console.log("ALLEMEMBERS",allMembers)
                 self.addUnitDetail(allMembers, associationId);
 
 
@@ -134,7 +137,7 @@ class Resident extends React.Component {
                         }
                     }
                 }
-
+                console.log("memberArr",memberArr)
                 self.setState({
                     residentData: memberArr,
                     clonedList: memberArr,
@@ -149,13 +152,39 @@ class Resident extends React.Component {
 
     }
 
+    async updateRolesFRTDB(user, roleId){
+                
+        var dbref = base.services.frtdbservice.ref('rolechange/'+user.acAccntID);
+        dbref.set({            
+            associationID:user.asAssnID,
+            unit:user.unUnitID,
+            role:roleId,
+            user:user.acAccntID
+        }).then((data)=>{
+            //success callback
+            console.log('data ' , data)
+        }).catch((error)=>{
+            //error callback
+            console.log('error ' , error)
+        })
+        // let obj = {
+        //     sbSubID: ""+user.acAccntID+""+user.unUnitID+"usernotif",
+        //     ntTitle: "Role Changed",
+        //     ntDesc:
+        //       "Your role in unit has been changed",
+        //     ntType: "Role_Change",
+        //     associationID: user.asAssnID
+        //   }
+        // console.log("sendRoleNotification",obj)
+        // let notification = await base.services.residentfcmservice.sendUniqueResidentPN(obj)
+        // console.log("notificationResp",notification);
+    }
 
     changeRole = (title, message) => {
         try {
         
                 const {getDashUnits, selectedAssociation} = this.props;
-                console.log('Props in role managment', this.props);
-
+                console.log('Props in role managment', this.props);                
                 const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
                 console.log("selectedUser:", this.state.selectedUser); //+91
 
@@ -190,6 +219,7 @@ class Resident extends React.Component {
                     .then(response => response.json())
                     .then(responseJson => {
                         console.log("%%%%%%%%%%", responseJson, requestBody);
+                        this.updateRolesFRTDB(this.state.selectedUser,this.state.selectedRoleData.selRolId)
                         this.props.navigation.goBack();
                     })
                     .catch(error => {

@@ -13,6 +13,8 @@ export const REFRESH_NOTIFICATION_START = "refresh_notification_start";
 export const REFRESH_NOTIFICATION_SUCCESS = "refresh_notification_success";
 export const REFRESH_NOTIFICATION_FAILED = "refresh_notification_failed";
 export const TOGGLE_COLLAPSIBLE = "toggle_collapsible";
+export const ON_END_START = "on_end_start";
+export const ON_END_SUCCESS = "on_end_success";
 // export const ON_NOTIFICATION_REFRESH = 'on_notification_refresh';
 
 // App Reducer
