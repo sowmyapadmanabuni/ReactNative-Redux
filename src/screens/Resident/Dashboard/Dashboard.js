@@ -522,6 +522,8 @@ try{
             console.log("ROLE_UPDATE", role);
           }
         );
+          this.checkUnitIsThere();
+
       // })
       // .catch(error => {        
       //   this.setState({ error, loading: false });
@@ -768,7 +770,7 @@ try{
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
     self.checkUnitIsThere();
-    self.getVehicleList();
+    //self.getVehicleList();
   }
 
   getVehicleList = unitId => {

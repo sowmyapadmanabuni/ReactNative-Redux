@@ -75,7 +75,7 @@ class MyFamilyEdit extends Component {
       lastName: this.props.navigation.state.params.fmlName,
       mobileNumber: this.props.navigation.state.params.fmMobile, //myFamilyMobileNo
       relationName:this.props.navigation.state.params.fmRltn,
-      relativeImage:this.props.navigation.state.params.fmImgName !=='' ? "http://mediaupload.oyespace.com/" +this.props.navigation.state.params.fmImgName:'',
+      relativeImage:this.props.navigation.state.params.fmImgName !=='' ? "http://mediaupload.oyespace.com/" +this.props.navigation.state.params.fmImgName:  "http://mediaupload.oyespace.com/"+base.utils.strings.noImageCapturedPlaceholder,
        isMinor:this.props.navigation.state.params.fmMinor,
        guardianName:this.props.navigation.state.params.fmGurName,
         cCode:this.props.navigation.state.params.fmisdCode,
@@ -91,7 +91,7 @@ class MyFamilyEdit extends Component {
     return (
       <View style={Style.container}>
 
-<SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+ <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
             <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
               <View style={Style.viewDetails1}>
                 <TouchableOpacity
@@ -141,14 +141,9 @@ class MyFamilyEdit extends Component {
 <KeyboardAwareScrollView>
             <View style={Style.subContainer}>
               <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
-                {this.state.relativeImage ==='' ?
-                    <Image style={{height: 40, width: 40, alignSelf: 'center'}}
-                           source={require('../../../../../icons/camera.png')}
-                    />
-                    :
-                    <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
+                  <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
                            source={{uri:this.state.relativeImage}}/>
-                }
+
               </TouchableOpacity>
             </View>
             <View style={Style.famTextView}>
@@ -560,7 +555,7 @@ class MyFamilyEdit extends Component {
       "FMID":self.props.navigation.state.params.fmid
     };
     let stat = await base.services.OyeSafeApiFamily.myFamilyEditMember(input)
-    console.log('Stat in Add family', stat)
+    console.log('Stat in Edit family', stat,input)
     if (stat.success) {
       try {
         if(self.state.isPhotoAvailable) {

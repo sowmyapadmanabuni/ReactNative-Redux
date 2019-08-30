@@ -132,11 +132,11 @@ class MyFamily extends Component {
                     <View style={Style.subContainer}>
                         <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                             {this.state.relativeImage === '' ?
-                                <Image style={{ height: 40, width: 40, alignSelf: 'center' }}
-                                    source={require('../../../../../icons/camera.png')}
+                                <Image style={{ height: 40, width: 40,borderRadius:20, alignSelf: 'center' }}
+                                       source={{ uri:"https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                 />
                                 :
-                                <Image style={{ height: 90, width: 90, borderRadius: 45, alignSelf: 'center' }}
+                                <Image style={{ height: 85, width: 85, borderRadius: 85/2, alignSelf: 'center' }}
                                     source={{ uri: this.state.relativeImage }} />
                             }
                         </TouchableOpacity>
