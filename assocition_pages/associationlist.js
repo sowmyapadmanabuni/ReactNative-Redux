@@ -251,7 +251,7 @@ class BlockDetail extends React.Component {
                       arrayholder: [],
                       filteredDataSource: [],
                       filteredArr: [],
-                      searchText: ''
+                      searchText: ""
                     })
                   }}
                 >
@@ -266,13 +266,7 @@ class BlockDetail extends React.Component {
     );
   };
 
-  renderItem1 = ({ item }) => {
-    return (
-      <View>
-
-      </View>
-    );
-  };
+  
 
   render() {
     const { navigate } = this.props.navigation;
@@ -388,7 +382,7 @@ class BlockDetail extends React.Component {
           <Form style={styles.formSearch}>
             <Item style={styles.inputItem}>
               <Input
-                // value={this.state.searchText}
+                value={this.state.searchText}
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
                 multiline={false}
