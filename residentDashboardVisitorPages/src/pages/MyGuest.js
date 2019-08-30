@@ -407,7 +407,7 @@ class MyGuests extends Component {
 
     if (this.state.isLoading) {
       return (
-        <View style={styles.contaianer}>
+        <View style={styles.container}>
           {/* <Header /> */}
 
           {/* <Text style={styles.titleOfScreen}>My Guests</Text> */}
@@ -577,7 +577,7 @@ class MyGuests extends Component {
 }
 
 const styles = StyleSheet.create({
-  contaianer: {
+  container: {
     flex: 1,
     backgroundColor: "#fff",
     flexDirection: "column"
