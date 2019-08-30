@@ -8,14 +8,11 @@ const isSecure = true;
 
 const isMandatory = " is required";
 
-
 const api = {
   oyeSafeApiDomainFamily: isDev
     ? "api.oyespace.com/oyesafe/api/v1/"
     : "api.oyespace.com/oyesafe/api/v1/",
-  oyeSafeDomain: isDev
-    ? "api.oyespace.com/oye247"
-    : "api.oyespace.com/oye247",
+  oyeSafeDomain: isDev ? "api.oyespace.com/oye247" : "api.oyespace.com/oye247",
   oyeDomain: isDev
     ? "api.oyespace.com/oyeliving"
     : "api.oyespace.com/oyeliving",
@@ -29,28 +26,25 @@ const api = {
   GATE_CLOUD_FUNCTION_URL:
     "https://us-central1-oyespace-b7e2d.cloudfunctions.net"
 
-
-//PRODUCTION
-// oyeSafeApiDomainFamily: isDev
-//     ? "api.oyespace.com/oyesafe/api/v1/"
-//     : "api.oyespace.com/oyesafe/api/v1/",
-//   oyeSafeDomain: isDev
-//     ? "api.oyespace.com/oye247"
-//     : "api.oyespace.com/oye247",
-//   oyeDomain: isDev
-//     ? "api.oyespace.com/oyeliving"
-//     : "api.oyespace.com/oyeliving",
-//   oyeLivingDomain: isDev ? "api.oyespace.com" : "OyeLivingApi.oyespace.com",
-//   protocol: isSecure ? "https://" : "http://",
-//   oyeSafeApiPath: "/api/v1/",
-//   oyeLivingApiPath: "/oyeliving/OyeLivingApi/v1/",
-//   oyeSafeKey: "7470AD35-D51C-42AC-BC21-F45685805BBE",
-//   oyeLivingKey: "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-//   CLOUD_FUNCTION_URL: "https://us-central1-oyespace-dc544.cloudfunctions.net",
-//   GATE_CLOUD_FUNCTION_URL:
-//     "https://us-central1-oyespace-b7e2d.cloudfunctions.net"
-
-
+  //PRODUCTION
+  // oyeSafeApiDomainFamily: isDev
+  //     ? "api.oyespace.com/oyesafe/api/v1/"
+  //     : "api.oyespace.com/oyesafe/api/v1/",
+  //   oyeSafeDomain: isDev
+  //     ? "api.oyespace.com/oye247"
+  //     : "api.oyespace.com/oye247",
+  //   oyeDomain: isDev
+  //     ? "api.oyespace.com/oyeliving"
+  //     : "api.oyespace.com/oyeliving",
+  //   oyeLivingDomain: isDev ? "api.oyespace.com" : "OyeLivingApi.oyespace.com",
+  //   protocol: isSecure ? "https://" : "http://",
+  //   oyeSafeApiPath: "/api/v1/",
+  //   oyeLivingApiPath: "/oyeliving/OyeLivingApi/v1/",
+  //   oyeSafeKey: "7470AD35-D51C-42AC-BC21-F45685805BBE",
+  //   oyeLivingKey: "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+  //   CLOUD_FUNCTION_URL: "https://us-central1-oyespace-dc544.cloudfunctions.net",
+  //   GATE_CLOUD_FUNCTION_URL:
+  //     "https://us-central1-oyespace-b7e2d.cloudfunctions.net"
 };
 
 //const imageUrl = "https://mediauploaddev.oyespace.com/Images/"  //Development
