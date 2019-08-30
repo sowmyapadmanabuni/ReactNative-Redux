@@ -51,36 +51,8 @@ class EditProfile extends Component {
             alterMobNum:"",
             alterCCode:"",
             profileName:"",
-
-
-
-
-
-            FirstName: "",
-            LastName: "",
-
-            MobileNumber: "",
-            AlternateMobileNumber: "",
-            cca2: "",
-            cca3: "",
-            callingCode: "",
-            callingCode1: "",
-            countryName1: "",
-
-            Email: "",
-            AlternateEmail: "",
-
-            Image: "",
-            countryName: "",
-
-            // cca2: "",
-            // callingCode: "",
-            data1: [],
-            photo: null,
-            photoDetails: null,
             isPhotoAvailable: false,
-            filePath: '',
-            imagePath: ''
+
         }
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
 
@@ -139,11 +111,12 @@ class EditProfile extends Component {
         let source = (Platform.OS === 'ios') ? response.uri : response.uri;
         const form = new FormData();
         let imgObj = {
-            name: (response.fileName !== undefined) ? response.fileName : "XXXXX.jpg",
+            name: (response.fileName !== undefined) ? response.fileName : "XXXXX.JPG",
             uri: source,
             type: (response.type !== undefined || response.type != null) ? response.type : "image/jpeg"
         };
         form.append('image', imgObj)
+        console.log("Image upload before",response)
         let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
         console.log('Photo upload response', stat,response)
         if (stat) {
@@ -162,7 +135,7 @@ class EditProfile extends Component {
 
 
     async updateProfile() {
-        console.log("Alternate data",this.state)
+        console.log("Alternate data",this.state,this.props)
 
         axios
             .post(
@@ -199,13 +172,15 @@ class EditProfile extends Component {
             )
 
             .then(response => {
-                if(this.state.isPhotoAvailable){
+                console.log("Respo1111:", response);
+
+             if(this.state.isPhotoAvailable){
                     if (Platform.OS === 'android') {
                         this.deleteImage();
                     }
                 }
+                console.log("Respo22222:", response);
 
-                
                 updateUserInfo({ prop: "MyEmail", value: this.state.primaryEmail });
                 updateUserInfo({
                   prop: "MyMobileNumber",
@@ -221,10 +196,9 @@ class EditProfile extends Component {
                 });
                 
                 this.props.navigation.goBack();
-                console.log("Respo:", response);
             })
             .catch(error => {
-                console.log(error)
+                console.log("Crash in profile",error)
             })
 
     }
@@ -304,7 +278,7 @@ class EditProfile extends Component {
 
     render() {
 
-        console.log('AGHGHGHGH',this.state,this.state.myProfileImage)
+        console.log('AGHGHGHGH',this.state,this.state.myProfileImage,this.props)
         console.log("My Account Id", this.props.MyAccountID)
         return (
             <TouchableWithoutFeedback
@@ -469,7 +443,7 @@ class EditProfile extends Component {
                                                     }}
                                                     //cca2={this.state.cca2}
                                                     cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                    flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    flag={this.state.primeCName === "" || this.state.primeCName=== "+91" ? 'IN' : this.state.primeCName}
                                                     translation="eng"
                                                 />
                                             </View>
@@ -526,7 +500,7 @@ class EditProfile extends Component {
                                                         })
                                                     }}
                                                     cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
+                                                    flag={this.state.alterCName === "" || this.state.alterCName === "+91"  ? 'IN' : this.state.alterCName}
                                                     translation="eng"
                                                 />
                                             </View>

@@ -19,6 +19,7 @@ import CardView from "../../../components/cardView/CardView";
 import { Dropdown } from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
@@ -52,7 +53,7 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-
+var counter = 0
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -96,20 +97,31 @@ class Dashboard extends PureComponent {
     });
     this.getListOfAssociation();
     this.myProfileNet();
-    this.listenRoleChange();
+    this.listenRoleChange()
   }
 
-  listenRoleChange() {
-    const { MyAccountID, dropdown } = this.props;
-    let path = "rolechange/" + MyAccountID;
-    let roleRef = base.services.frtdbservice.ref(path);
-    //roleRef.off(path);
-    let self = this;
-    roleRef.on("value", function(snapshot) {
-      //alert(JSON.stringify(snapshot.val()))
-      self.roleCheckForAdmin(self.state.assocId);
-      self.requestNotifPermission();
-    });
+  listenRoleChange(){
+    const {
+      MyAccountID,
+      dropdown
+    } = this.props;
+      let path = 'rolechange/'+MyAccountID;
+      let roleRef =  base.services.frtdbservice.ref(path);
+      //roleRef.off(path);
+      let self = this;
+      roleRef.on('value', function (snapshot) { 
+        //alert(JSON.stringify(snapshot.val()))       
+        self.roleCheckForAdmin(self.state.assocId);
+        self.requestNotifPermission()
+      });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // return (
+    return (
+      !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
+    );
+    // );
   }
 
   componentDidUpdate() {
@@ -192,26 +204,24 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");
+        console.log(response, "fetched");        
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
-        firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
         data.map(units => {
-          // console.log(units.mrmRoleID + "role");
-          if (receiveNotifications) {
-            //alert(MyAccountID + "admin");
-            firebase
-              .messaging()
-              .subscribeToTopic(
-                "" + MyAccountID + units.unUnitID + "usernotif"
-              );
+
+           console.log( "role_units",units.mrmRoleID);
+          if (receiveNotifications) {            
+             //alert(MyAccountID + "admin");
+            firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
             } else if (units.mrmRoleID === 1) {
               console.log(units, "units");
               if (units.meIsActive) {
-                firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
+                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
               } else {
                 firebase
                   .messaging()
@@ -225,18 +235,22 @@ class Dashboard extends PureComponent {
           }
         });
 
-        if (data != undefined && data != null && data.length > 0) {
-          let val = data.find(o => o.mrmRoleID === 1);
-          if (val == undefined || val == null) {
-            //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
-            firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
-            firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
-          }
-        }
+        // if(data != undefined && data!=null && data.length > 0){
+        //     let val = data.find(o => o.mrmRoleID === 1);
+        //     if(val == undefined || val == null){
+        //       //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
+        //     }
+        // }
+
+
       });
   };
 
   showLocalNotification = notification => {
+
+    try{
     // console.log(notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
@@ -261,21 +275,25 @@ class Dashboard extends PureComponent {
         foreground: true
       })
       .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")
-      .android.setAutoCancel(true)
+      .android.setLargeIcon("ic_notif")      
       .android.setSmallIcon("ic_stat_ic_notification")
       .android.setChannelId("channel_id")
       .android.setVibrate("default")
+      .setSound('default')
       // .android.setChannelId('notification-action')
       .android.setPriority(firebase.notifications.Android.Priority.Max);
 
     firebase.notifications().displayNotification(notificationBuild);
     this.setState({ foregroundNotif: notification._data });
+    }catch(e){
+      console.log("FAILED_NOTIF")
+    }
   };
 
-  listenForNotif = () => {
+  listenForNotif = () => {    
+    if(this.notificationDisplayedListener == undefined || this.notificationDisplayedListener==null){    
     let navigationInstance = this.props.navigation;
-
+      
     this.notificationDisplayedListener = firebase
       .notifications()
       .onNotificationDisplayed(notification => {
@@ -289,15 +307,25 @@ class Dashboard extends PureComponent {
     this.notificationListener = firebase
       .notifications()
       .onNotification(notification => {
-        // console.log("___________");
-        // console.log(notification);
-        // console.log("____________");
+        console.log("___________");
+        console.log(notification);
+        console.log("____________");
 
         if (notification._data.associationID) {
           // this.props.createNotification(notification._data, navigationInstance, false)
         }
 
         this.showLocalNotification(notification);
+
+        showMessage({
+          message: notification.title,
+          description: notification.body,
+          type: "default",
+          backgroundColor: "#FF9100",
+          onPress: () => {
+            this.props.navigation.navigate("NotificationScreen")
+          },
+        });
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
@@ -305,19 +333,18 @@ class Dashboard extends PureComponent {
       const { oyeURL } = this.props.oyespaceReducer;
       let details = notificationOpen.notification._data;
       if (notificationOpen.notification._data.admin === "true") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        // if (notificationOpen.action) {
-        //   // this.props.newNotifInstance(notificationOpen.notification);
-        //   // this.props.createNotification(
-        //   //   notificationOpen.notification._data,
-        //   //   navigationInstance,
-        //   //   true,
-        //   //   "true",
-        //   //   this.props.oyeURL,
-        //   //   this.props.MyAccountID
-        //   // );
-        //   // this.props.createNotification(notificationOpen.notification)
-        // }
+        if (notificationOpen.action) {
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+          // this.props.createNotification(notificationOpen.notification)
+        }
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
@@ -343,17 +370,17 @@ class Dashboard extends PureComponent {
 
       if (notificationOpen.notification._data.admin === "true") {
         this.props.refreshNotifications(oyeURL, MyAccountID);
-        // if (notificationOpen.notification._data.foreground) {
-        //   // this.props.newNotifInstance(notificationOpen.notification);
-        //   // this.props.createNotification(
-        //   //   notificationOpen.notification._data,
-        //   //   navigationInstance,
-        //   //   true,
-        //   //   "true",
-        //   //   this.props.oyeURL,
-        //   //   this.props.MyAccountID
-        //   // );
-        // }
+        if (notificationOpen.notification._data.foreground) {
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+        }
       } else if (notificationOpen.notification._data.admin === "gate_app") {
         this.props.refreshNotifications(oyeURL, MyAccountID);
         // this.props.newNotifInstance(notificationOpen.notification);
@@ -372,6 +399,7 @@ class Dashboard extends PureComponent {
       // this.props.getNotifications(oyeURL, MyAccountID);
       this.props.navigation.navigate("NotificationScreen");
     });
+  }
   };
 
   onChangeText = () => {};
@@ -394,21 +422,17 @@ class Dashboard extends PureComponent {
       getDashAssociation,
       getAssoMembers,
       getDashSub,
-      getDashAssoSync,
-      selectedDropdown,
-      selectedDropdown1
+      getDashAssoSync
     } = this.props;
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-
+    
     this.requestNotifPermission();
-
-    // alert(selectedDropdown1, "drop");
     // this.props.getNotifications(oyeURL, MyAccountID);
 
     // getDashSub(oyeURL, SelectedAssociationID);
-    getDashAssoSync(oyeURL, MyAccountID, selectedDropdown, selectedDropdown1);
+    getDashAssoSync(oyeURL, MyAccountID);
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
   };
@@ -422,7 +446,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
+    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this)
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
@@ -439,70 +463,74 @@ class Dashboard extends PureComponent {
         this.syncData();
         // alert("hererereerrrereer");
       },
-      3000
+      5000
     );
   }
 
-  async roleCheckForAdmin(index) {
-    try {
-      let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
-        this.state.assocId
-      );
-      let role = "";
+  async roleCheckForAdmin (index) {
+ 
+try{
 
-      //responseJson.data.members.splice(0,1);
-      console.log("Manas", responseJson, responseJson.data);
-      for (let i = 0; i < responseJson.data.members.length; i++) {
-        //alert(responseJson.data.members[i].mrmRoleID)
+        let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
+        let role = "";
+        console.log("roleCheckForAdmin_",responseJson)
+        //responseJson.data.members.splice(0,1);
         console.log(
-          "Get_Ids",
-          this.props.userReducer.MyAccountID,
-          responseJson.data.members[i].acAccntID,
-          this.state.assocId,
-          responseJson.data.members[i].asAssnID,
-          responseJson.data.members[i].mrmRoleID,
-          responseJson.data.members[i].unUniName + "name"
+          "Manas",
+          responseJson,
+          responseJson.data          
         );
-        if (
-          responseJson.data.members[i].meIsActive &&
-          this.props.userReducer.MyAccountID ===
-            responseJson.data.members[i].acAccntID &&
-          responseJson.data.members[i].mrmRoleID === 1 &&
-          parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
-        ) {
+        for (let i = 0; i < responseJson.data.members.length; i++) {
+          //alert(responseJson.data.members[i].mrmRoleID)
           console.log(
-            "Id_eq",
+            "Get_Ids",
             this.props.userReducer.MyAccountID,
             responseJson.data.members[i].acAccntID,
-            responseJson.data.members[i].mrmRoleID
+            this.state.assocId,
+            responseJson.data.members[i].asAssnID,
+            responseJson.data.members[i].mrmRoleID,
+            responseJson.data.members[i].unUniName + "name"
           );
-          role = responseJson.data.members[i].mrmRoleID;
+          if (
+            responseJson.data.members[i].meIsActive &&
+            this.props.userReducer.MyAccountID ===
+              responseJson.data.members[i].acAccntID &&            
+            parseInt(this.state.assocId) ===
+              responseJson.data.members[i].asAssnID
+          ) {
+            console.log(
+              "Id_eq",
+              this.props.userReducer.MyAccountID,
+              responseJson.data.members[i].acAccntID,
+              responseJson.data.members[i].mrmRoleID
+            );            
+            role = responseJson.data.members[i].mrmRoleID;
+          }
         }
-      }
-
-      console.log(role, "role");
-      this.setState(
-        {
-          role: role
-        },
-        () => {
-          const { updateuserRole } = this.props;
-          console.log("Role123456:", updateuserRole);
-          updateuserRole({
-            prop: "role",
-            value: role
-          });
-          console.log("ROLE_UPDATE", role);
-        }
-      );
+        console.log(role, "role");
+        this.setState(
+          {
+            role: role
+          },
+          () => {
+            const { updateuserRole } = this.props;
+            console.log("Role123456:", updateuserRole);
+            updateuserRole({
+              prop: "role",
+              value: role
+            });
+            console.log("ROLE_UPDATE", role);
+          }
+        );
       // })
-      // .catch(error => {
+      // .catch(error => {        
       //   this.setState({ error, loading: false });
       // });
-    } catch (err) {
-      //alert(err)
-    }
-  }
+        }catch(err){
+          //alert(err)
+          console.log("ROLECHECK_ERROR",err)
+        }
+  };
 
   static getAssociationList() {
     this.getAssociationList();
@@ -661,7 +689,7 @@ class Dashboard extends PureComponent {
   checkUnitIsThere() {
     const { dropdown1 } = this.props;
     console.log(
-      "CheckUnit;s is there",
+      "CheckUnit;s is there",this.props,
       this.props.dashBoardReducer.uniID,
       dropdown1,
       dropdown1.length
@@ -687,7 +715,7 @@ class Dashboard extends PureComponent {
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat);
+    console.log("STAT123", stat,self.state.assocId);
 
     try {
       if (stat && stat.data) {
@@ -715,8 +743,6 @@ class Dashboard extends PureComponent {
         // });
 
         self.roleCheckForAdmin(this.state.assocId);
-        self.checkUnitIsThere();
-        self.getVehicleList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -830,7 +856,7 @@ class Dashboard extends PureComponent {
 
   getVisitorList = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
       {
         method: "GET",
         headers: {
@@ -878,6 +904,10 @@ class Dashboard extends PureComponent {
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
+    let maxLen=25;
+    let maxLenUnit=10;
+    let text='ALL THE GLITTERS IS NOT GOLD';
+    console.log('Hfhfhgfhfhhgfhgfgh',dropdown.length,dropdown1.length)
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -889,21 +919,19 @@ class Dashboard extends PureComponent {
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    value={selectedDropdown}
+                    value={selectedDropdown.length>maxLen?selectedDropdown.substring(0,maxLen-2) + '...':selectedDropdown}
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
                     containerStyle={{
-                      width: "114%",
-                      borderBottomWidth: hp("0.05%"),
-                      borderBottomColor: "#474749"
+                      width: "100%",
                     }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
-                      borderBottomColor: "transparent"
+                      borderBottomColor: "transparent",
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-3}
+                   dropdownPosition={dropdown.length>2?-5:-2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -924,12 +952,12 @@ class Dashboard extends PureComponent {
                 {this.state.unitNameHide === false ? (
                   <Dropdown
                     // value={this.state.unitName}
-                    value={selectedDropdown1}
-                    containerStyle={{
-                      width: "70%",
+                    value={selectedDropdown1.length>maxLenUnit?selectedDropdown1.substring(0,maxLenUnit-3) + '...':selectedDropdown1}
+                    containerStyle={{ width: "95%",
+                      /*width: "70%",
                       marginLeft: "30%",
                       borderBottomWidth: hp("0.05%"),
-                      borderBottomColor: "#474749"
+                      borderBottomColor: "#474749"*/
                     }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
@@ -939,7 +967,7 @@ class Dashboard extends PureComponent {
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={0}
+                    dropdownPosition={dropdown1.length>2?-4:dropdown1.length<2 ?-2:-3}
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
@@ -983,10 +1011,12 @@ class Dashboard extends PureComponent {
                 height={this.state.myUnitCardHeight}
                 width={this.state.myUnitCardWidth}
                 cardText={"My Unit"}
-                iconWidth={Platform.OS === "ios" ? 35 : 16}
-                iconHeight={Platform.OS === "ios" ? 35 : 16}
+                iconWidth={Platform.OS === "ios" ? 35 : 20}
+                iconHeight={Platform.OS === "ios" ? 35 : 20}
                 cardIcon={require("../../../../icons/my_unit.png")}
                 onCardClick={() => this.changeCardStatus("UNIT")}
+                textWeight={'bold'}
+                textFontSize={10}
                 disabled={this.state.isSelectedCard === "UNIT"}
               />
               {this.state.role === 1 ? (
@@ -994,8 +1024,9 @@ class Dashboard extends PureComponent {
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
                   cardText={"Admin"}
-                  iconWidth={Platform.OS === "ios" ? 35 : 16}
-                  iconHeight={Platform.OS === "ios" ? 35 : 16}
+                  textWeight={'bold'}
+                  iconWidth={Platform.OS === "ios" ? 35 : 20}
+                  iconHeight={Platform.OS === "ios" ? 35 : 20}
                   onCardClick={() => this.changeCardStatus("ADMIN")}
                   cardIcon={require("../../../../icons/user.png")}
                   disabled={this.state.isSelectedCard === "ADMIN"}
@@ -1072,7 +1103,7 @@ class Dashboard extends PureComponent {
         myUnitCardHeight: "80%",
         myUnitCardWidth: "26%",
         adminCardHeight: "70%",
-        adminCardWidth: "20%",
+        adminCardWidth: "22%",
         offersCardHeight: "70%",
         offersCardWidth: "20%",
 
@@ -1082,7 +1113,7 @@ class Dashboard extends PureComponent {
     } else if (status == "ADMIN") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "80%",
         adminCardWidth: "25%",
         offersCardHeight: "70%",
@@ -1094,7 +1125,7 @@ class Dashboard extends PureComponent {
     } else if (status == "OFFERS") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "70%",
         adminCardWidth: "20%",
         offersCardHeight: "80%",
@@ -1328,13 +1359,13 @@ class Dashboard extends PureComponent {
           >
             <Text>View All Visitors</Text>
           </Button>
-          <Button
+          {/*<Button
             bordered
             style={styles.button1}
             onPress={() => this.props.navigation.navigate("schedulePatrolling")}
           >
             <Text>Patrolling</Text>
-          </Button>
+          </Button>*/}
         </View>
       </ElevatedView>
     );
@@ -1554,7 +1585,6 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyespaceReducer: state.OyespaceReducer,
     receiveNotifications: state.NotificationReducer.receiveNotifications,
-    page: state.NotificationReducer.page,
     dashBoardReducer: state.DashboardReducer
   };
 };

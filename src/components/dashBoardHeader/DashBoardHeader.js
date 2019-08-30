@@ -58,25 +58,31 @@ class DashBoardHeader extends React.Component {
     };
 
     getRoleName(roleId){
-        switch(roleId){
-          case 1:
-            return "Admin"
-          case 2:
-            return "Owner"
-          case 3:
-            return "Tenant"
-          default:
-            return ""
+      try{
+        roleId = parseInt(roleId);
+        if(roleId<=1){
+          return "Admin"
         }
+        else if(roleId == 2){
+          return "Owner"
+        }
+        else if(roleId >=3){
+          return "Tenant"
+        }
+        else{
+          return "";
+        }
+      }catch(e){
+        return "";
+      }
     }
 
-  
 
-  render() {
-    console.log(
-      "State in dashboard header:",this.state
-    );
-    console.log("DASHREDUCER",this.props.dashboardReducer)
+
+
+
+    render() {
+    console.log("State in dashboard header:",this.state,this.props);
     return (
       <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
         <View style={HeaderStyles.container}>
