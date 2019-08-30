@@ -2,7 +2,7 @@
  * Created by Anooj Krishnan at Synclovis Systems Pvt. Ltd. on 2019-06-24
  */
 
-const isDev = false;
+const isDev = true;
 
 const isSecure = true;
 
