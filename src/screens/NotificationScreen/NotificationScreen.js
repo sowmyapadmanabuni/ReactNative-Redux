@@ -368,13 +368,16 @@ class NotificationScreen extends Component {
                                 "vlEntryImg",
                                 item.sbMemID
                               ) === "" ?
-                                <Image style={{ width: hp('12%'), height: hp('12%') }} source={require('../../../icons/no_img_captured.png')} /> 
-                                
+                                  <Image
+                                  style={styles.img}
+                                  source={{
+                                    uri:
+                                      `${this.props.noImage}`}}
+                                />                                
                                 :
 
                                 <Image
                                   style={styles.img}
-                                  // style={styles.img}
                                   source={{
                                     uri:
                                       `${this.props.mediaupload}` +
@@ -780,6 +783,7 @@ const mapStateToProps = state => {
     savedNoifId: state.AppReducer.savedNoifId,
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
+    noImage: state.OyespaceReducer.noImage,
     MyAccountID: state.UserReducer.MyAccountID,
     refresh: state.NotificationReducer.refresh
   };

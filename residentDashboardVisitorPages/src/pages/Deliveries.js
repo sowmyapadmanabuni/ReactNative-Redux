@@ -254,9 +254,27 @@ class App extends React.Component {
           ]}
         >
           <View style={styles.iconContainer}>
-            <Text style={styles.contactIcon}>
-              {item.vlfName[0].toUpperCase()}
-            </Text>
+            {item.vlEntryImg == "" ?
+            //   <Text style={styles.contactIcon}>
+            //   {item.vlfName[0].toUpperCase()}
+            // </Text> 
+            <Image
+                style={styles.profilePicImageStyle}
+                source={{
+                  uri:
+                    `${this.props.noImage}`
+                }}
+              />
+              :
+              <Image
+                style={styles.profilePicImageStyle}
+                source={{
+                  uri:
+                    `${this.props.mediaupload}` +
+                    item.vlEntryImg
+                }}
+              />
+            }
           </View>
           <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}>
             <View style={styles.infoContainer}>
@@ -266,48 +284,48 @@ class App extends React.Component {
               {/* <View style={{ flexDirection: "column" }}>
                 <Text style={styles.infoNumber}>{item.vlMobile}</Text>
               </View> */}
-              <View style={{ flexDirection: 'row',marginBottom:hp('0.3%') }}>
-                <View style={{flexDirection:'row'}}>
-                  <Image source={require('../../../icons/user.png')} style={{width:hp('2%'),height:hp('2%')}}/>
+              <View style={{ flexDirection: 'row', marginBottom: hp('0.3%') }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image source={require('../../../icons/user.png')} style={{ width: hp('2%'), height: hp('2%') }} />
                   <Text>{"  "}</Text>
                 </View>
                 <View>
                   <Text style={{ fontSize: hp('1.5%') }}>{item.vlVisType}</Text>
                 </View>
               </View>
-              <View style={{ flexDirection: 'row',marginBottom:hp('0.3%') }}>
-                <View style={{flexDirection:'row'}}>
-                  <Image source={require('../../../icons/entry_time.png')} style={{width:hp('2%'),height:hp('2%')}}/>
+              <View style={{ flexDirection: 'row', marginBottom: hp('0.3%') }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image source={require('../../../icons/entry_time.png')} style={{ width: hp('2%'), height: hp('2%') }} />
                   <Text>{"  "}</Text>
                 </View>
                 <View>
                   <Text style={{ fontSize: hp('1.5%') }}>Entry Time: {item.vlEntryT.substring(11, 16)}{" "}</Text>
                 </View>
                 {moment(item.vlExitT).format("hh:mm") === '00:00' ?
-                <View style={{ flexDirection: 'row' }}>
-                  <View>
-                    <Text style={{ fontSize: hp('1.5%') }}>Exit Time: N.A.</Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View>
+                      <Text style={{ fontSize: hp('1.5%') }}>Exit Time: N.A.</Text>
+                    </View>
                   </View>
-                </View>
-                :
-                <View style={{ flexDirection: 'row' }}>
-                  <View>
-                    <Text style={{ fontSize: hp('1.5%') }}>Exit Time: {item.vlExitT.substring(11, 16)}</Text>
+                  :
+                  <View style={{ flexDirection: 'row' }}>
+                    <View>
+                      <Text style={{ fontSize: hp('1.5%') }}>Exit Time: {item.vlExitT.substring(11, 16)}</Text>
+                    </View>
                   </View>
-                </View>
-              }
+                }
               </View>
 
 
-              
+
               <View style={{ flexDirection: 'row' }}>
-                  <View style={{flexDirection:'row'}}>
-                    <Image source={require('../../../icons/location.png')} style={{width:hp('2%'),height:hp('2%')}}/>
-                    <Text>{"  "}</Text>
-                  </View>
-                  <View>
-                    <Text style={{ fontSize: hp('1.5%') }}>Entry Gate: {item.vlengName}{" "}</Text>
-                  </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image source={require('../../../icons/location.png')} style={{ width: hp('2%'), height: hp('2%') }} />
+                  <Text>{"  "}</Text>
+                </View>
+                <View>
+                  <Text style={{ fontSize: hp('1.5%') }}>Entry Gate: {item.vlengName}{" "}</Text>
+                </View>
                 {item.vlexgName === "" ? <View></View> :
                   <View>
                     <Text style={{ fontSize: hp('1.5%') }}>Exit Gate: {item.vlexgName}</Text>
@@ -348,7 +366,7 @@ class App extends React.Component {
             </Card>
           </View>
         </View>
-        <View style={{ flexDirection: 'row',alignSelf: 'flex-end' }}>
+        <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
           <View style={{ alignItems: 'flex-end', marginRight: hp('1%') }}>
             {item.open ?
               <View /> :
@@ -358,14 +376,14 @@ class App extends React.Component {
             }
           </View>
         </View>
-          <Collapsible
-            duration={100}
-            collapsed={!item.open}>
-            <View style={{ flexDirection: 'column' }}>
-              <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
-                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%') }}>Delivery from: <Text style={{ color: '#38bcdb' }}>{item.vlComName}</Text></Text>
-              </View>
-              {/* <View style={{ flexDirection: 'row' }}>
+        <Collapsible
+          duration={100}
+          collapsed={!item.open}>
+          <View style={{ flexDirection: 'column' }}>
+            <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%') }}>Delivery from: <Text style={{ color: '#38bcdb' }}>{item.vlComName}</Text></Text>
+            </View>
+            {/* <View style={{ flexDirection: 'row' }}>
                 <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Entry approved by: {item.vlpOfVis}</Text>
                 <Image />
               </View>
@@ -374,7 +392,7 @@ class App extends React.Component {
                 <Image />
               </View> */}
 
-              {/* {!item.open ?
+            {/* {!item.open ?
                 <View></View> :
 
                 <View style={{ marginBottom: hp('1%'), marginTop: hp('1%') }}>
@@ -383,21 +401,21 @@ class App extends React.Component {
                   </View>
                 </View>
               } */}
-               <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'flex-end', marginRight: hp('1%') }}>
-                {!item.open ?
-                  <View>
-                  </View> :
+            <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'flex-end', marginRight: hp('1%') }}>
+              {!item.open ?
+                <View>
+                </View> :
 
-                  <View>
-                    <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_less.png')} />
-                  </View>
-                }
-              </View>
+                <View>
+                  <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_less.png')} />
+                </View>
+              }
             </View>
-          </Collapsible>
+          </View>
+        </Collapsible>
 
         <View style={{ borderColor: "#707070", borderBottomWidth: hp("0.1%") }} />
-        </View>
+      </View>
 
 
 
@@ -631,15 +649,15 @@ class App extends React.Component {
             </View>
           </View>
 
-          
+
           {this.state.dataSource.length === 0 ?
-            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: 'white',width:'100%', height:'80%' }}   >
+            <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', width: '100%', height: '80%' }}   >
               <Image source={require('../../../icons/delivery-man.png')} style={{ width: hp('10%'), height: hp('10%') }} />
               <Text style={{ backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', fontSize: hp('1.6%') }}>No Entries for selected Date</Text>
             </View>
             : (
               <FlatList
-                style={{ marginTop: hp("2%"),marginBottom:hp('20%') }}
+                style={{ marginTop: hp("2%"), marginBottom: hp('20%') }}
                 data={this.state.dataSource.sort((a, b) =>
                   a.vlfName.localeCompare(b.vlfName)
                 )}
@@ -663,7 +681,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop:hp('10%')
+    marginTop: hp('10%')
   },
   textinput: {
     height: hp("6%"),
@@ -675,6 +693,22 @@ const styles = StyleSheet.create({
     fontSize: hp("2.2%"),
     backgroundColor: "#f4f4f4",
     borderRadius: hp("4%")
+  },
+  iconContainer: {
+    width: hp("10%"),
+    height: hp("10%"),
+    // alignItems: "center",
+    // justifyContent: "center",
+    // borderColor: "#ff8c00",
+    borderRadius: 100,
+  },
+  profilePicImageStyle: {
+      width: hp("8%"),
+      height: hp("8%"),
+      borderColor: "#ff8c00",
+      borderRadius: hp("4%"),
+      marginTop: hp("2%"),
+      borderWidth: hp("0.1%")
   },
   datePickerButtonView: {
     marginTop: hp("1.5%"),
@@ -720,15 +754,9 @@ const styles = StyleSheet.create({
     paddingBottom: hp("2%"),
     paddingTop: hp("1%")
   },
-  iconContainer: {
-    width: hp("6.5%"),
-    height: hp("6.5%"),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ff8c00",
-    borderRadius: 100,
-  },
+
   contactIcon: {
+   width: hp('12%'), height: hp('12%'),
     fontSize: hp("3.5%"),
     color: "#fff"
   },
@@ -804,6 +832,7 @@ const mapStateToProps = state => {
     dashBoardReducer: state.DashboardReducer,
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
+    noImage: state.OyespaceReducer.noImage,
     userReducer: state.UserReducer
 
   };
