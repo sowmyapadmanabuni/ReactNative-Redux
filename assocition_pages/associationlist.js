@@ -77,7 +77,8 @@ class BlockDetail extends React.Component {
     console.log("Text", text)
     if(text.length === 0){
       this.setState({
-        filteredDataSource: []
+        filteredDataSource: [],
+        searchText: ""
       })
     }else{
       this.setState({
@@ -251,7 +252,7 @@ class BlockDetail extends React.Component {
                       arrayholder: [],
                       filteredDataSource: [],
                       filteredArr: [],
-                      searchText: ''
+                      searchText: ""
                     })
                   }}
                 >
@@ -266,13 +267,7 @@ class BlockDetail extends React.Component {
     );
   };
 
-  renderItem1 = ({ item }) => {
-    return (
-      <View>
-
-      </View>
-    );
-  };
+  
 
   render() {
     const { navigate } = this.props.navigation;
@@ -388,7 +383,7 @@ class BlockDetail extends React.Component {
           <Form style={styles.formSearch}>
             <Item style={styles.inputItem}>
               <Input
-                // value={this.state.searchText}
+                value={this.state.searchText}
                 marginBottom={hp("-1%")}
                 placeholder="Search...."
                 multiline={false}
@@ -399,12 +394,7 @@ class BlockDetail extends React.Component {
             </Item>
           </Form>
 
-          {/* <TextInput
-            style={styles.searchTextStyle}
-            placeholder="Search by Country/Name/Pincode..."
-            round
-            onChangeText={this.searchFilterFunction}
-          /> */}
+          
 
           <View style={styles.lineAboveAndBelowFlatList} />
 
