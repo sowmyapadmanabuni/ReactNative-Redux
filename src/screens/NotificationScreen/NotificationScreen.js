@@ -425,10 +425,57 @@ class NotificationScreen extends PureComponent {
                               {this.renderCollapseData(
                                 "vlGtName",
                                 item.sbMemID
-                              )}{" "}
-                              Association
-                            </Text>
-                          </View>
+                              ) === "" ?
+                                  <Image
+                                  style={styles.img}
+                                  source={{
+                                    uri:
+                                      `${this.props.noImage}`}}
+                                />                                
+                                :
+
+                                <Image
+                                  style={styles.img}
+                                  source={{
+                                    uri:
+                                      `${this.props.mediaupload}` +
+                                      this.renderCollapseData(
+                                        "vlEntryImg",
+                                        item.sbMemID
+                                      )
+                                  }}
+                                />
+                              }
+
+                            </View>
+                            <View style={{ flexDirection: 'column', marginLeft: hp('1%') }}>
+                              <View style={{ marginBottom: 5 }}>
+                                <Text style={{ fontSize: hp("1.8%"), fontWeight: '500' }}>
+                                  {this.renderCollapseData("vlGtName", item.sbMemID)}{" "}
+                                  Association
+                                  </Text>
+                              </View>
+
+                              <View style={{ marginBottom: 5 }}>
+                                <Text style={{ fontSize: hp("1.8%") }}>
+                                  {this.renderCollapseData("vlfName", item.sbMemID)}{" "}
+
+                                </Text>
+                              </View>
+
+                              <View style={{ flexDirection: "row", marginBottom: 5 }}>
+                                <Text style={{ fontSize: hp("1.8%"), color: "#000" }}>
+                                  {this.renderCollapseData(
+                                    "vlVisType",
+                                    item.sbMemID
+                                  )}{" "}
+
+                                </Text>
+                                <Text style={{ fontSize: hp("1.8%"), color: "#38bcdb" }}>
+                                  {this.renderCollapseData(
+                                    "vlComName",
+                                    item.sbMemID
+                                  )}{" "}
 
                           <View style={{ marginBottom: 5 }}>
                             <Text style={{ fontSize: hp("1.8%") }}>
@@ -824,6 +871,7 @@ const mapStateToProps = state => {
     savedNoifId: state.AppReducer.savedNoifId,
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
+    noImage: state.OyespaceReducer.noImage,
     MyAccountID: state.UserReducer.MyAccountID,
     refresh: state.NotificationReducer.refresh,
     page: state.NotificationReducer.page,
