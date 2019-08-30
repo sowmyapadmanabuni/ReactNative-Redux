@@ -212,7 +212,7 @@ class MyGuests extends Component {
           ]}
         >
           <View style={styles.iconContainer}>
-            {item.vlEntryImg.includes("PERSONAssociation") ?
+            {item.vlEntryImg == "" ?
             //   <Text style={styles.contactIcon}>
             //   {item.vlfName[0].toUpperCase()}
             // </Text> 
