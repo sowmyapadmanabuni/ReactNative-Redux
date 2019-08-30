@@ -217,7 +217,7 @@ export default class City extends Component {
                 }}
                 // onPress={() => this.props.navigation.navigate('City')}
                 >
-                  <Text>Click here to schedule a demo.</Text>
+                  <Text style={{fontSize:hp('2%')}}>Click here to schedule a demo.</Text>
                 </Button>
               </View>
             </View>
