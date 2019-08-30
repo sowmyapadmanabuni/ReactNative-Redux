@@ -416,6 +416,7 @@ class SchedulePatrol extends React.Component {
         for (let i in this.props.selectedCheckPoints.selectedCheckPoints) {
             patrolCheckPointID = patrolCheckPointID === "" ? patrolCheckPointID + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID : patrolCheckPointID + "," + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID
         }
+
             let startTime = moment(this.state.startTime).format("HH:mm");
             let endTime = moment(this.state.endTime).format("HH:mm");
             console.log('Time at validation:',(this.state.startTime),(this.state.endTime));

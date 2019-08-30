@@ -175,7 +175,8 @@ class ReportScreen extends React.Component {
                 let reprArr = [];
                 if (difference !== 0) {
                     for (let i = 0; i <= difference; i++) {
-                        if (!reportsData[i] || startDate !== moment(reportsData[i].ptdCreated).format('YYYY-MM-DD')) {
+                        console.log(startDate,moment(reportsData[i].ptdCreated).format("YYYY-MM-DD"))
+                        if (!reportsData[i] || startDate == moment(reportsData[i].ptdCreated).format('YYYY-MM-DD')) {
                             let arr = [
                                 moment(startDate).format('DD-MM-YYYY'),
                                 ' Patrolling is not Done'
@@ -201,7 +202,7 @@ class ReportScreen extends React.Component {
                         moment(reportsData[0].ptdCreated).format('DD-MM-YYYY'),
                         moment(reportsData[0].ptsDateT).format("hh:mm A"),
                         moment(reportsData[0].pteDateT).format("hh:mm A"),
-                        reportsData[0].ptStatus === "" ? "N/A" : reportsData[i].ptStatus,
+                        reportsData[0].ptStatus === "" ? "N/A" : reportsData[0].ptStatus,
                         reportsData[0].wkfName];
                     reprArr.push(arr)
                 }
