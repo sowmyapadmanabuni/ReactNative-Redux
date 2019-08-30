@@ -53,7 +53,7 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-var counter = 0
+var counter = 0;
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -97,23 +97,20 @@ class Dashboard extends PureComponent {
     });
     this.getListOfAssociation();
     this.myProfileNet();
-    this.listenRoleChange()
+    this.listenRoleChange();
   }
 
-  listenRoleChange(){
-    const {
-      MyAccountID,
-      dropdown
-    } = this.props;
-      let path = 'rolechange/'+MyAccountID;
-      let roleRef =  base.services.frtdbservice.ref(path);
-      //roleRef.off(path);
-      let self = this;
-      roleRef.on('value', function (snapshot) { 
-        //alert(JSON.stringify(snapshot.val()))       
-        self.roleCheckForAdmin(self.state.assocId);
-        self.requestNotifPermission()
-      });
+  listenRoleChange() {
+    const { MyAccountID, dropdown } = this.props;
+    let path = "rolechange/" + MyAccountID;
+    let roleRef = base.services.frtdbservice.ref(path);
+    //roleRef.off(path);
+    let self = this;
+    roleRef.on("value", function(snapshot) {
+      //alert(JSON.stringify(snapshot.val()))
+      self.roleCheckForAdmin(self.state.assocId);
+      self.requestNotifPermission();
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -204,16 +201,19 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");        
+        console.log(response, "fetched");
         let data = response.data.data.memberListByAccount;
-        // console.log("dataoye", data);
-        firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
+         console.log("dataoye", data);
+        firebase.messaging().subscribeToTopic(MyAccountID + "admin");
         data.map(units => {
-
-           console.log( "role_units",units.mrmRoleID);
-          if (receiveNotifications) {            
-             //alert(MyAccountID + "admin");
-            firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
+          console.log("role_units", units.mrmRoleID);
+          if (receiveNotifications) {
+            //alert(MyAccountID + "admin");
+            firebase
+              .messaging()
+              .subscribeToTopic(
+                "" + MyAccountID + units.unUnitID + "usernotif"
+              );
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
@@ -221,7 +221,7 @@ class Dashboard extends PureComponent {
               console.log(units, "units");
               if (units.meIsActive) {
                 //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
-                firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
+                firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
               } else {
                 firebase
                   .messaging()
@@ -243,163 +243,165 @@ class Dashboard extends PureComponent {
         //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
         //     }
         // }
-
-
       });
   };
 
   showLocalNotification = notification => {
+    try {
+      // console.log(notification);
+      const channel = new firebase.notifications.Android.Channel(
+        "channel_id",
+        "Oyespace",
+        firebase.notifications.Android.Importance.Max
+      ).setDescription("Oyespace channel");
+      channel.enableLights(true);
+      // channel.enableVibration(true);
+      // channel.vibrationPattern([500]);
+      firebase.notifications().android.createChannel(channel);
 
-    try{
-    // console.log(notification);
-    const channel = new firebase.notifications.Android.Channel(
-      "channel_id",
-      "Oyespace",
-      firebase.notifications.Android.Importance.Max
-    ).setDescription("Oyespace channel");
-    channel.enableLights(true);
-    // channel.enableVibration(true);
-    // channel.vibrationPattern([500]);
-    firebase.notifications().android.createChannel(channel);
-
-    const notificationBuild = new firebase.notifications.Notification({
-      sound: "default",
-      show_in_foreground: true
-    })
-      .setTitle(notification._title)
-      .setBody(notification._body)
-      .setNotificationId(notification._notificationId)
-      // .setSound('default')
-      .setData({
-        ...notification._data,
-        foreground: true
+      const notificationBuild = new firebase.notifications.Notification({
+        sound: "default",
+        show_in_foreground: true
       })
-      .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")      
-      .android.setSmallIcon("ic_stat_ic_notification")
-      .android.setChannelId("channel_id")
-      .android.setVibrate("default")
-      .setSound('default')
-      // .android.setChannelId('notification-action')
-      .android.setPriority(firebase.notifications.Android.Priority.Max);
+        .setTitle(notification._title)
+        .setBody(notification._body)
+        .setNotificationId(notification._notificationId)
+        // .setSound('default')
+        .setData({
+          ...notification._data,
+          foreground: true
+        })
+        .android.setAutoCancel(true)
+        .android.setColor("#FF9100")
+        .android.setLargeIcon("ic_notif")
+        .android.setSmallIcon("ic_stat_ic_notification")
+        .android.setChannelId("channel_id")
+        .android.setVibrate("default")
+        .setSound("default")
 
-    firebase.notifications().displayNotification(notificationBuild);
-    this.setState({ foregroundNotif: notification._data });
-    }catch(e){
-      console.log("FAILED_NOTIF")
+        // .android.setChannelId('notification-action')
+        .android.setPriority(firebase.notifications.Android.Priority.Max);
+
+      firebase.notifications().displayNotification(notificationBuild);
+      this.setState({ foregroundNotif: notification._data });
+    } catch (e) {
+      console.log("FAILED_NOTIF");
     }
   };
 
-  listenForNotif = () => {    
-    if(this.notificationDisplayedListener == undefined || this.notificationDisplayedListener==null){    
-    let navigationInstance = this.props.navigation;
-      
-    this.notificationDisplayedListener = firebase
-      .notifications()
-      .onNotificationDisplayed(notification => {
-        // console.log('___________')
-        // console.log(notification)
-        // console.log('____________')
-        // Process your notification as required
-        // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-      });
+  listenForNotif = () => {
+    if (
+      this.notificationDisplayedListener == undefined ||
+      this.notificationDisplayedListener == null
+    ) {
+      let navigationInstance = this.props.navigation;
 
-    this.notificationListener = firebase
-      .notifications()
-      .onNotification(notification => {
-        console.log("___________");
-        console.log(notification);
-        console.log("____________");
-
-        if (notification._data.associationID) {
-          // this.props.createNotification(notification._data, navigationInstance, false)
-        }
-
-        this.showLocalNotification(notification);
-
-        showMessage({
-          message: notification.title,
-          description: notification.body,
-          type: "default",
-          backgroundColor: "#FF9100",
-          onPress: () => {
-            this.props.navigation.navigate("NotificationScreen")
-          },
+      this.notificationDisplayedListener = firebase
+        .notifications()
+        .onNotificationDisplayed(notification => {
+          // console.log('___________')
+          // console.log(notification)
+          // console.log('____________')
+          // Process your notification as required
+          // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
         });
+
+      this.notificationListener = firebase
+        .notifications()
+        .onNotification(notification => {
+          console.log("___________");
+          console.log(notification);
+          console.log("____________");
+
+          if (notification._data.associationID) {
+            // this.props.createNotification(notification._data, navigationInstance, false)
+          }
+
+          this.showLocalNotification(notification);
+
+          showMessage({
+            message: notification.title,
+            description: notification.body,
+            type: "default",
+            backgroundColor: "#FF9100",
+            onPress: () => {
+              this.props.navigation.navigate("NotificationScreen");
+            }
+          });
+        });
+
+      firebase.notifications().onNotificationOpened(notificationOpen => {
+        const { MyAccountID } = this.props.userReducer;
+        const { oyeURL } = this.props.oyespaceReducer;
+        let details = notificationOpen.notification._data;
+        if (notificationOpen.notification._data.admin === "true") {
+          if (notificationOpen.action) {
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(
+            //   notificationOpen.notification._data,
+            //   navigationInstance,
+            //   true,
+            //   "true",
+            //   this.props.oyeURL,
+            //   this.props.MyAccountID
+            // );
+            // this.props.createNotification(notificationOpen.notification)
+          }
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+        } else if (notificationOpen.notification._data.admin === "false") {
+          this.props.refreshNotifications(oyeURL, MyAccountID);
+          // this.props.createUserNotification(
+          //     "Join_Status",
+          //     oyeURL,
+          //     MyAccountID,
+          //     1,
+          //     details.ntDesc,
+          //     "resident_user",
+          //     "resident_user",
+          //     details.sbSubID,
+          //     "resident_user",
+          //     "resident_user",
+          //     "resident_user",
+          //     "resident_user",
+          //     "resident_user",
+          //     true
+          // );
+          // this.props.navigation.navigate("NotificationScreen");
+        }
+
+        if (notificationOpen.notification._data.admin === "true") {
+          this.props.refreshNotifications(oyeURL, MyAccountID);
+          if (notificationOpen.notification._data.foreground) {
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(
+            //   notificationOpen.notification._data,
+            //   navigationInstance,
+            //   true,
+            //   "true",
+            //   this.props.oyeURL,
+            //   this.props.MyAccountID
+            // );
+          }
+        } else if (notificationOpen.notification._data.admin === "gate_app") {
+          this.props.refreshNotifications(oyeURL, MyAccountID);
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "gate_app",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+        } else if (notificationOpen.notification._data.admin === "false") {
+        }
+        // this.props.getNotifications(oyeURL, MyAccountID);
+        this.props.navigation.navigate("NotificationScreen");
       });
-
-    firebase.notifications().onNotificationOpened(notificationOpen => {
-      const { MyAccountID } = this.props.userReducer;
-      const { oyeURL } = this.props.oyespaceReducer;
-      let details = notificationOpen.notification._data;
-      if (notificationOpen.notification._data.admin === "true") {
-        if (notificationOpen.action) {
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(
-          //   notificationOpen.notification._data,
-          //   navigationInstance,
-          //   true,
-          //   "true",
-          //   this.props.oyeURL,
-          //   this.props.MyAccountID
-          // );
-          // this.props.createNotification(notificationOpen.notification)
-        }
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      } else if (notificationOpen.notification._data.admin === "false") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        // this.props.createUserNotification(
-        //     "Join_Status",
-        //     oyeURL,
-        //     MyAccountID,
-        //     1,
-        //     details.ntDesc,
-        //     "resident_user",
-        //     "resident_user",
-        //     details.sbSubID,
-        //     "resident_user",
-        //     "resident_user",
-        //     "resident_user",
-        //     "resident_user",
-        //     "resident_user",
-        //     true
-        // );
-        // this.props.navigation.navigate("NotificationScreen");
-      }
-
-      if (notificationOpen.notification._data.admin === "true") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        if (notificationOpen.notification._data.foreground) {
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(
-          //   notificationOpen.notification._data,
-          //   navigationInstance,
-          //   true,
-          //   "true",
-          //   this.props.oyeURL,
-          //   this.props.MyAccountID
-          // );
-        }
-      } else if (notificationOpen.notification._data.admin === "gate_app") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(
-        //   notificationOpen.notification._data,
-        //   navigationInstance,
-        //   true,
-        //   "gate_app",
-        //   this.props.oyeURL,
-        //   this.props.MyAccountID
-        // );
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      } else if (notificationOpen.notification._data.admin === "false") {
-      }
-      // this.props.getNotifications(oyeURL, MyAccountID);
-      this.props.navigation.navigate("NotificationScreen");
-    });
-  }
+    }
   };
 
   onChangeText = () => {};
@@ -427,7 +429,7 @@ class Dashboard extends PureComponent {
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    
+
     this.requestNotifPermission();
     // this.props.getNotifications(oyeURL, MyAccountID);
 
@@ -446,7 +448,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this)
+    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
@@ -467,72 +469,66 @@ class Dashboard extends PureComponent {
     );
   }
 
-  async roleCheckForAdmin (index) {
- 
-try{
-
-        let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
-        let role = "";
-        console.log("roleCheckForAdmin_",responseJson)
-        //responseJson.data.members.splice(0,1);
+  async roleCheckForAdmin(index) {
+    try {
+      let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
+        this.state.assocId
+      );
+      let role = "";
+      console.log("roleCheckForAdmin_", responseJson);
+      //responseJson.data.members.splice(0,1);
+      console.log("Manas", responseJson, responseJson.data);
+      for (let i = 0; i < responseJson.data.members.length; i++) {
+        //alert(responseJson.data.members[i].mrmRoleID)
         console.log(
-          "Manas",
-          responseJson,
-          responseJson.data          
+          "Get_Ids",
+          this.props.userReducer.MyAccountID,
+          responseJson.data.members[i].acAccntID,
+          this.state.assocId,
+          responseJson.data.members[i].asAssnID,
+          responseJson.data.members[i].mrmRoleID,
+          responseJson.data.members[i].unUniName + "name"
         );
-        for (let i = 0; i < responseJson.data.members.length; i++) {
-          //alert(responseJson.data.members[i].mrmRoleID)
+        if (
+          responseJson.data.members[i].meIsActive &&
+          this.props.userReducer.MyAccountID ===
+            responseJson.data.members[i].acAccntID &&
+          parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
+        ) {
           console.log(
-            "Get_Ids",
+            "Id_eq",
             this.props.userReducer.MyAccountID,
             responseJson.data.members[i].acAccntID,
-            this.state.assocId,
-            responseJson.data.members[i].asAssnID,
-            responseJson.data.members[i].mrmRoleID,
-            responseJson.data.members[i].unUniName + "name"
+            responseJson.data.members[i].mrmRoleID
           );
-          if (
-            responseJson.data.members[i].meIsActive &&
-            this.props.userReducer.MyAccountID ===
-              responseJson.data.members[i].acAccntID &&            
-            parseInt(this.state.assocId) ===
-              responseJson.data.members[i].asAssnID
-          ) {
-            console.log(
-              "Id_eq",
-              this.props.userReducer.MyAccountID,
-              responseJson.data.members[i].acAccntID,
-              responseJson.data.members[i].mrmRoleID
-            );            
-            role = responseJson.data.members[i].mrmRoleID;
-          }
+          role = responseJson.data.members[i].mrmRoleID;
         }
-        console.log(role, "role");
-        this.setState(
-          {
-            role: role
-          },
-          () => {
-            const { updateuserRole } = this.props;
-            console.log("Role123456:", updateuserRole);
-            updateuserRole({
-              prop: "role",
-              value: role
-            });
-            console.log("ROLE_UPDATE", role);
-          }
-        );
-          this.checkUnitIsThere();
-
+      }
+      console.log(role, "role");
+      this.setState(
+        {
+          role: role
+        },
+        () => {
+          const { updateuserRole } = this.props;
+          console.log("Role123456:", updateuserRole);
+          updateuserRole({
+            prop: "role",
+            value: role
+          });
+          console.log("ROLE_UPDATE", role);
+        }
+      );
+       this.checkUnitIsThere();
       // })
-      // .catch(error => {        
+      // .catch(error => {
       //   this.setState({ error, loading: false });
       // });
-        }catch(err){
-          //alert(err)
-          console.log("ROLECHECK_ERROR",err)
-        }
-  };
+    } catch (err) {
+      //alert(err)
+      console.log("ROLECHECK_ERROR", err);
+    }
+  }
 
   static getAssociationList() {
     this.getAssociationList();
@@ -691,7 +687,8 @@ try{
   checkUnitIsThere() {
     const { dropdown1 } = this.props;
     console.log(
-      "CheckUnit;s is there",this.props,
+      "CheckUnit;s is there",
+      this.props,
       this.props.dashBoardReducer.uniID,
       dropdown1,
       dropdown1.length
@@ -717,7 +714,7 @@ try{
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat,self.state.assocId);
+    console.log("STAT123", stat, self.state.assocId);
 
     try {
       if (stat && stat.data) {
@@ -906,10 +903,10 @@ try{
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-    let maxLen=25;
-    let maxLenUnit=10;
-    let text='ALL THE GLITTERS IS NOT GOLD';
-    console.log('Hfhfhgfhfhhgfhgfgh',dropdown.length,dropdown1.length)
+    let maxLen = 25;
+    let maxLenUnit = 10;
+    let text = "ALL THE GLITTERS IS NOT GOLD";
+    console.log("Hfhfhgfhfhhgfhgfgh", dropdown.length, dropdown1.length);
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -921,19 +918,23 @@ try{
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    value={selectedDropdown.length>maxLen?selectedDropdown.substring(0,maxLen-2) + '...':selectedDropdown}
+                    value={
+                      selectedDropdown.length > maxLen
+                        ? selectedDropdown.substring(0, maxLen - 2) + "..."
+                        : selectedDropdown
+                    }
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
                     containerStyle={{
-                      width: "100%",
+                      width: "100%"
                     }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
-                      borderBottomColor: "transparent",
+                      borderBottomColor: "transparent"
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                   dropdownPosition={dropdown.length>2?-5:-2}
+                    dropdownPosition={dropdown.length > 2 ? -5 : -2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -954,8 +955,13 @@ try{
                 {this.state.unitNameHide === false ? (
                   <Dropdown
                     // value={this.state.unitName}
-                    value={selectedDropdown1.length>maxLenUnit?selectedDropdown1.substring(0,maxLenUnit-3) + '...':selectedDropdown1}
-                    containerStyle={{ width: "95%",
+                    value={
+                      selectedDropdown1.length > maxLenUnit
+                        ? selectedDropdown1.substring(0, maxLenUnit - 3) + "..."
+                        : selectedDropdown1
+                    }
+                    containerStyle={{
+                      width: "95%"
                       /*width: "70%",
                       marginLeft: "30%",
                       borderBottomWidth: hp("0.05%"),
@@ -969,7 +975,9 @@ try{
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={dropdown1.length>2?-4:dropdown1.length<2 ?-2:-3}
+                    dropdownPosition={
+                      dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
+                    }
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
@@ -1017,7 +1025,7 @@ try{
                 iconHeight={Platform.OS === "ios" ? 35 : 20}
                 cardIcon={require("../../../../icons/my_unit.png")}
                 onCardClick={() => this.changeCardStatus("UNIT")}
-                textWeight={'bold'}
+                textWeight={"bold"}
                 textFontSize={10}
                 disabled={this.state.isSelectedCard === "UNIT"}
               />
@@ -1026,7 +1034,7 @@ try{
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
                   cardText={"Admin"}
-                  textWeight={'bold'}
+                  textWeight={"bold"}
                   iconWidth={Platform.OS === "ios" ? 35 : 20}
                   iconHeight={Platform.OS === "ios" ? 35 : 20}
                   onCardClick={() => this.changeCardStatus("ADMIN")}
