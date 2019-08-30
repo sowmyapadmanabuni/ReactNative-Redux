@@ -111,11 +111,12 @@ class EditProfile extends Component {
         let source = (Platform.OS === 'ios') ? response.uri : response.uri;
         const form = new FormData();
         let imgObj = {
-            name: (response.fileName !== undefined) ? response.fileName : "XXXXX.jpg",
+            name: (response.fileName !== undefined) ? response.fileName : "XXXXX.JPG",
             uri: source,
             type: (response.type !== undefined || response.type != null) ? response.type : "image/jpeg"
         };
         form.append('image', imgObj)
+        console.log("Image upload before",response)
         let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
         console.log('Photo upload response', stat,response)
         if (stat) {
@@ -277,7 +278,7 @@ class EditProfile extends Component {
 
     render() {
 
-        console.log('AGHGHGHGH',this.state,this.state.myProfileImage)
+        console.log('AGHGHGHGH',this.state,this.state.myProfileImage,this.props)
         console.log("My Account Id", this.props.MyAccountID)
         return (
             <TouchableWithoutFeedback

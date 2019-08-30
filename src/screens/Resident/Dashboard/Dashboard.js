@@ -19,6 +19,7 @@ import CardView from "../../../components/cardView/CardView";
 import { Dropdown } from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
@@ -52,7 +53,7 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-
+var counter = 0
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -96,20 +97,31 @@ class Dashboard extends PureComponent {
     });
     this.getListOfAssociation();
     this.myProfileNet();
-    this.listenRoleChange();
+    this.listenRoleChange()
   }
 
-  listenRoleChange() {
-    const { MyAccountID, dropdown } = this.props;
-    let path = "rolechange/" + MyAccountID;
-    let roleRef = base.services.frtdbservice.ref(path);
-    //roleRef.off(path);
-    let self = this;
-    roleRef.on("value", function(snapshot) {
-      //alert(JSON.stringify(snapshot.val()))
-      self.roleCheckForAdmin(self.state.assocId);
-      self.requestNotifPermission();
-    });
+  listenRoleChange(){
+    const {
+      MyAccountID,
+      dropdown
+    } = this.props;
+      let path = 'rolechange/'+MyAccountID;
+      let roleRef =  base.services.frtdbservice.ref(path);
+      //roleRef.off(path);
+      let self = this;
+      roleRef.on('value', function (snapshot) { 
+        //alert(JSON.stringify(snapshot.val()))       
+        self.roleCheckForAdmin(self.state.assocId);
+        self.requestNotifPermission()
+      });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // return (
+    return (
+      !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
+    );
+    // );
   }
 
   componentDidUpdate() {
@@ -192,26 +204,24 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");
+        console.log(response, "fetched");        
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
-        firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
         data.map(units => {
-          // console.log(units.mrmRoleID + "role");
-          if (receiveNotifications) {
-            //alert(MyAccountID + "admin");
-            firebase
-              .messaging()
-              .subscribeToTopic(
-                "" + MyAccountID + units.unUnitID + "usernotif"
-              );
+
+           console.log( "role_units",units.mrmRoleID);
+          if (receiveNotifications) {            
+             //alert(MyAccountID + "admin");
+            firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
             } else if (units.mrmRoleID === 1) {
               console.log(units, "units");
               if (units.meIsActive) {
-                firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
+                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
               } else {
                 firebase
                   .messaging()
@@ -225,18 +235,22 @@ class Dashboard extends PureComponent {
           }
         });
 
-        if (data != undefined && data != null && data.length > 0) {
-          let val = data.find(o => o.mrmRoleID === 1);
-          if (val == undefined || val == null) {
-            //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
-            firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
-            firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
-          }
-        }
+        // if(data != undefined && data!=null && data.length > 0){
+        //     let val = data.find(o => o.mrmRoleID === 1);
+        //     if(val == undefined || val == null){
+        //       //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
+        //     }
+        // }
+
+
       });
   };
 
   showLocalNotification = notification => {
+
+    try{
     // console.log(notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
@@ -261,21 +275,25 @@ class Dashboard extends PureComponent {
         foreground: true
       })
       .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")
-      .android.setAutoCancel(true)
+      .android.setLargeIcon("ic_notif")      
       .android.setSmallIcon("ic_stat_ic_notification")
       .android.setChannelId("channel_id")
       .android.setVibrate("default")
+      .setSound('default')
       // .android.setChannelId('notification-action')
       .android.setPriority(firebase.notifications.Android.Priority.Max);
 
     firebase.notifications().displayNotification(notificationBuild);
     this.setState({ foregroundNotif: notification._data });
+    }catch(e){
+      console.log("FAILED_NOTIF")
+    }
   };
 
-  listenForNotif = () => {
+  listenForNotif = () => {    
+    if(this.notificationDisplayedListener == undefined || this.notificationDisplayedListener==null){    
     let navigationInstance = this.props.navigation;
-
+      
     this.notificationDisplayedListener = firebase
       .notifications()
       .onNotificationDisplayed(notification => {
@@ -289,15 +307,25 @@ class Dashboard extends PureComponent {
     this.notificationListener = firebase
       .notifications()
       .onNotification(notification => {
-        // console.log("___________");
-        // console.log(notification);
-        // console.log("____________");
+        console.log("___________");
+        console.log(notification);
+        console.log("____________");
 
         if (notification._data.associationID) {
           // this.props.createNotification(notification._data, navigationInstance, false)
         }
 
         this.showLocalNotification(notification);
+
+        showMessage({
+          message: notification.title,
+          description: notification.body,
+          type: "default",
+          backgroundColor: "#FF9100",
+          onPress: () => {
+            this.props.navigation.navigate("NotificationScreen")
+          },
+        });
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
@@ -305,19 +333,18 @@ class Dashboard extends PureComponent {
       const { oyeURL } = this.props.oyespaceReducer;
       let details = notificationOpen.notification._data;
       if (notificationOpen.notification._data.admin === "true") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        // if (notificationOpen.action) {
-        //   // this.props.newNotifInstance(notificationOpen.notification);
-        //   // this.props.createNotification(
-        //   //   notificationOpen.notification._data,
-        //   //   navigationInstance,
-        //   //   true,
-        //   //   "true",
-        //   //   this.props.oyeURL,
-        //   //   this.props.MyAccountID
-        //   // );
-        //   // this.props.createNotification(notificationOpen.notification)
-        // }
+        if (notificationOpen.action) {
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+          // this.props.createNotification(notificationOpen.notification)
+        }
         // this.props.newNotifInstance(notificationOpen.notification);
         // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
       } else if (notificationOpen.notification._data.admin === "false") {
@@ -343,17 +370,17 @@ class Dashboard extends PureComponent {
 
       if (notificationOpen.notification._data.admin === "true") {
         this.props.refreshNotifications(oyeURL, MyAccountID);
-        // if (notificationOpen.notification._data.foreground) {
-        //   // this.props.newNotifInstance(notificationOpen.notification);
-        //   // this.props.createNotification(
-        //   //   notificationOpen.notification._data,
-        //   //   navigationInstance,
-        //   //   true,
-        //   //   "true",
-        //   //   this.props.oyeURL,
-        //   //   this.props.MyAccountID
-        //   // );
-        // }
+        if (notificationOpen.notification._data.foreground) {
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "true",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+        }
       } else if (notificationOpen.notification._data.admin === "gate_app") {
         this.props.refreshNotifications(oyeURL, MyAccountID);
         // this.props.newNotifInstance(notificationOpen.notification);
@@ -372,6 +399,7 @@ class Dashboard extends PureComponent {
       // this.props.getNotifications(oyeURL, MyAccountID);
       this.props.navigation.navigate("NotificationScreen");
     });
+  }
   };
 
   onChangeText = () => {};
@@ -394,21 +422,17 @@ class Dashboard extends PureComponent {
       getDashAssociation,
       getAssoMembers,
       getDashSub,
-      getDashAssoSync,
-      selectedDropdown,
-      selectedDropdown1
+      getDashAssoSync
     } = this.props;
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-
+    
     this.requestNotifPermission();
-
-    // alert(selectedDropdown1, "drop");
     // this.props.getNotifications(oyeURL, MyAccountID);
 
     // getDashSub(oyeURL, SelectedAssociationID);
-    getDashAssoSync(oyeURL, MyAccountID, selectedDropdown, selectedDropdown1);
+    getDashAssoSync(oyeURL, MyAccountID);
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
   };
@@ -422,7 +446,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
+    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this)
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
@@ -439,71 +463,74 @@ class Dashboard extends PureComponent {
         this.syncData();
         // alert("hererereerrrereer");
       },
-      3000
+      5000
     );
   }
 
-  async roleCheckForAdmin(index) {
-    try {
-      let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
-        this.state.assocId
-      );
-      let role = "";
+  async roleCheckForAdmin (index) {
+ 
+try{
 
-      //responseJson.data.members.splice(0,1);
-      console.log("Manas", responseJson, responseJson.data);
-      for (let i = 0; i < responseJson.data.members.length; i++) {
-        //alert(responseJson.data.members[i].mrmRoleID)
+        let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
+        let role = "";
+        console.log("roleCheckForAdmin_",responseJson)
+        //responseJson.data.members.splice(0,1);
         console.log(
-          "Get_Ids",
-          this.props.userReducer.MyAccountID,
-          responseJson.data.members[i].acAccntID,
-          this.state.assocId,
-          responseJson.data.members[i].asAssnID,
-          responseJson.data.members[i].mrmRoleID,
-          responseJson.data.members[i].unUniName + "name"
+          "Manas",
+          responseJson,
+          responseJson.data          
         );
-        if (
-          responseJson.data.members[i].meIsActive &&
-          this.props.userReducer.MyAccountID ===
-            responseJson.data.members[i].acAccntID &&
-          responseJson.data.members[i].mrmRoleID === 1 &&
-          parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
-        ) {
+        for (let i = 0; i < responseJson.data.members.length; i++) {
+          //alert(responseJson.data.members[i].mrmRoleID)
           console.log(
-            "Id_eq",
+            "Get_Ids",
             this.props.userReducer.MyAccountID,
             responseJson.data.members[i].acAccntID,
-            responseJson.data.members[i].mrmRoleID
+            this.state.assocId,
+            responseJson.data.members[i].asAssnID,
+            responseJson.data.members[i].mrmRoleID,
+            responseJson.data.members[i].unUniName + "name"
           );
-          role = responseJson.data.members[i].mrmRoleID;
+          if (
+            responseJson.data.members[i].meIsActive &&
+            this.props.userReducer.MyAccountID ===
+              responseJson.data.members[i].acAccntID &&            
+            parseInt(this.state.assocId) ===
+              responseJson.data.members[i].asAssnID
+          ) {
+            console.log(
+              "Id_eq",
+              this.props.userReducer.MyAccountID,
+              responseJson.data.members[i].acAccntID,
+              responseJson.data.members[i].mrmRoleID
+            );            
+            role = responseJson.data.members[i].mrmRoleID;
+          }
         }
-      }
-
-      console.log(role, "role");
-      this.setState(
-        {
-          role: role
-        },
-        () => {
-          const { updateuserRole } = this.props;
-          console.log("Role123456:", updateuserRole);
-          updateuserRole({
-            prop: "role",
-            value: role
-          });
-          console.log("ROLE_UPDATE", role);
-        }
-      );
-      this.checkUnitIsThere()
+        console.log(role, "role");
+        this.setState(
+          {
+            role: role
+          },
+          () => {
+            const { updateuserRole } = this.props;
+            console.log("Role123456:", updateuserRole);
+            updateuserRole({
+              prop: "role",
+              value: role
+            });
+            console.log("ROLE_UPDATE", role);
+          }
+        );
       // })
-      // .catch(error => {
+      // .catch(error => {        
       //   this.setState({ error, loading: false });
       // });
-    } catch (err) {
-      //alert(err)
-    }
-  }
+        }catch(err){
+          //alert(err)
+          console.log("ROLECHECK_ERROR",err)
+        }
+  };
 
   static getAssociationList() {
     this.getAssociationList();
@@ -688,7 +715,7 @@ class Dashboard extends PureComponent {
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat);
+    console.log("STAT123", stat,self.state.assocId);
 
     try {
       if (stat && stat.data) {
@@ -829,7 +856,7 @@ class Dashboard extends PureComponent {
 
   getVisitorList = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
       {
         method: "GET",
         headers: {

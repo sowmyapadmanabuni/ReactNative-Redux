@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import {
   View,
   Image,
@@ -21,7 +21,8 @@ import {
   storeOpenedNotif,
   getNotifications,
   refreshNotifications,
-  toggleCollapsible
+  toggleCollapsible,
+  onEndReached
 } from "../../actions";
 import _ from "lodash";
 import { NavigationEvents } from "react-navigation";
@@ -62,11 +63,16 @@ class NotificationScreen extends PureComponent {
       // item.ntType === "gate_app"
     ) {
       this.props.navigation.navigate("NotificationDetailScreen", {
-        details: item
+        details: item,
+        index,
+        notifications,
+        oyeURL,
+        savedNoifId,
+        ntid: item.ntid
       });
 
-      this.props.onNotificationOpen(notifications, index, oyeURL);
-      this.props.storeOpenedNotif(savedNoifId, item.ntid);
+      // this.props.onNotificationOpen(notifications, index, oyeURL);
+      // this.props.storeOpenedNotif(savedNoifId, item.ntid);
     }
   };
 
@@ -367,7 +373,7 @@ class NotificationScreen extends PureComponent {
                   </View>
                 </View>
                 <Collapsible
-                  duration={300}
+                  duration={100}
                   style={{ flex: 1 }}
                   collapsed={item.open}
                   align="center"
@@ -642,10 +648,11 @@ class NotificationScreen extends PureComponent {
       refresh,
       refreshNotifications,
       oyeURL,
-      MyAccountID
+      MyAccountID,
+      footerLoading,
+      page
     } = this.props;
     // console.log(loading)
-    // console.log(isCreateLoading)
     if (loading) {
       return (
         <View
@@ -661,21 +668,47 @@ class NotificationScreen extends PureComponent {
       );
     } else {
       return (
-        <FlatList
-          keyExtractor={this.keyExtractor}
-          data={notifications}
-          renderItem={this.renderItem}
-          extraData={this.props.notifications}
-          refreshControl={
-            <RefreshControl
-              refreshing={refresh}
-              onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
-              progressBackgroundColor="#fff"
-              tintColor="#ED8A19"
-              colors={["#ED8A19"]}
-            />
-          }
-        />
+        <Fragment>
+          <FlatList
+            keyExtractor={this.keyExtractor}
+            contentContainerStyle={{ flexGrow: 1 }}
+            style={{ flex: 1 }}
+            ListFooterComponentStyle={{
+              flex: 1,
+              justifyContent: "flex-end"
+            }}
+            data={notifications}
+            ListFooterComponent={() =>
+              footerLoading ? (
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginVertical: 10
+                  }}
+                >
+                  <ActivityIndicator />
+                </View>
+              ) : null
+            }
+            renderItem={this.renderItem}
+            extraData={this.props.notifications}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              // console.log("End Reached");
+              // this.props.onEndReached(oyeURL, page, notifications, MyAccountID);
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refresh}
+                onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
+                progressBackgroundColor="#fff"
+                tintColor="#ED8A19"
+                colors={["#ED8A19"]}
+              />
+            }
+          />
+        </Fragment>
       );
     }
   };
@@ -684,29 +717,10 @@ class NotificationScreen extends PureComponent {
     const { navigation, notifications, oyeURL, MyAccountID } = this.props;
     // const refresh = navigation.getParam("refresh", "NO-ID");
     // console.log(this.state.gateDetails, "gateDetails");
-    console.log("rendered");
+    // console.log("rendered");
     return (
       <View style={styles.container}>
         <NavigationEvents />
-        {/* <Header
-              leftComponent={{
-                icon: "arrow-left",
-                color: "#ED8A19",
-                type: "material-community",
-                onPress: () => navigation.pop()
-              }}
-              containerStyle={{
-                borderBottomColor: "#ED8A19",
-                borderBottomWidth: 2
-              }}
-              centerComponent={
-                <Image
-                    source={require("../../../pages/assets/images/OyeSpace.png")}
-                    style={{ height: 90, width: 90 }}
-                />
-              }
-              backgroundColor="#fff"
-          /> */}
 
         <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
@@ -811,7 +825,9 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
     MyAccountID: state.UserReducer.MyAccountID,
-    refresh: state.NotificationReducer.refresh
+    refresh: state.NotificationReducer.refresh,
+    page: state.NotificationReducer.page,
+    footerLoading: state.NotificationReducer.footerLoading
   };
 };
 
@@ -822,6 +838,7 @@ export default connect(
     storeOpenedNotif,
     getNotifications,
     refreshNotifications,
-    toggleCollapsible
+    toggleCollapsible,
+    onEndReached
   }
 )(NotificationScreen);
