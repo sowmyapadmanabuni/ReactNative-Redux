@@ -419,7 +419,7 @@ export const newNotifInstance = data => {
 };
 
 export const onNotificationOpen = (notif, index, oyeURL) => {
-  console.log(index);
+  console.log("DJKVHKRVJ<VHRKJV>",newNotif,index);
   return dispatch => {
     newNotif = Object.assign([], notif);
     newNotif[index].read = true;

@@ -206,19 +206,17 @@ class Dashboard extends PureComponent {
       .then(response => {
         console.log(response, "fetched");        
         let data = response.data.data.memberListByAccount;
-        // console.log("dataoye", data);
+         console.log("dataoye", data);
         firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
         data.map(units => {
 
-           console.log( "role_units",units.mrmRoleID);
+           console.log( "role_units",units.acMobile,units.mrmRoleID,units);
           if (receiveNotifications) {            
-             //alert(MyAccountID + "admin");
             firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-            } else if (units.mrmRoleID === 1) {
-              console.log(units, "units");
+            if ((units.mrmRoleID === 2 || units.mrmRoleID === 3) || units.acMobile == "") {
+            } else if (units.mrmRoleID === 1 && units.acMobile !== "") {
               if (units.meIsActive) {
                 //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
                 firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
