@@ -443,7 +443,7 @@ class EditProfile extends Component {
                                                     }}
                                                     //cca2={this.state.cca2}
                                                     cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                    flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    flag={this.state.primeCName === "" || this.state.primeCName=== "+91" ? 'IN' : this.state.primeCName}
                                                     translation="eng"
                                                 />
                                             </View>
@@ -500,7 +500,7 @@ class EditProfile extends Component {
                                                         })
                                                     }}
                                                     cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
+                                                    flag={this.state.alterCName === "" || this.state.alterCName === "+91"  ? 'IN' : this.state.alterCName}
                                                     translation="eng"
                                                 />
                                             </View>
