@@ -51,36 +51,8 @@ class EditProfile extends Component {
             alterMobNum:"",
             alterCCode:"",
             profileName:"",
-
-
-
-
-
-            FirstName: "",
-            LastName: "",
-
-            MobileNumber: "",
-            AlternateMobileNumber: "",
-            cca2: "",
-            cca3: "",
-            callingCode: "",
-            callingCode1: "",
-            countryName1: "",
-
-            Email: "",
-            AlternateEmail: "",
-
-            Image: "",
-            countryName: "",
-
-            // cca2: "",
-            // callingCode: "",
-            data1: [],
-            photo: null,
-            photoDetails: null,
             isPhotoAvailable: false,
-            filePath: '',
-            imagePath: ''
+
         }
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
 
@@ -162,7 +134,7 @@ class EditProfile extends Component {
 
 
     async updateProfile() {
-        console.log("Alternate data",this.state)
+        console.log("Alternate data",this.state,this.props)
 
         axios
             .post(
@@ -199,13 +171,15 @@ class EditProfile extends Component {
             )
 
             .then(response => {
-                if(this.state.isPhotoAvailable){
+                console.log("Respo1111:", response);
+
+             if(this.state.isPhotoAvailable){
                     if (Platform.OS === 'android') {
                         this.deleteImage();
                     }
                 }
+                console.log("Respo22222:", response);
 
-                
                 updateUserInfo({ prop: "MyEmail", value: this.state.primaryEmail });
                 updateUserInfo({
                   prop: "MyMobileNumber",
@@ -221,10 +195,9 @@ class EditProfile extends Component {
                 });
                 
                 this.props.navigation.goBack();
-                console.log("Respo:", response);
             })
             .catch(error => {
-                console.log(error)
+                console.log("Crash in profile",error)
             })
 
     }
