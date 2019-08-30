@@ -258,8 +258,7 @@ class MyGuests extends Component {
               </View>
 
 
-              {/* {moment(item.vlExitT).format("YYYY-MM-DD") === '1900-01-01' ? */}
-              {item.vlExitT === '0001-01-01T00:00:00' ?
+              {item.vlExitT === '0001-01-01T00:00:00'  ?
                 <View style={{ flexDirection: 'row' }}>
                   <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
                   <Text>{"  "}</Text>

@@ -19,6 +19,7 @@ import CardView from "../../../components/cardView/CardView";
 import { Dropdown } from "react-native-material-dropdown";
 import ElevatedView from "react-native-elevated-view";
 import OSButton from "../../../components/osButton/OSButton";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Style from "./Style";
 import axios from "axios";
 import firebase from "react-native-firebase";
@@ -52,7 +53,7 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-
+var counter = 0
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -206,9 +207,10 @@ class Dashboard extends PureComponent {
         console.log(response, "fetched");        
         let data = response.data.data.memberListByAccount;
         // console.log("dataoye", data);
-        firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
         data.map(units => {
-          // console.log(units.mrmRoleID + "role");
+
+           console.log( "role_units",units.mrmRoleID);
           if (receiveNotifications) {            
              //alert(MyAccountID + "admin");
             firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
@@ -218,7 +220,8 @@ class Dashboard extends PureComponent {
             } else if (units.mrmRoleID === 1) {
               console.log(units, "units");
               if (units.meIsActive) {
-                firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
+                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
               } else {
                 firebase
                   .messaging()
@@ -232,20 +235,22 @@ class Dashboard extends PureComponent {
           }
         });
 
-        if(data != undefined && data!=null && data.length > 0){
-            let val = data.find(o => o.mrmRoleID === 1);
-            if(val == undefined || val == null){
-              //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
-              firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
-              firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
-            }
-        }
+        // if(data != undefined && data!=null && data.length > 0){
+        //     let val = data.find(o => o.mrmRoleID === 1);
+        //     if(val == undefined || val == null){
+        //       //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
+        //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
+        //     }
+        // }
 
 
       });
   };
 
   showLocalNotification = notification => {
+
+    try{
     // console.log(notification);
     const channel = new firebase.notifications.Android.Channel(
       "channel_id",
@@ -270,21 +275,25 @@ class Dashboard extends PureComponent {
         foreground: true
       })
       .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")
-      .android.setAutoCancel(true)
+      .android.setLargeIcon("ic_notif")      
       .android.setSmallIcon("ic_stat_ic_notification")
       .android.setChannelId("channel_id")
       .android.setVibrate("default")
+      .setSound('default')
       // .android.setChannelId('notification-action')
       .android.setPriority(firebase.notifications.Android.Priority.Max);
 
     firebase.notifications().displayNotification(notificationBuild);
     this.setState({ foregroundNotif: notification._data });
+    }catch(e){
+      console.log("FAILED_NOTIF")
+    }
   };
 
-  listenForNotif = () => {
+  listenForNotif = () => {    
+    if(this.notificationDisplayedListener == undefined || this.notificationDisplayedListener==null){    
     let navigationInstance = this.props.navigation;
-
+      
     this.notificationDisplayedListener = firebase
       .notifications()
       .onNotificationDisplayed(notification => {
@@ -307,6 +316,16 @@ class Dashboard extends PureComponent {
         }
 
         this.showLocalNotification(notification);
+
+        showMessage({
+          message: notification.title,
+          description: notification.body,
+          type: "default",
+          backgroundColor: "#FF9100",
+          onPress: () => {
+            this.props.navigation.navigate("NotificationScreen")
+          },
+        });
       });
 
     firebase.notifications().onNotificationOpened(notificationOpen => {
@@ -380,6 +399,7 @@ class Dashboard extends PureComponent {
       // this.props.getNotifications(oyeURL, MyAccountID);
       this.props.navigation.navigate("NotificationScreen");
     });
+  }
   };
 
   onChangeText = () => {};
@@ -407,7 +427,7 @@ class Dashboard extends PureComponent {
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-
+    
     this.requestNotifPermission();
     // this.props.getNotifications(oyeURL, MyAccountID);
 
@@ -450,9 +470,10 @@ class Dashboard extends PureComponent {
   async roleCheckForAdmin (index) {
  
 try{
+
         let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
         let role = "";
-        
+        console.log("roleCheckForAdmin_",responseJson)
         //responseJson.data.members.splice(0,1);
         console.log(
           "Manas",
@@ -473,8 +494,7 @@ try{
           if (
             responseJson.data.members[i].meIsActive &&
             this.props.userReducer.MyAccountID ===
-              responseJson.data.members[i].acAccntID &&
-            responseJson.data.members[i].mrmRoleID === 1 &&
+              responseJson.data.members[i].acAccntID &&            
             parseInt(this.state.assocId) ===
               responseJson.data.members[i].asAssnID
           ) {
@@ -487,7 +507,6 @@ try{
             role = responseJson.data.members[i].mrmRoleID;
           }
         }
-
         console.log(role, "role");
         this.setState(
           {
@@ -509,6 +528,7 @@ try{
       // });
         }catch(err){
           //alert(err)
+          console.log("ROLECHECK_ERROR",err)
         }
   };
 
@@ -669,7 +689,7 @@ try{
   checkUnitIsThere() {
     const { dropdown1 } = this.props;
     console.log(
-      "CheckUnit;s is there",
+      "CheckUnit;s is there",this.props,
       this.props.dashBoardReducer.uniID,
       dropdown1,
       dropdown1.length
@@ -695,7 +715,7 @@ try{
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat);
+    console.log("STAT123", stat,self.state.assocId);
 
     try {
       if (stat && stat.data) {
@@ -723,8 +743,6 @@ try{
         // });
 
         self.roleCheckForAdmin(this.state.assocId);
-        self.checkUnitIsThere();
-        self.getVehicleList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -838,7 +856,7 @@ try{
 
   getVisitorList = () => {
     fetch(
-      `http://apidev.oyespace.com/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
       {
         method: "GET",
         headers: {
@@ -886,6 +904,10 @@ try{
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
+    let maxLen=25;
+    let maxLenUnit=10;
+    let text='ALL THE GLITTERS IS NOT GOLD';
+    console.log('Hfhfhgfhfhhgfhgfgh',dropdown.length,dropdown1.length)
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -897,21 +919,19 @@ try{
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    value={selectedDropdown}
+                    value={selectedDropdown.length>maxLen?selectedDropdown.substring(0,maxLen-2) + '...':selectedDropdown}
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
                     containerStyle={{
-                      width: "114%",
-                      borderBottomWidth: hp("0.05%"),
-                      borderBottomColor: "#474749"
+                      width: "100%",
                     }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
-                      borderBottomColor: "transparent"
+                      borderBottomColor: "transparent",
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-3}
+                   dropdownPosition={dropdown.length>2?-5:-2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -932,12 +952,12 @@ try{
                 {this.state.unitNameHide === false ? (
                   <Dropdown
                     // value={this.state.unitName}
-                    value={selectedDropdown1}
-                    containerStyle={{
-                      width: "70%",
+                    value={selectedDropdown1.length>maxLenUnit?selectedDropdown1.substring(0,maxLenUnit-3) + '...':selectedDropdown1}
+                    containerStyle={{ width: "95%",
+                      /*width: "70%",
                       marginLeft: "30%",
                       borderBottomWidth: hp("0.05%"),
-                      borderBottomColor: "#474749"
+                      borderBottomColor: "#474749"*/
                     }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
@@ -947,7 +967,7 @@ try{
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={0}
+                    dropdownPosition={dropdown1.length>2?-4:dropdown1.length<2 ?-2:-3}
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
@@ -991,10 +1011,12 @@ try{
                 height={this.state.myUnitCardHeight}
                 width={this.state.myUnitCardWidth}
                 cardText={"My Unit"}
-                iconWidth={Platform.OS === "ios" ? 35 : 16}
-                iconHeight={Platform.OS === "ios" ? 35 : 16}
+                iconWidth={Platform.OS === "ios" ? 35 : 20}
+                iconHeight={Platform.OS === "ios" ? 35 : 20}
                 cardIcon={require("../../../../icons/my_unit.png")}
                 onCardClick={() => this.changeCardStatus("UNIT")}
+                textWeight={'bold'}
+                textFontSize={10}
                 disabled={this.state.isSelectedCard === "UNIT"}
               />
               {this.state.role === 1 ? (
@@ -1002,8 +1024,9 @@ try{
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
                   cardText={"Admin"}
-                  iconWidth={Platform.OS === "ios" ? 35 : 16}
-                  iconHeight={Platform.OS === "ios" ? 35 : 16}
+                  textWeight={'bold'}
+                  iconWidth={Platform.OS === "ios" ? 35 : 20}
+                  iconHeight={Platform.OS === "ios" ? 35 : 20}
                   onCardClick={() => this.changeCardStatus("ADMIN")}
                   cardIcon={require("../../../../icons/user.png")}
                   disabled={this.state.isSelectedCard === "ADMIN"}
@@ -1080,7 +1103,7 @@ try{
         myUnitCardHeight: "80%",
         myUnitCardWidth: "26%",
         adminCardHeight: "70%",
-        adminCardWidth: "20%",
+        adminCardWidth: "22%",
         offersCardHeight: "70%",
         offersCardWidth: "20%",
 
@@ -1090,7 +1113,7 @@ try{
     } else if (status == "ADMIN") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "80%",
         adminCardWidth: "25%",
         offersCardHeight: "70%",
@@ -1102,7 +1125,7 @@ try{
     } else if (status == "OFFERS") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "70%",
         adminCardWidth: "20%",
         offersCardHeight: "80%",
@@ -1336,13 +1359,13 @@ try{
           >
             <Text>View All Visitors</Text>
           </Button>
-          <Button
+          {/*<Button
             bordered
             style={styles.button1}
             onPress={() => this.props.navigation.navigate("schedulePatrolling")}
           >
             <Text>Patrolling</Text>
-          </Button>
+          </Button>*/}
         </View>
       </ElevatedView>
     );

@@ -19,10 +19,10 @@ const Style = StyleSheet.create({
         flexDirection: 'row',
     },
     leftDropDown: {
-        width: '60%',
+        width: '70%',
     },
     rightDropDown: {
-        width: '40%'
+        width: '30%'
     },
     bottomCards: {
         height: '13%',

@@ -185,7 +185,7 @@ class MainScreen extends Component {
                 // console.log(association.asAsnName)
                 // console.log(association.asAssnID)
                 // console.log('***********')
-                firebase.messaging().subscribeToTopic(association.asAssnID + 'admin')
+                //firebase.messaging().subscribeToTopic(association.asAssnID + 'admin')
             })
         })
     }
