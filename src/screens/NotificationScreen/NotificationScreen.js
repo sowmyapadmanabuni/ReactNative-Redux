@@ -33,6 +33,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 import moment from "moment";
+import firebase from "react-native-firebase";
 
 class NotificationScreen extends PureComponent {
   constructor(props) {
@@ -51,6 +52,7 @@ class NotificationScreen extends PureComponent {
     // console.log("didmount");
     // this.gateAppNotif()
     this.doNetwork(null, this.props.notifications);
+    firebase.notifications().removeAllDeliveredNotifications();
   }
 
   keyExtractor = (item, index) => index.toString();
