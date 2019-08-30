@@ -940,7 +940,7 @@ class Dashboard extends PureComponent {
                       borderBottomColor: "transparent"
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={dropdown.length > 2 ? -5 : -2}
+                    dropdownPosition={dropdown.length > 2 ? -6 : -2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
