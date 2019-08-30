@@ -385,7 +385,7 @@ class BlockDetail extends React.Component {
               <Input
                 value={this.state.searchText}
                 marginBottom={hp("-1%")}
-                placeholder="Search...."
+                placeholder="Search your association...."
                 multiline={false}
                 onChangeText={this.searchFilterFunction}
               />

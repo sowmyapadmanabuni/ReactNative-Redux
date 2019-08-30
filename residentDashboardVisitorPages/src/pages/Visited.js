@@ -212,18 +212,18 @@ class MyGuests extends Component {
           ]}
         >
           <View style={styles.iconContainer}>
-            {item.vlEntryImg.includes("PERSONAssociation") ?
-            //   <Text style={styles.contactIcon}>
-            //   {item.vlfName[0].toUpperCase()}
-            // </Text> 
-            <Image
+            {item.vlEntryImg == "" ?
+              //   <Text style={styles.contactIcon}>
+              //   {item.vlfName[0].toUpperCase()}
+              // </Text> 
+              <Image
                 style={styles.profilePicImageStyle}
                 source={{
                   uri:
-                      "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder // `${this.props.noImage}`
+                    "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder // `${this.props.noImage}`
                 }}
               />
-            :
+              :
               <Image
                 style={styles.profilePicImageStyle}
                 source={{
@@ -259,7 +259,7 @@ class MyGuests extends Component {
               </View>
 
 
-              {item.vlExitT === '0001-01-01T00:00:00'  ?
+              {item.vlExitT === '0001-01-01T00:00:00' ?
                 <View style={{ flexDirection: 'row' }}>
                   <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
                   <Text>{"  "}</Text>
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
     borderRadius: hp("4%"),
     marginTop: hp("2%"),
     borderWidth: hp("0.1%")
-},
+  },
   infoContainer: {
     flexDirection: "column",
     paddingLeft: hp("1.6%"),
