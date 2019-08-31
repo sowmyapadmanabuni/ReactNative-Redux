@@ -525,7 +525,7 @@ class NotificationDetailScreen extends PureComponent {
                   justifyContent: "center"
                 }}
               >
-                <Text>{this.state.date || "Rejected"}</Text>
+                <Text>{this.state.date || "Request Rejected"}</Text>
               </View>
             );
           }

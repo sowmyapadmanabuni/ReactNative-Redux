@@ -46,7 +46,9 @@ const HeaderStyles = StyleSheet.create({
         alignSelf:'center',
         height: 32,
         width: 32,
-        borderRadius: 32 / 2
+        borderRadius: 32 / 2,
+        borderColor:base.theme.colors.primary,
+        borderWidth:1
     },
     logoStyles: {
         height: 25,

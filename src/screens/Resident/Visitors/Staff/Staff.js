@@ -115,7 +115,7 @@ class Staff extends React.Component {
                     <View style={StaffStyle.detailsLeftView}>
                         {this.state.staffPic ==='' ?
                             <Image style={StaffStyle.staffImg}
-                                   source={{uri:base.utils.strings.staffPlaceHolder}}
+                                   source={{uri:"https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                             />
                             :
                             <Image style={StaffStyle.staffImg}

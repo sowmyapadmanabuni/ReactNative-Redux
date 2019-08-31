@@ -78,10 +78,11 @@ const strings = {
   UNSOLD_VACANT_UNIT: 'UnSold Vacant Unit',
   UNSOLD_TENANT_OCCUPIED_UNIT: 'UnSold Tenant Occupied Unit',
   SOLD_VACANT_UNIT: 'Sold Vacant Unit',
-
   USER_ADMIN: 1,
   USER_OWNER: 2,
-  USER_TENANT: 3
+  USER_TENANT: 3,
+  noImageCapturedPlaceholder:"Images/no_img_captured.png",
+
 };
 
 export default strings;

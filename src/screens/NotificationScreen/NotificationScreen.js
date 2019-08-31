@@ -34,6 +34,7 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import firebase from 'react-native-firebase';
+import base from "../../base";
 
 class NotificationScreen extends PureComponent {
   constructor(props) {
@@ -394,7 +395,9 @@ class NotificationScreen extends PureComponent {
                           ) === '' ? (
                             <Image
                               style={{ width: hp('20%'), height: hp('20%') }}
-                              source={require('../../../icons/no_img_captured.png')}
+                              source={{
+                                uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder
+                              }}
                             />
                           ) : (
                             <Image

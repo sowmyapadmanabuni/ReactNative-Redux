@@ -95,7 +95,9 @@ class DashBoardHeader extends React.Component {
               <Image
                 style={HeaderStyles.imageStyles}
                 source={{
-                  uri: "https://via.placeholder.com/150/ff8c00/FFFFFF"
+                    uri:
+                        "https://mediaupload.oyespace.com/" +
+                        base.utils.strings.noImageCapturedPlaceholder
                 }}
               />
             ) : (

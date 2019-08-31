@@ -32,7 +32,7 @@ const Style = StyleSheet.create({
     flex: 1
   },
   containerViewStyle: {
-    height: hp("87%"),
+    height: hp("90%"),
     width: wp("100%")
   },
 
@@ -99,7 +99,8 @@ const Style = StyleSheet.create({
     justifyContent: "flex-start"
   },
   imageContainerViewStyle: {
-    flex: 2,
+    height:'20%',
+    width:'20%',
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center"
@@ -176,7 +177,7 @@ const Style = StyleSheet.create({
     width: wp("20%"),
     borderRadius: wp("20%") / 2,
     borderColor: "orange",
-    borderWidth: hp("0.1%")
+    borderWidth: hp("0.1%"),
   },
   threeBtnStyle: {
    // borderColor: "gray",

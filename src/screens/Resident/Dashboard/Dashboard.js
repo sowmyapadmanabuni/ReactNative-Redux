@@ -203,7 +203,7 @@ class Dashboard extends PureComponent {
       .then(response => {
         console.log(response, "fetched");
         let data = response.data.data.memberListByAccount;
-        // console.log("dataoye", data);
+         console.log("dataoye", data);
         firebase.messaging().subscribeToTopic(MyAccountID + "admin");
         data.map(units => {
           console.log("role_units", units.mrmRoleID);
@@ -519,6 +519,7 @@ class Dashboard extends PureComponent {
           console.log("ROLE_UPDATE", role);
         }
       );
+       this.checkUnitIsThere();
       // })
       // .catch(error => {
       //   this.setState({ error, loading: false });
@@ -766,7 +767,7 @@ class Dashboard extends PureComponent {
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
     self.checkUnitIsThere();
-    self.getVehicleList();
+    //self.getVehicleList();
   }
 
   getVehicleList = unitId => {
