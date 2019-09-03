@@ -550,7 +550,7 @@ try{
 
         let assnId = ""+this.state.assocId+"admin"
         if(isAdminFound){
-           
+            role = 1;
             console.log(assnId)
             //let subscription = await base.utils.storage.retrieveData('ADMIN_NOTIF'+assnId);
             console.log("SUBSCRIBED_TO_",assnId)
