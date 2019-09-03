@@ -166,6 +166,7 @@ class BlockDetail extends React.Component {
       });
   };
   renderItem = ({ item }) => {
+    console.log("RENDER_ITEM",item);
     return (
       <View style={styles.tableView}>
         <View style={styles.cellView}>
