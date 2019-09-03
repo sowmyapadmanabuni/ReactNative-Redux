@@ -10,7 +10,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View
+    View,
+    ScrollView
 } from "react-native"
 
 import {NavigationEvents} from "react-navigation"
@@ -23,6 +24,7 @@ import ZoomImage from "react-native-zoom-image"
 import Style from "./Style"
 import base from "../../../../base"
 import {connect} from "react-redux";
+import FloatingActionButton from "../../../../components/FloatingButton";
 
 class MyFamilyList extends React.Component {
   static navigationOptions = {
@@ -159,16 +161,19 @@ class MyFamilyList extends React.Component {
     this.myFamilyListGetData()
   }
 
-  renderItem = ({item}) => {
+  renderItem = ({item,index}) => {
     let itemID = item.id
-      console.log('Image issue',item)
+      console.log('Image issue',item,index)
     return (
-        <View style={Style.tableView}>
+        <View style={[Style.tableView,{marginBottom: index === this.state.myfamily11.length - 1 ? 270 : 0 }]}>
           <View style={Style.cellView}>
             <View style={Style.imageContainerViewStyle}>
               {item.fmImgName == "" ? (
                   <ZoomImage
-                      source={require("../../../../../icons/placeholderImg.png")}
+                      source={{
+                          uri:
+                              "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder
+                      }}
                       imgStyle={Style.placeholderImage}
                       duration={300}
                       enableScaling={true}
@@ -412,25 +417,6 @@ class MyFamilyList extends React.Component {
 
               <Icon style={Style.icon} name="search" size={14} />
             </Item>
-              {/* <View
-                  style={{flex: 0.9, height: hp("5.5%"), marginStart: hp("2%"), marginBottom: 50}}
-              >
-                <TextInput
-                    // value={this.state.searchText}
-                    style={{
-                      height: hp("5.5%"),
-                      backgroundColor: "#F5F5F5",
-                      borderRadius: hp("7%"),
-                      fontSize: hp("1.8%"),
-                      paddingLeft: hp("2%")
-                    }}
-                    placeholder="  search...."
-                    round
-                    //autoCapitalize="characters"
-                    onChangeText={(text) => this.handleSearch(text)}
-                />
-              </View>
-             */}
             </View>
             {/* <View style={Style.lineAboveAndBelowFlatList} /> */}
 
@@ -452,6 +438,7 @@ class MyFamilyList extends React.Component {
                 </View>
                 :
                 <FlatList
+                    style={{ marginTop: hp("2%")}}
                     // data={this.state.dataSource.sort((a, b) =>
                     //   a.fmName.localeCompare(b.fmName)
                     // )}
@@ -460,7 +447,6 @@ class MyFamilyList extends React.Component {
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => item.fmid.toString()}
                 />
-
             }
             <TouchableOpacity
                 style={Style.floatButton}

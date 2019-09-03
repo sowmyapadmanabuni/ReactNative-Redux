@@ -26,6 +26,7 @@ import { DatePickerDialog } from "react-native-datepicker-dialog";
 import { Card, CardItem, Form, Item, Input, Icon, Button } from "native-base"
 import moment from "moment";
 import Collapsible from "react-native-collapsible";
+import base from "../../../src/base";
 
 let dt = new Date();
 dt.setDate(dt.getDate());
@@ -211,7 +212,7 @@ class MyGuests extends Component {
           ]}
         >
           <View style={styles.iconContainer}>
-            {item.vlEntryImg == "" ?
+            {item.vlEntryImg.includes("PERSONAssociation") ?
             //   <Text style={styles.contactIcon}>
             //   {item.vlfName[0].toUpperCase()}
             // </Text> 
@@ -219,7 +220,7 @@ class MyGuests extends Component {
                 style={styles.profilePicImageStyle}
                 source={{
                   uri:
-                    `${this.props.noImage}`
+                      "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder // `${this.props.noImage}`
                 }}
               />
             :

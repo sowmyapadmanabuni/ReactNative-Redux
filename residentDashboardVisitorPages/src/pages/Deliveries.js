@@ -31,6 +31,7 @@ import {
 import ZoomImage from "react-native-zoom-image";
 import { connect } from "react-redux";
 import Collapsible from "react-native-collapsible";
+import base from "../../../src/base";
 
 let dt = new Date();
 dt.setDate(dt.getDate());
@@ -262,7 +263,7 @@ class App extends React.Component {
                 style={styles.profilePicImageStyle}
                 source={{
                   uri:
-                    `${this.props.noImage}`
+                      "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder
                 }}
               />
               :
@@ -648,7 +649,6 @@ class App extends React.Component {
               </Button>
             </View>
           </View>
-
 
           {this.state.dataSource.length === 0 ?
             <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', width: '100%', height: '80%' }}   >

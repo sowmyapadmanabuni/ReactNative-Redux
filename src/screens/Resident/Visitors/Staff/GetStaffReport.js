@@ -269,7 +269,7 @@ class GetStaffReport extends React.Component {
                         <View style={StaffStyle.detailsLeftView}>
                             {this.props.staffReducer.staffProfilePic === '' ?
                                 <Image style={StaffStyle.staffImg}
-                                       source={{uri: base.utils.strings.staffPlaceHolder}}
+                                       source={{uri:"https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                 />
                                 :
                                 <Image style={StaffStyle.staffImg}
