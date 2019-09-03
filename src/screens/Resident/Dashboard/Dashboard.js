@@ -356,15 +356,15 @@ class Dashboard extends PureComponent {
 
           this.showLocalNotification(notification);
 
-          showMessage({
-            message: notification.title,
-            description: notification.body,
-            type: "default",
-            backgroundColor: "#FF9100",
-            onPress: () => {
-              this.props.navigation.navigate("NotificationScreen");
-            }
-          });
+          // showMessage({
+          //   message: notification.title,
+          //   description: notification.body,
+          //   type: "default",
+          //   backgroundColor: "#FF9100",
+          //   onPress: () => {
+          //     this.props.navigation.navigate("NotificationScreen");
+          //   }
+          // });
         });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {

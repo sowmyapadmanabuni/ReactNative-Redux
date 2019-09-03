@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from 'react';
 import {
   View,
   Text,
@@ -8,59 +8,96 @@ import {
   Image,
   SafeAreaView,
   Dimensions,
-  TouchableOpacity,BackHandler
-} from "react-native";
-import { Button, Header, Avatar } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
-import axios from "axios";
-import { CLOUD_FUNCTION_URL } from "../../../constant";
-import { connect } from "react-redux";
+  TouchableOpacity
+} from 'react-native';
+import { Button, Header, Avatar } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
+import { CLOUD_FUNCTION_URL } from '../../../constant';
+import { connect } from 'react-redux';
 import {
   updateApproveAdmin,
   getNotifications,
   createUserNotification,
   storeOpenedNotif,
   onNotificationOpen
-} from "../../actions";
+} from '../../actions';
 
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
-import _ from "lodash";
-import base from "../../base";
+import _ from 'lodash';
+import base from '../../base';
 
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
-  state = {
-    loading: false,
-    date: "",
-    reqStatus: ""
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+      date: '',
+      reqStatus: '',
+      adminStatLoading: true,
+      adminStat: null
+    };
+
+    this.checkAdminNotifStatus = this.checkAdminNotifStatus.bind(this);
+  }
 
   componentDidMount() {
     const { navigation } = this.props;
     // const details = navigation.getParam("details", "NO-ID");
-    const index = navigation.getParam("index", "NO-ID");
-    const notifications = navigation.getParam("notifications", "NO-ID");
-    const ntid = navigation.getParam("ntid", "NO-ID");
-    const oyeURL = navigation.getParam("oyeURL", "NO-ID");
-    const savedNoifId = navigation.getParam("savedNoifId", "NO-ID");
+    const index = navigation.getParam('index', 'NO-ID');
+    const notifications = navigation.getParam('notifications', 'NO-ID');
+    const ntid = navigation.getParam('ntid', 'NO-ID');
+    const oyeURL = navigation.getParam('oyeURL', 'NO-ID');
+    const savedNoifId = navigation.getParam('savedNoifId', 'NO-ID');
     this.props.onNotificationOpen(notifications, index, oyeURL);
     this.props.storeOpenedNotif(savedNoifId, ntid);
 
     this.manageJoinRequest();
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
-      this.props.navigation.goBack(null); // works best when the goBack is async
-      return true;
-    });
+    this.checkAdminNotifStatus();
   }
 
+  checkAdminNotifStatus() {
+    const { navigation, champBaseURL } = this.props;
+    const details = navigation.getParam('details', 'NO-ID');
+    console.log(details, 'detailssss');
 
-  componentWillUnmount(){
-    this.backHandler.remove();
+    axios
+      .post(
+        `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
+        {
+          ACAccntID: details.acAccntID,
+          UNUnitID: details.sbUnitID,
+          ASAssnID: details.asAssnID
+        },
+        {
+          headers: {
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      .then(res => {
+        this.setState({ adminStatLoading: false });
+        let data = res.data.data;
+        console.log(data, 'adminData');
+        if (data) {
+          if (data.member.meJoinStat === 'Accepted') {
+            this.setState({ adminStat: 'Accepted' });
+          } else if (data.member.meJoinStat === 'Rejected') {
+            this.setState({ adminStat: 'Rejected' });
+          }
+        }
+      })
+      .catch(error => {
+        console.log(error, 'adminDataError');
+        this.setState({ adminStatLoading: false });
+      });
   }
 
   /**
@@ -90,16 +127,16 @@ class NotificationDetailScreen extends PureComponent {
   async manageJoinRequest() {
     try {
       const { navigation } = this.props;
-      const details = navigation.getParam("details", "NO-ID");
+      const details = navigation.getParam('details', 'NO-ID');
       const role = details.sbRoleID;
-      base.utils.logger.logArgs("NotificationDetailScreen", details);
+      base.utils.logger.logArgs('NotificationDetailScreen', details);
       //if(details != undefined && details.ntType == "Join" && details.ntJoinStat == "" && details.ntIsActive){
       this.setState({ loading: true });
       const response = await base.services.OyeLivingApi.getUnitDetailByUnitId(
         details.sbUnitID
       );
       this.setState({ loading: false });
-      base.utils.logger.logArgs("NotificationDetailScreen2", response);
+      base.utils.logger.logArgs('NotificationDetailScreen2', response);
       if (response.success && response.data.unit != undefined) {
         let unitInfo = response.data.unit;
         if (
@@ -117,7 +154,7 @@ class NotificationDetailScreen extends PureComponent {
         ) {
         }
       } else {
-        base.utils.logger.logArgs("manageJoinRequest", "No Active Request");
+        base.utils.logger.logArgs('manageJoinRequest', 'No Active Request');
       }
       // else{
       // }
@@ -132,9 +169,9 @@ class NotificationDetailScreen extends PureComponent {
     const { oyeURL } = this.props;
     if (status) {
       Alert.alert(
-        "Oyespace",
-        "You have already responded to this request!",
-        [{ text: "Ok", onPress: () => {} }],
+        'Oyespace',
+        'You have already responded to this request!',
+        [{ text: 'Ok', onPress: () => {} }],
         { cancelable: false }
       );
     } else {
@@ -143,13 +180,13 @@ class NotificationDetailScreen extends PureComponent {
       console.log(item);
 
       const headers = {
-        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-        "Content-Type": "application/json"
+        'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+        'Content-Type': 'application/json'
       };
 
       axios
         .post(
-          this.props.champBaseURL + "MemberRoleChangeToAdminOwnerUpdate",
+          this.props.champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate',
           {
             MRMRoleID: item.sbRoleID,
             MEMemID: item.sbMemID,
@@ -160,22 +197,22 @@ class NotificationDetailScreen extends PureComponent {
           }
         )
         .then(response => {
-          let roleName = item.sbRoleID === 2 ? "Owner" : "Tenant";
+          let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
 
           axios
             .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
               sbSubID: item.sbSubID,
-              ntTitle: "Request Approved",
+              ntTitle: 'Request Approved',
               ntDesc:
-                "Your request to join " +
+                'Your request to join ' +
                 item.mrRolName +
-                " " +
-                " unit in " +
+                ' ' +
+                ' unit in ' +
                 item.asAsnName +
-                " association as " +
+                ' association as ' +
                 roleName +
-                " has been approved",
-              ntType: "Join_Status",
+                ' has been approved',
+              ntType: 'Join_Status',
               associationID: item.asAssnID
             })
             .then(() => {
@@ -194,26 +231,26 @@ class NotificationDetailScreen extends PureComponent {
               };
 
               this.props.createUserNotification(
-                "Join_Status",
+                'Join_Status',
                 this.props.oyeURL,
                 item.acNotifyID,
                 1,
-                "Your request to join " +
+                'Your request to join ' +
                   item.mrRolName +
-                  " " +
-                  " unit in " +
+                  ' ' +
+                  ' unit in ' +
                   item.asAsnName +
-                  " association as " +
+                  ' association as ' +
                   roleName +
-                  " has been approved",
-                "resident_user",
-                "resident_user",
+                  ' has been approved',
+                'resident_user',
+                'resident_user',
                 item.sbSubID,
-                "resident_user",
-                "resident_user",
-                "resident_user",
-                "resident_user",
-                "resident_user",
+                'resident_user',
+                'resident_user',
+                'resident_user',
+                'resident_user',
+                'resident_user',
                 false,
                 this.props.MyAccountID
               );
@@ -221,10 +258,10 @@ class NotificationDetailScreen extends PureComponent {
               fetch(
                 `${this.props.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
                 {
-                  method: "POST",
+                  method: 'POST',
                   headers: {
-                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-                    "Content-Type": "application/json"
+                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                    'Content-Type': 'application/json'
                   },
                   body: JSON.stringify(DateUnit)
                 }
@@ -234,11 +271,11 @@ class NotificationDetailScreen extends PureComponent {
                   fetch(
                     `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
                     {
-                      method: "POST",
+                      method: 'POST',
                       headers: {
-                        "X-Champ-APIKey":
-                          "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-                        "Content-Type": "application/json"
+                        'X-Champ-APIKey':
+                          '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                        'Content-Type': 'application/json'
                       },
                       body: JSON.stringify(UpdateTenant)
                     }
@@ -250,46 +287,46 @@ class NotificationDetailScreen extends PureComponent {
 
                       StatusUpdate = {
                         NTID: item.ntid,
-                        NTStatDesc: "Request Sent"
+                        NTStatDesc: 'Request Sent'
                         //NTStatDesc: responseJson_2.data.string
                       };
 
                       fetch(
                         `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
                         {
-                          method: "POST",
+                          method: 'POST',
                           headers: {
-                            "X-OYE247-APIKey":
-                              "7470AD35-D51C-42AC-BC21-F45685805BBE",
-                            "Content-Type": "application/json"
+                            'X-OYE247-APIKey':
+                              '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                            'Content-Type': 'application/json'
                           },
                           body: JSON.stringify(StatusUpdate)
                         }
                       )
                         .then(response => {
                           response.json();
-                          console.log("Response", response);
+                          console.log('Response', response);
                         })
                         .then(responseJson_3 => {
-                          console.log(item.ntid, "ntid");
-                          console.log("NTJoinStat");
+                          console.log(item.ntid, 'ntid');
+                          console.log('NTJoinStat');
                           axios
                             .post(
                               `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                               {
                                 NTID: item.ntid,
-                                NTJoinStat: "Accepted"
+                                NTJoinStat: 'Accepted'
                               },
                               {
                                 headers: {
-                                  "X-OYE247-APIKey":
-                                    "7470AD35-D51C-42AC-BC21-F45685805BBE",
-                                  "Content-Type": "application/json"
+                                  'X-OYE247-APIKey':
+                                    '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                  'Content-Type': 'application/json'
                                 }
                               }
                             )
                             .then(() => {
-                              console.log("updated suc");
+                              console.log('updated suc');
                               this.props.getNotifications(
                                 this.props.oyeURL,
                                 this.props.MyAccountID
@@ -300,12 +337,12 @@ class NotificationDetailScreen extends PureComponent {
                               });
 
                               setTimeout(() => {
-                                this.props.navigation.navigate("ResDashBoard");
+                                this.props.navigation.navigate('ResDashBoard');
                               }, 300);
                             })
                             .catch(error => {
-                              console.log("Join Status", error);
-                              Alert.alert("Join Status", error.message);
+                              console.log('Join Status', error);
+                              Alert.alert('Join Status', error.message);
                               this.setState({
                                 loading: false
                               });
@@ -317,32 +354,32 @@ class NotificationDetailScreen extends PureComponent {
                           // );
                         })
                         .catch(error => {
-                          console.log("StatusUpdate", error);
-                          Alert.alert("StatusUpdate", error.message);
+                          console.log('StatusUpdate', error);
+                          Alert.alert('StatusUpdate', error.message);
                           this.setState({ loading: false });
                         });
                     })
                     .catch(error => {
-                      console.log("Update", error);
-                      Alert.alert("Update", error.message);
+                      console.log('Update', error);
+                      Alert.alert('Update', error.message);
                       this.setState({ loading: false });
                     });
                 })
                 .catch(error => {
-                  console.log("DateUnit", error);
-                  Alert.alert("DateUnit", error.message);
+                  console.log('DateUnit', error);
+                  Alert.alert('DateUnit', error.message);
                   this.setState({ loading: false });
                 });
             })
             .catch(error => {
-              console.log("firebase", error);
-              Alert.alert("firebase", error.message);
+              console.log('firebase', error);
+              Alert.alert('firebase', error.message);
               this.setState({ loading: false });
             });
         })
         .catch(error => {
-          console.log("MemberRoleChange", error);
-          Alert.alert("MemberRoleChange", error.message);
+          console.log('MemberRoleChange', error);
+          Alert.alert('MemberRoleChange', error.message);
           this.setState({ loading: false });
         });
     }
@@ -352,79 +389,79 @@ class NotificationDetailScreen extends PureComponent {
     const { oyeURL } = this.props;
     if (status) {
       Alert.alert(
-        "Oyespace",
-        "You have already responded to this request!",
-        [{ text: "Ok", onPress: () => {} }],
+        'Oyespace',
+        'You have already responded to this request!',
+        [{ text: 'Ok', onPress: () => {} }],
         { cancelable: false }
       );
     } else {
       this.setState({ loading: true });
 
       const headers = {
-        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-        "Content-Type": "application/json"
+        'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+        'Content-Type': 'application/json'
       };
       axios
         .get(
           `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
           {
             headers: {
-              "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-              "Content-Type": "application/json"
+              'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+              'Content-Type': 'application/json'
             }
           }
         )
         .then(() => {
-          let roleName = item.sbRoleID === 1 ? "Owner" : "Tenant";
+          let roleName = item.sbRoleID === 1 ? 'Owner' : 'Tenant';
           axios
             .get(
               `http://${this.props.oyeURL}/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${item.sbMemID}`,
               {
                 headers: {
-                  "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-                  "Content-Type": "application/json"
+                  'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                  'Content-Type': 'application/json'
                 }
               }
             )
             .then(succc => {
-              console.log(succc, "worked");
+              console.log(succc, 'worked');
               axios
                 .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                   sbSubID: item.sbSubID,
-                  ntTitle: "Request Declined",
+                  ntTitle: 'Request Declined',
                   ntDesc:
-                    "Your request to join" +
+                    'Your request to join' +
                     item.mrRolName +
-                    " " +
-                    " unit in " +
+                    ' ' +
+                    ' unit in ' +
                     item.asAsnName +
-                    " association as " +
+                    ' association as ' +
                     roleName +
-                    " has been declined",
-                  ntType: "Join_Status"
+                    ' has been declined',
+                  ntType: 'Join_Status'
                 })
                 .then(() => {
                   this.props.createUserNotification(
-                    "Join_Status",
+                    'Join_Status',
                     this.props.oyeURL,
                     item.acNotifyID,
                     1,
-                    "Your request to join" +
+                    'Your request to join' +
                       item.mrRolName +
-                      " " +
-                      " unit in " +
+                      ' ' +
+                      ' unit in ' +
                       item.asAsnName +
-                      " association as " +
+                      ' association as ' +
                       roleName +
-                      " has been declined",
-                    "resident_user",
-                    "resident_user",
+                      ' has been declined',
+                    'resident_user',
+                    'resident_user',
                     item.sbSubID,
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
-                    "resident_user",
+                    'resident_user',
+                    'resident_user',
+                    'resident_user',
+                    'resident_user',
+                    'resident_user',
                     false,
                     this.props.MyAccountID
                   );
@@ -434,13 +471,13 @@ class NotificationDetailScreen extends PureComponent {
                       `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                       {
                         NTID: item.ntid,
-                        NTJoinStat: "Rejected"
+                        NTJoinStat: 'Rejected'
                       },
                       {
                         headers: {
-                          "X-OYE247-APIKey":
-                            "7470AD35-D51C-42AC-BC21-F45685805BBE",
-                          "Content-Type": "application/json"
+                          'X-OYE247-APIKey':
+                            '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                          'Content-Type': 'application/json'
                         }
                       }
                     )
@@ -456,19 +493,19 @@ class NotificationDetailScreen extends PureComponent {
                       //   item.sbSubID
                       // );
                       setTimeout(() => {
-                        this.props.navigation.navigate("ResDashBoard");
+                        this.props.navigation.navigate('ResDashBoard');
                       }, 300);
                     })
                     .catch(error => {
-                      console.log("Join Status", error);
-                      Alert.alert("Join Status", error.message);
+                      console.log('Join Status', error);
+                      Alert.alert('Join Status', error.message);
                       this.setState({
                         loading: false
                       });
                     });
                 })
                 .catch(error => {
-                  Alert.alert("@@@@@@@@@@@@@@@", error.message);
+                  Alert.alert('@@@@@@@@@@@@@@@', error.message);
                   this.setState({ loading: false });
                 });
             })
@@ -478,7 +515,7 @@ class NotificationDetailScreen extends PureComponent {
         })
         .catch(error => {
           // Alert.alert("******************", error.message);
-          console.log(error, "first api");
+          console.log(error, 'first api');
           this.setState({ loading: false });
         });
       // })
@@ -491,9 +528,9 @@ class NotificationDetailScreen extends PureComponent {
   };
 
   renderButton = () => {
-    const { loading } = this.state;
-    const { navigation, approvedAdmins } = this.props;
-    const details = navigation.getParam("details", "NO-ID");
+    const { loading, adminStatLoading, adminStat } = this.state;
+    const { navigation } = this.props;
+    const details = navigation.getParam('details', 'NO-ID');
 
     let subId = details.sbSubID;
     // let status = _.includes(approvedAdmins, subId);
@@ -501,154 +538,97 @@ class NotificationDetailScreen extends PureComponent {
 
     let status;
 
-    if (loading) {
+    if (loading || adminStatLoading) {
       return (
         <View
-          style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
+          style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}
         >
           <ActivityIndicator />
         </View>
       );
     } else {
-      if (details.ntType === "Join_Status") {
+      if (details.ntType === 'Join_Status') {
         return null;
-      } else if (details.ntType === "gate_app") {
+      } else if (details.ntType === 'gate_app') {
         return null;
       } else {
-        if (details.ntJoinStat) {
-          if (details.ntJoinStat === "Accepted") {
+        if (adminStat) {
+          return null;
+        } else {
+          if (details.ntJoinStat) {
+            if (details.ntJoinStat === 'Accepted') {
+              status = (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Text> {this.state.date || 'Request Accepted'} </Text>
+                </View>
+              );
+            } else if (details.ntJoinStat === 'Rejected') {
+              status = (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Text>{this.state.date || 'Request Rejected'}</Text>
+                </View>
+              );
+            }
+          } else {
             status = (
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <Text> {this.state.date || "Request Accepted"} </Text>
-              </View>
-            );
-          } else if (details.ntJoinStat === "Rejected") {
-            status = (
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <Text>{this.state.date || "Request Rejected"}</Text>
+              <View style={styles.buttonContainer}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Avatar
+                    onPress={() => this.reject(details)}
+                    overlayContainerStyle={{
+                      backgroundColor: 'red'
+                    }}
+                    rounded
+                    icon={{
+                      name: 'close',
+                      type: 'font-awesome',
+                      size: 15,
+                      color: '#fff'
+                    }}
+                  />
+                  <Text style={{ color: 'red' }}> Reject </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Avatar
+                    onPress={() => this.approve(details)}
+                    overlayContainerStyle={{
+                      backgroundColor: 'orange'
+                    }}
+                    rounded
+                    icon={{
+                      name: 'check',
+                      type: 'font-awesome',
+                      size: 15,
+                      color: '#fff'
+                    }}
+                  />
+                  <Text style={{ color: 'orange' }}> Approve </Text>
+                </View>
               </View>
             );
           }
-        } else {
-          status = (
-            <View style={styles.buttonContainer}>
-              <View
-                style={{
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "center"
-                }}
-              >
-                <Avatar
-                  onPress={() => this.reject(details)}
-                  overlayContainerStyle={{
-                    backgroundColor: "red"
-                  }}
-                  rounded
-                  icon={{
-                    name: "close",
-                    type: "font-awesome",
-                    size: 15,
-                    color: "#fff"
-                  }}
-                />
-                <Text style={{ color: "red" }}> Reject </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "center"
-                }}
-              >
-                <Avatar
-                  onPress={() => this.approve(details)}
-                  overlayContainerStyle={{
-                    backgroundColor: "orange"
-                  }}
-                  rounded
-                  icon={{
-                    name: "check",
-                    type: "font-awesome",
-                    size: 15,
-                    color: "#fff"
-                  }}
-                />
-                <Text style={{ color: "orange" }}> Approve </Text>
-              </View>
-            </View>
-          );
-          // if (details.ntJoinStat.length <= 0) {
-          //   status = (
-          //     <View
-          //       style={{
-          //         alignItems: "center",
-          //         justifyContent: "center"
-          //       }}
-          //     >
-          //       <Text>{this.state.date || "Rejected"}</Text>
-          //     </View>
-          //   );
-          // } else {
-          //   status = (
-          //     <View style={styles.buttonContainer}>
-          //       <View
-          //         style={{
-          //           flexDirection: "column",
-          //           justifyContent: "flex-start",
-          //           alignItems: "center"
-          //         }}
-          //       >
-          //         <Avatar
-          //           onPress={() => this.reject(details)}
-          //           overlayContainerStyle={{
-          //             backgroundColor: "red"
-          //           }}
-          //           rounded
-          //           icon={{
-          //             name: "close",
-          //             type: "font-awesome",
-          //             size: 15,
-          //             color: "#fff"
-          //           }}
-          //         />
-          //         <Text style={{ color: "red" }}> Reject </Text>
-          //       </View>
-          //       <View
-          //         style={{
-          //           flexDirection: "column",
-          //           justifyContent: "flex-start",
-          //           alignItems: "center"
-          //         }}
-          //       >
-          //         <Avatar
-          //           onPress={() => this.approve(details)}
-          //           overlayContainerStyle={{
-          //             backgroundColor: "orange"
-          //           }}
-          //           rounded
-          //           icon={{
-          //             name: "check",
-          //             type: "font-awesome",
-          //             size: 15,
-          //             color: "#fff"
-          //           }}
-          //         />
-          //         <Text style={{ color: "orange" }}> Approve </Text>
-          //       </View>
-          //     </View>
-          //   );
-          // }
         }
       }
 
@@ -658,7 +638,8 @@ class NotificationDetailScreen extends PureComponent {
 
   render() {
     const { navigation } = this.props;
-    const details = navigation.getParam("details", "NO-ID");
+    const details = navigation.getParam('details', 'NO-ID');
+    console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
     return (
       <View style={styles.container}>
         {/* <Header
@@ -681,8 +662,8 @@ class NotificationDetailScreen extends PureComponent {
           backgroundColor="#fff"
         /> */}
 
-        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+        <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
@@ -691,15 +672,15 @@ class NotificationDetailScreen extends PureComponent {
               >
                 <View
                   style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: "flex-start",
-                    justifyContent: "center"
+                    height: hp('4%'),
+                    width: wp('15%'),
+                    alignItems: 'flex-start',
+                    justifyContent: 'center'
                   }}
                 >
                   <Image
                     resizeMode="contain"
-                    source={require("../../../icons/back.png")}
+                    source={require('../../../icons/back.png')}
                     style={styles.viewDetails2}
                   />
                 </View>
@@ -707,24 +688,24 @@ class NotificationDetailScreen extends PureComponent {
             </View>
             <View
               style={{
-                width: "35%",
-                justifyContent: "center",
-                alignItems: "center"
+                width: '35%',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
               <Image
                 style={[styles.image]}
-                source={require("../../../icons/headerLogo.png")}
+                source={require('../../../icons/headerLogo.png')}
               />
             </View>
-            <View style={{ width: "35%" }}>
+            <View style={{ width: '35%' }}>
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
         <Text style={styles.titleStyle}> {details.ntDesc} </Text>
-        {details.ntType === "Join_Status" ? null : this.renderButton()}
+        {details.ntType === 'Join_Status' ? null : this.renderButton()}
       </View>
     );
   }
@@ -737,46 +718,46 @@ const styles = StyleSheet.create({
   },
 
   viewStyle1: {
-    backgroundColor: "#fff",
-    height: hp("7%"),
-    width: "100%",
-    shadowColor: "#000",
+    backgroundColor: '#fff',
+    height: hp('7%'),
+    width: '100%',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
-    position: "relative"
+    position: 'relative'
   },
   viewDetails1: {
-    width: "30%",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
+    width: '30%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginLeft: 10
   },
   viewDetails2: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: hp("3%"),
-    height: hp("3%"),
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: hp('3%'),
+    height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   },
   image: {
-    width: wp("24%"),
-    height: hp("10%")
+    width: wp('24%'),
+    height: hp('10%')
   },
 
   buttonContainer: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 15
   },
 
   titleStyle: {
     fontSize: 16,
     marginBottom: 5,
-    textAlign: "center"
+    textAlign: 'center'
   }
 });
 
