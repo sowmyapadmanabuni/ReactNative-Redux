@@ -9,7 +9,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View, Platform,BackHandler
 } from "react-native";
 // import Header from "./src/components/common/Header";
 import { Button } from "native-base";
@@ -24,10 +24,17 @@ import {
 } from "../src/actions";
 
 class MyProfile extends Component {
-  state = {
-    ImageSource: null,
-    datasource: null
-  }
+
+  constructor(props){
+    super();
+    this.state = {
+      ImageSource: null,
+      datasource: null,
+      
+    }
+  }  
+  
+
 
   static navigationOptions = {
     title: "My Profile",
@@ -67,8 +74,16 @@ class MyProfile extends Component {
   }
 
   componentDidMount() {
-    this.myProfile()
-    console.log("Image at the first open", this.state.ImageSource)
+    this.myProfile();
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
+      return true;
+    });
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   render() {

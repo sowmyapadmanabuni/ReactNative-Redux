@@ -2,21 +2,30 @@
  * Created by Anooj Krishnan at Synclovis Systems Pvt. Ltd. on 2019-06-24
  */
 
-const isDev = false;
+const isDev = true;
 
 const isSecure = true;
 
 const isMandatory = ' is required';
 
+/*Change this urlType to
+    1. apiuat  --- For testing server
+    2. apidev  --- For develpment server
+    3. api     --- For production server
+*/
+let urlType = 'api';
+
 const api = {
   oyeSafeApiDomainFamily: isDev
-    ? 'api.oyespace.com/oyesafe/api/v1/'
-    : 'api.oyespace.com/oyesafe/api/v1/',
-  oyeSafeDomain: isDev ? 'api.oyespace.com/oye247' : 'api.oyespace.com/oye247',
-  oyeDomain: isDev
-    ? 'api.oyespace.com/oyeliving'
-    : 'api.oyespace.com/oyeliving',
-  oyeLivingDomain: isDev ? 'api.oyespace.com' : 'OyeLivingApi.oyespace.com',
+  ? `${urlType}.oyespace.com/oyesafe/api/v1/`
+  : `${urlType}.oyespace.com/oyesafe/api/v1/`,
+oyeSafeDomain: isDev
+  ? `${urlType}.oyespace.com/oye247`
+  : `${urlType}.oyespace.com/oye247`,
+oyeDomain: isDev
+  ? `${urlType}.oyespace.com/oyeliving`
+  : `${urlType}.oyespace.com/oyeliving`,
+oyeLivingDomain: isDev ? `${urlType}.oyespace.com` : "OyeLivingApi.oyespace.com",
   protocol: isSecure ? 'https://' : 'http://',
   oyeSafeApiPath: '/api/v1/',
   oyeLivingApiPath: '/oyeliving/OyeLivingApi/v1/',
@@ -47,9 +56,9 @@ const api = {
   //     "https://us-central1-oyespace-b7e2d.cloudfunctions.net"
 };
 
-//const imageUrl = "https://mediauploaddev.oyespace.com/Images/"  //Development
-//const imageUrl = "https://mediauploaduat.oyespace.com/Images/"; //Validation
-const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
+const imageUrl = 'https://mediauploaddev.oyespace.com/Images/'; //Development
+// const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
+//const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
 const strings = {
   appName: 'OyeSpace',
@@ -81,8 +90,16 @@ const strings = {
   USER_ADMIN: 1,
   USER_OWNER: 2,
   USER_TENANT: 3,
-  noImageCapturedPlaceholder:"Images/no_img_captured.png",
-
+  firebaseconfig: {
+    apiKey: 'AIzaSyAHw662K_LOVs6DW76D1HRu05PxjpOgyQw',
+    authDomain: 'oyespace-b7e2d.firebaseapp.com',
+    databaseURL: 'https://oyespace-b7e2d.firebaseio.com',
+    projectId: 'oyespace-b7e2d',
+    storageBucket: 'oyespace-b7e2d.appspot.com',
+    messagingSenderId: '194451632723',
+    appId: '1:194451632723:web:55842a54e3f70d54'
+  },
+  noImageCapturedPlaceholder: 'Images/no_img_captured.png'
 };
 
 export default strings;

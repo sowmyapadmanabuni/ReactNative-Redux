@@ -15,7 +15,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,BackHandler
 } from "react-native";
 import {
   heightPercentageToDP as hp,
@@ -62,6 +62,18 @@ class AddVehicle extends Component {
 
   componentWillMount() {
     this.getUnitDetail();
+  }
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   async getUnitDetail() {

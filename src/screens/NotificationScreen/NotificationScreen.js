@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,BackHandler
 } from 'react-native';
 import { connect } from 'react-redux';
 import { ListItem, Header, Card } from 'react-native-elements';
@@ -54,6 +54,15 @@ class NotificationScreen extends PureComponent {
     // this.gateAppNotif()
     this.doNetwork(null, this.props.notifications);
     firebase.notifications().removeAllDeliveredNotifications();
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   keyExtractor = (item, index) => index.toString();

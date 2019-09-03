@@ -158,16 +158,16 @@ class Dashboard extends React.Component {
           // console.log(association.asAsnName)
           // console.log(association.asAssnID)
           // console.log('***********')
-          if (receiveNotifications) {
-            firebase
-              .messaging()
-              .subscribeToTopic(association.asAssnID + "admin");
-            // console.log(association.asAssnID);
-          } else if (!receiveNotifications) {
-            firebase
-              .messaging()
-              .unsubscribeFromTopic(association.asAssnID + "admin");
-          }
+          // if (receiveNotifications) {
+          //   firebase
+          //     .messaging()
+          //     .subscribeToTopic(association.asAssnID + "admin");
+          //   // console.log(association.asAssnID);
+          // } else if (!receiveNotifications) {
+          //   firebase
+          //     .messaging()
+          //     .unsubscribeFromTopic(association.asAssnID + "admin");
+          // }
         });
       });
 
