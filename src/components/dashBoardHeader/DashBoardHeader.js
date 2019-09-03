@@ -77,13 +77,12 @@ class DashBoardHeader extends React.Component {
       }
     }
 
-  
 
-  render() {
-    console.log(
-      "State in dashboard header:",this.state
-    );
-    console.log("DASHREDUCER",this.props.dashboardReducer)
+
+
+
+    render() {
+    console.log("State in dashboard header:",this.state,this.props);
     return (
       <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
         <View style={HeaderStyles.container}>
@@ -96,7 +95,9 @@ class DashBoardHeader extends React.Component {
               <Image
                 style={HeaderStyles.imageStyles}
                 source={{
-                  uri: "https://via.placeholder.com/150/ff8c00/FFFFFF"
+                    uri:
+                        "https://mediaupload.oyespace.com/" +
+                        base.utils.strings.noImageCapturedPlaceholder
                 }}
               />
             ) : (

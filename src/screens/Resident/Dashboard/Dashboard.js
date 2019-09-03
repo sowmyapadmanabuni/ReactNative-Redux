@@ -56,7 +56,7 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-var counter = 0
+var counter = 0;
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -100,7 +100,7 @@ class Dashboard extends PureComponent {
     });
     this.getListOfAssociation();
     this.myProfileNet();
-    this.listenRoleChange()
+    this.listenRoleChange();
   }
 
   listenRoleChange(){
@@ -225,16 +225,19 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");        
+        console.log(response, "fetched");
         let data = response.data.data.memberListByAccount;
-        // console.log("dataoye", data);
-        firebase.messaging().subscribeToTopic(MyAccountID + "admin");        
+         console.log("dataoye", data);
+        firebase.messaging().subscribeToTopic(MyAccountID + "admin");
         data.map(units => {
-
-           console.log( "role_units",units.mrmRoleID);
-          if (receiveNotifications) {            
-             //alert(MyAccountID + "admin");
-            firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
+          console.log("role_units", units.mrmRoleID);
+          if (receiveNotifications) {
+            //alert(MyAccountID + "admin");
+            firebase
+              .messaging()
+              .subscribeToTopic(
+                "" + MyAccountID + units.unUnitID + "usernotif"
+              );
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
             // if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
@@ -265,163 +268,165 @@ class Dashboard extends PureComponent {
         //     }
         // }
         this.roleCheckForAdmin()
-
-
       });
   };
 
   showLocalNotification = notification => {
+    try {
+      // console.log(notification);
+      const channel = new firebase.notifications.Android.Channel(
+        "channel_id",
+        "Oyespace",
+        firebase.notifications.Android.Importance.Max
+      ).setDescription("Oyespace channel");
+      channel.enableLights(true);
+      // channel.enableVibration(true);
+      // channel.vibrationPattern([500]);
+      firebase.notifications().android.createChannel(channel);
 
-    try{
-    // console.log(notification);
-    const channel = new firebase.notifications.Android.Channel(
-      "channel_id",
-      "Oyespace",
-      firebase.notifications.Android.Importance.Max
-    ).setDescription("Oyespace channel");
-    channel.enableLights(true);
-    // channel.enableVibration(true);
-    // channel.vibrationPattern([500]);
-    firebase.notifications().android.createChannel(channel);
-
-    const notificationBuild = new firebase.notifications.Notification({
-      sound: "default",
-      show_in_foreground: true
-    })
-      .setTitle(notification._title)
-      .setBody(notification._body)
-      .setNotificationId(notification._notificationId)
-      // .setSound('default')
-      .setData({
-        ...notification._data,
-        foreground: true
+      const notificationBuild = new firebase.notifications.Notification({
+        sound: "default",
+        show_in_foreground: true
       })
-      .android.setColor("#FF9100")
-      .android.setLargeIcon("ic_notif")      
-      .android.setSmallIcon("ic_stat_ic_notification")
-      .android.setChannelId("channel_id")
-      .android.setVibrate("default")
-      .setSound('default')
-      // .android.setChannelId('notification-action')
-      .android.setPriority(firebase.notifications.Android.Priority.Max);
+        .setTitle(notification._title)
+        .setBody(notification._body)
+        .setNotificationId(notification._notificationId)
+        // .setSound('default')
+        .setData({
+          ...notification._data,
+          foreground: true
+        })
+        .android.setAutoCancel(true)
+        .android.setColor("#FF9100")
+        .android.setLargeIcon("ic_notif")
+        .android.setSmallIcon("ic_stat_ic_notification")
+        .android.setChannelId("channel_id")
+        .android.setVibrate("default")
+        .setSound("default")
 
-    firebase.notifications().displayNotification(notificationBuild);
-    this.setState({ foregroundNotif: notification._data });
-    }catch(e){
-      console.log("FAILED_NOTIF")
+        // .android.setChannelId('notification-action')
+        .android.setPriority(firebase.notifications.Android.Priority.Max);
+
+      firebase.notifications().displayNotification(notificationBuild);
+      this.setState({ foregroundNotif: notification._data });
+    } catch (e) {
+      console.log("FAILED_NOTIF");
     }
   };
 
-  listenForNotif = () => {    
-    if(this.notificationDisplayedListener == undefined || this.notificationDisplayedListener==null){    
-    let navigationInstance = this.props.navigation;
-      
-    this.notificationDisplayedListener = firebase
-      .notifications()
-      .onNotificationDisplayed(notification => {
-        // console.log('___________')
-        // console.log(notification)
-        // console.log('____________')
-        // Process your notification as required
-        // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-      });
+  listenForNotif = () => {
+    if (
+      this.notificationDisplayedListener == undefined ||
+      this.notificationDisplayedListener == null
+    ) {
+      let navigationInstance = this.props.navigation;
 
-    this.notificationListener = firebase
-      .notifications()
-      .onNotification(notification => {
-        console.log("___________");
-        console.log(notification);
-        console.log("____________");
-
-        if (notification._data.associationID) {
-          // this.props.createNotification(notification._data, navigationInstance, false)
-        }
-
-        this.showLocalNotification(notification);
-
-        showMessage({
-          message: notification.title,
-          description: notification.body,
-          type: "default",
-          backgroundColor: "#FF9100",
-          onPress: () => {
-            this.props.navigation.navigate("NotificationScreen")
-          },
+      this.notificationDisplayedListener = firebase
+        .notifications()
+        .onNotificationDisplayed(notification => {
+          // console.log('___________')
+          // console.log(notification)
+          // console.log('____________')
+          // Process your notification as required
+          // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
         });
+
+      this.notificationListener = firebase
+        .notifications()
+        .onNotification(notification => {
+          console.log("___________");
+          console.log(notification);
+          console.log("____________");
+
+          if (notification._data.associationID) {
+            // this.props.createNotification(notification._data, navigationInstance, false)
+          }
+
+          this.showLocalNotification(notification);
+
+          showMessage({
+            message: notification.title,
+            description: notification.body,
+            type: "default",
+            backgroundColor: "#FF9100",
+            onPress: () => {
+              this.props.navigation.navigate("NotificationScreen");
+            }
+          });
+        });
+
+      firebase.notifications().onNotificationOpened(notificationOpen => {
+        const { MyAccountID } = this.props.userReducer;
+        const { oyeURL } = this.props.oyespaceReducer;
+        let details = notificationOpen.notification._data;
+        if (notificationOpen.notification._data.admin === "true") {
+          if (notificationOpen.action) {
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(
+            //   notificationOpen.notification._data,
+            //   navigationInstance,
+            //   true,
+            //   "true",
+            //   this.props.oyeURL,
+            //   this.props.MyAccountID
+            // );
+            // this.props.createNotification(notificationOpen.notification)
+          }
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+        } else if (notificationOpen.notification._data.admin === "false") {
+          this.props.refreshNotifications(oyeURL, MyAccountID);
+          // this.props.createUserNotification(
+          //     "Join_Status",
+          //     oyeURL,
+          //     MyAccountID,
+          //     1,
+          //     details.ntDesc,
+          //     "resident_user",
+          //     "resident_user",
+          //     details.sbSubID,
+          //     "resident_user",
+          //     "resident_user",
+          //     "resident_user",
+          //     "resident_user",
+          //     "resident_user",
+          //     true
+          // );
+          // this.props.navigation.navigate("NotificationScreen");
+        }
+
+        if (notificationOpen.notification._data.admin === "true") {
+          this.props.refreshNotifications(oyeURL, MyAccountID);
+          if (notificationOpen.notification._data.foreground) {
+            // this.props.newNotifInstance(notificationOpen.notification);
+            // this.props.createNotification(
+            //   notificationOpen.notification._data,
+            //   navigationInstance,
+            //   true,
+            //   "true",
+            //   this.props.oyeURL,
+            //   this.props.MyAccountID
+            // );
+          }
+        } else if (notificationOpen.notification._data.admin === "gate_app") {
+          this.props.refreshNotifications(oyeURL, MyAccountID);
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(
+          //   notificationOpen.notification._data,
+          //   navigationInstance,
+          //   true,
+          //   "gate_app",
+          //   this.props.oyeURL,
+          //   this.props.MyAccountID
+          // );
+          // this.props.newNotifInstance(notificationOpen.notification);
+          // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
+        } else if (notificationOpen.notification._data.admin === "false") {
+        }
+        // this.props.getNotifications(oyeURL, MyAccountID);
+        this.props.navigation.navigate("NotificationScreen");
       });
-
-    firebase.notifications().onNotificationOpened(notificationOpen => {
-      const { MyAccountID } = this.props.userReducer;
-      const { oyeURL } = this.props.oyespaceReducer;
-      let details = notificationOpen.notification._data;
-      if (notificationOpen.notification._data.admin === "true") {
-        if (notificationOpen.action) {
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(
-          //   notificationOpen.notification._data,
-          //   navigationInstance,
-          //   true,
-          //   "true",
-          //   this.props.oyeURL,
-          //   this.props.MyAccountID
-          // );
-          // this.props.createNotification(notificationOpen.notification)
-        }
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      } else if (notificationOpen.notification._data.admin === "false") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        // this.props.createUserNotification(
-        //     "Join_Status",
-        //     oyeURL,
-        //     MyAccountID,
-        //     1,
-        //     details.ntDesc,
-        //     "resident_user",
-        //     "resident_user",
-        //     details.sbSubID,
-        //     "resident_user",
-        //     "resident_user",
-        //     "resident_user",
-        //     "resident_user",
-        //     "resident_user",
-        //     true
-        // );
-        // this.props.navigation.navigate("NotificationScreen");
-      }
-
-      if (notificationOpen.notification._data.admin === "true") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        if (notificationOpen.notification._data.foreground) {
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(
-          //   notificationOpen.notification._data,
-          //   navigationInstance,
-          //   true,
-          //   "true",
-          //   this.props.oyeURL,
-          //   this.props.MyAccountID
-          // );
-        }
-      } else if (notificationOpen.notification._data.admin === "gate_app") {
-        this.props.refreshNotifications(oyeURL, MyAccountID);
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(
-        //   notificationOpen.notification._data,
-        //   navigationInstance,
-        //   true,
-        //   "gate_app",
-        //   this.props.oyeURL,
-        //   this.props.MyAccountID
-        // );
-        // this.props.newNotifInstance(notificationOpen.notification);
-        // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-      } else if (notificationOpen.notification._data.admin === "false") {
-      }
-      // this.props.getNotifications(oyeURL, MyAccountID);
-      this.props.navigation.navigate("NotificationScreen");
-    });
-  }
+    }
   };
 
   onChangeText = () => {};
@@ -449,7 +454,7 @@ class Dashboard extends PureComponent {
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    
+
     this.requestNotifPermission();
     // this.props.getNotifications(oyeURL, MyAccountID);
 
@@ -468,7 +473,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this)
+    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
@@ -499,22 +504,23 @@ try{
         console.log("roleCheckForAdmin_",responseJson)
         //responseJson.data.members.splice(0,1);
         console.log(
-          "Manas",
-          responseJson,
-          responseJson.data          
+          "Get_Ids",
+          this.props.userReducer.MyAccountID,
+          responseJson.data.members[i].acAccntID,
+          this.state.assocId,
+          responseJson.data.members[i].asAssnID,
+          responseJson.data.members[i].mrmRoleID,
+          responseJson.data.members[i].unUniName + "name"
         );
         for (let i = 0; i < responseJson.data.members.length; i++) {
           //alert(responseJson.data.members[i].mrmRoleID)
           let assnId = ""+responseJson.data.members[i].asAssnID;
           assnId = assnId.trim()+"admin"
           console.log(
-            "Get_Ids",
+            "Id_eq",
             this.props.userReducer.MyAccountID,
             responseJson.data.members[i].acAccntID,
-            this.state.assocId,
-            responseJson.data.members[i].asAssnID,
-            responseJson.data.members[i].mrmRoleID,
-            responseJson.data.members[i].unUniName + "name"
+            responseJson.data.members[i].mrmRoleID
           );
           if (
             responseJson.data.members[i].meIsActive &&
@@ -579,14 +585,14 @@ try{
           }
         );
       // })
-      // .catch(error => {        
+      // .catch(error => {
       //   this.setState({ error, loading: false });
       // });
-        }catch(err){
-          //alert(err)
-          console.log("ROLECHECK_ERROR",err)
-        }
-  };
+    } catch (err) {
+      //alert(err)
+      console.log("ROLECHECK_ERROR", err);
+    }
+  }
 
   static getAssociationList() {
     this.getAssociationList();
@@ -746,6 +752,7 @@ try{
     const { dropdown1 } = this.props;
     console.log(
       "CheckUnit;s is there",
+      this.props,
       this.props.dashBoardReducer.uniID,
       dropdown1,
       dropdown1.length
@@ -771,7 +778,7 @@ try{
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat,self.state.assocId);
+    console.log("STAT123", stat, self.state.assocId);
 
     try {
       if (stat && stat.data) {
@@ -799,8 +806,6 @@ try{
         // });
 
         self.roleCheckForAdmin(this.state.assocId);
-        self.checkUnitIsThere();
-        self.getVehicleList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -826,7 +831,7 @@ try{
     //  const {updateIdDashboard} = this.props;
     // updateIdDashboard({prop: "uniID", value: unitId});
     self.checkUnitIsThere();
-    self.getVehicleList();
+    //self.getVehicleList();
   }
 
   getVehicleList = unitId => {
@@ -962,6 +967,10 @@ try{
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
+    let maxLen = 25;
+    let maxLenUnit = 10;
+    let text = "ALL THE GLITTERS IS NOT GOLD";
+    console.log("Hfhfhgfhfhhgfhgfgh", dropdown.length, dropdown1.length);
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -973,21 +982,23 @@ try{
               <View style={Style.leftDropDown}>
                 {this.state.assdNameHide === false ? (
                   <Dropdown
-                    value={selectedDropdown}
+                    value={
+                      selectedDropdown.length > maxLen
+                        ? selectedDropdown.substring(0, maxLen - 2) + "..."
+                        : selectedDropdown
+                    }
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
                     containerStyle={{
-                      width: "114%",
-                      borderBottomWidth: hp("0.05%"),
-                      borderBottomColor: "#474749"
+                      width: "100%"
                     }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
                       borderBottomColor: "transparent"
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={-3}
+                    dropdownPosition={dropdown.length > 2 ? -5 : -2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -1008,12 +1019,17 @@ try{
                 {this.state.unitNameHide === false ? (
                   <Dropdown
                     // value={this.state.unitName}
-                    value={selectedDropdown1}
+                    value={
+                      selectedDropdown1.length > maxLenUnit
+                        ? selectedDropdown1.substring(0, maxLenUnit - 3) + "..."
+                        : selectedDropdown1
+                    }
                     containerStyle={{
-                      width: "70%",
+                      width: "95%"
+                      /*width: "70%",
                       marginLeft: "30%",
                       borderBottomWidth: hp("0.05%"),
-                      borderBottomColor: "#474749"
+                      borderBottomColor: "#474749"*/
                     }}
                     label="Unit"
                     baseColor="rgba(0, 0, 0, 1)"
@@ -1023,7 +1039,9 @@ try{
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={0}
+                    dropdownPosition={
+                      dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
+                    }
                     rippleOpacity={0}
                     // onChangeText={(value, index) => {
                     //   this.updateUnit(value, index);
@@ -1067,10 +1085,12 @@ try{
                 height={this.state.myUnitCardHeight}
                 width={this.state.myUnitCardWidth}
                 cardText={"My Unit"}
-                iconWidth={Platform.OS === "ios" ? 35 : 16}
-                iconHeight={Platform.OS === "ios" ? 35 : 16}
+                iconWidth={Platform.OS === "ios" ? 35 : 20}
+                iconHeight={Platform.OS === "ios" ? 35 : 20}
                 cardIcon={require("../../../../icons/my_unit.png")}
                 onCardClick={() => this.changeCardStatus("UNIT")}
+                textWeight={"bold"}
+                textFontSize={10}
                 disabled={this.state.isSelectedCard === "UNIT"}
               />
               {this.state.role === 1 ? (
@@ -1078,8 +1098,9 @@ try{
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
                   cardText={"Admin"}
-                  iconWidth={Platform.OS === "ios" ? 35 : 16}
-                  iconHeight={Platform.OS === "ios" ? 35 : 16}
+                  textWeight={"bold"}
+                  iconWidth={Platform.OS === "ios" ? 35 : 20}
+                  iconHeight={Platform.OS === "ios" ? 35 : 20}
                   onCardClick={() => this.changeCardStatus("ADMIN")}
                   cardIcon={require("../../../../icons/user.png")}
                   disabled={this.state.isSelectedCard === "ADMIN"}
@@ -1156,7 +1177,7 @@ try{
         myUnitCardHeight: "80%",
         myUnitCardWidth: "26%",
         adminCardHeight: "70%",
-        adminCardWidth: "20%",
+        adminCardWidth: "22%",
         offersCardHeight: "70%",
         offersCardWidth: "20%",
 
@@ -1166,7 +1187,7 @@ try{
     } else if (status == "ADMIN") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "80%",
         adminCardWidth: "25%",
         offersCardHeight: "70%",
@@ -1178,7 +1199,7 @@ try{
     } else if (status == "OFFERS") {
       this.setState({
         myUnitCardHeight: "70%",
-        myUnitCardWidth: "20%",
+        myUnitCardWidth: "22%",
         adminCardHeight: "70%",
         adminCardWidth: "20%",
         offersCardHeight: "80%",
@@ -1412,13 +1433,13 @@ try{
           >
             <Text>View All Visitors</Text>
           </Button>
-          <Button
+          {/*<Button
             bordered
             style={styles.button1}
             onPress={() => this.props.navigation.navigate("schedulePatrolling")}
           >
             <Text>Patrolling</Text>
-          </Button>
+          </Button>*/}
         </View>
       </ElevatedView>
     );

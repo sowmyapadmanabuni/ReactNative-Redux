@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
   Text, View, StyleSheet, SafeAreaView, TouchableOpacity,
-  TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView
+  TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView, Platform, Linking
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { Card, CardItem, Form, Item, Input, Icon } from "native-base"
+import { Card, CardItem, Form, Item, Button, Input, Icon } from "native-base"
 
 
 export default class City extends Component {
@@ -77,108 +77,108 @@ export default class City extends Component {
         </SafeAreaView>
         <ScrollView>
           <View>
-              <Form style={styles.formSearch}>
+            {/* <Form style={styles.formSearch}>
                   <Item style={styles.inputItem}>
 
                     <Input
                       marginBottom={hp("-1%")}
                       placeholder="Search for your city...."
-                      pointerEvents="none"
+                      pointerEvents='none'
                       // onTouchStart={() => this.props.navigation.navigate('AssnListScreen')}
                     />
                     <Icon style={styles.icon} name="search" size={14} />
                   </Item>
-              </Form>
+              </Form> */}
             <View style={{ borderWidth: 0.5, borderColor: "#E5E5E5" }} />
 
             <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
               <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
-                <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>POPULAR CITIES</Text>
+                <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>Select your City</Text>
               </View>
             </View>
             <View style={{ flexDirection: 'row', }}>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"Bangalore", id : "56"})}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Bangalore", id: "56" })}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/bengaluru.png')} />
                   <Text>Bengaluru</Text>
                 </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen', {name:"Chandigarh", id : "16"})}>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Chandigarh", id: "16" })}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/chandigarh.png')} />
                   <Text>Chandigarh</Text>
                 </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Delhi", id : "11"})}>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Delhi", id: "11" })}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/delhi-ncr.png')} />
                   <Text>Delhi-NCR</Text>
                 </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Indore", id : "45"})}>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Indore", id: "45" })}>
                 <View style={styles.card}>
                   <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/indore.png')} />
                   <Text>Indore</Text>
                 </View>
-              </TouchableWithoutFeedback>
+              </TouchableOpacity>
             </View>
 
 
             <View style={{ flexDirection: 'row', }}>
-            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Jaipur", id : "30"})}>
-              <View style={styles.card}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/jaipur.png')} />
-                <Text>Jaipur</Text>
-              </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Kanpur", id : "20"})}>
-              <View style={styles.card}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} />
-                <Text>Kanpur</Text>
-              </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Lucknow", id : "22"})}>
-              <View style={styles.card}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/lucknow.png')} />
-                <Text>Lucknow</Text>
-              </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Mumbai", id : "40"})}>
-              <View style={styles.card}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/mumbai.png')} />
-                <Text>Mumbai</Text>
-              </View>
-              </TouchableWithoutFeedback>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Jaipur", id: "30" })}>
+                <View style={styles.card}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/jaipur.png')} />
+                  <Text>Jaipur</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Kanpur", id: "20" })}>
+                <View style={styles.card}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} />
+                  <Text>Kanpur</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Lucknow", id: "22" })}>
+                <View style={styles.card}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/lucknow.png')} />
+                  <Text>Lucknow</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Mumbai", id: "40" })}>
+                <View style={styles.card}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/mumbai.png')} />
+                  <Text>Mumbai</Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
 
             <View style={{ flexDirection: 'row', }}>
-            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Nagpur", id : "44"})}>
-              <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/nagpur.png')} />
-                <Text>Nagpur</Text>
-              </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Prayagraj", id : "21"})}>
-              <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} />
-                <Text>Prayagraj</Text>
-                <Text>(Allahabad)</Text>
-              </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Pune", id : "41"})}>
-              <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/pune.png')} />
-                <Text>Pune</Text>
-              </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('AssnListScreen',{name:"Varanasi", id : "22"})}>
-              <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/varanasi.png')} />
-                <Text>Varanasi</Text>
-                <Text>(Benaras)</Text>
-              </View>
-              </TouchableWithoutFeedback>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Nagpur", id: "44" })}>
+                <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/nagpur.png')} />
+                  <Text>Nagpur</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Prayagraj", id: "21" })}>
+                <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} />
+                  <Text>Prayagraj</Text>
+                  <Text>(Allahabad)</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Pune", id: "41" })}>
+                <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/pune.png')} />
+                  <Text>Pune</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Varanasi", id: "22" })}>
+                <View style={[styles.card, { borderBottomWidth: 1 }]}>
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/varanasi.png')} />
+                  <Text>Varanasi</Text>
+                  <Text>(Benaras)</Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
             {/* <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
@@ -199,6 +199,28 @@ export default class City extends Component {
                 </Text>}
 
             /> */}
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems:'center'
+              }}
+            >
+              <View style={{ marginTop: hp("2%") }}>
+                <Button bordered warning style={styles.button1}
+                onPress={() => {
+                  {
+                    Platform.OS === "android"
+                      ? Linking.openURL(`tel:+919343121121`)
+                      : Linking.openURL(`tel:+919343121121`);
+                  }
+                }}
+                // onPress={() => this.props.navigation.navigate('City')}
+                >
+                  <Text style={{fontSize:hp('2%')}}>Click here to schedule a demo.</Text>
+                </Button>
+              </View>
+            </View>
           </View>
 
         </ScrollView>
@@ -221,6 +243,10 @@ const styles = StyleSheet.create({
     height: hp("3%"),
     marginTop: 5
     // marginLeft: 10
+  },
+  button1: {
+    width: hp("30%"),
+    justifyContent: "center"
   },
   viewDetails1: {
     width: '30%',

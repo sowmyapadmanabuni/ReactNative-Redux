@@ -327,11 +327,13 @@ class VehicleList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
+    flexDirection: "column"
   },
-  progress:{
-    justifyContent:'center',
-    alignItems:'center',
+  progress: {
+    flex:1,
+    justifyContent: 'center',
+    alignItems: "center",
   },
   titleOfScreen: {
     marginTop:hp("1.6%"),

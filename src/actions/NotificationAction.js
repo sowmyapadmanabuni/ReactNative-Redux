@@ -100,7 +100,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         });
       })
       .catch(error => {
-        // console.log(error);
+        console.log(error, "error fetching notifications");
         dispatch({
           type: GET_NOTIFICATIONS_FAILED,
           payload: []

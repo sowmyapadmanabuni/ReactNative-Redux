@@ -26,6 +26,7 @@ import { DatePickerDialog } from "react-native-datepicker-dialog";
 import { Card, CardItem, Form, Item, Input, Icon, Button } from "native-base"
 import moment from "moment";
 import Collapsible from "react-native-collapsible";
+import base from "../../../src/base";
 
 let dt = new Date();
 dt.setDate(dt.getDate());
@@ -211,9 +212,27 @@ class MyGuests extends Component {
           ]}
         >
           <View style={styles.iconContainer}>
-            <Text style={styles.contactIcon}>
-              {item.vlfName[0].toUpperCase()}
-            </Text>
+            {item.vlEntryImg == "" ?
+              //   <Text style={styles.contactIcon}>
+              //   {item.vlfName[0].toUpperCase()}
+              // </Text> 
+              <Image
+                style={styles.profilePicImageStyle}
+                source={{
+                  uri:
+                    "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder // `${this.props.noImage}`
+                }}
+              />
+              :
+              <Image
+                style={styles.profilePicImageStyle}
+                source={{
+                  uri:
+                    `${this.props.mediaupload}` +
+                    item.vlEntryImg
+                }}
+              />
+            }
           </View>
           <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}>
             <View style={styles.infoContainer}>
@@ -240,7 +259,7 @@ class MyGuests extends Component {
               </View>
 
 
-              {moment(item.vlExitT).format("YYYY-MM-DD") === '1900-01-01' ?
+              {item.vlExitT === '0001-01-01T00:00:00' ?
                 <View style={{ flexDirection: 'row' }}>
                   <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
                   <Text>{"  "}</Text>
@@ -446,7 +465,7 @@ class MyGuests extends Component {
               bordered
               warning
               style={[styles.buttonUpdateStyle, { justifyContent: "center" }]}
-            onPress={() => this.getInvitationList()}
+              onPress={() => this.getInvitationList()}
             >
               <Text
                 style={{
@@ -548,16 +567,25 @@ const styles = StyleSheet.create({
     paddingTop: hp("1%")
   },
   iconContainer: {
-    width: hp("6.5%"),
-    height: hp("6.5%"),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ff8c00",
+    width: hp("10%"),
+    height: hp("10%"),
+    // alignItems: "center",
+    // justifyContent: "center",
+    // borderColor: "#ff8c00",
     borderRadius: 100,
   },
   contactIcon: {
+    width: hp('12%'), height: hp('12%'),
     fontSize: hp("3.5%"),
     color: "#fff"
+  },
+  profilePicImageStyle: {
+    width: hp("8%"),
+    height: hp("8%"),
+    borderColor: "#ff8c00",
+    borderRadius: hp("4%"),
+    marginTop: hp("2%"),
+    borderWidth: hp("0.1%")
   },
   infoContainer: {
     flexDirection: "column",
@@ -634,6 +662,7 @@ const mapStateToProps = state => {
     MyAccountID: state.UserReducer.MyAccountID,
     dashBoardReducer: state.DashboardReducer,
     mediaupload: state.OyespaceReducer.mediaupload,
+    noImage: state.OyespaceReducer.noImage,
     userReducer: state.UserReducer
   };
 };

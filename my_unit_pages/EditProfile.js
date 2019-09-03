@@ -51,36 +51,8 @@ class EditProfile extends Component {
             alterMobNum:"",
             alterCCode:"",
             profileName:"",
-
-
-
-
-
-            FirstName: "",
-            LastName: "",
-
-            MobileNumber: "",
-            AlternateMobileNumber: "",
-            cca2: "",
-            cca3: "",
-            callingCode: "",
-            callingCode1: "",
-            countryName1: "",
-
-            Email: "",
-            AlternateEmail: "",
-
-            Image: "",
-            countryName: "",
-
-            // cca2: "",
-            // callingCode: "",
-            data1: [],
-            photo: null,
-            photoDetails: null,
             isPhotoAvailable: false,
-            filePath: '',
-            imagePath: ''
+
         }
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
 
@@ -135,6 +107,7 @@ class EditProfile extends Component {
     }
 
     async uploadImage(response) {
+        console.log("Image upload before",response)
         let self = this;
         let source = (Platform.OS === 'ios') ? response.uri : response.uri;
         const form = new FormData();
@@ -162,7 +135,10 @@ class EditProfile extends Component {
 
 
     async updateProfile() {
-        console.log("Alternate data",this.state)
+        console.log('Add image', this.state.firstName,
+            this.state.lastName, this.state.primaryMobNum, this.state.primaryEmail, this.state.primeCCode, this.state.alterMobNum, this.state.alterCCode,
+            this.state.alterEmail, this.state.imageUrl, this.props.MyAccountID, this.state.primeCName, this.state.alterCName)
+
 
         axios
             .post(
@@ -187,8 +163,8 @@ class EditProfile extends Component {
                     ACEmail4: null,
                     ACImgName:this.state.imageUrl,
                     ACAccntID:this.props.MyAccountID,
-                    acCrtyCode:this.state.primeCName,
-                    acCrtyCode1:this.state.alterCName
+                    ACCrtyCode:this.state.primeCName,
+                    ACCrtyCode1:this.state.alterCName
                 },
                 {
                     headers: {
@@ -199,13 +175,13 @@ class EditProfile extends Component {
             )
 
             .then(response => {
-                if(this.state.isPhotoAvailable){
+                console.log("Respo1111:", response);
+
+             if(this.state.isPhotoAvailable){
                     if (Platform.OS === 'android') {
                         this.deleteImage();
                     }
                 }
-
-                
                 updateUserInfo({ prop: "MyEmail", value: this.state.primaryEmail });
                 updateUserInfo({
                   prop: "MyMobileNumber",
@@ -221,10 +197,12 @@ class EditProfile extends Component {
                 });
                 
                 this.props.navigation.goBack();
-                console.log("Respo:", response);
             })
             .catch(error => {
-                console.log(error)
+                console.log("Crash in profile",error)
+                console.log('Add image in catch', this.state.firstName,
+                    this.state.lastName, this.state.firstName, this.state.lastName, this.state.primaryMobNum, this.state.primaryEmail, this.state.primeCCode, this.state.alterMobNum, this.state.alterCCode,
+                    this.state.alterEmail, this.state.imageUrl, this.props.MyAccountID, this.state.primeCName, this.state.alterCName)
             })
 
     }
@@ -252,20 +230,20 @@ class EditProfile extends Component {
 
     componentWillMount() {
 
-        console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params)
+        console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params,this.props.navigation.state.params.primeCName,this.props.navigation.state.params.alterCName)
       this.setState({
           firstName:this.props.navigation.state.params.firstName,
           lastName:this.props.navigation.state.params.lastName,
           primaryMobNum:this.props.navigation.state.params.primaryMobNum,
           primeCCode:this.props.navigation.state.params.primeCCode,
-          primeCName:this.props.navigation.state.params.primeCName,
+          primeCName:this.props.navigation.state.params.primeCName =="+91"? 'IN':this.props.navigation.state.params.primeCName,
           alterMobNum:this.props.navigation.state.params.alterMobNum,
           alterCCode:this.props.navigation.state.params.alterCCode,
-          alterCName:this.props.navigation.state.params.alterCName,
+          alterCName:this.props.navigation.state.params.alterCName =="+91"? 'IN':this.props.navigation.state.params.alterCName ,
           primaryEmail:this.props.navigation.state.params.primaryEmail,
           alterEmail:this.props.navigation.state.params.alterEmail,
           myProfileImage:this.props.navigation.state.params.myProfileImage !==""?
-              "https://mediaupload.oyespace.com/" +this.props.navigation.state.params.myProfileImage:"",
+              "https://mediaupload.oyespace.com/" +this.props.navigation.state.params.myProfileImage:"https://mediaupload.oyespace.com/"+base.utils.strings.noImageCapturedPlaceholder,
           imageUrl:this.props.navigation.state.params.myProfileImage,
           alterCca:this.props.navigation.state.params.alterCca,
           primeCca:this.props.navigation.state.params.primeCca,
@@ -304,7 +282,7 @@ class EditProfile extends Component {
 
     render() {
 
-        console.log('AGHGHGHGH',this.state,this.state.myProfileImage)
+        console.log('AGHGHGHGH',this.state,this.state.myProfileImage,this.props)
         console.log("My Account Id", this.props.MyAccountID)
         return (
             <TouchableWithoutFeedback
@@ -373,7 +351,7 @@ class EditProfile extends Component {
                                           <View style={styles.viewForProfilePicImageStyle}>
                                               <Image
                                                   style={styles.profilePicImageStyle}
-                                                  source={{uri:this.state.myProfileImage !== "" ? this.state.myProfileImage :base.utils.strings.staffPlaceHolder}}
+                                                  source={{uri:this.state.myProfileImage}}
                                               />
                                             </View>
 
@@ -526,7 +504,7 @@ class EditProfile extends Component {
                                                         })
                                                     }}
                                                     cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
+                                                    flag={this.state.alterCName === ""   ? 'IN' : this.state.alterCName}
                                                     translation="eng"
                                                 />
                                             </View>

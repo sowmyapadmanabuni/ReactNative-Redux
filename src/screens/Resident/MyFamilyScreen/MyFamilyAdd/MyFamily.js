@@ -132,11 +132,11 @@ class MyFamily extends Component {
                     <View style={Style.subContainer}>
                         <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                             {this.state.relativeImage === '' ?
-                                <Image style={{ height: 40, width: 40, alignSelf: 'center' }}
-                                    source={require('../../../../../icons/camera.png')}
+                                <Image style={{ height: 40, width: 40,borderRadius:20, alignSelf: 'center' }}
+                                       source={{ uri:"https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                 />
                                 :
-                                <Image style={{ height: 90, width: 90, borderRadius: 45, alignSelf: 'center' }}
+                                <Image style={{ height: 85, width: 85, borderRadius: 85/2, alignSelf: 'center' }}
                                     source={{ uri: this.state.relativeImage }} />
                             }
                         </TouchableOpacity>
@@ -538,8 +538,7 @@ class MyFamily extends Component {
             return false
         } else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
-        }
-        else if (self.props.dashBoardReducer.uniID === null) {
+        } else if (self.props.dashBoardReducer.uniID === null) {
             alert('Unit id is null')
         } else if (self.props.dashBoardReducer.assId === null) {
             alert('Association id is null')
@@ -595,7 +594,7 @@ class MyFamily extends Component {
             "FMGurName": self.state.guardianName,
             "PAccntID": self.props.userReducer.MyAccountID
         };
-        console.log('MyFam', input)
+        console.log('MyFam', input);
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
         console.log('Stat in Add family', stat)
         this.setState({
@@ -609,6 +608,7 @@ class MyFamily extends Component {
                             self.deleteImage()
                         }
                     }
+                    Alert.alert('Family member added to your list')
                     self.props.navigation.navigate('MyFamilyList')
                     this.setState({
                         isLoading: true

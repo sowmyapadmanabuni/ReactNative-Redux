@@ -25,6 +25,7 @@ import {getDashUnits} from "../src/actions";
 import base from "../src/base";
 import OSButton from '../src/components/osButton/OSButton'
 import StaffStyle from "../src/screens/Resident/Visitors/Staff/StaffStyle";
+import _ from 'lodash';
 
 let data = [
     {
@@ -122,11 +123,13 @@ class Resident extends React.Component {
 
     async addUnitDetail(memberArr, associationId) {
         let self = this;
+        console.log("Stat12345");
+
         let stat = await base.services.OyeLivingApi.getUnitListByAssociationId(associationId);
         try {
             if (stat) {
                 let unitArr = stat.data.unit;
-                console.log("Stat:", unitArr);
+                console.log("Stat:",unitArr);
                 for (let i in memberArr) {
                     for (let k in unitArr) {
                         if (memberArr[i].unUnitID === unitArr[k].unUnitID) {
@@ -137,10 +140,9 @@ class Resident extends React.Component {
                 console.log("memberArr",memberArr)
                 self.setState({
                     residentData: memberArr,
-                    clonedList: memberArr
+                    clonedList: memberArr,
+                    isLoading:false
                 })
-                self.setState({isLoading:false})
-
             }
         } catch (e) {
             console.log(e)

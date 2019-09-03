@@ -169,7 +169,11 @@ class MyProfile extends Component {
                       {this.state.ImageSource == "" ?
                           <Image
                               style={styles.profilePicImageStyle}
-                              source={require("../icons/camwithgradientbg.png")}
+                              source={{
+                                uri:
+                                    "https://mediaupload.oyespace.com/" +
+                                    base.utils.strings.noImageCapturedPlaceholder
+                              }}
                           />:
                           <Image
                               style={styles.profilePicImageStyle}

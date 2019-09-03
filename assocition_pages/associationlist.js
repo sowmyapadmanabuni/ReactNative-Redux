@@ -31,8 +31,9 @@ class BlockDetail extends React.Component {
       isLoading: true,
       dataSource: [],
       filteredDataSource: [],
-      city:"",
-      filteredArr:[],
+      emptyError: [],
+      city: "",
+      filteredArr: [],
       query: "",
       loading: false,
       error: null,
@@ -47,8 +48,8 @@ class BlockDetail extends React.Component {
     setTimeout(() => {
       this.setState({
         isLoading: false,
-        city:this.props.navigation.state.params.id
-      },()=>this.myJoinAssociationListGetData());
+        city: this.props.navigation.state.params.id
+      }, () => this.myJoinAssociationListGetData());
     }, 1000);
 
   }
@@ -67,32 +68,41 @@ class BlockDetail extends React.Component {
   // };
 
   searchFilterFunction = text => {
-    // const newData = this.arrayholder.filter(item => {
-    //   const itemData = `${item.asCountry.toUpperCase()} ${item.asAsnName.toUpperCase()} ${item.asPinCode.toUpperCase()}`;
-    //   const textData = text.toUpperCase();
+    const newData = this.state.filteredArr.filter(item => {
+      const itemData = `${item.asAsnName.toUpperCase()}`;
+      const textData = text.toUpperCase();
 
-    //   return itemData.indexOf(textData) > -1;
-    // });
-    let filteredArray = [];
-    console.log("Text", text)
-    let newData = this.state.filteredArr
-    console.log("kjsnak", newData)
-    if (text.length === 0) {
-      this.setState({
-        filteredDataSource: []
-      })
-    } else {
-      for (let i in newData) {
-        if(text.toUpperCase().includes(newData[i].asAsnName.toUpperCase())){
-          console.log("New Data",newData[i])
-          filteredArray.push(newData[i])
-        }
-      }
-    }
-    this.setState({
-      searchText: text,
-      filteredDataSource: filteredArray
+      return itemData.indexOf(textData) > -1;
     });
+    console.log("Text", text)
+    if(text.length === 0){
+      this.setState({
+        filteredDataSource: [],
+        searchText: ""
+      })
+    }else{
+      this.setState({
+        searchText: text,
+        filteredDataSource: newData
+      });
+    }
+    // let filteredArray = [];
+    // console.log("Text", text)
+    // let newData = this.state.filteredArr
+    // console.log("kjsnak", newData)
+    // if (text.length === 0) {
+    //   this.setState({
+    //     filteredDataSource: []
+    //   })
+    // } else {
+    //   for (let i in newData) {
+    //     if (text.toUpperCase().includes(newData[i].asAsnName.toUpperCase())) {
+    //       console.log("New Data", newData[i])
+    //       filteredArray.push(newData[i])
+    //     }
+    //   }
+    // }
+    
   };
 
 
@@ -130,22 +140,21 @@ class BlockDetail extends React.Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Response Json",responseJson);
+        console.log("Response Json", responseJson);
         let arr = []
         let self = this;
-        for(let i in responseJson.data.associations){
+        for (let i in responseJson.data.associations) {
           // console.log("i is:", i)
-          if(self.state.city === responseJson.data.associations[i].asPinCode.substring(0,2)){
-            console.log("City Wise Associations",responseJson.data.associations[i])
-            console.log("Pin Code",responseJson.data.associations[i].asPinCode.substring(0,2) )
+          if (self.state.city === responseJson.data.associations[i].asPinCode.substring(0, 2)) {
+            console.log("City Wise Associations", responseJson.data.associations[i])
+            console.log("Pin Code", responseJson.data.associations[i].asPinCode.substring(0, 2))
             arr.push(responseJson.data.associations[i])
           }
         }
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.associations,
-          filteredDataSource:arr,
-          filteredArr:arr,
+          filteredArr: arr,
           error: responseJson.error || null,
           loading: false
         });
@@ -166,7 +175,6 @@ class BlockDetail extends React.Component {
               <View
                 style={{
                   flex: 5,
-                  //alignItems: "flex-start",
                   flexDirection: "row",
                   alignContent: "flex-start"
                 }}
@@ -244,8 +252,8 @@ class BlockDetail extends React.Component {
                       dataSource: [],
                       arrayholder: [],
                       filteredDataSource: [],
-                      filteredArr:[],
-                      searchText: ''
+                      filteredArr: [],
+                      searchText: ""
                     })
                   }}
                 >
@@ -259,6 +267,8 @@ class BlockDetail extends React.Component {
       </View>
     );
   };
+
+  
 
   render() {
     const { navigate } = this.props.navigation;
@@ -376,7 +386,7 @@ class BlockDetail extends React.Component {
               <Input
                 value={this.state.searchText}
                 marginBottom={hp("-1%")}
-                placeholder="Search...."
+                placeholder="Search your association...."
                 multiline={false}
                 onChangeText={this.searchFilterFunction}
               />
@@ -385,21 +395,15 @@ class BlockDetail extends React.Component {
             </Item>
           </Form>
 
-          {/* <TextInput
-            style={styles.searchTextStyle}
-            placeholder="Search by Country/Name/Pincode..."
-            round
-            onChangeText={this.searchFilterFunction}
-          /> */}
+          
 
           <View style={styles.lineAboveAndBelowFlatList} />
 
           {this.state.filteredDataSource.length === 0 ?
             <FlatList
 
-              data={this.state.filteredDataSource}
+              data={this.state.emptyError}
               renderItem={this.renderItem}
-              extraData={this.state}
               keyExtractor={(item, index) => item.asAssnID.toString()}
             />
             :
@@ -450,6 +454,11 @@ class BlockDetail extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    flexDirection: "column"
+  },
   emptyViewStyle: {
     width: hp("15%")
   },
@@ -467,8 +476,8 @@ const styles = StyleSheet.create({
   },
   progressViewStyle: {
     flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: "center",
   },
   formSearch: {
     marginBottom: hp("1%")
