@@ -2,9 +2,14 @@ import { UPDATE_USER_INFO } from '../actions/types';
 
 //DB
 
-// const oyeURL = "apidev.oyespace.com"; //Development
-const oyeURL = "apiuat.oyespace.com"; //Validation/
- //const oyeURL = "api.oyespace.com"; //Production
+/*Change this urlType to
+    1. apiuat  --- For testing server
+    2. apidev  --- For develpment server
+    3. api     --- For production server
+*/
+let urlType = "api";
+
+const oyeURL = `${urlType}.oyespace.com`; //Validation/
 
 //Image Domains
  //const mediaUpload = "https://mediauploaddev.oyespace.com/Images/"; //Development

@@ -13,7 +13,7 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View
+    View,BackHandler
 } from "react-native";
 import {Card} from "native-base";
 import {TextInput} from "react-native-gesture-handler";
@@ -68,10 +68,17 @@ class Resident extends React.Component {
         this.getMemberList();        
     }
 
-    componentDidMount(){
-        
-        
-    }
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          console.log("Back KSCNJND")
+          this.props.navigation.goBack(null); // works best when the goBack is async
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
     static navigationOptions = {
         title: "resident",

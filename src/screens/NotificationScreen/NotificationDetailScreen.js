@@ -8,7 +8,7 @@ import {
   Image,
   SafeAreaView,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,BackHandler
 } from "react-native";
 import { Button, Header, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -51,6 +51,16 @@ class NotificationDetailScreen extends PureComponent {
     this.props.storeOpenedNotif(savedNoifId, ntid);
 
     this.manageJoinRequest();
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+  }
+
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   /**

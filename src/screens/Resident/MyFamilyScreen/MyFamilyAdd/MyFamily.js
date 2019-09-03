@@ -8,7 +8,7 @@ import {
     TextInput,
     ScrollView,
     PermissionsAndroid, Dimensions,
-    SafeAreaView, Alert, ToastAndroid
+    SafeAreaView, Alert, ToastAndroid,BackHandler
 } from "react-native";
 import ProgressLoader from "rn-progress-loader";
 import ImagePicker from "react-native-image-picker"
@@ -74,6 +74,18 @@ class MyFamily extends Component {
             isPhoneBookOpened:false
         }
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          console.log("Back KSCNJND")
+          this.props.navigation.goBack(null); // works best when the goBack is async
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
     render() {
         console.log('Isminor', this.state)
