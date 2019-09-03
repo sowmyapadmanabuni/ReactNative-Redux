@@ -216,8 +216,8 @@ class Dashboard extends PureComponent {
               );
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-            if ((units.mrmRoleID === 2 || units.mrmRoleID === 3) || units.acMobile == "") {
-            } else if (units.mrmRoleID === 1 && units.acMobile !== "") {
+            if ((units.mrmRoleID === 2 || units.mrmRoleID === 3)) {
+            } else if (units.mrmRoleID === 1) {
               if (units.meIsActive) {
                 //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
                 firebase.messaging().subscribeToTopic(units.asAssnID + "admin");
