@@ -9,7 +9,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,BackHandler
 } from "react-native";
 
 import ImagePicker from "react-native-image-picker";
@@ -83,6 +83,18 @@ class MyFamilyEdit extends Component {
       imageUrl:this.props.navigation.state.params.fmImgName
 
     })
+  }
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   render() {

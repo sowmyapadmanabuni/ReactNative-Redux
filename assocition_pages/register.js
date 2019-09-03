@@ -82,15 +82,20 @@ class RegisterMe extends Component {
     } = this.props.navigation.state.params;
 
     const { getAssoMembers, oyeURL, MyAccountID } = this.props;
-    if (this.state.dobText == "Select Date of Occupancy") {
-      alert("Select Date of Occupancy");
-    } else if (this.state.sent) {
-      alert("Request already sent");
-    } else if (this.checkForOwner()) {
+
+    /*
+    else if (this.checkForOwner()) {
       alert("You are an active member and can't join");
     } else if (this.checkStatus()) {
       alert("You already requested to join this unit");
-    } else {
+    }else if (this.state.sent) {
+      alert("Request already sent");
+    }
+    */
+    if (this.state.dobText == "Select Date of Occupancy") {
+      alert("Select Date of Occupancy");
+    } 
+      else {
       anu = {
         ASAssnID: unitList.asAssnID,
         BLBlockID: unitList.blBlockID,
@@ -365,15 +370,18 @@ class RegisterMe extends Component {
     } = this.props.navigation.state.params;
 
     const { getAssoMembers, oyeURL, MyAccountID } = this.props;
-    if (this.state.dobText == "Select Date of Occupancy") {
-      alert("Select Date of Occupancy");
-    } else if (this.state.sent) {
+    /**
+     else if (this.state.sent) {
       alert("Request already sent");
     } else if (this.checkTenant()) {
       alert("You are an active member and can't join");
     } else if (this.checkStatus()) {
       alert("You already requested to join this unit");
-    } else {
+    }
+     */
+    if (this.state.dobText == "Select Date of Occupancy") {
+      alert("Select Date of Occupancy");
+    }  else {
       anu = {
         ASAssnID: unitList.asAssnID,
         BLBlockID: unitList.blBlockID,
@@ -690,7 +698,7 @@ class RegisterMe extends Component {
       return o.unUnitID === unitID;
     });
 
-    console.log(matchUnit, "matchUnit");
+    console.log("matchUnit", matchUnit,memberList);
 
     if (matchUnit) {
       if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
@@ -722,7 +730,7 @@ class RegisterMe extends Component {
       return o.unUnitID === unitID;
     });
 
-    console.log(matchUnit, "matchUnit");
+    console.log("matchUnit", matchUnit,memberList);
 
     if (matchUnit) {
       if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {

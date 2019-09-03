@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View,TouchableWithoutFeedback, Keyboard, Image, ScrollView,Alert, Dimensions, TouchableOpacity } from 'react-native';
+import {Platform, StyleSheet, Text, View,TouchableWithoutFeedback, Keyboard, Image, ScrollView,Alert, Dimensions, TouchableOpacity,BackHandler } from 'react-native';
 // import Header from './src/components/common/Header'
 import { Card,CardItem, Form, Item, Label, Input, Button, } from "native-base"
 import CountryPicker, {getAllCountries} from 'react-native-country-picker-modal';
@@ -62,6 +62,18 @@ class InviteGuests extends Component {
     
    }
  }
+
+ componentDidMount() {
+  this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+    console.log("Back KSCNJND")
+    this.props.navigation.goBack(null); // works best when the goBack is async
+    return true;
+  });
+}
+
+componentWillUnmount(){
+  this.backHandler.remove();
+}
 
  //Date Picker
  onDOBPress = () => {

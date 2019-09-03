@@ -15,7 +15,7 @@ import {
   TextInput,
   Easing,
   SafeAreaView,
-  Dimensions
+  Dimensions,BackHandler
 } from "react-native";
 // import Header from "./src/components/common/Header"
 import { Card, CardItem, Button, Form, Item, Input, Icon } from "native-base";
@@ -142,7 +142,18 @@ class App extends React.Component {
       });
     }, 5000);
     console.log("Association Id", this.props.dashBoardReducer.assId);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
   }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
+  }
+
+
   myVisitorsGetList = () => {
     this.setState({
       isLoading:true

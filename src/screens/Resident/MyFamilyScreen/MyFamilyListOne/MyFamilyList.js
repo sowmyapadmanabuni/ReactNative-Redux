@@ -11,7 +11,7 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    ScrollView
+    ScrollView,BackHandler
 } from "react-native"
 
 import {NavigationEvents} from "react-navigation"
@@ -49,6 +49,10 @@ class MyFamilyList extends React.Component {
     }
 
     this.arrayholder = []
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   renderFlatList(item) {
@@ -169,7 +173,12 @@ class MyFamilyList extends React.Component {
         isLoading: false
       });
     }, 1500);
-    this.myFamilyListGetData()
+    this.myFamilyListGetData();
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
+      return true;
+    });
   }
 
   renderItem = ({item,index}) => {

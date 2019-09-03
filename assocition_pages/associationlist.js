@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   Dimensions,
   TextInput,
-  SafeAreaView,
+  SafeAreaView,BackHandler
 } from "react-native";
 import { Button } from "native-base";
 import {
@@ -51,8 +51,19 @@ class BlockDetail extends React.Component {
         city: this.props.navigation.state.params.id
       }, () => this.myJoinAssociationListGetData());
     }, 1000);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+    
 
   }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
+  }
+
+  
 
   // searchFilterFunction = text => {
   //   const newData = this.arrayholder.filter(item => {

@@ -1,6 +1,6 @@
 /** @format */
 import React, { Component } from "react";
-import { AppRegistry, View, StatusBar, Platform } from "react-native";
+import { AppRegistry, View, StatusBar, Platform,BackHandler } from "react-native";
 import { Provider } from "react-redux";
 import App from "./App";
 import store from "./src/store";
@@ -30,6 +30,8 @@ import base from "./src/base";
 import { StatusBarPlaceHolder } from "../ReactNative-Redux/src/components/StatusBar";
 
 class RootApp extends Component {
+
+  
   render() {
     $.logTitle("O Y E S P A C E - R E S I D E N T");
     return (

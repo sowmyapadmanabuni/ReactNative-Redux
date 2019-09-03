@@ -5,7 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Image ,
-  Dimensions
+  Dimensions,BackHandler
 } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import MyGuests from './src/pages/MyGuests.js';
@@ -17,6 +17,18 @@ import PatrollingCommonHeader from "../src/components/NavigationalHeaders/Patrol
 import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport";
 
 class FirstTab extends Component {
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
+  }
     render() {
 
       const AppTabNavigator = createMaterialTopTabNavigator({
