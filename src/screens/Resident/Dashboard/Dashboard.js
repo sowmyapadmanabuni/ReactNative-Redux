@@ -176,7 +176,7 @@ class Dashboard extends PureComponent {
   showExitAlert(){
     Alert.alert(
       'Exit Oyespace ?',
-      'Are you sure, You want to exit the applcation ?',
+      'Are you sure, You want to exit the application ?',
       [
         {
           text: 'No',
