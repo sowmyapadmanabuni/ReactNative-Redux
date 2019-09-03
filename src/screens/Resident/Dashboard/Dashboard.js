@@ -503,25 +503,21 @@ try{
         let isAdminFound = false;  
         console.log("roleCheckForAdmin_",responseJson)
         //responseJson.data.members.splice(0,1);
-        console.log(
-          "Get_Ids",
-          this.props.userReducer.MyAccountID,
-          responseJson.data.members[i].acAccntID,
-          this.state.assocId,
-          responseJson.data.members[i].asAssnID,
-          responseJson.data.members[i].mrmRoleID,
-          responseJson.data.members[i].unUniName + "name"
-        );
+        
         for (let i = 0; i < responseJson.data.members.length; i++) {
           //alert(responseJson.data.members[i].mrmRoleID)
-          let assnId = ""+responseJson.data.members[i].asAssnID;
-          assnId = assnId.trim()+"admin"
           console.log(
-            "Id_eq",
+            "Get_Ids",
             this.props.userReducer.MyAccountID,
             responseJson.data.members[i].acAccntID,
-            responseJson.data.members[i].mrmRoleID
+            this.state.assocId,
+            responseJson.data.members[i].asAssnID,
+            responseJson.data.members[i].mrmRoleID,
+            responseJson.data.members[i].unUniName + "name"
           );
+          let assnId = ""+responseJson.data.members[i].asAssnID;
+          assnId = assnId.trim()+"admin"
+          
           if (
             responseJson.data.members[i].meIsActive &&
             this.props.userReducer.MyAccountID ===
