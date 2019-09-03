@@ -25,6 +25,7 @@ import Style from "./Style"
 import base from "../../../../base"
 import {connect} from "react-redux";
 import FloatingActionButton from "../../../../components/FloatingButton";
+import {updateIdDashboard} from "../../../../actions";
 
 class MyFamilyList extends React.Component {
   static navigationOptions = {
@@ -121,6 +122,11 @@ class MyFamilyList extends React.Component {
           myfamily11: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1),
           clonedList: myFamilyList.data.familyMembers.sort((a, b) => (a.fmName > b.fmName) ? 1 : -1)
         })
+          const { updateIdDashboard } = this.props;
+          updateIdDashboard({
+              prop: "familyMemberCount",
+              value:myFamilyList.data.familyMembers.length
+          });
         this.setState({familyData: myFamilyList})
       }
       else{
@@ -130,6 +136,11 @@ class MyFamilyList extends React.Component {
     } catch (error) {
       base.utils.logger.log(error)
       this.setState({error, loading: false})
+        const { updateIdDashboard } = this.props;
+        updateIdDashboard({
+            prop: "familyMemberCount",
+            value:0
+        });
     }
   }
     showAlert(msg, ispop) {
@@ -473,7 +484,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(MyFamilyList);
+export default connect(mapStateToProps,{updateIdDashboard})(MyFamilyList);
 
 // createIdsForData = () => {
 //   // returns a new array with ids from index

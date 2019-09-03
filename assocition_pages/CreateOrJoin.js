@@ -59,7 +59,7 @@ class CreateOrJoin extends React.Component {
                     style={{ flexDirection: 'row', alignItems: 'center', margin: 5, marginLeft: 35,
                       marginRight: 35, padding: 10,
                     }}
-                    onPress={() => this.props.navigation.navigate('AssnListScreen')}>
+                    onPress={() => this.props.navigation.navigate('City')}>
 
                   <Image source={require('../pages/assets/images/icons8-add-user-group-man-man-24.png')}
                          style={{ height: 30, width: 30, margin: 10, alignItems: "flex-end", }} />

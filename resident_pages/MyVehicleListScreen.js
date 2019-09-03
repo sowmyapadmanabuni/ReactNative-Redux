@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 import { NavigationEvents } from 'react-navigation';
 import { connect } from "react-redux";
 import base from "../src/base";
+import {updateIdDashboard} from "../src/actions";
 
 class VehicleList extends Component {
 
@@ -48,12 +49,23 @@ class VehicleList extends Component {
               isLoading: false,
               dataSource: responseJson.data.vehicleListByUnitID,
             })
+              const { updateIdDashboard } = this.props;
+              updateIdDashboard({
+                  prop: "vehiclesCount",
+                  value:responseJson.data.vehicleListByUnitID.length
+              });
             
           })
           
           .catch(error=>{
             this.setState({ loading: false });
             console.log(error)})
+        const { updateIdDashboard } = this.props;
+        updateIdDashboard({
+            prop: "vehiclesCount",
+            value:0
+        });
+
     }
     
     renderItem = ({ item, index }) => {
@@ -469,4 +481,4 @@ const mapStateToProps = state => {
 };
 
 
-export default connect(mapStateToProps)(VehicleList);
+export default connect(mapStateToProps,{updateIdDashboard})(VehicleList);
