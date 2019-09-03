@@ -18,7 +18,7 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Image,
-    Alert
+    Alert,BackHandler
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {Card, CardItem, Form, Item, Label, Input, Button,} from "native-base";
@@ -77,6 +77,18 @@ class EditVehicle extends Component {
                 : ""
         })
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          console.log("Back KSCNJND")
+          this.props.navigation.goBack(null); // works best when the goBack is async
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
     onSelect(index, value) {
         this.setState({

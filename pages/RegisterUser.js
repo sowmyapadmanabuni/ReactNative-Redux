@@ -1,6 +1,6 @@
 /*Screen to register the user*/
 import React from 'react';
-import { View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, Alert,BackHandler } from 'react-native';
 import Mytextinput from './components/Mytextinput';
 import Mybutton from './components/Mybutton';
 
@@ -14,6 +14,17 @@ export default class RegisterUser extends React.Component {
       user_contact: '',
       user_address: '',
     };
+  }
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   register_user = () => {

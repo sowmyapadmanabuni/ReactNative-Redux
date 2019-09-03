@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text, View, StyleSheet, SafeAreaView, TouchableOpacity,
-  TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView, Platform, Linking
+  TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView, Platform, Linking,BackHandler
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Card, CardItem, Form, Item, Button, Input, Icon } from "native-base"
@@ -25,6 +25,19 @@ export default class City extends Component {
       ]
     };
   }
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("Back KSCNJND")
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
+  }
+
   FlatListItemSeparator = () => {
     return (
       <View style={{ height: 1, width: "100%", backgroundColor: "#E5E5E5", marginBottom: hp('1%'), marginTop: hp('1%') }} />

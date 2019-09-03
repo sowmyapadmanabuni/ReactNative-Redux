@@ -90,7 +90,6 @@ class Dashboard extends PureComponent {
     this.backButtonListener = null;
     this.currentRouteName = "Main";
     this.lastBackButtonPress = null;
-    // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentWillMount() {
@@ -155,11 +154,13 @@ class Dashboard extends PureComponent {
           }
 
           if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-            BackHandler.exitApp();
-            return true;
+            this.showExitAlert();
+           // BackHandler.exitApp();
+            //return true;
           }
           if (this.state.isSelectedCard === "UNIT") {
-            BackHandler.exitApp();
+            this.showExitAlert();
+            //BackHandler.exitApp();
           } else {
             this.changeCardStatus("UNIT");
           }
@@ -172,11 +173,22 @@ class Dashboard extends PureComponent {
     }
   }
 
-  handleBackButtonClick() {
-    console.log("DNDJVL");
-    // this.props.navigation.goBack(null);
-    // return true;
+  showExitAlert(){
+    Alert.alert(
+      'Exit Oyespace ?',
+      'Are you sure, You want to exit the applcation ?',
+      [
+        {
+          text: 'No',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+      ],
+      {cancelable: false},
+    );
   }
+
 
   requestNotifPermission = () => {
     const {
@@ -550,7 +562,7 @@ try{
 
         let assnId = ""+this.state.assocId+"admin"
         if(isAdminFound){
-           
+            role = 1;
             console.log(assnId)
             //let subscription = await base.utils.storage.retrieveData('ADMIN_NOTIF'+assnId);
             console.log("SUBSCRIBED_TO_",assnId)

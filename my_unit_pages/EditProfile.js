@@ -12,7 +12,7 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
-    Platform
+    Platform,BackHandler
 } from "react-native"
 
 import {Button, Form, Input, Item, Label} from "native-base";
@@ -57,6 +57,18 @@ class EditProfile extends Component {
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
 
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          console.log("Back KSCNJND")
+          this.props.navigation.goBack(null); // works best when the goBack is async
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
 
 
@@ -179,7 +191,7 @@ class EditProfile extends Component {
 
              if(this.state.isPhotoAvailable){
                     if (Platform.OS === 'android') {
-                        this.deleteImage();
+                       // this.deleteImage();
                     }
                 }
                 updateUserInfo({ prop: "MyEmail", value: this.state.primaryEmail });
@@ -219,7 +231,7 @@ class EditProfile extends Component {
   
         })
         .catch(err => {
-          console.error(err)
+          console.error("Stat while deleting image:",err)
         });
     }
 

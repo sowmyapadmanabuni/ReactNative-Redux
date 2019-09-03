@@ -12,7 +12,7 @@ import {
   TextInput,
   Dimensions,
   Alert,
-  TouchableHighlight
+  TouchableHighlight,BackHandler
 } from "react-native";
 import { Button, Card, CardItem } from "native-base";
 import {
@@ -81,6 +81,15 @@ class UnitList extends Component {
       });
     }, 1500);
     this.getUnitList();
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack(null); // works best when the goBack is async
+      return true;
+    });
+    
+  }
+
+  componentWillUnmount(){
+    this.backHandler.remove();
   }
 
   searchFilterFunction = text => {
