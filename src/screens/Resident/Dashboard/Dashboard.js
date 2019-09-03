@@ -29,6 +29,9 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
+
+import RNRestart from 'react-native-restart';
+
 import {
   createNotification,
   createUserNotification,
@@ -109,10 +112,28 @@ class Dashboard extends PureComponent {
       let roleRef =  base.services.frtdbservice.ref(path);
       //roleRef.off(path);
       let self = this;
-      roleRef.on('value', function (snapshot) { 
-        //alert(JSON.stringify(snapshot.val()))       
-        self.roleCheckForAdmin(self.state.assocId);
-        self.requestNotifPermission()
+      roleRef.on('value', async function (snapshot) { 
+        try{
+          if(counter != 0){            
+            console.log(JSON.stringify(snapshot.val()))      
+            console.log("ROLE_CHANGE_FRTDB")
+            if(snapshot.val().role != undefined && snapshot.val().role != 1){
+              let resp = await firebase.messaging().deleteToken();
+              firebase.initializeApp(base.utils.strings.firebaseconfig);
+            }
+            
+            let firebaseMessaging = firebase.messaging();
+            let tok = await firebaseMessaging.getToken()            
+            console.log("ROLE_CHANGE_FRTDB_MSG",tok)         
+            self.requestNotifPermission()
+            self.roleCheckForAdmin(self.state.assocId);
+            //RNRestart.Restart();
+          }else{
+            counter = 1;
+          }
+        }catch(er){
+          console.log("ROLE_CHANGE_FRTDB_ERR",er);
+        }
       });
   }
 
@@ -216,18 +237,18 @@ class Dashboard extends PureComponent {
             firebase.messaging().subscribeToTopic(""+MyAccountID+units.unUnitID+"usernotif");
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-            } else if (units.mrmRoleID === 1) {
-              console.log(units, "units");
-              if (units.meIsActive) {
-                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
-                firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
-              } else {
-                firebase
-                  .messaging()
-                  .unsubscribeFromTopic(units.asAssnID + "admin");
-              }
-            }
+            // if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+            // } else if (units.mrmRoleID === 1) {
+            //   console.log(units, "units");
+            //   if (units.meIsActive) {
+            //     //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+            //     firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
+            //   } else {
+            //     firebase
+            //       .messaging()
+            //       .unsubscribeFromTopic(units.asAssnID + "admin");
+            //   }
+            // }
           } else if (!receiveNotifications) {
             // firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
             firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
@@ -243,6 +264,7 @@ class Dashboard extends PureComponent {
         //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
         //     }
         // }
+        this.roleCheckForAdmin()
 
 
       });
@@ -472,7 +494,8 @@ class Dashboard extends PureComponent {
 try{
 
         let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
-        let role = "";
+        let role = "";      
+        let isAdminFound = false;  
         console.log("roleCheckForAdmin_",responseJson)
         //responseJson.data.members.splice(0,1);
         console.log(
@@ -482,6 +505,8 @@ try{
         );
         for (let i = 0; i < responseJson.data.members.length; i++) {
           //alert(responseJson.data.members[i].mrmRoleID)
+          let assnId = ""+responseJson.data.members[i].asAssnID;
+          assnId = assnId.trim()+"admin"
           console.log(
             "Get_Ids",
             this.props.userReducer.MyAccountID,
@@ -496,7 +521,7 @@ try{
             this.props.userReducer.MyAccountID ===
               responseJson.data.members[i].acAccntID &&            
             parseInt(this.state.assocId) ===
-              responseJson.data.members[i].asAssnID
+              responseJson.data.members[i].asAssnID && responseJson.data.members[i].unUniName !=""
           ) {
             console.log(
               "Id_eq",
@@ -504,8 +529,38 @@ try{
               responseJson.data.members[i].acAccntID,
               responseJson.data.members[i].mrmRoleID
             );            
-            role = responseJson.data.members[i].mrmRoleID;
+            role = responseJson.data.members[i].mrmRoleID;              
+              if(role == 1){
+                isAdminFound = true;                                      
+              }
+              // else{
+              //   console.log("UNSUBSCRIBED_FROM_",assnId)
+              //   //await base.utils.storage.removeData('ADMIN_NOTIF'+assnId);
+              //   //firebase.messaging().unsubscribeFromTopic(assnId)                                
+              // }
+
+          }else{
+            //console.log("UNSUBSCRIBED_USER_FROM_",assnId)
+            //firebase.messaging().unsubscribeFromTopic(assnId)                                
           }
+        }
+
+
+        let assnId = ""+this.state.assocId+"admin"
+        if(isAdminFound){
+           
+            console.log(assnId)
+            //let subscription = await base.utils.storage.retrieveData('ADMIN_NOTIF'+assnId);
+            console.log("SUBSCRIBED_TO_",assnId)
+           // if(subscription == null || subscription == undefined){
+                  
+                  await base.utils.storage.storeData('ADMIN_NOTIF'+assnId,assnId);
+                  firebase.messaging().subscribeToTopic(assnId)         
+           // } 
+        }else{
+          console.log("UNSUBSCRIBED_FROM_",assnId)
+          await base.utils.storage.removeData('ADMIN_NOTIF'+assnId);
+          firebase.messaging().unsubscribeFromTopic(assnId)         
         }
 
         console.log(role, "role");

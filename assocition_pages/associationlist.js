@@ -144,6 +144,7 @@ class BlockDetail extends React.Component {
         this.setState({
           isLoading: false,
           dataSource: responseJson.data.associations,
+          filteredDataSource:arr,
           filteredArr:arr,
           error: responseJson.error || null,
           loading: false
@@ -156,6 +157,7 @@ class BlockDetail extends React.Component {
       });
   };
   renderItem = ({ item }) => {
+    console.log("RENDER_ITEM",item);
     return (
       <View style={styles.tableView}>
         <View style={styles.cellView}>

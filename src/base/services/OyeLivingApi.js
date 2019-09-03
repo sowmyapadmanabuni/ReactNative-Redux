@@ -58,7 +58,7 @@ export default class OyeLivingApi {
         return await instance.get('Member/GetMemberListByAccountID/' + accountId)
     }
 
-    static async getUnitListByAssoc(assocId) {
+    static async getUnitListByAssoc(assocId) {        
         return await instance.get('Member/GetMemUniOwnerTenantListByAssoc/' + assocId)
     }
 
