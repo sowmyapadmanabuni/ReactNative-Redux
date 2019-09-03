@@ -89,7 +89,7 @@ class CardView extends React.Component {
                 <View style={CardViewStyles.subCardView}>
                     <Image style={[CardViewStyles.imageStyles,{height:this.props.iconHeight,width:this.props.iconWidth,
                         borderRadius:this.props.iconBorderRadius,...this.props.style}]}
-                           source={imgSrc}>
+                           source={imgSrc} resizeMode='contain'>
                     </Image>
                     <View style={[CardViewStyles.subView]}>
                         <Text style={CardViewStyles.count}>

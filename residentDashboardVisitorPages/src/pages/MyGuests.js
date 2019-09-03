@@ -27,12 +27,12 @@ export default class MyGuests extends Component {
       
       Invited: { screen: Invited,  
         navigationOptions:{  
-            tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>Invited</Text>, 
+            tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:hp('2.2%'),}}>Invited</Text>, 
         }  
     },  
     visited : { screen: visited,  
       navigationOptions:{  
-          tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:20,marginBottom:10}}>visited</Text>, 
+          tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:hp('2.2%')}}>visited</Text>, 
           
         //   tabBarIcon: ({ tintColor }) => (  
         //     <View>  
@@ -52,7 +52,6 @@ export default class MyGuests extends Component {
           backgroundColor:'#fff',
           borderTopWidth:0.5,
           borderTopColor:'#fff',
-          height:hp('10%')
           },
           indicatorStyle: {
               backgroundColor: '#fff',
@@ -61,6 +60,7 @@ export default class MyGuests extends Component {
           },
           tabStyle: {
               width: Dimensions.get('window').width / 2,
+              height:hp('8%')
           },
           showIcon:true
 
