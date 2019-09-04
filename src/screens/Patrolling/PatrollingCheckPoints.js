@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert,AsyncStorage} from 'react-native';
+import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert,AsyncStorage,BackHandler} from 'react-native';
 import {connect} from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
@@ -70,6 +70,16 @@ class PatrollingCheckPoints extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          //this.props.navigation.navigate("ResDashBoard");
+          this.props.navigation.goBack(null)
+          return true;
+        });
+      }
+    
+    
+
 
     async getCheckPoints(isRefreshing) {
         let self = this;
@@ -77,7 +87,7 @@ class PatrollingCheckPoints extends React.Component {
 
         let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
         //let stat = await OyeSafeApi.getCheckPointList(8);
-        base.utils.logger.logArgs("Stat:", stat);
+        console.log("Stat in Patrolling CP:", stat);
         try {
             if (stat && stat !== undefined) {
                 let cpList = stat.data.checkPointListByAssocID;
@@ -161,6 +171,7 @@ class PatrollingCheckPoints extends React.Component {
 
     componentWillUnmount() {
         updateSelectedCheckPoints({value: null});
+        this.backHandler.remove();
     }
 
     render() {

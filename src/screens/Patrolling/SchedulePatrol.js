@@ -17,7 +17,8 @@ import {
     TouchableHighlight,
     TouchableOpacity,
     View,
-    AsyncStorage
+    AsyncStorage,
+    BackHandler
 } from 'react-native';
 import {connect} from 'react-redux';
 import axios from "axios";
@@ -100,6 +101,18 @@ class SchedulePatrol extends React.Component {
         }
         this.getDeviceList();
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          //this.props.navigation.navigate("ResDashBoard");
+          this.props.navigation.goBack(null)
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
     async getPatrolData(){
         let self = this;

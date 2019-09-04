@@ -12,7 +12,8 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
-    View
+    View,
+    BackHandler
 } from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../base";
@@ -105,6 +106,18 @@ class ReportScreen extends React.Component {
         //Calling the External Write permission function
         requestExternalWritePermission();
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          //this.props.navigation.navigate("ResDashBoard");
+          this.props.navigation.goBack(null)
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
 
     async generatePDF() {
