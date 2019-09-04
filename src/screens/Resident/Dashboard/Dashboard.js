@@ -544,7 +544,7 @@ try{
               responseJson.data.members[i].mrmRoleID
             );            
             role = responseJson.data.members[i].mrmRoleID;              
-              if(role == 1){
+              if(role === 1){
                 isAdminFound = true;                                      
               }
               // else{
