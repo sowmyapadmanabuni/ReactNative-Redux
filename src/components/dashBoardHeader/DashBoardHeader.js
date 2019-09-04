@@ -145,17 +145,12 @@ class DashBoardHeader extends React.Component {
             source={require("../../../icons/headerLogo.png")}
           />
         </View>
-          <View style={HeaderStyles.subContainerRight}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("NotificationScreen")}
-          >
-            {/* <Image
-              style={HeaderStyles.logoStyles}
-              source={require("../../../icons/notifications.png")}
-            />*/}
+            <TouchableOpacity style={HeaderStyles.subContainerRight}
+                onPress={() => this.props.navigation.navigate("NotificationScreen")}
+            >
                         {this.renderBadge()}
-                    </TouchableOpacity>
-                </View>
+            </TouchableOpacity>
+
         </View>
       </SafeAreaView>
 

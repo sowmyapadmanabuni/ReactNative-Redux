@@ -177,7 +177,7 @@ class Dashboard extends PureComponent {
   showExitAlert(){
     Alert.alert(
       'Exit Oyespace ?',
-      'Are you sure, You want to exit the applcation ?',
+      'Are you sure, You want to exit the application ?',
       [
         {
           text: 'No',
@@ -358,15 +358,15 @@ class Dashboard extends PureComponent {
 
           this.showLocalNotification(notification);
 
-          showMessage({
-            message: notification.title,
-            description: notification.body,
-            type: "default",
-            backgroundColor: "#FF9100",
-            onPress: () => {
-              this.props.navigation.navigate("NotificationScreen");
-            }
-          });
+          // showMessage({
+          //   message: notification.title,
+          //   description: notification.body,
+          //   type: "default",
+          //   backgroundColor: "#FF9100",
+          //   onPress: () => {
+          //     this.props.navigation.navigate("NotificationScreen");
+          //   }
+          // });
         });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {

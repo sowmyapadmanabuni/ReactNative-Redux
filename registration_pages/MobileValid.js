@@ -69,7 +69,7 @@ class MobileValid extends Component {
         } else {
             this.setState({ Mobilenumber: mobilenumber });
         }
-        
+
     };
 
     getOtp = mobilenumber => {
@@ -91,7 +91,7 @@ class MobileValid extends Component {
                 MobileNumber: mobilenumber
             };
 
-            console.log('jhgjhghjgjh',this.props)
+            console.log('jhgjhghjgjh', this.props)
 
             url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/sendotp`;
             //  http://api.oyespace.com/champ/api/v1/account/sendotp
@@ -113,7 +113,7 @@ class MobileValid extends Component {
                 .then(response => response.json())
                 .then(responseJson => {
                     if (responseJson.success) {
-                        console.log("responseJson Account if",responseJson, responseJson.data);
+                        console.log("responseJson Account if", responseJson, responseJson.data);
                         // this.insert_OTP(mobilenumber, countryCode);
                         updateUserInfo({ prop: "MyMobileNumber", value: mobilenumber });
                         updateUserInfo({ prop: "MyISDCode", value: countryCode });
@@ -125,7 +125,7 @@ class MobileValid extends Component {
                         this.props.navigation.navigate("OTPVerificationScreen");
 
 
-                    } 
+                    }
                 })
                 .catch(error => {
                     console.log(error);
@@ -137,7 +137,7 @@ class MobileValid extends Component {
         }
     };
 
-    
+
     render() {
         return (
             <Fragment>

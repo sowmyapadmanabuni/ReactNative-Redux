@@ -49,7 +49,7 @@ const CardViewStyles = StyleSheet.create({
     },
     cardText: {
         color: base.theme.colors.black,
-        textAlign: 'left',
+        textAlign: 'center',
 
     }
 
