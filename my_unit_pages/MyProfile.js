@@ -75,8 +75,7 @@ class MyProfile extends Component {
   componentDidMount() {
     this.myProfile();
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
-      this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
+      this.props.navigation.navigate("ResDashBoard");
       return true;
     });
   }
@@ -95,7 +94,6 @@ class MyProfile extends Component {
             }}
         >
           <View style={styles.mainViewStyle}>
-            {/* <Header /> */}
             <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
               <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
                 <View style={styles.viewDetails1}>
