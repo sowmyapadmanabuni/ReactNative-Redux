@@ -535,7 +535,7 @@ try{
             this.props.userReducer.MyAccountID ===
               responseJson.data.members[i].acAccntID &&            
             parseInt(this.state.assocId) ===
-              responseJson.data.members[i].asAssnID && responseJson.data.members[i].unUniName !=""
+              responseJson.data.members[i].asAssnID
           ) {
             console.log(
               "Id_eq",
