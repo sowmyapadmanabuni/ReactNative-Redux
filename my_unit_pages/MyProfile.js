@@ -76,8 +76,8 @@ class MyProfile extends Component {
   componentDidMount() {
     this.myProfile();
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
-      this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
+      //this.props.navigation.navigate("ResDashBoard");
+      this.props.navigation.goBack(null)
       return true;
     });
   }

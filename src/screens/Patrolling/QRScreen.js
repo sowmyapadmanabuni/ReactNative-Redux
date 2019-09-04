@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {StyleSheet, Text, TouchableHighlight, View,Image} from 'react-native';
+import {StyleSheet, Text, TouchableHighlight, View,Image,BackHandler} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen'
 import base from "../../base";
 import QRCode from 'react-native-qrcode-svg';
@@ -50,6 +50,18 @@ class QRScreen extends React.Component {
             latLong: this.props.navigation.state.params.dataToBeSent
         })
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          //this.props.navigation.navigate("ResDashBoard");
+          this.props.navigation.goBack(null)
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
 
     takeScreenShot = refname => {

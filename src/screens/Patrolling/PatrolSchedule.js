@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, Alert, Switch, Text, TouchableHighlight, View,AsyncStorage,Platform,PermissionsAndroid} from 'react-native';
+import {Dimensions, FlatList, Image, Alert, Switch, Text, TouchableHighlight, View,AsyncStorage,Platform,PermissionsAndroid,BackHandler} from 'react-native';
 import {Container, Subtitle} from 'native-base';
 import {connect} from 'react-redux';
 import base from '../../base';
@@ -66,6 +66,18 @@ class PatrolSchedule extends React.Component {
         if (Platform.OS === 'ios' ? this.getUserLocation() : this.requestLocationPermission())
         this.getPatrollingList();
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          //this.props.navigation.navigate("ResDashBoard");
+          this.props.navigation.goBack(null)
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
     async requestLocationPermission() {
         try {
