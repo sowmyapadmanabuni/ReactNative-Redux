@@ -61,7 +61,7 @@ class NotificationDetailScreen extends PureComponent {
     this.props.onNotificationOpen(notifications, index, oyeURL);
     this.props.storeOpenedNotif(savedNoifId, ntid);
 
-    this.manageJoinRequest();
+    // this.manageJoinRequest();
     this.checkAdminNotifStatus();
   }
 
@@ -127,44 +127,44 @@ class NotificationDetailScreen extends PureComponent {
    * Rest of the cases will be handled in normal accept/reject method
    *
    */
-  async manageJoinRequest() {
-    try {
-      const { navigation } = this.props;
-      const details = navigation.getParam('details', 'NO-ID');
-      const role = details.sbRoleID;
-      base.utils.logger.logArgs('NotificationDetailScreen', details);
-      //if(details != undefined && details.ntType == "Join" && details.ntJoinStat == "" && details.ntIsActive){
-      this.setState({ loading: true });
-      const response = await base.services.OyeLivingApi.getUnitDetailByUnitId(
-        details.sbUnitID
-      );
-      this.setState({ loading: false });
-      base.utils.logger.logArgs('NotificationDetailScreen2', response);
-      if (response.success && response.data.unit != undefined) {
-        let unitInfo = response.data.unit;
-        if (
-          unitInfo.unOcStat == base.utils.strings.SOLD_OWNER_OCCUPIED_UNIT ||
-          unitInfo.unOcStat == base.utils.strings.SOLD_TENANT_OCCUPIED_UNIT
-        ) {
-          this.showAppendReplaceUI(details, unitInfo, role);
-        } else if (
-          unitInfo.unOcStat == base.utils.strings.UNSOLD_TENANT_OCCUPIED_UNIT &&
-          role == base.utils.strings.USER_TENANT
-        ) {
-        } else if (
-          unitInfo.unOcStat == base.utils.strings.SOLD_VACANT_UNIT &&
-          role == base.utils.strings.USER_OWNER
-        ) {
-        }
-      } else {
-        base.utils.logger.logArgs('manageJoinRequest', 'No Active Request');
-      }
-      // else{
-      // }
-    } catch (e) {
-      base.utils.logger.logArgs(e);
-    }
-  }
+  // async manageJoinRequest() {
+  //   try {
+  //     const { navigation } = this.props;
+  //     const details = navigation.getParam('details', 'NO-ID');
+  //     const role = details.sbRoleID;
+  //     base.utils.logger.logArgs('NotificationDetailScreen', details);
+  //     //if(details != undefined && details.ntType == "Join" && details.ntJoinStat == "" && details.ntIsActive){
+  //     this.setState({ loading: true });
+  //     const response = await base.services.OyeLivingApi.getUnitDetailByUnitId(
+  //       details.sbUnitID
+  //     );
+  //     this.setState({ loading: false });
+  //     base.utils.logger.logArgs('NotificationDetailScreen2', response);
+  //     if (response.success && response.data.unit != undefined) {
+  //       let unitInfo = response.data.unit;
+  //       if (
+  //         unitInfo.unOcStat == base.utils.strings.SOLD_OWNER_OCCUPIED_UNIT ||
+  //         unitInfo.unOcStat == base.utils.strings.SOLD_TENANT_OCCUPIED_UNIT
+  //       ) {
+  //         this.showAppendReplaceUI(details, unitInfo, role);
+  //       } else if (
+  //         unitInfo.unOcStat == base.utils.strings.UNSOLD_TENANT_OCCUPIED_UNIT &&
+  //         role == base.utils.strings.USER_TENANT
+  //       ) {
+  //       } else if (
+  //         unitInfo.unOcStat == base.utils.strings.SOLD_VACANT_UNIT &&
+  //         role == base.utils.strings.USER_OWNER
+  //       ) {
+  //       }
+  //     } else {
+  //       base.utils.logger.logArgs('manageJoinRequest', 'No Active Request');
+  //     }
+  //     // else{
+  //     // }
+  //   } catch (e) {
+  //     base.utils.logger.logArgs(e);
+  //   }
+  // }
 
   showAppendReplaceUI(details) {
     const { showButtons } = this.state;
