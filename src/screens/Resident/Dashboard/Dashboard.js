@@ -539,7 +539,7 @@ try{
             this.props.userReducer.MyAccountID ===
               responseJson.data.members[i].acAccntID &&            
             parseInt(this.state.assocId) ===
-              responseJson.data.members[i].asAssnID && responseJson.data.members[i].unUniName !=""
+              responseJson.data.members[i].asAssnID
           ) {
             console.log(
               "Id_eq",
@@ -548,7 +548,7 @@ try{
               responseJson.data.members[i].mrmRoleID
             );            
             role = responseJson.data.members[i].mrmRoleID;              
-              if(role == 1){
+              if(role === 1){
                 isAdminFound = true;                                      
               }
               // else{
