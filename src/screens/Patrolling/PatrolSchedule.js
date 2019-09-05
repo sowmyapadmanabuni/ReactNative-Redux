@@ -58,12 +58,11 @@ class PatrolSchedule extends React.Component {
         };
 
         this.getPatrollingList = this.getPatrollingList.bind(this);
-        this.getUserLocation = this.getUserLocation.bind(this)
+        //this.getUserLocation = this.getUserLocation.bind(this)
 
     }
 
     componentWillMount() {
-        if (Platform.OS === 'ios' ? this.getUserLocation() : this.requestLocationPermission())
         this.getPatrollingList();
     }
 
@@ -78,47 +77,6 @@ class PatrolSchedule extends React.Component {
       componentWillUnmount(){
         this.backHandler.remove();
       }
-
-    async requestLocationPermission() {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                {
-                    'title': 'Location Permission Required',
-                    'message': 'OyeSpace needs access to your location'
-                }
-            )
-
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.getUserLocation();
-                console.log("Location permission granted")
-            } else {
-                console.log("Location permission denied")
-            }
-        } catch (err) {
-            console.warn(err)
-        }
-    }
-
-    async getUserLocation() {
-        let self = this;
-        try {
-            await navigator.geolocation.getCurrentPosition((data) => {
-                let LocationData = (data.coords);
-                self.setState({
-                    region: {
-                        latitude: LocationData.latitude,
-                        longitude: LocationData.longitude,
-                        longitudeDelta:LONGITUDE_DELTA,
-                        latitudeDelta:LATITUDE_DELTA,
-                        gpsLocation: LocationData.latitude.toFixed(4) + "," + LocationData.longitude.toFixed(4)
-                    }
-                })
-            });
-        } catch (e) {
-            console.log("Error:", e);
-        }
-    }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.navigation.state.params.refresh) {

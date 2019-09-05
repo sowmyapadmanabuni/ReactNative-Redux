@@ -13,7 +13,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TouchableHighlight,
+    TouchableHighlight,Linking,
     View,BackHandler
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -28,6 +28,8 @@ import OyeSafeApi from "../../base/services/OyeSafeApi";
 import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
 import Geolocation from 'react-native-geolocation-service';
 var RNFS = require('react-native-fs');
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+
 
 
 const {width, height} = Dimensions.get('window');
@@ -87,11 +89,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentDidMount() {
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-          //this.props.navigation.navigate("ResDashBoard");
-          this.props.navigation.goBack(null)
-          return true;
-        });
+       
       }
     
       componentWillUnmount(){
@@ -102,9 +100,10 @@ class AddAndEditCheckPoints extends React.Component {
         console.log("SCDMVD:",this.props.navigation.state.params);
         let params = this.props.navigation.state.params !== undefined ? this.props.navigation.state.params.data.item : null;
         if (params === null) {
-            (Platform.OS === 'ios' ? this.getUserLocation() : this.requestLocationPermission())
+            (Platform.OS === 'ios' ? this.getUserLocation(params) : this.checkGPSStatus(params))
         } else {
             let gpsLocationArr = params.cpgpsPnt.split(" ");
+            this.checkGPSStatus(params);
             this.setState({
                 isEditing: true,
                 checkPointName: params.cpCkPName,
@@ -125,13 +124,82 @@ class AddAndEditCheckPoints extends React.Component {
 
     };
 
+
+    checkGPSStatus(params){
+        if(Platform.OS === "android"){
+            RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
+            .then(data => {
+                console.log("DATATATATATATATTATA:",data)
+                    this.locationPermissionsAccess(params);  
+            }).catch(err => {
+
+            console.log("DATATATATATATATTATA err",err)
+                this.showDenialAlertMessage();
+  });
+        }
+      
+    }
+
+
+
+    locationPermissionsAccess(params){
+        (async () => {
+            { try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    
+                )
+    
+    
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            this.getUserLocation(params)
+    
+                        },
+                        (error) => {
+                            Alert.alert(
+                                'Location',
+                                'We are not able to get your current location.',
+                                [
+                                    {text: 'Cancel', onPress: () => this.props.navigation.navigate('ResDashBoard'), style: 'cancel'},
+                                    {text: 'Try Again', onPress: () => this.getUserLocation(params)},
+                                ],
+                                { cancelable: false }
+                            )
+                        },
+                        { enableHighAccuracy:false, timeout: 5000, maximumAge: 1000, distanceFilter: 1 }
+                    );
+                } else {
+                    console.log("Permission deny")
+                    this.props.navigation.navigate("ResDashBoard")
+    
+                }
+            } catch (err) {
+                console.error("No Access  to location" + err);
+            }
+            }
+        })();
+    }
+
+
+
     componentDidMount(){
+
+        setTimeout(()=>{
+            if(this.state.gpsLocation === "Set GPS Location"){
+                this.showDenialAlertMessage();
+            }
+        },2000)
         this.watchuserPosition();
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            //this.props.navigation.navigate("ResDashBoard");
+            this.props.navigation.goBack(null)
+            return true;
+          });
     }
 
     watchuserPosition(){
-        console.log("PATH TO SAVE FILE:,",RNFS.ExternalStorageDirectoryPath);
-        let path = RNFS.ExternalStorageDirectoryPath + '/test.csv';
         let locationArrStored = [];
         this.watchId = Geolocation.watchPosition(
             (position) => {
@@ -186,7 +254,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
 
-    async getUserLocation() {
+    async getUserLocation(params) {
         let self = this;
         try {
             await navigator.geolocation.getCurrentPosition((data) => {
@@ -199,11 +267,52 @@ class AddAndEditCheckPoints extends React.Component {
                         latitudeDelta:LATITUDE_DELTA,
                         
                     },
-                    gpsLocation: LocationData.latitude + "," + LocationData.longitude
+                    isEditing:params===null?false:true,
+                    checkPointName:params!==null? params.cpCkPName:this.state.checkPointName,
+                    gpsLocation:params!==null?  params.cpgpsPnt:this.state.gpsLocation,
+                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
+                    selectedIndex:params!==null? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2:this.state.selectedIndex,
+                    checkPointId: params!==null?params.cpChkPntID:this.state.checkPointId,
+                    selectedValue:params!==null? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2:this.state.selectedValue,
                 },()=>this.getAllCheckPoints())
             });
         } catch (e) {
-            console.log("Error:", e);
+            console.log("Error:",e);
+            self.showDenialAlertMessage(error)
+                }
+    }
+
+
+    showDenialAlertMessage(error){
+        if (Platform.OS === 'ios') {
+            Alert.alert(
+                'Location permission denied',
+                'Please allow the location permission',
+                [
+                    {text: "Don't Allow",onPress:()=>this.props.navigation.navigate("ResDashBoard"), style: 'cancel'},
+                    {text: 'Allow', onPress: () => this.navigateToSettings()}
+                ]
+            );
+        }
+        else {
+            Alert.alert(
+                'Location permission denied',
+                'Please provide location permissions in application settings',
+                [
+                    {text: "Ok", onPress: () => this.navigateToSettings()}
+                ]
+            );
+        }
+    }
+
+
+
+    navigateToSettings(){
+        if (Platform.OS === 'ios') {
+            Linking.openURL('app-settings:');
+        }
+        else {
+           this.props.navigation.navigate("ResDashBoard")
         }
     }
 
@@ -251,37 +360,50 @@ class AddAndEditCheckPoints extends React.Component {
             alert("Please enter Check Point Name")
         }
         else{
-            let storedArr = this.state.locationArrStored;
-            let latArr = [];
-            let longArr = [];
-            for(let i in storedArr){
-                latArr.push(parseFloat(storedArr[i].latitude).toFixed(5));
-                longArr.push(parseFloat(storedArr[i].longitude).toFixed(5))
-            }
+            // if(this.state.lastLatLong !== 0){
+            //     let storedArr = this.state.locationArrStored;
+            // let latArr = [];
+            // let longArr = [];
+            // for(let i in storedArr){
+            //     console.log("DMKLNKBVDKLDNKNDKNSKCDVNCDV>N:",storedArr[i])
+            //     latArr.push(parseFloat(storedArr[i].latitude).toFixed(5));
+            //     longArr.push(parseFloat(storedArr[i].longitude).toFixed(5))
+            // }
 
-            let latMean = 0;
-            let longMean = 0;
-            let latSum = 0;
-            let longSum = 0;
+            // let latMean = 0;
+            // let longMean = 0;
+            // let latSum = 0;
+            // let longSum = 0;
 
-            for(let i in latArr){
-                latSum += latArr[i];
-                latMean = latSum/latArr.length;
-            }
+            // for(let i in latArr){
+            //     latSum += parseFloat(latArr[i]);
+            //     latMean = parseFloat(latSum/latArr.length);
+            // }
 
-            for(let i in longArr){
-                longSum += longArr[i];
-                longMean = longSum/longArr.length
-            }
+            // for(let i in longArr){
+            //     longSum += parseFloat(longArr[i]);
+            //     longMean = parseFloat(longSum/longArr.length)
+            // }
             
-            let lastLatLongParsed = (this.state.lastLatLong).split(" ");
-            let lastLat = parseFloat(lastLatLongParsed[0]).toFixed(5);
-            let lastLong = parseFloat(lastLatLongParsed[1]).toFixed(5);
-            let latDiff = lastLat-latMean;
-            let longDiff = lastLong-longMean;
+            // let lastLatLongParsed = (this.state.lastLatLong).split(" ");
+            // let lastLat = parseFloat(lastLatLongParsed[0]).toFixed(5);
+            // let lastLong = parseFloat(lastLatLongParsed[1]).toFixed(5);
+            // let latDiff = lastLat-latMean;
+            // let longDiff = lastLong-longMean;
 
-            console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
-           // this.addCheckPoint();
+            // console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
+
+            // this.setState({
+            //     region:{ 
+            //         latitude:parseFloat(latMean).toFixed(6),
+            //         longitude:parseFloat(longMean).toFixed(6)
+            //     }
+            // },()=>this.addCheckPoint())
+            // }
+            //else{
+                 this.addCheckPoint();
+            //}
+           
         }
     }
 
