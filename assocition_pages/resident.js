@@ -92,7 +92,6 @@ export default class ViewmembersList extends Component {
       })
       .catch((error) => {
         console.log('unitlist err ', error);
-       
       })
     const url = global.champBaseURL + 'Member/GetMemUniOwnerTenantListByAssoc/' + global.SelectedAssociationID
     console.log('ViewmembersList ', 'componentdidmount '+ url);
