@@ -145,7 +145,7 @@ class AddAndEditCheckPoints extends React.Component {
                         longitudeDelta:LONGITUDE_DELTA,
                         latitudeDelta:LATITUDE_DELTA,
                     },
-                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
+                    gpsLocation: parseFloat(LocationData.latitude).toFixed(5) + "," + parseFloat(LocationData.longitude).toFixed(5),
                     locationArrStored:locationArrStored
                   })   
             },
@@ -251,48 +251,37 @@ class AddAndEditCheckPoints extends React.Component {
             alert("Please enter Check Point Name")
         }
         else{
-//             let storedArr = this.state.locationArrStored;
-//             let latArr = [];
-//             let longArr = [];
-//             for(let i in storedArr){
-//                 latArr.push(storedArr[i].latitude);
-//                 longArr.push(storedArr[i].longitude)
-//             }
+            let storedArr = this.state.locationArrStored;
+            let latArr = [];
+            let longArr = [];
+            for(let i in storedArr){
+                latArr.push(parseFloat(storedArr[i].latitude).toFixed(5));
+                longArr.push(parseFloat(storedArr[i].longitude).toFixed(5))
+            }
 
-//             let latMean = 0;
-//             let longMean = 0;
-//             let latSum = 0;
-//             let longSum = 0;
+            let latMean = 0;
+            let longMean = 0;
+            let latSum = 0;
+            let longSum = 0;
 
-//             for(let i in latArr){
-//                 latSum += latArr[i];
-//                 latMean = latSum/latArr.length;
-//             }
+            for(let i in latArr){
+                latSum += latArr[i];
+                latMean = latSum/latArr.length;
+            }
 
-//             for(let i in longArr){
-//                 longSum += longArr[i];
-//                 longMean = longSum/longArr.length
-//             }
+            for(let i in longArr){
+                longSum += longArr[i];
+                longMean = longSum/longArr.length
+            }
             
-//             let lastLatLongParsed = (this.state.lastLatLong).split(" ");
-//             let lastLat = parseFloat(lastLatLongParsed[0]);
-//             let lastLong = parseFloat(lastLatLongParsed[1]);
-//             let latDiff = lastLat-latMean;
-//             let longDiff = lastLong-longMean;
+            let lastLatLongParsed = (this.state.lastLatLong).split(" ");
+            let lastLat = parseFloat(lastLatLongParsed[0]).toFixed(5);
+            let lastLong = parseFloat(lastLatLongParsed[1]).toFixed(5);
+            let latDiff = lastLat-latMean;
+            let longDiff = lastLong-longMean;
 
-//             var path = RNFS.DocumentDirectoryPath + '/test.txt';
-
-// // write the file
-//             RNFS.writeFile(path, JSON.stringify(latMean,lastLat,longMean,lastLong,latDiff,longDiff), 'utf8')
-//             .then((success) => {
-//                 console.log('FILE WRITTEN!',path);
-//             })
-//             .catch((err) => {
-//                 console.log(err.message);
-//             });
-
-//             console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
-            this.addCheckPoint();
+            console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
+           // this.addCheckPoint();
         }
     }
 

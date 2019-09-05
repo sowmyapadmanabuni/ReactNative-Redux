@@ -144,15 +144,11 @@ class Dashboard extends PureComponent {
     // );
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     if (Platform.OS === "android") {
       this.backButtonListener = BackHandler.addEventListener(
         "hardwareBackPress",
         () => {
-          if (this.currentRouteName !== "Main") {
-            return false;
-          }
-
           if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
             this.showExitAlert();
            // BackHandler.exitApp();
@@ -171,6 +167,10 @@ class Dashboard extends PureComponent {
         }
       );
     }
+  }
+
+  componentWillUnmount(){
+    this.backButtonListener.remove();
   }
 
   showExitAlert(){

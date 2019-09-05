@@ -11,7 +11,8 @@ import {
     Platform,
     Text,
     TouchableHighlight,
-    View
+    View,
+    BackHandler
 } from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {connect} from 'react-redux';
