@@ -15,6 +15,7 @@ import com.zmxv.RNSound.RNSoundPackage;
 import com.lynxit.contactswrapper.ContactsWrapperPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 
 
 
@@ -90,7 +91,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new RNFirebaseNotificationsPackage(),
                     new ContactsWrapperPackage(),
                     new MapsPackage(),
-                    new RNFusedLocationPackage()
+                    new RNFusedLocationPackage(),
+                    new RNAndroidLocationEnablerPackage()
 
 
 

@@ -241,12 +241,9 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");
         let data = response.data.data.memberListByAccount;
-         console.log("dataoye", data);
         firebase.messaging().subscribeToTopic(MyAccountID + "admin");
         data.map(units => {
-          console.log("role_units", units.mrmRoleID);
           if (receiveNotifications) {
             //alert(MyAccountID + "admin");
             firebase
@@ -522,15 +519,6 @@ try{
         
         for (let i = 0; i < responseJson.data.members.length; i++) {
           //alert(responseJson.data.members[i].mrmRoleID)
-          console.log(
-            "Get_Ids",
-            this.props.userReducer.MyAccountID,
-            responseJson.data.members[i].acAccntID,
-            this.state.assocId,
-            responseJson.data.members[i].asAssnID,
-            responseJson.data.members[i].mrmRoleID,
-            responseJson.data.members[i].unUniName + "name"
-          );
           let assnId = ""+responseJson.data.members[i].asAssnID;
           assnId = assnId.trim()+"admin"
           
