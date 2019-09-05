@@ -611,7 +611,7 @@ class NotificationDetailScreen extends PureComponent {
                         console.log('NTJoinStat');
                         axios
                           .post(
-                            `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
+                            `http://${this.props.oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                             {
                               NTID: item.ntid,
                               NTJoinStat: 'Accepted'
@@ -1018,7 +1018,7 @@ console.log('DETAILS:', details)
             this.renderButton()}
         </View>
 
-        <View style={{ flex: 1, marginLeft:hp('5%'), marginTop:hp('10%') }}>
+        <View style={{ flex: 1, marginLeft:hp('5%'), marginTop:hp('15%') }}>
           <View style={{ flexDirection: 'column', marginBottom:hp('5%') }}>
             <View style={{ flexDirection: 'row' }}>
               <Text>Requestor Name: </Text>

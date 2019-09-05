@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text, View, StyleSheet, SafeAreaView, TouchableOpacity,
-  TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView, Platform, Linking,BackHandler
+  TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView, Platform, Linking, BackHandler
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Card, CardItem, Form, Item, Button, Input, Icon } from "native-base"
@@ -34,7 +34,7 @@ export default class City extends Component {
     });
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.backHandler.remove();
   }
 
@@ -194,6 +194,15 @@ export default class City extends Component {
               </TouchableOpacity>
             </View>
 
+            <View style={{ flexDirection: 'row', }}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('WholeAssociationList')}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', borderBottomWidth: 1, width: Dimensions.get('window').width, height: hp('4%'), borderColor: "#E5E5E5" }}>
+                  <Text style={{ fontSize: hp('2%') }}>Other Cities</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+
             {/* <View style={{ flexDirection: 'column', backgroundColor: '#fafafa' }}>
               <View style={{ height: hp('5%'), justifyContent: 'center', marginLeft: hp('2%') }}>
                 <Text style={{ fontSize: hp('2%'), fontWeight: '500' }}>OTHER CITIES</Text>
@@ -212,31 +221,35 @@ export default class City extends Component {
                 </Text>}
 
             /> */}
-            <View
+            
+          </View>
+
+          
+        </ScrollView>
+        <View
               style={{
                 flexDirection: "column",
-                justifyContent: "center",
-                alignItems:'center'
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin:hp('3%'),
               }}
             >
-              <View style={{ marginTop: hp("2%") }}>
+              <Text>Don't see your Association?</Text>
+              <View style={{ marginTop: hp("1%") }}>
                 <Button bordered warning style={styles.button1}
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`tel:+919343121121`)
-                      : Linking.openURL(`tel:+919343121121`);
-                  }
-                }}
+                  onPress={() => {
+                    {
+                      Platform.OS === "android"
+                        ? Linking.openURL(`tel:+919343121121`)
+                        : Linking.openURL(`tel:+919343121121`);
+                    }
+                  }}
                 // onPress={() => this.props.navigation.navigate('City')}
                 >
-                  <Text style={{fontSize:hp('2%')}}>Click here to schedule a demo.</Text>
+                  <Text style={{ fontSize: hp('2%') }}>Click here for demo.</Text>
                 </Button>
               </View>
             </View>
-          </View>
-
-        </ScrollView>
       </View>
     );
   }
