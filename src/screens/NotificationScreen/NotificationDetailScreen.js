@@ -1105,8 +1105,6 @@ console.log('DETAILS:', details)
           <Text>Hello World.....!</Text> */}
         </View>
 
-
-
       </View>
     );
   }

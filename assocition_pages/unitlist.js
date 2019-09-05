@@ -928,7 +928,7 @@ class UnitList extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
-          <SafeAreaView style={{ backgroundColor: "orange" }}>
+          <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
             <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -968,7 +968,7 @@ class UnitList extends Component {
                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
               </View>
             </View>
-            <View style={{ borderWidth: 1, borderColor: "orange" }} />
+            <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
           </SafeAreaView>
 
           <Text style={styles.titleOfScreen}>Unit List</Text>
@@ -987,7 +987,7 @@ class UnitList extends Component {
           onDidFocus={payload => this.getUnitList()}
           // onWillBlur={payload => this.getUnitList()}
         />
-        <SafeAreaView style={{ backgroundColor: "orange" }}>
+        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
           <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
@@ -1027,7 +1027,7 @@ class UnitList extends Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
         </SafeAreaView>
 
         <Text style={styles.titleOfScreen}>Unit List</Text>
@@ -1340,8 +1340,8 @@ const styles = StyleSheet.create({
     height: hp("3.6%"),
     borderRadius: hp("2%"),
     //borderWidth: hp("0.2%"),
-    borderColor: "orange",
-    backgroundColor: "orange",
+    borderColor: "#ff8c00",
+    backgroundColor: "#ff8c00",
     justifyContent: "center"
   },
   addUnitText: {
