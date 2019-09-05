@@ -17,15 +17,17 @@ let urlType = 'api';
 
 const api = {
   oyeSafeApiDomainFamily: isDev
-      ? `${urlType}.oyespace.com/oyesafe/api/v1/`
-  : `${urlType}.oyespace.com/oyesafe/api/v1/`,
-oyeSafeDomain: isDev
-  ? `${urlType}.oyespace.com/oye247`
-  : `${urlType}.oyespace.com/oye247`,
-oyeDomain: isDev
-  ? `${urlType}.oyespace.com/oyeliving`
-  : `${urlType}.oyespace.com/oyeliving`,
-oyeLivingDomain: isDev ? `${urlType}.oyespace.com` : "OyeLivingApi.oyespace.com",
+    ? `${urlType}.oyespace.com/oyesafe/api/v1/`
+    : `${urlType}.oyespace.com/oyesafe/api/v1/`,
+  oyeSafeDomain: isDev
+    ? `${urlType}.oyespace.com/oye247`
+    : `${urlType}.oyespace.com/oye247`,
+  oyeDomain: isDev
+    ? `${urlType}.oyespace.com/oyeliving`
+    : `${urlType}.oyespace.com/oyeliving`,
+  oyeLivingDomain: isDev
+    ? `${urlType}.oyespace.com`
+    : 'OyeLivingApi.oyespace.com',
   protocol: isSecure ? 'https://' : 'http://',
   oyeSafeApiPath: '/api/v1/',
   oyeLivingApiPath: '/oyeliving/OyeLivingApi/v1/',

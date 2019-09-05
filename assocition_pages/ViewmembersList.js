@@ -300,7 +300,7 @@ class Resident extends React.Component {
     };
 
     render() {
-        console.log('Data inside####', this.state.residentData)
+        // console.log('Data inside####', this.state.residentData)
         let residentList = this.props.dashBoardReducer.residentList;
         const {params} = this.props.navigation.state;
         let currentUserID = this.props.userReducer.MyAccountID;
