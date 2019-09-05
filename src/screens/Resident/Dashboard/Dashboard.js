@@ -153,12 +153,6 @@ class Dashboard extends PureComponent {
           if (this.currentRouteName !== "Main") {
             return false;
           }
-
-          if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-            this.showExitAlert();
-           // BackHandler.exitApp();
-            //return true;
-          }
           if (this.state.isSelectedCard === "UNIT") {
             this.showExitAlert();
             //BackHandler.exitApp();
@@ -173,6 +167,11 @@ class Dashboard extends PureComponent {
       );
     }
   }
+
+  componentWillUnmount() {
+    this.backButtonListener.remove();
+  }
+
 
   showExitAlert(){
     Alert.alert(
