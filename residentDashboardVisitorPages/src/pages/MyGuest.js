@@ -543,7 +543,7 @@ class MyGuests extends Component {
           :
           <FlatList
             style={{ marginTop: hp("1.5%") }}
-            data={this.state.dataSource.sort((a, b) => a.infName.localeCompare(b.infName))}
+            data={this.state.dataSource.sort((a, b) => b.insDate.localeCompare(a.insDate))}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => item.inInvtID.toString()}
           />

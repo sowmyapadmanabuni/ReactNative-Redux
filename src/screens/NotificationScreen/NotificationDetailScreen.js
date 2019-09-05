@@ -8,6 +8,8 @@ import {
   Image,
   SafeAreaView,
   Dimensions,
+  Linking,
+  Platform,
   TouchableOpacity
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
@@ -41,7 +43,14 @@ class NotificationDetailScreen extends PureComponent {
       date: '',
       reqStatus: '',
       adminStatLoading: true,
-      adminStat: null
+      adminStat: null,
+
+      unitIDD:'',
+      dataSource: [],
+      requestorMob:'',
+
+      dataSource1: [],
+      requestorMob1:''
     };
 
     this.checkAdminNotifStatus = this.checkAdminNotifStatus.bind(this);
@@ -60,13 +69,14 @@ class NotificationDetailScreen extends PureComponent {
 
     this.manageJoinRequest();
     this.checkAdminNotifStatus();
+
+    // this.getRequestorAndResDetails()
   }
 
   checkAdminNotifStatus() {
     const { navigation, champBaseURL } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
     console.log(details, 'detailssss');
-
     axios
       .post(
         `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
@@ -83,7 +93,7 @@ class NotificationDetailScreen extends PureComponent {
         }
       )
       .then(res => {
-        this.setState({ adminStatLoading: false });
+        this.setState({ adminStatLoading: false});
         let data = res.data.data;
         console.log(data, 'adminData');
         if (data) {
@@ -98,6 +108,53 @@ class NotificationDetailScreen extends PureComponent {
         console.log(error, 'adminDataError');
         this.setState({ adminStatLoading: false });
       });
+
+      fetch(
+        `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          }
+        }
+      )
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("Response Json", responseJson)
+          this.setState({
+            dataSource1: responseJson.data.account,
+            requestorMob1: responseJson.data.account[0].acMobile
+          });
+          console.log("Mobile Number1:", this.state.dataSource, this.state.requestorMob1 )
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      fetch(
+        `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          }
+        }
+      )
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("Response Json", responseJson)
+          this.setState({
+            dataSource: responseJson.data.unitsByUnitID[0],
+            requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
+          });
+          console.log("Mobile Number:", this.state.dataSource )
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      
   }
 
   /**
@@ -163,7 +220,7 @@ class NotificationDetailScreen extends PureComponent {
     }
   }
 
-  showAppendReplaceUI(notification, unitInfo, accessedRole) {}
+  showAppendReplaceUI(notification, unitInfo, accessedRole) { }
 
   approve = (item, status) => {
     const { oyeURL } = this.props;
@@ -171,7 +228,7 @@ class NotificationDetailScreen extends PureComponent {
       Alert.alert(
         'Oyespace',
         'You have already responded to this request!',
-        [{ text: 'Ok', onPress: () => {} }],
+        [{ text: 'Ok', onPress: () => { } }],
         { cancelable: false }
       );
     } else {
@@ -197,6 +254,7 @@ class NotificationDetailScreen extends PureComponent {
           }
         )
         .then(response => {
+          
           let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
 
           axios
@@ -236,13 +294,13 @@ class NotificationDetailScreen extends PureComponent {
                 item.acNotifyID,
                 1,
                 'Your request to join ' +
-                  item.mrRolName +
-                  ' ' +
-                  ' unit in ' +
-                  item.asAsnName +
-                  ' association as ' +
-                  roleName +
-                  ' has been approved',
+                item.mrRolName +
+                ' ' +
+                ' unit in ' +
+                item.asAsnName +
+                ' association as ' +
+                roleName +
+                ' has been approved',
                 'resident_user',
                 'resident_user',
                 item.sbSubID,
@@ -308,7 +366,7 @@ class NotificationDetailScreen extends PureComponent {
                           console.log('Response', response);
                         })
                         .then(responseJson_3 => {
-                          console.log(item.ntid, 'ntid');
+                          console.log(item.ntid, 'NTID');
                           console.log('NTJoinStat');
                           axios
                             .post(
@@ -391,7 +449,7 @@ class NotificationDetailScreen extends PureComponent {
       Alert.alert(
         'Oyespace',
         'You have already responded to this request!',
-        [{ text: 'Ok', onPress: () => {} }],
+        [{ text: 'Ok', onPress: () => { } }],
         { cancelable: false }
       );
     } else {
@@ -447,13 +505,13 @@ class NotificationDetailScreen extends PureComponent {
                     item.acNotifyID,
                     1,
                     'Your request to join' +
-                      item.mrRolName +
-                      ' ' +
-                      ' unit in ' +
-                      item.asAsnName +
-                      ' association as ' +
-                      roleName +
-                      ' has been declined',
+                    item.mrRolName +
+                    ' ' +
+                    ' unit in ' +
+                    item.asAsnName +
+                    ' association as ' +
+                    roleName +
+                    ' has been declined',
                     'resident_user',
                     'resident_user',
                     item.sbSubID,
@@ -626,6 +684,12 @@ class NotificationDetailScreen extends PureComponent {
                   />
                   <Text style={{ color: 'orange' }}> Approve </Text>
                 </View>
+                
+                {/* <View style={{ flex: 1 }}>
+                  <Text>Hello World.....!</Text>
+                  <Text>Hello World.....!</Text>
+                </View> */}
+
               </View>
             );
           }
@@ -639,7 +703,7 @@ class NotificationDetailScreen extends PureComponent {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
-    console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
+console.log('DETAILS:', details)
     return (
       <View style={styles.container}>
         {/* <Header
@@ -705,7 +769,102 @@ class NotificationDetailScreen extends PureComponent {
           <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
         <Text style={styles.titleStyle}> {details.ntDesc} </Text>
-        {details.ntType === 'Join_Status' ? null : this.renderButton()}
+        <View style={{ height: hp('8%') }}>
+          {details.ntType === 'Join_Status' ?
+            null
+            :
+            this.renderButton()}
+        </View>
+
+        <View style={{ flex: 1, marginLeft:hp('5%') }}>
+          <View style={{ flexDirection: 'column', marginBottom:hp('5%') }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Requestor Name: </Text>
+              <Text>{
+                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''
+              }{" "}
+              </Text>
+              <Text>{
+                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''
+              }
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Unit Name: </Text>
+              <Text>{
+                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
+              }{" "}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+            <Text>Mobile: </Text>
+            <TouchableOpacity
+                  onPress={() => {
+                    {
+                      Platform.OS === "android"
+                        ? Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`)
+                        : Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`);
+                    }
+                  }}
+                >
+                  <View style={{flexDirection:'row'}}>
+                  
+                  <Text>{this.state.requestorMob1 ? this.state.requestorMob1 : ''}</Text>
+                  <Image
+                    style={{width:hp('2%'),height:hp('2%')}}
+                    source={require("../../../icons/call.png")}
+                  />
+                  </View>
+                 
+                </TouchableOpacity>
+              
+              
+            </View>
+          </View>
+
+          <View style={{ flexDirection: 'column' }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Resident Name: </Text>
+              <Text>{this.state.dataSource.uofName}{" "}</Text> 
+              <Text>{this.state.dataSource.uolName}</Text>
+            </View>
+            {/* <View style={{ flexDirection: 'row' }}>
+              <Text>Unit Name: </Text>
+              <Text>{
+                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
+              }{" "}
+              </Text>
+            </View> */}
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Mobile: </Text>
+              <TouchableOpacity
+                  onPress={() => {
+                    {
+                      Platform.OS === "android"
+                        ? Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`)
+                        : Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`);
+                    }
+                  }}
+                >
+                  <View style={{flexDirection:'row'}}>
+                  
+                  <Text>{this.state.requestorMob ? this.state.requestorMob : ''}</Text>
+                  <Image
+                    style={{width:hp('2%'),height:hp('2%')}}
+                    source={require("../../../icons/call.png")}
+                  />
+                  </View>
+                 
+                </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* <Text>Hello World.....!</Text>
+          <Text>Hello World.....!</Text> */}
+        </View>
+
+
+
       </View>
     );
   }

@@ -403,7 +403,7 @@ class NotificationScreen extends PureComponent {
                             item.sbMemID
                           ) === '' ? (
                             <Image
-                              style={{ width: hp('20%'), height: hp('20%') }}
+                              style={{ width: hp('12%'), height: hp('12%') }}
                               source={{
                                 uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder
                               }}
