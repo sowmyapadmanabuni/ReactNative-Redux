@@ -14,7 +14,7 @@ import {
     StyleSheet,
     Text,
     TouchableHighlight,
-    View,
+    View,BackHandler
 } from 'react-native';
 import {connect} from 'react-redux';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
@@ -27,6 +27,7 @@ import RadioForm, {RadioButton} from 'react-native-simple-radio-button';
 import OyeSafeApi from "../../base/services/OyeSafeApi";
 import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
 import Geolocation from 'react-native-geolocation-service';
+var RNFS = require('react-native-fs');
 
 
 const {width, height} = Dimensions.get('window');
@@ -66,7 +67,9 @@ class AddAndEditCheckPoints extends React.Component {
             latitude:0,
             longitude:0,
             isSet:false,
-            lastLatLong:0
+            lastLatLong:0,
+            locationArrStored : []
+            
         });
 
         
@@ -82,6 +85,18 @@ class AddAndEditCheckPoints extends React.Component {
             checkPointName: text
         })
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          //this.props.navigation.navigate("ResDashBoard");
+          this.props.navigation.goBack(null)
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
     componentWillMount() {
         console.log("SCDMVD:",this.props.navigation.state.params);
@@ -115,10 +130,14 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     watchuserPosition(){
+        console.log("PATH TO SAVE FILE:,",RNFS.ExternalStorageDirectoryPath);
+        let path = RNFS.ExternalStorageDirectoryPath + '/test.csv';
+        let locationArrStored = [];
         this.watchId = Geolocation.watchPosition(
             (position) => {
               console.log("sdvdfgddhdgs",position);
               let LocationData = position.coords;
+              locationArrStored.push(LocationData);
                 this.setState({
                     region: {
                         latitude: LocationData.latitude,
@@ -126,14 +145,14 @@ class AddAndEditCheckPoints extends React.Component {
                         longitudeDelta:LONGITUDE_DELTA,
                         latitudeDelta:LATITUDE_DELTA,
                     },
-                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
-                  })  
-                
+                    gpsLocation: parseFloat(LocationData.latitude).toFixed(5) + "," + parseFloat(LocationData.longitude).toFixed(5),
+                    locationArrStored:locationArrStored
+                  })   
             },
             (error) => {
               console.log(error);
             },
-            { enableHighAccuracy: true, distanceFilter: 0, interval: 5000, fastestInterval: 2000 }
+            { enableHighAccuracy: false, distanceFilter: 1, interval: 5000, fastestInterval: 2000,useSignificantChanges: true,timeout:1000 }
           );
     }
     
@@ -232,7 +251,37 @@ class AddAndEditCheckPoints extends React.Component {
             alert("Please enter Check Point Name")
         }
         else{
-            this.addCheckPoint();
+            let storedArr = this.state.locationArrStored;
+            let latArr = [];
+            let longArr = [];
+            for(let i in storedArr){
+                latArr.push(parseFloat(storedArr[i].latitude).toFixed(5));
+                longArr.push(parseFloat(storedArr[i].longitude).toFixed(5))
+            }
+
+            let latMean = 0;
+            let longMean = 0;
+            let latSum = 0;
+            let longSum = 0;
+
+            for(let i in latArr){
+                latSum += latArr[i];
+                latMean = latSum/latArr.length;
+            }
+
+            for(let i in longArr){
+                longSum += longArr[i];
+                longMean = longSum/longArr.length
+            }
+            
+            let lastLatLongParsed = (this.state.lastLatLong).split(" ");
+            let lastLat = parseFloat(lastLatLongParsed[0]).toFixed(5);
+            let lastLong = parseFloat(lastLatLongParsed[1]).toFixed(5);
+            let latDiff = lastLat-latMean;
+            let longDiff = lastLong-longMean;
+
+            console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
+           // this.addCheckPoint();
         }
     }
 

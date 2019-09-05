@@ -11,7 +11,8 @@ import {
     Platform,
     Text,
     TouchableHighlight,
-    View
+    View,
+    BackHandler
 } from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {connect} from 'react-redux';
@@ -57,6 +58,18 @@ class PatrollingReport extends React.Component {
     componentWillMount() {
         this.getPatrolSlot()
     }
+
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          //this.props.navigation.navigate("ResDashBoard");
+          this.props.navigation.goBack(null)
+          return true;
+        });
+      }
+    
+      componentWillUnmount(){
+        this.backHandler.remove();
+      }
 
     async getPatrolSlot() {
         let self = this;

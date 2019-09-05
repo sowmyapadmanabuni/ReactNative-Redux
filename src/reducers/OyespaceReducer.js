@@ -2,6 +2,7 @@ import { UPDATE_USER_INFO } from '../actions/types';
 
 //DB
 
+
 /*Change this urlType to
     1. apiuat  --- For testing server
     2. apidev  --- For develpment server
@@ -9,13 +10,14 @@ import { UPDATE_USER_INFO } from '../actions/types';
 */
 let urlType = "api";
 
+
 const oyeURL = `${urlType}.oyespace.com`; //Validation/
 
 //Image Domains
- //const mediaUpload = "https://mediauploaddev.oyespace.com/Images/"; //Development
+//const mediaUpload = "https://mediauploaddev.oyespace.com/Images/"; //Development
 //const mediaUpload = "https://mediauploaduat.oyespace.com/Images/"; //Validation
- const mediaUpload = "https://mediaupload.oyespace.com/Images/"; //Production
-const oyeBaseURL = "http://" + oyeURL + "/oye247/api/v1/";
+const mediaUpload = 'https://mediaupload.oyespace.com/Images/'; //Production
+const oyeBaseURL = 'http://' + oyeURL + '/oye247/api/v1/';
 
 const INITIAL_STATE = {
   oyeURL,

@@ -126,7 +126,9 @@ class PatrollingCommonHeader extends React.Component {
         let cpList = this.props.selectedCheckPoints.selectedCheckPoints;
         let spCount = 0;
         let epCount = 0;
+        let cpCount = 0;
         let isCP = false;
+        let cpArray = [];
         for (let i in cpList) {
             if (cpList[i].cpcPntAt === 'StartPoint') {
                 spCount += 1;
@@ -135,23 +137,26 @@ class PatrollingCommonHeader extends React.Component {
                 epCount += 1;
             }
             if (cpList[i].cpcPntAt === 'CheckPoint') {
-                isCP = true
+                isCP = true;
+                cpCount += 1;
+                cpArray.push(cpList[i])
             }
         }
-        console.log('Selected Chekp Points:',cpList)
-        if (spCount === 1 && epCount === 1 && isCP) {
+        if (spCount === 1 && epCount === 1 && isCP && cpCount >=2) {
             this.props.navigation.navigate("schPatrolling");
         } else if (spCount > 1) {
             alert("Please select only one Start Point")
         } else if (epCount > 1) {
             alert("Please select only one End Point")
         } else if (!isCP && (spCount === 0 || spCount === 1) && (epCount === 0 || epCount === 1)) {
-            alert("Please select at least one check Point")
+            alert("Please select at least two check Points")
         } else if (spCount === 0) {
             alert("Please select at least one Start Point")
         } else if (epCount === 0) {
             alert("Please select at least one end Point")
 
+        } else if (cpCount < 2) {
+            alert("Please select at least two check Points")
         } else {
             alert("Please select the check points before scheduling patrol");
         }

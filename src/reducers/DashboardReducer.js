@@ -37,7 +37,9 @@ const INITIAL_STATE = {
   selectedDropdown: "",
   selectedDropdown1: "",
   called: false,
-  role: ""
+  role: "",
+  familyMemberCount:0,
+  vehiclesCount:0
 };
 
 export default (state = INITIAL_STATE, action) => {
