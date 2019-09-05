@@ -144,11 +144,15 @@ class Dashboard extends PureComponent {
     // );
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     if (Platform.OS === "android") {
       this.backButtonListener = BackHandler.addEventListener(
         "hardwareBackPress",
         () => {
+          if (this.currentRouteName !== "Main") {
+            return false;
+          }
+
           if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
             this.showExitAlert();
            // BackHandler.exitApp();
@@ -183,7 +187,7 @@ class Dashboard extends PureComponent {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+        {text: 'Yes', onPress: () => {BackHandler.exitApp();return true}},
       ],
       {cancelable: false},
     );

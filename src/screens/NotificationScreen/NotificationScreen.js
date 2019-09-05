@@ -145,7 +145,7 @@ class NotificationScreen extends PureComponent {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log('Manas', responseJson);
+        console.log('Response from server notification list', responseJson);
         this.setState({
           gateDetails: responseJson.data.visitorLog,
           Date:
@@ -176,6 +176,7 @@ class NotificationScreen extends PureComponent {
   };
 
   renderCollapseData(type, id) {
+    console.log('Gate app get data$$$$$$',type,id)
     const { gateDetails } = this.state;
     let value = '';
 
@@ -184,6 +185,7 @@ class NotificationScreen extends PureComponent {
     } else {
       if (type === 'vlGtName') {
         let foundData = _.find(gateDetails, { sbMemID: id });
+        console.log('founddata in notification',foundData)
         value = foundData ? foundData.vlGtName : '';
       } else if (type === 'vlfName') {
         let foundData = _.find(gateDetails, { sbMemID: id });
@@ -225,7 +227,11 @@ class NotificationScreen extends PureComponent {
       }
     }
 
-    return value;
+    console.log('return value',value)
+      return value;
+
+
+
   }
 
   doNetwork = (item, notifications) => {
@@ -246,8 +252,23 @@ class NotificationScreen extends PureComponent {
           )
           .then(res => {
             let responseData = res.data.data;
-            console.log(responseData, 'responseData');
-
+            for(let i=0; i<this.props.notifications.length;i++){
+                if(this.props.notifications[i].sbMemID===responseData.visitorLog.vlVisLgID){
+                  console.log('Ids equal',this.props.notifications[i].sbMemID,responseData.visitorLog.vlVisLgID)
+                  this.props.notifications[i].vlEntryImg=responseData.visitorLog.vlEntryImg
+                  this.props.notifications[i].vlGtName=responseData.visitorLog.vlGtName
+                  this.props.notifications[i].vlengName=responseData.visitorLog.vlengName
+                  this.props.notifications[i].vlVisType=responseData.visitorLog.vlVisType
+                  this.props.notifications[i].vlComName=responseData.visitorLog.vlComName
+                  this.props.notifications[i].vlMobile=responseData.visitorLog.vlMobile
+                  this.props.notifications[i].vlEntryT=responseData.visitorLog.vlEntryT
+                  this.props.notifications[i].vldCreated=responseData.visitorLog.vldCreated
+                  this.props.notifications[i].vlengName=responseData.visitorLog.vlengName
+                  this.props.notifications[i].vlexgName=responseData.visitorLog.vlexgName
+                  this.props.notifications[i].vldUpdated=responseData.visitorLog.vldUpdated
+                  this.props.notifications[i].vlExitT=responseData.visitorLog.vlExitT
+                }
+            }
             this.setState(
               (prevState, newEmployer) => ({
                 gateDetails: prevState.gateDetails.concat([
@@ -261,13 +282,15 @@ class NotificationScreen extends PureComponent {
             console.log(error, 'error while fetching networks');
           });
       }
+      console.log('Props  notifications~~~~~',this.props.notifications)
+
     });
   };
 
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
     let status = _.includes(savedNoifId, item.ntid);
-    // console.log("NOTIF_ITEM:: ",item)
+     console.log("NOTIF_ITEM:1234: ",item)
     if (item.ntType !== 'gate_app') {
       return (
         <Card>
@@ -306,11 +329,12 @@ class NotificationScreen extends PureComponent {
         </Card>
       );
     } else {
+      console.log('Gate app Notifications98989898',item,this.state.gateDetails)
       return (
         <TouchableWithoutFeedback
           onPress={() => {
-            console.log(item.ntIsActive);
-            if (item.ntIsActive) {
+            console.log("Clicked on the gate app notification ######",item,index);
+           if (item.ntIsActive) {
               this.props.onNotificationOpen(notifications, index, oyeURL);
             }
             this.props.toggleCollapsible(notifications, item.open, index);
@@ -351,22 +375,23 @@ class NotificationScreen extends PureComponent {
                     </View>
                     <View style={{ flex: 1 }}>
                       {item.open ? (
-                        <View
+                        <TouchableOpacity
                           style={{
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
                             flexDirection: 'row',
                             marginTop: hp('3%')
                           }}
+                          onPress={()=>console.log('Check it is opened or not', item)}
                         >
                           {/* <Text style={{ color: '#ff8c00' }}>More</Text> */}
                           <Image
                             style={{ width: hp('2%'), height: hp('2%') }}
                             source={require('../../../icons/show_more.png')}
                           />
-                        </View>
+                        </TouchableOpacity>
                       ) : (
-                        <View
+                        <TouchableOpacity
                           style={{
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
@@ -379,7 +404,7 @@ class NotificationScreen extends PureComponent {
                             style={{ width: hp('2%'), height: hp('2%') }}
                             source={require('../../../icons/show_less.png')}
                           />
-                        </View>
+                        </TouchableOpacity>
                       )}
                     </View>
                   </View>
@@ -398,10 +423,8 @@ class NotificationScreen extends PureComponent {
                     <View style={{ flexDirection: 'column' }}>
                       <View style={{ flexDirection: 'row' }}>
                         <View style={{ marginBottom: hp('0.2%') }}>
-                          {this.renderCollapseData(
-                            'vlEntryImg',
-                            item.sbMemID
-                          ) === '' ? (
+
+                          { item.vlEntryImg === '' ? (
                             <Image
                               style={{ width: hp('20%'), height: hp('20%') }}
                               source={{
@@ -411,14 +434,9 @@ class NotificationScreen extends PureComponent {
                           ) : (
                             <Image
                               style={styles.img}
-                              // style={styles.img}
                               source={{
                                 uri:
-                                  `${this.props.mediaupload}` +
-                                  this.renderCollapseData(
-                                    'vlEntryImg',
-                                    item.sbMemID
-                                  )
+                                  `${this.props.mediaupload}` + item.vlEntryImg
                               }}
                             />
                           )}
@@ -435,18 +453,13 @@ class NotificationScreen extends PureComponent {
                                 fontSize: hp('1.8%'),
                                 fontWeight: '500'
                               }}
-                            >
-                              {this.renderCollapseData(
-                                'vlGtName',
-                                item.sbMemID
-                              )}{' '}
-                              Association
+                            >{item.vlGtName}{' '}Association
                             </Text>
                           </View>
 
                           <View style={{ marginBottom: 5 }}>
                             <Text style={{ fontSize: hp('1.8%') }}>
-                              {this.renderCollapseData('vlfName', item.sbMemID)}{' '}
+                              {item.vlengName}{' '}
                             </Text>
                           </View>
 
@@ -456,21 +469,15 @@ class NotificationScreen extends PureComponent {
                             <Text
                               style={{ fontSize: hp('1.8%'), color: '#000' }}
                             >
-                              {this.renderCollapseData(
-                                'vlVisType',
-                                item.sbMemID
-                              )}{' '}
+                              {item.vlVisType}{' '}
                             </Text>
                             <Text
                               style={{ fontSize: hp('1.8%'), color: '#38bcdb' }}
                             >
-                              {this.renderCollapseData(
-                                'vlComName',
-                                item.sbMemID
-                              )}{' '}
+                              {item.vlComName}{' '}
                             </Text>
                           </View>
-                          {this.renderCollapseData('vlMobile', item.sbMemID) !==
+                          {item.vlMobile !==
                           '' ? (
                             <View style={{ flexDirection: 'row' }}>
                               <TouchableOpacity
@@ -478,22 +485,11 @@ class NotificationScreen extends PureComponent {
                                   {
                                     Platform.OS === 'android'
                                       ? Linking.openURL(
-                                          `tel:${
-                                            this.renderCollapseData(
-                                              'vlMobile',
-                                              item.sbMemID
-                                            )
-                                            // this.state.gateDetails
-                                            //   .vlMobile
-                                          }`
+                                          `tel:${item.vlMobile}`
                                         )
                                       : Linking.openURL(
                                           `tel:${
-                                            // this.state.gateDetails.vlMobile
-                                            this.renderCollapseData(
-                                              'vlMobile',
-                                              item.sbMemID
-                                            )
+                                              item.vlMobile
                                           }`
                                         );
                                   }
@@ -506,11 +502,7 @@ class NotificationScreen extends PureComponent {
                                         fontSize: hp('1.8%'),
                                         color: '#ff8c00'
                                       }}
-                                    >
-                                      {this.renderCollapseData(
-                                        'vlMobile',
-                                        item.sbMemID
-                                      )}
+                                    >{item.vlMobile}
                                     </Text>
                                   </View>
                                   <View
@@ -545,17 +537,11 @@ class NotificationScreen extends PureComponent {
                           </Text>
                           <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontSize: hp('1.8%') }}>
-                              {this.renderCollapseData(
-                                'vldCreated',
-                                item.sbMemID
-                              )}{' '}
+                              {item.vldCreated}{' '}
                             </Text>
 
                             <Text style={{ fontSize: hp('1.8%') }}>
-                              {this.renderCollapseData(
-                                'vlEntryT',
-                                item.sbMemID
-                              )}
+                              {item.vlEntryT}
                             </Text>
                           </View>
                         </View>
@@ -571,7 +557,7 @@ class NotificationScreen extends PureComponent {
                             From:{' '}
                           </Text>
                           <Text style={{ fontSize: hp('1.8%') }}>
-                            {this.renderCollapseData('vlengName', item.sbMemID)}
+                            { item.vlengName}
                           </Text>
                         </View>
                       </View>
@@ -581,10 +567,7 @@ class NotificationScreen extends PureComponent {
                             flexDirection: 'row'
                           }}
                         >
-                          {this.renderCollapseData(
-                            'vlexgName',
-                            item.sbMemID
-                          ) !== '' ? (
+                          {item.vlexgName !== '' ? (
                             <View
                               style={{
                                 flexDirection: 'row'
@@ -601,16 +584,10 @@ class NotificationScreen extends PureComponent {
                                 </Text>
                                 <View style={{ flexDirection: 'row' }}>
                                   <Text style={{ fontSize: hp('1.8%') }}>
-                                    {this.renderCollapseData(
-                                      'vldUpdated',
-                                      item.sbMemID
-                                    )}{' '}
+                                    {item.vldUpdated}{' '}
                                   </Text>
                                   <Text style={{ fontSize: hp('1.8%') }}>
-                                    {this.renderCollapseData(
-                                      'vlExitT',
-                                      item.sbMemID
-                                    )}
+                                    {item.vlExitT}
                                   </Text>
                                 </View>
                               </View>
@@ -630,10 +607,7 @@ class NotificationScreen extends PureComponent {
                                   From:{' '}
                                 </Text>
                                 <Text style={{ fontSize: hp('1.8%') }}>
-                                  {this.renderCollapseData(
-                                    'vlexgName',
-                                    item.sbMemID
-                                  )}
+                                  {item.vlexgName}
                                 </Text>
                               </View>
                             </View>
@@ -647,7 +621,6 @@ class NotificationScreen extends PureComponent {
                 </Collapsible>
               </View>
             )}
-            {/* <Text> {item.ntdCreated}</Text> */}
           </Card>
         </TouchableWithoutFeedback>
       );
@@ -715,7 +688,7 @@ class NotificationScreen extends PureComponent {
             refreshControl={
               <RefreshControl
                 refreshing={refresh}
-                onRefresh={() => refreshNotifications(oyeURL, MyAccountID)}
+                onRefresh={() => {refreshNotifications(oyeURL, MyAccountID)}}
                 progressBackgroundColor="#fff"
                 tintColor="#ED8A19"
                 colors={['#ED8A19']}

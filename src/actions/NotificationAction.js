@@ -82,6 +82,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         //   "ntdUpdated"
         // ]).reverse();
 
+
         const sorted = _.sortBy(allNotifs, ["ntdCreated"]).reverse();
 
         sorted.map(data => {
