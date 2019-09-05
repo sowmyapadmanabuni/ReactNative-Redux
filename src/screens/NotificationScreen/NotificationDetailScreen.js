@@ -85,7 +85,7 @@ class NotificationDetailScreen extends PureComponent {
       .post(
         `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
         {
-          ACAccntID: details.acAccntID,
+          ACAccntID: details.acNotifyID,
           UNUnitID: details.sbUnitID,
           ASAssnID: details.asAssnID
         },
@@ -97,7 +97,7 @@ class NotificationDetailScreen extends PureComponent {
         }
       )
       .then(res => {
-        this.setState({ adminStatLoading: false});
+        this.setState({ adminStatLoading: false });
         let data = res.data.data;
         console.log(data, 'adminData');
         if (data) {
