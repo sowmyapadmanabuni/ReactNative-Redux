@@ -27,7 +27,7 @@ export default class MyGuests extends Component {
       
       Invited: { screen: Invited,  
         navigationOptions:{  
-            tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:hp('2.2%'),}}>Invited</Text>, 
+            tabBarLabel:<Text style={{ textTransform: 'capitalize',fontSize:hp('2.2%'),}}>Invitation Details</Text>, 
         }  
     },  
     visited : { screen: visited,  

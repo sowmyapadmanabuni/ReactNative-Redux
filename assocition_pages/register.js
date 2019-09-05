@@ -61,8 +61,8 @@ class RegisterMe extends Component {
       });
     }
     this.refs.dobDialog.open({
-      date: dobDate,
-      minDate: new Date() //To restirct past dates
+      date: dobDate
+      // minDate: new Date() //To restirct past dates
     });
   };
 
@@ -93,12 +93,16 @@ class RegisterMe extends Component {
     */
     if (this.state.dobText == 'Select Date of Occupancy') {
       alert('Select Date of Occupancy');
+      return;
     } else if (this.checkForOwner()) {
       alert("You are an active member and can't join");
+      return;
     } else if (this.checkStatus()) {
       alert('You already requested to join this unit');
+      return;
     } else if (this.state.sent) {
       alert('Request already sent');
+      return;
     } else {
       anu = {
         ASAssnID: unitList.asAssnID,
@@ -385,12 +389,16 @@ class RegisterMe extends Component {
      */
     if (this.state.dobText == 'Select Date of Occupancy') {
       alert('Select Date of Occupancy');
+      return;
     } else if (this.state.sent) {
       alert('Request already sent');
+      return;
     } else if (this.checkTenant()) {
       alert("You are an active member and can't join");
+      return;
     } else if (this.checkStatus()) {
       alert('You already requested to join this unit');
+      return;
     } else {
       anu = {
         ASAssnID: unitList.asAssnID,

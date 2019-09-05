@@ -154,12 +154,12 @@ class Dashboard extends PureComponent {
           }
 
           if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-            this.showExitAlert();
+            // this.showExitAlert();
            // BackHandler.exitApp();
             //return true;
           }
           if (this.state.isSelectedCard === "UNIT") {
-            this.showExitAlert();
+            // this.showExitAlert();
             //BackHandler.exitApp();
           } else {
             this.changeCardStatus("UNIT");
@@ -527,7 +527,7 @@ try{
             this.props.userReducer.MyAccountID ===
               responseJson.data.members[i].acAccntID &&            
             parseInt(this.state.assocId) ===
-              responseJson.data.members[i].asAssnID && responseJson.data.members[i].unUniName !=""
+              responseJson.data.members[i].asAssnID
           ) {
             console.log(
               "Id_eq",
@@ -536,7 +536,7 @@ try{
               responseJson.data.members[i].mrmRoleID
             );            
             role = responseJson.data.members[i].mrmRoleID;              
-              if(role == 1){
+              if(role === 1){
                 isAdminFound = true;                                      
               }
               // else{
