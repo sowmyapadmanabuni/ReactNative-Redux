@@ -76,7 +76,7 @@ class MyProfile extends Component {
   componentDidMount() {
     this.myProfile();
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      //this.props.navigation.navigate("ResDashBoard");
+      console.log('Inside Back handler')
       this.props.navigation.goBack(null)
       return true;
     });

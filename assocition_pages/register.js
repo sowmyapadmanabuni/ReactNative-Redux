@@ -62,7 +62,7 @@ class RegisterMe extends Component {
     }
     this.refs.dobDialog.open({
       date: dobDate,
-      minDate: new Date() //To restirct past dates
+      // minDate: new Date() //To restirct past dates
     });
   };
 

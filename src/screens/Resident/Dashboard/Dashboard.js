@@ -173,6 +173,10 @@ class Dashboard extends PureComponent {
     }
   }
 
+  componentWillUnmount(){
+    this.backButtonListener.remove();
+  }
+
   showExitAlert(){
     Alert.alert(
       'Exit Oyespace ?',
@@ -183,7 +187,7 @@ class Dashboard extends PureComponent {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+        {text: 'Yes', onPress: () => {BackHandler.exitApp();return true}},
       ],
       {cancelable: false},
     );

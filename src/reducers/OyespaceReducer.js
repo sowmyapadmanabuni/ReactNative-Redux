@@ -2,12 +2,14 @@ import { UPDATE_USER_INFO } from '../actions/types';
 
 //DB
 
+
 /*Change this urlType to
     1. apiuat  --- For testing server
     2. apidev  --- For develpment server
     3. api     --- For production server
 */
-let urlType = 'apiuat';
+let urlType = "api";
+
 
 const oyeURL = `${urlType}.oyespace.com`; //Validation/
 

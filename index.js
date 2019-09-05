@@ -39,7 +39,9 @@ class RootApp extends Component {
         <CheckInternet />
         <StatusBarPlaceHolder />
         <App />
+{/*
         <FlashMessage position="top" duration={5000} />
+*/}
       </Provider>
     );
   }
