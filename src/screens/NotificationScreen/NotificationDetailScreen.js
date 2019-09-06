@@ -10,7 +10,7 @@ import {
   Dimensions,
   Linking,
   Platform,
-  TouchableOpacity
+  TouchableOpacity, FlatList
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -49,9 +49,13 @@ class NotificationDetailScreen extends PureComponent {
       unitIDD: '',
       dataSource: [],
       requestorMob: '',
+      data: [],
 
       dataSource1: [],
       requestorMob1: '',
+
+      dataSource2: [],
+      dataSource3: [],
 
       showButtons: true,
 
@@ -152,6 +156,7 @@ class NotificationDetailScreen extends PureComponent {
       .then(responseJson => {
         console.log("Response Json", responseJson)
         this.setState({
+          data: responseJson.data.unitsByUnitID,
           dataSource: responseJson.data.unitsByUnitID[0],
           requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
         });
@@ -161,6 +166,39 @@ class NotificationDetailScreen extends PureComponent {
         console.log(error);
       });
 
+    fetch(
+      //http://api.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/35894
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${details.sbUnitID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Response Json", responseJson)
+        console.log("Owner Tenant length", responseJson.data.unit.owner.length, responseJson.data.unit.tenant.length)
+        let arr1 = [];
+        let self = this;
+        let arr2 = [];
+        for (let i = 0; i < responseJson.data.unit.owner.length; i++) {
+          for (let j = 0; j < responseJson.data.unit.tenant.length; j++){
+            arr1.push(responseJson.data.unit.owner[i])
+            arr2.push(responseJson.data.unit.tenant[j])
+          } 
+        }
+        self.setState({
+          dataSource2: [...arr1, ...arr2],
+        });
+        console.log("DataSource2", this.state.dataSource2)
+
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
   }
 
@@ -271,7 +309,7 @@ class NotificationDetailScreen extends PureComponent {
   append = item => {
     const { oyeURL } = this.props;
 
-    this.setState({ loading: true, appendButtonClicked: true });
+    this.setState({ loading: true, appendButtonClicked: true, });
     // console.log(item);
 
     const headers = {
@@ -949,8 +987,10 @@ class NotificationDetailScreen extends PureComponent {
 
   renderDetails = () => {
     const { navigation } = this.props;
-    const details = navigation.getParam('details', 'NO-ID');
-    if (this.state.replaceButtonClicked === true && this.state.appendButtonClicked === false) {
+    const details = navigation.getParam('details', 'NO-ID')
+
+
+    if (this.state.replaceButtonClicked === true) {
       return (
         <View style={{ flexDirection: 'column' }}>
           <View style={{ flexDirection: 'row' }}>
@@ -959,12 +999,12 @@ class NotificationDetailScreen extends PureComponent {
             <Text>{this.state.dataSource.uolName}</Text>
           </View>
           {/* <View style={{ flexDirection: 'row' }}>
-                  <Text>Unit Name: </Text>
-                  <Text>{
-                    (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
-                  }{" "}
-                  </Text>
-                </View> */}
+                    <Text>Unit Name: </Text>
+                    <Text>{
+                      (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
+                    }{" "}
+                    </Text>
+                  </View> */}
           <View style={{ flexDirection: 'row' }}>
             <Text>Mobile: </Text>
             <TouchableOpacity
@@ -989,7 +1029,7 @@ class NotificationDetailScreen extends PureComponent {
           </View>
         </View>
       )
-    } else if (this.state.appendButtonClicked === true && this.state.replaceButtonClicked === false) {
+    } else if (this.state.appendButtonClicked === true) {
       return (
         <View style={{ flexDirection: 'column' }}>
           <View style={{ flexDirection: 'row' }}>
@@ -1022,87 +1062,86 @@ class NotificationDetailScreen extends PureComponent {
           </View>
         </View>
       )
-    } else {
+    }
+
+    else {
       return (
-        <View style={{ flex: 1, marginLeft: hp('5%'), marginTop: hp('15%') }}>
-          <View style={{ flexDirection: 'column', marginBottom: hp('5%') }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Requestor Name: </Text>
-              <Text>{
-                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''
-              }{" "}
-              </Text>
-              <Text>{
-                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''
+        <View>
+          <View style={{ marginTop: hp('15%') }}>
+            <FlatList
+              style={{ marginLeft: hp('1.5%'), marginRight: hp('1%'), height: '50%' }}
+              data={this.state.dataSource2}
+              renderItem={({ item }) =>
+                <View style={{ flex: 1, marginLeft: hp('5%'), marginTop: hp('1%') }}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text>Resident Name: </Text>
+                      <Text>{item.uofName}{" "}</Text>
+                      <Text>{item.uolName}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text>Mobile: </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          {
+                            Platform.OS === "android"
+                              ? Linking.openURL(`tel:${item.uoMobile ? item.uoMobile : ''}`)
+                              : Linking.openURL(`tel:${item.uoMobile ? item.uoMobile : ''}`);
+                          }
+                        }}
+                      >
+                        <View style={{ flexDirection: 'row' }}>
+
+                          <Text>{item.uoMobile ? item.uoMobile : ''}</Text>
+                          <Image
+                            style={{ width: hp('2%'), height: hp('2%') }}
+                            source={require("../../../icons/call.png")}
+                          />
+                        </View>
+
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection: 'column' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text>Resident Name: </Text>
+                      <Text>{item.utfName}{" "}</Text>
+                      <Text>{item.utlName}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text>Mobile: </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          {
+                            Platform.OS === "android"
+                              ? Linking.openURL(`tel:${item.utMobile ? item.utMobile : ''}`)
+                              : Linking.openURL(`tel:${item.utMobile ? item.utMobile : ''}`);
+                          }
+                        }}
+                      >
+                        <View style={{ flexDirection: 'row' }}>
+
+                          <Text>{item.utMobile ? item.utMobile : ''}</Text>
+                          <Image
+                            style={{ width: hp('2%'), height: hp('2%') }}
+                            source={require("../../../icons/call.png")}
+                          />
+                        </View>
+
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                
+                </View>
+
+
               }
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Unit Name: </Text>
-              <Text>{
-                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
-              }{" "}
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Mobile: </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`)
-                      : Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`);
-                  }
-                }}
-              >
-                <View style={{ flexDirection: 'row' }}>
+            />
 
-                  <Text>{this.state.requestorMob1 ? this.state.requestorMob1 : ''}</Text>
-                  <Image
-                    style={{ width: hp('2%'), height: hp('2%') }}
-                    source={require("../../../icons/call.png")}
-                  />
-                </View>
-
-              </TouchableOpacity>
-
-
-            </View>
           </View>
-
-          <View style={{ flexDirection: 'column' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Resident Name: </Text>
-              <Text>{this.state.dataSource.uofName}{" "}</Text>
-              <Text>{this.state.dataSource.uolName}</Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Mobile: </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  {
-                    Platform.OS === "android"
-                      ? Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`)
-                      : Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`);
-                  }
-                }}
-              >
-                <View style={{ flexDirection: 'row' }}>
-
-                  <Text>{this.state.requestorMob ? this.state.requestorMob : ''}</Text>
-                  <Image
-                    style={{ width: hp('2%'), height: hp('2%') }}
-                    source={require("../../../icons/call.png")}
-                  />
-                </View>
-
-              </TouchableOpacity>
-            </View>
-          </View>
+          {/*  */}
         </View>
-
       )
-
     }
   }
 
@@ -1179,7 +1218,6 @@ class NotificationDetailScreen extends PureComponent {
             :
             this.renderButton()}
         </View>
-
         {this.renderDetails()}
 
 
