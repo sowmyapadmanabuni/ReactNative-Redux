@@ -34,7 +34,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-datepicker-dialog": "0.0.9",
     "react-native-datepicker-modal": "^1.1.0",
-    "react-native-device-info": "^2.2.2",
+    "react-native-device-info": "2.2.2",
     "react-native-document-picker": "^2.3.0",
     "react-native-dropdown-searchable": "1.0.1",
     "react-native-elements": "^1.0.0",
