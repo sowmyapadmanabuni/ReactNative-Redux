@@ -82,7 +82,6 @@ class NotificationScreen extends PureComponent {
         savedNoifId,
         ntid: item.ntid
       });
-
       // this.props.onNotificationOpen(notifications, index, oyeURL);
       // this.props.storeOpenedNotif(savedNoifId, item.ntid);
     }
@@ -323,6 +322,7 @@ class NotificationScreen extends PureComponent {
                 collapsed={item.open}
               >
                 <View style={{ backgroundColor: '#ED8A19' }}></View>
+                
               </Collapsible>
             </View>
           )}
