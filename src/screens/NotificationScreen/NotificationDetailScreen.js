@@ -46,14 +46,17 @@ class NotificationDetailScreen extends PureComponent {
       adminStatLoading: true,
       adminStat: null,
 
-      unitIDD:'',
+      unitIDD: '',
       dataSource: [],
-      requestorMob:'',
+      requestorMob: '',
 
       dataSource1: [],
-      requestorMob1:'',
-      
-      showButtons: true
+      requestorMob1: '',
+
+      showButtons: true,
+
+      appendButtonClicked: false,
+      replaceButtonClicked: false
     };
 
     this.checkAdminNotifStatus = this.checkAdminNotifStatus.bind(this);
@@ -113,52 +116,52 @@ class NotificationDetailScreen extends PureComponent {
         this.setState({ adminStatLoading: false });
       });
 
-      fetch(
-        `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-          }
+    fetch(
+      `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
         }
-      )
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log("Response Json", responseJson)
-          this.setState({
-            dataSource1: responseJson.data.account,
-            requestorMob1: responseJson.data.account[0].acMobile
-          });
-          console.log("Mobile Number1:", this.state.dataSource, this.state.requestorMob1 )
-        })
-        .catch(error => {
-          console.log(error);
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Response Json", responseJson)
+        this.setState({
+          dataSource1: responseJson.data.account,
+          requestorMob1: responseJson.data.account[0].acMobile
         });
-      fetch(
-        `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-          }
+        console.log("Mobile Number1:", this.state.dataSource, this.state.requestorMob1)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    fetch(
+      `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
         }
-      )
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log("Response Json", responseJson)
-          this.setState({
-            dataSource: responseJson.data.unitsByUnitID[0],
-            requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
-          });
-          console.log("Mobile Number:", this.state.dataSource )
-        })
-        .catch(error => {
-          console.log(error);
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Response Json", responseJson)
+        this.setState({
+          dataSource: responseJson.data.unitsByUnitID[0],
+          requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
         });
+        console.log("Mobile Number:", this.state.dataSource)
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
-      
+
   }
 
   /**
@@ -268,7 +271,7 @@ class NotificationDetailScreen extends PureComponent {
   append = item => {
     const { oyeURL } = this.props;
 
-    this.setState({ loading: true });
+    this.setState({ loading: true, appendButtonClicked: true });
     // console.log(item);
 
     const headers = {
@@ -328,13 +331,13 @@ class NotificationDetailScreen extends PureComponent {
               item.acNotifyID,
               1,
               'Your request to join ' +
-                item.mrRolName +
-                ' ' +
-                ' unit in ' +
-                item.asAsnName +
-                ' association as ' +
-                roleName +
-                ' has been approved',
+              item.mrRolName +
+              ' ' +
+              ' unit in ' +
+              item.asAsnName +
+              ' association as ' +
+              roleName +
+              ' has been approved',
               'resident_user',
               'resident_user',
               item.sbSubID,
@@ -476,7 +479,7 @@ class NotificationDetailScreen extends PureComponent {
   };
 
   replace = item => {
-    this.setState({ loading: true });
+    this.setState({ loading: true, replaceButtonClicked: true });
     console.log(item);
 
     const headers = {
@@ -536,13 +539,13 @@ class NotificationDetailScreen extends PureComponent {
               item.acNotifyID,
               1,
               'Your request to join ' +
-                item.mrRolName +
-                ' ' +
-                ' unit in ' +
-                item.asAsnName +
-                ' association as ' +
-                roleName +
-                ' has been approved',
+              item.mrRolName +
+              ' ' +
+              ' unit in ' +
+              item.asAsnName +
+              ' association as ' +
+              roleName +
+              ' has been approved',
               'resident_user',
               'resident_user',
               item.sbSubID,
@@ -611,7 +614,7 @@ class NotificationDetailScreen extends PureComponent {
                         console.log('NTJoinStat');
                         axios
                           .post(
-                            `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
+                            `http://${this.props.oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                             {
                               NTID: item.ntid,
                               NTJoinStat: 'Accepted'
@@ -944,10 +947,169 @@ class NotificationDetailScreen extends PureComponent {
     }
   };
 
+  renderDetails = () => {
+    const { navigation } = this.props;
+    const details = navigation.getParam('details', 'NO-ID');
+    if (this.state.replaceButtonClicked === true && this.state.appendButtonClicked === false) {
+      return (
+        <View style={{ flexDirection: 'column' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Resident Name: </Text>
+            <Text>{this.state.dataSource.uofName}{" "}</Text>
+            <Text>{this.state.dataSource.uolName}</Text>
+          </View>
+          {/* <View style={{ flexDirection: 'row' }}>
+                  <Text>Unit Name: </Text>
+                  <Text>{
+                    (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
+                  }{" "}
+                  </Text>
+                </View> */}
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Mobile: </Text>
+            <TouchableOpacity
+              onPress={() => {
+                {
+                  Platform.OS === "android"
+                    ? Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`)
+                    : Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`);
+                }
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
+
+                <Text>{this.state.requestorMob ? this.state.requestorMob : ''}</Text>
+                <Image
+                  style={{ width: hp('2%'), height: hp('2%') }}
+                  source={require("../../../icons/call.png")}
+                />
+              </View>
+
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    } else if (this.state.appendButtonClicked === true && this.state.replaceButtonClicked === false) {
+      return (
+        <View style={{ flexDirection: 'column' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Resident Name: </Text>
+            <Text>{this.state.dataSource.uofName}{" "}</Text>
+            <Text>{this.state.dataSource.uolName}</Text>
+          </View>
+
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Mobile: </Text>
+            <TouchableOpacity
+              onPress={() => {
+                {
+                  Platform.OS === "android"
+                    ? Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`)
+                    : Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`);
+                }
+              }}
+            >
+              <View style={{ flexDirection: 'row' }}>
+
+                <Text>{this.state.requestorMob ? this.state.requestorMob : ''}</Text>
+                <Image
+                  style={{ width: hp('2%'), height: hp('2%') }}
+                  source={require("../../../icons/call.png")}
+                />
+              </View>
+
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{ flex: 1, marginLeft: hp('5%'), marginTop: hp('15%') }}>
+          <View style={{ flexDirection: 'column', marginBottom: hp('5%') }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Requestor Name: </Text>
+              <Text>{
+                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''
+              }{" "}
+              </Text>
+              <Text>{
+                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''
+              }
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Unit Name: </Text>
+              <Text>{
+                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
+              }{" "}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Mobile: </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  {
+                    Platform.OS === "android"
+                      ? Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`)
+                      : Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`);
+                  }
+                }}
+              >
+                <View style={{ flexDirection: 'row' }}>
+
+                  <Text>{this.state.requestorMob1 ? this.state.requestorMob1 : ''}</Text>
+                  <Image
+                    style={{ width: hp('2%'), height: hp('2%') }}
+                    source={require("../../../icons/call.png")}
+                  />
+                </View>
+
+              </TouchableOpacity>
+
+
+            </View>
+          </View>
+
+          <View style={{ flexDirection: 'column' }}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Resident Name: </Text>
+              <Text>{this.state.dataSource.uofName}{" "}</Text>
+              <Text>{this.state.dataSource.uolName}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text>Mobile: </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  {
+                    Platform.OS === "android"
+                      ? Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`)
+                      : Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`);
+                  }
+                }}
+              >
+                <View style={{ flexDirection: 'row' }}>
+
+                  <Text>{this.state.requestorMob ? this.state.requestorMob : ''}</Text>
+                  <Image
+                    style={{ width: hp('2%'), height: hp('2%') }}
+                    source={require("../../../icons/call.png")}
+                  />
+                </View>
+
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+      )
+
+    }
+  }
+
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
-console.log('DETAILS:', details)
+    // console.log('DETAILS:', details)
     return (
       <View style={styles.container}>
         {/* <Header
@@ -1018,92 +1180,8 @@ console.log('DETAILS:', details)
             this.renderButton()}
         </View>
 
-        <View style={{ flex: 1, marginLeft:hp('5%'), marginTop:hp('10%') }}>
-          <View style={{ flexDirection: 'column', marginBottom:hp('5%') }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Requestor Name: </Text>
-              <Text>{
-                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''
-              }{" "}
-              </Text>
-              <Text>{
-                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''
-              }
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Unit Name: </Text>
-              <Text>{
-                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
-              }{" "}
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-            <Text>Mobile: </Text>
-            <TouchableOpacity
-                  onPress={() => {
-                    {
-                      Platform.OS === "android"
-                        ? Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`)
-                        : Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`);
-                    }
-                  }}
-                >
-                  <View style={{flexDirection:'row'}}>
-                  
-                  <Text>{this.state.requestorMob1 ? this.state.requestorMob1 : ''}</Text>
-                  <Image
-                    style={{width:hp('2%'),height:hp('2%')}}
-                    source={require("../../../icons/call.png")}
-                  />
-                  </View>
-                 
-                </TouchableOpacity>
-              
-              
-            </View>
-          </View>
+        {this.renderDetails()}
 
-          <View style={{ flexDirection: 'column' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Resident Name: </Text>
-              <Text>{this.state.dataSource.uofName}{" "}</Text> 
-              <Text>{this.state.dataSource.uolName}</Text>
-            </View>
-            {/* <View style={{ flexDirection: 'row' }}>
-              <Text>Unit Name: </Text>
-              <Text>{
-                (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
-              }{" "}
-              </Text>
-            </View> */}
-            <View style={{ flexDirection: 'row' }}>
-              <Text>Mobile: </Text>
-              <TouchableOpacity
-                  onPress={() => {
-                    {
-                      Platform.OS === "android"
-                        ? Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`)
-                        : Linking.openURL(`tel:${this.state.requestorMob ? this.state.requestorMob : ''}`);
-                    }
-                  }}
-                >
-                  <View style={{flexDirection:'row'}}>
-                  
-                  <Text>{this.state.requestorMob ? this.state.requestorMob : ''}</Text>
-                  <Image
-                    style={{width:hp('2%'),height:hp('2%')}}
-                    source={require("../../../icons/call.png")}
-                  />
-                  </View>
-                 
-                </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* <Text>Hello World.....!</Text>
-          <Text>Hello World.....!</Text> */}
-        </View>
 
       </View>
     );
