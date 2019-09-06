@@ -1313,7 +1313,9 @@ import {
   Image,
   SafeAreaView,
   Dimensions,
-  TouchableOpacity
+  Linking,
+  Platform,
+  TouchableOpacity, FlatList
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -1346,7 +1348,23 @@ class NotificationDetailScreen extends PureComponent {
       date: '',
       reqStatus: '',
       adminStatLoading: true,
-      adminStat: null
+      adminStat: null,
+
+      unitIDD: '',
+      dataSource: [],
+      requestorMob: '',
+      data: [],
+
+      dataSource1: [],
+      requestorMob1: '',
+
+      dataSource2: [],
+      dataSource3: [],
+
+      showButtons: true,
+
+      appendButtonClicked: false,
+      replaceButtonClicked: false
     };
 
     this.checkAdminNotifStatus = this.checkAdminNotifStatus.bind(this);
@@ -1403,6 +1421,90 @@ class NotificationDetailScreen extends PureComponent {
         console.log(error, 'adminDataError');
         this.setState({ adminStatLoading: false });
       });
+
+    fetch(
+      `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Response Json", responseJson)
+        this.setState({
+          dataSource1: responseJson.data.account,
+          requestorMob1: responseJson.data.account[0].acMobile
+        });
+        console.log("Mobile Number1:", this.state.dataSource, this.state.requestorMob1)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    fetch(
+      `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Response Json", responseJson)
+        this.setState({
+          data: responseJson.data.unitsByUnitID,
+          dataSource: responseJson.data.unitsByUnitID[0],
+          requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
+        });
+        console.log("Mobile Number:", this.state.dataSource)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    fetch(
+      //http://api.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/35894
+      `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${details.sbUnitID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("Response Json", responseJson)
+        console.log("Owner Tenant length", responseJson.data.unit.owner.length, responseJson.data.unit.tenant.length)
+        let arr1 = [];
+        let self = this;
+        let arr2 = [];
+        for (let i = 0; i < responseJson.data.unit.owner.length; i++) {
+          for (let j = 0; j < responseJson.data.unit.tenant.length; j++) {
+            arr1.push({ name: responseJson.data.unit.owner[i].uofName + " " + responseJson.data.unit.owner[i].uolName, number: responseJson.data.unit.owner[i].uoMobile })
+            // arr1.push(responseJson.data.unit.owner[i])
+            arr2.push({ name: responseJson.data.unit.tenant[j].utfName + " " + responseJson.data.unit.tenant[j].utlName, number: responseJson.data.unit.tenant[j].utMobile })
+
+            // arr2.push(responseJson.data.unit.tenant[j])
+          }
+        }
+        self.setState({
+          dataSource2: [...arr1, ...arr2],
+        });
+        console.log("DataSource2", this.state.dataSource2)
+
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
   }
 
   /**
@@ -1468,7 +1570,7 @@ class NotificationDetailScreen extends PureComponent {
     }
   }
 
-  showAppendReplaceUI(notification, unitInfo, accessedRole) {}
+  showAppendReplaceUI(notification, unitInfo, accessedRole) { }
 
   approve = (item, status) => {
     const { oyeURL } = this.props;
@@ -1476,7 +1578,7 @@ class NotificationDetailScreen extends PureComponent {
       Alert.alert(
         'Oyespace',
         'You have already responded to this request!',
-        [{ text: 'Ok', onPress: () => {} }],
+        [{ text: 'Ok', onPress: () => { } }],
         { cancelable: false }
       );
     } else {
@@ -1541,13 +1643,13 @@ class NotificationDetailScreen extends PureComponent {
                 item.acNotifyID,
                 1,
                 'Your request to join ' +
-                  item.mrRolName +
-                  ' ' +
-                  ' unit in ' +
-                  item.asAsnName +
-                  ' association as ' +
-                  roleName +
-                  ' has been approved',
+                item.mrRolName +
+                ' ' +
+                ' unit in ' +
+                item.asAsnName +
+                ' association as ' +
+                roleName +
+                ' has been approved',
                 'resident_user',
                 'resident_user',
                 item.sbSubID,
@@ -1696,7 +1798,7 @@ class NotificationDetailScreen extends PureComponent {
       Alert.alert(
         'Oyespace',
         'You have already responded to this request!',
-        [{ text: 'Ok', onPress: () => {} }],
+        [{ text: 'Ok', onPress: () => { } }],
         { cancelable: false }
       );
     } else {
@@ -1752,13 +1854,13 @@ class NotificationDetailScreen extends PureComponent {
                     item.acNotifyID,
                     1,
                     'Your request to join' +
-                      item.mrRolName +
-                      ' ' +
-                      ' unit in ' +
-                      item.asAsnName +
-                      ' association as ' +
-                      roleName +
-                      ' has been declined',
+                    item.mrRolName +
+                    ' ' +
+                    ' unit in ' +
+                    item.asAsnName +
+                    ' association as ' +
+                    roleName +
+                    ' has been declined',
                     'resident_user',
                     'resident_user',
                     item.sbSubID,
@@ -1841,6 +1943,7 @@ class NotificationDetailScreen extends PureComponent {
     // let status = _.includes(approvedAdmins, subId);
     // let status = false;
 
+
     let status;
 
     if (loading || adminStatLoading) {
@@ -1869,7 +1972,10 @@ class NotificationDetailScreen extends PureComponent {
                     justifyContent: 'center'
                   }}
                 >
-                  <Text> {this.state.date || 'Request Accepted'} </Text>
+                  <View>
+                    <Text> {this.state.date || 'Request Accepted'} </Text>
+                  </View>
+
                 </View>
               );
             } else if (details.ntJoinStat === 'Rejected') {
@@ -1886,51 +1992,91 @@ class NotificationDetailScreen extends PureComponent {
             }
           } else {
             status = (
-              <View style={styles.buttonContainer}>
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Avatar
-                    onPress={() => this.reject(details)}
-                    overlayContainerStyle={{
-                      backgroundColor: 'red'
+              <View stlye={{}}>
+                <View style={styles.buttonContainer}>
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center'
                     }}
-                    rounded
-                    icon={{
-                      name: 'close',
-                      type: 'font-awesome',
-                      size: 15,
-                      color: '#fff'
+                  >
+                    <Avatar
+                      onPress={() => this.reject(details)}
+                      overlayContainerStyle={{
+                        backgroundColor: 'red'
+                      }}
+                      rounded
+                      icon={{
+                        name: 'close',
+                        type: 'font-awesome',
+                        size: 15,
+                        color: '#fff'
+                      }}
+                    />
+                    <Text style={{ color: 'red' }}> Reject </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center'
                     }}
-                  />
-                  <Text style={{ color: 'red' }}> Reject </Text>
+                  >
+                    <Avatar
+                      onPress={() => this.approve(details)}
+                      overlayContainerStyle={{
+                        backgroundColor: 'orange'
+                      }}
+                      rounded
+                      icon={{
+                        name: 'check',
+                        type: 'font-awesome',
+                        size: 15,
+                        color: '#fff'
+                      }}
+                    />
+                    <Text style={{ color: 'orange' }}> Approve </Text>
+                  </View>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Avatar
-                    onPress={() => this.approve(details)}
-                    overlayContainerStyle={{
-                      backgroundColor: 'orange'
-                    }}
-                    rounded
-                    icon={{
-                      name: 'check',
-                      type: 'font-awesome',
-                      size: 15,
-                      color: '#fff'
-                    }}
-                  />
-                  <Text style={{ color: 'orange' }}> Approve </Text>
+
+                <View style={{ flexDirection: 'column', marginTop: hp('4%') }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text>Requestor Name: </Text>
+                    <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}</Text>
+                    <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text>Unit Name: </Text>
+                    <Text>{
+                      (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
+                    }{" "}
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text>Mobile: </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        {
+                          Platform.OS === "android"
+                            ? Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`)
+                            : Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`);
+                        }
+                      }}
+                    >
+                      <View style={{ flexDirection: 'row' }}>
+
+                        <Text>{this.state.requestorMob1 ? this.state.requestorMob1 : ''}</Text>
+                        <Image
+                          style={{ width: hp('2%'), height: hp('2%') }}
+                          source={require("../../../icons/call.png")}
+                        />
+                      </View>
+
+                    </TouchableOpacity>
+                  </View>
                 </View>
+              
               </View>
             );
           }
@@ -1940,6 +2086,59 @@ class NotificationDetailScreen extends PureComponent {
       return status;
     }
   };
+
+  renderDetails = () => {
+    const { navigation } = this.props;
+    const details = navigation.getParam('details', 'NO-ID')
+
+    return (
+      <View>
+        <View style={{ marginTop: hp('15%') }}>
+          <FlatList
+            style={{ marginLeft: hp('1.5%'), marginRight: hp('1%'), height: '100%' }}
+            data={this.state.dataSource2.reverse()}
+            renderItem={({ item }) =>
+              <View style={{ flex: 1, marginLeft: hp('5%'), marginTop: hp('1%') }}>
+                <View style={{ flexDirection: 'column' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text>Resident Name: </Text>
+                    <Text>{item.name}{" "}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text>Mobile: </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        {
+                          Platform.OS === "android"
+                            ? Linking.openURL(`tel:${item.number ? item.number : ''}`)
+                            : Linking.openURL(`tel:${item.number ? item.number : ''}`);
+                        }
+                      }}
+                    >
+                      <View style={{ flexDirection: 'row' }}>
+
+                        <Text>{item.number ? item.number : ''}</Text>
+                        <Image
+                          style={{ width: hp('2%'), height: hp('2%') }}
+                          source={require("../../../icons/call.png")}
+                        />
+                      </View>
+
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+              </View>
+
+
+            }
+          />
+
+        </View>
+        {/*  */}
+      </View>
+    )
+  }
 
   render() {
     const { navigation } = this.props;
@@ -2010,7 +2209,18 @@ class NotificationDetailScreen extends PureComponent {
           <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
         <Text style={styles.titleStyle}> {details.ntDesc} </Text>
-        {details.ntType === 'Join_Status' ? null : this.renderButton()}
+        <View style={{ height: hp('8%') }}>
+          {details.ntType === 'Join_Status' ?
+            null
+            :
+            this.renderButton()}
+        </View>
+        <View>
+          {this.renderDetails()}
+
+        </View>
+
+
       </View>
     );
   }
