@@ -2098,7 +2098,7 @@ class NotificationDetailScreen extends PureComponent {
             style={{ marginLeft: hp('1.5%'), marginRight: hp('1%'), height: '100%' }}
             data={this.state.dataSource2.reverse()}
             renderItem={({ item }) =>
-              <View style={{ flex: 1, marginLeft: hp('5%'), marginTop: hp('1%') }}>
+              <View style={{ flex: 1, marginLeft: hp('5%'), marginTop: hp('1%')}}>
                 <View style={{ flexDirection: 'column' }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text>Resident Name: </Text>
