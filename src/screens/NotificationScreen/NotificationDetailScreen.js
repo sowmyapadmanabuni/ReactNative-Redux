@@ -2040,7 +2040,7 @@ class NotificationDetailScreen extends PureComponent {
                   </View>
                 </View>
 
-                <View style={{ flexDirection: 'column', marginTop: hp('4%') }}>
+                <View style={{ flexDirection: 'column', marginTop: hp('4%'),marginLeft: hp('2%') }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text>Requestor Name: </Text>
                     <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}</Text>
