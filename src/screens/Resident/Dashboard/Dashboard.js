@@ -56,7 +56,8 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-var counter = 0;
+let counter = 0;
+
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -588,6 +589,7 @@ try{
       // .catch(error => {
       //   this.setState({ error, loading: false });
       // });
+   this.checkUnitIsThere()
     } catch (err) {
       //alert(err)
       console.log("ROLECHECK_ERROR", err);
