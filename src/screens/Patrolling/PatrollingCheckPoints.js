@@ -70,13 +70,6 @@ class PatrollingCheckPoints extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-          //this.props.navigation.navigate("ResDashBoard");
-          this.props.navigation.goBack(null)
-          return true;
-        });
-      }
     
     
 
@@ -171,7 +164,6 @@ class PatrollingCheckPoints extends React.Component {
 
     componentWillUnmount() {
         updateSelectedCheckPoints({value: null});
-        this.backHandler.remove();
     }
 
     render() {

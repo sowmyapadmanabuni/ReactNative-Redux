@@ -659,7 +659,7 @@ class App extends React.Component {
               <FlatList
                 style={{ marginTop: hp("2%"), marginBottom: hp('20%') }}
                 data={this.state.dataSource.sort((a, b) =>
-                  a.vlfName.localeCompare(b.vlfName)
+                  b.vldCreated.localeCompare(a.vldCreated)
                 )}
                 renderItem={this.renderItem}
                 keyExtractor={(item, index) => item.fmid.toString()}

@@ -56,7 +56,8 @@ import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
 
 const Profiler = React.unstable_Profiler;
-var counter = 0;
+let counter = 0;
+
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -97,7 +98,6 @@ class Dashboard extends PureComponent {
       isDataLoading: true,
       isDataVisible: true
     });
-    console.log('API data for association list111111',this.props.userReducer,this.props.userReducer.MyAccountID,this.props.oyeURL)
     this.getListOfAssociation();
     this.myProfileNet();
     this.listenRoleChange();
@@ -153,8 +153,14 @@ class Dashboard extends PureComponent {
           if (this.currentRouteName !== "Main") {
             return false;
           }
+
+          if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
+            // this.showExitAlert();
+           // BackHandler.exitApp();
+            //return true;
+          }
           if (this.state.isSelectedCard === "UNIT") {
-            this.showExitAlert();
+            // this.showExitAlert();
             //BackHandler.exitApp();
           } else {
             this.changeCardStatus("UNIT");
@@ -168,10 +174,9 @@ class Dashboard extends PureComponent {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(){
     this.backButtonListener.remove();
   }
-
 
   showExitAlert(){
     Alert.alert(
@@ -183,7 +188,7 @@ class Dashboard extends PureComponent {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+        {text: 'Yes', onPress: () => {BackHandler.exitApp();return true}},
       ],
       {cancelable: false},
     );
@@ -237,12 +242,9 @@ class Dashboard extends PureComponent {
         }
       )
       .then(response => {
-        console.log(response, "fetched");
         let data = response.data.data.memberListByAccount;
-         console.log("dataoye", data);
         firebase.messaging().subscribeToTopic(MyAccountID + "admin");
         data.map(units => {
-          console.log("role_units", units.mrmRoleID);
           if (receiveNotifications) {
             //alert(MyAccountID + "admin");
             firebase
@@ -252,7 +254,6 @@ class Dashboard extends PureComponent {
               );
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-
             // if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
             // } else if (units.mrmRoleID === 1) {
             //   console.log(units, "units");
@@ -516,17 +517,9 @@ try{
         let isAdminFound = false;  
         console.log("roleCheckForAdmin_",responseJson)
         //responseJson.data.members.splice(0,1);
-    for (let i = 0; i < responseJson.data.members.length; i++) {
+        
+        for (let i = 0; i < responseJson.data.members.length; i++) {
           //alert(responseJson.data.members[i].mrmRoleID)
-          console.log(
-            "Get_Ids",
-            this.props.userReducer.MyAccountID,
-            responseJson.data.members[i].acAccntID,
-            this.state.assocId,
-            responseJson.data.members[i].asAssnID,
-            responseJson.data.members[i].mrmRoleID,
-            responseJson.data.members[i].unUniName + "name"
-          );
           let assnId = ""+responseJson.data.members[i].asAssnID;
           assnId = assnId.trim()+"admin"
           
@@ -544,7 +537,7 @@ try{
               responseJson.data.members[i].mrmRoleID
             );            
             role = responseJson.data.members[i].mrmRoleID;              
-              if(role == 1){
+              if(role === 1){
                 isAdminFound = true;                                      
               }
               // else{
@@ -592,11 +585,11 @@ try{
             console.log("ROLE_UPDATE", role);
           }
         );
-        this.checkUnitIsThere();
       // })
       // .catch(error => {
       //   this.setState({ error, loading: false });
       // });
+   this.checkUnitIsThere()
     } catch (err) {
       //alert(err)
       console.log("ROLECHECK_ERROR", err);
@@ -607,7 +600,7 @@ try{
     this.getAssociationList();
   }
 
-   getListOfAssociation() {
+  async getListOfAssociation() {
     let self = this;
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
@@ -616,7 +609,7 @@ try{
     //   this.props.userReducer.MyAccountID
     // );
 
-     axios.get(
+    let stat = await axios.get(
       `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
       {
         headers: {
@@ -624,110 +617,72 @@ try{
           "Content-Type": "application/json"
         }
       }
-    ).then(stat => {
+    );
 
-       console.log('API data for association list', this.props.userReducer, this.props.userReducer.MyAccountID, this.props.oyeURL)
+    console.log("Response_Association: ", stat);
 
-       console.log("Response_Association: ", stat);
+    try {
+      if (stat && stat.data.success) {
+        this.setState({
+          isNoAssJoin: false
+        });
+        let assocList = [];
+        for (let i = 0; i < stat.data.data.memberListByAccount.length; i++) {
+          if (stat.data.data.memberListByAccount[i].asAsnName !== "") {
+            assocList.push({
+              value: stat.data.data.memberListByAccount[i].asAsnName,
+              details: stat.data.data.memberListByAccount[i]
+            });
+          }
+        }
+        let sortedArr = assocList.sort(
+          base.utils.validate.compareAssociationNames
+        ); //open chrome
+        console.log("Sorted and All Asc List", sortedArr, assocList);
 
-       try {
-         if (stat && stat.data.success) {
-           this.setState({
-             isNoAssJoin: false
-           });
-           let assocList = [];
-           for (let i = 0; i < stat.data.data.memberListByAccount.length; i++) {
-             if (stat.data.data.memberListByAccount[i].asAsnName !== "") {
-               assocList.push({
-                 value: stat.data.data.memberListByAccount[i].asAsnName,
-                 details: stat.data.data.memberListByAccount[i]
-               });
-             }
-           }
-           let sortedArr = assocList.sort(
-               base.utils.validate.compareAssociationNames
-           ); //open chrome
-           console.log("Sorted and All Asc List", sortedArr, assocList);
+        let removedDuplicates = _.uniqBy(sortedArr, "value");
+        console.log("Removed duplicates", sortedArr, assocList);
 
-           let removedDuplicates = _.uniqBy(sortedArr, "value");
-           console.log("Removed duplicates", sortedArr, assocList);
+        self.setState({
+          assocList: removedDuplicates,
+          assocName: sortedArr[0].details.asAsnName,
+          assocId: sortedArr[0].details.asAssnID
+        });
+        const { updateIdDashboard } = this.props;
+        console.log("updateIdDashboard1", this.props);
+        updateIdDashboard({
+          prop: "assId",
+          value: sortedArr[0].details.asAssnID
+        });
+        // updateIdDashboard({ prop: "memberList", value: sortedArr });
+        const { updateUserInfo } = this.props;
+        updateUserInfo({
+          prop: "SelectedAssociationID",
+          value: sortedArr[0].details.asAssnID
+        });
 
-           self.setState({
-             assocList: removedDuplicates,
-             assocName: sortedArr[0].details.asAsnName,
-             assocId: sortedArr[0].details.asAssnID
-           });
-           const {updateIdDashboard} = this.props;
-           console.log("updateIdDashboard1", this.props);
-           updateIdDashboard({
-             prop: "assId",
-             value: sortedArr[0].details.asAssnID
-           });
-           // updateIdDashboard({ prop: "memberList", value: sortedArr });
-           const {updateUserInfo} = this.props;
-           updateUserInfo({
-             prop: "SelectedAssociationID",
-             value: sortedArr[0].details.asAssnID
-           });
+        self.getUnitListByAssoc();
+      } else if (!stat.data.success) {
+        this.setState({
+          isNoAssJoin: true
+        });
+        Alert.alert(
+          "Join association",
 
-           self.getUnitListByAssoc();
-         } else if (!stat.data.success) {
-           this.setState({
-             isNoAssJoin: true
-           });
-           Alert.alert(
-               "Join association",
-
-               "Please join in any association to access Data  ?",
-               [
-                 {
-                   text: "Yes",
-                   onPress: () =>
-                       this.props.navigation.navigate("CreateOrJoinScreen")
-                 },
-                 {text: "No", style: "cancel"}
-               ]
-           );
-         }
-       } catch (error) {
-         console.log('Error details', error)
-         this.setState({
-           isNoAssJoin: true
-         });
-         Alert.alert(
-             "Join association",
-
-             "Please join in any association to access Data  ?",
-             [
-               {
-                 text: "Yes",
-                 onPress: () =>
-                     this.props.navigation.navigate("CreateOrJoinScreen")
-               },
-               {text: "No", style: "cancel"}
-             ]
-         );
-
-       }
-     }).catch(error => {
-       console.log("Error in list of Association",error)
-       this.setState({
-         isNoAssJoin: true
-       });
-       Alert.alert(
-           "Join association",
-
-           "Please join in any association to access Data  ?",
-           [
-             {
-               text: "Yes",
-               onPress: () =>
-                   this.props.navigation.navigate("CreateOrJoinScreen")
-             },
-             {text: "No", style: "cancel"}
-           ]
-       );
-     });
+          "Please join in any association to access Data  ?",
+          [
+            {
+              text: "Yes",
+              onPress: () =>
+                this.props.navigation.navigate("CreateOrJoinScreen")
+            },
+            { text: "No", style: "cancel" }
+          ]
+        );
+      }
+    } catch (error) {
+      base.utils.logger.log(error);
+    }
   }
 
   onAssociationChange = (value, index) => {
@@ -809,16 +764,6 @@ try{
         vehiclesCount: 0,
         falmilyMemebCount: 0
       });
-      const { updateIdDashboard } = this.props;
-      updateIdDashboard({
-        prop: "familyMemberCount",
-        value:0
-      });
-      updateIdDashboard({
-        prop: "vehiclesCount",
-        value:0
-      });
-
     } else {
       this.getVehicleList();
       this.myFamilyListGetData();
@@ -915,22 +860,12 @@ try{
           //Object.keys(responseJson.data.unitsByBlockID).length
           vehiclesCount: responseJson.data.vehicleListByUnitID.length
         });
-        const { updateIdDashboard } = this.props;
-        updateIdDashboard({
-          prop: "vehiclesCount",
-          value: responseJson.data.vehicleListByUnitID.length
-        });
       })
       .catch(error => {
         this.setState({ loading: false });
         this.setState({
           //Object.keys(responseJson.data.unitsByBlockID).length
           vehiclesCount: 0
-        });
-        const { updateIdDashboard } = this.props;
-        updateIdDashboard({
-          prop: "vehiclesCount",
-          value:0
         });
         console.log("error in net call", error);
       });
@@ -975,25 +910,12 @@ try{
         this.setState({
           falmilyMemebCount: myFamilyList.data.familyMembers.length
         });
-        const { updateIdDashboard } = this.props;
-        console.log("updateIdDashboard1", this.props);
-        updateIdDashboard({
-          prop: "familyMemberCount",
-          value:myFamilyList.data.familyMembers.length
-        });
       }
     } catch (error) {
       this.setState({
         falmilyMemebCount: 0,
         loading: false
       });
-      const { updateIdDashboard } = this.props;
-      console.log("updateIdDashboard1", this.props);
-      updateIdDashboard({
-        prop: "familyMemberCount",
-        value:0
-      });
-
     }
   }
 
@@ -1047,9 +969,10 @@ try{
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-    let maxLen = 20;
+    let maxLen = 25;
     let maxLenUnit = 10;
     let text = "ALL THE GLITTERS IS NOT GOLD";
+    console.log("Hfhfhgfhfhhgfhgfgh", dropdown.length, dropdown1.length);
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -1077,7 +1000,7 @@ try{
                       borderBottomColor: "transparent"
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={dropdown.length > 2 ? -6 : -2}
+                    dropdownPosition={dropdown.length > 2 ? -5 : -2}
                     rippleOpacity={0}
                     // onChangeText={(value, index) =>
                     //   this.onAssociationChange(value, index)
@@ -1307,7 +1230,6 @@ try{
         status: "PAID"
       }
     ];
-    console.log('FamilyList count',this.props.dashBoardReducer)
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
         <View style={Style.elevatedView}>
@@ -1316,7 +1238,7 @@ try{
             width={"25%"}
             cardText={" Family Members"}
             cardIcon={require("../../../../icons/view_all_visitors.png")}
-            cardCount={this.props.dashBoardReducer.familyMemberCount}
+            cardCount={this.state.falmilyMemebCount}
             marginTop={20}
             iconWidth={Platform.OS === "ios" ? 40 : 35}
             iconHeight={Platform.OS === "ios" ? 40 : 20}
@@ -1336,7 +1258,7 @@ try{
             iconWidth={Platform.OS === "ios" ? 40 : 25}
             iconHeight={Platform.OS === "ios" ? 40 : 20}
             cardIcon={require("../../../../icons/vehicle.png")}
-            cardCount={this.props.dashBoardReducer.vehiclesCount}
+            cardCount={this.state.vehiclesCount}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>

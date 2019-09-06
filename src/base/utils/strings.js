@@ -36,9 +36,7 @@ const api = {
   CLOUD_FUNCTION_URL: 'https://us-central1-oyespace-dc544.cloudfunctions.net',
   GATE_CLOUD_FUNCTION_URL:
     'https://us-central1-oyespace-b7e2d.cloudfunctions.net'
-
 };
-
 
 //const imageUrl = 'https://mediauploaddev.oyespace.com/Images/'; //Development
 const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation

@@ -356,11 +356,10 @@ class NotificationScreen extends PureComponent {
             ) : (
               <View style={{flex:1 }}>
                 <View
-                  style={{ flexDirection: 'column', marginBottom: hp('1%') }}
+                  style={{ flexDirection: 'column'}}
                 >
                   <Text
                     style={{
-                      marginTop: 10,
                       fontSize: hp('2.5%'),
                       color: '#000'
                     }}
@@ -373,18 +372,26 @@ class NotificationScreen extends PureComponent {
                     <View>
                       <Text>{item.ntDesc}</Text>
                     </View>
-                    <View style={{ flex: 1 }}>
+                    </View>
+                  <View style={{ flex: 1, alignItems:'center'}}>
                       {item.open ? (
                         <TouchableOpacity
                           style={{
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
                             flexDirection: 'row',
-                            marginTop: hp('3%')
+                            marginTop: hp('1%')
                           }}
-                          onPress={()=>console.log('Check it is opened or not', item)}
+                          // onPress={()=>console.log('Check it is opened or not', item)}
+                          onPress={() => {
+                            console.log("Clicked on the gate app notification ######",item,index);
+                           if (item.ntIsActive) {
+                              this.props.onNotificationOpen(notifications, index, oyeURL);
+                            }
+                            this.props.toggleCollapsible(notifications, item.open, index);
+                          }}
                         >
-                          {/* <Text style={{ color: '#ff8c00' }}>More</Text> */}
+                          <Text style={{ color: '#ff8c00' }}>More</Text>
                           <Image
                             style={{ width: hp('2%'), height: hp('2%') }}
                             source={require('../../../icons/show_more.png')}
@@ -396,10 +403,19 @@ class NotificationScreen extends PureComponent {
                             alignItems: 'flex-end',
                             justifyContent: 'flex-end',
                             flexDirection: 'row',
-                            marginTop: hp('3%')
+                            marginTop: hp('1%'),
+                            marginBottom: hp('1%')
+                          }}
+
+                          onPress={() => {
+                            console.log("Clicked on the gate app notification ######",item,index);
+                           if (item.ntIsActive) {
+                              this.props.onNotificationOpen(notifications, index, oyeURL);
+                            }
+                            this.props.toggleCollapsible(notifications, item.open, index);
                           }}
                         >
-                          {/* <Text style={{ color: '#ff8c00' }}>Less</Text> */}
+                          <Text style={{ color: '#ff8c00' }}>Less</Text>
                           <Image
                             style={{ width: hp('2%'), height: hp('2%') }}
                             source={require('../../../icons/show_less.png')}
@@ -407,7 +423,7 @@ class NotificationScreen extends PureComponent {
                         </TouchableOpacity>
                       )}
                     </View>
-                  </View>
+                  
                 </View>
                 <Collapsible
                   duration={100}
@@ -442,7 +458,7 @@ class NotificationScreen extends PureComponent {
                         </View>
                         <View>
                           <Text style={{color:base.theme.colors.black,fontSize: hp('1.7%'),
-                            fontWeight: '500',marginLeft:10}} numberOfLines={1} maxLength={15}>{item.vlGtName}{' '}{item.vlGtName.length>15? 'Association'.substring(0,  5)+ "...":'Association'}</Text>
+                            fontWeight: '500',marginLeft:10}} numberOfLines={1} maxLength={15}>{item.vlGtName}{' '}Association</Text>
                           <Text style={{color:base.theme.colors.black,marginLeft:10}} numberOfLines={1}>{item.vlfName}{''}</Text>
                           <Text style={{color:base.theme.colors.black,marginLeft:10}} numberOfLines={1}>{item.vlVisType}{''} <Text style={{color: '#38bcdb' }}>{item.vlComName}{''}</Text></Text>
                           <TouchableOpacity  onPress={() => {
@@ -501,6 +517,7 @@ class NotificationScreen extends PureComponent {
   };
 
   renderComponent = () => {
+
     const {
       loading,
       isCreateLoading,
@@ -513,6 +530,8 @@ class NotificationScreen extends PureComponent {
       page
     } = this.props;
     // console.log(loading)
+    console.log("Data in notification",notifications)
+
     if (loading) {
       return (
         <View
