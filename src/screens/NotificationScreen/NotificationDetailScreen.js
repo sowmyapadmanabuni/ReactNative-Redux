@@ -2040,7 +2040,7 @@ class NotificationDetailScreen extends PureComponent {
                   </View>
                 </View>
 
-                <View style={{ flexDirection: 'column', marginTop: hp('4%'),marginLeft: hp('2%') }}>
+                <View style={{ flexDirection: 'column', marginTop: hp('8%'),marginLeft: hp('2%') }}>
                   <View style={{ flexDirection: 'row' }}>
                     <Text>Requestor Name: </Text>
                     <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}</Text>
@@ -2091,6 +2091,7 @@ class NotificationDetailScreen extends PureComponent {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID')
 
+    console.log("DETAILS", details)
     return (
       <View>
         <View style={{ marginTop: hp('15%') }}>
