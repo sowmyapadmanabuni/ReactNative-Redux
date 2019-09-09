@@ -609,7 +609,7 @@ try{
     //   this.props.userReducer.MyAccountID
     // );
 
-    let stat = await axios.get(
+   /* let stat = await axios.get(
       `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
       {
         headers: {
@@ -681,8 +681,134 @@ try{
         );
       }
     } catch (error) {
-      base.utils.logger.log(error);
-    }
+      this.setState({
+        isNoAssJoin: true
+      });
+      Alert.alert(
+          "Join association",
+
+          "Please join in any association to access Data  ?",
+          [
+            {
+              text: "Yes",
+              onPress: () =>
+                  this.props.navigation.navigate("CreateOrJoinScreen")
+            },
+            { text: "No", style: "cancel" }
+          ]
+      );    }*/
+    axios.get(
+        `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
+        {
+          headers: {
+            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
+            "Content-Type": "application/json"
+          }
+        }
+    ).then(stat => {
+
+      console.log('API data for association list', this.props.userReducer, this.props.userReducer.MyAccountID, this.props.oyeURL)
+
+      console.log("Response_Association: ", stat);
+
+      try {
+        if (stat && stat.data.success) {
+          this.setState({
+            isNoAssJoin: false
+          });
+          let assocList = [];
+          for (let i = 0; i < stat.data.data.memberListByAccount.length; i++) {
+            if (stat.data.data.memberListByAccount[i].asAsnName !== "") {
+              assocList.push({
+                value: stat.data.data.memberListByAccount[i].asAsnName,
+                details: stat.data.data.memberListByAccount[i]
+              });
+            }
+          }
+          let sortedArr = assocList.sort(
+              base.utils.validate.compareAssociationNames
+          ); //open chrome
+          console.log("Sorted and All Asc List", sortedArr, assocList);
+
+          let removedDuplicates = _.uniqBy(sortedArr, "value");
+          console.log("Removed duplicates", sortedArr, assocList);
+
+          self.setState({
+            assocList: removedDuplicates,
+            assocName: sortedArr[0].details.asAsnName,
+            assocId: sortedArr[0].details.asAssnID
+          });
+          const {updateIdDashboard} = this.props;
+          console.log("updateIdDashboard1", this.props);
+          updateIdDashboard({
+            prop: "assId",
+            value: sortedArr[0].details.asAssnID
+          });
+          // updateIdDashboard({ prop: "memberList", value: sortedArr });
+          const {updateUserInfo} = this.props;
+          updateUserInfo({
+            prop: "SelectedAssociationID",
+            value: sortedArr[0].details.asAssnID
+          });
+
+          self.getUnitListByAssoc();
+        } else if (!stat.data.success) {
+          this.setState({
+            isNoAssJoin: true
+          });
+          Alert.alert(
+              "Join association",
+
+              "Please join in any association to access Data  ?",
+              [
+                {
+                  text: "Yes",
+                  onPress: () =>
+                      this.props.navigation.navigate("CreateOrJoinScreen")
+                },
+                {text: "No", style: "cancel"}
+              ]
+          );
+        }
+      } catch (error) {
+        console.log('Error details', error)
+        this.setState({
+          isNoAssJoin: true
+        });
+        Alert.alert(
+            "Join association",
+
+            "Please join in any association to access Data  ?",
+            [
+              {
+                text: "Yes",
+                onPress: () =>
+                    this.props.navigation.navigate("CreateOrJoinScreen")
+              },
+              {text: "No", style: "cancel"}
+            ]
+        );
+
+      }
+    }).catch(error => {
+      console.log("Error in list of Association",error)
+      this.setState({
+        isNoAssJoin: true
+      });
+      Alert.alert(
+          "Join association",
+
+          "Please join in any association to access Data  ?",
+          [
+            {
+              text: "Yes",
+              onPress: () =>
+                  this.props.navigation.navigate("CreateOrJoinScreen")
+            },
+            {text: "No", style: "cancel"}
+          ]
+      );
+    });
   }
 
   onAssociationChange = (value, index) => {
@@ -764,6 +890,16 @@ try{
         vehiclesCount: 0,
         falmilyMemebCount: 0
       });
+      const { updateIdDashboard } = this.props;
+      updateIdDashboard({
+        prop: "familyMemberCount",
+        value:0
+      });
+      updateIdDashboard({
+        prop: "vehiclesCount",
+        value:0
+      });
+
     } else {
       this.getVehicleList();
       this.myFamilyListGetData();
@@ -867,6 +1003,11 @@ try{
           //Object.keys(responseJson.data.unitsByBlockID).length
           vehiclesCount: 0
         });
+        const { updateIdDashboard } = this.props;
+        updateIdDashboard({
+          prop: "vehiclesCount",
+          value:0
+        });
         console.log("error in net call", error);
       });
   };
@@ -910,12 +1051,25 @@ try{
         this.setState({
           falmilyMemebCount: myFamilyList.data.familyMembers.length
         });
+        const { updateIdDashboard } = this.props;
+        console.log("updateIdDashboard1", this.props);
+        updateIdDashboard({
+          prop: "familyMemberCount",
+          value:myFamilyList.data.familyMembers.length
+        });
       }
     } catch (error) {
       this.setState({
         falmilyMemebCount: 0,
         loading: false
       });
+      const { updateIdDashboard } = this.props;
+      console.log("updateIdDashboard1", this.props);
+      updateIdDashboard({
+        prop: "familyMemberCount",
+        value:0
+      });
+
     }
   }
 
@@ -969,7 +1123,7 @@ try{
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
-    let maxLen = 25;
+    let maxLen = 23;
     let maxLenUnit = 10;
     let text = "ALL THE GLITTERS IS NOT GOLD";
     console.log("Hfhfhgfhfhhgfhgfgh", dropdown.length, dropdown1.length);
@@ -1230,6 +1384,7 @@ try{
         status: "PAID"
       }
     ];
+    console.log('FamilyList count',this.props.dashBoardReducer)
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
         <View style={Style.elevatedView}>
@@ -1238,7 +1393,7 @@ try{
             width={"25%"}
             cardText={" Family Members"}
             cardIcon={require("../../../../icons/view_all_visitors.png")}
-            cardCount={this.state.falmilyMemebCount}
+            cardCount={this.props.dashBoardReducer.familyMemberCount}
             marginTop={20}
             iconWidth={Platform.OS === "ios" ? 40 : 35}
             iconHeight={Platform.OS === "ios" ? 40 : 20}
@@ -1258,7 +1413,7 @@ try{
             iconWidth={Platform.OS === "ios" ? 40 : 25}
             iconHeight={Platform.OS === "ios" ? 40 : 20}
             cardIcon={require("../../../../icons/vehicle.png")}
-            cardCount={this.state.vehiclesCount}
+            cardCount={this.props.dashBoardReducer.vehiclesCount}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>
@@ -1435,13 +1590,13 @@ try{
           >
             <Text>View All Visitors</Text>
           </Button>
-          <Button
+        {/* <Button
             bordered
             style={styles.button1}
             onPress={() => this.props.navigation.navigate("schedulePatrolling")}
           >
             <Text>Patrolling</Text>
-          </Button>
+          </Button>*/}
         </View>
       </ElevatedView>
     );
