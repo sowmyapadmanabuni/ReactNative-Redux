@@ -58,7 +58,6 @@ class PatrolSchedule extends React.Component {
         };
 
         this.getPatrollingList = this.getPatrollingList.bind(this);
-        //this.getUserLocation = this.getUserLocation.bind(this)
 
     }
 
@@ -89,7 +88,6 @@ class PatrolSchedule extends React.Component {
 
         console.log("Assocoatin:",self.props.SelectedAssociationID)
         let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(self.props.SelectedAssociationID);
-        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
         console.log("Stat in Patrolling:",stat,);
         try {
             if (stat.success) {
@@ -113,7 +111,6 @@ class PatrolSchedule extends React.Component {
         let self = this;
 
         let stat = await base.services.OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
-        //let stat = await base.services.OyeSafeApi.getCheckPointList(8);
 
         console.log("Stat in CP List:",stat);
         try{

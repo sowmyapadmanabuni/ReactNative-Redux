@@ -29,7 +29,7 @@ import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
 import Geolocation from 'react-native-geolocation-service';
 var RNFS = require('react-native-fs');
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-
+//import firebase from 'firebase';
 
 
 const {width, height} = Dimensions.get('window');
@@ -366,41 +366,57 @@ class AddAndEditCheckPoints extends React.Component {
             // let longArr = [];
             // for(let i in storedArr){
             //     console.log("DMKLNKBVDKLDNKNDKNSKCDVNCDV>N:",storedArr[i])
-            //     latArr.push(parseFloat(storedArr[i].latitude).toFixed(5));
-            //     longArr.push(parseFloat(storedArr[i].longitude).toFixed(5))
+            //     latArr.push(parseFloat(storedArr[i].latitude));
+            //     longArr.push(parseFloat(storedArr[i].longitude))
             // }
 
             // let latMean = 0;
             // let longMean = 0;
             // let latSum = 0;
             // let longSum = 0;
+            // let firstLatData = 0;
+            // let firstLongData= 0;
+            // let lastLatData = 0;
+            // let lastLongData = 0;
 
             // for(let i in latArr){
+            //     firstLatData = latArr[0];
+            //     lastLatData = latArr[latArr.length-1]
             //     latSum += parseFloat(latArr[i]);
             //     latMean = parseFloat(latSum/latArr.length);
             // }
 
             // for(let i in longArr){
+            //     firstLongData = longArr[0];
+            //     lastLongData = longArr[longArr.length-1]
             //     longSum += parseFloat(longArr[i]);
             //     longMean = parseFloat(longSum/longArr.length)
             // }
             
             // let lastLatLongParsed = (this.state.lastLatLong).split(" ");
-            // let lastLat = parseFloat(lastLatLongParsed[0]).toFixed(5);
-            // let lastLong = parseFloat(lastLatLongParsed[1]).toFixed(5);
+            // let lastLat = parseFloat(lastLatLongParsed[0])
+            // let lastLong = parseFloat(lastLatLongParsed[1])
             // let latDiff = lastLat-latMean;
             // let longDiff = lastLong-longMean;
 
+
             // console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
+            // firebase.database().ref('Patrolling Points/' +this.state.checkPointName + "/").set({
+            //     latMean,longMean,lastLat,lastLong,latDiff,longDiff,firstLatData,lastLatData,firstLongData,lastLongData
+            //  }).then((data) =>   {
+            //      console.log("Data stored in firebase:", data)
+            //  }).catch((error) => {
+            //      console.log("Error:", error)
+            //  }) 
 
             // this.setState({
             //     region:{ 
             //         latitude:parseFloat(latMean).toFixed(6),
             //         longitude:parseFloat(longMean).toFixed(6)
             //     }
-            // },()=>this.addCheckPoint())
+            // })
             // }
-            //else{
+            // else{
                  this.addCheckPoint();
             //}
            

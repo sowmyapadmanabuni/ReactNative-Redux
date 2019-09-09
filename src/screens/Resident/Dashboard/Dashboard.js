@@ -54,6 +54,7 @@ import {
 import ProgressLoader from "rn-progress-loader";
 import { NavigationEvents } from "react-navigation";
 import timer from "react-native-timer";
+import CountdownCircle from 'react-native-countdown-circle';
 
 const Profiler = React.unstable_Profiler;
 var counter = 0;
@@ -85,7 +86,8 @@ class Dashboard extends PureComponent {
       unitNameHide: false,
       isDataLoading: false,
       isDataVisible: false,
-      isNoAssJoin: false
+      isNoAssJoin: false,
+      isSOSSelected:false
     };
     this.backButtonListener = null;
     this.currentRouteName = "Main";
@@ -1321,8 +1323,39 @@ try{
                     }
                 </ElevatedView>
             */}
+
+            <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'flex-end',marginTop:hp('20')}}>
+              {!this.state.isSOSSelected?
+              <TouchableHighlight 
+              underlayColor={base.theme.colors.transparent}
+              onPress={()=>this.selectSOS()}>
+              <Image
+              style={{width: wp("15%"),
+              height: hp("10%"),
+              right: 20,
+              justifyContent: "center"}}
+                source={require('../../../../icons/sos_btn.png')}
+                />
+                </TouchableHighlight>:
+                 <CountdownCircle
+                 seconds={5}
+                 radius={20}
+                 borderWidth={7}
+                 color={base.theme.colors.primary}
+                 bgColor="#fff"
+                 textStyle={{ fontSize: 20 }}
+                 onTimeElapsed={() => this.props.navigation.navigate("")}
+             />}
+            </View>
       </ElevatedView>
     );
+  }
+
+
+  selectSOS(){
+    this.setState({
+      isSOSSelected:!this.state.isSOSSelected
+    })
   }
 
   adminCard() {

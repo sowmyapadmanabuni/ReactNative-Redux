@@ -119,6 +119,7 @@ import PatrollingCommonHeader from "../src/components/NavigationalHeaders/Patrol
 import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
 import AddAndEditCheckPoints from "../src/screens/Patrolling/AddAndEditCheckPoints";
 import SchedulePatrol from "../src/screens/Patrolling/SchedulePatrol";
+import CreateSOS from '../src/screens/SOS/CreateSOS'
 import QRScreen from "../src/screens/Patrolling/QRScreen";
 import PatrollingReport from '../src/screens/Patrolling/PatrollingReport'
 import ReportScreen from "../src/screens/Patrolling/ReportScreen";
@@ -820,6 +821,16 @@ addCheckPoint: {
     navigationOptions: {
       header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
                                                isHidden={true} {...props}/>
+    }
+  },
+  sosScreen: {
+    screen: CreateSOS,
+    navigationOptions: {
+      title: "Help On the way ",
+      header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
+                                               isHidden={true} {...props}/>,
+      headerStyle: { backgroundColor: "#FA9917" },
+      headerTintColor: "#ffffff"
     }
   },
   
