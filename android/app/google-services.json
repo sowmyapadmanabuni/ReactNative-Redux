@@ -13,7 +13,12 @@
           "package_name": "com.oyespace.oyesafe"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1092188854243-53kmtsn7tesa29sfaeh9qq8ll9kbo2g1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA7NpJAbUjRP0ETrdAI1_jfzY5jL2MupWY"
@@ -25,6 +30,13 @@
             {
               "client_id": "1092188854243-53kmtsn7tesa29sfaeh9qq8ll9kbo2g1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1092188854243-rpgv9n8gb8cf7sr1kv80jqgibl86stcs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oyespace.oyesafe"
+              }
             }
           ]
         }

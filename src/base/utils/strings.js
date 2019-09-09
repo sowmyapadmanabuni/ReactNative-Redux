@@ -39,7 +39,7 @@ const api = {
 };
 
 //const imageUrl = 'https://mediauploaddev.oyespace.com/Images/'; //Development
-// const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
+//const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
 const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
 const strings = {

@@ -256,7 +256,7 @@ class NotificationScreen extends PureComponent {
                   console.log('Ids equal',this.props.notifications[i].sbMemID,responseData.visitorLog.vlVisLgID)
                   this.props.notifications[i].vlEntryImg=responseData.visitorLog.vlEntryImg
                   this.props.notifications[i].vlGtName=responseData.visitorLog.vlGtName
-                  this.props.notifications[i].vlengName=responseData.visitorLog.vlengName
+                  this.props.notifications[i].vlfName=responseData.visitorLog.vlfName
                   this.props.notifications[i].vlVisType=responseData.visitorLog.vlVisType
                   this.props.notifications[i].vlComName=responseData.visitorLog.vlComName
                   this.props.notifications[i].vlMobile=responseData.visitorLog.vlMobile
@@ -354,7 +354,7 @@ class NotificationScreen extends PureComponent {
                 containerStyle={this.renderIcons('style', item, index)}
               />
             ) : (
-              <View style={{ flex: 1 }}>
+              <View style={{flex:1 }}>
                 <View
                   style={{ flexDirection: 'column'}}
                 >
@@ -437,201 +437,74 @@ class NotificationScreen extends PureComponent {
                     </View>
                   ) : (
                     <View style={{ flexDirection: 'column' }}>
-                      <View style={{ flexDirection: 'row' }}>
-                        <View style={{ marginBottom: hp('0.2%') }}>
-
-                          { item.vlEntryImg === '' ? (
+                      <View style={{flexDirection: 'row', alignItems:'space-between'}}>
+                        <View>
+                        {item.vlEntryImg == "" ?
                             <Image
-                              style={{ width: hp('12%'), height: hp('12%') }}
-                              source={{
-                                uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder
-                              }}
-                            />
-                          ) : (
+                                style={styles.img}
+                                source={{
+                                  uri:
+                                      "https://mediaupload.oyespace.com/" +
+                                      base.utils.strings.noImageCapturedPlaceholder
+                                }}
+                            /> :
                             <Image
-                              style={styles.img}
-                              source={{
-                                uri:
-                                  `${this.props.mediaupload}` + item.vlEntryImg
-                              }}
+                                style={styles.img}
+                                source={{
+                                  uri:
+                                      `${this.props.mediaupload}`+item.vlEntryImg
+                                }}
+                            />}
+                        </View>
+                        <View>
+                          <Text style={{color:base.theme.colors.black,fontSize: hp('1.7%'),
+                            fontWeight: '500',marginLeft:10}} numberOfLines={1} maxLength={15}>{item.vlGtName}{' '}Association</Text>
+                          <Text style={{color:base.theme.colors.black,marginLeft:10}} numberOfLines={1}>{item.vlfName}{''}</Text>
+                          <Text style={{color:base.theme.colors.black,marginLeft:10}} numberOfLines={1}>{item.vlVisType}{''} <Text style={{color: '#38bcdb' }}>{item.vlComName}{''}</Text></Text>
+                          <TouchableOpacity  onPress={() => {
+                            {
+                              Platform.OS === 'android'
+                                  ? Linking.openURL(
+                                  `tel:${item.vlMobile}`
+                                  )
+                                  : Linking.openURL(
+                                  `tel:${item.vlMobile}`
+                                  );
+                            }
+                          }}>
+                          <View style={{flexDirection:'row',marginLeft:10}}>
+                            <Text style={{color:base.theme.colors.primary,fontWeight:'bold'}}>{item.vlMobile}</Text>
+                            <Image
+                            style={{
+                            width: hp('2.2%'),
+                            height: hp('2.2%')
+                          }}
+                            source={require('../../../icons/call.png')}
                             />
-                          )}
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: 'column',
-                            marginLeft: hp('1%')
-                          }}
-                        >
-                          <View style={{ marginBottom: 5 }}>
-                            <Text
-                              style={{
-                                fontSize: hp('1.8%'),
-                                fontWeight: '500'
-                              }}
-                            >{item.vlGtName}{' '}Association
-                            </Text>
                           </View>
-
-                          <View style={{ marginBottom: 5 }}>
-                            <Text style={{ fontSize: hp('1.8%') }}>
-                              {item.vlengName}{' '}
-                            </Text>
-                          </View>
-
-                          <View
-                            style={{ flexDirection: 'row', marginBottom: 5 }}
-                          >
-                            <Text
-                              style={{ fontSize: hp('1.8%'), color: '#000' }}
-                            >
-                              {item.vlVisType}{' '}
-                            </Text>
-                            <Text
-                              style={{ fontSize: hp('1.8%'), color: '#38bcdb' }}
-                            >
-                              {item.vlComName}{' '}
-                            </Text>
-                          </View>
-                          {item.vlMobile !==
-                          '' ? (
-                            <View style={{ flexDirection: 'row' }}>
-                              <TouchableOpacity
-                                onPress={() => {
-                                  {
-                                    Platform.OS === 'android'
-                                      ? Linking.openURL(
-                                          `tel:${item.vlMobile}`
-                                        )
-                                      : Linking.openURL(
-                                          `tel:${
-                                              item.vlMobile
-                                          }`
-                                        );
-                                  }
-                                }}
-                              >
-                                <View style={{ flexDirection: 'row' }}>
-                                  <View>
-                                    <Text
-                                      style={{
-                                        fontSize: hp('1.8%'),
-                                        color: '#ff8c00'
-                                      }}
-                                    >{item.vlMobile}
-                                    </Text>
-                                  </View>
-                                  <View
-                                    style={{
-                                      width: hp('2.2%'),
-                                      height: hp('2.2%')
-                                    }}
-                                  >
-                                    <Image
-                                      style={{
-                                        width: hp('2.2%'),
-                                        height: hp('2.2%')
-                                      }}
-                                      source={require('../../../icons/call.png')}
-                                    />
-                                  </View>
-                                </View>
-                              </TouchableOpacity>
-                            </View>
-                          ) : (
-                            <View></View>
-                          )}
+                          </TouchableOpacity>
                         </View>
                       </View>
-
-                      <View style={{ flexDirection: 'row' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                          <Text
-                            style={{ fontSize: hp('1.8%'), color: '#ff8c00' }}
-                          >
-                            Entry On:{' '}
-                          </Text>
-                          <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ fontSize: hp('1.8%') }}>
-                              {item.vldCreated}{' '}
-                            </Text>
-
-                            <Text style={{ fontSize: hp('1.8%') }}>
-                              {item.vlEntryT}
-                            </Text>
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginLeft: hp('2%')
-                          }}
-                        >
-                          <Text
-                            style={{ fontSize: hp('1.8%'), color: '#ff8c00' }}
-                          >
-                            From:{' '}
-                          </Text>
-                          <Text style={{ fontSize: hp('1.8%') }}>
-                            { item.vlengName}
-                          </Text>
-                        </View>
+                      <View style={{flexDirection: 'row',alignItems:'space-between'}}>
+                        <Text style={{color:base.theme.colors.primary,fontWeight:'bold'}}>Entry on:{' '}
+                        <Text style={{color:base.theme.colors.black,fontWeight:'normal',marginLeft:5}}>{moment(item.vldCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}{' '}
+                          {moment(item.vlEntryT).format('hh:mm A')}</Text></Text>
+                        {item.vlengName!==""?
+                        <Text style={{color:base.theme.colors.primary,fontWeight:'bold',marginLeft:25}}>From:{' '}
+                        <Text style={{color:base.theme.colors.black, fontWeight:'normal',marginLeft:5}}>{item.vlengName} </Text></Text>
+                            :<View/>}
                       </View>
-                      <View>
-                        <View
-                          style={{
-                            flexDirection: 'row'
-                          }}
-                        >
-                          {item.vlexgName !== '' ? (
-                            <View
-                              style={{
-                                flexDirection: 'row'
-                              }}
-                            >
-                              <View style={{ flexDirection: 'row' }}>
-                                <Text
-                                  style={{
-                                    fontSize: hp('1.8%'),
-                                    color: '#ff8c00'
-                                  }}
-                                >
-                                  Exit On:{' '}
-                                </Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                  <Text style={{ fontSize: hp('1.8%') }}>
-                                    {item.vldUpdated}{' '}
-                                  </Text>
-                                  <Text style={{ fontSize: hp('1.8%') }}>
-                                    {item.vlExitT}
-                                  </Text>
-                                </View>
-                              </View>
-
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  marginLeft: hp('3.3%')
-                                }}
-                              >
-                                <Text
-                                  style={{
-                                    fontSize: hp('1.8%'),
-                                    color: '#ff8c00'
-                                  }}
-                                >
-                                  From:{' '}
-                                </Text>
-                                <Text style={{ fontSize: hp('1.8%') }}>
-                                  {item.vlexgName}
-                                </Text>
-                              </View>
-                            </View>
-                          ) : (
-                            <View></View>
-                          )}
-                        </View>
+                      { item.vlexgName !=="" ?
+                      <View style={{flexDirection: 'row',alignItems:'space-between'}}>
+                        <Text style={{color:base.theme.colors.primary,fontWeight:'bold'}}>Exit on:{' '}
+                          <Text style={{color:base.theme.colors.black,fontWeight:'normal',marginLeft:5}}>{moment(item.vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY')}{' '}{moment(item.vlExitT).format('hh:mm A')} </Text></Text>
+                        <Text style={{color:base.theme.colors.primary,fontWeight:'bold',marginLeft:25}}>From:{' '}
+                        <Text style={{color:base.theme.colors.black,fontWeight:'normal',marginLeft:5}} >{item.vlexgName}</Text></Text>
                       </View>
+                          :
+                          <View/>
+                      }
+
                     </View>
                   )}
                 </Collapsible>
@@ -644,6 +517,7 @@ class NotificationScreen extends PureComponent {
   };
 
   renderComponent = () => {
+
     const {
       loading,
       isCreateLoading,
@@ -656,6 +530,8 @@ class NotificationScreen extends PureComponent {
       page
     } = this.props;
     // console.log(loading)
+    console.log("Data in notification",notifications)
+
     if (loading) {
       return (
         <View

@@ -91,10 +91,6 @@ class AddAndEditCheckPoints extends React.Component {
     componentDidMount() {
        
       }
-    
-      componentWillUnmount(){
-        this.backHandler.remove();
-      }
 
     componentWillMount() {
         console.log("SCDMVD:",this.props.navigation.state.params);
@@ -185,18 +181,8 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     componentDidMount(){
-
-        setTimeout(()=>{
-            if(this.state.gpsLocation === "Set GPS Location"){
-                this.showDenialAlertMessage();
-            }
-        },2000)
         this.watchuserPosition();
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            //this.props.navigation.navigate("ResDashBoard");
-            this.props.navigation.goBack(null)
-            return true;
-          });
+
     }
 
     watchuserPosition(){
@@ -269,7 +255,6 @@ class AddAndEditCheckPoints extends React.Component {
                     },
                     isEditing:params===null?false:true,
                     checkPointName:params!==null? params.cpCkPName:this.state.checkPointName,
-                    gpsLocation:params!==null?  params.cpgpsPnt:this.state.gpsLocation,
                     gpsLocation: LocationData.latitude + "," + LocationData.longitude,
                     selectedIndex:params!==null? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2:this.state.selectedIndex,
                     checkPointId: params!==null?params.cpChkPntID:this.state.checkPointId,

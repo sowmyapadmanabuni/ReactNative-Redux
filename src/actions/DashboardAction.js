@@ -69,12 +69,6 @@ export const getDashAssoSync = (
             }
           });
 
-          // alert(
-          //   selectedUnit,
-          //   withoutString[0].value,
-          //   selectedUnit !== withoutString[0].value
-          // );
-
           if (selectedUnit !== withoutString[0].value) {
             if (withoutString.length > 0) {
               dispatch({
