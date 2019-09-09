@@ -25,6 +25,8 @@ import SideMenu from "../dashboard_pages/SideMenu";
 //import NavDrawer from './assocition_pages/NavDrawer';
 
 import associationlist from "../assocition_pages/associationlist";
+import WholeAssociationList from "../assocition_pages/WholeAssociationList";
+
 import CreateAssociation from "../assocition_pages/CreateAssociation";
 //import EditAssociation from '../assocition_pages/EditAssociation';
 import unitlist from "../assocition_pages/unitlist";
@@ -291,6 +293,16 @@ const ResApp = createStackNavigator({
   },
   AssnListScreen: {
     screen: associationlist,
+    navigationOptions: {
+      title: "Association List",
+      header: null,
+      headerStyle: { backgroundColor: "#FA9917" },
+      headerTintColor: "#ffffff"
+    }
+  },
+  //WholeAssociationList
+  WholeAssociationList: {
+    screen: WholeAssociationList,
     navigationOptions: {
       title: "Association List",
       header: null,

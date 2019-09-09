@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.react.rnspinkit.RNSpinkitPackage;
@@ -15,7 +16,6 @@ import com.zmxv.RNSound.RNSoundPackage;
 import com.lynxit.contactswrapper.ContactsWrapperPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
-import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 
 
 
@@ -49,6 +49,10 @@ import org.pgsqlite.SQLitePluginPackage;
 import java.util.Arrays;
 import java.util.List;
 
+import com.smixx.fabric.FabricPackage;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+
 public class MainApplication extends Application implements ShareApplication, ReactApplication {
 
     @Override
@@ -66,6 +70,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new GeolocationPackage(),
                     new ReactNativeRestartPackage(),
                     new RNDeviceInfo(),
                     new RNSpinkitPackage(),
@@ -92,7 +97,7 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new ContactsWrapperPackage(),
                     new MapsPackage(),
                     new RNFusedLocationPackage(),
-                    new RNAndroidLocationEnablerPackage()
+                    new FabricPackage()
 
 
 
@@ -114,5 +119,7 @@ public class MainApplication extends Application implements ShareApplication, Re
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
+        Fabric.with(this, new Crashlytics());
+
     }
 }

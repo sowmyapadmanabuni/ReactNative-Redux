@@ -51,18 +51,6 @@ class QRScreen extends React.Component {
         })
     }
 
-    componentDidMount() {
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-          //this.props.navigation.navigate("ResDashBoard");
-          this.props.navigation.goBack(null)
-          return true;
-        });
-      }
-    
-      componentWillUnmount(){
-        this.backHandler.remove();
-      }
-
 
     takeScreenShot = refname => {
         const { params } = this.props.navigation.state;
