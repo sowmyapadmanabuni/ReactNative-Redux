@@ -2061,15 +2061,16 @@ class NotificationDetailScreen extends PureComponent {
                     <View style={{ flex: 5 }}>
                       <TouchableOpacity
                         onPress={() => {
-                          {
+                          
                             Platform.OS === "android"
-                              ? Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`)
-                              : Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`);
-                          }
+                              ? Linking.openURL(`tel:${this.state.requestorMob1}`)
+                              : Linking.openURL(`tel:${this.state.requestorMob1}`);
+                          
+                          // alert("Number calling") 
                         }}
                       >
 
-                        <View style={{ flexDirection: 'row', }}>
+                        <View style={{ flexDirection: 'row'}}>
 
                           <Text>{this.state.requestorMob1}</Text>
                           <Image
@@ -2081,6 +2082,7 @@ class NotificationDetailScreen extends PureComponent {
                       </TouchableOpacity>
 
                     </View>
+                  
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}>
@@ -2115,7 +2117,7 @@ class NotificationDetailScreen extends PureComponent {
 
     console.log("DETAILS", details)
     return (
-      <View style={{ marginTop: hp('14%') }}>
+      <View style={{ marginTop: hp('20%') }}>
         <View style={{ marginLeft: hp('2%') }}>
           <Text style={{ color: '#ff8c00' }}>Current Status</Text>
         </View>
@@ -2149,11 +2151,12 @@ class NotificationDetailScreen extends PureComponent {
                   <View style={{ flex: 5 }}>
                     <TouchableOpacity
                       onPress={() => {
-                        {
+                        
                           Platform.OS === "android"
                             ? Linking.openURL(`tel:${item.number ? item.number : ''}`)
                             : Linking.openURL(`tel:${item.number ? item.number : ''}`);
-                        }
+                        
+                        
                       }}
                     >
                       <View style={{ flexDirection: 'row' }}>
@@ -2168,6 +2171,7 @@ class NotificationDetailScreen extends PureComponent {
                     </TouchableOpacity>
 
                   </View>
+                
                 </View>
               </View>
 
