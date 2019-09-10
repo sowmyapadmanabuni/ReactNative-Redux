@@ -22,7 +22,7 @@ import OSButton from '../../../components/osButton/OSButton';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 import Style from './Style';
 import axios from 'axios';
-import firebase from 'react-native-firebase';
+import firebase, { Firebase } from 'react-native-firebase';
 import { Button } from 'native-base';
 import _ from 'lodash';
 import {
@@ -246,7 +246,7 @@ class Dashboard extends PureComponent {
       .then(response => {
         let data = response.data.data.memberListByAccount;
         console.log(data, 'memList');
-        // firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+        firebase.messaging().subscribeToTopic('' + MyAccountID + 'admin');
         data.map(units => {
           if (receiveNotifications) {
             //alert(MyAccountID + "admin");
@@ -256,10 +256,15 @@ class Dashboard extends PureComponent {
                 '' + MyAccountID + units.unUnitID + 'usernotif'
               );
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
-            // firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+            firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+            // firebase.messaging().subscribeToTopic( + 'admin');
+            // alert(MyAccountID + 'admin');
             // firebase.messaging().subscribeToTopic('7548admin');
 
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+              // console.log(units, 'units');
+              // firebase.messaging().subscribeToTopic(units.unUnitID + 'admin');
+              // alert(units.unUnitID + 'admin');
             } else if (units.mrmRoleID === 1) {
               // console.log(units, 'unitsadmin');
               // firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
@@ -282,15 +287,6 @@ class Dashboard extends PureComponent {
             firebase.messaging().unsubscribeFromTopic(units.asAssnID + 'admin');
           }
         });
-
-        // if(data != undefined && data!=null && data.length > 0){
-        //     let val = data.find(o => o.mrmRoleID === 1);
-        //     if(val == undefined || val == null){
-        //       //firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
-        //       firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
-        //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
-        //     }
-        // }
         this.roleCheckForAdmin();
       });
   };
@@ -577,7 +573,7 @@ class Dashboard extends PureComponent {
       } else {
         console.log('UNSUBSCRIBED_FROM_', assnId);
         await base.utils.storage.removeData('ADMIN_NOTIF' + assnId);
-       /* if (assnId === '7548admin') {
+        /* if (assnId === '7548admin') {
          // alert('Unsub');
         }*/
         firebase.messaging().unsubscribeFromTopic(assnId);
