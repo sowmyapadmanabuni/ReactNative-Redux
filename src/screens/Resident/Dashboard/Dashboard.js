@@ -570,9 +570,9 @@ class Dashboard extends PureComponent {
 
         await base.utils.storage.storeData('ADMIN_NOTIF' + assnId, assnId);
         firebase.messaging().subscribeToTopic(assnId);
-        if (assnId === '7548admin') {
-          alert('Sub');
-        }
+        // if (assnId === '7548admin') {
+        //   // alert('Sub');
+        // }
         // }
       } else {
         console.log('UNSUBSCRIBED_FROM_', assnId);

@@ -575,12 +575,18 @@ class NotificationScreen extends PureComponent {
             onEndReachedThreshold={0.5}
             onEndReached={() => {
               // console.log("End Reached");
+              // alert("On end")
               // this.props.onEndReached(oyeURL, page, notifications, MyAccountID);
             }}
             refreshControl={
               <RefreshControl
                 refreshing={refresh}
-                onRefresh={() => {refreshNotifications(oyeURL, MyAccountID)}}
+                onRefresh={() => {refreshNotifications(
+                                    oyeURL,
+                                    MyAccountID,
+                                    null,
+                                    notifications
+                                  )}}
                 progressBackgroundColor="#fff"
                 tintColor="#ED8A19"
                 colors={['#ED8A19']}
