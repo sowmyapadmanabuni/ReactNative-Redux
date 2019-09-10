@@ -262,7 +262,7 @@ class Dashboard extends PureComponent {
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
             } else if (units.mrmRoleID === 1) {
               // console.log(units, 'unitsadmin');
-              // firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+               firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
               // console.log(units.asAssnID + 'admin', 'subadmin');
               // if (units.asAssnID + 'admin' === '7548admin') {
               //   alert('Accepted');
