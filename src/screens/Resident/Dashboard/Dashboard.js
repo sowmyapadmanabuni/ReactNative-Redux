@@ -1386,7 +1386,7 @@ class Dashboard extends PureComponent {
   }
 
   myUnitCard() {
-    const { dropdown1 } = this.props;
+    const {dropdown, dropdown1 } = this.props;
     let invoiceList = [
       {
         invoiceNumber: 528,
@@ -1415,7 +1415,7 @@ class Dashboard extends PureComponent {
             iconWidth={Platform.OS === 'ios' ? 40 : 35}
             iconHeight={Platform.OS === 'ios' ? 40 : 20}
             onCardClick={() =>
-              this.state.isNoAssJoin
+                dropdown.length === 0
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
                 ? alert('Unit is not available')
@@ -1434,7 +1434,7 @@ class Dashboard extends PureComponent {
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>
-              this.state.isNoAssJoin
+                dropdown.length === 0
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
                 ? alert('Unit is not available')
