@@ -2041,7 +2041,7 @@ class NotificationDetailScreen extends PureComponent {
                   </View>
                 </View>
 
-                <View style={{ flexDirection: 'column', marginTop: hp('10%'), marginLeft: hp('2%') }}>
+                <View style={{ flexDirection: 'column', marginTop: hp('10%'), marginBottom: hp('2%'), marginLeft: hp('2%') }}>
                   <View>
                     <Text style={{ color: '#ff8c00' }}>Requestor </Text>
                   </View>
@@ -2059,30 +2059,27 @@ class NotificationDetailScreen extends PureComponent {
                       <Text>Mobile</Text>
                     </View>
                     <View style={{ flex: 5 }}>
+
+
                       <TouchableOpacity
                         onPress={() => {
-                          
-                            Platform.OS === "android"
-                              ? Linking.openURL(`tel:${this.state.requestorMob1}`)
-                              : Linking.openURL(`tel:${this.state.requestorMob1}`);
-                          
-                          // alert("Number calling") 
-                        }}
-                      >
 
-                        <View style={{ flexDirection: 'row'}}>
+                          Platform.OS === "android"
+                            ? Linking.openURL(`tel:${this.state.requestorMob1}`)
+                            : Linking.openURL(`tel:${this.state.requestorMob1}`);
+                        }}>
+                        
+                          <View style={{ flexDirection: 'row' }}>
 
-                          <Text>{this.state.requestorMob1}</Text>
-                          <Image
-                            style={{ width: hp('2%'), height: hp('2%') }}
-                            source={require("../../../icons/call.png")}
-                          />
-                        </View>
-
+                            <Text>{this.state.requestorMob1}</Text>
+                            <Image
+                              style={{ width: hp('2%'), height: hp('2%') }}
+                              source={require("../../../icons/call.png")}
+                            />
+                          </View>
+                        
                       </TouchableOpacity>
-
                     </View>
-                  
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}>
@@ -2094,10 +2091,9 @@ class NotificationDetailScreen extends PureComponent {
                       }{" "}
                       </Text>
                     </View>
-
                   </View>
-
                   <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('1%') }} />
+
 
                 </View>
 
@@ -2148,15 +2144,17 @@ class NotificationDetailScreen extends PureComponent {
                   <View style={{ flex: 2.5 }}>
                     <Text>Mobile</Text>
                   </View>
-                  <View style={{ flex: 5 }}>
+                  <View style={{ flex: 5, zIndex: 100 }}>
                     <TouchableOpacity
+                      // onPress={() => alert("here")}
+
                       onPress={() => {
-                        
-                          Platform.OS === "android"
-                            ? Linking.openURL(`tel:${item.number ? item.number : ''}`)
-                            : Linking.openURL(`tel:${item.number ? item.number : ''}`);
-                        
-                        
+
+                        Platform.OS === "android"
+                          ? Linking.openURL(`tel:${item.number ? item.number : ''}`)
+                          : Linking.openURL(`tel:${item.number ? item.number : ''}`);
+
+
                       }}
                     >
                       <View style={{ flexDirection: 'row' }}>
@@ -2171,7 +2169,7 @@ class NotificationDetailScreen extends PureComponent {
                     </TouchableOpacity>
 
                   </View>
-                
+
                 </View>
               </View>
 
@@ -2191,25 +2189,6 @@ class NotificationDetailScreen extends PureComponent {
     console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
     return (
       <View style={styles.container}>
-        {/* <Header
-          leftComponent={{
-            icon: "arrow-left",
-            color: "#ED8A19",
-            type: "material-community",
-            onPress: () => navigation.pop()
-          }}
-          containerStyle={{
-            borderBottomColor: "#ED8A19",
-            borderBottomWidth: 2
-          }}
-          centerComponent={
-            <Image
-              source={require("../../../pages/assets/images/OyeSpace.png")}
-              style={{ height: 90, width: 90 }}
-            />
-          }
-          backgroundColor="#fff"
-        /> */}
 
         <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
