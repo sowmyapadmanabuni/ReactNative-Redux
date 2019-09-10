@@ -1,5 +1,5 @@
-import axios from "axios";
-import moment from "moment";
+import axios from 'axios';
+import moment from 'moment';
 import {
   GET_NOTIFICATIONS,
   NEW_NOTIF_INSTANCE,
@@ -16,8 +16,8 @@ import {
   TOGGLE_COLLAPSIBLE,
   ON_END_START,
   ON_END_SUCCESS
-} from "./types";
-import _ from "lodash";
+} from './types';
+import _ from 'lodash';
 
 export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
   return dispatch => {
@@ -33,23 +33,23 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
     // );
     dispatch({ type: GET_NOTIFICATIONS });
     fetch(
-      "http://" +
+      'http://' +
         oyeURL +
-        "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+        '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
         MyAccountID +
-        "/" +
+        '/' +
         page,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
         }
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Check list", responseJson);
+        console.log('Check list', responseJson);
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];
@@ -64,17 +64,17 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         let gateAppNotif = [];
 
         activeNotifications.map((data, index) => {
-          if (data.ntType === "gate_app") {
+          if (data.ntType === 'gate_app') {
             gateAppNotif.push({ open: true, ...data });
-          } else if (data.ntType === "Join_Status") {
+          } else if (data.ntType === 'Join_Status') {
             joinStatNotif.push(data);
-          } else if (data.ntType === "Join") {
+          } else if (data.ntType === 'Join') {
             joinNotif.push(data);
           }
         });
 
-        const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
-        const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+        const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
+        const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
         let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
 
         // const sorted = _.sortBy(allNotifs, [
@@ -82,8 +82,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         //   "ntdUpdated"
         // ]).reverse();
 
-
-        const sorted = _.sortBy(allNotifs, ["ntdCreated"]).reverse();
+        const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
 
         sorted.map(data => {
           console.log(data.ntIsActive);
@@ -101,7 +100,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         });
       })
       .catch(error => {
-        console.log(error, "error fetching notifications");
+        console.log(error, 'error fetching notifications');
         dispatch({
           type: GET_NOTIFICATIONS_FAILED,
           payload: []
@@ -122,8 +121,8 @@ export const createNotification = (
     dispatch({ type: CREATE_NEW_NOTIFICATION });
 
     let headers = {
-      "Content-Type": "application/json",
-      "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+      'Content-Type': 'application/json',
+      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
     };
 
     let date = moment();
@@ -132,22 +131,22 @@ export const createNotification = (
     console.log(data);
     console.log(navigation);
 
-    if (admin === "true") {
+    if (admin === 'true') {
       console.log({
         ACAccntID: MyAccountID,
         ASAssnID: data.associationID,
         NTType: data.ntType,
         NTDesc: data.ntDesc,
-        SBUnitID: "resident_user",
-        SBMemID: "resident_user",
+        SBUnitID: 'resident_user',
+        SBMemID: 'resident_user',
         SBSubID: data.sbSubID,
-        SBRoleID: "resident_user",
-        ASAsnName: "resident_user",
-        MRRolName: "resident_user",
+        SBRoleID: 'resident_user',
+        ASAsnName: 'resident_user',
+        MRRolName: 'resident_user',
         NTDCreated: formatdate,
         NTDUpdated: formatdate,
-        UNOcSDate: "resident_user",
-        UNSldDate: "resident_user"
+        UNOcSDate: 'resident_user',
+        UNSldDate: 'resident_user'
       });
       axios
         .post(
@@ -180,15 +179,15 @@ export const createNotification = (
           dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS });
           if (navigate) {
             fetch(
-              "http://" +
+              'http://' +
                 oyeURL +
-                "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+                '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
                 MyAccountID,
               {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                  "Content-Type": "application/json",
-                  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                  'Content-Type': 'application/json',
+                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
                 }
               }
             )
@@ -204,10 +203,10 @@ export const createNotification = (
                 });
 
                 const sorted = _.sortBy(activeNotifications, [
-                  "ntdCreated",
-                  "ntdUpdated"
+                  'ntdCreated',
+                  'ntdUpdated'
                 ]).reverse();
-                const unique = _.uniqBy(sorted, "sbSubID");
+                const unique = _.uniqBy(sorted, 'sbSubID');
 
                 // console.log(sorted)
                 // console.log(unique)
@@ -221,11 +220,11 @@ export const createNotification = (
                 console.log(error);
                 dispatch({
                   type: GET_NOTIFICATIONS_FAILED,
-                  payload: ""
+                  payload: ''
                 });
               });
 
-            navigation.navigate("NotificationScreen", {
+            navigation.navigate('NotificationScreen', {
               refresh: true
             });
           }
@@ -235,7 +234,7 @@ export const createNotification = (
           console.log(error.message);
           dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED });
         });
-    } else if (admin === "false") {
+    } else if (admin === 'false') {
       // console.log(data)
       axios
         .post(
@@ -245,16 +244,16 @@ export const createNotification = (
             ASAssnID: data.associationID,
             NTType: data.ntType,
             NTDesc: data.ntDesc,
-            SBUnitID: "resident_user",
-            SBMemID: "resident_user",
+            SBUnitID: 'resident_user',
+            SBMemID: 'resident_user',
             SBSubID: data.sbSubID,
-            SBRoleID: "resident_user",
-            ASAsnName: "resident_user",
-            MRRolName: "resident_user",
+            SBRoleID: 'resident_user',
+            ASAsnName: 'resident_user',
+            MRRolName: 'resident_user',
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
-            UNOcSDate: "resident_user",
-            UNSldDate: "resident_user"
+            UNOcSDate: 'resident_user',
+            UNSldDate: 'resident_user'
             // ntIsActive: false
           },
           {
@@ -268,15 +267,15 @@ export const createNotification = (
           if (navigate) {
             // dispatch({ type: GET_NOTIFICATIONS });
             fetch(
-              "http://" +
+              'http://' +
                 oyeURL +
-                "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+                '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
                 MyAccountID,
               {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                  "Content-Type": "application/json",
-                  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                  'Content-Type': 'application/json',
+                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
                 }
               }
             )
@@ -292,10 +291,10 @@ export const createNotification = (
                 });
 
                 const sorted = _.sortBy(activeNotifications, [
-                  "ntdCreated",
-                  "ntdUpdated"
+                  'ntdCreated',
+                  'ntdUpdated'
                 ]).reverse();
-                const unique = _.uniqBy(sorted, "sbSubID");
+                const unique = _.uniqBy(sorted, 'sbSubID');
 
                 // console.log(sorted)
                 // console.log(unique)
@@ -309,11 +308,11 @@ export const createNotification = (
                 console.log(error);
                 dispatch({
                   type: GET_NOTIFICATIONS_FAILED,
-                  payload: ""
+                  payload: ''
                 });
               });
 
-            navigation.navigate("NotificationScreen", {
+            navigation.navigate('NotificationScreen', {
               refresh: true
             });
           }
@@ -322,7 +321,7 @@ export const createNotification = (
           console.log(error.message);
           dispatch({ type: CREATE_NEW_NOTIFICATION_FAILED });
         });
-    } else if (admin === "gate_app") {
+    } else if (admin === 'gate_app') {
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
@@ -331,16 +330,16 @@ export const createNotification = (
             ASAssnID: data.associationID,
             NTType: data.ntType,
             NTDesc: data.ntDesc,
-            SBUnitID: "gate_app",
-            SBMemID: "gate_app",
+            SBUnitID: 'gate_app',
+            SBMemID: 'gate_app',
             SBSubID: data.sbSubID,
-            SBRoleID: "gate_app",
-            ASAsnName: "gate_app",
-            MRRolName: "gate_app",
+            SBRoleID: 'gate_app',
+            ASAsnName: 'gate_app',
+            MRRolName: 'gate_app',
             NTDCreated: formatdate,
             NTDUpdated: formatdate,
-            UNOcSDate: "gate_app",
-            UNSldDate: "gate_app"
+            UNOcSDate: 'gate_app',
+            UNSldDate: 'gate_app'
           },
           {
             headers: headers
@@ -352,15 +351,15 @@ export const createNotification = (
           dispatch({ type: CREATE_NEW_NOTIFICATION_SUCCESS });
           if (navigate) {
             fetch(
-              "http://" +
+              'http://' +
                 oyeURL +
-                "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+                '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
                 MyAccountID,
               {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                  "Content-Type": "application/json",
-                  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                  'Content-Type': 'application/json',
+                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
                 }
               }
             )
@@ -376,10 +375,10 @@ export const createNotification = (
                 });
 
                 const sorted = _.sortBy(activeNotifications, [
-                  "ntdCreated",
-                  "ntdUpdated"
+                  'ntdCreated',
+                  'ntdUpdated'
                 ]).reverse();
-                const unique = _.uniqBy(sorted, "sbSubID");
+                const unique = _.uniqBy(sorted, 'sbSubID');
 
                 console.log(sorted);
                 console.log(unique);
@@ -390,14 +389,14 @@ export const createNotification = (
                 });
               })
               .catch(error => {
-                console.log("error", error);
+                console.log('error', error);
                 dispatch({
                   type: GET_NOTIFICATIONS_FAILED,
-                  payload: ""
+                  payload: ''
                 });
               });
 
-            navigation.navigate("NotificationScreen", {
+            navigation.navigate('NotificationScreen', {
               refresh: true
             });
           }
@@ -428,8 +427,8 @@ export const onNotificationOpen = (notif, index, oyeURL) => {
     newNotif[index].ntIsActive = false;
 
     let headers = {
-      "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-      "Content-Type": "application/json"
+      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+      'Content-Type': 'application/json'
     };
 
     console.log(newNotif[index]);
@@ -487,17 +486,17 @@ export const refreshNotifications = (
     });
 
     fetch(
-      "http://" +
+      'http://' +
         oyeURL +
-        "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+        '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
         MyAccountID +
-        "/" +
+        '/' +
         page,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
         }
       }
     )
@@ -511,68 +510,80 @@ export const refreshNotifications = (
           activeNotifications.push({ ...value, read: false });
         });
 
+        console.log(activeNotifications, 'activeNotifications');
         // console.log("sorted", sorted);
         let joinNotif = [];
         let joinStatNotif = [];
         let gateAppNotif = [];
 
         activeNotifications.map((data, index) => {
-          if (data.ntType === "gate_app") {
+          if (data.ntType === 'gate_app') {
             gateAppNotif.push({ open: true, ...data });
-          } else if (data.ntType === "Join_Status") {
+          } else if (data.ntType === 'Join_Status') {
             joinStatNotif.push(data);
-          } else if (data.ntType === "Join") {
+          } else if (data.ntType === 'Join') {
             joinNotif.push(data);
           }
         });
 
-        const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
-        const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+        const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
+        const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
+        // const uniqueJoinStat = [...joinStatNotif];
+        // const uniqueJoin = [...joinNotif];
         let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
 
-          allNotifs.map((data, index) => {
-              if (data.ntType === 'gate_app') {
-                  axios
-                      .get(
-                          `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
-                          //data.sbMemID`,
-                          {
-                              headers: {
-                                  'Content-Type': 'application/json',
-                                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                              }
-                          }
-                      )
-                      .then(res => {
-                          let responseData = res.data.data;
-                          for(let i=0; i<allNotifs.length;i++){
-                              if(allNotifs[i].sbMemID===responseData.visitorLog.vlVisLgID){
-                                  console.log('&&&&&&&&&&&&&&&&',allNotifs[i].sbMemID,responseData,responseData.visitorLog.vlVisLgID)
-                                  allNotifs[i].vlEntryImg=responseData.visitorLog.vlEntryImg
-                                  allNotifs[i].vlGtName=responseData.visitorLog.vlGtName
-                                  allNotifs[i].vlfName=responseData.visitorLog.vlfName
-                                  allNotifs[i].vlVisType=responseData.visitorLog.vlVisType
-                                  allNotifs[i].vlComName=responseData.visitorLog.vlComName
-                                  allNotifs[i].vlMobile=responseData.visitorLog.vlMobile
-                                  allNotifs[i].vlEntryT=responseData.visitorLog.vlEntryT
-                                  allNotifs[i].vldCreated=responseData.visitorLog.vldCreated
-                                  allNotifs[i].vlengName=responseData.visitorLog.vlengName
-                                  allNotifs[i].vlexgName=responseData.visitorLog.vlexgName
-                                  allNotifs[i].vldUpdated=responseData.visitorLog.vldUpdated //date
-                                  allNotifs[i].vlExitT=responseData.visitorLog.vlExitT //time
-                              }
-                          }
-                      })
-                      .catch(error => {
-                          console.log(error, 'error while fetching networks');
-                      });
-              }
-              console.log('Props  notifications~~~~~',allNotifs)
-
-          });
+        allNotifs.map((data, index) => {
+          if (data.ntType === 'gate_app') {
+            axios
+              .get(
+                `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+                //data.sbMemID`,
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                  }
+                }
+              )
+              .then(res => {
+                let responseData = res.data.data;
+                for (let i = 0; i < allNotifs.length; i++) {
+                  if (
+                    allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
+                  ) {
+                    console.log(
+                      '&&&&&&&&&&&&&&&&',
+                      allNotifs[i].sbMemID,
+                      responseData,
+                      responseData.visitorLog.vlVisLgID
+                    );
+                    allNotifs[i].vlEntryImg =
+                      responseData.visitorLog.vlEntryImg;
+                    allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
+                    allNotifs[i].vlfName = responseData.visitorLog.vlfName;
+                    allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
+                    allNotifs[i].vlComName = responseData.visitorLog.vlComName;
+                    allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
+                    allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
+                    allNotifs[i].vldCreated =
+                      responseData.visitorLog.vldCreated;
+                    allNotifs[i].vlengName = responseData.visitorLog.vlengName;
+                    allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
+                    allNotifs[i].vldUpdated =
+                      responseData.visitorLog.vldUpdated; //date
+                    allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
+                  }
+                }
+              })
+              .catch(error => {
+                console.log(error, 'error while fetching networks');
+              });
+          }
+          console.log('Props  notifications~~~~~', allNotifs);
+        });
 
         // const sorted = _.sortBy(allNotifs, ["ntdUpdated"]);
-        const sorted = _.sortBy(allNotifs, ["ntdCreated"]).reverse();
+        const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
 
         dispatch({
           type: REFRESH_NOTIFICATION_SUCCESS,
@@ -607,16 +618,16 @@ export const createUserNotification = (
 ) => {
   return dispatch => {
     let headers = {
-      "Content-Type": "application/json",
-      "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+      'Content-Type': 'application/json',
+      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
     };
 
-    let formatdate = moment().format("YYYY-MMMM-ddd, hh:mm:ss");
+    let formatdate = moment().format('YYYY-MMMM-ddd, hh:mm:ss');
     // let date = moment();
     // let formatdate = date._d;
     // alert(refresh);
     // console.log(notifType);
-    if (notifType === "Join") {
+    if (notifType === 'Join') {
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
@@ -642,12 +653,12 @@ export const createUserNotification = (
           }
         )
         .then(res => {
-          console.log("notification created succ", res.data.data);
+          console.log('notification created succ', res.data.data);
         })
         .catch(error => {
-          console.log("notification not created succ", error);
+          console.log('notification not created succ', error);
         });
-    } else if (notifType === "Join_Status") {
+    } else if (notifType === 'Join_Status') {
       console.log(
         notifType,
         oyeURL,
@@ -690,22 +701,22 @@ export const createUserNotification = (
           }
         )
         .then(res => {
-          console.log("notification joinstatus succ", res.data.data);
+          console.log('notification joinstatus succ', res.data.data);
           refreshNotifications(oyeURL, accountID);
           if (refresh) {
             dispatch({
               type: REFRESH_NOTIFICATION_START
             });
             fetch(
-              "http://" +
+              'http://' +
                 oyeURL +
-                "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+                '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
                 accountID,
               {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                  "Content-Type": "application/json",
-                  "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+                  'Content-Type': 'application/json',
+                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
                 }
               }
             )
@@ -725,27 +736,27 @@ export const createUserNotification = (
                 let joinStatNotif = [];
                 let gateAppNotif = [];
                 activeNotifications.map((data, index) => {
-                  if (data.ntType === "gate_app") {
+                  if (data.ntType === 'gate_app') {
                     gateAppNotif.push({
                       open: true,
                       ...data
                     });
-                  } else if (data.ntType === "Join_Status") {
+                  } else if (data.ntType === 'Join_Status') {
                     joinStatNotif.push(data);
-                  } else if (data.ntType === "Join") {
+                  } else if (data.ntType === 'Join') {
                     joinNotif.push(data);
                   }
                 });
-                const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
-                const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+                const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
+                const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
                 let allNotifs = [
                   ...gateAppNotif,
                   ...uniqueJoinStat,
                   ...uniqueJoin
                 ];
                 const sorted = _.sortBy(allNotifs, [
-                  "ntdCreated",
-                  "ntdUpdated"
+                  'ntdCreated',
+                  'ntdUpdated'
                 ]).reverse();
                 dispatch({
                   type: REFRESH_NOTIFICATION_SUCCESS,
@@ -762,9 +773,9 @@ export const createUserNotification = (
           // getNotifications(oyeURL, accountID);
         })
         .catch(error => {
-          console.log("notification not joinstatus succ", error);
+          console.log('notification not joinstatus succ', error);
         });
-    } else if (notifType === "gate_app") {
+    } else if (notifType === 'gate_app') {
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
@@ -790,11 +801,11 @@ export const createUserNotification = (
           }
         )
         .then(res => {
-          console.log("notification joinstatus succ", res.data.data);
+          console.log('notification joinstatus succ', res.data.data);
           // getNotifications(oyeURL, accountID);
         })
         .catch(error => {
-          console.log("notification not joinstatus succ", error);
+          console.log('notification not joinstatus succ', error);
         });
     }
   };
@@ -821,27 +832,27 @@ export const onEndReached = (
     dispatch({
       type: ON_END_START
     });
-    console.log(prevPage, "prevPage");
+    console.log(prevPage, 'prevPage');
     let page = prevPage + 1;
 
     fetch(
-      "http://" +
+      'http://' +
         oyeURL +
-        "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+        '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
         MyAccountID +
-        "/" +
+        '/' +
         page,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
         }
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson, page, "redddd");
+        console.log(responseJson, page, 'redddd');
         let resData = responseJson.data.notificationListByAcctID;
 
         let activeNotifications = [];
@@ -856,17 +867,17 @@ export const onEndReached = (
         let gateAppNotif = [];
 
         activeNotifications.map((data, index) => {
-          if (data.ntType === "gate_app") {
+          if (data.ntType === 'gate_app') {
             gateAppNotif.push({ open: true, ...data });
-          } else if (data.ntType === "Join_Status") {
+          } else if (data.ntType === 'Join_Status') {
             joinStatNotif.push(data);
-          } else if (data.ntType === "Join") {
+          } else if (data.ntType === 'Join') {
             joinNotif.push(data);
           }
         });
 
-        const uniqueJoinStat = _.uniqBy(joinStatNotif, "sbSubID");
-        const uniqueJoin = _.uniqBy(joinNotif, "sbSubID");
+        const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
+        const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
         let allNotifs = [...gateAppNotif, ...uniqueJoinStat, ...uniqueJoin];
 
         // const sorted = _.sortBy(allNotifs, [
@@ -876,7 +887,7 @@ export const onEndReached = (
 
         let newNotifications = [...prevNotifications, ...allNotifs];
 
-        const sorted = _.sortBy(newNotifications, ["ntdCreated"]).reverse();
+        const sorted = _.sortBy(newNotifications, ['ntdCreated']).reverse();
 
         dispatch({
           type: ON_END_SUCCESS,
@@ -885,7 +896,7 @@ export const onEndReached = (
         });
       })
       .catch(error => {
-        console.log(error, "on end");
+        console.log(error, 'on end');
         // dispatch({
         //   type: GET_NOTIFICATIONS_FAILED,
         //   payload: []

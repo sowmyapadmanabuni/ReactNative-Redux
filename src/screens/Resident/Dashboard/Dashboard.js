@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from 'react';
 import {
   Alert,
   Dimensions,
@@ -12,23 +12,23 @@ import {
   View,
   BackHandler,
   ToastAndroid
-} from "react-native";
-import base from "../../../base";
-import { connect } from "react-redux";
-import CardView from "../../../components/cardView/CardView";
-import { Dropdown } from "react-native-material-dropdown";
-import ElevatedView from "react-native-elevated-view";
-import OSButton from "../../../components/osButton/OSButton";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import Style from "./Style";
-import axios from "axios";
-import firebase from "react-native-firebase";
-import { Button } from "native-base";
-import _ from "lodash";
+} from 'react-native';
+import base from '../../../base';
+import { connect } from 'react-redux';
+import CardView from '../../../components/cardView/CardView';
+import { Dropdown } from 'react-native-material-dropdown';
+import ElevatedView from 'react-native-elevated-view';
+import OSButton from '../../../components/osButton/OSButton';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import Style from './Style';
+import axios from 'axios';
+import firebase from 'react-native-firebase';
+import { Button } from 'native-base';
+import _ from 'lodash';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 import RNRestart from 'react-native-restart';
 
@@ -50,10 +50,10 @@ import {
   updateUserInfo,
   updateuserRole,
   getDashAssoSync
-} from "../../../actions";
-import ProgressLoader from "rn-progress-loader";
-import { NavigationEvents } from "react-navigation";
-import timer from "react-native-timer";
+} from '../../../actions';
+import ProgressLoader from 'rn-progress-loader';
+import { NavigationEvents } from 'react-navigation';
+import timer from 'react-native-timer';
 
 const Profiler = React.unstable_Profiler;
 let counter = 0;
@@ -64,24 +64,24 @@ class Dashboard extends PureComponent {
     this.props = props;
 
     this.state = {
-      myUnitCardHeight: "80%",
-      myUnitCardWidth: "25%",
-      adminCardHeight: "60%",
-      adminCardWidth: "20%",
-      offersCardHeight: "60%",
-      offersCardWidth: "20%",
-      isSelectedCard: "UNIT",
+      myUnitCardHeight: '80%',
+      myUnitCardWidth: '25%',
+      adminCardHeight: '60%',
+      adminCardWidth: '20%',
+      offersCardHeight: '60%',
+      offersCardWidth: '20%',
+      isSelectedCard: 'UNIT',
       isLoading: false,
       assocList: [],
-      assocName: "",
-      assocId: "",
+      assocName: '',
+      assocId: '',
       unitList: [],
-      unitName: "",
+      unitName: '',
       unitId: null,
       falmilyMemebCount: null,
       vehiclesCount: null,
       visitorCount: null,
-      role: "",
+      role: '',
       assdNameHide: false,
       unitNameHide: false,
       isDataLoading: false,
@@ -89,7 +89,7 @@ class Dashboard extends PureComponent {
       isNoAssJoin: false
     };
     this.backButtonListener = null;
-    this.currentRouteName = "Main";
+    this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
   }
 
@@ -103,38 +103,35 @@ class Dashboard extends PureComponent {
     this.listenRoleChange();
   }
 
-  listenRoleChange(){
-    const {
-      MyAccountID,
-      dropdown
-    } = this.props;
-      let path = 'rolechange/'+MyAccountID;
-      let roleRef =  base.services.frtdbservice.ref(path);
-      //roleRef.off(path);
-      let self = this;
-      roleRef.on('value', async function (snapshot) { 
-        try{
-          if(counter != 0){            
-            console.log(JSON.stringify(snapshot.val()))      
-            console.log("ROLE_CHANGE_FRTDB")
-            if(snapshot.val().role != undefined && snapshot.val().role != 1){
-              let resp = await firebase.messaging().deleteToken();
-              firebase.initializeApp(base.utils.strings.firebaseconfig);
-            }
-            
-            let firebaseMessaging = firebase.messaging();
-            let tok = await firebaseMessaging.getToken()            
-            console.log("ROLE_CHANGE_FRTDB_MSG",tok)         
-            self.requestNotifPermission()
-            self.roleCheckForAdmin(self.state.assocId);
-            //RNRestart.Restart();
-          }else{
-            counter = 1;
+  listenRoleChange() {
+    const { MyAccountID, dropdown } = this.props;
+    let path = 'rolechange/' + MyAccountID;
+    let roleRef = base.services.frtdbservice.ref(path);
+    //roleRef.off(path);
+    let self = this;
+    roleRef.on('value', async function(snapshot) {
+      try {
+        if (counter != 0) {
+          console.log(JSON.stringify(snapshot.val()));
+          console.log('ROLE_CHANGE_FRTDB');
+          if (snapshot.val().role != undefined && snapshot.val().role != 1) {
+            let resp = await firebase.messaging().deleteToken();
+            firebase.initializeApp(base.utils.strings.firebaseconfig);
           }
-        }catch(er){
-          console.log("ROLE_CHANGE_FRTDB_ERR",er);
+
+          let firebaseMessaging = firebase.messaging();
+          let tok = await firebaseMessaging.getToken();
+          console.log('ROLE_CHANGE_FRTDB_MSG', tok);
+          self.requestNotifPermission();
+          self.roleCheckForAdmin(self.state.assocId);
+          //RNRestart.Restart();
+        } else {
+          counter = 1;
         }
-      });
+      } catch (er) {
+        console.log('ROLE_CHANGE_FRTDB_ERR', er);
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -146,24 +143,24 @@ class Dashboard extends PureComponent {
   }
 
   componentDidUpdate() {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       this.backButtonListener = BackHandler.addEventListener(
-        "hardwareBackPress",
+        'hardwareBackPress',
         () => {
-          if (this.currentRouteName !== "Main") {
+          if (this.currentRouteName !== 'Main') {
             return false;
           }
 
           if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
             // this.showExitAlert();
-           // BackHandler.exitApp();
+            // BackHandler.exitApp();
             //return true;
           }
-          if (this.state.isSelectedCard === "UNIT") {
+          if (this.state.isSelectedCard === 'UNIT') {
             // this.showExitAlert();
             //BackHandler.exitApp();
           } else {
-            this.changeCardStatus("UNIT");
+            this.changeCardStatus('UNIT');
           }
 
           this.lastBackButtonPress = new Date().getTime();
@@ -174,11 +171,11 @@ class Dashboard extends PureComponent {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.backButtonListener.remove();
   }
 
-  showExitAlert(){
+  showExitAlert() {
     Alert.alert(
       'Exit Oyespace ?',
       'Are you sure, You want to exit the application ?',
@@ -186,14 +183,19 @@ class Dashboard extends PureComponent {
         {
           text: 'No',
           onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
+          style: 'cancel'
         },
-        {text: 'Yes', onPress: () => {BackHandler.exitApp();return true}},
+        {
+          text: 'Yes',
+          onPress: () => {
+            BackHandler.exitApp();
+            return true;
+          }
+        }
       ],
-      {cancelable: false},
+      { cancelable: false }
     );
   }
-
 
   requestNotifPermission = () => {
     const {
@@ -230,8 +232,8 @@ class Dashboard extends PureComponent {
       });
 
     var headers = {
-      "Content-Type": "application/json",
-      "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+      'Content-Type': 'application/json',
+      'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
     };
 
     axios
@@ -243,33 +245,41 @@ class Dashboard extends PureComponent {
       )
       .then(response => {
         let data = response.data.data.memberListByAccount;
-        firebase.messaging().subscribeToTopic(MyAccountID + "admin");
+        console.log(data, 'memList');
+        // firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
         data.map(units => {
           if (receiveNotifications) {
             //alert(MyAccountID + "admin");
             firebase
               .messaging()
               .subscribeToTopic(
-                "" + MyAccountID + units.unUnitID + "usernotif"
+                '' + MyAccountID + units.unUnitID + 'usernotif'
               );
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
-            firebase.messaging().subscribeToTopic(MyAccountID + "admin");
-            // if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-            // } else if (units.mrmRoleID === 1) {
-            //   console.log(units, "units");
-            //   if (units.meIsActive) {
-            //     //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
-            //     firebase.messaging().subscribeToTopic(units.asAssnID+ "admin");
-            //   } else {
-            //     firebase
-            //       .messaging()
-            //       .unsubscribeFromTopic(units.asAssnID + "admin");
-            //   }
-            // }
+            // firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+            // firebase.messaging().subscribeToTopic('7548admin');
+
+            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+            } else if (units.mrmRoleID === 1) {
+              // console.log(units, 'unitsadmin');
+              // firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+              // console.log(units.asAssnID + 'admin', 'subadmin');
+              // if (units.asAssnID + 'admin' === '7548admin') {
+              //   alert('Accepted');
+              // }
+              if (units.meIsActive) {
+                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+              } else {
+                firebase
+                  .messaging()
+                  .unsubscribeFromTopic(units.asAssnID + 'admin');
+              }
+            }
           } else if (!receiveNotifications) {
             // firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
-            firebase.messaging().unsubscribeFromTopic(MyAccountID + "admin");
-            firebase.messaging().unsubscribeFromTopic(units.asAssnID + "admin");
+            firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
+            firebase.messaging().unsubscribeFromTopic(units.asAssnID + 'admin');
           }
         });
 
@@ -281,7 +291,7 @@ class Dashboard extends PureComponent {
         //       firebase.messaging().unsubscribeFromTopic(val.asAssnID + "admin");
         //     }
         // }
-        this.roleCheckForAdmin()
+        this.roleCheckForAdmin();
       });
   };
 
@@ -289,17 +299,17 @@ class Dashboard extends PureComponent {
     try {
       // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
-        "channel_id",
-        "Oyespace",
+        'channel_id',
+        'Oyespace',
         firebase.notifications.Android.Importance.Max
-      ).setDescription("Oyespace channel");
+      ).setDescription('Oyespace channel');
       channel.enableLights(true);
       // channel.enableVibration(true);
       // channel.vibrationPattern([500]);
       firebase.notifications().android.createChannel(channel);
 
       const notificationBuild = new firebase.notifications.Notification({
-        sound: "default",
+        sound: 'default',
         show_in_foreground: true
       })
         .setTitle(notification._title)
@@ -311,12 +321,12 @@ class Dashboard extends PureComponent {
           foreground: true
         })
         .android.setAutoCancel(true)
-        .android.setColor("#FF9100")
-        .android.setLargeIcon("ic_notif")
-        .android.setSmallIcon("ic_stat_ic_notification")
-        .android.setChannelId("channel_id")
-        .android.setVibrate("default")
-        .setSound("default")
+        .android.setColor('#FF9100')
+        .android.setLargeIcon('ic_notif')
+        .android.setSmallIcon('ic_stat_ic_notification')
+        .android.setChannelId('channel_id')
+        .android.setVibrate('default')
+        .setSound('default')
 
         // .android.setChannelId('notification-action')
         .android.setPriority(firebase.notifications.Android.Priority.Max);
@@ -324,7 +334,7 @@ class Dashboard extends PureComponent {
       firebase.notifications().displayNotification(notificationBuild);
       this.setState({ foregroundNotif: notification._data });
     } catch (e) {
-      console.log("FAILED_NOTIF");
+      console.log('FAILED_NOTIF');
     }
   };
 
@@ -348,9 +358,9 @@ class Dashboard extends PureComponent {
       this.notificationListener = firebase
         .notifications()
         .onNotification(notification => {
-          console.log("___________");
+          console.log('___________');
           console.log(notification);
-          console.log("____________");
+          console.log('____________');
 
           if (notification._data.associationID) {
             // this.props.createNotification(notification._data, navigationInstance, false)
@@ -373,7 +383,7 @@ class Dashboard extends PureComponent {
         const { MyAccountID } = this.props.userReducer;
         const { oyeURL } = this.props.oyespaceReducer;
         let details = notificationOpen.notification._data;
-        if (notificationOpen.notification._data.admin === "true") {
+        if (notificationOpen.notification._data.admin === 'true') {
           if (notificationOpen.action) {
             // this.props.newNotifInstance(notificationOpen.notification);
             // this.props.createNotification(
@@ -388,7 +398,7 @@ class Dashboard extends PureComponent {
           }
           // this.props.newNotifInstance(notificationOpen.notification);
           // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-        } else if (notificationOpen.notification._data.admin === "false") {
+        } else if (notificationOpen.notification._data.admin === 'false') {
           this.props.refreshNotifications(oyeURL, MyAccountID);
           // this.props.createUserNotification(
           //     "Join_Status",
@@ -409,7 +419,7 @@ class Dashboard extends PureComponent {
           // this.props.navigation.navigate("NotificationScreen");
         }
 
-        if (notificationOpen.notification._data.admin === "true") {
+        if (notificationOpen.notification._data.admin === 'true') {
           this.props.refreshNotifications(oyeURL, MyAccountID);
           if (notificationOpen.notification._data.foreground) {
             // this.props.newNotifInstance(notificationOpen.notification);
@@ -422,7 +432,7 @@ class Dashboard extends PureComponent {
             //   this.props.MyAccountID
             // );
           }
-        } else if (notificationOpen.notification._data.admin === "gate_app") {
+        } else if (notificationOpen.notification._data.admin === 'gate_app') {
           this.props.refreshNotifications(oyeURL, MyAccountID);
           // this.props.newNotifInstance(notificationOpen.notification);
           // this.props.createNotification(
@@ -435,10 +445,10 @@ class Dashboard extends PureComponent {
           // );
           // this.props.newNotifInstance(notificationOpen.notification);
           // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
-        } else if (notificationOpen.notification._data.admin === "false") {
+        } else if (notificationOpen.notification._data.admin === 'false') {
         }
         // this.props.getNotifications(oyeURL, MyAccountID);
-        this.props.navigation.navigate("NotificationScreen");
+        this.props.navigation.navigate('NotificationScreen');
       });
     }
   };
@@ -499,7 +509,7 @@ class Dashboard extends PureComponent {
 
     timer.setInterval(
       this,
-      "syncData",
+      'syncData',
       () => {
         this.syncData();
         // alert("hererereerrrereer");
@@ -508,91 +518,94 @@ class Dashboard extends PureComponent {
     );
   }
 
-  async roleCheckForAdmin (index) {
- 
-try{
+  async roleCheckForAdmin(index) {
+    try {
+      let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
+        this.state.assocId
+      );
+      let role = '';
+      let isAdminFound = false;
+      console.log('roleCheckForAdmin_', responseJson);
+      //responseJson.data.members.splice(0,1);
 
-        let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(this.state.assocId);
-        let role = "";      
-        let isAdminFound = false;  
-        console.log("roleCheckForAdmin_",responseJson)
-        //responseJson.data.members.splice(0,1);
-        
-        for (let i = 0; i < responseJson.data.members.length; i++) {
-          //alert(responseJson.data.members[i].mrmRoleID)
-          let assnId = ""+responseJson.data.members[i].asAssnID;
-          assnId = assnId.trim()+"admin"
-          
-          if (
-            responseJson.data.members[i].meIsActive &&
-            this.props.userReducer.MyAccountID ===
-              responseJson.data.members[i].acAccntID &&            
-            parseInt(this.state.assocId) ===
-              responseJson.data.members[i].asAssnID
-          ) {
-            console.log(
-              "Id_eq",
-              this.props.userReducer.MyAccountID,
-              responseJson.data.members[i].acAccntID,
-              responseJson.data.members[i].mrmRoleID
-            );            
-            role = responseJson.data.members[i].mrmRoleID;              
-              if(role === 1){
-                isAdminFound = true;                                      
-              }
-              // else{
-              //   console.log("UNSUBSCRIBED_FROM_",assnId)
-              //   //await base.utils.storage.removeData('ADMIN_NOTIF'+assnId);
-              //   //firebase.messaging().unsubscribeFromTopic(assnId)                                
-              // }
+      for (let i = 0; i < responseJson.data.members.length; i++) {
+        //alert(responseJson.data.members[i].mrmRoleID)
+        let assnId = '' + responseJson.data.members[i].asAssnID;
+        assnId = assnId.trim() + 'admin';
 
-          }else{
-            //console.log("UNSUBSCRIBED_USER_FROM_",assnId)
-            //firebase.messaging().unsubscribeFromTopic(assnId)                                
+        if (
+          responseJson.data.members[i].meIsActive &&
+          this.props.userReducer.MyAccountID ===
+            responseJson.data.members[i].acAccntID &&
+          parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
+        ) {
+          console.log(
+            'Id_eq',
+            this.props.userReducer.MyAccountID,
+            responseJson.data.members[i].acAccntID,
+            responseJson.data.members[i].mrmRoleID
+          );
+          role = responseJson.data.members[i].mrmRoleID;
+          if (role === 1) {
+            isAdminFound = true;
           }
+          // else{
+          //   console.log("UNSUBSCRIBED_FROM_",assnId)
+          //   //await base.utils.storage.removeData('ADMIN_NOTIF'+assnId);
+          //   //firebase.messaging().unsubscribeFromTopic(assnId)
+          // }
+        } else {
+          //console.log("UNSUBSCRIBED_USER_FROM_",assnId)
+          //firebase.messaging().unsubscribeFromTopic(assnId)
         }
+      }
 
+      let assnId = '' + this.state.assocId + 'admin';
+      if (isAdminFound) {
+        role = 1;
+        console.log(assnId);
+        //let subscription = await base.utils.storage.retrieveData('ADMIN_NOTIF'+assnId);
+        console.log('SUBSCRIBED_TO_', assnId);
+        // if(subscription == null || subscription == undefined){
 
-        let assnId = ""+this.state.assocId+"admin"
-        if(isAdminFound){
-            role = 1;
-            console.log(assnId)
-            //let subscription = await base.utils.storage.retrieveData('ADMIN_NOTIF'+assnId);
-            console.log("SUBSCRIBED_TO_",assnId)
-           // if(subscription == null || subscription == undefined){
-                  
-                  await base.utils.storage.storeData('ADMIN_NOTIF'+assnId,assnId);
-                  firebase.messaging().subscribeToTopic(assnId)         
-           // } 
-        }else{
-          console.log("UNSUBSCRIBED_FROM_",assnId)
-          await base.utils.storage.removeData('ADMIN_NOTIF'+assnId);
-          firebase.messaging().unsubscribeFromTopic(assnId)         
+        await base.utils.storage.storeData('ADMIN_NOTIF' + assnId, assnId);
+        firebase.messaging().subscribeToTopic(assnId);
+        // if (assnId === '7548admin') {
+        //   // alert('Sub');
+        // }
+        // }
+      } else {
+        console.log('UNSUBSCRIBED_FROM_', assnId);
+        await base.utils.storage.removeData('ADMIN_NOTIF' + assnId);
+        if (assnId === '7548admin') {
+          alert('Unsub');
         }
+        firebase.messaging().unsubscribeFromTopic(assnId);
+      }
 
-        console.log(role, "role");
-        this.setState(
-          {
-            role: role
-          },
-          () => {
-            const { updateuserRole } = this.props;
-            console.log("Role123456:", updateuserRole);
-            updateuserRole({
-              prop: "role",
-              value: role
-            });
-            console.log("ROLE_UPDATE", role);
-          }
-        );
+      console.log(role, 'role');
+      this.setState(
+        {
+          role: role
+        },
+        () => {
+          const { updateuserRole } = this.props;
+          console.log('Role123456:', updateuserRole);
+          updateuserRole({
+            prop: 'role',
+            value: role
+          });
+          console.log('ROLE_UPDATE', role);
+        }
+      );
       // })
       // .catch(error => {
       //   this.setState({ error, loading: false });
       // });
-   this.checkUnitIsThere()
+      this.checkUnitIsThere();
     } catch (err) {
       //alert(err)
-      console.log("ROLECHECK_ERROR", err);
+      console.log('ROLECHECK_ERROR', err);
     }
   }
 
@@ -609,7 +622,7 @@ try{
     //   this.props.userReducer.MyAccountID
     // );
 
-   /* let stat = await axios.get(
+    /* let stat = await axios.get(
       `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
       {
         headers: {
@@ -697,118 +710,128 @@ try{
             { text: "No", style: "cancel" }
           ]
       );    }*/
-    axios.get(
+    axios
+      .get(
         `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
         {
           headers: {
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-            "Content-Type": "application/json"
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+            'Content-Type': 'application/json'
           }
         }
-    ).then(stat => {
+      )
+      .then(stat => {
+        console.log(
+          'API data for association list',
+          this.props.userReducer,
+          this.props.userReducer.MyAccountID,
+          this.props.oyeURL
+        );
 
-      console.log('API data for association list', this.props.userReducer, this.props.userReducer.MyAccountID, this.props.oyeURL)
+        console.log('Response_Association: ', stat);
 
-      console.log("Response_Association: ", stat);
-
-      try {
-        if (stat && stat.data.success) {
-          this.setState({
-            isNoAssJoin: false
-          });
-          let assocList = [];
-          for (let i = 0; i < stat.data.data.memberListByAccount.length; i++) {
-            if (stat.data.data.memberListByAccount[i].asAsnName !== "") {
-              assocList.push({
-                value: stat.data.data.memberListByAccount[i].asAsnName,
-                details: stat.data.data.memberListByAccount[i]
-              });
+        try {
+          if (stat && stat.data.success) {
+            this.setState({
+              isNoAssJoin: false
+            });
+            let assocList = [];
+            for (
+              let i = 0;
+              i < stat.data.data.memberListByAccount.length;
+              i++
+            ) {
+              if (stat.data.data.memberListByAccount[i].asAsnName !== '') {
+                assocList.push({
+                  value: stat.data.data.memberListByAccount[i].asAsnName,
+                  details: stat.data.data.memberListByAccount[i]
+                });
+              }
             }
-          }
-          let sortedArr = assocList.sort(
+            let sortedArr = assocList.sort(
               base.utils.validate.compareAssociationNames
-          ); //open chrome
-          console.log("Sorted and All Asc List", sortedArr, assocList);
+            ); //open chrome
+            console.log('Sorted and All Asc List', sortedArr, assocList);
 
-          let removedDuplicates = _.uniqBy(sortedArr, "value");
-          console.log("Removed duplicates", sortedArr, assocList);
+            let removedDuplicates = _.uniqBy(sortedArr, 'value');
+            console.log('Removed duplicates', sortedArr, assocList);
 
-          self.setState({
-            assocList: removedDuplicates,
-            assocName: sortedArr[0].details.asAsnName,
-            assocId: sortedArr[0].details.asAssnID
-          });
-          const {updateIdDashboard} = this.props;
-          console.log("updateIdDashboard1", this.props);
-          updateIdDashboard({
-            prop: "assId",
-            value: sortedArr[0].details.asAssnID
-          });
-          // updateIdDashboard({ prop: "memberList", value: sortedArr });
-          const {updateUserInfo} = this.props;
-          updateUserInfo({
-            prop: "SelectedAssociationID",
-            value: sortedArr[0].details.asAssnID
-          });
+            self.setState({
+              assocList: removedDuplicates,
+              assocName: sortedArr[0].details.asAsnName,
+              assocId: sortedArr[0].details.asAssnID
+            });
+            const { updateIdDashboard } = this.props;
+            console.log('updateIdDashboard1', this.props);
+            updateIdDashboard({
+              prop: 'assId',
+              value: sortedArr[0].details.asAssnID
+            });
+            // updateIdDashboard({ prop: "memberList", value: sortedArr });
+            const { updateUserInfo } = this.props;
+            updateUserInfo({
+              prop: 'SelectedAssociationID',
+              value: sortedArr[0].details.asAssnID
+            });
 
-          self.getUnitListByAssoc();
-        } else if (!stat.data.success) {
+            self.getUnitListByAssoc();
+          } else if (!stat.data.success) {
+            this.setState({
+              isNoAssJoin: true
+            });
+            Alert.alert(
+              'Join association',
+
+              'Please join in any association to access Data  ?',
+              [
+                {
+                  text: 'Yes',
+                  onPress: () =>
+                    this.props.navigation.navigate('CreateOrJoinScreen')
+                },
+                { text: 'No', style: 'cancel' }
+              ]
+            );
+          }
+        } catch (error) {
+          console.log('Error details', error);
           this.setState({
             isNoAssJoin: true
           });
           Alert.alert(
-              "Join association",
+            'Join association',
 
-              "Please join in any association to access Data  ?",
-              [
-                {
-                  text: "Yes",
-                  onPress: () =>
-                      this.props.navigation.navigate("CreateOrJoinScreen")
-                },
-                {text: "No", style: "cancel"}
-              ]
+            'Please join in any association to access Data  ?',
+            [
+              {
+                text: 'Yes',
+                onPress: () =>
+                  this.props.navigation.navigate('CreateOrJoinScreen')
+              },
+              { text: 'No', style: 'cancel' }
+            ]
           );
         }
-      } catch (error) {
-        console.log('Error details', error)
+      })
+      .catch(error => {
+        console.log('Error in list of Association', error);
         this.setState({
           isNoAssJoin: true
         });
         Alert.alert(
-            "Join association",
+          'Join association',
 
-            "Please join in any association to access Data  ?",
-            [
-              {
-                text: "Yes",
-                onPress: () =>
-                    this.props.navigation.navigate("CreateOrJoinScreen")
-              },
-              {text: "No", style: "cancel"}
-            ]
-        );
-
-      }
-    }).catch(error => {
-      console.log("Error in list of Association",error)
-      this.setState({
-        isNoAssJoin: true
-      });
-      Alert.alert(
-          "Join association",
-
-          "Please join in any association to access Data  ?",
+          'Please join in any association to access Data  ?',
           [
             {
-              text: "Yes",
+              text: 'Yes',
               onPress: () =>
-                  this.props.navigation.navigate("CreateOrJoinScreen")
+                this.props.navigation.navigate('CreateOrJoinScreen')
             },
-            {text: "No", style: "cancel"}
+            { text: 'No', style: 'cancel' }
           ]
-      );
-    });
+        );
+      });
   }
 
   onAssociationChange = (value, index) => {
@@ -822,7 +845,7 @@ try{
       updateSelectedDropDown,
       dropdown1
     } = this.props;
-    console.log("Ass index", value, index, dropdown[index]);
+    console.log('Ass index', value, index, dropdown[index]);
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
     this.setState({ assocId: dropdown[index].associationId });
@@ -838,24 +861,24 @@ try{
     );
 
     const { updateIdDashboard } = this.props;
-    console.log("updateIdDashboard1", this.props);
+    console.log('updateIdDashboard1', this.props);
     updateIdDashboard({
-      prop: "assId",
+      prop: 'assId',
       value: dropdown[index].associationId
     });
 
     updateUserInfo({
-      prop: "SelectedAssociationID",
+      prop: 'SelectedAssociationID',
       value: dropdown[index].associationId
     });
 
     updateSelectedDropDown({
-      prop: "selectedDropdown",
+      prop: 'selectedDropdown',
       value: dropdown[index].value
     });
 
     updateSelectedDropDown({
-      prop: "assId",
+      prop: 'assId',
       value: dropdown[index].associationId
     });
 
@@ -864,11 +887,11 @@ try{
     // });
 
     updateUserInfo({
-      prop: "MyOYEMemberID",
+      prop: 'MyOYEMemberID',
       value: dropdown[index].memberId
     });
     updateUserInfo({
-      prop: "SelectedMemberID",
+      prop: 'SelectedMemberID',
       value: dropdown[index].memberId
     });
     this.roleCheckForAdmin(dropdown[index].associationId);
@@ -879,7 +902,7 @@ try{
   checkUnitIsThere() {
     const { dropdown1 } = this.props;
     console.log(
-      "CheckUnit;s is there",
+      'CheckUnit;s is there',
       this.props,
       this.props.dashBoardReducer.uniID,
       dropdown1,
@@ -892,14 +915,13 @@ try{
       });
       const { updateIdDashboard } = this.props;
       updateIdDashboard({
-        prop: "familyMemberCount",
-        value:0
+        prop: 'familyMemberCount',
+        value: 0
       });
       updateIdDashboard({
-        prop: "vehiclesCount",
-        value:0
+        prop: 'vehiclesCount',
+        value: 0
       });
-
     } else {
       this.getVehicleList();
       this.myFamilyListGetData();
@@ -911,25 +933,25 @@ try{
     //self.setState({isLoading: true})
     const { updateIdDashboard } = this.props;
 
-    console.log("APi1233", self.state.assocId);
+    console.log('APi1233', self.state.assocId);
     let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
       self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
-    console.log("STAT123", stat, self.state.assocId);
+    console.log('STAT123', stat, self.state.assocId);
 
     try {
       if (stat && stat.data) {
         let unitList = [];
         for (let i = 0; i < stat.data.members.length; i++) {
-          if (stat.data.members[i].unUniName !== "") {
+          if (stat.data.members[i].unUniName !== '') {
             unitList.push({
               value: stat.data.members[i].unUniName,
               details: stat.data.members[i]
             });
           }
         }
-        console.log("JGjhgjhg", unitList, unitList[0].details.unUnitID);
+        console.log('JGjhgjhg', unitList, unitList[0].details.unUnitID);
 
         self.setState({
           unitList: unitList,
@@ -937,7 +959,7 @@ try{
           // unitId: unitList[0].details.unUnitID,
           isDataVisible: true
         });
-        console.log("updateIdDashboard3", this.props);
+        console.log('updateIdDashboard3', this.props);
         // updateIdDashboard({
         //     prop: "uniID",
         //     value: unitList[0].details.unUnitID
@@ -954,14 +976,14 @@ try{
     let self = this;
     let unitList = self.state.unitList;
     let unitName, unitId;
-    console.log("DKVMKODVND:", unitList, value, index);
+    console.log('DKVMKODVND:', unitList, value, index);
     for (let i = 0; i < unitList.length; i++) {
       if (value === unitList[i].value) {
         unitName = unitList[i].details.asAsnName;
         unitId = unitList[i].details.unUnitID;
       }
     }
-    console.log("DKVMhghgghhgh", value, unitId);
+    console.log('DKVMhghgghhgh', value, unitId);
     self.setState({
       unitName: value,
       unitId: unitId
@@ -973,22 +995,22 @@ try{
   }
 
   getVehicleList = unitId => {
-    console.log("Get ID for vehicle", this.props.dashBoardReducer.uniID);
+    console.log('Get ID for vehicle', this.props.dashBoardReducer.uniID);
 
     fetch(
       `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         }
       }
     )
       .then(response => response.json())
       .then(responseJson => {
         console.log(
-          "VehicleRespponse####",
+          'VehicleRespponse####',
           this.props.dashBoardReducer.uniID,
           responseJson
         );
@@ -1005,26 +1027,26 @@ try{
         });
         const { updateIdDashboard } = this.props;
         updateIdDashboard({
-          prop: "vehiclesCount",
-          value:0
+          prop: 'vehiclesCount',
+          value: 0
         });
-        console.log("error in net call", error);
+        console.log('error in net call', error);
       });
   };
 
   myProfileNet = async () => {
-    console.log("AccId@@@@@", this.props);
+    console.log('AccId@@@@@', this.props);
     let response = await base.services.OyeLivingApi.getProfileFromAccount(
       this.props.userReducer.MyAccountID
     );
-    console.log("Joe", response);
+    console.log('Joe', response);
     const { updateUserInfo } = this.props;
     updateUserInfo({
-      prop: "userData",
+      prop: 'userData',
       value: response
     });
     updateUserInfo({
-      prop: "userProfilePic",
+      prop: 'userProfilePic',
       value: response.data.account[0].acImgName
     });
   };
@@ -1032,7 +1054,7 @@ try{
   async myFamilyListGetData() {
     this.setState({ loading: true });
     console.log(
-      "Data sending to get family",
+      'Data sending to get family',
       this.props,
       this.props.dashBoardReducer.assId,
       this.props.dashBoardReducer.uniID,
@@ -1043,7 +1065,7 @@ try{
       this.props.dashBoardReducer.assId,
       this.props.userReducer.MyAccountID
     );
-    console.log("Get Family Data", myFamilyList);
+    console.log('Get Family Data', myFamilyList);
 
     this.setState({ isLoading: false, loading: false });
     try {
@@ -1052,10 +1074,10 @@ try{
           falmilyMemebCount: myFamilyList.data.familyMembers.length
         });
         const { updateIdDashboard } = this.props;
-        console.log("updateIdDashboard1", this.props);
+        console.log('updateIdDashboard1', this.props);
         updateIdDashboard({
-          prop: "familyMemberCount",
-          value:myFamilyList.data.familyMembers.length
+          prop: 'familyMemberCount',
+          value: myFamilyList.data.familyMembers.length
         });
       }
     } catch (error) {
@@ -1064,12 +1086,11 @@ try{
         loading: false
       });
       const { updateIdDashboard } = this.props;
-      console.log("updateIdDashboard1", this.props);
+      console.log('updateIdDashboard1', this.props);
       updateIdDashboard({
-        prop: "familyMemberCount",
-        value:0
+        prop: 'familyMemberCount',
+        value: 0
       });
-
     }
   }
 
@@ -1077,16 +1098,16 @@ try{
     fetch(
       `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         }
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Manas", responseJson);
+        console.log('Manas', responseJson);
         this.setState({
           //Object.keys(responseJson.data.unitsByBlockID).length
           vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
@@ -1125,12 +1146,12 @@ try{
     let unitList = this.state.unitList;
     let maxLen = 23;
     let maxLenUnit = 10;
-    let text = "ALL THE GLITTERS IS NOT GOLD";
-    console.log("Hfhfhgfhfhhgfhgfgh", dropdown.length, dropdown1.length);
+    let text = 'ALL THE GLITTERS IS NOT GOLD';
+    console.log('Hfhfhgfhfhhgfhgfgh', dropdown.length, dropdown1.length);
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
-      <View style={{ height: "100%", width: "100%" }}>
+      <View style={{ height: '100%', width: '100%' }}>
         <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
         {!this.props.isLoading ? (
           <View style={Style.container}>
@@ -1140,18 +1161,18 @@ try{
                   <Dropdown
                     value={
                       selectedDropdown.length > maxLen
-                        ? selectedDropdown.substring(0, maxLen - 2) + "..."
+                        ? selectedDropdown.substring(0, maxLen - 2) + '...'
                         : selectedDropdown
                     }
                     label="Association Name"
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown}
                     containerStyle={{
-                      width: "100%"
+                      width: '100%'
                     }}
                     textColor={base.theme.colors.black}
                     inputContainerStyle={{
-                      borderBottomColor: "transparent"
+                      borderBottomColor: 'transparent'
                     }}
                     dropdownOffset={{ top: 10, left: 0 }}
                     dropdownPosition={dropdown.length > 2 ? -5 : -2}
@@ -1177,11 +1198,11 @@ try{
                     // value={this.state.unitName}
                     value={
                       selectedDropdown1.length > maxLenUnit
-                        ? selectedDropdown1.substring(0, maxLenUnit - 3) + "..."
+                        ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
                         : selectedDropdown1
                     }
                     containerStyle={{
-                      width: "95%"
+                      width: '95%'
                       /*width: "70%",
                       marginLeft: "30%",
                       borderBottomWidth: hp("0.05%"),
@@ -1191,7 +1212,7 @@ try{
                     baseColor="rgba(0, 0, 0, 1)"
                     data={dropdown1}
                     inputContainerStyle={{
-                      borderBottomColor: "transparent"
+                      borderBottomColor: 'transparent'
                     }}
                     textColor="#000"
                     dropdownOffset={{ top: 10, left: 0 }}
@@ -1204,19 +1225,19 @@ try{
                     // }}
                     onChangeText={(value, index) => {
                       updateUserInfo({
-                        prop: "SelectedUnitID",
+                        prop: 'SelectedUnitID',
                         value: dropdown1[index].unitId
                       });
                       updateIdDashboard({
-                        prop: "uniID",
+                        prop: 'uniID',
                         value: dropdown1[index].unitId
                       });
                       updateSelectedDropDown({
-                        prop: "uniID",
+                        prop: 'uniID',
                         value: dropdown1[index].unitId
                       });
                       updateSelectedDropDown({
-                        prop: "selectedDropdown1",
+                        prop: 'selectedDropdown1',
                         value: dropdown1[index].value
                       });
                       this.updateUnit(value, index);
@@ -1231,35 +1252,35 @@ try{
                 )}
               </View>
             </View>
-            {this.state.isSelectedCard === "UNIT"
+            {this.state.isSelectedCard === 'UNIT'
               ? this.myUnitCard()
-              : this.state.isSelectedCard === "ADMIN"
+              : this.state.isSelectedCard === 'ADMIN'
               ? this.adminCard()
               : this.offersZoneCard()}
             <View style={Style.bottomCards}>
               <CardView
                 height={this.state.myUnitCardHeight}
                 width={this.state.myUnitCardWidth}
-                cardText={"My Unit"}
-                iconWidth={Platform.OS === "ios" ? 35 : 20}
-                iconHeight={Platform.OS === "ios" ? 35 : 20}
-                cardIcon={require("../../../../icons/my_unit.png")}
-                onCardClick={() => this.changeCardStatus("UNIT")}
-                textWeight={"bold"}
+                cardText={'My Unit'}
+                iconWidth={Platform.OS === 'ios' ? 35 : 20}
+                iconHeight={Platform.OS === 'ios' ? 35 : 20}
+                cardIcon={require('../../../../icons/my_unit.png')}
+                onCardClick={() => this.changeCardStatus('UNIT')}
+                textWeight={'bold'}
                 textFontSize={10}
-                disabled={this.state.isSelectedCard === "UNIT"}
+                disabled={this.state.isSelectedCard === 'UNIT'}
               />
               {this.state.role === 1 ? (
                 <CardView
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
-                  cardText={"Admin"}
-                  textWeight={"bold"}
-                  iconWidth={Platform.OS === "ios" ? 35 : 20}
-                  iconHeight={Platform.OS === "ios" ? 35 : 20}
-                  onCardClick={() => this.changeCardStatus("ADMIN")}
-                  cardIcon={require("../../../../icons/user.png")}
-                  disabled={this.state.isSelectedCard === "ADMIN"}
+                  cardText={'Admin'}
+                  textWeight={'bold'}
+                  iconWidth={Platform.OS === 'ios' ? 35 : 20}
+                  iconHeight={Platform.OS === 'ios' ? 35 : 20}
+                  onCardClick={() => this.changeCardStatus('ADMIN')}
+                  cardIcon={require('../../../../icons/user.png')}
+                  disabled={this.state.isSelectedCard === 'ADMIN'}
                 />
               ) : (
                 <View />
@@ -1280,7 +1301,7 @@ try{
                 <TouchableOpacity
                   onPress={() => {
                     {
-                      Platform.OS === "android"
+                      Platform.OS === 'android'
                         ? Linking.openURL(`tel:+919343121121`)
                         : Linking.openURL(`tel:+919343121121`);
                     }
@@ -1288,7 +1309,7 @@ try{
                 >
                   <Image
                     style={[Style.supportIcon]}
-                    source={require("../../../../icons/call1.png")}
+                    source={require('../../../../icons/call1.png')}
                   />
                 </TouchableOpacity>
                 {/* <TouchableOpacity>
@@ -1298,12 +1319,12 @@ try{
               />
             </TouchableOpacity> */}
                 <TouchableOpacity
-                  onPress={() => Linking.openURL("mailto:happy@oyespace.com")}
+                  onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
                   //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
                 >
                   <Image
                     style={Style.supportIcon}
-                    source={require("../../../../icons/Group771.png")}
+                    source={require('../../../../icons/Group771.png')}
                   />
                 </TouchableOpacity>
               </View>
@@ -1317,7 +1338,7 @@ try{
           isModal={true}
           visible={this.props.isLoading}
           color={base.theme.colors.primary}
-          hudColor={"#FFFFFF"}
+          hudColor={'#FFFFFF'}
         />
       </View>
       // </Profiler>
@@ -1328,44 +1349,44 @@ try{
     this.setState({
       isSelectedCard: status
     });
-    if (status == "UNIT") {
+    if (status == 'UNIT') {
       this.setState({
-        myUnitCardHeight: "80%",
-        myUnitCardWidth: "26%",
-        adminCardHeight: "70%",
-        adminCardWidth: "22%",
-        offersCardHeight: "70%",
-        offersCardWidth: "20%",
+        myUnitCardHeight: '80%',
+        myUnitCardWidth: '26%',
+        adminCardHeight: '70%',
+        adminCardWidth: '22%',
+        offersCardHeight: '70%',
+        offersCardWidth: '20%',
 
         assdNameHide: false,
         unitNameHide: false
       });
-    } else if (status == "ADMIN") {
+    } else if (status == 'ADMIN') {
       this.setState({
-        myUnitCardHeight: "70%",
-        myUnitCardWidth: "22%",
-        adminCardHeight: "80%",
-        adminCardWidth: "25%",
-        offersCardHeight: "70%",
-        offersCardWidth: "20%",
+        myUnitCardHeight: '70%',
+        myUnitCardWidth: '22%',
+        adminCardHeight: '80%',
+        adminCardWidth: '25%',
+        offersCardHeight: '70%',
+        offersCardWidth: '20%',
 
         assdNameHide: true,
         unitNameHide: true
       });
-    } else if (status == "OFFERS") {
+    } else if (status == 'OFFERS') {
       this.setState({
-        myUnitCardHeight: "70%",
-        myUnitCardWidth: "22%",
-        adminCardHeight: "70%",
-        adminCardWidth: "20%",
-        offersCardHeight: "80%",
-        offersCardWidth: "25%"
+        myUnitCardHeight: '70%',
+        myUnitCardWidth: '22%',
+        adminCardHeight: '70%',
+        adminCardWidth: '20%',
+        offersCardHeight: '80%',
+        offersCardWidth: '25%'
       });
     }
   }
 
   navigateToScreen() {
-    this.props.navigation.navigate("");
+    this.props.navigation.navigate('');
   }
 
   myUnitCard() {
@@ -1373,65 +1394,65 @@ try{
     let invoiceList = [
       {
         invoiceNumber: 528,
-        bill: "12,300",
-        dueDate: "11-May-2019",
-        status: "NOT PAID"
+        bill: '12,300',
+        dueDate: '11-May-2019',
+        status: 'NOT PAID'
       },
       {
         invoiceNumber: 527,
-        bill: "12,800",
-        dueDate: "8-May-2019",
-        status: "PAID"
+        bill: '12,800',
+        dueDate: '8-May-2019',
+        status: 'PAID'
       }
     ];
-    console.log('FamilyList count',this.props.dashBoardReducer)
+    console.log('FamilyList count', this.props.dashBoardReducer);
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
         <View style={Style.elevatedView}>
           <CardView
-            height={"100%"}
-            width={"25%"}
-            cardText={" Family Members"}
-            cardIcon={require("../../../../icons/view_all_visitors.png")}
+            height={'100%'}
+            width={'25%'}
+            cardText={' Family Members'}
+            cardIcon={require('../../../../icons/view_all_visitors.png')}
             cardCount={this.props.dashBoardReducer.familyMemberCount}
             marginTop={20}
-            iconWidth={Platform.OS === "ios" ? 40 : 35}
-            iconHeight={Platform.OS === "ios" ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? 40 : 35}
+            iconHeight={Platform.OS === 'ios' ? 40 : 20}
             onCardClick={() =>
               this.state.isNoAssJoin
-                ? this.props.navigation.navigate("CreateOrJoinScreen")
+                ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
-                ? alert("Unit is not available")
-                : this.props.navigation.navigate("MyFamilyList")
+                ? alert('Unit is not available')
+                : this.props.navigation.navigate('MyFamilyList')
             }
             backgroundColor={base.theme.colors.cardBackground}
           />
           <CardView
-            height={"100%"}
-            width={"25%"}
-            cardText={"Vehicles"}
-            iconWidth={Platform.OS === "ios" ? 40 : 25}
-            iconHeight={Platform.OS === "ios" ? 40 : 20}
-            cardIcon={require("../../../../icons/vehicle.png")}
+            height={'100%'}
+            width={'25%'}
+            cardText={'Vehicles'}
+            iconWidth={Platform.OS === 'ios' ? 40 : 25}
+            iconHeight={Platform.OS === 'ios' ? 40 : 20}
+            cardIcon={require('../../../../icons/vehicle.png')}
             cardCount={this.props.dashBoardReducer.vehiclesCount}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>
               this.state.isNoAssJoin
-                ? this.props.navigation.navigate("CreateOrJoinScreen")
+                ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
-                ? alert("Unit is not available")
-                : this.props.navigation.navigate("MyVehicleListScreen")
+                ? alert('Unit is not available')
+                : this.props.navigation.navigate('MyVehicleListScreen')
             }
           />
           <CardView
-            height={"100%"}
-            width={"25%"}
-            cardText={"Visitors"}
-            cardIcon={require("../../../../icons/view_all_visitors.png")}
+            height={'100%'}
+            width={'25%'}
+            cardText={'Visitors'}
+            cardIcon={require('../../../../icons/view_all_visitors.png')}
             marginTop={20}
-            iconWidth={Platform.OS === "ios" ? 40 : 35}
-            iconHeight={Platform.OS === "ios" ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? 40 : 35}
+            iconHeight={Platform.OS === 'ios' ? 40 : 20}
             iconBorderRadius={0}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.goToFirstTab()}
@@ -1567,16 +1588,16 @@ try{
 
         <View
           style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            alignSelf: "center"
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center'
           }}
         >
           <Button
             bordered
             style={styles.button1}
-            onPress={() => this.props.navigation.navigate("ViewmembersScreen")}
+            onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
           >
             <Text>Role Management</Text>
           </Button>
@@ -1585,12 +1606,12 @@ try{
             bordered
             style={styles.button1}
             onPress={() =>
-              this.props.navigation.navigate("ViewAlllVisitorsPage")
+              this.props.navigation.navigate('ViewAlllVisitorsPage')
             }
           >
             <Text>View All Visitors</Text>
           </Button>
-        {/* <Button
+          {/* <Button
             bordered
             style={styles.button1}
             onPress={() => this.props.navigation.navigate("schedulePatrolling")}
@@ -1613,29 +1634,29 @@ try{
   listOfInvoices(item) {
     base.utils.logger.log(item);
     return (
-      <TouchableHighlight underlayColor={"transparent"}>
+      <TouchableHighlight underlayColor={'transparent'}>
         <View style={Style.invoiceView}>
           <View style={Style.invoiceSubView}>
             <Text style={Style.invoiceNumberText}>
               Invoice No. {item.item.invoiceNumber}
             </Text>
             <Text style={Style.billText}>
-              <Text style={Style.rupeeIcon}>{"\u20B9"}</Text>
+              <Text style={Style.rupeeIcon}>{'\u20B9'}</Text>
               {item.item.bill}
             </Text>
           </View>
           <View style={Style.invoiceSubView}>
             <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
             <OSButton
-              height={"80%"}
-              width={"25%"}
+              height={'80%'}
+              width={'25%'}
               borderRadius={15}
               oSBBackground={
-                item.item.status === "PAID"
+                item.item.status === 'PAID'
                   ? base.theme.colors.grey
                   : base.theme.colors.primary
               }
-              oSBText={item.item.status === "PAID" ? "Paid" : "Pay Now"}
+              oSBText={item.item.status === 'PAID' ? 'Paid' : 'Pay Now'}
             />
           </View>
         </View>
@@ -1648,139 +1669,139 @@ try{
   goToFirstTab() {
     const { dropdown1 } = this.props;
     this.state.isNoAssJoin
-      ? this.props.navigation.navigate("CreateOrJoinScreen")
+      ? this.props.navigation.navigate('CreateOrJoinScreen')
       : dropdown1.length === 0
-      ? alert("Unit is not available")
-      : this.props.navigation.navigate("firstTab");
+      ? alert('Unit is not available')
+      : this.props.navigation.navigate('firstTab');
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "#fff",
-    paddingLeft: hp("0.7%")
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    paddingLeft: hp('0.7%')
   },
   progress: {
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   button1: {
-    width: hp("30%"),
-    justifyContent: "center",
-    marginBottom: hp("2%")
+    width: hp('30%'),
+    justifyContent: 'center',
+    marginBottom: hp('2%')
   },
   card: {
     borderBottomWidth: 1,
-    flexDirection: "column",
-    width: Dimensions.get("window").width / 4 - 10,
-    height: hp("9%"),
-    alignItems: "center"
+    flexDirection: 'column',
+    width: Dimensions.get('window').width / 4 - 10,
+    height: hp('9%'),
+    alignItems: 'center'
   },
   cardItem: {
-    flexDirection: "column",
-    borderColor: "orange",
-    borderWidth: hp("10%")
+    flexDirection: 'column',
+    borderColor: 'orange',
+    borderWidth: hp('10%')
     // borderBottomWidth:30,
   },
   textWrapper: {
-    height: hp("85%"), // 70% of height device screen
-    width: wp("97%") // 80% of width device screen
+    height: hp('85%'), // 70% of height device screen
+    width: wp('97%') // 80% of width device screen
   },
   gaugeText: {
-    backgroundColor: "transparent",
-    color: "#000",
-    fontSize: hp("3%")
+    backgroundColor: 'transparent',
+    color: '#000',
+    fontSize: hp('3%')
   },
   image1: {
-    width: wp("6%"),
-    height: hp("3%"),
+    width: wp('6%'),
+    height: hp('3%'),
     marginRight: 10,
-    justifyContent: "space-between"
+    justifyContent: 'space-between'
   },
   image2: {
-    height: hp("2%"),
-    width: hp("2%"),
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    marginBottom: hp("2.4%"),
-    marginTop: hp("2.4%")
+    height: hp('2%'),
+    width: hp('2%'),
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    marginBottom: hp('2.4%'),
+    marginTop: hp('2.4%')
   },
   text1: {
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     flex: 5,
-    color: "#FF8C00",
-    marginBottom: hp("2.4%"),
-    marginTop: hp("2.4%")
+    color: '#FF8C00',
+    marginBottom: hp('2.4%'),
+    marginTop: hp('2.4%')
   },
   text2: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    color: "#FF8C00",
-    marginBottom: hp("2.4%"),
-    marginTop: hp("2.4%")
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    color: '#FF8C00',
+    marginBottom: hp('2.4%'),
+    marginTop: hp('2.4%')
   },
   text3: {
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     flex: 1,
-    color: "#45B591",
-    marginBottom: hp("2.4%"),
-    marginTop: hp("2.4%")
+    color: '#45B591',
+    marginBottom: hp('2.4%'),
+    marginTop: hp('2.4%')
   },
   text4: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    color: "#45B591",
-    marginBottom: hp("2.4%"),
-    marginTop: hp("2.4%")
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    color: '#45B591',
+    marginBottom: hp('2.4%'),
+    marginTop: hp('2.4%')
   },
   image3: {
-    height: hp("2%"),
-    width: hp("2%"),
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    marginBottom: hp("2.4%"),
-    marginTop: hp("2.4%")
+    height: hp('2%'),
+    width: hp('2%'),
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    marginBottom: hp('2.4%'),
+    marginTop: hp('2.4%')
   },
   image4: {
-    width: wp("5%"),
-    height: hp("2%"),
-    justifyContent: "flex-start",
-    marginLeft: hp("1%"),
-    marginRight: hp("1%")
+    width: wp('5%'),
+    height: hp('2%'),
+    justifyContent: 'flex-start',
+    marginLeft: hp('1%'),
+    marginRight: hp('1%')
   },
   view1: {
-    flexDirection: "row",
-    margin: hp("0.5%"),
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    margin: hp('0.5%'),
+    alignItems: 'center',
+    justifyContent: 'center',
     bottom: 0,
-    height: hp("12%")
+    height: hp('12%')
   },
   view2: {
-    borderWidth: hp("0.8%"),
-    borderBottomEndRadius: hp("0.8%"),
-    borderBottomStartRadius: hp("0.8%"),
-    borderColor: "orange",
-    width: Dimensions.get("window").width / 4 - 10,
-    marginTop: hp("0.8%")
+    borderWidth: hp('0.8%'),
+    borderBottomEndRadius: hp('0.8%'),
+    borderBottomStartRadius: hp('0.8%'),
+    borderColor: 'orange',
+    width: Dimensions.get('window').width / 4 - 10,
+    marginTop: hp('0.8%')
   },
   card1: {
-    height: hp("4%"),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff6e5",
-    marginBottom: hp("2%")
+    height: hp('4%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff6e5',
+    marginBottom: hp('2%')
   },
   gauge: {
-    position: "absolute",
-    width: wp("40%"),
-    height: hp("22%"),
-    alignItems: "center",
-    justifyContent: "center"
+    position: 'absolute',
+    width: wp('40%'),
+    height: hp('22%'),
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
