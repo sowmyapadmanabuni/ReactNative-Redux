@@ -2092,7 +2092,7 @@ class NotificationDetailScreen extends PureComponent {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('1%') }} />
+                  <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('3%') }} />
 
 
                 </View>

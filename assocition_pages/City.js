@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text, View, StyleSheet, SafeAreaView, TouchableOpacity,
+  Text, View, StyleSheet, SafeAreaView, TouchableOpacity, 
   TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView, Platform, Linking, BackHandler
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
