@@ -577,9 +577,9 @@ class Dashboard extends PureComponent {
       } else {
         console.log('UNSUBSCRIBED_FROM_', assnId);
         await base.utils.storage.removeData('ADMIN_NOTIF' + assnId);
-        if (assnId === '7548admin') {
-          alert('Unsub');
-        }
+       /* if (assnId === '7548admin') {
+         // alert('Unsub');
+        }*/
         firebase.messaging().unsubscribeFromTopic(assnId);
       }
 
