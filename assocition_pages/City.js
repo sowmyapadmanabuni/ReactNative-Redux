@@ -4,7 +4,12 @@ import {
   TouchableWithoutFeedback, Image, Dimensions, FlatList, ScrollView, Platform, Linking, BackHandler
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { Card, CardItem, Form, Item, Button, Input, Icon } from "native-base"
+import { Card, CardItem, Form, Item, Button, Input } from "native-base"
+
+import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import IcoMoonConfig from '../src/assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 
 export default class City extends Component {
@@ -58,7 +63,7 @@ export default class City extends Component {
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("ResDashBoard")
+                  this.props.navigation.goBack()
                 }}
               >
                 <View
@@ -119,26 +124,29 @@ export default class City extends Component {
             <View style={{ flexDirection: 'row', }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Bangalore", id: "56" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/bengaluru.png')} />
+
+                  <Image style={{ width: hp('6%'), height: hp('6%') }} source={require('../icons/bengaluru.png')} />
                   <Text>Bengaluru</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Chandigarh", id: "16" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/chandigarh.png')} />
+                  <Image style={{ width: hp('6%'), height: hp('6%') }} source={require('../icons/chandigarh.png')} />
                   <Text>Chandigarh</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Delhi", id: "11" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/delhi-ncr.png')} />
-                  <Text>Delhi-NCR</Text>
+                  <Icon color="#474749" size={hp('5%')} name="delhi" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/delhi-ncr.png')} /> */}
+                  <Text style={{ marginTop: hp('0.2%') }}>Delhi-NCR</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Indore", id: "45" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/indore.png')} />
-                  <Text>Indore</Text>
+                  <Icon color="#474749" size={hp('5%')} name="indore" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/indore.png')} /> */}
+                  <Text style={{ marginTop: hp('0.2%') }}>Indore</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -147,26 +155,30 @@ export default class City extends Component {
             <View style={{ flexDirection: 'row', }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Jaipur", id: "30" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/jaipur.png')} />
-                  <Text>Jaipur</Text>
+                  <Icon color="#474749" size={hp('5%')} name="jaipur" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/jaipur.png')} /> */}
+                  <Text style={{ marginTop: hp('0.2%') }}>Jaipur</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Kanpur", id: "20" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} />
-                  <Text>Kanpur</Text>
+                  <Icon color="#474749" size={hp('5%')} name="kanpur" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} /> */}
+                  <Text style={{ marginTop: hp('0.2%') }}>Kanpur</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Lucknow", id: "22" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/lucknow.png')} />
-                  <Text>Lucknow</Text>
+                  <Icon color="#474749" size={hp('5%')} name="lucknow" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/lucknow.png')} /> */}
+                  <Text style={{ marginTop: hp('0.2%') }}>Lucknow</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Mumbai", id: "40" })}>
                 <View style={styles.card}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/mumbai.png')} />
-                  <Text>Mumbai</Text>
+                  <Icon color="#474749" size={hp('5%')} name="mumbai" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/mumbai.png')} /> */}
+                  <Text style={{ marginTop: hp('0.2%') }}>Mumbai</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -175,26 +187,30 @@ export default class City extends Component {
             <View style={{ flexDirection: 'row', }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Nagpur", id: "44" })}>
                 <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/nagpur.png')} />
-                  <Text>Nagpur</Text>
+                  {/* <Icon color="black" size={40} name="nagpur"/> */}
+                  <Image style={{ width: hp('6%'), height: hp('6%') }} source={require('../icons/nagpur.png')} />
+                  <Text style={{ marginTop: hp('0.2%') }}>Nagpur</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Prayagraj", id: "21" })}>
                 <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} />
+                  <Icon color="#474749" size={hp('5%')} name="prayagraj" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} /> */}
                   <Text>Prayagraj</Text>
                   <Text>(Allahabad)</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Pune", id: "41" })}>
                 <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/pune.png')} />
-                  <Text>Pune</Text>
+                  <Icon color="#474749" size={hp('5%')} name="pune" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/pune.png')} /> */}
+                  <Text style={{ marginTop: hp('0.5%') }}>Pune</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('AssnListScreen', { name: "Varanasi", id: "22" })}>
                 <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/varanasi.png')} />
+                  <Icon color="#474749" size={hp('5%')} name="varanasi" />
+                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/varanasi.png')} /> */}
                   <Text>Varanasi</Text>
                   <Text>(Benaras)</Text>
                 </View>
@@ -203,8 +219,8 @@ export default class City extends Component {
 
             <View style={{ flexDirection: 'row', }}>
               <TouchableOpacity onPress={() => this.props.navigation.navigate('WholeAssociationList')}>
-                <View style={{ alignItems: 'center', justifyContent: 'center', borderBottomWidth: 1, width: Dimensions.get('window').width, height: hp('4%'), borderColor: "#E5E5E5" }}>
-                  <Text style={{ fontSize: hp('2%') }}>Other Cities</Text>
+                <View style={{ alignItems: 'center', justifyContent: 'center', borderBottomWidth: 1, width: Dimensions.get('window').width, height: hp('6%'), borderColor: "#E5E5E5" }}>
+                  <Text style={{ fontSize: hp('3%'), fontWeight: '500' }}>Other Cities</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -228,35 +244,35 @@ export default class City extends Component {
                 </Text>}
 
             /> */}
-            
+
           </View>
 
-          
+
         </ScrollView>
         <View
-              style={{
-                flexDirection: "column",
-                justifyContent: 'center',
-                alignItems: 'center',
-                margin:hp('3%'),
+          style={{
+            flexDirection: "column",
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: hp('3%'),
+          }}
+        >
+          <Text>Don't see your Association?</Text>
+          <View style={{ marginTop: hp("1%") }}>
+            <Button bordered warning style={styles.button1}
+              onPress={() => {
+                {
+                  Platform.OS === "android"
+                    ? Linking.openURL(`tel:+919343121121`)
+                    : Linking.openURL(`tel:+919343121121`);
+                }
               }}
+            // onPress={() => this.props.navigation.navigate('City')}
             >
-              <Text>Don't see your Association?</Text>
-              <View style={{ marginTop: hp("1%") }}>
-                <Button bordered warning style={styles.button1}
-                  onPress={() => {
-                    {
-                      Platform.OS === "android"
-                        ? Linking.openURL(`tel:+919343121121`)
-                        : Linking.openURL(`tel:+919343121121`);
-                    }
-                  }}
-                // onPress={() => this.props.navigation.navigate('City')}
-                >
-                  <Text style={{ fontSize: hp('2%') }}>Click here for demo.</Text>
-                </Button>
-              </View>
-            </View>
+              <Text style={{ fontSize: hp('2%') }}>Click here for demo.</Text>
+            </Button>
+          </View>
+        </View>
       </View>
     );
   }

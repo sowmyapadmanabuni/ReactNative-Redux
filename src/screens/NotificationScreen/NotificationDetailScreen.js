@@ -1338,6 +1338,7 @@ import {
 import _ from 'lodash';
 import base from '../../base';
 
+
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
   constructor(props) {
@@ -1359,7 +1360,7 @@ class NotificationDetailScreen extends PureComponent {
       requestorMob1: '',
 
       dataSource2: [],
-      dataSource3: [],
+      dataSource3: "",
 
       showButtons: true,
 
@@ -1427,7 +1428,8 @@ class NotificationDetailScreen extends PureComponent {
       .then(res => {
         this.setState({ adminStatLoading: false });
         let data = res.data.data;
-        console.log(data, 'adminData');
+
+        console.log(data, res, 'adminData');
         if (data) {
           if (data.member.meJoinStat === 'Accepted') {
             this.setState({ adminStat: 'Accepted' });
@@ -1444,21 +1446,25 @@ class NotificationDetailScreen extends PureComponent {
     fetch(
       `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         }
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Response Json", responseJson)
+        console.log('Response Json', responseJson);
         this.setState({
           dataSource1: responseJson.data.account,
           requestorMob1: responseJson.data.account[0].acMobile
         });
-        console.log("Mobile Number1:", this.state.dataSource, this.state.requestorMob1)
+        console.log(
+          'Mobile Number1:',
+          this.state.dataSource,
+          this.state.requestorMob1
+        );
       })
       .catch(error => {
         console.log(error);
@@ -1466,22 +1472,22 @@ class NotificationDetailScreen extends PureComponent {
     fetch(
       `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         }
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Response Json", responseJson)
+        console.log('Response Json', responseJson);
         this.setState({
           data: responseJson.data.unitsByUnitID,
           dataSource: responseJson.data.unitsByUnitID[0],
           requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
         });
-        console.log("Mobile Number:", this.state.dataSource)
+        console.log('Mobile Number:', this.state.dataSource);
       })
       .catch(error => {
         console.log(error);
@@ -1491,39 +1497,54 @@ class NotificationDetailScreen extends PureComponent {
       //http://api.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/35894
       `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${details.sbUnitID}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         }
       }
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log("Response Json", responseJson)
-        console.log("Owner Tenant length", responseJson.data.unit.owner.length, responseJson.data.unit.tenant.length)
+        console.log('Response Json', responseJson);
+        console.log(
+          'Owner Tenant length',
+          responseJson.data.unit.owner.length,
+          responseJson.data.unit.tenant.length
+        );
         let arr1 = [];
         let self = this;
         let arr2 = [];
         for (let i = 0; i < responseJson.data.unit.owner.length; i++) {
           for (let j = 0; j < responseJson.data.unit.tenant.length; j++) {
-            arr1.push({ name: responseJson.data.unit.owner[i].uofName + " " + responseJson.data.unit.owner[i].uolName, number: responseJson.data.unit.owner[i].uoMobile })
+            arr1.push({
+              name:
+                responseJson.data.unit.owner[i].uofName +
+                ' ' +
+                responseJson.data.unit.owner[i].uolName,
+              number: responseJson.data.unit.owner[i].uoMobile
+            });
             // arr1.push(responseJson.data.unit.owner[i])
-            arr2.push({ name: responseJson.data.unit.tenant[j].utfName + " " + responseJson.data.unit.tenant[j].utlName, number: responseJson.data.unit.tenant[j].utMobile })
+            arr2.push({
+              name:
+                responseJson.data.unit.tenant[j].utfName +
+                ' ' +
+                responseJson.data.unit.tenant[j].utlName,
+              number: responseJson.data.unit.tenant[j].utMobile
+            });
 
             // arr2.push(responseJson.data.unit.tenant[j])
           }
         }
         self.setState({
           dataSource2: [...arr1, ...arr2],
+          dataSource3: responseJson.data.unit.unOcStat
         });
-        console.log("DataSource2", this.state.dataSource2)
-
+        console.log('DataSource2', this.state.dataSource2);
       })
       .catch(error => {
         console.log(error);
       });
-
   }
 
   /**
@@ -1589,7 +1610,7 @@ class NotificationDetailScreen extends PureComponent {
     }
   }
 
-  showAppendReplaceUI(notification, unitInfo, accessedRole) { }
+  showAppendReplaceUI(notification, unitInfo, accessedRole) {}
 
   approve = (item, status) => {
     const { oyeURL } = this.props;
@@ -1597,7 +1618,7 @@ class NotificationDetailScreen extends PureComponent {
       Alert.alert(
         'Oyespace',
         'You have already responded to this request!',
-        [{ text: 'Ok', onPress: () => { } }],
+        [{ text: 'Ok', onPress: () => {} }],
         { cancelable: false }
       );
     } else {
@@ -1662,13 +1683,13 @@ class NotificationDetailScreen extends PureComponent {
                 item.acNotifyID,
                 1,
                 'Your request to join ' +
-                item.mrRolName +
-                ' ' +
-                ' unit in ' +
-                item.asAsnName +
-                ' association as ' +
-                roleName +
-                ' has been approved',
+                  item.mrRolName +
+                  ' ' +
+                  ' unit in ' +
+                  item.asAsnName +
+                  ' association as ' +
+                  roleName +
+                  ' has been approved',
                 'resident_user',
                 'resident_user',
                 item.sbSubID,
@@ -1817,7 +1838,7 @@ class NotificationDetailScreen extends PureComponent {
       Alert.alert(
         'Oyespace',
         'You have already responded to this request!',
-        [{ text: 'Ok', onPress: () => { } }],
+        [{ text: 'Ok', onPress: () => {} }],
         { cancelable: false }
       );
     } else {
@@ -1873,13 +1894,13 @@ class NotificationDetailScreen extends PureComponent {
                     item.acNotifyID,
                     1,
                     'Your request to join' +
-                    item.mrRolName +
-                    ' ' +
-                    ' unit in ' +
-                    item.asAsnName +
-                    ' association as ' +
-                    roleName +
-                    ' has been declined',
+                      item.mrRolName +
+                      ' ' +
+                      ' unit in ' +
+                      item.asAsnName +
+                      ' association as ' +
+                      roleName +
+                      ' has been declined',
                     'resident_user',
                     'resident_user',
                     item.sbSubID,
@@ -1962,7 +1983,6 @@ class NotificationDetailScreen extends PureComponent {
     // let status = _.includes(approvedAdmins, subId);
     // let status = false;
 
-
     let status;
 
     if (loading || adminStatLoading) {
@@ -1979,8 +1999,18 @@ class NotificationDetailScreen extends PureComponent {
       } else if (details.ntType === 'gate_app') {
         return null;
       } else {
-        if (adminStat) {
-          return null;
+        if (adminStat === 'Accepted') {
+          return (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontWeight: '500' }}> {'Request Accepted'} </Text>
+            </View>
+          );
+        } else if (adminStat === 'Rejected') {
+          return (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontWeight: '500' }}> {'Request Rejected'} </Text>
+            </View>
+          );
         } else {
           if (details.ntJoinStat) {
             if (details.ntJoinStat === 'Accepted') {
@@ -1994,7 +2024,6 @@ class NotificationDetailScreen extends PureComponent {
                   <View>
                     <Text> {this.state.date || 'Request Accepted'} </Text>
                   </View>
-
                 </View>
               );
             } else if (details.ntJoinStat === 'Rejected') {
@@ -2059,43 +2088,66 @@ class NotificationDetailScreen extends PureComponent {
                   </View>
                 </View>
 
-                <View style={{ flexDirection: 'column', marginTop: hp('8%'),marginLeft: hp('2%') }}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text>Requestor Name: </Text>
-                    <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}</Text>
-                    <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''}</Text>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    marginTop: hp('10%'),
+                    marginBottom: hp('2%'),
+                    marginLeft: hp('2%')
+                  }}
+                >
+                  <View>
+                    <Text style={{ color: '#ff8c00' }}>Requestor </Text>
                   </View>
                   <View style={{ flexDirection: 'row' }}>
-                    <Text>Unit Name: </Text>
-                    <Text>{
-                      (details.ntDesc !== undefined) ? details.ntDesc.split(' ')[5].trim() : ''
-                    }{" "}
-                    </Text>
+                    <View style={{ flex: 1 }}>
+                      <Text>Name</Text>
+                    </View>
+                    <View style={{ flex: 2, flexDirection: 'row' }}>
+                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}{" "}</Text>
+                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''}</Text>
+                    </View>
                   </View>
                   <View style={{ flexDirection: 'row' }}>
-                    <Text>Mobile: </Text>
-                    <TouchableOpacity
-                      onPress={() => {
-                        {
-                          Platform.OS === "android"
-                            ? Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`)
-                            : Linking.openURL(`tel:${this.state.requestorMob1 ? this.state.requestorMob1 : ''}`);
-                        }
-                      }}
-                    >
-                      <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 2.5 }}>
+                      <Text>Mobile</Text>
+                    </View>
+                    <View style={{ flex: 5 }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          Platform.OS === 'android'
+                            ? Linking.openURL(`tel:${this.state.requestorMob1}`)
+                            : Linking.openURL(`tel:${this.state.requestorMob1}`);
+                        }}>
 
-                        <Text>{this.state.requestorMob1 ? this.state.requestorMob1 : ''}</Text>
-                        <Image
-                          style={{ width: hp('2%'), height: hp('2%') }}
-                          source={require("../../../icons/call.png")}
-                        />
-                      </View>
+                        <View style={{ flexDirection: 'row' }}>
 
-                    </TouchableOpacity>
+                          <Text>{this.state.requestorMob1}</Text>
+                          <Image
+                            style={{ width: hp('2%'), height: hp('2%') }}
+                            source={require("../../../icons/call.png")}
+                          />
+                        </View>
+
+                      </TouchableOpacity>
+                    </View>
                   </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 1 }}>
+                      <Text>Unit</Text>
+                    </View>
+                    <View style={{ flex: 2 }}>
+                      <Text>
+                        {details.ntDesc !== undefined
+                          ? details.ntDesc.split(' ')[5].trim()
+                          : ''}{' '}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('3%') }} />
+
+
                 </View>
-              
               </View>
             );
           }
@@ -2108,84 +2160,81 @@ class NotificationDetailScreen extends PureComponent {
 
   renderDetails = () => {
     const { navigation } = this.props;
-    const details = navigation.getParam('details', 'NO-ID')
+    const details = navigation.getParam('details', 'NO-ID');
 
-    console.log("DETAILS", details)
+    console.log('DETAILS', details);
     return (
-      <View>
-        <View style={{ marginTop: hp('15%') }}>
-          <FlatList
-            style={{ marginLeft: hp('1.5%'), marginRight: hp('1%'), height: '100%' }}
-            data={this.state.dataSource2.reverse()}
-            renderItem={({ item }) =>
-              <View style={{ flex: 1, marginLeft: hp('5%'), marginTop: hp('1%')}}>
-                <View style={{ flexDirection: 'column' }}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text>Resident Name: </Text>
-                    <Text>{item.name}{" "}</Text>
+      <View style={{ marginTop: hp('20%') }}>
+        <View style={{ marginLeft: hp('2%') }}>
+          <Text style={{ color: '#ff8c00' }}>Current Status</Text>
+        </View>
+        <View style={{ flexDirection: 'row', marginLeft: hp('2%') }}>
+          <View style={{ flex: 1 }}>
+            <Text>Occupancy</Text>
+          </View>
+          <View style={{ flex: 2 }}>
+            <Text>{this.state.dataSource3} </Text>
+          </View>
+        </View>
+        <FlatList
+          style={{ height: '100%' }}
+          data={this.state.dataSource2.reverse()}
+          renderItem={({ item }) => (
+            <View
+              style={{ flex: 1, marginLeft: hp('2%'), marginTop: hp('1%') }}
+            >
+              <View style={{ flexDirection: 'column' }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flex: 1 }}>
+                    <Text>Resident Name</Text>
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text>Mobile: </Text>
+                  <View style={{ flex: 2 }}>
+                    <Text>{item.name} </Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flex: 2.5 }}>
+                    <Text>Mobile</Text>
+                  </View>
+                  <View style={{ flex: 5, zIndex: 100 }}>
                     <TouchableOpacity
+                      // onPress={() => alert("here")}
+
                       onPress={() => {
-                        {
-                          Platform.OS === "android"
-                            ? Linking.openURL(`tel:${item.number ? item.number : ''}`)
-                            : Linking.openURL(`tel:${item.number ? item.number : ''}`);
-                        }
+                        Platform.OS === 'android'
+                          ? Linking.openURL(
+                              `tel:${item.number ? item.number : ''}`
+                            )
+                          : Linking.openURL(
+                              `tel:${item.number ? item.number : ''}`
+                            );
                       }}
                     >
                       <View style={{ flexDirection: 'row' }}>
-
                         <Text>{item.number ? item.number : ''}</Text>
                         <Image
                           style={{ width: hp('2%'), height: hp('2%') }}
-                          source={require("../../../icons/call.png")}
+                          source={require('../../../icons/call.png')}
                         />
                       </View>
-
                     </TouchableOpacity>
                   </View>
                 </View>
-
               </View>
-
-
-            }
-          />
-
-        </View>
-        {/*  */}
+            </View>
+          )}
+        />
       </View>
-    )
-  }
+    );
+  };
 
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
+    // console.log("DETAILS", details)
     console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
     return (
       <View style={styles.container}>
-        {/* <Header
-          leftComponent={{
-            icon: "arrow-left",
-            color: "#ED8A19",
-            type: "material-community",
-            onPress: () => navigation.pop()
-          }}
-          containerStyle={{
-            borderBottomColor: "#ED8A19",
-            borderBottomWidth: 2
-          }}
-          centerComponent={
-            <Image
-              source={require("../../../pages/assets/images/OyeSpace.png")}
-              style={{ height: 90, width: 90 }}
-            />
-          }
-          backgroundColor="#fff"
-        /> */}
-
         <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
@@ -2228,17 +2277,20 @@ class NotificationDetailScreen extends PureComponent {
           </View>
           <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
-        <Text style={styles.titleStyle}> {details.ntDesc} </Text>
-        <View style={{ height: hp('8%') }}>
-          {details.ntType === 'Join_Status' ?
-            null
-            :
-            this.renderButton()}
+        <View style={{ marginTop: hp('2%') }}>
+          <Text style={styles.titleStyle}> {details.ntDesc} </Text>
         </View>
-        <View>
-          {this.renderDetails()}
 
+        <View style={{ height: hp('8%') }}>
+          {details.ntType === 'Join_Status' ? null : this.renderButton()}
         </View>
+        {this.state.dataSource3 === "" ? <View></View> :
+          <View>
+            {this.renderDetails()}
+
+          </View>
+        }
+
 
 
       </View>
@@ -2290,9 +2342,10 @@ const styles = StyleSheet.create({
   },
 
   titleStyle: {
-    fontSize: 16,
+    fontSize: hp('1.8%'),
     marginBottom: 5,
-    textAlign: 'center'
+    textAlign: 'left',
+    marginLeft: hp('2%')
   }
 });
 

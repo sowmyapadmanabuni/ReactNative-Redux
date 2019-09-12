@@ -191,7 +191,7 @@ const Style = StyleSheet.create({
     marginBottom: hp("1%")
   },
   icon: {
-    color: "orange"
+    marginRight:hp('1.6%')
   },
   viewStyle1: {
     backgroundColor: "#fff",

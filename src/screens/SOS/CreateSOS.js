@@ -316,7 +316,7 @@ class CreateSOS extends React.Component {
                                         <Image
                                             resizeMode={'contain'}
                                             style={CreateSOSStyles.imageStyles1}
-                                            source={require("../../../icons/call1.png")}
+                                            source={require("../../../icons/call.png")}
                                         />
                                         <Text style={CreateSOSStyles.cardText}
                                               numberOfLines={2}>
@@ -342,7 +342,7 @@ class CreateSOS extends React.Component {
                                         <Image
                                             resizeMode={'contain'}
                                             style={CreateSOSStyles.imageStyles1}
-                                            source={require("../../../icons/call1.png")}
+                                            source={require("../../../icons/call.png")}
                                         />
                                         <Text style={CreateSOSStyles.cardText}
                                               numberOfLines={2}>
@@ -368,7 +368,7 @@ class CreateSOS extends React.Component {
                                         <Image
                                             resizeMode={'contain'}
                                             style={CreateSOSStyles.imageStyles1}
-                                            source={require("../../../icons/call1.png")}
+                                            source={require("../../../icons/call.png")}
                                         />
                                         <Text style={CreateSOSStyles.cardText}
                                               numberOfLines={2}>

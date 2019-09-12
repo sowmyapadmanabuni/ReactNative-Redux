@@ -121,8 +121,8 @@ android {
         applicationId "com.oyespace.oyesafe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 14
-        versionName "10.12"
+        versionCode 15
+        versionName "10.15"
         multiDexEnabled true
         ndk {
             // abiFilters "armeabi-v7a", "x86"
@@ -224,5 +224,14 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+
+// configurations.all {
+// resolutionStrategy {
+// force 'com.google.android.gms:play-services-gcm:16.1.0'
+// force 'com.google.android.gms:play-services-base:16.1.0'
+// force 'com.google.firebase:firebase-core:16.0.9'
+// force 'com.google.firebase:firebase-messaging:18.0.0'
+// }}
 
 apply plugin: 'com.google.gms.google-services'

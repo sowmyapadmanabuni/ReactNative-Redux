@@ -5880,6 +5880,11 @@ react-native-action-button@^2.8.5:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-android-location-enabler@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-android-location-enabler/-/react-native-android-location-enabler-1.2.0.tgz#82ddf9743b257360c94647243d92497960005adc"
+  integrity sha512-9NGhjkfU5RMmBjSS2Rd2yYj9TBJNPhgXySo/FrDWAtN+137eN3F/KkOtEE5JFWzqGmBqp3GyEufCCOJf59R37w==
+
 react-native-animatable@>=1.3.x, react-native-animatable@^1.1.0, react-native-animatable@^1.2.4, react-native-animatable@^1.3.1:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.2.tgz#4783ee1a73dc98815aef234ce6b819f80bfe7d80"
@@ -5993,7 +5998,7 @@ react-native-datepicker@^1.7.2:
   dependencies:
     moment "^2.22.0"
 
-react-native-device-info@^2.2.2:
+react-native-device-info@2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-2.2.2.tgz#777388b8cff4594c8db2ea3a53f2f1f9e2c611a1"
   integrity sha512-2b0TycUJbW/9T7L070L6q4+ce8guD4c0c8mWWjiVNuvCrZVf7VNomvNk1BqIVXcnYbZO43V0SVN6z1fvp2HTyg==
@@ -6045,6 +6050,11 @@ react-native-exit-app@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-exit-app/-/react-native-exit-app-1.0.0.tgz#a2fbb121d902e6967cd8a365fe8453e5c4bc3172"
   integrity sha512-2d8RlzfjA4fTJaXD3xObTt0hv+7i41bDyWDB9+zOI0zS1nGvY4mtENKhte8ceRih/3eZWQLpwkkHFP1Y8AG/5w==
+
+react-native-fabric@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-fabric/-/react-native-fabric-0.5.2.tgz#6eb728cb4f55652c60eab4fbfe1ab6bc3841805f"
+  integrity sha512-uarBq3XtADCJIGwzeHMzG7LCTfElGuqUj4UqMxsWbPsXaYForfNw+EMkEQ+6eBq/a2k4PKfuVQXQAC7rfgo/Vg==
 
 react-native-file-viewer@^1.0.10:
   version "1.0.14"
@@ -6390,7 +6400,7 @@ react-native-sms-verifycode@^2.4.0:
   dependencies:
     prop-types "^15.6.2"
 
-react-native-sound@^0.10.12:
+react-native-sound@0.10.12:
   version "0.10.12"
   resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.10.12.tgz#f912d6f9d6e9e2b42b391e0226787628d940f01a"
   integrity sha512-lhvzZ+ekNSHW9s4FjmxxGAQmd7yDT9FnHgJNP824cMyHRrTES/LgHnSOxES/1FWVoaQ8FdfbEHkWd2rN0G/L9A==

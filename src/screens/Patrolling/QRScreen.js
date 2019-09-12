@@ -103,7 +103,7 @@ class QRScreen extends React.Component {
                             console.log("data base64 " + data,uri);
                             this.setState({ qrBase64: data });
                             this.updateStore();
-                        
+
                         });
                 },
                 error => {
@@ -112,20 +112,20 @@ class QRScreen extends React.Component {
                 }
             );
     };
-    
+
     componentDidMount () {
         this.refs.viewShot.capture().then(uri => {
-          console.log("do something with ", uri);
-          this.setState({ imageURI: uri }),
-                        RNFS.readFile(this.state.imageURI, "base64").then(data => {
-                            // binary data
-                            console.log("data base64 " + data,uri);
-                            this.setState({ qrBase64: data });
-                            this.updateStore();
-                        
-                        });
+            console.log("do something with ", uri);
+            this.setState({ imageURI: uri }),
+                RNFS.readFile(this.state.imageURI, "base64").then(data => {
+                    // binary data
+                    console.log("data base64 " + data,uri);
+                    this.setState({ qrBase64: data });
+                    this.updateStore();
+
+                });
         });
-      }
+    }
 
 
 
@@ -143,11 +143,11 @@ class QRScreen extends React.Component {
                         style={QRScreenStyles.headerText}>Patrolling Check Points QR Code</Text>
                 </View>
                 <ViewShot ref="viewShot" style={{backgroundColor:"white"}} options={{ format: "jpg", quality: 0.9 }}>
-                     <View  style={QRScreenStyles.qrView}>
+                    <View  style={QRScreenStyles.qrView}>
                         <QRCode
                             value={this.state.latLong}
                             logo={require('../../../icons/headerLogo.png')}
-                        // getRef={(c) => (this.qrcode = c)}
+                            // getRef={(c) => (this.qrcode = c)}
                             size={200}
                             logoSize={50}
                         />

@@ -18,7 +18,7 @@ import {
   Dimensions,BackHandler
 } from "react-native";
 // import Header from "./src/components/common/Header"
-import { Card, CardItem, Button, Form, Item, Input, Icon } from "native-base";
+import { Card, CardItem, Button, Form, Item, Input } from "native-base";
 import DatePicker from "react-native-datepicker";
 import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -32,6 +32,11 @@ import ZoomImage from "react-native-zoom-image";
 import { connect } from "react-redux";
 import base from "../src/base";
 import EmptyView from "../src/components/common/EmptyView";
+
+import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import IcoMoonConfig from '../src/assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 class App extends React.Component {
   constructor(props) {
@@ -440,7 +445,7 @@ class App extends React.Component {
                     multiline={false}
                     onChangeText={this.searchFilterFunction}
                 />
-                <Icon style={{ color: "orange" }} name="search" size={14} />
+            <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight:hp('1.2%')}} name="search" />
               </Item>
             </Form>
 
@@ -469,10 +474,7 @@ class App extends React.Component {
                     />
 
                     <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                      <Image
-                          style={[styles.viewDatePickerImageStyle]}
-                          source={require("../icons/calender.png")}
-                      />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
                     </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
@@ -492,10 +494,8 @@ class App extends React.Component {
                         onDatePicked={this.onDOBDatePicked1.bind(this)}
                     />
                     <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                      <Image
-                          style={styles.viewDatePickerImageStyle}
-                          source={require("../icons/calender.png")}
-                      />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
+
                     </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
@@ -605,7 +605,7 @@ class App extends React.Component {
                     multiline={false}
                     onChangeText={this.searchFilterFunction}
                 />
-                <Icon style={{ color: "orange" }} name="search" size={14} />
+            <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight:hp('1.2%')}} name="search" />
               </Item>
             </Form>
 
@@ -634,10 +634,7 @@ class App extends React.Component {
                     />
 
                     <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                      <Image
-                          style={[styles.viewDatePickerImageStyle]}
-                          source={require("../icons/calender.png")}
-                      />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
                     </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
@@ -657,10 +654,7 @@ class App extends React.Component {
                         onDatePicked={this.onDOBDatePicked1.bind(this)}
                     />
                     <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                      <Image
-                          style={styles.viewDatePickerImageStyle}
-                          source={require("../icons/calender.png")}
-                      />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
                     </TouchableOpacity>
                   </View>
                 </TouchableOpacity>

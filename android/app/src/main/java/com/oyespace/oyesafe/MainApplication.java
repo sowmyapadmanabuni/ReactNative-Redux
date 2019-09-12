@@ -53,6 +53,8 @@ import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
+
 public class MainApplication extends Application implements ShareApplication, ReactApplication {
 
     @Override
@@ -70,7 +72,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new GeolocationPackage(),
+                    new GeolocationPackage(),
                     new ReactNativeRestartPackage(),
                     new RNDeviceInfo(),
                     new RNSpinkitPackage(),
@@ -97,7 +99,11 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new ContactsWrapperPackage(),
                     new MapsPackage(),
                     new RNFusedLocationPackage(),
-                    new FabricPackage()
+                    new FabricPackage(),
+                    new RNAndroidLocationEnablerPackage()
+
+
+
             );
         }
 

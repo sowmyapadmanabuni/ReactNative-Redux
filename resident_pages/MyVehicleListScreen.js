@@ -6,12 +6,18 @@ import { connect } from "react-redux";
 import base from "../src/base";
 import {updateIdDashboard} from "../src/actions";
 
+import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import IcoMoonConfig from '../src/assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
+
 class VehicleList extends Component {
 
     static navigationOptions = {
         title: "Vehicle List",
         header:null
     }
+    // open the home screen file lets test
 
     constructor(props){
       super(props);
@@ -127,8 +133,8 @@ class VehicleList extends Component {
             <View style={styles.firstRow}>
               <View style={{justifyContent:'center',alignItems:'flex-start'}}>
                 {item.veType == "Two Wheeler" ? 
-                  <Image style={{width:hp('5%'),height:hp('5%')}} source={require('../icons/2wheeler.png')}/>:
-                  <Image style={{width:hp('5%'),height:hp('5%')}} source={require('../icons/4wheeler.png')}/>
+                  <Icon size={hp('5%')} name="wheeler" />:
+                  <Icon size={hp('5%')} name="wheeler1" />
                 }  
               </View>
               <View style={{flex:1, justifyContent:'center',alignItems:'flex-start',marginLeft:hp('1%'), }}>
@@ -169,14 +175,14 @@ class VehicleList extends Component {
                   VehType:item.veType,
                   Veid: item.veid
                 })}}>
-                  <Image style={{width:hp('3%'), height:hp('3%')}} source={require('../icons/edit.png')}/>
+                  <Icon size={hp('3%')} color="#ff8c00" name="edit" />
                 </TouchableOpacity>
                 <TouchableOpacity 
                  style={{
                   right:10,
                 }}
                 onPress={()=> this.deleteVehicle(item.veid)}>
-                  <Image style={{width:hp('3%'), height:hp('3%')}} source={require('../icons/delete.png')}/>
+                  <Icon size={hp('3%')} color="#ff8c00" name="delete" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -330,7 +336,8 @@ class VehicleList extends Component {
       
         {this.state.dataSource.length == 0 ?
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-              <Image source={require('../icons/car.png')} style={{width:hp('10%'), height:hp('10%'),}}/>
+              <Icon size={hp('10%')} name="wheeler1" />
+              {/* <Image source={require('../icons/car.png')} style={{width:hp('10%'), height:hp('10%'),}}/> */}
               {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Vehicle Data Available.</Text> */}
               <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.6%') }}>Add your vehicle details</Text>
             </View>
