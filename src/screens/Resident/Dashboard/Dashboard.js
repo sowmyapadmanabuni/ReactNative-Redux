@@ -113,7 +113,7 @@ class Dashboard extends PureComponent {
       try {
         if (counter != 0) {
           console.log(JSON.stringify(snapshot.val()));
-          console.log('ROLE_CHANGE_FRTDB');
+          console.log('ROLE_CHANGE_FRTDB',snapshot.val().role);
           if (snapshot.val().role != undefined && snapshot.val().role != 1) {
             let resp = await firebase.messaging().deleteToken();
             firebase.initializeApp(base.utils.strings.firebaseconfig);
@@ -589,6 +589,11 @@ class Dashboard extends PureComponent {
           console.log('Role123456:', updateuserRole);
           updateuserRole({
             prop: 'role',
+            value: role
+          });
+          const { updateIdDashboard } = this.props;
+          updateIdDashboard({
+            prop: 'roleId',
             value: role
           });
           console.log('ROLE_UPDATE', role);
@@ -1136,14 +1141,14 @@ class Dashboard extends PureComponent {
       selectedDropdown,
       selectedDropdown1,
       updateSelectedDropDown,
-      updateIdDashboard
+      updateIdDashboard,
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     let maxLen = 23;
     let maxLenUnit = 10;
     let text = 'ALL THE GLITTERS IS NOT GOLD';
-    console.log('Hfhfhgfhfhhgfhgfgh', dropdown.length, dropdown1.length);
+    console.log('To check the @@@@@@', dropdown.length, dropdown1.length,this.props);
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -1266,7 +1271,7 @@ class Dashboard extends PureComponent {
                 textFontSize={10}
                 disabled={this.state.isSelectedCard === 'UNIT'}
               />
-              {this.state.role === 1 ? (
+              {this.props.dashBoardReducer.role === 1 ? (
                 <CardView
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
@@ -1663,8 +1668,8 @@ class Dashboard extends PureComponent {
   myUnit() {}
 
   goToFirstTab() {
-    const { dropdown1 } = this.props;
-    this.state.isNoAssJoin
+    const { dropdown,dropdown1 } = this.props;
+      dropdown.length === 0
       ? this.props.navigation.navigate('CreateOrJoinScreen')
       : dropdown1.length === 0
       ? alert('Unit is not available')

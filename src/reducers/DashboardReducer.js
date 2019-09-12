@@ -39,7 +39,8 @@ const INITIAL_STATE = {
   called: false,
   role: "",
   familyMemberCount:0,
-  vehiclesCount:0
+  vehiclesCount:0,
+  roleId:null
 };
 
 export default (state = INITIAL_STATE, action) => {

@@ -188,7 +188,7 @@ class MyGuests extends Component {
   }
 
   renderItem = ({ item, index }) => {
-    console.log("List in visited ", item, index)
+    console.log("List in visited ", item, index,this.props.mediaupload)
     return (
       <View style={{ flexDirection: 'column', marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0 }}>
         <View style={{ borderColor: "#707070", borderWidth: wp("0.1%") }} />
