@@ -12,7 +12,7 @@ import {
   TextInput,
   Keyboard,
   Alert,
-  ActivityIndicator
+  ActivityIndicator, BackHandler
 } from "react-native";
 // import Header from "./src/components/common/Header";
 import { NavigationEvents } from "react-navigation";
@@ -84,7 +84,21 @@ class MyGuests extends Component {
         dataSource: newDataSource
       });
     }, 1500);
+
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log("MyGuest")
+      this.props.navigation.goBack(null);
+      return true;
+    });
   }
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
+
+
+
 
 
   getInvitationList = () => {

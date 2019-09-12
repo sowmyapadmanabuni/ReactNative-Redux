@@ -37,7 +37,7 @@ class VehicleList extends Component {
         });
       }, 1500);
       this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-        console.log("Back KSCNJND")
+        console.log("My vehicles list screen")
         this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
         return true;
       });

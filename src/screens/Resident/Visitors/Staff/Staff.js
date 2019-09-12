@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    View, Image, Text, TouchableOpacity, ActivityIndicator,
+    View, Image, Text, TouchableOpacity, ActivityIndicator, BackHandler,
 } from 'react-native';
 import base from "../../../../base";
 import {Dropdown} from "react-native-material-dropdown";
@@ -44,6 +44,17 @@ class Staff extends React.Component {
 
     componentWillMount() {
         this.getListOfStaff();
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            console.log("Staff Details")
+            this.props.navigation.goBack(null);
+            return true;
+        });
     }
 
     async getListOfStaff() {

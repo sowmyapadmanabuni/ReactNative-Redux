@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
     Image, Text, TouchableOpacity,
-    View, FlatList, Platform, PermissionsAndroid, ScrollView, ActivityIndicator, Alert
+    View, FlatList, Platform, PermissionsAndroid, ScrollView, ActivityIndicator, Alert, BackHandler
 
 } from 'react-native';
 import base from "../../../../base";
@@ -70,6 +70,16 @@ class GetStaffReport extends React.Component {
             })
         }
 
+    }
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            console.log("Staff Report")
+            this.props.navigation.goBack(null);
+            return true;
+        });
     }
 
     getAndroidPermissions() {

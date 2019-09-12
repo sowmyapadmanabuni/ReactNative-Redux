@@ -60,6 +60,8 @@ class MyFamilyList extends React.Component {
     this.backHandler.remove();
   }
 
+
+
   renderFlatList(item) {
     let itemID = item.id
 
@@ -180,7 +182,7 @@ class MyFamilyList extends React.Component {
     }, 1500);
     this.myFamilyListGetData();
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
+      console.log("My Family list view")
       this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
       return true;
     });

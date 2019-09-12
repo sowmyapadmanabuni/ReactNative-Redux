@@ -1305,17 +1305,17 @@
 
 import React, { PureComponent } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  Alert,
-  Image,
-  SafeAreaView,
-  Dimensions,
-  Linking,
-  Platform,
-  TouchableOpacity, FlatList
+    View,
+    Text,
+    StyleSheet,
+    ActivityIndicator,
+    Alert,
+    Image,
+    SafeAreaView,
+    Dimensions,
+    Linking,
+    Platform,
+    TouchableOpacity, FlatList, BackHandler
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -1337,6 +1337,7 @@ import {
 
 import _ from 'lodash';
 import base from '../../base';
+import firebase from "react-native-firebase";
 
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
@@ -1380,10 +1381,19 @@ class NotificationDetailScreen extends PureComponent {
     const savedNoifId = navigation.getParam('savedNoifId', 'NO-ID');
     this.props.onNotificationOpen(notifications, index, oyeURL);
     this.props.storeOpenedNotif(savedNoifId, ntid);
+      this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+          console.log("Notification Detail screen")
+          this.props.navigation.goBack(null);
+          return true;
+      });
 
     this.manageJoinRequest();
     this.checkAdminNotifStatus();
   }
+
+  componentWillUnmount(){
+        this.backHandler.remove();
+    }
 
   checkAdminNotifStatus() {
     const { navigation, champBaseURL } = this.props;

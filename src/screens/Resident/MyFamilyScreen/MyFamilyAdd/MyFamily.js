@@ -77,7 +77,7 @@ class MyFamily extends Component {
 
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-          console.log("Back KSCNJND")
+          console.log("My Family list screen")
           this.props.navigation.goBack(null); // works best when the goBack is async
           return true;
         });

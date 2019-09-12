@@ -87,7 +87,7 @@ class MyFamilyEdit extends Component {
 
   componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
+      console.log("MyFamily Edit")
       this.props.navigation.goBack(null); // works best when the goBack is async
       return true;
     });
