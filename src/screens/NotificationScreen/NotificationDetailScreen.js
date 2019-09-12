@@ -1359,7 +1359,7 @@ class NotificationDetailScreen extends PureComponent {
       requestorMob1: '',
 
       dataSource2: [],
-      dataSource3: [],
+      dataSource3: "",
 
       showButtons: true,
 
@@ -2050,7 +2050,7 @@ class NotificationDetailScreen extends PureComponent {
                       <Text>Name</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
-                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}</Text>
+                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}{" "}</Text>
                       <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''}</Text>
                     </View>
                   </View>
@@ -2068,16 +2068,16 @@ class NotificationDetailScreen extends PureComponent {
                             ? Linking.openURL(`tel:${this.state.requestorMob1}`)
                             : Linking.openURL(`tel:${this.state.requestorMob1}`);
                         }}>
-                        
-                          <View style={{ flexDirection: 'row' }}>
 
-                            <Text>{this.state.requestorMob1}</Text>
-                            <Image
-                              style={{ width: hp('2%'), height: hp('2%') }}
-                              source={require("../../../icons/call.png")}
-                            />
-                          </View>
-                        
+                        <View style={{ flexDirection: 'row' }}>
+
+                          <Text>{this.state.requestorMob1}</Text>
+                          <Image
+                            style={{ width: hp('2%'), height: hp('2%') }}
+                            source={require("../../../icons/call.png")}
+                          />
+                        </View>
+
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -2092,7 +2092,7 @@ class NotificationDetailScreen extends PureComponent {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('1%') }} />
+                  <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('3%') }} />
 
 
                 </View>
@@ -2186,6 +2186,7 @@ class NotificationDetailScreen extends PureComponent {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
+    // console.log("DETAILS", details)
     console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
     return (
       <View style={styles.container}>
@@ -2242,10 +2243,13 @@ class NotificationDetailScreen extends PureComponent {
             :
             this.renderButton()}
         </View>
-        <View>
-          {this.renderDetails()}
+        {this.state.dataSource3 === "" ? <View></View> :
+          <View>
+            {this.renderDetails()}
 
-        </View>
+          </View>
+        }
+
 
 
       </View>

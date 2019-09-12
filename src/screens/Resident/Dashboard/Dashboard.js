@@ -55,8 +55,15 @@ import ProgressLoader from 'rn-progress-loader';
 import { NavigationEvents } from 'react-navigation';
 import timer from 'react-native-timer';
 
+import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import IcoMoonConfig from '../../../assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
+
+
 const Profiler = React.unstable_Profiler;
 let counter = 0;
+
 
 class Dashboard extends PureComponent {
   constructor(props) {
@@ -1308,10 +1315,8 @@ class Dashboard extends PureComponent {
                     }
                   }}
                 >
-                  <Image
-                    style={[Style.supportIcon]}
-                    source={require('../../../../icons/call1.png')}
-                  />
+                  <Icon color="#38bcdb" size={hp('2.6%')} style={{...Style.supportIcon}} name="call1" />
+                  
                 </TouchableOpacity>
                 {/* <TouchableOpacity>
               <Image
@@ -1323,6 +1328,7 @@ class Dashboard extends PureComponent {
                   onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
                   //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
                 >
+                  
                   <Image
                     style={Style.supportIcon}
                     source={require('../../../../icons/Group771.png')}
@@ -1409,6 +1415,7 @@ class Dashboard extends PureComponent {
     console.log('FamilyList count', this.props.dashBoardReducer);
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
+        {/* <Icon color="red" size={50} name="delhi"/> */}
         <View style={Style.elevatedView}>
           <CardView
             height={'100%'}
