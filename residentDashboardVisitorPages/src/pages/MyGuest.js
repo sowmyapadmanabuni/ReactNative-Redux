@@ -25,8 +25,15 @@ import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { DatePickerDialog } from "react-native-datepicker-dialog";
 import { connect } from "react-redux";
-import { Card, CardItem, Form, Item, Input, Icon, Button } from "native-base"
+import { Card, CardItem, Form, Item, Input, Button } from "native-base"
 import Collapsible from "react-native-collapsible";
+
+
+import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import IcoMoonConfig from '../../../src/assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
+
 
 let dt = new Date();
 dt.setDate(dt.getDate());
@@ -360,10 +367,7 @@ class MyGuests extends Component {
                 }}
               >
                 <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/share.png")}
-                  />
+                <Icon color="#ff8c00" name="share" style={styles.images} />
                 </CardItem>
               </TouchableOpacity>
             </Card>
@@ -378,10 +382,8 @@ class MyGuests extends Component {
                 }}
               >
                 <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/phone.png")}
-                  />
+                <Icon color="#ff8c00" name="call" style={styles.images} />
+                  {/*  */}
                 </CardItem>
               </TouchableOpacity>
             </Card>
@@ -484,8 +486,7 @@ class MyGuests extends Component {
               multiline={false}
               onChangeText={this.searchFilterFunction}
             />
-
-            <Icon style={styles.icon} name="search" size={14} />
+            <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight:hp('1.2%')}} name="search" />
           </Item>
         </Form>
         {/* <TextInput
@@ -521,10 +522,8 @@ class MyGuests extends Component {
                 />
 
                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                  <Image
-                    style={[styles.viewDatePickerImageStyle]}
-                    source={require("../../../icons/calender.png")}
-                  />
+                <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
+                  
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -544,10 +543,8 @@ class MyGuests extends Component {
                   onDatePicked={this.onDOBDatePicked1.bind(this)}
                 />
                 <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                  <Image
-                    style={styles.viewDatePickerImageStyle}
-                    source={require("../../../icons/calender.png")}
-                  />
+                <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5%')}} name="cal" />
+                 
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -585,7 +582,7 @@ class MyGuests extends Component {
 
         {this.state.dataSource.length === 0 ?
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}   >
-            <Image source={require('../../../icons/guest.png')} style={{ width: hp('10%'), height: hp('10%'), margin: hp('1%') }} />
+            <Icon size={hp('10%')} style={{margin:hp('1%')}} name="guest" />
             {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text> */}
             <Text style={{ backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', fontSize: hp('1.6%') }}>Please invite Guest</Text>
           </View>
@@ -672,7 +669,7 @@ const styles = StyleSheet.create({
   },
   viewDatePickerImageStyle: {
     width: wp("3%"),
-    height: hp("2.2%"),
+    height: hp("3%"),
     marginRight: hp("0.5%")
   },
   buttonUpdateStyle: {

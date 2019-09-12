@@ -27,6 +27,11 @@ import OSButton from '../src/components/osButton/OSButton'
 import StaffStyle from "../src/screens/Resident/Visitors/Staff/StaffStyle";
 import _ from 'lodash';
 
+import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import IcoMoonConfig from '../src/assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
+
 let data = [
     {
         value: "Admin",
@@ -375,10 +380,11 @@ class Resident extends React.Component {
                                     round
                                     onChangeText={(text) => this.handleSearch(text)}
                                 />
-                                <Image
+                                <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight:hp('1.2%'),marginTop:hp('2%')}} name="search" />
+                                {/* <Image
                                     style={{top:10}}
                                     source={require('../icons/search.png')}
-                                />
+                                /> */}
                             </View>
                         </View>
                         <View

@@ -1339,6 +1339,7 @@ import {
 import _ from 'lodash';
 import base from '../../base';
 
+
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
   constructor(props) {
@@ -1360,7 +1361,7 @@ class NotificationDetailScreen extends PureComponent {
       requestorMob1: '',
 
       dataSource2: [],
-      dataSource3: [],
+      dataSource3: "",
 
       showButtons: true,
 
@@ -2085,6 +2086,7 @@ class NotificationDetailScreen extends PureComponent {
                       <Text>Name</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
+<<<<<<< HEAD
                       <Text>
                         {details.ntDesc !== undefined
                           ? details.ntDesc.split(' ')[0].trim()
@@ -2095,6 +2097,10 @@ class NotificationDetailScreen extends PureComponent {
                           ? details.ntDesc.split(' ')[1].trim()
                           : ''}
                       </Text>
+=======
+                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}{" "}</Text>
+                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''}</Text>
+>>>>>>> 93fed8fc2eb08636170ec1a2c6e0f4362e926957
                     </View>
                   </View>
                   <View style={{ flexDirection: 'row' }}>
@@ -2106,6 +2112,7 @@ class NotificationDetailScreen extends PureComponent {
                         onPress={() => {
                           Platform.OS === 'android'
                             ? Linking.openURL(`tel:${this.state.requestorMob1}`)
+<<<<<<< HEAD
                             : Linking.openURL(
                                 `tel:${this.state.requestorMob1}`
                               );
@@ -2118,6 +2125,20 @@ class NotificationDetailScreen extends PureComponent {
                             source={require('../../../icons/call.png')}
                           />
                         </View>
+=======
+                            : Linking.openURL(`tel:${this.state.requestorMob1}`);
+                        }}>
+
+                        <View style={{ flexDirection: 'row' }}>
+
+                          <Text>{this.state.requestorMob1}</Text>
+                          <Image
+                            style={{ width: hp('2%'), height: hp('2%') }}
+                            source={require("../../../icons/call.png")}
+                          />
+                        </View>
+
+>>>>>>> 93fed8fc2eb08636170ec1a2c6e0f4362e926957
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -2133,6 +2154,7 @@ class NotificationDetailScreen extends PureComponent {
                       </Text>
                     </View>
                   </View>
+<<<<<<< HEAD
                   <View
                     style={{
                       borderWidth: 1,
@@ -2141,6 +2163,11 @@ class NotificationDetailScreen extends PureComponent {
                       marginBottom: hp('1%')
                     }}
                   />
+=======
+                  <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('3%') }} />
+
+
+>>>>>>> 93fed8fc2eb08636170ec1a2c6e0f4362e926957
                 </View>
               </View>
             );
@@ -2225,6 +2252,7 @@ class NotificationDetailScreen extends PureComponent {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
+    // console.log("DETAILS", details)
     console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
     return (
       <View style={styles.container}>
@@ -2277,7 +2305,19 @@ class NotificationDetailScreen extends PureComponent {
         <View style={{ height: hp('8%') }}>
           {details.ntType === 'Join_Status' ? null : this.renderButton()}
         </View>
+<<<<<<< HEAD
         <View>{this.renderDetails()}</View>
+=======
+        {this.state.dataSource3 === "" ? <View></View> :
+          <View>
+            {this.renderDetails()}
+
+          </View>
+        }
+
+
+
+>>>>>>> 93fed8fc2eb08636170ec1a2c6e0f4362e926957
       </View>
     );
   }
