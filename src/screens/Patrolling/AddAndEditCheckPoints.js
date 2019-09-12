@@ -88,9 +88,7 @@ class AddAndEditCheckPoints extends React.Component {
         })
     }
 
-    componentDidMount() {
-       
-      }
+  
 
     componentWillMount() {
         console.log("SCDMVD:",this.props.navigation.state.params);
