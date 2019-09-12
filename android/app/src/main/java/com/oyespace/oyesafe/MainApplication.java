@@ -98,9 +98,6 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new MapsPackage(),
                     new RNFusedLocationPackage(),
                     new FabricPackage()
-
-
-
             );
         }
 

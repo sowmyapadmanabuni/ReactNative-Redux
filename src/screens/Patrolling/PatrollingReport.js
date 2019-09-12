@@ -59,6 +59,25 @@ class PatrollingReport extends React.Component {
         this.getPatrolSlot()
     }
 
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
+
     async getPatrolSlot() {
         let self = this;
         let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);

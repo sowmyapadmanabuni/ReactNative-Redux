@@ -171,12 +171,19 @@ import TermsAndConditions from "../src/screens/Policy/TermsAndConditions";
 import City from '../assocition_pages/City.js';
 
 import PatrolSchedule from "../src/screens/Patrolling/PatrolSchedule";
+
+
+
+
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
       "Double tap R on your keyboard to reload,\n" +
       "Shake or press menu button for dev menu"
 });
+
+
+
 
 const NotificationStack = createStackNavigator({
   NotificationScreen: {
@@ -216,8 +223,6 @@ const ResApp = createStackNavigator({
     navigationOptions: {
       title: "My Profile",
       header: null
-      //headerStyle: { backgroundColor: '#FA9917' },
-      // headerTintColor: '#ffffff',
     }
   },
   EditProfileScreen: {
@@ -838,19 +843,14 @@ addCheckPoint: {
   sosScreen: {
     screen: CreateSOS,
     navigationOptions: {
-      title: "Help On the way ",
-      header: props => <PatrollingCommonHeader isReportVisible={false} isShareVisible={false}
-                                               isHidden={true} {...props}/>,
-      headerStyle: { backgroundColor: "#FA9917" },
-      headerTintColor: "#ffffff"
+      header:null
     }
   },
   
 
-},{
-  initialRouteName: "ResDashBoard",
-  headerMode:"screen"
 });
+
+//export const ResApp = reduxifyNavigator(ResApp, "root");
 
 
 export default createAppContainer(ResApp);

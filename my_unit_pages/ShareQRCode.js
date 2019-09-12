@@ -12,7 +12,7 @@ import {
     ActivityIndicator,
     SafeAreaView,
     Dimensions,
-    ScrollView
+    ScrollView,BackHandler
 } from "react-native";
 // import Header from './src/components/common/Header'
 import { QRCode } from "react-native-custom-qr-codes";
@@ -65,6 +65,25 @@ class QRCodeGeneration extends Component {
         console.log("OPEN");
         this.setState({ visible: true });
     }
+
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
 
     qrGeneration = () => {
         const { params } = this.props.navigation.state;

@@ -51,6 +51,25 @@ class QRScreen extends React.Component {
         })
     }
 
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
+
 
     takeScreenShot = refname => {
         const { params } = this.props.navigation.state;
@@ -123,7 +142,7 @@ class QRScreen extends React.Component {
                     <Text
                         style={QRScreenStyles.headerText}>Patrolling Check Points QR Code</Text>
                 </View>
-                <ViewShot ref="viewShot" options={{ format: "jpg", quality: 0.9 }}>
+                <ViewShot ref="viewShot" style={{backgroundColor:"white"}} options={{ format: "jpg", quality: 0.9 }}>
                      <View  style={QRScreenStyles.qrView}>
                         <QRCode
                             value={this.state.latLong}
@@ -133,10 +152,10 @@ class QRScreen extends React.Component {
                             logoSize={50}
                         />
                     </View>
-                    <Text style={{alignSelf:'center',marginTop:10,fontFamily:base.theme.fonts.bold,color:base.theme.colors.white}}>
+                    <Text style={{alignSelf:'center',marginTop:10,fontFamily:base.theme.fonts.bold,color:base.theme.colors.black}}>
                         Association Name : {this.props.dashboardReducer.selectedDropdown}
                     </Text>
-                    <Text style={{alignSelf:'center',marginTop:10-3 ,fontFamily:base.theme.fonts.bold,color:base.theme.colors.white}}>
+                    <Text style={{alignSelf:'center',marginTop:10-3 ,fontFamily:base.theme.fonts.bold,color:base.theme.colors.black}}>
                         Check Point Name : {this.state.cpName}
                     </Text>
                 </ViewShot>

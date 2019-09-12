@@ -78,16 +78,23 @@ class EditVehicle extends Component {
         })
     }
 
-    componentDidMount() {
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-          console.log("Back KSCNJND")
-          this.props.navigation.goBack(null); // works best when the goBack is async
-          return true;
-        });
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
       }
     
-      componentWillUnmount(){
-        this.backHandler.remove();
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
       }
 
     onSelect(index, value) {

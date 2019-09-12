@@ -60,9 +60,11 @@
 		9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */; };
 		9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06026B22C4FF5200DA17C8 /* MapKit.framework */; };
 		9F675E6E22E5C99500D175F9 /* libRCTContactsWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F675E3A22E5C98800D175F9 /* libRCTContactsWrapper.a */; };
+		9F9CC6A42326543600895783 /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9F9CC66C2326543500895783 /* sound_1.mp3 */; };
 		9FCBB88422FB063300C2E0AF /* libRNShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB87E22FB060100C2E0AF /* libRNShare.a */; };
 		9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB88522FB068100C2E0AF /* Social.framework */; };
 		9FCBB88822FB068F00C2E0AF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB88722FB068F00C2E0AF /* MessageUI.framework */; };
+		9FDB79AC2326739E00E7A993 /* sound_2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9FDB79742326739D00E7A993 /* sound_2.mp3 */; };
 		A044B858230D4DA98A645E50 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A97874886154EAD8570A5A1 /* MaterialCommunityIcons.ttf */; };
 		A1E6D75E21DF2328006FE22F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E6D75D21DF2328006FE22F /* libsqlite3.tbd */; };
 		A1E6D76021DF2331006FE22F /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E6D75F21DF2331006FE22F /* libsqlite3.0.tbd */; };
@@ -475,13 +477,6 @@
 			remoteGlobalIDString = D8D93E6420161A7F00A39331;
 			remoteInfo = reactnativeuilib;
 		};
-		FDF254862313B2300091E722 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 117405FA1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDFTests;
-		};
 		FDF254912313B2310091E722 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7B1D4D427E654E448D8EF7BA /* RCTRestart.xcodeproj */;
@@ -577,9 +572,11 @@
 		9829F0B4AFED38BA79B920FC /* Pods-OyeSpaceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OyeSpaceTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OyeSpaceTests/Pods-OyeSpaceTests.release.xcconfig"; sourceTree = "<group>"; };
 		9F06026B22C4FF5200DA17C8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		9F675E3322E5C98700D175F9 /* ContactsWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ContactsWrapper.xcodeproj; path = "../node_modules/react-native-contacts-wrapper/ios/ContactsWrapper.xcodeproj"; sourceTree = "<group>"; };
+		9F9CC66C2326543500895783 /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound_1.mp3; path = ../../../../../Downloads/sound_1.mp3; sourceTree = "<group>"; };
 		9FCBB84822FB060100C2E0AF /* RNShare.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShare.xcodeproj; path = "../node_modules/react-native-share/ios/RNShare.xcodeproj"; sourceTree = "<group>"; };
 		9FCBB88522FB068100C2E0AF /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		9FCBB88722FB068F00C2E0AF /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		9FDB79742326739D00E7A993 /* sound_2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound_2.mp3; path = ../../../../../Downloads/sound_2.mp3; sourceTree = "<group>"; };
 		A10286B321E3730300CB1BC5 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		A1E6D75D21DF2328006FE22F /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A1E6D75F21DF2331006FE22F /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
@@ -943,6 +940,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9FDB79742326739D00E7A993 /* sound_2.mp3 */,
+				9F9CC66C2326543500895783 /* sound_1.mp3 */,
 				13B07FAE1A68108700A75B9A /* OyeSpace */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* OyeSpaceTests */,
@@ -1059,7 +1058,6 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-				FDF254872313B2300091E722 /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1679,13 +1677,6 @@
 			remoteRef = FDC53A8E229FABA80095F5B5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FDF254872313B2300091E722 /* RNHTMLtoPDFTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = FDF254862313B2300091E722 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		FDF254922313B2310091E722 /* libRCTRestart.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1702,8 +1693,10 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				9F9CC6A42326543600895783 /* sound_1.mp3 in Resources */,
 				179FDCDC0E1645AE8B76B3F3 /* AntDesign.ttf in Resources */,
 				0EB496CCBD65402CB6101409 /* Entypo.ttf in Resources */,
+				9FDB79AC2326739E00E7A993 /* sound_2.mp3 in Resources */,
 				C5A6861F06354B359662DEF7 /* EvilIcons.ttf in Resources */,
 				B9E1905B5D7E4ED1BA9765E5 /* Feather.ttf in Resources */,
 				5972C4279F4F4ECE99D5C64E /* FontAwesome.ttf in Resources */,

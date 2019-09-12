@@ -59,7 +59,7 @@ const CreateSOSStyles = StyleSheet.create({
     },
     guardView: {
         flexDirection: 'column', height: heightPercentageToDP('15%'),
-        width: heightPercentageToDP('23%'), justifyContent: 'center'
+        width: heightPercentageToDP('30%'), justifyContent: 'center'
     },
     guardHeadingView: {height: 30},
     guardHeading: {

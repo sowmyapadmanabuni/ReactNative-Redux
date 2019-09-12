@@ -65,6 +65,25 @@ class PatrolSchedule extends React.Component {
         this.getPatrollingList();
     }
 
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.navigation.state.params.refresh) {
             this.getPatrollingList()

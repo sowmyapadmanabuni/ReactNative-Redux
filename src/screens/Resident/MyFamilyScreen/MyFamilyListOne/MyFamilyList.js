@@ -174,11 +174,25 @@ class MyFamilyList extends React.Component {
       });
     }, 1500);
     this.myFamilyListGetData();
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
-      this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
-      return true;
-    });
+  }
+
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
   }
 
   renderItem = ({item,index}) => {

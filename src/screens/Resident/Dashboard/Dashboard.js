@@ -29,6 +29,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
+import * as fb  from 'firebase';
 
 import RNRestart from 'react-native-restart';
 
@@ -103,6 +104,9 @@ class Dashboard extends PureComponent {
     this.getListOfAssociation();
     this.myProfileNet();
     this.listenRoleChange();
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      this.setState({ isSOSSelected: false });
+    });
   }
 
   listenRoleChange(){
@@ -149,35 +153,39 @@ class Dashboard extends PureComponent {
 
   componentDidUpdate() {
     if (Platform.OS === "android") {
-      this.backButtonListener = BackHandler.addEventListener(
-        "hardwareBackPress",
-        () => {
-          if (this.currentRouteName !== "Main") {
-            return false;
+      setTimeout(()=>{
+        this.backButtonListener = BackHandler.addEventListener(
+          "hardwareBackPress",
+          () => {
+            if (this.currentRouteName !== "Main") {
+              return false;
+            }
+  
+            if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
+               this.showExitAlert();
+             // BackHandler.exitApp();
+              //return true;
+            }
+            if (this.state.isSelectedCard === "UNIT") {
+               this.showExitAlert();
+              //BackHandler.exitApp();
+            } else {
+              this.changeCardStatus("UNIT");
+            }
+  
+            this.lastBackButtonPress = new Date().getTime();
+  
+            return true;
           }
-
-          if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-            // this.showExitAlert();
-           // BackHandler.exitApp();
-            //return true;
-          }
-          if (this.state.isSelectedCard === "UNIT") {
-            // this.showExitAlert();
-            //BackHandler.exitApp();
-          } else {
-            this.changeCardStatus("UNIT");
-          }
-
-          this.lastBackButtonPress = new Date().getTime();
-
-          return true;
-        }
-      );
+        );
+      },100)
+      
     }
   }
 
   componentWillUnmount(){
     this.backButtonListener.remove();
+    this.focusListener.remove();
   }
 
   showExitAlert(){
@@ -494,6 +502,20 @@ class Dashboard extends PureComponent {
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
+    // let self = this;
+    
+    //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
+    //     let receivedData = snapshot.val();
+    //     console.log("ReceiveddataDash", snapshot.val(),'SOS/' + SelectedAssociationID + "/" + MyAccountID + "/");
+    //     if (receivedData !== null) {
+    //        self.props.navigation.navigate("sosScreen",{isActive:true})
+    //         }
+    //     });
+    
+    
+    //Adding an event listner om focus
+    //So whenever the screen will have focus it will set the state to zero
+    
 
     if (!this.props.called) {
       this.didMount();
@@ -1326,29 +1348,43 @@ try{
                 </ElevatedView>
             */}
 
-            <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'flex-end',marginTop:hp('20')}}>
+            {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?
               <TouchableHighlight 
               underlayColor={base.theme.colors.transparent}
               onPress={()=>this.selectSOS()}>
               <Image
-              style={{width: wp("15%"),
+              style={{width: wp("18%"),
               height: hp("10%"),
               right: 20,
               justifyContent: "center"}}
                 source={require('../../../../icons/sos_btn.png')}
                 />
                 </TouchableHighlight>:
+                <View style={{flexDirection:'row',right:45}}>
+                  <TouchableHighlight style={{alignSelf:'flex-end',right:2}} 
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={()=>this.selectSOS()}>
+                  <Text style={{alignSelf:'flex-end',right:5,color:base.theme.colors.red}}>Cancel</Text>
+                  </TouchableHighlight>
+                <TouchableHighlight 
+                underlayColor={base.theme.colors.transparent}
+                onPress={()=>this.props.navigation.navigate("sosScreen",{isActive:false})}>
                  <CountdownCircle
                  seconds={5}
-                 radius={20}
+                 radius={25}
                  borderWidth={7}
                  color={base.theme.colors.primary}
+                 updateText={(elapsedSeconds, totalSeconds) =>
+                  (""+totalSeconds - elapsedSeconds).toString()+"\nsec"}
                  bgColor="#fff"
-                 textStyle={{ fontSize: 20 }}
-                 onTimeElapsed={() => this.props.navigation.navigate("")}
-             />}
-            </View>
+                 textStyle={{ fontSize: 15,textAlign:'center'}}
+                 onTimeElapsed={() => this.props.navigation.navigate("sosScreen",{isActive:false})}
+             />
+             </TouchableHighlight>
+             </View>
+             }
+            </View> */}
       </ElevatedView>
     );
   }
@@ -1476,6 +1512,43 @@ try{
             <Text>Patrolling</Text>
           </Button>
         </View>
+        {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
+              {!this.state.isSOSSelected?
+              <TouchableHighlight 
+              underlayColor={base.theme.colors.transparent}
+              onPress={()=>this.selectSOS()}>
+              <Image
+              style={{width: wp("15%"),
+              height: hp("10%"),
+              right: 20,
+              justifyContent: "center"}}
+                source={require('../../../../icons/sos_btn.png')}
+                />
+                </TouchableHighlight>:
+                <View style={{flexDirection:'row',right:45}}>
+                  <TouchableHighlight style={{alignSelf:'flex-end',right:2}} 
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={()=>this.selectSOS()}>
+                  <Text style={{alignSelf:'flex-end',right:5,color:base.theme.colors.red}}>Cancel</Text>
+                  </TouchableHighlight>
+                <TouchableHighlight 
+                underlayColor={base.theme.colors.transparent}
+                onPress={()=>this.props.navigation.navigate("sosScreen",{isActive:false})}>
+                 <CountdownCircle
+                 seconds={5}
+                 radius={25}
+                 borderWidth={7}
+                 color={base.theme.colors.primary}
+                 updateText={(elapsedSeconds, totalSeconds) =>
+                  (""+totalSeconds - elapsedSeconds).toString()+"\nsec"}
+                 bgColor="#fff"
+                 textStyle={{ fontSize: 15,textAlign:'center'}}
+                 onTimeElapsed={() => this.props.navigation.navigate("sosScreen",{isActive:false})}
+             />
+             </TouchableHighlight>
+             </View>
+             }
+            </View> */}
       </ElevatedView>
     );
   }
