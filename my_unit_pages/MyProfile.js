@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
   View, Platform,BackHandler
 } from "react-native";
-// import Header from "./src/components/common/Header";
+import { NavigationActions } from 'react-navigation'
 import { Button } from "native-base";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { NavigationEvents } from "react-navigation";
@@ -24,16 +24,17 @@ import {
 } from "../src/actions";
 
 class MyProfile extends Component {
-
   constructor(props){
-    super();
+    super(props);
+    
     this.state = {
       ImageSource: null,
       datasource: null,
-      
-    }
-  }  
-  
+    };
+    this.backButtonListener = null;
+    this.currentRouteName = "Main";
+    this.lastBackButtonPress = null;
+  }
 
 
   static navigationOptions = {
@@ -73,24 +74,43 @@ class MyProfile extends Component {
       .catch(error => console.log(error))
   }
 
-  componentDidMount() {
-    this.myProfile();
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log('Inside Back handler')
-      this.props.navigation.goBack(null)
-      return true;
-    });
+   componentWillMount(){
+    
   }
 
-  componentWillUnmount(){
-    this.backHandler.remove();
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+    this.myProfile();
   }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
+  }
+
+
+  onBackButtonPressAndroid = () => {
+    console.log("HIttinh1234")
+    this.props.navigation.goBack(null);
+    return false
+  }
+
+
 
   render() {
     console.log("State in My Profile:", this.state.ImageSource, this.props);
     const { navigate } = this.props.navigation
     return (
-
       <View style={styles.mainViewStyle}>
         {/* <Header /> */}
         <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>

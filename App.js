@@ -289,7 +289,7 @@ const mapStateToProps = state => {
 
 const LoadingConnect = connect(mapStateToProps)(Loading);
 
-const App = createAppContainer(
+const AppNavigator = createAppContainer(
     createSwitchNavigator(
         {
           AuthLoading: LoadingConnect,
@@ -301,6 +301,22 @@ const App = createAppContainer(
         }
     )
 );
+
+import NavigatorService from './navigator';
+
+class App extends React.Component{
+
+
+  render(){
+    return(
+      <AppNavigator
+      ref={navigatorRef => {
+        NavigatorService.setContainer(navigatorRef);
+      }}
+      />
+    )
+  }
+}
 
 export default App;
 

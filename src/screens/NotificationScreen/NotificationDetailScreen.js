@@ -1315,8 +1315,7 @@ import {
   Dimensions,
   Linking,
   Platform,
-  TouchableOpacity,
-  FlatList
+  TouchableOpacity, FlatList,BackHandler
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -1385,6 +1384,25 @@ class NotificationDetailScreen extends PureComponent {
 
     this.manageJoinRequest();
     this.checkAdminNotifStatus();
+  }
+
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
   }
 
   checkAdminNotifStatus() {

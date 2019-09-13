@@ -121,6 +121,7 @@ import PatrollingCommonHeader from "../src/components/NavigationalHeaders/Patrol
 import PatrollingCheckPoints from "../src/screens/Patrolling/PatrollingCheckPoints";
 import AddAndEditCheckPoints from "../src/screens/Patrolling/AddAndEditCheckPoints";
 import SchedulePatrol from "../src/screens/Patrolling/SchedulePatrol";
+import CreateSOS from '../src/screens/SOS/CreateSOS'
 import QRScreen from "../src/screens/Patrolling/QRScreen";
 import PatrollingReport from '../src/screens/Patrolling/PatrollingReport'
 import ReportScreen from "../src/screens/Patrolling/ReportScreen";
@@ -170,12 +171,19 @@ import TermsAndConditions from "../src/screens/Policy/TermsAndConditions";
 import City from '../assocition_pages/City.js';
 
 import PatrolSchedule from "../src/screens/Patrolling/PatrolSchedule";
+
+
+
+
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
   android:
       "Double tap R on your keyboard to reload,\n" +
       "Shake or press menu button for dev menu"
 });
+
+
+
 
 const NotificationStack = createStackNavigator({
   NotificationScreen: {
@@ -215,8 +223,6 @@ const ResApp = createStackNavigator({
     navigationOptions: {
       title: "My Profile",
       header: null
-      //headerStyle: { backgroundColor: '#FA9917' },
-      // headerTintColor: '#ffffff',
     }
   },
   EditProfileScreen: {
@@ -834,12 +840,17 @@ addCheckPoint: {
                                                isHidden={true} {...props}/>
     }
   },
+  sosScreen: {
+    screen: CreateSOS,
+    navigationOptions: {
+      header:null
+    }
+  },
   
 
-},{
-  initialRouteName: "ResDashBoard",
-  headerMode:"screen"
 });
+
+//export const ResApp = reduxifyNavigator(ResApp, "root");
 
 
 export default createAppContainer(ResApp);

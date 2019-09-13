@@ -8,7 +8,7 @@ import {
   Button,
   Image,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,BackHandler
 } from "react-native";
 import ImageLoad from "react-native-image-placeholder";
 import ActionButton from "react-native-action-button";
@@ -69,6 +69,26 @@ export default class ViewFamilyMembersList extends Component {
   componentDidMount() {
     this.refresh();
   }
+
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
+  }
+
   refresh() {
     const url =
       global.oye247BaseURL +
