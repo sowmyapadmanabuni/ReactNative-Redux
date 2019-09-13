@@ -68,11 +68,7 @@ class MyGuests extends Component {
     this.state.dataSource.map((data) => {
       newDataSource.push({ ...data, open: false })
     })
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Visitors")
-      this.props.navigation.goBack(null);
-      return true;
-    });
+
     setTimeout(() => {
       self.getInvitationList();
       self.setState({
@@ -81,9 +77,22 @@ class MyGuests extends Component {
       });
     }, 2500);
   }
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
 
   componentWillUnmount() {
-    this.backHandler.remove();
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+  }
+
+  processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
   }
 
   getInvitationList = () => {

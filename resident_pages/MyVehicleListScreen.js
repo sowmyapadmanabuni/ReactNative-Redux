@@ -36,15 +36,27 @@ class VehicleList extends Component {
           isLoading: false
         });
       }, 1500);
-      this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-        console.log("My vehicles list screen")
-        this.props.navigation.navigate("ResDashBoard"); // works best when the goBack is async
-        return true;
-      });
+
+      setTimeout(()=>{
+        BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+      },100)
     }
 
-    componentWillUnmount(){
-      this.backHandler.remove()
+    // componentDidUpdate() {
+      
+    // }
+  
+    componentWillUnmount() {
+      setTimeout(()=>{
+        BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+      },0)
+      
+    }
+  
+     processBackPress(){
+      console.log("Part");
+      const {goBack} = this.props.navigation;
+      goBack(null);
     }
 
     getVehicleList = () => {

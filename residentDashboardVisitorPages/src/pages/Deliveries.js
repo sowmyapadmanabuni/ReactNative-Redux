@@ -15,7 +15,8 @@ import {
   TextInput,
   Easing,
   SafeAreaView,
-  Dimensions
+  Dimensions,
+    BackHandler
 } from "react-native";
 // import Header from "./src/components/common/Header"
 import { Card, CardItem, Button, Form, Item, Input } from "native-base";
@@ -72,6 +73,24 @@ class App extends React.Component {
 
     };
     this.arrayholder = [];
+  }
+
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+  }
+
+  processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
   }
 
   //Date Picker 1

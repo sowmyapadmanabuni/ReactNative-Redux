@@ -89,6 +89,25 @@ class SchedulePatrol extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
+
 
     async componentWillMount(){
         let key = base.utils.strings.patrolId;
@@ -273,6 +292,7 @@ class SchedulePatrol extends React.Component {
             PCIDs:pcids
         };
         let stat = await base.services.OyeSafeApi.updatePatrol(detail);
+        console.log("KHJDKVHDV<HDKJVDV<:",stat);
         try {
             if (stat) {
                 if (stat.success) {

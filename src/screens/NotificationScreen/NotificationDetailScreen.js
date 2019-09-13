@@ -1305,17 +1305,17 @@
 
 import React, { PureComponent } from 'react';
 import {
-    View,
-    Text,
-    StyleSheet,
-    ActivityIndicator,
-    Alert,
-    Image,
-    SafeAreaView,
-    Dimensions,
-    Linking,
-    Platform,
-    TouchableOpacity, FlatList, BackHandler
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  Image,
+  SafeAreaView,
+  Dimensions,
+  Linking,
+  Platform,
+  TouchableOpacity, FlatList,BackHandler
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -1392,9 +1392,24 @@ class NotificationDetailScreen extends PureComponent {
     this.checkAdminNotifStatus();
   }
 
-  componentWillUnmount(){
-        this.backHandler.remove();
-    }
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
+  }
 
   checkAdminNotifStatus() {
     const { navigation, champBaseURL } = this.props;
@@ -2136,7 +2151,9 @@ class NotificationDetailScreen extends PureComponent {
                     </View>
                   </View>
                   <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('3%') }} />
-          </View>
+
+
+                </View>
               </View>
             );
           }
@@ -2279,7 +2296,7 @@ class NotificationDetailScreen extends PureComponent {
 
           </View>
         }
-          </View>
+      </View>
     );
   }
 }

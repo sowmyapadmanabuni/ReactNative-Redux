@@ -46,15 +46,17 @@ class Staff extends React.Component {
         this.getListOfStaff();
     }
 
-    componentWillUnmount() {
-        this.backHandler.remove();
+    componentDidUpdate() {
+        setTimeout(()=>{
+            BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
     }
-    componentDidMount() {
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            console.log("Staff Details")
-            this.props.navigation.goBack(null);
-            return true;
-        });
+
+    componentWillUnmount() {
+        setTimeout(()=>{
+            BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+
     }
 
     async getListOfStaff() {

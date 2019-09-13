@@ -184,14 +184,14 @@ class GetStaffReport extends React.Component {
         base.utils.logger.log(duration.days())
         let difference=duration.as('days');
         let selectedDate = input.FromDate;
-        console.log('hghgfghfgf',difference,difference+1)
+       // console.log('hghgfghfgf',difference,difference+1)
 
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-                console.log("Diffrence:",initialDate,reportsData);
+               // console.log("Diffrence:",initialDate,reportsData);
                 for (let i = 0; i < reportsData.length; i++) {
                     let rowData = [];
                     rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'))

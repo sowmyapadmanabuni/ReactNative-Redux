@@ -64,13 +64,21 @@ class DashBoardHeader extends React.Component {
   };
 
   getRoleName(roleId) {
+    console.log('State in dashboard header:', this.props.dashboardReducer,this.props.dashboardReducer.dropdown1,this.props.dashboardReducer.selectedDropdown1);
+    let dropDown=this.props.dashboardReducer.dropdown1
+    let myRole=roleId
+    for(let i=0;i<dropDown.length;i++){
+     if(this.props.dashboardReducer.selectedDropdown1 ===dropDown[i].name){
+       myRole=dropDown[i].myRoleId
+     }
+ }
     try {
-      roleId = parseInt(roleId);
-      if (roleId === 1) {
-        return 'Admin';
-      } else if (roleId === 2) {
+      //roleId = parseInt(roleId);
+      if (myRole === 1) {
+        return 'Owner';  //return 'Admin';
+      } else if (myRole === 2) {
         return 'Owner';
-      } else if (roleId === 3) {
+      } else if (myRole=== 3) {
         return 'Tenant';
       } else {
         return '';
@@ -81,7 +89,6 @@ class DashBoardHeader extends React.Component {
   }
 
   render() {
-    console.log('State in dashboard header:', this.state, this.props);
     return (
       <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
         <View style={HeaderStyles.container}>
