@@ -13,7 +13,8 @@ import {
     TouchableWithoutFeedback,
     View,
     Platform,BackHandler
-} from "react-native"
+} from "react-native";
+import {StackActions, NavigationActions } from 'react-navigation';
 
 import {Button, Form, Input, Item, Label} from "native-base";
 
@@ -66,7 +67,7 @@ class EditProfile extends Component {
     
       componentWillUnmount() {
         setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+          BackHandler.removeEventListener('hardwareBackPress',()=>this.processBackPress())
         },0)
         
       }
@@ -75,8 +76,9 @@ class EditProfile extends Component {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
+        return true;
       }
-
+//MyProfileScreen
 
 
     validation = () => {

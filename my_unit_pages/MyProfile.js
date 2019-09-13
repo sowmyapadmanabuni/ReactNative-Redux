@@ -9,9 +9,9 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View, Platform,BackHandler
+  View, Platform,BackHandler,
 } from "react-native";
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions } from 'react-navigation';
 import { Button } from "native-base";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { NavigationEvents } from "react-navigation";
@@ -34,13 +34,13 @@ class MyProfile extends Component {
     this.backButtonListener = null;
     this.currentRouteName = "Main";
     this.lastBackButtonPress = null;
-  }
+  };
 
 
   static navigationOptions = {
     title: "My Profile",
     header: null
-  }
+  };
 
   myProfile = () => {
     fetch(
@@ -72,37 +72,37 @@ class MyProfile extends Component {
         });
       })
       .catch(error => console.log(error))
-  }
+  };
 
    componentWillMount(){
-    
+     console.log("Part HIttinh1234");
+     this.myProfile();
   }
 
   componentDidUpdate() {
-    setTimeout(()=>{
-      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-    },100)
-    this.myProfile();
+    if(Platform.OS === 'android'){
+      setTimeout(()=>{
+        BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+      },100)
+    }
   }
 
   componentWillUnmount() {
-    setTimeout(()=>{
-      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-    },0)
+   // BackHandler.removeEventListener('backPress');
+  
+      BackHandler.removeEventListener('hardwareBackPress',()=>this.processBackPress())
+  
+      
     
   }
 
-   processBackPress(){
-    console.log("Part");
+   processBackPress(stat){
+    console.log("Part",stat);
     const {goBack} = this.props.navigation;
-    goBack(null);
-  }
+      goBack(null);
+      return true;
 
-
-  onBackButtonPressAndroid = () => {
-    console.log("HIttinh1234")
-    this.props.navigation.goBack(null);
-    return false
+   
   }
 
 

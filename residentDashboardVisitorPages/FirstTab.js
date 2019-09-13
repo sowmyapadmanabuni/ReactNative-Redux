@@ -17,17 +17,9 @@ import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffRepor
 
 class FirstTab extends Component {
 
-  componentDidMount() {
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
-      this.props.navigation.goBack(null); // works best when the goBack is async
-      return true;
-    });
-  }
+  
 
-  componentWillUnmount(){
-    this.backHandler.remove();
-  }
+  
     render() {
 
     const AppTabNavigator = createMaterialTopTabNavigator({
