@@ -261,14 +261,14 @@ class App extends React.Component {
         >
           <View style={styles.iconContainer}>
             {item.vlEntryImg == "" ?
-            //   <Text style={styles.contactIcon}>
-            //   {item.vlfName[0].toUpperCase()}
-            // </Text> 
-            <Image
+              //   <Text style={styles.contactIcon}>
+              //   {item.vlfName[0].toUpperCase()}
+              // </Text> 
+              <Image
                 style={styles.profilePicImageStyle}
                 source={{
                   uri:
-                      "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder
+                    "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder
                 }}
               />
               :
@@ -292,7 +292,8 @@ class App extends React.Component {
               </View> */}
               <View style={{ flexDirection: 'row', marginBottom: hp('0.3%') }}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Image source={require('../../../icons/user.png')} style={{ width: hp('2%'), height: hp('2%') }} />
+                  {/* user */}
+                  <Icon color="#ff8c00" size={hp('2%')} name="user" />
                   <Text>{"  "}</Text>
                 </View>
                 <View>
@@ -301,7 +302,8 @@ class App extends React.Component {
               </View>
               <View style={{ flexDirection: 'row', marginBottom: hp('0.3%') }}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Image source={require('../../../icons/entry_time.png')} style={{ width: hp('2%'), height: hp('2%') }} />
+                  {/* entry_time */}
+                  <Icon color="#ff8c00" size={hp('2%')} name="entry_time" />
                   <Text>{"  "}</Text>
                 </View>
                 <View>
@@ -326,7 +328,8 @@ class App extends React.Component {
 
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Image source={require('../../../icons/location.png')} style={{ width: hp('2%'), height: hp('2%') }} />
+                  {/* location */}
+                  <Icon color="#ff8c00" size={hp('2%')} name="location" />
                   <Text>{"  "}</Text>
                 </View>
                 <View>
@@ -363,24 +366,24 @@ class App extends React.Component {
                 }}
               >
                 <CardItem bordered>
-                  <Image
-                    style={styles.images}
-                    source={require("../icons/phone.png")}
-                  />
+                  <Icon color="#ff8c00" style={styles.images} name="call" />
                 </CardItem>
               </TouchableOpacity>
             </Card>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', alignSelf: 'flex-end' }}>
-          <View style={{ alignItems: 'flex-end', marginRight: hp('1%') }}>
-            {item.open ?
-              <View /> :
-              <View>
-                <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_more.png')} />
-              </View>
-            }
-          </View>
+        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center' }}>
+          <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: hp('1%') }}>
+              {item.open ?
+                <View /> :
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: '#ff8c00', marginRight: hp('1%') }}>More</Text>
+                  <Icon color="#ff8c00" size={hp('1.8%')} name="show_more" />
+                </View>
+              }
+            </View>
+          </TouchableOpacity>
         </View>
         <Collapsible
           duration={100}
@@ -407,16 +410,19 @@ class App extends React.Component {
                   </View>
                 </View>
               } */}
-            <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'flex-end', marginRight: hp('1%') }}>
-              {!item.open ?
-                <View>
-                </View> :
+            <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}>
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginRight: hp('1%') }}>
+                {!item.open ?
+                  <View>
+                  </View> :
 
-                <View>
-                  <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_less.png')} />
-                </View>
-              }
-            </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ color: '#ff8c00', marginRight: hp('1%') }}>Less</Text>
+                    <Icon color="#ff8c00" size={hp('1.8%')} name="show_less" />
+                  </View>
+                }
+              </View>
+            </TouchableOpacity>
           </View>
         </Collapsible>
 
@@ -441,7 +447,7 @@ class App extends React.Component {
                 multiline={false}
                 onChangeText={this.searchFilterFunction}
               />
-            <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight:hp('1.2%')}} name="search" />
+              <Icon color="#ff8c00" size={hp('2.6%')} style={{ marginRight: hp('1.2%') }} name="search" />
             </Item>
           </Form>
 
@@ -470,7 +476,7 @@ class App extends React.Component {
                   />
 
                   <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                  <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{ marginRight: hp('0.5') }} name="cal" />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
@@ -490,7 +496,7 @@ class App extends React.Component {
                     onDatePicked={this.onDOBDatePicked1.bind(this)}
                   />
                   <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                  <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{ marginRight: hp('0.5') }} name="cal" />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
@@ -558,7 +564,7 @@ class App extends React.Component {
                 multiline={false}
                 onChangeText={this.searchFilterFunction}
               />
-            <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight:hp('1.2%')}} name="search" />
+              <Icon color="#ff8c00" size={hp('2.6%')} style={{ marginRight: hp('1.2%') }} name="search" />
             </Item>
           </Form>
 
@@ -587,7 +593,7 @@ class App extends React.Component {
                   />
 
                   <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                  <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{ marginRight: hp('0.5') }} name="cal" />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
@@ -607,7 +613,7 @@ class App extends React.Component {
                     onDatePicked={this.onDOBDatePicked1.bind(this)}
                   />
                   <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                  <Icon color="#ff8c00" size={hp('2%')} style={{marginRight:hp('0.5')}}  name="cal" />
+                    <Icon color="#ff8c00" size={hp('2%')} style={{ marginRight: hp('0.5') }} name="cal" />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
@@ -646,7 +652,7 @@ class App extends React.Component {
           {this.state.dataSource.length === 0 ?
             <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: 'white', width: '100%', height: '80%' }}   >
               {/* delivery-man */}
-              <Icon size={hp('10%')} style={{margin:hp('1%')}} name="delivery-man" />
+              <Icon size={hp('10%')} style={{ margin: hp('1%') }} name="delivery-man" />
               <Text style={{ backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', fontSize: hp('1.6%') }}>No Entries for selected Date</Text>
             </View>
             : (
@@ -697,12 +703,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   profilePicImageStyle: {
-      width: hp("8%"),
-      height: hp("8%"),
-      borderColor: "#ff8c00",
-      borderRadius: hp("4%"),
-      marginTop: hp("2%"),
-      borderWidth: hp("0.1%")
+    width: hp("8%"),
+    height: hp("8%"),
+    borderColor: "#ff8c00",
+    borderRadius: hp("4%"),
+    marginTop: hp("2%"),
+    borderWidth: hp("0.1%")
   },
   datePickerButtonView: {
     marginTop: hp("1.5%"),
@@ -750,7 +756,7 @@ const styles = StyleSheet.create({
   },
 
   contactIcon: {
-   width: hp('12%'), height: hp('12%'),
+    width: hp('12%'), height: hp('12%'),
     fontSize: hp("3.5%"),
     color: "#fff"
   },
