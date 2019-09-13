@@ -20,6 +20,7 @@
     "react-native": "^0.59.8",
     "react-native-action-button": "^2.8.5",
     "react-native-android-location-enabler": "^1.1.0",
+    "react-native-android-wifi": "0.0.41",
     "react-native-blink-view": "0.0.6",
     "react-native-calendar-picker": "^5.22.0",
     "react-native-calendar-select": "^0.1.2",

@@ -29,7 +29,7 @@ import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
 import Geolocation from 'react-native-geolocation-service';
 var RNFS = require('react-native-fs');
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-
+import wifi from 'react-native-android-wifi';
 
 
 const {width, height} = Dimensions.get('window');
@@ -77,6 +77,8 @@ class AddAndEditCheckPoints extends React.Component {
         
         this.getUserLocation = this.getUserLocation.bind(this)
 
+
+
     }
 
     
@@ -90,7 +92,7 @@ class AddAndEditCheckPoints extends React.Component {
 
   
 
-    componentWillMount() {
+   async componentWillMount() {
         console.log("SCDMVD:",this.props.navigation.state.params);
         let params = this.props.navigation.state.params !== undefined ? this.props.navigation.state.params.data.item : null;
         if (params === null) {
@@ -117,6 +119,20 @@ class AddAndEditCheckPoints extends React.Component {
         console.log("Params:", params);
 
     };
+
+
+    scanWifiStrength(callback){
+        if(Platform.OS == 'android'){
+            wifi.reScanAndLoadWifiList((wifiStringList) => {
+                var wifiArray = JSON.parse(wifiStringList);            
+                callback(JSON.stringify(wifiArray))
+            },(error)=>{
+                callback("")
+            });
+        }else{
+            callback("");
+        }
+    }
 
 
     checkGPSStatus(params){
@@ -393,51 +409,55 @@ class AddAndEditCheckPoints extends React.Component {
     async addCheckPoint() {
         base.utils.logger.log(this.props);
         let self = this;
+        self.scanWifiStrength(async function(wifiArray){
+            let gpsLocation = parseFloat(this.state.region.latitude) + " " + parseFloat(this.state.region.longitude);
 
-        let gpsLocation = parseFloat(this.state.region.latitude) + " " + parseFloat(this.state.region.longitude);
-
-        let details = {};
-
-        if (self.state.isEditing) {
-            details = {
-                "CPCkPName": self.state.checkPointName,
-                "CPGPSPnt": gpsLocation,
-                "CPCPntAt": self.state.checkPointType,
-                "CPChkPntID": self.state.checkPointId
-            };
-        } else {
-            details = {
-                "CPCkPName": self.state.checkPointName,
-                "CPGPSPnt": gpsLocation,
-                "ASAssnID": self.props.SelectedAssociationID,
-                "CPCPntAt": self.state.checkPointType
-            };
-        }
-
-        let stat = self.state.isEditing ? await OyeSafeApi.editCheckPoint(details) : await OyeSafeApi.addCheckPoint(details);
-        console.log("Stat:",stat,details)
-        try {
-            if (stat !== undefined && stat !== null) {
-                if (stat.success) {
-                    let message = self.state.isEditing?"Check Point has been edited successfully":"Check Point has added been successfully"
-                    Alert.alert(
-                        'Success',
-                        message,
-                        [
-                            {
-                                text: 'See Checkpoints',
-                                onPress: () => this.props.navigation.navigate('patrollingCheckPoint', {isRefreshing: true})
-                            },
-                        ],
-                        {cancelable: false},
-                    );
-                } else {
-                    alert("Oops, Something went wrong\n Possible Reason:-" + stat.error.message);
-                }
+            let details = {};
+    
+            if (self.state.isEditing) {
+                details = {
+                    "CPCkPName": self.state.checkPointName,
+                    "CPGPSPnt": gpsLocation,
+                    "CPCPntAt": self.state.checkPointType,
+                    "CPChkPntID": self.state.checkPointId,
+                    "CPSurrName":wifiArray
+                };
+            } else {
+                details = {
+                    "CPCkPName": self.state.checkPointName,
+                    "CPGPSPnt": gpsLocation,
+                    "ASAssnID": self.props.SelectedAssociationID,
+                    "CPCPntAt": self.state.checkPointType,
+                    "CPSurrName":wifiArray
+                };
             }
-        } catch (e) {
-            base.utils.logger.log(e)
-        }
+    
+            let stat = self.state.isEditing ? await OyeSafeApi.editCheckPoint(details) : await OyeSafeApi.addCheckPoint(details);
+            console.log("Stat:",stat,details)
+            try {
+                if (stat !== undefined && stat !== null) {
+                    if (stat.success) {
+                        let message = self.state.isEditing?"Check Point has been edited successfully":"Check Point has added been successfully"
+                        Alert.alert(
+                            'Success',
+                            message,
+                            [
+                                {
+                                    text: 'See Checkpoints',
+                                    onPress: () => this.props.navigation.navigate('patrollingCheckPoint', {isRefreshing: true})
+                                },
+                            ],
+                            {cancelable: false},
+                        );
+                    } else {
+                        alert("Oops, Something went wrong\n Possible Reason:-" + stat.error.message);
+                    }
+                }
+            } catch (e) {
+                base.utils.logger.log(e)
+            }
+        })
+        
     }
 
     setRadioButtonValue(val, index) {
