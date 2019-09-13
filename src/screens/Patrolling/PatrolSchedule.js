@@ -58,13 +58,31 @@ class PatrolSchedule extends React.Component {
         };
 
         this.getPatrollingList = this.getPatrollingList.bind(this);
-        //this.getUserLocation = this.getUserLocation.bind(this)
 
     }
 
     componentWillMount() {
         this.getPatrollingList();
     }
+
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.navigation.state.params.refresh) {
@@ -77,7 +95,6 @@ class PatrolSchedule extends React.Component {
 
         console.log("Assocoatin:",self.props.SelectedAssociationID)
         let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(self.props.SelectedAssociationID);
-        //let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(8);
         console.log("Stat in Patrolling:",stat,);
         try {
             if (stat.success) {
@@ -101,7 +118,6 @@ class PatrolSchedule extends React.Component {
         let self = this;
 
         let stat = await base.services.OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
-        //let stat = await base.services.OyeSafeApi.getCheckPointList(8);
 
         console.log("Stat in CP List:",stat);
         try{

@@ -721,8 +721,8 @@ class RegisterMe extends Component {
     if (matchUnit) {
       if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
         status = true;
-      } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-        status = true;
+        // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        //   status = true;
       } else {
         status = false;
       }
@@ -751,10 +751,10 @@ class RegisterMe extends Component {
     console.log('matchUnit', matchUnit, memberList);
 
     if (matchUnit) {
-      if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
+      if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
         status = true;
-      } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-        status = true;
+        // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        //   status = true;
       } else {
         status = false;
       }

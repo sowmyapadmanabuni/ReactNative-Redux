@@ -26,12 +26,11 @@ import base from "./src/base";
 //   appId: "1:194451632723:web:55842a54e3f70d54"
 // };
 
-// firebase.initializeApp(config);
+ //firebase.initializeApp(config);
 import { StatusBarPlaceHolder } from "../ReactNative-Redux/src/components/StatusBar";
 
-class RootApp extends Component {
 
-  
+class RootApp extends Component {
   render() {
     $.logTitle("O Y E S P A C E - R E S I D E N T");
     return (
