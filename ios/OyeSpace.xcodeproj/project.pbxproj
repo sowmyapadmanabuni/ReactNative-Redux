@@ -477,6 +477,13 @@
 			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
 			remoteInfo = "RNSpinkit-tvOS";
 		};
+		FD5C60AB232BA7A800084783 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 117405FA1B9954BF004425E1;
+			remoteInfo = RNHTMLtoPDFTests;
+		};
 		FDC53A8E229FABA80095F5B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6EA84CBBF5AD40688D7FE07D /* reactnativeuilib.xcodeproj */;
@@ -1683,6 +1690,13 @@
 			fileType = archive.ar;
 			path = libRNSpinkit.a;
 			remoteRef = FD57EA4E22E98F05009A1AC7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FD5C60AC232BA7A800084783 /* RNHTMLtoPDFTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNHTMLtoPDFTests.xctest;
+			remoteRef = FD5C60AB232BA7A800084783 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		FDC53A8F229FABA80095F5B5 /* libreactnativeuilib.a */ = {
