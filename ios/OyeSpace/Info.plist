@@ -24,8 +24,7 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-	<key>Fabric</key>
-	<dict>
+	
     <key>Fabric</key>
     <dict>
       <key>APIKey</key>
@@ -40,7 +39,6 @@
         </dict>
       </array>
     </dict>
-	</dict>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
