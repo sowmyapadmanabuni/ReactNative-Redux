@@ -15,7 +15,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,BackHandler
 } from "react-native";
 import { TextField } from "react-native-material-textfield";
 import moment from "moment";
@@ -53,11 +53,29 @@ class OTPVerification extends Component {
     this.getOTP = this.getOTP.bind(this);
   }
 
+
   componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100);
     if (this.state.timer === 1) {
       clearInterval(this.interval);
     }
   }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
+  }
+
   componentDidMount() {
     this.interval = setInterval(
         () => this.setState(prevState => ({ timer: prevState.timer - 1 })),

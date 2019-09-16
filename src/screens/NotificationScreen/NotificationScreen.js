@@ -36,6 +36,12 @@ import moment from 'moment';
 import firebase from 'react-native-firebase';
 import base from "../../base";
 
+import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import IcoMoonConfig from '../../assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
+
+
 class NotificationScreen extends PureComponent {
   constructor(props) {
     super(props);
@@ -54,15 +60,26 @@ class NotificationScreen extends PureComponent {
     // this.gateAppNotif()
     this.doNetwork(null, this.props.notifications);
     firebase.notifications().removeAllDeliveredNotifications();
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      console.log("Back KSCNJND")
-      this.props.navigation.goBack(null); // works best when the goBack is async
-      return true;
-    });
+    
   }
 
-  componentWillUnmount(){
-    this.backHandler.remove();
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
   }
 
   keyExtractor = (item, index) => index.toString();
@@ -392,10 +409,8 @@ class NotificationScreen extends PureComponent {
                           }}
                         >
                           <Text style={{ color: '#ff8c00' }}>More</Text>
-                          <Image
-                            style={{ width: hp('2%'), height: hp('2%') }}
-                            source={require('../../../icons/show_more.png')}
-                          />
+                          <Icon color="#ff8c00" size={hp('2%')} name="show_more" />
+                          
                         </TouchableOpacity>
                       ) : (
                         <TouchableOpacity
@@ -416,10 +431,8 @@ class NotificationScreen extends PureComponent {
                           }}
                         >
                           <Text style={{ color: '#ff8c00' }}>Less</Text>
-                          <Image
-                            style={{ width: hp('2%'), height: hp('2%') }}
-                            source={require('../../../icons/show_less.png')}
-                          />
+                          <Icon color="#ff8c00" size={hp('2%')} name="show_less" />
+                          
                         </TouchableOpacity>
                       )}
                     </View>
@@ -474,13 +487,9 @@ class NotificationScreen extends PureComponent {
                           }}>
                           <View style={{flexDirection:'row',marginLeft:10}}>
                             <Text style={{color:base.theme.colors.primary,fontWeight:'bold'}}>{item.vlMobile}</Text>
-                            <Image
-                            style={{
-                            width: hp('2.2%'),
-                            height: hp('2.2%')
-                          }}
-                            source={require('../../../icons/call.png')}
-                            />
+                            <Icon color="#ff8c00" size={hp('2.2%')} name="call" />
+                            
+                          
                           </View>
                           </TouchableOpacity>
                         </View>

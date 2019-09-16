@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert,AsyncStorage,BackHandler} from 'react-native';
+import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert,AsyncStorage,BackHandler } from 'react-native';
 import {connect} from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
@@ -26,6 +26,7 @@ let isRefreshing = false;
 
 
 class PatrollingCheckPoints extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -46,6 +47,7 @@ class PatrollingCheckPoints extends React.Component {
             selectedCP:[]
         };
         this.getCheckPoints = this.getCheckPoints.bind(this);
+        //this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
     };
 
     componentWillMount() {
@@ -56,8 +58,28 @@ class PatrollingCheckPoints extends React.Component {
         }
 
        // this.updateStore();
-
     }
+
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
+
+
 
     componentWillReceiveProps(nextProps) { 
         console.log("Next Props:",nextProps);
@@ -166,9 +188,13 @@ class PatrollingCheckPoints extends React.Component {
         updateSelectedCheckPoints({value: null});
     }
 
+    onBackButtonPressAndroid(){
+        console.log("Hitting:111222");
+    }
+
     render() {
         console.log("State:",this.state.checkPointArray);
-        return (
+        return (            
             <View style={PatrollingCheckPointsStyles.container}>
                 <View style={PatrollingCheckPointsStyles.header}>
                     <Text
@@ -186,7 +212,7 @@ class PatrollingCheckPoints extends React.Component {
                         </View>}
                 </View>
                 <FloatingActionButton onBtnClick={() => this.props.navigation.navigate('addCheckPoint')}/>
-            </View>
+            </View>            
         )
     }
 
