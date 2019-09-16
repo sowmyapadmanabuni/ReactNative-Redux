@@ -36,14 +36,14 @@ class VehicleList extends Component {
           isLoading: false
         });
       }, 1500);
+     
+    }
+
+     componentDidUpdate() {
       setTimeout(()=>{
         BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
       },100)
-    }
-
-    // componentDidUpdate() {
-      
-    // }
+     }
   
     componentWillUnmount() {
       setTimeout(()=>{

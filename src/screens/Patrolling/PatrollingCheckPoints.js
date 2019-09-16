@@ -194,7 +194,7 @@ class PatrollingCheckPoints extends React.Component {
 
     render() {
         console.log("State:",this.state.checkPointArray);
-        return (            
+        return (
             <View style={PatrollingCheckPointsStyles.container}>
                 <View style={PatrollingCheckPointsStyles.header}>
                     <Text
@@ -212,7 +212,7 @@ class PatrollingCheckPoints extends React.Component {
                         </View>}
                 </View>
                 <FloatingActionButton onBtnClick={() => this.props.navigation.navigate('addCheckPoint')}/>
-            </View>            
+            </View>
         )
     }
 
