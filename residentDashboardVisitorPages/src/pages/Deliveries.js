@@ -15,8 +15,7 @@ import {
   TextInput,
   Easing,
   SafeAreaView,
-  Dimensions,
-    BackHandler
+  Dimensions,BackHandler
 } from "react-native";
 // import Header from "./src/components/common/Header"
 import { Card, CardItem, Button, Form, Item, Input } from "native-base";
@@ -85,9 +84,10 @@ class App extends React.Component {
     setTimeout(()=>{
       BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
     },0)
+    
   }
 
-  processBackPress(){
+   processBackPress(){
     console.log("Part");
     const {goBack} = this.props.navigation;
     goBack(null);

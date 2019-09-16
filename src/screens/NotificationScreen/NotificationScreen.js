@@ -56,8 +56,6 @@ class NotificationScreen extends PureComponent {
   }
 
   componentDidMount() {
-    // console.log("didmount");
-    // this.gateAppNotif()
     this.doNetwork(null, this.props.notifications);
     firebase.notifications().removeAllDeliveredNotifications();
     
@@ -408,7 +406,7 @@ class NotificationScreen extends PureComponent {
                             this.props.toggleCollapsible(notifications, item.open, index);
                           }}
                         >
-                          <Text style={{ color: '#ff8c00' }}>More</Text>
+                          <Text style={{ color: '#ff8c00',marginRight:hp('0.6%') }}>More</Text>
                           <Icon color="#ff8c00" size={hp('2%')} name="show_more" />
                           
                         </TouchableOpacity>
@@ -430,7 +428,7 @@ class NotificationScreen extends PureComponent {
                             this.props.toggleCollapsible(notifications, item.open, index);
                           }}
                         >
-                          <Text style={{ color: '#ff8c00' }}>Less</Text>
+                          <Text style={{ color: '#ff8c00', marginRight:hp('0.6%') }}>Less</Text>
                           <Icon color="#ff8c00" size={hp('2%')} name="show_less" />
                           
                         </TouchableOpacity>

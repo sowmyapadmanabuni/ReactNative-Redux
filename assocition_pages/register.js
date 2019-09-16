@@ -91,10 +91,12 @@ class RegisterMe extends Component {
       alert("Request already sent");
     }
     */
+    let checkOwner = this.checkForOwner();
+
     if (this.state.dobText == 'Select Date of Occupancy') {
       alert('Select Date of Occupancy');
       return;
-    } else if (this.checkForOwner()) {
+    } else if (checkOwner.stat) {
       alert("You are an active member and can't join");
       return;
     } else if (this.checkStatus()) {
@@ -217,6 +219,7 @@ class RegisterMe extends Component {
                   firebase.messaging().subscribeToTopic(sbSubID);
 
                   // Send a push notification to the admin here
+
                   axios
                     .post(`${CLOUD_FUNCTION_URL}/sendAdminNotification`, {
                       userID: userID.toString(),
@@ -226,7 +229,10 @@ class RegisterMe extends Component {
                       sbRoleId: sbRoleId,
                       sbMemID: sbMemID.toString(),
                       sbName: sbName,
-                      associationID: AssnId.toString(),
+                      //  associationID: AssnId.toString(),
+                      associationID: checkOwner.admin
+                        ? 'admin_not_send'
+                        : AssnId.toString(),
                       associationName: associationName,
                       ntType: ntType,
                       ntTitle: ntTitle,
@@ -256,7 +262,11 @@ class RegisterMe extends Component {
                             res.data.data.memberListByAssociation;
 
                           memberList.map(data => {
-                            if (data.mrmRoleID === 1 && data.meIsActive) {
+                            if (
+                              data.mrmRoleID === 1 &&
+                              data.meIsActive &&
+                              data.acAccntID !== this.props.MyAccountID
+                            ) {
                               console.log('adminssss', data);
                               this.props.createUserNotification(
                                 ntType,
@@ -387,13 +397,14 @@ class RegisterMe extends Component {
       alert("You already requested to join this unit");
     }
      */
+    let checkTenant = this.checkTenant();
     if (this.state.dobText == 'Select Date of Occupancy') {
       alert('Select Date of Occupancy');
       return;
     } else if (this.state.sent) {
       alert('Request already sent');
       return;
-    } else if (this.checkTenant()) {
+    } else if (checkTenant.stat) {
       alert("You are an active member and can't join");
       return;
     } else if (this.checkStatus()) {
@@ -522,7 +533,9 @@ class RegisterMe extends Component {
                       sbRoleId: sbRoleId,
                       sbMemID: sbMemID.toString(),
                       sbName: sbName,
-                      associationID: this.props.navigation.state.params.AssnId.toString(),
+                      associationID: checkTenant.admin
+                        ? 'admin_not_send'
+                        : this.props.navigation.state.params.AssnId.toString(),
                       associationName: this.props.navigation.state.params
                         .associationName,
                       ntType: ntType,
@@ -553,7 +566,11 @@ class RegisterMe extends Component {
                             res.data.data.memberListByAssociation;
 
                           memberList.map(data => {
-                            if (data.mrmRoleID === 1 && data.meIsActive) {
+                            if (
+                              data.mrmRoleID === 1 &&
+                              data.meIsActive &&
+                              data.acAccntID !== this.props.MyAccountID
+                            ) {
                               console.log('adminssss', data);
                               this.props.createUserNotification(
                                 ntType,
@@ -720,14 +737,17 @@ class RegisterMe extends Component {
 
     if (matchUnit) {
       if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
-        status = true;
-      } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-        status = true;
+        status = { stat: true, admin: false };
+        // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        //   status = true;
+      }
+      if (matchUnit.mrmRoleID === 1) {
+        status = { stat: false, admin: true };
       } else {
-        status = false;
+        status = { stat: false, admin: false };
       }
     } else {
-      status = false;
+      status = { stat: false, admin: false };
     }
 
     return status;
@@ -751,15 +771,18 @@ class RegisterMe extends Component {
     console.log('matchUnit', matchUnit, memberList);
 
     if (matchUnit) {
-      if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
-        status = true;
-      } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-        status = true;
+      if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        status = { stat: true, admin: false };
+        // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        //   status = true;
+      }
+      if (matchUnit.mrmRoleID === 1) {
+        status = { stat: false, admin: true };
       } else {
-        status = false;
+        status = { stat: false, admin: false };
       }
     } else {
-      status = false;
+      status = { stat: false, admin: false };
     }
 
     return status;
@@ -797,7 +820,7 @@ class RegisterMe extends Component {
 
   render() {
     const { unitList, AssnId } = this.props.navigation.state.params;
-    console.log('unitList', unitList);
+    // console.log('unitList', unitList);
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>

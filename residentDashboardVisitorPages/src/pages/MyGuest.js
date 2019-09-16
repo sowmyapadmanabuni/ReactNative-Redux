@@ -12,7 +12,7 @@ import {
   TextInput,
   Keyboard,
   Alert,
-  ActivityIndicator, BackHandler
+  ActivityIndicator,BackHandler
 } from "react-native";
 // import Header from "./src/components/common/Header";
 import { NavigationEvents } from "react-navigation";
@@ -94,6 +94,26 @@ class MyGuests extends Component {
 
   componentWillUnmount() {
     this.backHandler.remove();
+  }
+
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+    
+  }
+
+   processBackPress(){
+    console.log("Part");
+    // const {goBack} = this.props.navigation;
+    // goBack(null);
+    this.props.navigation.navigate("ResDashBoard")
   }
 
 

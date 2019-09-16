@@ -4,7 +4,7 @@
 
 
 import React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Dimensions } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Dimensions,BackHandler } from 'react-native';
 import base from "../../base";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { connect } from 'react-redux';
@@ -15,6 +15,25 @@ class MyFamilyHeader extends React.Component {
     constructor(props) {
         super(props);
     }
+
+    componentDidUpdate() {
+        setTimeout(()=>{
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+        },100)
+      }
+    
+      componentWillUnmount() {
+        setTimeout(()=>{
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+        },0)
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
 
 
     render() {

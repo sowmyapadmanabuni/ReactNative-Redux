@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-    View, Image, Text, TouchableOpacity, ActivityIndicator, BackHandler,
+    View, Image, Text, TouchableOpacity, ActivityIndicator,BackHandler
 } from 'react-native';
 import base from "../../../../base";
 import {Dropdown} from "react-native-material-dropdown";
@@ -48,16 +48,22 @@ class Staff extends React.Component {
 
     componentDidUpdate() {
         setTimeout(()=>{
-            BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
         },100)
-    }
-
-    componentWillUnmount() {
+      }
+    
+      componentWillUnmount() {
         setTimeout(()=>{
-            BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
         },0)
-
-    }
+        
+      }
+    
+       processBackPress(){
+        console.log("Part");
+        const {goBack} = this.props.navigation;
+        goBack(null);
+      }
 
     async getListOfStaff() {
         let self = this; //dashboardReducer.uniID
