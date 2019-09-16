@@ -1438,15 +1438,17 @@ class NotificationDetailScreen extends PureComponent {
         if (data) {
           if (
             data.member.meJoinStat === 'Accepted' &&
-            data.member.mrmRoleID === details.sbRoleID
+            data.member.mrmRoleID === details.sbRoleID &&
+            data.member.meIsActive
           ) {
             this.setState({ adminStat: 'Accepted' });
           } else if (
-            data.member.meJoinStat === 'Rejected' &&
-            data.member.mrmRoleID === details.sbRoleID
-          ) {
-            this.setState({ adminStat: 'Rejected' });
-          }
+                   data.member.meJoinStat === 'Rejected' &&
+                   data.member.mrmRoleID === details.sbRoleID &&
+                   data.member.meIsActive
+                 ) {
+                   this.setState({ adminStat: 'Rejected' });
+                 }
         }
       })
       .catch(error => {
