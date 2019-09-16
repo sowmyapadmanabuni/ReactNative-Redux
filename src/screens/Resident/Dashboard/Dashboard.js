@@ -533,15 +533,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    timer.setInterval(
-      this,
-      'syncData',
-      () => {
-        this.syncData();
-        // alert("hererereerrrereer");
-      },
-      5000
-    );
+    // timer.setInterval(
+    //   this,
+    //   'syncData',
+    //   () => {
+    //     this.syncData();
+    //     // alert("hererereerrrereer");
+    //   },
+    //   5000
+    // );
   }
 
   async roleCheckForAdmin(index) {
@@ -1682,13 +1682,13 @@ class Dashboard extends PureComponent {
           >
             <Text>View All Visitors</Text>
           </Button>
-          {/* <Button
+          <Button
             bordered
             style={styles.button1}
             onPress={() => this.props.navigation.navigate("schedulePatrolling")}
           >
             <Text>Patrolling</Text>
-          </Button>*/}
+          </Button>
         </View>
         {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?
