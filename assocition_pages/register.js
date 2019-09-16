@@ -398,6 +398,7 @@ class RegisterMe extends Component {
     }
      */
     let checkTenant = this.checkTenant();
+    console.log(checkTenant, 'checkTenant');
     if (this.state.dobText == 'Select Date of Occupancy') {
       alert('Select Date of Occupancy');
       return;
@@ -740,8 +741,7 @@ class RegisterMe extends Component {
         status = { stat: true, admin: false };
         // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
         //   status = true;
-      }
-      if (matchUnit.mrmRoleID === 1) {
+      } else if (matchUnit.mrmRoleID === 1) {
         status = { stat: false, admin: true };
       } else {
         status = { stat: false, admin: false };
@@ -772,11 +772,11 @@ class RegisterMe extends Component {
 
     if (matchUnit) {
       if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+        console.log('In_Here');
         status = { stat: true, admin: false };
         // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
         //   status = true;
-      }
-      if (matchUnit.mrmRoleID === 1) {
+      } else if (matchUnit.mrmRoleID === 1) {
         status = { stat: false, admin: true };
       } else {
         status = { stat: false, admin: false };
