@@ -22,8 +22,10 @@ import { Card, CardItem, Form, Item, Button, Input } from 'native-base';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../src/assets/selection.json';
+import IcoMoonConfig1 from '../src/assets/selection1.json';
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
+const Icon1 = createIconSetFromIcoMoon(IcoMoonConfig1);
 
 export default class City extends Component {
   constructor(props) {
@@ -112,7 +114,7 @@ export default class City extends Component {
             >
               <Image
                 style={[styles.image]}
-                source={require('../icons/headerLogo.png')}
+                source={require('../icons/OyespaceSafe.png')}
               />
             </View>
             <View style={{ width: '35%' }}>
@@ -148,6 +150,7 @@ export default class City extends Component {
                 }
               >
                 <View style={styles.card}>
+                  {/* <Icon1 color="black" size={40} name="bengaluru" /> */}
                   <Image
                     style={{ width: hp('6%'), height: hp('6%') }}
                     source={require('../icons/bengaluru.png')}
@@ -164,6 +167,7 @@ export default class City extends Component {
                 }
               >
                 <View style={styles.card}>
+                  {/* <Icon1 color="black" size={40} name="chandigarh" /> */}
                   <Image
                     style={{ width: hp('6%'), height: hp('6%') }}
                     source={require('../icons/chandigarh.png')}
@@ -180,10 +184,10 @@ export default class City extends Component {
                 }
               >
                 <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  {/* <Icon color="black" size={40} name="nagpur"/> */}
+                  {/* <Icon1 color="black" size={40} name="chennai" /> */}
                   <Image
                     style={{ width: hp('6%'), height: hp('6%') }}
-                    source={require('../icons/nagpur.png')}
+                    source={require('../icons/chennai.png')}
                   />
                   <Text style={{ marginTop: hp('0.2%') }}>Chennai</Text>
                 </View>
@@ -228,8 +232,9 @@ export default class City extends Component {
                 }
               >
                 <View style={[styles.card, { borderBottomWidth: 1 }]}>
-                  <Icon color="#474749" size={hp('5%')} name="prayagraj" />
-                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/prayagraj.png')} /> */}
+                  {/* <Icon color="#474749" size={hp('5%')} name="prayagraj" /> */}
+                  {/* <Icon1 color="black" size={40} name="hubli" /> */}
+                  <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/hubli.png')} />
                   <Text>Hubli</Text>
                 </View>
               </TouchableOpacity>
@@ -242,8 +247,11 @@ export default class City extends Component {
                 }
               >
                 <View style={styles.card}>
-                  <Icon color="#474749" size={hp('5%')} name="indore" />
-                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/indore.png')} /> */}
+                  {/* <Icon color="#474749" size={hp('5%')} name="indore" /> */}
+                  <Image
+                    style={{ width: hp('5%'), height: hp('5%') }}
+                    source={require('../icons/hyderabad.png')}
+                  />
                   <Text style={{ marginTop: hp('0.2%') }}>Hyderabad</Text>
                 </View>
               </TouchableOpacity>
@@ -301,8 +309,11 @@ export default class City extends Component {
                 }
               >
                 <View style={styles.card}>
-                  <Icon color="#474749" size={hp('5%')} name="kanpur" />
-                  {/* <Image style={{ width: hp('5%'), height: hp('5%') }} source={require('../icons/kanpur.png')} /> */}
+                  {/* <Icon color="#474749" size={hp('5%')} name="kanpur" /> */}
+                  <Image
+                    style={{ width: hp('5%'), height: hp('5%') }}
+                    source={require('../icons/kochi.png')}
+                  />
                   <Text style={{ marginTop: hp('0.2%') }}>Kochi</Text>
                 </View>
               </TouchableOpacity>
@@ -549,8 +560,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: wp('24%'),
-    height: hp('10%')
+    width: wp('34%'),
+    height: hp('18%')
   },
 
   card: {

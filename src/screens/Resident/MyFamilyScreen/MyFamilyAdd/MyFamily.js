@@ -133,7 +133,7 @@ class MyFamily extends Component {
                         >
                             <Image
                                 style={[Style.image1]}
-                                source={require("../../../../../icons/headerLogo.png")}
+                                source={require("../../../../../icons/OyespaceSafe.png")}
                             />
                         </View>
                         <View style={{ flex: 0.2 }}>

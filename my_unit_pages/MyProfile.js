@@ -73,10 +73,16 @@ class MyProfile extends Component {
           ImageSource: responseJson.data.account[0].acImgName,
           number:
             responseJson.data.account[0].acisdCode +
-            responseJson.data.account[0].acMobile
+            responseJson.data.account[0].acMobile +
+            ';' +
+            this.props.dashBoardReducer.uniID
         });
         const { updateUserInfo } = this.props;
-        console.log('Image at the second open', this.state.ImageSource);
+        console.log(
+          'Image at the second open',
+          this.state.ImageSource,
+          this.state.number
+        );
         updateUserInfo({
           prop: 'userData',
           value: responseJson
@@ -90,8 +96,14 @@ class MyProfile extends Component {
   };
 
   componentWillMount() {
-    console.log('Part HIttinh1234');
-    this.myProfile();
+    console.log('Unit ID', this.props.dashBoardReducer.uniID);
+    let self = this;
+    setTimeout(() => {
+      self.myProfile();
+      self.setState({
+        isLoading: false
+      });
+    }, 1500);
   }
 
   componentDidUpdate() {
@@ -159,7 +171,7 @@ class MyProfile extends Component {
             >
               <Image
                 style={[styles.image]}
-                source={require('../icons/headerLogo.png')}
+                source={require('../icons/OyespaceSafe.png')}
               />
             </View>
             <View style={{ width: '35%' }}>
@@ -316,8 +328,8 @@ class MyProfile extends Component {
                   }}
                 >
                   <QRCode
-                    logo={require('../icons/logo_QR.png')}
-                    logoSize={hp('6%')}
+                    // logo={require('../icons/OyespaceSafe.png')}
+                    // logoSize={hp('6%')}
                     size={hp('20%')}
                     content={this.state.number}
                     codeStyle="square"
@@ -482,8 +494,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: wp('24%'),
-    height: hp('10%')
+    width: wp('34%'),
+    height: hp('18%')
   },
   button1: {
     width: hp('40%'),
@@ -514,6 +526,7 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     imageUrl: state.OyespaceReducer.imageUrl,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    dashBoardReducer: state.DashboardReducer,
     mediaupload: state.OyespaceReducer.mediaupload
   };
 };

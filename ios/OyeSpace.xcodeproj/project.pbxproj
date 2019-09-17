@@ -85,6 +85,7 @@
 		F12C89A5946E4D56B497B889 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2328DDF9544647CC922A4556 /* Ionicons.ttf */; };
 		F6AC63031EDA4ADEACA79D56 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22FE5082DA494D888B11412A /* Entypo.ttf */; };
 		F86D2FF2019D49F593E73243 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 102944E29C634BF6AAFA7678 /* FontAwesome5_Regular.ttf */; };
+		FD1A894E2330E9A500375686 /* icomoon1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD1A89152330E9A500375686 /* icomoon1.ttf */; };
 		FD2B2A64223F841A0061AB68 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2B2A61223F84080061AB68 /* libRNSVG.a */; };
 		FD57EA5322E98F37009A1AC7 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD57EA4D22E98F05009A1AC7 /* libRNSpinkit.a */; };
 		FD735809232914EC005D887E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD7357D0232914AB005D887E /* icomoon.ttf */; };
@@ -618,6 +619,7 @@
 		F0B486FF7B9B46EE84A1B4BA /* libRazorpayCheckout.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRazorpayCheckout.a; sourceTree = "<group>"; };
 		F458CCDED1A544129FAC5DBC /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		FCE1202D81A94C659368BD94 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		FD1A89152330E9A500375686 /* icomoon1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon1.ttf; sourceTree = "<group>"; };
 		FD2B2A5B223F84080061AB68 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		FD57EA1522E98F05009A1AC7 /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
 		FD7357D0232914AB005D887E /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
@@ -750,6 +752,7 @@
 				2328DDF9544647CC922A4556 /* Ionicons.ttf */,
 				C414C04D798746EBA1C72930 /* MaterialCommunityIcons.ttf */,
 				FD7357D0232914AB005D887E /* icomoon.ttf */,
+				FD1A89152330E9A500375686 /* icomoon1.ttf */,
 				5D8FED1A448A4B69B4222891 /* MaterialIcons.ttf */,
 				F458CCDED1A544129FAC5DBC /* Octicons.ttf */,
 				426DAAB08359498F908E82FD /* SimpleLineIcons.ttf */,
@@ -1713,6 +1716,7 @@
 				0EB496CCBD65402CB6101409 /* Entypo.ttf in Resources */,
 				C5A6861F06354B359662DEF7 /* EvilIcons.ttf in Resources */,
 				B9E1905B5D7E4ED1BA9765E5 /* Feather.ttf in Resources */,
+				FD1A894E2330E9A500375686 /* icomoon1.ttf in Resources */,
 				5972C4279F4F4ECE99D5C64E /* FontAwesome.ttf in Resources */,
 				38B525F3545E455D8964C5F2 /* FontAwesome5_Brands.ttf in Resources */,
 				930F1F01B8FD42468E78DF39 /* FontAwesome5_Regular.ttf in Resources */,
@@ -1799,7 +1803,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -1840,7 +1844,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FDBD6BA1222B078900D8C8DA /* ShellScript */ = {
