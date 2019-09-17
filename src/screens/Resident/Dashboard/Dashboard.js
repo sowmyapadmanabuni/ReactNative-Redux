@@ -1699,6 +1699,13 @@ class Dashboard extends PureComponent {
           >
             <Text>Patrolling</Text>
           </Button>
+          <Button
+              bordered
+              style={styles.button1}
+              onPress={() => this.props.navigation.navigate("subscriptionManagement")}
+          >
+            <Text>Subscription</Text>
+          </Button>
         </View>
         {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?

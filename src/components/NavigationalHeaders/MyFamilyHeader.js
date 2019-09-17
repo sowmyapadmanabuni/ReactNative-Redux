@@ -38,29 +38,8 @@ class MyFamilyHeader extends React.Component {
 
     render() {
         const { goBack } = this.props.navigation;
+        console.log('JGjhjjhg',this.props)
         return (
-            // <View style={styles.container}>
-            //     <TouchableOpacity
-            //         onPress={() => goBack(null)}
-            //         style={styles.buttonView}>
-            //         <Image
-            //             style={styles.backButton}
-            //             source={require('../../../icons/arrowBack.png')}
-            //         />
-            //     </TouchableOpacity>
-            //     <View style={styles.logoView}>
-            //         <Image
-            //             resizeMode={'cover'}
-            //             style={styles.logo}
-            //             source={require('../../../icons/headerLogo.png')}
-            //         />
-            //     </View>
-
-            //    {/* <TouchableOpacity onPress={() => this.onNextButtonClick()}
-            //                               style={styles.scheduleReport}>
-            //                 <Text style={styles.scheduleTextStyle}>Next</Text>
-            //     </TouchableOpacity>*/}
-            // </View>
             <View style={styles.container}>
                 <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
                     <View style={[styles.viewStyle, { flexDirection: "row" }]}>
@@ -104,7 +83,11 @@ class MyFamilyHeader extends React.Component {
                     </View>
                     <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
                 </SafeAreaView>
-                <Text style={styles.titleOfScreen}> Visitors </Text>
+
+                {this.props.isSub === true ?
+                    <View/> :
+                    <Text style={styles.titleOfScreen}> Visitors </Text>
+                }
 
             </View>
 

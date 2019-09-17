@@ -163,7 +163,7 @@ import Dashboard from '../src/screens/Resident/Dashboard/Dashboard'
 import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader'
 import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffReport"
 import FirstTab from "../residentDashboardVisitorPages/FirstTab";
-import Subscription from "../assocition_pages/Subscription";
+//import Subscription from "../assocition_pages/Subscription";
 import MyFamilyHeader from "../src/components/NavigationalHeaders/MyFamilyHeader";
 import PrivacyPolicy from "../src/screens/Policy/PrivacyPolicy";
 import TermsAndConditions from "../src/screens/Policy/TermsAndConditions";
@@ -171,6 +171,7 @@ import TermsAndConditions from "../src/screens/Policy/TermsAndConditions";
 import City from '../assocition_pages/City.js';
 
 import PatrolSchedule from "../src/screens/Patrolling/PatrolSchedule";
+import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement";
 
 
 
@@ -844,6 +845,12 @@ addCheckPoint: {
     screen: CreateSOS,
     navigationOptions: {
       header:null
+    }
+  },
+  subscriptionManagement: {
+    screen:SubscriptionManagement,
+    navigationOptions: {
+      header: props => <MyFamilyHeader  isSub={true} {...props}/>
     }
   },
   
