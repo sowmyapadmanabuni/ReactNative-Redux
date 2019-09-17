@@ -28,8 +28,8 @@ import _ from 'lodash';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
-} from "react-native-responsive-screen";
-import * as fb  from 'firebase';
+} from 'react-native-responsive-screen';
+import * as fb from 'firebase';
 
 import RNRestart from 'react-native-restart';
 
@@ -56,15 +56,13 @@ import ProgressLoader from 'rn-progress-loader';
 import { NavigationEvents } from 'react-navigation';
 import timer from 'react-native-timer';
 
-import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../assets/selection.json';
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
-
 const Profiler = React.unstable_Profiler;
 let counter = 0;
-
 
 class Dashboard extends PureComponent {
   constructor(props) {
@@ -95,7 +93,7 @@ class Dashboard extends PureComponent {
       isDataLoading: false,
       isDataVisible: false,
       isNoAssJoin: false,
-      isSOSSelected:false
+      isSOSSelected: false
     };
     this.backButtonListener = null;
     this.currentRouteName = 'Main';
@@ -155,34 +153,33 @@ class Dashboard extends PureComponent {
   }
 
   componentDidUpdate() {
-    if (Platform.OS === "android") {
-      setTimeout(()=>{
+    if (Platform.OS === 'android') {
+      setTimeout(() => {
         this.backButtonListener = BackHandler.addEventListener(
-          "hardwareBackPress",
+          'hardwareBackPress',
           () => {
-            if (this.currentRouteName !== "Main") {
+            if (this.currentRouteName !== 'Main') {
               return false;
             }
-  
+
             if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-               //this.showExitAlert();
-             // BackHandler.exitApp();
+              //this.showExitAlert();
+              // BackHandler.exitApp();
               //return true;
             }
-            if (this.state.isSelectedCard === "UNIT") {
-               //this.showExitAlert();
+            if (this.state.isSelectedCard === 'UNIT') {
+              //this.showExitAlert();
               //BackHandler.exitApp();
             } else {
-              this.changeCardStatus("UNIT");
+              this.changeCardStatus('UNIT');
             }
-  
+
             this.lastBackButtonPress = new Date().getTime();
-  
+
             return true;
           }
         );
-      },100)
-      
+      }, 100);
     }
   }
 
@@ -283,7 +280,7 @@ class Dashboard extends PureComponent {
               // alert(units.unUnitID + 'admin');
             } else if (units.mrmRoleID === 1) {
               // console.log(units, 'unitsadmin');
-               firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+              firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
               // console.log(units.asAssnID + 'admin', 'subadmin');
               // if (units.asAssnID + 'admin' === '7548admin') {
               //   alert('Accepted');
@@ -515,7 +512,7 @@ class Dashboard extends PureComponent {
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
     // let self = this;
-    
+
     //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
     //     let receivedData = snapshot.val();
     //     console.log("ReceiveddataDash", snapshot.val(),'SOS/' + SelectedAssociationID + "/" + MyAccountID + "/");
@@ -523,11 +520,9 @@ class Dashboard extends PureComponent {
     //        self.props.navigation.navigate("sosScreen",{isActive:true})
     //         }
     //     });
-    
-    
+
     //Adding an event listner om focus
     //So whenever the screen will have focus it will set the state to zero
-    
 
     if (!this.props.called) {
       this.didMount();
@@ -1333,8 +1328,12 @@ class Dashboard extends PureComponent {
                     }
                   }}
                 >
-                  <Icon color="#38bcdb" size={hp('2.6%')} style={{...Style.supportIcon}} name="call1" />
-                  
+                  <Icon
+                    color="#38bcdb"
+                    size={hp('2.6%')}
+                    style={{ ...Style.supportIcon }}
+                    name="call1"
+                  />
                 </TouchableOpacity>
                 {/* <TouchableOpacity>
               <Image
@@ -1346,7 +1345,6 @@ class Dashboard extends PureComponent {
                   onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
                   //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
                 >
-                  
                   <Image
                     style={Style.supportIcon}
                     source={require('../../../../icons/Group771.png')}
@@ -1415,7 +1413,7 @@ class Dashboard extends PureComponent {
   }
 
   myUnitCard() {
-    const {dropdown, dropdown1 } = this.props;
+    const { dropdown, dropdown1 } = this.props;
     let invoiceList = [
       {
         invoiceNumber: 528,
@@ -1445,7 +1443,7 @@ class Dashboard extends PureComponent {
             iconWidth={Platform.OS === 'ios' ? 40 : 35}
             iconHeight={Platform.OS === 'ios' ? 40 : 20}
             onCardClick={() =>
-                dropdown.length === 0
+              dropdown.length === 0
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
                 ? alert('Unit is not available')
@@ -1464,7 +1462,7 @@ class Dashboard extends PureComponent {
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>
-                dropdown.length === 0
+              dropdown.length === 0
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
                 ? alert('Unit is not available')
@@ -1526,7 +1524,7 @@ class Dashboard extends PureComponent {
                 </ElevatedView>
             */}
 
-            {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
+        {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?
               <TouchableHighlight 
               underlayColor={base.theme.colors.transparent}
@@ -1567,11 +1565,10 @@ class Dashboard extends PureComponent {
     );
   }
 
-
-  selectSOS(){
+  selectSOS() {
     this.setState({
-      isSOSSelected:!this.state.isSOSSelected
-    })
+      isSOSSelected: !this.state.isSOSSelected
+    });
   }
 
   adminCard() {
@@ -1682,13 +1679,13 @@ class Dashboard extends PureComponent {
           >
             <Text>View All Visitors</Text>
           </Button>
-          {/* <Button
+          <Button
             bordered
             style={styles.button1}
-            onPress={() => this.props.navigation.navigate("schedulePatrolling")}
+            onPress={() => this.props.navigation.navigate('schedulePatrolling')}
           >
             <Text>Patrolling</Text>
-          </Button>*/}
+          </Button>
         </View>
         {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?

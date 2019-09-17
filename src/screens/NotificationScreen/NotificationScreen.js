@@ -56,8 +56,6 @@ class NotificationScreen extends PureComponent {
   }
 
   componentDidMount() {
-    // console.log("didmount");
-    // this.gateAppNotif()
     this.doNetwork(null, this.props.notifications);
     firebase.notifications().removeAllDeliveredNotifications();
     

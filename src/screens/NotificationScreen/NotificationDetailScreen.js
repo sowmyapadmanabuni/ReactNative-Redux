@@ -1315,7 +1315,9 @@ import {
   Dimensions,
   Linking,
   Platform,
-  TouchableOpacity, FlatList,BackHandler
+  TouchableOpacity,
+  FlatList,
+  BackHandler
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -1338,7 +1340,6 @@ import {
 import _ from 'lodash';
 import base from '../../base';
 
-
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
   constructor(props) {
@@ -1360,7 +1361,7 @@ class NotificationDetailScreen extends PureComponent {
       requestorMob1: '',
 
       dataSource2: [],
-      dataSource3: "",
+      dataSource3: '',
 
       showButtons: true,
 
@@ -1384,24 +1385,28 @@ class NotificationDetailScreen extends PureComponent {
 
     this.manageJoinRequest();
     this.checkAdminNotifStatus();
+    // console.log(this.props, 'notificationdetailscreen');
   }
 
   componentDidUpdate() {
-    setTimeout(()=>{
-      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-    },100)
+    setTimeout(() => {
+      BackHandler.addEventListener('hardwareBackPress', () =>
+        this.processBackPress()
+      );
+    }, 100);
   }
 
   componentWillUnmount() {
-    setTimeout(()=>{
-      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-    },0)
-    
+    setTimeout(() => {
+      BackHandler.removeEventListener('hardwareBackPress', () =>
+        this.processBackPress()
+      );
+    }, 0);
   }
 
-   processBackPress(){
-    console.log("Part");
-    const {goBack} = this.props.navigation;
+  processBackPress() {
+    console.log('Part');
+    const { goBack } = this.props.navigation;
     goBack(null);
   }
 
@@ -1431,11 +1436,19 @@ class NotificationDetailScreen extends PureComponent {
 
         console.log(data, res, 'adminData');
         if (data) {
-          if (data.member.meJoinStat === 'Accepted') {
+          if (
+            data.member.meJoinStat === 'Accepted' &&
+            data.member.mrmRoleID === details.sbRoleID &&
+            data.member.meIsActive
+          ) {
             this.setState({ adminStat: 'Accepted' });
-          } else if (data.member.meJoinStat === 'Rejected') {
-            this.setState({ adminStat: 'Rejected' });
-          }
+          } else if (
+                   data.member.meJoinStat === 'Rejected' &&
+                   data.member.mrmRoleID === details.sbRoleID &&
+                   data.member.meIsActive
+                 ) {
+                   this.setState({ adminStat: 'Rejected' });
+                 }
         }
       })
       .catch(error => {
@@ -2104,8 +2117,16 @@ class NotificationDetailScreen extends PureComponent {
                       <Text>Name</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
-                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[0].trim() : ''}{" "}</Text>
-                      <Text>{(details.ntDesc !== undefined) ? details.ntDesc.split(' ')[1].trim() : ''}</Text>
+                      <Text>
+                        {details.ntDesc !== undefined
+                          ? details.ntDesc.split(' ')[0].trim()
+                          : ''}{' '}
+                      </Text>
+                      <Text>
+                        {details.ntDesc !== undefined
+                          ? details.ntDesc.split(' ')[1].trim()
+                          : ''}
+                      </Text>
                     </View>
                   </View>
                   <View style={{ flexDirection: 'row' }}>
@@ -2117,18 +2138,18 @@ class NotificationDetailScreen extends PureComponent {
                         onPress={() => {
                           Platform.OS === 'android'
                             ? Linking.openURL(`tel:${this.state.requestorMob1}`)
-                            : Linking.openURL(`tel:${this.state.requestorMob1}`);
-                        }}>
-
+                            : Linking.openURL(
+                                `tel:${this.state.requestorMob1}`
+                              );
+                        }}
+                      >
                         <View style={{ flexDirection: 'row' }}>
-
                           <Text>{this.state.requestorMob1}</Text>
                           <Image
                             style={{ width: hp('2%'), height: hp('2%') }}
-                            source={require("../../../icons/call.png")}
+                            source={require('../../../icons/call.png')}
                           />
                         </View>
-
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -2144,9 +2165,14 @@ class NotificationDetailScreen extends PureComponent {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ borderWidth: 1, borderColor: "#E5E5E5", marginTop: hp('1%'), marginBottom: hp('3%') }} />
-
-
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: '#E5E5E5',
+                      marginTop: hp('1%'),
+                      marginBottom: hp('3%')
+                    }}
+                  />
                 </View>
               </View>
             );
@@ -2284,15 +2310,11 @@ class NotificationDetailScreen extends PureComponent {
         <View style={{ height: hp('8%') }}>
           {details.ntType === 'Join_Status' ? null : this.renderButton()}
         </View>
-        {this.state.dataSource3 === "" ? <View></View> :
-          <View>
-            {this.renderDetails()}
-
-          </View>
-        }
-
-
-
+        {this.state.dataSource3 === '' ? (
+          <View></View>
+        ) : (
+          <View>{this.renderDetails()}</View>
+        )}
       </View>
     );
   }

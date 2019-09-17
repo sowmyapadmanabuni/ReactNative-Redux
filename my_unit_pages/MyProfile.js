@@ -89,36 +89,35 @@ class MyProfile extends Component {
       .catch(error => console.log(error));
   };
 
-  componentWillMount() {}
-
-  componentDidUpdate() {
-    setTimeout(() => {
-      BackHandler.addEventListener('hardwareBackPress', () =>
-        this.processBackPress()
-      );
-    }, 100);
+  componentWillMount() {
+    console.log('Part HIttinh1234');
     this.myProfile();
   }
 
-  componentWillUnmount() {
-    setTimeout(() => {
-      BackHandler.removeEventListener('hardwareBackPress', () =>
-        this.processBackPress()
-      );
-    }, 0);
+  componentDidUpdate() {
+    if (Platform.OS === 'android') {
+      setTimeout(() => {
+        BackHandler.addEventListener('hardwareBackPress', () =>
+          this.processBackPress()
+        );
+      }, 100);
+    }
   }
 
-  processBackPress() {
-    console.log('Part');
+  componentWillUnmount() {
+    // BackHandler.removeEventListener('backPress');
+
+    BackHandler.removeEventListener('hardwareBackPress', () =>
+      this.processBackPress()
+    );
+  }
+
+  processBackPress(stat) {
+    console.log('Part', stat);
     const { goBack } = this.props.navigation;
     goBack(null);
+    return true;
   }
-
-  onBackButtonPressAndroid = () => {
-    console.log('HIttinh1234');
-    this.props.navigation.goBack(null);
-    return false;
-  };
 
   render() {
     console.log('State in My Profile:', this.state.ImageSource, this.props);
