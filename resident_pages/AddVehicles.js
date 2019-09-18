@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Alert,
   Dimensions,
@@ -15,30 +15,31 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,BackHandler
-} from "react-native";
+  View,
+  BackHandler
+} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
-} from "react-native-responsive-screen";
-import ProgressLoader from "rn-progress-loader";
-import { Button, Form, Input, Item, Label } from "native-base";
+} from 'react-native-responsive-screen';
+import ProgressLoader from 'rn-progress-loader';
+import { Button, Form, Input, Item, Label } from 'native-base';
 // import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { RadioButton, RadioGroup } from "react-native-flexi-radio-button";
-import { connect } from "react-redux";
-import OyeLivingApi from "../src/base/services/OyeLivingApi";
-import { Dropdown } from "react-native-material-dropdown";
-import base from "../src/base";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RadioButton, RadioGroup } from 'react-native-flexi-radio-button';
+import { connect } from 'react-redux';
+import OyeLivingApi from '../src/base/services/OyeLivingApi';
+import { Dropdown } from 'react-native-material-dropdown';
+import base from '../src/base';
 
 var radio_props = [
-  { label: "Two Wheeler", value: 0 },
-  { label: "Four Wheeler", value: 1 }
+  { label: 'Two Wheeler', value: 0 },
+  { label: 'Four Wheeler', value: 1 }
 ];
 
 class AddVehicle extends Component {
   static navigationOptions = {
-    title: "Add Vehicle",
+    title: 'Add Vehicle',
     header: null
   };
 
@@ -46,13 +47,13 @@ class AddVehicle extends Component {
     super(props);
     this.state = {
       value: 0,
-      text: "Two Wheeler",
-      vehName: "",
-      vehNum: "",
-      vehStickerNum: "",
-      parkingSlotNum: "",
+      text: 'Two Wheeler',
+      vehName: '',
+      vehNum: '',
+      vehStickerNum: '',
+      parkingSlotNum: '',
       parkingLotDetail: [],
-      selectedData: "",
+      selectedData: '',
 
       isLoading: false
     };
@@ -65,20 +66,23 @@ class AddVehicle extends Component {
   }
 
   componentDidUpdate() {
-    setTimeout(()=>{
-      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-    },100)
+    setTimeout(() => {
+      BackHandler.addEventListener('hardwareBackPress', () =>
+        this.processBackPress()
+      );
+    }, 100);
   }
 
   componentWillUnmount() {
-    setTimeout(()=>{
-      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-    },0)
-    
+    setTimeout(() => {
+      BackHandler.removeEventListener('hardwareBackPress', () =>
+        this.processBackPress()
+      );
+    }, 0);
   }
 
-   processBackPress(){
-    console.log("Part");
+  processBackPress() {
+    console.log('Part');
     this.props.navigation.goBack(null);
   }
 
@@ -88,7 +92,7 @@ class AddVehicle extends Component {
       this.props.dashBoardReducer.uniID
     );
     //let stat = await OyeLivingApi.getUnitDetailByUnitId(497);
-    console.log("Stat in unit detail:", stat);
+    console.log('Stat in unit detail:', stat);
     try {
       if (stat !== null) {
         let data = stat.data.unit.unitParkingLot;
@@ -109,7 +113,7 @@ class AddVehicle extends Component {
           parkingLotDetail: []
         });
       }
-    } catch (e) { }
+    } catch (e) {}
   }
 
   createVehicle = () => {
@@ -118,39 +122,39 @@ class AddVehicle extends Component {
     let vehNum = this.state.vehNum;
     let vehStickerNum = this.state.vehStickerNum;
     let parkingSlotNum = this.state.parkingSlotNum;
-    let upID = "";
+    let upID = '';
 
     //regex code
 
-    console.log("Props :", this.props);
+    console.log('Props :', this.props);
 
     const oyeNonSpecialRegex = /[^0-9A-Za-z ]/;
 
-    if (vehName.length === 0 || vehName === "") {
-      Alert.alert("Enter Vehicle Name");
+    if (vehName.length === 0 || vehName === '') {
+      Alert.alert('Enter Vehicle Name');
       return false;
-    } else if (vehNum.length === 0 || vehNum === "") {
-      Alert.alert("Enter Vehicle Number");
+    } else if (vehNum.length === 0 || vehNum === '') {
+      Alert.alert('Enter Vehicle Number');
       return false;
-    } else if (vehStickerNum.length === 0 || vehStickerNum === "") {
-      Alert.alert("Enter Sticker Number");
+    } else if (vehStickerNum.length === 0 || vehStickerNum === '') {
+      Alert.alert('Enter Sticker Number');
       return false;
-    } else if (parkingSlotNum.length === 0 || parkingSlotNum === "") {
-      Alert.alert("Enter Parking Slot Number");
+    } else if (parkingSlotNum.length === 0 || parkingSlotNum === '') {
+      Alert.alert('Enter Parking Slot Number');
       return false;
     } else if (oyeNonSpecialRegex.test(vehName) === true) {
-      Alert.alert("Vehicle Name should not contain special character");
+      Alert.alert('Vehicle Name should not contain special character');
       return false;
     } else if (oyeNonSpecialRegex.test(vehNum) === true) {
-      Alert.alert("Vehicle Number should not contain special character");
+      Alert.alert('Vehicle Number should not contain special character');
       return false;
     } else if (oyeNonSpecialRegex.test(vehStickerNum) === true) {
       Alert.alert(
-        "Vehicle Sticker Number should not contain special character"
+        'Vehicle Sticker Number should not contain special character'
       );
       return false;
     } else if (oyeNonSpecialRegex.test(parkingSlotNum) === true) {
-      Alert.alert("Parking Slot Number should not contain special character");
+      Alert.alert('Parking Slot Number should not contain special character');
       return false;
     } else {
       if (this.state.parkingLotDetail.length !== 0) {
@@ -166,7 +170,7 @@ class AddVehicle extends Component {
           }
         }
       }
-      console.log('ValValVal', value)
+      console.log('ValValVal', value);
 
       let payloadData = {
         VERegNo: vehNum,
@@ -180,35 +184,35 @@ class AddVehicle extends Component {
       };
 
       this.setState({
-        isLoading:true
-      })
-      console.log("Payload Data:", payloadData);
+        isLoading: true
+      });
+      console.log('Payload Data:', payloadData);
 
       fetch(`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/Create`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         },
         body: JSON.stringify(payloadData)
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log("Manas", responseJson, payloadData);
+          console.log('Manas', responseJson, payloadData);
           if (responseJson.success) {
-            this.props.navigation.navigate("MyVehicleListScreen");
+            this.props.navigation.navigate('MyVehicleListScreen');
             this.setState({
               isLoading: true
-            })
-          }
-          else {
+            });
+          } else {
             alert(responseJson.error.message);
             this.setState({
               isLoading: false
-            })
+            });
           }
         })
-        .catch(error => Alert.alert(responseJson.error.message),
+        .catch(
+          error => Alert.alert(responseJson.error.message),
           this.setState({
             isLoading: false
           })
@@ -218,17 +222,17 @@ class AddVehicle extends Component {
 
   onSelect(index, value) {
     this.setState({
-      text: `${value}`,
+      text: `${value}`
     });
   }
 
   render() {
-    console.log("State:", this.state);
+    console.log('State:', this.state);
     return (
       <View style={styles.container}>
         {/* <Header/> */}
-        <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
-          <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+        <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
@@ -237,15 +241,15 @@ class AddVehicle extends Component {
               >
                 <View
                   style={{
-                    height: hp("4%"),
-                    width: wp("15%"),
-                    alignItems: "flex-start",
-                    justifyContent: "center"
+                    height: hp('4%'),
+                    width: wp('15%'),
+                    alignItems: 'flex-start',
+                    justifyContent: 'center'
                   }}
                 >
                   <Image
                     resizeMode="contain"
-                    source={require("../icons/back.png")}
+                    source={require('../icons/back.png')}
                     style={styles.viewDetails2}
                   />
                 </View>
@@ -254,31 +258,31 @@ class AddVehicle extends Component {
             <View
               style={{
                 flex: 1,
-                justifyContent: "center",
-                alignItems: "center"
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
               <Image
                 style={[styles.image1]}
-                source={require("../icons/headerLogo.png")}
+                source={require('../icons/OyespaceSafe.png')}
               />
             </View>
             <View style={{ flex: 0.2 }}>
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: "orange" }} />
+          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
 
         <Text style={styles.titleOfScreen}>Add Vehicle</Text>
-        <View style={[styles.containers, { flex: 1, flexDirection: "column" }]}>
+        <View style={[styles.containers, { flex: 1, flexDirection: 'column' }]}>
           <View
             style={{
-              alignItems: "center",
-              justifyContent: "space-around",
-              flexDirection: "row",
-              backgroundColor: "#DAE0E2",
-              height: hp("7%")
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              flexDirection: 'row',
+              backgroundColor: '#DAE0E2',
+              height: hp('7%')
             }}
           >
             {/* <RadioForm style={{marginTop:hp('1%')}}
@@ -295,14 +299,14 @@ class AddVehicle extends Component {
                       onPress={(value) => {this.setState({value:value})}}
                     /> */}
             <RadioGroup
-              style={{ flexDirection: "row" }}
+              style={{ flexDirection: 'row' }}
               selectedIndex={0}
               onSelect={(index, value) => this.onSelect(index, value)}
             >
-              <RadioButton value={"Two Wheeler"}>
+              <RadioButton value={'Two Wheeler'}>
                 <Text>Two Wheeler</Text>
               </RadioButton>
-              <RadioButton value={"Four Wheeler"}>
+              <RadioButton value={'Four Wheeler'}>
                 <Text>Four Wheeler</Text>
               </RadioButton>
             </RadioGroup>
@@ -357,24 +361,23 @@ class AddVehicle extends Component {
                   containerStyle={styles.box1}
                   dropdownPosition={-1}
                   style={{
-
                     right: 19,
-                    textAlign: "left",
+                    textAlign: 'left',
                     fontFamily: base.theme.fonts.light,
-                    fontSize: hp("2.5%")
+                    fontSize: hp('2.5%')
                   }}
-                  value={"Select Parking lot"}
+                  value={'Select Parking lot'}
                   textColor="#3A3A3C"
-                  labelHeight={hp("0.7%")}
+                  labelHeight={hp('0.7%')}
                   data={this.state.parkingLotDetail}
-                  inputContainerStyle={{ borderBottomColor: "transparent" }}
+                  inputContainerStyle={{ borderBottomColor: 'transparent' }}
                   onChangeText={data => this.setState({ selectedData: data })}
                 />
               ) : (
-                  <View style={styles.noData}>
-                    <Text>No parking slot available</Text>
-                  </View>
-                )}
+                <View style={styles.noData}>
+                  <Text>No parking slot available</Text>
+                </View>
+              )}
             </Form>
             <View style={styles.buttonStyle}>
               <Button
@@ -402,7 +405,7 @@ class AddVehicle extends Component {
           isModal={true}
           visible={this.state.isLoading}
           color={base.theme.colors.primary}
-          hudColor={"#FFFFFF"}
+          hudColor={'#FFFFFF'}
         />
       </View>
     );
@@ -412,99 +415,99 @@ class AddVehicle extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff'
   },
   containers: {},
   viewStyle1: {
-    backgroundColor: "#fff",
-    height: hp("7%"),
-    width: Dimensions.get("screen").width,
-    shadowColor: "#000",
+    backgroundColor: '#fff',
+    height: hp('7%'),
+    width: Dimensions.get('screen').width,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
-    position: "relative"
+    position: 'relative'
   },
   image1: {
-    width: wp("22%"),
-    height: hp("12%")
+    width: wp('34%'),
+    height: hp('18%')
   },
 
   viewDetails1: {
     flex: 0.3,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginLeft: 3
   },
   viewDetails2: {
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: hp("3%"),
-    height: hp("3%"),
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: hp('3%'),
+    height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   },
 
   titleOfScreen: {
-    marginTop: hp("1.6%"),
-    textAlign: "center",
+    marginTop: hp('1.6%'),
+    textAlign: 'center',
     fontSize: 18,
-    color: "#ff8c00",
-    marginBottom: hp("4%")
+    color: '#ff8c00',
+    marginBottom: hp('4%')
   },
   inputItem: {
-    marginLeft: wp("5%"),
-    marginRight: wp("5%"),
-    borderColor: "orange"
+    marginLeft: wp('5%'),
+    marginRight: wp('5%'),
+    borderColor: 'orange'
   },
   buttonStyle: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: hp("4%"),
-    marginBottom: hp("2%"),
-    marginHorizontal: hp("2%")
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: hp('4%'),
+    marginBottom: hp('2%'),
+    marginHorizontal: hp('2%')
   },
   buttonCancel: {
-    width: wp("32%"),
-    height: hp("5%"),
-    borderRadius: hp("2.5%"),
-    borderWidth: hp("0.2%"),
-    borderColor: "#EF3939",
-    backgroundColor: "#EF3939",
-    justifyContent: "center"
+    width: wp('32%'),
+    height: hp('5%'),
+    borderRadius: hp('2.5%'),
+    borderWidth: hp('0.2%'),
+    borderColor: '#EF3939',
+    backgroundColor: '#EF3939',
+    justifyContent: 'center'
   },
   textFamilyVehicle: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: hp("2%")
+    color: 'white',
+    fontWeight: '600',
+    fontSize: hp('2%')
   },
   buttonAdd: {
-    width: wp("32%"),
-    height: hp("5%"),
-    borderRadius: hp("2.5%"),
-    borderWidth: hp("0.2%"),
-    borderColor: "orange",
-    backgroundColor: "orange",
-    justifyContent: "center"
+    width: wp('32%'),
+    height: hp('5%'),
+    borderRadius: hp('2.5%'),
+    borderWidth: hp('0.2%'),
+    borderColor: 'orange',
+    backgroundColor: 'orange',
+    justifyContent: 'center'
   },
   box1: {
-    borderBottomColor: "#ff8c00",
-    borderBottomWidth: hp("0.2%"),
-    marginLeft: wp("5%"),
-    marginRight: wp("5%"),
-    paddingLeft: wp("5%"),
-    height: hp("5%"),
-    backgroundColor: "#ff8c00",
-    width: hp("50%"),
-    marginTop: hp("4%")
+    borderBottomColor: '#ff8c00',
+    borderBottomWidth: hp('0.2%'),
+    marginLeft: wp('5%'),
+    marginRight: wp('5%'),
+    paddingLeft: wp('5%'),
+    height: hp('5%'),
+    backgroundColor: '#ff8c00',
+    width: hp('50%'),
+    marginTop: hp('4%')
   },
   noData: {
-    marginLeft: wp("5%"),
-    marginRight: wp("5%"),
-    height: hp("5%"),
-    width: hp("50%"),
-    marginTop: hp("4%")
+    marginLeft: wp('5%'),
+    marginRight: wp('5%'),
+    height: hp('5%'),
+    width: hp('50%'),
+    marginTop: hp('4%')
   }
 });
 
@@ -517,5 +520,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(AddVehicle);
-
-

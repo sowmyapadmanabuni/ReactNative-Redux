@@ -148,7 +148,7 @@ class DashBoardHeader extends React.Component {
           <View style={HeaderStyles.subContainerRight}>
             <Image
               style={HeaderStyles.appLogoStyles}
-              source={require('../../../icons/headerLogo.png')}
+              source={require('../../../icons/OyespaceSafe.png')}
             />
           </View>
           <View style={HeaderStyles.subContainerRight}>

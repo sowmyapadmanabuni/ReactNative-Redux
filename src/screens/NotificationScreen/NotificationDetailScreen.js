@@ -2300,7 +2300,7 @@ class NotificationDetailScreen extends PureComponent {
             >
               <Image
                 style={[styles.image]}
-                source={require('../../../icons/headerLogo.png')}
+                source={require('../../../icons/OyespaceSafe.png')}
               />
             </View>
             <View style={{ width: '35%' }}>
@@ -2358,8 +2358,8 @@ const styles = StyleSheet.create({
     // marginLeft: 10
   },
   image: {
-    width: wp('24%'),
-    height: hp('10%')
+    width: wp('34%'),
+    height: hp('18%')
   },
 
   buttonContainer: {

@@ -11,7 +11,6 @@ import { View, Text, Alert, NetInfo, ScrollView, TouchableOpacity, Image } from 
 //import { Switch } from 'react-native-switch';
 import SwitchExample from '../registration_pages/SwitchExample';
 import { Fonts } from '../pages/src/utils/Fonts'
-import MyHeader from "../components/MyHeader";
 
 
 var doNotDisturb = "FALSE";
@@ -524,33 +523,6 @@ export default class HomeContainer extends Component {
                 <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
 
                 <Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',margin:10 }}>Admin Settings</Text>
-                {/* <MyHeader navigation={this.props.navigation} title="Menu"
-style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }}  />
-<Text style={{ fontSize: 16, color: 'black', fontWeight:'bold', alignSelf: 'center',justifyContent:'center',alignContent:'center', }}>Admin Settings</Text> */}
-                    {/* <View
-                        style={{
-                            paddingTop: 2, paddingRight: 2, paddingLeft: 2, flexDirection: 'row', paddingBottom: 2,
-                            borderColor: 'white', borderRadius: 0, borderWidth: 2, textAlign: 'center',
-                            marginTop:20,
-                        }}>
-                        <TouchableOpacity onPress={() => navigate(('ResDashBoard'), { cat: '' })}
-                            style={{ flex: 1 , alignSelf:'center'}}>
-                            <Image source={require('../pages/assets/images/back.png')}
-                                style={{ height: 25, width: 25, margin: 10, alignSelf: 'center' }} />
-                        </TouchableOpacity>
-                        <Text style={{ flex: 4, paddingLeft: 5, fontSize: 14, color: 'black', alignContent: 'flex-start', alignSelf: 'center' }}> </Text>
-                        <Text style={{ flex: 5, fontSize: 16, color: 'black',  alignSelf: 'center',fontWeight:'bold',alignItems:'center',justifyContent:'center' }}>Admin Settings</Text>
-                        <View style={{ flex: 4, alignSelf: 'center' }}>
-                        
-                            <Image source={require('../pages/assets/images/OyeSpace_hor.png')}
-                                style={{
-                                    height: 35, width: 105, margin: 5,
-                                    alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
-                                }} />
-                        </View>
-                    </View> */}
-                    {/* <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View> */}
-                
                 {this.state.isLoading
                     ?
                     <View style={{
