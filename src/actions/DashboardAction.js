@@ -16,10 +16,10 @@ import {
   UPDATE_USER_INFO,
   USER_ROLE,
   DASHBOARD_ASSOCIATION_SYNC
-} from "./types";
-import axios from "axios";
-import _ from "lodash";
-import base from "../base";
+} from './types';
+import axios from 'axios';
+import _ from 'lodash';
+import base from '../base';
 
 export const getDashAssoSync = (
   oyeURL,
@@ -30,19 +30,19 @@ export const getDashAssoSync = (
   return dispatch => {
     const getUnits = (unit, oyeURL, MyAccountID) => {
       // dispatch({ type: DASHBOARD_UNITS_START });
-      console.log("called from sync");
+      console.log('called from sync');
       axios
         .get(
           `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`,
           {
             headers: {
-              "Content-Type": "application/json",
-              "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+              'Content-Type': 'application/json',
+              'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
             }
           }
         )
         .then(response => {
-          console.log("response in Units by My Account Id", response);
+          console.log('response in Units by My Account Id', response);
           let responseData = response.data.data;
 
           let units = [];
@@ -57,9 +57,9 @@ export const getDashAssoSync = (
             });
           });
 
-          let sortedUnit = _.sortBy(units, ["value"], ["asc"]);
+          let sortedUnit = _.sortBy(units, ['value'], ['asc']);
 
-          console.log("Sorted Unit:", sortedUnit);
+          console.log('Sorted Unit:', sortedUnit);
 
           let withoutString = [];
 
@@ -74,7 +74,7 @@ export const getDashAssoSync = (
               dispatch({
                 type: UPDATE_SELECTED_DROPDOWN,
                 payload: {
-                  prop: "selectedDropdown1",
+                  prop: 'selectedDropdown1',
                   value: withoutString[0].value
                 }
               });
@@ -82,7 +82,7 @@ export const getDashAssoSync = (
               dispatch({
                 type: UPDATE_SELECTED_DROPDOWN,
                 payload: {
-                  prop: "uniID",
+                  prop: 'uniID',
                   value: withoutString[0].unitId
                 }
               });
@@ -96,17 +96,17 @@ export const getDashAssoSync = (
           });
         })
         .catch(error => {
-          console.log(error, "error while fetching units");
+          console.log(error, 'error while fetching units');
         });
     };
 
     fetch(
       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         }
       }
     )
@@ -140,7 +140,7 @@ export const getDashAssoSync = (
             }
           });
 
-          let removeDuplicates = _.uniqBy(withoutString, "associationId");
+          let removeDuplicates = _.uniqBy(withoutString, 'associationId');
 
           let sorted = removeDuplicates.sort(
             base.utils.validate.compareAssociationNames
@@ -156,13 +156,13 @@ export const getDashAssoSync = (
             }
           });
 
-          console.log("sorted asso", sorted);
+          console.log('sorted asso', sorted);
 
           if (sorted.length === 1) {
             dispatch({
               type: UPDATE_SELECTED_DROPDOWN,
               payload: {
-                prop: "selectedDropdown",
+                prop: 'selectedDropdown',
                 value: sorted[0].value
               }
             });
@@ -181,16 +181,16 @@ export const getDashAssoSync = (
           dispatch({
             type: UPDATE_SELECTED_DROPDOWN,
             payload: {
-              prop: "selectedDropdown",
-              value: ""
+              prop: 'selectedDropdown',
+              value: ''
             }
           });
 
           dispatch({
             type: UPDATE_SELECTED_DROPDOWN,
             payload: {
-              prop: "selectedDropdown1",
-              value: ""
+              prop: 'selectedDropdown1',
+              value: ''
             }
           });
         }
@@ -200,14 +200,14 @@ export const getDashAssoSync = (
 
 export const getDashSub = (oyeURL, SelectedAssociationID) => {
   return dispatch => {
-    console.log("oyeURL", oyeURL);
+    console.log('oyeURL', oyeURL);
     fetch(
       `http://${oyeURL}/oyesafe/api/v1/Subscription/GetLatestSubscriptionByAssocID/${SelectedAssociationID}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
         }
       }
     )
@@ -230,10 +230,10 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
     fetch(
       `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+          'Content-Type': 'application/json',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
         }
       }
     )
@@ -242,7 +242,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
         if (responseJson.success) {
           let associations = responseJson.data.memberListByAccount;
 
-          console.log(associations, "associations");
+          console.log(associations, 'associations');
 
           let associationIds = [];
           let drop_down_data = [];
@@ -269,13 +269,13 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
             }
           });
 
-          let removeDuplicates = _.uniqBy(withoutString, "associationId");
+          let removeDuplicates = _.uniqBy(withoutString, 'associationId');
 
           let sorted = removeDuplicates.sort(
             base.utils.validate.compareAssociationNames
           );
 
-          console.log(sorted, "dttttt");
+          console.log(sorted, 'dttttt');
           dispatch({
             type: DASHBOARD_ASSOCIATION,
             payload: {
@@ -288,7 +288,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
             dispatch({
               type: UPDATE_SELECTED_DROPDOWN,
               payload: {
-                prop: "selectedDropdown",
+                prop: 'selectedDropdown',
                 value: sorted[0].value
               }
             });
@@ -296,7 +296,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
             dispatch({
               type: UPDATE_SELECTED_DROPDOWN,
               payload: {
-                prop: "assId",
+                prop: 'assId',
                 value: sorted[0].associationId
               }
             });
@@ -312,7 +312,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               index
             ) => {
               if (index === 0) {
-                console.log("Data to get the units", unit, oyeURL, accountId);
+                console.log('Data to get the units', unit, oyeURL, accountId);
                 dispatch({ type: DASHBOARD_UNITS_START });
 
                 axios
@@ -320,13 +320,13 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                     `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${accountId}/${unit}`,
                     {
                       headers: {
-                        "Content-Type": "application/json",
-                        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                        'Content-Type': 'application/json',
+                        'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
                       }
                     }
                   )
                   .then(resUnits => {
-                    console.log("Response in Get Units", resUnits);
+                    console.log('Response in Get Units', resUnits);
                     let responseDataUnits = resUnits.data.data;
 
                     let units = [];
@@ -340,11 +340,11 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                       });
                     });
 
-                    console.log("unitshshs", units);
+                    console.log('unitshshs', units);
 
                     let withoutString_units = [];
 
-                    let sortedUnits = _.sortBy(units, ["value"], ["asc"]);
+                    let sortedUnits = _.sortBy(units, ['value'], ['asc']);
 
                     sortedUnits.map((data, index) => {
                       if (data.name.length >= 1) {
@@ -354,7 +354,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                       }
                     });
 
-                    console.log(withoutString_units, "withoutString_units");
+                    console.log(withoutString_units, 'withoutString_units');
 
                     if (withoutString_units.length > 0) {
                       filterAssociations.push({ ...associations });
@@ -368,7 +368,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                         dispatch({
                           type: UPDATE_SELECTED_DROPDOWN,
                           payload: {
-                            prop: "selectedDropdown1",
+                            prop: 'selectedDropdown1',
                             value: withoutString_units[0].value
                           }
                         });
@@ -376,7 +376,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                         dispatch({
                           type: UPDATE_SELECTED_DROPDOWN,
                           payload: {
-                            prop: "uniID",
+                            prop: 'uniID',
                             value: withoutString_units[0].unitId
                           }
                         });
@@ -390,7 +390,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                     });
                   })
                   .catch(error => {
-                    console.log(error, "error while fetching units");
+                    console.log(error, 'error while fetching units');
                   });
               }
             };
@@ -400,7 +400,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                 sorted[index].associationId,
                 index,
                 allData,
-                "mapped"
+                'mapped'
               );
               getDashUnits_s(
                 sorted[index].associationId,
@@ -423,7 +423,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
         dispatch({
           type: DASHBOARD_ASSOC_STOP
         });
-        console.log(error, "error while fetching associations in action");
+        console.log(error, 'error while fetching associations in action');
       });
   };
 };
@@ -438,19 +438,19 @@ export const getDashUnits = (
 ) => {
   return dispatch => {
     dispatch({ type: DASHBOARD_UNITS_START });
-    console.log("called from sync");
+    console.log('called from sync');
     axios
       .get(
         `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`,
         {
           headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            'Content-Type': 'application/json',
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
           }
         }
       )
       .then(response => {
-        console.log("response in Units by My Account Id", response);
+        console.log('response in Units by My Account Id', response);
         let responseData = response.data.data;
 
         let units = [];
@@ -465,9 +465,9 @@ export const getDashUnits = (
           });
         });
 
-        let sortedUnit = _.sortBy(units, ["value"], ["asc"]);
+        let sortedUnit = _.sortBy(units, ['value'], ['asc']);
 
-        console.log("Sorted Unit:", sortedUnit);
+        console.log('Sorted Unit:', sortedUnit);
 
         let withoutString = [];
 
@@ -481,7 +481,7 @@ export const getDashUnits = (
           dispatch({
             type: UPDATE_SELECTED_DROPDOWN,
             payload: {
-              prop: "selectedDropdown1",
+              prop: 'selectedDropdown1',
               value: withoutString[0].value
             }
           });
@@ -489,7 +489,7 @@ export const getDashUnits = (
           dispatch({
             type: UPDATE_SELECTED_DROPDOWN,
             payload: {
-              prop: "uniID",
+              prop: 'uniID',
               value: withoutString[0].unitId
             }
           });
@@ -501,15 +501,15 @@ export const getDashUnits = (
           association: unit
         });
 
-        console.log(responseData, "responseDatas");
+        console.log(responseData, 'responseDatas');
 
         axios
           .get(
             `http://${oyeURL}/oyeliving/api/v1/Member/GetMemUniOwnerTenantListByAssoc/${unit}`,
             {
               headers: {
-                "Content-Type": "application/json",
-                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                'Content-Type': 'application/json',
+                'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
               }
             }
           )
@@ -523,10 +523,10 @@ export const getDashUnits = (
             fetch(
               `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/${unit}`,
               {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                  "Content-Type": "application/json",
-                  "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                  'Content-Type': 'application/json',
+                  'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
                 }
               }
             )
@@ -553,7 +553,7 @@ export const getDashUnits = (
                       Residentlist.push({
                         name: ownername,
                         unit: unitname,
-                        role: "Owner",
+                        role: 'Owner',
                         unitid: unitid,
                         uoMobile: uoMobile,
                         admin: admin
@@ -571,7 +571,7 @@ export const getDashUnits = (
                       Residentlist.push({
                         name: tenantname,
                         unit: unitname,
-                        role: "Tenant"
+                        role: 'Tenant'
                       });
                     }
                   }
@@ -580,15 +580,15 @@ export const getDashUnits = (
                   let residentListTenant = [];
 
                   Residentlist.map((val, i) => {
-                    if (val.role === "Owner") {
+                    if (val.role === 'Owner') {
                       residentListOwner.push({ ...val });
                     } else {
                       residentListTenant.push({ ...val });
                     }
                   });
 
-                  console.log(units, "units");
-                  console.log(Residentlist, "Residentlist");
+                  console.log(units, 'units');
+                  console.log(Residentlist, 'Residentlist');
 
                   let newResidentOwner = [];
                   let newResidentTenant = [];
@@ -620,19 +620,19 @@ export const getDashUnits = (
                   dispatch({ type: DASHBOARD_UNITS_STOP });
                 }
 
-                console.log(responseJson, "responseJson");
+                console.log(responseJson, 'responseJson');
               })
               .catch(error => {
-                console.log(error, "error in get units action");
+                console.log(error, 'error in get units action');
                 dispatch({ type: DASHBOARD_UNITS_STOP });
               });
           })
           .catch(error => {
-            console.log(error, "error while fetching");
+            console.log(error, 'error while fetching');
           });
       })
       .catch(error => {
-        console.log(error, "error while fetching units");
+        console.log(error, 'error while fetching units');
       });
   };
 };
@@ -644,8 +644,8 @@ export const getAssoMembers = (oyeURL, id) => {
         `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${id}`,
         {
           headers: {
-            "Content-Type": "application/json",
-            "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            'Content-Type': 'application/json',
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
           }
         }
       )
@@ -656,7 +656,7 @@ export const getAssoMembers = (oyeURL, id) => {
           // console.log(data.meJoinStat + index);
         });
 
-        let removedDuplicates = _.uniqBy(resData, "unUnitID");
+        let removedDuplicates = _.uniqBy(resData, 'unUnitID');
         dispatch({
           type: GET_MEMBERLIST_SUCCESS,
           payload: resData

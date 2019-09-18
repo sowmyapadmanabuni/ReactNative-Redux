@@ -494,7 +494,6 @@ class Dashboard extends PureComponent {
     // getDashSub(oyeURL, SelectedAssociationID);
     getDashAssoSync(oyeURL, MyAccountID);
     // getAssoMembers(oyeURL, MyAccountID);
-    this.requestNotifPermission();
   };
 
   componentDidMount() {
