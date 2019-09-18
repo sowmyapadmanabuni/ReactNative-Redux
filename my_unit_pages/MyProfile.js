@@ -89,11 +89,7 @@ class MyProfile extends Component {
 
   componentWillUnmount() {
    // BackHandler.removeEventListener('backPress');
-  
-      BackHandler.removeEventListener('hardwareBackPress',()=>this.processBackPress())
-  
-      
-    
+  BackHandler.removeEventListener('hardwareBackPress',()=>this.processBackPress());  
   }
 
    processBackPress(stat){
@@ -101,11 +97,7 @@ class MyProfile extends Component {
     const {goBack} = this.props.navigation;
       goBack(null);
       return true;
-
-   
   }
-
-
 
   render() {
     console.log("State in My Profile:", this.state.ImageSource, this.props);

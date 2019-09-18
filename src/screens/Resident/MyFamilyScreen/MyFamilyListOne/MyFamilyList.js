@@ -56,9 +56,7 @@ class MyFamilyList extends React.Component {
     this.arrayholder = []
   }
 
-  componentWillUnmount() {
-    this.backHandler.remove();
-  }
+  
 
   renderFlatList(item) {
     let itemID = item.id
@@ -198,6 +196,7 @@ class MyFamilyList extends React.Component {
     console.log("Part");
     const {goBack} = this.props.navigation;
     goBack(null);
+    return true;
   }
 
   renderItem = ({ item, index }) => {

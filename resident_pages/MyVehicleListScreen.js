@@ -56,6 +56,7 @@ class VehicleList extends Component {
       console.log("Part");
       const {goBack} = this.props.navigation;
       goBack(null);
+      return true;
     }
 
     getVehicleList = () => {

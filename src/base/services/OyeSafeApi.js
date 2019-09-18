@@ -112,7 +112,4 @@ export default class OyeSafeApi{
         return await instance.get('GetWorkerListByAssocIDAccountIDAndUnitID/'+associationId + '/' + accountId+'/'+unitId)
 
     }
-
-
-
 }

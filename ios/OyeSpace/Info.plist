@@ -24,21 +24,20 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
-	
-    <key>Fabric</key>
-    <dict>
-      <key>APIKey</key>
-      <string>71ecc6e51aa1c6a10438249055c5140043157bc1</string>
-      <key>Kits</key>
-      <array>
-        <dict>
-          <key>KitInfo</key>
-          <dict/>
-          <key>KitName</key>
-          <string>Crashlytics</string>
-        </dict>
-      </array>
-    </dict>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>71ecc6e51aa1c6a10438249055c5140043157bc1</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>

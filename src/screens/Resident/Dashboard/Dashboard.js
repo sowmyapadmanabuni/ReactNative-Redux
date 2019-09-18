@@ -30,6 +30,7 @@ import {
   widthPercentageToDP as wp
 } from "react-native-responsive-screen";
 import * as fb  from 'firebase';
+import CountdownCircle from 'react-native-countdown-circle'
 
 import RNRestart from 'react-native-restart';
 
@@ -514,15 +515,15 @@ class Dashboard extends PureComponent {
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-    // let self = this;
-    
-    //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
-    //     let receivedData = snapshot.val();
-    //     console.log("ReceiveddataDash", snapshot.val(),'SOS/' + SelectedAssociationID + "/" + MyAccountID + "/");
-    //     if (receivedData !== null) {
-    //        self.props.navigation.navigate("sosScreen",{isActive:true})
-    //         }
-    //     });
+    let self = this;
+
+      fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
+        let receivedData = snapshot.val();
+        console.log("ReceiveddataDash", snapshot.val(),'SOS/' + SelectedAssociationID + "/" + MyAccountID + "/");
+        if (receivedData !== null) {
+           self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+            }
+        });
     
     
     //Adding an event listner om focus
@@ -533,15 +534,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    timer.setInterval(
-      this,
-      'syncData',
-      () => {
-        this.syncData();
-        // alert("hererereerrrereer");
-      },
-      5000
-    );
+    // timer.setInterval(
+    //   this,
+    //   'syncData',
+    //   () => {
+    //     this.syncData();
+    //     // alert("hererereerrrereer");
+    //   },
+    //   5000
+    // );
   }
 
   async roleCheckForAdmin(index) {
@@ -1526,7 +1527,7 @@ class Dashboard extends PureComponent {
                 </ElevatedView>
             */}
 
-            {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
+            <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?
               <TouchableHighlight 
               underlayColor={base.theme.colors.transparent}
@@ -1562,7 +1563,7 @@ class Dashboard extends PureComponent {
              </TouchableHighlight>
              </View>
              }
-            </View> */}
+            </View>
       </ElevatedView>
     );
   }
@@ -1690,7 +1691,7 @@ class Dashboard extends PureComponent {
             <Text>Patrolling</Text>
           </Button>*/}
         </View>
-        {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
+        <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?
               <TouchableHighlight 
               underlayColor={base.theme.colors.transparent}
@@ -1726,7 +1727,7 @@ class Dashboard extends PureComponent {
              </TouchableHighlight>
              </View>
              }
-            </View> */}
+            </View>
       </ElevatedView>
     );
   }

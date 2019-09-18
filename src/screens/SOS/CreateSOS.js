@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Dimensions, Image, Linking, Text, TouchableHighlight, TouchableOpacity, View,ScrollView} from 'react-native';
+import {Dimensions, Image, Linking, Text, TouchableHighlight, TouchableOpacity, View,ScrollView,BackHandler,Platform,PermissionsAndroid,Alert} from 'react-native';
 import firebase from 'firebase';
 import CreateSOSStyles from "./CreateSOSStyles";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
@@ -21,6 +21,7 @@ const {height, width} = Dimensions.get('screen');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 
 class CreateSOS extends React.Component {
@@ -67,16 +68,111 @@ class CreateSOS extends React.Component {
               }
             });
           });
-          this.getCurrentLocation();
+          Platform.OS==='ios'?this.getCurrentLocation():this.checkGPS();
     }
 
-    componentDidMount(){
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            console.log("Back KSCNJND")
-            alert("Please close the alert first") // works best when the goBack is async
-            //return true;
-          });
+    checkGPS(){
+        RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
+            .then(data => {
+                console.log("DATATATATATATATTATA:",data)
+                    this.locationPermissionsAccess();  
+            }).catch(err => {
+
+            console.log("DATATATATATATATTATA err",err)
+                this.showDenialAlertMessage();
+      });
     }
+
+    locationPermissionsAccess(){
+        (async () => {
+            { try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    
+                )
+    
+    
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            this.getCurrentLocation()
+    
+                        },
+                        (error) => {
+                            Alert.alert(
+                                'Location',
+                                'We are not able to get your current location.',
+                                [
+                                    {text: 'Cancel', onPress: () => this.props.navigation.navigate('ResDashBoard'), style: 'cancel'},
+                                    {text: 'Try Again', onPress: () => this.getCurrentLocation()},
+                                ],
+                                { cancelable: false }
+                            )
+                        },
+                        { enableHighAccuracy:false, timeout: 5000, maximumAge: 1000, distanceFilter: 1 }
+                    );
+                } else {
+                    console.log("Permission deny")
+                    //alert("Location Permission denied")
+                    this.showDenialAlertMessage()
+                    //this.props.navigation.navigate("ResDashBoard")
+    
+                }
+            } catch (err) {
+                console.error("No Access  to location" + err);
+            }
+            }
+        })();
+    }
+
+    showDenialAlertMessage(){
+        if (Platform.OS === 'ios') {
+            Alert.alert(
+                'Location permission denied',
+                'Please allow the location permission',
+                [
+                    {text: "Don't Allow",onPress:()=>this.props.navigation.navigate("ResDashBoard"), style: 'cancel'},
+                    {text: 'Allow', onPress: () => this.navigateToSettings()}
+                ]
+            );
+        }
+        else {
+            Alert.alert(
+                'Location permission denied',
+                'Please provide location permissions in application settings',
+                [
+                    {text: "Ok", onPress: () => this.navigateToSettings()}
+                ]
+            );
+        }
+    }
+
+    navigateToSettings(){
+        if (Platform.OS === 'ios') {
+            Linking.openURL('app-settings:');
+        }
+        else {
+           this.props.navigation.navigate("ResDashBoard")
+        }
+    }
+
+
+
+    componentDidUpdate() {
+        if(Platform.OS === 'android'){
+          setTimeout(()=>{
+            BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+          },100)
+        }
+      }
+
+    
+       processBackPress(stat){
+        console.log("Part",stat);
+
+        alert("Please stop the SOS or wait for it to get resolved before moving to another screen")
+          return true;
+      }
 
 
     componentWillUnmount(){
@@ -92,8 +188,9 @@ class CreateSOS extends React.Component {
               } else {
                 console.log('playback failed due to audio decoding errors');
               }
-            },()=>this.getCurrentLocation());
+            });
           });
+          BackHandler.removeEventListener('hardwareBackPress',()=>this.processBackPress());  
     }
 
     async getCurrentLocation() {
@@ -131,22 +228,21 @@ class CreateSOS extends React.Component {
         let userName = data.userReducer.MyFirstName;
         let userMobile = (data.userReducer.MyMobileNumber).toString();
         let unitId = data.dashBoardReducer.uniID;
-        let sosImage = this.state.image === null ? "N/A" : this.state.image;
         let latitude = this.state.region.latitude;
         let longitude = this.state.region.longitude;
         let unitName = data.dashBoardReducer.selectedDropdown1;
         let isActive = true;
 
-        console.log("State in create SOS:",this.state.imageArr);
        
 
-        console.log("Data to be saved:",associationID,userId,userMobile,userName,unitId,sosImage,latitude,longitude,unitName);
+        console.log("Data to be saved:",this.state);
             let self = this;
         if(this.state.image === null){
             firebase.database().ref('SOS/' + associationID + "/" + userId + "/").set({
-                isActive,latitude,longitude,sosImage,unitId,userId,userMobile,userName,unitName
+                isActive,latitude,longitude,unitId,userId,userMobile,userName,unitName
              }).then((data) => {
-                 console.log("Data saved to RTD:", data)
+                 console.log("Data saved to RTD:", data);
+                // self.createSOSInAPI()
              }).catch((error) => {
                  console.log("Error:", error)
              }) 
@@ -164,21 +260,76 @@ class CreateSOS extends React.Component {
             statForMediaUpload = await base.services.MediaUploadApi.uploadRelativeImage(data);
             console.log("Stat in Media Upload:", "http://mediaupload.oyespace.com/oyeliving/api/V1/",statForMediaUpload);
             let sosImage = "http://mediaupload.oyespace.com/"+statForMediaUpload;
-            let imgArr = this.state.sosImageArr;
-            imgArr.push(sosImage)
+            let imgArr = this.state.imageArr;
+            console.log("Image Arr:",imgArr);
+            imgArr.push(sosImage);
             this.setState({
-                sosImageArr:imgArr
+                imageArr:imgArr
             },()=>{
-                let imageArr = this.state.sosImageArr;
-                console.log("SOS Image Array:", imageArr);
+                let tempArr = [];
+                for(let i in imgArr){
+                        if(!imgArr[i].includes("content") && !imgArr[i].includes("file:///")){
+                            tempArr.push(imgArr[i])
+                        }
+                }
+                let emergencyImages = tempArr;
+                console.log("SOS Image Array:", emergencyImages);
                 firebase.database().ref('SOS/' + associationID + "/" + userId + "/").update({
-                    imageArr
+                    emergencyImages
+                }).then((data)=>{
+                    console.log("Image Saved in RTDB",data)
+                }).catch((err)=>{
+                    console.log("Error:",err)
                 });
             })
             
-        }
-        
+        }  
     }
+
+
+
+    async createSOSInAPI(){
+        let self = this;
+        let data = self.props;
+
+        let detail = {
+            SOGPSPnt:self.state.region.latitude+","+self.state.region.longitude,
+            ACFName:data.userReducer.MyFirstName,
+            ACMobile:(data.userReducer.MyMobileNumber).toString(),
+            SOEmgyCnt:"",
+            SOImage:"",
+            ACAccntID:data.userReducer.MyAccountID,
+            ASAssnID:data.associationID,
+            // ACAccntID:455,
+            // ASAssnID:5520
+        };
+
+        console.log("Stat in CreateSOSInAPI",detail);
+        fetch(
+            `http://apidev.oyespace.com/oyesafe/api/v1/SOS/Create`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+              },
+              body:JSON.stringify(detail)
+            }).then((response)=>{
+                console.log("Response in Create SOS API:",response)
+            }).catch((err)=>{
+                console.log("Error",err)
+            })
+    }
+
+
+    async updateSOSInAPI(){
+
+    }
+
+    async deleteSOSInAPI(){
+
+    }
+
 
     readUserData() {
         let self = this;
@@ -187,18 +338,32 @@ class CreateSOS extends React.Component {
         let userId = self.props.userReducer.MyAccountID;
         firebase.database().ref('SOS/' + associationID + "/" + userId + "/").on('value', function (snapshot) {
             let receivedData = snapshot.val();
-            console.log("Receiveddata", snapshot,self.state.isGuardDetailAvailable);
+            console.log("Receiveddata", snapshot.val(),self.state.isGuardDetailAvailable);
             if (receivedData !== null) {
                 if ((receivedData.attendedBy !== undefined && receivedData.attendedBy !== null) ) {
                     self.setState({
                         isGuardDetailAvailable: true,
                         deviceName:receivedData.attendedBy,
-                        mobileNumber:receivedData.attendedByMobile
+                        mobileNumber:receivedData.attendedByMobile,
+                        imageArr:receivedData.emergencyImages === undefined?[]:receivedData.emergencyImages,
+                        region:{
+                            latitude:receivedData.latitude,
+                            longitude:receivedData.longitude,
+                            latitudeDelta: LATITUDE_DELTA,
+                            longitudeDelta: LONGITUDE_DELTA,
+                        }
                     })
                 } 
                 else {
                     self.setState({
-                        isGuardDetailAvailable: false
+                        isGuardDetailAvailable: false,
+                        imageArr:receivedData.emergencyImages === undefined?[]:receivedData.emergencyImages,
+                        region:{
+                            latitude:receivedData.latitude,
+                            longitude:receivedData.longitude,
+                            latitudeDelta: LATITUDE_DELTA,
+                            longitudeDelta: LONGITUDE_DELTA,
+                        }
                     })
                 }
             }
@@ -214,6 +379,7 @@ class CreateSOS extends React.Component {
     openCamera() {
         const options = {
             title: 'Take Image',
+            quality:0.1,
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
@@ -222,6 +388,7 @@ class CreateSOS extends React.Component {
         ImagePicker.launchCamera(options, (response) => {
             // Same code as in above section!
             console.log("Response:", response);
+            if(!response.didCancel && !response.error){
             let imageArr = this.state.imageArr;
             imageArr.push(response.uri);
             this.setState({
@@ -229,6 +396,7 @@ class CreateSOS extends React.Component {
                 imageURI: response.uri,
                 imageArr:imageArr
             }, () => this.createSOS())
+        }
 
         });
     }
@@ -270,7 +438,7 @@ class CreateSOS extends React.Component {
                             source={imageURI}
                         />
                     </TouchableHighlight>
-                    <EmptyView width={50}/>
+                
                     {this.state.isGuardDetailAvailable ?
                         <View style={CreateSOSStyles.guardView}>
                             <View style={CreateSOSStyles.guardHeadingView}>
@@ -283,7 +451,7 @@ class CreateSOS extends React.Component {
                             <Text style={CreateSOSStyles.guardHeading}>Waiting for confirmation ...</Text>
                         </View>}
                 </View>
-                <EmptyView height={60}/>
+                <EmptyView height={30}/>
             <View style={{flexDirection:'row',width:widthPercentageToDP('100%')}}>
                 {this.state.imageArr.length!==0?
                 <View style={{width:widthPercentageToDP('90%'),left:15,justifyContent:'space-around'}}>
@@ -292,6 +460,7 @@ class CreateSOS extends React.Component {
                 data={this.state.imageArr}
                 horizontal={true}
                 renderItem={(item, index) => this.renderImages(item, index)}
+                horizontal={true}
                 /></View>:<View/>    
             }
                 </View>
@@ -388,7 +557,7 @@ class CreateSOS extends React.Component {
                         </View>
                     </TouchableHighlight>
                 </View>
-                {this._renderModal()}
+                {this._renderModal1()}
 
             </View>
         )
@@ -418,6 +587,17 @@ class CreateSOS extends React.Component {
         )
     }
 
+    _renderModal1(){
+        return(
+            <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={this.state.imageArr}
+            horizontal={true}
+            renderItem={(item, index) => this._renderModal(item, index)}
+            />
+        )
+    }
+
     _enlargeImage(imageURI){
         console.log("Sele:",imageURI)
         this.setState({
@@ -427,7 +607,6 @@ class CreateSOS extends React.Component {
     }
 
     renderImages(item,index){
-        console.log("State in Create SOS Image",item, index,this.state.imageURI);
         let imageURI = {uri:item.item}
 
         return(

@@ -80,6 +80,7 @@ class AddVehicle extends Component {
    processBackPress(){
     console.log("Part");
     this.props.navigation.goBack(null);
+    return true;
   }
 
   async getUnitDetail() {
