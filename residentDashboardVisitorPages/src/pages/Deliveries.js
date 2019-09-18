@@ -74,7 +74,6 @@ class App extends React.Component {
     this.arrayholder = [];
   }
 
-
   componentDidUpdate() {
     setTimeout(()=>{
       BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())

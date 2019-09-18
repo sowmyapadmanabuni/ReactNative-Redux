@@ -17,10 +17,7 @@ import GetStaffReport from "../src/screens/Resident/Visitors/Staff/GetStaffRepor
 
 class FirstTab extends Component {
 
-  
-
-  
-    render() {
+  render() {
 
     const AppTabNavigator = createMaterialTopTabNavigator({
       MyGuests: {

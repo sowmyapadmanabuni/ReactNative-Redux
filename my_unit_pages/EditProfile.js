@@ -345,7 +345,7 @@ class EditProfile extends Component {
                             >
                                 <Image
                                     style={[styles.image]}
-                                    source={require("../icons/headerLogo.png")}
+                                    source={require("../icons/OyespaceSafe.png")}
                                 />
                             </View>
                             <View style={styles.emptyViewStyle}/>
@@ -652,8 +652,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image: {
-        width: wp("24%"),
-        height: hp("10%")
+        width: wp("34%"),
+        height: hp("18%")
     },
     emptyViewStyle: {
         flex: 1

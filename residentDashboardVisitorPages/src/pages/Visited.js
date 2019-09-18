@@ -12,7 +12,7 @@ import {
   TextInput,
   Keyboard,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,BackHandler
 } from 'react-native';
 // import Header from "./src/components/common/Header";
 import { NavigationEvents } from 'react-navigation';
@@ -75,6 +75,23 @@ class MyGuests extends Component {
         dataSource: newDataSource
       });
     }, 2500);
+  }
+  componentDidUpdate() {
+    setTimeout(()=>{
+      BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
+    },100)
+  }
+
+  componentWillUnmount() {
+    setTimeout(()=>{
+      BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
+    },0)
+  }
+
+  processBackPress(){
+    console.log("Part");
+    const {goBack} = this.props.navigation;
+    goBack(null);
   }
 
   getInvitationList = () => {

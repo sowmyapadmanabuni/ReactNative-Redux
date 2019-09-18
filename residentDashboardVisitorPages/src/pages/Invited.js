@@ -1,13 +1,13 @@
 import InviteGuests from './InviteGuests.js';
-import MyGuests from './MyGuest.js';
+import MyGuest from './MyGuest.js';
 import QRCodeGeneration from './QRCodeGeneration.js';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 const MainNavigator = createStackNavigator(
   {
-    MyGuests : {screen: MyGuests},
-    InviteGuests : {screen: InviteGuests},
-    QRCodeGeneration: {screen: QRCodeGeneration}
+    MyGuest: { screen: MyGuest },
+    InviteGuests: { screen: InviteGuests },
+    QRCodeGeneration: { screen: QRCodeGeneration }
   }
   //, {
   //   defaultNavigationOptions: {
@@ -21,7 +21,7 @@ const MainNavigator = createStackNavigator(
   //     }
   //   }
   // }
-)
+);
 
 const App = createAppContainer(MainNavigator);
 export default App;

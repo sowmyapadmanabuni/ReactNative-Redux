@@ -336,7 +336,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                         value: data.unUniName,
                         name: data.unUniName,
                         unitId: data.unUnitID,
-                        id: index
+                        id: index,
+                        myRoleId:data.mrmRoleID
                       });
                     });
 
@@ -461,7 +462,8 @@ export const getDashUnits = (
             value: data.unUniName,
             name: data.unUniName,
             unitId: data.unUnitID,
-            id: index
+            id: index,
+            myRoleId:data.mrmRoleID
           });
         });
 

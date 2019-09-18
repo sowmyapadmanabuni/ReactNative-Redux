@@ -486,8 +486,8 @@ class QRCodeGeneration extends Component {
                   }}
               >
                 <QRCode
-                    logo={require("../icons/logo_QR.png")}
-                    logoSize={hp('8%')}
+                    // logo={require("../icons/logo_QR.png")}
+                    // logoSize={hp('8%')}
                     size={hp('20%')}
                     content={this.state.qrText}
                     codeStyle="square"

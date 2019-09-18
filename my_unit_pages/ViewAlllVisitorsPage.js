@@ -416,7 +416,7 @@ class App extends React.Component {
                 >
                   <Image
                       style={[styles.image1]}
-                      source={require("../icons/headerLogo.png")}
+                      source={require("../icons/OyespaceSafe.png")}
                   />
                 </View>
                 <View style={{ flex: 0.2 }}>
@@ -575,7 +575,7 @@ class App extends React.Component {
               >
                 <Image
                     style={[styles.image1]}
-                    source={require("../icons/headerLogo.png")}
+                    source={require("../icons/OyespaceSafe.png")}
                 />
               </View>
               <View style={{ flex: 0.2 }}>
@@ -901,8 +901,8 @@ const styles = StyleSheet.create({
     position: "relative"
   },
   image1: {
-    width: wp("22%"),
-    height: hp("12%")
+    width: wp("34%"),
+    height: hp("18%")
   },
 
   viewDetails1: {

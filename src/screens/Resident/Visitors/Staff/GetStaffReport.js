@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
     Image, Text, TouchableOpacity,
-    View, FlatList, Platform, PermissionsAndroid, ScrollView, ActivityIndicator, Alert
+    View, FlatList, Platform, PermissionsAndroid, ScrollView, ActivityIndicator, Alert, BackHandler
 
 } from 'react-native';
 import base from "../../../../base";
@@ -70,6 +70,16 @@ class GetStaffReport extends React.Component {
             })
         }
 
+    }
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            console.log("Staff Report")
+            this.props.navigation.goBack(null);
+            return true;
+        });
     }
 
     getAndroidPermissions() {
@@ -174,14 +184,14 @@ class GetStaffReport extends React.Component {
         base.utils.logger.log(duration.days())
         let difference=duration.as('days');
         let selectedDate = input.FromDate;
-        console.log('hghgfghfgf',difference,difference+1)
+       // console.log('hghgfghfgf',difference,difference+1)
 
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-                console.log("Diffrence:",initialDate,reportsData);
+               // console.log("Diffrence:",initialDate,reportsData);
                 for (let i = 0; i < reportsData.length; i++) {
                     let rowData = [];
                     rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'))
