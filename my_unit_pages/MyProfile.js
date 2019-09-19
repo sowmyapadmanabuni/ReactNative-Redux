@@ -75,7 +75,7 @@ class MyProfile extends Component {
             responseJson.data.account[0].acisdCode +
             responseJson.data.account[0].acMobile +
             ';' +
-            this.props.dashBoardReducer.uniID
+            this.props.dashBoardReducer.assId
         });
         const { updateUserInfo } = this.props;
         console.log(
@@ -132,7 +132,7 @@ class MyProfile extends Component {
   }
 
   render() {
-    console.log('State in My Profile:', this.state.ImageSource, this.props);
+    console.log('State in My Profile:', this.state.ImageSource, this.props.dashBoardReducer.dropdown);
     const { navigate } = this.props.navigation;
     console.log('Mobile number', this.state.number);
     return (
@@ -319,7 +319,7 @@ class MyProfile extends Component {
                     : null}
                 </Text>
               </View>
-              {this.state.number !== '' ? (
+              {this.state.number !== '' && this.props.dashBoardReducer.dropdown.length !==0? (
                 <View
                   style={{
                     justifyContent: 'center',
