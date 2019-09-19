@@ -286,6 +286,11 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
 
           if (sorted.length > 0) {
             dispatch({
+              type: USER_ROLE,
+              payload: { prop: 'role', value: sorted[0].roleId }
+            });
+
+            dispatch({
               type: UPDATE_SELECTED_DROPDOWN,
               payload: {
                 prop: 'selectedDropdown',
@@ -337,7 +342,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                         name: data.unUniName,
                         unitId: data.unUnitID,
                         id: index,
-                        myRoleId:data.mrmRoleID
+                        myRoleId: data.mrmRoleID
                       });
                     });
 
@@ -463,7 +468,7 @@ export const getDashUnits = (
             name: data.unUniName,
             unitId: data.unUnitID,
             id: index,
-            myRoleId:data.mrmRoleID
+            myRoleId: data.mrmRoleID
           });
         });
 
