@@ -328,8 +328,8 @@ class MyProfile extends Component {
                   }}
                 >
                   <QRCode
-                    // logo={require('../icons/OyespaceSafe.png')}
-                    // logoSize={hp('6%')}
+                    logo={require('../icons/oyesafe_qr_logo.png')}
+                    logoSize={hp('6%')}
                     size={hp('20%')}
                     content={this.state.number}
                     codeStyle="square"
