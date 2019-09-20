@@ -1,20 +1,17 @@
 import {StyleSheet} from 'react-native';
 import base from '../../../base'
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp
-  } from "react-native-responsive-screen";
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 const Style = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        marginTop:hp('2.8%')
+        marginTop: hp('2.8%')
     },
     dropDownContainer: {
-       // flex:1,
+        // flex:1,
         height: '7.5%',
-        marginLeft:10,
+        marginLeft: 10,
         width: '95%',
         flexDirection: 'row',
     },
@@ -66,8 +63,8 @@ const Style = StyleSheet.create({
         height: '70%',
         width: '95%',
         borderRadius: 25,
-        paddingHorizontal:8,
-        paddingVertical:12,
+        paddingHorizontal: 8,
+        paddingVertical: 12,
         backgroundColor: base.theme.colors.white
     },
     invoiceCardView: {
@@ -77,16 +74,16 @@ const Style = StyleSheet.create({
         margin: 10,
         backgroundColor: base.theme.colors.white,
         alignItems: 'center',
-        borderWidth:1,
-        borderColor:base.theme.colors.lightgrey
+        borderWidth: 1,
+        borderColor: base.theme.colors.lightgrey
     },
     invoiceHeadingView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '90%',
         margin: 5,
-        marginBottom:12,
-        marginTop:8
+        marginBottom: 12,
+        marginTop: 8
     },
     invoiceText: {
         color: base.theme.colors.primary,
@@ -100,10 +97,10 @@ const Style = StyleSheet.create({
         width: '100%',
         height: 70,
         backgroundColor: base.theme.colors.invoiceList,
-        marginBottom:12,
+        marginBottom: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius:6
+        borderRadius: 6
     },
     invoiceSubView: {
         width: "90%",

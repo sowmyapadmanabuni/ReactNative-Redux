@@ -8,23 +8,21 @@
 
 import React, {Component} from 'react';
 import {
-    Platform,
+    Alert,
+    BackHandler,
+    Dimensions,
+    Image,
+    SafeAreaView,
     StyleSheet,
     Text,
-    View,
-    TouchableWithoutFeedback,
-    Dimensions,
-    Keyboard,
-    SafeAreaView,
     TouchableOpacity,
-    Image,
-    Alert,BackHandler
+    View
 } from 'react-native';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {Card, CardItem, Form, Item, Label, Input, Button,} from "native-base";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {Button, Form, Input, Item, Label,} from "native-base";
 // import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import {RadioGroup, RadioButton} from "react-native-flexi-radio-button";
+import {RadioButton, RadioGroup} from "react-native-flexi-radio-button";
 import {connect} from "react-redux";
 
 var radio_props = [
@@ -37,7 +35,7 @@ class EditVehicle extends Component {
     static navigationOptions = {
         title: "Edit Vehicle",
         header: null
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -57,19 +55,19 @@ class EditVehicle extends Component {
             vehName: this.props.navigation.state.params.VehName ?
                 this.props.navigation.state.params.VehName
                 : ""
-        })
+        });
 
         this.setState({
             vehNum: this.props.navigation.state.params.VehNum ?
                 this.props.navigation.state.params.VehNum
                 : ""
-        })
+        });
 
         this.setState({
             vehStickerNum: this.props.navigation.state.params.VehStickerNum ?
                 this.props.navigation.state.params.VehStickerNum
                 : ""
-        })
+        });
 
         this.setState({
             vehParkingSlotNum: this.props.navigation.state.params.VehParkingSlotNum ?
@@ -79,23 +77,23 @@ class EditVehicle extends Component {
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
+    }
 
     onSelect(index, value) {
         this.setState({
@@ -105,16 +103,16 @@ class EditVehicle extends Component {
 
     ModelName = modelName => {
         this.setState({vehName: modelName})
-    }
+    };
     VehNum = vehNum => {
         this.setState({vehNum: vehNum})
-    }
+    };
     VehStickerNum = vehStickerNum => {
         this.setState({vehStickerNum: vehStickerNum})
-    }
+    };
     VehParkingSlotNum = vehParkingSlotNum => {
         this.setState({vehParkingSlotNum: vehParkingSlotNum})
-    }
+    };
 
     editVehicle = () => {
         const {
@@ -124,18 +122,18 @@ class EditVehicle extends Component {
             VehParkingSlotNum,
             VehType,
             Veid
-        } = this.props.navigation.state.params
+        } = this.props.navigation.state.params;
 
         // id = Veid
         value = this.state.text;
-        vehName = this.state.vehName
-        vehNum = this.state.vehNum
-        vehStickerNum = this.state.vehStickerNum
-        parkingSlotNum = this.state.vehParkingSlotNum
-        vehType = this.state.text
+        vehName = this.state.vehName;
+        vehNum = this.state.vehNum;
+        vehStickerNum = this.state.vehStickerNum;
+        parkingSlotNum = this.state.vehParkingSlotNum;
+        vehType = this.state.text;
 
-        const reg = /^[0]?[6789]\d{9}$/
-        const OyeFullName = /^[a-zA-Z ]+$/
+        const reg = /^[0]?[6789]\d{9}$/;
+        const OyeFullName = /^[a-zA-Z ]+$/;
         //regex code
         const oyeNonSpecialRegex = /[^0-9A-Za-z ]/;
         if (vehName.length == 0 || vehName == "") {
@@ -172,7 +170,7 @@ class EditVehicle extends Component {
                 VEStickNo: vehStickerNum.length <= 0 ? VehStickerNum : vehStickerNum.toString(),
                 UPLNum: parkingSlotNum.length <= 0 ? VehParkingSlotNum : parkingSlotNum.toString(),
                 VEID: this.props.navigation.state.params.Veid,
-                ASAssnID:this.props.dashBoardReducer.selectedAssociation
+                ASAssnID: this.props.dashBoardReducer.selectedAssociation
             });
             fetch(
                 `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/VehicleUpdate`,
@@ -187,7 +185,7 @@ class EditVehicle extends Component {
             )
                 .then(responseData => responseData.json())
                 .then(responseJson => {
-                    console.log("Respo::", responseJson,body);
+                    console.log("Respo::", responseJson, body);
                     if (responseJson.success) {
                         this.props.navigation.navigate("MyVehicleListScreen");
                     } else {
@@ -204,7 +202,7 @@ class EditVehicle extends Component {
                     console.log(responseJson.error.message)
                 })
         }
-    }
+    };
 
     onSelect(index, value) {
         this.setState({
@@ -214,15 +212,15 @@ class EditVehicle extends Component {
 
     render() {
 
-        console.log("Props:",this.props.navigation.state.params);
-        console.log("State:",this.state);
+        console.log("Props:", this.props.navigation.state.params);
+        console.log("State:", this.state);
         let propsData = this.props.navigation.state.params;
         let stateData = this.state;
-        let isEdited = (propsData.VehName !== stateData.vehName || propsData.VehNum !== stateData.vehNum || propsData.VehType !== stateData.text 
-            || propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum || propsData.VehStickerNum !== stateData.vehStickerNum) ;
-console.log(propsData.VehName !== stateData.vehName , propsData.VehName !== stateData.vehName , propsData.VehType !== stateData.text 
-    ,propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum , propsData.VehStickerNum !== stateData.vehStickerNum)
-            console.log("isEdited:",isEdited)
+        let isEdited = (propsData.VehName !== stateData.vehName || propsData.VehNum !== stateData.vehNum || propsData.VehType !== stateData.text
+            || propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum || propsData.VehStickerNum !== stateData.vehStickerNum);
+        console.log(propsData.VehName !== stateData.vehName, propsData.VehName !== stateData.vehName, propsData.VehType !== stateData.text
+            , propsData.VehParkingSlotNum !== stateData.vehParkingSlotNum, propsData.VehStickerNum !== stateData.vehStickerNum);
+        console.log("isEdited:", isEdited);
 
         return (
             <View style={styles.container}>
@@ -260,7 +258,7 @@ console.log(propsData.VehName !== stateData.vehName , propsData.VehName !== stat
                         >
                             <Image
                                 style={[styles.image1]}
-                                source={require("../icons/headerLogo.png")}
+                                source={require("../icons/OyespaceSafe.png")}
                             />
                         </View>
                         <View style={{flex: 0.2}}>
@@ -382,23 +380,23 @@ console.log(propsData.VehName !== stateData.vehName , propsData.VehName !== stat
                             >
                                 <Text style={styles.textFamilyVehicle}>Cancel</Text>
                             </Button>
-                            {isEdited?
-                            <Button
-                                bordered
-                                warning
-                                style={styles.buttonAdd}
-                                onPress={() => this.editVehicle()}
-                            >
-                                <Text style={styles.textFamilyVehicle}>Update</Text>
-                            </Button>:
-                            <Button
-                            bordered
-                            info
-                            style={styles.buttonCancel}
-                            onPress={() => alert("Please Edit the details to update")}
-                        >
-                            <Text style={styles.textFamilyVehicle}>Update</Text>
-                        </Button>}
+                            {isEdited ?
+                                <Button
+                                    bordered
+                                    warning
+                                    style={styles.buttonAdd}
+                                    onPress={() => this.editVehicle()}
+                                >
+                                    <Text style={styles.textFamilyVehicle}>Update</Text>
+                                </Button> :
+                                <Button
+                                    bordered
+                                    info
+                                    style={styles.buttonCancel}
+                                    onPress={() => alert("Please Edit the details to update")}
+                                >
+                                    <Text style={styles.textFamilyVehicle}>Update</Text>
+                                </Button>}
                         </View>
                     </KeyboardAwareScrollView>
                 </View>
@@ -480,8 +478,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image1: {
-        width: wp("22%"),
-        height: hp("12%"),
+        width: wp("34%"),
+        height: hp("18%"),
         marginRight: hp("3%")
     },
 

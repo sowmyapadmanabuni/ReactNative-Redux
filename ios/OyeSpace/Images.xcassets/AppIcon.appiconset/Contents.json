@@ -1,62 +1,62 @@
 {
-  "images" : [
+  "images": [
     {
-      "size" : "20x20",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_40.jpg",
-      "scale" : "2x"
+      "size": "20x20",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_40.jpg",
+      "scale": "2x"
     },
     {
-      "size" : "20x20",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_60.jpg",
-      "scale" : "3x"
+      "size": "20x20",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_60.jpg",
+      "scale": "3x"
     },
     {
-      "size" : "29x29",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_58.jpg",
-      "scale" : "2x"
+      "size": "29x29",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_58.jpg",
+      "scale": "2x"
     },
     {
-      "size" : "29x29",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_87.jpg",
-      "scale" : "3x"
+      "size": "29x29",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_87.jpg",
+      "scale": "3x"
     },
     {
-      "size" : "40x40",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_80.jpg",
-      "scale" : "2x"
+      "size": "40x40",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_80.jpg",
+      "scale": "2x"
     },
     {
-      "size" : "40x40",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_120.jpg",
-      "scale" : "3x"
+      "size": "40x40",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_120.jpg",
+      "scale": "3x"
     },
     {
-      "size" : "60x60",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_120-1.jpg",
-      "scale" : "2x"
+      "size": "60x60",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_120-1.jpg",
+      "scale": "2x"
     },
     {
-      "size" : "60x60",
-      "idiom" : "iphone",
-      "filename" : "GateAppLogo_180-1.jpg",
-      "scale" : "3x"
+      "size": "60x60",
+      "idiom": "iphone",
+      "filename": "GateAppLogo_180-1.jpg",
+      "scale": "3x"
     },
     {
-      "size" : "1024x1024",
-      "idiom" : "ios-marketing",
-      "filename" : "GateAppLogo_1024.jpg",
-      "scale" : "1x"
+      "size": "1024x1024",
+      "idiom": "ios-marketing",
+      "filename": "GateAppLogo_1024.jpg",
+      "scale": "1x"
     }
   ],
-  "info" : {
-    "version" : 1,
-    "author" : "xcode"
+  "info": {
+    "version": 1,
+    "author": "xcode"
   }
 }

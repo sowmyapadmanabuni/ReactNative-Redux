@@ -5,20 +5,19 @@
 import React from 'react';
 import {
     Alert,
+    AsyncStorage,
+    BackHandler,
     DatePickerIOS,
     FlatList,
     Platform,
     ScrollView,
-    StyleSheet,
     Switch,
     Text,
     TextInput,
     TimePickerAndroid,
     TouchableHighlight,
     TouchableOpacity,
-    View,
-    AsyncStorage,
-    BackHandler
+    View
 } from 'react-native';
 import {connect} from 'react-redux';
 import axios from "axios";
@@ -65,14 +64,14 @@ class SchedulePatrol extends React.Component {
             deviceNameList: [],
             selectedDevice: "",
             isSnoozeEnabled: false,
-            patrolId:null,
-            patrolData:{},
-            pcid:[]
+            patrolId: null,
+            patrolData: {},
+            pcid: []
         });
 
-        console.log("TIME:",currentDate,moment().format())
+        console.log("TIME:", currentDate, moment().format());
         this.getDeviceList = this.getDeviceList.bind(this);
-      //  this.openTimePicker = this.openTimePicker.bind(this);
+        //  this.openTimePicker = this.openTimePicker.bind(this);
 
     };
 
@@ -90,38 +89,38 @@ class SchedulePatrol extends React.Component {
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
+    }
 
 
-    async componentWillMount(){
+    async componentWillMount() {
         let key = base.utils.strings.patrolId;
         let key1 = "PCID";
         let data = await AsyncStorage.getItem(key);
         let pcid = await AsyncStorage.getItem(key1);
-        console.log("PCID:",pcid);
-        if(data!==null || data !== undefined){
-            this.setState({patrolId:data,pcid:pcid},()=>this.getPatrolData())
+        console.log("PCID:", pcid);
+        if (data !== null || data !== undefined) {
+            this.setState({patrolId: data, pcid: pcid}, () => this.getPatrolData())
         }
         this.getDeviceList();
     }
 
-    async getPatrolData(){
+    async getPatrolData() {
         let self = this;
 
         let stat = await base.services.OyeSafeApi.getPatrollingShiftListByAssociationID(this.props.SelectedAssociationID);
@@ -129,11 +128,11 @@ class SchedulePatrol extends React.Component {
         try {
             if (stat.success) {
                 let patrollArr = stat.data.patrollingShifts;
-                for(let i in patrollArr){
-                    if(self.state.patrolId == patrollArr[i].psPtrlSID){
+                for (let i in patrollArr) {
+                    if (self.state.patrolId == patrollArr[i].psPtrlSID) {
                         self.setState({
-                            patrolData:patrollArr[i]
-                        },()=>self.setData())
+                            patrolData: patrollArr[i]
+                        }, () => self.setData())
                     }
                 }
             }
@@ -144,10 +143,10 @@ class SchedulePatrol extends React.Component {
     }
 
 
-    setData(){
+    setData() {
         //moment.utc(yourDate).format()
         let data = this.state.patrolData;
-        console.log("DATA:",data)
+        console.log("DATA:", data);
 
         let sdt = new Date(data.pssTime);
         let edt = new Date(data.pseTime);
@@ -157,22 +156,22 @@ class SchedulePatrol extends React.Component {
         let _edt = edt;
         let days = this.state.days;
         let receivedDays = data.psRepDays.split(',');
-        console.log("Days:",days,receivedDays);
-        for(let i in days){
-            for(let j in receivedDays){
-                if(days[i].day === receivedDays[j]){
-                    console.log(days[i].day, receivedDays[j])
+        console.log("Days:", days, receivedDays);
+        for (let i in days) {
+            for (let j in receivedDays) {
+                if (days[i].day === receivedDays[j]) {
+                    console.log(days[i].day, receivedDays[j]);
                     days[i].isSelected = true
                 }
             }
-            
+
         }
         this.setState({
             startTime: _sdt,
             endTime: _edt,
-            slotName:data.psSltName,
-            isSnoozeEnabled:data.psSnooze,
-            days:days
+            slotName: data.psSltName,
+            isSnoozeEnabled: data.psSnooze,
+            days: days
         })
     }
 
@@ -181,50 +180,50 @@ class SchedulePatrol extends React.Component {
 
         const {
             oyeURL
-          } = this.props;
+        } = this.props;
 
-        
+
         var headers = {
             "Content-Type": "application/json",
-            "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
-        }
+            "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
+        };
 
-        console.log("OyeURL:",oyeURL)
+        console.log("OyeURL:", oyeURL);
 
         //let stat = await base.services.OyeSafeApi.getDeviceList(associationId);
         let associationId = this.props.SelectedAssociationID;
         //let associationId = 8;
         axios
-      .get(
-        `http://${oyeURL}/oyesafe/api/v1/Device/GetDeviceListByAssocID/${associationId}`,
-        {
-          headers: headers
-        }
-      )
-      .then(stat => {
-          console.log("Stat:",stat)
-        try {
-            if (stat) {
-                let dataReceived = stat.data.data.deviceListByAssocID;
-                let deviceName = [];
-                for (let i in dataReceived) {
-                    let deviceDetail = {
-                        deviceName: dataReceived[i].deGateNo,
-                        deviceId: dataReceived[i].deid
-                    }
-                    deviceName.push(deviceDetail)
+            .get(
+                `http://${oyeURL}/oyesafe/api/v1/Device/GetDeviceListByAssocID/${associationId}`,
+                {
+                    headers: headers
                 }
+            )
+            .then(stat => {
+                console.log("Stat:", stat);
+                try {
+                    if (stat) {
+                        let dataReceived = stat.data.data.deviceListByAssocID;
+                        let deviceName = [];
+                        for (let i in dataReceived) {
+                            let deviceDetail = {
+                                deviceName: dataReceived[i].deGateNo,
+                                deviceId: dataReceived[i].deid
+                            };
+                            deviceName.push(deviceDetail)
+                        }
 
-                self.setState({
-                    deviceNameList: deviceName,
-                    selectedDevice: dataReceived[0].deGateNo
-                });
-            }
-        } catch (e) {
-            console.log(e)
-        }
-      })
-        
+                        self.setState({
+                            deviceNameList: deviceName,
+                            selectedDevice: dataReceived[0].deGateNo
+                        });
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+            })
+
     };
 
     async schedulePatrol(days, patrolCheckPointID) {
@@ -243,7 +242,7 @@ class SchedulePatrol extends React.Component {
             //ASAssnID: 8
         };
 
-        console.log("Detail for network call:",detail);
+        console.log("Detail for network call:", detail);
 
         let stat = await base.services.OyeSafeApi.schedulePatrol(detail);
         try {
@@ -266,14 +265,14 @@ class SchedulePatrol extends React.Component {
         }
     };
 
-    async updatePatrol(days, patrolCheckPointID){
+    async updatePatrol(days, patrolCheckPointID) {
         let self = this;
         let pcids = '';
 
         let statePcid = JSON.parse(self.state.pcid);
 
-        for(let i in statePcid){
-            console.log("PCIS:",JSON.parse(self.state.pcid));
+        for (let i in statePcid) {
+            console.log("PCIS:", JSON.parse(self.state.pcid));
             pcids = pcids === "" ? pcids + statePcid[i] : pcids + "," + statePcid[i]
 
         }
@@ -288,11 +287,11 @@ class SchedulePatrol extends React.Component {
             PSSltName: self.state.slotName,
             ASAssnID: self.props.SelectedAssociationID,
             //ASAssnID: 8,
-            PSPtrlSID  : self.state.patrolId,
-            PCIDs:pcids
+            PSPtrlSID: self.state.patrolId,
+            PCIDs: pcids
         };
         let stat = await base.services.OyeSafeApi.updatePatrol(detail);
-        console.log("KHJDKVHDV<HDKJVDV<:",stat);
+        console.log("KHJDKVHDV<HDKJVDV<:", stat);
         try {
             if (stat) {
                 if (stat.success) {
@@ -316,7 +315,7 @@ class SchedulePatrol extends React.Component {
     async goBack() {
         const {updateSelectedCheckPoints} = this.props;
         await updateSelectedCheckPoints({value: []});
-        this.props.navigation.navigate("schedulePatrolling",{refresh:true});
+        this.props.navigation.navigate("schedulePatrolling", {refresh: true});
     }
 
     openTimeSpinner(selType) {
@@ -414,7 +413,7 @@ class SchedulePatrol extends React.Component {
                               oSBBackground={base.theme.colors.red}
                               height={30} borderRadius={10}/>
                     <OSButton onButtonClick={() => this.validateFields()}
-                              oSBText={this.state.patrolId===null?'Save':'Update'} oSBType={"custom"}
+                              oSBText={this.state.patrolId === null ? 'Save' : 'Update'} oSBType={"custom"}
                               oSBBackground={base.theme.colors.primary}
                               height={30} borderRadius={10}/>
                 </View>
@@ -438,55 +437,46 @@ class SchedulePatrol extends React.Component {
             patrolCheckPointID = patrolCheckPointID === "" ? patrolCheckPointID + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID : patrolCheckPointID + "," + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID
         }
 
-            let startTime = moment(this.state.startTime).format("HH:mm");
-            let endTime = moment(this.state.endTime).format("HH:mm");
-            console.log('Time at validation:',(this.state.startTime),(this.state.endTime));
+        let startTime = moment(this.state.startTime).format("HH:mm");
+        let endTime = moment(this.state.endTime).format("HH:mm");
+        console.log('Time at validation:', (this.state.startTime), (this.state.endTime));
 
-            console.log("Disfffff:",this.compareTime(startTime,endTime));
-             let diff = this.compareTime(startTime,endTime);
-            if(!diff){
-                alert("Patrol end time can not be earlier than or equal to patrol start time");
-            }
-            else if(daysString.length === 0){
-                alert("Please select patrolling days")
-        }
-        else if(base.utils.validate.isBlank(this.state.slotName)){
+        console.log("Disfffff:", this.compareTime(startTime, endTime));
+        let diff = this.compareTime(startTime, endTime);
+        if (!diff) {
+            alert("Patrol end time can not be earlier than or equal to patrol start time");
+        } else if (daysString.length === 0) {
+            alert("Please select patrolling days")
+        } else if (base.utils.validate.isBlank(this.state.slotName)) {
             alert("Please enter slot name");
-        }
-        else{
-            this.state.patrolId === null? this.schedulePatrol(daysString, patrolCheckPointID):this.updatePatrol(daysString,patrolCheckPointID)
+        } else {
+            this.state.patrolId === null ? this.schedulePatrol(daysString, patrolCheckPointID) : this.updatePatrol(daysString, patrolCheckPointID)
         }
     }
 
 
-    compareTime(startTime,endTime){
+    compareTime(startTime, endTime) {
         let startTimeArr = startTime.split(":");
         let endTimeArr = endTime.split(":");
-        console.log("Time Arr:",startTimeArr,endTimeArr);
+        console.log("Time Arr:", startTimeArr, endTimeArr);
 
-        if(startTimeArr[0]>endTimeArr[0]){
+        if (startTimeArr[0] > endTimeArr[0]) {
             return false
-        }
-        else if(startTimeArr[0]<endTimeArr[0]){
+        } else if (startTimeArr[0] < endTimeArr[0]) {
             return true
-        }
-        else{
-            if(startTimeArr[1]>endTimeArr[1]){
+        } else {
+            if (startTimeArr[1] > endTimeArr[1]) {
                 return false
-            }
-            else if(startTimeArr[0] === endTimeArr[0]){
-                if(startTimeArr[1] === endTimeArr[1]){
+            } else if (startTimeArr[0] === endTimeArr[0]) {
+                if (startTimeArr[1] === endTimeArr[1]) {
                     return false
-                }
-                else{
+                } else {
                     return true
                 }
-            }
-            else{
+            } else {
                 return true
             }
         }
-
 
 
     }
@@ -522,8 +512,10 @@ class SchedulePatrol extends React.Component {
             <TouchableOpacity
                 underlayColor={base.theme.colors.transparent}
                 onPress={() => this.selectDay(item.item)}
-                style={[SchedulePatrolStyles.dataWeekView,{backgroundColor: dayData.isSelected ? base.theme.colors.primary : base.theme.colors.white,
-                    borderColor: dayData.isSelected ? base.theme.colors.white : base.theme.colors.blue}]}>
+                style={[SchedulePatrolStyles.dataWeekView, {
+                    backgroundColor: dayData.isSelected ? base.theme.colors.primary : base.theme.colors.white,
+                    borderColor: dayData.isSelected ? base.theme.colors.white : base.theme.colors.blue
+                }]}>
                 <Text
                     style={{
                         color: dayData.isSelected ? base.theme.colors.white : base.theme.colors.black,
@@ -535,26 +527,26 @@ class SchedulePatrol extends React.Component {
 
     openTimePicker() {
         let self = this;
-        let isOpen  = self.state.isSpinnerOpen;
+        let isOpen = self.state.isSpinnerOpen;
         let hr = moment().get('hour');
-        let min =moment().get('minute');
-        console.log("JDHH:",hr,min)
-        Platform.OS === 'ios' ? self.renderTimeSpinnerModal() : isOpen? self.renderTimePicker(this.state.selType, {
+        let min = moment().get('minute');
+        console.log("JDHH:", hr, min);
+        Platform.OS === 'ios' ? self.renderTimeSpinnerModal() : isOpen ? self.renderTimePicker(this.state.selType, {
             hour: hr,
             minute: min,
             is24Hour: false,
             mode: 'spinner',
-        }):null
+        }) : null
     }
 
 
     renderTimeSpinnerModal() {
         let sTime = this.state.startTime;
         let eTime = this.state.endTime;
-        let selectedDate = this.state.selType === 0 ? sTime:eTime;
+        let selectedDate = this.state.selType === 0 ? sTime : eTime;
 
         return (
-            <Modal isVisible={Platform.OS === 'ios'?this.state.isSpinnerOpen:false}
+            <Modal isVisible={Platform.OS === 'ios' ? this.state.isSpinnerOpen : false}
                    style={SchedulePatrolStyles.spinModal}
             >
                 <View
@@ -578,42 +570,42 @@ class SchedulePatrol extends React.Component {
     }
 
     renderTimePicker = async (stateKey, options) => {
-            try {
-                let newState = {};
-                const {action, hour, minute} = await TimePickerAndroid.open(options);
-                if (action !== TimePickerAndroid.dismissedAction) {
-                    let newTime = new Date();
-                    newTime.setHours(hour);
-                    newTime.setMinutes(minute)
-                    console.log("SELELMEKVJBHEJV:",newTime);
-                    this.changeTime(newTime);
-                }
-                else {
-                    let newTime = new Date();
-                    newTime.setHours(hour);
-                    newTime.setMinutes(minute)
-                    console.log("SELELMEKVJBHEJV111111",newTime,currentDate)
-                    this.changeTime(currentDate);
-                }
-
-            } catch ({code, message}) {
-                console.warn('Cannot open time picker', message);
+        try {
+            let newState = {};
+            const {action, hour, minute} = await TimePickerAndroid.open(options);
+            if (action !== TimePickerAndroid.dismissedAction) {
+                let newTime = new Date();
+                newTime.setHours(hour);
+                newTime.setMinutes(minute);
+                console.log("SELELMEKVJBHEJV:", newTime);
+                this.changeTime(newTime);
+            } else {
+                let newTime = new Date();
+                newTime.setHours(hour);
+                newTime.setMinutes(minute);
+                console.log("SELELMEKVJBHEJV111111", newTime, currentDate);
+                this.changeTime(currentDate);
             }
-    }
+
+        } catch ({code, message}) {
+            console.warn('Cannot open time picker', message);
+        }
+    };
 
     changeTime(time) {
-        console.log("Old Time:",time);
-        let selTime = time==="Invalid Date"?currentDate:time;
-        console.log("Time:",selTime,(time),currentDate);
+        console.log("Old Time:", time);
+        let selTime = time === "Invalid Date" ? currentDate : time;
+        console.log("Time:", selTime, (time), currentDate);
         if (this.state.selType === 0) {
-            this.setState({startTime: selTime,isSpinnerOpen:false})
+            this.setState({startTime: selTime, isSpinnerOpen: false})
         } else {
-            this.setState({endTime: selTime,isSpinnerOpen:false})
+            this.setState({endTime: selTime, isSpinnerOpen: false})
         }
     }
 
 
 }
+
 const mapStateToProps = state => {
     return {
         SelectedAssociationID: state.DashboardReducer.assId,

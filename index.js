@@ -1,14 +1,14 @@
 /** @format */
-import React, { Component } from "react";
-import { AppRegistry, View, StatusBar, Platform,BackHandler } from "react-native";
-import { Provider } from "react-redux";
+import React, {Component} from "react";
+import {AppRegistry} from "react-native";
+import {Provider} from "react-redux";
 import App from "./App";
 import store from "./src/store";
-import { name as appName } from "./app.json";
-import FlashMessage from "react-native-flash-message";
+import {name as appName} from "./app.json";
 import $ from "logdecor";
 import CheckInternet from "./src/base/services/CheckInternet";
-import base from "./src/base";
+//firebase.initializeApp(config);
+import {StatusBarPlaceHolder} from "../ReactNative-Redux/src/components/StatusBar";
 // import firebase from 'firebase';
 // import {firebaseDetails} from './constant';
 
@@ -26,24 +26,21 @@ import base from "./src/base";
 //   appId: "1:194451632723:web:55842a54e3f70d54"
 // };
 
- //firebase.initializeApp(config);
-import { StatusBarPlaceHolder } from "../ReactNative-Redux/src/components/StatusBar";
-
 
 class RootApp extends Component {
-  render() {
-    $.logTitle("O Y E S P A C E - R E S I D E N T");
-    return (
-      <Provider store={store}>
-        <CheckInternet />
-        <StatusBarPlaceHolder />
-        <App />
-{/*
+    render() {
+        $.logTitle("O Y E S P A C E - R E S I D E N T");
+        return (
+            <Provider store={store}>
+                <CheckInternet/>
+                <StatusBarPlaceHolder/>
+                <App/>
+                {/*
         <FlashMessage position="top" duration={5000} />
 */}
-      </Provider>
-    );
-  }
+            </Provider>
+        );
+    }
 }
 
 AppRegistry.registerComponent(appName, () => RootApp);

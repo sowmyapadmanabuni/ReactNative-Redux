@@ -36,8 +36,8 @@ const PatrollingScheduleStyles = StyleSheet.create({
         width: wp("10%"),
         position: "absolute",
         alignSelf: 'center',
-        right:20,
-        top:50
+        right: 20,
+        top: 50
     },
     centerView: {
         height: '70%',
@@ -81,79 +81,79 @@ const PatrollingScheduleStyles = StyleSheet.create({
         height: hp('4%'),
         width: hp('4%')
     },
-    noSlotTextView:{
+    noSlotTextView: {
         justifyContent: 'center',
         alignItems: 'center'
     },
-    deviceView:{
+    deviceView: {
         flexDirection: 'row',
         marginTop: hp('1%')
     },
-    alarmView:{
+    alarmView: {
         flexDirection: 'row',
         marginTop: hp('1%')
     },
-    alarmText:{
+    alarmText: {
         fontFamily: base.theme.fonts.medium,
         color: base.theme.colors.black,
         fontSize: hp('2%'),
         marginLeft: wp('1%')
     },
-    marqueeText:{
+    marqueeText: {
         width: wp('45%'),
         fontFamily: base.theme.fonts.light,
         color: base.theme.colors.black,
         fontSize: hp('2%'),
     },
-    mapModal:{
+    mapModal: {
         flex: 1,
         backgroundColor: base.theme.colors.transparent,
         alignSelf: 'center',
         width: wp('90%'),
     },
-    mapModalView:{
+    mapModalView: {
         height: hp("65%"),
         justifyContent: 'flex-start',
         backgroundColor: base.theme.colors.white,
     },
-    mapTouchableView:{
+    mapTouchableView: {
         height: hp('7%'),
         justifyContent: 'center',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
         width: wp('20%'),
     },
-    closeText:{
+    closeText: {
         alignSelf: 'center',
         color: base.theme.colors.primary,
         fontFamily: base.theme.fonts.medium
     },
-    slotView:{
+    slotView: {
         borderWidth: 0,
         height: hp('12%'),
         width: wp('85%'),
         alignSelf: 'center'
     },
-    shareView:{
+    shareView: {
         flexDirection: 'row',
         alignItems: 'center'
     },
-    shareImageView:{
+    shareImageView: {
         width: wp('30%'),
         alignItems: 'flex-end'
     },
-    shareIcon:{
+    shareIcon: {
         height: hp('3%'),
         width: hp('3%')
     },
-    marqView:{
+    marqView: {
         fontSize: 12,
         textAlign: "center",
         alignSelf: 'center',
         top: 1,
         width: wp('50%')
     },
-    markerView:{
+    markerView: {
         height: hp('2%'),
         width: hp('2%'),
         borderRadius: hp('1%'),

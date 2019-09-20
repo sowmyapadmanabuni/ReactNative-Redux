@@ -9,7 +9,7 @@
 
 import axios from 'axios';
 
-console.log("props in OSAPI:",this.props);
+console.log("props in OSAPI:", this.props);
 
 let instance = axios.create({
     baseURL: 'https://apiuat.oyespace.com/oyeliving/api/v1/',
@@ -36,13 +36,13 @@ instance.interceptors.response.use((response) => {
 });
 
 
-class OSApiConnector{
+class OSApiConnector {
 
 
-    static async loginScreen(detail){
-        return await instance.post('account/sendotp',detail);
+    static async loginScreen(detail) {
+        return await instance.post('account/sendotp', detail);
     }
-    
+
 }
 
 

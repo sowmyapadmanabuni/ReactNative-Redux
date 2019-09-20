@@ -26,13 +26,13 @@ const StaffStyle = StyleSheet.create({
             , height: '100%',
         },
         textView: {
-            marginLeft:10,
+            marginLeft: 10,
             width: '28%',
         },
         staffText: {
             fontSize: 15,
             color: base.theme.colors.black,
-            marginRight:2,
+            marginRight: 2,
         },
         desigText: {
             fontSize: 12,
@@ -50,7 +50,7 @@ const StaffStyle = StyleSheet.create({
             justifyContent: 'center'
         },
         shareImg: {
-            height:20,
+            height: 20,
             width: 20,
             alignSelf: 'center'
         },
@@ -61,7 +61,7 @@ const StaffStyle = StyleSheet.create({
             justifyContent: 'space-around',
             alignItems: 'center',
             marginTop: 25,
-            marginBottom:5,
+            marginBottom: 5,
         },
         datePickerSubView: {
             width: '40%',
@@ -78,20 +78,20 @@ const StaffStyle = StyleSheet.create({
             marginTop: 25,
             marginBottom: 35,
         },
-    noStaffDataText:{
-            fontSize:14,
-        color:base.theme.colors.black
-    },
-    noStaffData:{
-            alignItems:'center',
-        justifyContent:'center',
-        height:'100%'
-    },
-    activityIndicator: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    }
+        noStaffDataText: {
+            fontSize: 14,
+            color: base.theme.colors.black
+        },
+        noStaffData: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%'
+        },
+        activityIndicator: {
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+        }
 
 
     }

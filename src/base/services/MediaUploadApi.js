@@ -39,14 +39,12 @@ instance.interceptors.response.use((response) => {
 });
 
 
-export default class MediaUploadApi{
+export default class MediaUploadApi {
 
-    static async uploadRelativeImage(form){
-        console.log('Image upload server')
-        return await instance.post('/association/upload',form);
+    static async uploadRelativeImage(form) {
+        console.log('Image upload server');
+        return await instance.post('/association/upload', form);
     }
-
-
 
 
 }

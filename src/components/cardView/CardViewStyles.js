@@ -1,4 +1,4 @@
-import {StyleSheet, Platform} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import base from '../../../src/base'
 
 
@@ -9,10 +9,10 @@ const CardViewStyles = StyleSheet.create({
         justifyContent: 'center',
         elevation: 5,
         borderColor: base.theme.colors.lightgrey,
-        borderWidth:0.5,
+        borderWidth: 0.5,
         shadowColor: base.theme.colors.darkgrey,
-        shadowOffset: {width: 0, height: Platform.OS==='ios'?3:2},
-        shadowOpacity: Platform.OS==='ios'?0.3:0.8,
+        shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 2},
+        shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
         shadowRadius: 2,
 
     },
@@ -40,7 +40,7 @@ const CardViewStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '55%',
-        justifyContent:'space-between'
+        justifyContent: 'space-between'
     },
     count: {
         fontSize: 15,

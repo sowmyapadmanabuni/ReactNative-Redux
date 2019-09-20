@@ -3,7 +3,17 @@
  */
 
 import React from 'react';
-import {Dimensions, FlatList, Image, Text, TouchableHighlight, View,Alert,AsyncStorage,BackHandler } from 'react-native';
+import {
+    Alert,
+    AsyncStorage,
+    BackHandler,
+    Dimensions,
+    FlatList,
+    Image,
+    Text,
+    TouchableHighlight,
+    View
+} from 'react-native';
 import {connect} from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
@@ -15,7 +25,6 @@ import {updateSelectedCheckPoints} from '../../../src/actions';
 import Modal from "react-native-modal";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
-import _ from 'lodash';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -39,12 +48,12 @@ class PatrollingCheckPoints extends React.Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
-            cpName:'',
+            cpName: '',
             isEditing: false,
             selectedArray: [],
             checkedArray: [],
-            points:[],
-            selectedCP:[]
+            points: [],
+            selectedCP: []
         };
         this.getCheckPoints = this.getCheckPoints.bind(this);
         //this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
@@ -57,43 +66,39 @@ class PatrollingCheckPoints extends React.Component {
             this.setState({isEditing: true})
         }
 
-       // this.updateStore();
+        // this.updateStore();
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
+    }
 
 
-
-    componentWillReceiveProps(nextProps) { 
-        console.log("Next Props:",nextProps);
+    componentWillReceiveProps(nextProps) {
+        console.log("Next Props:", nextProps);
         if (nextProps.navigation.state.params !== undefined) {
             if (nextProps.navigation.state.params.isRefreshing === true) {
-                nextProps.navigation.state.params.isRefreshing  = false
+                nextProps.navigation.state.params.isRefreshing = false;
                 this.getCheckPoints(true);
             }
 
         }
     }
-
-    
-    
 
 
     async getCheckPoints(isRefreshing) {
@@ -106,7 +111,7 @@ class PatrollingCheckPoints extends React.Component {
         try {
             if (stat && stat !== undefined) {
                 let cpList = stat.data.checkPointListByAssocID;
-                if(this.props.navigation.state.params !== undefined && this.props.navigation.state.params.isRefreshing ){
+                if (this.props.navigation.state.params !== undefined && this.props.navigation.state.params.isRefreshing) {
                     // let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
                     //     let cpListIDArr = cpListIDs.split(",");
                     //     let cpArr= [];
@@ -117,30 +122,28 @@ class PatrollingCheckPoints extends React.Component {
                     //             }
                     //         }
                     //     }
-                        this.setState({
-                            checkPointArray: cpList
-                        },()=>this.updateStore(cpList)) 
-                }
-                else if(this.props.navigation.state.params !== undefined && this.props.navigation.state.params.data !== undefined){
+                    this.setState({
+                        checkPointArray: cpList
+                    }, () => this.updateStore(cpList))
+                } else if (this.props.navigation.state.params !== undefined && this.props.navigation.state.params.data !== undefined) {
                     let cpListIDs = this.props.navigation.state.params.data.point;
-                    console.log("CPLISTID:",cpListIDs,cpList)
-                    let cpArr= [];
+                    console.log("CPLISTID:", cpListIDs, cpList);
+                    let cpArr = [];
                     for (let i in cpListIDs) {
                         for (let j in cpList) {
-                            if(cpListIDs[i].psChkPID === cpList[j].cpChkPntID){
+                            if (cpListIDs[i].psChkPID === cpList[j].cpChkPntID) {
                                 cpList[j].isChecked = true
                             }
                         }
                     }
                     this.setState({
                         checkPointArray: cpList,
-                        points:cpListIDs
-                    },()=>this.updateStore(cpList)) 
-                }
-                else{
+                        points: cpListIDs
+                    }, () => this.updateStore(cpList))
+                } else {
                     self.updateCheckList(cpList);
                 }
-                    
+
             }
         } catch (e) {
             base.utils.logger.log(e);
@@ -150,37 +153,37 @@ class PatrollingCheckPoints extends React.Component {
 
     updateCheckList(cpList) {
         let cpListArr = [];
-            if (this.props.navigation.state.params !== undefined) {
-                // if (this.props.navigation.state.params.isRefreshing !== undefined) {
-                //     cpListArr = cpList
-                // } else {
-                //     let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
-                //     let cpListIDArr = cpListIDs.split(",");
-                //     for (let i in cpList) {
-                //         for (let j in cpListIDArr) {
-                //             if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
-                //                 cpList[i].isChecked = true
-                //             }
-                //         }
-                //     }
-                //     cpListArr = cpList;
-                // }
-                cpListArr = cpList
+        if (this.props.navigation.state.params !== undefined) {
+            // if (this.props.navigation.state.params.isRefreshing !== undefined) {
+            //     cpListArr = cpList
+            // } else {
+            //     let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
+            //     let cpListIDArr = cpListIDs.split(",");
+            //     for (let i in cpList) {
+            //         for (let j in cpListIDArr) {
+            //             if (cpList[i].cpChkPntID.toString() === cpListIDArr[j]) {
+            //                 cpList[i].isChecked = true
+            //             }
+            //         }
+            //     }
+            //     cpListArr = cpList;
+            // }
+            cpListArr = cpList
 
-            } else {
-                cpListArr = cpList
-            }
+        } else {
+            cpListArr = cpList
+        }
 
-            console.log("CPLISTARR:",cpListArr,cpList)
+        console.log("CPLISTARR:", cpListArr, cpList);
         this.setState({
             checkPointArray: cpListArr
         })
 
-    //     if (this.props.navigation.state.params !== undefined) {
-    //     if (this.props.navigation.state.params.isRefreshing === true) {
-    //         this.updateStore();
-    //     }
-    // }
+        //     if (this.props.navigation.state.params !== undefined) {
+        //     if (this.props.navigation.state.params.isRefreshing === true) {
+        //         this.updateStore();
+        //     }
+        // }
 
     }
 
@@ -188,12 +191,12 @@ class PatrollingCheckPoints extends React.Component {
         updateSelectedCheckPoints({value: null});
     }
 
-    onBackButtonPressAndroid(){
+    onBackButtonPressAndroid() {
         console.log("Hitting:111222");
     }
 
     render() {
-        console.log("State:",this.state.checkPointArray);
+        console.log("State:", this.state.checkPointArray);
         return (
             <View style={PatrollingCheckPointsStyles.container}>
                 <View style={PatrollingCheckPointsStyles.header}>
@@ -224,14 +227,14 @@ class PatrollingCheckPoints extends React.Component {
     updateStore(cpListArray) {
         let cpList = cpListArray;
         const {updateSelectedCheckPoints} = this.props;
-        console.log("CP List Array:",cpListArray,this.props);
+        console.log("CP List Array:", cpListArray, this.props);
         let selectedCPArr = [];
         for (let i in cpList) {
             if (cpList[i].isChecked) {
                 selectedCPArr.push(cpList[i]);
             }
         }
-        console.log("Selected CP:",cpListArray)
+        console.log("Selected CP:", cpListArray);
         updateSelectedCheckPoints({value: selectedCPArr});
         this.updateCheckList(cpListArray)
     }
@@ -242,16 +245,16 @@ class PatrollingCheckPoints extends React.Component {
                    style={PatrollingCheckPointsStyles.mapViewModal}>
                 <View
                     style={PatrollingCheckPointsStyles.modalView}>
-                        <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
                         <View>
-                            <Text  style={PatrollingCheckPointsStyles.modalText}>{this.state.cpName}</Text>
+                            <Text style={PatrollingCheckPointsStyles.modalText}>{this.state.cpName}</Text>
                         </View>
-                    <TouchableHighlight
-                        underlayColor={base.theme.colors.transparent}
-                        style={PatrollingCheckPointsStyles.modalTouchable}
-                        onPress={() => this.setState({isModalOpen: false})}>
-                        <Text style={PatrollingCheckPointsStyles.modalText}>Close</Text>
-                    </TouchableHighlight>
+                        <TouchableHighlight
+                            underlayColor={base.theme.colors.transparent}
+                            style={PatrollingCheckPointsStyles.modalTouchable}
+                            onPress={() => this.setState({isModalOpen: false})}>
+                            <Text style={PatrollingCheckPointsStyles.modalText}>Close</Text>
+                        </TouchableHighlight>
                     </View>
                     <MapView
                         ref={map => {
@@ -294,9 +297,9 @@ class PatrollingCheckPoints extends React.Component {
 
 
     mapModal(data) {
-        console.log("Data:",data);
+        console.log("Data:", data);
         let res = data.item.cpgpsPnt.split(" ");
-        console.log("Res:",parseFloat(res[0]),parseFloat(res[1]));
+        console.log("Res:", parseFloat(res[0]), parseFloat(res[1]));
         this.setState({
             isModalOpen: !this.state.isModalOpen,
             region: {
@@ -305,24 +308,24 @@ class PatrollingCheckPoints extends React.Component {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
-            cpName:data.item.cpCkPName
+            cpName: data.item.cpCkPName
         })
     }
 
-    navigateToQRScree(data){
-        console.log("Data on Sharing:",data.item);
+    navigateToQRScree(data) {
+        console.log("Data on Sharing:", data.item);
         let dataForQR = data.item;
         let slicedGPSPNTS = dataForQR.cpgpsPnt.split(" ");
-        console.log("Sliced GPS Point:",slicedGPSPNTS);
+        console.log("Sliced GPS Point:", slicedGPSPNTS);
         let dataToBeSent = `${dataForQR.cpCkPName}, ${slicedGPSPNTS[0]},${slicedGPSPNTS[1]},${dataForQR.asAssnID},${dataForQR.cpChkPntID},QR_CODE`;
-        console.log("Data To Be Sent:",dataToBeSent);
+        console.log("Data To Be Sent:", dataToBeSent);
         this.props.navigation.navigate('qrScreen', {dataToBeSent})
-        
+
     }
 
     _renderCheckPoints(item) {
         let data = item;
-        console.log("Item:",item.item)
+        console.log("Item:", item.item);
         return (
             <View style={PatrollingCheckPointsStyles.checkBoxView}>
                 <View style={PatrollingCheckPointsStyles.checkPoint}>
@@ -376,9 +379,9 @@ class PatrollingCheckPoints extends React.Component {
                     </ElevatedView>
                     <EmptyView height={10}/>
                     <ElevatedView elevation={0}>
-                        <TouchableHighlight 
-                        underlayColor={base.theme.colors.transparent}
-                        onPress={() => this.editCheckPoint(data)}>
+                        <TouchableHighlight
+                            underlayColor={base.theme.colors.transparent}
+                            onPress={() => this.editCheckPoint(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                    source={require('../../../icons/edit.png')}/>
                         </TouchableHighlight>
@@ -398,20 +401,20 @@ class PatrollingCheckPoints extends React.Component {
         )
     }
 
-    deleteCheckPoint(data){
+    deleteCheckPoint(data) {
         Alert.alert(
             'Attention',
             'Are you sure you want to delete this checkpoint ?',
             [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Deletion Cancelled'),
-                style: 'cancel',
-              },
-              {text: 'Yes', onPress: () => this.deleteCP(data)},
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Deletion Cancelled'),
+                    style: 'cancel',
+                },
+                {text: 'Yes', onPress: () => this.deleteCP(data)},
             ],
             {cancelable: false},
-          );
+        );
     }
 
     async deleteCP(data) {
@@ -419,7 +422,7 @@ class PatrollingCheckPoints extends React.Component {
 
         let detail = {
             CPChkPntID: data.item.cpChkPntID
-        }
+        };
 
         let stat = await base.services.OyeSafeApi.deleteCP(detail);
         base.utils.logger.log(stat);
@@ -435,34 +438,34 @@ class PatrollingCheckPoints extends React.Component {
         }
     }
 
-    setCheckVal(item){
-            let cpList = this.state.checkPointArray;
-            let pointArr = this.state.points;
-            let unselectedData = [];
+    setCheckVal(item) {
+        let cpList = this.state.checkPointArray;
+        let pointArr = this.state.points;
+        let unselectedData = [];
 
-            for(let i in cpList){
-                if(item.item.cpChkPntID === cpList[i].cpChkPntID){
-                    console.log("Slelc:",cpList[i])
-                        cpList[i].isChecked = !cpList[i].isChecked   
-                    }
-                }
-            for(let i in pointArr){
-                for(let j in cpList){
-                    if(!cpList[j].isChecked){
-                        console.log("fdnfgdsdgb",cpList[j])
-                        if(cpList[j].cpChkPntID === pointArr[i].psChkPID){
-                            unselectedData.push(pointArr[i].pcid)
-                        }
+        for (let i in cpList) {
+            if (item.item.cpChkPntID === cpList[i].cpChkPntID) {
+                console.log("Slelc:", cpList[i]);
+                cpList[i].isChecked = !cpList[i].isChecked
+            }
+        }
+        for (let i in pointArr) {
+            for (let j in cpList) {
+                if (!cpList[j].isChecked) {
+                    console.log("fdnfgdsdgb", cpList[j]);
+                    if (cpList[j].cpChkPntID === pointArr[i].psChkPID) {
+                        unselectedData.push(pointArr[i].pcid)
                     }
                 }
             }
-            AsyncStorage.setItem("PCID",JSON.stringify(unselectedData));
+        }
+        AsyncStorage.setItem("PCID", JSON.stringify(unselectedData));
 
 
-            this.setState({
-                checkPointArray:cpList
-            })
-            this.updateStore(cpList)
+        this.setState({
+            checkPointArray: cpList
+        });
+        this.updateStore(cpList)
     }
 
 }

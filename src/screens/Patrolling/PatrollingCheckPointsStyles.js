@@ -28,7 +28,7 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
         justifyContent: 'center'
     },
     checkBoxView: {
-        height:Platform.OS === 'ios' ?hp('20%'): hp('17%'),
+        height: Platform.OS === 'ios' ? hp('20%') : hp('17%'),
         width: "98%",
         borderBottomWidth: 1,
         alignSelf: 'center',
@@ -57,7 +57,7 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
     centerTextView: {
         height: hp('3%'),
         justifyContent: 'center',
-        width:hp('40%')
+        width: hp('40%')
     },
     centerTextStyle: {
         fontFamily: base.theme.fonts.bold,
@@ -93,36 +93,36 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
         alignSelf: 'center',
         width: wp('90%'),
     },
-    mapViewModal:{
+    mapViewModal: {
         flex: 1,
         backgroundColor: base.theme.colors.transparent,
         height: 50,
         alignSelf: 'center',
         width: wp('90%'),
     },
-    modalView:{
+    modalView: {
         height: hp("50%"),
         justifyContent: 'flex-start',
         backgroundColor: base.theme.colors.white,
     },
-    modalTouchable:{
+    modalTouchable: {
         height: hp('7%'),
         justifyContent: 'center',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
         width: wp('20%'),
-        left:50
+        left: 50
     },
-    modalText:{
+    modalText: {
         alignSelf: 'center',
         color: base.theme.colors.primary,
         fontFamily: base.theme.fonts.medium
     },
-    marker:{
+    marker: {
         alignItems: 'center',
         justifyContent: 'center'
     },
-    checkPoint:{
+    checkPoint: {
         width: '10%'
     }
 });

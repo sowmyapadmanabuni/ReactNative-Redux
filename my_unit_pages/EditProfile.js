@@ -1,20 +1,20 @@
 import React, {Component} from "react"
 import {
     Alert,
+    BackHandler,
     Dimensions,
     Image,
     Keyboard,
     PixelRatio,
+    Platform,
     SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    View,
-    Platform,BackHandler
+    View
 } from "react-native";
-import {StackActions, NavigationActions } from 'react-navigation';
 
 import {Button, Form, Input, Item, Label} from "native-base";
 
@@ -27,65 +27,68 @@ import axios from "axios"
 import CountryPicker from "react-native-country-picker-modal"
 import base from "../src/base";
 
-import {
-    updateUserInfo,
-  } from '../src/actions'
+import {updateUserInfo,} from '../src/actions'
 
 const RNFS = require('react-native-fs');
 
 class EditProfile extends Component {
+    static navigationOptions = {
+        title: "My Profile",
+        header: null
+    };
+
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-            firstName:"",
-            lastName:"",
-            primaryMobNum:"",
-            primeCCode:"",
-            primeCName:"",
-            primaryEmail:"",
-            alterEmail:"",
-            myProfileImage:"",
-            imageUrl:"",
-            primeCca:"",
-            alterCca:"",
-            alterCName:"",
-            alterMobNum:"",
-            alterCCode:"",
-            profileName:"",
+            firstName: "",
+            lastName: "",
+            primaryMobNum: "",
+            primeCCode: "",
+            primeCName: "",
+            primaryEmail: "",
+            alterEmail: "",
+            myProfileImage: "",
+            imageUrl: "",
+            primeCca: "",
+            alterCca: "",
+            alterCName: "",
+            alterMobNum: "",
+            alterCCode: "",
+            profileName: "",
             isPhotoAvailable: false,
 
-        }
+        };
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
 
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=>this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+//MyProfileScreen
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
         return true;
-      }
-//MyProfileScreen
-
+    }
 
     validation = () => {
 
         if (base.utils.validate.isBlank(this.state.firstName)) {
             Alert.alert("Please Enter First name")
-        } else if (! base.utils.validate.alphabetValidation(this.state.firstName)) {
+        } else if (!base.utils.validate.alphabetValidation(this.state.firstName)) {
             Alert.alert("First name should not contain special characters")
         } else if (this.state.firstName.length < 3) {
             Alert.alert("First name should be minimum 2 characters (eg. OM)")
@@ -93,13 +96,13 @@ class EditProfile extends Component {
             Alert.alert("Maximum limit should be 20 characters")
         } else if (base.utils.validate.isBlank(this.state.lastName)) {
             Alert.alert("Please Enter Last Name")
-        } else if (! base.utils.validate.alphabetValidation(this.state.lastName)) {
+        } else if (!base.utils.validate.alphabetValidation(this.state.lastName)) {
             Alert.alert("Last name should not contain special characters")
         } else if (this.state.lastName.length < 3) {
             Alert.alert("Last name should be minimum 2 characters (eg. OM)")
         } else if (this.state.lastName.length > 20) {
             Alert.alert("Maximum limit should be 20 characters")
-        }  else if (base.utils.validate.isBlank(this.state.primaryMobNum)) {
+        } else if (base.utils.validate.isBlank(this.state.primaryMobNum)) {
             Alert.alert("Please Enter Primary mobile number")
         } else if (this.state.primaryMobNum.length < 10) {
             Alert.alert("Please enter a valid (10 digit) Mobile no")
@@ -111,24 +114,21 @@ class EditProfile extends Component {
             Alert.alert(
                 "Enter valid alternate mobile number"
             )
-        }
-        else if(Number(this.state.primaryMobNum) === Number(this.state.alterMobNum)){
+        } else if (Number(this.state.primaryMobNum) === Number(this.state.alterMobNum)) {
             Alert.alert("Primary and alternate mobile number should be different")
-        }
-        else if (base.utils.validate.isBlank(this.state.primaryEmail)) {
+        } else if (base.utils.validate.isBlank(this.state.primaryEmail)) {
             Alert.alert("Primary email cannot be empty")
         } else if (!base.utils.validate.validateEmailId(this.state.primaryEmail)) {
             Alert.alert("Please Enter a Valid Email Id")
-        }   else if (!base.utils.validate.isBlank(this.state.alterEmail) && !base.utils.validate.validateEmailId(this.state.alterEmail)) {
+        } else if (!base.utils.validate.isBlank(this.state.alterEmail) && !base.utils.validate.validateEmailId(this.state.alterEmail)) {
             Alert.alert("Please Enter a Valid alternate Email Id")
-        }
-         else {
+        } else {
             this.updateProfile()
         }
-    }
+    };
 
     async uploadImage(response) {
-        console.log("Image upload before",response)
+        console.log("Image upload before", response);
         let self = this;
         let source = (Platform.OS === 'ios') ? response.uri : response.uri;
         const form = new FormData();
@@ -137,15 +137,15 @@ class EditProfile extends Component {
             uri: source,
             type: (response.type !== undefined || response.type != null) ? response.type : "image/jpeg"
         };
-        form.append('image', imgObj)
+        form.append('image', imgObj);
         let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
-        console.log('Photo upload response', stat,response)
+        console.log('Photo upload response', stat, response);
         if (stat) {
             try {
                 self.setState({
-                    myProfileImage:response.uri,
-                    imageUrl:stat,
-                    isPhotoAvailable:true
+                    myProfileImage: response.uri,
+                    imageUrl: stat,
+                    isPhotoAvailable: true
                 })
             } catch (err) {
                 console.log('err', err)
@@ -154,38 +154,37 @@ class EditProfile extends Component {
 
     }
 
-
     async updateProfile() {
         console.log('Add image', this.state.firstName,
             this.state.lastName, this.state.primaryMobNum, this.state.primaryEmail, this.state.primeCCode, this.state.alterMobNum, this.state.alterCCode,
-            this.state.alterEmail, this.state.imageUrl, this.props.MyAccountID, this.state.primeCName, this.state.alterCName)
+            this.state.alterEmail, this.state.imageUrl, this.props.MyAccountID, this.state.primeCName, this.state.alterCName);
 
 
         axios
             .post(
                 `http://${this.props.oyeURL}/oyeliving/api/v1/AccountDetails/Update`,
                 {
-                    ACFName:this.state.firstName,
-                    ACLName:this.state.lastName,
-                    ACMobile:this.state.primaryMobNum,
-                    ACEmail:this.state.primaryEmail,
-                    ACISDCode:this.state.primeCCode,
-                    ACMobile1:this.state.alterMobNum,
-                    ACISDCode1:this.state.alterCCode,
+                    ACFName: this.state.firstName,
+                    ACLName: this.state.lastName,
+                    ACMobile: this.state.primaryMobNum,
+                    ACEmail: this.state.primaryEmail,
+                    ACISDCode: this.state.primeCCode,
+                    ACMobile1: this.state.alterMobNum,
+                    ACISDCode1: this.state.alterCCode,
                     ACMobile2: null,
                     ACISDCode2: null,
                     ACMobile3: null,
                     ACISDCode3: null,
                     ACMobile4: null,
                     ACISDCode4: null,
-                    ACEmail1:this.state.alterEmail,
+                    ACEmail1: this.state.alterEmail,
                     ACEmail2: null,
                     ACEmail3: null,
                     ACEmail4: null,
-                    ACImgName:this.state.imageUrl,
-                    ACAccntID:this.props.MyAccountID,
-                    ACCrtyCode:this.state.primeCName,
-                    ACCrtyCode1:this.state.alterCName
+                    ACImgName: this.state.imageUrl,
+                    ACAccntID: this.props.MyAccountID,
+                    ACCrtyCode: this.state.primeCName,
+                    ACCrtyCode1: this.state.alterCName
                 },
                 {
                     headers: {
@@ -198,29 +197,29 @@ class EditProfile extends Component {
             .then(response => {
                 console.log("Respo1111:", response);
 
-             if(this.state.isPhotoAvailable){
+                if (this.state.isPhotoAvailable) {
                     if (Platform.OS === 'android') {
-                       // this.deleteImage();
+                        // this.deleteImage();
                     }
                 }
-                updateUserInfo({ prop: "MyEmail", value: this.state.primaryEmail });
+                updateUserInfo({prop: "MyEmail", value: this.state.primaryEmail});
                 updateUserInfo({
-                  prop: "MyMobileNumber",
-                  value: this.state.primaryMobNum
+                    prop: "MyMobileNumber",
+                    value: this.state.primaryMobNum
                 });
                 updateUserInfo({
-                  prop: "MyFirstName",
-                  value: this.state.firstName
+                    prop: "MyFirstName",
+                    value: this.state.firstName
                 });
                 updateUserInfo({
-                  prop: "MyLastName",
-                  value: this.state.lastName
+                    prop: "MyLastName",
+                    value: this.state.lastName
                 });
-                
+
                 this.props.navigation.goBack();
             })
             .catch(error => {
-                console.log("Crash in profile",error)
+                console.log("Crash in profile", error);
                 console.log('Add image in catch', this.state.firstName,
                     this.state.lastName, this.state.firstName, this.state.lastName, this.state.primaryMobNum, this.state.primaryEmail, this.state.primeCCode, this.state.alterMobNum, this.state.alterCCode,
                     this.state.alterEmail, this.state.imageUrl, this.props.MyAccountID, this.state.primeCName, this.state.alterCName)
@@ -228,48 +227,43 @@ class EditProfile extends Component {
 
     }
 
-     deleteImage() {
+    deleteImage() {
         let file = this.state.myProfileImage.split('///').pop();
         const filePath = file.substring(0, file.lastIndexOf('/'));
         console.warn("File Path: " + filePath);
         console.warn("File to DELETE: " + file);
         RNFS.readDir(filePath).then(files => {
-          for(let t of files) {
-            RNFS.unlink(t.path);
-          }
-  
-        })
-        .catch(err => {
-          console.error("Stat while deleting image:",err)
-        });
-    }
+            for (let t of files) {
+                RNFS.unlink(t.path);
+            }
 
-    static navigationOptions = {
-        title: "My Profile",
-        header: null
+        })
+            .catch(err => {
+                console.error("Stat while deleting image:", err)
+            });
     }
 
     componentWillMount() {
 
-        console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params,this.props.navigation.state.params.primeCName,this.props.navigation.state.params.alterCName)
-      this.setState({
-          firstName:this.props.navigation.state.params.firstName,
-          lastName:this.props.navigation.state.params.lastName,
-          primaryMobNum:this.props.navigation.state.params.primaryMobNum,
-          primeCCode:this.props.navigation.state.params.primeCCode,
-          primeCName:this.props.navigation.state.params.primeCName =="+91"? 'IN':this.props.navigation.state.params.primeCName,
-          alterMobNum:this.props.navigation.state.params.alterMobNum,
-          alterCCode:this.props.navigation.state.params.alterCCode,
-          alterCName:this.props.navigation.state.params.alterCName =="+91"? 'IN':this.props.navigation.state.params.alterCName ,
-          primaryEmail:this.props.navigation.state.params.primaryEmail,
-          alterEmail:this.props.navigation.state.params.alterEmail,
-          myProfileImage:this.props.navigation.state.params.myProfileImage !==""?
-              "https://mediaupload.oyespace.com/" +this.props.navigation.state.params.myProfileImage:"https://mediaupload.oyespace.com/"+base.utils.strings.noImageCapturedPlaceholder,
-          imageUrl:this.props.navigation.state.params.myProfileImage,
-          alterCca:this.props.navigation.state.params.alterCca,
-          primeCca:this.props.navigation.state.params.primeCca,
-          profileName:this.props.navigation.state.params.firstName,
-      })
+        console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params, this.props.navigation.state.params.primeCName, this.props.navigation.state.params.alterCName);
+        this.setState({
+            firstName: this.props.navigation.state.params.firstName,
+            lastName: this.props.navigation.state.params.lastName,
+            primaryMobNum: this.props.navigation.state.params.primaryMobNum,
+            primeCCode: this.props.navigation.state.params.primeCCode,
+            primeCName: this.props.navigation.state.params.primeCName == "+91" ? 'IN' : this.props.navigation.state.params.primeCName,
+            alterMobNum: this.props.navigation.state.params.alterMobNum,
+            alterCCode: this.props.navigation.state.params.alterCCode,
+            alterCName: this.props.navigation.state.params.alterCName == "+91" ? 'IN' : this.props.navigation.state.params.alterCName,
+            primaryEmail: this.props.navigation.state.params.primaryEmail,
+            alterEmail: this.props.navigation.state.params.alterEmail,
+            myProfileImage: this.props.navigation.state.params.myProfileImage !== "" ?
+                "https://mediaupload.oyespace.com/" + this.props.navigation.state.params.myProfileImage : "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
+            imageUrl: this.props.navigation.state.params.myProfileImage,
+            alterCca: this.props.navigation.state.params.alterCca,
+            primeCca: this.props.navigation.state.params.primeCca,
+            profileName: this.props.navigation.state.params.firstName,
+        })
 
 
     }
@@ -283,7 +277,7 @@ class EditProfile extends Component {
             storageOptions: {
                 skipBackup: true,
                 path: 'tmp_files'
-              },
+            },
         };
         //showImagePicker
         ImagePicker.showImagePicker(options, response => {
@@ -303,8 +297,8 @@ class EditProfile extends Component {
 
     render() {
 
-        console.log('AGHGHGHGH',this.state,this.state.myProfileImage,this.props)
-        console.log("My Account Id", this.props.MyAccountID)
+        console.log('AGHGHGHGH', this.state, this.state.myProfileImage, this.props);
+        console.log("My Account Id", this.props.MyAccountID);
         return (
             <TouchableWithoutFeedback
                 onPress={() => {
@@ -316,7 +310,7 @@ class EditProfile extends Component {
                         <View style={[styles.viewStyle, {flexDirection: "row"}]}>
                             <View
                                 style={{
-                                    width:'30%',
+                                    width: '30%',
                                     flexDirection: "row",
                                     justifyContent: "flex-start",
                                     alignItems: "center",
@@ -338,21 +332,21 @@ class EditProfile extends Component {
 
                             <View
                                 style={{
-                                    width:'30%',
+                                    width: '30%',
                                     justifyContent: "center",
                                     alignItems: "center"
                                 }}
                             >
                                 <Image
                                     style={[styles.image]}
-                                    source={require("../icons/headerLogo.png")}
+                                    source={require("../icons/OyespaceSafe.png")}
                                 />
                             </View>
                             <View style={styles.emptyViewStyle}/>
                         </View>
                         <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
                     </SafeAreaView>
-                    
+
                     <KeyboardAwareScrollView>
                         <View style={styles.mainContainer}>
                             <View style={styles.textWrapper}>
@@ -366,23 +360,23 @@ class EditProfile extends Component {
 
                                 <ScrollView>
                                     <TouchableOpacity
-                                        onPress={()=>this.selectPhotoTapped()}
+                                        onPress={() => this.selectPhotoTapped()}
                                     >
-                                    <View style={styles.containerView_ForProfilePicViewStyle}>
-                                          <View style={styles.viewForProfilePicImageStyle}>
-                                              <Image
-                                                  style={styles.profilePicImageStyle}
-                                                  source={{uri:this.state.myProfileImage}}
-                                              />
+                                        <View style={styles.containerView_ForProfilePicViewStyle}>
+                                            <View style={styles.viewForProfilePicImageStyle}>
+                                                <Image
+                                                    style={styles.profilePicImageStyle}
+                                                    source={{uri: this.state.myProfileImage}}
+                                                />
                                             </View>
 
-                                           <View style={styles.imagesmallCircle}>
+                                            <View style={styles.imagesmallCircle}>
                                                 <Image
                                                     style={[styles.smallImage]}
                                                     source={require("../icons/cam_with_gray_bg.png")}
                                                 />
                                             </View>
-                                    </View>
+                                        </View>
                                     </TouchableOpacity>
 
                                     <View
@@ -416,7 +410,7 @@ class EditProfile extends Component {
                                                 keyboardType='ascii-capable'
                                                 maxLength={50}
                                                 value={this.state.firstName}
-                                                onChangeText={(text)=>this.setState({firstName:text})}
+                                                onChangeText={(text) => this.setState({firstName: text})}
                                             />
                                         </Item>
 
@@ -441,8 +435,8 @@ class EditProfile extends Component {
                                                 autoCapitalize="words"
                                                 keyboardType='ascii-capable'
                                                 maxLength={50}
-                                                onChangeText={(text)=>this.setState({
-                                                    lastName:text
+                                                onChangeText={(text) => this.setState({
+                                                    lastName: text
                                                 })}
                                                 value={this.state.lastName}
                                             />
@@ -461,9 +455,9 @@ class EditProfile extends Component {
                                                     onChange={value => {
                                                         console.log("CCA:", value);
                                                         this.setState({
-                                                            primeCca:value.cca2,
-                                                            primeCCode:"+" + value.callingCode,
-                                                            primeCName:value.cca2,
+                                                            primeCca: value.cca2,
+                                                            primeCCode: "+" + value.callingCode,
+                                                            primeCName: value.cca2,
                                                         })
                                                     }}
                                                     //cca2={this.state.cca2}
@@ -494,13 +488,14 @@ class EditProfile extends Component {
                                                     autoCorrect={false}
                                                     keyboardType="phone-pad"
                                                     maxLength={20}
-                                                    onChangeText={(value)=>{
+                                                    onChangeText={(value) => {
                                                         let num = value.replace(".", '');
                                                         if (isNaN(num)) {
-                                                        // Its not a number
-                                                    } else {
-                                                        this.setState({primaryMobNum:num})
-                                                    }}}
+                                                            // Its not a number
+                                                        } else {
+                                                            this.setState({primaryMobNum: num})
+                                                        }
+                                                    }}
                                                     value={this.state.primaryMobNum}
                                                 />
                                             </Item>
@@ -519,13 +514,13 @@ class EditProfile extends Component {
                                                     onChange={value => {
                                                         console.log("CCA11:", value);
                                                         this.setState({
-                                                            alterCca:value.cca2,
+                                                            alterCca: value.cca2,
                                                             alterCCode: "+" + value.callingCode,
-                                                            alterCName:value.cca2
+                                                            alterCName: value.cca2
                                                         })
                                                     }}
                                                     cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    flag={this.state.alterCName === ""   ? 'IN' : this.state.alterCName}
+                                                    flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
                                                     translation="eng"
                                                 />
                                             </View>
@@ -551,13 +546,14 @@ class EditProfile extends Component {
                                                     autoCorrect={false}
                                                     keyboardType="phone-pad"
                                                     maxLength={20}
-                                                    onChangeText={(value)=>{
+                                                    onChangeText={(value) => {
                                                         let num = value.replace(".", '');
                                                         if (isNaN(num)) {
                                                             // Its not a number
                                                         } else {
-                                                            this.setState({alterMobNum:num})
-                                                        }}}
+                                                            this.setState({alterMobNum: num})
+                                                        }
+                                                    }}
                                                     value={this.state.alterMobNum}
                                                 />
                                             </Item>
@@ -583,7 +579,7 @@ class EditProfile extends Component {
                                                 autoCorrect={false}
                                                 keyboardType="email-address"
                                                 maxLength={50}
-                                                onChangeText={(text)=>this.setState({primaryEmail:text})}
+                                                onChangeText={(text) => this.setState({primaryEmail: text})}
                                                 value={this.state.primaryEmail}
                                             />
                                         </Item>
@@ -598,7 +594,7 @@ class EditProfile extends Component {
                                                 autoCorrect={false}
                                                 keyboardType="email-address"
                                                 maxLength={50}
-                                                onChangeText={(text)=>this.setState({alterEmail:text})}
+                                                onChangeText={(text) => this.setState({alterEmail: text})}
                                                 value={this.state.alterEmail}
                                             />
                                         </Item>
@@ -644,7 +640,7 @@ const styles = StyleSheet.create({
     viewStyle: {
         backgroundColor: "#fff",
         height: hp("8%"),
-        width:'100%',
+        width: '100%',
         shadowColor: "#000",
         shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.2,
@@ -652,8 +648,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image: {
-        width: wp("24%"),
-        height: hp("10%")
+        width: wp("34%"),
+        height: hp("18%")
     },
     emptyViewStyle: {
         flex: 1
@@ -801,7 +797,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => {``
+const mapStateToProps = state => {
+    ``;
     return {
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,

@@ -183,7 +183,7 @@ PODS:
     - RNSound/Core (= 0.10.12)
   - RNSound/Core (0.10.12):
     - React/Core
-  - RNVectorIcons (6.4.2):
+  - RNVectorIcons (6.6.0):
     - React
   - RNViewShot (2.6.0):
     - React
@@ -301,7 +301,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 22a79a961c3951ef2f77b67bfbc99e454247b319
   FirebaseInstanceID: a122b0c258720cf250551bb2bedf48c699f80d90
   FirebaseMessaging: 2d53d08d752fbe63ce0820428d70be5ab87c11fb
-  Folly: de497beb10f102453a1afa9edbf8cf8a251890de
+  Folly: 33c6eeb27a8ee4d1e212e56fdb7344c925ac441c
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleAppMeasurement: 1624046ab1bcc5e170061a56ef5679000b079c8e
@@ -324,7 +324,7 @@ SPEC CHECKSUMS:
   RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
   RNGestureHandler: 0438a761e8f29be3b809f9e7e43014f3aba4d7a6
   RNSound: e157320f503bdd4f4ee6d8542e948d54f90c3c3a
-  RNVectorIcons: 6607bd3a30291d0edb56f9bbe7ae411ee2b928b0
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 

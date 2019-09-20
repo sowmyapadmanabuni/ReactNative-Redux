@@ -1,20 +1,10 @@
-import React, {Component} from 'react';
-import {
-    Text,
-    View,
-    Image,
-    TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import {Image, Text, TouchableOpacity, View,} from 'react-native';
 import PropTypes from 'prop-types';
 import CardViewStyles from '../cardView/CardViewStyles'
 import base from "../../base";
 
 class CardView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.props = props;
-    }
-
     static propTypes = {
         height: PropTypes.any,
         width: PropTypes.any,
@@ -31,13 +21,12 @@ class CardView extends React.Component {
         marginLeft: PropTypes.number,
         marginRight: PropTypes.number,
         marginBottom: PropTypes.number,
-        iconHeight:PropTypes.any,
-        iconWidth:PropTypes.any,
-        iconBorderRadius:PropTypes.number,
-        textWeight:PropTypes.string,
-        textFontSize:PropTypes.number
-    }
-
+        iconHeight: PropTypes.any,
+        iconWidth: PropTypes.any,
+        iconBorderRadius: PropTypes.number,
+        textWeight: PropTypes.string,
+        textFontSize: PropTypes.number
+    };
     static defaultProps = {
         height: '45%',
         width: '45%',
@@ -53,13 +42,17 @@ class CardView extends React.Component {
         marginLeft: null,
         marginRight: null,
         marginBottom: null,
-        iconHeight:20,
-        iconWidth:20,
-        iconBorderRadius:0,
-        textWeight:'normal',
-        textFontSize:10
-    }
+        iconHeight: 20,
+        iconWidth: 20,
+        iconBorderRadius: 0,
+        textWeight: 'normal',
+        textFontSize: 10
+    };
 
+    constructor(props) {
+        super(props);
+        this.props = props;
+    }
 
     render() {
         let cardStyle = CardViewStyles.defaultCard;
@@ -87,15 +80,18 @@ class CardView extends React.Component {
                               onPress={this.onCardClick.bind(this)}
                               disabled={this.props.disabled}>
                 <View style={CardViewStyles.subCardView}>
-                    <Image style={[CardViewStyles.imageStyles,{height:this.props.iconHeight,width:this.props.iconWidth,
-                        borderRadius:this.props.iconBorderRadius,...this.props.style}]}
+                    <Image style={[CardViewStyles.imageStyles, {
+                        height: this.props.iconHeight, width: this.props.iconWidth,
+                        borderRadius: this.props.iconBorderRadius, ...this.props.style
+                    }]}
                            source={imgSrc} resizeMode='contain'>
                     </Image>
                     <View style={[CardViewStyles.subView]}>
                         <Text style={CardViewStyles.count}>
                             {this.props.cardCount}
                         </Text>
-                        <Text style={[CardViewStyles.cardText,{fontWeight:this.props.textWeight,fontSize:this.props.textFontSize,
+                        <Text style={[CardViewStyles.cardText, {
+                            fontWeight: this.props.textWeight, fontSize: this.props.textFontSize,
 
                         }]}
                               numberOfLines={2}>
@@ -117,7 +113,6 @@ class CardView extends React.Component {
 
 
 }
-
 
 
 export default CardView;

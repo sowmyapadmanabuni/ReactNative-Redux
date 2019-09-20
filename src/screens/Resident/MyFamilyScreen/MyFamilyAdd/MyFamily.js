@@ -1,36 +1,33 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
 import {
-    View,
-    Text,
+    Alert,
+    BackHandler,
     Image,
-    TouchableOpacity,
+    PermissionsAndroid,
     Platform,
+    SafeAreaView,
+    Text,
     TextInput,
-    ScrollView,
-    PermissionsAndroid, Dimensions,
-    SafeAreaView, Alert, ToastAndroid,BackHandler
+    TouchableOpacity,
+    View
 } from "react-native";
 import ProgressLoader from "rn-progress-loader";
 import ImagePicker from "react-native-image-picker"
-import { Dropdown } from "react-native-material-dropdown"
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp
-} from "react-native-responsive-screen"
+import {Dropdown} from "react-native-material-dropdown"
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 import base from "../../../../base"
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import ContactsWrapper from "react-native-contacts-wrapper"
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Style from './Style'
-import { Button } from "native-base";
-const RNFS = require('react-native-fs');
 
+const RNFS = require('react-native-fs');
 
 
 class MyFamily extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             relationList: [
                 {
@@ -59,8 +56,8 @@ class MyFamily extends Component {
             isMinor: false,
             firstName: "",
             lastName: "",
-            minorProps: [{ label: 'Yes', value: 0 },
-            { label: 'No', value: 1 }],
+            minorProps: [{label: 'Yes', value: 0},
+                {label: 'No', value: 1}],
             isMinorSelected: 0,
             guardianName: "",
             relativeImage: "",
@@ -71,37 +68,37 @@ class MyFamily extends Component {
             filePath: '',
 
             isLoading: false,
-            isPhoneBookOpened:false
+            isPhoneBookOpened: false
         }
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
+    }
 
     render() {
-        console.log('Isminor', this.state)
-        let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number"
+        console.log('Isminor', this.state);
+        let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number";
         return (
             <View style={Style.container}>
 
-                <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
-                    <View style={[Style.viewStyle1, { flexDirection: "row" }]}>
+                <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+                    <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
                         <View style={Style.viewDetails1}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -133,16 +130,15 @@ class MyFamily extends Component {
                         >
                             <Image
                                 style={[Style.image1]}
-                                source={require("../../../../../icons/headerLogo.png")}
+                                source={require("../../../../../icons/OyespaceSafe.png")}
                             />
                         </View>
-                        <View style={{ flex: 0.2 }}>
+                        <View style={{flex: 0.2}}>
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{ borderWidth: 1, borderColor: "#ff8c00" }} />
+                    <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
                 </SafeAreaView>
-
 
 
                 <Text style={Style.titleOfScreen}>Add Family Member</Text>
@@ -151,12 +147,12 @@ class MyFamily extends Component {
                     <View style={Style.subContainer}>
                         <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                             {this.state.relativeImage === '' ?
-                                <Image style={{ height: 40, width: 40,borderRadius:20, alignSelf: 'center' }}
-                                       source={{ uri:"https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
+                                <Image style={{height: 40, width: 40, borderRadius: 20, alignSelf: 'center'}}
+                                       source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                 />
                                 :
-                                <Image style={{ height: 85, width: 85, borderRadius: 85/2, alignSelf: 'center' }}
-                                    source={{ uri: this.state.relativeImage }} />
+                                <Image style={{height: 85, width: 85, borderRadius: 85 / 2, alignSelf: 'center'}}
+                                       source={{uri: this.state.relativeImage}}/>
                             }
                         </TouchableOpacity>
                     </View>
@@ -173,7 +169,7 @@ class MyFamily extends Component {
                             baseColor="rgba(0, 0, 0, 1)"
                             placeholder="Relationship *"
                             placeholderTextColor={base.theme.colors.black}
-                            placeholderStyle={{ fontWeight:'bold' }}
+                            placeholderStyle={{fontWeight: 'bold'}}
                             labelHeight={hp("4%")}
                             containerStyle={{
                                 width: wp("85%"),
@@ -181,16 +177,16 @@ class MyFamily extends Component {
                             }}
                             rippleOpacity={0}
                             dropdownPosition={-6}
-                            dropdownOffset={{ top: 0, left: 0, }}
-                            style={{ fontSize: hp("2.2%") }}
+                            dropdownOffset={{top: 0, left: 0,}}
+                            style={{fontSize: hp("2.2%")}}
                             onChangeText={(value, index) => this.changeFamilyMember(value, index)}
                         />
                         <View style={Style.textInputView}>
-                            <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'left' }}>First Name
-                                <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
+                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>First Name
+                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
-                                style={{ height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey }}
-                                onChangeText={(text) => this.setState({ firstName: text })}
+                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
+                                onChangeText={(text) => this.setState({firstName: text})}
                                 value={this.state.firstName}
                                 placeholder="First Name"
                                 keyboardType="ascii-capable"
@@ -198,11 +194,11 @@ class MyFamily extends Component {
                             />
                         </View>
                         <View style={Style.textInputView}>
-                            <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'left' }}>Last Name
-                                <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
+                            <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Last Name
+                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
-                                style={{ height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey }}
-                                onChangeText={(text) => this.setState({ lastName: text })}
+                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
+                                onChangeText={(text) => this.setState({lastName: text})}
                                 value={this.state.lastName}
                                 placeholder="Last Name"
                                 keyboardType="ascii-capable"
@@ -217,7 +213,7 @@ class MyFamily extends Component {
                                 justifyContent: 'flex-start',
                                 marginTop: 25,
                             }}>
-                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>Minor</Text>
+                                <Text style={{fontSize: 14, color: base.theme.colors.black}}>Minor</Text>
                                 <RadioForm formHorizontal={true} animation={true}>
                                     {this.state.minorProps.map((obj, i) => {
                                         let onPress = (value, index) => {
@@ -235,37 +231,37 @@ class MyFamily extends Component {
                                                     buttonInnerColor={base.theme.colors.primary}
                                                     buttonOuterColor={base.theme.colors.primary}
                                                     buttonSize={10}
-                                                    buttonStyle={{ borderWidth: 0.7 }}
-                                                    buttonWrapStyle={{ marginLeft: 40 }}
+                                                    buttonStyle={{borderWidth: 0.7}}
+                                                    buttonWrapStyle={{marginLeft: 40}}
                                                 />
                                                 <RadioButtonLabel
                                                     obj={obj}
                                                     index={i.toString()}
                                                     onPress={onPress}
-                                                    labelStyle={{ color: base.theme.colors.black }}
-                                                    labelWrapStyle={{ marginLeft: 10 }}
+                                                    labelStyle={{color: base.theme.colors.black}}
+                                                    labelWrapStyle={{marginLeft: 10}}
                                                 />
                                             </RadioButton>
                                         )
                                     })}
                                 </RadioForm>
                             </View>
-                            : <View />}
+                            : <View/>}
                         {this.state.isMinor && this.state.isMinorSelected === 0 ?
                             <View style={Style.textInputView}>
-                                <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'left' }}>Guardian's
+                                <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Guardian's
                                     Name
-                                    <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
+                                    <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                 <TextInput
-                                    style={{ height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey }}
-                                    onChangeText={(text) => this.setState({ guardianName: text })}
+                                    style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
+                                    onChangeText={(text) => this.setState({guardianName: text})}
                                     value={this.state.guardianName}
                                     placeholder="Guardian's Name"
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'default'}
                                 />
                             </View>
-                            : <View />}
+                            : <View/>}
                         <View style={[Style.textInputView, {
                             borderBottomWidth: 1,
                             borderColor: base.theme.colors.lightgrey, marginBottom: 10
@@ -275,19 +271,19 @@ class MyFamily extends Component {
                                 color: base.theme.colors.black,
                                 textAlign: 'left'
                             }}>{mobPlaceHolder}
-                                <Text style={{ color: base.theme.colors.primary, fontSize: 14 }}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <View style={Style.mobNumView}>
                                 <TextInput
-                                    style={{ height: 50, width: '80%', }}
-                                    onChangeText={(text) => this.setState({ mobileNumber: text })}
+                                    style={{height: 50, width: '80%',}}
+                                    onChangeText={(text) => this.setState({mobileNumber: text})}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
                                     keyboardType='numeric'
                                     placeholderTextColor={base.theme.colors.grey}
                                 />
-                                <TouchableOpacity style={{ width: 35, height: 35, }} onPress={() => this.getTheContact()}>
+                                <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
-                                        style={{ width: 25, height: 25, }} />
+                                           style={{width: 25, height: 25,}}/>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -345,21 +341,21 @@ class MyFamily extends Component {
                         </View>
                     </View>
                     <ProgressLoader
-                    isHUD={true}
-                    isModal={true}
-                    visible={this.state.isLoading}
-                    color={base.theme.colors.primary}
-                    hudColor={"#FFFFFF"}
-                />            
+                        isHUD={true}
+                        isModal={true}
+                        visible={this.state.isLoading}
+                        color={base.theme.colors.primary}
+                        hudColor={"#FFFFFF"}
+                    />
                 </KeyboardAwareScrollView>
-                
+
 
             </View>
         )
     }
 
     setImage() {
-        console.log('Set Image')
+        console.log('Set Image');
         const options = {
             quality: 0.5,
             maxWidth: 250,
@@ -388,6 +384,7 @@ class MyFamily extends Component {
         });
 
     }
+
     resetAllFields() {
         this.setState({
             relationName: "",
@@ -413,9 +410,9 @@ class MyFamily extends Component {
             uri: source,
             type: (response.type !== undefined || response.type != null) ? response.type : "image/jpeg"
         };
-        form.append('image', imgObj)
+        form.append('image', imgObj);
         let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
-        console.log('Photo upload response', stat)
+        console.log('Photo upload response', stat);
         if (stat) {
             try {
                 self.setState({
@@ -431,10 +428,10 @@ class MyFamily extends Component {
 
 
     changeFamilyMember(value, index) {
-        console.log('New Details', value, index)
+        console.log('New Details', value, index);
         this.setState({
             relationName: value
-        })
+        });
         if (value === 'Child') {
             this.setState({
                 isMinor: true,
@@ -472,7 +469,7 @@ class MyFamily extends Component {
         if (Platform.OS === 'android') {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.READ_CONTACTS
-            )
+            );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 isGranted = true
             }
@@ -484,21 +481,21 @@ class MyFamily extends Component {
         if (isGranted) {
             ContactsWrapper.getContact()
                 .then((contact) => {
-                    console.log('Details for mob', contact)
-                    let name = contact.name.split(" ")
-                    let mobCode = contact.phone.split('')
-                    let mobNum = contact.phone.replaceAll(/[ !@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?]/, '')
-                    let sendMob = contact.phone.split(" ")
+                    console.log('Details for mob', contact);
+                    let name = contact.name.split(" ");
+                    let mobCode = contact.phone.split('');
+                    let mobNum = contact.phone.replaceAll(/[ !@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?]/, '');
+                    let sendMob = contact.phone.split(" ");
 
                     if (mobCode[0] === '+') {
-                        console.log('plus')
-                        let mobCode2 = contact.phone.split(" ")
-                        console.log('mobCode', sendMob, mobCode, mobCode2, mobCode2[0])
+                        console.log('plus');
+                        let mobCode2 = contact.phone.split(" ");
+                        console.log('mobCode', sendMob, mobCode, mobCode2, mobCode2[0]);
                         let arr = '';
                         for (let i = 1; i < sendMob.length; i++) {
                             arr = arr + sendMob[i]
                         }
-                        console.log('mobbbbbb', arr)
+                        console.log('mobbbbbb', arr);
                         this.setState({
                             cCode: mobCode2[0],
                             sendNum: arr
@@ -522,7 +519,7 @@ class MyFamily extends Component {
                         })
                     }
                     this.setState({
-                        isPhoneBookOpened:true
+                        isPhoneBookOpened: true
                     })
 
                 })
@@ -537,8 +534,8 @@ class MyFamily extends Component {
         console.log('Props**!!!', this.props, this.state);
 
         let self = this;
-        const OyeFirstName=/^[a-zA-Z ]+$/ ;
-        const OyeLastName=/^[a-zA-Z ]+$/ ;
+        const OyeFirstName = /^[a-zA-Z ]+$/;
+        const OyeLastName = /^[a-zA-Z ]+$/;
         const reg = /^[0]?[6789]\d{9}$/;
 
         if (self.state.relationName === "") {
@@ -584,7 +581,7 @@ class MyFamily extends Component {
         Alert.alert(title, message, [
             {
                 text: btn, onPress: () => {
-                    self.setState({ isLoading: false });
+                    self.setState({isLoading: false});
                     callback()
                 }
             }
@@ -594,10 +591,10 @@ class MyFamily extends Component {
     async addRelativeDetails(title, message) {
         console.log('Props**', this.props, this.state);
         let self = this;
-        let mobNum = self.state.sendNum
-        let cCode = self.state.cCode
+        let mobNum = self.state.sendNum;
+        let cCode = self.state.cCode;
         if (cCode === "") {
-            cCode = "+91"
+            cCode = "+91";
             mobNum = self.state.mobileNumber
         }
         let input = {
@@ -614,26 +611,26 @@ class MyFamily extends Component {
             "PAccntID": self.props.userReducer.MyAccountID
         };
         console.log('MyFam', input);
-        let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input)
-        console.log('Stat in Add family', stat)
+        let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input);
+        console.log('Stat in Add family', stat);
         this.setState({
             isLoading: true
         });
         if (stat) {
             try {
                 if (stat.success) {
-                    if(self.state.imageUrl !==''){
-                        if(Platform.OS === "android"){
+                    if (self.state.imageUrl !== '') {
+                        if (Platform.OS === "android") {
                             self.deleteImage()
                         }
                     }
-                    Alert.alert('Family member added to your list')
-                    self.props.navigation.navigate('MyFamilyList')
+                    Alert.alert('Family member added to your list');
+                    self.props.navigation.navigate('MyFamilyList');
                     this.setState({
                         isLoading: true
                     })
                 } else {
-                    this.showAlert(stat.error.message, true)
+                    this.showAlert(stat.error.message, true);
                     // Alert.alert('Attention', stat.error.message, [
                     //     {
                     //         text: 'Ok',
@@ -647,7 +644,7 @@ class MyFamily extends Component {
                 }
 
             } catch (err) {
-                console.log('Error in adding Family Member')
+                console.log('Error in adding Family Member');
                 this.setState({
                     isLoading: false
                 })

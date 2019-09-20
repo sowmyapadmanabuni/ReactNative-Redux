@@ -38,78 +38,78 @@ instance.interceptors.response.use((response) => {
 });
 
 
-export default class OyeSafeApi{
+export default class OyeSafeApi {
 
-    static async getallguardsofassociation(assnid){
-        return await instance.get('GetWorkerListByAssocID/'+assnid);
+    static async getallguardsofassociation(assnid) {
+        return await instance.get('GetWorkerListByAssocID/' + assnid);
     }
 
-    
-    static async getPatrollingSchedules(){
+
+    static async getPatrollingSchedules() {
         return await instance.get('/Patrolling/GetPatrollingList');
     }
 
-    static async getPatrollingShiftListByAssociationID(associationId){
+    static async getPatrollingShiftListByAssociationID(associationId) {
         console.log(associationId);
-        return await instance.get('GetPatrollingShiftsListByAssocID/'+associationId);
+        return await instance.get('GetPatrollingShiftsListByAssocID/' + associationId);
     };
 
-    static async addCheckPoint(details){
-        return await instance.post('CheckPoint/Create',details);
+    static async addCheckPoint(details) {
+        return await instance.post('CheckPoint/Create', details);
     }
 
-    static async editCheckPoint(details){
-        console.log("Details in net call:",details);
-        return await instance.post('CheckPointGPS/Update',details)
+    static async editCheckPoint(details) {
+        console.log("Details in net call:", details);
+        return await instance.post('CheckPointGPS/Update', details)
     }
 
-    static async getCheckPointList(associationId){
-        return await instance.get('CheckPoint/GetCheckPointByAssocID/'+associationId)
+    static async getCheckPointList(associationId) {
+        return await instance.get('CheckPoint/GetCheckPointByAssocID/' + associationId)
     }
 
-    static async getDeviceList(associationId){
-        return await instance.get('Device/GetDeviceListByAssocID/'+associationId);
+    static async getDeviceList(associationId) {
+        return await instance.get('Device/GetDeviceListByAssocID/' + associationId);
     }
 
-    static async schedulePatrol(detail){
-        return await instance.post('PatrollingShifts/create',detail)
+    static async schedulePatrol(detail) {
+        return await instance.post('PatrollingShifts/create', detail)
     }
 
-    static async updatePatrol(detail){
-        return await instance.post('PatrollingShifts/Update',detail)
+    static async updatePatrol(detail) {
+        return await instance.post('PatrollingShifts/Update', detail)
     }
 
-    static async deleteCP(detail){
-        return await instance.post('CheckPoint/DeleteCheckPoint',detail)
+    static async deleteCP(detail) {
+        return await instance.post('CheckPoint/DeleteCheckPoint', detail)
     }
 
-    static async deletePatrolSlot(detail){
-        console.log("djnskvnvn",detail);
-        return await instance.post('PatrollingShiftSlotDelete/Update',detail)
+    static async deletePatrolSlot(detail) {
+        console.log("djnskvnvn", detail);
+        return await instance.post('PatrollingShiftSlotDelete/Update', detail)
     }
 
-    static async updateSnooze(detail){
-        return await instance.post('PatrollingShiftSlot/Update',detail)
+    static async updateSnooze(detail) {
+        return await instance.post('PatrollingShiftSlot/Update', detail)
     };
 
-    static async getReport(detail){
-        return await instance.post('GetPatrollingReportByDates',detail)
+    static async getReport(detail) {
+        return await instance.post('GetPatrollingReportByDates', detail)
     }
 
-    static async getStaffListByAssociationId(associationId,accountId){
-        console.log("AsId",associationId);
-        return await instance.get('GetWorkerListByAssocIDAndAccountID/'+associationId + '/' + accountId)
+    static async getStaffListByAssociationId(associationId, accountId) {
+        console.log("AsId", associationId);
+        return await instance.get('GetWorkerListByAssocIDAndAccountID/' + associationId + '/' + accountId)
 
     }
 
-    static async getStaffReportByDate(input){
-        console.log("Data", input)
-        return await instance.post('Worker/GetWorkerListByDatesAssocAndUnitID',input)
+    static async getStaffReportByDate(input) {
+        console.log("Data", input);
+        return await instance.post('Worker/GetWorkerListByDatesAssocAndUnitID', input)
     }
 
-    static async getStaffListByAssociationIdAndUnitId(associationId,accountId,unitId){
-        console.log("AsId@@@@@",associationId,accountId,unitId);
-        return await instance.get('GetWorkerListByAssocIDAccountIDAndUnitID/'+associationId + '/' + accountId+'/'+unitId)
+    static async getStaffListByAssociationIdAndUnitId(associationId, accountId, unitId) {
+        console.log("AsId@@@@@", associationId, accountId, unitId);
+        return await instance.get('GetWorkerListByAssocIDAccountIDAndUnitID/' + associationId + '/' + accountId + '/' + unitId)
 
     }
 }

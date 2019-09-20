@@ -36,25 +36,25 @@ const ReportScreenStyles = StyleSheet.create({
         borderColor: base.theme.colors.grey,
         borderWidth: 1
     },
-    entryTimeView:{
+    entryTimeView: {
         flexDirection: 'row',
         alignItems: 'center',
         height: hp('10%')
     },
-    entryIcon:{
+    entryIcon: {
         height: hp('5%'),
         width: wp('10%')
     },
-    slotTimeView:{
+    slotTimeView: {
         flexDirection: 'column',
         width: wp('80%'),
         marginLeft: 5
     },
-    shareIconView:{
+    shareIconView: {
         borderWidth: 0,
         alignItems: 'flex-end'
     },
-    shareIcon:{
+    shareIcon: {
         height: hp('5%'),
         width: wp('5%')
     }

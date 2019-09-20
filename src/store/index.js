@@ -1,16 +1,15 @@
-import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
-import { persistReducer, persistStore } from 'redux-persist';
+import {applyMiddleware, createStore} from 'redux';
+import {persistReducer, persistStore} from 'redux-persist';
 import FilesystemStorage from 'redux-persist-filesystem-storage';
 import reducers from '../reducers';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-import App, { appReducer } from '../../App';
 
 const persistConfig = {
-  key: 'root',
-  storage: FilesystemStorage,
-  whitelist: ['AppReducer', 'UserReducer']
-  //blacklist: ['DashboardReducer']
+    key: 'root',
+    storage: FilesystemStorage,
+    whitelist: ['AppReducer', 'UserReducer']
+    //blacklist: ['DashboardReducer']
 };
 
 //const newReducer = combineReducers(reducers,appReducer);
@@ -18,7 +17,7 @@ const persistConfig = {
 const persistReducers = persistReducer(persistConfig, reducers);
 
 const store = createStore(
-  persistReducers,{},applyMiddleware(thunk, logger)
+    persistReducers, {}, applyMiddleware(thunk, logger)
 );
 
 persistStore(store);

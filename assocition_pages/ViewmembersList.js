@@ -6,6 +6,7 @@
 import React from "react";
 import {
     ActivityIndicator,
+    BackHandler,
     Dimensions,
     FlatList,
     Image,
@@ -13,7 +14,7 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,BackHandler
+    View
 } from "react-native";
 import {Card} from "native-base";
 import {TextInput} from "react-native-gesture-handler";
@@ -25,9 +26,8 @@ import {getDashUnits} from "../src/actions";
 import base from "../src/base";
 import OSButton from '../src/components/osButton/OSButton'
 import StaffStyle from "../src/screens/Resident/Visitors/Staff/StaffStyle";
-import _ from 'lodash';
 
-import { createIconSetFromIcoMoon } from "react-native-vector-icons"
+import {createIconSetFromIcoMoon} from "react-native-vector-icons"
 import IcoMoonConfig from '../src/assets/selection.json';
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -49,6 +49,11 @@ let without = [];
 const role = [];
 
 class Resident extends React.Component {
+    static navigationOptions = {
+        title: "resident",
+        header: null
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -63,52 +68,46 @@ class Resident extends React.Component {
             residentData: [],
             selectedUser: {},
             clonedList: [],
-            isLoading:true
+            isLoading: true
         };
 
         this.getMemberList = this.getMemberList.bind(this);
     }
 
     componentWillMount() {
-        this.getMemberList();        
+        this.getMemberList();
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
-
-    static navigationOptions = {
-        title: "resident",
-        header: null
-    };
-
+    }
 
     async getMemberList() {
         let self = this;
         let associationId = self.props.selectedAssociation;
 
-        console.log('get association', associationId)
+        console.log('get association', associationId);
 
         console.log(
-          base.services.OyeLivingApi.getUnitListByAssoc(associationId)
+            base.services.OyeLivingApi.getUnitListByAssoc(associationId)
         );
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
-        console.log('getMemberList####', stat)
+        console.log('getMemberList####', stat);
 
         try {
             if (stat) {
@@ -127,15 +126,15 @@ class Resident extends React.Component {
                 }
 
                 let allMembers = [...unitOwner, ...unitTenant];
-                console.log("ALLEMEMBERS",allMembers)
+                console.log("ALLEMEMBERS", allMembers);
                 self.addUnitDetail(allMembers, associationId);
 
 
             }
 
         } catch (e) {
-            console.log(e)
-            this.setState({isLoading:false})
+            console.log(e);
+            this.setState({isLoading: false})
 
         }
     }
@@ -148,7 +147,7 @@ class Resident extends React.Component {
         try {
             if (stat) {
                 let unitArr = stat.data.unit;
-                console.log("Stat:",unitArr);
+                console.log("Stat:", unitArr);
                 for (let i in memberArr) {
                     for (let k in unitArr) {
                         if (memberArr[i].unUnitID === unitArr[k].unUnitID) {
@@ -156,35 +155,35 @@ class Resident extends React.Component {
                         }
                     }
                 }
-                console.log("memberArr",memberArr)
+                console.log("memberArr", memberArr);
                 self.setState({
                     residentData: memberArr,
                     clonedList: memberArr,
-                    isLoading:false
+                    isLoading: false
                 })
             }
         } catch (e) {
-            console.log(e)
-            this.setState({isLoading:false})
+            console.log(e);
+            this.setState({isLoading: false})
         }
 
 
     }
 
-    async updateRolesFRTDB(user, roleId){
-                
-        var dbref = base.services.frtdbservice.ref('rolechange/'+user.acAccntID);
-        dbref.set({            
-            associationID:user.asAssnID,
-            unit:user.unUnitID,
-            role:roleId,
-            user:user.acAccntID
-        }).then((data)=>{
+    async updateRolesFRTDB(user, roleId) {
+
+        var dbref = base.services.frtdbservice.ref('rolechange/' + user.acAccntID);
+        dbref.set({
+            associationID: user.asAssnID,
+            unit: user.unUnitID,
+            role: roleId,
+            user: user.acAccntID
+        }).then((data) => {
             //success callback
-            console.log('data ' , data)
-        }).catch((error)=>{
+            console.log('data ', data)
+        }).catch((error) => {
             //error callback
-            console.log('error ' , error)
+            console.log('error ', error)
         })
         // let obj = {
         //     sbSubID: ""+user.acAccntID+""+user.unUnitID+"usernotif",
@@ -201,49 +200,49 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         try {
-        
-                const {getDashUnits, selectedAssociation} = this.props;
-                console.log('Props in role managment', this.props);                
-                const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
-                console.log("selectedUser:", this.state.selectedUser); //+91
 
-                // let mobile=this.state.selectedUser.uoMobile.split(" ")
-                let mobile = this.state.selectedUser.uoMobile.split('');
-                let mobNumber = this.state.selectedUser.uoMobile;
-                console.log('Mob Array', mobile);
+            const {getDashUnits, selectedAssociation} = this.props;
+            console.log('Props in role managment', this.props);
+            const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
+            console.log("selectedUser:", this.state.selectedUser); //+91
 
-                if (mobile[0] === '+') {
-                    console.log('No need to add')
-                } else {
-                    console.log('Add')
-                    mobNumber = '+91' + mobNumber
-                }
+            // let mobile=this.state.selectedUser.uoMobile.split(" ")
+            let mobile = this.state.selectedUser.uoMobile.split('');
+            let mobNumber = this.state.selectedUser.uoMobile;
+            console.log('Mob Array', mobile);
 
-                let requestBody = {
-                    ACMobile: mobNumber,
-                    UNUnitID: this.state.selectedUser.unUnitID,
-                    MRMRoleID: this.state.selectedRoleData.selRolId,
-                    ASAssnID:this.props.selectedAssociation
-                };
-                console.log('reqBody role managment', requestBody)
+            if (mobile[0] === '+') {
+                console.log('No need to add')
+            } else {
+                console.log('Add');
+                mobNumber = '+91' + mobNumber
+            }
 
-                fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-                    },
-                    body: JSON.stringify(requestBody)
+            let requestBody = {
+                ACMobile: mobNumber,
+                UNUnitID: this.state.selectedUser.unUnitID,
+                MRMRoleID: this.state.selectedRoleData.selRolId,
+                ASAssnID: this.props.selectedAssociation
+            };
+            console.log('reqBody role managment', requestBody);
+
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(response => response.json())
+                .then(responseJson => {
+                    console.log("%%%%%%%%%%", responseJson, requestBody);
+                    this.updateRolesFRTDB(this.state.selectedUser, this.state.selectedRoleData.selRolId);
+                    this.props.navigation.goBack();
                 })
-                    .then(response => response.json())
-                    .then(responseJson => {
-                        console.log("%%%%%%%%%%", responseJson, requestBody);
-                        this.updateRolesFRTDB(this.state.selectedUser,this.state.selectedRoleData.selRolId)
-                        this.props.navigation.goBack();
-                    })
-                    .catch(error => {
-                        console.log("err " + error);
-                    });
+                .catch(error => {
+                    console.log("err " + error);
+                });
         } catch (e) {
             console.log("STATE:", this.state);
         }
@@ -285,7 +284,7 @@ class Resident extends React.Component {
             filteredArray.push(this.state.clonedList)
         } else {
             for (let i in sortResident) {
-                console.log("Sort:", sortResident[i])
+                console.log("Sort:", sortResident[i]);
                 if (sortResident[i].uoRoleID === 1) {
                     roleId = "Admin"
                 } else if (sortResident[i].uoRoleID === 2) {
@@ -363,7 +362,7 @@ class Resident extends React.Component {
                         >
                             <Image
                                 style={[styles.image1]}
-                                source={require("../icons/headerLogo.png")}
+                                source={require("../icons/OyespaceSafe.png")}
                             />
                         </View>
                         <View style={{flex: 0.2}}>
@@ -387,7 +386,8 @@ class Resident extends React.Component {
                                     round
                                     onChangeText={(text) => this.handleSearch(text)}
                                 />
-                                <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight:hp('1.2%'),marginTop:hp('2%')}} name="search" />
+                                <Icon color="#ff8c00" size={hp('2.6%')}
+                                      style={{marginRight: hp('1.2%'), marginTop: hp('2%')}} name="search"/>
                                 {/* <Image
                                     style={{top:10}}
                                     source={require('../icons/search.png')}
@@ -397,76 +397,84 @@ class Resident extends React.Component {
                         <View
                             style={{flex: 0.3, height: hp("5.5%"), alignItems: "flex-end"}}
                         >
-                            <View style={{alignItems: "flex-end", marginEnd: hp("2%"),top:15}}>
+                            <View style={{alignItems: "flex-end", marginEnd: hp("2%"), top: 15}}>
                                 {this.state.selectedRoleData.selRolId === 1 ||
-                                          this.state.selectedRoleData.selRolId === 2?
-                                <OSButton height={hp('3%')} onButtonClick={() => this.changeRole()} width={hp('8%')}
-                                          oSBText={"Update"}
-                                          borderRadius={hp('20%')}
-                                          oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
-                                          this.state.selectedRoleData.selRolId === 2 ? base.theme.colors.primary : base.theme.colors.grey
+                                this.state.selectedRoleData.selRolId === 2 ?
+                                    <OSButton height={hp('3%')} onButtonClick={() => this.changeRole()} width={hp('8%')}
+                                              oSBText={"Update"}
+                                              borderRadius={hp('20%')}
+                                              oSBBackground={this.state.selectedRoleData.selRolId === 1 ||
+                                              this.state.selectedRoleData.selRolId === 2 ? base.theme.colors.primary : base.theme.colors.grey
 
-                                          }/>:
-                                          <View style={{alignItems:'center',justifyContent:'center',height:hp("3%"),borderRadius:hp("3%"),width:hp('8%'),backgroundColor:base.theme.colors.grey}}>
-                                              <Text>Update</Text>
-                                          </View>}
+                                              }/> :
+                                    <View style={{
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        height: hp("3%"),
+                                        borderRadius: hp("3%"),
+                                        width: hp('8%'),
+                                        backgroundColor: base.theme.colors.grey
+                                    }}>
+                                        <Text>Update</Text>
+                                    </View>}
                             </View>
                         </View>
                     </View>
-                    {!this.state.isLoading?
-                    <View style={styles.viewDetails}>
-                        {this.state.residentData.length !== 0 ?
-                            <View style={{flex: 1,}}>
-                                <Text style={{color: base.theme.colors.black, margin: 20}}>* You can update only one at
-                                    a time</Text>
-                                <FlatList
-                                    data={this.state.residentData}
-                                    keyExtractor={(item, index) => index.toString()}
-                                    extraData={this.state}
-                                    renderItem={({item, index}) => (
-                                        <Card style={{height: hp("14%")}}>
-                                            <View style={{height: 1, backgroundColor: "lightgray"}}/>
-                                            <View style={{flexDirection: "row", flex: 1}}>
-                                                <View style={{flex: 1}}>
-                                                    <View Style={{flexDirection: "column"}}>
-                                                        <Text style={styles.textDetails}>{`Name: ${
-                                                            item.name
+                    {!this.state.isLoading ?
+                        <View style={styles.viewDetails}>
+                            {this.state.residentData.length !== 0 ?
+                                <View style={{flex: 1,}}>
+                                    <Text style={{color: base.theme.colors.black, margin: 20}}>* You can update only one
+                                        at
+                                        a time</Text>
+                                    <FlatList
+                                        data={this.state.residentData}
+                                        keyExtractor={(item, index) => index.toString()}
+                                        extraData={this.state}
+                                        renderItem={({item, index}) => (
+                                            <Card style={{height: hp("14%")}}>
+                                                <View style={{height: 1, backgroundColor: "lightgray"}}/>
+                                                <View style={{flexDirection: "row", flex: 1}}>
+                                                    <View style={{flex: 1}}>
+                                                        <View Style={{flexDirection: "column"}}>
+                                                            <Text style={styles.textDetails}>{`Name: ${
+                                                                item.name
                                                             }`}</Text>
-                                                        <Text style={styles.textDetails}>{`Unit: ${
-                                                            item.unitName
+                                                            <Text style={styles.textDetails}>{`Unit: ${
+                                                                item.unitName
                                                             }`}</Text>
-                                                        <Text style={styles.textDetails}>{`Role: ${
-                                                            item.uoRoleID === 1 ? "Admin" : item.uoRoleID === 2 ? "Owner" : "Tenant"
+                                                            <Text style={styles.textDetails}>{`Role: ${
+                                                                item.uoRoleID === 1 ? "Admin" : item.uoRoleID === 2 ? "Owner" : "Tenant"
                                                             }`}</Text>
+                                                        </View>
+                                                    </View>
+
+                                                    <View style={{flex: 0.5, marginRight: hp("3%")}}>
+                                                        {(item.uoRoleID === 1 || item.uoRoleID === 2) && currentUserID !== item.acAccntID ? (
+                                                            this.selectRole(item, index)
+                                                        ) : (
+                                                            <Text> </Text>
+                                                        )}
+                                                        {/*{this.renderAdminStatus(item)}*/}
+                                                        {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
                                                     </View>
                                                 </View>
+                                                <View style={{height: 1, backgroundColor: "lightgray"}}/>
+                                            </Card>
+                                        )}
+                                    />
 
-                                                <View style={{flex: 0.5, marginRight: hp("3%")}}>
-                                                    {(item.uoRoleID === 1 || item.uoRoleID === 2) && currentUserID !== item.acAccntID ? (
-                                                        this.selectRole(item, index)
-                                                    ) : (
-                                                        <Text> </Text>
-                                                    )}
-                                                    {/*{this.renderAdminStatus(item)}*/}
-                                                    {/* {item.isAdmin && item.role=='Owner' ?   <Text> is Admin  </Text> : <Text> Owner </Text> } */}
-                                                </View>
-                                            </View>
-                                            <View style={{height: 1, backgroundColor: "lightgray"}}/>
-                                        </Card>
-                                    )}
-                                />
-
-                            </View> :
-                            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                                <Text>No Data for the selected association </Text>
-                            </View>}
-                    </View>:
+                                </View> :
+                                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                                    <Text>No Data for the selected association </Text>
+                                </View>}
+                        </View> :
                         <View style={StaffStyle.activityIndicator}>
                             <ActivityIndicator size="large" color={base.theme.colors.primary}/>
                         </View>}
                 </View>
             </View>
-                        );
+        );
     }
 }
 
@@ -545,8 +553,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image1: {
-        width: wp("22%"),
-        height: hp("12%"),
+        width: wp("34%"),
+        height: hp("18%"),
         marginRight: hp("3%")
     },
 
