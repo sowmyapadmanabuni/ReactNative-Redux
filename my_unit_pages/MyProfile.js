@@ -292,31 +292,31 @@ class MyProfile extends Component {
                                     name="mail"
                                 />
 
-                                <Text style={styles.itemTextValues}>
-                                    {this.state.datasource
-                                        ? '  ' + this.state.datasource.data.account[0].acEmail
-                                        : null}
-                                </Text>
-                            </View>
-                            {this.state.number !== '' ? (
-                                <View
-                                    style={{
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        marginTop: hp('3%')
-                                    }}
-                                >
-                                    <QRCode
-                                        // logo={require('../icons/OyespaceSafe.png')}
-                                        // logoSize={hp('6%')}
-                                        size={hp('20%')}
-                                        content={this.state.number}
-                                        codeStyle="square"
-                                        outerEyeStyle="square"
-                                        innerEyeStyle="square"
-                                    />
-                                </View>
-                            ) : null}
+                <Text style={styles.itemTextValues}>
+                  {this.state.datasource
+                    ? '  ' + this.state.datasource.data.account[0].acEmail
+                    : null}
+                </Text>
+              </View>
+              {this.state.number !== '' ? (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: hp('3%')
+                  }}
+                >
+                  <QRCode
+                    logo={require('../icons/oyesafe_qr_logo.png')}
+                    logoSize={hp('6%')}
+                    size={hp('20%')}
+                    content={this.state.number}
+                    codeStyle="square"
+                    outerEyeStyle="square"
+                    innerEyeStyle="square"
+                  />
+                </View>
+              ) : null}
 
                             <View
                                 style={{
