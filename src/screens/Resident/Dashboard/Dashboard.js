@@ -1704,7 +1704,8 @@ class Dashboard extends PureComponent {
           >
             <Text>Patrolling</Text>
           </Button>
-          <Button
+       */}
+          {/*<Button
               bordered
               style={styles.button1}
               onPress={() => this.props.navigation.navigate("subscriptionManagement")}

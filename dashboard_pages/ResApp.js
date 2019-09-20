@@ -85,6 +85,7 @@ import TermsAndConditions from '../src/screens/Policy/TermsAndConditions';
 import City from '../assocition_pages/City.js';
 
 import PatrolSchedule from '../src/screens/Patrolling/PatrolSchedule';
+import SubscriptionManagement from "../src/screens/Subscription/SubscriptionManagement";
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -532,12 +533,12 @@ const ResApp = createStackNavigator({
       header: null
     }
   },
-  /*subscriptionManagement: {
+  subscriptionManagement: {
     screen:SubscriptionManagement,
     navigationOptions: {
       header: props => <MyFamilyHeader  isSub={true} {...props}/>
     }
-  },*/
+  },
 
 });
 

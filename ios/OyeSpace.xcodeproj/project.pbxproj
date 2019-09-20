@@ -28,6 +28,7 @@
 		16D3D1D203884931A6E621BF /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 770012F8ADA04B0C8F48E788 /* Zocial.ttf */; };
 		179FDCDC0E1645AE8B76B3F3 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D465E8C2E0234F4389F8685B /* AntDesign.ttf */; };
 		1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA53C5321BB40CCA9D694E0 /* libRNHTMLtoPDF.a */; };
+		1E5E6CA32334971E00733251 /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E5E6C6A2334971E00733251 /* sound_1.mp3 */; };
 		1EB458D80BAA45129F1275C1 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8BAB1885F524E67B6415E52 /* rubicon-icon-font.ttf */; };
 		240306F65F3D4FAD950C1D2A /* HelveticaNeueHv.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 598D334FA25C41B08E24DE69 /* HelveticaNeueHv.ttf */; };
 		2451D65A86BF457FA86F22EE /* HelveticaNeueBd.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA03311D714E4B3487257C79 /* HelveticaNeueBd.ttf */; };
@@ -530,6 +531,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = OyeSpace/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		15D244A9D5F44951A3FE136F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		1E5E6C6A2334971E00733251 /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound_1.mp3; path = ../../../../../Downloads/sound_1.mp3; sourceTree = "<group>"; };
 		227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Helvetica Neu Bold.ttf"; path = "../fonts/Helvetica Neu Bold.ttf"; sourceTree = "<group>"; };
 		22FE5082DA494D888B11412A /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		2328DDF9544647CC922A4556 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -946,6 +948,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				1E5E6C6A2334971E00733251 /* sound_1.mp3 */,
 				13B07FAE1A68108700A75B9A /* OyeSpace */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* OyeSpaceTests */,
@@ -1740,6 +1743,7 @@
 				1EB458D80BAA45129F1275C1 /* rubicon-icon-font.ttf in Resources */,
 				67BCC157B1E14945AFCE9B93 /* SimpleLineIcons.ttf in Resources */,
 				380AF2CE6CA244499F710B30 /* Zocial.ttf in Resources */,
+				1E5E6CA32334971E00733251 /* sound_1.mp3 in Resources */,
 				9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */,
 				E0DD5A639E34485C8EDFA30C /* HelveticaNeue BlackCond.ttf in Resources */,
 				77686AE00B724E57B8CEEA67 /* HelveticaNeue Light.ttf in Resources */,
@@ -1795,7 +1799,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
@@ -1836,7 +1840,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OyeSpace/Pods-OyeSpace-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FDBD6BA1222B078900D8C8DA /* ShellScript */ = {
