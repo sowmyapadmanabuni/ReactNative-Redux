@@ -7,12 +7,11 @@ import React from 'react';
 import utils from '../utils';
 
 
-
 let instance = axios.create({
     baseURL: utils.strings.gatecloudfuncurl,
     timeout: 10000,
     headers: {
-        'Content-Type': 'application/json'        
+        'Content-Type': 'application/json'
     }
 });
 
@@ -27,9 +26,10 @@ instance.interceptors.response.use((response) => {
 });
 
 
-export default class fcmservice{
+export default class fcmservice {
 
-    static async sendGatePN(detail){
-        return await instance.post('/sendUserNotification',detail);
+    static async sendGatePN(detail) {
+        console.log("Hitting")
+        return await instance.post('/sendUserNotification', detail);
     }
 }

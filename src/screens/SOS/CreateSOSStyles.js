@@ -6,7 +6,8 @@
 import {Platform, StyleSheet} from "react-native";
 import {
     heightPercentageToDP,
-    heightPercentageToDP as hp, widthPercentageToDP,
+    heightPercentageToDP as hp,
+    widthPercentageToDP,
     widthPercentageToDP as wp
 } from "react-native-responsive-screen";
 import base from "../../base";
@@ -14,7 +15,7 @@ import base from "../../base";
 
 const CreateSOSStyles = StyleSheet.create({
     container: {
-        height: hp("100%"),
+        //height: hp("100%"),
         backgroundColor: base.theme.colors.white,
         paddingBottom: Platform.OS === 'ios' ? hp('80%') : hp('70%')
     },
@@ -81,7 +82,7 @@ const CreateSOSStyles = StyleSheet.create({
         fontFamily: base.theme.fonts.medium,
         color: base.theme.colors.primary
     },
-    cardView:{
+    cardView: {
         height: "80%",
         width: "28%",
         borderRadius: 10,
@@ -116,7 +117,7 @@ const CreateSOSStyles = StyleSheet.create({
         height: 15,
         width: 15,
         alignSelf: 'center',
-        marginBottom: 2,right:5
+        marginBottom: 2, right: 5
     },
     count: {
         fontSize: 10,
@@ -126,14 +127,14 @@ const CreateSOSStyles = StyleSheet.create({
         fontSize: 10,
         color: base.theme.colors.black,
     },
-    stopSOSView:{
+    stopSOSView: {
         height: heightPercentageToDP('10%'),
         width: widthPercentageToDP('90%'),
         top: 10,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    stopSOSTextView:{
+    stopSOSTextView: {
         height: heightPercentageToDP('4%'),
         width: widthPercentageToDP('30%'),
         borderRadius: heightPercentageToDP('10%'),
@@ -141,8 +142,8 @@ const CreateSOSStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    stopSOSText:{
-        color:base.theme.colors.white
+    stopSOSText: {
+        color: base.theme.colors.white
     }
 });
 

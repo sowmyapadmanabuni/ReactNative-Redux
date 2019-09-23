@@ -1,16 +1,15 @@
 /**
-* Sample React Native App
-* https://github.com/facebook/react-native
-*
-* @format
-* @flow
-*/
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
 
-import React, { Component } from 'react'
-import { View, Text, Alert, NetInfo, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React, {Component} from 'react'
+import {Alert, Image, NetInfo, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 //import { Switch } from 'react-native-switch';
 import SwitchExample from '../registration_pages/SwitchExample';
-import { Fonts } from '../pages/src/utils/Fonts'
 
 
 var doNotDisturb = "FALSE";
@@ -21,7 +20,7 @@ var photoVerification = "OFF";
 var mobileMandatoryForVisitor = "OFF";
 var nameMandatoryForVisitor = "OFF";
 var preventGuardAutoLogoff = "OFF";
-var preventFaceID = "OFF"
+var preventFaceID = "OFF";
 
 //import SimpleToggleButton from '../registration_pages/SimpleToggleButton'
 
@@ -35,7 +34,7 @@ export default class HomeContainer extends Component {
     constructor(props) {
 
         super(props);
-        this._onStateChange = this._onStateChange.bind(this)
+        this._onStateChange = this._onStateChange.bind(this);
         this.state = {
             connection_Status: "",
             switchStDoNotDisturb: false,
@@ -55,11 +54,11 @@ export default class HomeContainer extends Component {
 
     _onStateChange(newState) {
         const value = newState ? "ON" : "OFF";
-        this.setState({ toggleText: value })
+        this.setState({toggleText: value})
     }
 
     toggleSwitchDoNotDistrub = (value) => {
-        this.setState({ switchStDoNotDisturb: value })
+        this.setState({switchStDoNotDisturb: value});
         if (value == true) {
             doNotDisturb = "TRUE";
             this.dnd();
@@ -68,10 +67,10 @@ export default class HomeContainer extends Component {
             this.dnd();
         }
         console.log('Switch doNotDisturb is: ' + doNotDisturb)
-    }
+    };
 
     toggleSwitchLeaveAtGuard = (value) => {
-        this.setState({ switchStLeaveAtGuard: value })
+        this.setState({switchStLeaveAtGuard: value});
         console.log('Switch leaveAtGuard is: ' + value);
         if (value == true) {
             leaveAtGuard = "TRUE";
@@ -81,11 +80,11 @@ export default class HomeContainer extends Component {
             this.dnd();
         }
         console.log('Switch leaveAtGuard is: ' + leaveAtGuard);
-    }
+    };
 
     toggleSwitchOTPVerification = (value) => {
-        this.setState({ switchStOTPVerification: value })
-        console.log('Switch  otpVerification: ' + value)
+        this.setState({switchStOTPVerification: value});
+        console.log('Switch  otpVerification: ' + value);
         if (value == true) {
             otpVerification = "ON";
             this.makeRemoteRequest();
@@ -97,12 +96,12 @@ export default class HomeContainer extends Component {
         //OTPStatus , PhotoStatus , NameStatus , MobileStatus , LogoffStatus 
         console.log('Switch  otpVerification: ' + otpVerification)
 
-    }
+    };
 
     toggleSwitchPhotoVerification = (value) => {
 
-        this.setState({ switchStPhotoVerification: value })
-        console.log('Switch photoVerification is: ' + value)
+        this.setState({switchStPhotoVerification: value});
+        console.log('Switch photoVerification is: ' + value);
         if (value == true) {
             photoVerification = "ON";
             this.makeRemoteRequest();
@@ -113,11 +112,11 @@ export default class HomeContainer extends Component {
         this.sendFCM("SyncAssociationSettings", "PhotoStatus", global.MyOYEMemberID, photoVerification);
         console.log('Switch photoVerification is: ' + photoVerification)
 
-    }
+    };
 
     toggleSwitchMobMandatoryForVisitors = (value) => {
-        this.setState({ switchStMobMandatoryForVisitor: value })
-        console.log('Switch 5 is: ' + value)
+        this.setState({switchStMobMandatoryForVisitor: value});
+        console.log('Switch 5 is: ' + value);
 
         if (value == true) {
             mobileMandatoryForVisitor = "ON";
@@ -126,14 +125,14 @@ export default class HomeContainer extends Component {
             mobileMandatoryForVisitor = "OFF";
             this.makeRemoteRequest();
         }
-        console.log('Switch mobileMandatoryForVisitor is: ' + mobileMandatoryForVisitor)
+        console.log('Switch mobileMandatoryForVisitor is: ' + mobileMandatoryForVisitor);
         this.sendFCM("SyncAssociationSettings", "MobileStatus", global.MyOYEMemberID, mobileMandatoryForVisitor);
         //OTPStatus , PhotoStatus , NameStatus , MobileStatus , LogoffStatus 
 
-    }
+    };
     toggleSwitchFaceIDMandatory = (value) => {
-        this.setState({ switchStPreventFaceID: value })
-        console.log('Switch FaceIDforVisitor is: ' + value)
+        this.setState({switchStPreventFaceID: value});
+        console.log('Switch FaceIDforVisitor is: ' + value);
 
         if (value == true) {
             preventFaceID = "ON";
@@ -142,16 +141,16 @@ export default class HomeContainer extends Component {
             preventFaceID = "OFF";
             this.makeRemoteRequest();
         }
-        console.log('Switch mobileFaceIDForVisitor is: ' + preventFaceID)
+        console.log('Switch mobileFaceIDForVisitor is: ' + preventFaceID);
         this.sendFCM("SyncAssociationSettings", "MobileStatus", global.MyOYEMemberID, preventFaceID);
         //OTPStatus , PhotoStatus , NameStatus , MobileStatus , LogoffStatus 
 
-    }
+    };
 
     toggleSwitch6 = (value) => {
 
-        this.setState({ switchStNameMandatoryForVisitor: value })
-        console.log('Switch nameMandatoryForVisitor is: ' + value)
+        this.setState({switchStNameMandatoryForVisitor: value});
+        console.log('Switch nameMandatoryForVisitor is: ' + value);
 
         if (value == true) {
             nameMandatoryForVisitor = "ON";
@@ -160,15 +159,15 @@ export default class HomeContainer extends Component {
             nameMandatoryForVisitor = "OFF";
             this.makeRemoteRequest();
         }
-        console.log('Switch nameMandatoryForVisitor is: ' + nameMandatoryForVisitor)
+        console.log('Switch nameMandatoryForVisitor is: ' + nameMandatoryForVisitor);
         this.sendFCM("SyncAssociationSettings", "NameStatus", global.MyOYEMemberID, nameMandatoryForVisitor);
         //OTPStatus , PhotoStatus ,  , MobileStatus , LogoffStatus 
 
-    }
+    };
 
     toggleSwitchPreventGuardAutoLogoff = (value) => {
-        this.setState({ switchStPreventGuardAutoLogoff: value })
-        console.log('Switch preventGuardAutoLogoff is: ' + value)
+        this.setState({switchStPreventGuardAutoLogoff: value});
+        console.log('Switch preventGuardAutoLogoff is: ' + value);
         if (value == true) {
             preventGuardAutoLogoff = "ON";
             this.makeRemoteRequest();
@@ -176,10 +175,10 @@ export default class HomeContainer extends Component {
             preventGuardAutoLogoff = "OFF";
             this.makeRemoteRequest();
         }
-        console.log('Switch preventGuardAutoLogoff is: ' + preventGuardAutoLogoff)
+        console.log('Switch preventGuardAutoLogoff is: ' + preventGuardAutoLogoff);
         this.sendFCM("SyncAssociationSettings", "LogoffStatus", global.MyOYEMemberID, preventGuardAutoLogoff);
         //OTPStatus , PhotoStatus ,  , MobileStatus ,  
-    }
+    };
 
     componentDidMount() {
 
@@ -187,20 +186,23 @@ export default class HomeContainer extends Component {
         NetInfo.isConnected.fetch().done((isConnected) => {
 
             if (isConnected == true) {
-                this.setState({ connection_Status: "Online" })
+                this.setState({connection_Status: "Online"})
             } else {
-                this.setState({ connection_Status: "Offline" })
+                this.setState({connection_Status: "Offline"});
                 Alert.alert('Alert', 'Please connect to the internet. ',
                     [
-                        { text: 'Ok', onPress: () => { } },
+                        {
+                            text: 'Ok', onPress: () => {
+                            }
+                        },
                     ],
-                    { cancelable: false }
+                    {cancelable: false}
                 );
             }
 
         });
         //http://api.oyespace.com/oyeliving/api/v1/association/getAssociationList/30
-        const url1 = global.champBaseURL + 'association/getAssociationList/' + global.SelectedAssociationID
+        const url1 = global.champBaseURL + 'association/getAssociationList/' + global.SelectedAssociationID;
         fetch(url1, {
             method: 'GET',
             headers: {
@@ -235,63 +237,63 @@ export default class HomeContainer extends Component {
                     preventGuardAutoLogoff = responseJson.data.association.asoloStat;
                     //"ASOTPStat": 
                     otpVerification = responseJson.data.association.asotpStat;
-                    preventFaceID=responseJson.data.association.asotpStat
-                    
+                    preventFaceID = responseJson.data.association.asotpStat;
 
-                    console.log('Switch mobileMandatoryForVisitor is: ' + nameMandatoryForVisitor)
+
+                    console.log('Switch mobileMandatoryForVisitor is: ' + nameMandatoryForVisitor);
                     if (nameMandatoryForVisitor == "ON") {
-                        this.setState({ switchStNameMandatoryForVisitor: true })
+                        this.setState({switchStNameMandatoryForVisitor: true})
                     } else {
-                        this.setState({ switchStNameMandatoryForVisitor: false })
+                        this.setState({switchStNameMandatoryForVisitor: false})
                     }
 
-                    console.log('Switch mobileMandatoryForVisitor is: ' + mobileMandatoryForVisitor)
+                    console.log('Switch mobileMandatoryForVisitor is: ' + mobileMandatoryForVisitor);
                     if (mobileMandatoryForVisitor == "ON") {
-                        this.setState({ switchStMobMandatoryForVisitor: true })
+                        this.setState({switchStMobMandatoryForVisitor: true})
                     } else {
-                        this.setState({ switchStMobMandatoryForVisitor: false })
+                        this.setState({switchStMobMandatoryForVisitor: false})
                     }
 
-                    console.log('Switch photoVerification is: ' + photoVerification)
+                    console.log('Switch photoVerification is: ' + photoVerification);
                     if (photoVerification == "ON") {
-                        this.setState({ switchStPhotoVerification: true })
+                        this.setState({switchStPhotoVerification: true})
                     } else {
-                        this.setState({ switchStPhotoVerification: false })
+                        this.setState({switchStPhotoVerification: false})
                     }
 
-                    console.log('Switch otpVerification is: ' + otpVerification)
+                    console.log('Switch otpVerification is: ' + otpVerification);
                     if (otpVerification == "ON") {
-                        this.setState({ switchStOTPVerification: true })
+                        this.setState({switchStOTPVerification: true})
                     } else {
-                        this.setState({ switchStOTPVerification: false })
+                        this.setState({switchStOTPVerification: false})
                     }
 
-                    console.log('Switch switchStPreventGuardAutoLogoff is: ' + preventGuardAutoLogoff)
+                    console.log('Switch switchStPreventGuardAutoLogoff is: ' + preventGuardAutoLogoff);
                     if (preventGuardAutoLogoff == "ON") {
-                        this.setState({ switchStPreventGuardAutoLogoff: true })
+                        this.setState({switchStPreventGuardAutoLogoff: true})
                     } else {
-                        this.setState({ switchStPreventGuardAutoLogoff: false })
+                        this.setState({switchStPreventGuardAutoLogoff: false})
                     }
-                    console.log('Switch switchStPreventFaceID is: ' + preventFaceID)
+                    console.log('Switch switchStPreventFaceID is: ' + preventFaceID);
                     if (preventGuardAutoLogoff == "ON") {
-                        this.setState({ switchStPreventFaceID: true })
+                        this.setState({switchStPreventFaceID: true})
                     } else {
-                        this.setState({ switchStPreventFaceID: false })
+                        this.setState({switchStPreventFaceID: false})
                     }
 
                 } else {
                     console.log('associationlist responseJson failurre')
                 }
-                
+
 
             })
             .catch((error) => {
                 console.log('associationlist err ' + error)
-            })
+            });
 
         anu = {
             "ACMobile": global.MyISDCode + global.MyMobileNumber
-        }
+        };
         const url2 = global.champBaseURL + 'Member/GetMemberListByMobileNumber';
         console.log('anu', url2 + ' ff ' + global.MyISDCode + global.MyMobileNumber);
         fetch(url2,
@@ -321,15 +323,15 @@ export default class HomeContainer extends Component {
                         // responseJson.data.memberList[i].mrmRoleID, responseJson.data.memberList[i].meIsActive,
                         // responseJson.data.memberList[i].acAccntID, responseJson.data.memberList[i].vehicleNumber);
 
-                        this.setState({ switchStDoNotDisturb: responseJson.data.memberList[0].medndStat })
+                        this.setState({switchStDoNotDisturb: responseJson.data.memberList[0].medndStat});
                         if (this.state.switchStDoNotDisturb == true) {
                             doNotDisturb = "TRUE";
                         } else {
                             doNotDisturb = "FALSE";
                         }
-                        console.log('Switch mobileMandatoryForVisitor is: ' + doNotDisturb)
+                        console.log('Switch mobileMandatoryForVisitor is: ' + doNotDisturb);
 
-                        this.setState({ switchStLeaveAtGuard: responseJson.data.memberList[0].melvaGrd })
+                        this.setState({switchStLeaveAtGuard: responseJson.data.memberList[0].melvaGrd});
                         if (this.state.switchStLeaveAtGuard == true) {
                             leaveAtGuard = "TRUE";
                         } else {
@@ -355,9 +357,9 @@ export default class HomeContainer extends Component {
     _handleConnectivityChange = (isConnected) => {
 
         if (isConnected == true) {
-            this.setState({ connection_Status: "Online" })
+            this.setState({connection_Status: "Online"})
         } else {
-            this.setState({ connection_Status: "Offline" })
+            this.setState({connection_Status: "Offline"});
             alert('You are offline...');
         }
 
@@ -367,15 +369,15 @@ export default class HomeContainer extends Component {
 
         anu = {
             "MEDNDStat": doNotDisturb,
-            "MEDNDStrt": year+"-"+month+"-"+date,//year+"-"+month+"-"+date, "2018-11-21"
-            "MEDNDStop": year+"-"+month+"-"+(date+1),
+            "MEDNDStrt": year + "-" + month + "-" + date,//year+"-"+month+"-"+date, "2018-11-21"
+            "MEDNDStop": year + "-" + month + "-" + (date + 1),
             "MELVAGrd": leaveAtGuard,
-            "MELVAGSrt": year+"-"+month+"-"+date,
-            "MELVAGStp": year+"-"+month+"-"+(date+1),
+            "MELVAGSrt": year + "-" + month + "-" + date,
+            "MELVAGStp": year + "-" + month + "-" + (date + 1),
             "MEVisATyp": "af",
             "MEMemID": global.MyOYEMemberID
-        }
-        console.log('anu', anu)
+        };
+        console.log('anu', anu);
 
         fetch(global.champBaseURL + 'MemberDNDLeaveAtGuardStatus/Update',
             {
@@ -404,7 +406,7 @@ export default class HomeContainer extends Component {
             });
         this.sendFCM("SyncMemberDNDstatus", doNotDisturb, global.MyOYEMemberID, leaveAtGuard);
 
-    }
+    };
 
     makeRemoteRequest = () => {
 
@@ -424,9 +426,9 @@ export default class HomeContainer extends Component {
             "ASOLOStat": preventGuardAutoLogoff,
             "ASOTPStat": otpVerification,
             "ASAssnID": global.SelectedAssociationID,
-            "ASFaceDet" :preventFaceID
+            "ASFaceDet": preventFaceID
 
-        }
+        };
 
         console.log('anu', anu);
         fetch(global.champBaseURL + 'AssociationStatuses/Update',
@@ -455,7 +457,7 @@ export default class HomeContainer extends Component {
                 alert('error')
             });
 
-    }
+    };
 
     sendFCM(actvt, nam, iid, ob) {
         fcmMsg = {
@@ -467,7 +469,7 @@ export default class HomeContainer extends Component {
                 "mobile": ob,
             },
             "to": "/topics/AllGuards" + global.SelectedAssociationID,
-        }
+        };
         console.log('fcmMsg ', fcmMsg);
         fetch('https://fcm.googleapis.com/fcm/send',
             {
@@ -492,16 +494,17 @@ export default class HomeContainer extends Component {
 
     render() {
         const {
-            navigate } = this.props.navigation;
+            navigate
+        } = this.props.navigation;
         return (
-            <View style={{ backgroundColor: '#FFF', height: '100%' }}>
+            <View style={{backgroundColor: '#FFF', height: '100%'}}>
 
-<View style={{flexDirection:'row',}}>
-                    <View style={{flex:1, marginTop:43,marginRight:0, justifyContent:'center',marginLeft:'2%'}}>
-                        <TouchableOpacity onPress={() => navigate(('AdminFunction'), { cat: '' })}
+                <View style={{flexDirection: 'row',}}>
+                    <View style={{flex: 1, marginTop: 43, marginRight: 0, justifyContent: 'center', marginLeft: '2%'}}>
+                        <TouchableOpacity onPress={() => navigate(('AdminFunction'), {cat: ''})}
                         >
-                        <Image source={require('../pages/assets/images/back.png')}
-                        style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
+                            <Image source={require('../pages/assets/images/back.png')}
+                                   style={{height: 25, width: 25, margin: 5, alignSelf: 'center'}}/>
                         </TouchableOpacity>
                     </View>
                     {/* <TouchableOpacity 
@@ -511,18 +514,18 @@ export default class HomeContainer extends Component {
                         <Image source={require('../pages/assets/images/menu_button.png')}
                             style={{ height: 25, width: 25, margin: 5, alignSelf: 'center' }} />
                     </TouchableOpacity> */}
-                    <View style={{ flex: 6, alignItems:'center', justifyContent:'center',}}>
-                    <Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
-                        style={{height: 40, width: 95, marginTop: 45,marginBottom:5}} />
-                    </View>  
-                    <View style={{flex:1,marginTop:45, marginRight:10, justifyContent:'center',}}>    
-                    </View>                 
-                </View> 
+                    <View style={{flex: 6, alignItems: 'center', justifyContent: 'center',}}>
+                        <Image source={require('../pages/assets/images/OyespaceRebrandingLogo.png')}
+                               style={{height: 40, width: 95, marginTop: 45, marginBottom: 5}}/>
+                    </View>
+                    <View style={{flex: 1, marginTop: 45, marginRight: 10, justifyContent: 'center',}}>
+                    </View>
+                </View>
 
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
-                <View style={{ backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1, }}></View>
+                <View style={{backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1,}}></View>
+                <View style={{backgroundColor: 'lightgrey', flexDirection: "row", width: '100%', height: 1,}}></View>
 
-                <Text style={{ fontSize: 16, color: 'black', fontWeight:'bold',margin:10 }}>Admin Settings</Text>
+                <Text style={{fontSize: 16, color: 'black', fontWeight: 'bold', margin: 10}}>Admin Settings</Text>
                 {this.state.isLoading
                     ?
                     <View style={{
@@ -534,68 +537,78 @@ export default class HomeContainer extends Component {
                         <ActivityIndicator
                             size="large"
                             color="#330066"
-                            animating />
+                            animating/>
                     </View>
                     :
                     <ScrollView>
-                           
-                        <View style={{ flexDirection: 'column', paddingTop: 2,
-                        margin:'3%',paddingBottom:5,
-                backgroundColor: 'white',
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: 'orange'  }}>
 
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{flex:5 , fontSize: 15,  color: 'black', marginLeft: 10 }}>OTP Verification for Visitors: </Text>
+                        <View style={{
+                            flexDirection: 'column', paddingTop: 2,
+                            margin: '3%', paddingBottom: 5,
+                            backgroundColor: 'white',
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            borderColor: 'orange'
+                        }}>
+
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>OTP Verification
+                                    for Visitors: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitchOTPVerification}
-                                    onValueChange={(switch1Value3) => this.setState({ switch1Value3 })}
-                                    switch1Value={this.state.switchStOTPVerification} />
+                                    onValueChange={(switch1Value3) => this.setState({switch1Value3})}
+                                    switch1Value={this.state.switchStOTPVerification}/>
                             </View>
 
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{flex:5 , fontSize: 15,  color: 'black', marginLeft: 10 }}>Photo of Visitors for Verification: </Text>
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>Photo of Visitors
+                                    for Verification: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitchPhotoVerification}
-                                    switch1Value={this.state.switchStPhotoVerification} />
+                                    switch1Value={this.state.switchStPhotoVerification}/>
                             </View>
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{flex:5 , fontSize: 15,  color: 'black', marginLeft: 10 }}>Mobile Number mandatory for Visitors: </Text>
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>Mobile Number
+                                    mandatory for Visitors: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitchMobMandatoryForVisitors}
-                                    switch1Value={this.state.switchStMobMandatoryForVisitor} />
+                                    switch1Value={this.state.switchStMobMandatoryForVisitor}/>
                             </View>
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{flex:5 , fontSize: 15,  color: 'black', marginLeft: 10 }}>Visitors Name mandatory: </Text>
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>Visitors Name
+                                    mandatory: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitch6}
-                                    switch1Value={this.state.switchStNameMandatoryForVisitor} />
+                                    switch1Value={this.state.switchStNameMandatoryForVisitor}/>
                             </View>
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{flex:5 , fontSize: 15,  color: 'black', marginLeft: 10 }}>Prevent Auto Logoff of Guards: </Text>
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>Prevent Auto
+                                    Logoff of Guards: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitchPreventGuardAutoLogoff}
-                                    switch1Value={this.state.switchStPreventGuardAutoLogoff} />
+                                    switch1Value={this.state.switchStPreventGuardAutoLogoff}/>
                             </View>
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{ flex:5 ,fontSize: 15,  color: 'black', marginLeft: 10 }}>Do Not Disturb: </Text>
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>Do Not
+                                    Disturb: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitchDoNotDistrub}
-                                    switch1Value={this.state.switchStDoNotDisturb} />
+                                    switch1Value={this.state.switchStDoNotDisturb}/>
                             </View>
 
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{ flex:5 ,fontSize: 15,  color: 'black', marginLeft: 10 }}>Leave the Courier with Guard: </Text>
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>Leave the Courier
+                                    with Guard: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitchLeaveAtGuard}
-                                    switch1Value={this.state.switchStLeaveAtGuard} />
+                                    switch1Value={this.state.switchStLeaveAtGuard}/>
                             </View>
-                            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                                <Text style={{flex:5 , fontSize: 15,  color: 'black', marginLeft: 10 }}>Face Detection Mandatory for Visitor: </Text>
+                            <View style={{flexDirection: 'row', marginTop: 20}}>
+                                <Text style={{flex: 5, fontSize: 15, color: 'black', marginLeft: 10}}>Face Detection
+                                    Mandatory for Visitor: </Text>
                                 <SwitchExample
                                     toggleSwitch1={this.toggleSwitchFaceIDMandatory}
-                                    switch1Value={this.state.switchStPreventFaceID} />
+                                    switch1Value={this.state.switchStPreventFaceID}/>
                             </View>
 
                             {/* <Text style={{fontSize: 20, textAlign: 'center', marginBottom: 20}}> You are { this.state.connection_Status } </Text> */}

@@ -73,7 +73,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new AndroidWifiPackage(),
+                    new AndroidWifiPackage(),
                     new GeolocationPackage(),
                     new ReactNativeRestartPackage(),
                     new RNDeviceInfo(),

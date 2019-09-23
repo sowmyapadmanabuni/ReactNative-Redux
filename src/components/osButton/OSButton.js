@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types'
 import base from '../../base'
 import OSButtonStyles from "./OSButtonStyles";
@@ -50,7 +50,7 @@ class OSButton extends React.Component {
                               style={[oSBStyle, {
                                   height: (this.props.height),
                                   width: (this.props.width),
-                                  justifyContent:'center',
+                                  justifyContent: 'center',
                                   borderRadius: (this.props.borderRadius),
                                   backgroundColor: this.props.oSBBackground,
                                   ...this.props.style
@@ -71,7 +71,6 @@ class OSButton extends React.Component {
 
 
 }
-
 
 
 export default OSButton;

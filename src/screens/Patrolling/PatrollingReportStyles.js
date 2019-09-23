@@ -104,7 +104,7 @@ const PatrollingReportStyles = StyleSheet.create({
         fontFamily: base.theme.fonts.medium
     },
     buttonView: {},
-    ModalMainView:{
+    ModalMainView: {
         flex: 1,
         backgroundColor: base.theme.colors.transparent,
         height: hp('50%'),
@@ -112,27 +112,27 @@ const PatrollingReportStyles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center'
     },
-    modalView:{
+    modalView: {
         backgroundColor: base.theme.colors.primary,
         height: 50,
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center'
     },
-    modalText:{
+    modalText: {
         fontFamily: base.theme.fonts.medium,
         fontSize: 18,
         color: base.theme.colors.white,
         alignSelf: 'center'
     },
-    entryTimeIcon:{
-        height:hp('5%'),
-        width:hp('5%')
+    entryTimeIcon: {
+        height: hp('5%'),
+        width: hp('5%')
     },
-    calenderIcon:{
-        borderWidth:0,
-        height:hp('5%'),
-        width:wp('5%')
+    calenderIcon: {
+        borderWidth: 0,
+        height: hp('5%'),
+        width: wp('5%')
     },
     radioButtonView: {
         height: hp('3%'),

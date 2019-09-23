@@ -18,6 +18,6 @@ const services = {
     OyeSafeApiFamily,
     MediaUploadApi,
     frtdbservice
-}
+};
 
 export default services;

@@ -1,15 +1,15 @@
-import { JOIN_ASSOCIATION } from "../actions/types";
+import {JOIN_ASSOCIATION} from "../actions/types";
 
 const INITIAL_STATE = {
-  joinedAssociations: []
+    joinedAssociations: []
 };
 
 export default (state = INITIAL_STATE, action) => {
-  switch (action.type) {
-    case JOIN_ASSOCIATION:
-      return { ...state, joinedAssociations: action.payload };
+    switch (action.type) {
+        case JOIN_ASSOCIATION:
+            return {...state, joinedAssociations: action.payload};
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 };

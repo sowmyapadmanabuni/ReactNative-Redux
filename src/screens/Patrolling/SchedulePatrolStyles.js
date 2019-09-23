@@ -80,17 +80,17 @@ const SchedulePatrolStyles = StyleSheet.create({
         height: hp('4%'),
         width: hp('4%')
     },
-    startTimeView:{
+    startTimeView: {
         flexDirection: 'column',
         height: hp('18%'),
         borderBottomWidth: 1
     },
-    startText:{
+    startText: {
         fontFamily: base.theme.fonts.medium,
         fontSize: 17,
         paddingLeft: 10
     },
-    timeText:{
+    timeText: {
         height: hp('8%'),
         width: '25%',
         marginTop: hp('2%'),
@@ -100,18 +100,18 @@ const SchedulePatrolStyles = StyleSheet.create({
         alignItems: 'center',
         borderColor: base.theme.colors.primary
     },
-    endTimeView:{
+    endTimeView: {
         flexDirection: 'column',
         height: hp('17%'),
         borderBottomWidth: 1,
         marginTop: hp('4%')
     },
-    endText:{
+    endText: {
         fontFamily: base.theme.fonts.medium,
         fontSize: 17,
         paddingLeft: 10
     },
-    endTimeText:{
+    endTimeText: {
         height: 50,
         width: '25%',
         marginTop: hp('2%'),
@@ -121,63 +121,63 @@ const SchedulePatrolStyles = StyleSheet.create({
         alignItems: 'center',
         borderColor: base.theme.colors.primary
     },
-    flatListMainView:{
+    flatListMainView: {
         height: hp('17%'),
         borderBottomWidth: 1,
         justifyContent: 'center',
         marginTop: hp('4%')
     },
-    flatList:{
+    flatList: {
         width: wp('95%'),
         alignSelf: 'center'
     },
-    repeatTextView:{
+    repeatTextView: {
         height: hp('10%'),
         width: wp('22%'),
         justifyContent: 'center',
         alignItems: 'center',
-       // justifySelf: 'flex-end'
+        // justifySelf: 'flex-end'
     },
-    slotMainView:{
+    slotMainView: {
         height: hp('12%'),
         alignSelf: 'center',
         width: wp('100%'),
         borderBottomWidth: 1,
         marginTop: hp('4%')
     },
-    slotSubView:{
+    slotSubView: {
         width: wp('27%'),
         justifyContent: 'center',
         alignItems: 'center',
         //justifySelf: 'flex-end'
     },
-    textInputView:{
+    textInputView: {
         height: hp('10%'),
         width: wp('90%'),
         borderWidth: 0,
         alignSelf: 'center'
     },
-    selectDevMainView:{
+    selectDevMainView: {
         height: hp('12%'),
         alignSelf: 'center',
         width: wp('100%'),
         borderBottomWidth: 1,
         marginTop: hp('4%')
     },
-    selectDevView:{
+    selectDevView: {
         width: wp('32%'),
         justifyContent: 'center',
         alignItems: 'center',
-       // justifySelf: 'flex-end'
+        // justifySelf: 'flex-end'
     },
-    picker:{
+    picker: {
         width: wp('90%'),
         height: hp('5%'),
         alignSelf: 'center',
         marginTop: hp('2%'),
         marginLeft: wp('60%'),
     },
-    snozeMainView:{
+    snozeMainView: {
         height: hp('8%'),
         width: wp('100%'),
         justifyContent: 'space-around',
@@ -185,14 +185,14 @@ const SchedulePatrolStyles = StyleSheet.create({
         borderBottomWidth: 1,
         marginTop: hp('4%')
     },
-    osButtonView:{
+    osButtonView: {
         height: hp('12%'),
         width: wp('100%'),
         justifyContent: 'space-around',
         flexDirection: 'row',
         marginTop: hp('4%')
     },
-    dataWeekView:{
+    dataWeekView: {
         height: 40,
         width: 40,
         borderRadius: 20,
@@ -201,26 +201,26 @@ const SchedulePatrolStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    spinModal:{
+    spinModal: {
         flex: 1,
         backgroundColor: base.theme.colors.transparent,
         height: 50,
         alignSelf: 'center',
         width: wp('90%'),
     },
-    spinMainView:{
+    spinMainView: {
         height: hp("50%"),
         justifyContent: 'flex-start',
         backgroundColor: base.theme.colors.white,
     },
-    closeTextView:{
+    closeTextView: {
         height: hp('7%'),
         justifyContent: 'center',
         alignItems: 'flex-end',
         alignSelf: 'flex-end',
         width: wp('20%'),
     },
-    closeText:{
+    closeText: {
         alignSelf: 'center',
         color: base.theme.colors.primary,
         fontFamily: base.theme.fonts.medium
