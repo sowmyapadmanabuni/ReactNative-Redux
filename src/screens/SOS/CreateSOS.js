@@ -726,6 +726,7 @@ class CreateSOS extends React.Component {
                 return;
             }
             sound.stop((success) => {
+                console.log("Sucuuu:",success)
                 if (success) {
                     console.log('successfully finished playing');
                 } else {

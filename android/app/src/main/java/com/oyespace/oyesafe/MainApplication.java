@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.devstepbcn.wifi.AndroidWifiPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
@@ -74,6 +75,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+                    new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
                     new GeolocationPackage(),
                     new ReactNativeRestartPackage(),

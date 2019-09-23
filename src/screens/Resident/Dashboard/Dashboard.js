@@ -515,12 +515,13 @@ class Dashboard extends PureComponent {
 
       fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
         let receivedData = snapshot.val();
-        console.log("ReceiveddataDash", receivedData);
+        console.log("ReceiveddataDash", snapshot.val());
         if (receivedData !== null) {
           if(receivedData.isActive && receivedData.userId){
-            self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+           self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+          }
+
             }
-         }
         });
 
     //Adding an event listner om focus

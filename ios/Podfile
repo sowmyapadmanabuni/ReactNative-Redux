@@ -74,6 +74,8 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
   pod 'ReactNativeFabric', :path => '../node_modules/react-native-fabric'
 
+  pod 'RNAudioRecorderPlayer', :path => '../node_modules/react-native-audio-recorder-player'
+
 end
   
 post_install do |installer|
