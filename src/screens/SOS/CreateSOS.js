@@ -15,7 +15,7 @@ import {
     TouchableHighlight,
     TouchableOpacity,
     View,
-    ScrollView
+    ScrollView,
 } from 'react-native';
 import firebase from 'firebase';
 import CreateSOSStyles from "./CreateSOSStyles";
@@ -29,6 +29,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import {heightPercentageToDP, widthPercentageToDP} from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import SystemSetting from 'react-native-system-setting'
 
 var Sound = require('react-native-sound');
 
@@ -83,10 +84,13 @@ class CreateSOS extends React.Component {
                 }
             });
             sound.setNumberOfLoops(-1);
+            sound.setVolume(0.3);
+            SystemSetting.getVolume().then((volume)=>{
+                console.log('Current volume is ' + volume);
+            });
+            SystemSetting.setVolume(0.3);
         });
-        
-
-        console.log("Sound Loop:",sound.getNumberOfLoops())
+     
         Platform.OS === 'ios' ? this.getCurrentLocation() : this.checkGPS();
     }
 
@@ -265,8 +269,8 @@ class CreateSOS extends React.Component {
         let associationID = data.associationID;
         //let associationID = 8;
         let userId = data.userReducer.MyAccountID;
-        let userName = data.userReducer.MyFirstName;
-        let userMobile = (data.userReducer.MyMobileNumber).toString();
+        let userName =data.userReducer.userData.data.account[0].acfName;
+        let userMobile = (data.userReducer.userData.data.account[0].acMobile).toString();
         let unitId = data.dashBoardReducer.uniID;
         let latitude = this.state.region.latitude;
         let longitude = this.state.region.longitude;
@@ -300,28 +304,29 @@ class CreateSOS extends React.Component {
             let sosImage = "http://mediaupload.oyespace.com/" + statForMediaUpload;
             let imgArr = this.state.imageArr;
             console.log("Image Arr:", imgArr);
-            imgArr.push(sosImage);
-            this.setState({
-                imageArr: imgArr
-            }, () => {
-                let tempArr = [];
-                for (let i in imgArr) {
-                    if (!imgArr[i].includes("content") && !imgArr[i].includes("file:///")) {
-                        tempArr.push(imgArr[i])
+            if(statForMediaUpload!==null){
+                imgArr.push(sosImage);
+                this.setState({
+                    imageArr: imgArr
+                }, () => {
+                    let tempArr = [];
+                    for (let i in imgArr) {
+                        if (!imgArr[i].includes("content") && !imgArr[i].includes("file:///")) {
+                            tempArr.push(imgArr[i])
+                        }
                     }
-                }
-                let emergencyImages = tempArr;
-                console.log("SOS Image Array:", emergencyImages);
-                firebase.database().ref('SOS/' + associationID + "/" + userId + "/").update({
-                    emergencyImages
-                }).then((data) => {
-                    console.log("Image Saved in RTDB", data);
-                    //self.updateSOSInAPI(sosImage)
-                }).catch((err) => {
-                    console.log("Error:", err)
-                });
-            })
-
+                    let emergencyImages = tempArr;
+                    console.log("SOS Image Array:", emergencyImages);
+                    firebase.database().ref('SOS/' + associationID + "/" + userId + "/").update({
+                        emergencyImages
+                    }).then((data) => {
+                        console.log("Image Saved in RTDB", data);
+                        //self.updateSOSInAPI(sosImage)
+                    }).catch((err) => {
+                        console.log("Error:", err)
+                    });
+                })
+            }
         }
     }
 
@@ -470,7 +475,7 @@ class CreateSOS extends React.Component {
 
 
     render() {
-        let imageURI = this.state.imageURI === null ? require('../../../icons/camera.png') : {uri: this.state.imageURI};
+        let imageURI = require('../../../icons/camera.png')
         console.log("Guard Detail:", this.state);
         return (
             <ScrollView style={CreateSOSStyles.container}>
@@ -487,7 +492,7 @@ class CreateSOS extends React.Component {
 
                 </View>
                 <View style={CreateSOSStyles.header}>
-                    <Text style={CreateSOSStyles.headerText}>Help On The Way</Text>
+                    <Text style={CreateSOSStyles.headerText}>Help is on the way to your unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
                 </View>
 
                 <View style={CreateSOSStyles.mapBox}>
@@ -713,7 +718,21 @@ class CreateSOS extends React.Component {
         //let associationID = 8;
         let userId = this.props.userReducer.MyAccountID;
         console.log("kscjd:", associationID, userId);
-        self.stopSound();
+        //self.stopSound();
+        Sound.setCategory('Playback');
+        var sound = new Sound('sound_1.mp3', Sound.MAIN_BUNDLE, (error) => {
+            if (error) {
+                console.log('failed to load the sound', error);
+                return;
+            }
+            sound.stop((success) => {
+                if (success) {
+                    console.log('successfully finished playing');
+                } else {
+                    console.log('playback failed due to audio decoding errors');
+                }
+            });
+        });
         await firebase.database().ref('SOS/' + associationID + "/" + userId + "/").remove();
         self.setState({
             isGuardDetailAvailable: false

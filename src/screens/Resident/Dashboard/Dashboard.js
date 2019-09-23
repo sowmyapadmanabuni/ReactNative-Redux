@@ -515,10 +515,12 @@ class Dashboard extends PureComponent {
 
       fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
         let receivedData = snapshot.val();
-        console.log("ReceiveddataDash", snapshot.val(),'SOS/' + SelectedAssociationID + "/" + MyAccountID + "/");
+        console.log("ReceiveddataDash", receivedData);
         if (receivedData !== null) {
-           self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+          if(receivedData.isActive && receivedData.userId){
+            self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
             }
+         }
         });
 
     //Adding an event listner om focus
@@ -1543,6 +1545,7 @@ class Dashboard extends PureComponent {
                 </ElevatedView>
             */}
 
+          {this.props.dropdown.length===0?<View/>:
         <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
               {!this.state.isSOSSelected?
               <TouchableHighlight 
@@ -1579,7 +1582,7 @@ class Dashboard extends PureComponent {
              </TouchableHighlight>
              </View>
              }
-            </View>
+            </View>}
       </ElevatedView>
     );
   }
@@ -1713,6 +1716,7 @@ class Dashboard extends PureComponent {
             <Text>Subscription</Text>
           </Button>*/}
         </View>
+        {this.props.dropdown.length==0?<View/>:
         <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('33%')}}>
               {!this.state.isSOSSelected?
               <TouchableHighlight 
@@ -1749,7 +1753,7 @@ class Dashboard extends PureComponent {
              </TouchableHighlight>
              </View>
              }
-            </View>
+            </View>}
       </ElevatedView>
     );
   }
