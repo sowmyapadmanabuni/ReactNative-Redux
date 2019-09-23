@@ -1,3 +1,5 @@
+ <!-- android:name="android.support.v4.content.FileProvider" -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="com.oyespace.oyesafe">
@@ -23,7 +25,7 @@
             android:usesCleartextTraffic="true"
             tools:targetApi="28">
         <provider
-                android:name="android.support.v4.content.FileProvider"
+                android:name="androidx.core.content.FileProvider"
                 android:authorities="${applicationId}.provider"
                 android:grantUriPermissions="true"
                 android:exported="false">

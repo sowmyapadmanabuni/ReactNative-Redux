@@ -1,4 +1,6 @@
 rootProject.name = 'OyeSpace'
+include ':react-native-audio-recorder-player'
+project(':react-native-audio-recorder-player').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-audio-recorder-player/android')
 include ':react-native-android-wifi'
 project(':react-native-android-wifi').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-wifi/android')
 include ':react-native-android-location-enabler'

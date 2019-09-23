@@ -21,6 +21,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-android-location-enabler": "^1.1.0",
     "react-native-android-wifi": "0.0.41",
+    "react-native-audio-recorder-player": "^2.3.0",
     "react-native-blink-view": "0.0.6",
     "react-native-calendar-picker": "^5.22.0",
     "react-native-calendar-select": "^0.1.2",
@@ -113,6 +114,7 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "jest": "23.6.0",
+    "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "0.51.1",
     "react-test-renderer": "16.6.3"
   },
