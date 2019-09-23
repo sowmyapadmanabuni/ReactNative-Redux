@@ -172,6 +172,8 @@ PODS:
     - React
   - rn-fetch-blob (0.10.6):
     - React/Core
+  - RNAudioRecorderPlayer (2.3.0):
+    - React
   - RNDeviceInfo (2.2.2):
     - React
   - RNFS (2.13.3):
@@ -221,6 +223,7 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - ReactNativeFabric (from `../node_modules/react-native-fabric`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
+  - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -275,6 +278,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fabric"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
+  RNAudioRecorderPlayer:
+    :path: "../node_modules/react-native-audio-recorder-player"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFS:
@@ -320,6 +325,7 @@ SPEC CHECKSUMS:
   react-native-version-number: d4919bbe43b62039894c6a747633bb59a8a44df3
   ReactNativeFabric: d05320ff347d5c72567c115b97edeead111ac4d2
   rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
+  RNAudioRecorderPlayer: f9e3c3cf07f74d7c09bfc39eb230a5dcd84ffe60
   RNDeviceInfo: a88be26a64ada7cbc2bc0ebbd1662d340304874e
   RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
   RNGestureHandler: 0438a761e8f29be3b809f9e7e43014f3aba4d7a6
@@ -328,6 +334,6 @@ SPEC CHECKSUMS:
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: 6952bdde55c1e0e6ec7b99ae6d7c0eff3f28e2a9
+PODFILE CHECKSUM: 281c38c316799c5eb6cc9e54e86f17f9f7241663
 
 COCOAPODS: 1.7.5

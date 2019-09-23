@@ -13,7 +13,7 @@ const isMandatory = ' is required';
     2. apidev  --- For develpment server
     3. api     --- For production server
 */
-let urlType = 'apiuat';
+let urlType = 'api';
 
 const api = {
   oyeSafeApiDomainFamily: isDev

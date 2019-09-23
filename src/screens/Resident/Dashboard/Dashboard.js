@@ -123,7 +123,7 @@ class Dashboard extends PureComponent {
       try {
         if (counter != 0) {
           console.log(JSON.stringify(snapshot.val()));
-          console.log('ROLE_CHANGE_FRTDB',snapshot.val().role);
+          console.log('ROLE_CHANGE_FRTDB', snapshot.val().role);
           if (snapshot.val().role != undefined && snapshot.val().role != 1) {
             let resp = await firebase.messaging().deleteToken();
             firebase.initializeApp(base.utils.strings.firebaseconfig);
@@ -540,11 +540,8 @@ class Dashboard extends PureComponent {
   }
 
   async roleCheckForAdmin(index) {
-    const {
-      dropdown,
-      dropdown1
-    } = this.props;
-    console.log('Check unit and Association available@@@',dropdown,dropdown1)
+    const { dropdown, dropdown1 } = this.props;
+    console.log('Check unit and Association available@@@', dropdown, dropdown1);
     try {
       let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
         this.state.assocId
@@ -1171,14 +1168,19 @@ class Dashboard extends PureComponent {
       selectedDropdown,
       selectedDropdown1,
       updateSelectedDropDown,
-      updateIdDashboard,
+      updateIdDashboard
     } = this.props;
     let associationList = this.state.assocList;
     let unitList = this.state.unitList;
     let maxLen = 23;
     let maxLenUnit = 10;
     let text = 'ALL THE GLITTERS IS NOT GOLD';
-    console.log('To check the @@@@@@', dropdown.length, dropdown1.length,this.props);
+    console.log(
+      'To check the @@@@@@',
+      dropdown.length,
+      dropdown1.length,
+      this.props
+    );
 
     return (
       // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
@@ -1301,7 +1303,8 @@ class Dashboard extends PureComponent {
                 textFontSize={10}
                 disabled={this.state.isSelectedCard === 'UNIT'}
               />
-              {this.props.dashBoardReducer.role === 1 && dropdown1.length !==0 ? (
+              {this.props.dashBoardReducer.role === 1 &&
+              dropdown1.length !== 0 ? (
                 <CardView
                   height={this.state.adminCardHeight}
                   width={this.state.adminCardWidth}
@@ -1441,7 +1444,6 @@ class Dashboard extends PureComponent {
     console.log('FamilyList count', this.props.dashBoardReducer);
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
-        {/* <Icon color="red" size={50} name="delhi"/> */}
         <View style={Style.elevatedView}>
           <CardView
             height={'100%'}
@@ -1789,8 +1791,8 @@ class Dashboard extends PureComponent {
   myUnit() {}
 
   goToFirstTab() {
-    const { dropdown,dropdown1 } = this.props;
-      dropdown.length === 0
+    const { dropdown, dropdown1 } = this.props;
+    dropdown.length === 0
       ? this.props.navigation.navigate('CreateOrJoinScreen')
       : dropdown1.length === 0
       ? alert('Unit is not available')

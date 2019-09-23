@@ -75,7 +75,7 @@ class MyProfile extends Component {
             responseJson.data.account[0].acisdCode +
             responseJson.data.account[0].acMobile +
             ';' +
-            this.props.dashBoardReducer.uniID
+            this.props.dashBoardReducer.assId
         });
         const { updateUserInfo } = this.props;
         console.log(
@@ -98,12 +98,12 @@ class MyProfile extends Component {
   componentWillMount() {
     console.log('Unit ID', this.props.dashBoardReducer.uniID);
     let self = this;
+    self.myProfile();
     setTimeout(() => {
-      self.myProfile();
       self.setState({
         isLoading: false
       });
-    }, 1500);
+    }, 1000);
   }
 
   componentDidUpdate() {
@@ -319,7 +319,8 @@ class MyProfile extends Component {
                     : null}
                 </Text>
               </View>
-              {this.state.number !== '' ? (
+              {this.state.number !== '' &&
+              this.props.dashBoardReducer.dropdown.length !== 0 ? (
                 <View
                   style={{
                     justifyContent: 'center',
@@ -352,6 +353,18 @@ class MyProfile extends Component {
                         <Text>Create Association</Text>
                       </Button> */}
                   <View />
+                  <View style={{ marginTop: hp('2%') }}>
+                    <Button
+                      bordered
+                      warning
+                      style={styles.button1}
+                      onPress={() =>
+                        this.props.navigation.navigate('SendingMsgToGate')
+                      }
+                    >
+                      <Text>new Page</Text>
+                    </Button>
+                  </View>
                   <View style={{ marginTop: hp('2%') }}>
                     <Button
                       bordered

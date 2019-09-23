@@ -83,6 +83,7 @@ import PrivacyPolicy from '../src/screens/Policy/PrivacyPolicy';
 import TermsAndConditions from '../src/screens/Policy/TermsAndConditions';
 
 import City from '../assocition_pages/City.js';
+import SendingMsgToGate from '../my_unit_pages/SendingMsgToGate.js';
 
 import PatrolSchedule from '../src/screens/Patrolling/PatrolSchedule';
 
@@ -212,6 +213,17 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff'
     }
   },
+  //SendingMsgToGate
+  SendingMsgToGate: {
+    screen: SendingMsgToGate,
+    navigationOptions: {
+      title: 'Leave with Vendor',
+      header: null,
+      headerStyle: { backgroundColor: '#FA9917' },
+      headerTintColor: '#ffffff'
+    }
+  },
+
   CreateOrJoinScreen: {
     screen: CreateOrJoin,
     navigationOptions: {
@@ -531,14 +543,13 @@ const ResApp = createStackNavigator({
     navigationOptions: {
       header: null
     }
-  },
+  }
   /*subscriptionManagement: {
     screen:SubscriptionManagement,
     navigationOptions: {
       header: props => <MyFamilyHeader  isSub={true} {...props}/>
     }
   },*/
-
 });
 
 export default createAppContainer(ResApp);
