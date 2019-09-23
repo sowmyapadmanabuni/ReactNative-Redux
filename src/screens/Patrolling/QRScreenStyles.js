@@ -24,7 +24,7 @@ const QRScreenStyles = StyleSheet.create({
     qrView: {
         justifyContent: 'center',
         alignSelf: 'center',
-        backgroundColor:'white'
+        backgroundColor: 'white'
     },
     cpTextView: {
         borderWidth: 2,

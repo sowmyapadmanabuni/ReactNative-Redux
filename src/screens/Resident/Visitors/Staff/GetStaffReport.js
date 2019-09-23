@@ -1,8 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-    Image, Text, TouchableOpacity,
-    View, FlatList, Platform, PermissionsAndroid, ScrollView, ActivityIndicator, Alert, BackHandler
-
+    ActivityIndicator,
+    BackHandler,
+    FlatList,
+    Image,
+    PermissionsAndroid,
+    Platform,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import base from "../../../../base";
 import StaffStyle from "./StaffStyle";
@@ -14,15 +21,13 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from "react-native-share";
 import RNFetchBlob from 'rn-fetch-blob'
 import moment from "moment";
-import utils from "../../../../base/utils";
 
 let RNFS = require('react-native-fs');
 
-let inActiveLeftIcon=require('../../../../../icons/prev.png');
-let activeLeftIcon=require('../../../../../icons/prev1.png');
-let inActiveRightIcon=require('../../../../../icons/next1.png');
-let activeRightIcon=require('../../../../../icons/next.png');
-
+let inActiveLeftIcon = require('../../../../../icons/prev.png');
+let activeLeftIcon = require('../../../../../icons/prev1.png');
+let inActiveRightIcon = require('../../../../../icons/next1.png');
+let activeRightIcon = require('../../../../../icons/next.png');
 
 
 class GetStaffReport extends React.Component {
@@ -30,12 +35,12 @@ class GetStaffReport extends React.Component {
         super(props);
         this.props = props;
         this.state = {
-            isLoading:true,
-            bottomPageIndicator:[],
-            tableHeader: [['Date',true], ['Entry Point',false],
-                ['Entry Time',false],
-                ['Exit Point',false],
-                ['Exit Time',false]],
+            isLoading: true,
+            bottomPageIndicator: [],
+            tableHeader: [['Date', true], ['Entry Point', false],
+                ['Entry Time', false],
+                ['Exit Point', false],
+                ['Exit Time', false]],
             tableData: [],
             staffReport: [],
             isPermitted: false,
@@ -44,10 +49,10 @@ class GetStaffReport extends React.Component {
             selectedWorkerId: '',
             startDate: '',
             endDate: '',
-            isShowViewPager:false,
-            numberOfPages:0,
-            pageLimit:10,
-            pageNumber:1
+            isShowViewPager: false,
+            numberOfPages: 0,
+            pageLimit: 10,
+            pageNumber: 1
         };
         this.getTheReport = this.getTheReport.bind(this);
 
@@ -71,12 +76,14 @@ class GetStaffReport extends React.Component {
         }
 
     }
+
     componentWillUnmount() {
         this.backHandler.remove();
     }
+
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            console.log("Staff Report")
+            console.log("Staff Report");
             this.props.navigation.goBack(null);
             return true;
         });
@@ -84,6 +91,7 @@ class GetStaffReport extends React.Component {
 
     getAndroidPermissions() {
         let that = this;
+
         async function requestExternalWritePermission() {
             try {
                 const granted = await PermissionsAndroid.request(
@@ -139,7 +147,7 @@ class GetStaffReport extends React.Component {
             })
                 .done((res) => {
                     console.log("Share done", res)
-                })
+                });
             await RNFS.unlink(file.filePath);
 
         } else {
@@ -158,102 +166,102 @@ class GetStaffReport extends React.Component {
 
     async getTheReport(props) {
         let self = this;
-        console.log('Get Date',this.props.staffReducer,this.props.userReducer)
+        console.log('Get Date', this.props.staffReducer, this.props.userReducer);
         let input = {
             "ASAssnID": this.props.userReducer.SelectedAssociationID,
             "WKWorkID": this.props.staffReducer.staffId.toString(),
-            "FromDate":this.props.staffReducer.startDate,
-            "ToDate":this.props.staffReducer.endDate,
-            "ACAccntID":this.props.userReducer.MyAccountID,
-            "UNUnitID":this.props.dashBoardReducer.uniID
-        }
-        console.log('Staff Data',input)
+            "FromDate": this.props.staffReducer.startDate,
+            "ToDate": this.props.staffReducer.endDate,
+            "ACAccntID": this.props.userReducer.MyAccountID,
+            "UNUnitID": this.props.dashBoardReducer.uniID
+        };
+        console.log('Staff Data', input);
 
         let stat = await base.services.OyeSafeApi.getStaffReportByDate(input);
 
-        self.setState({isLoading: false})
+        self.setState({isLoading: false});
 
-        console.log("GetStaffData",stat)
+        console.log("GetStaffData", stat);
 
 
         let initialDate = input.FromDate;
         let endDate = input.ToDate;
         let initialDateString = moment(input.FromDate, "YYYY-MM-DDTHH:mm:ss a");
-        let endDateString = moment(input.ToDate, "YYYY-MM-DDTHH:mm:ss a")
+        let endDateString = moment(input.ToDate, "YYYY-MM-DDTHH:mm:ss a");
         let duration = moment.duration(endDateString.diff(initialDateString));
-        base.utils.logger.log(duration.days())
-        let difference=duration.as('days');
+        base.utils.logger.log(duration.days());
+        let difference = duration.as('days');
         let selectedDate = input.FromDate;
-       // console.log('hghgfghfgf',difference,difference+1)
+        // console.log('hghgfghfgf',difference,difference+1)
 
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
-               // console.log("Diffrence:",initialDate,reportsData);
+                // console.log("Diffrence:",initialDate,reportsData);
                 for (let i = 0; i < reportsData.length; i++) {
                     let rowData = [];
-                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                    rowData.push(reportsData[i].vlengName)
-                    rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'))
-                    rowData.push(reportsData[i].vlexgName)
-                    rowData.push(reportsData[i].vlexgName ==='' ? '': moment(reportsData[i].vlExitT).format('hh:mm' + ' A'))
+                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+                    rowData.push(reportsData[i].vlengName);
+                    rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'));
+                    rowData.push(reportsData[i].vlexgName);
+                    rowData.push(reportsData[i].vlexgName === '' ? '' : moment(reportsData[i].vlExitT).format('hh:mm' + ' A'));
 
                     if (initialDate !== endDate) {
                         initialDate = moment(initialDate).add(1, 'day').format('YYYY-MM-DD')
                     }
                     tableData.push(rowData);
                 }
-                console.log('Table Data',tableData)
-                let datesArr=[];
-                for(let i=0;i<difference+1;i++){
-                    let tempArr=[]
-                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'))
-                    tempArr.push('No Entry on this Date')
-                    datesArr.push(tempArr)
+                console.log('Table Data', tableData);
+                let datesArr = [];
+                for (let i = 0; i < difference + 1; i++) {
+                    let tempArr = [];
+                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+                    tempArr.push('No Entry on this Date');
+                    datesArr.push(tempArr);
 
                     if (selectedDate !== endDate) {
                         selectedDate = moment(selectedDate).add(1, 'day').format('YYYY-MM-DD')
                     }
 
                 }
-                console.log('Dates Arr',datesArr)
+                console.log('Dates Arr', datesArr);
 
-                for(let i=0; i<datesArr.length;i++){
+                for (let i = 0; i < datesArr.length; i++) {
                     let dataMatched = false;
-                    for(let j=0; j<tableData.length; j++){
-                        if(datesArr[i][0] == tableData[j][0]){
+                    for (let j = 0; j < tableData.length; j++) {
+                        if (datesArr[i][0] == tableData[j][0]) {
                             dataMatched = true;
                         }
                     }
-                    if(!dataMatched){
+                    if (!dataMatched) {
                         tableData.push(datesArr[i]);
                         console.log("data not matched with", datesArr[i]);
                     }
                 }
-                tableData.sort(function(a, b){
-                    console.log('@@@@@@@@@',a[0],b[0], moment(a[0]).format(),new Date(moment(a[0]).format()) ,new Date(a[0]),new Date(b[0]))
+                tableData.sort(function (a, b) {
+                    console.log('@@@@@@@@@', a[0], b[0], moment(a[0]).format(), new Date(moment(a[0]).format()), new Date(a[0]), new Date(b[0]));
                     return new Date(moment(a[0]).format()) - new Date(moment(b[0]).format());
-                })
-                console.log('Final Data',tableData )
+                });
+                console.log('Final Data', tableData);
 
 
-                let numberOfPages=tableData.length/self.state.pageLimit;
-                let dataBottomList=[]
-                if(numberOfPages !==parseInt(numberOfPages)){
-                    numberOfPages=parseInt(numberOfPages)+1
+                let numberOfPages = tableData.length / self.state.pageLimit;
+                let dataBottomList = [];
+                if (numberOfPages !== parseInt(numberOfPages)) {
+                    numberOfPages = parseInt(numberOfPages) + 1
                 }
 
-                for(let i=0;i<numberOfPages;i++){
-                    dataBottomList[i]=i+1
+                for (let i = 0; i < numberOfPages; i++) {
+                    dataBottomList[i] = i + 1
                 }
                 self.setState({
-                    tableData:tableData,
-                    staffReport:tableData,
-                    numberOfPages:numberOfPages,
-                    bottomPageIndicator:dataBottomList
-                })
+                    tableData: tableData,
+                    staffReport: tableData,
+                    numberOfPages: numberOfPages,
+                    bottomPageIndicator: dataBottomList
+                });
 
                 this.changeTheData(self.state.pageNumber)
 
@@ -271,15 +279,15 @@ class GetStaffReport extends React.Component {
 
 
     render() {
-        base.utils.logger.log(this.props)
+        base.utils.logger.log(this.props);
         return (
-            !this.state.isLoading?
+            !this.state.isLoading ?
                 <View style={StaffReportStyle.mainContainer}>
                     <View style={StaffReportStyle.detailsMainView}>
                         <View style={StaffStyle.detailsLeftView}>
                             {this.props.staffReducer.staffProfilePic === '' ?
                                 <Image style={StaffStyle.staffImg}
-                                       source={{uri:"https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
+                                       source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                 />
                                 :
                                 <Image style={StaffStyle.staffImg}
@@ -288,15 +296,16 @@ class GetStaffReport extends React.Component {
                             }
                             <View style={StaffStyle.textView}>
                                 <Text style={StaffStyle.staffText}
-                                      numberofLines={1} ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
+                                      numberofLines={1}
+                                      ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
                             </View>
-                            {this.props.staffReducer.staffDesignation?
+                            {this.props.staffReducer.staffDesignation ?
 
                                 <Text style={StaffStyle.desigText}> ({this.props.staffReducer.staffDesignation})</Text>
-                                :<View/>}
+                                : <View/>}
                         </View>
                         <View style={StaffStyle.detailsRightView}>
-                            {this.state.tableData.length !==0 ?
+                            {this.state.tableData.length !== 0 ?
                                 <TouchableOpacity
                                     onPress={() => this.state.isPermitted ? this.createPDF() : alert('Please Provide permissions to share report')}>
                                     <Image style={StaffStyle.shareImg}
@@ -313,13 +322,13 @@ class GetStaffReport extends React.Component {
                         {this.renderViewPagerData()}
                     </ScrollView>
 
-                    {this.state.numberOfPages>1 ?
+                    {this.state.numberOfPages > 1 ?
                         <View style={StaffReportStyle.bottomView}>
                             <TouchableOpacity style={{alignItems: 'center'}}
                                               onPress={() => this.changeTheData(this.state.pageNumber - 1)}
-                                              disabled={this.state.pageNumber===1}>
+                                              disabled={this.state.pageNumber === 1}>
                                 <Image style={StaffReportStyle.arrowIcon}
-                                       source={this.state.pageNumber===1?inActiveLeftIcon:activeLeftIcon}
+                                       source={this.state.pageNumber === 1 ? inActiveLeftIcon : activeLeftIcon}
                                 />
                             </TouchableOpacity>
                             <View style={StaffReportStyle.viewPagerIcons}>
@@ -333,15 +342,15 @@ class GetStaffReport extends React.Component {
                             </View>
                             <TouchableOpacity style={{alignItems: 'center'}}
                                               onPress={() => this.changeTheData(this.state.pageNumber + 1)}
-                                              disabled={this.state.pageNumber===this.state.numberOfPages}>
+                                              disabled={this.state.pageNumber === this.state.numberOfPages}>
                                 <Image style={StaffReportStyle.arrowIcon}
-                                       source={this.state.pageNumber===this.state.numberOfPages?inActiveRightIcon:activeRightIcon}
+                                       source={this.state.pageNumber === this.state.numberOfPages ? inActiveRightIcon : activeRightIcon}
                                 />
                             </TouchableOpacity>
                         </View>
                         :
                         <View/>}
-                </View>:
+                </View> :
                 <View style={StaffStyle.activityIndicator}>
                     <ActivityIndicator size="large" color={base.theme.colors.primary}/>
                 </View>
@@ -351,15 +360,15 @@ class GetStaffReport extends React.Component {
 
     arrangeBottomTab(item) {
         return (
-            <TouchableOpacity onPress={() => this.changeTheData(item.index+1)}
+            <TouchableOpacity onPress={() => this.changeTheData(item.index + 1)}
                               style={[StaffReportStyle.bottomTabView, {
                                   shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 2},
                                   shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                                  backgroundColor: this.state.pageNumber-1 === item.index ? base.theme.colors.primary : base.theme.colors.white
+                                  backgroundColor: this.state.pageNumber - 1 === item.index ? base.theme.colors.primary : base.theme.colors.white
                               }]}>
                 <Text
-                    style={{color: this.state.pageNumber-1 === item.index ? base.theme.colors.white : base.theme.colors.black}}>
-                    {item.index+1}
+                    style={{color: this.state.pageNumber - 1 === item.index ? base.theme.colors.white : base.theme.colors.black}}>
+                    {item.index + 1}
                 </Text>
             </TouchableOpacity>
         )
@@ -371,10 +380,11 @@ class GetStaffReport extends React.Component {
 
         return (
             <View Style={StaffReportStyle.tableMainView}>
-                {state.tableData.length !==0?
+                {state.tableData.length !== 0 ?
                     <Table borderStyle={StaffReportStyle.tableView}>
                         <Row data={state.tableHeader} style={StaffReportStyle.tableHead}
-                             textStyle={StaffReportStyle.textHead} onClickIcon={()=>this.onCellClick(this.state.pageNumber) }/>
+                             textStyle={StaffReportStyle.textHead}
+                             onClickIcon={() => this.onCellClick(this.state.pageNumber)}/>
                         {state.tableData.map((rowData, index) => (
                             <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
                                 {
@@ -394,7 +404,7 @@ class GetStaffReport extends React.Component {
                         }
                     </Table>
                     :
-                    <View style={{alignItems:'center'}}>
+                    <View style={{alignItems: 'center'}}>
                         <Text>No report exist for the selected worker</Text>
                     </View>}
             </View>
@@ -402,40 +412,38 @@ class GetStaffReport extends React.Component {
     }
 
 
-    changeTheData(pageNumber,datToReversOrder){
-        let self=this;
-        let tableData=[];
-        let staffReportData=self.state.staffReport;
-        if(datToReversOrder){
-            staffReportData=datToReversOrder
+    changeTheData(pageNumber, datToReversOrder) {
+        let self = this;
+        let tableData = [];
+        let staffReportData = self.state.staffReport;
+        if (datToReversOrder) {
+            staffReportData = datToReversOrder
         }
-        let pageStartData=((pageNumber-1)*(self.state.pageLimit))+1
-        let pageEndData=pageNumber*(self.state.pageLimit)
-        if (pageEndData>staffReportData.length){
-            pageEndData=staffReportData.length
+        let pageStartData = ((pageNumber - 1) * (self.state.pageLimit)) + 1;
+        let pageEndData = pageNumber * (self.state.pageLimit);
+        if (pageEndData > staffReportData.length) {
+            pageEndData = staffReportData.length
         }
-        let j=0;
-        for(let i=pageStartData-1; i<pageEndData;i++){
-            tableData[j]=staffReportData[i]
-            j=j+1
+        let j = 0;
+        for (let i = pageStartData - 1; i < pageEndData; i++) {
+            tableData[j] = staffReportData[i];
+            j = j + 1
         }
-        self.setState({tableData:tableData,pageNumber:pageNumber})
+        self.setState({tableData: tableData, pageNumber: pageNumber})
     }
 
 
-
-
-    onCellClick(pageNumber){
-        let self=this;
-        let data=self.state.staffReport;
-        let reverseData=[];
-        let j=data.length-1;
-        for(let i=0; i<data.length; i++){
-            reverseData[i]=data[j]
-            j=j-1;
+    onCellClick(pageNumber) {
+        let self = this;
+        let data = self.state.staffReport;
+        let reverseData = [];
+        let j = data.length - 1;
+        for (let i = 0; i < data.length; i++) {
+            reverseData[i] = data[j];
+            j = j - 1;
         }
-        self.setState({staffReport:reverseData})
-        self.changeTheData(pageNumber,reverseData)
+        self.setState({staffReport: reverseData});
+        self.changeTheData(pageNumber, reverseData)
     }
 
 

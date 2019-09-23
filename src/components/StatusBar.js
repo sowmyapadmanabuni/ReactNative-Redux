@@ -4,7 +4,7 @@ import base from "../base";
 
 const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
 
-export  function StatusBarPlaceHolder() {
+export function StatusBarPlaceHolder() {
     return (
         <View style={{
             width: "100%",

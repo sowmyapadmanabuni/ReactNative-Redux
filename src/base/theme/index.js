@@ -11,6 +11,6 @@ const theme = {
     colors,
     fonts,
     dimensions
-}
+};
 
 export default theme;

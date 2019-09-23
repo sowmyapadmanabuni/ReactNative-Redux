@@ -58,7 +58,7 @@ export default class OyeLivingApi {
         return await instance.get('Member/GetMemberListByAccountID/' + accountId)
     }
 
-    static async getUnitListByAssoc(assocId) {        
+    static async getUnitListByAssoc(assocId) {
         return await instance.get('Member/GetMemUniOwnerTenantListByAssoc/' + assocId)
     }
 
@@ -71,18 +71,18 @@ export default class OyeLivingApi {
     };
 
 
-    static async getUnitListByAssociationId(associationId){
-        return await instance.get("Unit/GetUnitListByAssocID/"+associationId)
+    static async getUnitListByAssociationId(associationId) {
+        return await instance.get("Unit/GetUnitListByAssocID/" + associationId)
     }
 
-    static async getUnitListByAssociationIdWithPagination(associationId,page){
-        return await instance.get('Unit/GetUnitListByAssocIDWithPage/'+associationId+'/'+page)
+    static async getUnitListByAssociationIdWithPagination(associationId, page) {
+        return await instance.get('Unit/GetUnitListByAssocIDWithPage/' + associationId + '/' + page)
 
     }
 
 
-    static async deleteVehicle(data){
-        return await instance.post('Vehicle/VehicleStatusUpdate',data);
+    static async deleteVehicle(data) {
+        return await instance.post('Vehicle/VehicleStatusUpdate', data);
     }
 
 }

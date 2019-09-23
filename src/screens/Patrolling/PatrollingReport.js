@@ -4,6 +4,7 @@
 
 import React from 'react';
 import {
+    BackHandler,
     DatePickerAndroid,
     DatePickerIOS,
     Dimensions,
@@ -11,8 +12,7 @@ import {
     Platform,
     Text,
     TouchableHighlight,
-    View,
-    BackHandler
+    View
 } from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {connect} from 'react-redux';
@@ -60,23 +60,23 @@ class PatrollingReport extends React.Component {
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
+    }
 
     async getPatrolSlot() {
         let self = this;
@@ -89,7 +89,7 @@ class PatrollingReport extends React.Component {
                     slotDataObj = {
                         value: stat.data.patrollingShifts[i].psSltName,
                         id: stat.data.patrollingShifts[i].psPtrlSID,
-                    }
+                    };
                     slotDataArr.push(slotDataObj);
                 }
 
@@ -173,7 +173,7 @@ class PatrollingReport extends React.Component {
         Platform.OS === 'ios' ? (self.setState({isCalenderOpen: true, selType: selType})) : self.showPicker('cal', {
             date: _dt,
             maxDate: _dt
-        })
+        });
         this.setState({
             selType: selType
         })
@@ -299,7 +299,7 @@ class PatrollingReport extends React.Component {
             slotName: this.state.slotName,
             slotTime: this.state.slotTime
         };
-        console.log("Detail:",detail)
+        console.log("Detail:", detail);
         this.props.navigation.navigate('reportScreen', {detail})
 
     }

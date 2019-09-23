@@ -1,199 +1,930 @@
 import React from 'react';
-import {
-    View, Text, Platform,ScrollView,TouchableOpacity,Image,FlatList
-} from 'react-native';
+import {ScrollView, Text, View, Image, Platform, TouchableOpacity, FlatList, Alert,Modal} from 'react-native';
 import base from "../../base";
-import ElevatedView from "react-native-elevated-view";
+import CheckBox from "react-native-check-box";
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from "react-native-simple-radio-button";
+import {connect} from "react-redux";
+import {updateIdDashboard} from "../../actions";
+import moment from "moment";
+import diff from "redux-logger/src/diff";
 
 class SubscriptionManagement extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            offerTailsList:[1,2,3,4,5]
+        this.state = {
+            oyeLivingProps: [{label: 'Platinum', value: 0},
+                {label: 'Gold', value: 1}],
+            platinumCount: 1,
+            goldCount: 1,
+            biometricCount: 1,
+            isOyeLiving: false,
+            isOyeSafe: false,
+            isPlatinum: false,
+            isGold: false,
+            isBiometric: false,
+            isPlanSelected: 0,
+            isShowModal: false,
+            isDeviceName: null,
+            dataToShowInDesc: [],
+            platinumDevPrc: null,
+            goldDevPrc: null,
+            biometricPrc: null,
+            platinumPlanPrc: null,
+            goldPlanPrc: null,
+            oyeLivingSub: '0.00',
+            oyeLivingGST: '0.00',
+            oyeSafeGST: '0.00',
+            oyeSafeSub: '0.00',
+            grandTotal: '0.00',
+            oyeSafeDisList: [],
+            oyeLivingDisList: [],
+            biometricPriceT: 0,
+            goldPriceT: 0,
+            platinumPriceT: 0,
+            grandPriceOfDevices: 0,
+            existingSubDate: "",
+            isSubValid: true,
+            isCardsHide:true,
         }
     }
-    render(){
-        return(
-            <View style={{flex:1,alignItems:'center'}}>
-                <View style={{width:'100%',height:'10%',alignItems:'center',backgroundColor:base.theme.colors.white,elevation:1,
-                    shadowColor: base.theme.colors.darkgrey,
-                    shadowOffset: {width: 0, height: Platform.OS==='ios'?3:2},
-                    shadowOpacity: Platform.OS==='ios'?0.3:0.8,
-                    shadowRadius: 2,}}>
-                    <Text style={{fontSize:18,color:base.theme.colors.primary,marginTop:15}}>
+
+    componentWillMount() {
+        this.getPricingDetails();
+        this.getDiscountingDetails();
+        this.getLatestSubscription();
+        this.getDiscountingDetailsByAssociationId();
+        this.getProductDescriptionOfPlatinum();
+        // this.getProductDescriptionOfGold()
+    }
+
+    async getLatestSubscription() {
+        console.log('PropsInSubScreen', this.props)  //this.props.userReducer.SelectedAssociationID
+        let stat = await base.services.OyeSafeApiFamily.getLatestSubscriptionDetailsByAssId(8)
+        try {
+            console.log('Status', stat)
+            if (stat.success && stat.data.subscription !== null) {
+                console.log('Subscription is there', stat.data.subscription)
+                let data = stat.data.subscription;
+                this.setState({
+                    existingSubDate: moment(data.sueDate).format('DD-MMM-YYYY'),
+                    platinumCount: data.suNofPDev,
+                    goldCount: data.suNofGDev,
+                    biometricCount: data.suNoofBio,
+                    oyeSafeSub: data.suTotVal,
+                    grandTotal: data.sugTotVal,
+                    isOyeSafe: true,
+                    isPlatinum: data.suNofPDev !== 0,
+                    isGold: data.suNofGDev !== 0,
+                    isBiometric: data.suNoofBio !== 0
+                })
+                let date = moment(new Date()).format()
+                console.log('Date', date)
+                let initialDateString = moment(date, "YYYY-MM-DDTHH:mm:ss a");
+                let endDateString = moment(data.sueDate, "YYYY-MM-DDTHH:mm:ss a");
+                let duration = moment.duration(endDateString.diff(initialDateString));
+                await base.utils.logger.log(duration.days());
+                let difference = duration.as('days');
+                let isSubValid = true;
+                console.log('Difference between times', difference)
+                if (difference < 0) {
+                    isSubValid = false
+                }
+                this.setState({
+                    isSubValid: isSubValid
+                })
+            } else {
+                console.log('Check for Def value details', stat.success)
+                this.setState({
+                    platinumCount: 1,
+                    goldCount: 1,
+                    biometricCount: 1,
+                })
+            }
+        } catch (error) {
+            console.log('Error in get latest Subscription', error)
+        }
+    }
+
+    async getPricingDetails() {
+        console.log('PropsInSubScreenPricingData', this.props)
+        let stat = await base.services.OyeSafeApiFamily.getPricingData(this.props.userReducer.SelectedAssociationID)
+        try {
+            console.log('Status in Pricing Details', stat)
+            if (stat.success && stat.data.pricing.length !== 0) {
+                this.setState({
+                    platinumDevPrc: stat.data.pricing[0].pdValue,
+                    goldDevPrc: stat.data.pricing[1].pdValue,
+                    biometricPrc: stat.data.pricing[2].pdValue,
+                    platinumPlanPrc: stat.data.pricing[3].pdValue,
+                    goldPlanPrc: stat.data.pricing[4].pdValue
+                })
+            }
+        } catch (error) {
+            console.log('Error in Pricing Details', error)
+        }
+    }
+
+    async getDiscountingDetails() {
+        console.log('PropsInSubScreenPricingData', this.props)
+        let stat = await base.services.OyeSafeApiFamily.getDiscountingData(this.props.userReducer.SelectedAssociationID)
+        try {
+            console.log('Status in Discounting Details', stat)
+            if (stat.success && stat.data.discounting.length !== 0) {
+                let disList = stat.data.discounting;
+                let oyeSafeList = [];
+                let oyeLivingList = [];
+                for (let i = 0; i < disList.length; i++) {
+                    if (disList[i].pdName === 'OyeSafe') {
+                        oyeSafeList.push(disList[i])
+                    } else if (disList[i].pdName === 'OyeLiving') {
+                        oyeLivingList.push(disList[i])
+                    }
+                }
+                this.setState({
+                    oyeSafeDisList: oyeSafeList,
+                    oyeLivingDisList: oyeLivingList
+                })
+                console.log('Discounting lists', oyeSafeList, oyeLivingList)
+            }
+        } catch (error) {
+            console.log('Error in Pricing Details', error)
+        }
+    }
+
+    async getDiscountingDetailsByAssociationId() {
+        console.log('PropsInSubScreenPricingData', this.props)
+        let stat = await base.services.OyeSafeApiFamily.getDiscountingDataByAssId(this.props.userReducer.SelectedAssociationID)
+        try {
+            console.log('Status in Discounting Details by AssId', stat)
+        } catch (error) {
+            console.log('Error in Pricing Details', error)
+        }
+    }
+
+    async getProductDescriptionOfPlatinum() {
+        let stat = await base.services.OyeSafeApiFamily.getDescriptionOfDevice('Platinum')
+        try {
+            if (stat.success && stat.data.productDescription.length !== 0) {
+                console.log('Status in Description', stat.data.productDescription)
+                let platinumArr = stat.data.productDescription;
+                let dataArr = [];
+                for (let i = 0; i < platinumArr.length; i++) {
+                    dataArr[i] = platinumArr[i]
+                }
+                this.getProductDescriptionOfGold(dataArr)
+            }
+        } catch (error) {
+            console.log('Error in Desc platinum Details', error)
+        }
+    }
+
+    async getProductDescriptionOfGold(dataPlatinum) {
+        let stat = await base.services.OyeSafeApiFamily.getDescriptionOfDevice('Gold')
+        try {
+            if (stat.success && stat.data.productDescription.length !== 0) {
+                let goldArr = stat.data.productDescription;
+                let dataArr = dataPlatinum;
+                let len = goldArr.length + dataArr.length;
+                let j = 0;
+                for (let i = dataArr.length; i < len; i++) {
+                    dataArr[i] = goldArr[j]
+                    j = j + 1
+                }
+                this.setState({
+                    dataToShowInDesc: dataArr
+                })
+            }
+        } catch (error) {
+            console.log('Error in Desc Details', error)
+        }
+    }
+
+    async createNewSubscription() {
+        let input = {
+            "SUEDate": "2019-09-08",
+            "SUNofPDev": 3,
+            "SUNofGDev": 4,
+            "SUTotVal": 1200,
+            "SUGTotVal": 12320,
+            "PRID": 1,
+            "ASAssnID": 8,
+            "OyeLivingSubs": false,
+            "OyeSafeSubs": true,
+            "DiscountPerc": 2,
+            "PDID": 2,
+            "DiscountVal": 200,
+            "SUNoofBio": 1
+        };
+        let stat = await base.services.OyeSafeApiFamily.createSubscription(input);
+        try {
+            console.log('Create new sub', stat)
+        } catch (error) {
+            console.log('Error in create subscription', error)
+        }
+
+    }
+
+    changeTheCountOfDevices(value, name, count, unitPrice) {
+        console.log('change the values', value, name, count)
+        let countOfDev = count
+        if (value === 0) {
+            countOfDev = countOfDev - 1
+        } else {
+            countOfDev = countOfDev + 1
+        }
+        console.log('CountOfDev', countOfDev)
+
+        if (name === 'Platinum') {
+            this.setState({
+                platinumCount: countOfDev,
+            })
+        } else if (name === 'Gold') {
+            this.setState({
+                goldCount: countOfDev,
+            })
+        } else if (name === 'Biometric') {
+            this.setState({
+                biometricCount: countOfDev,
+            })
+        }
+        this.setState({
+            isCardsHide:false
+        });
+        this.getPricingWithEachDev(name, countOfDev, unitPrice)
+    }
+
+    getPricingWithEachDev(name, countOfDev, unitPrice) {
+        let pricingWithDev = base.utils.validate.getPrice(countOfDev, unitPrice)
+        console.log('Total Pricing amount with devices', pricingWithDev)
+        let bioMetricPrice = this.state.biometricPriceT;
+        let goldPrice = this.state.goldPriceT;
+        let platinumPrice = this.state.platinumPriceT;
+        if (name === "Platinum") {
+            platinumPrice = pricingWithDev
+            this.setState({
+                platinumPriceT: pricingWithDev,
+            })
+        } else if (name === "Gold") {
+            goldPrice = pricingWithDev
+            this.setState({
+                goldPriceT: pricingWithDev,
+            })
+        } else if (name === "Biometric") {
+            bioMetricPrice = pricingWithDev
+            this.setState({
+                biometricPriceT: pricingWithDev
+            })
+        }
+        this.getPricingOfDevForDuration(bioMetricPrice, goldPrice, platinumPrice)
+
+    }
+
+    getPricingOfDevForDuration(biometricPrice, goldPrice, PlatinumPrice) {
+        let oyeSafeList = this.state.oyeSafeDisList;
+        console.log('Get oyeSafeList', oyeSafeList,biometricPrice, goldPrice, PlatinumPrice);
+        let totalPrice = biometricPrice + goldPrice + PlatinumPrice;
+        let priceOfDevWithDur, priceWithDis;
+
+        for (let i = 0; i < oyeSafeList.length; i++) {
+            priceOfDevWithDur = base.utils.validate.getTotalPriceWithDuration(totalPrice, oyeSafeList[i].pdDisDur)
+            priceWithDis = base.utils.validate.getDiscountPrice(priceOfDevWithDur, oyeSafeList[i].pdDisPer)
+            base.utils.validate.getPriceWithGST(priceWithDis, 18, function (totalAmountWithDis, disValue) {
+                console.log('GST calculation', totalAmountWithDis, disValue)
+                oyeSafeList[i].priceWithGST = totalAmountWithDis;
+                oyeSafeList[i].valueOfGST = disValue;
+            });
+
+            oyeSafeList[i].priceOfDevWithDur = priceOfDevWithDur;
+            oyeSafeList[i].priceWithDis = priceWithDis;
+        }
+        console.log("OyeSafe List", oyeSafeList)
+        this.setState({
+            oyeSafeDisList: oyeSafeList
+        })
+        for(let i=0;i<oyeSafeList;i++){
+            if(oyeSafeList[i].pdIsActive){
+                this.setState({
+                    oyeSafeSub:oyeSafeList[i].priceWithGST,
+                    oyeSafeGST:oyeSafeList[i].valueOfGST,
+                    grandTotal:oyeSafeList[i].priceWithGST
+                })
+            }
+        }
+
+    }
+    checkBoxPlatinum(value){
+
+        if (this.state.isOyeSafe) {
+            this.setState({
+                isPlatinum: !this.state.isPlatinum,
+                isBiometric: true
+            })
+        } else {
+            Alert.alert('Please select oyeSafe for editing')
+        }
+        if(value){
+            this.setState({
+                platinumPriceT:0,
+                biometricPriceT:0
+            })
+            this.getPricingOfDevForDuration(0, this.state.goldPriceT, 0)
+
+        }
+        else{
+            this.getPricingOfDevForDuration(this.state.biometricPriceT, this.state.goldPriceT, this.state.platinumPriceT)
+
+        }
+    }
+    checkBoxGold(value){
+
+        if (this.state.isOyeSafe) {
+            this.setState({
+                isGold: !this.state.isGold,
+            })
+        } else {
+            Alert.alert('Please select oyeSafe for editing')
+        }
+        if(value){
+            this.setState({
+                goldPriceT:0
+            })
+            this.getPricingOfDevForDuration( this.state.biometricPriceT, 0,this.state.platinumPriceT)
+        }
+        else{
+            this.getPricingOfDevForDuration( this.state.biometricPriceT, this.state.goldPriceT,this.state.platinumPriceT)
+
+        }
+    }
+
+    render() {
+        return (
+            <ScrollView style={{height: '100%', width: '100%'}}>
+                <View style={{
+                    width: '100%', alignItems: 'center', backgroundColor: base.theme.colors.white, elevation: 2,
+                    shadowColor: base.theme.colors.shadedWhite,
+                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 4},
+                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
+                    shadowRadius: 5,
+                }}>
+                    <Text style={{fontSize: 18, color: base.theme.colors.primary, marginTop: 5, marginBottom: 15}}>
                         Subscription
                     </Text>
                 </View>
-                <ScrollView>
-                    <View style={{width:'90%',alignItems:'center',}}>
-                        <View style={{width:'100%',height:'200%',alignItems:'center',}}>
-                            <View style={{height:'6%',width:'100%',alignItems:'center',}}>
-                                <Text style={{fontSize:14,color:base.theme.colors.black,marginTop:10}}>Choose Plan</Text>
+                <View style={{width: '100%', alignItems: 'center',}}>
+                    <Text style={{fontSize: 18, color: base.theme.colors.black, marginTop: 10, marginBottom: 20}}>Choose
+                        Your Plan</Text>
+                </View>
+                <View style={{
+                    height: 40,
+                    width: '95%',
+                    alignSelf: 'center',
+                    backgroundColor: base.theme.colors.primary,
+                    borderRadius: 25,
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                }}>
+                    <CheckBox
+                        style={{marginLeft: 20}}
+                        onClick={() => {
+                            this.setState({
+                                isOyeSafe: !this.state.isOyeSafe,
+                            })
+                            if(this.state.isOyeSafe){
+                                this.setState({
+                                    oyeSafeSub:0
+                                })
+                            }
+                        }}
+                        isChecked={this.state.isOyeSafe}
+                        checkedImage={<Image source={require('../../../icons/checkbox.png')}
+                                             style={{height: 30, width: 30}}/>}
+                        unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
+                                               style={{height: 30, width: 30}}/>}
+                    />
+                    <Text style={{fontSize: 18, color: base.theme.colors.white, marginLeft: 10}}>OyeSafe:
+                        <Text style={{fontSize: 14, color: base.theme.colors.black,}}>{' '}Security and Safety
+                            Solution</Text>
+                    </Text>
+                </View>
+                <View style={{
+                    width: '90%',
+                    borderWidth: 1,
+                    alignSelf: 'center',
+                    borderColor: base.theme.colors.shadedWhite,
+                    alignItems: 'center'
+                }}>
+                    <View style={{height: 350, width: '100%', borderRadius: 20, alignItems: 'center',}}>
+                        <View style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginTop: 10,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{fontSize: 14, color: base.theme.colors.primary,}}>
+                                Existing Subscription -
+                            </Text>
+                            <Text style={{fontSize: 14, color: base.theme.colors.black,}}>
+                                Valid Till:
+                                <Text style={{
+                                    fontSize: 14,
+                                    color: this.state.isSubValid ? base.theme.colors.primary : base.theme.colors.red
+                                }}>{' '}{this.state.existingSubDate}</Text>
+                            </Text>
+                        </View>
+                        <View style={{
+                            width: '98%', flexDirection: 'row', height: '8%',
+                            backgroundColor: base.theme.colors.lightgrey,
+                        }}>
+                            <View style={{
+                                width: '25%',
+                                height: '100%',
+                                borderRightWidth: 1,
+                                borderColor: base.theme.colors.greyHead,
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <Text style={{fontSize: 15, color: base.theme.colors.black}}>Device</Text>
                             </View>
-                            <View style={{width:'100%',alignItems:'center',height:'100%',marginBottom:10,borderWidth:1}}>
-                                <View style={{height:'100%',width:'100%',borderWidth:1,flexDirection:'column',
-                                    alignItems:'flex-start'}}>
-                                    <View style={{width:'100%', height:'6%',flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
-                                        <Text style={{fontSize:12,color:base.theme.colors.primary,}}>
-                                            Existing Subscription -
-                                        </Text>
-                                        <Text style={{fontSize:12,color:base.theme.colors.black,}}>
-                                            Valid Till:
-                                            <Text style={{fontSize:12,color:base.theme.colors.primary}}>07-dec-2019</Text>
-                                        </Text>
-                                    </View>
-                                    <View style={{width:'100%',height:'15%',borderWidth:1,flexDirection:'row'}}>
-                                        <View style={{width:'25%',height:'100%',borderWidth:1}}>
-                                            <View style={{width:'100%',height:'25%',borderWidth:1,borderColor:'red',
-                                                backgroundColor:base.theme.colors.lightgrey,alignItems:'center',justifyContent:'center'}}>
-                                                <Text style={{fontSize:12,color:base.theme.colors.black}}>Device</Text>
-                                            </View>
-                                            <View style={{width:'100%',height:'75%',borderWidth:1,borderColor:'red'}}>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center'}}>
-                                                    <TouchableOpacity>
-                                                        <Text style={{fontSize:12,color:base.theme.colors.hyperLink,textDecorationLine:'underline'}}>Platinum</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center'}}>
-                                                    <TouchableOpacity>
-                                                        <Text style={{fontSize:12,color:base.theme.colors.hyperLink,textDecorationLine:'underline'}} >Gold</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center' }}>
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>Biometric</Text>
-                                                </View>
+                            <View style={{
+                                width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center',
+                                borderRightWidth: 1, borderColor: base.theme.colors.shadedWhite,
+                            }}>
+                                <Text style={{fontSize: 15, color: base.theme.colors.black}}>Monthly Unit Price</Text>
+                            </View>
+                            <View
+                                style={{width: '25%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                                <Text style={{fontSize: 15, color: base.theme.colors.black}}>Quantity</Text>
+                            </View>
+                        </View>
+                        <View style={{
+                            width: '98%', flexDirection: 'row', height: '7%',
+                            backgroundColor: this.state.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,
+                        }}>
+                            <View style={{
+                                width: '25%',
+                                height: '100%',
+                                borderRightWidth: 1,
+                                borderColor: base.theme.colors.shadedWhite,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                                <CheckBox
+                                    style={{marginLeft: 5}}
+                                    onClick={(value) => {this.checkBoxPlatinum(this.state.isPlatinum)}}
+                                    isChecked={this.state.isPlatinum}
+                                    checkedImage={<Image source={require('../../../icons/checkbox1.png')}
+                                                         style={{height: 15, width: 15}}/>}
+                                    unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
+                                                           style={{height: 15, width: 15}}/>}
+                                />
+                                <TouchableOpacity onPress={() => this.showDescriptionModal(0)}>
+                                    <Text style={{
+                                        marginLeft: 5,
+                                        fontSize: 12,
+                                        color: base.theme.colors.hyperLink,
+                                        textDecorationLine: 'underline'
+                                    }}>Platinum</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{
+                                width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center',
+                                borderRightWidth: 1, borderColor: base.theme.colors.shadedWhite, flexDirection: 'row'
+                            }}>
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{base.utils.strings.rupeeIconCode}</Text>
 
-                                            </View>
-                                        </View>
-                                        <View style={{width:'50%',height:'100%',borderWidth:1}}>
-                                            <View style={{width:'100%',height:'25%',borderWidth:1,borderColor:'red',
-                                                backgroundColor:base.theme.colors.lightgrey,alignItems:'center',justifyContent:'center'}}>
-                                                <Text style={{fontSize:12,color:base.theme.colors.black}}>Monthly Unit Price</Text>
-                                            </View>
-                                            <View style={{width:'100%',height:'75%',borderWidth:1,borderColor:'red'}}>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center',justifyContent:'center'}}>
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>{base.utils.strings.rupeeIconCode}</Text>
-
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>1990</Text>
-                                                </View>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center',justifyContent:'center'}}>
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>{base.utils.strings.rupeeIconCode}</Text>
-
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>1990</Text>
-                                                </View>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center',justifyContent:'center' }}>
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>{base.utils.strings.rupeeIconCode}</Text>
-
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>1990</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                        <View style={{width:'25%',height:'100%',borderWidth:1}}>
-                                            <View style={{width:'100%',height:'25%',borderWidth:1,borderColor:'red',
-                                                backgroundColor:base.theme.colors.lightgrey,alignItems:'center',justifyContent:'center'}}>
-                                                <Text style={{fontSize:12,color:base.theme.colors.black}}>Quantity</Text>
-                                            </View>
-                                            <View style={{width:'100%',height:'75%',borderWidth:1,borderColor:'red'}}>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center',justifyContent:'space-around'}}>
-                                                    <TouchableOpacity>
-                                                        <Image style={{height:20,width:20,alignSelf:'center'}}
-                                                               source={require('../../../icons/add_btn.png')}
-                                                        />
-                                                    </TouchableOpacity>
-
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>1990</Text>
-                                                    <TouchableOpacity>
-                                                        <Image style={{height:20,width:20,alignSelf:'center'}}
-                                                               source={require('../../../icons/add_btn.png')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center',justifyContent:'space-around'}}>
-                                                    <TouchableOpacity>
-                                                        <Image style={{height:20,width:20,alignSelf:'center'}}
-                                                               source={require('../../../icons/add_btn.png')}
-                                                        />
-                                                    </TouchableOpacity>
-
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>1990</Text>
-                                                    <TouchableOpacity>
-                                                        <Image style={{height:20,width:20,alignSelf:'center'}}
-                                                               source={require('../../../icons/add_btn.png')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <View style={{flexDirection:'row',width:'100%',height:'33%',alignItems:'center',justifyContent:'space-around' }}>
-                                                    <TouchableOpacity>
-                                                        <Image style={{height:20,width:20,alignSelf:'center'}}
-                                                               source={require('../../../icons/add_btn.png')}
-                                                        />
-                                                    </TouchableOpacity>
-
-                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}>1990</Text>
-                                                    <TouchableOpacity>
-                                                        <Image style={{height:20,width:20,alignSelf:'center'}}
-                                                               source={require('../../../icons/add_btn.png')}
-                                                        />
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View style={{height:'14%',width:'100%',borderWidth:1,borderColor:base.theme.colors.hyperLink}}>
-                                        <FlatList
-                                            data={this.state.offerTailsList}
-                                            keyExtractor={(item, index) => index.toString()}
-                                            renderItem={(item,index) => this.arrangeTails(item,index)}
-                                            extraData={this.state}
-                                            horizontal={true}
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{this.state.platinumDevPrc}</Text>
+                            </View>
+                            <View
+                                style={{
+                                    width: '25%',
+                                    height: '100%',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-around',
+                                    flexDirection: 'row'
+                                }}>
+                                {this.state.platinumCount === 1 || !this.state.isPlatinum ?
+                                    <View style={{height: 15, width: 15}}/> :
+                                    <TouchableOpacity
+                                        onPress={() => this.changeTheCountOfDevices(0, 'Platinum', this.state.platinumCount, this.state.platinumDevPrc)}>
+                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                               source={require('../../../icons/subtract.png')}
                                         />
-                                    </View>
-                                    <View style={{height:'3%',width:'100%',borderWidth:1,borderColor:base.theme.colors.lightgrey,alignItems:'center',justifyContent:'center'}}>
-                                        <Text style={{fontSize:12,color:base.theme.colors.primary}}> Sub Total -
-                                            <Text style={{color:base.theme.colors.black}}> {base.utils.strings.rupeeIconCode}1239030</Text>
-                                        </Text>
-                                    </View>
-
-                                </View>
-                                {/*<View style={{height:'3%',width:'100%', backgroundColor:base.theme.colors.primary,borderRadius:20,position:'absolute'}}>
-
-                        </View>*/}
+                                    </TouchableOpacity>}
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{this.state.platinumCount}</Text>
+                                {!this.state.isPlatinum ? <View style={{height: 15, width: 15}}/> :
+                                    <TouchableOpacity
+                                        onPress={() => this.changeTheCountOfDevices(1, 'Platinum', this.state.platinumCount, this.state.platinumDevPrc)}>
+                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                               source={require('../../../icons/add.png')}
+                                        />
+                                    </TouchableOpacity>}
                             </View>
                         </View>
-                         <View style={{width:'100%',alignItems:'center',height:'100%',}}>
-                        <View style={{height:'100%',width:'90%',borderWidth:1,}}>
+                        <View style={{
+                            width: '98%', flexDirection: 'row', height: '7%',
+                            backgroundColor: this.state.isGold ? base.theme.colors.greyCard : base.theme.colors.white,
+                        }}>
+                            <View style={{
+                                width: '25%',
+                                height: '100%',
+                                borderRightWidth: 1,
+                                borderColor: base.theme.colors.shadedWhite,
+                                alignItems: 'center',
+                                flexDirection: 'row'
+                            }}>
+                                <CheckBox
+                                    style={{marginLeft: 5}}
+                                    onClick={(value) => {this.checkBoxGold(this.state.isGold)}}
+                                    isChecked={this.state.isGold}
+                                    checkedImage={<Image source={require('../../../icons/checkbox1.png')}
+                                                         style={{height: 15, width: 15}}/>}
+                                    unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
+                                                           style={{height: 15, width: 15}}/>}
+                                />
+                                <TouchableOpacity onPress={() => this.showDescriptionModal(1)}>
+                                    <Text style={{
+                                        marginLeft: 5,
+                                        fontSize: 12,
+                                        color: base.theme.colors.hyperLink,
+                                        textDecorationLine: 'underline'
+                                    }}>Gold</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{
+                                width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center',
+                                borderRightWidth: 1, borderColor: base.theme.colors.shadedWhite, flexDirection: 'row'
+                            }}>
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{base.utils.strings.rupeeIconCode}</Text>
 
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{this.state.goldDevPrc}</Text>
+                            </View>
+                            <View
+                                style={{
+                                    width: '25%',
+                                    height: '100%',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-around',
+                                    flexDirection: 'row'
+                                }}>
+                                {this.state.goldCount === 1 || !this.state.isGold ?
+                                    <View style={{height: 15, width: 15}}/> :
+                                    <TouchableOpacity
+                                        onPress={() => this.changeTheCountOfDevices(0, 'Gold', this.state.goldCount, this.state.goldDevPrc)}>
+                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                               source={require('../../../icons/subtract.png')}
+                                        />
+                                    </TouchableOpacity>
+                                }
+
+                                <Text
+                                    style={{fontSize: 12, color: base.theme.colors.black}}>{this.state.goldCount}</Text>
+                                {!this.state.isGold ? <View style={{height: 15, width: 15}}/> :
+                                    <TouchableOpacity
+                                        onPress={() => this.changeTheCountOfDevices(1, 'Gold', this.state.goldCount, this.state.goldDevPrc)}>
+                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                               source={require('../../../icons/add.png')}
+                                        />
+                                    </TouchableOpacity>}
+                            </View>
                         </View>
-                        <View style={{height:'20%',width:'95%', backgroundColor:base.theme.colors.primary,borderRadius:20,position:'absolute'}}>
+                        <View style={{
+                            width: '98%', flexDirection: 'row', height: '7%',
+                            backgroundColor: this.state.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,
+                        }}>
+                            <View style={{
+                                width: '25%',
+                                height: '100%',
+                                borderRightWidth: 1,
+                                borderColor: base.theme.colors.shadedWhite,
+                                alignItems: 'center',
+                                flexDirection: 'row'
+                            }}>
+                                <CheckBox
+                                    style={{marginLeft: 5}}
+                                    onClick={() => {
+                                        //  console.log('No action')
+                                        if (this.state.isOyeSafe) {
+                                            this.state.isPlatinum ? Alert.alert('For Platinum Biometric is mandatory') : Alert.alert('You can select Biometric with Platinum only')
+                                        } else {
+                                            Alert.alert('Please select oyeSafe for editing')
+                                        }
 
+                                        /*this.setState({
+                                            isBiometric:this.state.isPlatinum
+                                        })*/
+                                    }}
+                                    isChecked={this.state.isPlatinum}
+                                    checkedImage={<Image source={require('../../../icons/checkbox1.png')}
+                                                         style={{height: 15, width: 15}}/>}
+                                    unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
+                                                           style={{height: 15, width: 15}}/>}
+                                />
+                                <Text style={{
+                                    marginLeft: 5,
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>Biometric</Text>
+                            </View>
+                            <View style={{
+                                width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center',
+                                borderRightWidth: 1, borderColor: base.theme.colors.shadedWhite, flexDirection: 'row'
+                            }}>
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{base.utils.strings.rupeeIconCode}</Text>
+
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{this.state.biometricPrc}</Text>
+                            </View>
+                            <View
+                                style={{
+                                    width: '25%',
+                                    height: '100%',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-around',
+                                    flexDirection: 'row'
+                                }}>
+                                {this.state.biometricCount === 1 || !this.state.isPlatinum ?
+                                    <View style={{height: 15, width: 15}}/> :
+                                    <TouchableOpacity
+                                        onPress={() => this.changeTheCountOfDevices(0, 'Biometric', this.state.biometricCount, this.state.biometricPrc)}>
+                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                               source={require('../../../icons/subtract.png')}
+                                        />
+                                    </TouchableOpacity>
+                                }
+                                <Text style={{
+                                    fontSize: 12,
+                                    color: base.theme.colors.black
+                                }}>{this.state.biometricCount}</Text>
+                                {!this.state.isPlatinum ? <View style={{height: 15, width: 15}}/> :
+                                    <TouchableOpacity
+                                        onPress={() => this.changeTheCountOfDevices(1, 'Biometric', this.state.biometricCount, this.state.biometricPrc)}>
+                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                               source={require('../../../icons/add.png')}
+                                        />
+                                    </TouchableOpacity>
+                                }
+                            </View>
+                        </View>
+                        {!this.state.isCardsHide?
+                        <View style={{width: '100%', marginTop: 25}}>
+                            <FlatList
+                                data={this.state.oyeSafeDisList}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={(item, index) => this.arrangeTails(item, index)}
+                                extraData={this.state}
+                                horizontal={true}
+                            />
+                        </View>
+                            :<View style={{width: '100%', marginTop: 25}}/>}
+                        <View style={{
+                            width: '100%', borderWidth: 1, borderColor: base.theme.colors.lightgrey, height: '10%',
+                            alignItems: 'center', justifyContent: 'space-around', marginTop: 10, flexDirection: 'row'
+                        }}>
+                            <View style={{width: '50%',}}>
+                                <Text style={{fontSize: 14, color: base.theme.colors.primary}}> Sub Total -
+                                    <Text style={{color: base.theme.colors.black}}
+                                          multiLine={true}
+                                    > {base.utils.strings.rupeeIconCode}{this.state.oyeSafeSub}</Text>
+                                </Text>
+                            </View>
+                            <View style={{width: '50%',}}>
+                                <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey}}>Incl GST @ 18%:
+                                    <Text multiLine={true}
+                                    > {base.utils.strings.rupeeIconCode}{this.state.oyeSafeGST}</Text>
+                                </Text>
+                            </View>
                         </View>
                     </View>
-                    </View>
-                </ScrollView>
-            </View>
+                </View>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                    <Text style={{fontSize: 18, color: base.theme.colors.primary}}> Grand Total -
+                        <Text style={{color: base.theme.colors.black}}
+                              multiLine={true}
+                        > {base.utils.strings.rupeeIconCode}{this.state.grandTotal}</Text>
+                    </Text>
+                    <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey}}>(Including all taxes)</Text>
+                </View>
+                {this.state.isShowModal ?
+                    this.showModalDesc() :
+                    <View/>}
+                <TouchableOpacity onPress={() => Alert.alert('We will release payment gateway feature soon !!!')}
+                                  style={{
+                                      height: '10%',
+                                      width: '100%',
+                                      backgroundColor: base.theme.colors.primary,
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      marginTop: 20,
+                                  }}>
+                    <Text style={{fontSize: 18, color: base.theme.colors.white}}>Pay Now</Text>
+                </TouchableOpacity>
+            </ScrollView>
         );
     }
-    arrangeTails(item,index){
-        console.log('TailsData',item,index)
-        return(
-            <View style={{alignItems:'center',justifyContent:'center'}}>
-                <TouchableOpacity style={{ width:80,height:80,borderRadius:15,backgroundColor:base.theme.colors.grey,
-                    marginLeft:20,alignSelf:'center',alignItems:'center',justifyContent:'center'}}>
-                    <Text style={{fontSize:10}}>6 Months</Text>
-                    <Text style={{fontSize:12,textDecorationLine: 'line-through', textDecorationStyle: 'solid'}}>{base.utils.strings.rupeeIconCode}20000</Text>
-                    <Text style={{fontSize:14,}}>{base.utils.strings.rupeeIconCode}20000</Text>
-                    <Text style={{fontSize:10,}}>Save 5%</Text>
+
+    showDescriptionModal(value) {
+        this.setState({
+            isShowModal: true,
+            isDeviceName: value
+        })
+    }
+
+    showModalDesc() {
+        let device = this.state.isDeviceName === 0 ? 'Platinum Device' : 'Gold Device';
+        return (
+            <Modal
+                visible={this.state.isShowModal}
+                transparent={true}
+                animationType={'fade'}
+                onRequestClose={() => this.closeModal()}
+            >
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    backgroundColor: base.theme.colors.transparent,
+                    height: '100%',
+                    width: '100%'
+                }}>
+                    <View style={{width: '90%', backgroundColor: base.theme.colors.white, alignItems: 'center'}}>
+                        <TouchableOpacity style={{width: '100%', alignItems: 'flex-end',}}
+                                          onPress={() => this.closeModal()}>
+                            <Image style={{height: 20, width: 20, alignSelf: 'flex-end'}}
+                                   source={require('../../../icons/close_btn1.png')}
+                            />
+                        </TouchableOpacity>
+                        <Text style={{
+                            fontSize: 16,
+                            color: base.theme.colors.primary,
+                            marginBottom: 10,
+                            marginTop: 10
+                        }}>{device}</Text>
+                        <FlatList
+                            data={this.state.dataToShowInDesc}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={(item, index) => this.descPointsView(item, this.state.isDeviceName)}
+                            extraData={this.state}
+                        />
+                    </View>
+
+
+                </View>
+
+            </Modal>
+        );
+    }
+
+    descPointsView(item, selDev) {
+        console.log('Data in the descView', item, selDev)
+        let dev = selDev === 0 ? 'Platinum' : 'Gold';
+        if (item.item.prName === dev) {
+            return (
+                <View style={{flexDirection: 'row', alignItems: 'center',}}>
+                    <View style={{
+                        alignSelf: 'center',
+                        width: 6,
+                        height: 6,
+                        borderRadius: 3,
+                        backgroundColor: base.theme.colors.black,
+                        marginLeft: 10,
+                        marginRight: 5
+                    }}/>
+                    <Text style={{
+                        fontSize: 11,
+                        color: base.theme.colors.black,
+                        textDecorationLine: item.item.pdIsActive ? 'none' : 'line-through',
+                        textDecorationStyle: 'solid',
+                        marginBottom: 5,
+                        textDecorationColor: '#ffffff'
+                    }} multiLine={true}>{item.item.pdDesc}</Text>
+                </View>
+            )
+        }
+
+    }
+
+    closeModal() {
+        this.setState({isShowModal: false})
+    }
+
+    arrangeTails(item, index) {
+        console.log('TailsData', item, index)
+
+        //let duration=parseInt(item.item.pdDisDur)<12?'Months':parseInt(item.item.pdDisDur)===12 ?'Year':'Years'
+        let durNum, duration;
+
+
+        if (parseInt(item.item.pdDisDur) < 12) {
+            if (parseInt(item.item.pdDisDur) === 1) {
+                duration = 'Month'
+            } else {
+                duration = 'Months'
+            }
+            durNum = parseInt(item.item.pdDisDur);
+        } else if (parseInt(item.item.pdDisDur) === 12) {
+            durNum = 1;
+            duration = 'Year'
+        } else {
+            durNum = parseInt(item.item.pdDisDur) / 12;
+            duration = 'Years'
+        }
+
+        return (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <TouchableOpacity onPress={() => this.getCardSelected(item)} style={{
+                    borderRadius: 10,
+                    marginLeft: 15,
+                    backgroundColor: item.item.pdIsActive ? base.theme.colors.primary : base.theme.colors.greyCard,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{
+                        fontSize: 10,
+                        marginLeft: 10,
+                        marginRight: 10,
+                        marginTop: 10
+                    }}>{durNum + ' ' + duration}</Text>
+                    <Text style={{
+                        fontSize: 12,
+                        textDecorationLine: 'line-through',
+                        textDecorationStyle: 'solid',
+                        textDecorationColor: '#ffffff', marginLeft: 5, marginRight: 5,
+                    }}>{base.utils.strings.rupeeIconCode}{item.item.priceOfDevWithDur}</Text>
+                    <Text style={{
+                        fontSize: 14,
+                        marginLeft: 5,
+                        marginRight: 5,
+                    }}>{base.utils.strings.rupeeIconCode}{item.item.priceWithDis}</Text>
+                    <Text style={{
+                        fontSize: 10,
+                        marginLeft: 5,
+                        marginRight: 5,
+                        marginBottom: 10
+                    }}>Save {item.item.pdDisPer}%</Text>
 
                 </TouchableOpacity>
-                <View style={{height:40,width:80,marginLeft:20,alignItems:'center',justifyContent:'center'}}>
-                    <Text style={{fontSize:8}}>Valid Till</Text>
-                    <Text style={{fontSize:10,color:base.theme.colors.primary}}>28-NOV-2021</Text>
-                </View>
+                {item.item.pdIsActive ?
+                    <View style={{height: 40, width: 80, alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style={{fontSize: 8}}>Valid Till</Text>
+                        <Text style={{
+                            fontSize: 10,
+                            color: base.theme.colors.primary
+                        }}>{moment(item.item.pdValTill).format('DD-MMM-YYYY')}</Text>
+                    </View>
+                    :
+                    <View style={{height: 40, width: 80, alignItems: 'center', justifyContent: 'center'}}/>}
             </View>
         )
 
+    }
 
+    getCardSelected(item) {
+        console.log('Selected Card:', item, this.state.oyeSafeDisList)
+        let oyeSafeDisList = this.state.oyeSafeDisList;
+        for (let i = 0; i < oyeSafeDisList.length; i++) {
+               if(item.index===i){
+                 oyeSafeDisList[i].pdIsActive=true
+               }
+               else{
+                   oyeSafeDisList[i].pdIsActive=false
+               }
+        }
+        this.setState({
+            oyeSafeDisList:oyeSafeDisList,
+            oyeSafeSub:item.item.priceWithGST.toFixed(2),
+            oyeSafeGST:item.item.valueOfGST.toFixed(2),
+            grandTotal:item.item.priceWithGST.toFixed(2),
+
+        })
     }
 }
+const mapStateToProps = state => {
+    return {
+        dashBoardReducer: state.DashboardReducer,
+        userReducer: state.UserReducer
+    };
+};
 
-export default SubscriptionManagement;
+export default connect(
+    mapStateToProps,
+)(SubscriptionManagement)

@@ -6,8 +6,29 @@
 	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string>OyeSpace</string>
+	<key>CFBundleVersion</key>
+	<string>42</string>
+	<key>NSCameraUsageDescription</key>
+	<string>OyeSpace would like to use your camera for profile image</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>71ecc6e51aa1c6a10438249055c5140043157bc1</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
