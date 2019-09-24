@@ -1,20 +1,9 @@
 import React from 'react';
-import {
-    ScrollView,
-    StyleSheet,
-    View,
-    Text,
-    Image,
-    Dimensions,
-    TouchableHighlight,
-    FlatList, Platform,
-    WebView, BackHandler, SafeAreaView, TouchableOpacity
-} from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {BackHandler, Dimensions, Image, SafeAreaView, StyleSheet, TouchableOpacity, View, WebView} from 'react-native';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 
-
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 class PrivacyPolicy extends React.Component {
     constructor(props) {
@@ -38,8 +27,8 @@ class PrivacyPolicy extends React.Component {
 
             <View style={styles.container}>
 
-                <SafeAreaView style={{ backgroundColor: "#ff8c00" }}>
-                    <View style={[styles.viewStyle1, { flexDirection: "row" }]}>
+                <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+                    <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -74,15 +63,15 @@ class PrivacyPolicy extends React.Component {
                                 source={require("../../../icons/headerLogo.png")}
                             />
                         </View>
-                        <View style={{ flex: 0.2 }}>
+                        <View style={{flex: 0.2}}>
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{ borderWidth: 1, borderColor: "orange" }} />
+                    <View style={{borderWidth: 1, borderColor: "orange"}}/>
                 </SafeAreaView>
                 <WebView
-                    source={{ uri: "https://www.oyespace.com/privacy" }}
-                    style={{ height: height, width: width }}
+                    source={{uri: "https://www.oyespace.com/privacy"}}
+                    style={{height: height, width: width}}
                 />
             </View>
 
@@ -104,7 +93,7 @@ const styles = StyleSheet.create({
         height: hp("7%"),
         width: Dimensions.get("screen").width,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.2,
         elevation: 2,
         position: "relative"
@@ -131,7 +120,6 @@ const styles = StyleSheet.create({
         marginTop: 5
         // marginLeft: 10
     },
-
 
 
 });

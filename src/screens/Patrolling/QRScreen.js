@@ -3,20 +3,19 @@
  */
 
 import React from 'react';
-import {StyleSheet, Text, TouchableHighlight, View,Image,BackHandler} from 'react-native';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen'
+import {BackHandler, Image, Text, TouchableHighlight, View} from 'react-native';
 import base from "../../base";
 import QRCode from 'react-native-qrcode-svg';
 import EmptyView from "../../components/common/EmptyView";
 import {updateQRBase64} from '../../../src/actions';
 import {connect} from 'react-redux';
 import QRScreenStyles from "./QRScreenStyles";
-import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
+import ViewShot, {captureRef} from "react-native-view-shot";
 import RNFS from "react-native-fs";
+
 const catsSource = {
     uri: "https://i.imgur.com/5EOyTDQ.jpg"
 };
-
 
 
 class QRScreen extends React.Component {
@@ -29,7 +28,7 @@ class QRScreen extends React.Component {
             error: null,
             res: null,
             imageURI: "",
-            cpName:"",
+            cpName: "",
             value: {
                 format: "png",
                 quality: 0.9,
@@ -41,38 +40,38 @@ class QRScreen extends React.Component {
     }
 
     componentWillMount() {
-        console.log("DATA For QR:",this.props)
+        console.log("DATA For QR:", this.props);
         let splitData = this.props.navigation.state.params.dataToBeSent.split(",");
-        console.log("Split Data:",splitData)
+        console.log("Split Data:", splitData);
 
         this.setState({
-            cpName:splitData[0],
+            cpName: splitData[0],
             latLong: this.props.navigation.state.params.dataToBeSent
         })
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
+    }
 
 
     takeScreenShot = refname => {
-        const { params } = this.props.navigation.state;
+        const {params} = this.props.navigation.state;
         (refname
                 ? captureRef(this.refs[qrdata], this.state.value)
                 :
@@ -97,11 +96,11 @@ class QRScreen extends React.Component {
             .then(
                 //callback function to get the result URL of the screnshot
                 uri => {
-                    this.setState({ imageURI: uri }),
+                    this.setState({imageURI: uri}),
                         RNFS.readFile(this.state.imageURI, "base64").then(data => {
                             // binary data
-                            console.log("data base64 " + data,uri);
-                            this.setState({ qrBase64: data });
+                            console.log("data base64 " + data, uri);
+                            this.setState({qrBase64: data});
                             this.updateStore();
 
                         });
@@ -113,20 +112,19 @@ class QRScreen extends React.Component {
             );
     };
 
-    componentDidMount () {
+    componentDidMount() {
         this.refs.viewShot.capture().then(uri => {
             console.log("do something with ", uri);
-            this.setState({ imageURI: uri }),
+            this.setState({imageURI: uri}),
                 RNFS.readFile(this.state.imageURI, "base64").then(data => {
                     // binary data
-                    console.log("data base64 " + data,uri);
-                    this.setState({ qrBase64: data });
+                    console.log("data base64 " + data, uri);
+                    this.setState({qrBase64: data});
                     this.updateStore();
 
                 });
         });
     }
-
 
 
     updateStore() {
@@ -142,8 +140,8 @@ class QRScreen extends React.Component {
                     <Text
                         style={QRScreenStyles.headerText}>Patrolling Check Points QR Code</Text>
                 </View>
-                <ViewShot ref="viewShot" style={{backgroundColor:"white"}} options={{ format: "jpg", quality: 0.9 }}>
-                    <View  style={QRScreenStyles.qrView}>
+                <ViewShot ref="viewShot" style={{backgroundColor: "white"}} options={{format: "jpg", quality: 0.9}}>
+                    <View style={QRScreenStyles.qrView}>
                         <QRCode
                             value={this.state.latLong}
                             logo={require('../../../icons/headerLogo.png')}
@@ -152,10 +150,20 @@ class QRScreen extends React.Component {
                             logoSize={50}
                         />
                     </View>
-                    <Text style={{alignSelf:'center',marginTop:10,fontFamily:base.theme.fonts.bold,color:base.theme.colors.black}}>
+                    <Text style={{
+                        alignSelf: 'center',
+                        marginTop: 10,
+                        fontFamily: base.theme.fonts.bold,
+                        color: base.theme.colors.black
+                    }}>
                         Association Name : {this.props.dashboardReducer.selectedDropdown}
                     </Text>
-                    <Text style={{alignSelf:'center',marginTop:10-3 ,fontFamily:base.theme.fonts.bold,color:base.theme.colors.black}}>
+                    <Text style={{
+                        alignSelf: 'center',
+                        marginTop: 10 - 3,
+                        fontFamily: base.theme.fonts.bold,
+                        color: base.theme.colors.black
+                    }}>
                         Check Point Name : {this.state.cpName}
                     </Text>
                 </ViewShot>
@@ -174,7 +182,7 @@ class QRScreen extends React.Component {
 const mapStateToProps = state => {
     return {
         patrollingReducer: state.PatrollingReducer,
-        dashboardReducer : state.DashboardReducer
+        dashboardReducer: state.DashboardReducer
     }
 };
 

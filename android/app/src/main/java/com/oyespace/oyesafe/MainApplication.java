@@ -75,7 +75,7 @@ public class MainApplication extends Application implements ShareApplication, Re
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
             new RNAudioRecorderPlayerPackage(),
-            new AndroidWifiPackage(),
+                    new AndroidWifiPackage(),
                     new GeolocationPackage(),
                     new ReactNativeRestartPackage(),
                     new RNDeviceInfo(),

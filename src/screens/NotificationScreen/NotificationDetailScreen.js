@@ -1339,7 +1339,7 @@ import {
 
 import _ from 'lodash';
 import base from '../../base';
-import firebase from "react-native-firebase";
+import firebase from 'react-native-firebase';
 
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
@@ -1383,11 +1383,11 @@ class NotificationDetailScreen extends PureComponent {
     const savedNoifId = navigation.getParam('savedNoifId', 'NO-ID');
     this.props.onNotificationOpen(notifications, index, oyeURL);
     this.props.storeOpenedNotif(savedNoifId, ntid);
-      this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-          console.log("Notification Detail screen")
-          this.props.navigation.goBack(null);
-          return true;
-      });
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log('Notification Detail screen');
+      this.props.navigation.goBack(null);
+      return true;
+    });
 
     this.manageJoinRequest();
     this.checkAdminNotifStatus();
@@ -1421,6 +1421,14 @@ class NotificationDetailScreen extends PureComponent {
     const details = navigation.getParam('details', 'NO-ID');
     console.log(details, 'detailssss');
 
+    let roleId;
+
+    if (parseInt(details.sbRoleID) === 2) {
+      roleId = 6;
+    } else {
+      roleId = 7;
+    }
+
     axios
       .post(
         `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
@@ -1449,12 +1457,12 @@ class NotificationDetailScreen extends PureComponent {
           ) {
             this.setState({ adminStat: 'Accepted' });
           } else if (
-                   data.member.meJoinStat === 'Rejected' &&
-                   data.member.mrmRoleID === details.sbRoleID &&
-                   data.member.meIsActive
-                 ) {
-                   this.setState({ adminStat: 'Rejected' });
-                 }
+            data.member.meJoinStat === 'Rejected' &&
+            parseInt(data.member.mrmRoleID) === roleId
+            //  data.member.meIsActive
+          ) {
+            this.setState({ adminStat: 'Rejected' });
+          }
         }
       })
       .catch(error => {

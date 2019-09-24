@@ -30,6 +30,7 @@ import {
   widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
 import * as fb from 'firebase';
+import CountdownCircle from 'react-native-countdown-circle';
 
 import RNRestart from 'react-native-restart';
 
@@ -68,6 +69,11 @@ class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
     this.props = props;
+
+    this.trace = null;
+    this.traceStarted = false;
+    this.initialMount = null;
+    this.initialUpdates = null;
 
     this.state = {
       myUnitCardHeight: '80%',
@@ -144,14 +150,6 @@ class Dashboard extends PureComponent {
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // return (
-    return (
-      !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
-    );
-    // );
-  }
-
   componentDidUpdate() {
     if (Platform.OS === 'android') {
       setTimeout(() => {
@@ -183,7 +181,8 @@ class Dashboard extends PureComponent {
     }
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
+    await this.trace.stop();
     this.backButtonListener.remove();
     this.focusListener.remove();
   }
@@ -494,10 +493,9 @@ class Dashboard extends PureComponent {
     // getDashSub(oyeURL, SelectedAssociationID);
     getDashAssoSync(oyeURL, MyAccountID);
     // getAssoMembers(oyeURL, MyAccountID);
-    this.requestNotifPermission();
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       getDashSub,
       getDashAssociation,
@@ -506,20 +504,34 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
+
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
+
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-    // let self = this;
+    let self = this;
 
-    //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
-    //     let receivedData = snapshot.val();
-    //     console.log("ReceiveddataDash", snapshot.val(),'SOS/' + SelectedAssociationID + "/" + MyAccountID + "/");
-    //     if (receivedData !== null) {
-    //        self.props.navigation.navigate("sosScreen",{isActive:true})
-    //         }
-    //     });
+    fb.database()
+      .ref('SOS/' + SelectedAssociationID + '/' + MyAccountID + '/')
+      .on('value', function(snapshot) {
+        let receivedData = snapshot.val();
+        console.log(
+          'ReceiveddataDash',
+          snapshot.val(),
+          'SOS/' + SelectedAssociationID + '/' + MyAccountID + '/'
+        );
+        if (receivedData !== null) {
+          self.props.navigation.navigate('sosScreen', {
+            isActive: true,
+            images:
+              receivedData.emergencyImages === undefined
+                ? []
+                : receivedData.emergencyImages
+          });
+        }
+      });
 
     //Adding an event listner om focus
     //So whenever the screen will have focus it will set the state to zero
@@ -528,15 +540,22 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    timer.setInterval(
-      this,
-      'syncData',
-      () => {
-        this.syncData();
-        // alert("hererereerrrereer");
-      },
-      5000
-    );
+    this.trace = firebase.perf().newTrace('cache_trace');
+    await this.trace.start();
+    this.traceStarted = true;
+    // put cached values after trace started
+    await this.trace.putAttribute('mount_time', this.initialMount);
+    if (this.initialUpdates)
+      await this.trace.incrementMetric('updates', this.initialUpdates);
+    // timer.setInterval(
+    //   this,
+    //   'syncData',
+    //   () => {
+    //     this.syncData();
+    //     // alert("hererereerrrereer");
+    //   },
+    //   5000
+    // );
   }
 
   async roleCheckForAdmin(index) {
@@ -614,15 +633,15 @@ class Dashboard extends PureComponent {
         () => {
           const { updateuserRole } = this.props;
           console.log('Role123456:', updateuserRole);
-          updateuserRole({
-            prop: 'role',
-            value: role
-          });
+          // updateuserRole({
+          //   prop: 'role',
+          //   value: role
+          // });
           const { updateIdDashboard } = this.props;
-          updateIdDashboard({
-            prop: 'roleId',
-            value: role
-          });
+          // updateIdDashboard({
+          //   prop: 'roleId',
+          //   value: role
+          // });
           console.log('ROLE_UPDATE', role);
         }
       );
@@ -1151,6 +1170,21 @@ class Dashboard extends PureComponent {
   logMeasurement = async (id, phase, actualDuration, baseDuration) => {
     // see output during DEV
     if (__DEV__) console.log({ id, phase, actualDuration, baseDuration });
+    if (phase === 'mount') {
+      if (this.traceStarted) {
+        await this.trace.putAttribute('mount_time', actualDuration);
+      } else {
+        // cache mount time before trace.start()
+        this.initialMount = actualDuration;
+      }
+    } else if (phase === 'update') {
+      if (this.traceStarted) {
+        await this.trace.incrementMetric('updates', 1);
+      } else {
+        // cache updates before trace.start()
+        this.initialUpdates = this.initialUpdates + 1;
+      }
+    }
   };
 
   render() {
@@ -1183,144 +1217,155 @@ class Dashboard extends PureComponent {
     );
 
     return (
-      // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
-      <View style={{ height: '100%', width: '100%' }}>
-        <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
-        {!this.props.isLoading ? (
-          <View style={Style.container}>
-            <View style={Style.dropDownContainer}>
-              <View style={Style.leftDropDown}>
-                {this.state.assdNameHide === false ? (
-                  <Dropdown
-                    value={
-                      selectedDropdown.length > maxLen
-                        ? selectedDropdown.substring(0, maxLen - 2) + '...'
-                        : selectedDropdown
-                    }
-                    label="Association Name"
-                    baseColor="rgba(0, 0, 0, 1)"
-                    data={dropdown}
-                    containerStyle={{
-                      width: '100%'
-                    }}
-                    textColor={base.theme.colors.black}
-                    inputContainerStyle={{
-                      borderBottomColor: 'transparent'
-                    }}
-                    dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={dropdown.length > 2 ? -5 : -2}
-                    rippleOpacity={0}
-                    // onChangeText={(value, index) =>
-                    //   this.onAssociationChange(value, index)
-                    // }
-                    onChangeText={(value, index) => {
-                      this.onAssociationChange(value, index);
-                      updateDropDownIndex(index);
-                      this.setState({
-                        associationSelected: true
-                      });
-                    }}
-                  />
-                ) : (
-                  <View />
-                )}
-              </View>
-              <View style={Style.rightDropDown}>
-                {this.state.unitNameHide === false ? (
-                  <Dropdown
-                    // value={this.state.unitName}
-                    value={
-                      selectedDropdown1.length > maxLenUnit
-                        ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
-                        : selectedDropdown1
-                    }
-                    containerStyle={{
-                      width: '95%'
-                      /*width: "70%",
+      <Profiler id={'Dashboard'} onRender={this.logMeasurement}>
+        <View style={{ height: '100%', width: '100%' }}>
+          <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
+          {!this.props.isLoading ? (
+            <View style={Style.container}>
+              <View style={Style.dropDownContainer}>
+                <View style={Style.leftDropDown}>
+                  {this.state.assdNameHide === false ? (
+                    <Dropdown
+                      value={
+                        selectedDropdown.length > maxLen
+                          ? selectedDropdown.substring(0, maxLen - 2) + '...'
+                          : selectedDropdown
+                      }
+                      label="Association Name"
+                      baseColor="rgba(0, 0, 0, 1)"
+                      data={dropdown}
+                      containerStyle={{
+                        width: '100%'
+                      }}
+                      textColor={base.theme.colors.black}
+                      inputContainerStyle={{
+                        borderBottomColor: 'transparent'
+                      }}
+                      dropdownOffset={{ top: 10, left: 0 }}
+                      dropdownPosition={dropdown.length > 2 ? -5 : -2}
+                      rippleOpacity={0}
+                      // onChangeText={(value, index) =>
+                      //   this.onAssociationChange(value, index)
+                      // }
+                      onChangeText={(value, index) => {
+                        this.onAssociationChange(value, index);
+
+                        this.props.updateuserRole({
+                          prop: 'role',
+                          value: dropdown[index].roleId
+                        });
+                        updateDropDownIndex(index);
+
+                        this.setState({
+                          associationSelected: true
+                        });
+                      }}
+                    />
+                  ) : (
+                    <View />
+                  )}
+                </View>
+                <View style={Style.rightDropDown}>
+                  {this.state.unitNameHide === false ? (
+                    <Dropdown
+                      // value={this.state.unitName}
+                      value={
+                        selectedDropdown1.length > maxLenUnit
+                          ? selectedDropdown1.substring(0, maxLenUnit - 3) +
+                            '...'
+                          : selectedDropdown1
+                      }
+                      containerStyle={{
+                        width: '95%'
+                        /*width: "70%",
                       marginLeft: "30%",
                       borderBottomWidth: hp("0.05%"),
                       borderBottomColor: "#474749"*/
-                    }}
-                    label="Unit"
-                    baseColor="rgba(0, 0, 0, 1)"
-                    data={dropdown1}
-                    inputContainerStyle={{
-                      borderBottomColor: 'transparent'
-                    }}
-                    textColor="#000"
-                    dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={
-                      dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
-                    }
-                    rippleOpacity={0}
-                    // onChangeText={(value, index) => {
-                    //   this.updateUnit(value, index);
-                    // }}
-                    onChangeText={(value, index) => {
-                      updateUserInfo({
-                        prop: 'SelectedUnitID',
-                        value: dropdown1[index].unitId
-                      });
-                      updateIdDashboard({
-                        prop: 'uniID',
-                        value: dropdown1[index].unitId
-                      });
-                      updateSelectedDropDown({
-                        prop: 'uniID',
-                        value: dropdown1[index].unitId
-                      });
-                      updateSelectedDropDown({
-                        prop: 'selectedDropdown1',
-                        value: dropdown1[index].value
-                      });
-                      this.updateUnit(value, index);
+                      }}
+                      label="Unit"
+                      baseColor="rgba(0, 0, 0, 1)"
+                      data={dropdown1}
+                      inputContainerStyle={{
+                        borderBottomColor: 'transparent'
+                      }}
+                      textColor="#000"
+                      dropdownOffset={{ top: 10, left: 0 }}
+                      dropdownPosition={
+                        dropdown1.length > 2
+                          ? -4
+                          : dropdown1.length < 2
+                          ? -2
+                          : -3
+                      }
+                      rippleOpacity={0}
+                      // onChangeText={(value, index) => {
+                      //   this.updateUnit(value, index);
+                      // }}
+                      onChangeText={(value, index) => {
+                        updateUserInfo({
+                          prop: 'SelectedUnitID',
+                          value: dropdown1[index].unitId
+                        });
+                        updateIdDashboard({
+                          prop: 'uniID',
+                          value: dropdown1[index].unitId
+                        });
+                        updateSelectedDropDown({
+                          prop: 'uniID',
+                          value: dropdown1[index].unitId
+                        });
+                        updateSelectedDropDown({
+                          prop: 'selectedDropdown1',
+                          value: dropdown1[index].value
+                        });
+                        this.updateUnit(value, index);
 
-                      // console.log(value);
-                      // console.log(index);
-                    }}
-                    // itemTextStyle={{}}
+                        // console.log(value);
+                        // console.log(index);
+                      }}
+                      // itemTextStyle={{}}
+                    />
+                  ) : (
+                    <View />
+                  )}
+                </View>
+              </View>
+              {this.state.isSelectedCard === 'UNIT'
+                ? this.myUnitCard()
+                : this.state.isSelectedCard === 'ADMIN'
+                ? this.adminCard()
+                : this.offersZoneCard()}
+              <View style={Style.bottomCards}>
+                <CardView
+                  height={this.state.myUnitCardHeight}
+                  width={this.state.myUnitCardWidth}
+                  cardText={'My Unit'}
+                  iconWidth={Platform.OS === 'ios' ? 35 : 20}
+                  iconHeight={Platform.OS === 'ios' ? 35 : 20}
+                  cardIcon={require('../../../../icons/my_unit.png')}
+                  onCardClick={() => this.changeCardStatus('UNIT')}
+                  textWeight={'bold'}
+                  textFontSize={10}
+                  disabled={this.state.isSelectedCard === 'UNIT'}
+                />
+                {this.props.dashBoardReducer.role === 1 &&
+                dropdown1.length !== 0 ? (
+                  <CardView
+                    height={this.state.adminCardHeight}
+                    width={this.state.adminCardWidth}
+                    cardText={'Admin'}
+                    textWeight={'bold'}
+                    iconWidth={Platform.OS === 'ios' ? 35 : 20}
+                    iconHeight={Platform.OS === 'ios' ? 35 : 20}
+                    onCardClick={() => this.changeCardStatus('ADMIN')}
+                    cardIcon={require('../../../../icons/user.png')}
+                    disabled={this.state.isSelectedCard === 'ADMIN'}
                   />
                 ) : (
                   <View />
                 )}
-              </View>
-            </View>
-            {this.state.isSelectedCard === 'UNIT'
-              ? this.myUnitCard()
-              : this.state.isSelectedCard === 'ADMIN'
-              ? this.adminCard()
-              : this.offersZoneCard()}
-            <View style={Style.bottomCards}>
-              <CardView
-                height={this.state.myUnitCardHeight}
-                width={this.state.myUnitCardWidth}
-                cardText={'My Unit'}
-                iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                cardIcon={require('../../../../icons/my_unit.png')}
-                onCardClick={() => this.changeCardStatus('UNIT')}
-                textWeight={'bold'}
-                textFontSize={10}
-                disabled={this.state.isSelectedCard === 'UNIT'}
-              />
-              {this.props.dashBoardReducer.role === 1 &&
-              dropdown1.length !== 0 ? (
-                <CardView
-                  height={this.state.adminCardHeight}
-                  width={this.state.adminCardWidth}
-                  cardText={'Admin'}
-                  textWeight={'bold'}
-                  iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                  iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                  onCardClick={() => this.changeCardStatus('ADMIN')}
-                  cardIcon={require('../../../../icons/user.png')}
-                  disabled={this.state.isSelectedCard === 'ADMIN'}
-                />
-              ) : (
-                <View />
-              )}
 
-              {/* <CardView
+                {/* <CardView
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
@@ -1329,55 +1374,55 @@ class Dashboard extends PureComponent {
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-            </View>
-            <View style={Style.supportContainer}>
-              <View style={Style.subSupportView}>
-                <TouchableOpacity
-                  onPress={() => {
-                    {
-                      Platform.OS === 'android'
-                        ? Linking.openURL(`tel:+919343121121`)
-                        : Linking.openURL(`tel:+919343121121`);
-                    }
-                  }}
-                >
-                  <Icon
-                    color="#38bcdb"
-                    size={hp('2.6%')}
-                    style={{ ...Style.supportIcon }}
-                    name="call1"
-                  />
-                </TouchableOpacity>
-                {/* <TouchableOpacity>
+              </View>
+              <View style={Style.supportContainer}>
+                <View style={Style.subSupportView}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      {
+                        Platform.OS === 'android'
+                          ? Linking.openURL(`tel:+919343121121`)
+                          : Linking.openURL(`tel:+919343121121`);
+                      }
+                    }}
+                  >
+                    <Icon
+                      color="#38bcdb"
+                      size={hp('2.6%')}
+                      style={{ ...Style.supportIcon }}
+                      name="call1"
+                    />
+                  </TouchableOpacity>
+                  {/* <TouchableOpacity>
               <Image
                 style={Style.supportIcon}
                 source={require("../../../../icons/chat.png")}
               />
             </TouchableOpacity> */}
-                <TouchableOpacity
-                  onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
-                  //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
-                >
-                  <Image
-                    style={Style.supportIcon}
-                    source={require('../../../../icons/Group771.png')}
-                  />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
+                    //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
+                  >
+                    <Image
+                      style={Style.supportIcon}
+                      source={require('../../../../icons/Group771.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        ) : (
-          <View />
-        )}
-        <ProgressLoader
-          isHUD={true}
-          isModal={true}
-          visible={this.props.isLoading}
-          color={base.theme.colors.primary}
-          hudColor={'#FFFFFF'}
-        />
-      </View>
-      // </Profiler>
+          ) : (
+            <View />
+          )}
+          <ProgressLoader
+            isHUD={true}
+            isModal={true}
+            visible={this.props.isLoading}
+            color={base.theme.colors.primary}
+            hudColor={'#FFFFFF'}
+          />
+        </View>
+      </Profiler>
     );
   }
 
@@ -1536,43 +1581,75 @@ class Dashboard extends PureComponent {
                 </ElevatedView>
             */}
 
-        {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
-              {!this.state.isSOSSelected?
-              <TouchableHighlight 
+        <View
+          style={{
+            alignSelf: 'flex-end',
+            height: 50,
+            width: 50,
+            justifyContent: 'center',
+            marginTop: hp('20')
+          }}
+        >
+          {!this.state.isSOSSelected ? (
+            <TouchableHighlight
               underlayColor={base.theme.colors.transparent}
-              onPress={()=>this.selectSOS()}>
+              onPress={() => this.selectSOS()}
+            >
               <Image
-              style={{width: wp("18%"),
-              height: hp("10%"),
-              right: 20,
-              justifyContent: "center"}}
+                style={{
+                  width: wp('18%'),
+                  height: hp('10%'),
+                  right: 20,
+                  justifyContent: 'center'
+                }}
                 source={require('../../../../icons/sos_btn.png')}
-                />
-                </TouchableHighlight>:
-                <View style={{flexDirection:'row',right:45}}>
-                  <TouchableHighlight style={{alignSelf:'flex-end',right:2}} 
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={()=>this.selectSOS()}>
-                  <Text style={{alignSelf:'flex-end',right:5,color:base.theme.colors.red}}>Cancel</Text>
-                  </TouchableHighlight>
-                <TouchableHighlight 
+              />
+            </TouchableHighlight>
+          ) : (
+            <View style={{ flexDirection: 'row', right: 45 }}>
+              <TouchableHighlight
+                style={{ alignSelf: 'flex-end', right: 2 }}
                 underlayColor={base.theme.colors.transparent}
-                onPress={()=>this.props.navigation.navigate("sosScreen",{isActive:false})}>
-                 <CountdownCircle
-                 seconds={5}
-                 radius={25}
-                 borderWidth={7}
-                 color={base.theme.colors.primary}
-                 updateText={(elapsedSeconds, totalSeconds) =>
-                  (""+totalSeconds - elapsedSeconds).toString()+"\nsec"}
-                 bgColor="#fff"
-                 textStyle={{ fontSize: 15,textAlign:'center'}}
-                 onTimeElapsed={() => this.props.navigation.navigate("sosScreen",{isActive:false})}
-             />
-             </TouchableHighlight>
-             </View>
-             }
-            </View> */}
+                onPress={() => this.selectSOS()}
+              >
+                <Text
+                  style={{
+                    alignSelf: 'flex-end',
+                    right: 5,
+                    color: base.theme.colors.red
+                  }}
+                >
+                  Cancel
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor={base.theme.colors.transparent}
+                onPress={() =>
+                  this.props.navigation.navigate('sosScreen', {
+                    isActive: false
+                  })
+                }
+              >
+                <CountdownCircle
+                  seconds={5}
+                  radius={25}
+                  borderWidth={7}
+                  color={base.theme.colors.primary}
+                  updateText={(elapsedSeconds, totalSeconds) =>
+                    ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                  }
+                  bgColor="#fff"
+                  textStyle={{ fontSize: 15, textAlign: 'center' }}
+                  onTimeElapsed={() =>
+                    this.props.navigation.navigate('sosScreen', {
+                      isActive: false
+                    })
+                  }
+                />
+              </TouchableHighlight>
+            </View>
+          )}
+        </View>
       </ElevatedView>
     );
   }
@@ -1706,43 +1783,75 @@ class Dashboard extends PureComponent {
             <Text>Subscription</Text>
           </Button>*/}
         </View>
-        {/* <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
-              {!this.state.isSOSSelected?
-              <TouchableHighlight 
+        <View
+          style={{
+            alignSelf: 'flex-end',
+            height: 50,
+            width: 50,
+            justifyContent: 'center',
+            marginTop: hp('33%')
+          }}
+        >
+          {!this.state.isSOSSelected ? (
+            <TouchableHighlight
               underlayColor={base.theme.colors.transparent}
-              onPress={()=>this.selectSOS()}>
+              onPress={() => this.selectSOS()}
+            >
               <Image
-              style={{width: wp("15%"),
-              height: hp("10%"),
-              right: 20,
-              justifyContent: "center"}}
+                style={{
+                  width: wp('18%'),
+                  height: hp('10%'),
+                  right: 20,
+                  justifyContent: 'center'
+                }}
                 source={require('../../../../icons/sos_btn.png')}
-                />
-                </TouchableHighlight>:
-                <View style={{flexDirection:'row',right:45}}>
-                  <TouchableHighlight style={{alignSelf:'flex-end',right:2}} 
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={()=>this.selectSOS()}>
-                  <Text style={{alignSelf:'flex-end',right:5,color:base.theme.colors.red}}>Cancel</Text>
-                  </TouchableHighlight>
-                <TouchableHighlight 
+              />
+            </TouchableHighlight>
+          ) : (
+            <View style={{ flexDirection: 'row', right: 45 }}>
+              <TouchableHighlight
+                style={{ alignSelf: 'flex-end', right: 2 }}
                 underlayColor={base.theme.colors.transparent}
-                onPress={()=>this.props.navigation.navigate("sosScreen",{isActive:false})}>
-                 <CountdownCircle
-                 seconds={5}
-                 radius={25}
-                 borderWidth={7}
-                 color={base.theme.colors.primary}
-                 updateText={(elapsedSeconds, totalSeconds) =>
-                  (""+totalSeconds - elapsedSeconds).toString()+"\nsec"}
-                 bgColor="#fff"
-                 textStyle={{ fontSize: 15,textAlign:'center'}}
-                 onTimeElapsed={() => this.props.navigation.navigate("sosScreen",{isActive:false})}
-             />
-             </TouchableHighlight>
-             </View>
-             }
-            </View> */}
+                onPress={() => this.selectSOS()}
+              >
+                <Text
+                  style={{
+                    alignSelf: 'flex-end',
+                    right: 5,
+                    color: base.theme.colors.red
+                  }}
+                >
+                  Cancel
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor={base.theme.colors.transparent}
+                onPress={() =>
+                  this.props.navigation.navigate('sosScreen', {
+                    isActive: false
+                  })
+                }
+              >
+                <CountdownCircle
+                  seconds={5}
+                  radius={25}
+                  borderWidth={7}
+                  color={base.theme.colors.primary}
+                  updateText={(elapsedSeconds, totalSeconds) =>
+                    ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                  }
+                  bgColor="#fff"
+                  textStyle={{ fontSize: 15, textAlign: 'center' }}
+                  onTimeElapsed={() =>
+                    this.props.navigation.navigate('sosScreen', {
+                      isActive: false
+                    })
+                  }
+                />
+              </TouchableHighlight>
+            </View>
+          )}
+        </View>
       </ElevatedView>
     );
   }

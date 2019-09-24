@@ -7,12 +7,11 @@ import React from 'react';
 import utils from '../utils';
 
 
-
 let instance = axios.create({
     baseURL: utils.strings.residentcloudfuncurl,
     timeout: 10000,
     headers: {
-        'Content-Type': 'application/json'        
+        'Content-Type': 'application/json'
     }
 });
 
@@ -27,9 +26,9 @@ instance.interceptors.response.use((response) => {
 });
 
 
-export default class residentfcmservice{
+export default class residentfcmservice {
 
-    static async sendUniqueResidentPN(detail){
-        return await instance.post('/sendUserNotification',detail);
+    static async sendUniqueResidentPN(detail) {
+        return await instance.post('/sendUserNotification', detail);
     }
 }

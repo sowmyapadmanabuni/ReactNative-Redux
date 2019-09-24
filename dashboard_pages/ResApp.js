@@ -6,16 +6,9 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import {
-  createStackNavigator,
-  createSwitchNavigator,
-  createDrawerNavigator,
-  createAppContainer
-} from 'react-navigation';
-
-import MainScreen from '../dashboard_pages/MainScreen';
+import React from 'react';
+import { Platform } from 'react-native';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 import associationlist from '../assocition_pages/associationlist';
 import WholeAssociationList from '../assocition_pages/WholeAssociationList';
@@ -30,17 +23,12 @@ import CreateUnitsPotrait from '../assocition_pages/CreateUnits';
 import EditCheckPoint from '../assocition_pages/EditCheckPoint';
 import CreateCheckPoint from '../assocition_pages/CreateCheckPoint';
 
-import AdminSettings from '../resident_pages/AdminSettings';
-
 import ViewAlllVisitorsPage from '../my_unit_pages/ViewAlllVisitorsPage';
 
 import EditFamilyMember from '../my_unit_pages/EditFamilyMember';
 
 import MyProfile from '../my_unit_pages/MyProfile.js';
 import EditProfile from '../my_unit_pages/EditProfile';
-
-import Communications from 'react-native-communications';
-import VersionNumber from 'react-native-version-number';
 import BlockDetail from '../assocition_pages/BlockDetails';
 import CreateBlock from '../assocition_pages/CreateBlock';
 import CreateOrJoin from '../assocition_pages/CreateOrJoin';
@@ -61,6 +49,7 @@ import Blockwise from '../assocition_pages/BlockwiseUnits';
 import AddUnit from '../assocition_pages/AddUnit.js';
 import EditUnit from '../assocition_pages/EditUnit.js';
 import SchedulePatrolling from '../src/screens/Patrolling/PatrolSchedule';
+import PatrolSchedule from '../src/screens/Patrolling/PatrolSchedule';
 import PatrollingCommonHeader from '../src/components/NavigationalHeaders/PatrollingCommonHeader';
 import PatrollingCheckPoints from '../src/screens/Patrolling/PatrollingCheckPoints';
 import AddAndEditCheckPoints from '../src/screens/Patrolling/AddAndEditCheckPoints';
@@ -75,17 +64,11 @@ import MyFamilyEdit from '../src/screens/Resident/MyFamilyScreen/MyFamilyEditOne
 
 import Dashboard from '../src/screens/Resident/Dashboard/Dashboard';
 import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader';
-import GetStaffReport from '../src/screens/Resident/Visitors/Staff/GetStaffReport';
 import FirstTab from '../residentDashboardVisitorPages/FirstTab';
-import Subscription from '../assocition_pages/Subscription';
 import MyFamilyHeader from '../src/components/NavigationalHeaders/MyFamilyHeader';
-import PrivacyPolicy from '../src/screens/Policy/PrivacyPolicy';
-import TermsAndConditions from '../src/screens/Policy/TermsAndConditions';
 
 import City from '../assocition_pages/City.js';
 import SendingMsgToGate from '../my_unit_pages/SendingMsgToGate.js';
-
-import PatrolSchedule from '../src/screens/Patrolling/PatrolSchedule';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -213,7 +196,6 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff'
     }
   },
-  //SendingMsgToGate
   SendingMsgToGate: {
     screen: SendingMsgToGate,
     navigationOptions: {
@@ -223,7 +205,6 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff'
     }
   },
-
   CreateOrJoinScreen: {
     screen: CreateOrJoin,
     navigationOptions: {
@@ -545,11 +526,11 @@ const ResApp = createStackNavigator({
     }
   }
   /*subscriptionManagement: {
-    screen:SubscriptionManagement,
-    navigationOptions: {
-      header: props => <MyFamilyHeader  isSub={true} {...props}/>
-    }
-  },*/
+      screen:SubscriptionManagement,
+      navigationOptions: {
+        header: props => <MyFamilyHeader  isSub={true} {...props}/>
+      }
+    },*/
 });
 
 export default createAppContainer(ResApp);

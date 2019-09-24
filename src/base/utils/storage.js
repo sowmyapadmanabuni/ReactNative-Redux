@@ -7,33 +7,33 @@ export default class storage {
 
     static storeData = async (key, value) => {
         try {
-          await AsyncStorage.setItem(key, value);
+            await AsyncStorage.setItem(key, value);
         } catch (error) {
             console.log(error)
         }
-      };
+    };
 
     static retrieveData = async (key) => {
         try {
-          const value = await AsyncStorage.getItem(key);
-          return value;
+            const value = await AsyncStorage.getItem(key);
+            return value;
         } catch (error) {
-          return null;
+            return null;
         }
-      };
+    };
 
     static removeData = async (key) => {
-        try{
+        try {
             await AsyncStorage.removeItem(key);
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
-    }
+    };
 
     static removeAllData = async () => {
-        try{
+        try {
             await AsyncStorage.removeAll()
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }

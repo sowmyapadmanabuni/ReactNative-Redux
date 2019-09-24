@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
-import {View, Text, NetInfo, Dimensions, StyleSheet, Platform} from 'react-native';
+import React, {PureComponent} from 'react';
+import {Dimensions, NetInfo, Platform, StyleSheet, Text, View} from 'react-native';
 import base from "../index";
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 function MiniOfflineSign() {
     return (
@@ -27,18 +27,17 @@ class CheckInternet extends PureComponent {
 
     handleConnectivityChange = isConnected => {
         if (isConnected) {
-            this.setState({ isConnected });
+            this.setState({isConnected});
         } else {
-            this.setState({ isConnected });
+            this.setState({isConnected});
         }
     };
 
     render() {
-        console.log('Is Internet connected',this.state.isConnected)
+        console.log('Is Internet connected', this.state.isConnected);
         if (!this.state.isConnected) {
-            return <MiniOfflineSign />;
-        }
-        else{
+            return <MiniOfflineSign/>;
+        } else {
             return null;
         }
     }
@@ -46,15 +45,15 @@ class CheckInternet extends PureComponent {
 
 const styles = StyleSheet.create({
     offlineContainer: {
-        backgroundColor:base.theme.colors.primary,
+        backgroundColor: base.theme.colors.primary,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         width,
-        marginTop:Platform.OS==='ios' ? 20:0
+        marginTop: Platform.OS === 'ios' ? 20 : 0
     },
-    offlineText: { color: '#fff' }
+    offlineText: {color: '#fff'}
 });
 
 export default CheckInternet;

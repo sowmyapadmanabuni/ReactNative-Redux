@@ -349,8 +349,8 @@ class HelloWorldApp extends Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            StartDate: date, //'2019-09-04',
-            EndDate: date, //'2019-09-23', //moment(new Date()).format('YYYY-MM-DD'),
+            StartDate: '2019-09-23',
+            EndDate: '2019-09-23', //moment(new Date()).format('YYYY-MM-DD'),
             ASAssnID: this.props.dashBoardReducer.assId,
             UNUnitID: this.props.dashBoardReducer.uniID,
             ACAccntID: this.props.userReducer.MyAccountID
@@ -369,11 +369,13 @@ class HelloWorldApp extends Component {
             let visitorObj = {};
             for (let i in data) {
               console.log(i);
-              visitorObj = {
-                value: data[i].vlfName,
-                id: data[i].vlVisLgID
-              };
-              visitors.push(visitorObj);
+              if (moment(data[i].vlExitT).format('hh:mm:ss') === '00:00:00') {
+                visitorObj = {
+                  value: data[i].vlfName,
+                  id: data[i].vlVisLgID
+                };
+                visitors.push(visitorObj);
+              }
             }
             this.setState({
               isLoading: false,

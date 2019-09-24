@@ -12,47 +12,42 @@ import {widthPercentageToDP} from "react-native-responsive-screen";
 import {connect} from 'react-redux';
 import Share from 'react-native-share';
 import {updateSelectedCheckPoints} from '../../actions';
-import QRScreen from '../../screens/Patrolling/QRScreen';
-
 
 
 class PatrollingCommonHeader extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-
     static propTypes = {
         isHidden: PropTypes.bool,
         isReportVisible: PropTypes.bool,
         isShareVisible: PropTypes.bool
     };
-
     static defaultProps = {
         isHidden: false,
         isReportVisible: true,
         isShareVisible: false
     };
 
+    constructor(props) {
+        super(props);
+    }
 
-    navigateBack(){
+    navigateBack() {
         let isHidden = this.props.isHidden;
         let isReportVisible = this.props.isReportVisible;
         let isShareVisible = this.props.isShareVisible;
         const {goBack} = this.props.navigation;
 
-        if(!isHidden && !isReportVisible){
+        if (!isHidden && !isReportVisible) {
             this.resetPatrolReducer()
-        }else{
+        } else {
             goBack(null)
         }
     }
 
-    resetPatrolReducer(){
+    resetPatrolReducer() {
         const {goBack} = this.props.navigation;
-            const {updateSelectedCheckPoints} = this.props;
-            updateSelectedCheckPoints({value:null})
-            goBack(null);
+        const {updateSelectedCheckPoints} = this.props;
+        updateSelectedCheckPoints({value: null});
+        goBack(null);
     }
 
     render() {
@@ -63,8 +58,8 @@ class PatrollingCommonHeader extends React.Component {
         return (
             <View style={styles.container}>
                 <TouchableOpacity
-                onPress={()=>this.navigateBack()}
-                   // onPress={() => goBack(null)}   //Passing null for as a parameter in the case of nested StackNavigators   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
+                    onPress={() => this.navigateBack()}
+                    // onPress={() => goBack(null)}   //Passing null for as a parameter in the case of nested StackNavigators   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
                     style={styles.buttonView}>
                     <Image
                         resizeMode={'center'}
@@ -95,21 +90,20 @@ class PatrollingCommonHeader extends React.Component {
         )
     }
 
- handleIconPress(isShareVisible) {
+    handleIconPress(isShareVisible) {
         if (isShareVisible) {
-            console.log("Base 64:",this.props)
-                let base64Image = this.props.selectedCheckPoints.qrBase64.value;
+            console.log("Base 64:", this.props);
+            let base64Image = this.props.selectedCheckPoints.qrBase64.value;
             let shareImageBase64 = {
                 title: "Check Point QR",
-                message: "Association Name: "+this.props.dashboardReducer.selectedDropdown,
-                url: 'data:image/png;base64,'+base64Image
+                message: "Association Name: " + this.props.dashboardReducer.selectedDropdown,
+                url: 'data:image/png;base64,' + base64Image
             };
-            console.log("base 64:",shareImageBase64);
+            console.log("base 64:", shareImageBase64);
             Share.open(shareImageBase64).then((response) => {
                 console.log(response)
             });
-        }
-        else {
+        } else {
             this.props.navigation.navigate('patrollingReport')
         }
     }
@@ -142,7 +136,7 @@ class PatrollingCommonHeader extends React.Component {
                 cpArray.push(cpList[i])
             }
         }
-        if (spCount === 1 && epCount === 1 && isCP && cpCount >=2) {
+        if (spCount === 1 && epCount === 1 && isCP && cpCount >= 2) {
             this.props.navigation.navigate("schPatrolling");
         } else if (spCount > 1) {
             alert("Please select only one Start Point")
@@ -185,7 +179,7 @@ const styles = StyleSheet.create({
         paddingTop: 3
     },
     backButton: {
-        height:'50%'
+        height: '50%'
     },
     logoView: {
         height: 40,
@@ -216,16 +210,16 @@ const styles = StyleSheet.create({
         width: widthPercentageToDP('20%'),
         fontFamily: base.theme.fonts.medium
     },
-    reportImage: {height: "50%",width: widthPercentageToDP("20%")}
+    reportImage: {height: "50%", width: widthPercentageToDP("20%")}
 });
 
 
 const mapStateToProps = state => {
     return {
         selectedCheckPoints: state.PatrollingReducer,
-        dashboardReducer : state.DashboardReducer
+        dashboardReducer: state.DashboardReducer
     }
 };
 
-export default connect(mapStateToProps,{updateSelectedCheckPoints})(PatrollingCommonHeader);
+export default connect(mapStateToProps, {updateSelectedCheckPoints})(PatrollingCommonHeader);
 

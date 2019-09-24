@@ -4,6 +4,7 @@
 
 import React from 'react';
 import {
+    BackHandler,
     Dimensions,
     FlatList,
     Image,
@@ -12,10 +13,9 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
-    View,
-    BackHandler
+    View
 } from 'react-native';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import base from "../../base";
 import {connect} from 'react-redux';
 import {Cell, Table, TableWrapper} from 'react-native-table-component';
@@ -55,7 +55,7 @@ class ReportScreen extends React.Component {
             slotName: '',
             slotTime: '',
             patrollingReport: [],
-            data:[]
+            data: []
         },
             this.getReport = this.getReport.bind(this);
 
@@ -78,23 +78,23 @@ class ReportScreen extends React.Component {
     }
 
     componentDidUpdate() {
-        setTimeout(()=>{
-          BackHandler.addEventListener('hardwareBackPress',()=>this.processBackPress())
-        },100)
-      }
-    
-      componentWillUnmount() {
-        setTimeout(()=>{
-          BackHandler.removeEventListener('hardwareBackPress',()=> this.processBackPress())
-        },0)
-        
-      }
-    
-       processBackPress(){
+        setTimeout(() => {
+            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 100)
+    }
+
+    componentWillUnmount() {
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
+
+    }
+
+    processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
-      }
+    }
 
     getAndroidPermissions() {
         let that = this;
@@ -154,7 +154,7 @@ class ReportScreen extends React.Component {
             })
                 .done((res) => {
                     console.log("Share done", res)
-                })
+                });
             await RNFS.unlink(file.filePath);
 
         } else {
@@ -188,14 +188,14 @@ class ReportScreen extends React.Component {
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days());
         let difference = duration.as('days');
-        base.utils.logger.log(stat)
+        base.utils.logger.log(stat);
         try {
             if (stat !== null && stat.data.patrolling.length !== 0) {
                 let reportsData = stat.data.patrolling;
                 let reprArr = [];
                 if (difference !== 0) {
                     for (let i = 0; i <= difference; i++) {
-                        console.log(startDate,moment(reportsData[i].ptdCreated).format("YYYY-MM-DD"))
+                        console.log(startDate, moment(reportsData[i].ptdCreated).format("YYYY-MM-DD"));
                         if (!reportsData[i] || startDate == moment(reportsData[i].ptdCreated).format('YYYY-MM-DD')) {
                             let arr = [
                                 moment(startDate).format('DD-MM-YYYY'),
@@ -241,7 +241,7 @@ class ReportScreen extends React.Component {
                     bottomPageIndicator: dataBottomList,
                     tableData: reprArr,
                     patrollingReport: reprArr,
-                    data:reprArr
+                    data: reprArr
 
                 });
 
@@ -256,7 +256,7 @@ class ReportScreen extends React.Component {
     }
 
     render() {
-        console.log("Data:",this.state.data);
+        console.log("Data:", this.state.data);
         return (
             <View style={StaffReportStyle.mainContainer}>
                 <View style={ReportScreenStyles.header}>
@@ -272,17 +272,17 @@ class ReportScreen extends React.Component {
                         <Text>{this.state.slotName}</Text>
                         <Text>{this.state.slotTime}</Text>
                     </View>
-                    {this.state.data === undefined || this.state.data.length !== 0?
-                    <TouchableOpacity
-                        underlayColor={base.theme.colors.transparent}
-                        onPress={() => this.generatePDF()}
-                        style={ReportScreenStyles.shareIconView}>
-                        <Image
-                            resizeMode={'contain'}
-                            style={ReportScreenStyles.shareIcon}
-                            source={require('../../../icons/share.png')}
-                        />
-                    </TouchableOpacity>:<View style={ReportScreenStyles.shareIconView}/>}
+                    {this.state.data === undefined || this.state.data.length !== 0 ?
+                        <TouchableOpacity
+                            underlayColor={base.theme.colors.transparent}
+                            onPress={() => this.generatePDF()}
+                            style={ReportScreenStyles.shareIconView}>
+                            <Image
+                                resizeMode={'contain'}
+                                style={ReportScreenStyles.shareIcon}
+                                source={require('../../../icons/share.png')}
+                            />
+                        </TouchableOpacity> : <View style={ReportScreenStyles.shareIconView}/>}
                 </View>
 
                 <ScrollView style={StaffReportStyle.scrollViewTable}>
@@ -344,10 +344,10 @@ class ReportScreen extends React.Component {
     }
 
     renderViewPagerData() {
-        console.log("Data:",this.state.data)
+        console.log("Data:", this.state.data);
         return (
             <View style={{height: hp('65%')}}>
-                { this.state.data.length !== 0 ?
+                {this.state.data.length !== 0 ?
                     <Table borderStyle={{borderWidth: 1, borderColor: base.theme.colors.grey}}>
                         <Row data={this.state.tableHead} style={ReportScreenStyles.headRow}
                              textStyle={ReportScreenStyles.textRow}
@@ -375,7 +375,7 @@ class ReportScreen extends React.Component {
                         }
                     </Table> :
                     <View style={{justifyContent: 'center', alignItems: 'center', height: hp('70%')}}>
-                        <Text style={{color:base.theme.colors.primary}}>Report not available for this patrol...</Text>
+                        <Text style={{color: base.theme.colors.primary}}>Report not available for this patrol...</Text>
                     </View>}
             </View>
         );
@@ -389,14 +389,14 @@ class ReportScreen extends React.Component {
         if (datToReversOrder) {
             patrollingReportData = datToReversOrder
         }
-        let pageStartData = ((pageNumber - 1) * (self.state.pageLimit)) + 1
-        let pageEndData = pageNumber * (self.state.pageLimit)
+        let pageStartData = ((pageNumber - 1) * (self.state.pageLimit)) + 1;
+        let pageEndData = pageNumber * (self.state.pageLimit);
         if (pageEndData > patrollingReportData.length) {
             pageEndData = patrollingReportData.length
         }
         let j = 0;
         for (let i = pageStartData - 1; i < pageEndData; i++) {
-            tableData[j] = patrollingReportData[i]
+            tableData[j] = patrollingReportData[i];
             j = j + 1
         }
         self.setState({tableData: tableData, pageNumber: pageNumber})
@@ -408,7 +408,7 @@ class ReportScreen extends React.Component {
         let reverseData = [];
         let j = data.length - 1;
         for (let i = 0; i < data.length; i++) {
-            reverseData[i] = data[j]
+            reverseData[i] = data[j];
             j = j - 1;
         }
         self.setState({patrollingReport: reverseData});

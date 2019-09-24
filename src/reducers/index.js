@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import {combineReducers} from "redux";
 import NotificationReducer from "./NotificationReducer";
 import AppReducer from "./AppReducer";
 import DashboardReducer from "./DashboardReducer";
@@ -9,12 +9,12 @@ import StaffReducer from "./StaffReducer";
 import JoinAssociationReducer from "./JoinAssociationReducer";
 
 export default combineReducers({
-  NotificationReducer: NotificationReducer,
-  AppReducer: AppReducer,
-  DashboardReducer: DashboardReducer,
-  UserReducer: UserReducer,
-  OyespaceReducer: OyespaceReducer,
-  PatrollingReducer: PatrollingReducer,
-  StaffReducer: StaffReducer,
-  JoinAssociationReducer: JoinAssociationReducer
+    NotificationReducer: NotificationReducer,
+    AppReducer: AppReducer,
+    DashboardReducer: DashboardReducer,
+    UserReducer: UserReducer,
+    OyespaceReducer: OyespaceReducer,
+    PatrollingReducer: PatrollingReducer,
+    StaffReducer: StaffReducer,
+    JoinAssociationReducer: JoinAssociationReducer
 });
