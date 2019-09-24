@@ -15,7 +15,7 @@ import {
     TouchableHighlight,
     TouchableOpacity,
     View,
-    ScrollView,
+    ScrollView,NetInfo,AsyncStorage
 } from 'react-native';
 import firebase from 'firebase';
 import CreateSOSStyles from "./CreateSOSStyles";
@@ -101,10 +101,40 @@ class CreateSOS extends React.Component {
             }
 
         });
+
+        let presenceRef = firebase.database().ref("disconnectmessage");
+        let self = this;
+        let connectedRef = firebase.database().ref(".info/connected");
+            connectedRef.on("value", function(snap) {
+            if (snap.val() === true) {
+                console.log("connected");
+                AsyncStorage.getItem('isSOSUpdatePending').then((responseStringyfied)=>{
+                    console.log("connected::::",responseStringyfied)
+                    let response = JSON.parse(responseStringyfied)
+                    if(response !== null){
+                        firebase.database().ref('SOS/' + response.ass + "/" + response.userId + "/").remove().then((response)=>{
+                            let receivedData = response.val();
+                            console.log("Response!!!!!!!",receivedData)
+                            self.setState({
+                                isGuardDetailAvailable: false
+                            },()=>{
+                                self.props.navigation.goBack("null");
+                            });
+                            
+                            
+                            }).catch((error)=>{
+                                console.log('Response!!!!!!!',error.response)
+                        });
+                    }
+                })
+            } else {
+                console.log("not connected");
+            }
+            });
      
         Platform.OS === 'ios' ? this.getCurrentLocation() : this.checkGPS();
     }
-
+    
     checkGPS() {
         RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
             .then(data => {
@@ -227,14 +257,7 @@ class CreateSOS extends React.Component {
 
 
     stopSound(){
-        // this.sound.stop();
-        // Sound.setCategory('Playback');
-        // var sound = new Sound('sound_1.mp3', Sound.MAIN_BUNDLE, (error) => {
-        //     sound.setVolume(0);
-        //     if (error) {
-        //         console.log('failed to load the sound', error);
-        //         return;
-        //     }
+        
             this.sound.stop((success) => {
                 if (success) {
                     console.log('successfully finished playing');
@@ -272,12 +295,17 @@ class CreateSOS extends React.Component {
     }
 
     componentDidMount() {
-        this.readUserData()
+        let self = this;
+        
+            self.readUserData();
+        
+//        self.props.navigation.state.params.isActive ? self.readUserData() : self.createSOS()
 
     }
 
 
     async createSOS() {
+        console.log("STSTATATATATSTFCTSFCGJSGCSCGMSCGCH<JMGC,",this.state)
         let data = this.props;
         let associationID = data.associationID;
         //let associationID = 8;
@@ -302,7 +330,7 @@ class CreateSOS extends React.Component {
             }).catch((error) => {
                 console.log("Error:", error)
             })
-        } else {
+        } else {  
             const data = new FormData();
             let imgObj = {
                 name: (this.state.image.fileName !== undefined) ? this.state.image.fileName : "XXXXX.jpg",
@@ -420,6 +448,7 @@ class CreateSOS extends React.Component {
             let receivedData = snapshot.val();
             console.log("Receiveddata", snapshot.val(), self.state.isGuardDetailAvailable);
             if (receivedData !== null) {
+                if(receivedData.isActive && receivedData.userId){
                 if ((receivedData.attendedBy !== undefined && receivedData.attendedBy !== null)) {
                     self.setState({
                         isGuardDetailAvailable: true,
@@ -445,8 +474,9 @@ class CreateSOS extends React.Component {
                         }
                     })
                 }
+            }
             } else {
-                if (!self.state.isGuardDetailAvailable && receivedData!==null) {
+                if (self.state.isGuardDetailAvailable) {
                     console.log("Receiveddata123");
                     self.sound.stop((success) => {
                         console.log("Sucuuu:",success)
@@ -726,17 +756,10 @@ class CreateSOS extends React.Component {
     async stopSOS() {
         let self = this;
         let associationID = self.props.associationID;
-        //let associationID = 8;
         let userId = this.props.userReducer.MyAccountID;
         console.log("kscjd:", associationID, userId);
-        //self.stopSound();
-        Sound.setCategory('Playback');
-        // var sound = new Sound('sound_1.mp3', Sound.MAIN_BUNDLE, (error) => {
-        //     sound.setVolume(0)
-        //     if (error) {
-        //         console.log('failed to load the sound', error);
-        //         return;
-        //     }
+        try{
+            Sound.setCategory('Playback');
             this.sound.stop((success) => {
                 console.log("Sucuuu:",success)
                 if (success) {
@@ -745,13 +768,38 @@ class CreateSOS extends React.Component {
                     console.log('playback failed due to audio decoding errors');
                 }
             });
-        //});
-        await firebase.database().ref('SOS/' + associationID + "/" + userId + "/").remove();
-        self.setState({
-            isGuardDetailAvailable: false
+            AsyncStorage.removeItem("isSOSUpdatePending");
+
+            NetInfo.isConnected.fetch().then(isConnected => {
+              
+                if(isConnected){
+                     firebase.database().ref('SOS/' + associationID + "/" + userId + "/").remove().then((response)=>{
+                        let receivedData = response.val();
+                        console.log("Response!!!!!!!",receivedData)
+                        
+                        }).catch((error)=>{
+                            console.log('Response!!!!!!!',error.response)
+                    });
+                    self.setState({
+                        isGuardDetailAvailable: false
+                    });
+                self.props.navigation.navigate("ResDashBoard");
+                }  
+                else{
+                    console.log("Hitiing Here@@@@@:")
+                    let sosDetail = {
+                        ass:associationID,
+                        userId:userId
+                    }
+                    AsyncStorage.setItem("isSOSUpdatePending",JSON.stringify(sosDetail));
+                    self.props.navigation.navigate("ResDashBoard");
+                } 
         });
+        }
+        catch(e){
+            console.log(e)
+        }
         
-        self.props.navigation.navigate("ResDashBoard");
     }
 
     async stopSOSInAPI(){
