@@ -21,7 +21,7 @@ const CreateSOSStyles = StyleSheet.create({
     },
     header: {
         justifyContent: "center",
-        height: hp('6%'),
+        height: hp('10%'),
         alignSelf: 'center'
     },
     headerText: {

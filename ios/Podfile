@@ -66,13 +66,15 @@ pod 'Firebase/Messaging', '~> 5.19.0'
   pod 'GoogleMaps'
   pod 'Google-Maps-iOS-Utils'
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
-
+  pod 'RCTSystemSetting', :path => '../node_modules/react-native-system-setting'
 
 
   
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
   pod 'ReactNativeFabric', :path => '../node_modules/react-native-fabric'
+
+  pod 'RNAudioRecorderPlayer', :path => '../node_modules/react-native-audio-recorder-player'
 
 end
   

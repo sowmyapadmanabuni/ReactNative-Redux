@@ -2,11 +2,9 @@ import React from 'react';
 import {ScrollView, Text, View, Image, Platform, TouchableOpacity, FlatList, Alert,Modal} from 'react-native';
 import base from "../../base";
 import CheckBox from "react-native-check-box";
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from "react-native-simple-radio-button";
 import {connect} from "react-redux";
-import {updateIdDashboard} from "../../actions";
+import {updateIdDashboard, updateSubscription} from "../../actions";
 import moment from "moment";
-import diff from "redux-logger/src/diff";
 
 class SubscriptionManagement extends React.Component {
     constructor(props) {
@@ -14,95 +12,108 @@ class SubscriptionManagement extends React.Component {
         this.state = {
             oyeLivingProps: [{label: 'Platinum', value: 0},
                 {label: 'Gold', value: 1}],
-            platinumCount: 1,
-            goldCount: 1,
-            biometricCount: 1,
             isOyeLiving: false,
             isOyeSafe: false,
             isPlatinum: false,
             isGold: false,
-            isBiometric: false,
-            isPlanSelected: 0,
             isShowModal: false,
             isDeviceName: null,
             dataToShowInDesc: [],
-            platinumDevPrc: null,
-            goldDevPrc: null,
-            biometricPrc: null,
-            platinumPlanPrc: null,
-            goldPlanPrc: null,
-            oyeLivingSub: '0.00',
-            oyeLivingGST: '0.00',
-            oyeSafeGST: '0.00',
-            oyeSafeSub: '0.00',
-            grandTotal: '0.00',
-            oyeSafeDisList: [],
-            oyeLivingDisList: [],
-            biometricPriceT: 0,
-            goldPriceT: 0,
-            platinumPriceT: 0,
-            grandPriceOfDevices: 0,
             existingSubDate: "",
             isSubValid: true,
-            isCardsHide:true,
         }
     }
 
     componentWillMount() {
         this.getPricingDetails();
         this.getDiscountingDetails();
-        this.getLatestSubscription();
         this.getDiscountingDetailsByAssociationId();
         this.getProductDescriptionOfPlatinum();
-        // this.getProductDescriptionOfGold()
+        this.getLatestSubscription();
+
     }
 
     async getLatestSubscription() {
-        console.log('PropsInSubScreen', this.props)  //this.props.userReducer.SelectedAssociationID
-        let stat = await base.services.OyeSafeApiFamily.getLatestSubscriptionDetailsByAssId(8)
+          //this.props.userReducer.SelectedAssociationID 8 212
+        let stat = await base.services.OyeSafeApiFamily.getLatestSubscriptionDetailsByAssId(this.props.userReducer.SelectedAssociationID)
         try {
             console.log('Status', stat)
             if (stat.success && stat.data.subscription !== null) {
-                console.log('Subscription is there', stat.data.subscription)
+                console.log('Status1', stat)
+
                 let data = stat.data.subscription;
+                const { updateSubscription} = this.props;
+                        updateSubscription({
+                            prop: 'platinumDevCount',
+                            value: data.suNofPDev
+                        });
+                        updateSubscription({
+                            prop: 'goldDevCount',
+                            value: data.suNofGDe
+                        });
+                        updateSubscription({
+                            prop: 'bioDevCount',
+                            value: data.suNoofBio
+                        });
                 this.setState({
                     existingSubDate: moment(data.sueDate).format('DD-MMM-YYYY'),
-                    platinumCount: data.suNofPDev,
-                    goldCount: data.suNofGDev,
-                    biometricCount: data.suNoofBio,
-                    oyeSafeSub: data.suTotVal,
-                    grandTotal: data.sugTotVal,
                     isOyeSafe: true,
                     isPlatinum: data.suNofPDev !== 0,
                     isGold: data.suNofGDev !== 0,
-                    isBiometric: data.suNoofBio !== 0
-                })
+                });
                 let date = moment(new Date()).format()
-                console.log('Date', date)
                 let initialDateString = moment(date, "YYYY-MM-DDTHH:mm:ss a");
                 let endDateString = moment(data.sueDate, "YYYY-MM-DDTHH:mm:ss a");
                 let duration = moment.duration(endDateString.diff(initialDateString));
                 await base.utils.logger.log(duration.days());
                 let difference = duration.as('days');
                 let isSubValid = true;
-                console.log('Difference between times', difference)
                 if (difference < 0) {
                     isSubValid = false
                 }
                 this.setState({
                     isSubValid: isSubValid
                 })
+                this.getCompletePriceCal()
+
             } else {
-                console.log('Check for Def value details', stat.success)
+                console.log('Status2', stat)
                 this.setState({
-                    platinumCount: 1,
-                    goldCount: 1,
-                    biometricCount: 1,
-                })
+                    isOyeSafe: true,
+                    isPlatinum: true,
+                    isGold:true,
+                });
+                this.getCompletePriceCal()
             }
         } catch (error) {
+            console.log('Status3', error)
             console.log('Error in get latest Subscription', error)
         }
+    }
+
+    getCompletePriceCal(){
+        console.log('Caluclate details pltmjjh',this.props.subscriptionReducer)
+        let pricePlatWithDev = base.utils.validate.getPrice(this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)
+        let priceGoldWithDev=base.utils.validate.getPrice(this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)
+        let priceBioWithDev=base.utils.validate.getPrice(this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)
+        console.log('Price Cal per dev', pricePlatWithDev,priceGoldWithDev,priceBioWithDev)
+        const { updateSubscription} = this.props;
+            updateSubscription({
+                prop: 'platinumTotalPrice',
+                value: pricePlatWithDev
+            });
+
+            updateSubscription({
+                prop: 'goldTotalPrice',
+                value: priceGoldWithDev
+            });
+
+            updateSubscription({
+                prop: 'biometricTotalPrice',
+                value: priceBioWithDev
+            });
+
+            this.getPricingOfDevForDuration()
     }
 
     async getPricingDetails() {
@@ -111,13 +122,20 @@ class SubscriptionManagement extends React.Component {
         try {
             console.log('Status in Pricing Details', stat)
             if (stat.success && stat.data.pricing.length !== 0) {
-                this.setState({
-                    platinumDevPrc: stat.data.pricing[0].pdValue,
-                    goldDevPrc: stat.data.pricing[1].pdValue,
-                    biometricPrc: stat.data.pricing[2].pdValue,
-                    platinumPlanPrc: stat.data.pricing[3].pdValue,
-                    goldPlanPrc: stat.data.pricing[4].pdValue
-                })
+
+                const { updateSubscription} = this.props;
+                updateSubscription({
+                    prop: 'platDevPrice',
+                    value: stat.data.pricing[0].pdValue
+                });
+                updateSubscription({
+                    prop: 'goldDevPrice',
+                    value: stat.data.pricing[1].pdValue
+                });
+                updateSubscription({
+                    prop: 'biometricPrice',
+                    value: stat.data.pricing[2].pdValue
+                });
             }
         } catch (error) {
             console.log('Error in Pricing Details', error)
@@ -126,8 +144,11 @@ class SubscriptionManagement extends React.Component {
 
     async getDiscountingDetails() {
         console.log('PropsInSubScreenPricingData', this.props)
+
         let stat = await base.services.OyeSafeApiFamily.getDiscountingData(this.props.userReducer.SelectedAssociationID)
         try {
+            const { updateSubscription} = this.props;
+
             console.log('Status in Discounting Details', stat)
             if (stat.success && stat.data.discounting.length !== 0) {
                 let disList = stat.data.discounting;
@@ -140,10 +161,17 @@ class SubscriptionManagement extends React.Component {
                         oyeLivingList.push(disList[i])
                     }
                 }
-                this.setState({
-                    oyeSafeDisList: oyeSafeList,
-                    oyeLivingDisList: oyeLivingList
-                })
+
+                updateSubscription({
+                    prop: 'oyeSafeList',
+                    value: oyeSafeList
+                });
+
+                updateSubscription({
+                    prop: 'oyeLivList',
+                    value: oyeLivingList
+                });
+
                 console.log('Discounting lists', oyeSafeList, oyeLivingList)
             }
         } catch (error) {
@@ -225,64 +253,64 @@ class SubscriptionManagement extends React.Component {
     }
 
     changeTheCountOfDevices(value, name, count, unitPrice) {
-        console.log('change the values', value, name, count)
         let countOfDev = count
         if (value === 0) {
             countOfDev = countOfDev - 1
         } else {
             countOfDev = countOfDev + 1
         }
-        console.log('CountOfDev', countOfDev)
-
+        const { updateSubscription} = this.props;
         if (name === 'Platinum') {
-            this.setState({
-                platinumCount: countOfDev,
-            })
+            updateSubscription({
+                prop: 'platinumDevCount',
+                value: countOfDev
+            });
+
         } else if (name === 'Gold') {
-            this.setState({
-                goldCount: countOfDev,
-            })
+            updateSubscription({
+                prop: 'goldDevCount',
+                value: countOfDev
+            });
+
         } else if (name === 'Biometric') {
-            this.setState({
-                biometricCount: countOfDev,
-            })
+            updateSubscription({
+                prop: 'bioDevCount',
+                value: countOfDev
+            });
         }
-        this.setState({
-            isCardsHide:false
-        });
         this.getPricingWithEachDev(name, countOfDev, unitPrice)
     }
 
     getPricingWithEachDev(name, countOfDev, unitPrice) {
         let pricingWithDev = base.utils.validate.getPrice(countOfDev, unitPrice)
-        console.log('Total Pricing amount with devices', pricingWithDev)
-        let bioMetricPrice = this.state.biometricPriceT;
-        let goldPrice = this.state.goldPriceT;
-        let platinumPrice = this.state.platinumPriceT;
+        console.log('Total Pricing amount with devices', pricingWithDev,this.props)
+        const { updateSubscription} = this.props;
+
         if (name === "Platinum") {
-            platinumPrice = pricingWithDev
-            this.setState({
-                platinumPriceT: pricingWithDev,
-            })
+            updateSubscription({
+                prop: 'platinumTotalPrice',
+                value: pricingWithDev
+            });
         } else if (name === "Gold") {
-            goldPrice = pricingWithDev
-            this.setState({
-                goldPriceT: pricingWithDev,
-            })
+            updateSubscription({
+                prop: 'goldTotalPrice',
+                value: pricingWithDev
+            });
         } else if (name === "Biometric") {
-            bioMetricPrice = pricingWithDev
-            this.setState({
-                biometricPriceT: pricingWithDev
-            })
+            updateSubscription({
+                prop: 'biometricTotalPrice',
+                value: pricingWithDev
+            });
         }
-        this.getPricingOfDevForDuration(bioMetricPrice, goldPrice, platinumPrice)
+        this.getPricingOfDevForDuration()
 
     }
 
-    getPricingOfDevForDuration(biometricPrice, goldPrice, PlatinumPrice) {
-        let oyeSafeList = this.state.oyeSafeDisList;
-        console.log('Get oyeSafeList', oyeSafeList,biometricPrice, goldPrice, PlatinumPrice);
-        let totalPrice = biometricPrice + goldPrice + PlatinumPrice;
+    getPricingOfDevForDuration() {
+        console.log('this props in getPricingofDev',this.props.subscriptionReducer)
+        let oyeSafeList = this.props.subscriptionReducer.oyeSafeList;
+        console.log('Get oyeSafeList', oyeSafeList);
+        let totalPrice=this.props.subscriptionReducer.biometricTotalPrice+this.props.subscriptionReducer.platinumTotalPrice+this.props.subscriptionReducer.goldTotalPrice
         let priceOfDevWithDur, priceWithDis;
 
         for (let i = 0; i < oyeSafeList.length; i++) {
@@ -298,44 +326,70 @@ class SubscriptionManagement extends React.Component {
             oyeSafeList[i].priceWithDis = priceWithDis;
         }
         console.log("OyeSafe List", oyeSafeList)
-        this.setState({
-            oyeSafeDisList: oyeSafeList
-        })
-        for(let i=0;i<oyeSafeList;i++){
+        const { updateSubscription} = this.props;
+
+        updateSubscription({
+            prop: 'oyeSafeList',
+            value: oyeSafeList
+        });
+
+        for(let i=0;i<oyeSafeList.length;i++){
             if(oyeSafeList[i].pdIsActive){
-                this.setState({
-                    oyeSafeSub:oyeSafeList[i].priceWithGST,
-                    oyeSafeGST:oyeSafeList[i].valueOfGST,
-                    grandTotal:oyeSafeList[i].priceWithGST
-                })
+                updateSubscription({
+                    prop: 'oyeSafePrice',
+                    value: oyeSafeList[i].priceWithGST.toFixed(2)
+                });
+                updateSubscription({
+                    prop: 'oyeSafeGST',
+                    value: oyeSafeList[i].valueOfGST.toFixed(2)
+                });
+                updateSubscription({
+                    prop: 'grandTotal',
+                    value: oyeSafeList[i].priceWithGST.toFixed(2)
+                });
             }
         }
 
     }
+
     checkBoxPlatinum(value){
+        console.log('Value Before',value)
+        const { updateSubscription} = this.props;
 
         if (this.state.isOyeSafe) {
             this.setState({
                 isPlatinum: !this.state.isPlatinum,
-                isBiometric: true
             })
         } else {
             Alert.alert('Please select oyeSafe for editing')
         }
         if(value){
-            this.setState({
-                platinumPriceT:0,
-                biometricPriceT:0
-            })
-            this.getPricingOfDevForDuration(0, this.state.goldPriceT, 0)
+            updateSubscription({
+                prop: 'platinumTotalPrice',
+                value:0
+            });
+            updateSubscription({
+                prop: 'biometricTotalPrice',
+                value: 0
+            });
+            updateSubscription({
+                prop: 'platinumDevCount',
+                value:0
+            });
+            updateSubscription({
+                prop: 'bioDevCount',
+                value:0
+            });
+            this.getPricingOfDevForDuration()
 
         }
         else{
-            this.getPricingOfDevForDuration(this.state.biometricPriceT, this.state.goldPriceT, this.state.platinumPriceT)
+            this.getPricingOfDevForDuration()
 
         }
     }
     checkBoxGold(value){
+        const { updateSubscription} = this.props;
 
         if (this.state.isOyeSafe) {
             this.setState({
@@ -345,18 +399,26 @@ class SubscriptionManagement extends React.Component {
             Alert.alert('Please select oyeSafe for editing')
         }
         if(value){
-            this.setState({
-                goldPriceT:0
-            })
-            this.getPricingOfDevForDuration( this.state.biometricPriceT, 0,this.state.platinumPriceT)
+            updateSubscription({
+                prop: 'goldTotalPrice',
+                value: 0
+            });
+            updateSubscription({
+                prop: 'goldDevCount',
+                value: 0
+            });
+            this.getPricingOfDevForDuration()
         }
         else{
-            this.getPricingOfDevForDuration( this.state.biometricPriceT, this.state.goldPriceT,this.state.platinumPriceT)
+            this.getPricingOfDevForDuration()
 
         }
     }
 
+
+
     render() {
+        console.log('Props in SubScreen',this.props.subscriptionReducer)
         return (
             <ScrollView style={{height: '100%', width: '100%'}}>
                 <View style={{
@@ -389,11 +451,6 @@ class SubscriptionManagement extends React.Component {
                             this.setState({
                                 isOyeSafe: !this.state.isOyeSafe,
                             })
-                            if(this.state.isOyeSafe){
-                                this.setState({
-                                    oyeSafeSub:0
-                                })
-                            }
                         }}
                         isChecked={this.state.isOyeSafe}
                         checkedImage={<Image source={require('../../../icons/checkbox.png')}
@@ -499,7 +556,7 @@ class SubscriptionManagement extends React.Component {
                                 <Text style={{
                                     fontSize: 12,
                                     color: base.theme.colors.black
-                                }}>{this.state.platinumDevPrc}</Text>
+                                }}>{this.props.subscriptionReducer.platDevPrice}</Text>
                             </View>
                             <View
                                 style={{
@@ -509,10 +566,10 @@ class SubscriptionManagement extends React.Component {
                                     justifyContent: 'space-around',
                                     flexDirection: 'row'
                                 }}>
-                                {this.state.platinumCount === 1 || !this.state.isPlatinum ?
+                                {this.props.subscriptionReducer.platinumDevCount <= 1 || !this.state.isPlatinum ?
                                     <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(0, 'Platinum', this.state.platinumCount, this.state.platinumDevPrc)}>
+                                        onPress={() => this.changeTheCountOfDevices(0, 'Platinum', this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
                                                source={require('../../../icons/subtract.png')}
                                         />
@@ -520,10 +577,10 @@ class SubscriptionManagement extends React.Component {
                                 <Text style={{
                                     fontSize: 12,
                                     color: base.theme.colors.black
-                                }}>{this.state.platinumCount}</Text>
+                                }}>{this.props.subscriptionReducer.platinumDevCount}</Text>
                                 {!this.state.isPlatinum ? <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(1, 'Platinum', this.state.platinumCount, this.state.platinumDevPrc)}>
+                                        onPress={() => this.changeTheCountOfDevices(1, 'Platinum', this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
                                                source={require('../../../icons/add.png')}
                                         />
@@ -572,7 +629,7 @@ class SubscriptionManagement extends React.Component {
                                 <Text style={{
                                     fontSize: 12,
                                     color: base.theme.colors.black
-                                }}>{this.state.goldDevPrc}</Text>
+                                }}>{this.props.subscriptionReducer.goldDevPrice}</Text>
                             </View>
                             <View
                                 style={{
@@ -582,21 +639,20 @@ class SubscriptionManagement extends React.Component {
                                     justifyContent: 'space-around',
                                     flexDirection: 'row'
                                 }}>
-                                {this.state.goldCount === 1 || !this.state.isGold ?
+                                {this.props.subscriptionReducer.goldDevCount <= 1 || !this.state.isGold ?
                                     <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(0, 'Gold', this.state.goldCount, this.state.goldDevPrc)}>
+                                        onPress={() => this.changeTheCountOfDevices(0, 'Gold', this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
                                                source={require('../../../icons/subtract.png')}
                                         />
                                     </TouchableOpacity>
                                 }
-
                                 <Text
-                                    style={{fontSize: 12, color: base.theme.colors.black}}>{this.state.goldCount}</Text>
+                                    style={{fontSize: 12, color: base.theme.colors.black}}>{ this.props.subscriptionReducer.goldDevCount}</Text>
                                 {!this.state.isGold ? <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(1, 'Gold', this.state.goldCount, this.state.goldDevPrc)}>
+                                        onPress={() => this.changeTheCountOfDevices(1, 'Gold', this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
                                                source={require('../../../icons/add.png')}
                                         />
@@ -618,16 +674,12 @@ class SubscriptionManagement extends React.Component {
                                 <CheckBox
                                     style={{marginLeft: 5}}
                                     onClick={() => {
-                                        //  console.log('No action')
                                         if (this.state.isOyeSafe) {
                                             this.state.isPlatinum ? Alert.alert('For Platinum Biometric is mandatory') : Alert.alert('You can select Biometric with Platinum only')
                                         } else {
                                             Alert.alert('Please select oyeSafe for editing')
                                         }
 
-                                        /*this.setState({
-                                            isBiometric:this.state.isPlatinum
-                                        })*/
                                     }}
                                     isChecked={this.state.isPlatinum}
                                     checkedImage={<Image source={require('../../../icons/checkbox1.png')}
@@ -653,7 +705,7 @@ class SubscriptionManagement extends React.Component {
                                 <Text style={{
                                     fontSize: 12,
                                     color: base.theme.colors.black
-                                }}>{this.state.biometricPrc}</Text>
+                                }}>{this.props.subscriptionReducer.biometricPrice}</Text>
                             </View>
                             <View
                                 style={{
@@ -663,10 +715,10 @@ class SubscriptionManagement extends React.Component {
                                     justifyContent: 'space-around',
                                     flexDirection: 'row'
                                 }}>
-                                {this.state.biometricCount === 1 || !this.state.isPlatinum ?
+                                {this.props.subscriptionReducer.bioDevCount <= 1 || !this.state.isPlatinum ?
                                     <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(0, 'Biometric', this.state.biometricCount, this.state.biometricPrc)}>
+                                        onPress={() => this.changeTheCountOfDevices(0, 'Biometric', this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
                                                source={require('../../../icons/subtract.png')}
                                         />
@@ -675,10 +727,10 @@ class SubscriptionManagement extends React.Component {
                                 <Text style={{
                                     fontSize: 12,
                                     color: base.theme.colors.black
-                                }}>{this.state.biometricCount}</Text>
+                                }}>{this.props.subscriptionReducer.bioDevCount}</Text>
                                 {!this.state.isPlatinum ? <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(1, 'Biometric', this.state.biometricCount, this.state.biometricPrc)}>
+                                        onPress={() => this.changeTheCountOfDevices(1, 'Biometric', this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
                                                source={require('../../../icons/add.png')}
                                         />
@@ -686,17 +738,15 @@ class SubscriptionManagement extends React.Component {
                                 }
                             </View>
                         </View>
-                        {!this.state.isCardsHide?
                         <View style={{width: '100%', marginTop: 25}}>
                             <FlatList
-                                data={this.state.oyeSafeDisList}
+                                data={this.props.subscriptionReducer.oyeSafeList}
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={(item, index) => this.arrangeTails(item, index)}
-                                extraData={this.state}
+                                extraData={this.props}
                                 horizontal={true}
                             />
                         </View>
-                            :<View style={{width: '100%', marginTop: 25}}/>}
                         <View style={{
                             width: '100%', borderWidth: 1, borderColor: base.theme.colors.lightgrey, height: '10%',
                             alignItems: 'center', justifyContent: 'space-around', marginTop: 10, flexDirection: 'row'
@@ -705,13 +755,13 @@ class SubscriptionManagement extends React.Component {
                                 <Text style={{fontSize: 14, color: base.theme.colors.primary}}> Sub Total -
                                     <Text style={{color: base.theme.colors.black}}
                                           multiLine={true}
-                                    > {base.utils.strings.rupeeIconCode}{this.state.oyeSafeSub}</Text>
+                                    > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.oyeSafePrice}</Text>
                                 </Text>
                             </View>
                             <View style={{width: '50%',}}>
                                 <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey}}>Incl GST @ 18%:
                                     <Text multiLine={true}
-                                    > {base.utils.strings.rupeeIconCode}{this.state.oyeSafeGST}</Text>
+                                    > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.oyeSafeGST}</Text>
                                 </Text>
                             </View>
                         </View>
@@ -721,22 +771,23 @@ class SubscriptionManagement extends React.Component {
                     <Text style={{fontSize: 18, color: base.theme.colors.primary}}> Grand Total -
                         <Text style={{color: base.theme.colors.black}}
                               multiLine={true}
-                        > {base.utils.strings.rupeeIconCode}{this.state.grandTotal}</Text>
+                        > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.grandTotal}</Text>
                     </Text>
                     <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey}}>(Including all taxes)</Text>
                 </View>
                 {this.state.isShowModal ?
                     this.showModalDesc() :
                     <View/>}
+
                 <TouchableOpacity onPress={() => Alert.alert('We will release payment gateway feature soon !!!')}
                                   style={{
-                                      height: '10%',
+                                      height:70,
                                       width: '100%',
-                                      backgroundColor: base.theme.colors.primary,
+                                      backgroundColor:this.state.isOyeSafe? base.theme.colors.primary: base.theme.colors.lightgrey,
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                       marginTop: 20,
-                                  }}>
+                                  }} disabled={!this.state.isOyeSafe}>
                     <Text style={{fontSize: 18, color: base.theme.colors.white}}>Pay Now</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -783,7 +834,6 @@ class SubscriptionManagement extends React.Component {
                             data={this.state.dataToShowInDesc}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={(item, index) => this.descPointsView(item, this.state.isDeviceName)}
-                            extraData={this.state}
                         />
                     </View>
 
@@ -828,11 +878,9 @@ class SubscriptionManagement extends React.Component {
     }
 
     arrangeTails(item, index) {
-        console.log('TailsData', item, index)
+        console.log('TailsData',item, item.item, index)
 
-        //let duration=parseInt(item.item.pdDisDur)<12?'Months':parseInt(item.item.pdDisDur)===12 ?'Year':'Years'
         let durNum, duration;
-
 
         if (parseInt(item.item.pdDisDur) < 12) {
             if (parseInt(item.item.pdDisDur) === 1) {
@@ -899,8 +947,8 @@ class SubscriptionManagement extends React.Component {
     }
 
     getCardSelected(item) {
-        console.log('Selected Card:', item, this.state.oyeSafeDisList)
-        let oyeSafeDisList = this.state.oyeSafeDisList;
+        console.log('Selected Card:', item, this.props.subscriptionReducer.oyeSafeList)
+        let oyeSafeDisList = this.props.subscriptionReducer.oyeSafeList;
         for (let i = 0; i < oyeSafeDisList.length; i++) {
                if(item.index===i){
                  oyeSafeDisList[i].pdIsActive=true
@@ -909,22 +957,34 @@ class SubscriptionManagement extends React.Component {
                    oyeSafeDisList[i].pdIsActive=false
                }
         }
-        this.setState({
-            oyeSafeDisList:oyeSafeDisList,
-            oyeSafeSub:item.item.priceWithGST.toFixed(2),
-            oyeSafeGST:item.item.valueOfGST.toFixed(2),
-            grandTotal:item.item.priceWithGST.toFixed(2),
+        const { updateSubscription} = this.props;
+                updateSubscription({
+                    prop: 'oyeSafePrice',
+                    value: item.item.priceWithGST.toFixed(2)
+                });
+                updateSubscription({
+                    prop: 'oyeSafeGST',
+                    value: item.item.valueOfGST.toFixed(2)
+                });
+                updateSubscription({
+                    prop: 'grandTotal',
+                    value: item.item.priceWithGST.toFixed(2)
+                });
+                updateSubscription({
+                     prop: 'oyeSafeList',
+                    value: oyeSafeDisList
+                });
 
-        })
     }
 }
 const mapStateToProps = state => {
     return {
         dashBoardReducer: state.DashboardReducer,
-        userReducer: state.UserReducer
+        userReducer: state.UserReducer,
+        subscriptionReducer:state.SubscriptionReducer,
     };
 };
 
 export default connect(
-    mapStateToProps,
+    mapStateToProps,{updateSubscription}
 )(SubscriptionManagement)

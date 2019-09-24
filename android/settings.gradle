@@ -1,4 +1,6 @@
 rootProject.name = 'OyeSpace'
+include ':react-native-audio-recorder-player'
+project(':react-native-audio-recorder-player').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-audio-recorder-player/android')
 include ':react-native-android-wifi'
 project(':react-native-android-wifi').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-wifi/android')
 include ':react-native-android-location-enabler'
@@ -55,5 +57,6 @@ include ':react-native-maps'
 project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
 include ':react-native-geolocation-service'
 project(':react-native-geolocation-service').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-geolocation-service/android')
-
+include ':react-native-system-setting'
+project(':react-native-system-setting').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-system-setting/android')
 include ':app'
