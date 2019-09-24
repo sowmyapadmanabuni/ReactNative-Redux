@@ -228,21 +228,21 @@ class CreateSOS extends React.Component {
 
     stopSound(){
         // this.sound.stop();
-        Sound.setCategory('Playback');
-        var sound = new Sound('sound_1.mp3', Sound.MAIN_BUNDLE, (error) => {
-            sound.setVolume(0);
-            if (error) {
-                console.log('failed to load the sound', error);
-                return;
-            }
-            sound.stop((success) => {
+        // Sound.setCategory('Playback');
+        // var sound = new Sound('sound_1.mp3', Sound.MAIN_BUNDLE, (error) => {
+        //     sound.setVolume(0);
+        //     if (error) {
+        //         console.log('failed to load the sound', error);
+        //         return;
+        //     }
+            this.sound.stop((success) => {
                 if (success) {
                     console.log('successfully finished playing');
                 } else {
                     console.log('playback failed due to audio decoding errors');
                 }
             });
-        });
+       // });
     }
 
     componentWillUnmount() {
@@ -446,8 +446,16 @@ class CreateSOS extends React.Component {
                     })
                 }
             } else {
-                if (self.state.isGuardDetailAvailable) {
+                if (!self.state.isGuardDetailAvailable && receivedData!==null) {
                     console.log("Receiveddata123");
+                    self.sound.stop((success) => {
+                        console.log("Sucuuu:",success)
+                        if (success) {
+                            console.log('successfully finished playing');
+                        } else {
+                            console.log('playback failed due to audio decoding errors');
+                        }
+                    });
                     self.props.navigation.goBack(null);
                 }
             }
