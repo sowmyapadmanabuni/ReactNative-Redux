@@ -314,8 +314,8 @@ class CreateSOS extends React.Component {
         let userName =data.userReducer.userData.data.account[0].acfName;
         let userMobile = (data.userReducer.userData.data.account[0].acMobile).toString();
         let unitId = data.dashBoardReducer.uniID;
-        let latitude = this.state.region.latitude;
-        let longitude = this.state.region.longitude;
+        let latitude = (this.state.region.latitude).toString();
+        let longitude = (this.state.region.longitude).toString();
         let unitName = data.dashBoardReducer.selectedDropdown1;
         let isActive = true;
 
@@ -420,6 +420,14 @@ class CreateSOS extends React.Component {
                 console.log("Response in Create SOS API:", responseJson)
                 self.setState({
                     sosId:responseJson.data.sosid
+                },()=>{
+                    firebase.database().ref('SOS/' + detail.ASAssnID + "/" + detail.ACAccntID + "/").update({
+                        id:self.state.sosId
+                    }).then((data) => {
+                        
+                    }).catch((err) => {
+                        console.log("Error:", err)
+                    });
                 })
             }).catch((err) => {
             console.log("Error", err)
@@ -473,8 +481,8 @@ class CreateSOS extends React.Component {
                             mobileNumber: receivedData.attendedByMobile,
                             imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
                             region: {
-                                latitude: receivedData.latitude,
-                                longitude: receivedData.longitude,
+                                latitude: parseFloat(receivedData.latitude),
+                                longitude: parseFloat(receivedData.longitude),
                                 latitudeDelta: LATITUDE_DELTA,
                                 longitudeDelta: LONGITUDE_DELTA,
                             }
@@ -484,8 +492,8 @@ class CreateSOS extends React.Component {
                             isGuardDetailAvailable: false,
                             imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
                             region: {
-                                latitude: receivedData.latitude,
-                                longitude: receivedData.longitude,
+                                latitude: parseFloat(receivedData.latitude),
+                                longitude: parseFloat(receivedData.longitude),
                                 latitudeDelta: LATITUDE_DELTA,
                                 longitudeDelta: LONGITUDE_DELTA,
                             }
@@ -543,14 +551,15 @@ class CreateSOS extends React.Component {
 
 
     render() {
-        let imageURI = require('../../../icons/camera.png')
+        let imageURI = require('../../../icons/camera.png');
+        let unitName = this.props.dashBoardReducer.selectedDropdown1 === undefined || this.props.dashBoardReducer.selectedDropdown1 === null ?"Help is on the way":`Help is on the way to your unit - ${this.props.dashBoardReducer.selectedDropdown1}`;
         console.log("Guard Detail:", this.state);
         return (
             <ScrollView style={CreateSOSStyles.container}>
                 <View style={{marginBottom:50}}>
 
                     <View style={CreateSOSStyles.header}>
-                        <Text style={CreateSOSStyles.headerText}>Help is on the way to your unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
+                        <Text style={CreateSOSStyles.headerText}>{unitName}</Text>
                     </View>
 
                     <View style={CreateSOSStyles.mapBox}>
