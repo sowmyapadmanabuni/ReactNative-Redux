@@ -13,7 +13,7 @@ const isMandatory = ' is required';
     2. apidev  --- For development server
     3. api     --- For production server
 */
-let urlType = 'api';
+const urlType = 'api';
 
 const api = {
   oyeSafeApiDomainFamily: isDev
@@ -43,6 +43,7 @@ const api = {
 const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
 const strings = {
+  urlType : urlType,
   appName: 'OyeSpace',
   //oyeSafeUrl:api.protocol+api.oyeSafeDomain, Patrolling it is like this
   oyeSafeUrlFamily: api.protocol + api.oyeSafeApiDomainFamily,
