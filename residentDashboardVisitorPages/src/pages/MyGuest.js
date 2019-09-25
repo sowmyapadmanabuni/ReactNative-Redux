@@ -22,6 +22,7 @@ import {Button, Card, CardItem, Form, Input, Item} from 'native-base';
 
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../src/assets/selection.json';
+import base from "../../../src/base";
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
@@ -64,6 +65,7 @@ class MyGuests extends Component {
     componentDidMount() {
         let self = this;
         let newDataSource = [];
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.state.dataSource.map(data => {
             newDataSource.push({...data, open: false});
         });

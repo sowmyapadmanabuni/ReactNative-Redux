@@ -13,14 +13,12 @@ class SubscriptionManagement extends React.Component {
             oyeLivingProps: [{label: 'Platinum', value: 0},
                 {label: 'Gold', value: 1}],
             isOyeLiving: false,
-            isOyeSafe: false,
-            isPlatinum: false,
-            isGold: false,
             isShowModal: false,
             isDeviceName: null,
             dataToShowInDesc: [],
             existingSubDate: "",
             isSubValid: true,
+            enablePayment:false,
         }
     }
 
@@ -55,11 +53,21 @@ class SubscriptionManagement extends React.Component {
                             prop: 'bioDevCount',
                             value: data.suNoofBio
                         });
+                         updateSubscription({
+                              prop: 'isOyeSafe',
+                              value: data.oyeSafeSubs
+                         });
+                         updateSubscription({
+                              prop: 'isPlatinum',
+                             value:  data.suNofPDev !== 0
+                         });
+                          updateSubscription({
+                               prop: 'isGold',
+                              value: data.suNofGDev !== 0
+                          });
+
                 this.setState({
                     existingSubDate: moment(data.sueDate).format('DD-MMM-YYYY'),
-                    isOyeSafe: true,
-                    isPlatinum: data.suNofPDev !== 0,
-                    isGold: data.suNofGDev !== 0,
                 });
                 let date = moment(new Date()).format()
                 let initialDateString = moment(date, "YYYY-MM-DDTHH:mm:ss a");
@@ -67,9 +75,18 @@ class SubscriptionManagement extends React.Component {
                 let duration = moment.duration(endDateString.diff(initialDateString));
                 await base.utils.logger.log(duration.days());
                 let difference = duration.as('days');
+                console.log('Get difference:',difference)
                 let isSubValid = true;
                 if (difference < 0) {
                     isSubValid = false
+                }
+                if(parseInt(difference)<=5){
+                    console.log('5 days left for payment')
+                    Alert.alert('Subscription is going to over in' +' '+ parseInt(difference)+' days. Please inform admin')
+                    this.setState({
+                        enablePayment:true
+                    })
+
                 }
                 this.setState({
                     isSubValid: isSubValid
@@ -79,9 +96,7 @@ class SubscriptionManagement extends React.Component {
             } else {
                 console.log('Status2', stat)
                 this.setState({
-                    isOyeSafe: true,
-                    isPlatinum: true,
-                    isGold:true,
+                    enablePayment:true
                 });
                 this.getCompletePriceCal()
             }
@@ -92,12 +107,12 @@ class SubscriptionManagement extends React.Component {
     }
 
     getCompletePriceCal(){
+        const { updateSubscription} = this.props;
         console.log('Caluclate details pltmjjh',this.props.subscriptionReducer)
         let pricePlatWithDev = base.utils.validate.getPrice(this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)
         let priceGoldWithDev=base.utils.validate.getPrice(this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)
         let priceBioWithDev=base.utils.validate.getPrice(this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)
         console.log('Price Cal per dev', pricePlatWithDev,priceGoldWithDev,priceBioWithDev)
-        const { updateSubscription} = this.props;
             updateSubscription({
                 prop: 'platinumTotalPrice',
                 value: pricePlatWithDev
@@ -353,13 +368,14 @@ class SubscriptionManagement extends React.Component {
     }
 
     checkBoxPlatinum(value){
-        console.log('Value Before',value)
+        console.log('Value Before',value,this.props)
         const { updateSubscription} = this.props;
 
-        if (this.state.isOyeSafe) {
-            this.setState({
-                isPlatinum: !this.state.isPlatinum,
-            })
+        if (this.props.subscriptionReducer.isOyeSafe) {
+            updateSubscription({
+                prop: 'isPlatinum',
+                value:!this.props.subscriptionReducer.isPlatinum
+            });
         } else {
             Alert.alert('Please select oyeSafe for editing')
         }
@@ -389,12 +405,15 @@ class SubscriptionManagement extends React.Component {
         }
     }
     checkBoxGold(value){
+        console.log('Value BeforeSUBBBB',value,this.props)
+
         const { updateSubscription} = this.props;
 
-        if (this.state.isOyeSafe) {
-            this.setState({
-                isGold: !this.state.isGold,
-            })
+        if (this.props.subscriptionReducer.isOyeSafe) {
+            updateSubscription({
+                prop: 'isGold',
+                value: !this.props.subscriptionReducer.isGold
+            });
         } else {
             Alert.alert('Please select oyeSafe for editing')
         }
@@ -418,7 +437,9 @@ class SubscriptionManagement extends React.Component {
 
 
     render() {
-        console.log('Props in SubScreen',this.props.subscriptionReducer)
+        console.log('Props in SubScreen',this.props.subscriptionReducer);
+        const { updateSubscription} = this.props;
+
         return (
             <ScrollView style={{height: '100%', width: '100%'}}>
                 <View style={{
@@ -448,11 +469,12 @@ class SubscriptionManagement extends React.Component {
                     <CheckBox
                         style={{marginLeft: 20}}
                         onClick={() => {
-                            this.setState({
-                                isOyeSafe: !this.state.isOyeSafe,
-                            })
+                            updateSubscription({
+                                prop: 'isOyeSafe',
+                                value: !this.props.subscriptionReducer.isOyeSafe
+                            });
                         }}
-                        isChecked={this.state.isOyeSafe}
+                        isChecked={this.props.subscriptionReducer.isOyeSafe}
                         checkedImage={<Image source={require('../../../icons/checkbox.png')}
                                              style={{height: 30, width: 30}}/>}
                         unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
@@ -516,7 +538,7 @@ class SubscriptionManagement extends React.Component {
                         </View>
                         <View style={{
                             width: '98%', flexDirection: 'row', height: '7%',
-                            backgroundColor: this.state.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,
+                            backgroundColor: this.props.subscriptionReducer.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,
                         }}>
                             <View style={{
                                 width: '25%',
@@ -528,8 +550,8 @@ class SubscriptionManagement extends React.Component {
                             }}>
                                 <CheckBox
                                     style={{marginLeft: 5}}
-                                    onClick={(value) => {this.checkBoxPlatinum(this.state.isPlatinum)}}
-                                    isChecked={this.state.isPlatinum}
+                                    onClick={(value) => {this.checkBoxPlatinum(this.props.subscriptionReducer.isPlatinum)}}
+                                    isChecked={this.props.subscriptionReducer.isPlatinum}
                                     checkedImage={<Image source={require('../../../icons/checkbox1.png')}
                                                          style={{height: 15, width: 15}}/>}
                                     unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
@@ -555,7 +577,10 @@ class SubscriptionManagement extends React.Component {
 
                                 <Text style={{
                                     fontSize: 12,
-                                    color: base.theme.colors.black
+                                    color: base.theme.colors.black,
+                                    textDecorationLine: 'line-through',
+                                    textDecorationStyle: 'solid',
+                                    textDecorationColor: '#ffffff',
                                 }}>{this.props.subscriptionReducer.platDevPrice}</Text>
                             </View>
                             <View
@@ -566,7 +591,7 @@ class SubscriptionManagement extends React.Component {
                                     justifyContent: 'space-around',
                                     flexDirection: 'row'
                                 }}>
-                                {this.props.subscriptionReducer.platinumDevCount <= 1 || !this.state.isPlatinum ?
+                                {this.props.subscriptionReducer.platinumDevCount === 0 || !this.props.subscriptionReducer.isPlatinum ?
                                     <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(0, 'Platinum', this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)}>
@@ -578,7 +603,7 @@ class SubscriptionManagement extends React.Component {
                                     fontSize: 12,
                                     color: base.theme.colors.black
                                 }}>{this.props.subscriptionReducer.platinumDevCount}</Text>
-                                {!this.state.isPlatinum ? <View style={{height: 15, width: 15}}/> :
+                                {!this.props.subscriptionReducer.isPlatinum ? <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(1, 'Platinum', this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
@@ -589,7 +614,7 @@ class SubscriptionManagement extends React.Component {
                         </View>
                         <View style={{
                             width: '98%', flexDirection: 'row', height: '7%',
-                            backgroundColor: this.state.isGold ? base.theme.colors.greyCard : base.theme.colors.white,
+                            backgroundColor: this.props.subscriptionReducer.isGold ? base.theme.colors.greyCard : base.theme.colors.white,
                         }}>
                             <View style={{
                                 width: '25%',
@@ -601,8 +626,8 @@ class SubscriptionManagement extends React.Component {
                             }}>
                                 <CheckBox
                                     style={{marginLeft: 5}}
-                                    onClick={(value) => {this.checkBoxGold(this.state.isGold)}}
-                                    isChecked={this.state.isGold}
+                                    onClick={(value) => {this.checkBoxGold(this.props.subscriptionReducer.isGold)}}
+                                    isChecked={this.props.subscriptionReducer.isGold}
                                     checkedImage={<Image source={require('../../../icons/checkbox1.png')}
                                                          style={{height: 15, width: 15}}/>}
                                     unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
@@ -628,7 +653,10 @@ class SubscriptionManagement extends React.Component {
 
                                 <Text style={{
                                     fontSize: 12,
-                                    color: base.theme.colors.black
+                                    color: base.theme.colors.black,
+                                    textDecorationLine: 'line-through',
+                                    textDecorationStyle: 'solid',
+                                    textDecorationColor: '#ffffff',
                                 }}>{this.props.subscriptionReducer.goldDevPrice}</Text>
                             </View>
                             <View
@@ -639,7 +667,7 @@ class SubscriptionManagement extends React.Component {
                                     justifyContent: 'space-around',
                                     flexDirection: 'row'
                                 }}>
-                                {this.props.subscriptionReducer.goldDevCount <= 1 || !this.state.isGold ?
+                                {this.props.subscriptionReducer.goldDevCount === 0 || !this.props.subscriptionReducer.isGold ?
                                     <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(0, 'Gold', this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)}>
@@ -650,7 +678,7 @@ class SubscriptionManagement extends React.Component {
                                 }
                                 <Text
                                     style={{fontSize: 12, color: base.theme.colors.black}}>{ this.props.subscriptionReducer.goldDevCount}</Text>
-                                {!this.state.isGold ? <View style={{height: 15, width: 15}}/> :
+                                {!this.props.subscriptionReducer.isGold ? <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(1, 'Gold', this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
@@ -661,7 +689,7 @@ class SubscriptionManagement extends React.Component {
                         </View>
                         <View style={{
                             width: '98%', flexDirection: 'row', height: '7%',
-                            backgroundColor: this.state.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,
+                            backgroundColor: this.props.subscriptionReducer.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,
                         }}>
                             <View style={{
                                 width: '25%',
@@ -674,14 +702,14 @@ class SubscriptionManagement extends React.Component {
                                 <CheckBox
                                     style={{marginLeft: 5}}
                                     onClick={() => {
-                                        if (this.state.isOyeSafe) {
-                                            this.state.isPlatinum ? Alert.alert('For Platinum Biometric is mandatory') : Alert.alert('You can select Biometric with Platinum only')
+                                        if (this.props.subscriptionReducer.isOyeSafe) {
+                                            this.props.subscriptionReducer.isPlatinum ? Alert.alert('For Platinum Biometric is mandatory') : Alert.alert('You can select Biometric with Platinum only')
                                         } else {
                                             Alert.alert('Please select oyeSafe for editing')
                                         }
 
                                     }}
-                                    isChecked={this.state.isPlatinum}
+                                    isChecked={this.props.subscriptionReducer.isPlatinum}
                                     checkedImage={<Image source={require('../../../icons/checkbox1.png')}
                                                          style={{height: 15, width: 15}}/>}
                                     unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
@@ -704,7 +732,10 @@ class SubscriptionManagement extends React.Component {
 
                                 <Text style={{
                                     fontSize: 12,
-                                    color: base.theme.colors.black
+                                    color: base.theme.colors.black,
+                                    textDecorationLine: 'line-through',
+                                    textDecorationStyle: 'solid',
+                                    textDecorationColor: '#ffffff',
                                 }}>{this.props.subscriptionReducer.biometricPrice}</Text>
                             </View>
                             <View
@@ -715,7 +746,7 @@ class SubscriptionManagement extends React.Component {
                                     justifyContent: 'space-around',
                                     flexDirection: 'row'
                                 }}>
-                                {this.props.subscriptionReducer.bioDevCount <= 1 || !this.state.isPlatinum ?
+                                {this.props.subscriptionReducer.bioDevCount === 0 || !this.props.subscriptionReducer.isPlatinum ?
                                     <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(0, 'Biometric', this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)}>
@@ -728,7 +759,7 @@ class SubscriptionManagement extends React.Component {
                                     fontSize: 12,
                                     color: base.theme.colors.black
                                 }}>{this.props.subscriptionReducer.bioDevCount}</Text>
-                                {!this.state.isPlatinum ? <View style={{height: 15, width: 15}}/> :
+                                {!this.props.subscriptionReducer.isPlatinum ? <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(1, 'Biometric', this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)}>
                                         <Image style={{height: 15, width: 15, alignSelf: 'center'}}
@@ -738,7 +769,7 @@ class SubscriptionManagement extends React.Component {
                                 }
                             </View>
                         </View>
-                        <View style={{width: '100%', marginTop: 25}}>
+                        <View style={{width: '100%', marginTop: 25,alignItems:'center'}}>
                             <FlatList
                                 data={this.props.subscriptionReducer.oyeSafeList}
                                 keyExtractor={(item, index) => index.toString()}
@@ -753,14 +784,18 @@ class SubscriptionManagement extends React.Component {
                         }}>
                             <View style={{width: '50%',}}>
                                 <Text style={{fontSize: 14, color: base.theme.colors.primary}}> Sub Total -
-                                    <Text style={{color: base.theme.colors.black}}
+                                    <Text style={{color: base.theme.colors.black,textDecorationLine: 'line-through',
+                                        textDecorationStyle: 'solid',
+                                        textDecorationColor: '#ffffff',}}
                                           multiLine={true}
                                     > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.oyeSafePrice}</Text>
                                 </Text>
                             </View>
                             <View style={{width: '50%',}}>
-                                <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey}}>Incl GST @ 18%:
-                                    <Text multiLine={true}
+                                <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey,}}>Incl GST @ 18%:
+                                    <Text multiLine={true} style={{textDecorationLine: 'line-through',
+                                        textDecorationStyle: 'solid',
+                                        textDecorationColor: '#ffffff',}}
                                     > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.oyeSafeGST}</Text>
                                 </Text>
                             </View>
@@ -769,12 +804,15 @@ class SubscriptionManagement extends React.Component {
                 </View>
                 <View style={{width: '100%', alignItems: 'center'}}>
                     <Text style={{fontSize: 18, color: base.theme.colors.primary}}> Grand Total -
-                        <Text style={{color: base.theme.colors.black}}
+                        <Text style={{color: base.theme.colors.black,textDecorationLine: 'line-through',
+                            textDecorationStyle: 'solid',
+                            textDecorationColor: '#ffffff',}}
                               multiLine={true}
                         > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.grandTotal}</Text>
                     </Text>
-                    <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey}}>(Including all taxes)</Text>
+                    <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey,}}>(Including all taxes)</Text>
                 </View>
+
                 {this.state.isShowModal ?
                     this.showModalDesc() :
                     <View/>}
@@ -783,11 +821,11 @@ class SubscriptionManagement extends React.Component {
                                   style={{
                                       height:70,
                                       width: '100%',
-                                      backgroundColor:this.state.isOyeSafe? base.theme.colors.primary: base.theme.colors.lightgrey,
+                                      backgroundColor:this.props.subscriptionReducer.isOyeSafe && this.state.enablePayment? base.theme.colors.primary: base.theme.colors.lightgrey,
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                       marginTop: 20,
-                                  }} disabled={!this.state.isOyeSafe}>
+                                  }} disabled={!(this.props.subscriptionReducer.isOyeSafe&&this.state.enablePayment)}>
                     <Text style={{fontSize: 18, color: base.theme.colors.white}}>Pay Now</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -922,6 +960,9 @@ class SubscriptionManagement extends React.Component {
                         fontSize: 14,
                         marginLeft: 5,
                         marginRight: 5,
+                        textDecorationLine: 'line-through',
+                        textDecorationStyle: 'solid',
+                        textDecorationColor: '#ffffff',
                     }}>{base.utils.strings.rupeeIconCode}{item.item.priceWithDis}</Text>
                     <Text style={{
                         fontSize: 10,

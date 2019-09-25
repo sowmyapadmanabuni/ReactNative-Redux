@@ -24,6 +24,7 @@ import {Button, Form, Input, Item, Label,} from "native-base";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {RadioButton, RadioGroup} from "react-native-flexi-radio-button";
 import {connect} from "react-redux";
+import base from "../src/base";
 
 var radio_props = [
     {label: 'Two Vehicle', value: 0},
@@ -74,6 +75,8 @@ class EditVehicle extends Component {
                 this.props.navigation.state.params.VehParkingSlotNum
                 : ""
         })
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
     }
 
     componentDidUpdate() {
@@ -527,8 +530,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
 
-        dashBoardReducer: state.DashboardReducer, //u have to call this in file where u need ids
+        dashBoardReducer: state.DashboardReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
+        userReducer: state.UserReducer,
+
 
 
     };

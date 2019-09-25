@@ -23,6 +23,7 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 //import Share from 'react-native-share';
 import ZoomImage from "react-native-zoom-image";
 import {connect} from 'react-redux';
+import base from "../src/base";
 
 
 class ViewAllVisitorsList extends Component {
@@ -119,6 +120,8 @@ class ViewAllVisitorsList extends Component {
     };
 
     componentDidMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+
         this.myVisitorsGetList();
     }
 
@@ -641,7 +644,9 @@ const mapStateToProps = state => {
     return {
         oyeURL: state.OyespaceReducer.oyeURL,
         associationid: state.DashboardReducer.associationid,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID
+        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        userReducer: state.UserReducer,
+
     }
 };
 

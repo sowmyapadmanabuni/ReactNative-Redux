@@ -104,6 +104,8 @@ class MyProfile extends Component {
         isLoading: false
       });
     }, 1500);
+    base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
   }
 
   componentDidUpdate() {
@@ -527,7 +529,9 @@ const mapStateToProps = state => {
     imageUrl: state.OyespaceReducer.imageUrl,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     dashBoardReducer: state.DashboardReducer,
-    mediaupload: state.OyespaceReducer.mediaupload
+    mediaupload: state.OyespaceReducer.mediaupload,
+    userReducer: state.UserReducer,
+
   };
 };
 

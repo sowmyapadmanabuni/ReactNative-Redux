@@ -75,6 +75,7 @@ class Resident extends React.Component {
     }
 
     componentWillMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.getMemberList();
     }
 

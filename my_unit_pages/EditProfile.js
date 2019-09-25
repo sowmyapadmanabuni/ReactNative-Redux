@@ -245,6 +245,9 @@ class EditProfile extends Component {
 
     componentWillMount() {
 
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
+
         console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params, this.props.navigation.state.params.primeCName, this.props.navigation.state.params.alterCName);
         this.setState({
             firstName: this.props.navigation.state.params.firstName,
@@ -806,6 +809,8 @@ const mapStateToProps = state => {
         imageUrl: state.OyespaceReducer.imageUrl,
         SelectedAssociationID: state.UserReducer.SelectedAssociationID,
         mediaupload: state.OyespaceReducer.mediaupload,
+        userReducer: state.UserReducer,
+
 
     }
 };

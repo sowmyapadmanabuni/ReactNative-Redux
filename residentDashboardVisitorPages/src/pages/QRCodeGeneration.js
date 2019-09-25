@@ -26,6 +26,7 @@ import {
 import RNFS from 'react-native-fs';
 import { captureRef, captureScreen } from 'react-native-view-shot';
 import { connect } from 'react-redux';
+import base from "../../../src/base";
 
 const catsSource = {
   uri: 'https://i.imgur.com/5EOyTDQ.jpg'
@@ -59,6 +60,7 @@ class QRCodeGeneration extends Component {
   }
 
   componentDidMount() {
+    base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
     this.associationName();
     this.qrGeneration();
   }
@@ -584,7 +586,9 @@ const mapStateToProps = state => {
     SelectedUnitID: state.UserReducer.SelectedUnitID,
     MyOYEMemberID: state.UserReducer.MyOYEMemberID,
     SelectedMemberID: state.UserReducer.SelectedMemberID,
-    dashBoardReducer: state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer,
+    userReducer: state.UserReducer
+
   };
 };
 
