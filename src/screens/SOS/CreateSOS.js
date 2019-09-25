@@ -115,6 +115,7 @@ class CreateSOS extends React.Component {
                         firebase.database().ref('SOS/' + response.ass + "/" + response.userId + "/").remove().then((response)=>{
                             let receivedData = response.val();
                             console.log("Response!!!!!!!",receivedData)
+                            self.stopSOSInAPI()
                             self.setState({
                                 isGuardDetailAvailable: false
                             },()=>{
@@ -327,6 +328,7 @@ class CreateSOS extends React.Component {
             }).then((data) => {
                 console.log("Data saved to RTD:", data);
                 self.sendPushNotification();
+                self.createSOSInAPI();
             }).catch((error) => {
                 console.log("Error:", error)
             })
@@ -362,7 +364,7 @@ class CreateSOS extends React.Component {
                         emergencyImages
                     }).then((data) => {
                         console.log("Image Saved in RTDB", data);
-                        //self.updateSOSInAPI(sosImage)
+                        self.updateSOSInAPI(sosImage)
                     }).catch((err) => {
                         console.log("Error:", err)
                     });
@@ -432,10 +434,23 @@ class CreateSOS extends React.Component {
             SOSID   : self.state.sosId
         }
         console.log("Detail in SOS update:",detail)
-    }
 
-    async deleteSOSInAPI() {
-
+        fetch(
+            `http://api.oyespace.com/oyesafe/api/v1/SOS/ImageUpdate`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                },
+                body: JSON.stringify(detail)
+            }).then(response => console.log("response.json():",response.json()))
+        //     .then(responseJson => {
+        //     console.log("Response in Update SOS API:", responseJson)
+        // })
+        .catch((err) => {
+            console.log("Error", err)
+        })
     }
 
 
@@ -782,14 +797,14 @@ class CreateSOS extends React.Component {
                     });
                     self.setState({
                         isGuardDetailAvailable: false
-                    });
+                    },()=>self.stopSOSInAPI());
                 self.props.navigation.navigate("ResDashBoard");
                 }  
                 else{
                     console.log("Hitiing Here@@@@@:")
                     let sosDetail = {
                         ass:associationID,
-                        userId:userId
+                        userId:userId,sosID:self.state.sosId
                     }
                     AsyncStorage.setItem("isSOSUpdatePending",JSON.stringify(sosDetail));
                     self.props.navigation.navigate("ResDashBoard");
@@ -803,6 +818,7 @@ class CreateSOS extends React.Component {
     }
 
     async stopSOSInAPI(){
+        console.log("Hitting")
         let self = this;
         let detail = {
             SOSID:self.state.sosId,
