@@ -391,6 +391,7 @@ class CreateSOS extends React.Component {
     async createSOSInAPI() {
         let self = this;
         let data = self.props;
+        let baseURL = base.utils.strings.urlType
 
         let detail = {
             SOGPSPnt: self.state.region.latitude + "," + self.state.region.longitude,
@@ -404,9 +405,9 @@ class CreateSOS extends React.Component {
             // ASAssnID:5520
         };
 
-        console.log("Stat in CreateSOSInAPI", detail);
+        console.log("Stat in CreateSOSInAPI", detail,baseURL);
         fetch(
-            `http://api.oyespace.com/oyesafe/api/v1/SOS/Create`,
+            `http://${baseURL}.oyespace.com/oyesafe/api/v1/SOS/Create`,
             {
                 method: 'POST',
                 headers: {
@@ -428,6 +429,7 @@ class CreateSOS extends React.Component {
 
     async updateSOSInAPI(imageURI) {
         let self = this;
+        let baseURL = base.utils.strings.urlType
 
         let detail = {
             SOImage : imageURI,
@@ -436,7 +438,7 @@ class CreateSOS extends React.Component {
         console.log("Detail in SOS update:",detail)
 
         fetch(
-            `http://api.oyespace.com/oyesafe/api/v1/SOS/ImageUpdate`,
+            `http://${baseURL}.oyespace.com/oyesafe/api/v1/SOS/ImageUpdate`,
             {
                 method: 'POST',
                 headers: {
@@ -820,6 +822,7 @@ class CreateSOS extends React.Component {
     async stopSOSInAPI(){
         console.log("Hitting")
         let self = this;
+        let baseURL = base.utils.strings.urlType
         let detail = {
             SOSID:self.state.sosId,
             DEName:"",
@@ -828,7 +831,7 @@ class CreateSOS extends React.Component {
         };
 
         fetch(
-            `http://api.oyespace.com/oyesafe/api/v1/SOS/SOSStopUpdate`,
+            `http://${baseURL}.oyespace.com/oyesafe/api/v1/SOS/SOSStopUpdate`,
             {
                 method: 'POST',
                 headers: {
