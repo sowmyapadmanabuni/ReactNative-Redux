@@ -28,6 +28,7 @@ import base from '../src/base';
 import { Dropdown } from 'react-native-material-dropdown';
 import ZoomImage from 'react-native-zoom-image';
 import { Easing } from 'react-native';
+import axios from 'axios';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -37,6 +38,7 @@ import AudioRecorderPlayer, {
 } from 'react-native-audio-recorder-player';
 import { ratio, screenWidth } from './Styles.js';
 import moment from 'moment';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 
 var audioRecorderPlayer;
@@ -49,6 +51,14 @@ class HelloWorldApp extends Component {
       relativeImage3: '',
       relativeImage4: '',
       relativeImage5: '',
+
+      myProfileImage1: '',
+      myProfileImage2: '',
+      myProfileImage3: '',
+      myProfileImage4: '',
+      myProfileImage5: '',
+
+      mp3uri: '',
 
       imageUrl: '',
       photo: null,
@@ -102,52 +112,37 @@ class HelloWorldApp extends Component {
         switch (this.state.id) {
           case 1:
             self.setState({
-              photo: response.uri,
-              photoDetails: response,
-              isPhotoAvailable: true,
-              imagePath: response.path,
-              relativeImage1: response.uri
+              myProfileImage1: response.uri
             });
+            this.uploadImage(response);
             alert(response.uri);
             break;
           case 2:
             self.setState({
-              photo: response.uri,
-              photoDetails: response,
-              isPhotoAvailable: true,
-              imagePath: response.path,
-              relativeImage2: response.uri
+              myProfileImage2: response.uri
             });
+            this.uploadImage(response);
             alert(response.uri);
             break;
           case 3:
             self.setState({
-              photo: response.uri,
-              photoDetails: response,
-              isPhotoAvailable: true,
-              imagePath: response.path,
-              relativeImage3: response.uri
+              myProfileImage3: response.uri
             });
+            this.uploadImage(response);
             alert(response.uri);
             break;
           case 4:
             self.setState({
-              photo: response.uri,
-              photoDetails: response,
-              isPhotoAvailable: true,
-              imagePath: response.path,
-              relativeImage4: response.uri
+              myProfileImage4: response.uri
             });
+            this.uploadImage(response);
             alert(response.uri);
             break;
           case 5:
             self.setState({
-              photo: response.uri,
-              photoDetails: response,
-              isPhotoAvailable: true,
-              imagePath: response.path,
-              relativeImage5: response.uri
+              myProfileImage5: response.uri
             });
+            this.uploadImage(response);
             alert(response.uri);
             break;
         }
@@ -166,6 +161,127 @@ class HelloWorldApp extends Component {
       }
     });
   }
+  async uploadImage(response) {
+    console.log('Image upload before', response);
+    let self = this;
+    let source = Platform.OS === 'ios' ? response.uri : response.uri;
+    console.log('Source', source);
+    const form = new FormData();
+    let imgObj = {
+      name: response.fileName !== undefined ? response.fileName : 'XXXXX.jpg',
+      uri: source,
+      type:
+        response.type !== undefined || response.type != null
+          ? response.type
+          : 'image/jpeg'
+    };
+    form.append('image', imgObj);
+    console.log('ImageObj', imgObj);
+    let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
+    // console.log(
+    //   'Photo upload response',
+    //   stat,
+    //   response,
+    // );
+    if (stat) {
+      try {
+        switch (this.state.id) {
+          case 1:
+            self.setState({
+              relativeImage1: stat,
+              isPhotoAvailable: true,
+              photo: response.uri,
+              photoDetails: response,
+              imagePath: response.path
+            });
+            break;
+          case 2:
+            self.setState({
+              relativeImage2: stat,
+              isPhotoAvailable: true,
+              photo: response.uri,
+              photoDetails: response,
+              imagePath: response.path
+            });
+            break;
+          case 3:
+            self.setState({
+              relativeImage3: stat,
+              isPhotoAvailable: true,
+              photo: response.uri,
+              photoDetails: response,
+              imagePath: response.path
+            });
+            break;
+          case 4:
+            self.setState({
+              relativeImage4: stat,
+              isPhotoAvailable: true,
+              photo: response.uri,
+              photoDetails: response,
+              imagePath: response.path
+            });
+            break;
+          case 5:
+            self.setState({
+              relativeImage5: stat,
+              isPhotoAvailable: true,
+              photo: response.uri,
+              photoDetails: response,
+              imagePath: response.path
+            });
+            break;
+        }
+        console.log(
+          'Photo upload response',
+          stat,
+          response,
+          this.state.relativeImage1,
+          this.state.relativeImage2,
+          this.state.relativeImage3,
+          this.state.relativeImage4,
+          this.state.relativeImage5
+        );
+      } catch (err) {
+        console.log('err', err);
+      }
+    }
+  }
+
+  uploadAudio = async result => {
+    console.log('Audio', result);
+    const path = `file://${result}`;
+    const formData = new FormData();
+
+    formData.append('file', {
+      uri: path,
+      name: 'hello.aac',
+      type: 'audio/aac'
+    });
+
+    console.log(formData, 'FormData');
+
+    axios({
+      method: 'post',
+      url:
+        'http://mediaupload.oyespace.com/oyeliving/api/V1/association/upload',
+      data: formData,
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+        }
+      }
+    })
+      .then(function(response) {
+        //handle success
+        console.log(response, 'ressss');
+      })
+      .catch(function(response) {
+        //handle error
+        console.log(response, 'errrrs');
+      });
+  };
 
   image1Exp = () => {};
   image2Exp() {
@@ -234,8 +350,9 @@ class HelloWorldApp extends Component {
     }
     const path = Platform.select({
       ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4'
+      android: 'sdcard/hello.aac' //here?
     });
+
     const audioSet = {
       AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
       AudioSourceAndroid: AudioSourceAndroidType.MIC,
@@ -264,10 +381,14 @@ class HelloWorldApp extends Component {
     this.setState({
       recordSecs: 0,
       buttonId: 1,
-      playBtnId: 1
+      playBtnId: 1,
+
+      mp3uri: result
     });
     alert('Recording Stop');
-    console.log(result);
+    console.log('.substring(14, 23)', result.substring(14, 23));
+    console.log('this state uri', this.state.mp3uri);
+    this.uploadAudio(result.substring(14, 23));
   };
 
   onStatusPress = e => {
@@ -337,7 +458,7 @@ class HelloWorldApp extends Component {
 
   visitorData = async () => {
     this.setState({ isLoading: true });
-    let date = moment(new Date().getDate()).format('YYYY-MM-DD');
+    let date = new Date().getDate();
     console.log('Date:', date);
     try {
       const response = await fetch(
@@ -349,8 +470,8 @@ class HelloWorldApp extends Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            StartDate: '2019-09-23',
-            EndDate: '2019-09-23', //moment(new Date()).format('YYYY-MM-DD'),
+            StartDate: '2019-09-24',
+            EndDate: '2019-09-24', //moment(new Date()).format('YYYY-MM-DD'),
             ASAssnID: this.props.dashBoardReducer.assId,
             UNUnitID: this.props.dashBoardReducer.uniID,
             ACAccntID: this.props.userReducer.MyAccountID
@@ -368,14 +489,15 @@ class HelloWorldApp extends Component {
             let visitors = [];
             let visitorObj = {};
             for (let i in data) {
-              console.log(i);
-              if (moment(data[i].vlExitT).format('hh:mm:ss') === '00:00:00') {
+              console.log('data[i].vlExitT', data[i].vlExitT);
+              if (data[i].vlExitT === '0001-01-01T00:00:00') {
                 visitorObj = {
                   value: data[i].vlfName,
                   id: data[i].vlVisLgID
                 };
-                visitors.push(visitorObj);
               }
+              visitors.push(visitorObj);
+              console.log('Visitors', visitorObj);
             }
             this.setState({
               isLoading: false,
@@ -461,144 +583,51 @@ class HelloWorldApp extends Component {
             Leave with Vendor
           </Text>
         </View>
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <Dropdown
-            value={'Select Visitor'}
-            data={this.state.datasource}
-            textColor={base.theme.colors.black}
-            inputContainerStyle={{}}
-            baseColor={base.theme.colors.black}
-            placeholder="Select Visitor"
-            placeholderTextColor={base.theme.colors.black}
-            placeholderStyle={{ fontWeight: 'bold' }}
-            labelHeight={hp('4%')}
-            containerStyle={{
-              width: wp('85%'),
-              height: hp('8%')
+        <KeyboardAwareScrollView>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Dropdown
+              value={'Select Visitor'}
+              data={this.state.datasource}
+              textColor={base.theme.colors.black}
+              inputContainerStyle={{}}
+              baseColor={base.theme.colors.black}
+              placeholder="Select Visitor"
+              placeholderTextColor={base.theme.colors.black}
+              placeholderStyle={{ fontWeight: 'bold' }}
+              labelHeight={hp('4%')}
+              containerStyle={{
+                width: wp('85%'),
+                height: hp('8%')
+              }}
+              rippleOpacity={0}
+              dropdownPosition={-6}
+              dropdownOffset={{ top: 0, left: 0 }}
+              style={{ fontSize: hp('2.2%') }}
+              //   onChangeText={(value, index) => this.changeFamilyMember(value, index)}
+            />
+          </View>
+
+          <Card
+            style={{
+              height: hp('25%'),
+              borderRadius: 10,
+              marginLeft: hp('2%'),
+              marginRight: hp('2%'),
+              marginTop: hp('2%'),
+              flexDirection: 'column'
             }}
-            rippleOpacity={0}
-            dropdownPosition={-6}
-            dropdownOffset={{ top: 0, left: 0 }}
-            style={{ fontSize: hp('2.2%') }}
-            //   onChangeText={(value, index) => this.changeFamilyMember(value, index)}
-          />
-        </View>
-
-        <Card
-          style={{
-            height: hp('25%'),
-            borderRadius: 10,
-            marginLeft: hp('2%'),
-            marginRight: hp('2%'),
-            marginTop: hp('2%'),
-            flexDirection: 'column'
-          }}
-        >
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.relativeImgView}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.setState({ id: 1 }), this.setImage();
-                }}
-              >
-                {this.state.relativeImage1 === '' ? (
-                  <View
-                    style={{
-                      justifyContent: 'space-evenly',
-                      height: hp('8%')
-                    }}
-                  >
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: hp('4.5%'),
-                        height: hp('4.5%'),
-                        alignSelf: 'center'
-                      }}
-                    >
-                      <Image
-                        style={{ width: hp('4%'), height: hp('4%') }}
-                        source={require('../icons/leave_vender_add.png')}
-                      />
-                    </View>
-                    <View style={{ marginTop: hp('0.5%') }}>
-                      <Text style={{ fontSize: hp('1.4%') }}>Add Photo</Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View style={styles.containerView_ForProfilePicViewStyle}>
-                    <View>
-                      <Image
-                        style={{
-                          height: hp('10%'),
-                          width: hp('10%'),
-                          borderRadius: hp('1%')
-                        }}
-                        source={{ uri: this.state.relativeImage1 }}
-                      />
-                    </View>
-                    <TouchableOpacity>
-                      <View style={styles.imagesmallCircle}>
-                        <View
-                          style={{
-                            // backgroundColor: 'red',
-                            width: hp('5%'),
-                            height: hp('5%'),
-                            zIndex: 100
-                          }}
-                        >
-                          <ZoomImage
-                            style={[styles.smallImage]}
-                            source={{ uri: this.state.relativeImage1 }}
-                            imgStyle={{
-                              height: hp('4%'),
-                              width: hp('4%'),
-                              borderRadius: hp('2%'),
-                              borderColor: 'orange',
-                              borderWidth: hp('0.1%'),
-                              marginRight: hp('2%')
-                            }}
-                          />
-                        </View>
-
-                        <View
-                          style={{
-                            // backgroundColor: 'red',
-                            width: hp('6%'),
-                            height: hp('6%'),
-                            position: 'absolute',
-                            zIndex: 110
-                          }}
-                        >
-                          <Text
-                            style={{
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              fontSize: hp('3%'),
-                              marginLeft: hp('1.5%'),
-                              color: '#000',
-                              fontWeight: '500'
-                              // backgroundColor: 'red'
-                            }}
-                          >
-                            +
-                          </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </TouchableOpacity>
-            </View>
-            {this.state.relativeImage1 ? (
+          >
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
               <View style={styles.relativeImgView}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({ id: 2 }), this.setImage();
+                    this.setState({ id: 1 }), this.setImage();
                   }}
                 >
-                  {this.state.relativeImage2 === '' ? (
+                  {this.state.relativeImage1 === '' ? (
                     <View
                       style={{
                         justifyContent: 'space-evenly',
@@ -632,7 +661,7 @@ class HelloWorldApp extends Component {
                             width: hp('10%'),
                             borderRadius: hp('1%')
                           }}
-                          source={{ uri: this.state.relativeImage2 }}
+                          source={{ uri: this.state.myProfileImage1 }}
                         />
                       </View>
                       <TouchableOpacity>
@@ -647,7 +676,7 @@ class HelloWorldApp extends Component {
                           >
                             <ZoomImage
                               style={[styles.smallImage]}
-                              source={{ uri: this.state.relativeImage2 }}
+                              source={{ uri: this.state.myProfileImage1 }}
                               imgStyle={{
                                 height: hp('4%'),
                                 width: hp('4%'),
@@ -682,8 +711,107 @@ class HelloWorldApp extends Component {
                               +
                             </Text>
                           </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </View>
+              {this.state.relativeImage1 ? (
+                <View style={styles.relativeImgView}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ id: 2 }), this.setImage();
+                    }}
+                  >
+                    {this.state.relativeImage2 === '' ? (
+                      <View
+                        style={{
+                          justifyContent: 'space-evenly',
+                          height: hp('8%')
+                        }}
+                      >
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: hp('4.5%'),
+                            height: hp('4.5%'),
+                            alignSelf: 'center'
+                          }}
+                        >
+                          <Image
+                            style={{ width: hp('4%'), height: hp('4%') }}
+                            source={require('../icons/leave_vender_add.png')}
+                          />
+                        </View>
+                        <View style={{ marginTop: hp('0.5%') }}>
+                          <Text style={{ fontSize: hp('1.4%') }}>
+                            Add Photo
+                          </Text>
+                        </View>
+                      </View>
+                    ) : (
+                      <View style={styles.containerView_ForProfilePicViewStyle}>
+                        <View>
+                          <Image
+                            style={{
+                              height: hp('10%'),
+                              width: hp('10%'),
+                              borderRadius: hp('1%')
+                            }}
+                            source={{ uri: this.state.myProfileImage2 }}
+                          />
+                        </View>
+                        <TouchableOpacity>
+                          <View style={styles.imagesmallCircle}>
+                            <View
+                              style={{
+                                // backgroundColor: 'red',
+                                width: hp('5%'),
+                                height: hp('5%'),
+                                zIndex: 100
+                              }}
+                            >
+                              <ZoomImage
+                                style={[styles.smallImage]}
+                                source={{ uri: this.state.myProfileImage2 }}
+                                imgStyle={{
+                                  height: hp('4%'),
+                                  width: hp('4%'),
+                                  borderRadius: hp('2%'),
+                                  borderColor: 'orange',
+                                  borderWidth: hp('0.1%'),
+                                  marginRight: hp('2%')
+                                }}
+                              />
+                            </View>
 
-                          {/* <Image
+                            <View
+                              style={{
+                                // backgroundColor: 'red',
+                                width: hp('6%'),
+                                height: hp('6%'),
+                                position: 'absolute',
+                                zIndex: 110
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  width: hp('6%'),
+                                  height: hp('6%'),
+                                  fontSize: hp('3%'),
+                                  marginLeft: hp('1.5%'),
+                                  color: '#000',
+                                  fontWeight: '500'
+                                  // backgroundColor: 'red'
+                                }}
+                              >
+                                +
+                              </Text>
+                            </View>
+
+                            {/* <Image
                             style={{
                               width: hp('6%'),
                               height: hp('6%'),
@@ -694,501 +822,510 @@ class HelloWorldApp extends Component {
                             }}
                             source={require('../icons/zoom_in_white.png')}
                           /> */}
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View></View>
-            )}
-            {this.state.relativeImage1 && this.state.relativeImage2 ? (
-              <View style={styles.relativeImgView}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ id: 3 }), this.setImage();
-                  }}
-                >
-                  {this.state.relativeImage3 === '' ? (
-                    <View
-                      style={{
-                        justifyContent: 'space-evenly',
-                        height: hp('8%')
-                      }}
-                    >
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View></View>
+              )}
+              {this.state.relativeImage1 && this.state.relativeImage2 ? (
+                <View style={styles.relativeImgView}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ id: 3 }), this.setImage();
+                    }}
+                  >
+                    {this.state.relativeImage3 === '' ? (
                       <View
                         style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          width: hp('4.5%'),
-                          height: hp('4.5%'),
-                          alignSelf: 'center'
+                          justifyContent: 'space-evenly',
+                          height: hp('8%')
                         }}
                       >
-                        <Image
-                          style={{ width: hp('4%'), height: hp('4%') }}
-                          source={require('../icons/leave_vender_add.png')}
-                        />
-                      </View>
-                      <View style={{ marginTop: hp('0.5%') }}>
-                        <Text style={{ fontSize: hp('1.4%') }}>Add Photo</Text>
-                      </View>
-                    </View>
-                  ) : (
-                    <View style={styles.containerView_ForProfilePicViewStyle}>
-                      <View>
-                        <Image
+                        <View
                           style={{
-                            height: hp('10%'),
-                            width: hp('10%'),
-                            borderRadius: hp('1%')
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: hp('4.5%'),
+                            height: hp('4.5%'),
+                            alignSelf: 'center'
                           }}
-                          source={{ uri: this.state.relativeImage3 }}
-                        />
+                        >
+                          <Image
+                            style={{ width: hp('4%'), height: hp('4%') }}
+                            source={require('../icons/leave_vender_add.png')}
+                          />
+                        </View>
+                        <View style={{ marginTop: hp('0.5%') }}>
+                          <Text style={{ fontSize: hp('1.4%') }}>
+                            Add Photo
+                          </Text>
+                        </View>
                       </View>
-                      <TouchableOpacity>
-                        <View style={styles.imagesmallCircle}>
-                          <View
+                    ) : (
+                      <View style={styles.containerView_ForProfilePicViewStyle}>
+                        <View>
+                          <Image
                             style={{
-                              // backgroundColor: 'red',
-                              width: hp('5%'),
-                              height: hp('5%'),
-                              zIndex: 100
+                              height: hp('10%'),
+                              width: hp('10%'),
+                              borderRadius: hp('1%')
                             }}
-                          >
-                            <ZoomImage
-                              style={[styles.smallImage]}
-                              source={{ uri: this.state.relativeImage3 }}
-                              imgStyle={{
-                                height: hp('4%'),
-                                width: hp('4%'),
-                                borderRadius: hp('2%'),
-                                borderColor: 'orange',
-                                borderWidth: hp('0.1%'),
-                                marginRight: hp('2%')
-                              }}
-                            />
-                          </View>
-
-                          <View
-                            style={{
-                              // backgroundColor: 'red',
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              position: 'absolute',
-                              zIndex: 110
-                            }}
-                          >
-                            <Text
+                            source={{ uri: this.state.myProfileImage3 }}
+                          />
+                        </View>
+                        <TouchableOpacity>
+                          <View style={styles.imagesmallCircle}>
+                            <View
                               style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                fontSize: hp('3%'),
-                                marginLeft: hp('1.5%'),
-                                color: '#000',
-                                fontWeight: '500'
-                                // backgroundColor: 'red'
+                                // backgroundColor: 'red',
+                                width: hp('5%'),
+                                height: hp('5%'),
+                                zIndex: 100
                               }}
                             >
-                              +
-                            </Text>
+                              <ZoomImage
+                                style={[styles.smallImage]}
+                                source={{ uri: this.state.myProfileImage3 }}
+                                imgStyle={{
+                                  height: hp('4%'),
+                                  width: hp('4%'),
+                                  borderRadius: hp('2%'),
+                                  borderColor: 'orange',
+                                  borderWidth: hp('0.1%'),
+                                  marginRight: hp('2%')
+                                }}
+                              />
+                            </View>
+
+                            <View
+                              style={{
+                                // backgroundColor: 'red',
+                                width: hp('6%'),
+                                height: hp('6%'),
+                                position: 'absolute',
+                                zIndex: 110
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  width: hp('6%'),
+                                  height: hp('6%'),
+                                  fontSize: hp('3%'),
+                                  marginLeft: hp('1.5%'),
+                                  color: '#000',
+                                  fontWeight: '500'
+                                  // backgroundColor: 'red'
+                                }}
+                              >
+                                +
+                              </Text>
+                            </View>
                           </View>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View></View>
-            )}
-            {this.state.relativeImage1 &&
-            this.state.relativeImage2 &&
-            this.state.relativeImage3 ? (
-              <View style={styles.relativeImgView}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ id: 4 }), this.setImage();
-                  }}
-                >
-                  {this.state.relativeImage4 === '' ? (
-                    <View
-                      style={{
-                        justifyContent: 'space-evenly',
-                        height: hp('8%')
-                      }}
-                    >
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View></View>
+              )}
+              {this.state.relativeImage1 &&
+              this.state.relativeImage2 &&
+              this.state.relativeImage3 ? (
+                <View style={styles.relativeImgView}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ id: 4 }), this.setImage();
+                    }}
+                  >
+                    {this.state.relativeImage4 === '' ? (
                       <View
                         style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          width: hp('4.5%'),
-                          height: hp('4.5%'),
-                          alignSelf: 'center'
+                          justifyContent: 'space-evenly',
+                          height: hp('8%')
                         }}
                       >
-                        <Image
-                          style={{ width: hp('4%'), height: hp('4%') }}
-                          source={require('../icons/leave_vender_add.png')}
-                        />
-                      </View>
-                      <View style={{ marginTop: hp('0.5%') }}>
-                        <Text style={{ fontSize: hp('1.4%') }}>Add Photo</Text>
-                      </View>
-                    </View>
-                  ) : (
-                    <View style={styles.containerView_ForProfilePicViewStyle}>
-                      <View>
-                        <Image
+                        <View
                           style={{
-                            height: hp('10%'),
-                            width: hp('10%'),
-                            borderRadius: hp('1%')
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: hp('4.5%'),
+                            height: hp('4.5%'),
+                            alignSelf: 'center'
                           }}
-                          source={{ uri: this.state.relativeImage4 }}
-                        />
+                        >
+                          <Image
+                            style={{ width: hp('4%'), height: hp('4%') }}
+                            source={require('../icons/leave_vender_add.png')}
+                          />
+                        </View>
+                        <View style={{ marginTop: hp('0.5%') }}>
+                          <Text style={{ fontSize: hp('1.4%') }}>
+                            Add Photo
+                          </Text>
+                        </View>
                       </View>
-                      <TouchableOpacity>
-                        <View style={styles.imagesmallCircle}>
-                          <View
+                    ) : (
+                      <View style={styles.containerView_ForProfilePicViewStyle}>
+                        <View>
+                          <Image
                             style={{
-                              // backgroundColor: 'red',
-                              width: hp('5%'),
-                              height: hp('5%'),
-                              zIndex: 100
+                              height: hp('10%'),
+                              width: hp('10%'),
+                              borderRadius: hp('1%')
                             }}
-                          >
-                            <ZoomImage
-                              style={[styles.smallImage]}
-                              source={{ uri: this.state.relativeImage4 }}
-                              imgStyle={{
-                                height: hp('4%'),
-                                width: hp('4%'),
-                                borderRadius: hp('2%'),
-                                borderColor: 'orange',
-                                borderWidth: hp('0.1%'),
-                                marginRight: hp('2%')
-                              }}
-                            />
-                          </View>
-
-                          <View
-                            style={{
-                              // backgroundColor: 'red',
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              position: 'absolute',
-                              zIndex: 110
-                            }}
-                          >
-                            <Text
+                            source={{ uri: this.state.myProfileImage4 }}
+                          />
+                        </View>
+                        <TouchableOpacity>
+                          <View style={styles.imagesmallCircle}>
+                            <View
                               style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                fontSize: hp('3%'),
-                                marginLeft: hp('1.5%'),
-                                color: '#000',
-                                fontWeight: '500'
-                                // backgroundColor: 'red'
+                                // backgroundColor: 'red',
+                                width: hp('5%'),
+                                height: hp('5%'),
+                                zIndex: 100
                               }}
                             >
-                              +
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View></View>
-            )}
+                              <ZoomImage
+                                style={[styles.smallImage]}
+                                source={{ uri: this.state.myProfileImage4 }}
+                                imgStyle={{
+                                  height: hp('4%'),
+                                  width: hp('4%'),
+                                  borderRadius: hp('2%'),
+                                  borderColor: 'orange',
+                                  borderWidth: hp('0.1%'),
+                                  marginRight: hp('2%')
+                                }}
+                              />
+                            </View>
 
-            {this.state.relativeImage1 &&
-            this.state.relativeImage2 &&
-            this.state.relativeImage3 &&
-            this.state.relativeImage4 ? (
-              <View style={styles.relativeImgView}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ id: 5 }), this.setImage();
-                  }}
-                >
-                  {this.state.relativeImage5 === '' ? (
-                    <View
-                      style={{
-                        justifyContent: 'space-evenly',
-                        height: hp('8%')
-                      }}
-                    >
+                            <View
+                              style={{
+                                // backgroundColor: 'red',
+                                width: hp('6%'),
+                                height: hp('6%'),
+                                position: 'absolute',
+                                zIndex: 110
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  width: hp('6%'),
+                                  height: hp('6%'),
+                                  fontSize: hp('3%'),
+                                  marginLeft: hp('1.5%'),
+                                  color: '#000',
+                                  fontWeight: '500'
+                                  // backgroundColor: 'red'
+                                }}
+                              >
+                                +
+                              </Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View></View>
+              )}
+
+              {this.state.relativeImage1 &&
+              this.state.relativeImage2 &&
+              this.state.relativeImage3 &&
+              this.state.relativeImage4 ? (
+                <View style={styles.relativeImgView}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ id: 5 }), this.setImage();
+                    }}
+                  >
+                    {this.state.relativeImage5 === '' ? (
                       <View
                         style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          width: hp('4.5%'),
-                          height: hp('4.5%'),
-                          alignSelf: 'center'
+                          justifyContent: 'space-evenly',
+                          height: hp('8%')
                         }}
                       >
-                        <Image
+                        <View
                           style={{
-                            width: hp('4%'),
-                            height: hp('4%')
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: hp('4.5%'),
+                            height: hp('4.5%'),
+                            alignSelf: 'center'
                           }}
-                          source={require('../icons/leave_vender_add.png')}
-                        />
-                      </View>
-                      <View style={{ marginTop: hp('0.3%') }}>
-                        <Text style={{ fontSize: hp('1.4%') }}>Add Photo</Text>
-                      </View>
-                    </View>
-                  ) : (
-                    <View style={styles.containerView_ForProfilePicViewStyle}>
-                      <View>
-                        <Image
-                          style={{
-                            height: hp('10%'),
-                            width: hp('10%'),
-                            borderRadius: hp('1%')
-                          }}
-                          source={{ uri: this.state.relativeImage5 }}
-                        />
-                      </View>
-                      <TouchableOpacity>
-                        <View style={styles.imagesmallCircle}>
-                          <View
+                        >
+                          <Image
                             style={{
-                              // backgroundColor: 'red',
-                              width: hp('5%'),
-                              height: hp('5%'),
-                              zIndex: 100
+                              width: hp('4%'),
+                              height: hp('4%')
                             }}
-                          >
-                            <ZoomImage
-                              style={[styles.smallImage]}
-                              source={{ uri: this.state.relativeImage5 }}
-                              imgStyle={{
-                                height: hp('4%'),
-                                width: hp('4%'),
-                                borderRadius: hp('2%'),
-                                borderColor: 'orange',
-                                borderWidth: hp('0.1%'),
-                                marginRight: hp('2%')
-                              }}
-                            />
-                          </View>
-
-                          <View
+                            source={require('../icons/leave_vender_add.png')}
+                          />
+                        </View>
+                        <View style={{ marginTop: hp('0.3%') }}>
+                          <Text style={{ fontSize: hp('1.4%') }}>
+                            Add Photo
+                          </Text>
+                        </View>
+                      </View>
+                    ) : (
+                      <View style={styles.containerView_ForProfilePicViewStyle}>
+                        <View>
+                          <Image
                             style={{
-                              // backgroundColor: 'red',
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              position: 'absolute',
-                              zIndex: 110
+                              height: hp('10%'),
+                              width: hp('10%'),
+                              borderRadius: hp('1%')
                             }}
-                          >
-                            <Text
+                            source={{ uri: this.state.myProfileImage5 }}
+                          />
+                        </View>
+                        <TouchableOpacity>
+                          <View style={styles.imagesmallCircle}>
+                            <View
                               style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                fontSize: hp('3%'),
-                                marginLeft: hp('1.5%'),
-                                color: '#000',
-                                fontWeight: '500'
-                                // backgroundColor: 'red'
+                                // backgroundColor: 'red',
+                                width: hp('5%'),
+                                height: hp('5%'),
+                                zIndex: 100
                               }}
                             >
-                              +
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View></View>
-            )}
-          </ScrollView>
+                              <ZoomImage
+                                style={[styles.smallImage]}
+                                source={{ uri: this.state.myProfileImage5 }}
+                                imgStyle={{
+                                  height: hp('4%'),
+                                  width: hp('4%'),
+                                  borderRadius: hp('2%'),
+                                  borderColor: 'orange',
+                                  borderWidth: hp('0.1%'),
+                                  marginRight: hp('2%')
+                                }}
+                              />
+                            </View>
 
+                            <View
+                              style={{
+                                // backgroundColor: 'red',
+                                width: hp('6%'),
+                                height: hp('6%'),
+                                position: 'absolute',
+                                zIndex: 110
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  width: hp('6%'),
+                                  height: hp('6%'),
+                                  fontSize: hp('3%'),
+                                  marginLeft: hp('1.5%'),
+                                  color: '#000',
+                                  fontWeight: '500'
+                                  // backgroundColor: 'red'
+                                }}
+                              >
+                                +
+                              </Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </ScrollView>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                marginTop: hp('2%')
+                // backgroundColor: 'yellow'
+              }}
+            >
+              <View>
+                {this.state.buttonId === 1 ? (
+                  <TouchableOpacity onPress={() => this.onStartRecord()}>
+                    <Image
+                      style={{
+                        width: hp('5%'),
+                        height: hp('5%'),
+                        marginLeft: hp('1%')
+                      }}
+                      source={require('../icons/leave_vender_record.png')}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => this.onStopRecord()}>
+                    <Image
+                      style={{
+                        width: hp('5%'),
+                        height: hp('5%'),
+                        marginLeft: hp('1%')
+                      }}
+                      source={require('../icons/leave_vender_stop.png')}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <View style={{ alignItems: 'center' }}>
+                  {this.state.buttonId === 1 ? (
+                    <Text>Click mic to record</Text>
+                  ) : (
+                    <Text style={styles.txtRecordCounter}>
+                      {this.state.recordTime}
+                    </Text>
+                  )}
+                </View>
+                <View style={styles.viewPlayer}>
+                  <TouchableOpacity
+                    style={styles.viewBarWrapper}
+                    onPress={this.onStatusPress}
+                  >
+                    <View style={styles.viewBar}>
+                      <View
+                        style={[styles.viewBarPlay, { width: playWidth }]}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  {this.state.playBtnId === 2 ? (
+                    <Text style={styles.txtCounter}>
+                      {this.state.playTime} / {this.state.duration}
+                    </Text>
+                  ) : (
+                    <View></View>
+                  )}
+                </View>
+              </View>
+              <Card
+                style={{
+                  width: hp('5%'),
+                  height: hp('5%'),
+                  marginRight: hp('1%'),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: hp('1%')
+                }}
+              >
+                {this.state.playBtnId === 0 ? (
+                  <Image source={require('../icons/leave_vender_play1.png')} />
+                ) : (
+                  <View>
+                    {this.state.playBtnId === 1 ? (
+                      <TouchableOpacity onPress={() => this.onStartPlay()}>
+                        <Image
+                          source={require('../icons/leave_vender_play.png')}
+                        />
+                      </TouchableOpacity>
+                    ) : (
+                      <View>
+                        {/* {this.state.buttonId === 1 &&
+                      this.state.playBtnId === 2 ? ( */}
+                        <TouchableOpacity onPress={() => this.onStopPlay()}>
+                          <Image
+                            source={require('../icons/leave_vender_pause.png')}
+                          />
+                        </TouchableOpacity>
+                        {/* ) : (
+                        <View></View>
+                      )} */}
+                      </View>
+                    )}
+                  </View>
+                )}
+              </Card>
+            </View>
+          </Card>
           <View
             style={{
-              flexDirection: 'row',
-              width: '100%',
+              marginHorizontal: hp('3%'),
               marginTop: hp('2%')
-              // backgroundColor: 'yellow'
             }}
           >
-            <View>
-              {this.state.buttonId === 1 ? (
-                <TouchableOpacity onPress={() => this.onStartRecord()}>
-                  <Image
-                    style={{
-                      width: hp('5%'),
-                      height: hp('5%'),
-                      marginLeft: hp('1%')
-                    }}
-                    source={require('../icons/leave_vender_record.png')}
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={() => this.onStopRecord()}>
-                  <Image
-                    style={{
-                      width: hp('5%'),
-                      height: hp('5%'),
-                      marginLeft: hp('1%')
-                    }}
-                    source={require('../icons/leave_vender_stop.png')}
-                  />
-                </TouchableOpacity>
-              )}
+            <View style={{ marginTop: hp('2%'), marginBottom: hp('1%') }}>
+              <Text style={{ fontSize: hp('1.8%') }}>Comment *</Text>
+            </View>
+
+            <View
+              style={{
+                borderColor: '#ff8c00',
+                borderWidth: hp('0.1%'),
+                borderRadius: hp('1%'),
+                height: hp('12%'),
+                justifyContent: 'flex-end'
+              }}
+            >
+              <Item
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: hp('2%'),
+                  marginRight: hp('2%'),
+                  // marginHorizontal: hp('3%'),
+                  marginBottom: hp('3%')
+                }}
+              >
+                <Input
+                  multiline={true}
+                  numberOfLines={4}
+                  style={{ fontSize: hp('1.8%') }}
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  placeholder="Write a comment here..."
+                  onChangeText={emailId => this.setState({ emailId: emailId })}
+                />
+              </Item>
             </View>
             <View
               style={{
-                flex: 1,
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <View style={{ alignItems: 'center' }}>
-                {this.state.buttonId === 1 ? (
-                  <Text>Click mic to record</Text>
-                ) : (
-                  <Text style={styles.txtRecordCounter}>
-                    {this.state.recordTime}
-                  </Text>
-                )}
-              </View>
-              <View style={styles.viewPlayer}>
-                <TouchableOpacity
-                  style={styles.viewBarWrapper}
-                  onPress={this.onStatusPress}
-                >
-                  <View style={styles.viewBar}>
-                    <View style={[styles.viewBarPlay, { width: playWidth }]} />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View>
-                {this.state.playBtnId === 2 ? (
-                  <Text style={styles.txtCounter}>
-                    {this.state.playTime} / {this.state.duration}
-                  </Text>
-                ) : (
-                  <View></View>
-                )}
-              </View>
-            </View>
-            <Card
-              style={{
-                width: hp('5%'),
-                height: hp('5%'),
-                marginRight: hp('1%'),
-                alignItems: 'center',
                 justifyContent: 'center',
-                borderRadius: hp('1%')
-              }}
-            >
-              {this.state.playBtnId === 0 ? (
-                <Image source={require('../icons/leave_vender_play1.png')} />
-              ) : (
-                <View>
-                  {this.state.playBtnId === 1 ? (
-                    <TouchableOpacity onPress={() => this.onStartPlay()}>
-                      <Image
-                        source={require('../icons/leave_vender_play.png')}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <View>
-                      {/* {this.state.buttonId === 1 &&
-                      this.state.playBtnId === 2 ? ( */}
-                      <TouchableOpacity onPress={() => this.onStopPlay()}>
-                        <Image
-                          source={require('../icons/leave_vender_pause.png')}
-                        />
-                      </TouchableOpacity>
-                      {/* ) : (
-                        <View></View>
-                      )} */}
-                    </View>
-                  )}
-                </View>
-              )}
-            </Card>
-          </View>
-        </Card>
-        <View
-          style={{
-            marginHorizontal: hp('3%'),
-            marginTop: hp('2%')
-          }}
-        >
-          <View style={{ marginTop: hp('2%'), marginBottom: hp('1%') }}>
-            <Text style={{ fontSize: hp('1.8%') }}>Comment *</Text>
-          </View>
-
-          <View
-            style={{
-              borderColor: '#ff8c00',
-              borderWidth: hp('0.1%'),
-              borderRadius: hp('1%'),
-              height: hp('12%'),
-              justifyContent: 'flex-end'
-            }}
-          >
-            <Item
-              style={{
                 alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: hp('2%'),
-                marginRight: hp('2%'),
-                // marginHorizontal: hp('3%'),
-                marginBottom: hp('3%')
+                marginVertical: hp('2%')
               }}
             >
-              <Input
-                multiline={true}
-                numberOfLines={4}
-                style={{ fontSize: hp('1.8%') }}
-                autoCorrect={false}
-                autoCapitalize="none"
-                keyboardType="email-address"
-                placeholder="Write a comment here..."
-                onChangeText={emailId => this.setState({ emailId: emailId })}
-              />
-            </Item>
-          </View>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginVertical: hp('2%')
-            }}
-          >
-            <Button
-              bordered
-              warning
-              style={styles.button}
-              // onPress={() => this.sendInvitation()}
-            >
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: hp('2%'),
-                  fontWeight: '500'
-                }}
+              <Button
+                bordered
+                warning
+                style={styles.button}
+                // onPress={() => this.sendInvitation()}
               >
-                Submit
-              </Text>
-            </Button>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: hp('2%'),
+                    fontWeight: '500'
+                  }}
+                >
+                  Submit
+                </Text>
+              </Button>
+            </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </View>
     );
   }
