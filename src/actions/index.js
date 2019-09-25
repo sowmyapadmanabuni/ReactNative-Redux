@@ -5,3 +5,4 @@ export * from "./UserAction";
 export * from "./PatrollingAction";
 export * from "./StaffAction";
 export * from "./JoinAssociationAction";
+export * from "./SubscriptionActions";

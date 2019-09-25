@@ -69,9 +69,9 @@ class CreateSOS extends React.Component {
         this.createSOS = this.createSOS.bind(this);
         Sound.setCategory('Playback');
         this.sound = new Sound('sound_1.mp3',Sound.MAIN_BUNDLE,(error)=>{
-                if(error){
-                    console.log('failed to load the sound', error);
-                }
+            if(error){
+                console.log('failed to load the sound', error);
+            }
         })
 
     }
@@ -105,7 +105,7 @@ class CreateSOS extends React.Component {
         let presenceRef = firebase.database().ref("disconnectmessage");
         let self = this;
         let connectedRef = firebase.database().ref(".info/connected");
-            connectedRef.on("value", function(snap) {
+        connectedRef.on("value", function(snap) {
             if (snap.val() === true) {
                 console.log("connected");
                 AsyncStorage.getItem('isSOSUpdatePending').then((responseStringyfied)=>{
@@ -121,21 +121,21 @@ class CreateSOS extends React.Component {
                             },()=>{
                                 self.props.navigation.goBack("null");
                             });
-                            
-                            
-                            }).catch((error)=>{
-                                console.log('Response!!!!!!!',error.response)
+
+
+                        }).catch((error)=>{
+                            console.log('Response!!!!!!!',error.response)
                         });
                     }
                 })
             } else {
                 console.log("not connected");
             }
-            });
-     
+        });
+
         Platform.OS === 'ios' ? this.getCurrentLocation() : this.checkGPS();
     }
-    
+
     checkGPS() {
         RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
             .then(data => {
@@ -244,29 +244,29 @@ class CreateSOS extends React.Component {
             'Stop SOS?',
             'Do you want to stop this SOS? ',
             [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              {text: 'Yes', onPress: () => this.stopSOS()},
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'Yes', onPress: () => this.stopSOS()},
             ],
             {cancelable: false},
-          );
+        );
         return true;
     }
 
 
     stopSound(){
-        
-            this.sound.stop((success) => {
-                if (success) {
-                    console.log('successfully finished playing');
-                } else {
-                    console.log('playback failed due to audio decoding errors');
-                }
-            });
-       // });
+
+        this.sound.stop((success) => {
+            if (success) {
+                console.log('successfully finished playing');
+            } else {
+                console.log('playback failed due to audio decoding errors');
+            }
+        });
+        // });
     }
 
     componentWillUnmount() {
@@ -297,9 +297,9 @@ class CreateSOS extends React.Component {
 
     componentDidMount() {
         let self = this;
-        
-            self.readUserData();
-        
+
+        self.readUserData();
+
 //        self.props.navigation.state.params.isActive ? self.readUserData() : self.createSOS()
 
     }
@@ -332,7 +332,7 @@ class CreateSOS extends React.Component {
             }).catch((error) => {
                 console.log("Error:", error)
             })
-        } else {  
+        } else {
             const data = new FormData();
             let imgObj = {
                 name: (this.state.image.fileName !== undefined) ? this.state.image.fileName : "XXXXX.jpg",
@@ -416,11 +416,11 @@ class CreateSOS extends React.Component {
                 body: JSON.stringify(detail)
             }).then(response => response.json())
             .then(responseJson => {
-            console.log("Response in Create SOS API:", responseJson)
-            self.setState({
-                sosId:responseJson.data.sosid
-            })
-        }).catch((err) => {
+                console.log("Response in Create SOS API:", responseJson)
+                self.setState({
+                    sosId:responseJson.data.sosid
+                })
+            }).catch((err) => {
             console.log("Error", err)
         })
     }
@@ -464,32 +464,32 @@ class CreateSOS extends React.Component {
             console.log("Receiveddata", snapshot.val(), self.state.isGuardDetailAvailable);
             if (receivedData !== null) {
                 if(receivedData.isActive && receivedData.userId){
-                if ((receivedData.attendedBy !== undefined && receivedData.attendedBy !== null)) {
-                    self.setState({
-                        isGuardDetailAvailable: true,
-                        deviceName: receivedData.attendedBy,
-                        mobileNumber: receivedData.attendedByMobile,
-                        imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
-                        region: {
-                            latitude: receivedData.latitude,
-                            longitude: receivedData.longitude,
-                            latitudeDelta: LATITUDE_DELTA,
-                            longitudeDelta: LONGITUDE_DELTA,
-                        }
-                    })
-                } else {
-                    self.setState({
-                        isGuardDetailAvailable: false,
-                        imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
-                        region: {
-                            latitude: receivedData.latitude,
-                            longitude: receivedData.longitude,
-                            latitudeDelta: LATITUDE_DELTA,
-                            longitudeDelta: LONGITUDE_DELTA,
-                        }
-                    })
+                    if ((receivedData.attendedBy !== undefined && receivedData.attendedBy !== null)) {
+                        self.setState({
+                            isGuardDetailAvailable: true,
+                            deviceName: receivedData.attendedBy,
+                            mobileNumber: receivedData.attendedByMobile,
+                            imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
+                            region: {
+                                latitude: receivedData.latitude,
+                                longitude: receivedData.longitude,
+                                latitudeDelta: LATITUDE_DELTA,
+                                longitudeDelta: LONGITUDE_DELTA,
+                            }
+                        })
+                    } else {
+                        self.setState({
+                            isGuardDetailAvailable: false,
+                            imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
+                            region: {
+                                latitude: receivedData.latitude,
+                                longitude: receivedData.longitude,
+                                latitudeDelta: LATITUDE_DELTA,
+                                longitudeDelta: LONGITUDE_DELTA,
+                            }
+                        })
+                    }
                 }
-            }
             } else {
                 if (self.state.isGuardDetailAvailable) {
                     console.log("Receiveddata123");
@@ -515,7 +515,7 @@ class CreateSOS extends React.Component {
         else{
             const options = {
                 title: 'Take Image',
-                quality: 0.5,       //Meduim Image Quality 
+                quality: 0.5,       //Meduim Image Quality
                 storageOptions: {
                     skipBackup: true,
                     path: 'images',
@@ -533,10 +533,10 @@ class CreateSOS extends React.Component {
                         imageArr: imageArr
                     }, () => this.createSOS())
                 }
-    
+
             });
         }
-       
+
     }
 
 
@@ -546,158 +546,158 @@ class CreateSOS extends React.Component {
         return (
             <ScrollView style={CreateSOSStyles.container}>
                 <View style={{marginBottom:50}}>
-                
-                <View style={CreateSOSStyles.header}>
-                    <Text style={CreateSOSStyles.headerText}>Help is on the way to your unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
-                </View>
 
-                <View style={CreateSOSStyles.mapBox}>
-                    <MapView
-                        provider={PROVIDER_GOOGLE}
-                        style={CreateSOSStyles.map}
-                        region={this.state.region}
-                        showsUserLocation={false}
-                        showsBuildings={true}
-                        scrollEnabled={false}
-                        zoomEnabled={false}
-                        pitchEnabled={false}
-                        rotateEnabled={false}
-                        followsUserLocation={true}
-                        minZoomLevel={19}
-                    >
-                        {this.renderUserLocation()}
-                    </MapView>
-                </View>
-                <EmptyView height={20}/>
-                <View style={CreateSOSStyles.detailBox}>
-                    <TouchableHighlight
-                        underlayColor={base.theme.colors.transparent}
-                        onPress={() => this.openCamera()} style={CreateSOSStyles.imageStyle}>
-                        <Image
-                            style={CreateSOSStyles.imageView}
-                            source={imageURI}
-                        />
-                    </TouchableHighlight>
-
-                    {this.state.isGuardDetailAvailable ?
-                        <View style={CreateSOSStyles.guardView}>
-                            <View style={CreateSOSStyles.guardHeadingView}>
-                                <Text style={CreateSOSStyles.guardHeading}>Guard
-                                    Detail</Text>
-                            </View>
-                            <Text>Device Name: {this.state.deviceName}</Text>
-                            <Text>Mobile No.: {this.state.mobileNumber}</Text>
-                        </View> : <View style={CreateSOSStyles.guardView}>
-                            <Text style={CreateSOSStyles.guardHeading}>Waiting for confirmation ...</Text>
-                        </View>}
-                </View>
-                <EmptyView height={30}/>
-                <View style={{flexDirection: 'row', width: widthPercentageToDP('100%')}}>
-                    {this.state.imageArr.length !== 0 ?
-                        <View style={{width: widthPercentageToDP('90%'), left: 15, justifyContent: 'space-around'}}>
-                            <FlatList
-                                keyExtractor={(item, index) => index.toString()}
-                                data={this.state.imageArr}
-                                horizontal={true}
-                                renderItem={(item, index) => this.renderImages(item, index)}
-                                horizontal={true}
-                            /></View> : <View/>
-                    }
-                </View>
-                <EmptyView height={60}/>
-                <View style={CreateSOSStyles.emergencyDetailBox}>
-                    <View style={CreateSOSStyles.emergency}>
-                        <Text style={CreateSOSStyles.emergencyHeader}>Emergency Contacts</Text>
+                    <View style={CreateSOSStyles.header}>
+                        <Text style={CreateSOSStyles.headerText}>Help is on the way to your unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
                     </View>
+
+                    <View style={CreateSOSStyles.mapBox}>
+                        <MapView
+                            provider={PROVIDER_GOOGLE}
+                            style={CreateSOSStyles.map}
+                            region={this.state.region}
+                            showsUserLocation={false}
+                            showsBuildings={true}
+                            scrollEnabled={false}
+                            zoomEnabled={false}
+                            pitchEnabled={false}
+                            rotateEnabled={false}
+                            followsUserLocation={true}
+                            minZoomLevel={19}
+                        >
+                            {this.renderUserLocation()}
+                        </MapView>
+                    </View>
+                    <EmptyView height={20}/>
                     <View style={CreateSOSStyles.detailBox}>
-                        <TouchableOpacity
+                        <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.makePhoneCall(108)} style={CreateSOSStyles.cardView}>
-                            <View style={CreateSOSStyles.subCardView}>
-                                <Image style={CreateSOSStyles.imageStyles}
-                                       source={require('../../../icons/ambulance.png')}>
-                                </Image>
-                                <View style={[CreateSOSStyles.subView]}>
-                                    <Text style={CreateSOSStyles.count}>
-                                        Ambulance
-                                    </Text>
-                                    <View style={{top: 5, flexDirection: 'row'}}>
-                                        <Image
-                                            resizeMode={'contain'}
-                                            style={CreateSOSStyles.imageStyles1}
-                                            source={require("../../../icons/call.png")}
-                                        />
-                                        <Text style={CreateSOSStyles.cardText}
-                                              numberOfLines={2}>
-                                            108
-                                        </Text>
-                                    </View>
+                            onPress={() => this.openCamera()} style={CreateSOSStyles.imageStyle}>
+                            <Image
+                                style={CreateSOSStyles.imageView}
+                                source={imageURI}
+                            />
+                        </TouchableHighlight>
 
+                        {this.state.isGuardDetailAvailable ?
+                            <View style={CreateSOSStyles.guardView}>
+                                <View style={CreateSOSStyles.guardHeadingView}>
+                                    <Text style={CreateSOSStyles.guardHeading}>Guard
+                                        Detail</Text>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.makePhoneCall(100)} style={CreateSOSStyles.cardView}>
-                            <View style={CreateSOSStyles.subCardView}>
-                                <Image style={CreateSOSStyles.imageStyles}
-                                       source={require('../../../icons/police.png')}>
-                                </Image>
-                                <View style={[CreateSOSStyles.subView]}>
-                                    <Text style={CreateSOSStyles.count}>
-                                        Police
-                                    </Text>
-                                    <View style={{top: 5, flexDirection: 'row'}}>
-                                        <Image
-                                            resizeMode={'contain'}
-                                            style={CreateSOSStyles.imageStyles1}
-                                            source={require("../../../icons/call.png")}
-                                        />
-                                        <Text style={CreateSOSStyles.cardText}
-                                              numberOfLines={2}>
-                                            100
-                                        </Text>
-                                    </View>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.makePhoneCall(101)} style={CreateSOSStyles.cardView}>
-                            <View style={CreateSOSStyles.subCardView}>
-                                <Image style={CreateSOSStyles.imageStyles}
-                                       source={require('../../../icons/fire_brigade.png')}>
-                                </Image>
-                                <View style={[CreateSOSStyles.subView]}>
-                                    <Text style={CreateSOSStyles.count}>
-                                        Fire Brigade
-                                    </Text>
-                                    <View style={{top: 5, flexDirection: 'row'}}>
-                                        <Image
-                                            resizeMode={'contain'}
-                                            style={CreateSOSStyles.imageStyles1}
-                                            source={require("../../../icons/call.png")}
-                                        />
-                                        <Text style={CreateSOSStyles.cardText}
-                                              numberOfLines={2}>
-                                            101
-                                        </Text>
-                                    </View>
-
-                                </View>
-                            </View>
-                        </TouchableOpacity>
+                                <Text>Device Name: {this.state.deviceName}</Text>
+                                <Text>Mobile No.: {this.state.mobileNumber}</Text>
+                            </View> : <View style={CreateSOSStyles.guardView}>
+                                <Text style={CreateSOSStyles.guardHeading}>Waiting for confirmation ...</Text>
+                            </View>}
                     </View>
-                    <TouchableHighlight
-                        underlayColor={base.theme.colors.transparent}
-                        onPress={() => this.stopSOS()} style={CreateSOSStyles.stopSOSView}>
-                        <View style={CreateSOSStyles.stopSOSTextView}>
-                            <Text style={CreateSOSStyles.stopSOSText}>Stop SOS</Text>
+                    <EmptyView height={30}/>
+                    <View style={{flexDirection: 'row', width: widthPercentageToDP('100%')}}>
+                        {this.state.imageArr.length !== 0 ?
+                            <View style={{width: widthPercentageToDP('90%'), left: 15, justifyContent: 'space-around'}}>
+                                <FlatList
+                                    keyExtractor={(item, index) => index.toString()}
+                                    data={this.state.imageArr}
+                                    horizontal={true}
+                                    renderItem={(item, index) => this.renderImages(item, index)}
+                                    horizontal={true}
+                                /></View> : <View/>
+                        }
+                    </View>
+                    <EmptyView height={60}/>
+                    <View style={CreateSOSStyles.emergencyDetailBox}>
+                        <View style={CreateSOSStyles.emergency}>
+                            <Text style={CreateSOSStyles.emergencyHeader}>Emergency Contacts</Text>
                         </View>
-                    </TouchableHighlight>
-                </View>
-                {this._renderModal1()}
+                        <View style={CreateSOSStyles.detailBox}>
+                            <TouchableOpacity
+                                underlayColor={base.theme.colors.transparent}
+                                onPress={() => this.makePhoneCall(108)} style={CreateSOSStyles.cardView}>
+                                <View style={CreateSOSStyles.subCardView}>
+                                    <Image style={CreateSOSStyles.imageStyles}
+                                           source={require('../../../icons/ambulance.png')}>
+                                    </Image>
+                                    <View style={[CreateSOSStyles.subView]}>
+                                        <Text style={CreateSOSStyles.count}>
+                                            Ambulance
+                                        </Text>
+                                        <View style={{top: 5, flexDirection: 'row'}}>
+                                            <Image
+                                                resizeMode={'contain'}
+                                                style={CreateSOSStyles.imageStyles1}
+                                                source={require("../../../icons/call.png")}
+                                            />
+                                            <Text style={CreateSOSStyles.cardText}
+                                                  numberOfLines={2}>
+                                                108
+                                            </Text>
+                                        </View>
+
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                underlayColor={base.theme.colors.transparent}
+                                onPress={() => this.makePhoneCall(100)} style={CreateSOSStyles.cardView}>
+                                <View style={CreateSOSStyles.subCardView}>
+                                    <Image style={CreateSOSStyles.imageStyles}
+                                           source={require('../../../icons/police.png')}>
+                                    </Image>
+                                    <View style={[CreateSOSStyles.subView]}>
+                                        <Text style={CreateSOSStyles.count}>
+                                            Police
+                                        </Text>
+                                        <View style={{top: 5, flexDirection: 'row'}}>
+                                            <Image
+                                                resizeMode={'contain'}
+                                                style={CreateSOSStyles.imageStyles1}
+                                                source={require("../../../icons/call.png")}
+                                            />
+                                            <Text style={CreateSOSStyles.cardText}
+                                                  numberOfLines={2}>
+                                                100
+                                            </Text>
+                                        </View>
+
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                underlayColor={base.theme.colors.transparent}
+                                onPress={() => this.makePhoneCall(101)} style={CreateSOSStyles.cardView}>
+                                <View style={CreateSOSStyles.subCardView}>
+                                    <Image style={CreateSOSStyles.imageStyles}
+                                           source={require('../../../icons/fire_brigade.png')}>
+                                    </Image>
+                                    <View style={[CreateSOSStyles.subView]}>
+                                        <Text style={CreateSOSStyles.count}>
+                                            Fire Brigade
+                                        </Text>
+                                        <View style={{top: 5, flexDirection: 'row'}}>
+                                            <Image
+                                                resizeMode={'contain'}
+                                                style={CreateSOSStyles.imageStyles1}
+                                                source={require("../../../icons/call.png")}
+                                            />
+                                            <Text style={CreateSOSStyles.cardText}
+                                                  numberOfLines={2}>
+                                                101
+                                            </Text>
+                                        </View>
+
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableHighlight
+                            underlayColor={base.theme.colors.transparent}
+                            onPress={() => this.stopSOS()} style={CreateSOSStyles.stopSOSView}>
+                            <View style={CreateSOSStyles.stopSOSTextView}>
+                                <Text style={CreateSOSStyles.stopSOSText}>Stop SOS</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                    {this._renderModal1()}
                 </View>
             </ScrollView>
         )
@@ -786,14 +786,14 @@ class CreateSOS extends React.Component {
             AsyncStorage.removeItem("isSOSUpdatePending");
 
             NetInfo.isConnected.fetch().then(isConnected => {
-              
+
                 if(isConnected){
-                     firebase.database().ref('SOS/' + associationID + "/" + userId + "/").remove().then((response)=>{
+                    firebase.database().ref('SOS/' + associationID + "/" + userId + "/").remove().then((response)=>{
                         let receivedData = response.val();
                         console.log("Response!!!!!!!",receivedData)
-                        
-                        }).catch((error)=>{
-                            console.log('Response!!!!!!!',error.response)
+
+                    }).catch((error)=>{
+                        console.log('Response!!!!!!!',error.response)
                     });
                     self.setState({
                         isGuardDetailAvailable: false
@@ -808,13 +808,13 @@ class CreateSOS extends React.Component {
                     }
                     AsyncStorage.setItem("isSOSUpdatePending",JSON.stringify(sosDetail));
                     self.props.navigation.navigate("ResDashBoard");
-                } 
-        });
+                }
+            });
         }
         catch(e){
             console.log(e)
         }
-        
+
     }
 
     async stopSOSInAPI(){
@@ -836,10 +836,10 @@ class CreateSOS extends React.Component {
                     'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
                 },
                 body: JSON.stringify(detail)})
-                .then(response => console.log("response in stop sos",response.json(),detail))
-                .catch((err) => {
-                    console.log("Error", err)
-                })
+            .then(response => console.log("response in stop sos",response.json(),detail))
+            .catch((err) => {
+                console.log("Error", err)
+            })
     }
 
     renderUserLocation() {

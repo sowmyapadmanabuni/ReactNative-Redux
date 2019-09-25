@@ -45,6 +45,35 @@ export default class OyeSafeApiFamily {
         console.log("My Family edit member", input);
         return await instance.post("FamilyMemberDetails/update", input)
     }
+    static async getLatestSubscriptionDetailsByAssId(associationId) {
+        console.log("SubAssId", associationId);
+        return await instance.get('Subscription/GetLatestSubscriptionByAssocID/' + associationId)
+
+    }
+    static async createSubscription(input) {
+        console.log("CreateSubInput", input);
+        return await instance.get('Subscription/Create',input)
+
+    }
+    static async getPricingData(associationId) {
+        console.log("SubAssId", associationId);
+        return await instance.get('Subscription/GetPricingData')
+
+    }
+    static async getDiscountingData(associationId) {
+        console.log("SubAssId", associationId);
+        return await instance.get('Subscription/GetDiscountingDetails')
+
+    }
+    static async getDiscountingDataByAssId(associationId) {
+        console.log("SubAssId", associationId);
+        return await instance.get('Subscription/GetDiscountingDetailsByAssociationID/'+associationId)
+    }
+    static async getDescriptionOfDevice(productId) {
+        console.log("SubAssId", productId);
+        return await instance.get('Subscription/GetProductDetailsByProductName/'+productId)
+    }
+
 
 
 }

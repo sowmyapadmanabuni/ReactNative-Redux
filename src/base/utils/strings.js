@@ -10,7 +10,7 @@ const isMandatory = ' is required';
 
 /*Change this urlType to
     1. apiuat  --- For testing server
-    2. apidev  --- For develpment server
+    2. apidev  --- For development server
     3. api     --- For production server
 */
 let urlType = 'api';
@@ -39,8 +39,8 @@ const api = {
 };
 
 //const imageUrl = 'https://mediauploaddev.oyespace.com/Images/'; //Development
-const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
-//const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
+//const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
+const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
 const strings = {
   appName: 'OyeSpace',

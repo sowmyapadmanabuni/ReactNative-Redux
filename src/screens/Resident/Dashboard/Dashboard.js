@@ -531,15 +531,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    // timer.setInterval(
-    //   this,
-    //   'syncData',
-    //   () => {
-    //     this.syncData();
+     timer.setInterval(
+     this,
+      'syncData',
+      () => {
+      this.syncData();
     //     // alert("hererereerrrereer");
-    //   },
-    //   5000
-    // );
+      },
+       5000
+     );
   }
 
   async roleCheckForAdmin(index) {
@@ -1709,13 +1709,14 @@ class Dashboard extends PureComponent {
           >
             <Text>Patrolling</Text>
           </Button>
-          <Button
+       */}
+        <Button
               bordered
               style={styles.button1}
               onPress={() => this.props.navigation.navigate("subscriptionManagement")}
           >
             <Text>Subscription</Text>
-          </Button>*/}
+          </Button>
         </View>
         {this.props.dropdown.length==0?<View/>:
         <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('33%')}}>
@@ -1973,7 +1974,7 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyespaceReducer: state.OyespaceReducer,
     receiveNotifications: state.NotificationReducer.receiveNotifications,
-    dashBoardReducer: state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer,
   };
 };
 
