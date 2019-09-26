@@ -172,6 +172,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-sound')
     implementation project(':react-native-audio-recorder-player')
     implementation project(':react-native-android-wifi')
     implementation project(':react-native-android-location-enabler')
@@ -201,6 +202,7 @@ dependencies {
     implementation project(':react-native-contacts-wrapper')
     implementation project(':react-native-maps')
     implementation project(':react-native-geolocation-service')
+    implementation project(':react-native-system-setting')
 
 
     // Firebase dependencies

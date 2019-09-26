@@ -365,10 +365,10 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                     if (withoutString_units.length > 0) {
                       filterAssociations.push({ ...associations });
 
-                      dispatch({
-                        type: DASHBOARD_NO_UNITS,
-                        payload: filterAssociations
-                      });
+                      // dispatch({
+                      //   type: DASHBOARD_NO_UNITS,
+                      //   payload: filterAssociations
+                      // });
 
                       if (allData[0]) {
                         dispatch({

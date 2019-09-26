@@ -19,7 +19,9 @@ const colors = {
     invoiceList: '#f4f4f4',
     cardBackground: "#fafafa",
     green: "#32CD32",
-    hyperLink: '#0000EE'
+    hyperLink: '#2D13F4',
+    greyHead:"#E0E0E0",
+    greyCard:"#EDEDED"
 };
 
 export default colors;

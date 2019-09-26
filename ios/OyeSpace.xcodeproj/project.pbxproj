@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -33,6 +34,7 @@
 		25D7E24572F94786B8FFC4C6 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C81EE116B58A407B802BD1A7 /* Roboto.ttf */; };
 		267923F42522481E975D90FB /* libRNFileViewer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE307AFB5FBC417C86E62341 /* libRNFileViewer.a */; };
 		33204605FC1E4E1CA4E6CA7B /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCE1202D81A94C659368BD94 /* Ionicons.ttf */; };
+		3695FCCD4F73492FBF5E2A69 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F29A1B3442204F989EB56B28 /* Fontisto.ttf */; };
 		372953B25D94459886D183E0 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F458CCDED1A544129FAC5DBC /* Octicons.ttf */; };
 		380AF2CE6CA244499F710B30 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 962DB82BDD1249AB8E425B06 /* Zocial.ttf */; };
 		38B525F3545E455D8964C5F2 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3AD9646F2057470C85588565 /* FontAwesome5_Brands.ttf */; };
@@ -86,8 +88,10 @@
 		FD2B2A64223F841A0061AB68 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2B2A61223F84080061AB68 /* libRNSVG.a */; };
 		FD57EA5322E98F37009A1AC7 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD57EA4D22E98F05009A1AC7 /* libRNSpinkit.a */; };
 		FD735809232914EC005D887E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD7357D0232914AB005D887E /* icomoon.ttf */; };
+		FDA791AC233B6F630034094B /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FDA791AB233B6F630034094B /* sound_1.mp3 */; };
+		FDA79208233B71720034094B /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDA79203233B715D0034094B /* libRNSound.a */; };
 		FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */; };
-		3695FCCD4F73492FBF5E2A69 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F29A1B3442204F989EB56B28 /* Fontisto.ttf */; };
+		FDDDA137233B582D00F1EBCE /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FDDDA136233B582C00F1EBCE /* sound_1.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +157,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
+		};
+		1E128095233796F80044B3D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 117405FA1B9954BF004425E1;
+			remoteInfo = RNHTMLtoPDFTests;
 		};
 		2D16E6711FA4F8DC00B85C8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -469,12 +480,12 @@
 			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
 			remoteInfo = "RNSpinkit-tvOS";
 		};
-		FD9A75C92339112C000680E6 /* PBXContainerItemProxy */ = {
+		FDA79202233B715D0034094B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
+			containerPortal = FDA791C9233B715D0034094B /* RNSound.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 117405FA1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDFTests;
+			remoteGlobalIDString = 19825A1E1BD4A89800EE0337;
+			remoteInfo = RNSound;
 		};
 		FDC53A8E229FABA80095F5B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -482,6 +493,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = D8D93E6420161A7F00A39331;
 			remoteInfo = reactnativeuilib;
+		};
+		FDDD9FBB233B370200F1EBCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FDDD9FB7233B370200F1EBCE /* RNAudioRecorderPlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNAudioRecorderPlayer;
 		};
 		FDF254912313B2310091E722 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -614,6 +632,7 @@
 		E8BAB1885F524E67B6415E52 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		F0B2FCB7F1B84CCA869C108E /* HelveticaNeueMed.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = HelveticaNeueMed.ttf; path = ../fonts/HelveticaNeueMed.ttf; sourceTree = "<group>"; };
 		F0B486FF7B9B46EE84A1B4BA /* libRazorpayCheckout.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRazorpayCheckout.a; sourceTree = "<group>"; };
+		F29A1B3442204F989EB56B28 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		F458CCDED1A544129FAC5DBC /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		FCE1202D81A94C659368BD94 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		FD2B2A5B223F84080061AB68 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
@@ -622,8 +641,12 @@
 		FD8A832B22353D4E00D04468 /* libyoga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libyoga.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD8A836022353E8700D04468 /* libyoga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libyoga.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD9A75D72339146D000680E6 /* libRNAudioRecorderPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAudioRecorderPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDA791AB233B6F630034094B /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound_1.mp3; path = ../../../sound_1.mp3; sourceTree = "<group>"; };
+		FDA791C9233B715D0034094B /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F29A1B3442204F989EB56B28 /* Fontisto.ttf */ = {isa = PBXFileReference; name = "Fontisto.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FDDD9F7D233B36C700F1EBCE /* libRNAudioRecorderPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAudioRecorderPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDDD9FB7233B370200F1EBCE /* RNAudioRecorderPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNAudioRecorderPlayer.xcodeproj; path = "../node_modules/react-native-audio-recorder-player/ios/RNAudioRecorderPlayer.xcodeproj"; sourceTree = "<group>"; };
+		FDDDA136233B582C00F1EBCE /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound_1.mp3; path = ../../../sound_1.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -631,6 +654,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDA79208233B71720034094B /* libRNSound.a in Frameworks */,
 				9FCBB88822FB068F00C2E0AF /* MessageUI.framework in Frameworks */,
 				9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */,
 				9FCBB88422FB063300C2E0AF /* libRNShare.a in Frameworks */,
@@ -850,6 +874,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FDDD9F7D233B36C700F1EBCE /* libRNAudioRecorderPlayer.a */,
 				FD9A75D72339146D000680E6 /* libRNAudioRecorderPlayer.a */,
 				9FCBB88722FB068F00C2E0AF /* MessageUI.framework */,
 				9FCBB88522FB068100C2E0AF /* Social.framework */,
@@ -907,6 +932,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FDA791C9233B715D0034094B /* RNSound.xcodeproj */,
+				FDDD9FB7233B370200F1EBCE /* RNAudioRecorderPlayer.xcodeproj */,
 				9FCBB84822FB060100C2E0AF /* RNShare.xcodeproj */,
 				FD57EA1522E98F05009A1AC7 /* RNSpinkit.xcodeproj */,
 				9F675E3322E5C98700D175F9 /* ContactsWrapper.xcodeproj */,
@@ -950,6 +977,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				FDDDA136233B582C00F1EBCE /* sound_1.mp3 */,
 				13B07FAE1A68108700A75B9A /* OyeSpace */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* OyeSpaceTests */,
@@ -1007,6 +1035,7 @@
 				F0B486FF7B9B46EE84A1B4BA /* libRazorpayCheckout.a */,
 				042936001371409F9D67B5D8 /* libreactnativeuilib.a */,
 				92A6A3934A9C4F1B9F512202 /* libRCTRestart.a */,
+				FDA791AB233B6F630034094B /* sound_1.mp3 */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1066,7 +1095,7 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-				FD9A75CA2339112C000680E6 /* RNHTMLtoPDFTests.xctest */,
+				1E128096233796F80044B3D4 /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1097,10 +1126,26 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		FDA791CA233B715D0034094B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FDA79203233B715D0034094B /* libRNSound.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		FDC53A8B229FABA80095F5B5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				FDC53A8F229FABA80095F5B5 /* libreactnativeuilib.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FDDD9FB8233B370200F1EBCE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FDDD9FBC233B370200F1EBCE /* libRNAudioRecorderPlayer.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1253,6 +1298,10 @@
 					ProjectRef = 6EA84CBBF5AD40688D7FE07D /* reactnativeuilib.xcodeproj */;
 				},
 				{
+					ProductGroup = FDDD9FB8233B370200F1EBCE /* Products */;
+					ProjectRef = FDDD9FB7233B370200F1EBCE /* RNAudioRecorderPlayer.xcodeproj */;
+				},
+				{
 					ProductGroup = FD2B2A56223F82850061AB68 /* Products */;
 					ProjectRef = 44AA5AF631FD48E0910DE33B /* RNExitApp.xcodeproj */;
 				},
@@ -1283,6 +1332,10 @@
 				{
 					ProductGroup = 9FCBB84922FB060100C2E0AF /* Products */;
 					ProjectRef = 9FCBB84822FB060100C2E0AF /* RNShare.xcodeproj */;
+				},
+				{
+					ProductGroup = FDA791CA233B715D0034094B /* Products */;
+					ProjectRef = FDA791C9233B715D0034094B /* RNSound.xcodeproj */;
 				},
 				{
 					ProductGroup = FD57EA1622E98F05009A1AC7 /* Products */;
@@ -1362,6 +1415,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		1E128096233796F80044B3D4 /* RNHTMLtoPDFTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNHTMLtoPDFTests.xctest;
+			remoteRef = 1E128095233796F80044B3D4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */ = {
@@ -1679,11 +1739,11 @@
 			remoteRef = FD57EA4E22E98F05009A1AC7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FD9A75CA2339112C000680E6 /* RNHTMLtoPDFTests.xctest */ = {
+		FDA79203233B715D0034094B /* libRNSound.a */ = {
 			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = FD9A75C92339112C000680E6 /* PBXContainerItemProxy */;
+			fileType = archive.ar;
+			path = libRNSound.a;
+			remoteRef = FDA79202233B715D0034094B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		FDC53A8F229FABA80095F5B5 /* libreactnativeuilib.a */ = {
@@ -1691,6 +1751,13 @@
 			fileType = archive.ar;
 			path = libreactnativeuilib.a;
 			remoteRef = FDC53A8E229FABA80095F5B5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FDDD9FBC233B370200F1EBCE /* libRNAudioRecorderPlayer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNAudioRecorderPlayer.a;
+			remoteRef = FDDD9FBB233B370200F1EBCE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		FDF254922313B2310091E722 /* libRCTRestart.a */ = {
@@ -1744,6 +1811,8 @@
 				1EB458D80BAA45129F1275C1 /* rubicon-icon-font.ttf in Resources */,
 				67BCC157B1E14945AFCE9B93 /* SimpleLineIcons.ttf in Resources */,
 				380AF2CE6CA244499F710B30 /* Zocial.ttf in Resources */,
+				FDDDA137233B582D00F1EBCE /* sound_1.mp3 in Resources */,
+				FDA791AC233B6F630034094B /* sound_1.mp3 in Resources */,
 				9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */,
 				E0DD5A639E34485C8EDFA30C /* HelveticaNeue BlackCond.ttf in Resources */,
 				77686AE00B724E57B8CEEA67 /* HelveticaNeue Light.ttf in Resources */,

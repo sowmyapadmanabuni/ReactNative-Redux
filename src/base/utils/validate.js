@@ -256,4 +256,50 @@ export class validate {
             return true;
         }
     }
+
+    static getPrice(devCount,unitPrice){
+        console.log('jhgjhghghg',devCount,unitPrice)
+        try{
+            let totalAmount=devCount*unitPrice;
+            console.log('getPriceFun',totalAmount)
+            return totalAmount;
+        }
+        catch(error){
+            console.log('Error while pricing',error)
+            return error
+        }
+    }
+
+    static getTotalPriceWithDuration(totalDevPrice,duration){
+        try{
+            let totalAmount=totalDevPrice*duration;
+            console.log('getPriceFun',totalAmount)
+            return totalAmount;
+        }
+        catch(error){
+            console.log('Error while pricing',error)
+            return error
+        }
+    }
+
+    static getDiscountPrice(totalPrice,disPer){
+        try{
+            let disValue= (totalPrice/100)*disPer
+            let totalAmountWithDis=totalPrice-disValue
+            return totalAmountWithDis
+        }
+        catch(error){
+            console.log('Error while pricing',error)
+        }
+    }
+    static getPriceWithGST(totalPrice,disPer,callback){
+        try{
+            let disValue= (totalPrice/100)*disPer
+            let totalAmountWithDis=totalPrice+disValue;
+            callback(totalAmountWithDis,disValue)
+        }
+        catch(error){
+            console.log('Error while pricing',error)
+        }
+    }
 }

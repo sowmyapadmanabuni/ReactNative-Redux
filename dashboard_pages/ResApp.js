@@ -69,6 +69,7 @@ import MyFamilyHeader from '../src/components/NavigationalHeaders/MyFamilyHeader
 
 import City from '../assocition_pages/City.js';
 import SendingMsgToGate from '../my_unit_pages/SendingMsgToGate.js';
+import SubscriptionManagement from '../src/screens/Subscription/SubscriptionManagement';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',

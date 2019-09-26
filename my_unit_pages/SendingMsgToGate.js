@@ -80,7 +80,13 @@ class HelloWorldApp extends Component {
 
       isLoading: false,
 
-      datasource: []
+      datasource: [],
+
+      visitorName: '',
+      visitorId: '',
+      visitorList: [],
+
+      comment: ''
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -470,10 +476,10 @@ class HelloWorldApp extends Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            StartDate: '2019-09-24',
-            EndDate: '2019-09-24', //moment(new Date()).format('YYYY-MM-DD'),
-            ASAssnID: this.props.dashBoardReducer.assId,
-            UNUnitID: this.props.dashBoardReducer.uniID,
+            StartDate: '2019-09-25',
+            EndDate: '2019-09-25', //moment(new Date()).format('YYYY-MM-DD'),
+            ASAssnID: this.props.dashboardReducer.assId,
+            UNUnitID: this.props.dashboardReducer.uniID,
             ACAccntID: this.props.userReducer.MyAccountID
           })
         }
@@ -483,6 +489,7 @@ class HelloWorldApp extends Component {
           //var count = Object.keys(responseJson.data.visitorlogbydate).length;
           //console.log("fsbkfh", count);
           if (responseJson.success) {
+            console.log('SUCCESS', responseJson);
             let data = responseJson.data.visitorlog.filter(
               x => x.vlVisType === 'Delivery'
             );
@@ -495,8 +502,20 @@ class HelloWorldApp extends Component {
                   value: data[i].vlfName,
                   id: data[i].vlVisLgID
                 };
+                console.log('VALUE,ID', visitorObj.value, visitorObj.id);
+                visitors.push(visitorObj);
+                this.setState({
+                  visitorList: visitors
+                });
+                console.log(
+                  'DATAAAAAAA',
+                  i,
+                  data[i],
+                  data[i].vlExitT,
+                  visitors
+                );
               }
-              visitors.push(visitorObj);
+
               console.log('Visitors', visitorObj);
             }
             this.setState({
@@ -521,6 +540,99 @@ class HelloWorldApp extends Component {
     } catch (e) {
       this.setState({ isLoading: false });
     }
+  };
+
+  visitorsendtogate = async (value, index) => {
+    let self = this;
+    let visitorList = self.state.visitorList;
+
+    let id, name;
+    for (let i = 0; i < visitorList.length; i++) {
+      console.log('VIsitor List', visitorList);
+      if (i === index) {
+        (id = visitorList[i].id), (name = visitorList[i].value);
+      }
+      console.log('id, name', id, name);
+      self.setState({
+        visitorName: name,
+        visitorId: id
+      });
+    }
+  };
+
+  datasend = () => {
+    let self = this;
+    let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
+    let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
+    let img3 = self.state.relativeImage3 ? self.state.relativeImage3 : '';
+    let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
+    let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
+    let comments = self.state.comment ? self.state.comment : '';
+    let visitorid = self.state.visitorId;
+    let visitorname = self.state.visitorName;
+    console.log(
+      'All Data',
+      img1,
+      img2,
+      img3,
+      img4,
+      img5,
+      comments,
+      visitorid,
+      visitorname,
+      self.props.dashboardReducer.assId,
+      self.props.dashboardReducer.uniID
+    );
+    axios
+      .post(
+        `http://api.oyespace.com/oyesafe/api/v1/VisitorLog/Create`,
+        {
+          ASAssnID: self.props.dashboardReducer.assId,
+          RERgVisID: visitorid,
+          SPPrdImg1: img1,
+          SPPrdImg10: '',
+          SPPrdImg2: img2,
+          SPPrdImg3: img3,
+          SPPrdImg4: img4,
+          SPPrdImg5: img5,
+          SPPrdImg6: '',
+          SPPrdImg7: '',
+          SPPrdImg8: '',
+          SPPrdImg9: '',
+          UNUniName: '',
+          UNUnitID: self.props.dashboardReducer.uniID,
+          VLComName: '',
+          VLENGName: '',
+          VLEntryImg: '',
+          VLFName: visitorname,
+          VLGtName: comments,
+          VLItmCnt: 0,
+          VLLName: '',
+          VLMobile: '',
+          VLPOfVis: '1',
+          VLVehNum: '',
+          VLVehType: '',
+          VLVerStat: '',
+          VLVisCnt: 1,
+          VLVisType: 'Delivery',
+          WKSelfImg: ''
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          }
+        }
+      )
+
+      .then(response => {
+        console.log('Respo1111:', response.data);
+        alert('Success');
+        // this.props.navigation.goBack();
+      })
+      .catch(error => {
+        console.log('Crash in profile', error);
+      });
   };
   render() {
     let playWidth =
@@ -603,7 +715,9 @@ class HelloWorldApp extends Component {
               dropdownPosition={-6}
               dropdownOffset={{ top: 0, left: 0 }}
               style={{ fontSize: hp('2.2%') }}
-              //   onChangeText={(value, index) => this.changeFamilyMember(value, index)}
+              onChangeText={(value, index) =>
+                this.visitorsendtogate(value, index)
+              }
             />
           </View>
 
@@ -1296,7 +1410,7 @@ class HelloWorldApp extends Component {
                   autoCapitalize="none"
                   keyboardType="email-address"
                   placeholder="Write a comment here..."
-                  onChangeText={emailId => this.setState({ emailId: emailId })}
+                  onChangeText={comment => this.setState({ comment: comment })}
                 />
               </Item>
             </View>
@@ -1311,7 +1425,7 @@ class HelloWorldApp extends Component {
                 bordered
                 warning
                 style={styles.button}
-                // onPress={() => this.sendInvitation()}
+                onPress={() => this.datasend()}
               >
                 <Text
                   style={{
@@ -1334,7 +1448,7 @@ class HelloWorldApp extends Component {
 const mapStateToProps = state => {
   return {
     oyeURL: state.OyespaceReducer.oyeURL,
-    dashBoardReducer: state.DashboardReducer,
+    dashboardReducer: state.DashboardReducer,
     userReducer: state.UserReducer
   };
 };

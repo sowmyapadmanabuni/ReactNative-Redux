@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.zmxv.RNSound.RNSoundPackage;
 import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.devstepbcn.wifi.AndroidWifiPackage;
@@ -19,6 +20,7 @@ import com.zmxv.RNSound.RNSoundPackage;
 import com.lynxit.contactswrapper.ContactsWrapperPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
+import com.ninty.system.setting.SystemSettingPackage;
 
 
 
@@ -75,8 +77,8 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new ReactNativeAudioPackage(),
-            new RNAudioRecorderPlayerPackage(),
+            new RNSoundPackage(),
+                    new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
                     new GeolocationPackage(),
                     new ReactNativeRestartPackage(),
@@ -106,7 +108,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new MapsPackage(),
                     new RNFusedLocationPackage(),
                     new FabricPackage(),
-                    new RNAndroidLocationEnablerPackage()
+                    new RNAndroidLocationEnablerPackage(),
+                    new SystemSettingPackage()
 
 
 

@@ -49,3 +49,7 @@ export const UPDATE_QR_BASE64 = "update_qr_bas64";
 
 //Staff Reducer
 export const UPDATE_STAFF_INFO = "update_staff_info";
+
+export const UPDATE_SUBSCRIPTION = "update_subscription";
+
+

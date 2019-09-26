@@ -7,6 +7,7 @@ import OyespaceReducer from "./OyespaceReducer";
 import PatrollingReducer from "./PatrollingReducer";
 import StaffReducer from "./StaffReducer";
 import JoinAssociationReducer from "./JoinAssociationReducer";
+import SubscriptionReducer from "./SubscriptionReducer";
 
 export default combineReducers({
     NotificationReducer: NotificationReducer,
@@ -16,5 +17,7 @@ export default combineReducers({
     OyespaceReducer: OyespaceReducer,
     PatrollingReducer: PatrollingReducer,
     StaffReducer: StaffReducer,
-    JoinAssociationReducer: JoinAssociationReducer
+    JoinAssociationReducer: JoinAssociationReducer,
+    SubscriptionReducer:SubscriptionReducer
+
 });
