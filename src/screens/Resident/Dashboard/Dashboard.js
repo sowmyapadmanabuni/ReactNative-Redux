@@ -822,6 +822,9 @@ class Dashboard extends PureComponent {
       value: dropdown[index].associationId
     });
 
+    base.utils.validate.checkSubscription(dropdown[index].associationId)
+
+
     // let memId = _.find(memberList, function(o) {
     //   return o.asAssnID === dropdown[index].associationId;
     // });

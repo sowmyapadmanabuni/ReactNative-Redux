@@ -64,8 +64,8 @@ class MyGuests extends Component {
 
     componentDidMount() {
         let self = this;
-        let newDataSource = [];
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        let newDataSource = [];
         this.state.dataSource.map(data => {
             newDataSource.push({...data, open: false});
         });
@@ -83,10 +83,6 @@ class MyGuests extends Component {
             this.props.navigation.goBack(null);
             return true;
         });
-    }
-
-    componentWillUnmount() {
-        this.backHandler.remove();
     }
 
     componentDidUpdate() {
