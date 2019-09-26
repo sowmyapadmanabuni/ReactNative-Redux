@@ -12,11 +12,15 @@ const INITIAL_STATE = {
     platinumTotalPrice:0,
     goldTotalPrice:0,
     biometricTotalPrice:0,
-    platinumDevCount:1,
-    goldDevCount:1,
-    bioDevCount:1,
+    platinumDevCount:0,
+    goldDevCount:0,
+    bioDevCount:0,
     oyeSafeList:[],
-    oyeLivList:[]
+    oyeLivList:[],
+    isOyeLiving: true,
+    isOyeSafe: true,
+    isPlatinum: true,
+    isGold: true,
 
 };
 

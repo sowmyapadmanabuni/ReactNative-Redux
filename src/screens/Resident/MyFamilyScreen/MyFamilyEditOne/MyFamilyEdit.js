@@ -70,6 +70,8 @@ class MyFamilyEdit extends Component {
 
     componentWillMount() {
         console.log('Props in Edit Family', this.props.navigation.state.params);
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+
         this.setState({
             firstName: this.props.navigation.state.params.fmName,
             lastName: this.props.navigation.state.params.fmlName,
@@ -635,7 +637,9 @@ const mapStateToProps = state => {
         associationid: state.DashboardReducer.associationid,
         selectedAssociation: state.DashboardReducer.selectedAssociation,
         oyeURL: state.OyespaceReducer.oyeURL,
-        dashBoardReducer: state.DashboardReducer
+        dashBoardReducer: state.DashboardReducer,
+        userReducer: state.UserReducer,
+
     };
 };
 

@@ -48,6 +48,8 @@ class VehicleList extends Component {
                 isLoading: false
             });
         }, 1500);
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
     }
 
     componentDidUpdate() {
@@ -617,7 +619,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         dashBoardReducer: state.DashboardReducer,
-        oyeURL: state.OyespaceReducer.oyeURL
+        oyeURL: state.OyespaceReducer.oyeURL,
+        userReducer: state.UserReducer,
+
     };
 };
 

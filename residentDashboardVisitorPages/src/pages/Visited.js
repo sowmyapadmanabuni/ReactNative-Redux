@@ -60,6 +60,7 @@ class MyGuests extends Component {
     componentDidMount() {
         let self = this;
         let newDataSource = [];
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.state.dataSource.map(data => {
             newDataSource.push({...data, open: false});
         });

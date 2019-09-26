@@ -38,6 +38,7 @@ class Staff extends React.Component {
     }
 
     componentWillMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.getListOfStaff();
     }
 

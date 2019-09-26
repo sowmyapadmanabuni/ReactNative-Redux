@@ -54,6 +54,7 @@ class NotificationScreen extends PureComponent {
     }
 
     componentDidMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.doNetwork(null, this.props.notifications);
         firebase.notifications().removeAllDeliveredNotifications();
 
@@ -755,7 +756,9 @@ const mapStateToProps = state => {
         MyAccountID: state.UserReducer.MyAccountID,
         refresh: state.NotificationReducer.refresh,
         page: state.NotificationReducer.page,
-        footerLoading: state.NotificationReducer.footerLoading
+        footerLoading: state.NotificationReducer.footerLoading,
+        userReducer: state.UserReducer
+
     };
 };
 

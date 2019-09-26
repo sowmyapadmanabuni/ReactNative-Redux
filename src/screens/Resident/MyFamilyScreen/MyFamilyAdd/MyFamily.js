@@ -84,6 +84,9 @@ class MyFamily extends Component {
         }, 0)
 
     }
+    componentWillMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+    }
 
     processBackPress() {
         console.log("Part");

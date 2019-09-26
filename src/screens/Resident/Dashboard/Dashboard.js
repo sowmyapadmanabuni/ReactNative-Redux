@@ -59,6 +59,7 @@ import timer from 'react-native-timer';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../assets/selection.json';
+import moment from "moment";
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
@@ -649,98 +650,6 @@ class Dashboard extends PureComponent {
     let oyeURL = this.props.oyeURL;
     self.setState({ isLoading: true });
 
-    // let stat = await base.services.OyeLivingApi.getAssociationListByAccountId(
-    //   this.props.userReducer.MyAccountID
-    // );
-
-    /* let stat = await axios.get(
-      `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
-      {
-        headers: {
-          "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1",
-          "Content-Type": "application/json"
-        }
-      }
-    );
-
-    console.log("Response_Association: ", stat);
-
-    try {
-      if (stat && stat.data.success) {
-        this.setState({
-          isNoAssJoin: false
-        });
-        let assocList = [];
-        for (let i = 0; i < stat.data.data.memberListByAccount.length; i++) {
-          if (stat.data.data.memberListByAccount[i].asAsnName !== "") {
-            assocList.push({
-              value: stat.data.data.memberListByAccount[i].asAsnName,
-              details: stat.data.data.memberListByAccount[i]
-            });
-          }
-        }
-        let sortedArr = assocList.sort(
-          base.utils.validate.compareAssociationNames
-        ); //open chrome
-        console.log("Sorted and All Asc List", sortedArr, assocList);
-
-        let removedDuplicates = _.uniqBy(sortedArr, "value");
-        console.log("Removed duplicates", sortedArr, assocList);
-
-        self.setState({
-          assocList: removedDuplicates,
-          assocName: sortedArr[0].details.asAsnName,
-          assocId: sortedArr[0].details.asAssnID
-        });
-        const { updateIdDashboard } = this.props;
-        console.log("updateIdDashboard1", this.props);
-        updateIdDashboard({
-          prop: "assId",
-          value: sortedArr[0].details.asAssnID
-        });
-        // updateIdDashboard({ prop: "memberList", value: sortedArr });
-        const { updateUserInfo } = this.props;
-        updateUserInfo({
-          prop: "SelectedAssociationID",
-          value: sortedArr[0].details.asAssnID
-        });
-
-        self.getUnitListByAssoc();
-      } else if (!stat.data.success) {
-        this.setState({
-          isNoAssJoin: true
-        });
-        Alert.alert(
-          "Join association",
-
-          "Please join in any association to access Data  ?",
-          [
-            {
-              text: "Yes",
-              onPress: () =>
-                this.props.navigation.navigate("CreateOrJoinScreen")
-            },
-            { text: "No", style: "cancel" }
-          ]
-        );
-      }
-    } catch (error) {
-      this.setState({
-        isNoAssJoin: true
-      });
-      Alert.alert(
-          "Join association",
-
-          "Please join in any association to access Data  ?",
-          [
-            {
-              text: "Yes",
-              onPress: () =>
-                  this.props.navigation.navigate("CreateOrJoinScreen")
-            },
-            { text: "No", style: "cancel" }
-          ]
-      );    }*/
     axios
       .get(
         `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
@@ -804,7 +713,7 @@ class Dashboard extends PureComponent {
               prop: 'SelectedAssociationID',
               value: sortedArr[0].details.asAssnID
             });
-
+            base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
             self.getUnitListByAssoc();
           } else if (!stat.data.success) {
             this.setState({
@@ -959,6 +868,7 @@ class Dashboard extends PureComponent {
     }
   }
 
+
   async getUnitListByAssoc() {
     let self = this;
     //self.setState({isLoading: true})
@@ -995,13 +905,14 @@ class Dashboard extends PureComponent {
         //     prop: "uniID",
         //     value: unitList[0].details.unUnitID
         // });
-
         self.roleCheckForAdmin(this.state.assocId);
       }
     } catch (error) {
       base.utils.logger.log(error);
     }
   }
+
+
 
   updateUnit(value, index) {
     let self = this;
@@ -1709,7 +1620,7 @@ class Dashboard extends PureComponent {
             <Text>Patrolling</Text>
           </Button>
        */}
-        <Button
+      <Button
               bordered
               style={styles.button1}
               onPress={() => this.props.navigation.navigate("subscriptionManagement")}
@@ -1718,7 +1629,7 @@ class Dashboard extends PureComponent {
           </Button>
         </View>
         {this.props.dropdown.length==0?<View/>:
-        <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('33%')}}>
+        <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('22%')}}>
               {!this.state.isSOSSelected?
               <TouchableHighlight 
               underlayColor={base.theme.colors.transparent}

@@ -18,6 +18,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {connect} from "react-redux";
+import base from "../../../src/base";
 
 var multipleEntries = "FALSE";
 
@@ -61,6 +62,7 @@ class InviteGuests extends Component {
     }
 
     componentDidMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             console.log("Back KSCNJND");
             this.props.navigation.goBack(null); // works best when the goBack is async
