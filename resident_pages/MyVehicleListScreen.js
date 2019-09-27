@@ -68,19 +68,7 @@ class VehicleList extends Component {
         }, 0);
     }
 
-    componentDidUpdate() {
-        setTimeout(() => {
-            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
-    }
-
-    componentWillUnmount() {
-        setTimeout(() => {
-            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
-
-    }
-
+    
     processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;

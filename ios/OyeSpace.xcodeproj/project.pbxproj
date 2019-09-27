@@ -88,7 +88,7 @@
 		FD2B2A64223F841A0061AB68 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD2B2A61223F84080061AB68 /* libRNSVG.a */; };
 		FD57EA5322E98F37009A1AC7 /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD57EA4D22E98F05009A1AC7 /* libRNSpinkit.a */; };
 		FD735809232914EC005D887E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD7357D0232914AB005D887E /* icomoon.ttf */; };
-		FDA791AC233B6F630034094B /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FDA791AB233B6F630034094B /* sound_1.mp3 */; };
+		FDA697D3233CE9CD00739516 /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FDA697D2233CE9CD00739516 /* sound_1.mp3 */; };
 		FDA79208233B71720034094B /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDA79203233B715D0034094B /* libRNSound.a */; };
 		FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */; };
 		FDDDA137233B582D00F1EBCE /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FDDDA136233B582C00F1EBCE /* sound_1.mp3 */; };
@@ -641,7 +641,7 @@
 		FD8A832B22353D4E00D04468 /* libyoga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libyoga.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD8A836022353E8700D04468 /* libyoga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libyoga.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD9A75D72339146D000680E6 /* libRNAudioRecorderPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAudioRecorderPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FDA791AB233B6F630034094B /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound_1.mp3; path = ../../../sound_1.mp3; sourceTree = "<group>"; };
+		FDA697D2233CE9CD00739516 /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_1.mp3; sourceTree = "<group>"; };
 		FDA791C9233B715D0034094B /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FDDD9F7D233B36C700F1EBCE /* libRNAudioRecorderPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAudioRecorderPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1035,7 +1035,7 @@
 				F0B486FF7B9B46EE84A1B4BA /* libRazorpayCheckout.a */,
 				042936001371409F9D67B5D8 /* libreactnativeuilib.a */,
 				92A6A3934A9C4F1B9F512202 /* libRCTRestart.a */,
-				FDA791AB233B6F630034094B /* sound_1.mp3 */,
+				FDA697D2233CE9CD00739516 /* sound_1.mp3 */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1812,7 +1812,7 @@
 				67BCC157B1E14945AFCE9B93 /* SimpleLineIcons.ttf in Resources */,
 				380AF2CE6CA244499F710B30 /* Zocial.ttf in Resources */,
 				FDDDA137233B582D00F1EBCE /* sound_1.mp3 in Resources */,
-				FDA791AC233B6F630034094B /* sound_1.mp3 in Resources */,
+				FDA697D3233CE9CD00739516 /* sound_1.mp3 in Resources */,
 				9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */,
 				E0DD5A639E34485C8EDFA30C /* HelveticaNeue BlackCond.ttf in Resources */,
 				77686AE00B724E57B8CEEA67 /* HelveticaNeue Light.ttf in Resources */,

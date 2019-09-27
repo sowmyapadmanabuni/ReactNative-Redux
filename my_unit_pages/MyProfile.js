@@ -104,8 +104,9 @@ class MyProfile extends Component {
         isLoading: false
       });
     }, 1500);
-    base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
-
+    base.utils.validate.checkSubscription(
+      this.props.userReducer.SelectedAssociationID
+    );
   }
 
   componentDidUpdate() {
@@ -308,7 +309,7 @@ class MyProfile extends Component {
               <View
                 style={{
                   marginLeft: hp('2%'),
-                  marginBottom: hp('3%'),
+                  marginBottom: hp('1%'),
                   flexDirection: 'row'
                 }}
               >
@@ -331,7 +332,7 @@ class MyProfile extends Component {
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginTop: hp('3%')
+                    marginTop: hp('1%')
                   }}
                 >
                   <QRCode
@@ -348,24 +349,36 @@ class MyProfile extends Component {
 
               <View
                 style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: hp('1%')
+                }}
+              >
+                <Button
+                  bordered
+                  warning
+                  style={styles.button2}
+                  onPress={() =>
+                    this.props.navigation.navigate('SendingMsgToGate')
+                  }
+                >
+                  <Text
+                    style={{
+                      fontSize: hp('2%'),
+                      fontWeight: '500'
+                    }}
+                  >
+                    Leave with Vendor
+                  </Text>
+                </Button>
+              </View>
+              <View
+                style={{
                   flexDirection: 'column',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
               >
-                {/* <View style={{ marginTop: hp('2%') }}>
-                  <Button
-                    bordered
-                    warning
-                    style={styles.button1}
-                    onPress={() =>
-                      this.props.navigation.navigate('SendingMsgToGate')
-                    }
-                  >
-                    <Text>new Page</Text>
-                  </Button>
-                </View> */}
-
                 <View style={{ marginTop: hp('2%') }}>
                   <Button
                     bordered
@@ -373,7 +386,14 @@ class MyProfile extends Component {
                     style={styles.button1}
                     onPress={() => this.props.navigation.navigate('City')}
                   >
-                    <Text>Join Existing Association</Text>
+                    <Text
+                      style={{
+                        fontSize: hp('2%'),
+                        fontWeight: '500'
+                      }}
+                    >
+                      Join Existing Association
+                    </Text>
                   </Button>
                 </View>
               </View>
@@ -514,6 +534,10 @@ const styles = StyleSheet.create({
     width: hp('40%'),
     justifyContent: 'center'
   },
+  button2: {
+    width: hp('40%'),
+    justifyContent: 'center'
+  },
 
   viewDetails2: {
     alignItems: 'flex-start',
@@ -541,8 +565,7 @@ const mapStateToProps = state => {
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     dashBoardReducer: state.DashboardReducer,
     mediaupload: state.OyespaceReducer.mediaupload,
-    userReducer: state.UserReducer,
-
+    userReducer: state.UserReducer
   };
 };
 
