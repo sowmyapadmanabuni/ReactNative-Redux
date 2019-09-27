@@ -16,10 +16,8 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-nativ
 
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../src/assets/selection.json';
-import IcoMoonConfig1 from '../src/assets/selection1.json';
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
-const Icon1 = createIconSetFromIcoMoon(IcoMoonConfig1);
 
 export default class City extends Component {
     constructor(props) {

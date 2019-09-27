@@ -285,7 +285,6 @@ class EditProfile extends Component {
         //showImagePicker
         ImagePicker.showImagePicker(options, response => {
             //console.log("Response = ", response)
-
             if (response.didCancel) {
                 console.log("User cancelled photo picker")
             } else if (response.error) {

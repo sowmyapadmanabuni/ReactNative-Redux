@@ -1367,7 +1367,6 @@ class Dashboard extends PureComponent {
     console.log('FamilyList count', this.props.dashBoardReducer);
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
-        {/* <Icon color="red" size={50} name="delhi"/> */}
         <View style={Style.elevatedView}>
           <CardView
             height={'100%'}
