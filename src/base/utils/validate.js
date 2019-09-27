@@ -262,7 +262,7 @@ export class validate {
     static getPrice(devCount,unitPrice){
         console.log('jhgjhghghg',devCount,unitPrice)
         try{
-            let totalAmount=devCount*unitPrice;
+            let totalAmount=(parseInt(devCount))*(parseInt(unitPrice));
             console.log('getPriceFun',totalAmount)
             return totalAmount;
         }
@@ -274,7 +274,7 @@ export class validate {
 
     static getTotalPriceWithDuration(totalDevPrice,duration){
         try{
-            let totalAmount=totalDevPrice*duration;
+            let totalAmount=(parseInt(totalDevPrice))*(parseInt(duration));
             console.log('getPriceFun',totalAmount)
             return totalAmount;
         }
@@ -286,7 +286,7 @@ export class validate {
 
     static getDiscountPrice(totalPrice,disPer){
         try{
-            let disValue= (totalPrice/100)*disPer
+            let disValue= (parseInt(totalPrice)/100)*parseInt(disPer)
             let totalAmountWithDis=totalPrice-disValue
             return totalAmountWithDis
         }
@@ -296,7 +296,7 @@ export class validate {
     }
     static getPriceWithGST(totalPrice,disPer,callback){
         try{
-            let disValue= (totalPrice/100)*disPer
+            let disValue= (parseInt(totalPrice)/100)*parseInt(disPer)
             let totalAmountWithDis=totalPrice+disValue;
             callback(totalAmountWithDis,disValue)
         }

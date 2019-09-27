@@ -14,7 +14,6 @@ const INITIAL_STATE = {
     biometricTotalPrice:0,
     platinumDevCount:0,
     goldDevCount:0,
-    bioDevCount:0,
     oyeSafeList:[],
     oyeLivList:[],
     isOyeLiving: true,

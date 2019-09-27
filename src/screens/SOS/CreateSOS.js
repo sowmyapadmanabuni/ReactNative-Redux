@@ -525,7 +525,7 @@ class CreateSOS extends React.Component {
         else{
             const options = {
                 title: 'Take Image',
-                quality: 0.5,       //Meduim Image Quality
+                quality: 0.5,       //Medium Image Quality
                 storageOptions: {
                     skipBackup: true,
                     path: 'images',
