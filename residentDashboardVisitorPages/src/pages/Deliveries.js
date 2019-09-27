@@ -62,6 +62,7 @@ class App extends React.Component {
         this.arrayholder = [];
     }
 
+
     componentDidUpdate() {
         setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
@@ -157,6 +158,7 @@ class App extends React.Component {
     };
 
     componentDidMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.myVisitorsGetList();
         let newDataSource = [];
         this.state.dataSource.map((data) => {

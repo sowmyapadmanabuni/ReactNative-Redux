@@ -65,6 +65,7 @@ class GetStaffReport extends React.Component {
     }
 
     componentWillMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.getTheReport(0, this.props);
 
         if (Platform.OS === 'android') {

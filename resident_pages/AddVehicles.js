@@ -60,6 +60,8 @@ class AddVehicle extends Component {
 
     componentWillMount() {
         this.getUnitDetail();
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
     }
 
     componentDidUpdate() {

@@ -3,9 +3,10 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.zmxv.RNSound.RNSoundPackage;
+import com.rnim.rn.audio.ReactNativeAudioPackage;
 import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.devstepbcn.wifi.AndroidWifiPackage;
-import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.react.rnspinkit.RNSpinkitPackage;
@@ -77,7 +78,6 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new MainReactPackage(),
                     new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
-                    new GeolocationPackage(),
                     new ReactNativeRestartPackage(),
                     new RNDeviceInfo(),
                     new RNSpinkitPackage(),

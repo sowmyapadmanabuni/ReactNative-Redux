@@ -104,6 +104,8 @@ class MyProfile extends Component {
         isLoading: false
       });
     }, 1500);
+    base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
   }
 
   componentDidUpdate() {
@@ -132,7 +134,11 @@ class MyProfile extends Component {
   }
 
   render() {
-    console.log('State in My Profile:', this.state.ImageSource, this.props.dashBoardReducer.dropdown);
+    console.log(
+      'State in My Profile:',
+      this.state.ImageSource,
+      this.props.dashBoardReducer.dropdown
+    );
     const { navigate } = this.props.navigation;
     console.log('Mobile number', this.state.number);
     return (
@@ -319,7 +325,8 @@ class MyProfile extends Component {
                     : null}
                 </Text>
               </View>
-              {this.state.number !== '' && this.props.dashBoardReducer.dropdown.length !==0? (
+              {this.state.number !== '' &&
+              this.props.dashBoardReducer.dropdown.length !== 0 ? (
                 <View
                   style={{
                     justifyContent: 'center',
@@ -328,8 +335,8 @@ class MyProfile extends Component {
                   }}
                 >
                   <QRCode
-                    // logo={require('../icons/OyespaceSafe.png')}
-                    // logoSize={hp('6%')}
+                    logo={require('../icons/oyesafe_qr_logo.png')}
+                    logoSize={hp('6%')}
                     size={hp('20%')}
                     content={this.state.number}
                     codeStyle="square"
@@ -346,22 +353,28 @@ class MyProfile extends Component {
                   alignItems: 'center'
                 }}
               >
-                <View>
-                  {/* <Button bordered warning style={styles.button1}
-                              onPress={() => this.props.navigation.navigate('CreateAssnScreen')}>
-                        <Text>Create Association</Text>
-                      </Button> */}
-                  <View />
-                  <View style={{ marginTop: hp('2%') }}>
-                    <Button
-                      bordered
-                      warning
-                      style={styles.button1}
-                      onPress={() => this.props.navigation.navigate('City')}
-                    >
-                      <Text>Join Existing Association</Text>
-                    </Button>
-                  </View>
+                {/* <View style={{ marginTop: hp('2%') }}>
+                  <Button
+                    bordered
+                    warning
+                    style={styles.button1}
+                    onPress={() =>
+                      this.props.navigation.navigate('SendingMsgToGate')
+                    }
+                  >
+                    <Text>new Page</Text>
+                  </Button>
+                </View> */}
+
+                <View style={{ marginTop: hp('2%') }}>
+                  <Button
+                    bordered
+                    warning
+                    style={styles.button1}
+                    onPress={() => this.props.navigation.navigate('City')}
+                  >
+                    <Text>Join Existing Association</Text>
+                  </Button>
                 </View>
               </View>
             </View>
@@ -527,7 +540,9 @@ const mapStateToProps = state => {
     imageUrl: state.OyespaceReducer.imageUrl,
     SelectedAssociationID: state.UserReducer.SelectedAssociationID,
     dashBoardReducer: state.DashboardReducer,
-    mediaupload: state.OyespaceReducer.mediaupload
+    mediaupload: state.OyespaceReducer.mediaupload,
+    userReducer: state.UserReducer,
+
   };
 };
 

@@ -179,6 +179,7 @@ class MyFamilyList extends React.Component {
                 isLoading: false
             });
         }, 1500);
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.myFamilyListGetData();
     }
 

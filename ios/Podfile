@@ -53,7 +53,6 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
   pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
 
-  pod 'RNSound', :path => '../node_modules/react-native-sound'
 
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
 
@@ -75,6 +74,9 @@ pod 'Firebase/Messaging', '~> 5.19.0'
   pod 'ReactNativeFabric', :path => '../node_modules/react-native-fabric'
 
   pod 'RNAudioRecorderPlayer', :path => '../node_modules/react-native-audio-recorder-player'
+
+
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
 
 end
   

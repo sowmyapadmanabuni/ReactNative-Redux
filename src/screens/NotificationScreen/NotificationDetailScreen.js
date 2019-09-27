@@ -1374,7 +1374,8 @@ class NotificationDetailScreen extends PureComponent {
   }
 
   componentDidMount() {
-    const { navigation } = this.props;
+      base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+      const { navigation } = this.props;
     // const details = navigation.getParam("details", "NO-ID");
     const index = navigation.getParam('index', 'NO-ID');
     const notifications = navigation.getParam('notifications', 'NO-ID');
@@ -2391,7 +2392,9 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
-    page: state.NotificationReducer.page
+    page: state.NotificationReducer.page,
+      userReducer: state.UserReducer
+
   };
 };
 

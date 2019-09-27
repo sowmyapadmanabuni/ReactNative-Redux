@@ -99,7 +99,7 @@ PODS:
     - React/Core (= 0.59.8)
   - react-native-document-picker (2.3.0):
     - React
-  - react-native-geolocation (1.4.2):
+  - react-native-geolocation (2.0.2):
     - React
   - react-native-google-maps (0.24.2):
     - Google-Maps-iOS-Utils (= 2.1.0)
@@ -182,11 +182,11 @@ PODS:
     - React
   - RNGestureHandler (1.0.16):
     - React
-  - RNSound (0.10.12):
-    - React/Core
-    - RNSound/Core (= 0.10.12)
-  - RNSound/Core (0.10.12):
-    - React/Core
+  - RNSound (0.11.0):
+    - React
+    - RNSound/Core (= 0.11.0)
+  - RNSound/Core (0.11.0):
+    - React
   - RNVectorIcons (6.6.0):
     - React
   - RNViewShot (2.6.0):
@@ -322,7 +322,7 @@ SPEC CHECKSUMS:
   RCTSystemSetting: 9279ff44c49bb4fb0a5d335a0851852c8f3eda99
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-document-picker: 8508bfda34be6c24a2cbecbe515b15108658c183
-  react-native-geolocation: 79c743ad7a2e86617811ef23f49308824e92520c
+  react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 568cb03d0eae7fef93626f65d05be55642404ed4
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
   react-native-maps: 0316ed017dbb64b33b227751fa810e2454fcfa39
@@ -335,11 +335,11 @@ SPEC CHECKSUMS:
   RNDeviceInfo: a88be26a64ada7cbc2bc0ebbd1662d340304874e
   RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
   RNGestureHandler: 0438a761e8f29be3b809f9e7e43014f3aba4d7a6
-  RNSound: e157320f503bdd4f4ee6d8542e948d54f90c3c3a
+  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: feb0586c6d3583b5b0a6cdb7365b139cfb19e03c
+PODFILE CHECKSUM: 25724af8c40c8e3f65fb39427e49d29bb98f7a01
 
 COCOAPODS: 1.7.4

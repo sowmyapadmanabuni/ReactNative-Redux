@@ -245,6 +245,9 @@ class EditProfile extends Component {
 
     componentWillMount() {
 
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
+
         console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params, this.props.navigation.state.params.primeCName, this.props.navigation.state.params.alterCName);
         this.setState({
             firstName: this.props.navigation.state.params.firstName,
@@ -282,7 +285,6 @@ class EditProfile extends Component {
         //showImagePicker
         ImagePicker.showImagePicker(options, response => {
             //console.log("Response = ", response)
-
             if (response.didCancel) {
                 console.log("User cancelled photo picker")
             } else if (response.error) {
@@ -806,6 +808,8 @@ const mapStateToProps = state => {
         imageUrl: state.OyespaceReducer.imageUrl,
         SelectedAssociationID: state.UserReducer.SelectedAssociationID,
         mediaupload: state.OyespaceReducer.mediaupload,
+        userReducer: state.UserReducer,
+
 
     }
 };

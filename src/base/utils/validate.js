@@ -1,6 +1,8 @@
 import React from 'react';
 import strings from "../utils/strings";
 import moment from "moment";
+import base from "../index";
+import {Alert} from "react-native";
 
 
 export class validate {
@@ -300,6 +302,28 @@ export class validate {
         }
         catch(error){
             console.log('Error while pricing',error)
+        }
+    }
+
+    static  async checkSubscription(id,title, message) {
+        console.log('@@@@@@@@@@@',id)
+        let stat = await base.services.OyeSafeApiFamily.getLatestSubscriptionDetailsByAssId(id)
+        try {
+            if (stat.success && stat.data.subscription !== null) {
+
+                let date = moment(new Date()).format()
+                let initialDateString = moment(date, "YYYY-MM-DDTHH:mm:ss a");
+                let endDateString = moment(stat.data.subscription.sueDate, "YYYY-MM-DDTHH:mm:ss a");
+                let duration = moment.duration(endDateString.diff(initialDateString));
+                await base.utils.logger.log(duration.days());
+                let difference = duration.as('days');
+                console.log('Duration coming',difference)
+                if(parseInt(difference)<=5){
+                    Alert.alert('Your subscription is going to end in' + ' ' + parseInt(difference) + ' days. Please contact your association admin', message)
+                }
+            }
+        } catch (error) {
+            console.log('Error in get latest Subscription', error)
         }
     }
 }
