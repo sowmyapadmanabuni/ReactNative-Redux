@@ -525,13 +525,13 @@ const ResApp = createStackNavigator({
     navigationOptions: {
       header: null
     }
-  }
-  /*subscriptionManagement: {
+  },
+ subscriptionManagement: {
       screen:SubscriptionManagement,
       navigationOptions: {
         header: props => <MyFamilyHeader  isSub={true} {...props}/>
       }
-    },*/
+    },
 });
 
 export default createAppContainer(ResApp);

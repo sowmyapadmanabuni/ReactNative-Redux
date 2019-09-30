@@ -1,10 +1,11 @@
 import React from 'react';
-import {ScrollView, Text, View, Image, Platform, TouchableOpacity, FlatList, Alert,Modal} from 'react-native';
+import {ScrollView, Text, View, Image, Platform, TouchableOpacity, FlatList, Alert, Modal} from 'react-native';
 import base from "../../base";
 import CheckBox from "react-native-check-box";
 import {connect} from "react-redux";
-import {updateIdDashboard, updateSubscription} from "../../actions";
+import {updateSubscription} from "../../actions";
 import moment from "moment";
+import SubscriptionStyles from "./SubscriptionStyles";
 
 class SubscriptionManagement extends React.Component {
     constructor(props) {
@@ -18,7 +19,7 @@ class SubscriptionManagement extends React.Component {
             dataToShowInDesc: [],
             existingSubDate: "",
             isSubValid: true,
-            enablePayment:false,
+            enablePayment: false,
         }
     }
 
@@ -32,39 +33,32 @@ class SubscriptionManagement extends React.Component {
     }
 
     async getLatestSubscription() {
-          //this.props.userReducer.SelectedAssociationID 8 212
+        // 8 212
         let stat = await base.services.OyeSafeApiFamily.getLatestSubscriptionDetailsByAssId(this.props.userReducer.SelectedAssociationID)
         try {
-            console.log('Status', stat)
             if (stat.success && stat.data.subscription !== null) {
-                console.log('Status1', stat)
-
                 let data = stat.data.subscription;
-                const { updateSubscription} = this.props;
-                        updateSubscription({
-                            prop: 'platinumDevCount',
-                            value: data.suNofPDev
-                        });
-                        updateSubscription({
-                            prop: 'goldDevCount',
-                            value: data.suNofGDe
-                        });
-                        updateSubscription({
-                            prop: 'bioDevCount',
-                            value: data.suNoofBio
-                        });
-                         updateSubscription({
-                              prop: 'isOyeSafe',
-                              value: data.oyeSafeSubs
-                         });
-                         updateSubscription({
-                              prop: 'isPlatinum',
-                             value:  data.suNofPDev !== 0
-                         });
-                          updateSubscription({
-                               prop: 'isGold',
-                              value: data.suNofGDev !== 0
-                          });
+                const {updateSubscription} = this.props;
+                updateSubscription({
+                    prop: 'platinumDevCount',
+                    value: data.suNofPDev
+                });
+                updateSubscription({
+                    prop: 'goldDevCount',
+                    value: data.suNofGDev
+                });
+                updateSubscription({
+                    prop: 'isOyeSafe',
+                    value: data.oyeSafeSubs
+                });
+                updateSubscription({
+                    prop: 'isPlatinum',
+                    value: data.suNofPDev !== 0
+                });
+                updateSubscription({
+                    prop: 'isGold',
+                    value: data.suNofGDev !== 0
+                });
 
                 this.setState({
                     existingSubDate: moment(data.sueDate).format('DD-MMM-YYYY'),
@@ -75,70 +69,102 @@ class SubscriptionManagement extends React.Component {
                 let duration = moment.duration(endDateString.diff(initialDateString));
                 await base.utils.logger.log(duration.days());
                 let difference = duration.as('days');
-                console.log('Get difference:',difference)
                 let isSubValid = true;
                 if (difference < 0) {
                     isSubValid = false
                 }
-                if(parseInt(difference)<=5){
-                    console.log('5 days left for payment')
-                    Alert.alert('Subscription is going to over in' +' '+ parseInt(difference)+' days. Please inform admin')
+                if (parseInt(difference) <= 5) {
+                    Alert.alert( base.utils.strings.alertMessage.subscriptionAlert1+ ' ' + parseInt(difference) + base.utils.strings.alertMessage.subscriptionAlert2, message)
+
                     this.setState({
-                        enablePayment:true
+                        enablePayment: true
                     })
 
                 }
                 this.setState({
                     isSubValid: isSubValid
-                })
-                this.getCompletePriceCal()
+                });
+                this.getCompleteCalculation(data.suNofPDev, data.suNofGDev)
 
             } else {
-                console.log('Status2', stat)
                 this.setState({
-                    enablePayment:true
+                    enablePayment: true
                 });
-                this.getCompletePriceCal()
+                this.getCompleteCalculation(this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.goldDevCount)
             }
         } catch (error) {
-            console.log('Status3', error)
             console.log('Error in get latest Subscription', error)
         }
     }
 
-    getCompletePriceCal(){
-        const { updateSubscription} = this.props;
-        console.log('Caluclate details pltmjjh',this.props.subscriptionReducer)
-        let pricePlatWithDev = base.utils.validate.getPrice(this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)
-        let priceGoldWithDev=base.utils.validate.getPrice(this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)
-        let priceBioWithDev=base.utils.validate.getPrice(this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)
-        console.log('Price Cal per dev', pricePlatWithDev,priceGoldWithDev,priceBioWithDev)
-            updateSubscription({
-                prop: 'platinumTotalPrice',
-                value: pricePlatWithDev
-            });
 
-            updateSubscription({
-                prop: 'goldTotalPrice',
-                value: priceGoldWithDev
-            });
+    getCompleteCalculation(platinumCount, goldCount) {
+        const {updateSubscription} = this.props;
 
-            updateSubscription({
-                prop: 'biometricTotalPrice',
-                value: priceBioWithDev
-            });
+        let pricePlatWithDev = base.utils.validate.getPrice(platinumCount, this.props.subscriptionReducer.platDevPrice);
+        let priceGoldWithDev = base.utils.validate.getPrice(goldCount, this.props.subscriptionReducer.goldDevPrice);
+        let priceBioWithDev = base.utils.validate.getPrice(platinumCount, this.props.subscriptionReducer.biometricPrice);
+        let totalPrice = pricePlatWithDev + priceGoldWithDev + priceBioWithDev;
+        let oyeSafeList = this.props.subscriptionReducer.oyeSafeList;
+        let priceOfDevWithDur, priceWithDis;
 
-            this.getPricingOfDevForDuration()
+        for (let i = 0; i < oyeSafeList.length; i++) {
+            priceOfDevWithDur = base.utils.validate.getTotalPriceWithDuration(totalPrice, oyeSafeList[i].pdDisDur);
+            priceWithDis = base.utils.validate.getDiscountPrice(priceOfDevWithDur, oyeSafeList[i].pdDisPer);
+            base.utils.validate.getPriceWithGST(priceWithDis, 18, function (totalAmountWithDis, disValue) {
+                oyeSafeList[i].priceWithGST = totalAmountWithDis;
+                oyeSafeList[i].valueOfGST = disValue;
+            });
+            oyeSafeList[i].priceOfDevWithDur = priceOfDevWithDur;
+            oyeSafeList[i].priceWithDis = priceWithDis;
+        }
+
+        updateSubscription({
+            prop: 'oyeSafeList',
+            value: oyeSafeList
+        });
+        updateSubscription({
+            prop: 'platinumTotalPrice',
+            value: pricePlatWithDev
+        });
+
+        updateSubscription({
+            prop: 'goldTotalPrice',
+            value: priceGoldWithDev
+        });
+
+        updateSubscription({
+            prop: 'biometricTotalPrice',
+            value: priceBioWithDev
+        });
+
+        for (let i = 0; i < oyeSafeList.length; i++) {
+            if (oyeSafeList[i].pdIsActive) {
+                updateSubscription({
+                    prop: 'oyeSafePrice',
+                    value: oyeSafeList[i].priceWithGST.toFixed(2)
+                });
+                updateSubscription({
+                    prop: 'oyeSafeGST',
+                    value: oyeSafeList[i].valueOfGST.toFixed(2)
+                });
+                updateSubscription({
+                    prop: 'grandTotal',
+                    value: oyeSafeList[i].priceWithGST.toFixed(2)
+                });
+            }
+        }
+
+
     }
 
+
     async getPricingDetails() {
-        console.log('PropsInSubScreenPricingData', this.props)
         let stat = await base.services.OyeSafeApiFamily.getPricingData(this.props.userReducer.SelectedAssociationID)
         try {
-            console.log('Status in Pricing Details', stat)
             if (stat.success && stat.data.pricing.length !== 0) {
 
-                const { updateSubscription} = this.props;
+                const {updateSubscription} = this.props;
                 updateSubscription({
                     prop: 'platDevPrice',
                     value: stat.data.pricing[0].pdValue
@@ -158,13 +184,10 @@ class SubscriptionManagement extends React.Component {
     }
 
     async getDiscountingDetails() {
-        console.log('PropsInSubScreenPricingData', this.props)
 
         let stat = await base.services.OyeSafeApiFamily.getDiscountingData(this.props.userReducer.SelectedAssociationID)
         try {
-            const { updateSubscription} = this.props;
-
-            console.log('Status in Discounting Details', stat)
+            const {updateSubscription} = this.props;
             if (stat.success && stat.data.discounting.length !== 0) {
                 let disList = stat.data.discounting;
                 let oyeSafeList = [];
@@ -187,7 +210,6 @@ class SubscriptionManagement extends React.Component {
                     value: oyeLivingList
                 });
 
-                console.log('Discounting lists', oyeSafeList, oyeLivingList)
             }
         } catch (error) {
             console.log('Error in Pricing Details', error)
@@ -195,7 +217,6 @@ class SubscriptionManagement extends React.Component {
     }
 
     async getDiscountingDetailsByAssociationId() {
-        console.log('PropsInSubScreenPricingData', this.props)
         let stat = await base.services.OyeSafeApiFamily.getDiscountingDataByAssId(this.props.userReducer.SelectedAssociationID)
         try {
             console.log('Status in Discounting Details by AssId', stat)
@@ -208,7 +229,6 @@ class SubscriptionManagement extends React.Component {
         let stat = await base.services.OyeSafeApiFamily.getDescriptionOfDevice('Platinum')
         try {
             if (stat.success && stat.data.productDescription.length !== 0) {
-                console.log('Status in Description', stat.data.productDescription)
                 let platinumArr = stat.data.productDescription;
                 let dataArr = [];
                 for (let i = 0; i < platinumArr.length; i++) {
@@ -260,7 +280,6 @@ class SubscriptionManagement extends React.Component {
         };
         let stat = await base.services.OyeSafeApiFamily.createSubscription(input);
         try {
-            console.log('Create new sub', stat)
         } catch (error) {
             console.log('Error in create subscription', error)
         }
@@ -274,372 +293,189 @@ class SubscriptionManagement extends React.Component {
         } else {
             countOfDev = countOfDev + 1
         }
-        const { updateSubscription} = this.props;
+        const {updateSubscription} = this.props;
+        let goldDev = this.props.subscriptionReducer.goldDevCount;
+        let platDev = this.props.subscriptionReducer.platinumDevCount;
+
         if (name === 'Platinum') {
+            platDev = countOfDev;
             updateSubscription({
                 prop: 'platinumDevCount',
                 value: countOfDev
             });
 
         } else if (name === 'Gold') {
+            goldDev = countOfDev;
             updateSubscription({
                 prop: 'goldDevCount',
                 value: countOfDev
             });
 
-        } else if (name === 'Biometric') {
-            updateSubscription({
-                prop: 'bioDevCount',
-                value: countOfDev
-            });
         }
-        this.getPricingWithEachDev(name, countOfDev, unitPrice)
+        this.getCompleteCalculation(platDev, goldDev)
     }
 
-    getPricingWithEachDev(name, countOfDev, unitPrice) {
-        let pricingWithDev = base.utils.validate.getPrice(countOfDev, unitPrice)
-        console.log('Total Pricing amount with devices', pricingWithDev,this.props)
-        const { updateSubscription} = this.props;
 
-        if (name === "Platinum") {
-            updateSubscription({
-                prop: 'platinumTotalPrice',
-                value: pricingWithDev
-            });
-        } else if (name === "Gold") {
-            updateSubscription({
-                prop: 'goldTotalPrice',
-                value: pricingWithDev
-            });
-        } else if (name === "Biometric") {
-            updateSubscription({
-                prop: 'biometricTotalPrice',
-                value: pricingWithDev
-            });
-        }
-        this.getPricingOfDevForDuration()
-
-    }
-
-    getPricingOfDevForDuration() {
-        console.log('this props in getPricingofDev',this.props.subscriptionReducer)
-        let oyeSafeList = this.props.subscriptionReducer.oyeSafeList;
-        console.log('Get oyeSafeList', oyeSafeList);
-        let totalPrice=this.props.subscriptionReducer.biometricTotalPrice+this.props.subscriptionReducer.platinumTotalPrice+this.props.subscriptionReducer.goldTotalPrice
-        let priceOfDevWithDur, priceWithDis;
-
-        for (let i = 0; i < oyeSafeList.length; i++) {
-            priceOfDevWithDur = base.utils.validate.getTotalPriceWithDuration(totalPrice, oyeSafeList[i].pdDisDur)
-            priceWithDis = base.utils.validate.getDiscountPrice(priceOfDevWithDur, oyeSafeList[i].pdDisPer)
-            base.utils.validate.getPriceWithGST(priceWithDis, 18, function (totalAmountWithDis, disValue) {
-                console.log('GST calculation', totalAmountWithDis, disValue)
-                oyeSafeList[i].priceWithGST = totalAmountWithDis;
-                oyeSafeList[i].valueOfGST = disValue;
-            });
-
-            oyeSafeList[i].priceOfDevWithDur = priceOfDevWithDur;
-            oyeSafeList[i].priceWithDis = priceWithDis;
-        }
-        console.log("OyeSafe List", oyeSafeList)
-        const { updateSubscription} = this.props;
-
-        updateSubscription({
-            prop: 'oyeSafeList',
-            value: oyeSafeList
-        });
-
-        for(let i=0;i<oyeSafeList.length;i++){
-            if(oyeSafeList[i].pdIsActive){
-                updateSubscription({
-                    prop: 'oyeSafePrice',
-                    value: oyeSafeList[i].priceWithGST.toFixed(2)
-                });
-                updateSubscription({
-                    prop: 'oyeSafeGST',
-                    value: oyeSafeList[i].valueOfGST.toFixed(2)
-                });
-                updateSubscription({
-                    prop: 'grandTotal',
-                    value: oyeSafeList[i].priceWithGST.toFixed(2)
-                });
-            }
-        }
-
-    }
-
-    checkBoxPlatinum(value){
-        console.log('Value Before',value,this.props)
-        const { updateSubscription} = this.props;
+    checkBoxPlatinum(title, message) {
+        const {updateSubscription} = this.props;
 
         if (this.props.subscriptionReducer.isOyeSafe) {
+            if (this.props.subscriptionReducer.isPlatinum) {
+
+                updateSubscription({
+                    prop: 'platinumDevCount',
+                    value: 0
+                });
+                this.getCompleteCalculation(0, this.props.subscriptionReducer.goldDevCount)
+            }
             updateSubscription({
                 prop: 'isPlatinum',
-                value:!this.props.subscriptionReducer.isPlatinum
+                value: !this.props.subscriptionReducer.isPlatinum
             });
+
         } else {
-            Alert.alert('Please select oyeSafe for editing')
+            Alert.alert(base.utils.strings.alertMessage.selectOyeSafe, message)
         }
-        if(value){
-            updateSubscription({
-                prop: 'platinumTotalPrice',
-                value:0
-            });
-            updateSubscription({
-                prop: 'biometricTotalPrice',
-                value: 0
-            });
-            updateSubscription({
-                prop: 'platinumDevCount',
-                value:0
-            });
-            updateSubscription({
-                prop: 'bioDevCount',
-                value:0
-            });
-            this.getPricingOfDevForDuration()
 
-        }
-        else{
-            this.getPricingOfDevForDuration()
-
-        }
     }
-    checkBoxGold(value){
-        console.log('Value BeforeSUBBBB',value,this.props)
 
-        const { updateSubscription} = this.props;
+    checkBoxGold(title, message) {
+
+        const {updateSubscription} = this.props;
 
         if (this.props.subscriptionReducer.isOyeSafe) {
+            if (this.props.subscriptionReducer.isGold) {
+                updateSubscription({
+                    prop: 'goldDevCount',
+                    value: 0
+                });
+                this.getCompleteCalculation(this.props.subscriptionReducer.platinumDevCount, 0)
+            }
             updateSubscription({
                 prop: 'isGold',
                 value: !this.props.subscriptionReducer.isGold
             });
         } else {
-            Alert.alert('Please select oyeSafe for editing')
+            Alert.alert(base.utils.strings.alertMessage.selectOyeSafe, message)
         }
-        if(value){
-            updateSubscription({
-                prop: 'goldTotalPrice',
-                value: 0
-            });
-            updateSubscription({
-                prop: 'goldDevCount',
-                value: 0
-            });
-            this.getPricingOfDevForDuration()
-        }
-        else{
-            this.getPricingOfDevForDuration()
 
-        }
     }
 
 
-
-    render() {
-        console.log('Props in SubScreen',this.props.subscriptionReducer);
-        const { updateSubscription} = this.props;
+    render(title, message) {
+        const {updateSubscription} = this.props;
 
         return (
-            <ScrollView style={{height: '100%', width: '100%'}}>
-                <View style={{
-                    width: '100%', alignItems: 'center', backgroundColor: base.theme.colors.white, elevation: 2,
-                    shadowColor: base.theme.colors.shadedWhite,
-                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 4},
-                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                    shadowRadius: 5,
-                }}>
-                    <Text style={{fontSize: 18, color: base.theme.colors.primary, marginTop: 5, marginBottom: 15}}>
+            <ScrollView style={SubscriptionStyles.container}>
+                <View style={SubscriptionStyles.headerView}>
+                    <Text style={SubscriptionStyles.headerText}>
                         Subscription
                     </Text>
                 </View>
-                <View style={{width: '100%', alignItems: 'center',}}>
-                    <Text style={{fontSize: 18, color: base.theme.colors.black, marginTop: 10, marginBottom: 20}}>Choose
+                <View style={SubscriptionStyles.planView}>
+                    <Text style={SubscriptionStyles.planText}>Choose
                         Your Plan</Text>
                 </View>
-                <View style={{
-                    height: 40,
-                    width: '95%',
-                    alignSelf: 'center',
-                    backgroundColor: base.theme.colors.primary,
-                    borderRadius: 25,
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                }}>
+                <View style={SubscriptionStyles.safeHeader}>
                     <CheckBox
-                        style={{marginLeft: 20}}
+                        style={SubscriptionStyles.checkBoxMargin}
                         onClick={() => {
                             updateSubscription({
                                 prop: 'isOyeSafe',
                                 value: !this.props.subscriptionReducer.isOyeSafe
                             });
+
                         }}
                         isChecked={this.props.subscriptionReducer.isOyeSafe}
                         checkedImage={<Image source={require('../../../icons/checkbox.png')}
-                                             style={{height: 30, width: 30}}/>}
+                                             style={SubscriptionStyles.checkBoxImage}/>}
                         unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
-                                               style={{height: 30, width: 30}}/>}
+                                               style={SubscriptionStyles.checkBoxImage}/>}
                     />
-                    <Text style={{fontSize: 18, color: base.theme.colors.white, marginLeft: 10}}>OyeSafe:
-                        <Text style={{fontSize: 14, color: base.theme.colors.black,}}>{' '}Security and Safety
+                    <Text style={SubscriptionStyles.safeText}>OyeSafe:
+                        <Text style={[SubscriptionStyles.textBlack,SubscriptionStyles.subFontSize]}>{' '}Security and Safety
                             Solution</Text>
                     </Text>
                 </View>
-                <View style={{
-                    width: '90%',
-                    borderWidth: 1,
-                    alignSelf: 'center',
-                    borderColor: base.theme.colors.shadedWhite,
-                    alignItems: 'center'
-                }}>
-                    <View style={{height: 350, width: '100%', borderRadius: 20, alignItems: 'center',}}>
-                        <View style={{
-                            width: '100%',
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            marginTop: 10,
-                            marginBottom: 10
-                        }}>
-                            <Text style={{fontSize: 14, color: base.theme.colors.primary,}}>
+                <View style={SubscriptionStyles.safeMainView}>
+                    <View style={SubscriptionStyles.safeSubView}>
+                        <View style={SubscriptionStyles.existSubView}>
+                            <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.subPrimary]}>
                                 Existing Subscription -
                             </Text>
-                            <Text style={{fontSize: 14, color: base.theme.colors.black,}}>
+                            <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.textBlack]}>
                                 Valid Till:
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: this.state.isSubValid ? base.theme.colors.primary : base.theme.colors.red
-                                }}>{' '}{this.state.existingSubDate}</Text>
+                                <Text style={[SubscriptionStyles.subFontSize,{color: this.state.isSubValid ? base.theme.colors.primary : base.theme.colors.red
+                                }]}>{' '}{this.state.existingSubDate}</Text>
                             </Text>
                         </View>
-                        <View style={{
-                            width: '98%', flexDirection: 'row', height: '8%',
-                            backgroundColor: base.theme.colors.lightgrey,
-                        }}>
-                            <View style={{
-                                width: '25%',
-                                height: '100%',
-                                borderRightWidth: 1,
-                                borderColor: base.theme.colors.greyHead,
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <Text style={{fontSize: 15, color: base.theme.colors.black}}>Device</Text>
+                        <View style={SubscriptionStyles.safeTableHead}>
+                            <View style={SubscriptionStyles.devView}>
+                                <Text style={[SubscriptionStyles.mediumFontSize,SubscriptionStyles.textBlack]}>Device</Text>
                             </View>
-                            <View style={{
-                                width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center',
-                                borderRightWidth: 1, borderColor: base.theme.colors.shadedWhite,
-                            }}>
-                                <Text style={{fontSize: 15, color: base.theme.colors.black}}>Monthly Unit Price</Text>
+                            <View style={SubscriptionStyles.priceView}>
+                                <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.textBlack]}>Monthly Unit Price</Text>
                             </View>
                             <View
-                                style={{width: '25%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
-                                <Text style={{fontSize: 15, color: base.theme.colors.black}}>Quantity</Text>
+                                style={SubscriptionStyles.devView}>
+                                <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.textBlack]}>Quantity</Text>
                             </View>
                         </View>
-                        <View style={{
-                            width: '98%', flexDirection: 'row', height: '7%',
-                            backgroundColor: this.props.subscriptionReducer.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,
-                        }}>
-                            <View style={{
-                                width: '25%',
-                                height: '100%',
-                                borderRightWidth: 1,
-                                borderColor: base.theme.colors.shadedWhite,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                            }}>
+                        <View style={[SubscriptionStyles.safeTableSub,{backgroundColor: this.props.subscriptionReducer.isPlatinum ? base.theme.colors.greyCard : base.theme.colors.white,}]}>
+                            <View style={[SubscriptionStyles.platView]}>
                                 <CheckBox
-                                    style={{marginLeft: 5}}
-                                    onClick={(value) => {this.checkBoxPlatinum(this.props.subscriptionReducer.isPlatinum)}}
+                                    style={SubscriptionStyles.checkBoxMarginSub}
+                                    onClick={() => {
+                                        this.checkBoxPlatinum()
+                                    }}
                                     isChecked={this.props.subscriptionReducer.isPlatinum}
                                     checkedImage={<Image source={require('../../../icons/checkbox1.png')}
-                                                         style={{height: 15, width: 15}}/>}
+                                                         style={SubscriptionStyles.checkBoxImageSub}/>}
                                     unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
-                                                           style={{height: 15, width: 15}}/>}
+                                                           style={SubscriptionStyles.checkBoxImageSub}/>}
                                 />
                                 <TouchableOpacity onPress={() => this.showDescriptionModal(0)}>
-                                    <Text style={{
-                                        marginLeft: 5,
-                                        fontSize: 12,
-                                        color: base.theme.colors.hyperLink,
-                                        textDecorationLine: 'underline'
-                                    }}>Platinum</Text>
+                                    <Text style={SubscriptionStyles.platText}>Platinum</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{
-                                width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center',
-                                borderRightWidth: 1, borderColor: base.theme.colors.shadedWhite, flexDirection: 'row'
-                            }}>
-                                <Text style={{
-                                    fontSize: 12,
-                                    color: base.theme.colors.black
-                                }}>{base.utils.strings.rupeeIconCode}</Text>
-
-                                <Text style={{
-                                    fontSize: 12,
-                                    color: base.theme.colors.black,
-                                    textDecorationLine: 'line-through',
-                                    textDecorationStyle: 'solid',
-                                    textDecorationColor: '#ffffff',
-                                }}>{this.props.subscriptionReducer.platDevPrice}</Text>
+                            <View style={[SubscriptionStyles.priceView,SubscriptionStyles.flexDir]}>
+                                <Text style={[SubscriptionStyles.lowFontSize,SubscriptionStyles.textBlack]}>{base.utils.strings.rupeeIconCode}</Text>
+                                <Text style={[SubscriptionStyles.lowFontSize,SubscriptionStyles.lowFontSize,SubscriptionStyles.textDecorStyle]}>{this.props.subscriptionReducer.platDevPrice}</Text>
                             </View>
-                            <View
-                                style={{
-                                    width: '25%',
-                                    height: '100%',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-around',
-                                    flexDirection: 'row'
-                                }}>
+                            <View style={SubscriptionStyles.devPlatCount}>
                                 {this.props.subscriptionReducer.platinumDevCount === 0 || !this.props.subscriptionReducer.isPlatinum ?
-                                    <View style={{height: 15, width: 15}}/> :
+                                    <View style={SubscriptionStyles.checkBoxImageSub}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(0, 'Platinum', this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)}>
-                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                        <Image style={[SubscriptionStyles.checkBoxImageSub,SubscriptionStyles.alignImage]}
                                                source={require('../../../icons/subtract.png')}
                                         />
                                     </TouchableOpacity>}
-                                <Text style={{
-                                    fontSize: 12,
-                                    color: base.theme.colors.black
-                                }}>{this.props.subscriptionReducer.platinumDevCount}</Text>
-                                {!this.props.subscriptionReducer.isPlatinum ? <View style={{height: 15, width: 15}}/> :
+                                <Text style={[SubscriptionStyles.lowFontSize,SubscriptionStyles.textBlack]}>{this.props.subscriptionReducer.platinumDevCount}</Text>
+                                {!this.props.subscriptionReducer.isPlatinum ? <View style={SubscriptionStyles.checkBoxImageSub}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(1, 'Platinum', this.props.subscriptionReducer.platinumDevCount, this.props.subscriptionReducer.platDevPrice)}>
-                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
+                                        <Image style={[SubscriptionStyles.checkBoxImageSub,SubscriptionStyles.alignImage]}
                                                source={require('../../../icons/add.png')}
                                         />
                                     </TouchableOpacity>}
                             </View>
                         </View>
-                        <View style={{
-                            width: '98%', flexDirection: 'row', height: '7%',
-                            backgroundColor: this.props.subscriptionReducer.isGold ? base.theme.colors.greyCard : base.theme.colors.white,
-                        }}>
-                            <View style={{
-                                width: '25%',
-                                height: '100%',
-                                borderRightWidth: 1,
-                                borderColor: base.theme.colors.shadedWhite,
-                                alignItems: 'center',
-                                flexDirection: 'row'
-                            }}>
+                        <View style={[SubscriptionStyles.safeTableSub,{backgroundColor: this.props.subscriptionReducer.isGold ? base.theme.colors.greyCard : base.theme.colors.white,}]}>
+                            <View style={SubscriptionStyles.platView}>
                                 <CheckBox
-                                    style={{marginLeft: 5}}
-                                    onClick={(value) => {this.checkBoxGold(this.props.subscriptionReducer.isGold)}}
+                                    style={SubscriptionStyles.checkBoxMarginSub}
+                                    onClick={() => {
+                                        this.checkBoxGold()
+                                    }}
                                     isChecked={this.props.subscriptionReducer.isGold}
                                     checkedImage={<Image source={require('../../../icons/checkbox1.png')}
-                                                         style={{height: 15, width: 15}}/>}
+                                                         style={SubscriptionStyles.checkBoxImageSub}/>}
                                     unCheckedImage={<Image source={require('../../../icons/unchecked.png')}
-                                                           style={{height: 15, width: 15}}/>}
+                                                           style={SubscriptionStyles.checkBoxImageSub}/>}
                                 />
                                 <TouchableOpacity onPress={() => this.showDescriptionModal(1)}>
-                                    <Text style={{
-                                        marginLeft: 5,
-                                        fontSize: 12,
-                                        color: base.theme.colors.hyperLink,
-                                        textDecorationLine: 'underline'
-                                    }}>Gold</Text>
+                                    <Text style={SubscriptionStyles.platText}>Gold</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={{
@@ -677,7 +513,10 @@ class SubscriptionManagement extends React.Component {
                                     </TouchableOpacity>
                                 }
                                 <Text
-                                    style={{fontSize: 12, color: base.theme.colors.black}}>{ this.props.subscriptionReducer.goldDevCount}</Text>
+                                    style={{
+                                        fontSize: 12,
+                                        color: base.theme.colors.black
+                                    }}>{this.props.subscriptionReducer.goldDevCount}</Text>
                                 {!this.props.subscriptionReducer.isGold ? <View style={{height: 15, width: 15}}/> :
                                     <TouchableOpacity
                                         onPress={() => this.changeTheCountOfDevices(1, 'Gold', this.props.subscriptionReducer.goldDevCount, this.props.subscriptionReducer.goldDevPrice)}>
@@ -701,11 +540,11 @@ class SubscriptionManagement extends React.Component {
                             }}>
                                 <CheckBox
                                     style={{marginLeft: 5}}
-                                    onClick={() => {
+                                    onClick={(title, message) => {
                                         if (this.props.subscriptionReducer.isOyeSafe) {
-                                            this.props.subscriptionReducer.isPlatinum ? Alert.alert('For Platinum Biometric is mandatory') : Alert.alert('You can select Biometric with Platinum only')
+                                            this.props.subscriptionReducer.isPlatinum ? Alert.alert(base.utils.strings.alertMessage.biometricWithPlatinum,message) : Alert.alert(base.utils.strings.alertMessage.biometricWithGold, message)
                                         } else {
-                                            Alert.alert('Please select oyeSafe for editing')
+                                            Alert.alert(base.utils.strings.alertMessage.selectOyeSafe, message)
                                         }
 
                                     }}
@@ -746,30 +585,17 @@ class SubscriptionManagement extends React.Component {
                                     justifyContent: 'space-around',
                                     flexDirection: 'row'
                                 }}>
-                                {this.props.subscriptionReducer.bioDevCount === 0 || !this.props.subscriptionReducer.isPlatinum ?
-                                    <View style={{height: 15, width: 15}}/> :
-                                    <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(0, 'Biometric', this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)}>
-                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
-                                               source={require('../../../icons/subtract.png')}
-                                        />
-                                    </TouchableOpacity>
-                                }
+
+                                <View style={{height: 15, width: 15}}
+                                />
                                 <Text style={{
                                     fontSize: 12,
                                     color: base.theme.colors.black
-                                }}>{this.props.subscriptionReducer.bioDevCount}</Text>
-                                {!this.props.subscriptionReducer.isPlatinum ? <View style={{height: 15, width: 15}}/> :
-                                    <TouchableOpacity
-                                        onPress={() => this.changeTheCountOfDevices(1, 'Biometric', this.props.subscriptionReducer.bioDevCount, this.props.subscriptionReducer.biometricPrice)}>
-                                        <Image style={{height: 15, width: 15, alignSelf: 'center'}}
-                                               source={require('../../../icons/add.png')}
-                                        />
-                                    </TouchableOpacity>
-                                }
+                                }}>{this.props.subscriptionReducer.platinumDevCount}</Text>
+                                <View style={{height: 15, width: 15}}/>
                             </View>
                         </View>
-                        <View style={{width: '100%', marginTop: 25,alignItems:'center'}}>
+                        <View style={{width: '100%', marginTop: 25, alignItems: 'center'}}>
                             <FlatList
                                 data={this.props.subscriptionReducer.oyeSafeList}
                                 keyExtractor={(item, index) => index.toString()}
@@ -784,18 +610,22 @@ class SubscriptionManagement extends React.Component {
                         }}>
                             <View style={{width: '50%',}}>
                                 <Text style={{fontSize: 14, color: base.theme.colors.primary}}> Sub Total -
-                                    <Text style={{color: base.theme.colors.black,textDecorationLine: 'line-through',
+                                    <Text style={{
+                                        color: base.theme.colors.black, textDecorationLine: 'line-through',
                                         textDecorationStyle: 'solid',
-                                        textDecorationColor: '#ffffff',}}
+                                        textDecorationColor: '#ffffff',
+                                    }}
                                           multiLine={true}
                                     > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.oyeSafePrice}</Text>
                                 </Text>
                             </View>
                             <View style={{width: '50%',}}>
                                 <Text style={{fontSize: 14, color: base.theme.colors.mediumGrey,}}>Incl GST @ 18%:
-                                    <Text multiLine={true} style={{textDecorationLine: 'line-through',
+                                    <Text multiLine={true} style={{
+                                        textDecorationLine: 'line-through',
                                         textDecorationStyle: 'solid',
-                                        textDecorationColor: '#ffffff',}}
+                                        textDecorationColor: '#ffffff',
+                                    }}
                                     > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.oyeSafeGST}</Text>
                                 </Text>
                             </View>
@@ -804,9 +634,11 @@ class SubscriptionManagement extends React.Component {
                 </View>
                 <View style={{width: '100%', alignItems: 'center'}}>
                     <Text style={{fontSize: 18, color: base.theme.colors.primary}}> Grand Total -
-                        <Text style={{color: base.theme.colors.black,textDecorationLine: 'line-through',
+                        <Text style={{
+                            color: base.theme.colors.black, textDecorationLine: 'line-through',
                             textDecorationStyle: 'solid',
-                            textDecorationColor: '#ffffff',}}
+                            textDecorationColor: '#ffffff',
+                        }}
                               multiLine={true}
                         > {base.utils.strings.rupeeIconCode}{this.props.subscriptionReducer.grandTotal}</Text>
                     </Text>
@@ -817,15 +649,15 @@ class SubscriptionManagement extends React.Component {
                     this.showModalDesc() :
                     <View/>}
 
-                <TouchableOpacity onPress={() => Alert.alert('We will release payment gateway feature soon !!!')}
+                <TouchableOpacity onPress={() => Alert.alert(base.utils.strings.alertMessage.paymentSuccess,message)}
                                   style={{
-                                      height:70,
+                                      height: 70,
                                       width: '100%',
-                                      backgroundColor:this.props.subscriptionReducer.isOyeSafe && this.state.enablePayment? base.theme.colors.primary: base.theme.colors.lightgrey,
+                                      backgroundColor: this.props.subscriptionReducer.isOyeSafe && this.state.enablePayment ? base.theme.colors.primary : base.theme.colors.lightgrey,
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                       marginTop: 20,
-                                  }} disabled={!(this.props.subscriptionReducer.isOyeSafe&&this.state.enablePayment)}>
+                                  }} disabled={!(this.props.subscriptionReducer.isOyeSafe && this.state.enablePayment)}>
                     <Text style={{fontSize: 18, color: base.theme.colors.white}}>Pay Now</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -883,7 +715,6 @@ class SubscriptionManagement extends React.Component {
     }
 
     descPointsView(item, selDev) {
-        console.log('Data in the descView', item, selDev)
         let dev = selDev === 0 ? 'Platinum' : 'Gold';
         if (item.item.prName === dev) {
             return (
@@ -898,12 +729,12 @@ class SubscriptionManagement extends React.Component {
                         marginRight: 5
                     }}/>
                     <Text style={{
-                        fontSize: 11,
+                        fontSize: 13,
                         color: base.theme.colors.black,
                         textDecorationLine: item.item.pdIsActive ? 'none' : 'line-through',
                         textDecorationStyle: 'solid',
                         marginBottom: 5,
-                        textDecorationColor: '#ffffff'
+                        textDecorationColor: '#ffffff',
                     }} multiLine={true}>{item.item.pdDesc}</Text>
                 </View>
             )
@@ -916,7 +747,6 @@ class SubscriptionManagement extends React.Component {
     }
 
     arrangeTails(item, index) {
-        console.log('TailsData',item, item.item, index)
 
         let durNum, duration;
 
@@ -988,44 +818,43 @@ class SubscriptionManagement extends React.Component {
     }
 
     getCardSelected(item) {
-        console.log('Selected Card:', item, this.props.subscriptionReducer.oyeSafeList)
         let oyeSafeDisList = this.props.subscriptionReducer.oyeSafeList;
         for (let i = 0; i < oyeSafeDisList.length; i++) {
-               if(item.index===i){
-                 oyeSafeDisList[i].pdIsActive=true
-               }
-               else{
-                   oyeSafeDisList[i].pdIsActive=false
-               }
+            if (item.index === i) {
+                oyeSafeDisList[i].pdIsActive = true
+            } else {
+                oyeSafeDisList[i].pdIsActive = false
+            }
         }
-        const { updateSubscription} = this.props;
-                updateSubscription({
-                    prop: 'oyeSafePrice',
-                    value: item.item.priceWithGST.toFixed(2)
-                });
-                updateSubscription({
-                    prop: 'oyeSafeGST',
-                    value: item.item.valueOfGST.toFixed(2)
-                });
-                updateSubscription({
-                    prop: 'grandTotal',
-                    value: item.item.priceWithGST.toFixed(2)
-                });
-                updateSubscription({
-                     prop: 'oyeSafeList',
-                    value: oyeSafeDisList
-                });
+        const {updateSubscription} = this.props;
+        updateSubscription({
+            prop: 'oyeSafePrice',
+            value: item.item.priceWithGST.toFixed(2)
+        });
+        updateSubscription({
+            prop: 'oyeSafeGST',
+            value: item.item.valueOfGST.toFixed(2)
+        });
+        updateSubscription({
+            prop: 'grandTotal',
+            value: item.item.priceWithGST.toFixed(2)
+        });
+        updateSubscription({
+            prop: 'oyeSafeList',
+            value: oyeSafeDisList
+        });
 
     }
 }
+
 const mapStateToProps = state => {
     return {
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
-        subscriptionReducer:state.SubscriptionReducer,
+        subscriptionReducer: state.SubscriptionReducer,
     };
 };
 
 export default connect(
-    mapStateToProps,{updateSubscription}
+    mapStateToProps, {updateSubscription}
 )(SubscriptionManagement)

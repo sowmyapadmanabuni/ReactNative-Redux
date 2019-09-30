@@ -4,18 +4,13 @@ import base from '../../base'
 const SubscriptionStyles = StyleSheet.create({
     container: {height: '100%', width: '100%'},
     headerView: {
-        width: '100%',
-        alignItems: 'center', backgroundColor: base.theme.colors.white,
-        elevation: 2,
+        width: '100%', alignItems: 'center', backgroundColor: base.theme.colors.white, elevation: 2,
         shadowColor: base.theme.colors.shadedWhite,
         shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 4},
         shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
         shadowRadius: 5,
-
     },
-    headerText: {
-        fontSize: 18, color: base.theme.colors.primary, marginTop: 5, marginBottom: 15
-    },
+    headerText: {fontSize: 18, color: base.theme.colors.primary, marginTop: 5, marginBottom: 15},
     planView: {
         width: '100%', alignItems: 'center',
     },
@@ -40,9 +35,6 @@ const SubscriptionStyles = StyleSheet.create({
     safeText: {
         fontSize: 18, color: base.theme.colors.white, marginLeft: 10
     },
-    safeSubText: {
-        fontSize: 14, color: base.theme.colors.black,
-    },
     safeMainView: {
         width: '90%',
         borderWidth: 1,
@@ -60,17 +52,17 @@ const SubscriptionStyles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10
     },
-    extText: {
-        fontSize: 14, color: base.theme.colors.primary
-    },
-    validText: {
-        fontSize: 14, color: base.theme.colors.black,
-    },
     subFontSize: {
         fontSize: 14
     },
+    mediumFontSize:{
+        fontSize:15
+    },
     subPrimary: {
         color: base.theme.colors.primary
+    },
+    textBlack:{
+        color: base.theme.colors.black
     },
     safeTableHead: {
         width: '98%', flexDirection: 'row', height: '8%',
@@ -98,12 +90,12 @@ const SubscriptionStyles = StyleSheet.create({
         borderColor: base.theme.colors.shadedWhite,
         flexDirection: 'row',
         alignItems: 'center',
-
     },
     checkBoxMarginSub: {
         marginLeft: 5
     },
     checkBoxImageSub: {height: 15, width: 15},
+
     platText: {
         marginLeft: 5,
         fontSize: 12,
@@ -113,9 +105,13 @@ const SubscriptionStyles = StyleSheet.create({
     flexDir: {
         flexDirection: 'row'
     },
-    rupeeText: {
+    lowFontSize: {
         fontSize: 12,
-        color: base.theme.colors.black
+    },
+    textDecorStyle:{
+        textDecorationLine: 'line-through',
+        textDecorationStyle: 'solid',
+        textDecorationColor: '#ffffff',
     },
     devPlatCount: {
         width: '25%',

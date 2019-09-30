@@ -172,7 +172,9 @@ android {
 }
 
 dependencies {
+
     implementation project(':react-native-audio')
+    implementation project(':react-native-community-geolocation')
     implementation project(':react-native-sound')
     implementation project(':react-native-audio-recorder-player')
     implementation project(':react-native-android-wifi')
@@ -187,6 +189,7 @@ dependencies {
     implementation project(':react-native-document-picker')
     implementation project(':react-native-exit-app')
     implementation project(':rn-fetch-blob')
+    implementation project(':react-native-sound')
     implementation project(':react-native-firebase')
     implementation project(':react-native-orientation')
     implementation project(':react-native-html-to-pdf')

@@ -132,6 +132,7 @@ class App extends React.Component {
     };
 
     componentDidMount() {
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
         this.myVisitorsGetList();
         setTimeout(() => {
             this.setState({
@@ -924,6 +925,8 @@ const mapStateToProps = state => {
         dashBoardReducer: state.DashboardReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
         mediaupload: state.OyespaceReducer.mediaupload,
+        userReducer: state.UserReducer,
+
     };
 };
 

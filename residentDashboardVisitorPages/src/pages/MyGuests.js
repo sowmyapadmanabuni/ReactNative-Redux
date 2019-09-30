@@ -58,7 +58,9 @@ export default class MyGuests extends Component {
                     width: Dimensions.get('window').width / 2,
                     height: hp('8%')
                 },
-                showIcon: true
+                showIcon: true,
+                lazy: true,
+                backBehavior: "history",
 
             }
 

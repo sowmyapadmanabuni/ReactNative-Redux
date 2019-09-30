@@ -3,8 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.zmxv.RNSound.RNSoundPackage;
-import com.rnim.rn.audio.ReactNativeAudioPackage;
+import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.devstepbcn.wifi.AndroidWifiPackage;
 import com.avishayil.rnrestart.ReactNativeRestartPackage;
@@ -106,7 +105,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new RNFusedLocationPackage(),
                     new FabricPackage(),
                     new RNAndroidLocationEnablerPackage(),
-                    new SystemSettingPackage()
+                    new SystemSettingPackage(),
+                    new GeolocationPackage()
 
 
 

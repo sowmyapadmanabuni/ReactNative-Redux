@@ -32,6 +32,8 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import SystemSetting from 'react-native-system-setting'
 
 var Sound = require('react-native-sound');
+const RNFS = require('react-native-fs');
+
 
 const {height, width} = Dimensions.get('screen');
 const ASPECT_RATIO = width / height;
@@ -373,6 +375,22 @@ class CreateSOS extends React.Component {
         }
     }
 
+    deleteImage() {
+        let file = this.state.imageURI.split('///').pop();
+        const filePath = file.substring(0, file.lastIndexOf('/'));
+        console.warn("File Path: " + filePath);
+        console.warn("File to DELETE: " + file);
+        RNFS.readDir(filePath).then(files => {
+            for (let t of files) {
+                RNFS.unlink(t.path);
+            }
+
+        })
+            .catch(err => {
+                console.error(err)
+            });
+    }
+
 
     async sendPushNotification(){
         let notificationDetails = {
@@ -454,7 +472,7 @@ class CreateSOS extends React.Component {
                     'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
                 },
                 body: JSON.stringify(detail)
-            }).then(response => console.log("response.json():",response.json()))
+            }).then(response => self.deleteImage())
         //     .then(responseJson => {
         //     console.log("Response in Update SOS API:", responseJson)
         // })
@@ -525,7 +543,7 @@ class CreateSOS extends React.Component {
         else{
             const options = {
                 title: 'Take Image',
-                quality: 0.5,       //Meduim Image Quality
+                quality: 0.5,       //Medium Image Quality
                 storageOptions: {
                     skipBackup: true,
                     path: 'images',

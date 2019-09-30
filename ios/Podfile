@@ -41,6 +41,7 @@ pod 'Firebase/Messaging', '~> 5.19.0'
   
 
   pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
   
   pod 'Fabric'
   pod 'Crashlytics'
@@ -69,14 +70,10 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
 
   
-  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
   pod 'ReactNativeFabric', :path => '../node_modules/react-native-fabric'
 
   pod 'RNAudioRecorderPlayer', :path => '../node_modules/react-native-audio-recorder-player'
-
-
-  pod 'RNSound', :path => '../node_modules/react-native-sound'
 
 end
   
