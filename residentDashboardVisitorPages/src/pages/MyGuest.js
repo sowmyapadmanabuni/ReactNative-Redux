@@ -644,18 +644,22 @@ class MyGuests extends Component {
                         </Button>
                     </View>
                 </View>
-
-                {this.state.dataSource.length === 0 ? (
-                    <View
+                    <FlatList
+                    contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
+                        style={{marginTop: hp('1.5%')}}
+                        data={this.state.dataSource.sort((a, b) =>
+                            b.insDate.localeCompare(a.insDate)
+                        )}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => item.inInvtID.toString()}
+                        ListEmptyComponent={
+                            <View
                         style={{
-                            flex: 1,
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'white'
                         }}
                     >
                         <Icon size={hp('10%')} style={{margin: hp('1%')}} name="guest"/>
-                        {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Guest invited.</Text> */}
                         <Text
                             style={{
                                 backgroundColor: 'white',
@@ -667,16 +671,9 @@ class MyGuests extends Component {
                             Please invite Guest
                         </Text>
                     </View>
-                ) : (
-                    <FlatList
-                        style={{marginTop: hp('1.5%')}}
-                        data={this.state.dataSource.sort((a, b) =>
-                            b.insDate.localeCompare(a.insDate)
-                        )}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item, index) => item.inInvtID.toString()}
+                        }
                     />
-                )}
+            
                 <TouchableOpacity
                     style={[styles.floatButton, {alignSelf: 'center', marginLeft: 2}]}
                     onPress={() => this.props.navigation.navigate('InviteGuests')}
@@ -750,6 +747,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         color: '#474749'
     },
+    centerEmptySet: { justifyContent: 'center', alignItems: 'center', height: '100%' },
     viewDatePickerImageStyle: {
         width: wp('3%'),
         height: hp('3%'),

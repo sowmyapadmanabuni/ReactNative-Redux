@@ -428,18 +428,22 @@ class VehicleList extends Component {
                 />
                 <Text style={styles.titleOfScreen}>Vehicles</Text>
 
-                {this.state.dataSource.length == 0 ? (
-                    <View
+                    <FlatList
+                    contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
+                        style={{marginTop: 15,}}
+                        data={this.state.dataSource}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => item.veid.toString()}
+                        ListEmptyComponent={
+                            <View
                         style={{
-                            flex: 1,
+                            
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'white'
+                            
                         }}
                     >
                         <Icon size={hp('10%')} name="wheeler1"/>
-                        {/* <Image source={require('../icons/car.png')} style={{width:hp('10%'), height:hp('10%'),}}/> */}
-                        {/* <Text style={{ backgroundColor: 'white',alignItems: 'center', justifyContent: 'center',fontSize:hp('1.8%') }}>No Vehicle Data Available.</Text> */}
                         <Text
                             style={{
                                 backgroundColor: 'white',
@@ -451,14 +455,9 @@ class VehicleList extends Component {
                             Add your vehicle details
                         </Text>
                     </View>
-                ) : (
-                    <FlatList
-                        style={{marginTop: 15}}
-                        data={this.state.dataSource}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item, index) => item.veid.toString()}
+                        }
                     />
-                )}
+               
                 <View style={{height: hp('7%')}}></View>
 
                 <TouchableOpacity
@@ -495,6 +494,7 @@ const styles = StyleSheet.create({
         color: '#ff8c00',
         marginBottom: hp('1.6%')
     },
+    centerEmptySet: { justifyContent: 'center', alignItems: 'center', height: '100%' },
     maincolumn: {
         flexDirection: 'column'
     },
