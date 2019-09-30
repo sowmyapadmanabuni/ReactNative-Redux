@@ -32,7 +32,6 @@ import {
 import * as fb from 'firebase';
 import CountdownCircle from 'react-native-countdown-circle'
 
-import RNRestart from 'react-native-restart';
 
 import {
   createNotification,
@@ -136,7 +135,6 @@ class Dashboard extends PureComponent {
           console.log('ROLE_CHANGE_FRTDB_MSG', tok);
           self.requestNotifPermission();
           self.roleCheckForAdmin(self.state.assocId);
-          //RNRestart.Restart();
         } else {
           counter = 1;
         }

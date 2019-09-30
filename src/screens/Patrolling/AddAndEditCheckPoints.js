@@ -23,7 +23,8 @@ import {TextField} from "react-native-material-textfield";
 import OSButton from "../../components/osButton/OSButton";
 import EmptyView from "../../components/common/EmptyView";
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import RadioForm, {RadioButton} from 'react-native-simple-radio-button';
+import {RadioButton, RadioGroup} from 'react-native-flexi-radio-button';
+// import RadioForm, {RadioButton} from 'react-native-simple-radio-button';
 import OyeSafeApi from "../../base/services/OyeSafeApi";
 import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
 import Geolocation from 'react-native-geolocation-service';
@@ -563,7 +564,7 @@ class AddAndEditCheckPoints extends React.Component {
                     </View>
                     <EmptyView height={35}/>
                     <View style={AddAndEditCheckPointStyles.radioView}>
-                        <RadioForm
+                        <RadioGroup
                             formHorizontal={true}
                             animation={true}
                         >
@@ -587,7 +588,7 @@ class AddAndEditCheckPoints extends React.Component {
                                     </View>
                                 )
                             })}
-                        </RadioForm>
+                        </RadioGroup>
                     </View>
                     <EmptyView height={0}/>
                     <View style={AddAndEditCheckPointStyles.buttonView}>

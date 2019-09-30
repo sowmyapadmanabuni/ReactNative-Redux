@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import RNExitApp from "react-native-exit-app";
+// import RNExitApp from "react-native-exit-app";
 import {updateUserInfo} from "../src/actions";
 import {connect} from "react-redux";
 
@@ -188,9 +188,7 @@ class AddRegularVisitor extends Component {
         }
     }
 
-    exitApp = () => {
-        RNExitApp.exitApp();
-    };
+    
 
     render() {
         return (
@@ -360,48 +358,7 @@ class AddRegularVisitor extends Component {
                                 JABM Property Managers Pvt Ltd{" "}
                             </Text>
                         </View>
-                        <View
-                            style={{
-                                backgroundColor: "white",
-                                padding: 5,
-                                width: "100%",
-                                flexDirection: "row-reverse",
-                                margin: 5,
-                                alignContent: "flex-end"
-                            }}
-                        >
-                            <TouchableOpacity
-                                style={{
-                                    flexDirection: "row-reverse",
-                                    alignItems: "center",
-                                    width: 70,
-                                    marginRight: 15
-                                }}
-                                onPress={this.exitApp.bind(
-                                    this
-                                )} /*Products is navigation name*/
-                            >
-                                <Image
-                                    source={require("../pages/assets/images/logout.png")}
-                                    style={{
-                                        height: 25,
-                                        width: 25,
-                                        margin: 5,
-                                        alignSelf: "center"
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        paddingLeft: 5,
-                                        color: "black",
-                                        alignSelf: "center"
-                                    }}
-                                >
-                                    Exit
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        
                     </View>
                 </ScrollView>
             </View>

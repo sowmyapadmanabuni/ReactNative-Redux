@@ -6,7 +6,7 @@ import Share from 'react-native-share';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import OSButton from "../../../../components/osButton/OSButton";
 import moment from "moment";
-import DatePicker from 'react-native-datepicker'
+import {DatePickerDialog} from "react-native-datepicker-dialog";
 import {connect} from "react-redux";
 import {updateStaffInfo} from "../../../../actions";
 import StaffStyle from "./StaffStyle";
@@ -164,7 +164,7 @@ class Staff extends React.Component {
                     {this.state.staffList.length !== 0 ?
                         <View style={StaffStyle.datePickerMainView}>
                             <View style={StaffStyle.datePickerSubView}>
-                                <DatePicker
+                                <DatePickerDialog
                                     style={{width: 150, alignItems: 'center'}}
                                     date={this.state.selectedInitialDate}
                                     mode="date"
@@ -196,7 +196,7 @@ class Staff extends React.Component {
                                 />
                             </View>
                             <View style={StaffStyle.datePickerSubView}>
-                                <DatePicker
+                                <DatePickerDialog
                                     style={{width: 150,}}
                                     date={this.state.selectedEndDate}
                                     mode="date"

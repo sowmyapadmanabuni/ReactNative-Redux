@@ -16,7 +16,7 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import _ from "lodash";
 import {connect} from "react-redux";
-import SwitchToggle from "react-native-switch-toggle";
+// import SwitchToggle from "react-native-switch-toggle";
 
 let Occupancy_Status = [
     {
@@ -422,8 +422,7 @@ class AddUnit extends Component {
                                                 </Text>
                                             </View>
                                             <View>
-                                                <SwitchToggle
-                                                    // buttonText={this.getButtonText()}
+                                                {/* <SwitchToggle
                                                     backTextRight={this.getRightText()}
                                                     backTextLeft={this.getLeftText()}
                                                     type={1}
@@ -474,7 +473,7 @@ class AddUnit extends Component {
                                                     circleColorOff="#DAE0E2"
                                                     circleColorOn="#ff8c00"
                                                     duration={500}
-                                                />
+                                                /> */}
                                             </View>
                                         </View>
                                     </Card>

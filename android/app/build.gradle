@@ -172,29 +172,23 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-system-setting')
+    implementation project(':react-native-svg')
+    implementation project(':react-native-html-to-pdf')
     implementation project(':react-native-audio-recorder-player')
     implementation project(':react-native-android-wifi')
     implementation project(':react-native-android-location-enabler')
     implementation project(':react-native-fabric')
     implementation project(':@react-native-community_geolocation')
-    implementation project(':react-native-restart')
     implementation project(':react-native-device-info')
     implementation project(':react-native-spinkit')
     implementation project(':react-native-version-number')
-    implementation project(':react-native-check-app-install')
-    implementation project(':react-native-svg')
-    implementation project(':react-native-document-picker')
-    implementation project(':react-native-exit-app')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-sound')
     implementation project(':react-native-firebase')
-    implementation project(':react-native-orientation')
-    implementation project(':react-native-html-to-pdf')
-    implementation project(':react-native-exit-app')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-view-shot')
     implementation project(':react-native-fs')
-    implementation project(':react-native-file-viewer')
     implementation project(':react-native-share')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-gesture-handler')
@@ -202,7 +196,6 @@ dependencies {
     implementation project(':react-native-contacts-wrapper')
     implementation project(':react-native-maps')
     implementation project(':react-native-geolocation-service')
-    implementation project(':react-native-system-setting')
 
 
     // Firebase dependencies
@@ -210,7 +203,6 @@ dependencies {
     implementation "com.google.firebase:firebase-core:16.0.8"
     implementation "com.google.firebase:firebase-messaging:18.0.0"
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
-    implementation project(':react-native-sqlite-storage')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:28.0.0"
     implementation "com.facebook.react:react-native:+"  // From node_modules

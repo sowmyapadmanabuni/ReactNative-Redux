@@ -21,7 +21,6 @@ import {
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import ProgressLoader from 'rn-progress-loader';
 import {Button, Form, Input, Item} from 'native-base';
-// import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {RadioButton, RadioGroup} from 'react-native-flexi-radio-button';
 import {connect} from 'react-redux';
