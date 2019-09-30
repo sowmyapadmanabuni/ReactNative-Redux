@@ -145,7 +145,7 @@ class MyProfile extends Component {
     return (
       <View style={styles.mainViewStyle}>
         {/* <Header /> */}
-        <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+        <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
@@ -202,7 +202,7 @@ class MyProfile extends Component {
                   <Text
                     style={{
                       fontSize: hp('2.5%'),
-                      color: '#ff8c00',
+                      color: base.theme.colors.primary,
                       textAlign: 'center'
                     }}
                   >
@@ -238,7 +238,7 @@ class MyProfile extends Component {
                     }}
                   >
                     <Icon
-                      color="#ff8c00"
+                      color={base.theme.colors.primary}
                       style={styles.editButtonImageStyle}
                       size={hp('2.8%')}
                       name="edit"
@@ -288,7 +288,7 @@ class MyProfile extends Component {
                 }}
               >
                 <Icon
-                  color="#ff8c00"
+                  color={base.theme.colors.primary}
                   style={styles.editButtonImageStyle1}
                   size={hp('2.8%')}
                   name="call"
@@ -314,7 +314,7 @@ class MyProfile extends Component {
                 }}
               >
                 <Icon
-                  color="#ff8c00"
+                  color={base.theme.colors.primary}
                   style={styles.editButtonImageStyle1}
                   size={hp('2.8%')}
                   name="mail"
@@ -414,7 +414,7 @@ class MyProfile extends Component {
           isModal={true}
           visible={this.state.isLoading}
           color={base.theme.colors.primary}
-          hudColor={'#FFFFFF'}
+          hudColor={base.theme.colors.white}
         />
       </View>
     );
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: hp('1.4%'),
 
-    backgroundColor: '#fff',
+    backgroundColor: base.theme.colors.white,
     flexDirection: 'column'
   },
   myProfileFlexStyle: {
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    color: '#474749'
+    color: base.theme.colors.textLight
   },
   itemTextValues1: {
     fontSize: hp('2.2%'),
@@ -512,14 +512,14 @@ const styles = StyleSheet.create({
 
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    color: '#474749'
+    color: base.theme.colors.textLight
   },
 
   viewStyle1: {
-    backgroundColor: '#fff',
+    backgroundColor: base.theme.colors.white,
     height: hp('7%'),
     width: '100%',
-    shadowColor: '#000',
+    shadowColor: base.theme.colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
