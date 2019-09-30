@@ -480,8 +480,19 @@ class MyFamilyList extends React.Component {
                         </Item>
                     </View>
 
-                    {this.state.myfamily11.length === 0 ? (
-                        <View
+                    
+                        <FlatList
+                            contentContainerStyle={this.state.myfamily11.length === 0 && Style.centerEmptySet}
+                            style={{marginTop: hp('2%')}}
+                            // data={this.state.dataSource.sort((a, b) =>
+                            //   a.fmName.localeCompare(b.fmName)
+                            // )}
+                            data={this.state.myfamily11}
+                            extraData={this.state}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => item.fmid.toString()}
+                            ListEmptyComponent={
+                                <View
                             style={{
                                 flex: 1,
                                 alignItems: 'center',
@@ -506,18 +517,9 @@ class MyFamilyList extends React.Component {
                                 Add your family details
                             </Text>
                         </View>
-                    ) : (
-                        <FlatList
-                            style={{marginTop: hp('2%')}}
-                            // data={this.state.dataSource.sort((a, b) =>
-                            //   a.fmName.localeCompare(b.fmName)
-                            // )}
-                            data={this.state.myfamily11}
-                            extraData={this.state}
-                            renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.fmid.toString()}
+                            }
                         />
-                    )}
+                    
                     <TouchableOpacity
                         style={Style.floatButton}
                         onPress={() => {

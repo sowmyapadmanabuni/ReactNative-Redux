@@ -1414,8 +1414,8 @@ class Dashboard extends PureComponent {
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.goToFirstTab()}
           />
+          
         </View>
-
         <View style={Style.elevatedViewSub}>
           {/* <CardView
                         height={"100%"}

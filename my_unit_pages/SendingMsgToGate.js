@@ -142,7 +142,7 @@ class HelloWorldApp extends Component {
       }
     };
     let self = this;
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.launchCamera(options, response => {
       console.log('response:', response);
       if (response.didCancel) {
       } else if (response.error) {
@@ -155,35 +155,35 @@ class HelloWorldApp extends Component {
               myProfileImage1: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 2:
             self.setState({
               myProfileImage2: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 3:
             self.setState({
               myProfileImage3: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 4:
             self.setState({
               myProfileImage4: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 5:
             self.setState({
               myProfileImage5: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
         }
         // self.setState(
@@ -732,8 +732,8 @@ class HelloWorldApp extends Component {
                 height: hp('8%')
               }}
               rippleOpacity={0}
-              dropdownPosition={-2}
-              dropdownOffset={{ top: 0, left: 0 }}
+              dropdownPosition={0}
+              dropdownOffset={{ top: hp('10%'), left: 0 }}
               style={{ fontSize: hp('2.2%') }}
               onChangeText={(value, index) =>
                 this.visitorsendtogate(value, index)
@@ -1538,8 +1538,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: 'yellow',
     height: hp('20%'),
-    width: hp('12%'),
-    marginTop: hp('2%')
+    width: hp('12%')
+    // marginTop: hp('2%')
   },
   imagesmallCircle: {
     alignItems: 'flex-end',
