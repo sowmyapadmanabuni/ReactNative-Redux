@@ -32,8 +32,7 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import SystemSetting from 'react-native-system-setting'
 
 var Sound = require('react-native-sound');
-const RNFS = require('react-native-fs');
-
+var RNFS = require('react-native-fs')
 
 const {height, width} = Dimensions.get('screen');
 const ASPECT_RATIO = width / height;
@@ -68,7 +67,7 @@ class CreateSOS extends React.Component {
         };
 
         this.getCurrentLocation = this.getCurrentLocation.bind(this);
-        this.createSOS = this.createSOS.bind(this);
+       // this.createSOS = this.createSOS.bind(this);
         Sound.setCategory('Playback');
         this.sound = new Sound('sound_1.mp3',Sound.MAIN_BUNDLE,(error)=>{
             if(error){
@@ -80,26 +79,26 @@ class CreateSOS extends React.Component {
 
     componentWillMount() {
         Sound.setCategory('Playback');
-        var sound = new Sound('sound_1.mp3', Sound.MAIN_BUNDLE, (error) => {
+        this.sound = new Sound('sound_1.mp3', Sound.MAIN_BUNDLE, (error) => {
             if (error) {
                 console.log('failed to load the sound', error);
                 return;
             }
-            sound.play((success) => {
+            this.sound.play((success) => {
                 if (success) {
                     console.log('successfully finished playing');
                 } else {
                     console.log('playback failed due to audio decoding errors');
                 }
             });
-            sound.setNumberOfLoops(-1);
-            sound.setVolume(1);
+            this.sound.setNumberOfLoops(-1);
+            this.sound.setVolume(1);
             SystemSetting.getVolume().then((volume)=>{
                 console.log('Current volume is ' + volume);
             });
             SystemSetting.setVolume(1);
             if(this.state.stopSOS){
-                sound.stop();
+                this.sound.stop();
             }
 
         });
@@ -442,7 +441,7 @@ class CreateSOS extends React.Component {
                     firebase.database().ref('SOS/' + detail.ASAssnID + "/" + detail.ACAccntID + "/").update({
                         id:self.state.sosId
                     }).then((data) => {
-                        
+
                     }).catch((err) => {
                         console.log("Error:", err)
                     });
@@ -473,12 +472,9 @@ class CreateSOS extends React.Component {
                 },
                 body: JSON.stringify(detail)
             }).then(response => self.deleteImage())
-        //     .then(responseJson => {
-        //     console.log("Response in Update SOS API:", responseJson)
-        // })
-        .catch((err) => {
-            console.log("Error", err)
-        })
+            .catch((err) => {
+                console.log("Error", err)
+            })
     }
 
 
@@ -543,7 +539,7 @@ class CreateSOS extends React.Component {
         else{
             const options = {
                 title: 'Take Image',
-                quality: 0.5,       //Medium Image Quality
+                quality: 0.5,       //Meduim Image Quality
                 storageOptions: {
                     skipBackup: true,
                     path: 'images',
@@ -803,9 +799,10 @@ class CreateSOS extends React.Component {
         let userId = this.props.userReducer.MyAccountID;
         console.log("kscjd:", associationID, userId);
         try{
-            Sound.setCategory('Playback');
-            this.sound.stop((success) => {
-                console.log("Sucuuu:",success)
+            // Sound.setCategory('Playback');
+            self.sound.stop((success) => {
+
+                console.log("Sucuuu:",success);
                 if (success) {
                     console.log('successfully finished playing');
                 } else {
@@ -827,8 +824,9 @@ class CreateSOS extends React.Component {
                     self.setState({
                         isGuardDetailAvailable: false
                     },()=>self.stopSOSInAPI());
-                self.props.navigation.navigate("ResDashBoard");
-                }  
+                    self.sound.stop();
+                    self.props.navigation.navigate("ResDashBoard");
+                }
                 else{
                     console.log("Hitiing Here@@@@@:")
                     let sosDetail = {
@@ -847,7 +845,7 @@ class CreateSOS extends React.Component {
     }
 
     async stopSOSInAPI(){
-        console.log("Hitting")
+        console.log("Hitting");
         let self = this;
         let baseURL = base.utils.strings.urlType
         let detail = {

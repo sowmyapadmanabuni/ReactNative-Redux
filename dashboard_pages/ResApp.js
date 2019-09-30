@@ -70,6 +70,7 @@ import MyFamilyHeader from '../src/components/NavigationalHeaders/MyFamilyHeader
 import City from '../assocition_pages/City.js';
 import SendingMsgToGate from '../my_unit_pages/SendingMsgToGate.js';
 import SubscriptionManagement from '../src/screens/Subscription/SubscriptionManagement';
+import PatrolShuffling from '../src/screens/Patrolling/PatrolShuffling';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -423,6 +424,7 @@ const ResApp = createStackNavigator({
         <PatrollingCommonHeader
           isReportVisible={true}
           isHidden={false}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -436,6 +438,21 @@ const ResApp = createStackNavigator({
         <PatrollingCommonHeader
           isReportVisible={false}
           isHidden={false}
+          isReshuffling={true}
+          {...props}
+        />
+      )
+    }
+  },
+  reshufflePatrol: {
+    screen: PatrolShuffling,
+    navigationOptions: {
+      title: 'Re-Shuffle Check Points',
+      header: props => (
+        <PatrollingCommonHeader
+          isReportVisible={false}
+          isHidden={false}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -450,6 +467,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -463,6 +481,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -476,6 +495,7 @@ const ResApp = createStackNavigator({
           isReportVisible={true}
           isShareVisible={true}
           isHidden={false}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -489,6 +509,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -502,6 +523,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -515,6 +537,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )

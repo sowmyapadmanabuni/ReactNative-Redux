@@ -36,7 +36,7 @@ class PatrollingCommonHeader extends React.Component {
         let isShareVisible = this.props.isShareVisible;
         const {goBack} = this.props.navigation;
 
-        if (!isHidden && !isReportVisible) {
+        if (!isHidden && !isReportVisible && this.props.isReshuffling) {
             this.resetPatrolReducer()
         } else {
             goBack(null)
@@ -109,11 +109,37 @@ class PatrollingCommonHeader extends React.Component {
     }
 
     openScheduling() {
-        if (this.props.selectedCheckPoints.selectedCheckPoints === null || this.props.selectedCheckPoints.selectedCheckPoints.length === 0) {
-            alert("Please select Checkpoint before scheduling the patrolling");
-        } else {
-            this.schedulePatrolling();
+        console.log("Props in patrolling Header:",this.props)
+        if(this.props.isReshuffling){
+            if (this.props.selectedCheckPoints.selectedCheckPoints === null || this.props.selectedCheckPoints.selectedCheckPoints.length === 0) {
+                alert("Please select Checkpoint before scheduling the patrolling");
+            } else {
+                
+                this.schedulePatrolling();
+            }
         }
+        else{
+            this.validateCheckPoint()
+          //  this.props.navigation.navigate("schPatrolling");
+        }
+    }
+
+
+    validateCheckPoint(){
+        let cpList = this.props.selectedCheckPoints.selectedCheckPoints;
+        let cpLength = cpList.length;
+        console.log("CPLIST,CPLENGTH:",cpList,cpLength)
+        if(cpList[0].cpcPntAt !== "StartPoint"){
+            alert("The first checkpoint should be a start point")
+        }
+        else if(cpList[cpLength-1].cpcPntAt !== "EndPoint"){
+            alert("The last checkpoint should be an end point")
+        }
+        else{
+            this.props.navigation.navigate("schPatrolling")  
+        }
+
+
     }
 
     schedulePatrolling() {
@@ -137,7 +163,8 @@ class PatrollingCommonHeader extends React.Component {
             }
         }
         if (spCount === 1 && epCount === 1 && isCP && cpCount >= 2) {
-            this.props.navigation.navigate("schPatrolling");
+            this.props.navigation.navigate("reshufflePatrol")
+            
         } else if (spCount > 1) {
             alert("Please select only one Start Point")
         } else if (epCount > 1) {

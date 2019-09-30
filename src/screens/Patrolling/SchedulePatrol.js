@@ -69,7 +69,7 @@ class SchedulePatrol extends React.Component {
             pcid: []
         });
 
-        console.log("TIME:", currentDate, moment().format());
+        console.log("TIME:", props);
         this.getDeviceList = this.getDeviceList.bind(this);
         //  this.openTimePicker = this.openTimePicker.bind(this);
 

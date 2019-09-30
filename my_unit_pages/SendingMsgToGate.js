@@ -8,13 +8,15 @@ import {
   Image,
   ScrollView,
   PermissionsAndroid,
-  Platform
+  Platform,
+  BackHandler
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
 import ImagePicker from 'react-native-image-picker';
+import ProgressLoader from 'rn-progress-loader';
 import {
   Card,
   CardItem,
@@ -59,6 +61,7 @@ class HelloWorldApp extends Component {
       myProfileImage5: '',
 
       mp3uri: '',
+      mp3: '',
 
       imageUrl: '',
       photo: null,
@@ -86,15 +89,46 @@ class HelloWorldApp extends Component {
       visitorId: '',
       visitorList: [],
 
-      comment: ''
+      comment: '',
+      dropdownValue: ''
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
   }
 
   componentDidMount() {
-    this.visitorData();
+    let self = this;
+    setTimeout(() => {
+      self.visitorData();
+      this.setState({
+        isLoading: false
+      });
+    }, 1500);
   }
+
+  componentDidUpdate() {
+    setTimeout(() => {
+      BackHandler.addEventListener('hardwareBackPress', () =>
+        this.processBackPress()
+      );
+    }, 100);
+  }
+
+  componentWillUnmount() {
+    setTimeout(() => {
+      BackHandler.removeEventListener('hardwareBackPress', () =>
+        this.processBackPress()
+      );
+    }, 0);
+  }
+
+  processBackPress() {
+    console.log('Part');
+    const { goBack } = this.props.navigation;
+    goBack(null);
+    return true;
+  }
+
   setImage() {
     console.log('Set Image');
     const options = {
@@ -184,11 +218,7 @@ class HelloWorldApp extends Component {
     form.append('image', imgObj);
     console.log('ImageObj', imgObj);
     let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
-    // console.log(
-    //   'Photo upload response',
-    //   stat,
-    //   response,
-    // );
+    // console.log('Photo upload response', stat, response);
     if (stat) {
       try {
         switch (this.state.id) {
@@ -255,38 +285,28 @@ class HelloWorldApp extends Component {
   }
 
   uploadAudio = async result => {
-    console.log('Audio', result);
-    const path = `file://${result}`;
+    console.log('Audio', result[0]);
+    const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
+    console.log('PATH', result[0], path);
+
     const formData = new FormData();
 
     formData.append('file', {
       uri: path,
-      name: 'hello.aac',
+      name: 'hello1111.aac',
       type: 'audio/aac'
     });
 
     console.log(formData, 'FormData');
-
-    axios({
-      method: 'post',
-      url:
-        'http://mediaupload.oyespace.com/oyeliving/api/V1/association/upload',
-      data: formData,
-      config: {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-        }
-      }
-    })
-      .then(function(response) {
-        //handle success
-        console.log(response, 'ressss');
-      })
-      .catch(function(response) {
-        //handle error
-        console.log(response, 'errrrs');
+    let stat = await base.services.MediaUploadApi.uploadRelativeImage(formData);
+    try {
+      this.setState({
+        mp3: stat
       });
+    } catch (e) {
+      console.log(e);
+    }
+    console.log('Stat222222222222222222222222:', stat);
   };
 
   image1Exp = () => {};
@@ -377,8 +397,8 @@ class HelloWorldApp extends Component {
         buttonId: 2
       });
     });
-    alert('Recording Started');
-    console.log(`uri: ${uri}`);
+    // alert('Recording Started');
+    // console.log(`uri: ${uri}`);
   };
 
   onStopRecord = async () => {
@@ -391,10 +411,11 @@ class HelloWorldApp extends Component {
 
       mp3uri: result
     });
-    alert('Recording Stop');
-    console.log('.substring(14, 23)', result.substring(14, 23));
-    console.log('this state uri', this.state.mp3uri);
-    this.uploadAudio(result.substring(14, 23));
+    // alert('Recording Stop');
+    // console.log('.substring(14, 23)', result.substring(14, 23));
+    // console.log('this state uri', this.state.mp3uri);
+    // this.uploadAudio(result.match('hello.m4a') || result.match('hello.mp3'));
+    this.uploadAudio(result);
   };
 
   onStatusPress = e => {
@@ -464,8 +485,14 @@ class HelloWorldApp extends Component {
 
   visitorData = async () => {
     this.setState({ isLoading: true });
-    let date = new Date().getDate();
-    console.log('Date:', date);
+    let today = moment(new Date(), 'DD-MM-YYYY').format('YYYY-MM-DD');
+
+    // let date = today.format('YYYY-MM-DD');
+    //oday.getFullYear() + '-' + today.getMonth() + '-' + today.getDate();
+
+    // console.log(date);
+    // let date = new Date().getDate().format('YYYY-MM-DD');
+    console.log('Date:', today);
     try {
       const response = await fetch(
         `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
@@ -476,8 +503,8 @@ class HelloWorldApp extends Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            StartDate: '2019-09-25',
-            EndDate: '2019-09-25', //moment(new Date()).format('YYYY-MM-DD'),
+            StartDate: `${today}`,
+            EndDate: `${today}`, //moment(new Date()).format('YYYY-MM-DD'),
             ASAssnID: this.props.dashboardReducer.assId,
             UNUnitID: this.props.dashboardReducer.uniID,
             ACAccntID: this.props.userReducer.MyAccountID
@@ -497,7 +524,10 @@ class HelloWorldApp extends Component {
             let visitorObj = {};
             for (let i in data) {
               console.log('data[i].vlExitT', data[i].vlExitT);
-              if (data[i].vlExitT === '0001-01-01T00:00:00') {
+              if (
+                data[i].vlExitT === '0001-01-01T00:00:00' ||
+                data[i].vlExitT === 'NULL'
+              ) {
                 visitorObj = {
                   value: data[i].vlfName,
                   id: data[i].vlVisLgID
@@ -570,6 +600,7 @@ class HelloWorldApp extends Component {
     let comments = self.state.comment ? self.state.comment : '';
     let visitorid = self.state.visitorId;
     let visitorname = self.state.visitorName;
+    let mp3 = self.state.mp3;
     console.log(
       'All Data',
       img1,
@@ -577,69 +608,58 @@ class HelloWorldApp extends Component {
       img3,
       img4,
       img5,
+      mp3,
       comments,
       visitorid,
       visitorname,
       self.props.dashboardReducer.assId,
-      self.props.dashboardReducer.uniID
+      self.props.dashboardReducer.uniID,
+      this.props.oyeURL
     );
-    axios
-      .post(
-        `http://api.oyespace.com/oyesafe/api/v1/VisitorLog/Create`,
-        {
-          ASAssnID: self.props.dashboardReducer.assId,
-          RERgVisID: visitorid,
-          SPPrdImg1: img1,
-          SPPrdImg10: '',
-          SPPrdImg2: img2,
-          SPPrdImg3: img3,
-          SPPrdImg4: img4,
-          SPPrdImg5: img5,
-          SPPrdImg6: '',
-          SPPrdImg7: '',
-          SPPrdImg8: '',
-          SPPrdImg9: '',
-          UNUniName: '',
-          UNUnitID: self.props.dashboardReducer.uniID,
-          VLComName: '',
-          VLENGName: '',
-          VLEntryImg: '',
-          VLFName: visitorname,
-          VLGtName: comments,
-          VLItmCnt: 0,
-          VLLName: '',
-          VLMobile: '',
-          VLPOfVis: '1',
-          VLVehNum: '',
-          VLVehType: '',
-          VLVerStat: '',
-          VLVisCnt: 1,
-          VLVisType: 'Delivery',
-          WKSelfImg: ''
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-          }
-        }
-      )
 
-      .then(response => {
-        console.log('Respo1111:', response.data);
-        alert('Success');
-        // this.props.navigation.goBack();
-      })
-      .catch(error => {
-        console.log('Crash in profile', error);
+    if (visitorid.length === 0) {
+      return alert('Please select vendor from dropdown');
+    } else {
+      this.setState({
+        isLoading: true
       });
+      axios
+        .post(
+          `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
+          {
+            VLVenName: `${visitorname}`,
+            VLCmnts: `${comments}`,
+            VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
+            VLVoiceNote: mp3,
+            VLVisLgID: visitorid
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+            }
+          }
+        )
+
+        .then(response => {
+          console.log('Respo1111:', response);
+          // alert('Success');
+          this.setState({
+            isLoading: false
+          });
+          this.props.navigation.goBack();
+        })
+        .catch(error => {
+          console.log('Crash in profile', error);
+        });
+    }
   };
   render() {
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
-
+    console.log('COMMENT', this.state.comment.length);
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
@@ -698,7 +718,7 @@ class HelloWorldApp extends Component {
         <KeyboardAwareScrollView>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Dropdown
-              value={'Select Visitor'}
+              value={'Select Visitor' || ''}
               data={this.state.datasource}
               textColor={base.theme.colors.black}
               inputContainerStyle={{}}
@@ -712,12 +732,15 @@ class HelloWorldApp extends Component {
                 height: hp('8%')
               }}
               rippleOpacity={0}
-              dropdownPosition={-6}
+              dropdownPosition={-2}
               dropdownOffset={{ top: 0, left: 0 }}
               style={{ fontSize: hp('2.2%') }}
               onChangeText={(value, index) =>
                 this.visitorsendtogate(value, index)
               }
+              // ref={c => {
+              //   dropdownValue = c;
+              // }}
             />
           </View>
 
@@ -778,11 +801,10 @@ class HelloWorldApp extends Component {
                           source={{ uri: this.state.myProfileImage1 }}
                         />
                       </View>
-                      <TouchableOpacity>
+                      {/* <TouchableOpacity>
                         <View style={styles.imagesmallCircle}>
                           <View
                             style={{
-                              // backgroundColor: 'red',
                               width: hp('5%'),
                               height: hp('5%'),
                               zIndex: 100
@@ -804,7 +826,6 @@ class HelloWorldApp extends Component {
 
                           <View
                             style={{
-                              // backgroundColor: 'red',
                               width: hp('6%'),
                               height: hp('6%'),
                               position: 'absolute',
@@ -819,7 +840,6 @@ class HelloWorldApp extends Component {
                                 marginLeft: hp('1.5%'),
                                 color: '#000',
                                 fontWeight: '500'
-                                // backgroundColor: 'red'
                               }}
                             >
                               +
@@ -827,6 +847,7 @@ class HelloWorldApp extends Component {
                           </View>
                         </View>
                       </TouchableOpacity>
+                     */}
                     </View>
                   )}
                 </TouchableOpacity>
@@ -877,11 +898,10 @@ class HelloWorldApp extends Component {
                             source={{ uri: this.state.myProfileImage2 }}
                           />
                         </View>
-                        <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}>
-                            <View
+                        {/* <TouchableOpacity>
+                          <View style={styles.imagesmallCircle}> */}
+                        {/* <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('5%'),
                                 height: hp('5%'),
                                 zIndex: 100
@@ -903,7 +923,6 @@ class HelloWorldApp extends Component {
 
                             <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('6%'),
                                 height: hp('6%'),
                                 position: 'absolute',
@@ -918,14 +937,13 @@ class HelloWorldApp extends Component {
                                   marginLeft: hp('1.5%'),
                                   color: '#000',
                                   fontWeight: '500'
-                                  // backgroundColor: 'red'
                                 }}
                               >
                                 +
                               </Text>
-                            </View>
+                            </View> */}
 
-                            {/* <Image
+                        {/* <Image
                             style={{
                               width: hp('6%'),
                               height: hp('6%'),
@@ -936,8 +954,8 @@ class HelloWorldApp extends Component {
                             }}
                             source={require('../icons/zoom_in_white.png')}
                           /> */}
-                          </View>
-                        </TouchableOpacity>
+                        {/* </View>
+                        </TouchableOpacity> */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -991,11 +1009,10 @@ class HelloWorldApp extends Component {
                             source={{ uri: this.state.myProfileImage3 }}
                           />
                         </View>
-                        <TouchableOpacity>
+                        {/* <TouchableOpacity>
                           <View style={styles.imagesmallCircle}>
                             <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('5%'),
                                 height: hp('5%'),
                                 zIndex: 100
@@ -1017,7 +1034,6 @@ class HelloWorldApp extends Component {
 
                             <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('6%'),
                                 height: hp('6%'),
                                 position: 'absolute',
@@ -1032,7 +1048,6 @@ class HelloWorldApp extends Component {
                                   marginLeft: hp('1.5%'),
                                   color: '#000',
                                   fontWeight: '500'
-                                  // backgroundColor: 'red'
                                 }}
                               >
                                 +
@@ -1040,6 +1055,7 @@ class HelloWorldApp extends Component {
                             </View>
                           </View>
                         </TouchableOpacity>
+                       */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -1095,11 +1111,10 @@ class HelloWorldApp extends Component {
                             source={{ uri: this.state.myProfileImage4 }}
                           />
                         </View>
-                        <TouchableOpacity>
+                        {/* <TouchableOpacity>
                           <View style={styles.imagesmallCircle}>
                             <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('5%'),
                                 height: hp('5%'),
                                 zIndex: 100
@@ -1121,7 +1136,6 @@ class HelloWorldApp extends Component {
 
                             <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('6%'),
                                 height: hp('6%'),
                                 position: 'absolute',
@@ -1136,7 +1150,6 @@ class HelloWorldApp extends Component {
                                   marginLeft: hp('1.5%'),
                                   color: '#000',
                                   fontWeight: '500'
-                                  // backgroundColor: 'red'
                                 }}
                               >
                                 +
@@ -1144,6 +1157,7 @@ class HelloWorldApp extends Component {
                             </View>
                           </View>
                         </TouchableOpacity>
+                       */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -1204,11 +1218,10 @@ class HelloWorldApp extends Component {
                             source={{ uri: this.state.myProfileImage5 }}
                           />
                         </View>
-                        <TouchableOpacity>
+                        {/* <TouchableOpacity>
                           <View style={styles.imagesmallCircle}>
                             <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('5%'),
                                 height: hp('5%'),
                                 zIndex: 100
@@ -1230,7 +1243,6 @@ class HelloWorldApp extends Component {
 
                             <View
                               style={{
-                                // backgroundColor: 'red',
                                 width: hp('6%'),
                                 height: hp('6%'),
                                 position: 'absolute',
@@ -1245,7 +1257,6 @@ class HelloWorldApp extends Component {
                                   marginLeft: hp('1.5%'),
                                   color: '#000',
                                   fontWeight: '500'
-                                  // backgroundColor: 'red'
                                 }}
                               >
                                 +
@@ -1253,6 +1264,7 @@ class HelloWorldApp extends Component {
                             </View>
                           </View>
                         </TouchableOpacity>
+                       */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -1360,7 +1372,7 @@ class HelloWorldApp extends Component {
                       this.state.playBtnId === 2 ? ( */}
                         <TouchableOpacity onPress={() => this.onStopPlay()}>
                           <Image
-                            source={require('../icons/leave_vender_pause.png')}
+                            source={require('../icons/leave_vender_stopcopy.png')}
                           />
                         </TouchableOpacity>
                         {/* ) : (
@@ -1425,6 +1437,7 @@ class HelloWorldApp extends Component {
                 bordered
                 warning
                 style={styles.button}
+                disabled={this.state.comment.length === 0}
                 onPress={() => this.datasend()}
               >
                 <Text
@@ -1440,6 +1453,13 @@ class HelloWorldApp extends Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
+        <ProgressLoader
+          isHUD={true}
+          isModal={true}
+          visible={this.state.isLoading}
+          color={base.theme.colors.primary}
+          hudColor={'#FFFFFF'}
+        />
       </View>
     );
   }

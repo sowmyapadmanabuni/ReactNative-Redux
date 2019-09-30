@@ -56,7 +56,6 @@ class PatrollingCheckPoints extends React.Component {
             selectedCP: []
         };
         this.getCheckPoints = this.getCheckPoints.bind(this);
-        //this.onBackButtonPressAndroid = this.onBackButtonPressAndroid.bind(this);
     };
 
     componentWillMount() {

@@ -19,6 +19,7 @@ import com.lynxit.contactswrapper.ContactsWrapperPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 import com.ninty.system.setting.SystemSettingPackage;
+import com.airbnb.android.react.lottie.LottiePackage;
 
 
 
@@ -106,9 +107,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new FabricPackage(),
                     new RNAndroidLocationEnablerPackage(),
                     new SystemSettingPackage(),
-                    new GeolocationPackage()
-
-
+                    new GeolocationPackage(),
+                    new LottiePackage()
 
             );
         }

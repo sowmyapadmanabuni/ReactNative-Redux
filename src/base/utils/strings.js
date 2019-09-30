@@ -43,7 +43,7 @@ const api = {
 const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
 const strings = {
-  urlType : urlType,
+  urlType: urlType,
   appName: 'OyeSpace',
   //oyeSafeUrl:api.protocol+api.oyeSafeDomain, Patrolling it is like this
   oyeSafeUrlFamily: api.protocol + api.oyeSafeApiDomainFamily,
@@ -84,14 +84,14 @@ const strings = {
   },
   noImageCapturedPlaceholder: 'Images/no_img_captured.png',
 
-  alertMessage:{
-    selectOyeSafe:'Please select oyeSafe for editing',
-    biometricWithPlatinum:'For Platinum, biometric is mandatory. Please select Biometric only with Platinum plan.',
-    biometricWithGold:'You can select Biometric with Platinum only',
-    paymentSuccess:'We will release payment gateway feature soon !!!',
-    subscriptionAlert1:'Your subscription is going to end in',
-    subscriptionAlert2:'days. Please contact your association admin'
-
+  alertMessage: {
+    selectOyeSafe: 'Please select oyeSafe for editing',
+    biometricWithPlatinum:
+      'For Platinum, biometric is mandatory. Please select Biometric only with Platinum plan.',
+    biometricWithGold: 'You can select Biometric with Platinum only',
+    paymentSuccess: 'We will release payment gateway feature soon !!!',
+    subscriptionAlert1: 'Your subscription is going to end in',
+    subscriptionAlert2: 'days. Please contact your association admin'
   }
 };
 
