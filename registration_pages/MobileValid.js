@@ -2,7 +2,6 @@ import React, {Component, Fragment} from "react";
 import {Dimensions, Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
 import ProgressLoader from "rn-progress-loader";
 import base from "../src/base";
-// import SplashScreen from "./SplashScreen.js";
 import CheckBox from "react-native-check-box";
 import {TextField} from "react-native-material-textfield";
 import CountryPicker from "react-native-country-picker-modal";
