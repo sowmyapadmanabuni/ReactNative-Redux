@@ -139,8 +139,7 @@ class AddAndEditCheckPoints extends React.Component {
     scanWifiStrength(callback) {
         if (Platform.OS == 'android') {
             wifi.reScanAndLoadWifiList((wifiStringList) => {
-                //var wifiArray = JSON.parse(wifiStringList);   
-                console.log("Wifi List:",wifiStringList);         
+                //var wifiArray = JSON.parse(wifiStringList);            
                 callback((wifiStringList))
             }, (error) => {
                 callback("")

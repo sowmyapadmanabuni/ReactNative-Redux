@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {Alert, Image, NetInfo, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Dropdown} from "react-native-material-dropdown";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
-import MultiSelect from "react-native-multiple-select";
+// import MultiSelect from "react-native-multiple-select";
 
 import moment from "moment";
 
@@ -585,7 +585,7 @@ export default class CreatePatrollingShift extends Component {
             /> 
             </View>  
                       </View> */}
-                        <MultiSelect
+                        {/* <MultiSelect
                             hideTags
                             items={this.items}
                             uniqueKey="id"
@@ -626,7 +626,7 @@ export default class CreatePatrollingShift extends Component {
                             searchInputStyle={{color: "#CCC"}}
                             submitButtonColor="#CCC"
                             submitButtonText="Submit"
-                        />
+                        /> */}
                         <TouchableOpacity
                             style={[styles.loginScreenButton]}
                             onPress={() => this.submit()}

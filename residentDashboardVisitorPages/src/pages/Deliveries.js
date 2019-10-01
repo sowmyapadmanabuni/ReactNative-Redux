@@ -676,13 +676,19 @@ class App extends React.Component {
                         </View>
                     </View>
 
-                    {this.state.dataSource.length === 0 ?
-                        <View style={{
+                    
+                            <FlatList
+                                contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
+                                style={{marginTop: hp("2%"), marginBottom: hp('20%')}}
+                                data={this.state.dataSource.sort((a, b) =>
+                                    b.vldCreated.localeCompare(a.vldCreated)
+                                )}
+                                renderItem={this.renderItem}
+                                keyExtractor={(item, index) => item.fmid.toString()}
+                                ListEmptyComponent={
+                                    <View style={{
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'white',
-                            width: '100%',
-                            height: '80%'
                         }}>
                             {/* delivery-man */}
                             <Icon size={hp('10%')} style={{margin: hp('1%')}} name="delivery-man"/>
@@ -693,16 +699,9 @@ class App extends React.Component {
                                 fontSize: hp('1.6%')
                             }}>No Entries for selected Date</Text>
                         </View>
-                        : (
-                            <FlatList
-                                style={{marginTop: hp("2%"), marginBottom: hp('20%')}}
-                                data={this.state.dataSource.sort((a, b) =>
-                                    b.vldCreated.localeCompare(a.vldCreated)
-                                )}
-                                renderItem={this.renderItem}
-                                keyExtractor={(item, index) => item.fmid.toString()}
+                                }
                             />
-                        )}
+                        
                 </View>
             </View>
         );
@@ -771,6 +770,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         color: "#474749"
     },
+    centerEmptySet: { justifyContent: 'center', alignItems: 'center', height: '100%' },
     viewDatePickerImageStyle: {
         width: wp("3%"),
         height: hp("2.2%"),

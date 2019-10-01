@@ -590,8 +590,17 @@ class MyGuests extends Component {
                     </View>
                 </View>
 
-                {this.state.dataSource.length === 0 ? (
-                    <View
+                
+                    <FlatList
+                    contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
+                        style={{marginTop: hp('1.5%')}}
+                        data={this.state.dataSource.sort((a, b) =>
+                            a.vlfName.localeCompare(b.vlfName)
+                        )}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => item.vlVisLgID.toString()}
+                        ListEmptyComponent={
+                            <View
                         style={{
                             flex: 1,
                             alignItems: 'center',
@@ -610,16 +619,9 @@ class MyGuests extends Component {
                             No Data Available.
                         </Text>
                     </View>
-                ) : (
-                    <FlatList
-                        style={{marginTop: hp('1.5%')}}
-                        data={this.state.dataSource.sort((a, b) =>
-                            a.vlfName.localeCompare(b.vlfName)
-                        )}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item, index) => item.vlVisLgID.toString()}
+                        }
                     />
-                )}
+                
             </View>
         );
     }
@@ -684,6 +686,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'orange',
         borderColor: 'orange'
     },
+    centerEmptySet: { justifyContent: 'center', alignItems: 'center', height: '100%' },
     listItem: {
         flexDirection: 'row',
         paddingLeft: hp('1.6%'),

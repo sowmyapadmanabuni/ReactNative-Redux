@@ -95,7 +95,7 @@ class CreateSOS extends React.Component {
             this.sound.setVolume(1);
             SystemSetting.getVolume().then((volume)=>{
                 console.log('Current volume is ' + volume);
-            });
+            }).catch((e)=>console.log("Current volume is ",e));
             SystemSetting.setVolume(1);
             if(this.state.stopSOS){
                 this.sound.stop();

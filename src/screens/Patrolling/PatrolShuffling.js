@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-09-30 11:29:48 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-09-30 16:03:16
+ * @Last Modified time: 2019-09-30 18:23:33
  */
 
 
@@ -275,7 +275,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
                             alignSelf: 'center',
                             justifySelf:'center',
                             color:base.theme.colors.red,fontSize: 15,
-                            fontFamily: base.theme.fonts.medium}}>is at first and End point of patrolling is at last postion in the list. </Text>
+                            fontFamily: base.theme.fonts.medium}}>is at first and End point of patrolling is at last position in the list. </Text>
                         <TouchableHighlight 
                         underlayColor={base.theme.colors.transparent}
                         onPress={()=>this.setState({isLottieModalOpen:false})}>
