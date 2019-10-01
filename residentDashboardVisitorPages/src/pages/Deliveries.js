@@ -406,8 +406,37 @@ class App extends React.Component {
                     collapsed={!item.open}>
                     <View style={{flexDirection: 'column'}}>
                         <View style={{flexDirection: 'row', marginBottom: hp('0.5%')}}>
+                        <View>
                             <Text style={{fontSize: hp('1.6%'), marginLeft: hp('1%')}}>Delivery from: <Text
                                 style={{color: '#38bcdb'}}>{item.vlComName}</Text></Text>
+                                </View>
+                                {/* {item.vlExitT !== '00:00'} */}
+                                <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: hp('1%')
+                }}
+              >
+                <Button
+                  bordered
+                  warning
+                  style={styles.button2}
+                  onPress={() =>
+                    this.props.navigation.navigate('SendingMsgToGate')
+                  }
+                >
+                  <Text
+                    style={{
+                      fontSize: hp('2%'),
+                      fontWeight: '500'
+                    }}
+                  >
+                    Leave with Vendor
+                  </Text>
+                </Button>
+              </View>
+             
                         </View>
                         {/* <View style={{ flexDirection: 'row' }}>
                 <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Entry approved by: {item.vlpOfVis}</Text>
