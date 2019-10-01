@@ -142,7 +142,7 @@ class HelloWorldApp extends Component {
       }
     };
     let self = this;
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.launchCamera(options, response => {
       console.log('response:', response);
       if (response.didCancel) {
       } else if (response.error) {
@@ -155,35 +155,35 @@ class HelloWorldApp extends Component {
               myProfileImage1: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 2:
             self.setState({
               myProfileImage2: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 3:
             self.setState({
               myProfileImage3: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 4:
             self.setState({
               myProfileImage4: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
           case 5:
             self.setState({
               myProfileImage5: response.uri
             });
             this.uploadImage(response);
-            alert(response.uri);
+            // alert(response.uri);
             break;
         }
         // self.setState(
@@ -662,7 +662,7 @@ class HelloWorldApp extends Component {
     console.log('COMMENT', this.state.comment.length);
     return (
       <View style={styles.container}>
-        <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+        <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
@@ -708,7 +708,7 @@ class HelloWorldApp extends Component {
           <Text
             style={{
               fontSize: hp('2.5%'),
-              color: '#ff8c00',
+              color: base.theme.colors.primary,
               textAlign: 'center'
             }}
           >
@@ -732,8 +732,8 @@ class HelloWorldApp extends Component {
                 height: hp('8%')
               }}
               rippleOpacity={0}
-              dropdownPosition={-2}
-              dropdownOffset={{ top: 0, left: 0 }}
+              dropdownPosition={0}
+              dropdownOffset={{ top: hp('10%'), left: 0 }}
               style={{ fontSize: hp('2.2%') }}
               onChangeText={(value, index) =>
                 this.visitorsendtogate(value, index)
@@ -838,7 +838,7 @@ class HelloWorldApp extends Component {
                                 height: hp('6%'),
                                 fontSize: hp('3%'),
                                 marginLeft: hp('1.5%'),
-                                color: '#000',
+                                color: base.theme.colors.black,
                                 fontWeight: '500'
                               }}
                             >
@@ -935,7 +935,7 @@ class HelloWorldApp extends Component {
                                   height: hp('6%'),
                                   fontSize: hp('3%'),
                                   marginLeft: hp('1.5%'),
-                                  color: '#000',
+                                  color: base.theme.colors.black,
                                   fontWeight: '500'
                                 }}
                               >
@@ -1046,7 +1046,7 @@ class HelloWorldApp extends Component {
                                   height: hp('6%'),
                                   fontSize: hp('3%'),
                                   marginLeft: hp('1.5%'),
-                                  color: '#000',
+                                  color: base.theme.colors.black,
                                   fontWeight: '500'
                                 }}
                               >
@@ -1148,7 +1148,7 @@ class HelloWorldApp extends Component {
                                   height: hp('6%'),
                                   fontSize: hp('3%'),
                                   marginLeft: hp('1.5%'),
-                                  color: '#000',
+                                  color: base.theme.colors.black,
                                   fontWeight: '500'
                                 }}
                               >
@@ -1255,7 +1255,7 @@ class HelloWorldApp extends Component {
                                   height: hp('6%'),
                                   fontSize: hp('3%'),
                                   marginLeft: hp('1.5%'),
-                                  color: '#000',
+                                  color: base.theme.colors.black,
                                   fontWeight: '500'
                                 }}
                               >
@@ -1397,7 +1397,7 @@ class HelloWorldApp extends Component {
 
             <View
               style={{
-                borderColor: '#ff8c00',
+                borderColor: base.theme.colors.primary,
                 borderWidth: hp('0.1%'),
                 borderRadius: hp('1%'),
                 height: hp('12%'),
@@ -1458,7 +1458,7 @@ class HelloWorldApp extends Component {
           isModal={true}
           visible={this.state.isLoading}
           color={base.theme.colors.primary}
-          hudColor={'#FFFFFF'}
+          hudColor={base.theme.colors.white}
         />
       </View>
     );
@@ -1479,10 +1479,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   viewStyle1: {
-    backgroundColor: '#fff',
+    backgroundColor: base.theme.colors.white,
     height: hp('7%'),
     width: '100%',
-    shadowColor: '#000',
+    shadowColor: base.theme.colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
@@ -1522,8 +1522,8 @@ const styles = StyleSheet.create({
     // borderWidth: 2,
     marginHorizontal: 10,
     marginTop: hp('2%'),
-    borderColor: '#ff8c00',
-    backgroundColor: '#f2f2f2',
+    borderColor: base.theme.colors.primary,
+    backgroundColor: base.theme.colors.imageShadow,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column'
@@ -1538,8 +1538,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: 'yellow',
     height: hp('20%'),
-    width: hp('12%'),
-    marginTop: hp('2%')
+    width: hp('12%')
+    // marginTop: hp('2%')
   },
   imagesmallCircle: {
     alignItems: 'flex-end',
@@ -1565,7 +1565,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   viewBar: {
-    backgroundColor: '#ccc',
+    backgroundColor: base.theme.colors.playprogressbar,
     height: 4 * ratio,
     alignSelf: 'stretch'
   },
@@ -1588,8 +1588,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,
-    borderColor: '#fff',
+    borderColor: base.theme.colors.white,
     marginBottom: hp('2%'),
-    backgroundColor: '#ff8c00'
+    backgroundColor: base.theme.colors.primary
   }
 });
