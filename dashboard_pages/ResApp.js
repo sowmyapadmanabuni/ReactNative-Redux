@@ -68,8 +68,8 @@ import FirstTab from '../residentDashboardVisitorPages/FirstTab';
 import MyFamilyHeader from '../src/components/NavigationalHeaders/MyFamilyHeader';
 
 import City from '../assocition_pages/City.js';
-import SendingMsgToGate from '../my_unit_pages/SendingMsgToGate.js';
 import SubscriptionManagement from '../src/screens/Subscription/SubscriptionManagement';
+import PatrolShuffling from '../src/screens/Patrolling/PatrolShuffling';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -197,15 +197,7 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff'
     }
   },
-  SendingMsgToGate: {
-    screen: SendingMsgToGate,
-    navigationOptions: {
-      title: 'Leave with Vendor',
-      header: null,
-      headerStyle: { backgroundColor: '#FA9917' },
-      headerTintColor: '#ffffff'
-    }
-  },
+
   CreateOrJoinScreen: {
     screen: CreateOrJoin,
     navigationOptions: {
@@ -423,6 +415,7 @@ const ResApp = createStackNavigator({
         <PatrollingCommonHeader
           isReportVisible={true}
           isHidden={false}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -436,6 +429,21 @@ const ResApp = createStackNavigator({
         <PatrollingCommonHeader
           isReportVisible={false}
           isHidden={false}
+          isReshuffling={true}
+          {...props}
+        />
+      )
+    }
+  },
+  reshufflePatrol: {
+    screen: PatrolShuffling,
+    navigationOptions: {
+      title: 'Re-Shuffle Check Points',
+      header: props => (
+        <PatrollingCommonHeader
+          isReportVisible={false}
+          isHidden={false}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -450,6 +458,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -463,6 +472,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -476,6 +486,7 @@ const ResApp = createStackNavigator({
           isReportVisible={true}
           isShareVisible={true}
           isHidden={false}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -489,6 +500,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -502,6 +514,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -515,6 +528,7 @@ const ResApp = createStackNavigator({
           isReportVisible={false}
           isShareVisible={false}
           isHidden={true}
+          isReshuffling={false}
           {...props}
         />
       )
@@ -526,12 +540,12 @@ const ResApp = createStackNavigator({
       header: null
     }
   },
- subscriptionManagement: {
-      screen:SubscriptionManagement,
-      navigationOptions: {
-        header: props => <MyFamilyHeader  isSub={true} {...props}/>
-      }
-    },
+  subscriptionManagement: {
+    screen: SubscriptionManagement,
+    navigationOptions: {
+      header: props => <MyFamilyHeader isSub={true} {...props} />
+    }
+  }
 });
 
 export default createAppContainer(ResApp);

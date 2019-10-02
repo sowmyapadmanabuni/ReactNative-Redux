@@ -1613,14 +1613,13 @@ class Dashboard extends PureComponent {
           >
             <Text>View All Visitors</Text>
           </Button>
-          {/*<Button
+          <Button
             bordered
             style={styles.button1}
             onPress={() => this.props.navigation.navigate('schedulePatrolling')}
           >
             <Text>Patrolling</Text>
           </Button>
-       */}
       <Button
               bordered
               style={styles.button1}

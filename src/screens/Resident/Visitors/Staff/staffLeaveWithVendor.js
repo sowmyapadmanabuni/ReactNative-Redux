@@ -26,7 +26,7 @@ import {
   Input,
   InputGroup
 } from 'native-base';
-import base from '../src/base';
+import base from '../../../../base';
 import { Dropdown } from 'react-native-material-dropdown';
 import ZoomImage from 'react-native-zoom-image';
 import { Easing } from 'react-native';
@@ -38,13 +38,14 @@ import AudioRecorderPlayer, {
   AudioSet,
   AudioSourceAndroidType
 } from 'react-native-audio-recorder-player';
-import { ratio, screenWidth } from './Styles.js';
+import { ratio, screenWidth } from './VendorStyles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
+import StaffStyle from './StaffStyle.js';
 
 var audioRecorderPlayer;
-class SendingMsgToGate extends Component {
+class StaffLeaveWithVendor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -99,7 +100,6 @@ class SendingMsgToGate extends Component {
   componentDidMount() {
     let self = this;
     setTimeout(() => {
-      self.visitorData();
       this.setState({
         isLoading: false
       });
@@ -483,113 +483,6 @@ class SendingMsgToGate extends Component {
     });
   };
 
-  visitorData = async () => {
-    this.setState({ isLoading: true });
-    let today = moment(new Date(), 'DD-MM-YYYY').format('YYYY-MM-DD');
-
-    // let date = today.format('YYYY-MM-DD');
-    //oday.getFullYear() + '-' + today.getMonth() + '-' + today.getDate();
-
-    // console.log(date);
-    // let date = new Date().getDate().format('YYYY-MM-DD');
-    console.log('Date:', today);
-    try {
-      const response = await fetch(
-        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
-        {
-          method: 'POST',
-          headers: {
-            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            StartDate: `${today}`,
-            EndDate: `${today}`, //moment(new Date()).format('YYYY-MM-DD'),
-            ASAssnID: this.props.dashboardReducer.assId,
-            UNUnitID: this.props.dashboardReducer.uniID,
-            ACAccntID: this.props.userReducer.MyAccountID
-          })
-        }
-      )
-        .then(response => response.json())
-        .then(responseJson => {
-          //var count = Object.keys(responseJson.data.visitorlogbydate).length;
-          //console.log("fsbkfh", count);
-          if (responseJson.success) {
-            console.log('SUCCESS', responseJson);
-            let data = responseJson.data.visitorlog.filter(
-              x => x.vlVisType === 'Delivery'
-            );
-            let visitors = [];
-            let visitorObj = {};
-            for (let i in data) {
-              console.log('data[i].vlExitT', data[i].vlExitT);
-              if (
-                data[i].vlExitT === '0001-01-01T00:00:00' ||
-                data[i].vlExitT === 'NULL'
-              ) {
-                visitorObj = {
-                  value: data[i].vlfName,
-                  id: data[i].vlVisLgID
-                };
-                console.log('VALUE,ID', visitorObj.value, visitorObj.id);
-                visitors.push(visitorObj);
-                this.setState({
-                  visitorList: visitors
-                });
-                console.log(
-                  'DATAAAAAAA',
-                  i,
-                  data[i],
-                  data[i].vlExitT,
-                  visitors
-                );
-              }
-
-              console.log('Visitors', visitorObj);
-            }
-            this.setState({
-              isLoading: false,
-              datasource: visitors
-            });
-            console.log('Visitor Data', this.state.datasource);
-          } else {
-            this.setState({
-              isLoading: false,
-              datasource: []
-            });
-          }
-        });
-      if (response) {
-        console.log(
-          'Visitor Data',
-          response.data.visitorlog.filter(x => x.vlVisType === 'Delivery')
-        );
-        this.setState({ isLoading: false });
-      }
-    } catch (e) {
-      this.setState({ isLoading: false });
-    }
-  };
-
-  visitorsendtogate = async (value, index) => {
-    let self = this;
-    let visitorList = self.state.visitorList;
-
-    let id, name;
-    for (let i = 0; i < visitorList.length; i++) {
-      console.log('VIsitor List', visitorList);
-      if (i === index) {
-        (id = visitorList[i].id), (name = visitorList[i].value);
-      }
-      console.log('id, name', id, name);
-      self.setState({
-        visitorName: name,
-        visitorId: id
-      });
-    }
-  };
-
   datasend = () => {
     let self = this;
     let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
@@ -660,50 +553,9 @@ class SendingMsgToGate extends Component {
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
     console.log('COMMENT', this.state.comment.length);
+    console.log('PROPS:', this.props.navigation.state.params);
     return (
       <View style={styles.container}>
-        {/* <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
-          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp('4%'),
-                    width: wp('15%'),
-                    alignItems: 'flex-start',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={require('../icons/back.png')}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                width: '35%',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Image
-                style={[styles.image]}
-                source={require('../icons/OyespaceSafe.png')}
-              />
-            </View>
-            <View style={{ width: '35%' }}>
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
-        </SafeAreaView>
-         */}
         <View style={styles.viewForMyProfileText}>
           <Text
             style={{
@@ -716,32 +568,46 @@ class SendingMsgToGate extends Component {
           </Text>
         </View>
         <KeyboardAwareScrollView>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Dropdown
-              value={'Select Visitor' || ''}
-              data={this.state.datasource}
-              textColor={base.theme.colors.black}
-              inputContainerStyle={{}}
-              baseColor={base.theme.colors.black}
-              placeholder="Select Visitor"
-              placeholderTextColor={base.theme.colors.black}
-              placeholderStyle={{ fontWeight: 'bold' }}
-              labelHeight={hp('4%')}
-              containerStyle={{
-                width: wp('85%'),
-                height: hp('8%')
-              }}
-              rippleOpacity={0}
-              dropdownPosition={0}
-              dropdownOffset={{ top: hp('10%'), left: 0 }}
-              style={{ fontSize: hp('2.2%') }}
-              onChangeText={(value, index) =>
-                this.visitorsendtogate(value, index)
-              }
-              // ref={c => {
-              //   dropdownValue = c;
-              // }}
-            />
+          {/* <View
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+          >
+
+          </View> */}
+          <View style={StaffStyle.detailsMainView}>
+            <View
+              style={{ ...StaffStyle.detailsLeftView, marginLeft: hp('2%') }}
+            >
+              {this.props.navigation.state.params.Pic === '' ? (
+                <Image
+                  style={StaffStyle.staffImg}
+                  source={{
+                    uri:
+                      'https://mediaupload.oyespace.com/' +
+                      base.utils.strings.noImageCapturedPlaceholder
+                  }}
+                />
+              ) : (
+                <Image
+                  style={StaffStyle.staffImg}
+                  source={{
+                    uri:
+                      base.utils.strings.imageUrl +
+                      this.props.navigation.state.params.Pic
+                  }}
+                />
+              )}
+              <View style={StaffStyle.textView1}>
+                <Text style={StaffStyle.staffText1} numberofLines={1}>
+                  {this.props.navigation.state.params.StaffName}
+                </Text>
+              </View>
+              {this.props.navigation.state.params.DeptName && (
+                <Text style={StaffStyle.desigText}>
+                  {' '}
+                  ({this.props.navigation.state.params.DeptName})
+                </Text>
+              )}
+            </View>
           </View>
 
           <Card
@@ -782,7 +648,7 @@ class SendingMsgToGate extends Component {
                       >
                         <Image
                           style={{ width: hp('4%'), height: hp('4%') }}
-                          source={require('../icons/leave_vender_add.png')}
+                          source={require('../../../../../icons/leave_vender_add.png')}
                         />
                       </View>
                       <View style={{ marginTop: hp('0.5%') }}>
@@ -877,7 +743,7 @@ class SendingMsgToGate extends Component {
                         >
                           <Image
                             style={{ width: hp('4%'), height: hp('4%') }}
-                            source={require('../icons/leave_vender_add.png')}
+                            source={require('../../../../../icons/leave_vender_add.png')}
                           />
                         </View>
                         <View style={{ marginTop: hp('0.5%') }}>
@@ -952,7 +818,7 @@ class SendingMsgToGate extends Component {
                               marginRight: hp('5%')
                               // backgroundColor: 'red'
                             }}
-                            source={require('../icons/zoom_in_white.png')}
+                            source={require('../../../../../icons/zoom_in_white.png')}
                           /> */}
                         {/* </View>
                         </TouchableOpacity> */}
@@ -988,7 +854,7 @@ class SendingMsgToGate extends Component {
                         >
                           <Image
                             style={{ width: hp('4%'), height: hp('4%') }}
-                            source={require('../icons/leave_vender_add.png')}
+                            source={require('../../../../../icons/leave_vender_add.png')}
                           />
                         </View>
                         <View style={{ marginTop: hp('0.5%') }}>
@@ -1090,7 +956,7 @@ class SendingMsgToGate extends Component {
                         >
                           <Image
                             style={{ width: hp('4%'), height: hp('4%') }}
-                            source={require('../icons/leave_vender_add.png')}
+                            source={require('../../../../../icons/leave_vender_add.png')}
                           />
                         </View>
                         <View style={{ marginTop: hp('0.5%') }}>
@@ -1197,7 +1063,7 @@ class SendingMsgToGate extends Component {
                               width: hp('4%'),
                               height: hp('4%')
                             }}
-                            source={require('../icons/leave_vender_add.png')}
+                            source={require('../../../../../icons/leave_vender_add.png')}
                           />
                         </View>
                         <View style={{ marginTop: hp('0.3%') }}>
@@ -1291,7 +1157,7 @@ class SendingMsgToGate extends Component {
                         height: hp('5%'),
                         marginLeft: hp('1%')
                       }}
-                      source={require('../icons/leave_vender_record.png')}
+                      source={require('../../../../../icons/leave_vender_record.png')}
                     />
                   </TouchableOpacity>
                 ) : (
@@ -1302,7 +1168,7 @@ class SendingMsgToGate extends Component {
                         height: hp('5%'),
                         marginLeft: hp('1%')
                       }}
-                      source={require('../icons/leave_vender_stop.png')}
+                      source={require('../../../../../icons/leave_vender_stop.png')}
                     />
                   </TouchableOpacity>
                 )}
@@ -1357,13 +1223,15 @@ class SendingMsgToGate extends Component {
                 }}
               >
                 {this.state.playBtnId === 0 ? (
-                  <Image source={require('../icons/leave_vender_play1.png')} />
+                  <Image
+                    source={require('../../../../../icons/leave_vender_play1.png')}
+                  />
                 ) : (
                   <View>
                     {this.state.playBtnId === 1 ? (
                       <TouchableOpacity onPress={() => this.onStartPlay()}>
                         <Image
-                          source={require('../icons/leave_vender_play.png')}
+                          source={require('../../../../../icons/leave_vender_play.png')}
                         />
                       </TouchableOpacity>
                     ) : (
@@ -1372,7 +1240,7 @@ class SendingMsgToGate extends Component {
                       this.state.playBtnId === 2 ? ( */}
                         <TouchableOpacity onPress={() => this.onStopPlay()}>
                           <Image
-                            source={require('../icons/leave_vender_stopcopy.png')}
+                            source={require('../../../../../icons/leave_vender_stopcopy.png')}
                           />
                         </TouchableOpacity>
                         {/* ) : (
@@ -1472,7 +1340,7 @@ const mapStateToProps = state => {
     userReducer: state.UserReducer
   };
 };
-export default connect(mapStateToProps)(SendingMsgToGate);
+export default connect(mapStateToProps)(StaffLeaveWithVendor);
 
 const styles = StyleSheet.create({
   container: {

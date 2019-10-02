@@ -62,7 +62,22 @@ class App extends React.Component {
         this.arrayholder = [];
     }
 
-
+    componentDidMount() {
+        let self = this;
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        let newDataSource = [];
+        this.state.dataSource.map((data) => {
+            newDataSource.push({...data, open: false})
+        });
+        setTimeout(() => {
+            self.myVisitorsGetList();
+            this.setState({
+                isLoading: false,
+                dataSource: newDataSource
+            });
+        }, 5000);
+        // console.log("Association Id", this.props.dashBoardReducer.assId);
+    }
     componentDidUpdate() {
         setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
@@ -130,17 +145,6 @@ class App extends React.Component {
         });
     };
 
-    // //Time Picker
-    // _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
-    // _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
-    // _handleDatePicked = (dataSource.data.visitorlogbydate.vlEntryT[0]) => {
-    //   this.setState({
-    //     datetime: moment(
-    //       responseJson.data.visitorlogbydate.vlEntryT.substring(11, 16)
-    //     ).format("HH:mm:ss a")
-    //   });
-    // };
-
     searchFilterFunction = text => {
         this.setState({
             value: text
@@ -157,21 +161,7 @@ class App extends React.Component {
         });
     };
 
-    componentDidMount() {
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
-        this.myVisitorsGetList();
-        let newDataSource = [];
-        this.state.dataSource.map((data) => {
-            newDataSource.push({...data, open: false})
-        });
-        setTimeout(() => {
-            this.setState({
-                isLoading: false,
-                dataSource: newDataSource
-            });
-        }, 5000);
-        console.log("Association Id", this.props.dashBoardReducer.assId);
-    }
+    
 
     myVisitorsGetList = () => {
         this.setState({
@@ -406,37 +396,38 @@ class App extends React.Component {
                     collapsed={!item.open}>
                     <View style={{flexDirection: 'column'}}>
                         <View style={{flexDirection: 'row', marginBottom: hp('0.5%')}}>
-                        <View>
+                        <View style={{justifyContent:'center', alignItems:'flex-start',flex:1}}>
                             <Text style={{fontSize: hp('1.6%'), marginLeft: hp('1%')}}>Delivery from: <Text
                                 style={{color: '#38bcdb'}}>{item.vlComName}</Text></Text>
                                 </View>
-                                {/* {item.vlExitT !== '00:00'} */}
-                                <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: hp('1%')
-                }}
-              >
-                <Button
-                  bordered
-                  warning
-                  style={styles.button2}
-                  onPress={() =>
-                    this.props.navigation.navigate('SendingMsgToGate')
-                  }
-                >
-                  <Text
-                    style={{
-                      fontSize: hp('2%'),
-                      fontWeight: '500'
-                    }}
-                  >
-                    Leave with Vendor
-                  </Text>
-                </Button>
-              </View>
-             
+                                {item.vlExitT === '0001-01-01T00:00:00' &&
+                                    <View
+                                        style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        marginRight:hp('1%'),
+                                        }}
+                                    >
+                                        <Button
+                                        bordered
+                                        warning
+                                        style={styles.button2}
+                                        onPress={() =>
+                                            this.props.navigation.navigate('SendingMsgToGate')
+                                        }
+                                        >
+                                        <Text
+                                            style={{
+                                            fontSize: hp('1.6%'),
+                                            }}
+                                        >
+                                            Leave with Vendor
+                                        </Text>
+                                        </Button>
+                                    </View>
+                                     
+                                }
+                                
                         </View>
                         {/* <View style={{ flexDirection: 'row' }}>
                 <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Entry approved by: {item.vlpOfVis}</Text>
@@ -713,7 +704,7 @@ class App extends React.Component {
                                     b.vldCreated.localeCompare(a.vldCreated)
                                 )}
                                 renderItem={this.renderItem}
-                                keyExtractor={(item, index) => item.fmid.toString()}
+                                keyExtractor={(item, index) => item.vlVisLgID.toString()}
                                 ListEmptyComponent={
                                     <View style={{
                             alignItems: 'center',
@@ -765,13 +756,13 @@ const styles = StyleSheet.create({
         height: hp("10%"),
         // alignItems: "center",
         // justifyContent: "center",
-        // borderColor: "#ff8c00",
+        // borderColor: base.theme.colors.primary,
         borderRadius: 100,
     },
     profilePicImageStyle: {
         width: hp("8%"),
         height: hp("8%"),
-        borderColor: "#ff8c00",
+        borderColor: base.theme.colors.primary,
         borderRadius: hp("4%"),
         marginTop: hp("2%"),
         borderWidth: hp("0.1%")
@@ -850,7 +841,7 @@ const styles = StyleSheet.create({
         fontSize: hp("2.4%"),
         fontWeight: "bold",
         marginBottom: hp("1.5%"),
-        color: "#ff8c00"
+        color: base.theme.colors.primary
     },
 
     floatButton: {
@@ -863,7 +854,7 @@ const styles = StyleSheet.create({
         bottom: hp("2.5%"),
         right: hp("2.5%"),
         height: hp("8%"),
-        backgroundColor: "#FF8C00",
+        backgroundColor: base.theme.colors.primary,
         borderRadius: 100,
         // shadowColor: '#000000',
         shadowOffset: {
@@ -890,8 +881,15 @@ const styles = StyleSheet.create({
         marginBottom: hp("1%")
     },
     icon: {
-        color: "orange"
-    }
+        color: base.theme.colors.primary
+    },
+    button2: {
+        width: hp('15%'),
+        justifyContent: 'center',
+        borderRadius:hp('10%'),
+        borderWidth:hp('0.2%'),
+        borderColor:base.theme.colors.primary
+      },
 });
 
 const mapStateToProps = state => {

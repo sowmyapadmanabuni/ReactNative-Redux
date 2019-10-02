@@ -20,7 +20,10 @@ import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage; // <-- Add this line
 import com.oblador.vectoricons.VectorIconsPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
+import com.airbnb.android.react.lottie.LottiePackage;
+import com.ninty.system.setting.SystemSettingPackage;
 import com.horcrux.svg.SvgPackage;
+
 import com.rnfs.RNFSPackage;
 import cl.json.RNSharePackage;
 import com.imagepicker.ImagePickerPackage;
@@ -54,8 +57,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNHTMLtoPDFPackage(),
-                    new SvgPackage(),
+                    new RNHTMLtoPDFPackage(),
                     new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
                     new GeolocationPackage(),
@@ -76,8 +78,10 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new MapsPackage(),
                     new RNFusedLocationPackage(),
                     new FabricPackage(),
-                    new RNAndroidLocationEnablerPackage()
-
+                    new RNAndroidLocationEnablerPackage(),
+                    new LottiePackage(),
+                    new SystemSettingPackage(),
+                    new SvgPackage()
             );
         }
 

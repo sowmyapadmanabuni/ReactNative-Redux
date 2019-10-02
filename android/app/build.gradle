@@ -172,7 +172,9 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-system-setting')
+
+    implementation project(':lottie-react-native')
+    implementation project(':react-native-sound')
     implementation project(':react-native-svg')
     implementation project(':react-native-html-to-pdf')
     implementation project(':react-native-audio-recorder-player')
@@ -196,6 +198,7 @@ dependencies {
     implementation project(':react-native-contacts-wrapper')
     implementation project(':react-native-maps')
     implementation project(':react-native-geolocation-service')
+    implementation project(':react-native-system-setting')
 
 
     // Firebase dependencies
