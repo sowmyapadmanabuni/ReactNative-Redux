@@ -30,8 +30,7 @@ import {
   widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
 import * as fb from 'firebase';
-import CountdownCircle from 'react-native-countdown-circle'
-
+import CountdownCircle from 'react-native-countdown-circle';
 
 import {
   createNotification,
@@ -58,7 +57,7 @@ import timer from 'react-native-timer';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../assets/selection.json';
-import moment from "moment";
+import moment from 'moment';
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
@@ -512,16 +511,23 @@ class Dashboard extends PureComponent {
     this.props.getNotifications(oyeURL, MyAccountID);
     let self = this;
 
-      fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
+    fb.database()
+      .ref('SOS/' + SelectedAssociationID + '/' + MyAccountID + '/')
+      .on('value', function(snapshot) {
         let receivedData = snapshot.val();
-        console.log("ReceiveddataDash", snapshot.val());
+        console.log('ReceiveddataDash', snapshot.val());
         if (receivedData !== null) {
-          if(receivedData.isActive && receivedData.userId){
-           self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+          if (receivedData.isActive && receivedData.userId) {
+            self.props.navigation.navigate('sosScreen', {
+              isActive: true,
+              images:
+                receivedData.emergencyImages === undefined
+                  ? []
+                  : receivedData.emergencyImages
+            });
           }
-
-            }
-        });
+        }
+      });
 
     //Adding an event listner om focus
     //So whenever the screen will have focus it will set the state to zero
@@ -530,15 +536,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-     timer.setInterval(
-     this,
+    timer.setInterval(
+      this,
       'syncData',
       () => {
-      this.syncData();
-    //     // alert("hererereerrrereer");
+        this.syncData();
+        //     // alert("hererereerrrereer");
       },
-       5000
-     );
+      5000
+    );
   }
 
   async roleCheckForAdmin(index) {
@@ -711,7 +717,9 @@ class Dashboard extends PureComponent {
               prop: 'SelectedAssociationID',
               value: sortedArr[0].details.asAssnID
             });
-            base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+            base.utils.validate.checkSubscription(
+              this.props.userReducer.SelectedAssociationID
+            );
             self.getUnitListByAssoc();
           } else if (!stat.data.success) {
             this.setState({
@@ -820,8 +828,7 @@ class Dashboard extends PureComponent {
       value: dropdown[index].associationId
     });
 
-    base.utils.validate.checkSubscription(dropdown[index].associationId)
-
+    base.utils.validate.checkSubscription(dropdown[index].associationId);
 
     // let memId = _.find(memberList, function(o) {
     //   return o.asAssnID === dropdown[index].associationId;
@@ -869,7 +876,6 @@ class Dashboard extends PureComponent {
     }
   }
 
-
   async getUnitListByAssoc() {
     let self = this;
     //self.setState({isLoading: true})
@@ -912,8 +918,6 @@ class Dashboard extends PureComponent {
       base.utils.logger.log(error);
     }
   }
-
-
 
   updateUnit(value, index) {
     let self = this;
@@ -1414,7 +1418,6 @@ class Dashboard extends PureComponent {
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.goToFirstTab()}
           />
-          
         </View>
         <View style={Style.elevatedViewSub}>
           {/* <CardView
@@ -1457,44 +1460,79 @@ class Dashboard extends PureComponent {
                 </ElevatedView>
             */}
 
-          {this.props.dropdown.length===0?<View/>:
-        <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('20')}}>
-              {!this.state.isSOSSelected?
-              <TouchableHighlight 
-              underlayColor={base.theme.colors.transparent}
-              onPress={()=>this.selectSOS()}>
-              <Image
-              style={{width: wp("18%"),
-              height: hp("10%"),
-              right: 20,
-              justifyContent: "center"}}
-                source={require('../../../../icons/sos_btn.png')}
-                />
-                </TouchableHighlight>:
-                <View style={{flexDirection:'row',right:45}}>
-                  <TouchableHighlight style={{alignSelf:'flex-end',right:2}} 
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={()=>this.selectSOS()}>
-                  <Text style={{alignSelf:'flex-end',right:5,color:base.theme.colors.red}}>Cancel</Text>
-                  </TouchableHighlight>
-                <TouchableHighlight 
+        {this.props.dropdown.length === 0 ? (
+          <View />
+        ) : (
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              height: 50,
+              width: 50,
+              justifyContent: 'center',
+              marginTop: hp('20')
+            }}
+          >
+            {!this.state.isSOSSelected ? (
+              <TouchableHighlight
                 underlayColor={base.theme.colors.transparent}
-                onPress={()=>this.props.navigation.navigate("sosScreen",{isActive:false})}>
-                 <CountdownCircle
-                 seconds={5}
-                 radius={25}
-                 borderWidth={7}
-                 color={base.theme.colors.primary}
-                 updateText={(elapsedSeconds, totalSeconds) =>
-                  (""+totalSeconds - elapsedSeconds).toString()+"\nsec"}
-                 bgColor="#fff"
-                 textStyle={{ fontSize: 15,textAlign:'center'}}
-                 onTimeElapsed={() => this.props.navigation.navigate("sosScreen",{isActive:false})}
-             />
-             </TouchableHighlight>
-             </View>
-             }
-            </View>}
+                onPress={() => this.selectSOS()}
+              >
+                <Image
+                  style={{
+                    width: wp('18%'),
+                    height: hp('10%'),
+                    right: 20,
+                    justifyContent: 'center'
+                  }}
+                  source={require('../../../../icons/sos_btn.png')}
+                />
+              </TouchableHighlight>
+            ) : (
+              <View style={{ flexDirection: 'row', right: 45 }}>
+                <TouchableHighlight
+                  style={{ alignSelf: 'flex-end', right: 2 }}
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={() => this.selectSOS()}
+                >
+                  <Text
+                    style={{
+                      alignSelf: 'flex-end',
+                      right: 5,
+                      color: base.theme.colors.red
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={() =>
+                    this.props.navigation.navigate('sosScreen', {
+                      isActive: false
+                    })
+                  }
+                >
+                  <CountdownCircle
+                    seconds={5}
+                    radius={25}
+                    borderWidth={7}
+                    color={base.theme.colors.primary}
+                    updateText={(elapsedSeconds, totalSeconds) =>
+                      ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                    }
+                    bgColor="#fff"
+                    textStyle={{ fontSize: 15, textAlign: 'center' }}
+                    onTimeElapsed={() =>
+                      this.props.navigation.navigate('sosScreen', {
+                        isActive: false
+                      })
+                    }
+                  />
+                </TouchableHighlight>
+              </View>
+            )}
+          </View>
+        )}
       </ElevatedView>
     );
   }
@@ -1620,52 +1658,96 @@ class Dashboard extends PureComponent {
           >
             <Text>Patrolling</Text>
           </Button>
-      <Button
-              bordered
-              style={styles.button1}
-              onPress={() => this.props.navigation.navigate("subscriptionManagement")}
+          <Button
+            bordered
+            style={styles.button1}
+            onPress={() =>
+              this.props.navigation.navigate('subscriptionManagement')
+            }
           >
             <Text>Subscription</Text>
           </Button>
+          {/* <Button
+            bordered
+            style={styles.button1}
+            onPress={() => this.props.navigation.navigate('Announcement')}
+          >
+            <Text>Announcement</Text>
+          </Button> */}
         </View>
-        {this.props.dropdown.length==0?<View/>:
-        <View style={{alignSelf:'flex-end',height:50,width:50,justifyContent:'center',marginTop:hp('22%')}}>
-              {!this.state.isSOSSelected?
-              <TouchableHighlight 
-              underlayColor={base.theme.colors.transparent}
-              onPress={()=>this.selectSOS()}>
-              <Image
-              style={{width: wp("18%"),
-              height: hp("10%"),
-              right: 20,
-              justifyContent: "center"}}
-                source={require('../../../../icons/sos_btn.png')}
-                />
-                </TouchableHighlight>:
-                <View style={{flexDirection:'row',right:45}}>
-                  <TouchableHighlight style={{alignSelf:'flex-end',right:2}} 
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={()=>this.selectSOS()}>
-                  <Text style={{alignSelf:'flex-end',right:5,color:base.theme.colors.red}}>Cancel</Text>
-                  </TouchableHighlight>
-                <TouchableHighlight 
+        {this.props.dropdown.length == 0 ? (
+          <View />
+        ) : (
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              height: 50,
+              width: 50,
+              justifyContent: 'center',
+              marginTop: hp('22%')
+            }}
+          >
+            {!this.state.isSOSSelected ? (
+              <TouchableHighlight
                 underlayColor={base.theme.colors.transparent}
-                onPress={()=>this.props.navigation.navigate("sosScreen",{isActive:false})}>
-                 <CountdownCircle
-                 seconds={5}
-                 radius={25}
-                 borderWidth={7}
-                 color={base.theme.colors.primary}
-                 updateText={(elapsedSeconds, totalSeconds) =>
-                  (""+totalSeconds - elapsedSeconds).toString()+"\nsec"}
-                 bgColor="#fff"
-                 textStyle={{ fontSize: 15,textAlign:'center'}}
-                 onTimeElapsed={() => this.props.navigation.navigate("sosScreen",{isActive:false})}
-             />
-             </TouchableHighlight>
-             </View>
-             }
-            </View>}
+                onPress={() => this.selectSOS()}
+              >
+                <Image
+                  style={{
+                    width: wp('18%'),
+                    height: hp('10%'),
+                    right: 20,
+                    justifyContent: 'center'
+                  }}
+                  source={require('../../../../icons/sos_btn.png')}
+                />
+              </TouchableHighlight>
+            ) : (
+              <View style={{ flexDirection: 'row', right: 45 }}>
+                <TouchableHighlight
+                  style={{ alignSelf: 'flex-end', right: 2 }}
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={() => this.selectSOS()}
+                >
+                  <Text
+                    style={{
+                      alignSelf: 'flex-end',
+                      right: 5,
+                      color: base.theme.colors.red
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={() =>
+                    this.props.navigation.navigate('sosScreen', {
+                      isActive: false
+                    })
+                  }
+                >
+                  <CountdownCircle
+                    seconds={5}
+                    radius={25}
+                    borderWidth={7}
+                    color={base.theme.colors.primary}
+                    updateText={(elapsedSeconds, totalSeconds) =>
+                      ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                    }
+                    bgColor="#fff"
+                    textStyle={{ fontSize: 15, textAlign: 'center' }}
+                    onTimeElapsed={() =>
+                      this.props.navigation.navigate('sosScreen', {
+                        isActive: false
+                      })
+                    }
+                  />
+                </TouchableHighlight>
+              </View>
+            )}
+          </View>
+        )}
       </ElevatedView>
     );
   }
@@ -1884,7 +1966,7 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyespaceReducer: state.OyespaceReducer,
     receiveNotifications: state.NotificationReducer.receiveNotifications,
-    dashBoardReducer: state.DashboardReducer,
+    dashBoardReducer: state.DashboardReducer
   };
 };
 

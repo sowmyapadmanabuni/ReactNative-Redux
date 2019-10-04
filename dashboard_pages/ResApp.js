@@ -71,6 +71,8 @@ import City from '../assocition_pages/City.js';
 import SubscriptionManagement from '../src/screens/Subscription/SubscriptionManagement';
 import PatrolShuffling from '../src/screens/Patrolling/PatrolShuffling';
 
+import Announcement from '../assocition_pages/announcement.js';
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -536,6 +538,13 @@ const ResApp = createStackNavigator({
   },
   sosScreen: {
     screen: CreateSOS,
+    navigationOptions: {
+      header: null
+    }
+  },
+  //Announcement
+  Announcement: {
+    screen: Announcement,
     navigationOptions: {
       header: null
     }

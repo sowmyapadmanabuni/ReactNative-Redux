@@ -318,9 +318,9 @@ class Staff extends React.Component {
                         : <View/>}
 
                         {/* {this.state.staffList.length !== 0 &&
-<AnimatedTouchable animation={'swing'} onPress={()=> this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId, Pic: this.state.staffPic, DeptName:this.state.departmentName})}>
-  <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:'#ff8c00',borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}><Text style={{fontSize:hp('2%'), color:'#ff8c00'}}>Leave with Vendor</Text></View>
-</AnimatedTouchable>
+                            <AnimatedTouchable animation={'swing'} onPress={()=> this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId, Pic: this.state.staffPic, DeptName:this.state.departmentName})}>
+                            <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:base.theme.colors.primary,borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}><Text style={{fontSize:hp('2%'), color:base.theme.colors.primary}}>Leave with Vendor</Text></View>
+                            </AnimatedTouchable>
                         } */}
                 </View>
                 :

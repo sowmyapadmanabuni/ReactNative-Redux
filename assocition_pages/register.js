@@ -739,7 +739,46 @@ class RegisterMe extends Component {
         console.log('matchUnit', matchUnit, memberList);
 
         if (matchUnit) {
-            if (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive) {
+            if (
+              (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive)
+               ||
+              (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
+            ) {
+              status = { stat: true, admin: false };
+              // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+              //   status = true;
+            } else if (matchUnit.mrmRoleID === 1) {
+              status = { stat: false, admin: true };
+            } else {
+              status = { stat: false, admin: false };
+            }
+        } else {
+            status = {stat: false, admin: false};
+        }
+
+        return status;
+    };
+
+     checkFamily = () => {
+        const {memberList} = this.props;
+        const {unitList} = this.props.navigation.state.params;
+
+        let unitID = unitList.unUnitID;
+        let status;
+
+        // console.log(unitID, "unitID");
+        console.log(memberList, 'memberList');
+
+        let matchUnit = _.find(memberList, function (o) {
+            console.log(o, 'values');
+            console.log(o.unUnitID, 'member', unitID, 'unitID');
+            return o.unUnitID === unitID;
+        });
+
+        console.log('matchUnit', matchUnit, memberList);
+
+        if (matchUnit) {
+            if (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive) {
                 status = {stat: true, admin: false};
                 // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
                 //   status = true;
@@ -773,15 +812,18 @@ class RegisterMe extends Component {
         console.log('matchUnit', matchUnit, memberList);
 
         if (matchUnit) {
-            if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-                console.log('In_Here');
-                status = {stat: true, admin: false};
-                // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-                //   status = true;
+            if (
+              (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) ||
+              (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
+            ) {
+              console.log('In_Here');
+              status = { stat: true, admin: false };
+              // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+              //   status = true;
             } else if (matchUnit.mrmRoleID === 1) {
-                status = {stat: false, admin: true};
+              status = { stat: false, admin: true };
             } else {
-                status = {stat: false, admin: false};
+              status = { stat: false, admin: false };
             }
         } else {
             status = {stat: false, admin: false};
@@ -1081,3 +1123,4 @@ export default connect(
     mapStateToProps,
     {updateJoinedAssociation, createUserNotification, getAssoMembers}
 )(RegisterMe);
+

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     ActivityIndicator,
     Alert,
@@ -13,14 +13,14 @@ import {
     View
 } from 'react-native';
 // import Header from "./src/components/common/Header";
-import {NavigationEvents} from 'react-navigation';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import { NavigationEvents } from 'react-navigation';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import moment from 'moment';
-import {DatePickerDialog} from 'react-native-datepicker-dialog';
-import {connect} from 'react-redux';
-import {Button, Card, CardItem, Form, Input, Item} from 'native-base';
+import { DatePickerDialog } from 'react-native-datepicker-dialog';
+import { connect } from 'react-redux';
+import { Button, Card, CardItem, Form, Input, Item } from 'native-base';
 
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../src/assets/selection.json';
 import base from "../../../src/base";
 
@@ -67,7 +67,7 @@ class MyGuests extends Component {
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         let newDataSource = [];
         this.state.dataSource.map(data => {
-            newDataSource.push({...data, open: false});
+            newDataSource.push({ ...data, open: false });
         });
 
         setTimeout(() => {
@@ -163,7 +163,7 @@ class MyGuests extends Component {
                 })
                 .catch(error => {
                     console.log(error);
-                    this.setState({error, loading: false});
+                    this.setState({ error, loading: false });
                 });
         }
     };
@@ -253,7 +253,7 @@ class MyGuests extends Component {
             .catch(error => console.log(error));
     };
 
-    renderItem = ({item, index}) => {
+    renderItem = ({ item, index }) => {
         console.log('Item  Index', item, index);
         return (
             <View
@@ -262,7 +262,7 @@ class MyGuests extends Component {
                     marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0
                 }}
             >
-                <View style={{borderColor: '#707070', borderWidth: wp('0.1%')}}/>
+                <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
                 {/* <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }}>
             <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginTop: hp('1%') }}>Unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
@@ -271,7 +271,7 @@ class MyGuests extends Component {
             <Text style={{ color: '#ff8c00', fontSize: hp('1.6%'), marginRight: hp('1%'), marginTop: hp('1%') }}>{moment(item.indCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>
           </View>
         </View> */}
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                     <View style={styles.iconContainer}>
                         <Text style={styles.contactIcon}>
                             {item.infName[0].toUpperCase()}
@@ -304,44 +304,44 @@ class MyGuests extends Component {
                     <Text style={styles.infoNumber}>{item.inMobile}</Text>
                   </View>
                 </View> */}
-                            <View style={{flexDirection: 'row'}}>
-                                <View style={{flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row' }}>
                                     <Image
                                         source={require('../../../icons/datetime.png')}
-                                        style={{width: hp('1.5%'), height: hp('1.5%')}}
+                                        style={{ width: hp('1.5%'), height: hp('1.5%') }}
                                     />
                                     <Text>{'  '}</Text>
                                 </View>
                                 <View>
-                                    <Text style={{fontSize: hp('1.4%')}}>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
                                         Invitation Valid From:{' '}
                                         {moment(item.insDate, 'YYYY-MM-DD').format('DD-MM-YYYY')}
                                         {'  '}
                                     </Text>
                                 </View>
                                 <View>
-                                    <Text style={{fontSize: hp('1.4%')}}>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
                                         {item.insDate.substring(11, 16)}
                                     </Text>
                                 </View>
                             </View>
-                            <View style={{flexDirection: 'row'}}>
-                                <View style={{flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row' }}>
                                     <Image
                                         source={require('../../../icons/datetime.png')}
-                                        style={{width: hp('1.5%'), height: hp('1.5%')}}
+                                        style={{ width: hp('1.5%'), height: hp('1.5%') }}
                                     />
                                     <Text>{'  '}</Text>
                                 </View>
                                 <View>
-                                    <Text style={{fontSize: hp('1.4%')}}>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
                                         Till:{' '}
                                         {moment(item.ineDate, 'YYYY-MM-DD').format('DD-MM-YYYY')}
                                         {'  '}
                                     </Text>
                                 </View>
                                 <View>
-                                    <Text style={{fontSize: hp('1.4%')}}>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
                                         {item.ineDate.substring(11, 16)}
                                     </Text>
                                 </View>
@@ -387,11 +387,11 @@ class MyGuests extends Component {
                   </View>
                 } */}
 
-                            <View style={{flexDirection: 'column'}}>
+                            <View style={{ flexDirection: 'column' }}>
                                 {/* <View>
                     <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Purpose of Invitation: {item.inpOfInv}</Text>
                   </View> */}
-                                <View style={{flexDirection: 'row'}}>
+                                <View style={{ flexDirection: 'row' }}>
                                     <Text
                                         style={{
                                             fontSize: hp('1.6%'),
@@ -415,7 +415,7 @@ class MyGuests extends Component {
                             paddingRight: 0
                         }}
                     >
-                        <Card style={{paddingTop: 0}}>
+                        <Card style={{ paddingTop: 0 }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     this.props.navigation.navigate('QRCodeGeneration', {
@@ -424,11 +424,11 @@ class MyGuests extends Component {
                                 }}
                             >
                                 <CardItem bordered>
-                                    <Icon color="#ff8c00" name="share" size={hp('2.5%')}/>
+                                    <Icon color="#ff8c00" name="share" size={hp('2.5%')} />
                                 </CardItem>
                             </TouchableOpacity>
                         </Card>
-                        <Card style={{marginTop: 0}}>
+                        <Card style={{ marginTop: 0 }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     {
@@ -439,7 +439,7 @@ class MyGuests extends Component {
                                 }}
                             >
                                 <CardItem bordered>
-                                    <Icon color="#ff8c00" name="call" size={hp('2.5%')}/>
+                                    <Icon color="#ff8c00" name="call" size={hp('2.5%')} />
                                     {/*  */}
                                 </CardItem>
                             </TouchableOpacity>
@@ -493,7 +493,7 @@ class MyGuests extends Component {
           </View>
         </Collapsible> */}
 
-                <View style={{borderColor: '#707070', borderWidth: wp('0.1%')}}/>
+                <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
             </View>
         );
     };
@@ -502,27 +502,14 @@ class MyGuests extends Component {
 
         data[index].open = !value;
 
-        this.setState({dataSource: data});
+        this.setState({ dataSource: data });
     };
 
     render() {
         console.log('Data Sources', this.state.dataSource);
-
-        if (this.state.isLoading) {
-            return (
-                <View style={styles.container}>
-                    {/* <Header /> */}
-
-                    {/* <Text style={styles.titleOfScreen}>My Guests</Text> */}
-
-                    <View style={styles.progress}>
-                        <ActivityIndicator size="large" color="#F3B431"/>
-                    </View>
-                </View>
-            );
-        }
         return (
-            <View style={{flex: 1, marginTop: hp('1%')}}>
+            <View style={{ flex: 1, marginTop: hp('1%') }}>
+
                 {/* <Header /> */}
                 <NavigationEvents
                     onDidFocus={payload => this.getInvitationList()}
@@ -541,7 +528,7 @@ class MyGuests extends Component {
                         <Icon
                             color="#ff8c00"
                             size={hp('2.6%')}
-                            style={{marginRight: hp('1.2%')}}
+                            style={{ marginRight: hp('1.2%') }}
                             name="search"
                         />
                     </Item>
@@ -565,7 +552,7 @@ class MyGuests extends Component {
                         }}
                     >
                         <View>
-                            <Text style={{color: '#38BCDB'}}>From</Text>
+                            <Text style={{ color: '#38BCDB' }}>From</Text>
                         </View>
                         {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                         <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
@@ -582,7 +569,7 @@ class MyGuests extends Component {
                                     <Icon
                                         color="#ff8c00"
                                         size={hp('2%')}
-                                        style={{marginRight: hp('0.5')}}
+                                        style={{ marginRight: hp('0.5') }}
                                         name="cal"
                                     />
                                 </TouchableOpacity>
@@ -591,7 +578,7 @@ class MyGuests extends Component {
 
                         {/* </View> */}
                         <View>
-                            <Text style={{color: '#38BCDB'}}> To </Text>
+                            <Text style={{ color: '#38BCDB' }}> To </Text>
                         </View>
                         {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                         <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
@@ -607,7 +594,7 @@ class MyGuests extends Component {
                                     <Icon
                                         color="#ff8c00"
                                         size={hp('2%')}
-                                        style={{marginRight: hp('0.5%')}}
+                                        style={{ marginRight: hp('0.5%') }}
                                         name="cal"
                                     />
                                 </TouchableOpacity>
@@ -629,7 +616,7 @@ class MyGuests extends Component {
                         <Button
                             bordered
                             warning
-                            style={[styles.buttonUpdateStyle, {justifyContent: 'center'}]}
+                            style={[styles.buttonUpdateStyle, { justifyContent: 'center' }]}
                             onPress={() => this.getInvitationList()}
                         >
                             <Text
@@ -644,9 +631,16 @@ class MyGuests extends Component {
                         </Button>
                     </View>
                 </View>
+                {this.state.isLoading ?
+                    <View style={styles.container}>
+                        <View style={styles.progress}>
+                            <ActivityIndicator size="large" color="#F3B431" />
+                        </View>
+                    </View>
+                    :
                     <FlatList
-                    contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
-                        style={{marginTop: hp('1.5%')}}
+                        contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
+                        style={{ marginTop: hp('1.5%') }}
                         data={this.state.dataSource.sort((a, b) =>
                             b.insDate.localeCompare(a.insDate)
                         )}
@@ -654,28 +648,28 @@ class MyGuests extends Component {
                         keyExtractor={(item, index) => item.inInvtID.toString()}
                         ListEmptyComponent={
                             <View
-                        style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Icon size={hp('10%')} style={{margin: hp('1%')}} name="guest"/>
-                        <Text
-                            style={{
-                                backgroundColor: 'white',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: hp('1.6%')
-                            }}
-                        >
-                            Please invite Guest
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Icon size={hp('10%')} style={{ margin: hp('1%') }} name="guest" />
+                                <Text
+                                    style={{
+                                        backgroundColor: 'white',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: hp('1.6%')
+                                    }}
+                                >
+                                    Please invite Guest
                         </Text>
-                    </View>
+                            </View>
                         }
                     />
-            
+                }
                 <TouchableOpacity
-                    style={[styles.floatButton, {alignSelf: 'center', marginLeft: 2}]}
+                    style={[styles.floatButton, { alignSelf: 'center', marginLeft: 2 }]}
                     onPress={() => this.props.navigation.navigate('InviteGuests')}
                 >
                     <Text
@@ -705,11 +699,10 @@ class MyGuests extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        flexDirection: 'column'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     progress: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },

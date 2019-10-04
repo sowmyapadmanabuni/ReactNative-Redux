@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     ActivityIndicator,
     BackHandler,
@@ -12,14 +12,19 @@ import {
     View
 } from 'react-native';
 // import Header from "./src/components/common/Header";
-import {NavigationEvents} from 'react-navigation';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {connect} from 'react-redux';
-import {DatePickerDialog} from 'react-native-datepicker-dialog';
-import {Button, Card, CardItem, Form, Icon, Input, Item} from 'native-base';
+import { NavigationEvents } from 'react-navigation';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { connect } from 'react-redux';
+import { DatePickerDialog } from 'react-native-datepicker-dialog';
+import { Button, Card, CardItem, Form, Input, Item } from 'native-base';
 import moment from 'moment';
 import Collapsible from 'react-native-collapsible';
 import base from '../../../src/base';
+
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import IcoMoonConfig from '../../../src/assets/selection.json';
+
+const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 let dt = new Date();
 dt.setDate(dt.getDate());
@@ -62,7 +67,7 @@ class MyGuests extends Component {
         let newDataSource = [];
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.state.dataSource.map(data => {
-            newDataSource.push({...data, open: false});
+            newDataSource.push({ ...data, open: false });
         });
         setTimeout(() => {
             self.getInvitationList();
@@ -70,7 +75,7 @@ class MyGuests extends Component {
                 isLoading: false,
                 dataSource: newDataSource
             });
-        }, 2500);
+        }, 1000);
     }
 
     componentDidUpdate() {
@@ -87,7 +92,7 @@ class MyGuests extends Component {
 
     processBackPress() {
         console.log("Part");
-        const {goBack} = this.props.navigation;
+        const { goBack } = this.props.navigation;
         goBack(null);
     }
 
@@ -134,7 +139,7 @@ class MyGuests extends Component {
                 this.arrayholder = responseJson.data.invitation;
             })
             .catch(error => {
-                this.setState({error, loading: false});
+                this.setState({ error, loading: false });
             });
     };
 
@@ -168,7 +173,6 @@ class MyGuests extends Component {
             maxDate: new Date() //To restirct past dates
         });
     };
-
     onDOBDatePicked = date => {
         console.log('Date Piceked !:', date);
 
@@ -178,8 +182,8 @@ class MyGuests extends Component {
         });
     };
 
-    //Date Piker 2
 
+    //Date Piker 2
     onDOBPress1 = () => {
         let dobDate = this.state.dobDate1;
         if (!dobDate || dobDate == null) {
@@ -193,7 +197,6 @@ class MyGuests extends Component {
             maxDate: new Date() //To restirct past dates
         });
     };
-
     onDOBDatePicked1 = date => {
         console.log('Date Piceked !:', date);
         this.setState({
@@ -207,10 +210,10 @@ class MyGuests extends Component {
 
         data[index].open = !value;
 
-        this.setState({dataSource: data});
+        this.setState({ dataSource: data });
     };
 
-    renderItem = ({item, index}) => {
+    renderItem = ({ item, index }) => {
         console.log('List in visited ', item, index);
         return (
             <View
@@ -219,10 +222,10 @@ class MyGuests extends Component {
                     marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0
                 }}
             >
-                <View style={{borderColor: '#707070', borderWidth: wp('0.1%')}}/>
+                <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
 
-                <View style={{flexDirection: 'row'}}>
-                    <View style={{flex: 1}}>
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 1 }}>
                         <Text
                             style={{
                                 fontSize: hp('1.6%'),
@@ -270,13 +273,13 @@ class MyGuests extends Component {
                                 }}
                             />
                         ) : (
-                            <Image
-                                style={styles.profilePicImageStyle}
-                                source={{
-                                    uri: `${this.props.mediaupload}` + item.vlEntryImg
-                                }}
-                            />
-                        )}
+                                <Image
+                                    style={styles.profilePicImageStyle}
+                                    source={{
+                                        uri: `${this.props.mediaupload}` + item.vlEntryImg
+                                    }}
+                                />
+                            )}
                     </View>
                     <TouchableOpacity
                         onPress={() => this.toggleCollapsible(index, item.open)}
@@ -285,83 +288,83 @@ class MyGuests extends Component {
                             <Text style={styles.infoText}>
                                 {item.vlfName} {item.vllName}
                             </Text>
-                            <View style={{flexDirection: 'row'}}>
-                                <View style={{flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row' }}>
                                     <Image
                                         source={require('../../../icons/phone.png')}
-                                        style={{width: hp('1.5%'), height: hp('1.5%')}}
+                                        style={{ width: hp('1.5%'), height: hp('1.5%') }}
                                     />
                                     <Text>{'  '}</Text>
                                 </View>
                                 <Text style={styles.infoNumber}>{item.vlMobile}</Text>
                             </View>
-                            <View style={{flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
                                 <Image
                                     source={require('../../../icons/datetime.png')}
-                                    style={{width: hp('1.5%'), height: hp('1.5%')}}
+                                    style={{ width: hp('1.5%'), height: hp('1.5%') }}
                                 />
                                 <Text>{'  '}</Text>
                                 <View>
-                                    <Text style={{fontSize: hp('1.2%')}}>
+                                    <Text style={{ fontSize: hp('1.2%') }}>
                                         Entry Date:{' '}
                                         {moment(item.vldCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}{' '}
                                     </Text>
                                 </View>
                                 <View>
-                                    <Text style={{fontSize: hp('1.2%')}}>
+                                    <Text style={{ fontSize: hp('1.2%') }}>
                                         Entry Time: {item.vlEntryT.substring(11, 16)}
                                     </Text>
                                 </View>
                             </View>
 
                             {item.vlExitT === '0001-01-01T00:00:00' ? (
-                                <View style={{flexDirection: 'row'}}>
+                                <View style={{ flexDirection: 'row' }}>
                                     <Image
                                         source={require('../../../icons/datetime.png')}
-                                        style={{width: hp('1.5%'), height: hp('1.5%')}}
+                                        style={{ width: hp('1.5%'), height: hp('1.5%') }}
                                     />
                                     <Text>{'  '}</Text>
-                                    <Text style={{fontSize: hp('1.2%')}}>
+                                    <Text style={{ fontSize: hp('1.2%') }}>
                                         Exit Date: N.A.{'  '}
                                     </Text>
-                                    <Text style={{fontSize: hp('1.2%')}}>Exit Time: N.A.</Text>
+                                    <Text style={{ fontSize: hp('1.2%') }}>Exit Time: N.A.</Text>
                                 </View>
                             ) : (
-                                <View style={{flexDirection: 'row'}}>
-                                    <Image
-                                        source={require('../../../icons/datetime.png')}
-                                        style={{width: hp('1.5%'), height: hp('1.5%')}}
-                                    />
-                                    <Text>{'  '}</Text>
-                                    <Text style={{fontSize: hp('1.2%')}}>
-                                        Exit Date:{' '}
-                                        {moment(item.vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
-                                        {'  '}
-                                    </Text>
-                                    <Text style={{fontSize: hp('1.2%')}}>
-                                        Exit Time: {item.vlExitT.substring(11, 16)}
-                                    </Text>
-                                </View>
-                            )}
-                            <View style={{flexDirection: 'row'}}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Image
+                                            source={require('../../../icons/datetime.png')}
+                                            style={{ width: hp('1.5%'), height: hp('1.5%') }}
+                                        />
+                                        <Text>{'  '}</Text>
+                                        <Text style={{ fontSize: hp('1.2%') }}>
+                                            Exit Date:{' '}
+                                            {moment(item.vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
+                                            {'  '}
+                                        </Text>
+                                        <Text style={{ fontSize: hp('1.2%') }}>
+                                            Exit Time: {item.vlExitT.substring(11, 16)}
+                                        </Text>
+                                    </View>
+                                )}
+                            <View style={{ flexDirection: 'row' }}>
                                 <Image
                                     source={require('../../../icons/location.png')}
-                                    style={{width: hp('2%'), height: hp('2%')}}
+                                    style={{ width: hp('2%'), height: hp('2%') }}
                                 />
                                 <Text> </Text>
-                                <Text style={{fontSize: hp('1.2%')}}>
+                                <Text style={{ fontSize: hp('1.2%') }}>
                                     Entry Gate: {item.vlengName}
                                     {'  '}
                                 </Text>
                                 {item.vlexgName === '' ? (
                                     <View></View>
                                 ) : (
-                                    <View>
-                                        <Text style={{fontSize: hp('1.2%')}}>
-                                            Exit Gate: {item.vlexgName}
-                                        </Text>
-                                    </View>
-                                )}
+                                        <View>
+                                            <Text style={{ fontSize: hp('1.2%') }}>
+                                                Exit Gate: {item.vlexgName}
+                                            </Text>
+                                        </View>
+                                    )}
                             </View>
                             {/* {item.open ?
                   <View></View> :
@@ -374,8 +377,8 @@ class MyGuests extends Component {
                 } */}
                         </View>
                     </TouchableOpacity>
-                    <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 0}}>
-                        <Card style={{marginTop: 0}}>
+                    <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 0 }}>
+                        <Card style={{ marginTop: 0 }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     {
@@ -396,11 +399,11 @@ class MyGuests extends Component {
                     </View>
                 </View>
                 <Collapsible duration={100} collapsed={!item.open}>
-                    <View style={{flexDirection: 'column'}}>
-                        <View style={{flexDirection: 'row', marginBottom: hp('0.5%')}}>
-                            <Text style={{fontSize: hp('1.6%'), marginLeft: hp('1%')}}>
+                    <View style={{ flexDirection: 'column' }}>
+                        <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
+                            <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%') }}>
                                 Visited On:{' '}
-                                <Text style={{color: '#38bcdb'}}>
+                                <Text style={{ color: '#38bcdb' }}>
                                     {moment(item.vldCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
                                 </Text>{' '}
                             </Text>
@@ -439,42 +442,29 @@ class MyGuests extends Component {
                         {!item.open ? (
                             <View></View>
                         ) : (
-                            <View style={{marginBottom: hp('1%'), marginTop: hp('1%')}}>
-                                <View
-                                    style={{
-                                        borderBottomWidth: hp('0.1%'),
-                                        borderBottomColor: '#474749',
-                                        width: hp('5%'),
-                                        justifyContent: 'center',
-                                        alignSelf: 'center',
-                                        marginLeft: hp('3%')
-                                    }}
-                                ></View>
-                            </View>
-                        )}
+                                <View style={{ marginBottom: hp('1%'), marginTop: hp('1%') }}>
+                                    <View
+                                        style={{
+                                            borderBottomWidth: hp('0.1%'),
+                                            borderBottomColor: '#474749',
+                                            width: hp('5%'),
+                                            justifyContent: 'center',
+                                            alignSelf: 'center',
+                                            marginLeft: hp('3%')
+                                        }}
+                                    ></View>
+                                </View>
+                            )}
                     </View>
                 </Collapsible>
-                <View style={{borderColor: '#707070', borderWidth: wp('0.1%')}}/>
+                <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
             </View>
         );
     };
 
     render() {
-        if (this.state.isLoading) {
-            return (
-                <View style={styles.contaianer}>
-                    {/* <Header /> */}
-
-                    {/* <Text style={styles.titleOfScreen}>My Guests</Text> */}
-
-                    <View style={styles.progress}>
-                        <ActivityIndicator size="large" color="#F3B431"/>
-                    </View>
-                </View>
-            );
-        }
         return (
-            <View style={{flex: 1, marginTop: hp('1%')}}>
+            <View style={{ flex: 1, marginTop: hp('1%') }}>
                 {/* <Header /> */}
                 <NavigationEvents
                     onDidFocus={payload => this.getInvitationList()}
@@ -491,7 +481,7 @@ class MyGuests extends Component {
                             onChangeText={this.searchFilterFunction}
                         />
 
-                        <Icon style={styles.icon} name="search" size={14}/>
+                        <Icon style={styles.icon} name="search" size={14} />
                     </Item>
                 </Form>
 
@@ -514,7 +504,7 @@ class MyGuests extends Component {
                         }}
                     >
                         <View>
-                            <Text style={{color: '#38BCDB'}}>From</Text>
+                            <Text style={{ color: '#38BCDB' }}>From</Text>
                         </View>
                         {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                         <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
@@ -538,7 +528,7 @@ class MyGuests extends Component {
 
                         {/* </View> */}
                         <View>
-                            <Text style={{color: '#38BCDB'}}> To </Text>
+                            <Text style={{ color: '#38BCDB' }}> To </Text>
                         </View>
                         {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                         <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
@@ -574,7 +564,7 @@ class MyGuests extends Component {
                         <Button
                             bordered
                             warning
-                            style={[styles.buttonUpdateStyle, {justifyContent: 'center'}]}
+                            style={[styles.buttonUpdateStyle, { justifyContent: 'center' }]}
                             onPress={() => this.getInvitationList()}
                         >
                             <Text
@@ -590,10 +580,16 @@ class MyGuests extends Component {
                     </View>
                 </View>
 
-                
+                {this.state.isLoading ?
+                    <View style={styles.contaianer}>
+                        <View style={styles.progress}>
+                            <ActivityIndicator size="large" color="#F3B431" />
+                        </View>
+                    </View>
+                    :
                     <FlatList
-                    contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
-                        style={{marginTop: hp('1.5%')}}
+                        contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
+                        style={{ marginTop: hp('1.5%') }}
                         data={this.state.dataSource.sort((a, b) =>
                             a.vlfName.localeCompare(b.vlfName)
                         )}
@@ -601,27 +597,26 @@ class MyGuests extends Component {
                         keyExtractor={(item, index) => item.vlVisLgID.toString()}
                         ListEmptyComponent={
                             <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: 'white'
-                        }}
-                    >
-                        <Text
-                            style={{
-                                backgroundColor: 'white',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: hp('1.8%')
-                            }}
-                        >
-                            No Data Available.
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Icon size={hp('10%')} style={{ margin: hp('1%') }} name="guest" />
+                                <Text
+                                    style={{
+                                        backgroundColor: 'white',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: hp('1.6%')
+                                    }}
+                                >
+                                    No Data Available.
                         </Text>
-                    </View>
+                            </View>
                         }
                     />
-                
+                }
             </View>
         );
     }
@@ -630,11 +625,10 @@ class MyGuests extends Component {
 const styles = StyleSheet.create({
     contaianer: {
         flex: 1,
-        backgroundColor: '#fff',
-        flexDirection: 'column'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     progress: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
     },

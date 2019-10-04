@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import HeaderStyles from './HeaderStyles';
 import { Icon, withBadge } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import MarqueeText from 'react-native-marquee';
 
 class DashBoardHeader extends React.Component {
   constructor(props) {
@@ -123,14 +124,29 @@ class DashBoardHeader extends React.Component {
                     this.props.navigation.navigate('MyProfileScreen');
                   }}
                 >
-                  <Text
-                    style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
-                    numberOfLines={1}
+                  <MarqueeText
+                    style={HeaderStyles.residentName}
+                    duration={3000}
+                    marqueeOnStart
+                    loop
+                    marqueeDelay={1000}
+                    marqueeResetDelay={1000}
                   >
                     {this.props.userReducer.userData
                       ? this.props.userReducer.userData.data.account[0].acfName
                       : null}
-                  </Text>
+                  </MarqueeText>
+                  {/* <Text
+                    style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
+                    numberOfLines={1}
+                  >
+                    {this.props.userReducer.userData
+                      ? this.props.userReducer.userData.data.account[0].acfName.substring(
+                          0,
+                          8
+                        )
+                      : null}
+                  </Text> */}
                 </TouchableOpacity>
                 {this.props.userReducer.SelectedAssociationID != null ? (
                   <Text style={HeaderStyles.statusText} numberOfLines={1}>
@@ -148,7 +164,7 @@ class DashBoardHeader extends React.Component {
                 this.props.navigation.navigate('MyProfileScreen');
               }}
             >
-              <View style={HeaderStyles.textContainer}>
+              <View style={HeaderStyles.qrcode}>
                 <Image
                   style={HeaderStyles.qrcodeStyles}
                   source={require('../../../icons/qr_profile.png')}

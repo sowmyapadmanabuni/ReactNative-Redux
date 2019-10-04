@@ -43,7 +43,8 @@ const StaffStyle = StyleSheet.create({
     marginRight: 2
   },
   staffText1: {
-    fontSize: 15,
+    fontSize: hp('1.6%'),
+    fontWeight: '500',
     color: base.theme.colors.black
   },
   desigText: {
