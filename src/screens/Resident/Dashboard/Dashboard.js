@@ -114,6 +114,34 @@ class Dashboard extends PureComponent {
     });
   }
 
+  readFBRTB(isNotificationClicked){
+    const {dropdown} = this.props;
+    let count = 0;
+    for(let i in dropdown){
+      let SelectedAssociationID = parseInt(dropdown[i].associationId);
+      let MyAccountID = this.props.userReducer.MyAccountID;
+      let self = this;
+      fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
+        let receivedData = snapshot.val();
+        console.log("ReceiveddataDash", snapshot.val());
+        if (receivedData !== null) {
+          count = count+1;
+          if(receivedData.isActive && receivedData.userId){
+           self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+          }
+        }
+      });
+    }
+
+    if(count===0 && isNotificationClicked){
+      this.props.navigation.navigate('NotificationScreen')
+    }
+  }
+
+  navigateToNotificationScreen(){
+
+  }
+
   listenRoleChange() {
     const { MyAccountID, dropdown } = this.props;
     let path = 'rolechange/' + MyAccountID;
@@ -389,7 +417,7 @@ class Dashboard extends PureComponent {
         });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {
-        const { MyAccountID } = this.props.userReducer;
+        const { MyAccountID ,SelectedAssociationID} = this.props.userReducer;
         const { oyeURL } = this.props.oyespaceReducer;
         let details = notificationOpen.notification._data;
         if (notificationOpen.notification._data.admin === 'true') {
@@ -457,7 +485,25 @@ class Dashboard extends PureComponent {
         } else if (notificationOpen.notification._data.admin === 'false') {
         }
         // this.props.getNotifications(oyeURL, MyAccountID);
-        this.props.navigation.navigate('NotificationScreen');
+        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+        // let self = this;
+        // // const { MyAccountID, SelectedAssociationID } = self.props.userReducer;
+
+        // fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
+        // let receivedData = snapshot.val();
+        // console.log("ReceiveddataDash", snapshot.val());
+        // if (receivedData !== null) {
+        //   if(receivedData.isActive && receivedData.userId){
+        //    //self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+        //   }
+        //   else{
+        //     self.props.navigation.navigate('NotificationScreen');
+        //   }
+
+        //     }
+        // });
+        this.readFBRTB(true);
+        //this.props.navigation.navigate('NotificationScreen');
       });
     }
   };
@@ -501,27 +547,28 @@ class Dashboard extends PureComponent {
       getDashSub,
       getDashAssociation,
       getAssoMembers,
-      receiveNotifications
+      receiveNotifications,
+      dropdown
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
+    
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
-    let self = this;
+    // let self = this;
+    //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
+    //     let receivedData = snapshot.val();
+    //     console.log("ReceiveddataDash", snapshot.val());
+    //     if (receivedData !== null) {
+    //       if(receivedData.isActive && receivedData.userId){
+    //        self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+    //       }
 
-      fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
-        let receivedData = snapshot.val();
-        console.log("ReceiveddataDash", snapshot.val());
-        if (receivedData !== null) {
-          if(receivedData.isActive && receivedData.userId){
-           self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
-          }
-
-            }
-        });
+    //         }
+    //     });
 
     //Adding an event listner om focus
     //So whenever the screen will have focus it will set the state to zero
@@ -530,15 +577,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-     timer.setInterval(
-     this,
-      'syncData',
-      () => {
-      this.syncData();
-    //     // alert("hererereerrrereer");
-      },
-       5000
-     );
+    //  timer.setInterval(
+    //  this,
+    //   'syncData',
+    //   () => {
+    //   this.syncData();
+    // //     // alert("hererereerrrereer");
+    //   },
+    //    5000
+    //  );
   }
 
   async roleCheckForAdmin(index) {
@@ -712,6 +759,7 @@ class Dashboard extends PureComponent {
               value: sortedArr[0].details.asAssnID
             });
             base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+           
             self.getUnitListByAssoc();
           } else if (!stat.data.success) {
             this.setState({
@@ -901,6 +949,7 @@ class Dashboard extends PureComponent {
           // unitId: unitList[0].details.unUnitID,
           isDataVisible: true
         });
+        self.readFBRTB(false);
         console.log('updateIdDashboard3', this.props);
         // updateIdDashboard({
         //     prop: "uniID",
@@ -1613,13 +1662,13 @@ class Dashboard extends PureComponent {
           >
             <Text>View All Visitors</Text>
           </Button>
-          <Button
-            bordered
-            style={styles.button1}
-            onPress={() => this.props.navigation.navigate('schedulePatrolling')}
-          >
-            <Text>Patrolling</Text>
-          </Button>
+           {/* <Button
+             bordered
+             style={styles.button1}
+             onPress={() => this.props.navigation.navigate('schedulePatrolling')}
+           >
+             <Text>Patrolling</Text>
+           </Button> */}
       <Button
               bordered
               style={styles.button1}

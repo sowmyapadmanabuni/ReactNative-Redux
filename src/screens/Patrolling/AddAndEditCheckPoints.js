@@ -14,10 +14,12 @@ import {
     Platform,
     ScrollView,
     Text,
-    View
+    View,
+    TouchableHighlight,
+    Animated,Easing
 } from 'react-native';
 import {connect} from 'react-redux';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../base";
 import {TextField} from "react-native-material-textfield";
 import OSButton from "../../components/osButton/OSButton";
@@ -29,6 +31,10 @@ import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
 import Geolocation from 'react-native-geolocation-service';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import wifi from 'react-native-android-wifi';
+import LottieView from 'lottie-react-native';
+import Modal from "react-native-modal";
+
+
 
 var RNFS = require('react-native-fs');
 
@@ -71,10 +77,12 @@ class AddAndEditCheckPoints extends React.Component {
             longitude: 0,
             isSet: false,
             lastLatLong: 0,
-            locationArrStored: []
-
+            locationArrStored: [],
+            isLottieModalOpen:false,
+            progress: new Animated.Value(0),
         });
 
+        this.thread = null;
 
         this.getUserLocation = this.getUserLocation.bind(this)
 
@@ -89,6 +97,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentDidUpdate() {
+        
         setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
         }, 100)
@@ -212,8 +221,12 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     componentDidMount() {
+       
         this.watchuserPosition();
+    }
 
+    handleLocationThread = (message) =>{
+        console.log("Message Recevied from Thread:",message);
     }
 
     watchuserPosition() {
@@ -439,11 +452,22 @@ class AddAndEditCheckPoints extends React.Component {
             // })
             // }
             // else{
-            this.addCheckPoint();
-            //}
-
-        }
-    }
+                this.setState({isLottieModalOpen:true})
+                Animated.timing(this.state.progress, {
+                    toValue: 1,
+                    duration: 5000,
+                    easing: Easing.linear,
+                  }).start();
+                  setTimeout(()=>{
+                    this.setState({
+                        isLottieModalOpen:false
+                    })
+                  },7000)
+                  setTimeout(()=>{
+                    this.addCheckPoint();
+                  },7500)
+            }
+    }ifc
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);
@@ -490,7 +514,20 @@ class AddAndEditCheckPoints extends React.Component {
                             {cancelable: false},
                         );
                     } else {
-                        alert("Oops, Something went wrong\n Possible Reason:-" + stat.error.message);
+                        let errMessage = stat.error.message;
+                        Alert.alert(
+                            'Error',
+                            errMessage,
+                            [
+                                {
+                                    text: "Got It",
+                                    onPress: () => self.props.navigation.navigate('patrollingCheckPoint', {isRefreshing: true})
+                                },
+                            ],
+                            {cancelable: false},
+                        );
+                        // alert("Oops, Something went wrong\n Possible Reason:-" + stat.error.message);
+                        // self.props.navigation.navigate('patrollingCheckPoint', {isRefreshing: true})
                     }
                 }
             } catch (e) {
@@ -601,7 +638,44 @@ class AddAndEditCheckPoints extends React.Component {
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>
+                {this.openLottieModal()}
             </ScrollView>
+        )
+    }
+
+    openLottieModal(){
+        return(
+            <Modal isVisible={this.state.isLottieModalOpen}
+            animationOutTiming={500}
+            backdropOpacity={0.12}
+                   style={{
+                        top:hp('35'),
+                        flex:0.3,
+                        backgroundColor: base.theme.colors.white,
+                        alignSelf: 'center',
+                        justifySelf:'center',
+                        justifyContent:'center',
+                         width: wp('55%'),
+                         borderRadius:hp('20'),
+                         flexDirection:'row',
+                         height:hp('50%'),
+                         width:wp('60')
+                        }}>
+                            
+                       <LottieView
+                            progress={this.state.progress}
+                            loop={true}
+                            style={{
+                               
+                                backgroundColor: base.theme.colors.white,
+                                alignSelf: 'center',
+                                justifyContent:'center',
+                                }}
+                            source={require('../../assets/gps.json')}
+                        />
+                        <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
+                        
+                   </Modal>
         )
     }
 }

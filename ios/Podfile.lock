@@ -176,16 +176,8 @@ PODS:
     - React
   - RNGestureHandler (1.0.16):
     - React
-<<<<<<< HEAD
-=======
-  - RNSound (0.11.0):
+  - RNSVG (9.9.9):
     - React
-    - RNSound/Core (= 0.11.0)
-  - RNSound/Core (0.11.0):
-    - React
-  - RNSVG (9.9.6):
-    - React
->>>>>>> 6b230ab32addcd12505e9137848795b786e46825
   - RNVectorIcons (6.6.0):
     - React
   - RNViewShot (2.6.0):
@@ -226,11 +218,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-<<<<<<< HEAD
-=======
-  - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
->>>>>>> 6b230ab32addcd12505e9137848795b786e46825
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNViewShot (from `../node_modules/react-native-view-shot`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -285,13 +273,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-<<<<<<< HEAD
-=======
-  RNSound:
-    :path: "../node_modules/react-native-sound"
   RNSVG:
     :path: "../node_modules/react-native-svg"
->>>>>>> 6b230ab32addcd12505e9137848795b786e46825
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   RNViewShot:
@@ -331,19 +314,11 @@ SPEC CHECKSUMS:
   RNDeviceInfo: a88be26a64ada7cbc2bc0ebbd1662d340304874e
   RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
   RNGestureHandler: 0438a761e8f29be3b809f9e7e43014f3aba4d7a6
-<<<<<<< HEAD
-=======
-  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
-  RNSVG: 7364057921be1c8d234642bb2bd001a6c4a8f313
->>>>>>> 6b230ab32addcd12505e9137848795b786e46825
+  RNSVG: b7e8745a87c046386569eecb437b3040cc6a7954
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-<<<<<<< HEAD
-PODFILE CHECKSUM: 96cd4f14b116efeaee90130a2cc18fc10432ab8d
-=======
-PODFILE CHECKSUM: db1694e6d1f07896109370c2e99cd0c3a00e4c83
->>>>>>> 6b230ab32addcd12505e9137848795b786e46825
+PODFILE CHECKSUM: dc49e79db2619dd2a5fcd041c4862181c66e43e2
 
 COCOAPODS: 1.7.4
