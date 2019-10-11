@@ -201,12 +201,12 @@ class MyProfile extends Component {
                 <View style={styles.viewForMyProfileText}>
                   <Text
                     style={{
-                      fontSize: hp('2.5%'),
+                      fontSize: hp('2%'),
                       color: base.theme.colors.primary,
                       textAlign: 'center'
                     }}
                   >
-                    My Profile
+                    My Profile / Resident ID
                   </Text>
                 </View>
                 <View style={styles.editButtonViewStyle}>
@@ -380,7 +380,7 @@ class MyProfile extends Component {
                   >
                     <QRCode
                       logo={require('../icons/oyesafe_qr_logo.png')}
-                      logoSize={hp('6%')}
+                      logoSize={hp('8%')}
                       size={hp('20%')}
                       content={this.state.number}
                       codeStyle="square"
@@ -484,10 +484,10 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   emptyViewStyle: {
-    width: '30%'
+    width: hp('5%')
   },
   viewForMyProfileText: {
-    width: '35%',
+    flex: 1,
     justifyContent: 'center',
     alignSelf: 'center'
   },
@@ -497,18 +497,14 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
   editButtonViewStyle: {
-    width: '30%',
-    alignItems: 'flex-end',
+    width: hp('5%'),
+    alignItems: 'center',
     justifyContent: 'center'
   },
   editButtonImageStyle: {
     width: hp('3.5%'),
-    height: hp('3.5%'),
-    marginRight: 10
-  },
-  editButtonImageStyle1: {
-    width: hp('3.5%'),
     height: hp('3.5%')
+    // marginRight: 10
   },
   containerView_ForProfilePicViewStyle: {
     justifyContent: 'center',

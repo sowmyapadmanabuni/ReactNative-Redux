@@ -34,7 +34,12 @@ const HeaderStyles = StyleSheet.create({
     marginRight: 20
   },
   textContainer: {
-    marginLeft: 5
+    marginLeft: 5,
+    width: hp('6%')
+  },
+  qrcode: {
+    // marginLeft: 5,
+    alignSelf: 'flex-start'
   },
   residentName: {
     fontSize: 14,
