@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import {updateStaffInfo} from "../../../../actions";
 import StaffStyle from "./StaffStyle";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import * as Animatable from 'react-native-animatable';
 
 class Staff extends React.Component {
     constructor(props) {
@@ -105,6 +106,7 @@ class Staff extends React.Component {
     render() {
         let staffList = this.state.staffList;
         console.log('Add', this.state.staffPic);
+        const AnimatedTouchable = Animatable.createAnimatableComponent(TouchableOpacity);
         return (
             !this.state.isLoading ?
                 <View style={StaffStyle.mainContainer}>
@@ -314,6 +316,12 @@ class Staff extends React.Component {
                             oSBText={'Get Report'}
                             onButtonClick={() => this.getStaffReport()}/>
                         : <View/>}
+
+                        {/* {this.state.staffList.length !== 0 &&
+<AnimatedTouchable animation={'swing'} onPress={()=> this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId, Pic: this.state.staffPic, DeptName:this.state.departmentName})}>
+  <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:'#ff8c00',borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}><Text style={{fontSize:hp('2%'), color:'#ff8c00'}}>Leave with Vendor</Text></View>
+</AnimatedTouchable>
+                        } */}
                 </View>
                 :
                 <View style={StaffStyle.activityIndicator}>

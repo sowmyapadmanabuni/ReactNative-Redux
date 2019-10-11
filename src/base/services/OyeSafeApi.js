@@ -63,6 +63,13 @@ export default class OyeSafeApi {
         return await instance.post('CheckPointGPS/Update', details)
     }
 
+
+    static async getCheckPointListBySlotId(scheduleId){
+        console.log("getCheckPointListBySlotId:",scheduleId);
+
+        return await instance.get(`GetCheckPointNamesByPatrollingSchedule/${scheduleId}`)
+    }
+
     static async getCheckPointList(associationId) {
         return await instance.get('CheckPoint/GetCheckPointByAssocID/' + associationId)
     }
@@ -81,6 +88,10 @@ export default class OyeSafeApi {
 
     static async deleteCP(detail) {
         return await instance.post('CheckPoint/DeleteCheckPoint', detail)
+    }
+
+    static async deteleCPFromSlot(detail){
+        return await instance.post('PatrollingShiftSlotCheckPointDelete',detail)
     }
 
     static async deletePatrolSlot(detail) {

@@ -14,19 +14,19 @@ import {
     TouchableHighlight,
     View
 } from 'react-native';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
 import OyeSafeApi from "../../base/services/OyeSafeApi";
 import CheckBox from 'react-native-check-box';
 import ElevatedView from 'react-native-elevated-view';
 import EmptyView from "../../components/common/EmptyView";
-import {updateSelectedCheckPoints} from '../../../src/actions';
+import { updateSelectedCheckPoints } from '../../../src/actions';
 import Modal from "react-native-modal";
-import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
 
-const {height, width} = Dimensions.get('screen');
+const { height, width } = Dimensions.get('screen');
 
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
@@ -53,16 +53,19 @@ class PatrollingCheckPoints extends React.Component {
             selectedArray: [],
             checkedArray: [],
             points: [],
-            selectedCP: []
+            selectedCP: [],
+            receivedCP: []
         };
         this.getCheckPoints = this.getCheckPoints.bind(this);
+        console.log("Receicved Porp@@@@@@@@@:", props)
     };
 
     componentWillMount() {
         this.getCheckPoints(false);
 
         if (this.props.navigation.state.params !== undefined) {
-            this.setState({isEditing: true})
+            this.setState({ isEditing: true })
+            this.getCheckPointListBySlotId()
         }
 
         // this.updateStore();
@@ -83,7 +86,7 @@ class PatrollingCheckPoints extends React.Component {
 
     processBackPress() {
         console.log("Part");
-        const {goBack} = this.props.navigation;
+        const { goBack } = this.props.navigation;
         goBack(null);
     }
 
@@ -93,10 +96,31 @@ class PatrollingCheckPoints extends React.Component {
         if (nextProps.navigation.state.params !== undefined) {
             if (nextProps.navigation.state.params.isRefreshing === true) {
                 nextProps.navigation.state.params.isRefreshing = false;
-                this.getCheckPoints(true);
+                //this.getCheckPoints(true);
+                this.getCheckPointListBySlotId()
             }
 
         }
+    }
+
+
+    async getCheckPointListBySlotId() {
+        let data = this.props.navigation.state.params;
+        let self = this;
+        console.log("getCheckPointListBySlotId:", data);
+
+        let stat = await OyeSafeApi.getCheckPointListBySlotId(data.data.psPtrlSID);
+        console.log("getCheckPointListBySlotId:", data, stat);
+        try {
+            if (stat.success) {
+                self.setState({
+                    receivedCP: stat.data.checkPointsBySchedule[0].point
+                }, () => self.getCheckPoints(true))
+            }
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
 
@@ -125,7 +149,7 @@ class PatrollingCheckPoints extends React.Component {
                         checkPointArray: cpList
                     }, () => this.updateStore(cpList))
                 } else if (this.props.navigation.state.params !== undefined && this.props.navigation.state.params.data !== undefined) {
-                    let cpListIDs = this.props.navigation.state.params.data.point;
+                    let cpListIDs = this.state.receivedCP;
                     console.log("CPLISTID:", cpListIDs, cpList);
                     let cpArr = [];
                     for (let i in cpListIDs) {
@@ -187,7 +211,7 @@ class PatrollingCheckPoints extends React.Component {
     }
 
     componentWillUnmount() {
-        updateSelectedCheckPoints({value: null});
+        updateSelectedCheckPoints({ value: null });
     }
 
     onBackButtonPressAndroid() {
@@ -208,24 +232,24 @@ class PatrollingCheckPoints extends React.Component {
                             keyExtractor={(item, index) => index.toString()}
                             data={this.state.checkPointArray}
                             renderItem={(item, index) => this._renderCheckPoints(item, index)}
-                            extraData={this.state}/> :
-                        <View style={{justifyContent: 'center'}}>
+                            extraData={this.state} /> :
+                        <View style={{ justifyContent: 'center' }}>
                             <Text>No Check Points available</Text>
                         </View>}
                 </View>
-                <FloatingActionButton onBtnClick={() => this.props.navigation.navigate('addCheckPoint')}/>
+                <FloatingActionButton onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
             </View>
         )
     }
 
     editCheckPoint(data) {
-        this.props.navigation.navigate("addCheckPoint", {data: data})
+        this.props.navigation.navigate("addCheckPoint", { data: data })
     }
 
 
     updateStore(cpListArray) {
         let cpList = cpListArray;
-        const {updateSelectedCheckPoints} = this.props;
+        const { updateSelectedCheckPoints } = this.props;
         console.log("CP List Array:", cpListArray, this.props);
         let selectedCPArr = [];
         for (let i in cpList) {
@@ -234,24 +258,24 @@ class PatrollingCheckPoints extends React.Component {
             }
         }
         console.log("Selected CP:", cpListArray);
-        updateSelectedCheckPoints({value: selectedCPArr});
+        updateSelectedCheckPoints({ value: selectedCPArr });
         this.updateCheckList(cpListArray)
     }
 
     openMapModal() {
         return (
             <Modal isVisible={this.state.isModalOpen}
-                   style={PatrollingCheckPointsStyles.mapViewModal}>
+                style={PatrollingCheckPointsStyles.mapViewModal}>
                 <View
                     style={PatrollingCheckPointsStyles.modalView}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                         <View>
                             <Text style={PatrollingCheckPointsStyles.modalText}>{this.state.cpName}</Text>
                         </View>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             style={PatrollingCheckPointsStyles.modalTouchable}
-                            onPress={() => this.setState({isModalOpen: false})}>
+                            onPress={() => this.setState({ isModalOpen: false })}>
                             <Text style={PatrollingCheckPointsStyles.modalText}>Close</Text>
                         </TouchableHighlight>
                     </View>
@@ -285,9 +309,9 @@ class PatrollingCheckPoints extends React.Component {
         return (
             <View>
                 <Marker key={1024}
-                        pinColor={base.theme.colors.primary}
-                        style={PatrollingCheckPointsStyles.marker}
-                        coordinate={{latitude: lat, longitude: long}}>
+                    pinColor={base.theme.colors.primary}
+                    style={PatrollingCheckPointsStyles.marker}
+                    coordinate={{ latitude: lat, longitude: long }}>
 
                 </Marker>
             </View>
@@ -318,7 +342,7 @@ class PatrollingCheckPoints extends React.Component {
         console.log("Sliced GPS Point:", slicedGPSPNTS);
         let dataToBeSent = `${dataForQR.cpCkPName}, ${slicedGPSPNTS[0]},${slicedGPSPNTS[1]},${dataForQR.asAssnID},${dataForQR.cpChkPntID},QR_CODE`;
         console.log("Data To Be Sent:", dataToBeSent);
-        this.props.navigation.navigate('qrScreen', {dataToBeSent})
+        this.props.navigation.navigate('qrScreen', { dataToBeSent })
 
     }
 
@@ -334,11 +358,11 @@ class PatrollingCheckPoints extends React.Component {
                         onClick={() => {
                             this.setCheckVal(data)
                         }}
-                        isChecked={item.item.isChecked}/>
+                        isChecked={item.item.isChecked} />
                 </View>
                 <TouchableHighlight onPress={() => this.mapModal(data)}
-                                    underlayColor={base.theme.colors.transparent}
-                                    style={{justifyContent: 'center'}}>
+                    underlayColor={base.theme.colors.transparent}
+                    style={{ justifyContent: 'center' }}>
                     <View>
                         <Image
                             style={PatrollingCheckPointsStyles.mapImage}
@@ -361,7 +385,7 @@ class PatrollingCheckPoints extends React.Component {
                             source={require('../../../icons/location.png')}
                         />
                         <Text numberOfLines={1}
-                              style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>
+                            style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>
                     </View>
                     <View style={PatrollingCheckPointsStyles.centerTextView}>
                         <Text style={PatrollingCheckPointsStyles.centerTextStyle}>Type:- {data.item.cpcPntAt}</Text>
@@ -373,25 +397,25 @@ class PatrollingCheckPoints extends React.Component {
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.navigateToQRScree(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
-                                   source={require('../../../icons/qr-codes.png')}/>
+                                source={require('../../../icons/qr-codes.png')} />
                         </TouchableHighlight>
                     </ElevatedView>
-                    <EmptyView height={10}/>
+                    <EmptyView height={10} />
                     <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.editCheckPoint(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
-                                   source={require('../../../icons/edit.png')}/>
+                                source={require('../../../icons/edit.png')} />
                         </TouchableHighlight>
                     </ElevatedView>
-                    <EmptyView height={10}/>
+                    <EmptyView height={10} />
                     <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.deleteCheckPoint(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
-                                   source={require('../../../icons/delete.png')}/>
+                                source={require('../../../icons/delete.png')} />
                         </TouchableHighlight>
                     </ElevatedView>
                 </View>
@@ -401,6 +425,7 @@ class PatrollingCheckPoints extends React.Component {
     }
 
     deleteCheckPoint(data) {
+
         Alert.alert(
             'Attention',
             'Are you sure you want to delete this checkpoint ?',
@@ -410,10 +435,57 @@ class PatrollingCheckPoints extends React.Component {
                     onPress: () => console.log('Deletion Cancelled'),
                     style: 'cancel',
                 },
-                {text: 'Yes', onPress: () => this.deleteCP(data)},
+                { text: 'Yes', onPress: () => this.selectDeleteType(data) },
             ],
-            {cancelable: false},
+            { cancelable: false },
         );
+    }
+
+    selectDeleteType(data) {
+        (this.state.isEditing) ? this.deleteSlotCP(data) : this.deleteCP(data);
+    }
+
+
+
+
+    async deleteSlotCP(data) {
+        let self = this;
+        let receivedCP = self.state.receivedCP;
+        console.log("Hitting11111:", data.item.cpChkPntID, receivedCP)
+        let tempArr = self.state.checkPointArray;
+        let matchItem = false;
+        for (let i in receivedCP) {
+            console.log("Hitting11111344364:", data.item.cpChkPntID, receivedCP[i])
+
+            if (data.item.cpChkPntID === receivedCP[i].psChkPID) {
+                console.log("Hitting111112", receivedCP[i].psChkPID)
+                matchItem = true;
+            }
+
+        }
+        if (matchItem) {
+            alert("You can't delete an active check point")
+        }
+        else {
+            self.spliceArr(data.item.cpChkPntID)
+        }
+
+
+    }
+
+
+    spliceArr(cpId) {
+        let cpArr = this.state.checkPointArray
+        for (let i in cpArr) {
+            if (cpId === cpArr[i].cpChkPntID) {
+                cpArr.splice(i, 1)
+            }
+        }
+
+        this.setState({
+            checkPointArray: cpArr
+        }, () => this.updateStore(cpArr))
+
     }
 
     async deleteCP(data) {
@@ -481,4 +553,4 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps, {updateSelectedCheckPoints})(PatrollingCheckPoints);
+export default connect(mapStateToProps, { updateSelectedCheckPoints })(PatrollingCheckPoints);

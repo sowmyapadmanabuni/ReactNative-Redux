@@ -245,7 +245,7 @@ class AddAndEditCheckPoints extends React.Component {
                     },
                     gpsLocation: parseFloat(LocationData.latitude).toFixed(5) + "," + parseFloat(LocationData.longitude).toFixed(5),
                     locationArrStored: locationArrStored
-                })
+                },()=>this.renderUserLocation())
             },
             (error) => {
                 console.log(error);
@@ -382,11 +382,13 @@ class AddAndEditCheckPoints extends React.Component {
         let long = self.state.region.longitude;
         return (
             <View>
-                <Marker key={1024}
+                <Marker.Animated key={1024+'_' + Date.now()}
                         pinColor={base.theme.colors.green}
                         style={{alignItems: 'center', justifyContent: 'center'}}
+                        animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
                         coordinate={{latitude: lat, longitude: long}}>
-                </Marker>
+                            
+                </Marker.Animated>
             </View>
         )
     }
@@ -395,63 +397,6 @@ class AddAndEditCheckPoints extends React.Component {
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
         } else {
-            // if(this.state.lastLatLong !== 0){
-            //     let storedArr = this.state.locationArrStored;
-            // let latArr = [];
-            // let longArr = [];
-            // for(let i in storedArr){
-            //     console.log("DMKLNKBVDKLDNKNDKNSKCDVNCDV>N:",storedArr[i])
-            //     latArr.push(parseFloat(storedArr[i].latitude));
-            //     longArr.push(parseFloat(storedArr[i].longitude))
-            // }
-
-            // let latMean = 0;
-            // let longMean = 0;
-            // let latSum = 0;
-            // let longSum = 0;
-            // let firstLatData = 0;
-            // let firstLongData= 0;
-            // let lastLatData = 0;
-            // let lastLongData = 0;
-
-            // for(let i in latArr){
-            //     firstLatData = latArr[0];
-            //     lastLatData = latArr[latArr.length-1]
-            //     latSum += parseFloat(latArr[i]);
-            //     latMean = parseFloat(latSum/latArr.length);
-            // }
-
-            // for(let i in longArr){
-            //     firstLongData = longArr[0];
-            //     lastLongData = longArr[longArr.length-1]
-            //     longSum += parseFloat(longArr[i]);
-            //     longMean = parseFloat(longSum/longArr.length)
-            // }
-
-            // let lastLatLongParsed = (this.state.lastLatLong).split(" ");
-            // let lastLat = parseFloat(lastLatLongParsed[0])
-            // let lastLong = parseFloat(lastLatLongParsed[1])
-            // let latDiff = lastLat-latMean;
-            // let longDiff = lastLong-longMean;
-
-
-            // console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
-            // firebase.database().ref('Patrolling Points/' +this.state.checkPointName + "/").set({
-            //     latMean,longMean,lastLat,lastLong,latDiff,longDiff,firstLatData,lastLatData,firstLongData,lastLongData
-            //  }).then((data) =>   {
-            //      console.log("Data stored in firebase:", data)
-            //  }).catch((error) => {
-            //      console.log("Error:", error)
-            //  }) 
-
-            // this.setState({
-            //     region:{ 
-            //         latitude:parseFloat(latMean).toFixed(6),
-            //         longitude:parseFloat(longMean).toFixed(6)
-            //     }
-            // })
-            // }
-            // else{
                 this.setState({isLottieModalOpen:true})
                 Animated.timing(this.state.progress, {
                     toValue: 1,
@@ -467,7 +412,7 @@ class AddAndEditCheckPoints extends React.Component {
                     this.addCheckPoint();
                   },7500)
             }
-    }ifc
+    }
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);
@@ -566,7 +511,8 @@ class AddAndEditCheckPoints extends React.Component {
                             zoomEnabled={true}
                             zoomTapEnabled={true}
                             minZoomLevel={20}
-                            scrollEnabled={false}
+                            scrollEnabled={true}
+                            onUserLocationChange={(data)=>this.renderUserLocation()}
                         >
                             {this.renderUserLocation()}
                         </MapView>

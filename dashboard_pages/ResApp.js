@@ -66,11 +66,12 @@ import Dashboard from '../src/screens/Resident/Dashboard/Dashboard';
 import DashBoardHeader from '../src/components/dashBoardHeader/DashBoardHeader';
 import FirstTab from '../residentDashboardVisitorPages/FirstTab';
 import MyFamilyHeader from '../src/components/NavigationalHeaders/MyFamilyHeader';
+import OyeLivingHeader from '../src/components/NavigationalHeaders/OyeLivingHeader'
 
 import City from '../assocition_pages/City.js';
-import SendingMsgToGate from '../my_unit_pages/SendingMsgToGate.js';
 import SubscriptionManagement from '../src/screens/Subscription/SubscriptionManagement';
 import PatrolShuffling from '../src/screens/Patrolling/PatrolShuffling';
+import OyeLiving from '../src/screens/OyeLiving/OyeLiving';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -109,6 +110,13 @@ const ResApp = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: 'Tabs Visitors',
       header: props => <MyFamilyHeader isVisitors={true} {...props} />
+    })
+  },
+  oyeLiving: {
+    screen: OyeLiving,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Tabs Visitors',
+      header: props => <OyeLivingHeader isVisitors={true} {...props} />
     })
   },
   MyProfileScreen: {
@@ -198,15 +206,7 @@ const ResApp = createStackNavigator({
       headerTintColor: '#ffffff'
     }
   },
-  SendingMsgToGate: {
-    screen: SendingMsgToGate,
-    navigationOptions: {
-      title: 'Leave with Vendor',
-      header: null,
-      headerStyle: { backgroundColor: '#FA9917' },
-      headerTintColor: '#ffffff'
-    }
-  },
+
   CreateOrJoinScreen: {
     screen: CreateOrJoin,
     navigationOptions: {
@@ -549,12 +549,12 @@ const ResApp = createStackNavigator({
       header: null
     }
   },
- subscriptionManagement: {
-      screen:SubscriptionManagement,
-      navigationOptions: {
-        header: props => <MyFamilyHeader  isSub={true} {...props}/>
-      }
-    },
+  subscriptionManagement: {
+    screen: SubscriptionManagement,
+    navigationOptions: {
+      header: props => <MyFamilyHeader isSub={true} {...props} />
+    }
+  }
 });
 
 export default createAppContainer(ResApp);

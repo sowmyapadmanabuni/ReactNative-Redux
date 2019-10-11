@@ -148,7 +148,7 @@ class Resident extends React.Component {
         try {
             if (stat) {
                 let unitArr = stat.data.unit;
-                console.log("Stat:", unitArr);
+                console.log("Stat:", stat);
                 for (let i in memberArr) {
                     for (let k in unitArr) {
                         if (memberArr[i].unUnitID === unitArr[k].unUnitID) {

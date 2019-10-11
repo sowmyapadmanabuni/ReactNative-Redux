@@ -63,7 +63,8 @@ class CreateSOS extends React.Component {
             isModalOpen: false,
             sosImageArr: [],
             sosId:"",
-            stopSOS:false
+            stopSOS:false,
+            unitId:''
         };
 
         this.getCurrentLocation = this.getCurrentLocation.bind(this);
@@ -319,6 +320,9 @@ class CreateSOS extends React.Component {
         let longitude = (this.state.region.longitude).toString();
         let unitName = data.dashBoardReducer.selectedDropdown1;
         let isActive = true;
+        this.setState({
+            unitId:unitName
+        })
 
 
         console.log("Data to be saved:", this.state);
@@ -493,6 +497,7 @@ class CreateSOS extends React.Component {
                             isGuardDetailAvailable: true,
                             deviceName: receivedData.attendedBy,
                             mobileNumber: receivedData.attendedByMobile,
+                            unitId:receivedData.unitName,
                             imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
                             region: {
                                 latitude: parseFloat(receivedData.latitude),
@@ -504,6 +509,7 @@ class CreateSOS extends React.Component {
                     } else {
                         self.setState({
                             isGuardDetailAvailable: false,
+                            unitId:receivedData.unitName,
                             imageArr: receivedData.emergencyImages === undefined ? [] : receivedData.emergencyImages,
                             region: {
                                 latitude: parseFloat(receivedData.latitude),
@@ -566,7 +572,7 @@ class CreateSOS extends React.Component {
 
     render() {
         let imageURI = require('../../../icons/camera.png');
-        let unitName = this.props.dashBoardReducer.selectedDropdown1 === undefined || this.props.dashBoardReducer.selectedDropdown1 === null ?"Help is on the way":`Help is on the way to your unit - ${this.props.dashBoardReducer.selectedDropdown1}`;
+        let unitName = this.props.dashBoardReducer.selectedDropdown1 === undefined || this.props.dashBoardReducer.selectedDropdown1 === null ?"Help is on the way":`Help is on the way to your unit - ${this.state.unitId}`;
         console.log("Guard Detail:", this.state);
         return (
             <ScrollView style={CreateSOSStyles.container}>

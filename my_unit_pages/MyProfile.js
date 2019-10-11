@@ -14,7 +14,7 @@ import {
   BackHandler
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import { Button } from 'native-base';
+import { Card, Button } from 'native-base';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
@@ -246,132 +246,169 @@ class MyProfile extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
-
-              <View style={styles.containerView_ForProfilePicViewStyle}>
-                <View style={styles.viewForProfilePicImageStyle}>
-                  {this.state.ImageSource == '' ? (
-                    <Image
-                      style={styles.profilePicImageStyle}
-                      source={{
-                        uri:
-                          'https://mediaupload.oyespace.com/' +
-                          base.utils.strings.noImageCapturedPlaceholder
-                      }}
-                    />
-                  ) : (
-                    <Image
-                      style={styles.profilePicImageStyle}
-                      source={{
-                        uri:
-                          'https://mediaupload.oyespace.com/' +
-                          this.state.ImageSource
-                      }}
-                    />
-                  )}
-                </View>
-              </View>
-
-              <View style={{ alignItems: 'center', marginBottom: hp('4%') }}>
-                <Text style={styles.itemTextValues1}>
-                  {this.state.datasource
-                    ? this.state.datasource.data.account[0].acfName +
-                      ' ' +
-                      this.state.datasource.data.account[0].aclName
-                    : null}
-                </Text>
-              </View>
-              <View
+              <Card
                 style={{
-                  marginLeft: hp('2%'),
-                  marginBottom: hp('0.5%'),
-                  flexDirection: 'row'
+                  borderRadius: hp('3%'),
+                  marginTop: hp('5%'),
+                  width: Dimensions.get('window').width - 80,
+                  // marginLeft: hp('5%'),
+                  alignSelf: 'center',
+                  zIndex: 1000,
+                  elevation: 1000,
+                  shadowColor: '#867F7F',
+                  shadowOffset: {
+                    height: 6
+                  },
+                  shadowOpacity: 0.2
                 }}
               >
-                <Icon
-                  color={base.theme.colors.primary}
-                  style={styles.editButtonImageStyle1}
-                  size={hp('2.8%')}
-                  name="call"
-                />
-
-                <Text style={styles.itemTextValues}>
-                  {this.state.datasource
-                    ? ' ' +
-                      this.state.datasource.data.account[0].acisdCode.substring(
-                        0,
-                        this.state.datasource.data.account[0].acisdCode.length
-                      ) +
-                      ' ' +
-                      this.state.datasource.data.account[0].acMobile
-                    : null}
-                </Text>
-              </View>
-              <View
-                style={{
-                  marginLeft: hp('2%'),
-                  marginBottom: hp('1%'),
-                  flexDirection: 'row'
-                }}
-              >
-                <Icon
-                  color={base.theme.colors.primary}
-                  style={styles.editButtonImageStyle1}
-                  size={hp('2.8%')}
-                  name="mail"
-                />
-
-                <Text style={styles.itemTextValues}>
-                  {this.state.datasource
-                    ? '  ' + this.state.datasource.data.account[0].acEmail
-                    : null}
-                </Text>
-              </View>
-              {this.state.number !== '' &&
-              this.props.dashBoardReducer.dropdown.length !== 0 ? (
                 <View
                   style={{
-                    justifyContent: 'center',
                     alignItems: 'center',
-                    marginTop: hp('1%')
+                    justifyContent: 'center',
+                    width: Dimensions.get('window').width - 80,
+                    marginTop: hp('8%'),
+                    alignSelf: 'center'
                   }}
                 >
-                  <QRCode
-                    logo={require('../icons/oyesafe_qr_logo.png')}
-                    logoSize={hp('6%')}
-                    size={hp('20%')}
-                    content={this.state.number}
-                    codeStyle="square"
-                    outerEyeStyle="square"
-                    innerEyeStyle="square"
+                  <Image
+                    style={{
+                      height: hp('16%'),
+                      // marginRight: hp('2%'),
+                      // marginLeft: hp('2%'),
+                      position: 'absolute',
+                      width: Dimensions.get('window').width - 80
+                    }}
+                    source={require('../icons/img_signup.png')}
                   />
                 </View>
-              ) : null}
+                <View style={styles.containerView_ForProfilePicViewStyle}>
+                  <View style={styles.viewForProfilePicImageStyle}>
+                    {this.state.ImageSource == '' ? (
+                      <Image
+                        style={{
+                          ...styles.profilePicImageStyle,
+                          position: 'relative'
+                        }}
+                        source={{
+                          uri:
+                            'https://mediaupload.oyespace.com/' +
+                            base.utils.strings.noImageCapturedPlaceholder
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        style={{
+                          ...styles.profilePicImageStyle,
+                          position: 'relative'
+                        }}
+                        source={{
+                          uri:
+                            'https://mediaupload.oyespace.com/' +
+                            this.state.ImageSource
+                        }}
+                      />
+                    )}
+                  </View>
+                </View>
+
+                <View style={{ alignItems: 'center', marginBottom: hp('4%') }}>
+                  <Text style={styles.itemTextValues1}>
+                    {this.state.datasource
+                      ? this.state.datasource.data.account[0].acfName +
+                        ' ' +
+                        this.state.datasource.data.account[0].aclName
+                      : null}
+                  </Text>
+                </View>
+                {/* <View
+                  style={{
+                    marginLeft: hp('2%'),
+                    marginBottom: hp('0.5%'),
+                    flexDirection: 'row'
+                  }}
+                >
+                  <Icon
+                    color={base.theme.colors.primary}
+                    style={styles.editButtonImageStyle1}
+                    size={hp('2.8%')}
+                    name="call"
+                  />
+
+                  <Text style={styles.itemTextValues}>
+                    {this.state.datasource
+                      ? ' ' +
+                        this.state.datasource.data.account[0].acisdCode.substring(
+                          0,
+                          this.state.datasource.data.account[0].acisdCode.length
+                        ) +
+                        ' ' +
+                        this.state.datasource.data.account[0].acMobile
+                      : null}
+                  </Text>
+                </View> */}
+                {/* <View
+                  style={{
+                    marginLeft: hp('2%'),
+                    marginBottom: hp('1%'),
+                    flexDirection: 'row'
+                  }}
+                >
+                  <Icon
+                    color={base.theme.colors.primary}
+                    style={styles.editButtonImageStyle1}
+                    size={hp('2.8%')}
+                    name="mail"
+                  />
+
+                  <Text style={styles.itemTextValues}>
+                    {this.state.datasource
+                      ? '  ' + this.state.datasource.data.account[0].acEmail
+                      : null}
+                  </Text>
+                </View> */}
+
+                {this.state.number !== '' &&
+                this.props.dashBoardReducer.dropdown.length !== 0 ? (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: hp('1%'),
+                      marginBottom: hp('2%')
+                    }}
+                  >
+                    <QRCode
+                      logo={require('../icons/oyesafe_qr_logo.png')}
+                      logoSize={hp('6%')}
+                      size={hp('20%')}
+                      content={this.state.number}
+                      codeStyle="square"
+                      outerEyeStyle="square"
+                      innerEyeStyle="square"
+                    />
+                  </View>
+                ) : null}
+              </Card>
 
               <View
                 style={{
-                  justifyContent: 'center',
                   alignItems: 'center',
-                  marginTop: hp('1%')
+                  justifyContent: 'center'
                 }}
               >
-                <Button
-                  bordered
-                  warning
-                  style={styles.button2}
-                  onPress={() =>
-                    this.props.navigation.navigate('SendingMsgToGate')
-                  }
-                >
-                  <Text
-                    style={{
-                      fontSize: hp('2%'),
-                      fontWeight: '500'
-                    }}
-                  >
-                    Leave with Vendor
-                  </Text>
-                </Button>
+                <Image
+                  style={{
+                    width: Dimensions.get('window').width,
+                    height: hp('4%'),
+                    marginRight: hp('2%'),
+                    marginLeft: hp('2%'),
+                    position: 'absolute'
+                  }}
+                  source={require('../icons/shadow1.png')}
+                />
               </View>
+
               <View
                 style={{
                   flexDirection: 'column',
@@ -379,7 +416,7 @@ class MyProfile extends Component {
                   alignItems: 'center'
                 }}
               >
-                <View style={{ marginTop: hp('2%') }}>
+                <View style={{ marginTop: hp('6%') }}>
                   <Button
                     bordered
                     warning
@@ -482,8 +519,8 @@ const styles = StyleSheet.create({
     height: hp('15%'),
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: hp('4%'),
-    marginBottom: hp('2%')
+    marginTop: hp('2%')
+    // marginBottom: hp('2%')
   },
   profilePicImageStyle: {
     width: 110,
@@ -531,10 +568,6 @@ const styles = StyleSheet.create({
     height: hp('18%')
   },
   button1: {
-    width: hp('40%'),
-    justifyContent: 'center'
-  },
-  button2: {
     width: hp('40%'),
     justifyContent: 'center'
   },

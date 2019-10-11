@@ -78,6 +78,7 @@ class SchedulePatrol extends React.Component {
     onValueChange(data, key) {
         let self = this;
         let deviceArr = this.state.deviceNameList;
+        console.log("Hitting Here",data,deviceArr)
 
         for (let i in deviceArr) {
             if (data === deviceArr[i].deviceName) {
@@ -115,9 +116,9 @@ class SchedulePatrol extends React.Component {
         let pcid = await AsyncStorage.getItem(key1);
         console.log("PCID:", pcid);
         if (data !== null || data !== undefined) {
-            this.setState({patrolId: data, pcid: pcid}, () => this.getPatrolData())
+            this.setState({patrolId: data, pcid: pcid}, () => this.getDeviceList())
         }
-        this.getDeviceList();
+       // this.getDeviceList();
     }
 
     async getPatrolData() {
@@ -156,7 +157,7 @@ class SchedulePatrol extends React.Component {
         let _edt = edt;
         let days = this.state.days;
         let receivedDays = data.psRepDays.split(',');
-        console.log("Days:", days, receivedDays);
+        console.log("Days:", data.deName, this.state.deviceNameList);
         for (let i in days) {
             for (let j in receivedDays) {
                 if (days[i].day === receivedDays[j]) {
@@ -164,14 +165,26 @@ class SchedulePatrol extends React.Component {
                     days[i].isSelected = true
                 }
             }
-
         }
+
+        // let deviceArr = this.state.deviceNameList;
+        // let deviceName = '';
+        // for (let i in deviceArr){
+        //     if(deviceArr[i].deviceName == data.deName){
+        //         console.log("Days123:", data.deName, deviceArr[i].deviceName); 
+        //          deviceName = deviceArr[i].deviceName
+        //     }  
+        // }
+
+        this.onValueChange(data.deName)
+
         this.setState({
             startTime: _sdt,
             endTime: _edt,
             slotName: data.psSltName,
             isSnoozeEnabled: data.psSnooze,
-            days: days
+            days: days,
+            //selectedDevice:deviceName
         })
     }
 
@@ -217,7 +230,7 @@ class SchedulePatrol extends React.Component {
                         self.setState({
                             deviceNameList: deviceName,
                             selectedDevice: dataReceived[0].deGateNo
-                        });
+                        },()=>this.getPatrolData());
                     }
                 } catch (e) {
                     console.log(e)
@@ -291,7 +304,7 @@ class SchedulePatrol extends React.Component {
             PCIDs: pcids
         };
         let stat = await base.services.OyeSafeApi.updatePatrol(detail);
-        console.log("KHJDKVHDV<HDKJVDV<:", stat);
+        console.log("KHJDKVHDV<HDKJVDV<:", stat,detail);
         try {
             if (stat) {
                 if (stat.success) {

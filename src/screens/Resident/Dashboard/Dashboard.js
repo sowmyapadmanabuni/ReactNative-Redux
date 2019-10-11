@@ -1662,19 +1662,26 @@ class Dashboard extends PureComponent {
           >
             <Text>View All Visitors</Text>
           </Button>
-           {/* <Button
+           <Button
              bordered
              style={styles.button1}
              onPress={() => this.props.navigation.navigate('schedulePatrolling')}
            >
              <Text>Patrolling</Text>
-           </Button> */}
+           </Button>
       <Button
               bordered
               style={styles.button1}
               onPress={() => this.props.navigation.navigate("subscriptionManagement")}
           >
             <Text>Subscription</Text>
+          </Button>
+          <Button
+              bordered
+              style={styles.button1}
+              onPress={() => this.props.navigation.navigate("oyeLiving")}
+          >
+            <Text>Oyeliving</Text>
           </Button>
         </View>
         {this.props.dropdown.length==0?<View/>:
