@@ -320,7 +320,7 @@ class WholeAssociationList extends React.Component {
                         <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
                     </SafeAreaView>
 
-                    <Text style={styles.titleOfScreenStyle}>Join association</Text>
+                    <Text style={styles.titleOfScreenStyle}>Join Association</Text>
 
                     <View style={styles.progressViewStyle}>
                         <ActivityIndicator size="large" color="#F3B431"/>
@@ -380,7 +380,7 @@ class WholeAssociationList extends React.Component {
                 />
 
                 <View style={styles.containerViewStyle}>
-                    <Text style={styles.titleOfScreenStyle}>Join association</Text>
+                    <Text style={styles.titleOfScreenStyle}>Join Association</Text>
 
                     <Form style={styles.formSearch}>
                         <Item style={styles.inputItem}>

@@ -6,6 +6,10 @@ import {connect} from "react-redux";
 import {updateSubscription} from "../../actions";
 import moment from "moment";
 import SubscriptionStyles from "./SubscriptionStyles";
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+  } from 'react-native-responsive-screen';
 
 class SubscriptionManagement extends React.Component {
     constructor(props) {
@@ -400,14 +404,18 @@ class SubscriptionManagement extends React.Component {
                 <View style={SubscriptionStyles.safeMainView}>
                     <View style={SubscriptionStyles.safeSubView}>
                         <View style={SubscriptionStyles.existSubView}>
-                            <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.subPrimary]}>
-                                Existing Subscription -
-                            </Text>
-                            <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.textBlack]}>
+                            <View style={{flex:1}}>
+                                <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.subPrimary]}>
+                                    Existing Subscription -
+                                </Text>
+                            </View>
+                            <View style={{flex:1}}>
+                                <Text style={[SubscriptionStyles.subFontSize,SubscriptionStyles.textBlack]}>
                                 Valid Till:
                                 <Text style={[SubscriptionStyles.subFontSize,{color: this.state.isSubValid ? base.theme.colors.primary : base.theme.colors.red
                                 }]}>{' '}{this.state.existingSubDate}</Text>
                             </Text>
+                            </View>
                         </View>
                         <View style={SubscriptionStyles.safeTableHead}>
                             <View style={SubscriptionStyles.devView}>
@@ -609,8 +617,7 @@ class SubscriptionManagement extends React.Component {
                             alignItems: 'center', justifyContent: 'space-around', marginTop: 10, flexDirection: 'row'
                         }}>
                             <View style={{width: '50%',}}>
-                                <Text style={{fontSize: 14, color: base.theme.colors.primary}}> Sub Total -
-                                    <Text style={{
+                                <Text style={{fontSize: 14, color: base.theme.colors.primary}}> Sub Total - <Text style={{
                                         color: base.theme.colors.black, textDecorationLine: 'line-through',
                                         textDecorationStyle: 'solid',
                                         textDecorationColor: '#ffffff',
@@ -633,8 +640,7 @@ class SubscriptionManagement extends React.Component {
                     </View>
                 </View>
                 <View style={{width: '100%', alignItems: 'center'}}>
-                    <Text style={{fontSize: 18, color: base.theme.colors.primary}}> Grand Total -
-                        <Text style={{
+                    <Text style={{fontSize: 18, color: base.theme.colors.primary}}> Grand Total - <Text style={{
                             color: base.theme.colors.black, textDecorationLine: 'line-through',
                             textDecorationStyle: 'solid',
                             textDecorationColor: '#ffffff',
@@ -683,23 +689,29 @@ class SubscriptionManagement extends React.Component {
                 <View style={{
                     flex: 1,
                     justifyContent: 'center',
-                    backgroundColor: base.theme.colors.transparent,
+                    backgroundColor: '#00000090',
+                    alignSelf:'center',
                     height: '100%',
                     width: '100%'
                 }}>
-                    <View style={{width: '90%', backgroundColor: base.theme.colors.white, alignItems: 'center'}}>
-                        <TouchableOpacity style={{width: '100%', alignItems: 'flex-end',}}
-                                          onPress={() => this.closeModal()}>
-                            <Image style={{height: 20, width: 20, alignSelf: 'flex-end'}}
-                                   source={require('../../../icons/close_btn1.png')}
-                            />
-                        </TouchableOpacity>
+                    <View style={{width:'90%',height: '16%',justifyContent:'center', backgroundColor: base.theme.colors.white,alignSelf:'center', alignItems: 'center'}}>
+                        <View style={{alignItems:'center',justifyContent:'center', flexDirection:'row',marginTop:5}}>
+                        <View style={{flex:1,}}/>
+                        <View style={{flex:1,justifyContent:'center',alignItems:'center',}}>
                         <Text style={{
                             fontSize: 16,
                             color: base.theme.colors.primary,
-                            marginBottom: 10,
-                            marginTop: 10
                         }}>{device}</Text>
+                        </View>
+                        <View style={{flex:1,alignSelf:'center', alignItems:'center'}}>
+                        <TouchableOpacity style={{width: '100%',height:'14%',justifyContent:'center', alignItems: 'flex-end',}}
+                                          onPress={() => this.closeModal()}>
+                            <Image style={{height: 20, width: 20,right:10 ,alignSelf: 'flex-end',}}
+                                   source={require('../../../icons/close_btn1.png')}
+                            />
+                        </TouchableOpacity>
+                        </View>
+                        </View>
                         <FlatList
                             data={this.state.dataToShowInDesc}
                             keyExtractor={(item, index) => index.toString()}
@@ -729,7 +741,7 @@ class SubscriptionManagement extends React.Component {
                         marginRight: 5
                     }}/>
                     <Text style={{
-                        fontSize: 13,
+                        fontSize: hp('1.4%'),
                         color: base.theme.colors.black,
                         textDecorationLine: item.item.pdIsActive ? 'none' : 'line-through',
                         textDecorationStyle: 'solid',
@@ -767,9 +779,8 @@ class SubscriptionManagement extends React.Component {
 
         return (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <TouchableOpacity onPress={() => this.getCardSelected(item)} style={{
+                    <TouchableOpacity onPress={() => this.getCardSelected(item)} style={{
                     borderRadius: 10,
-                    marginLeft: 15,
                     backgroundColor: item.item.pdIsActive ? base.theme.colors.primary : base.theme.colors.greyCard,
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -803,7 +814,7 @@ class SubscriptionManagement extends React.Component {
 
                 </TouchableOpacity>
                 {item.item.pdIsActive ?
-                    <View style={{height: 40, width: 80, alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={{height: 40, width: 100, alignItems: 'center', justifyContent: 'center'}}>
                         <Text style={{fontSize: 8}}>Valid Till</Text>
                         <Text style={{
                             fontSize: 10,
@@ -811,7 +822,8 @@ class SubscriptionManagement extends React.Component {
                         }}>{moment(item.item.pdValTill).format('DD-MMM-YYYY')}</Text>
                     </View>
                     :
-                    <View style={{height: 40, width: 80, alignItems: 'center', justifyContent: 'center'}}/>}
+                    <View style={{height: 40, width: 100, alignItems: 'center', justifyContent: 'center'}}/>}
+                    
             </View>
         )
 

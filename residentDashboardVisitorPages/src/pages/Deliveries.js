@@ -178,7 +178,7 @@ class App extends React.Component {
       moment(this.state.dobDate).format('YYYY-MM-DD') >
       moment(this.state.dobDate1).format('YYYY-MM-DD')
     ) {
-      Alert.alert('From Date should be less than To Date.');
+      Alert.alert('From date should be less than to date.');
       this.setState({
         isLoading: false
       });
@@ -447,6 +447,7 @@ class App extends React.Component {
             </View>
           </TouchableOpacity>
         </View>
+
         <Collapsible duration={100} collapsed={!item.open}>
           <View style={{ flexDirection: 'column' }}>
             <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
@@ -708,7 +709,7 @@ class App extends React.Component {
                     fontSize: hp('1.6%')
                   }}
                 >
-                  No Entries for selected Date
+                  No entries for selected date
                 </Text>
               </View>
             }

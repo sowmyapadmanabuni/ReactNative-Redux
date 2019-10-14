@@ -383,7 +383,7 @@ class Staff extends React.Component {
             console.log(duration.as('days'));
             let difference = duration.as('days');
             if (difference > 31) {
-                alert('Maximum Limit is 31 Days. You can not select more than that')
+                alert('Maximum limit is 31 Days. You can not select more than that')
             } else {
                 const {updateStaffInfo} = this.props;
                 updateStaffInfo({prop: "startDate", value: moment(fromDate).format('YYYY-MM-DD')});

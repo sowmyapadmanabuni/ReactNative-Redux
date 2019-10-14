@@ -125,7 +125,7 @@ class MyGuests extends Component {
             moment(this.state.dobDate).format('YYYY-MM-DD') >
             moment(this.state.dobDate1).format('YYYY-MM-DD')
         ) {
-            Alert.alert('From Date should be less than To Date.');
+            Alert.alert('From date should be less than To date.');
             this.setState({
                 isLoading: false
             });
@@ -316,7 +316,7 @@ class MyGuests extends Component {
                                     <Text style={{ fontSize: hp('1.4%') }}>
                                         Invitation Valid From:{' '}
                                         {moment(item.insDate, 'YYYY-MM-DD').format('DD-MM-YYYY')}
-                                        {'  '}
+                                        {'      '}
                                     </Text>
                                 </View>
                                 <View>
@@ -337,7 +337,7 @@ class MyGuests extends Component {
                                     <Text style={{ fontSize: hp('1.4%') }}>
                                         Till:{' '}
                                         {moment(item.ineDate, 'YYYY-MM-DD').format('DD-MM-YYYY')}
-                                        {'  '}
+                                        {'       '}
                                     </Text>
                                 </View>
                                 <View>
@@ -669,27 +669,15 @@ class MyGuests extends Component {
                     />
                 }
                 <TouchableOpacity
-                    style={[styles.floatButton, { alignSelf: 'center', marginLeft: 2 }]}
+                    style={styles.floatButton}
                     onPress={() => this.props.navigation.navigate('InviteGuests')}
                 >
                     <Text
-                        style={{
-                            fontSize: hp('5%'),
-                            color: '#fff',
-                            fontWeight: 'bold',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            alignSelf: 'center',
-                            marginBottom: hp('0.5%')
-                        }}
+                        style={styles.plusTextStyle}
                     >
                         +
                     </Text>
-                    {/* <Entypo
-                    name="plus"
-                    size={30}
-                    color="#fff"
-                /> */}
+                
                 </TouchableOpacity>
             </View>
         );
@@ -807,21 +795,31 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0,0,0,0)',
         alignItems: 'center',
         justifyContent: 'center',
-        width: hp('8%'),
+        width: hp('6.5%'),
         position: 'absolute',
-        bottom: hp('2.5%'),
-        right: hp('2.5%'),
-        height: hp('8%'),
+        bottom: hp('5%'),
+        right: hp('3.5%'),
+        height: hp('6.5%'),
         backgroundColor: '#FF8C00',
-        borderRadius: 100,
+        borderRadius: hp('4.5%'),
         // shadowColor: '#000000',
         shadowOffset: {
-            width: 0,
-            height: 3
+          width: 0,
+          height: 3
         },
         shadowRadius: 3,
         shadowOpacity: 0.6
-    },
+      },
+     
+      plusTextStyle: {
+        fontSize: hp('4%'),
+        color: '#fff',
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginBottom: hp('0.5%')
+      },
     images: {
         width: hp('2.5%'),
         height: hp('2.5%'),

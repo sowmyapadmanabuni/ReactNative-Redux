@@ -64,13 +64,13 @@ const Style = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0)',
     alignItems: 'center',
     justifyContent: 'center',
-    width: hp('8%'),
+    width: hp('6.5%'),
     position: 'absolute',
-    bottom: hp('2.5%'),
-    right: hp('2.5%'),
-    height: hp('8%'),
+    bottom: hp('5%'),
+    right: hp('3.5%'),
+    height: hp('6.5%'),
     backgroundColor: '#FF8C00',
-    borderRadius: 100,
+    borderRadius: hp('4.5%'),
     // shadowColor: '#000000',
     shadowOffset: {
       width: 0,
@@ -79,8 +79,9 @@ const Style = StyleSheet.create({
     shadowRadius: 3,
     shadowOpacity: 0.6
   },
+ 
   plusTextStyle: {
-    fontSize: hp('5%'),
+    fontSize: hp('4%'),
     color: '#fff',
     fontWeight: 'bold',
     justifyContent: 'center',
