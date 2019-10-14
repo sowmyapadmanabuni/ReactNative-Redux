@@ -94,7 +94,9 @@ class Announcement extends Component {
       visitorList: [],
 
       comment: '',
-      dropdownValue: ''
+      dropdownValue: '',
+
+      announcementId: ''
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -553,7 +555,8 @@ class Announcement extends Component {
           .then(response => {
             console.log('Respo1111:', response);
             this.setState({
-              isLoading: false
+              isLoading: false,
+              announcementId: response.data.announcement.anid
             });
             axios
               .get(
@@ -589,16 +592,16 @@ class Announcement extends Component {
                   );
                 });
 
-                getAssoMembers(oyeURL, MyAccountID);
+                // getAssoMembers(oyeURL, MyAccountID);
 
-                this.props.updateJoinedAssociation(
-                  this.props.joinedAssociations,
-                  unitList.unUnitID
-                );
+                // this.props.updateJoinedAssociation(
+                //   this.props.joinedAssociations,
+                //   unitList.unUnitID
+                // );
                 this.props.navigation.goBack();
               })
               .catch(error => {
-                getAssoMembers(oyeURL, MyAccountID);
+                // getAssoMembers(oyeURL, MyAccountID);
                 this.setState({
                   loading: false
                 });
