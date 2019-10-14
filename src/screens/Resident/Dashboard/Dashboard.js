@@ -31,6 +31,7 @@ import {
 } from 'react-native-responsive-screen';
 import * as fb from 'firebase';
 import CountdownCircle from 'react-native-countdown-circle';
+import * as Animatable from 'react-native-animatable';
 
 import {
   createNotification,
@@ -258,6 +259,7 @@ class Dashboard extends PureComponent {
       .then(response => {
         let data = response.data.data.memberListByAccount;
         console.log(data, 'memList');
+
         firebase.messaging().subscribeToTopic('' + MyAccountID + 'admin');
         data.map(units => {
           if (receiveNotifications) {
@@ -267,11 +269,18 @@ class Dashboard extends PureComponent {
               .subscribeToTopic(
                 '' + MyAccountID + units.unUnitID + 'usernotif'
               );
+            console.log('date_asAssnID', units.asAssnID);
             //alert(""+MyAccountID+units.unUnitID+"usernotif")
             firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+
+            // firebase.messaging().sendMessage("topic here")
             // firebase.messaging().subscribeToTopic( + 'admin');
             // alert(MyAccountID + 'admin');
             // firebase.messaging().subscribeToTopic('7548admin');
+
+            firebase
+              .messaging()
+              .subscribeToTopic(units.asAssnID + 'Announcement');
 
             if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
               // console.log(units, 'units');
@@ -1544,6 +1553,9 @@ class Dashboard extends PureComponent {
   }
 
   adminCard() {
+    // const AnimatedTouchable = Animatable.createAnimatableComponent(
+    //   TouchableOpacity
+    // );
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
         {/* <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
@@ -1667,6 +1679,31 @@ class Dashboard extends PureComponent {
           >
             <Text>Subscription</Text>
           </Button>
+
+          {/* <AnimatedTouchable
+            animation={'swing'}
+            onPress={() => this.props.navigation.navigate('Announcement')}
+          >
+            <View
+              style={{
+                height: hp('5%'),
+                width: hp('20%'),
+                borderRadius: hp('4%'),
+                marginTop: hp('3%'),
+                borderColor: base.theme.colors.primary,
+                borderWidth: hp('0.1%'),
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text
+                style={{ fontSize: hp('2%'), color: base.theme.colors.primary }}
+              >
+                Announcement
+              </Text>
+            </View>
+          </AnimatedTouchable> */}
+
           {/* <Button
             bordered
             style={styles.button1}
@@ -1684,7 +1721,7 @@ class Dashboard extends PureComponent {
               height: 50,
               width: 50,
               justifyContent: 'center',
-              marginTop: hp('22%')
+              marginTop: hp('16%')
             }}
           >
             {!this.state.isSOSSelected ? (

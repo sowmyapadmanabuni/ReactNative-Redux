@@ -715,7 +715,7 @@ class App extends React.Component {
                                 a.vlfName.localeCompare(b.vlfName)
                             )}
                             renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.fmid.toString()}
+                            keyExtractor={(item, index) => item.vlVisLgID.toString()}
                         />
                     )}
                 </View>

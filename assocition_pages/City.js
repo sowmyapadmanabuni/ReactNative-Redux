@@ -494,7 +494,7 @@ export default class City extends Component {
                             }
                         }}
                     >
-                        <Text style={{fontSize: hp('2%'), textDecorationLine: 'underline'}}>Click here.</Text>
+                        <Text style={{fontSize: hp('2%'),color:'#38BCDB', textDecorationLine: 'underline'}}>Click here.</Text>
                     </TouchableOpacity>
                     {/* <View style={{ marginTop: hp("1%") }}>
             <Button bordered warning style={styles.button1}

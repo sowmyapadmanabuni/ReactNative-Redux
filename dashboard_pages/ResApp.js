@@ -39,6 +39,8 @@ import RegisterToUnit from '../assocition_pages/register';
 import ViewAllVisitorsList from '../assocition_pages/ViewAllVisitorsList';
 import NotificationScreen from '../src/screens/NotificationScreen/NotificationScreen';
 import NotificationDetailScreen from '../src/screens/NotificationScreen/NotificationDetailScreen';
+import NotificationAnnouncementDetailScreen from '../src/screens/NotificationScreen/NotificationAnnouncementDetailScreen';
+
 import MyVehicleListScreen from '../resident_pages/MyVehicleListScreen.js';
 import AddVehicles from '../resident_pages/AddVehicles';
 import EditVehicles from '../resident_pages/EditVehicles';
@@ -88,10 +90,18 @@ const NotificationStack = createStackNavigator({
       header: null
     }
   },
+  //NotificationAnnouncementDetailScreen
   NotificationDetailScreen: {
     screen: NotificationDetailScreen,
     navigationOptions: {
       title: 'Notification Details',
+      header: null
+    }
+  },
+  NotificationAnnouncementDetailScreen: {
+    screen: NotificationAnnouncementDetailScreen,
+    navigationOptions: {
+      title: 'Notification Announcement Detail Screen',
       header: null
     }
   }
