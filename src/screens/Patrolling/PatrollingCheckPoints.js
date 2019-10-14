@@ -96,7 +96,10 @@ class PatrollingCheckPoints extends React.Component {
         if (nextProps.navigation.state.params !== undefined) {
             if (nextProps.navigation.state.params.isRefreshing === true) {
                 nextProps.navigation.state.params.isRefreshing = false;
-                //this.getCheckPoints(true);
+                this.getCheckPoints(true);
+            }
+            else if(nextProps.navigation.state.params.isEditing){
+                nextProps.navigation.state.params.isEditing = false;
                 this.getCheckPointListBySlotId()
             }
 
@@ -401,23 +404,23 @@ class PatrollingCheckPoints extends React.Component {
                         </TouchableHighlight>
                     </ElevatedView>
                     <EmptyView height={10} />
-                    <ElevatedView elevation={0}>
+                    {/* <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.editCheckPoint(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                 source={require('../../../icons/edit.png')} />
                         </TouchableHighlight>
-                    </ElevatedView>
+                    </ElevatedView> */}
                     <EmptyView height={10} />
-                    <ElevatedView elevation={0}>
+                    {/* <ElevatedView elevation={0}>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.deleteCheckPoint(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
                                 source={require('../../../icons/delete.png')} />
                         </TouchableHighlight>
-                    </ElevatedView>
+                    </ElevatedView> */}
                 </View>
                 {this.openMapModal()}
             </View>
