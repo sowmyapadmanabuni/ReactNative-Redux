@@ -14,10 +14,12 @@ import {
     Platform,
     ScrollView,
     Text,
-    View
+    View,
+    TouchableHighlight,
+    Animated,Easing
 } from 'react-native';
 import {connect} from 'react-redux';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../base";
 import {TextField} from "react-native-material-textfield";
 import OSButton from "../../components/osButton/OSButton";
@@ -29,6 +31,10 @@ import AddAndEditCheckPointStyles from "./AddAndEditCheckPointStyles";
 import Geolocation from 'react-native-geolocation-service';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import wifi from 'react-native-android-wifi';
+import LottieView from 'lottie-react-native';
+import Modal from "react-native-modal";
+
+
 
 var RNFS = require('react-native-fs');
 
@@ -71,10 +77,12 @@ class AddAndEditCheckPoints extends React.Component {
             longitude: 0,
             isSet: false,
             lastLatLong: 0,
-            locationArrStored: []
-
+            locationArrStored: [],
+            isLottieModalOpen:false,
+            progress: new Animated.Value(0),
         });
 
+        this.thread = null;
 
         this.getUserLocation = this.getUserLocation.bind(this)
 
@@ -89,6 +97,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentDidUpdate() {
+        
         setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
         }, 100)
@@ -212,8 +221,12 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     componentDidMount() {
+       
         this.watchuserPosition();
+    }
 
+    handleLocationThread = (message) =>{
+        console.log("Message Recevied from Thread:",message);
     }
 
     watchuserPosition() {
@@ -232,7 +245,7 @@ class AddAndEditCheckPoints extends React.Component {
                     },
                     gpsLocation: parseFloat(LocationData.latitude).toFixed(5) + "," + parseFloat(LocationData.longitude).toFixed(5),
                     locationArrStored: locationArrStored
-                })
+                },()=>this.renderUserLocation())
             },
             (error) => {
                 console.log(error);
@@ -369,11 +382,13 @@ class AddAndEditCheckPoints extends React.Component {
         let long = self.state.region.longitude;
         return (
             <View>
-                <Marker key={1024}
+                <Marker.Animated key={1024+'_' + Date.now()}
                         pinColor={base.theme.colors.green}
                         style={{alignItems: 'center', justifyContent: 'center'}}
+                        animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
                         coordinate={{latitude: lat, longitude: long}}>
-                </Marker>
+                            
+                </Marker.Animated>
             </View>
         )
     }
@@ -382,67 +397,21 @@ class AddAndEditCheckPoints extends React.Component {
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
         } else {
-            // if(this.state.lastLatLong !== 0){
-            //     let storedArr = this.state.locationArrStored;
-            // let latArr = [];
-            // let longArr = [];
-            // for(let i in storedArr){
-            //     console.log("DMKLNKBVDKLDNKNDKNSKCDVNCDV>N:",storedArr[i])
-            //     latArr.push(parseFloat(storedArr[i].latitude));
-            //     longArr.push(parseFloat(storedArr[i].longitude))
-            // }
-
-            // let latMean = 0;
-            // let longMean = 0;
-            // let latSum = 0;
-            // let longSum = 0;
-            // let firstLatData = 0;
-            // let firstLongData= 0;
-            // let lastLatData = 0;
-            // let lastLongData = 0;
-
-            // for(let i in latArr){
-            //     firstLatData = latArr[0];
-            //     lastLatData = latArr[latArr.length-1]
-            //     latSum += parseFloat(latArr[i]);
-            //     latMean = parseFloat(latSum/latArr.length);
-            // }
-
-            // for(let i in longArr){
-            //     firstLongData = longArr[0];
-            //     lastLongData = longArr[longArr.length-1]
-            //     longSum += parseFloat(longArr[i]);
-            //     longMean = parseFloat(longSum/longArr.length)
-            // }
-
-            // let lastLatLongParsed = (this.state.lastLatLong).split(" ");
-            // let lastLat = parseFloat(lastLatLongParsed[0])
-            // let lastLong = parseFloat(lastLatLongParsed[1])
-            // let latDiff = lastLat-latMean;
-            // let longDiff = lastLong-longMean;
-
-
-            // console.log('JSHDVBDKJVDJVHDVKDVKJDV:',latMean,longMean,lastLat,lastLong,latDiff,longDiff);
-            // firebase.database().ref('Patrolling Points/' +this.state.checkPointName + "/").set({
-            //     latMean,longMean,lastLat,lastLong,latDiff,longDiff,firstLatData,lastLatData,firstLongData,lastLongData
-            //  }).then((data) =>   {
-            //      console.log("Data stored in firebase:", data)
-            //  }).catch((error) => {
-            //      console.log("Error:", error)
-            //  }) 
-
-            // this.setState({
-            //     region:{ 
-            //         latitude:parseFloat(latMean).toFixed(6),
-            //         longitude:parseFloat(longMean).toFixed(6)
-            //     }
-            // })
-            // }
-            // else{
-            this.addCheckPoint();
-            //}
-
-        }
+                this.setState({isLottieModalOpen:true})
+                Animated.timing(this.state.progress, {
+                    toValue: 1,
+                    duration: 5000,
+                    easing: Easing.linear,
+                  }).start();
+                  setTimeout(()=>{
+                    this.setState({
+                        isLottieModalOpen:false
+                    })
+                  },7000)
+                  setTimeout(()=>{
+                    this.addCheckPoint();
+                  },7500)
+            }
     }
 
     async addCheckPoint() {
@@ -490,7 +459,20 @@ class AddAndEditCheckPoints extends React.Component {
                             {cancelable: false},
                         );
                     } else {
-                        alert("Oops, Something went wrong\n Possible Reason:-" + stat.error.message);
+                        let errMessage = stat.error.message;
+                        Alert.alert(
+                            'Error',
+                            errMessage,
+                            [
+                                {
+                                    text: "Got It",
+                                    onPress: () => self.props.navigation.navigate('patrollingCheckPoint', {isRefreshing: true})
+                                },
+                            ],
+                            {cancelable: false},
+                        );
+                        // alert("Oops, Something went wrong\n Possible Reason:-" + stat.error.message);
+                        // self.props.navigation.navigate('patrollingCheckPoint', {isRefreshing: true})
                     }
                 }
             } catch (e) {
@@ -529,7 +511,8 @@ class AddAndEditCheckPoints extends React.Component {
                             zoomEnabled={true}
                             zoomTapEnabled={true}
                             minZoomLevel={20}
-                            scrollEnabled={false}
+                            scrollEnabled={true}
+                            onUserLocationChange={(data)=>this.renderUserLocation()}
                         >
                             {this.renderUserLocation()}
                         </MapView>
@@ -601,7 +584,44 @@ class AddAndEditCheckPoints extends React.Component {
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>
+                {this.openLottieModal()}
             </ScrollView>
+        )
+    }
+
+    openLottieModal(){
+        return(
+            <Modal isVisible={this.state.isLottieModalOpen}
+            animationOutTiming={500}
+            backdropOpacity={0.12}
+                   style={{
+                        top:hp('35'),
+                        flex:0.3,
+                        backgroundColor: base.theme.colors.white,
+                        alignSelf: 'center',
+                        justifySelf:'center',
+                        justifyContent:'center',
+                         width: wp('55%'),
+                         borderRadius:hp('20'),
+                         flexDirection:'row',
+                         height:hp('50%'),
+                         width:wp('60')
+                        }}>
+                            
+                       <LottieView
+                            progress={this.state.progress}
+                            loop={true}
+                            style={{
+                               
+                                backgroundColor: base.theme.colors.white,
+                                alignSelf: 'center',
+                                justifyContent:'center',
+                                }}
+                            source={require('../../assets/gps.json')}
+                        />
+                        <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
+                        
+                   </Modal>
         )
     }
 }

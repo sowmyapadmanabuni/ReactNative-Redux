@@ -60,7 +60,6 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new RNHTMLtoPDFPackage(),
                     new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
-                    new GeolocationPackage(),
                     new RNDeviceInfo(),
                     new RNSpinkitPackage(),
                     new RNFetchBlobPackage(),
@@ -81,7 +80,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new RNAndroidLocationEnablerPackage(),
                     new LottiePackage(),
                     new SystemSettingPackage(),
-                    new SvgPackage()
+                    new SvgPackage(),
+                    new GeolocationPackage()
             );
         }
 

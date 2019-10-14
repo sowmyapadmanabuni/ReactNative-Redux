@@ -19,15 +19,15 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import axios from "axios";
 import base from "../../base";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
-import {updateSelectedCheckPoints} from '../../../src/actions';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { updateSelectedCheckPoints } from '../../../src/actions';
 import moment from 'moment';
 import Modal from 'react-native-modal'
 import EmptyView from "../../components/common/EmptyView";
-import {Icon, Picker} from "native-base";
+import { Icon, Picker } from "native-base";
 import OSButton from "../../components/osButton/OSButton";
 import SchedulePatrolStyles from "./SchedulePatrolStyles";
 
@@ -44,7 +44,7 @@ class SchedulePatrol extends React.Component {
             endTime: currentDate,
             isSpinnerOpen: false,
             selType: 0,
-            days: [{day: "Sunday", initial: "S", isSelected: false, dayOfWeek: 1}, {
+            days: [{ day: "Sunday", initial: "S", isSelected: false, dayOfWeek: 1 }, {
                 day: "Monday",
                 initial: "M",
                 isSelected: false,
@@ -52,14 +52,14 @@ class SchedulePatrol extends React.Component {
             }, {
                 day: "Tuesday",
                 initial: "T", isSelected: false, dayOfWeek: 3
-            }, {day: "Wednesday", initial: "W", isSelected: false, dayOfWeek: 4}, {
+            }, { day: "Wednesday", initial: "W", isSelected: false, dayOfWeek: 4 }, {
                 day: "Thursday",
                 initial: "T",
                 isSelected: false, dayOfWeek: 5
             }, {
                 day: "friday",
                 initial: "F", isSelected: false, dayOfWeek: 6
-            }, {day: "Saturday", initial: "S", isSelected: false, dayOfWeek: 7}],
+            }, { day: "Saturday", initial: "S", isSelected: false, dayOfWeek: 7 }],
             slotName: '',
             deviceNameList: [],
             selectedDevice: "",
@@ -71,13 +71,13 @@ class SchedulePatrol extends React.Component {
 
         console.log("TIME:", props);
         this.getDeviceList = this.getDeviceList.bind(this);
-        //  this.openTimePicker = this.openTimePicker.bind(this);
 
     };
 
     onValueChange(data, key) {
         let self = this;
         let deviceArr = this.state.deviceNameList;
+        console.log("Hitting Here", data, deviceArr)
 
         for (let i in deviceArr) {
             if (data === deviceArr[i].deviceName) {
@@ -103,7 +103,7 @@ class SchedulePatrol extends React.Component {
 
     processBackPress() {
         console.log("Part");
-        const {goBack} = this.props.navigation;
+        const { goBack } = this.props.navigation;
         goBack(null);
     }
 
@@ -115,9 +115,9 @@ class SchedulePatrol extends React.Component {
         let pcid = await AsyncStorage.getItem(key1);
         console.log("PCID:", pcid);
         if (data !== null || data !== undefined) {
-            this.setState({patrolId: data, pcid: pcid}, () => this.getPatrolData())
+            this.setState({ patrolId: data, pcid: pcid }, () => this.getDeviceList())
         }
-        this.getDeviceList();
+        // this.getDeviceList();
     }
 
     async getPatrolData() {
@@ -156,7 +156,7 @@ class SchedulePatrol extends React.Component {
         let _edt = edt;
         let days = this.state.days;
         let receivedDays = data.psRepDays.split(',');
-        console.log("Days:", days, receivedDays);
+        console.log("Days:", data.deName, this.state.deviceNameList);
         for (let i in days) {
             for (let j in receivedDays) {
                 if (days[i].day === receivedDays[j]) {
@@ -164,14 +164,26 @@ class SchedulePatrol extends React.Component {
                     days[i].isSelected = true
                 }
             }
-
         }
+
+        // let deviceArr = this.state.deviceNameList;
+        // let deviceName = '';
+        // for (let i in deviceArr){
+        //     if(deviceArr[i].deviceName == data.deName){
+        //         console.log("Days123:", data.deName, deviceArr[i].deviceName); 
+        //          deviceName = deviceArr[i].deviceName
+        //     }  
+        // }
+
+        this.onValueChange(data.deName)
+
         this.setState({
             startTime: _sdt,
             endTime: _edt,
             slotName: data.psSltName,
             isSnoozeEnabled: data.psSnooze,
-            days: days
+            days: days,
+            //selectedDevice:deviceName
         })
     }
 
@@ -217,7 +229,7 @@ class SchedulePatrol extends React.Component {
                         self.setState({
                             deviceNameList: deviceName,
                             selectedDevice: dataReceived[0].deGateNo
-                        });
+                        }, () => this.getPatrolData());
                     }
                 } catch (e) {
                     console.log(e)
@@ -252,9 +264,9 @@ class SchedulePatrol extends React.Component {
                         'Success',
                         'Patrolling has be successfully scheduled',
                         [
-                            {text: 'Go back', onPress: () => self.goBack()},
+                            { text: 'Go back', onPress: () => self.goBack() },
                         ],
-                        {cancelable: false},
+                        { cancelable: false },
                     );
                 } else {
                     alert(stat.error.message);
@@ -291,7 +303,7 @@ class SchedulePatrol extends React.Component {
             PCIDs: pcids
         };
         let stat = await base.services.OyeSafeApi.updatePatrol(detail);
-        console.log("KHJDKVHDV<HDKJVDV<:", stat);
+        console.log("KHJDKVHDV<HDKJVDV<:", stat, detail);
         try {
             if (stat) {
                 if (stat.success) {
@@ -299,9 +311,9 @@ class SchedulePatrol extends React.Component {
                         'Success',
                         'Patrolling has be successfully updated',
                         [
-                            {text: 'Go back', onPress: () => self.goBack()},
+                            { text: 'Go back', onPress: () => self.goBack() },
                         ],
-                        {cancelable: false},
+                        { cancelable: false },
                     );
                 } else {
                     alert(stat.error.message);
@@ -313,9 +325,9 @@ class SchedulePatrol extends React.Component {
     }
 
     async goBack() {
-        const {updateSelectedCheckPoints} = this.props;
-        await updateSelectedCheckPoints({value: []});
-        this.props.navigation.navigate("schedulePatrolling", {refresh: true});
+        const { updateSelectedCheckPoints } = this.props;
+        await updateSelectedCheckPoints({ value: [] });
+        this.props.navigation.navigate("schedulePatrolling", { refresh: true });
     }
 
     openTimeSpinner(selType) {
@@ -327,7 +339,7 @@ class SchedulePatrol extends React.Component {
 
     render() {
         let deviceList = this.state.deviceNameList.map((d, i) => {
-            return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName}/>
+            return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
         });
         return (
             <ScrollView style={SchedulePatrolStyles.container}>
@@ -342,7 +354,7 @@ class SchedulePatrol extends React.Component {
                         onPress={() => this.openTimeSpinner(0)}
                         style={SchedulePatrolStyles.endTimeText}>
                         <Text
-                            style={{color: base.theme.colors.primary}}>{moment(this.state.startTime).format("hh:mm A")}</Text>
+                            style={{ color: base.theme.colors.primary }}>{moment(this.state.startTime).format("hh:mm A")}</Text>
                     </TouchableHighlight>
                 </View>
                 <View style={SchedulePatrolStyles.endTimeView}>
@@ -353,9 +365,9 @@ class SchedulePatrol extends React.Component {
                         onPress={() => this.openTimeSpinner(1)}
                         style={SchedulePatrolStyles.endTimeText}>
                         <Text
-                            style={{color: base.theme.colors.primary}}>{moment(this.state.endTime).format("hh:mm A")}</Text>
+                            style={{ color: base.theme.colors.primary }}>{moment(this.state.endTime).format("hh:mm A")}</Text>
                     </TouchableHighlight>
-                    <View style={{height: hp('10%')}}>
+                    <View style={{ height: hp('10%') }}>
                         {this.openTimePicker()}
                     </View>
                 </View>
@@ -366,30 +378,30 @@ class SchedulePatrol extends React.Component {
                             data={this.state.days}
                             horizontal={true}
                             renderItem={(item, index) => this._renderDays(item, index)}
-                            extraData={this.state}/>
+                            extraData={this.state} />
                     </View>
                     <View style={SchedulePatrolStyles.repeatTextView}>
-                        <Text style={{fontFamily: base.theme.fonts.medium}}>Repeat</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium }}>Repeat</Text>
                     </View>
                 </View>
                 <View style={SchedulePatrolStyles.slotMainView}>
                     <View style={SchedulePatrolStyles.slotSubView}>
-                        <Text style={{fontFamily: base.theme.fonts.medium}}>Slot Name</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium }}>Slot Name</Text>
                     </View>
                     <TextInput
                         placeholder={"Please Enter Slot Name"}
                         style={SchedulePatrolStyles.textInputView}
-                        onChangeText={(text) => this.setState({slotName: text})}
+                        onChangeText={(text) => this.setState({ slotName: text })}
                         value={this.state.slotName}
                     />
                 </View>
                 <View style={SchedulePatrolStyles.selectDevMainView}>
                     <View style={SchedulePatrolStyles.selectDevView}>
-                        <Text style={{fontFamily: base.theme.fonts.medium}}>Select Device</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium }}>Select Device</Text>
                         <Picker
                             mode="dropdown"
                             iosHeader="Select Device"
-                            iosIcon={<Icon name="arrow-down"/>}
+                            iosIcon={<Icon name="arrow-down" />}
                             style={SchedulePatrolStyles.picker}
                             selectedValue={this.state.selectedDevice}
                             onValueChange={(key) => this.onValueChange(key)}>
@@ -401,23 +413,23 @@ class SchedulePatrol extends React.Component {
                     <View style={{
                         width: wp('65%'),
                     }}>
-                        <Text style={{fontFamily: base.theme.fonts.medium}}>Snooze</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium }}>Snooze</Text>
                     </View>
                     <Switch
                         onValueChange={() => this.changeSnooze()}
-                        value={this.state.isSnoozeEnabled}/>
+                        value={this.state.isSnoozeEnabled} />
                 </View>
                 <View style={SchedulePatrolStyles.osButtonView}>
                     <OSButton onButtonClick={() => this.props.navigation.goBack(null)}
-                              oSBText={'Cancel'} oSBType={"custom"}
-                              oSBBackground={base.theme.colors.red}
-                              height={30} borderRadius={10}/>
+                        oSBText={'Cancel'} oSBType={"custom"}
+                        oSBBackground={base.theme.colors.red}
+                        height={30} borderRadius={10} />
                     <OSButton onButtonClick={() => this.validateFields()}
-                              oSBText={this.state.patrolId === null ? 'Save' : 'Update'} oSBType={"custom"}
-                              oSBBackground={base.theme.colors.primary}
-                              height={30} borderRadius={10}/>
+                        oSBText={this.state.patrolId === null ? 'Save' : 'Update'} oSBType={"custom"}
+                        oSBBackground={base.theme.colors.primary}
+                        height={30} borderRadius={10} />
                 </View>
-                <EmptyView height={60}/>
+                <EmptyView height={60} />
                 {this.renderTimeSpinnerModal()}
             </ScrollView>
         )
@@ -449,7 +461,11 @@ class SchedulePatrol extends React.Component {
             alert("Please select patrolling days")
         } else if (base.utils.validate.isBlank(this.state.slotName)) {
             alert("Please enter slot name");
-        } else {
+        }
+        else if (this.state.selectedDevice === "") {
+            alert("Please select a device");
+        }
+        else {
             this.state.patrolId === null ? this.schedulePatrol(daysString, patrolCheckPointID) : this.updatePatrol(daysString, patrolCheckPointID)
         }
     }
@@ -547,21 +563,21 @@ class SchedulePatrol extends React.Component {
 
         return (
             <Modal isVisible={Platform.OS === 'ios' ? this.state.isSpinnerOpen : false}
-                   style={SchedulePatrolStyles.spinModal}
+                style={SchedulePatrolStyles.spinModal}
             >
                 <View
                     style={SchedulePatrolStyles.spinMainView}>
                     <TouchableHighlight
                         underlayColor={base.theme.colors.transparent}
                         style={SchedulePatrolStyles.closeTextView}
-                        onPress={() => this.setState({isSpinnerOpen: false})}>
+                        onPress={() => this.setState({ isSpinnerOpen: false })}>
                         <Text style={SchedulePatrolStyles.closeText}>Close</Text>
                     </TouchableHighlight>
                     <DatePickerIOS
                         date={selectedDate}
                         mode={'time'}
                         height={100}
-                        style={{height: 100}}
+                        style={{ height: 100 }}
                         onDateChange={(time) => this.changeTime(time)}
                     />
                 </View>
@@ -572,7 +588,7 @@ class SchedulePatrol extends React.Component {
     renderTimePicker = async (stateKey, options) => {
         try {
             let newState = {};
-            const {action, hour, minute} = await TimePickerAndroid.open(options);
+            const { action, hour, minute } = await TimePickerAndroid.open(options);
             if (action !== TimePickerAndroid.dismissedAction) {
                 let newTime = new Date();
                 newTime.setHours(hour);
@@ -587,7 +603,7 @@ class SchedulePatrol extends React.Component {
                 this.changeTime(currentDate);
             }
 
-        } catch ({code, message}) {
+        } catch ({ code, message }) {
             console.warn('Cannot open time picker', message);
         }
     };
@@ -597,9 +613,9 @@ class SchedulePatrol extends React.Component {
         let selTime = time === "Invalid Date" ? currentDate : time;
         console.log("Time:", selTime, (time), currentDate);
         if (this.state.selType === 0) {
-            this.setState({startTime: selTime, isSpinnerOpen: false})
+            this.setState({ startTime: selTime, isSpinnerOpen: false })
         } else {
-            this.setState({endTime: selTime, isSpinnerOpen: false})
+            this.setState({ endTime: selTime, isSpinnerOpen: false })
         }
     }
 
@@ -614,4 +630,4 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps, {updateSelectedCheckPoints})(SchedulePatrol)
+export default connect(mapStateToProps, { updateSelectedCheckPoints })(SchedulePatrol)
