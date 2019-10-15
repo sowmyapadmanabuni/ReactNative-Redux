@@ -26,7 +26,7 @@ import {
   Input,
   InputGroup
 } from 'native-base';
-import base from '../src/base';
+import base from '../../base';
 import { Dropdown } from 'react-native-material-dropdown';
 import ZoomImage from 'react-native-zoom-image';
 import { Easing } from 'react-native';
@@ -38,13 +38,14 @@ import AudioRecorderPlayer, {
   AudioSet,
   AudioSourceAndroidType
 } from 'react-native-audio-recorder-player';
-import { ratio, screenWidth } from './Styles.js';
+import { ratio, screenWidth } from './VendorStyles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { connect } from 'react-redux';
 
 var audioRecorderPlayer;
-class SendingMsgToGate extends Component {
+class NotificationAnnouncementDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -99,7 +100,6 @@ class SendingMsgToGate extends Component {
   componentDidMount() {
     let self = this;
     setTimeout(() => {
-      self.visitorData();
       this.setState({
         isLoading: false
       });
@@ -142,7 +142,7 @@ class SendingMsgToGate extends Component {
       }
     };
     let self = this;
-    ImagePicker.launchCamera(options, response => {
+    ImagePicker.showImagePicker(options, response => {
       console.log('response:', response);
       if (response.didCancel) {
       } else if (response.error) {
@@ -285,7 +285,7 @@ class SendingMsgToGate extends Component {
   }
 
   uploadAudio = async result => {
-    console.log('Audio', result);
+    console.log('Audio', result[0]);
     const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
     console.log('PATH', result[0], path);
 
@@ -299,7 +299,6 @@ class SendingMsgToGate extends Component {
 
     console.log(formData, 'FormData');
     let stat = await base.services.MediaUploadApi.uploadRelativeImage(formData);
-    console.log('Voice_Data', stat);
     try {
       this.setState({
         mp3: stat
@@ -307,7 +306,7 @@ class SendingMsgToGate extends Component {
     } catch (e) {
       console.log(e);
     }
-    console.log('Stat222222222222222222222222:', stat, this.state.mp3);
+    console.log('Stat222222222222222222222222:', stat);
   };
 
   image1Exp = () => {};
@@ -484,113 +483,6 @@ class SendingMsgToGate extends Component {
     });
   };
 
-  visitorData = async () => {
-    this.setState({ isLoading: true });
-    let today = moment(new Date(), 'DD-MM-YYYY').format('YYYY-MM-DD');
-
-    // let date = today.format('YYYY-MM-DD');
-    //oday.getFullYear() + '-' + today.getMonth() + '-' + today.getDate();
-
-    // console.log(date);
-    // let date = new Date().getDate().format('YYYY-MM-DD');
-    console.log('Date:', today);
-    try {
-      const response = await fetch(
-        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
-        {
-          method: 'POST',
-          headers: {
-            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            StartDate: `${today}`,
-            EndDate: `${today}`, //moment(new Date()).format('YYYY-MM-DD'),
-            ASAssnID: this.props.dashboardReducer.assId,
-            UNUnitID: this.props.dashboardReducer.uniID,
-            ACAccntID: this.props.userReducer.MyAccountID
-          })
-        }
-      )
-        .then(response => response.json())
-        .then(responseJson => {
-          //var count = Object.keys(responseJson.data.visitorlogbydate).length;
-          //console.log("fsbkfh", count);
-          if (responseJson.success) {
-            console.log('SUCCESS', responseJson);
-            let data = responseJson.data.visitorlog.filter(
-              x => x.vlVisType === 'Delivery'
-            );
-            let visitors = [];
-            let visitorObj = {};
-            for (let i in data) {
-              console.log('data[i].vlExitT', data[i].vlExitT);
-              if (
-                data[i].vlExitT === '0001-01-01T00:00:00' ||
-                data[i].vlExitT === 'NULL'
-              ) {
-                visitorObj = {
-                  value: data[i].vlfName,
-                  id: data[i].vlVisLgID
-                };
-                console.log('VALUE,ID', visitorObj.value, visitorObj.id);
-                visitors.push(visitorObj);
-                this.setState({
-                  visitorList: visitors
-                });
-                console.log(
-                  'DATAAAAAAA',
-                  i,
-                  data[i],
-                  data[i].vlExitT,
-                  visitors
-                );
-              }
-
-              console.log('Visitors', visitorObj);
-            }
-            this.setState({
-              isLoading: false,
-              datasource: visitors
-            });
-            console.log('Visitor Data', this.state.datasource);
-          } else {
-            this.setState({
-              isLoading: false,
-              datasource: []
-            });
-          }
-        });
-      if (response) {
-        console.log(
-          'Visitor Data',
-          response.data.visitorlog.filter(x => x.vlVisType === 'Delivery')
-        );
-        this.setState({ isLoading: false });
-      }
-    } catch (e) {
-      this.setState({ isLoading: false });
-    }
-  };
-
-  visitorsendtogate = async (value, index) => {
-    let self = this;
-    let visitorList = self.state.visitorList;
-
-    let id, name;
-    for (let i = 0; i < visitorList.length; i++) {
-      console.log('VIsitor List', visitorList);
-      if (i === index) {
-        (id = visitorList[i].id), (name = visitorList[i].value);
-      }
-      console.log('id, name', id, name);
-      self.setState({
-        visitorName: name,
-        visitorId: id
-      });
-    }
-  };
-
   datasend = () => {
     let self = this;
     let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
@@ -602,6 +494,8 @@ class SendingMsgToGate extends Component {
     let visitorid = self.state.visitorId;
     let visitorname = self.state.visitorName;
     let mp3 = self.state.mp3;
+    accountId = self.props.userReducer.MyAccountID;
+    assocID = self.props.dashboardReducer.assId;
     console.log(
       'All Data',
       img1,
@@ -617,54 +511,25 @@ class SendingMsgToGate extends Component {
       self.props.dashboardReducer.uniID,
       this.props.oyeURL
     );
+    let ntTitle = 'Announcement';
+    let ntDesc = `${comments}`;
+    let ntType = `Announcement`;
+    let associationId = self.props.dashboardReducer.assId;
 
-    if (visitorid.length === 0) {
-      return alert('Please select vendor from dropdown');
-    } else {
-      this.setState({
-        isLoading: true
-      });
-      axios
-        .post(
-          `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
-          {
-            VLVenName: `${visitorname}`,
-            VLCmnts: `${comments}`,
-            VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
-            VLVoiceNote: mp3,
-            VLVisLgID: visitorid
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-            }
-          }
-        )
-
-        .then(response => {
-          console.log('Respo1111:', response);
-          // alert('Success');
-          this.setState({
-            isLoading: false
-          });
-          this.props.navigation.goBack();
-        })
-        .catch(error => {
-          console.log('Crash in profile', error);
-        });
-    }
+    this.setState({
+      isLoading: true
+    });
   };
-
   render() {
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
     console.log('COMMENT', this.state.comment.length);
+    console.log('PROPS:', this.props.navigation.state.params);
     return (
       <View style={styles.container}>
-        {/* <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
+        <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
@@ -682,7 +547,7 @@ class SendingMsgToGate extends Component {
                 >
                   <Image
                     resizeMode="contain"
-                    source={require('../icons/back.png')}
+                    source={require('../../../icons/back.png')}
                     style={styles.viewDetails2}
                   />
                 </View>
@@ -697,16 +562,20 @@ class SendingMsgToGate extends Component {
             >
               <Image
                 style={[styles.image]}
-                source={require('../icons/OyespaceSafe.png')}
+                source={require('../../../icons/OyespaceSafe.png')}
               />
             </View>
             <View style={{ width: '35%' }}>
+              {/* <Image source={require('../../../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
           <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
-         */}
-        <View style={styles.viewForMyProfileText}>
+
+        <View>
+          <Text>{this.props.navigation.state.params.ntid}</Text>
+        </View>
+        {/* <View style={styles.viewForMyProfileText}>
           <Text
             style={{
               fontSize: hp('2.5%'),
@@ -714,37 +583,11 @@ class SendingMsgToGate extends Component {
               textAlign: 'center'
             }}
           >
-            Leave with Vendor
+            Announcement
           </Text>
         </View>
         <KeyboardAwareScrollView>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Dropdown
-              value={'Select Visitor' || ''}
-              data={this.state.datasource}
-              textColor={base.theme.colors.black}
-              inputContainerStyle={{}}
-              baseColor={base.theme.colors.black}
-              placeholder="Select Visitor"
-              placeholderTextColor={base.theme.colors.black}
-              placeholderStyle={{ fontWeight: 'bold' }}
-              labelHeight={hp('4%')}
-              containerStyle={{
-                width: wp('85%'),
-                height: hp('8%')
-              }}
-              rippleOpacity={0}
-              dropdownPosition={0}
-              dropdownOffset={{ top: hp('10%'), left: 0 }}
-              style={{ fontSize: hp('2.2%') }}
-              onChangeText={(value, index) =>
-                this.visitorsendtogate(value, index)
-              }
-              // ref={c => {
-              //   dropdownValue = c;
-              // }}
-            />
-          </View>
+         
 
           <Card
             style={{
@@ -803,53 +646,6 @@ class SendingMsgToGate extends Component {
                           source={{ uri: this.state.myProfileImage1 }}
                         />
                       </View>
-                      {/* <TouchableOpacity>
-                        <View style={styles.imagesmallCircle}>
-                          <View
-                            style={{
-                              width: hp('5%'),
-                              height: hp('5%'),
-                              zIndex: 100
-                            }}
-                          >
-                            <ZoomImage
-                              style={[styles.smallImage]}
-                              source={{ uri: this.state.myProfileImage1 }}
-                              imgStyle={{
-                                height: hp('4%'),
-                                width: hp('4%'),
-                                borderRadius: hp('2%'),
-                                borderColor: 'orange',
-                                borderWidth: hp('0.1%'),
-                                marginRight: hp('2%')
-                              }}
-                            />
-                          </View>
-
-                          <View
-                            style={{
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              position: 'absolute',
-                              zIndex: 110
-                            }}
-                          >
-                            <Text
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                fontSize: hp('3%'),
-                                marginLeft: hp('1.5%'),
-                                color: base.theme.colors.black,
-                                fontWeight: '500'
-                              }}
-                            >
-                              +
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                     */}
                     </View>
                   )}
                 </TouchableOpacity>
@@ -900,64 +696,6 @@ class SendingMsgToGate extends Component {
                             source={{ uri: this.state.myProfileImage2 }}
                           />
                         </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}> */}
-                        {/* <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage2 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View> */}
-
-                        {/* <Image
-                            style={{
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              marginBottom: hp('15%'),
-                              position: 'absolute',
-                              marginRight: hp('5%')
-                              // backgroundColor: 'red'
-                            }}
-                            source={require('../icons/zoom_in_white.png')}
-                          /> */}
-                        {/* </View>
-                        </TouchableOpacity> */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -1011,53 +749,6 @@ class SendingMsgToGate extends Component {
                             source={{ uri: this.state.myProfileImage3 }}
                           />
                         </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}>
-                            <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage3 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                       */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -1113,53 +804,6 @@ class SendingMsgToGate extends Component {
                             source={{ uri: this.state.myProfileImage4 }}
                           />
                         </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}>
-                            <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage4 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                       */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -1220,53 +864,6 @@ class SendingMsgToGate extends Component {
                             source={{ uri: this.state.myProfileImage5 }}
                           />
                         </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}>
-                            <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage5 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                       */}
                       </View>
                     )}
                   </TouchableOpacity>
@@ -1370,16 +967,13 @@ class SendingMsgToGate extends Component {
                       </TouchableOpacity>
                     ) : (
                       <View>
-                        {/* {this.state.buttonId === 1 &&
-                      this.state.playBtnId === 2 ? ( */}
+                        
                         <TouchableOpacity onPress={() => this.onStopPlay()}>
                           <Image
                             source={require('../icons/leave_vender_stopcopy.png')}
                           />
                         </TouchableOpacity>
-                        {/* ) : (
-                        <View></View>
-                      )} */}
+                        
                       </View>
                     )}
                   </View>
@@ -1449,12 +1043,14 @@ class SendingMsgToGate extends Component {
                     fontWeight: '500'
                   }}
                 >
-                  Submit
+                  Send
                 </Text>
               </Button>
             </View>
           </View>
         </KeyboardAwareScrollView>
+         */}
+
         <ProgressLoader
           isHUD={true}
           isModal={true}
@@ -1474,7 +1070,7 @@ const mapStateToProps = state => {
     userReducer: state.UserReducer
   };
 };
-export default connect(mapStateToProps)(SendingMsgToGate);
+export default connect(mapStateToProps)(NotificationAnnouncementDetailScreen);
 
 const styles = StyleSheet.create({
   container: {

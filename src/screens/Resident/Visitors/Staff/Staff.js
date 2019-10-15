@@ -317,11 +317,11 @@ class Staff extends React.Component {
                             onButtonClick={() => this.getStaffReport()}/>
                         : <View/>}
 
-                        {/* {this.state.staffList.length !== 0 &&
+                        {this.state.staffList.length !== 0 &&
                             <AnimatedTouchable animation={'swing'} onPress={()=> this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId, Pic: this.state.staffPic, DeptName:this.state.departmentName})}>
                             <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:base.theme.colors.primary,borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}><Text style={{fontSize:hp('2%'), color:base.theme.colors.primary}}>Leave with Vendor</Text></View>
                             </AnimatedTouchable>
-                        } */}
+                        }
                 </View>
                 :
                 <View style={StaffStyle.activityIndicator}>
@@ -383,7 +383,7 @@ class Staff extends React.Component {
             console.log(duration.as('days'));
             let difference = duration.as('days');
             if (difference > 31) {
-                alert('Maximum Limit is 31 Days. You can not select more than that')
+                alert('Maximum limit is 31 Days. You can not select more than that')
             } else {
                 const {updateStaffInfo} = this.props;
                 updateStaffInfo({prop: "startDate", value: moment(fromDate).format('YYYY-MM-DD')});

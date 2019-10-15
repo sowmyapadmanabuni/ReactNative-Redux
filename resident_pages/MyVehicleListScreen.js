@@ -461,15 +461,17 @@ class VehicleList extends Component {
                 <View style={{height: hp('7%')}}></View>
 
                 <TouchableOpacity
-                    style={[styles.floatButton]}
+                    style={styles.floatButton}
                     onPress={() => this.props.navigation.navigate('AddVehiclesScreen')}
                 >
-                    <Image
-                        style={{height: hp('8%'), width: hp('8%'), top: 10}}
-                        resizeMode={'contain'}
-                        source={require('../icons/add_btn.png')}
-                    />
+                    <Text
+                        style={styles.plusTextStyle}
+                    >
+                        +
+                    </Text>
                 </TouchableOpacity>
+
+                
             </View>
         );
     }
@@ -556,21 +558,31 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0,0,0,0)',
         alignItems: 'center',
         justifyContent: 'center',
-        width: hp('5%'),
+        width: hp('6.5%'),
         position: 'absolute',
-        bottom: 20,
-        right: 20,
-        height: hp('5%'),
-        backgroundColor: 'rgba(0,0,0,0)',
-        borderRadius: hp('2.5%'),
+        bottom: hp('5%'),
+        right: hp('3.5%'),
+        height: hp('6.5%'),
+        backgroundColor: '#FF8C00',
+        borderRadius: hp('4.5%'),
         // shadowColor: '#000000',
         shadowOffset: {
-            width: 0,
-            height: 3
+          width: 0,
+          height: 3
         },
         shadowRadius: 3,
         shadowOpacity: 0.6
-    },
+      },
+     
+      plusTextStyle: {
+        fontSize: hp('4%'),
+        color: '#fff',
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginBottom: hp('0.5%')
+      },
     viewStyle1: {
         backgroundColor: '#fff',
         height: hp('7%'),

@@ -715,7 +715,7 @@ class App extends React.Component {
                                 a.vlfName.localeCompare(b.vlfName)
                             )}
                             renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.fmid.toString()}
+                            keyExtractor={(item, index) => item.vlVisLgID.toString()}
                         />
                     )}
                 </View>
@@ -831,8 +831,9 @@ const styles = StyleSheet.create({
         fontWeight: "600"
     },
     unitTextStyle: {
-        fontSize: hp("1.5%"),
-        fontFamily: base.theme.fonts.bold, marginBottom: 10
+        fontSize: hp("1.5%"),fontWeight:'bold',
+        fontFamily: base.theme.fonts.bold, 
+        marginBottom: 6, 
     },
     subNameTextStyleOne: {
         padding: hp("0.5%"),
@@ -841,7 +842,7 @@ const styles = StyleSheet.create({
     },
     subNameTextStyleTwo: {
         padding: hp("0.5%"),
-        fontSize: hp("1.7%"),
+        fontSize: hp("1.3%"),
         color: "#909091"
     },
     textinput: {

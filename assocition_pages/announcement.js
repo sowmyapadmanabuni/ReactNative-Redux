@@ -41,6 +41,10 @@ import AudioRecorderPlayer, {
 import { ratio, screenWidth } from './VendorStyles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { CLOUD_FUNCTION_URL } from '../constant.js';
+import firebase from 'react-native-firebase';
+
+import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 
 var audioRecorderPlayer;
@@ -90,7 +94,9 @@ class Announcement extends Component {
       visitorList: [],
 
       comment: '',
-      dropdownValue: ''
+      dropdownValue: '',
+
+      announcementId: ''
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -141,7 +147,7 @@ class Announcement extends Component {
       }
     };
     let self = this;
-    ImagePicker.launchCamera(options, response => {
+    ImagePicker.showImagePicker(options, response => {
       console.log('response:', response);
       if (response.didCancel) {
       } else if (response.error) {
@@ -493,6 +499,8 @@ class Announcement extends Component {
     let visitorid = self.state.visitorId;
     let visitorname = self.state.visitorName;
     let mp3 = self.state.mp3;
+    accountId = self.props.userReducer.MyAccountID;
+    assocID = self.props.dashboardReducer.assId;
     console.log(
       'All Data',
       img1,
@@ -508,43 +516,103 @@ class Announcement extends Component {
       self.props.dashboardReducer.uniID,
       this.props.oyeURL
     );
+    let ntTitle = 'Announcement';
+    let ntDesc = `${comments}`;
+    let ntType = `Announcement`;
+    let associationId = self.props.dashboardReducer.assId;
 
-    if (visitorid.length === 0) {
-      return alert('Please select vendor from dropdown');
-    } else {
-      this.setState({
-        isLoading: true
-      });
-      axios
-        .post(
-          `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
-          {
-            VLVenName: `${visitorname}`,
-            VLCmnts: `${comments}`,
-            VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
-            VLVoiceNote: mp3,
-            VLVisLgID: visitorid
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+    this.setState({
+      isLoading: true
+    });
+    axios
+      .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
+        admin: 'false',
+        ntType: ntType,
+        ntDesc: ntDesc,
+        ntTitle: ntTitle,
+        associationID: associationId
+      })
+      .then(response_3 => {
+        console.log('response_3', response_3);
+        this.setState({ loading: false });
+        axios
+          .post(
+            `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
+            {
+              ANImages: `${img1},${img2},${img3},${img4},${img5}`,
+              ANCmnts: `${comments}`,
+              ACAccntID: accountId,
+              ASAssnID: assocID,
+              ANVoice: mp3
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+              }
             }
-          }
-        )
+          )
+          .then(response => {
+            console.log('Respo1111:', response);
+            this.setState({
+              isLoading: false,
+              announcementId: response.data.announcement.anid
+            });
+            axios
+              .get(
+                `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
+                {
+                  headers: {
+                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                    'Content-Type': 'application/json'
+                  }
+                }
+              )
+              .then(res => {
+                let memberList = res.data.data.memberListByAssociation;
+                console.log('memberList1111', memberList);
+                memberList.map(data => {
+                  console.log('adminssss', data);
+                  this.props.createUserNotification(
+                    ntType,
+                    this.props.oyeURL,
+                    data.acAccntID,
+                    this.props.dashboardReducer.assId.toString(),
+                    ntDesc,
+                    // sbUnitID.toString(),
+                    // sbMemID.toString(),
+                    // sbSubID.toString(),
+                    // sbRoleId,
+                    // this.props.navigation.state.params.associationName,
+                    // unitName.toString(),
+                    // occupancyDate,
+                    // soldDate,
+                    false,
+                    this.props.userReducer.MyAccountID
+                  );
+                });
 
-        .then(response => {
-          console.log('Respo1111:', response);
-          // alert('Success');
-          this.setState({
-            isLoading: false
+                // getAssoMembers(oyeURL, MyAccountID);
+
+                // this.props.updateJoinedAssociation(
+                //   this.props.joinedAssociations,
+                //   unitList.unUnitID
+                // );
+                this.props.navigation.goBack();
+              })
+              .catch(error => {
+                // getAssoMembers(oyeURL, MyAccountID);
+                this.setState({
+                  loading: false
+                });
+
+                console.log(error, 'errorAdmin');
+              });
+          })
+          .catch(error => {
+            console.log('Crash in Announcement', error);
           });
-          this.props.navigation.goBack();
-        })
-        .catch(error => {
-          console.log('Crash in profile', error);
-        });
-    }
+      });
   };
   render() {
     let playWidth =
@@ -555,6 +623,49 @@ class Announcement extends Component {
     console.log('PROPS:', this.props.navigation.state.params);
     return (
       <View style={styles.container}>
+        <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
+          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
+            <View style={styles.viewDetails1}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack();
+                }}
+              >
+                <View
+                  style={{
+                    height: hp('4%'),
+                    width: wp('15%'),
+                    alignItems: 'flex-start',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Image
+                    resizeMode="contain"
+                    source={require('../icons/back.png')}
+                    style={styles.viewDetails2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                width: '35%',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Image
+                style={[styles.image]}
+                source={require('../icons/OyespaceSafe.png')}
+              />
+            </View>
+            <View style={{ width: '35%' }}>
+              {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+            </View>
+          </View>
+          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
+        </SafeAreaView>
+
         <View style={styles.viewForMyProfileText}>
           <Text
             style={{
@@ -563,7 +674,7 @@ class Announcement extends Component {
               textAlign: 'center'
             }}
           >
-            Leave with Vendor
+            Announcement
           </Text>
         </View>
         <KeyboardAwareScrollView>
@@ -1276,7 +1387,7 @@ class Announcement extends Component {
                     fontWeight: '500'
                   }}
                 >
-                  Submit
+                  Send
                 </Text>
               </Button>
             </View>
@@ -1301,7 +1412,10 @@ const mapStateToProps = state => {
     userReducer: state.UserReducer
   };
 };
-export default connect(mapStateToProps)(Announcement);
+export default connect(
+  mapStateToProps,
+  { createUserNotification }
+)(Announcement);
 
 const styles = StyleSheet.create({
   container: {

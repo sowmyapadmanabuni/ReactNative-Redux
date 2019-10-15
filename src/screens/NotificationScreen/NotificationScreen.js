@@ -85,7 +85,8 @@ class NotificationScreen extends PureComponent {
         const {notifications, savedNoifId, oyeURL} = this.props;
         if (
             item.ntType === 'Join' ||
-            item.ntType === 'Join_Status'
+            item.ntType === 'Join_Status' 
+            
         // item.ntType === "gate_app"
         ) {
             this.props.navigation.navigate('NotificationDetailScreen', {
@@ -98,6 +99,17 @@ class NotificationScreen extends PureComponent {
             });
             // this.props.onNotificationOpen(notifications, index, oyeURL);
             // this.props.storeOpenedNotif(savedNoifId, item.ntid);
+        } else if(item.ntType === 'Announcement'){
+            //Seperate Page i'll write
+            console.log("Announcement_item",item)
+            this.props.navigation.navigate('NotificationAnnouncementDetailScreen', {
+                details: item,
+                index,
+                notifications,
+                oyeURL,
+                savedNoifId,
+                ntid: item.ntid
+            }) 
         }
     };
 
@@ -133,6 +145,8 @@ class NotificationScreen extends PureComponent {
             return 'Request to Join Status';
         } else if (type === 'gate_app') {
             return 'Gate App Notification';
+        } else if( type==='Announcement') {
+            return 'Announcement'
         }
     };
 

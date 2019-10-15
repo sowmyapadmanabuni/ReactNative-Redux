@@ -521,13 +521,16 @@ class MyFamilyList extends React.Component {
                         />
                     
                     <TouchableOpacity
-                        style={Style.floatButton}
-                        onPress={() => {
-                            this.props.navigation.navigate('MyFamily');
-                        }}
+                    style={Style.floatButton}
+                    onPress={() => this.props.navigation.navigate('MyFamily')}
+                >
+                    <Text
+                        style={Style.plusTextStyle}
                     >
-                        <Text style={Style.plusTextStyle}>+</Text>
-                    </TouchableOpacity>
+                        +
+                    </Text>
+                </TouchableOpacity>
+
                 </View>
             </View>
         );
