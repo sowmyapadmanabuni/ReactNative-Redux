@@ -526,9 +526,8 @@ class PatrollingCheckPoints extends React.Component {
         for (let i in pointArr) {
             for (let j in cpList) {
                 if (!cpList[j].isChecked) {
-                    console.log("fdnfgdsdgb", cpList[j]);
                     if (cpList[j].cpChkPntID === pointArr[i].psChkPID) {
-                        unselectedData.push(pointArr[i].pcid)
+                        unselectedData.push(pointArr[i].psChkPID)
                     }
                 }
             }

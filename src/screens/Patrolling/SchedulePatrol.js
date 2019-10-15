@@ -32,7 +32,7 @@ import OSButton from "../../components/osButton/OSButton";
 import SchedulePatrolStyles from "./SchedulePatrolStyles";
 
 
-let currentDate = new Date();
+let currentDate = moment().format();
 
 
 class SchedulePatrol extends React.Component {
@@ -148,10 +148,10 @@ class SchedulePatrol extends React.Component {
         let data = this.state.patrolData;
         console.log("DATA:", data);
 
-        let sdt = new Date(data.pssTime);
-        let edt = new Date(data.pseTime);
-        sdt.setDate(sdt.getDate());
-        edt.setDate(edt.getDate());
+        let sdt = moment(data.pssTime).format();
+        let edt = moment(data.pseTime).format();
+        // sdt.setDate(sdt.getDate());
+        // edt.setDate(edt.getDate());
         let _sdt = sdt;
         let _edt = edt;
         let days = this.state.days;
