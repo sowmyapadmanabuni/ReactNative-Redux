@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-09-30 11:29:48 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-09-30 18:23:33
+ * @Last Modified time: 2019-10-16 15:33:50
  */
 
 
@@ -18,22 +18,22 @@ import {
     TouchableHighlight,
     View
 } from 'react-native';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import base from "../../base";
 import FloatingActionButton from "../../components/FloatingButton";
 import OyeSafeApi from "../../base/services/OyeSafeApi";
 import CheckBox from 'react-native-check-box';
 import ElevatedView from 'react-native-elevated-view';
 import EmptyView from "../../components/common/EmptyView";
-import {updateSelectedCheckPoints} from '../../../src/actions';
+import { updateSelectedCheckPoints } from '../../../src/actions';
 import Modal from "react-native-modal";
-import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
-const {height, width} = Dimensions.get('screen');
-import Toast, {DURATION} from 'react-native-easy-toast';
+const { height, width } = Dimensions.get('screen');
+import Toast, { DURATION } from 'react-native-easy-toast';
 import LottieView from 'lottie-react-native';
 
 
@@ -44,12 +44,12 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
 
- class PatrolShuffling extends React.Component{
-    constructor(props){
+class PatrolShuffling extends React.Component {
+    constructor(props) {
         super(props);
-        this.state={
-            data:[],
-            scrolled:{},
+        this.state = {
+            data: [],
+            scrolled: {},
             isModalOpen: false,
             region: {
                 latitude: '',
@@ -57,77 +57,68 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
-            cpName:"",
-            isLottieModalOpen:false
+            cpName: "",
+            isLottieModalOpen: false
         }
     }
 
 
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
-            data:this.props.selectedCheckPoints.selectedCheckPoints,
-            isLottieModalOpen:true
-        },()=>{
-            this.animation.play();
-            //this.refs.toast.show('hello world!',1500);
+            data: this.props.selectedCheckPoints.selectedCheckPoints,
+            isLottieModalOpen: true
         })
     }
-    
-    componentDidMount(){
-        this.animation.play();
-    }
-
-    
-
 
     renderItem = ({ item, index, move, moveEnd, isActive }) => {
-        console.log("SKJCKJDC:",item);
+        console.log("SKJCKJDC:", item);
         let data = item;
         console.log("Item:", item.item);
         return (
-          <TouchableHighlight
-          underlayColor={base.theme.colors.transparent}
-          style={[PatrollingCheckPointsStyles.checkBoxView],{backgroundColor:isActive?base.theme.colors.primary:base.theme.colors.white}}
-            onLongPress={move}
-            onPressOut={moveEnd}
-          >
-            <View style={PatrollingCheckPointsStyles.checkBoxView}>
-                <TouchableHighlight onPress={() => this.mapModal(data)}
-                                    underlayColor={base.theme.colors.transparent}
-                                    style={{justifyContent: 'center'}}>
-                    <View>
-                        <Image
-                            style={PatrollingCheckPointsStyles.mapImage}
-                            source={require('../../../icons/map1.png')}
-                        />
-                        <Image
-                            resizeMode={'center'}
-                            style={PatrollingCheckPointsStyles.mapImage1}
-                            source={require('../../../icons/zoom.png')}
-                        />
-                    </View>
-                </TouchableHighlight>
-                <View style={PatrollingCheckPointsStyles.centerView}>
-                    <View style={PatrollingCheckPointsStyles.centerTextView}>
-                        <Text style={PatrollingCheckPointsStyles.centerTextStyle}>{data.cpCkPName}</Text>
-                    </View>
-                    <View style={PatrollingCheckPointsStyles.locationView}>
-                        <Image
-                            style={PatrollingCheckPointsStyles.locationImageStyle}
-                            source={require('../../../icons/location.png')}
-                        />
-                        <Text numberOfLines={1}
-                              style={PatrollingCheckPointsStyles.locationText}>{data.cpgpsPnt}</Text>
-                    </View>
-                    <View style={PatrollingCheckPointsStyles.centerTextView}>
-                        <Text style={PatrollingCheckPointsStyles.centerTextStyle}>Type:- {data.cpcPntAt}</Text>
+            <TouchableHighlight
+                underlayColor={base.theme.colors.transparent}
+                style={[PatrollingCheckPointsStyles.checkBoxView], { backgroundColor: isActive ? base.theme.colors.primary : base.theme.colors.white }}
+                onLongPress={move}
+                onPressOut={moveEnd}
+            >
+                <View style={PatrollingCheckPointsStyles.checkBoxView}>
+                    <TouchableHighlight onPress={() => this.mapModal(data)}
+                        underlayColor={base.theme.colors.transparent}
+                        style={{ justifyContent: 'center' }}>
+                        <View>
+                            <Image
+                                style={PatrollingCheckPointsStyles.mapImage}
+                                source={require('../../../icons/map1.png')}
+                            />
+                            <Image
+                                resizeMode={'center'}
+                                style={PatrollingCheckPointsStyles.mapImage1}
+                                source={require('../../../icons/zoom.png')}
+                            />
+                        </View>
+                    </TouchableHighlight>
+                    <View style={PatrollingCheckPointsStyles.centerView}>
+                        <View style={PatrollingCheckPointsStyles.centerTextView}>
+                            <Text style={PatrollingCheckPointsStyles.centerTextStyle}>{data.cpCkPName}</Text>
+                        </View>
+                        <View style={PatrollingCheckPointsStyles.locationView}>
+                            <Image
+                                resizeMode={'center'}
+                                style={PatrollingCheckPointsStyles.locationImageStyle}
+                                source={require('../../../icons/location.png')}
+                            />
+                            <Text numberOfLines={1}
+                                style={PatrollingCheckPointsStyles.locationText}>{data.cpgpsPnt}</Text>
+                        </View>
+                        <View style={PatrollingCheckPointsStyles.centerTextView}>
+                            <Text style={PatrollingCheckPointsStyles.centerTextStyle}>Type:- {data.cpcPntAt}</Text>
+                        </View>
                     </View>
                 </View>
-            </View>
-            
-          </TouchableHighlight>
+
+            </TouchableHighlight>
         )
-      }
+    }
 
 
     mapModal(data) {
@@ -146,20 +137,21 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
         })
     }
 
-      openMapModal() {
+    openMapModal() {
         return (
             <Modal isVisible={this.state.isModalOpen}
-                   style={PatrollingCheckPointsStyles.mapViewModal}>
+                style={PatrollingCheckPointsStyles.mapViewModal}>
                 <View
                     style={PatrollingCheckPointsStyles.modalView}>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                         <View>
                             <Text style={PatrollingCheckPointsStyles.modalText}>{this.state.cpName}</Text>
                         </View>
                         <TouchableHighlight
                             underlayColor={base.theme.colors.transparent}
                             style={PatrollingCheckPointsStyles.modalTouchable}
-                            onPress={() => this.setState({isModalOpen: false})}>
+                            onPress={() => this.setState({ isModalOpen: false })}>
                             <Text style={PatrollingCheckPointsStyles.modalText}>Close</Text>
                         </TouchableHighlight>
                     </View>
@@ -193,95 +185,99 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
         return (
             <View>
                 <Marker key={1024}
-                        pinColor={base.theme.colors.primary}
-                        style={PatrollingCheckPointsStyles.marker}
-                        coordinate={{latitude: lat, longitude: long}}>
+                    pinColor={base.theme.colors.primary}
+                    style={PatrollingCheckPointsStyles.marker}
+                    coordinate={{ latitude: lat, longitude: long }}>
 
                 </Marker>
             </View>
         )
     }
 
-      updateStore(){
-        const {updateSelectedCheckPoints} = this.props;
-        updateSelectedCheckPoints({value: this.state.data});
-    
+    updateStore() {
+        const { updateSelectedCheckPoints } = this.props;
+        updateSelectedCheckPoints({ value: this.state.data });
+
     }
 
 
 
-    render(){
-        console.log("Props Received:",this.state.data);
+    render() {
+        console.log("Props Received:", this.state.data);
 
-        return(
-            <View style={{flex:1,backgroundColor:base.theme.colors.white}}>
+        return (
+            <View style={{ flex: 1, backgroundColor: base.theme.colors.white }}>
                 <View style={PatrollingCheckPointsStyles.header}>
                     <Text
-                        style={[PatrollingCheckPointsStyles.headerText],{textAlign:'center',color:base.theme.colors.primary}}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
+                        style={[PatrollingCheckPointsStyles.headerText], { textAlign: 'center', color: base.theme.colors.primary }}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
                 </View>
                 <DraggableFlatList
                     data={this.state.data}
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     scrollPercent={15}
-                    onMoveEnd={({ data }) => this.setState({data},()=>this.updateStore())}
+                    onMoveEnd={({ data }) => this.setState({ data }, () => this.updateStore())}
                 />
                 {this.openMapModal()}
                 {this.openLottieModal()}
             </View>
         )
     }
-    
 
-    openLottieModal(){
-        return(
+
+    openLottieModal() {
+        return (
             <Modal isVisible={this.state.isLottieModalOpen}
-                   style={{
-                        top:hp('20'),
-                        flex:0.5,
-                        backgroundColor: base.theme.colors.white,
+                style={{
+
+                    backgroundColor: base.theme.colors.transparent,
+                    alignSelf: 'center',
+                    justifySelf: 'center',
+                    justifyContent: 'center',
+                    width: wp('100%'),
+                    height: hp('50%')
+                }}>
+                <Image style={{
+                    alignSelf: 'center',
+                    height: hp('15%'),
+                    width: hp('15%')
+                }}
+                    source={require('../../../icons/swipe.png')} />
+                <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('70'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: 'rgba(192, 192, 192, 0.3)', justifyContent: 'center' }}>
+                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white }}>You can change the patrolling path by swiping </Text>
+                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white }}>the checkpoints up and down.</Text>
+                </View>
+                <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('80'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: '#1AFF0000', justifyContent: 'center', borderColor: "#000000", alignItems: 'center' }}>
+                    <Text style={{
+                        marginTop: hp('2'),
                         alignSelf: 'center',
-                        justifySelf:'center',
-                        justifyContent:'center',
-                         width: wp('95%'),
-                         borderRadius:20
-                        // height:hp('50%')
-                        }}>
-                       <LottieView
-                            ref={animation => {
-                                this.animation = animation;
-                            }}
-                            style={{
-                                flex:0.5,
-                                backgroundColor: base.theme.colors.white,
-                                alignSelf: 'center',
-                                justifySelf:'center',
-                                justifyContent:'center',
-                                width: wp('80%'),
-                                //height:hp('70%')
-                                }}
-                            source={require('../../assets/swipeAnimation.json')}
-                        />
-                        <Text style={{marginTop:hp('2'),alignSelf: 'center',justifySelf:'center'}}>You can change the patrolling path by swiping </Text>
-                        <Text style={{marginTop:hp('0'),alignSelf: 'center',justifySelf:'center'}}>the checkpoints up and down.</Text>
-                        <Text style={{
-                            marginTop:hp('5'),
-                            alignSelf: 'center',
-                            justifySelf:'center',
-                            color:base.theme.colors.red,fontSize: 15,
-                            fontFamily: base.theme.fonts.medium}}>Please make sure that the starting point of patrolling </Text>
-                        <Text style={{
-                            marginTop:hp('0'),
-                            alignSelf: 'center',
-                            justifySelf:'center',
-                            color:base.theme.colors.red,fontSize: 15,
-                            fontFamily: base.theme.fonts.medium}}>is at first and End point of patrolling is at last position in the list. </Text>
-                        <TouchableHighlight 
-                        underlayColor={base.theme.colors.transparent}
-                        onPress={()=>this.setState({isLottieModalOpen:false})}>
-                        <Text style={{marginTop:hp('5'),alignSelf: 'center',color:base.theme.colors.primary}}>Got It</Text>
-                        </TouchableHighlight>
-                   </Modal>
+                        justifySelf: 'center',
+                        color: base.theme.colors.primary, fontSize: 15,
+                        fontFamily: base.theme.fonts.medium
+                    }}>Please make sure that the starting point of patrolling is </Text>
+                    <Text style={{
+                        marginTop: hp('0'),
+                        alignSelf: 'center',
+                        width: wp('80'),
+                        color: base.theme.colors.primary, fontSize: 15,
+                        fontFamily: base.theme.fonts.medium
+                    }}>at first and End point of patrolling is at last position in </Text>
+                    <Text style={{
+                        marginTop: hp('0'),
+                        alignSelf: 'center',
+                        color: base.theme.colors.primary, fontSize: 15,
+                        fontFamily: base.theme.fonts.medium
+                    }}>the list. </Text>
+                </View>
+                <TouchableHighlight
+                    underlayColor={base.theme.colors.transparent}
+                    onPress={() => this.setState({ isLottieModalOpen: false })}>
+                    <Text style={{
+                        borderBottomWidth: 2, borderColor: "#FFFFFF", marginTop: hp('5'), alignSelf: 'center', color: base.theme.colors.white, fontSize: 20,
+                        fontFamily: base.theme.fonts.medium
+                    }}>Got It</Text>
+                </TouchableHighlight>
+            </Modal>
         )
     }
 }
@@ -301,4 +297,4 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps, {updateSelectedCheckPoints})(PatrolShuffling);
+export default connect(mapStateToProps, { updateSelectedCheckPoints })(PatrolShuffling);

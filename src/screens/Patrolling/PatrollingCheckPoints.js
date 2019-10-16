@@ -25,6 +25,7 @@ import { updateSelectedCheckPoints } from '../../../src/actions';
 import Modal from "react-native-modal";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
+import { heightPercentageToDP } from 'react-native-responsive-screen';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -240,7 +241,7 @@ class PatrollingCheckPoints extends React.Component {
                             <Text>No Check Points available</Text>
                         </View>}
                 </View>
-                <FloatingActionButton onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
+                <FloatingActionButton marginTop={heightPercentageToDP('85')} onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
             </View>
         )
     }
@@ -384,6 +385,7 @@ class PatrollingCheckPoints extends React.Component {
                     </View>
                     <View style={PatrollingCheckPointsStyles.locationView}>
                         <Image
+                            resizeMode={'center'}
                             style={PatrollingCheckPointsStyles.locationImageStyle}
                             source={require('../../../icons/location.png')}
                         />

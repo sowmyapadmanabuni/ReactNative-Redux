@@ -148,7 +148,6 @@ class AddAndEditCheckPoints extends React.Component {
     scanWifiStrength(callback) {
         if (Platform.OS == 'android') {
             wifi.reScanAndLoadWifiList((wifiStringList) => {
-                //var wifiArray = JSON.parse(wifiStringList);            
                 callback((wifiStringList))
             }, (error) => {
                 callback("")
@@ -163,11 +162,9 @@ class AddAndEditCheckPoints extends React.Component {
         if (Platform.OS === "android") {
             RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
                 .then(data => {
-                    console.log("DATATATATATATATTATA:", data);
                     this.locationPermissionsAccess(params);
                 }).catch(err => {
 
-                console.log("DATATATATATATATTATA err", err);
                 this.showDenialAlertMessage();
             });
         }
@@ -418,11 +415,8 @@ class AddAndEditCheckPoints extends React.Component {
         base.utils.logger.log(this.props);
         let self = this;
         self.scanWifiStrength(async function (wifiArray) {
-            //alert(wifiArray)
             let gpsLocation = parseFloat(self.state.region.latitude) + " " + parseFloat(self.state.region.longitude);
-
             let details = {};
-
             if (self.state.isEditing) {
                 details = {
                     "CPCkPName": self.state.checkPointName,
