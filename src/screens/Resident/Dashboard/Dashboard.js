@@ -114,33 +114,39 @@ class Dashboard extends PureComponent {
     });
   }
 
-  readFBRTB(isNotificationClicked){
-    const {dropdown} = this.props;
+  readFBRTB(isNotificationClicked) {
+    const { dropdown } = this.props;
     let count = 0;
-    for(let i in dropdown){
+    for (let i in dropdown) {
       let SelectedAssociationID = parseInt(dropdown[i].associationId);
       let MyAccountID = this.props.userReducer.MyAccountID;
       let self = this;
-      fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
-        let receivedData = snapshot.val();
-        console.log("ReceiveddataDash", snapshot.val());
-        if (receivedData !== null) {
-          count = count+1;
-          if(receivedData.isActive && receivedData.userId){
-           self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+      fb.database()
+        .ref('SOS/' + SelectedAssociationID + '/' + MyAccountID + '/')
+        .on('value', function(snapshot) {
+          let receivedData = snapshot.val();
+          console.log('ReceiveddataDash', snapshot.val());
+          if (receivedData !== null) {
+            count = count + 1;
+            if (receivedData.isActive && receivedData.userId) {
+              self.props.navigation.navigate('sosScreen', {
+                isActive: true,
+                images:
+                  receivedData.emergencyImages === undefined
+                    ? []
+                    : receivedData.emergencyImages
+              });
+            }
           }
-        }
-      });
+        });
     }
 
-    if(count===0 && isNotificationClicked){
-      this.props.navigation.navigate('NotificationScreen')
+    if (count === 0 && isNotificationClicked) {
+      this.props.navigation.navigate('NotificationScreen');
     }
   }
 
-  navigateToNotificationScreen(){
-
-  }
+  navigateToNotificationScreen() {}
 
   listenRoleChange() {
     const { MyAccountID, dropdown } = this.props;
@@ -425,7 +431,7 @@ class Dashboard extends PureComponent {
         });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {
-        const { MyAccountID ,SelectedAssociationID} = this.props.userReducer;
+        const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
         const { oyeURL } = this.props.oyespaceReducer;
         let details = notificationOpen.notification._data;
         if (notificationOpen.notification._data.admin === 'true') {
@@ -493,7 +499,9 @@ class Dashboard extends PureComponent {
         } else if (notificationOpen.notification._data.admin === 'false') {
         }
         // this.props.getNotifications(oyeURL, MyAccountID);
-        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+        console.log(
+          '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+        );
         // let self = this;
         // // const { MyAccountID, SelectedAssociationID } = self.props.userReducer;
 
@@ -560,7 +568,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    
+
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
     // getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
@@ -1594,9 +1602,9 @@ class Dashboard extends PureComponent {
   }
 
   adminCard() {
-    // const AnimatedTouchable = Animatable.createAnimatableComponent(
-    //   TouchableOpacity
-    // );
+    const AnimatedTouchable = Animatable.createAnimatableComponent(
+      TouchableOpacity
+    );
     return (
       <ElevatedView elevation={6} style={Style.mainElevatedView}>
         {/* <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
@@ -1704,29 +1712,31 @@ class Dashboard extends PureComponent {
           >
             <Text>View All Visitors</Text>
           </Button>
-           <Button
-             bordered
-             style={styles.button1}
-             onPress={() => this.props.navigation.navigate('schedulePatrolling')}
-           >
-             <Text>Patrolling</Text>
-           </Button>
-      <Button
-              bordered
-              style={styles.button1}
-              onPress={() => this.props.navigation.navigate("subscriptionManagement")}
+          <Button
+            bordered
+            style={styles.button1}
+            onPress={() => this.props.navigation.navigate('schedulePatrolling')}
+          >
+            <Text>Patrolling</Text>
+          </Button>
+          <Button
+            bordered
+            style={styles.button1}
+            onPress={() =>
+              this.props.navigation.navigate('subscriptionManagement')
+            }
           >
             <Text>Subscription</Text>
           </Button>
           <Button
-              bordered
-              style={styles.button1}
-              onPress={() => this.props.navigation.navigate("oyeLiving")}
+            bordered
+            style={styles.button1}
+            onPress={() => this.props.navigation.navigate('oyeLiving')}
           >
             <Text>Oyeliving</Text>
           </Button>
 
-          {/* <AnimatedTouchable
+          <AnimatedTouchable
             animation={'swing'}
             onPress={() => this.props.navigation.navigate('Announcement')}
           >
@@ -1748,7 +1758,7 @@ class Dashboard extends PureComponent {
                 Announcement
               </Text>
             </View>
-          </AnimatedTouchable> */}
+          </AnimatedTouchable>
 
           {/* <Button
             bordered
