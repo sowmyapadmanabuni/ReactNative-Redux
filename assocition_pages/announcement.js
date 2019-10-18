@@ -43,9 +43,10 @@ import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CLOUD_FUNCTION_URL } from '../constant.js';
 import firebase from 'react-native-firebase';
-
+import RNFetchBlob from 'rn-fetch-blob';
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
+import utils from '../src/base/utils';
 
 var audioRecorderPlayer;
 
@@ -207,6 +208,7 @@ class Announcement extends Component {
       }
     });
   }
+
   async uploadImage(response) {
     console.log('Image upload before', response);
     let self = this;
@@ -292,15 +294,17 @@ class Announcement extends Component {
   }
 
   uploadAudio = async result => {
+    const newUri = result.replace('file://', 'file:///');
+
     console.log('Audio', result);
-    const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
+    const path = Platform.OS === 'ios' ? result : newUri; //`Images/${result[0]}`;
     console.log('PATH', path);
 
     const formData = new FormData();
 
     formData.append('file', {
       uri: path,
-      name: 'hello1111.aac',
+      name: 'hello.aac',
       type: 'audio/aac'
     });
 
@@ -313,6 +317,7 @@ class Announcement extends Component {
     } catch (e) {
       console.log(e);
     }
+
     console.log('Stat222222222222222222222222:', stat);
   };
 
@@ -381,9 +386,15 @@ class Announcement extends Component {
         return;
       }
     }
+
+    const dirs = RNFetchBlob.fs.dirs;
+
+    console.log(dirs.MusicDir, 'dir');
+
     const path = Platform.select({
       ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4' //here?
+      android: 'sdcard/hello.mp4'
+      // android: `${dirs.MusicDir}/announcement/hello.mp4` //here?
     });
 
     const audioSet = {
@@ -393,8 +404,11 @@ class Announcement extends Component {
       AVNumberOfChannelsKeyIOS: 2,
       AVFormatIDKeyIOS: AVEncodingOption.aac
     };
-    console.log('audioSet', audioSet);
+    // console.log('audioSet', audioSet);
     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
+
+    // console.log(uri, 'URI_PATH');
+
     this.audioRecorderPlayer.addRecordBackListener(e => {
       this.setState({
         recordSecs: e.current_position,
