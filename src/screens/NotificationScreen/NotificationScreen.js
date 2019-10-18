@@ -569,6 +569,7 @@ class NotificationScreen extends PureComponent {
                             </View>
                         )}
                     </Card>
+                
                 </TouchableWithoutFeedback>
             );
         }

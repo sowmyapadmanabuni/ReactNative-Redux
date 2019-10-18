@@ -1326,8 +1326,8 @@ class Dashboard extends PureComponent {
                 >
                   <Icon
                     color="#38bcdb"
-                    size={hp('2.6%')}
-                    style={{ ...Style.supportIcon }}
+                    size={hp('2.2%')}
+                    // style={Style.supportIcon }
                     name="call1"
                   />
                 </TouchableOpacity>
