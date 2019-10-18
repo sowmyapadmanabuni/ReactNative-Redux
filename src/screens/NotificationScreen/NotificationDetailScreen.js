@@ -1336,7 +1336,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
-
+import gateFirebase from 'firebase';
 import _ from 'lodash';
 import base from '../../base';
 import firebase from 'react-native-firebase';
@@ -1374,8 +1374,10 @@ class NotificationDetailScreen extends PureComponent {
   }
 
   componentDidMount() {
-      base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
-      const { navigation } = this.props;
+    base.utils.validate.checkSubscription(
+      this.props.userReducer.SelectedAssociationID
+    );
+    const { navigation } = this.props;
     // const details = navigation.getParam("details", "NO-ID");
     const index = navigation.getParam('index', 'NO-ID');
     const notifications = navigation.getParam('notifications', 'NO-ID');
@@ -1392,7 +1394,6 @@ class NotificationDetailScreen extends PureComponent {
 
     this.manageJoinRequest();
     this.checkAdminNotifStatus();
-    // console.log(this.props, 'notificationdetailscreen');
   }
 
   componentDidUpdate() {
@@ -2393,8 +2394,7 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
     page: state.NotificationReducer.page,
-      userReducer: state.UserReducer
-
+    userReducer: state.UserReducer
   };
 };
 

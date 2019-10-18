@@ -176,7 +176,7 @@ PODS:
     - React
   - RNGestureHandler (1.0.16):
     - React
-  - RNSVG (9.11.1):
+  - RNSVG (9.9.9):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -224,7 +224,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/cocoapods/specs.git:
     - boost-for-react-native
     - Crashlytics
     - DoubleConversion
@@ -301,24 +301,24 @@ SPEC CHECKSUMS:
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
-  RCTSystemSetting: 9279ff44c49bb4fb0a5d335a0851852c8f3eda99
-  React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
-  react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
-  react-native-google-maps: 568cb03d0eae7fef93626f65d05be55642404ed4
-  react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
-  react-native-maps: 0316ed017dbb64b33b227751fa810e2454fcfa39
-  react-native-version-number: d4919bbe43b62039894c6a747633bb59a8a44df3
-  ReactNativeFabric: d05320ff347d5c72567c115b97edeead111ac4d2
-  rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
-  RNAudioRecorderPlayer: f9e3c3cf07f74d7c09bfc39eb230a5dcd84ffe60
-  RNDeviceInfo: a88be26a64ada7cbc2bc0ebbd1662d340304874e
-  RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
-  RNGestureHandler: 0438a761e8f29be3b809f9e7e43014f3aba4d7a6
-  RNSVG: be27aa7c58819f97399388ae53d7fa0572f32c7f
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
-  RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
-  yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
+  RCTSystemSetting: 67dc0e56f86c0eb005055d131b38853af5c968c4
+  React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
+  react-native-geolocation: 8710b1bae31e734191273344d52141151b94bb3f
+  react-native-google-maps: 77af0fa3b5325c72c107d054677911f6e6170496
+  react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
+  react-native-maps: bb480348a3fe1e5a811fed1ba3387b329161c5cc
+  react-native-version-number: 36c0d8eb57a275a6239a860f8dbab3d18299b0e0
+  ReactNativeFabric: 01c1333f76fd4708a5833d71f0a4832a9266bf0f
+  rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
+  RNAudioRecorderPlayer: 15d6d916f85b29a60d1610fb81bbef49b41f3143
+  RNDeviceInfo: 5b5b42b12587207b6bd686441ac42d19d8e07933
+  RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
+  RNGestureHandler: afde2addc517e85cc97a25bfe119acbee779a7ce
+  RNSVG: 2e097b92aaa6d4e0f354fd7c49cbf3b17f8b3920
+  RNVectorIcons: 66af4d5c8ff4f584c7b7cd9c4b0780920f27fce2
+  RNViewShot: fdf9a64f0621ebc4e7c3392a10d2ffb70a7faee4
+  yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
 PODFILE CHECKSUM: 810549e4c90bc63881f127526e7ad4250dc36c6a
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.5.3
