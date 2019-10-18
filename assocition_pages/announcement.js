@@ -44,12 +44,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { CLOUD_FUNCTION_URL } from '../constant.js';
 import firebase from 'react-native-firebase';
 
-
-
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 
 var audioRecorderPlayer;
+
 class Announcement extends Component {
   constructor(props) {
     super(props);
@@ -224,6 +223,7 @@ class Announcement extends Component {
     };
     form.append('image', imgObj);
     console.log('ImageObj', imgObj);
+
     let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
     // console.log('Photo upload response', stat, response);
     if (stat) {
@@ -292,7 +292,6 @@ class Announcement extends Component {
   }
 
   uploadAudio = async result => {
-   
     console.log('Audio', result);
     const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
     console.log('PATH', path);
@@ -626,6 +625,7 @@ class Announcement extends Component {
           });
       });
   };
+
   render() {
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
