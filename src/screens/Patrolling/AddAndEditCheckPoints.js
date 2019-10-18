@@ -423,7 +423,7 @@ class AddAndEditCheckPoints extends React.Component {
                     "CPGPSPnt": gpsLocation,
                     "CPCPntAt": self.state.checkPointType,
                     "CPChkPntID": self.state.checkPointId,
-                    "CPSurrName": wifiArray
+                    "CPSurrName": '[]'
                 };
             } else {
                 details = {
@@ -431,7 +431,7 @@ class AddAndEditCheckPoints extends React.Component {
                     "CPGPSPnt": gpsLocation,
                     "ASAssnID": self.props.SelectedAssociationID,
                     "CPCPntAt": self.state.checkPointType,
-                    "CPSurrName": wifiArray
+                   "CPSurrName": '[]'
                 };
             }
 

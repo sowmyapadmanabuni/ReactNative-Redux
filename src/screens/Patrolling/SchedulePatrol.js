@@ -422,7 +422,7 @@ class SchedulePatrol extends React.Component {
                             extraData={this.state} />
                     </View>
                     <View style={SchedulePatrolStyles.repeatTextView}>
-                        <Text style={{ fontFamily: base.theme.fonts.medium,fontSize:18,marginLeft:hp('3') }}>{this.state.repeatText}</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.8%'),marginLeft:hp('3') }}>{this.state.repeatText}</Text>
                     </View>
                 </View>
                 <View style={SchedulePatrolStyles.slotMainView}>
@@ -564,7 +564,7 @@ class SchedulePatrol extends React.Component {
 
         for(let i in dayArr){
             if(dayArr[i].isSelected){
-                text1 = text1.concat((dayArr[i].ShName+" "));
+                text1 = text1.concat((dayArr[i].ShName+","));
                 selectedDay = selectedDay + 1
             }
         }

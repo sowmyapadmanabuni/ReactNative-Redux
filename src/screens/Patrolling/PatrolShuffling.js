@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-09-30 11:29:48 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-16 15:33:50
+ * @Last Modified time: 2019-10-18 15:52:14
  */
 
 
@@ -110,9 +110,14 @@ class PatrolShuffling extends React.Component {
                             <Text numberOfLines={1}
                                 style={PatrollingCheckPointsStyles.locationText}>{data.cpgpsPnt}</Text>
                         </View>
-                        <View style={PatrollingCheckPointsStyles.centerTextView}>
-                            <Text style={PatrollingCheckPointsStyles.centerTextStyle}>Type:- {data.cpcPntAt}</Text>
-                        </View>
+                        <View style={PatrollingCheckPointsStyles.locationView}>
+                    <Image
+                            resizeMode={'center'}
+                            style={PatrollingCheckPointsStyles.locationImageStyle}
+                            source={require('../../../icons/checkpoint.png')}
+                        />
+                        <Text style={PatrollingCheckPointsStyles.locationText}>{data.cpcPntAt}</Text>
+                    </View>
                     </View>
                 </View>
 
@@ -243,9 +248,9 @@ class PatrolShuffling extends React.Component {
                     width: hp('15%')
                 }}
                     source={require('../../../icons/swipe.png')} />
-                <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('70'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: 'rgba(192, 192, 192, 0.3)', justifyContent: 'center' }}>
-                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white }}>You can change the patrolling path by swiping </Text>
-                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white }}>the checkpoints up and down.</Text>
+                <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('75'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: 'rgba(192, 192, 192, 0.3)', justifyContent: 'center',alignItem:'center' }}>
+                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white,fontSize: hp('1.8'), }}>You can change the patrolling path by swiping </Text>
+                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white,fontSize: hp('1.8') }}>the checkpoints up and down.</Text>
                 </View>
                 <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('80'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: '#1AFF0000', justifyContent: 'center', borderColor: "#000000", alignItems: 'center' }}>
                     <Text style={{
@@ -253,21 +258,16 @@ class PatrolShuffling extends React.Component {
                         alignSelf: 'center',
                         justifySelf: 'center',
                         color: base.theme.colors.primary, fontSize: 15,
-                        fontFamily: base.theme.fonts.medium
-                    }}>Please make sure that the starting point of patrolling is </Text>
+                        fontFamily: base.theme.fonts.medium,fontSize: hp('1.8')
+                    }}>Please make sure that the starting point of patrolling </Text>
                     <Text style={{
                         marginTop: hp('0'),
                         alignSelf: 'center',
                         width: wp('80'),
-                        color: base.theme.colors.primary, fontSize: 15,
-                        fontFamily: base.theme.fonts.medium
-                    }}>at first and End point of patrolling is at last position in </Text>
-                    <Text style={{
-                        marginTop: hp('0'),
-                        alignSelf: 'center',
-                        color: base.theme.colors.primary, fontSize: 15,
-                        fontFamily: base.theme.fonts.medium
-                    }}>the list. </Text>
+                        color: base.theme.colors.primary, fontSize: hp('1.8'),
+                        fontFamily: base.theme.fonts.medium,
+                    }}>is at first and End point of patrolling is at last position in the list </Text>
+                    
                 </View>
                 <TouchableHighlight
                     underlayColor={base.theme.colors.transparent}

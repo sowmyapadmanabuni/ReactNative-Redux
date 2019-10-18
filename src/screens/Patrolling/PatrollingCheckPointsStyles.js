@@ -62,6 +62,7 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
     centerTextStyle: {
         fontFamily: base.theme.fonts.bold,
         fontSize: 15,
+        left:6
     },
     locationView: {
         flexDirection: 'row',

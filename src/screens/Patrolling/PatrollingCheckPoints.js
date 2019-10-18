@@ -241,7 +241,7 @@ class PatrollingCheckPoints extends React.Component {
                             <Text>No Check Points available</Text>
                         </View>}
                 </View>
-                <FloatingActionButton marginTop={heightPercentageToDP('85')} onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
+                <FloatingActionButton marginTop={heightPercentageToDP('70')} onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
             </View>
         )
     }
@@ -392,8 +392,13 @@ class PatrollingCheckPoints extends React.Component {
                         <Text numberOfLines={1}
                             style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>
                     </View>
-                    <View style={PatrollingCheckPointsStyles.centerTextView}>
-                        <Text style={PatrollingCheckPointsStyles.centerTextStyle}>Type:- {data.item.cpcPntAt}</Text>
+                    <View style={PatrollingCheckPointsStyles.locationView}>
+                    <Image
+                            resizeMode={'center'}
+                            style={PatrollingCheckPointsStyles.locationImageStyle}
+                            source={require('../../../icons/checkpoint.png')}
+                        />
+                        <Text style={PatrollingCheckPointsStyles.locationText}>{data.item.cpcPntAt}</Text>
                     </View>
                 </View>
                 <View style={PatrollingCheckPointsStyles.rightView}>

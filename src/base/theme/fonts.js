@@ -3,10 +3,10 @@
  */
 
 const fonts = {
-    thin: "HelveticaNeue-Thin",
-    light: "HelveticaNeue-Light",
-    medium: "HelveticaNeue-Medium",
-    bold: "HelveticaNeue-Bold"
+    thin: "HelveticaNeueIt",
+    light: "HelveticaNeueLt",
+    medium: "HelveticaNeueMed",
+    bold: "HelveticaNeueBd"
 };
 
 export default fonts;
