@@ -1326,8 +1326,8 @@ class Dashboard extends PureComponent {
                 >
                   <Icon
                     color="#38bcdb"
-                    size={hp('2.6%')}
-                    style={{ ...Style.supportIcon }}
+                    size={hp('2.2%')}
+                    // style={Style.supportIcon }
                     name="call1"
                   />
                 </TouchableOpacity>
@@ -1728,13 +1728,13 @@ class Dashboard extends PureComponent {
           >
             <Text>Subscription</Text>
           </Button>
-          <Button
-            bordered
-            style={styles.button1}
-            onPress={() => this.props.navigation.navigate('oyeLiving')}
+          {/* <Button
+              bordered
+              style={styles.button1}
+              onPress={() => this.props.navigation.navigate("oyeLiving")}
           >
             <Text>Oyeliving</Text>
-          </Button>
+          </Button> */}
 
           <AnimatedTouchable
             animation={'swing'}

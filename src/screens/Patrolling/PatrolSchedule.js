@@ -427,10 +427,10 @@ class PatrolSchedule extends React.Component {
                             <Text style={PatrollingScheduleStyles.closeText}>Close</Text>
                         </TouchableHighlight>
                         <View style={PatrollingScheduleStyles.slotView}>
-                            <Text>{data.psSltName}</Text>
+                            <Text style={{fontFamily:base.theme.fonts.bold,fontSize:20}}>{data.psSltName}</Text>
                             <View style={PatrollingScheduleStyles.shareView}>
                                 <Text
-                                    style={{borderWidth: 0}}>Start: {moment(data.pssTime).format('HH:mm A')} Stop: {moment(data.pseTime).format('HH:mm A')}</Text>
+                                    style={{marginLeft: 0}}>Start: {moment(data.pssTime).format('HH:mm A')}               Stop: {moment(data.pseTime).format('HH:mm A')}</Text>
                                 <TouchableHighlight
                                     style={PatrollingScheduleStyles.shareImageView}
                                     underlayColor={base.theme.colors.transparent}
@@ -442,7 +442,7 @@ class PatrolSchedule extends React.Component {
                                 </TouchableHighlight>
                             </View>
                             <View style={{flexDirection: 'row'}}>
-                                <Text numberOfLines={1}>Device: {data.deName} Alarm: </Text>
+                                <Text numberOfLines={1}>Device: {data.deName}                  Alarm: </Text>
                                 <MarqueeText
                                     style={PatrollingScheduleStyles.marqView}
                                     duration={3000}
@@ -458,7 +458,7 @@ class PatrolSchedule extends React.Component {
                             provider={PROVIDER_GOOGLE}
                             initialRegion={this.state.region}
                             scrollEnabled={true}
-                            minZoomLevel={20}
+                            minZoomLevel={0}
                             maxZoomLevel={20}
                             zoomTapEnabled={true}
                             zoomEnabled={true}

@@ -44,29 +44,32 @@ class SchedulePatrol extends React.Component {
             endTime: currentDate,
             isSpinnerOpen: false,
             selType: 0,
-            days: [{ day: "Sunday", initial: "S", isSelected: false, dayOfWeek: 1 }, {
+            days: [{ day: "Sunday",ShName:"Sun", initial: "S", isSelected: false, dayOfWeek: 1 }, {
                 day: "Monday",
                 initial: "M",
+                ShName:"Mon",
                 isSelected: false,
                 dayOfWeek: 2
             }, {
                 day: "Tuesday",
-                initial: "T", isSelected: false, dayOfWeek: 3
-            }, { day: "Wednesday", initial: "W", isSelected: false, dayOfWeek: 4 }, {
+                initial: "T",ShName:"Tue", isSelected: false, dayOfWeek: 3
+            }, { day: "Wednesday",ShName:"Wed", initial: "W", isSelected: false, dayOfWeek: 4 }, {
                 day: "Thursday",
+                ShName:"Thu",
                 initial: "T",
                 isSelected: false, dayOfWeek: 5
             }, {
                 day: "friday",
-                initial: "F", isSelected: false, dayOfWeek: 6
-            }, { day: "Saturday", initial: "S", isSelected: false, dayOfWeek: 7 }],
+                initial: "F",ShName:"Fri", isSelected: false, dayOfWeek: 6
+            }, { day: "Saturday",ShName:"Sat", initial: "S", isSelected: false, dayOfWeek: 7 }],
             slotName: '',
             deviceNameList: [],
             selectedDevice: "",
             isSnoozeEnabled: false,
             patrolId: null,
             patrolData: {},
-            pcid: []
+            pcid: [],
+            repeatText:"No Occurance"
         });
 
         console.log("TIME:", props);
@@ -157,6 +160,7 @@ class SchedulePatrol extends React.Component {
         let days = this.state.days;
         let receivedDays = data.psRepDays.split(',');
         console.log("Days:", data.deName, this.state.deviceNameList);
+        
         for (let i in days) {
             for (let j in receivedDays) {
                 if (days[i].day === receivedDays[j]) {
@@ -165,16 +169,7 @@ class SchedulePatrol extends React.Component {
                 }
             }
         }
-
-        // let deviceArr = this.state.deviceNameList;
-        // let deviceName = '';
-        // for (let i in deviceArr){
-        //     if(deviceArr[i].deviceName == data.deName){
-        //         console.log("Days123:", data.deName, deviceArr[i].deviceName); 
-        //          deviceName = deviceArr[i].deviceName
-        //     }  
-        // }
-
+        this.setDay()
         this.onValueChange(data.deName)
 
         this.setState({
@@ -184,6 +179,52 @@ class SchedulePatrol extends React.Component {
             isSnoozeEnabled: data.psSnooze,
             days: days,
             //selectedDevice:deviceName
+        })
+    }
+
+    setDay(){
+        let dayArr = this.state.days;
+        let selectedDay = 0;
+        let text = 'Every ';
+        let text1 = "";
+        let isWeekend = false;
+        let isWeekDay  = false;
+        let isEveryDay = false;
+        let finalText = "";
+
+        for(let i in dayArr){
+            if(dayArr[i].isSelected){
+                text1 = text1.concat((dayArr[i].ShName+" "));
+                selectedDay = selectedDay + 1
+            }
+        }
+
+        if(selectedDay === 7){
+            isEveryDay = true
+            text= "Every Day"
+        }else if(selectedDay ===0){
+            text = "Occurance Never"
+        }
+        else if(!text1.includes("Sun Sat")){
+            console.log("dayArr[i].isSelected2222")
+            if(selectedDay === 5 && !text1.includes("Sun") && !text1.includes("Sat")){
+                text = "Every Weekdays"
+            }
+            else{
+                text = "Every "+text1
+            }
+        }
+        else{
+            text = "Every Weekends"
+        }
+
+        console.log("dayArr[i].isSelected1111:",text,selectedDay,text1)
+
+
+        this.setState({
+            days: dayArr,
+            selectedDay: selectedDay,
+            repeatText:text
         })
     }
 
@@ -381,7 +422,7 @@ class SchedulePatrol extends React.Component {
                             extraData={this.state} />
                     </View>
                     <View style={SchedulePatrolStyles.repeatTextView}>
-                        <Text style={{ fontFamily: base.theme.fonts.medium }}>Repeat</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.8%'),marginLeft:hp('3') }}>{this.state.repeatText}</Text>
                     </View>
                 </View>
                 <View style={SchedulePatrolStyles.slotMainView}>
@@ -507,16 +548,53 @@ class SchedulePatrol extends React.Component {
     selectDay(data) {
         let dayArr = this.state.days;
         let selectedDay = 0;
+        let text = 'Every ';
+        let text1 = "";
+        let isWeekend = false;
+        let isWeekDay  = false;
+        let isEveryDay = false;
+        let finalText = "";
 
         for (let i in dayArr) {
             if (dayArr[i].day === data.day) {
                 dayArr[i].isSelected = !dayArr[i].isSelected;
+                
             }
         }
 
+        for(let i in dayArr){
+            if(dayArr[i].isSelected){
+                text1 = text1.concat((dayArr[i].ShName+","));
+                selectedDay = selectedDay + 1
+            }
+        }
+
+        if(selectedDay === 7){
+            isEveryDay = true
+            text= "Every Day"
+        }else if(selectedDay ===0){
+            text = "Occurance Never"
+        }
+        else if(!text1.includes("Sun Sat")){
+            console.log("dayArr[i].isSelected2222")
+            if(selectedDay === 5 && !text1.includes("Sun") && !text1.includes("Sat")){
+                text = "Every Weekdays"
+            }
+            else{
+                text = "Every "+text1
+            }
+        }
+        else{
+            text = "Every Weekends"
+        }
+
+        console.log("dayArr[i].isSelected1111:",text,selectedDay,text1)
+
+
         this.setState({
             days: dayArr,
-            selectedDay: selectedDay
+            selectedDay: selectedDay,
+            repeatText:text
         })
     }
 
@@ -529,7 +607,7 @@ class SchedulePatrol extends React.Component {
                 underlayColor={base.theme.colors.transparent}
                 onPress={() => this.selectDay(item.item)}
                 style={[SchedulePatrolStyles.dataWeekView, {
-                    backgroundColor: dayData.isSelected ? base.theme.colors.primary : base.theme.colors.white,
+                    backgroundColor: dayData.isSelected ? base.theme.colors.blue : base.theme.colors.white,
                     borderColor: dayData.isSelected ? base.theme.colors.white : base.theme.colors.blue
                 }]}>
                 <Text
