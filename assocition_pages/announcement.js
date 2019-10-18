@@ -44,6 +44,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { CLOUD_FUNCTION_URL } from '../constant.js';
 import firebase from 'react-native-firebase';
 
+
+
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 
@@ -137,7 +139,7 @@ class Announcement extends Component {
   setImage() {
     console.log('Set Image');
     const options = {
-      quality: 0.5,
+      quality: 1,
       maxWidth: 250,
       maxHeight: 250,
       cameraRoll: true,
@@ -274,7 +276,7 @@ class Announcement extends Component {
             break;
         }
         console.log(
-          'Photo upload response',
+          'Photo_upload_response',
           stat,
           response,
           this.state.relativeImage1,
@@ -290,9 +292,10 @@ class Announcement extends Component {
   }
 
   uploadAudio = async result => {
-    console.log('Audio', result[0]);
+   
+    console.log('Audio', result);
     const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
-    console.log('PATH', result[0], path);
+    console.log('PATH', path);
 
     const formData = new FormData();
 
@@ -381,7 +384,7 @@ class Announcement extends Component {
     }
     const path = Platform.select({
       ios: 'hello.m4a',
-      android: 'sdcard/hello.aac' //here?
+      android: 'sdcard/hello.mp4' //here?
     });
 
     const audioSet = {
@@ -455,6 +458,7 @@ class Announcement extends Component {
       android: 'sdcard/hello.mp4'
     });
     const msg = await this.audioRecorderPlayer.startPlayer(path);
+    console.log('Message', msg);
     this.audioRecorderPlayer.setVolume(1.0);
     console.log(msg);
     this.audioRecorderPlayer.addPlayBackListener(e => {
@@ -521,6 +525,8 @@ class Announcement extends Component {
     let ntType = `Announcement`;
     let associationId = self.props.dashboardReducer.assId;
 
+    let image = `${img1},${img2},${img3},${img4},${img5}`;
+
     this.setState({
       isLoading: true
     });
@@ -539,7 +545,7 @@ class Announcement extends Component {
           .post(
             `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
             {
-              ANImages: `${img1},${img2},${img3},${img4},${img5}`,
+              ANImages: image,
               ANCmnts: `${comments}`,
               ACAccntID: accountId,
               ASAssnID: assocID,
@@ -553,10 +559,13 @@ class Announcement extends Component {
             }
           )
           .then(response => {
-            console.log('Respo1111:', response);
+            console.log(
+              'Respo1111:',
+              response,
+              response.data.data.announcement.anid
+            );
             this.setState({
-              isLoading: false,
-              announcementId: response.data.announcement.anid
+              isLoading: false
             });
             axios
               .get(
@@ -570,7 +579,9 @@ class Announcement extends Component {
               )
               .then(res => {
                 let memberList = res.data.data.memberListByAssociation;
-                console.log('memberList1111', memberList);
+                let announcement = response.data.data.announcement.anid;
+
+                console.log('memberList1111', memberList, announcement);
                 memberList.map(data => {
                   console.log('adminssss', data);
                   this.props.createUserNotification(
@@ -579,6 +590,7 @@ class Announcement extends Component {
                     data.acAccntID,
                     this.props.dashboardReducer.assId.toString(),
                     ntDesc,
+                    announcement,
                     // sbUnitID.toString(),
                     // sbMemID.toString(),
                     // sbSubID.toString(),
@@ -591,6 +603,7 @@ class Announcement extends Component {
                     this.props.userReducer.MyAccountID
                   );
                 });
+                this.props.navigation.goBack();
 
                 // getAssoMembers(oyeURL, MyAccountID);
 
@@ -598,7 +611,6 @@ class Announcement extends Component {
                 //   this.props.joinedAssociations,
                 //   unitList.unUnitID
                 // );
-                this.props.navigation.goBack();
               })
               .catch(error => {
                 // getAssoMembers(oyeURL, MyAccountID);
