@@ -397,20 +397,20 @@ class AddAndEditCheckPoints extends React.Component {
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
         } else {
-                this.setState({isLottieModalOpen:true})
-                Animated.timing(this.state.progress, {
+            let self = this;
+                self.setState({isLottieModalOpen:true})
+                Animated.timing(self.state.progress, {
                     toValue: 1,
-                    duration: 5000,
+                    duration: 2000,
                     easing: Easing.linear,
                   }).start();
                   setTimeout(()=>{
-                    this.setState({
+                    self.setState({
                         isLottieModalOpen:false
                     })
-                  },7000)
-                  setTimeout(()=>{
-                    this.addCheckPoint();
-                  },7500)
+                  },2100);
+                    self.addCheckPoint()
+
             }
     }
 
@@ -440,6 +440,8 @@ class AddAndEditCheckPoints extends React.Component {
                     "CPSurrName": wifiArray
                 };
             }
+
+            console.log("Stat123456:",details)
 
             let stat = self.state.isEditing ? await OyeSafeApi.editCheckPoint(details) : await OyeSafeApi.addCheckPoint(details);
             console.log("Stat:", stat, details);

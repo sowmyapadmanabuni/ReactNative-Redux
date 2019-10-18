@@ -87,7 +87,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
         return (
           <TouchableHighlight
           underlayColor={base.theme.colors.transparent}
-          style={[PatrollingCheckPointsStyles.checkBoxView],{backgroundColor:isActive?base.theme.colors.primary:base.theme.colors.white}}
+          style={[PatrollingCheckPointsStyles.checkBoxView,{backgroundColor:isActive?base.theme.colors.primary:base.theme.colors.white}]}
             onLongPress={move}
             onPressOut={moveEnd}
           >
@@ -217,7 +217,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
             <View style={{flex:1,backgroundColor:base.theme.colors.white}}>
                 <View style={PatrollingCheckPointsStyles.header}>
                     <Text
-                        style={[PatrollingCheckPointsStyles.headerText],{textAlign:'center',color:base.theme.colors.primary}}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
+                        style={[PatrollingCheckPointsStyles.headerText,{textAlign:'center',color:base.theme.colors.primary}]}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
                 </View>
                 <DraggableFlatList
                     data={this.state.data}

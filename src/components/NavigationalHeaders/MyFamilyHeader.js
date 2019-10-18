@@ -107,7 +107,7 @@ class MyFamilyHeader extends React.Component {
                     <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
                 </SafeAreaView>
 
-                {this.props.isSub === true ?
+                {this.props.isSub  || this.props.isOyeLiving ?
                     <View/> :
                     <Text style={styles.titleOfScreen}> Visitors </Text>
                 }

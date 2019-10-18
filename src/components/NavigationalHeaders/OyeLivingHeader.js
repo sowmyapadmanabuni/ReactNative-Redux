@@ -45,58 +45,71 @@ class OyeLivingHeader extends React.Component {
     }
 
     render() {
+        console.log('Props@@@@@',this.props)
         const {goBack} = this.props.navigation;
-        return (
-            <View style={styles.container}>
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                    <View style={[styles.viewStyle, {flexDirection: 'row'}]}>
-                        <View style={styles.viewDetails1}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.navigate('ResDashBoard');
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        height: hp('4%'),
-                                        width: wp('15%'),
-                                        alignItems: 'flex-start',
-                                        justifyContent: 'center'
+        if(this.props.isOther){
+           return  null
+        }
+        else {
+            return (
+                <View style={styles.container}>
+                    <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
+                        <View style={[styles.viewStyle, {flexDirection: 'row'}]}>
+                            <View style={styles.viewDetails1}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.props.navigation.navigate('ResDashBoard');
                                     }}
                                 >
-                                    <Image
-                                        resizeMode="contain"
-                                        source={require('../../../icons/back.png')}
-                                        style={styles.viewDetails2}
-                                    />
-                                </View>
-                            </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            height: hp('4%'),
+                                            width: wp('15%'),
+                                            alignItems: 'flex-start',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <Image
+                                            resizeMode="contain"
+                                            source={require('../../../icons/back.png')}
+                                            style={styles.viewDetails2}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Image
+                                    style={[styles.image1]}
+                                    source={require('../../../icons/OyespaceSafe.png')}
+                                />
+                            </View>
+                            <View style={{flex: 0.2}}>
+                                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                            </View>
                         </View>
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <Image
-                                style={[styles.image1]}
-                                source={require('../../../icons/OyespaceSafe.png')}
-                            />
-                        </View>
-                        <View style={{flex: 0.2}}>
-                            {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-                        </View>
-                    </View>
-                    <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
-                </SafeAreaView>
+                        <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
+                    </SafeAreaView>
 
-                {this.props.isSub === true ?
-                    <View/> :
-                    <Text style={styles.titleOfScreen}> Expense Management </Text>
-                }
-            </View>
-        );
+                    {this.props.isSub === true ?
+                        <View/> :
+                        <Text style={styles.titleOfScreen}> Expense Management </Text>
+                    }
+                    {/*<TouchableOpacity style={{alignSelf:'flex-end',position: 'absolute',marginTop:hp('85'),alignItems:'flex-end',justifyContent:'flex-end'}} onPress={() =>this.props.navigation.navigate('addExpenseScreen')}>
+                    <Image
+                        resizeMode={'contain'}
+                        style={{ alignSelf: 'flex-end',height:70,width:70 }}
+                        source={require('../../../icons/add_btn.png')}
+                    />
+                </TouchableOpacity>*/}
+                </View>
+            );
+        }
     }
 
     onNextButtonClick() {

@@ -80,9 +80,55 @@ export default class OyeLivingApi {
 
     }
 
-
     static async deleteVehicle(data) {
         return await instance.post('Vehicle/VehicleStatusUpdate', data);
     }
+
+    static async getTheListOfBlocksByAssociation(assId){
+        return await instance.get('Block/GetBlockListByAssocID/' +assId);
+    }
+
+    static async getExpenseRecTypeList(assId){
+        return await instance.get('GetExpenseReccurranceList');
+    }
+
+    static async getExpenseApplicabilityList (assId){
+        return await instance.get('GetExpenseApplicabilityList');
+    }
+
+    static async getPaymentMethodList(assId){
+        return await instance.get('PaymentMethod/GetPaymentMethodList');
+    }
+
+    static async addNewExpense(input){
+        return await instance.post('Expense/Create',input);
+    }
+    static async updateExpense(input){
+        return await instance.post('Expense/ExpenseUpdate',input);
+    }
+
+    static async getTheExpenseListByAssociationId(input){
+        return await instance.get('Expense/GetExpenseListByAssocID/'+assId);
+    }
+
+    static async getTheExpenseListByBlockId(blockId){
+        return await instance.get('Expense/GetExpenseListByBlockID/'+blockId);
+    }
+
+    static async getTheExpenseListByDates(input){
+        return await instance.post('PaymentMethod/GetPaymentMethodList',input);
+    }
+
+    static async deleteInvoice(input){
+        return await instance.post('Expense/ExpenseDeleteUpdate',input);
+    }
+    static async getUnitName(uniId){
+        return await instance.get('Unit/GetUnitListByUnitID/'+uniId);
+    }
+
+
+
+
+
 
 }

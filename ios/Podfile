@@ -79,6 +79,8 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
   pod 'RCTSystemSetting', :path => '../node_modules/react-native-system-setting'
 
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
 end
   
 post_install do |installer|
