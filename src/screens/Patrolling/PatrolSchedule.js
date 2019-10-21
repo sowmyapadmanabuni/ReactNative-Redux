@@ -458,7 +458,7 @@ class PatrolSchedule extends React.Component {
                             provider={PROVIDER_GOOGLE}
                             initialRegion={this.state.region}
                             scrollEnabled={true}
-                            minZoomLevel={0}
+                            minZoomLevel={10}
                             maxZoomLevel={20}
                             zoomTapEnabled={true}
                             zoomEnabled={true}

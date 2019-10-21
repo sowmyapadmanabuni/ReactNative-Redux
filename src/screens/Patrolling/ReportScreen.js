@@ -70,6 +70,9 @@ class ReportScreen extends React.Component {
                 isPermitted: true
             })
         }
+        
+
+
         this.setState({
             slotName: this.props.navigation.state.params.detail.slotName,
             slotTime: this.props.navigation.state.params.detail.slotTime
@@ -172,13 +175,15 @@ class ReportScreen extends React.Component {
 
     async getReport(props) {
         let self = this;
-        let input = self.props.navigation.state.params.detail;    //Uncpmmet
-        // let input = {
-        //     "FromDate" : "2019-07-12",
-        //     "ToDate"   : "2019-07-30",
-        //     "ASAssnID" : 8,
-        //     "PSPtrlSID": 1
-        // };
+       // let input = self.props.navigation.state.params.detail;    //Uncpmmet
+         let input = {
+            
+                "FromDate" : "2019-08-25",
+                "ToDate"   : "2019-08-25",
+                "ASAssnID" : 11640,
+                "PSPtrlSID": 2034
+            
+         };
 
         let stat = await base.services.OyeSafeApi.getReport(input);
         let startDate = input.FromDate;
@@ -188,7 +193,7 @@ class ReportScreen extends React.Component {
         let duration = moment.duration(endDateString.diff(initialDateString));
         base.utils.logger.log(duration.days());
         let difference = duration.as('days');
-        base.utils.logger.log(stat);
+        console.log("Stat in report scren:",stat,input)
         try {
             if (stat !== null && stat.data.patrolling.length !== 0) {
                 let reportsData = stat.data.patrolling;

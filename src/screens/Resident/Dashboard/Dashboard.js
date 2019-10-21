@@ -593,15 +593,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    timer.setInterval(
-      this,
-      'syncData',
-      () => {
-        this.syncData();
-        //     // alert("hererereerrrereer");
-      },
-      5000
-    );
+    // timer.setInterval(
+    //   this,
+    //   'syncData',
+    //   () => {
+    //     this.syncData();
+    //     //     // alert("hererereerrrereer");
+    //   },
+    //   5000
+    // );
   }
 
   async roleCheckForAdmin(index) {
@@ -1728,13 +1728,13 @@ class Dashboard extends PureComponent {
           >
             <Text>Subscription</Text>
           </Button>
-          {/* <Button
+          <Button
               bordered
               style={styles.button1}
               onPress={() => this.props.navigation.navigate("oyeLiving")}
           >
             <Text>Oyeliving</Text>
-          </Button> */}
+          </Button>
 
           <AnimatedTouchable
             animation={'swing'}
@@ -1777,7 +1777,9 @@ class Dashboard extends PureComponent {
               height: 50,
               width: 50,
               justifyContent: 'center',
-              marginTop: hp('16%')
+              marginTop: hp('49%'),
+              position:'absolute',
+              right:hp('1')
             }}
           >
             {!this.state.isSOSSelected ? (
