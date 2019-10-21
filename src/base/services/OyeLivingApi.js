@@ -116,7 +116,7 @@ export default class OyeLivingApi {
     }
 
     static async getTheExpenseListByDates(input){
-        return await instance.post('PaymentMethod/GetPaymentMethodList',input);
+        return await instance.post('Expense/ExpenseListByDatesAndID',input);
     }
 
     static async deleteInvoice(input){

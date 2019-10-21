@@ -122,7 +122,7 @@ const SchedulePatrolStyles = StyleSheet.create({
         borderColor: base.theme.colors.primary
     },
     flatListMainView: {
-        height: hp('17%'),
+        height: hp('13%'),
         borderBottomWidth: 1,
         justifyContent: 'center',
         marginTop: hp('4%')
@@ -132,18 +132,18 @@ const SchedulePatrolStyles = StyleSheet.create({
         alignSelf: 'center'
     },
     repeatTextView: {
-        height: hp('10%'),
-        width: wp('22%'),
+        marginTop: hp('2%'),
+        height: hp('6%'),
+        width: wp('90%'),
         justifyContent: 'center',
-        alignItems: 'center',
-        // justifySelf: 'flex-end'
+        alignItems: 'flex-start',
     },
     slotMainView: {
         height: hp('12%'),
         alignSelf: 'center',
         width: wp('100%'),
         borderBottomWidth: 1,
-        marginTop: hp('4%')
+        marginTop: hp('2%')
     },
     slotSubView: {
         width: wp('27%'),

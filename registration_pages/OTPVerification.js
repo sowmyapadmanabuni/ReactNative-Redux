@@ -30,7 +30,7 @@ class OTPVerification extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Mobilenumber: "",
+            Mobilenumber:"",
             OTPNumber: "",
             isLoading: false,
             timer: 180,
@@ -467,7 +467,7 @@ class OTPVerification extends Component {
                                 disabled={this.state.timer !== 1 || !this.state.isSmsLimit}
                             >
                                 <Text style={[styles.submitButtonText, {
-                                    color: base.theme.colors.white,
+                                    color: base.theme.colors.white
                                 }]}>
                                     Resend OTP <Image/>
                                 </Text>

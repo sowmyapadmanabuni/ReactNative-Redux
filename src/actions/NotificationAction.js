@@ -621,6 +621,7 @@ export const createUserNotification = (
   accountID,
   associationID,
   ntDesc,
+  announcement,
   sbUnitID,
   sbMemID,
   sbSubID,
@@ -842,7 +843,7 @@ export const createUserNotification = (
             NTDUpdated: formatdate,
             UNOcSDate: occupancyDate,
             UNSldDate: soldDate,
-            ACNotifyID: senderId
+            ACNotifyID: announcement
           },
           {
             headers: headers

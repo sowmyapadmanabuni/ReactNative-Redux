@@ -120,7 +120,7 @@ class PatrollingReport extends React.Component {
                             borderBottomColor: 'transparent',
                             bottom: Platform.OS === 'ios' ? 10 : 10
                         }}
-                        containerStyle={{height: hp('5%'), justifyContent: 'center'}}
+                        containerStyle={{height: hp('5%'), justifyContent: 'center',marginBottom:hp('1')}}
                         pickerStyle={PatrollingReportStyles.pickerStyles}
                         data={this.state.slotData}
                         onChangeText={(args, index, data) => this.setSelectedPatrol(args, data)}

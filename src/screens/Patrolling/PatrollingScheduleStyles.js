@@ -51,7 +51,7 @@ const PatrollingScheduleStyles = StyleSheet.create({
     },
     centerTextStyle: {
         fontFamily: base.theme.fonts.bold,
-        fontSize: 15
+        fontSize: 18
     },
     locationView: {
         flexDirection: 'row',
@@ -151,7 +151,7 @@ const PatrollingScheduleStyles = StyleSheet.create({
         textAlign: "center",
         alignSelf: 'center',
         top: 1,
-        width: wp('50%')
+        width: wp('45%')
     },
     markerView: {
         height: hp('2%'),

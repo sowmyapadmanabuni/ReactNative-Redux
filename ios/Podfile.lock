@@ -87,6 +87,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.8.0):
     - GoogleUtilities/Logger
+  - lottie-ios (3.0.3)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -97,6 +98,8 @@ PODS:
     - React
   - React (0.59.8):
     - React/Core (= 0.59.8)
+  - react-native-document-picker (3.2.4):
+    - React
   - react-native-geolocation (2.0.2):
     - React
   - react-native-google-maps (0.24.2):
@@ -193,7 +196,9 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - lottie-ios (from `../node_modules/lottie-ios`)
   - RCTSystemSetting (from `../node_modules/react-native-system-setting`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
@@ -247,10 +252,14 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  lottie-ios:
+    :path: "../node_modules/lottie-ios"
   RCTSystemSetting:
     :path: "../node_modules/react-native-system-setting"
   React:
     :path: "../node_modules/react-native"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
@@ -299,10 +308,12 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 1624046ab1bcc5e170061a56ef5679000b079c8e
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
+  lottie-ios: 6037add6441183d4ffd100d2ac78724aa8d919d4
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
   RCTSystemSetting: 9279ff44c49bb4fb0a5d335a0851852c8f3eda99
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
+  react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 568cb03d0eae7fef93626f65d05be55642404ed4
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
@@ -319,6 +330,6 @@ SPEC CHECKSUMS:
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: 810549e4c90bc63881f127526e7ad4250dc36c6a
+PODFILE CHECKSUM: a1e643f30dbec58446d403bb47258457aa5057f0
 
 COCOAPODS: 1.8.3

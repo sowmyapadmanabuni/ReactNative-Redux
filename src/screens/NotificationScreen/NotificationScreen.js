@@ -103,7 +103,9 @@ class NotificationScreen extends PureComponent {
             //Seperate Page i'll write
             console.log("Announcement_item",item)
             this.props.navigation.navigate('NotificationAnnouncementDetailScreen', {
-                details: item,
+                notifyid: item.acNotifyID,
+                associationid: item.asAssnID,
+                accountid: item.acAccntID,
                 index,
                 notifications,
                 oyeURL,
@@ -567,6 +569,7 @@ class NotificationScreen extends PureComponent {
                             </View>
                         )}
                     </Card>
+                
                 </TouchableWithoutFeedback>
             );
         }
