@@ -16,14 +16,15 @@ import {
     View
 } from 'react-native';
 import {connect} from 'react-redux';
-import {Card, ListItem} from 'react-native-elements';
+import {Card, ListItem, Button} from 'react-native-elements';
 import {
-    getNotifications,
-    onEndReached,
-    onNotificationOpen,
-    refreshNotifications,
-    storeOpenedNotif,
-    toggleCollapsible
+  getNotifications,
+  onEndReached,
+  onNotificationOpen,
+  refreshNotifications,
+  storeOpenedNotif,
+  toggleCollapsible,
+  onGateApp
 } from '../../actions';
 import _ from 'lodash';
 import {NavigationEvents} from 'react-navigation';
@@ -33,7 +34,7 @@ import axios from 'axios';
 import moment from 'moment';
 import firebase from 'react-native-firebase';
 import base from "../../base";
-
+import gateFirebase from 'firebase'
 import {createIconSetFromIcoMoon} from "react-native-vector-icons"
 import IcoMoonConfig from '../../assets/selection.json';
 
@@ -57,6 +58,20 @@ class NotificationScreen extends PureComponent {
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.doNetwork(null, this.props.notifications);
         firebase.notifications().removeAllDeliveredNotifications();
+
+        //   alert('mounted');
+        //   gateFirebase
+        //     .database()
+        //     .ref(`NotificationSync/${}`)
+        //     .once('value')
+        //     .then(snapshot => {
+        //       console.log(snapshot.val(), 'value_firebase');
+        //     //   alert('here');
+        //     })
+        //     .catch(error => {
+        //       console.log(error, 'error_reading');
+        //     //   alert('error');
+        //     });
 
     }
 
@@ -316,10 +331,51 @@ class NotificationScreen extends PureComponent {
         });
     };
 
+    acceptgateVisitor = (visitorId, index) => {
+        let oldNotif = [...this.props.notifications];
+
+        console.log(oldNotif[index], "old_notifffff")
+        console.log(oldNotif[index].opened, 'old_notifffff_opened');
+        oldNotif[index].opened = true;
+        this.props.onGateApp(oldNotif);
+
+        // alert(oldNotif[index].opened)
+
+        gateFirebase
+          .database()
+          .ref(`NotificationSync/${visitorId}`)
+          .set({ buttonColor: '#75be6f', opened: true, visitorlogId : visitorId})
+          .then(() => {
+            //    if (item.opened) {
+            //      this.props.onNotificationOpen(notifications, index, oyeURL);
+            //    }
+          });
+
+
+    }
+
+    declinegateVisitor = (visitorId, index) => {
+        let oldNotif = [...this.props.notifications]
+        oldNotif[index].opened = true;
+        this.props.onGateApp(oldNotif);
+
+        
+        gateFirebase
+          .database()
+          .ref(`NotificationSync/${visitorId}`)
+          .set({
+            buttonColor: '#ff0000',
+            opened: true,
+            visitorlogId: visitorId
+          });
+    }
+
     renderItem = ({item, index}) => {
         const {savedNoifId, notifications, oyeURL} = this.props;
+
+       
         let status = _.includes(savedNoifId, item.ntid);
-        console.log("NOTIF_ITEM:1234: ", item);
+
         if (item.ntType !== 'gate_app') {
             return (
                 <Card>
@@ -361,216 +417,395 @@ class NotificationScreen extends PureComponent {
         } else {
             console.log('Gate app Notifications98989898', item, this.state.gateDetails);
             return (
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        console.log("Clicked on the gate app notification ######", item, index);
-                        if (item.ntIsActive) {
-                            this.props.onNotificationOpen(notifications, index, oyeURL);
-                        }
-                        this.props.toggleCollapsible(notifications, item.open, index);
-                    }}
-                >
-                    <Card containerStyle={this.renderStyle(item.ntIsActive)}>
-                        {item.ntType !== 'gate_app' ? (
-                            <ListItem
-                                onPress={() => this.onPress(item, index)}
-                                title={this.renderTitle(item.ntType, item)}
-                                subtitle={item.ntDesc}
-                                leftIcon={{
-                                    name: this.renderIcons('name', item, index),
-                                    type: this.renderIcons('type', item, index),
-                                    color: '#ED8A19'
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  console.log(
+                    'Clicked on the gate app notification ######',
+                    item,
+                    index
+                  );
+                  if (item.ntIsActive) {
+                    this.props.onNotificationOpen(notifications, index, oyeURL);
+                  }
+                  this.props.toggleCollapsible(notifications, item.open, index);
+                }}
+              >
+                <Card containerStyle={this.renderStyle(item.ntIsActive)}>
+                  {item.ntType !== 'gate_app' ? (
+                    <ListItem
+                      onPress={() => this.onPress(item, index)}
+                      title={this.renderTitle(item.ntType, item)}
+                      subtitle={item.ntDesc}
+                      leftIcon={{
+                        name: this.renderIcons('name', item, index),
+                        type: this.renderIcons('type', item, index),
+                        color: '#ED8A19'
+                      }}
+                      containerStyle={this.renderIcons('style', item, index)}
+                    />
+                  ) : (
+                    <View style={{ flex: 1 }}>
+                      <View style={{ flexDirection: 'column' }}>
+                        <Text
+                          style={{
+                            fontSize: hp('2.5%'),
+                            color: '#000'
+                          }}
+                        >
+                          {moment(item.ntdCreated, 'YYYY-MM-DD').format(
+                            'DD-MM-YYYY'
+                          )}
+                          {'     '}
+                          {moment(item.ntdCreated).format('hh:mm A')}
+                        </Text>
+                        <View style={{ flexDirection: 'row' }}>
+                          <View>
+                            <Text>{item.ntDesc}</Text>
+                          </View>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                          {item.open ? (
+                            <TouchableOpacity
+                              style={{
+                                alignItems: 'flex-end',
+                                justifyContent: 'flex-end',
+                                flexDirection: 'row',
+                                marginTop: hp('1%')
+                              }}
+                              // onPress={()=>console.log('Check it is opened or not', item)}
+                              onPress={() => {
+                                console.log(
+                                  'Clicked on the gate app notification ######',
+                                  item,
+                                  index
+                                );
+                                if (item.ntIsActive) {
+                                  this.props.onNotificationOpen(
+                                    notifications,
+                                    index,
+                                    oyeURL
+                                  );
+                                }
+                                this.props.toggleCollapsible(
+                                  notifications,
+                                  item.open,
+                                  index
+                                );
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: '#ff8c00',
+                                  marginRight: hp('0.6%')
                                 }}
-                                containerStyle={this.renderIcons('style', item, index)}
-                            />
+                              >
+                                More
+                              </Text>
+                              <Icon
+                                color="#ff8c00"
+                                size={hp('2%')}
+                                name="show_more"
+                              />
+                            </TouchableOpacity>
+                          ) : (
+                            <TouchableOpacity
+                              style={{
+                                alignItems: 'flex-end',
+                                justifyContent: 'flex-end',
+                                flexDirection: 'row',
+                                marginTop: hp('1%'),
+                                marginBottom: hp('1%')
+                              }}
+                              onPress={() => {
+                                console.log(
+                                  'Clicked on the gate app notification ######',
+                                  item,
+                                  index
+                                );
+                                if (item.ntIsActive) {
+                                  this.props.onNotificationOpen(
+                                    notifications,
+                                    index,
+                                    oyeURL
+                                  );
+                                }
+                                this.props.toggleCollapsible(
+                                  notifications,
+                                  item.open,
+                                  index
+                                );
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: '#ff8c00',
+                                  marginRight: hp('0.6%')
+                                }}
+                              >
+                                Less
+                              </Text>
+                              <Icon
+                                color="#ff8c00"
+                                size={hp('2%')}
+                                name="show_less"
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </View>
+                      </View>
+                      <Collapsible
+                        duration={100}
+                        style={{ flex: 1 }}
+                        collapsed={item.open}
+                        align="center"
+                      >
+                        {item.sbMemID === 0 ? (
+                          <View>
+                            <Text>No Data</Text>
+                          </View>
                         ) : (
-                            <View style={{flex: 1}}>
-                                <View
-                                    style={{flexDirection: 'column'}}
+                          <View style={{ flexDirection: 'column' }}>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'space-between'
+                              }}
+                            >
+                              <View>
+                                {item.vlEntryImg == '' ? (
+                                  <Image
+                                    style={styles.img}
+                                    source={{
+                                      uri:
+                                        'https://mediaupload.oyespace.com/' +
+                                        base.utils.strings
+                                          .noImageCapturedPlaceholder
+                                    }}
+                                  />
+                                ) : (
+                                  <Image
+                                    style={styles.img}
+                                    source={{
+                                      uri:
+                                        `${this.props.mediaupload}` +
+                                        item.vlEntryImg
+                                    }}
+                                  />
+                                )}
+                              </View>
+                              <View>
+                                <Text
+                                  style={{
+                                    color: base.theme.colors.black,
+                                    fontSize: hp('1.7%'),
+                                    fontWeight: '500',
+                                    marginLeft: 10
+                                  }}
+                                  numberOfLines={1}
+                                  maxLength={15}
                                 >
+                                  {item.vlGtName} Association
+                                </Text>
+                                <Text
+                                  style={{
+                                    color: base.theme.colors.black,
+                                    marginLeft: 10
+                                  }}
+                                  numberOfLines={1}
+                                >
+                                  {item.vlfName}
+                                  {''}
+                                </Text>
+                                <Text
+                                  style={{
+                                    color: base.theme.colors.black,
+                                    marginLeft: 10
+                                  }}
+                                  numberOfLines={1}
+                                >
+                                  {item.vlVisType}
+                                  {''}{' '}
+                                  <Text style={{ color: '#38bcdb' }}>
+                                    {item.vlComName}
+                                    {''}
+                                  </Text>
+                                </Text>
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    {
+                                      Platform.OS === 'android'
+                                        ? Linking.openURL(
+                                            `tel:${item.vlMobile}`
+                                          )
+                                        : Linking.openURL(
+                                            `tel:${item.vlMobile}`
+                                          );
+                                    }
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginLeft: 10
+                                    }}
+                                  >
                                     <Text
-                                        style={{
-                                            fontSize: hp('2.5%'),
-                                            color: '#000'
-                                        }}
+                                      style={{
+                                        color: base.theme.colors.primary,
+                                        fontWeight: 'bold'
+                                      }}
                                     >
-                                        {moment(item.ntdCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
-                                        {'     '}
-                                        {moment(item.ntdCreated).format('hh:mm A')}
+                                      {item.vlMobile}
                                     </Text>
-                                    <View style={{flexDirection: 'row'}}>
-                                        <View>
-                                            <Text>{item.ntDesc}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={{flex: 1, alignItems: 'center'}}>
-                                        {item.open ? (
-                                            <TouchableOpacity
-                                                style={{
-                                                    alignItems: 'flex-end',
-                                                    justifyContent: 'flex-end',
-                                                    flexDirection: 'row',
-                                                    marginTop: hp('1%')
-                                                }}
-                                                // onPress={()=>console.log('Check it is opened or not', item)}
-                                                onPress={() => {
-                                                    console.log("Clicked on the gate app notification ######", item, index);
-                                                    if (item.ntIsActive) {
-                                                        this.props.onNotificationOpen(notifications, index, oyeURL);
-                                                    }
-                                                    this.props.toggleCollapsible(notifications, item.open, index);
-                                                }}
-                                            >
-                                                <Text style={{color: '#ff8c00', marginRight: hp('0.6%')}}>More</Text>
-                                                <Icon color="#ff8c00" size={hp('2%')} name="show_more"/>
-
-                                            </TouchableOpacity>
-                                        ) : (
-                                            <TouchableOpacity
-                                                style={{
-                                                    alignItems: 'flex-end',
-                                                    justifyContent: 'flex-end',
-                                                    flexDirection: 'row',
-                                                    marginTop: hp('1%'),
-                                                    marginBottom: hp('1%')
-                                                }}
-
-                                                onPress={() => {
-                                                    console.log("Clicked on the gate app notification ######", item, index);
-                                                    if (item.ntIsActive) {
-                                                        this.props.onNotificationOpen(notifications, index, oyeURL);
-                                                    }
-                                                    this.props.toggleCollapsible(notifications, item.open, index);
-                                                }}
-                                            >
-                                                <Text style={{color: '#ff8c00', marginRight: hp('0.6%')}}>Less</Text>
-                                                <Icon color="#ff8c00" size={hp('2%')} name="show_less"/>
-
-                                            </TouchableOpacity>
-                                        )}
-                                    </View>
-
-                                </View>
-                                <Collapsible
-                                    duration={100}
-                                    style={{flex: 1}}
-                                    collapsed={item.open}
-                                    align="center"
-                                >
-                                    {item.sbMemID === 0 ? (
-                                        <View>
-                                            <Text>No Data</Text>
-                                        </View>
-                                    ) : (
-                                        <View style={{flexDirection: 'column'}}>
-                                            <View style={{flexDirection: 'row', alignItems: 'space-between'}}>
-                                                <View>
-                                                    {item.vlEntryImg == "" ?
-                                                        <Image
-                                                            style={styles.img}
-                                                            source={{
-                                                                uri:
-                                                                    "https://mediaupload.oyespace.com/" +
-                                                                    base.utils.strings.noImageCapturedPlaceholder
-                                                            }}
-                                                        /> :
-                                                        <Image
-                                                            style={styles.img}
-                                                            source={{
-                                                                uri:
-                                                                    `${this.props.mediaupload}` + item.vlEntryImg
-                                                            }}
-                                                        />}
-                                                </View>
-                                                <View>
-                                                    <Text style={{
-                                                        color: base.theme.colors.black, fontSize: hp('1.7%'),
-                                                        fontWeight: '500', marginLeft: 10
-                                                    }} numberOfLines={1}
-                                                          maxLength={15}>{item.vlGtName}{' '}Association</Text>
-                                                    <Text style={{color: base.theme.colors.black, marginLeft: 10}}
-                                                          numberOfLines={1}>{item.vlfName}{''}</Text>
-                                                    <Text style={{color: base.theme.colors.black, marginLeft: 10}}
-                                                          numberOfLines={1}>{item.vlVisType}{''} <Text
-                                                        style={{color: '#38bcdb'}}>{item.vlComName}{''}</Text></Text>
-                                                    <TouchableOpacity onPress={() => {
-                                                        {
-                                                            Platform.OS === 'android'
-                                                                ? Linking.openURL(
-                                                                `tel:${item.vlMobile}`
-                                                                )
-                                                                : Linking.openURL(
-                                                                `tel:${item.vlMobile}`
-                                                                );
-                                                        }
-                                                    }}>
-                                                        <View style={{flexDirection: 'row', marginLeft: 10}}>
-                                                            <Text style={{
-                                                                color: base.theme.colors.primary,
-                                                                fontWeight: 'bold'
-                                                            }}>{item.vlMobile}</Text>
-                                                            <Icon color="#ff8c00" size={hp('2.2%')} name="call"/>
-
-
-                                                        </View>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                            <View style={{flexDirection: 'row', alignItems: 'space-between'}}>
-                                                <Text style={{color: base.theme.colors.primary, fontWeight: 'bold'}}>Entry
-                                                    on:{' '}
-                                                    <Text style={{
-                                                        color: base.theme.colors.black,
-                                                        fontWeight: 'normal',
-                                                        marginLeft: 5
-                                                    }}>{moment(item.vldCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}{' '}
-                                                        {moment(item.vlEntryT).format('hh:mm A')}</Text></Text>
-                                                {item.vlengName !== "" ?
-                                                    <Text style={{
-                                                        color: base.theme.colors.primary,
-                                                        fontWeight: 'bold',
-                                                        marginLeft: 25
-                                                    }}>From:{' '}
-                                                        <Text style={{
-                                                            color: base.theme.colors.black,
-                                                            fontWeight: 'normal',
-                                                            marginLeft: 5
-                                                        }}>{item.vlengName} </Text></Text>
-                                                    : <View/>}
-                                            </View>
-                                            {item.vlexgName !== "" ?
-                                                <View style={{flexDirection: 'row', alignItems: 'space-between'}}>
-                                                    <Text
-                                                        style={{color: base.theme.colors.primary, fontWeight: 'bold'}}>Exit
-                                                        on:{' '}
-                                                        <Text style={{
-                                                            color: base.theme.colors.black,
-                                                            fontWeight: 'normal',
-                                                            marginLeft: 5
-                                                        }}>{moment(item.vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY')}{' '}{moment(item.vlExitT).format('hh:mm A')} </Text></Text>
-                                                    <Text style={{
-                                                        color: base.theme.colors.primary,
-                                                        fontWeight: 'bold',
-                                                        marginLeft: 25
-                                                    }}>From:{' '}
-                                                        <Text style={{
-                                                            color: base.theme.colors.black,
-                                                            fontWeight: 'normal',
-                                                            marginLeft: 5
-                                                        }}>{item.vlexgName}</Text></Text>
-                                                </View>
-                                                :
-                                                <View/>
-                                            }
-
-                                        </View>
-                                    )}
-                                </Collapsible>
+                                    <Icon
+                                      color="#ff8c00"
+                                      size={hp('2.2%')}
+                                      name="call"
+                                    />
+                                  </View>
+                                </TouchableOpacity>
+                              </View>
                             </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'space-between'
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: base.theme.colors.primary,
+                                  fontWeight: 'bold'
+                                }}
+                              >
+                                Entry on:{' '}
+                                <Text
+                                  style={{
+                                    color: base.theme.colors.black,
+                                    fontWeight: 'normal',
+                                    marginLeft: 5
+                                  }}
+                                >
+                                  {moment(item.vldCreated, 'YYYY-MM-DD').format(
+                                    'DD-MM-YYYY'
+                                  )}{' '}
+                                  {moment(item.vlEntryT).format('hh:mm A')}
+                                </Text>
+                              </Text>
+                              {item.vlengName !== '' ? (
+                                <Text
+                                  style={{
+                                    color: base.theme.colors.primary,
+                                    fontWeight: 'bold',
+                                    marginLeft: 25
+                                  }}
+                                >
+                                  From:{' '}
+                                  <Text
+                                    style={{
+                                      color: base.theme.colors.black,
+                                      fontWeight: 'normal',
+                                      marginLeft: 5
+                                    }}
+                                  >
+                                    {item.vlengName}{' '}
+                                  </Text>
+                                </Text>
+                              ) : (
+                                <View />
+                              )}
+                            </View>
+                            {item.vlexgName !== '' ? (
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'space-between'
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color: base.theme.colors.primary,
+                                    fontWeight: 'bold'
+                                  }}
+                                >
+                                  Exit on:{' '}
+                                  <Text
+                                    style={{
+                                      color: base.theme.colors.black,
+                                      fontWeight: 'normal',
+                                      marginLeft: 5
+                                    }}
+                                  >
+                                    {moment(
+                                      item.vldUpdated,
+                                      'YYYY-MM-DD'
+                                    ).format('DD-MM-YYYY')}{' '}
+                                    {moment(item.vlExitT).format('hh:mm A')}{' '}
+                                  </Text>
+                                </Text>
+                                <Text
+                                  style={{
+                                    color: base.theme.colors.primary,
+                                    fontWeight: 'bold',
+                                    marginLeft: 25
+                                  }}
+                                >
+                                  From:{' '}
+                                  <Text
+                                    style={{
+                                      color: base.theme.colors.black,
+                                      fontWeight: 'normal',
+                                      marginLeft: 5
+                                    }}
+                                  >
+                                    {item.vlexgName}
+                                  </Text>
+                                </Text>
+                              </View>
+                            ) : (
+                              <View />
+                            )}
+                            {item.opened ? null : (
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-around',
+                                  marginTop: 15
+                                }}
+                              >
+                                <Button
+                                  buttonStyle={{ borderColor: '#75be6f' }}
+                                  onPress={() =>
+                                    this.acceptgateVisitor(item.sbMemID, index)
+                                  }
+                                  title="Accept"
+                                  type="outline"
+                                  titleStyle={{
+                                    color: '#75be6f',
+                                    fontSize: 14
+                                  }}
+                                />
+                                <Button
+                                  onPress={() =>
+                                    this.declinegateVisitor(item.sbMemID, index)
+                                  }
+                                  buttonStyle={{ borderColor: '#ff0000' }}
+                                  title="Decline"
+                                  titleStyle={{
+                                    color: '#ff0000',
+                                    fontSize: 14
+                                  }}
+                                  type="outline"
+                                />
+                              </View>
+                            )}
+                          </View>
                         )}
-                    </Card>
-                
-                </TouchableWithoutFeedback>
+                      </Collapsible>
+                    </View>
+                  )}
+                </Card>
+              </TouchableWithoutFeedback>
             );
         }
     };
@@ -780,13 +1015,14 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-    mapStateToProps,
-    {
-        onNotificationOpen,
-        storeOpenedNotif,
-        getNotifications,
-        refreshNotifications,
-        toggleCollapsible,
-        onEndReached
-    }
+  mapStateToProps,
+  {
+    onNotificationOpen,
+    storeOpenedNotif,
+    getNotifications,
+    refreshNotifications,
+    toggleCollapsible,
+    onEndReached,
+    onGateApp
+  }
 )(NotificationScreen);

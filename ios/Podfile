@@ -84,7 +84,6 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
   pod 'RNPDF', :path => '../node_modules/react-native-view-pdf'
 
-  pod 'react-native-pdf', :path => '../node_modules/react-native-pdf'
 
 end
   

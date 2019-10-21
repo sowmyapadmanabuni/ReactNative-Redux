@@ -15,9 +15,11 @@ import {
   REFRESH_NOTIFICATION_START,
   REFRESH_NOTIFICATION_SUCCESS,
   TOGGLE_ADMIN_NOTIFICATION,
-  TOGGLE_COLLAPSIBLE
+  TOGGLE_COLLAPSIBLE,
+  ON_GATE_OPEN
 } from './types';
 import _ from 'lodash';
+import firebase from 'firebase';
 
 export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
   return dispatch => {
@@ -93,19 +95,39 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         console.log('allNotifs', allNotifs);
         const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
 
-        sorted.map(data => {
-          console.log(data.ntIsActive);
+        let firebaseNoti = [];
+
+        sorted.map((data, index) => {
+          if (data.ntType !== 'gate_app') {
+            firebaseNoti.push({ ...data });
+          } else {
+            firebase
+              .database()
+              .ref(`NotificationSync/${data.sbMemID}`)
+              .once('value')
+              .then(snapshot => {
+                let val = snapshot.val();
+                firebaseNoti.push({ ...data, ...val });
+                console.log(snapshot.val(), 'value_firebase');
+
+                // data = snapshot.val();
+                //   alert('here');
+              })
+              .catch(error => {
+                firebaseNoti.push({ ...data, opened: false });
+                console.log(error, 'error_reading');
+                //   alert('error');
+              });
+          }
         });
 
-        let gateDetailsArr = [];
-
-        sorted.map(data => {
-          console.log(data.ntIsActive);
-        });
+        // sorted.map(data => {
+        //   console.log(data.ntIsActive);
+        // });
 
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
-          payload: sorted
+          payload: firebaseNoti
         });
       })
       .catch(error => {
@@ -951,5 +973,14 @@ export const onEndReached = (
         //   payload: []
         // });
       });
+  };
+};
+
+export const onGateApp = notifications => {
+  return dispatch => {
+    dispatch({
+      type: ON_GATE_OPEN,
+      payload: notifications
+    });
   };
 };
