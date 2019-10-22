@@ -100,13 +100,12 @@ class OyeLivingHeader extends React.Component {
                         <View/> :
                         <Text style={styles.titleOfScreen}> Expense Management </Text>
                     }
-                    {/*<TouchableOpacity style={{alignSelf:'flex-end',position: 'absolute',marginTop:hp('85'),alignItems:'flex-end',justifyContent:'flex-end'}} onPress={() =>this.props.navigation.navigate('addExpenseScreen')}>
-                    <Image
-                        resizeMode={'contain'}
-                        style={{ alignSelf: 'flex-end',height:70,width:70 }}
-                        source={require('../../../icons/add_btn.png')}
-                    />
-                </TouchableOpacity>*/}
+
+                    {/*<TouchableOpacity style={{height:'5%'}} onPress={() => {
+                        this.props.navigation.navigate('invoices');
+                    }}>
+                        <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
+                    </TouchableOpacity>*/}
                 </View>
             );
         }

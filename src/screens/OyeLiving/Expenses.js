@@ -542,14 +542,19 @@ class Expenses extends React.Component {
     render() {
         console.log("State:@@@@@@", this.state.expensesList,this.state.expensesAllList)
         return (
-            <TouchableOpacity  onPress={() =>{this.clearTheFilters(this.state.isTabSelected,this.state.expensesAllList)}} >
+            <TouchableOpacity  onPress={() =>{this.clearTheFilters(this.state.isTabSelected,this.state.expensesAllList)}} disabled={!this.state.isModalVisible}>
             <View style={{
                 height: '100%',
                 width: '100%',
                 backgroundColor: this.state.isModalVisible ? 'rgba(52, 52, 52, 0.05)' : base.theme.colors.white
             }}>
+                <TouchableOpacity style={{width:'100%',justifyContent:'flex-end',alignItems:'flex-end',height:30,position:'absolute',alignSelf:'flex-end',marginBottom:160}} onPress={() => {
+                    this.props.navigation.navigate('invoices');
+                }}>
+                    <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
+                </TouchableOpacity>
                 <View>
-                    <View style={{position: 'absolute'}}>
+                    <View style={{position: 'absolute' ,}}>
                         {this.renderModal()}
                     </View>
                     <View style={{
@@ -1853,7 +1858,7 @@ class Expenses extends React.Component {
 
         self.onModalOpen();
 
-        self.getSelectedInvoices(this.state.isTabSelected,this.state.expensesAllList)
+        self.getSelectedInvoices(self.state.isTabSelected,filteredNameList)
     }
 
     clearTheFilters(id, expensesList) {
