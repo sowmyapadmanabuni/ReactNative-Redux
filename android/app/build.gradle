@@ -172,6 +172,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-view-pdf')
+    implementation project(':react-native-document-picker')
 
     implementation project(':lottie-react-native')
     implementation project(':react-native-sound')

@@ -98,7 +98,7 @@ class Staff extends React.Component {
                 })
             }
         } catch (error) {
-            base.utils.logger.log(error)
+            await base.utils.logger.log(error)
         }
 
     }
@@ -166,7 +166,7 @@ class Staff extends React.Component {
                     {this.state.staffList.length !== 0 ?
                         <View style={StaffStyle.datePickerMainView}>
                             <View style={StaffStyle.datePickerSubView}>
-                                <DatePickerDialog
+                                <DatePicker
                                     style={{width: 150, alignItems: 'center'}}
                                     date={this.state.selectedInitialDate}
                                     mode="date"
@@ -198,7 +198,7 @@ class Staff extends React.Component {
                                 />
                             </View>
                             <View style={StaffStyle.datePickerSubView}>
-                                <DatePickerDialog
+                                <DatePicker
                                     style={{width: 150,}}
                                     date={this.state.selectedEndDate}
                                     mode="date"

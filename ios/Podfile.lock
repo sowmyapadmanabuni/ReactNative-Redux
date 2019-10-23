@@ -87,16 +87,19 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.8.0):
     - GoogleUtilities/Logger
+  - lottie-ios (3.0.3)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - Protobuf (3.10.0)
-  - RCTSystemSetting (1.7.2):
+  - RCTSystemSetting (1.7.3):
     - React
-  - React (0.59.8):
-    - React/Core (= 0.59.8)
+  - React (0.59.10):
+    - React/Core (= 0.59.10)
+  - react-native-document-picker (3.2.4):
+    - React
   - react-native-geolocation (2.0.2):
     - React
   - react-native-google-maps (0.24.2):
@@ -107,58 +110,58 @@ PODS:
     - React
   - react-native-maps (0.24.2):
     - React
-  - react-native-version-number (0.3.5):
+  - react-native-version-number (0.3.6):
     - React
-  - React/Core (0.59.8):
-    - yoga (= 0.59.8.React)
-  - React/CxxBridge (0.59.8):
+  - React/Core (0.59.10):
+    - yoga (= 0.59.10.React)
+  - React/CxxBridge (0.59.10):
     - Folly (= 2018.10.22.00)
     - React/Core
     - React/cxxreact
     - React/jsiexecutor
-  - React/cxxreact (0.59.8):
+  - React/cxxreact (0.59.10):
     - boost-for-react-native (= 1.63.0)
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
     - React/jsinspector
-  - React/DevSupport (0.59.8):
+  - React/DevSupport (0.59.10):
     - React/Core
     - React/RCTWebSocket
-  - React/fishhook (0.59.8)
-  - React/jsi (0.59.8):
+  - React/fishhook (0.59.10)
+  - React/jsi (0.59.10):
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
-  - React/jsiexecutor (0.59.8):
+  - React/jsiexecutor (0.59.10):
     - DoubleConversion
     - Folly (= 2018.10.22.00)
     - glog
     - React/cxxreact
     - React/jsi
-  - React/jsinspector (0.59.8)
-  - React/RCTActionSheet (0.59.8):
+  - React/jsinspector (0.59.10)
+  - React/RCTActionSheet (0.59.10):
     - React/Core
-  - React/RCTAnimation (0.59.8):
+  - React/RCTAnimation (0.59.10):
     - React/Core
-  - React/RCTBlob (0.59.8):
+  - React/RCTBlob (0.59.10):
     - React/Core
-  - React/RCTGeolocation (0.59.8):
+  - React/RCTGeolocation (0.59.10):
     - React/Core
-  - React/RCTImage (0.59.8):
+  - React/RCTImage (0.59.10):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.59.8):
+  - React/RCTLinkingIOS (0.59.10):
     - React/Core
-  - React/RCTNetwork (0.59.8):
+  - React/RCTNetwork (0.59.10):
     - React/Core
-  - React/RCTSettings (0.59.8):
+  - React/RCTSettings (0.59.10):
     - React/Core
-  - React/RCTText (0.59.8):
+  - React/RCTText (0.59.10):
     - React/Core
-  - React/RCTVibration (0.59.8):
+  - React/RCTVibration (0.59.10):
     - React/Core
-  - React/RCTWebSocket (0.59.8):
+  - React/RCTWebSocket (0.59.10):
     - React/Core
     - React/fishhook
     - React/RCTBlob
@@ -168,21 +171,23 @@ PODS:
     - React
   - rn-fetch-blob (0.10.6):
     - React/Core
-  - RNAudioRecorderPlayer (2.3.0):
+  - RNAudioRecorderPlayer (2.4.3):
     - React
   - RNDeviceInfo (2.2.2):
     - React
-  - RNFS (2.13.3):
+  - RNFS (2.15.2):
     - React
-  - RNGestureHandler (1.0.16):
+  - RNGestureHandler (1.4.1):
     - React
-  - RNSVG (9.9.9):
+  - RNPDF (0.10.1):
+    - React
+  - RNSVG (9.11.1):
     - React
   - RNVectorIcons (6.6.0):
     - React
   - RNViewShot (2.6.0):
     - React
-  - yoga (0.59.8.React)
+  - yoga (0.59.10.React)
 
 DEPENDENCIES:
   - Crashlytics
@@ -193,7 +198,9 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - lottie-ios (from `../node_modules/lottie-ios`)
   - RCTSystemSetting (from `../node_modules/react-native-system-setting`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
@@ -218,6 +225,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNViewShot (from `../node_modules/react-native-view-shot`)
@@ -247,10 +255,14 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  lottie-ios:
+    :path: "../node_modules/lottie-ios"
   RCTSystemSetting:
     :path: "../node_modules/react-native-system-setting"
   React:
     :path: "../node_modules/react-native"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
@@ -273,6 +285,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPDF:
+    :path: "../node_modules/react-native-view-pdf"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
@@ -299,26 +313,29 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 1624046ab1bcc5e170061a56ef5679000b079c8e
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
+  lottie-ios: 6037add6441183d4ffd100d2ac78724aa8d919d4
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
-  RCTSystemSetting: 9279ff44c49bb4fb0a5d335a0851852c8f3eda99
-  React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
+  RCTSystemSetting: 2870be06565f2398a8786bfe8486ff6880a4326a
+  React: 36d0768f9e93be2473b37e7fa64f92c1d5341eef
+  react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 568cb03d0eae7fef93626f65d05be55642404ed4
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
   react-native-maps: 0316ed017dbb64b33b227751fa810e2454fcfa39
-  react-native-version-number: d4919bbe43b62039894c6a747633bb59a8a44df3
+  react-native-version-number: 15563dc4145a94aabfc1faab2a9af10174a4204e
   ReactNativeFabric: d05320ff347d5c72567c115b97edeead111ac4d2
   rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
-  RNAudioRecorderPlayer: f9e3c3cf07f74d7c09bfc39eb230a5dcd84ffe60
+  RNAudioRecorderPlayer: ad2dd78ab2c98e24a8daecbbb923771a1d441721
   RNDeviceInfo: a88be26a64ada7cbc2bc0ebbd1662d340304874e
-  RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
-  RNGestureHandler: 0438a761e8f29be3b809f9e7e43014f3aba4d7a6
-  RNSVG: b7e8745a87c046386569eecb437b3040cc6a7954
+  RNFS: 54da03c2b7d862c42ea3ca8c7f86f892760a535a
+  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
+  RNPDF: 8a40fafbed2714e7e8fe4e7c9f6f9815f52a939c
+  RNSVG: be27aa7c58819f97399388ae53d7fa0572f32c7f
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
-  yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
+  yoga: 684513b14b03201579ba3cee20218c9d1298b0cc
 
-PODFILE CHECKSUM: 810549e4c90bc63881f127526e7ad4250dc36c6a
+PODFILE CHECKSUM: 963f7767a21acee4dd833a9514abd062d96be95d
 
 COCOAPODS: 1.8.3

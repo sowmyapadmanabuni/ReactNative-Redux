@@ -30,7 +30,7 @@ class OTPVerification extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Mobilenumber: "",
+            Mobilenumber:"",
             OTPNumber: "",
             isLoading: false,
             timer: 180,

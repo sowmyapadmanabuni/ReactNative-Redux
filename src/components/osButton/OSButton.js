@@ -7,8 +7,8 @@ import OSButtonStyles from "./OSButtonStyles";
 
 class OSButton extends React.Component {
     static propTypes = {
-        height: PropTypes.string,
-        width: PropTypes.string,
+        height: PropTypes.any,
+        width: PropTypes.any,
         borderRadius: PropTypes.number,
         oSBText: PropTypes.string.isRequired,
         oSBBackground: PropTypes.string,
