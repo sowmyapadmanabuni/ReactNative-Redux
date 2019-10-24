@@ -42,6 +42,7 @@ import { ratio, screenWidth } from './Styles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
+import gateFirebase from 'firebase';
 
 var audioRecorderPlayer;
 class SendingMsgToGate extends Component {
@@ -98,6 +99,7 @@ class SendingMsgToGate extends Component {
 
   componentDidMount() {
     let self = this;
+    console.log(this.props, this.state, 'sendingMsggat');
     setTimeout(() => {
       // self.visitorData();
       this.setState({
@@ -626,7 +628,7 @@ class SendingMsgToGate extends Component {
       .post(
         `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
         {
-          VLVenName: `${visitorname}`,
+          VLVenName: `${this.props.navigation.state.params.fname}`,
           VLCmnts: `${comments}`,
           VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
           VLVoiceNote: mp3,
@@ -642,6 +644,19 @@ class SendingMsgToGate extends Component {
 
       .then(response => {
         console.log('Respo1111:', response);
+        const { associationId, id } = this.props.navigation.state.params;
+
+        let timeFormat = moment.utc().format();
+        let anotherString = timeFormat.replace(/Z/g, '');
+        console.log(anotherString, 'another_string');
+
+        gateFirebase
+          .database()
+          .ref(`NotificationSync/A_${associationId}/${id}`)
+          .update({
+            newAttachment: true,
+            attachmentTime: anotherString
+          });
         // alert('Success');
         this.setState({
           isLoading: false,

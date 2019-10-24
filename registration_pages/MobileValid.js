@@ -51,6 +51,9 @@ class MobileValid extends Component {
     };
 
     getOtp = mobilenumber => {
+
+        // this.props.navigation.navigate('OTPVerificationScreen');
+
         const reg = /^[0]?[6789]\d{9}$/;
         const countryCode = "+" + this.state.callingCode; //this.phone.getValue();
 
