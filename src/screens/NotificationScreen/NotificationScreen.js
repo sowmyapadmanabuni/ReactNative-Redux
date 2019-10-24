@@ -358,6 +358,10 @@ class NotificationScreen extends PureComponent {
     oldNotif[index].opened = true;
     this.props.onGateApp(oldNotif);
 
+    let timeFormat = moment.utc().format();
+    let anotherString = timeFormat.replace(/Z/g, '');
+    console.log(anotherString, 'another_string');
+
     // alert(oldNotif[index].opened)
 
     gateFirebase
@@ -367,7 +371,7 @@ class NotificationScreen extends PureComponent {
         buttonColor: '#75be6f',
         opened: true,
         visitorlogId: visitorId,
-        updatedTime: { '.sv': 'timestamp' }
+        updatedTime: anotherString
         // status:
       })
       .then(() => {
@@ -382,6 +386,11 @@ class NotificationScreen extends PureComponent {
     let oldNotif = [...this.props.notifications];
     oldNotif[index].opened = true;
     this.props.onGateApp(oldNotif);
+
+    let timeFormat = moment.utc().format();
+    let anotherString = timeFormat.replace(/Z/g, '');
+    console.log(anotherString, 'another_string');
+
     gateFirebase
       .database()
       .ref(`NotificationSync/A_${associationid}/${visitorId}`)
@@ -389,7 +398,7 @@ class NotificationScreen extends PureComponent {
         buttonColor: '#ff0000',
         opened: true,
         visitorlogId: visitorId,
-        updatedTime: { '.sv': 'timestamp' }
+        updatedTime: anotherString
       });
   };
 

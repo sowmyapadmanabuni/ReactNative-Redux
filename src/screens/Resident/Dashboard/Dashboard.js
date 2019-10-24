@@ -1312,31 +1312,26 @@ class Dashboard extends PureComponent {
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-                </View>
-                <View style={Style.supportContainer}>
-                  <View style={Style.subSupportView}>
-                    <TouchableOpacity
-                        onPress={() => {
-                          {
-                            Platform.OS === 'android'
-                                ? Linking.openURL(`tel:+919343121121`)
-                                : Linking.openURL(`tel:+919343121121`);
-                          }
-                        }}
-                    >
-                      <Icon
-                          color="#38bcdb"
-                          size={hp('2.2%')}
-                          // style={Style.supportIcon }
-                          name="call1"
-                      />
-                    </TouchableOpacity>
-                    {/* <TouchableOpacity>
-              <Image
-                style={Style.supportIcon}
-                source={require("../../../../icons/chat.png")}
-              />
-            </TouchableOpacity> */}
+            </View>
+            <View style={Style.supportContainer}>
+              <View style={Style.subSupportView}>
+                <TouchableOpacity
+                  onPress={() => {
+                    {
+                      Platform.OS === 'android'
+                        ? Linking.openURL(`tel:9343121121`)
+                        : Linking.openURL(`tel:9343121121`);
+                    }
+                  }}
+                >
+                  <Icon
+                    color="#38bcdb"
+                    size={hp('2.2%')}
+                    // style={Style.supportIcon }
+                    name="call1"
+                  />
+                </TouchableOpacity>
+                
                     <TouchableOpacity
                         onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
                         //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
@@ -1735,38 +1730,39 @@ class Dashboard extends PureComponent {
             >
               <Text>Oyeliving</Text>
             </Button>
+            <Button
+              bordered
+              style={styles.button1}
+              onPress={() => this.props.navigation.navigate("reportsTab")}
+          >
+            <Text>Reports</Text>
+          </Button>
 
-            <AnimatedTouchable
-                animation={'swing'}
-                onPress={() => this.props.navigation.navigate('Announcement')}
-            >
-              <View
-                  style={{
-                    height: hp('5%'),
-                    width: hp('20%'),
-                    borderRadius: hp('4%'),
-                    marginTop: hp('3%'),
-                    borderColor: base.theme.colors.primary,
-                    borderWidth: hp('0.1%'),
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-              >
-                <Text
-                    style={{ fontSize: hp('2%'), color: base.theme.colors.primary }}
-                >
-                  Announcement
-                </Text>
-              </View>
-            </AnimatedTouchable>
-
-            {/* <Button
-            bordered
-            style={styles.button1}
+          <AnimatedTouchable
+            animation={'swing'}
             onPress={() => this.props.navigation.navigate('Announcement')}
           >
-            <Text>Announcement</Text>
-          </Button> */}
+            <View
+              style={{
+                height: hp('5%'),
+                width: hp('20%'),
+                borderRadius: hp('4%'),
+                marginTop: hp('3%'),
+                borderColor: base.theme.colors.primary,
+                borderWidth: hp('0.1%'),
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text
+                style={{ fontSize: hp('2%'), color: base.theme.colors.primary }}
+              >
+                Announcement
+              </Text>
+            </View>
+          </AnimatedTouchable>
+            
+          
           </View>
           {this.props.dropdown.length == 0 ? (
               <View />

@@ -103,7 +103,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           } else {
             firebase
               .database()
-              .ref(`NotificationSync/${data.sbMemID}`)
+              .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
               .once('value')
               .then(snapshot => {
                 let val = snapshot.val();

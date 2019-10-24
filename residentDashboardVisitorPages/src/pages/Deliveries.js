@@ -477,7 +477,11 @@ class App extends React.Component {
                     style={styles.button2}
                     onPress={() =>
                       this.props.navigation.navigate('SendingMsgToGate', {
-                        details: item
+                        image: item.vlEntryImg,
+                        fname: item.vlfName,
+                        lname: item.vllName,
+                        id: item.vlVisLgID,
+                        associationId: item.asAssnID
                       })
                     }
                   >

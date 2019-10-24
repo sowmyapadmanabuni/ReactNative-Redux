@@ -829,6 +829,7 @@ class UnitList extends Component {
 
     getUnitList = () => {
         const {id, associationName} = this.props.navigation.state.params;
+        console.log("ASSOCIATION_ID", id)
         fetch(
             `https://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByAssocID/` +
             id,

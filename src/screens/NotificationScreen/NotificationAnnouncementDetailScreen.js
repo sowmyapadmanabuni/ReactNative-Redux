@@ -103,13 +103,13 @@ class NotificationAnnouncementDetailScreen extends Component {
   }
 
   componentDidMount() {
-    this.getAnnouncementData();
     let self = this;
     setTimeout(() => {
       this.setState({
         isLoading: false
       });
-    }, 1500);
+      self.getAnnouncementData();
+    }, 1000);
   }
 
   componentDidUpdate() {
@@ -204,7 +204,7 @@ class NotificationAnnouncementDetailScreen extends Component {
       .then(response => {
         console.log('Announcement_Dataaaa', response);
         this.setState({
-          isLoading: true,
+          isLoading: false,
           imageData: response.data.data.announcements[0].anImages,
           image1:
             'https://mediaupload.oyespace.com/' +
