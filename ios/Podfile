@@ -79,8 +79,6 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
   pod 'RCTSystemSetting', :path => '../node_modules/react-native-system-setting'
 
-  pod 'lottie-ios', :path => '../node_modules/lottie-ios'
-
 end
   
 post_install do |installer|

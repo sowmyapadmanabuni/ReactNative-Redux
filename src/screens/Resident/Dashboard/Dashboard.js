@@ -1319,8 +1319,8 @@ class Dashboard extends PureComponent {
                   onPress={() => {
                     {
                       Platform.OS === 'android'
-                        ? Linking.openURL(`tel:+919343121121`)
-                        : Linking.openURL(`tel:+919343121121`);
+                        ? Linking.openURL(`tel:9343121121`)
+                        : Linking.openURL(`tel:9343121121`);
                     }
                   }}
                 >
@@ -1735,6 +1735,13 @@ class Dashboard extends PureComponent {
           >
             <Text>Oyeliving</Text>
           </Button> */}
+          <Button
+              bordered
+              style={styles.button1}
+              onPress={() => this.props.navigation.navigate("reportsTab")}
+          >
+            <Text>Reports</Text>
+          </Button>
 
           <AnimatedTouchable
             animation={'swing'}

@@ -227,7 +227,7 @@ class Announcement extends Component {
     console.log('ImageObj', imgObj);
 
     let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
-    // console.log('Photo upload response', stat, response);
+    console.log('Stat222222222222222222222222', stat, response);
     if (stat) {
       try {
         switch (this.state.id) {
@@ -297,7 +297,7 @@ class Announcement extends Component {
     const newUri = result.replace('file://', 'file:///');
 
     console.log('Audio', result);
-    const path = Platform.OS === 'ios' ? result : newUri; //`Images/${result[0]}`;
+    const path = Platform.OS === 'ios' ? result : newUri;
     console.log('PATH', path);
 
     const formData = new FormData();

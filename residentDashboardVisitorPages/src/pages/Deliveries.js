@@ -476,7 +476,9 @@ class App extends React.Component {
                     warning
                     style={styles.button2}
                     onPress={() =>
-                      this.props.navigation.navigate('SendingMsgToGate')
+                      this.props.navigation.navigate('SendingMsgToGate', {
+                        image: item.vlEntryImg, fname: item.vlfName, lname:item.vllName, id: item.vlVisLgID
+                      })
                     }
                   >
                     <Text
