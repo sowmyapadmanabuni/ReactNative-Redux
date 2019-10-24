@@ -27,6 +27,8 @@ import base from '../../../src/base';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../src/assets/selection.json';
 
+import gateFirebase from 'firebase';
+
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 let dt = new Date();
@@ -59,7 +61,9 @@ class App extends React.Component {
 
       count: 1,
 
-      open: false
+      open: false,
+
+      buttonColor: ''
     };
     this.arrayholder = [];
   }
@@ -259,6 +263,18 @@ class App extends React.Component {
     // const time = item.vlEntryT;
     // const entertiming = time.subString();
     // console.log(entertiming);
+    gateFirebase
+      .database()
+      .ref(`NotificationSync/A_${item.asAssnID}/${item.vlVisLgID}`)
+      .once('value')
+      .then(snapshot => {
+        let val = snapshot.val();
+        console.log(val, 'value_firebase');
+        this.setState({
+          buttonColor: val.buttonColor
+        });
+      });
+
     return (
       <View
         style={{
@@ -463,7 +479,8 @@ class App extends React.Component {
                   <Text style={{ color: '#38bcdb' }}>{item.vlComName}</Text>
                 </Text>
               </View>
-              {item.vlExitT === '0001-01-01T00:00:00' && (
+              {item.vlExitT === '0001-01-01T00:00:00' &&
+              this.state.buttonColor === '#75be6f' ? (
                 <View
                   style={{
                     justifyContent: 'center',
@@ -477,7 +494,10 @@ class App extends React.Component {
                     style={styles.button2}
                     onPress={() =>
                       this.props.navigation.navigate('SendingMsgToGate', {
-                        image: item.vlEntryImg, fname: item.vlfName, lname:item.vllName, id: item.vlVisLgID
+                        image: item.vlEntryImg,
+                        fname: item.vlfName,
+                        lname: item.vllName,
+                        id: item.vlVisLgID
                       })
                     }
                   >
@@ -490,6 +510,8 @@ class App extends React.Component {
                     </Text>
                   </Button>
                 </View>
+              ) : (
+                <View />
               )}
             </View>
             {/* <View style={{ flexDirection: 'row' }}>
