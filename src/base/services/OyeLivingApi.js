@@ -122,8 +122,13 @@ export default class OyeLivingApi {
     static async deleteInvoice(input){
         return await instance.post('Expense/ExpenseDeleteUpdate',input);
     }
+
     static async getUnitName(uniId){
         return await instance.get('Unit/GetUnitListByUnitID/'+uniId);
+    }
+
+    static async generateInvoiceList(assId,blockId){
+        return await instance.get('invoice/list/' + assId + '/' + blockId);
     }
 
 

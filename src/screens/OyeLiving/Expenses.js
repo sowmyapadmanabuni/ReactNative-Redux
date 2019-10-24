@@ -517,6 +517,21 @@ class Expenses extends React.Component {
 
     }
 
+    async generateInvoice(){
+        let self=this;
+        console.log('Invoiced list',self.props.userReducer.SelectedAssociationID,self.state.blockId)
+        let stat = await base.services.OyeLivingApi.generateInvoiceList(self.props.userReducer.SelectedAssociationID,self.state.blockId)
+        console.log('Generated Invoice List',stat)
+        try {
+            if (stat.success) {
+                // self.props.navigation.navigate('invoices')
+            }
+        }catch(error){
+            console.log('Error in the file',error)
+        }
+
+    }
+
     onModalOpen() {
         this.setState({
             isModalVisible: !this.state.isModalVisible,
@@ -549,7 +564,7 @@ class Expenses extends React.Component {
                 backgroundColor: this.state.isModalVisible ? 'rgba(52, 52, 52, 0.05)' : base.theme.colors.white
             }}>
                 <TouchableOpacity style={{width:'100%',justifyContent:'flex-end',alignItems:'flex-end',height:30,position:'absolute',alignSelf:'flex-end',marginBottom:160}} onPress={() => {
-                    this.props.navigation.navigate('invoices');
+                    this.generateInvoice();
                 }}>
                     <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
                 </TouchableOpacity>
@@ -562,7 +577,8 @@ class Expenses extends React.Component {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         width: wp('95'),
-                        alignSelf: 'center'
+                        alignSelf: 'center',
+                        marginTop:30 //temp purpose
                     }}>
                         <Dropdown
                             value={'Select Block'}
@@ -707,7 +723,7 @@ class Expenses extends React.Component {
                             <TouchableHighlight
                                 underlayColor={base.theme.colors.transparent}
                                 onPress={() => {
-                                    this.setState({collapse1: !this.state.collapse1})
+                                    this.setState({collapse1:!this.state.collapse1})
                                 }}>
                                 <View style={{
                                     flexDirection: 'row',
