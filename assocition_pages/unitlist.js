@@ -889,7 +889,7 @@ class UnitList extends Component {
                             />
                             <View style={{flexDirection: "column"}}>
                                 <Text style={styles.blockNameTextStyle}>
-                                    {item.block.blBlkName ? (
+                                    {item.block && item.block.blBlkName ? (
                                         <Text> {item.block.blBlkName + " > "}</Text>
                                     ) : null}
                                     {item.unUniName}
@@ -938,6 +938,7 @@ class UnitList extends Component {
     };
 
     render() {
+        console.log('Data source in the unit list',this.state.dataSource)
         if (this.state.isLoading) {
             return (
                 <View style={styles.container}>

@@ -575,7 +575,7 @@ class SchedulePatrol extends React.Component {
         }else if(selectedDay ===0){
             text = "Occurance Never"
         }
-        else if(!text1.includes("Sun Sat")){
+        else if(!text1.includes("Sun,Sat")){
             console.log("dayArr[i].isSelected2222")
             if(selectedDay === 5 && !text1.includes("Sun") && !text1.includes("Sat")){
                 text = "Every Weekdays"

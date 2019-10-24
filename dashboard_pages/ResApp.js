@@ -78,6 +78,8 @@ import reportsTab from '../src/screens/Reports/reportsTab';
 import ReportsHeader from '../src/components/NavigationalHeaders/ReportsHeader';
 
 import Announcement from '../assocition_pages/announcement.js';
+import AddExpense from "../src/screens/OyeLiving/Expenses/AddExpense";
+import EditExpense from "../src/screens/OyeLiving/Expenses/EditExpense";
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -110,6 +112,8 @@ const NotificationStack = createStackNavigator({
     }
   }
 });
+
+
 
 const ResApp = createStackNavigator({
   ResDashBoard: {
@@ -582,6 +586,18 @@ const ResApp = createStackNavigator({
     screen: SubscriptionManagement,
     navigationOptions: {
       header: props => <MyFamilyHeader isSub={true} {...props} />
+    }
+  },
+  /*addExpenseScreen: {
+    screen: AddExpense,
+    navigationOptions: {
+      header: props => <MyFamilyHeader isOyeLiving={true} {...props} />
+    }
+  },*/
+  editExpenseScreen: {
+    screen: EditExpense,
+    navigationOptions: {
+      header: props => <MyFamilyHeader isOyeLiving={true} {...props} />
     }
   }
 });

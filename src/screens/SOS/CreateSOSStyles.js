@@ -144,7 +144,11 @@ const CreateSOSStyles = StyleSheet.create({
     },
     stopSOSText: {
         color: base.theme.colors.white
-    }
+    },
+    imageViewExp:{
+        height: heightPercentageToDP('8%'),
+        width: heightPercentageToDP('8%'),
+  },
 });
 
 

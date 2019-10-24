@@ -388,6 +388,7 @@ class PatrollingCheckPoints extends React.Component {
                             resizeMode={'center'}
                             style={PatrollingCheckPointsStyles.locationImageStyle}
                             source={require('../../../icons/location.png')}
+                            resizeMode={'contain'}
                         />
                         <Text numberOfLines={1}
                             style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>

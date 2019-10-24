@@ -3,6 +3,8 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rumax.reactnative.pdfviewer.PDFViewPackage;
+import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.devstepbcn.wifi.AndroidWifiPackage;
@@ -57,6 +59,8 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+                    new PDFViewPackage(),
+                    new DocumentPickerPackage(),
                     new RNHTMLtoPDFPackage(),
                     new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),

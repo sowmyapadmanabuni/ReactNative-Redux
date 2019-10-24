@@ -75,9 +75,10 @@ class PatrolShuffling extends React.Component {
         let data = item;
         console.log("Item:", item.item);
         return (
+
             <TouchableHighlight
                 underlayColor={base.theme.colors.transparent}
-                style={[PatrollingCheckPointsStyles.checkBoxView], { backgroundColor: isActive ? base.theme.colors.primary : base.theme.colors.white }}
+                style={[PatrollingCheckPointsStyles.checkBoxView, { backgroundColor: isActive ? base.theme.colors.primary : base.theme.colors.white }]}
                 onLongPress={move}
                 onPressOut={moveEnd}
             >
@@ -214,7 +215,8 @@ class PatrolShuffling extends React.Component {
             <View style={{ flex: 1, backgroundColor: base.theme.colors.white }}>
                 <View style={PatrollingCheckPointsStyles.header}>
                     <Text
-                        style={[PatrollingCheckPointsStyles.headerText], { textAlign: 'center', color: base.theme.colors.primary }}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
+
+                        style={[PatrollingCheckPointsStyles.headerText, { textAlign: 'center', color: base.theme.colors.primary }]}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
                 </View>
                 <DraggableFlatList
                     data={this.state.data}
@@ -257,7 +259,7 @@ class PatrolShuffling extends React.Component {
                         marginTop: hp('2'),
                         alignSelf: 'center',
                         justifySelf: 'center',
-                        color: base.theme.colors.primary, fontSize: 15,
+                        color: base.theme.colors.primary,
                         fontFamily: base.theme.fonts.medium,fontSize: hp('1.8')
                     }}>Please make sure that the starting point of patrolling </Text>
                     <Text style={{

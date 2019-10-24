@@ -8,11 +8,10 @@
 let urlType = 'apidev';
 
 const oyeURL = `${urlType}.oyespace.com`; //Validation/
-
-//Image Domainss
-//const mediaUpload = "https://mediauploaddev.oyespace.com/Images/"; //Development
+//Image Domains
+const mediaUpload = "https://mediauploaddev.oyespace.com/Images/"; //Development
 //const mediaUpload = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
-const mediaUpload = 'https://mediaupload.oyespace.com/Images/'; //Production
+//const mediaUpload = 'https://mediaupload.oyespace.com/Images/'; //Production
 const oyeBaseURL = 'http://' + oyeURL + '/oye247/api/v1/';
 
 const INITIAL_STATE = {
