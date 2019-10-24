@@ -13,6 +13,7 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		043D2988225E33B60051E37D /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 043D297E225E338E0051E37D /* libRNFirebase.a */; };
+		048CBC62236041070050CC40 /* Oyespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048CBC61236041070050CC40 /* Oyespace.swift */; };
 		049386FB225DFA370033CF63 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049386FA225DFA370033CF63 /* GoogleService-Info.plist */; };
 		0EB496CCBD65402CB6101409 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 861BE436359B40A5B710E1BB /* Entypo.ttf */; };
 		11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
@@ -27,7 +28,6 @@
 		16D3D1D203884931A6E621BF /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 770012F8ADA04B0C8F48E788 /* Zocial.ttf */; };
 		179FDCDC0E1645AE8B76B3F3 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D465E8C2E0234F4389F8685B /* AntDesign.ttf */; };
 		1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA53C5321BB40CCA9D694E0 /* libRNHTMLtoPDF.a */; };
-		1E84013A235D9279006A8841 /* OyeSoace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E840139235D9279006A8841 /* OyeSoace.swift */; };
 		1EB458D80BAA45129F1275C1 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8BAB1885F524E67B6415E52 /* rubicon-icon-font.ttf */; };
 		240306F65F3D4FAD950C1D2A /* HelveticaNeueHv.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 598D334FA25C41B08E24DE69 /* HelveticaNeueHv.ttf */; };
 		2451D65A86BF457FA86F22EE /* HelveticaNeueBd.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA03311D714E4B3487257C79 /* HelveticaNeueBd.ttf */; };
@@ -515,6 +515,8 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* OyeSpaceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OyeSpaceTests.m; sourceTree = "<group>"; };
 		042936001371409F9D67B5D8 /* libreactnativeuilib.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libreactnativeuilib.a; sourceTree = "<group>"; };
+		048CBC61236041070050CC40 /* Oyespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Oyespace.swift; sourceTree = "<group>"; };
+		048CBC982360420E0050CC40 /* OyeSpace-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OyeSpace-Bridging-Header.h"; sourceTree = "<group>"; };
 		049386FA225DFA370033CF63 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		049386FC225E00580033CF63 /* OyeSpace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = OyeSpace.entitlements; path = OyeSpace/OyeSpace.entitlements; sourceTree = "<group>"; };
 		102944E29C634BF6AAFA7678 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
@@ -529,8 +531,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = OyeSpace/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		15D244A9D5F44951A3FE136F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		1E840138235D9279006A8841 /* OyeSpace-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OyeSpace-Bridging-Header.h"; sourceTree = "<group>"; };
-		1E840139235D9279006A8841 /* OyeSoace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OyeSoace.swift; sourceTree = "<group>"; };
 		227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Helvetica Neu Bold.ttf"; path = "../fonts/Helvetica Neu Bold.ttf"; sourceTree = "<group>"; };
 		22FE5082DA494D888B11412A /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		2328DDF9544647CC922A4556 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -951,7 +951,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				1E840139235D9279006A8841 /* OyeSoace.swift */,
+				048CBC982360420E0050CC40 /* OyeSpace-Bridging-Header.h */,
+				048CBC61236041070050CC40 /* Oyespace.swift */,
 				9FB793922355CA3700D8145E /* sound_1.mp3 */,
 				13B07FAE1A68108700A75B9A /* OyeSpace */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -961,7 +962,6 @@
 				5AB2854691C8EF24BB736741 /* Pods */,
 				A1E6D78721E0DCB1006FE22F /* Recovered References */,
 				04C5C01DA5534580BF6D2BE2 /* Resources */,
-				1E840138235D9279006A8841 /* OyeSpace-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -1885,8 +1885,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E84013A235D9279006A8841 /* OyeSoace.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				048CBC62236041070050CC40 /* Oyespace.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1954,7 +1954,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -2005,7 +2005,7 @@
 				PRODUCT_NAME = OyeSpace;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

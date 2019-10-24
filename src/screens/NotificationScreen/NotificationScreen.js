@@ -333,9 +333,7 @@ class NotificationScreen extends PureComponent {
 
     acceptgateVisitor = (visitorId, index) => {
         let oldNotif = [...this.props.notifications];
-
-        console.log(oldNotif[index], "old_notifffff")
-        console.log(oldNotif[index].opened, 'old_notifffff_opened');
+        console.log(visitorId, 'visitorLogid');
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
 
@@ -344,7 +342,13 @@ class NotificationScreen extends PureComponent {
         gateFirebase
           .database()
           .ref(`NotificationSync/${visitorId}`)
-          .set({ buttonColor: '#75be6f', opened: true, visitorlogId : visitorId})
+          .set({
+            buttonColor: '#75be6f',
+            opened: true,
+            visitorlogId: visitorId,
+            updatedTime: { '.sv': 'timestamp' },
+            // status: 
+          })
           .then(() => {
             //    if (item.opened) {
             //      this.props.onNotificationOpen(notifications, index, oyeURL);
@@ -355,6 +359,7 @@ class NotificationScreen extends PureComponent {
     }
 
     declinegateVisitor = (visitorId, index) => {
+     console.log(visitorId, 'visitorLogid');
         let oldNotif = [...this.props.notifications]
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
@@ -366,7 +371,8 @@ class NotificationScreen extends PureComponent {
           .set({
             buttonColor: '#ff0000',
             opened: true,
-            visitorlogId: visitorId
+            visitorlogId: visitorId,
+            updatedTime: { '.sv': 'timestamp' }
           });
     }
 
