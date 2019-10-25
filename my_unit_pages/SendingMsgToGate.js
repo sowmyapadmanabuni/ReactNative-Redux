@@ -645,7 +645,7 @@ class SendingMsgToGate extends Component {
       .then(response => {
         console.log('Respo1111:', response);
         const { associationId, id } = this.props.navigation.state.params;
-
+        console.log('PARAMS', this.props.navigation.state.params);
         let timeFormat = moment.utc().format();
         let anotherString = timeFormat.replace(/Z/g, '');
         console.log(anotherString, 'another_string');

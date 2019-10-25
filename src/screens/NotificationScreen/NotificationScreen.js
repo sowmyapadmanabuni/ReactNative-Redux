@@ -370,6 +370,7 @@ class NotificationScreen extends PureComponent {
       .set({
         buttonColor: '#75be6f',
         opened: true,
+        newAttachment: false,
         visitorlogId: visitorId,
         updatedTime: anotherString
         // status:
@@ -396,12 +397,39 @@ class NotificationScreen extends PureComponent {
       .ref(`NotificationSync/A_${associationid}/${visitorId}`)
       .set({
         buttonColor: '#ff0000',
-        opened: true,
+        opened: false,
+        newAttachment: true,
         visitorlogId: visitorId,
         updatedTime: anotherString
       });
   };
 
+  // {item.ntType === 'Announcement' && (
+  //   <Card>
+  //     <Text style={{ fontSize: hp('2.5%'), color: '#000' }}>
+  //       {moment(item.ntdCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
+  //       {'     '}
+  //       {moment(item.ntdCreated).format('hh:mm A')}
+  //     </Text>
+
+  //     <ListItem
+  //       onPress={() => this.onPress(item, index)}
+  //       title={this.renderTitle(item.ntType, item)}
+  //       subtitle={item.ntDesc}
+  //       leftIcon={{
+  //         name: this.renderIcons('name', item, index),
+  //         type: this.renderIcons('type', item, index),
+  //         color: '#ED8A19'
+  //       }}
+  //       rightIcon={{
+  //         name: this.renderIcons('name', item, index),
+  //         type: this.renderIcons('type', item, index),
+  //         color: '#ED8A19'
+  //       }}
+  //       containerStyle={this.renderIcons('style', item, index)}
+  //     />
+  //   </Card>
+  // )}
   renderItem = ({ item, index }) => {
     const { savedNoifId, notifications, oyeURL } = this.props;
 
@@ -683,11 +711,11 @@ class NotificationScreen extends PureComponent {
                               >
                                 {item.vlMobile}
                               </Text>
-                              <Icon
+                              {/* <Icon
                                 color="#ff8c00"
                                 size={hp('2.2%')}
                                 name="call"
-                              />
+                              /> */}
                             </View>
                           </TouchableOpacity>
                         </View>
@@ -704,7 +732,7 @@ class NotificationScreen extends PureComponent {
                             fontWeight: 'bold'
                           }}
                         >
-                          Entry on:{' '}
+                          Entry:{' '}
                           <Text
                             style={{
                               color: base.theme.colors.black,
@@ -754,7 +782,7 @@ class NotificationScreen extends PureComponent {
                               fontWeight: 'bold'
                             }}
                           >
-                            Exit on:{' '}
+                            Exit:{' '}
                             <Text
                               style={{
                                 color: base.theme.colors.black,
