@@ -453,7 +453,7 @@ class Expenses extends React.Component {
                 self.getSelectedInvoices(self.state.isTabSelected, newList)
             }
         } catch (error) {
-            self.setState({expenseList: []});
+            self.setState({expenseList: [],expensesAllList:[]});
             console.log('error', error)
         }
 
@@ -594,7 +594,7 @@ class Expenses extends React.Component {
                                 borderBottomWidth: 1,
                             }}
                             dropdownOffset={{top: 10, left: 0}}
-                            dropdownPosition={-3}
+                            dropdownPosition={-5}
                             rippleOpacity={0}
                             onChangeText={(value, index) => {this.setState({isLoading:true});
                                 this.getTheExpenseList(value, index)}}

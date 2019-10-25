@@ -132,6 +132,53 @@ export default class OyeLivingApi {
     }
 
 
+    static async getAssociationNameById(assId){
+        return await instance.get('association/getAssociationList/'+assId);
+    }
+
+    static async getReceiptsListByBlockId(blockId){
+        return await instance.get('GetPaymentListByBlockID/'+blockId);
+    }
+    static async getTheReceiptsListByDates(input){
+        return await instance.post('Payment/ReportByDates',input);
+    }
+    static async createNewReceipt(input){
+        return await instance.post('payment/add',input);
+    }
+    static async getInvoices(associationId,blockId){
+        return await instance.get(`/invoice/list/${associationId}/${blockId}`)
+    }
+
+    static  async getInvoiceData(AssociationID,BlockID){
+        return await instance.get(`invoice/view/${AssociationID}/${BlockID} `)
+    }
+
+    static  async sendInvoiceViaMail(detail){
+        return await instance.post(`GetInvoiceOwnerListByInvoiceId`,detail)
+    }
+
+    static  async updateDiscVal(detail){
+        return await  instance.post('UpdateInvoiceDiscountValueAndInsert',detail)
+    }
+
+    static async getInvoiceDetail(invoiceId,unitId){
+        return await instance.get(`invoice/details/${invoiceId}/${unitId} `)
+    }
+
+    static  async getInvoiceListByDates(detail){
+        return await  instance.post('invoice/InvoiceListByDatesAndID ',detail)
+    }
+
+    static async getInvoiceListByInvoiceNumber(invoiceNum){
+        return await instance.get(`Invoice/InvoiceListByInvoiceNumber/`+invoiceNum)
+    }
+
+
+
+
+
+
+
 
 
 

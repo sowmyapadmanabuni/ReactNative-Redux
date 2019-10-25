@@ -99,10 +99,7 @@ class OyeLiving extends React.Component {
                             Vendors
                       </Text>
                     ),
-                    tabBarOnPress: (scene, jumpToIndex) => {
-                        console.log('onPress:', scene.route);
-                        jumpToIndex(scene.index);
-                    },
+
                 }
             },
             invoices: {
@@ -115,10 +112,6 @@ class OyeLiving extends React.Component {
                             Invoices
                       </Text>
                     ),
-                    tabBarOnPress: (scene, jumpToIndex) => {
-                        console.log('onPress:', scene.route);
-                        jumpToIndex(scene.index);
-                    },
                 }
             },
             receipts: {
@@ -130,10 +123,6 @@ class OyeLiving extends React.Component {
                         >Receipts
                       </Text>
                     ),
-                    tabBarOnPress: (scene, jumpToIndex) => {
-                        console.log('onPress:', scene.route);
-                        jumpToIndex(scene.index);
-                    },
                 }
             },
         },

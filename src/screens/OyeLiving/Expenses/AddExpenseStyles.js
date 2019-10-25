@@ -27,7 +27,8 @@ const AddExpenseStyles = StyleSheet.create({
     },
     headerText:{
         fontSize:16,
-        color:base.theme.colors.primary
+        color:base.theme.colors.primary,
+       // fontFamily:base.theme.fonts.medium
     },
     subHeadView:{
         alignItems:'center',

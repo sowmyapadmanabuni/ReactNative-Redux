@@ -1,14 +1,14 @@
 /** @format */
-import React, {Component} from "react";
-import {AppRegistry,AsyncStorage} from "react-native";
-import {Provider} from "react-redux";
-import App from "./App";
-import store from "./src/store";
-import {name as appName} from "./app.json";
-import $ from "logdecor";
-import CheckInternet from "./src/base/services/CheckInternet";
+import React, { Component } from 'react';
+import { AppRegistry, AsyncStorage } from 'react-native';
+import { Provider } from 'react-redux';
+import App from './App';
+import store from './src/store';
+import { name as appName } from './app.json';
+import $ from 'logdecor';
+import CheckInternet from './src/base/services/CheckInternet';
 //firebase.initializeApp(config);
-import {StatusBarPlaceHolder} from "../ReactNative-Redux/src/components/StatusBar";
+import { StatusBarPlaceHolder } from './src/components/StatusBar';
 // import firebase from 'firebase';
 // import {firebaseDetails} from './constant';
 
@@ -33,27 +33,25 @@ var { Crashlytics } = Fabric;
 Crashlytics.setString("version", "Production");
 
 
-
 class RootApp extends Component {
+  async componentWillUpdate() {
+    let data = await JSON.parse(AsyncStorage.getItem('isSOSUpdatePending'));
+    console.log('isSOSUpdatePending:', data);
+  }
 
-    async componentWillUpdate(){
-        let data = await JSON.parse(AsyncStorage.getItem("isSOSUpdatePending"));
-        console.log("isSOSUpdatePending:",data);
-    }
-
-    render() {
-        $.logTitle("O Y E S P A C E - R E S I D E N T");
-        return (
-            <Provider store={store}>
-                <CheckInternet/>
-                <StatusBarPlaceHolder/>
-                <App/>
-                {/*
+  render() {
+    $.logTitle('O Y E S P A C E - R E S I D E N T');
+    return (
+      <Provider store={store}>
+        <CheckInternet />
+        <StatusBarPlaceHolder />
+        <App />
+        {/*
         <FlashMessage position="top" duration={5000} />
 */}
-            </Provider>
-        );
-    }
+      </Provider>
+    );
+  }
 }
 
 AppRegistry.registerComponent(appName, () => RootApp);
