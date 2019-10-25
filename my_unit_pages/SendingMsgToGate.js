@@ -42,6 +42,7 @@ import { ratio, screenWidth } from './Styles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
+import gateFirebase from 'firebase';
 
 var audioRecorderPlayer;
 class SendingMsgToGate extends Component {
@@ -98,8 +99,9 @@ class SendingMsgToGate extends Component {
 
   componentDidMount() {
     let self = this;
+    console.log(this.props, this.state, 'sendingMsggat');
     setTimeout(() => {
-      self.visitorData();
+      // self.visitorData();
       this.setState({
         isLoading: false
       });
@@ -285,8 +287,9 @@ class SendingMsgToGate extends Component {
   }
 
   uploadAudio = async result => {
+    const newUri = result.replace('file://', 'file:///');
     console.log('Audio', result);
-    const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
+    const path = Platform.OS === 'ios' ? result : newUri; //`Images/${result[0]}`;
     console.log('PATH', result[0], path);
 
     const formData = new FormData();
@@ -618,42 +621,86 @@ class SendingMsgToGate extends Component {
       this.props.oyeURL
     );
 
-    if (visitorid.length === 0) {
-      return alert('Please select vendor from dropdown');
-    } else {
-      this.setState({
-        isLoading: true
-      });
-      axios
-        .post(
-          `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
-          {
-            VLVenName: `${visitorname}`,
-            VLCmnts: `${comments}`,
-            VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
-            VLVoiceNote: mp3,
-            VLVisLgID: visitorid
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-            }
+    this.setState({
+      isLoading: true
+    });
+    axios
+      .post(
+        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
+        {
+          VLVenName: `${this.props.navigation.state.params.fname}`,
+          VLCmnts: `${comments}`,
+          VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
+          VLVoiceNote: mp3,
+          VLVisLgID: this.props.navigation.state.params.id
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
           }
-        )
+        }
+      )
 
-        .then(response => {
-          console.log('Respo1111:', response);
-          // alert('Success');
-          this.setState({
-            isLoading: false
+      .then(response => {
+        console.log('Respo1111:', response);
+        const { associationId, id } = this.props.navigation.state.params;
+        console.log('PARAMS', this.props.navigation.state.params);
+        let timeFormat = moment.utc().format();
+        let anotherString = timeFormat.replace(/Z/g, '');
+        console.log(anotherString, 'another_string');
+
+        gateFirebase
+          .database()
+          .ref(`NotificationSync/A_${associationId}/${id}`)
+          .update({
+            newAttachment: true,
+            attachmentTime: anotherString
           });
-          this.props.navigation.goBack();
-        })
-        .catch(error => {
-          console.log('Crash in profile', error);
+        // alert('Success');
+        this.setState({
+          isLoading: false,
+
+          relativeImage1: '',
+          relativeImage2: '',
+          relativeImage3: '',
+          relativeImage4: '',
+          relativeImage5: '',
+
+          myProfileImage1: '',
+          myProfileImage2: '',
+          myProfileImage3: '',
+          myProfileImage4: '',
+          myProfileImage5: '',
+
+          mp3uri: '',
+          mp3: '',
+
+          imageUrl: '',
+          photo: null,
+          photoDetails: null,
+          isPhotoAvailable: false,
+          filePath: '',
+          imagePath: '',
+          id: '',
+
+          buttonId: 1,
+          playBtnId: 0,
+
+          recordSecs: 0,
+          recordTime: '00:00:00',
+          currentPositionSec: 0,
+          currentDurationSec: 0,
+          playTime: '00:00:00',
+          duration: '00:00:00',
+          comment: '',
+          dropdownValue: ''
         });
-    }
+        this.props.navigation.goBack();
+      })
+      .catch(error => {
+        console.log('Crash in profile', error);
+      });
   };
 
   render() {
@@ -662,50 +709,9 @@ class SendingMsgToGate extends Component {
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
     console.log('COMMENT', this.state.comment.length);
+    console.log('All_Data', this.props.navigation.state.params);
     return (
       <View style={styles.container}>
-        {/* <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
-          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <View
-                  style={{
-                    height: hp('4%'),
-                    width: wp('15%'),
-                    alignItems: 'flex-start',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Image
-                    resizeMode="contain"
-                    source={require('../icons/back.png')}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                width: '35%',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Image
-                style={[styles.image]}
-                source={require('../icons/OyespaceSafe.png')}
-              />
-            </View>
-            <View style={{ width: '35%' }}>
-            </View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
-        </SafeAreaView>
-         */}
         <View style={styles.viewForMyProfileText}>
           <Text
             style={{
@@ -719,7 +725,7 @@ class SendingMsgToGate extends Component {
         </View>
         <KeyboardAwareScrollView>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Dropdown
+            {/* <Dropdown
               value={'Select Visitor' || ''}
               data={this.state.datasource}
               textColor={base.theme.colors.black}
@@ -743,7 +749,37 @@ class SendingMsgToGate extends Component {
               // ref={c => {
               //   dropdownValue = c;
               // }}
-            />
+            /> */}
+          </View>
+
+          <View style={styles.detailsMainView}>
+            <View style={{ ...styles.detailsLeftView, marginLeft: hp('2%') }}>
+              {this.props.navigation.state.params.image === '' ? (
+                <Image
+                  style={styles.staffImg}
+                  source={{
+                    uri:
+                      'https://mediaupload.oyespace.com/' +
+                      base.utils.strings.noImageCapturedPlaceholder
+                  }}
+                />
+              ) : (
+                <Image
+                  style={styles.staffImg}
+                  source={{
+                    uri:
+                      base.utils.strings.imageUrl +
+                      this.props.navigation.state.params.image
+                  }}
+                />
+              )}
+              <View style={styles.textView1}>
+                <Text style={styles.staffText1} numberofLines={1}>
+                  {this.props.navigation.state.params.fname}{' '}
+                  {this.props.navigation.state.params.lname}
+                </Text>
+              </View>
+            </View>
           </View>
 
           <Card
@@ -1424,6 +1460,7 @@ class SendingMsgToGate extends Component {
                   autoCapitalize="none"
                   keyboardType="email-address"
                   placeholder="Write a comment here..."
+                  value={this.state.comment}
                   onChangeText={comment => this.setState({ comment: comment })}
                 />
               </Item>
@@ -1593,5 +1630,33 @@ const styles = StyleSheet.create({
     borderColor: base.theme.colors.white,
     marginBottom: hp('2%'),
     backgroundColor: base.theme.colors.primary
+  },
+  detailsMainView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: '15%',
+    width: '90%',
+    marginTop: 20,
+    justifyContent: 'space-between'
+  },
+  detailsLeftView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: '100%'
+  },
+  staffImg: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    alignSelf: 'center'
+  },
+  textView1: {
+    marginLeft: 10,
+    width: hp('10%')
+  },
+  staffText1: {
+    fontSize: hp('1.6%'),
+    fontWeight: '500',
+    color: base.theme.colors.black
   }
 });

@@ -429,7 +429,7 @@ class MyProfile extends Component {
                         fontWeight: '500'
                       }}
                     >
-                      Join Existing Association
+                      Join Association
                     </Text>
                   </Button>
                 </View>
