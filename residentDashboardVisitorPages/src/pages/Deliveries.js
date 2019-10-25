@@ -497,7 +497,8 @@ class App extends React.Component {
                         image: item.vlEntryImg,
                         fname: item.vlfName,
                         lname: item.vllName,
-                        id: item.vlVisLgID
+                        id: item.vlVisLgID,
+                        associationId: item.asAssnID
                       })
                     }
                   >
