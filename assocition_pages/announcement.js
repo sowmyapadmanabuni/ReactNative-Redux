@@ -525,11 +525,13 @@ class Announcement extends Component {
       img3,
       img4,
       img5,
-      mp3,
       comments,
+      mp3,
+      accountId,
+      self.props.dashboardReducer.assId,
+
       visitorid,
       visitorname,
-      self.props.dashboardReducer.assId,
       self.props.dashboardReducer.uniID,
       this.props.oyeURL
     );
@@ -553,7 +555,7 @@ class Announcement extends Component {
       })
       .then(response_3 => {
         console.log('response_3', response_3);
-        this.setState({ loading: false });
+        // this.setState({ loading: false });
         axios
           .post(
             `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
@@ -577,9 +579,9 @@ class Announcement extends Component {
               response,
               response.data.data.announcement.anid
             );
-            this.setState({
-              isLoading: false
-            });
+            // this.setState({
+            //   isLoading: false
+            // });
             axios
               .get(
                 `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
@@ -595,6 +597,9 @@ class Announcement extends Component {
                 let announcement = response.data.data.announcement.anid;
 
                 console.log('memberList1111', memberList, announcement);
+                this.setState({
+                  isLoading: false
+                });
                 memberList.map(data => {
                   console.log('adminssss', data);
                   this.props.createUserNotification(
