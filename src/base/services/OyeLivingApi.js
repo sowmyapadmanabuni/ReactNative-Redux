@@ -130,6 +130,116 @@ export default class OyeLivingApi {
         return await instance.get(`/invoice/list/${associationId}/${blockId}`)
     }
 
+    static  async getInvoiceData(AssociationID,BlockID){
+        return await instance.get(`invoice/view/${AssociationID}/${BlockID} `)
+    }
+
+    static  async sendInvoiceViaMail(detail){
+        return await instance.post(`GetInvoiceOwnerListByInvoiceId`,detail)
+    }
+
+    static  async updateDiscVal(detail){
+        return await  instance.post('UpdateInvoiceDiscountValueAndInsert',detail)
+    }
+
+
+    static async getInvoiceDetail(invoiceId,unitId){
+        return await instance.get(`invoice/details/${invoiceId}/${unitId} `)
+    }
+
+    static async getAssDetail(assId){
+        return await instance.get(`association/getAssociationList/${assId}`)
+    }
+
+    static async getTheListOfBlocksByAssociation(assId){
+        return await instance.get('Block/GetBlockListByAssocID/' +assId);
+    }
+
+    static async getExpenseRecTypeList(assId){
+        return await instance.get('GetExpenseReccurranceList');
+    }
+
+    static async getExpenseApplicabilityList (assId){
+        return await instance.get('GetExpenseApplicabilityList');
+    }
+
+    static async getPaymentMethodList(assId){
+        return await instance.get('PaymentMethod/GetPaymentMethodList');
+    }
+
+    static async addNewExpense(input){
+        return await instance.post('Expense/Create',input);
+    }
+    static async updateExpense(input){
+        return await instance.post('Expense/ExpenseUpdate',input);
+    }
+
+    static async getTheExpenseListByAssociationId(input){
+        return await instance.get('Expense/GetExpenseListByAssocID/'+assId);
+    }
+
+    static async getTheExpenseListByBlockId(blockId){
+        return await instance.get('Expense/GetExpenseListByBlockID/'+blockId);
+    }
+
+    static async getTheExpenseListByDates(input){
+        return await instance.post('Expense/ExpenseListByDatesAndID',input);
+    }
+
+    static async deleteInvoice(input){
+        return await instance.post('Expense/ExpenseDeleteUpdate',input);
+    }
+
+    static async getUnitName(uniId){
+        return await instance.get('Unit/GetUnitListByUnitID/'+uniId);
+    }
+
+    static async generateInvoiceList(assId,blockId){
+        return await instance.get('invoice/list/' + assId + '/' + blockId);
+    }
+
+
+    static async getAssociationNameById(assId){
+        return await instance.get('association/getAssociationList/'+assId);
+    }
+
+    static async getReceiptsListByBlockId(blockId){
+        return await instance.get('GetPaymentListByBlockID/'+blockId);
+    }
+    static async getTheReceiptsListByDates(input){
+        return await instance.post('Payment/ReportByDates',input);
+    }
+    static async createNewReceipt(input){
+        return await instance.post('payment/add',input);
+    }
+    static async getInvoices(associationId,blockId){
+        return await instance.get(`/invoice/list/${associationId}/${blockId}`)
+    }
+
+    static  async getInvoiceData(AssociationID,BlockID){
+        return await instance.get(`invoice/view/${AssociationID}/${BlockID}`)
+    }
+
+    static  async sendInvoiceViaMail(detail){
+        return await instance.post(GetInvoiceOwnerListByInvoiceId,detail)
+    }
+
+    static  async updateDiscVal(detail){
+        return await  instance.post('UpdateInvoiceDiscountValueAndInsert',detail)
+    }
+
+    static async getInvoiceDetail(invoiceId,unitId){
+        return await instance.get(`invoice/details/${invoiceId}/${unitId}`)
+    }
+
+    static  async getInvoiceListByDates(detail){
+        return await  instance.post('invoice/InvoiceListByDatesAndID ',detail)
+    }
+
+    static async getInvoiceListByInvoiceNumber(invoiceNum){
+        return await instance.get(`Invoice/InvoiceListByInvoiceNumber/`+invoiceNum)
+    }
+
 
 
 

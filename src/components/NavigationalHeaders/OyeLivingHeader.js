@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-10-07 12:10:39 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-22 12:39:00
+ * @Last Modified time: 2019-10-23 10:56:40
  */
 
 
@@ -100,11 +100,12 @@ class OyeLivingHeader extends React.Component {
                         <View /> :
                         <Text style={styles.titleOfScreen}> Expense Management </Text>
                     }
-                    <TouchableOpacity onPress={() => {
+
+                    {/*<TouchableOpacity style={{height:'5%'}} onPress={() => {
                         this.props.navigation.navigate('invoices');
                     }}>
-                        <Text style={{ color: base.theme.colors.blue }}>Generate Invoice</Text>
-                    </TouchableOpacity>
+                        <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
+                    </TouchableOpacity>*/}
                 </View>
             );
         }

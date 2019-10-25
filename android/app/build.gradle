@@ -119,7 +119,7 @@ android {
 
     defaultConfig {
         applicationId "com.oyespace.oyesafe"
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 19
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 17
         versionName "10.17"
@@ -201,6 +201,7 @@ dependencies {
     implementation project(':react-native-maps')
     implementation project(':react-native-geolocation-service')
     implementation project(':react-native-system-setting')
+    implementation project(':react-native-image-to-pdf')
 
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.1.0"

@@ -539,19 +539,29 @@ class Expenses extends React.Component {
         )
     }
 
+    async generateInvoices(){
+        //this.props.navigation.navigate('invoices');
+        let self = this;
+        let associationId = self.props.userReducer.SelectedAssociationID;
+        let stat = await base.services.OyeLivingApi.getInvoices(associationId,self.state.blockId);
+        console.log("Stat in gemerate invoices:",stat)
+    }
+
     render() {
         console.log("State:@@@@@@", this.state.expensesList,this.state.expensesAllList)
         return (
-            <TouchableOpacity  onPress={() =>{this.clearTheFilters(this.state.isTabSelected,this.state.expensesAllList)}} >
+            <TouchableOpacity  onPress={() =>{this.clearTheFilters(this.state.isTabSelected,this.state.expensesAllList)}} disabled={!this.state.isModalVisible}>
             <View style={{
                 height: '100%',
                 width: '100%',
                 backgroundColor: this.state.isModalVisible ? 'rgba(52, 52, 52, 0.05)' : base.theme.colors.white
             }}>
+                <TouchableOpacity style={{width:'100%',justifyContent:'flex-end',alignItems:'flex-end',height:30,paddingRight:15,alignSelf:'flex-end',marginBottom:10}} onPress={() => {
+                   this.generateInvoices()
+                }}>
+                    <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
+                </TouchableOpacity>
                 <View>
-                    <View style={{position: 'absolute'}}>
-                        {this.renderModal()}
-                    </View>
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
@@ -1853,7 +1863,7 @@ class Expenses extends React.Component {
 
         self.onModalOpen();
 
-        self.getSelectedInvoices(this.state.isTabSelected,this.state.expensesAllList)
+        self.getSelectedInvoices(self.state.isTabSelected,filteredNameList)
     }
 
     clearTheFilters(id, expensesList) {

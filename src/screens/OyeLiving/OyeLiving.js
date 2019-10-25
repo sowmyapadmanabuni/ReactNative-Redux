@@ -62,7 +62,11 @@ class OyeLiving extends React.Component {
                         >
                             Expenses
                       </Text>
-                    )
+                    ),
+                    tabBarOnPress: (scene, jumpToIndex) => {
+                        console.log('onPress:', scene.route);
+                        jumpToIndex(scene.index);
+                    },
                 },
             },
             budgetProjection: {
@@ -74,7 +78,11 @@ class OyeLiving extends React.Component {
                         >
                             Budget Projection
                       </Text>
-                    )
+                    ),
+                    tabBarOnPress: (scene, jumpToIndex) => {
+                        console.log('onPress:', scene.route);
+                        jumpToIndex(scene.index);
+                    },
                 }
             },
             purchaseOrder: {
@@ -86,7 +94,10 @@ class OyeLiving extends React.Component {
                         >
                             Purchase Order
                       </Text>
-                    )
+                    ),tabBarOnPress: (scene, jumpToIndex) => {
+                        console.log('onPress:', scene.route);
+                        jumpToIndex(scene.index);
+                    },
                 }
             },
             vendors: {
