@@ -62,6 +62,21 @@ class NotificationScreen extends PureComponent {
     );
     this.doNetwork(null, this.props.notifications);
     firebase.notifications().removeAllDeliveredNotifications();
+    axios
+      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        }
+      })
+      .then(res => {
+        console.log(res.data, 'current time');
+        this.setState({ currentTime: res.data.data.currentDateTime });
+      })
+      .catch(error => {
+        console.log(error, 'erro_fetching_data');
+        this.setState({ currentTime: 'failed' });
+      });
 
     //   alert('mounted');
     //   gateFirebase
@@ -362,6 +377,8 @@ class NotificationScreen extends PureComponent {
     let anotherString = timeFormat.replace(/Z/g, '');
     console.log(anotherString, 'another_string');
 
+    // let
+
     // alert(oldNotif[index].opened)
 
     gateFirebase
@@ -371,7 +388,7 @@ class NotificationScreen extends PureComponent {
         buttonColor: '#75be6f',
         opened: true,
         visitorlogId: visitorId,
-        updatedTime: anotherString
+        updatedTime: this.state.currentTime
         // status:
       })
       .then(() => {
@@ -398,7 +415,7 @@ class NotificationScreen extends PureComponent {
         buttonColor: '#ff0000',
         opened: true,
         visitorlogId: visitorId,
-        updatedTime: anotherString
+        updatedTime: this.state.currentTime
       });
   };
 
