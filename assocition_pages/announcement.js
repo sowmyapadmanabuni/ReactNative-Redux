@@ -525,11 +525,13 @@ class Announcement extends Component {
       img3,
       img4,
       img5,
-      mp3,
       comments,
+      mp3,
+      accountId,
+      self.props.dashboardReducer.assId,
+
       visitorid,
       visitorname,
-      self.props.dashboardReducer.assId,
       self.props.dashboardReducer.uniID,
       this.props.oyeURL
     );
@@ -544,42 +546,42 @@ class Announcement extends Component {
       isLoading: true
     });
     axios
-      .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
-        admin: 'false',
-        ntType: ntType,
-        ntDesc: ntDesc,
-        ntTitle: ntTitle,
-        associationID: associationId
-      })
-      .then(response_3 => {
-        console.log('response_3', response_3);
-        this.setState({ loading: false });
+      .post(
+        `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
+        {
+          ANImages: image,
+          ANCmnts: `${comments}`,
+          ACAccntID: accountId,
+          ASAssnID: assocID,
+          ANVoice: mp3
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          }
+        }
+      )
+      .then(response => {
+        console.log(
+          'Respo1111:',
+          response,
+          response.data.data.announcement.anid
+        );
+        // this.setState({
+        //   isLoading: false
+        // });
         axios
-          .post(
-            `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
-            {
-              ANImages: image,
-              ANCmnts: `${comments}`,
-              ACAccntID: accountId,
-              ASAssnID: assocID,
-              ANVoice: mp3
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-              }
-            }
-          )
-          .then(response => {
-            console.log(
-              'Respo1111:',
-              response,
-              response.data.data.announcement.anid
-            );
-            this.setState({
-              isLoading: false
-            });
+          .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
+            admin: 'false',
+            ntType: ntType,
+            ntDesc: ntDesc,
+            ntTitle: ntTitle,
+            associationID: associationId
+          })
+          .then(response_3 => {
+            console.log('response_3', response_3);
+            // this.setState({ loading: false });
             axios
               .get(
                 `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
@@ -595,6 +597,9 @@ class Announcement extends Component {
                 let announcement = response.data.data.announcement.anid;
 
                 console.log('memberList1111', memberList, announcement);
+                this.setState({
+                  isLoading: false
+                });
                 memberList.map(data => {
                   console.log('adminssss', data);
                   this.props.createUserNotification(
@@ -633,10 +638,10 @@ class Announcement extends Component {
 
                 console.log(error, 'errorAdmin');
               });
-          })
-          .catch(error => {
-            console.log('Crash in Announcement', error);
           });
+      })
+      .catch(error => {
+        console.log('Crash in Announcement', error);
       });
   };
 
