@@ -518,9 +518,9 @@ class SchedulePatrol extends React.Component {
         console.log("Time Arr:", startTimeArr, endTimeArr);
 
         if (startTimeArr[0] > endTimeArr[0]) {
-            return false
-        } else if (startTimeArr[0] < endTimeArr[0]) {
             return true
+        } else if (startTimeArr[0] < endTimeArr[0]) {
+            return false
         } else {
             if (startTimeArr[1] > endTimeArr[1]) {
                 return false
