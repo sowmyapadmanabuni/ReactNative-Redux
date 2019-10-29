@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra
  * @Date: 2019-10-07 12:14:58
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-25 17:47:54
+ * @Last Modified time: 2019-10-28 12:49:35
  */
 
 
@@ -787,13 +787,15 @@ class Invoices extends React.Component {
                                 source={require('../../../icons/OyespaceSafe.png')}
                             />
                         </View>
-                        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableHighlight
+                        onPress={()=>this.shareInvoice(invoiceData)}
+                        style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
                             <Image
                                 resizeMode={'center'}
                                 style={{ height: hp('3'), width: hp('3') }}
                                 source={require('../../../icons/share.png')} />
 
-                        </View>
+                        </TouchableHighlight>
                     </View>
                     <View ref={'view'} style={{backgroundColor: '#FFFFFF'}} >
                     <View style={{
@@ -887,7 +889,7 @@ class Invoices extends React.Component {
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.black }}>{this.state.assDetail.asCity} {this.state.assDetail.asCountry}</Text>
                     </View>
                     <View style={{width:wp('86'),height:hp('10'),borderWidth:0,alignSelf:'center',alignItems:'center',flexDirection:'row',justifyContent:'space-between'}}>
-                    <TouchableHighlight  onPress={this.snapshot("view")} style={{ height: hp('3'), borderRadius: hp('5'), width: wp('25'), backgroundColor: base.theme.colors.primary,alignSelf:'flex-start', justifyContent: 'center',alignItems:'center' }}>
+                    <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={this.snapshot("view")} style={{ height: hp('3'), borderRadius: hp('5'), width: wp('25'), backgroundColor: base.theme.colors.primary,alignSelf:'flex-start', justifyContent: 'center',alignItems:'center' }}>
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.5'), color: base.theme.colors.white }}>Print Invoice</Text>
                     </TouchableHighlight>
                     <View style={{ height: hp('5'),width: wp('30'),alignSelf:'flex-start', justifyContent: 'center',alignItems:'center',flexDirection:'column' }}>

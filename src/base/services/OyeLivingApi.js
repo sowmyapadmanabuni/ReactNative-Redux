@@ -131,12 +131,12 @@ export default class OyeLivingApi {
         return await instance.get(`invoice/view/${AssociationID}/${BlockID}`)
     }
 
-    static  async sendInvoiceViaMail(detail){
-        return await instance.post(`GetInvoiceOwnerListByInvoiceId`,detail)
+    static async sendInvoiceViaMail(detail){
+        return await instance.post('GetInvoiceOwnerListByInvoiceId',detail)
     }
 
     static  async updateDiscVal(detail){
-        return await  instance.post('UpdateInvoiceDiscountValueAndInsert',detail)
+        return await instance.post('UpdateInvoiceDiscountValueAndInsert',detail)
     }
 
 
