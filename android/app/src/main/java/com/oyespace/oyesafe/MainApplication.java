@@ -25,6 +25,7 @@ import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.ninty.system.setting.SystemSettingPackage;
 import com.horcrux.svg.SvgPackage;
+import com.anyline.RNImageToPDF.RNImageToPdfPackage;
 
 import com.rnfs.RNFSPackage;
 import cl.json.RNSharePackage;
@@ -59,8 +60,8 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-                    new PDFViewPackage(),
-                    new DocumentPickerPackage(),
+            new PDFViewPackage(),
+            new DocumentPickerPackage(),
                     new RNHTMLtoPDFPackage(),
                     new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
@@ -85,7 +86,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new LottiePackage(),
                     new SystemSettingPackage(),
                     new SvgPackage(),
-                    new GeolocationPackage()
+                    new GeolocationPackage(),
+                    new RNImageToPdfPackage()
             );
         }
 

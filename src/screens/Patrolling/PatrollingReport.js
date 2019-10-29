@@ -294,7 +294,7 @@ class PatrollingReport extends React.Component {
         let detail = {
             FromDate: moment(selectedStartDate).format("YYYY-MM-DD"),
             ToDate: moment(selectedEndDate).format("YYYY-MM-DD"),
-            ASAssnID: this.props.SelectedAssociationID,
+            ASAssnID: parseInt(this.props.SelectedAssociationID),
             PSPtrlSID: this.state.selectedSlotId,
             slotName: this.state.slotName,
             slotTime: this.state.slotTime

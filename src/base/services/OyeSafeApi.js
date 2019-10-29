@@ -21,6 +21,8 @@ let instance = axios.create({
     }
 });
 
+//www.apiuat.oyespace.com/api/v1/PatrollingShifts/Update
+
 instance.interceptors.response.use((response) => {
     /**
      * Uncomment below line only for debugging complete response

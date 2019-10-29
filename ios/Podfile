@@ -79,6 +79,14 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
   pod 'RCTSystemSetting', :path => '../node_modules/react-native-system-setting'
 
+<<<<<<< HEAD
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+  pod 'lottie-ios', :path => '../node_modules/lottie-ios'
+
+  pod 'RNPDF', :path => '../node_modules/react-native-view-pdf'
+
+=======
+>>>>>>> 997936896785e7a0cd735a8ae21ef9983257f2ec
 end
   
 post_install do |installer|

@@ -26,6 +26,13 @@ import { StatusBarPlaceHolder } from './src/components/StatusBar';
 //   appId: "1:194451632723:web:55842a54e3f70d54"
 // };
 
+var Fabric = require('react-native-fabric');
+
+var { Crashlytics } = Fabric;
+
+Crashlytics.setString("version", "Production");
+
+
 class RootApp extends Component {
   async componentWillUpdate() {
     let data = await JSON.parse(AsyncStorage.getItem('isSOSUpdatePending'));
