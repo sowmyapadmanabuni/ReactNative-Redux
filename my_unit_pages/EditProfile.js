@@ -56,7 +56,6 @@ class EditProfile extends Component {
             alterCCode: "",
             profileName: "",
             isPhotoAvailable: false,
-
         };
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
 

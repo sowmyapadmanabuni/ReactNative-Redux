@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-10-07 11:58:24 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-09 13:05:47
+ * @Last Modified time: 2019-10-22 12:21:21
  */
 
 
@@ -42,6 +42,8 @@ import AddExpenseStyles from "./Expenses/AddExpenseStyles";
 import OSButton from "../../components/osButton/OSButton";
 import CreateSOSStyles from "../SOS/CreateSOSStyles";
 import PDFView from "react-native-view-pdf";
+import CheckBox from "react-native-check-box";
+import PatrollingCheckPointsStyles from "../Patrolling/PatrollingCheckPointsStyles";
 
 let RNFS = require('react-native-fs');
 
@@ -60,7 +62,7 @@ class Expenses extends React.Component {
         this.state = {
             isLoading:true,
             blockList: [],
-            selectedBlock:'',
+            selectedBlock:'Select Block',
             blockId: '',
             expenseDetail: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             isModalVisible: false,
@@ -80,14 +82,14 @@ class Expenses extends React.Component {
             getIndex: 0,
             isCalenderOpenAdd: false,
             blockListAdd: [],
-            selectedBlockAdd: 'Select Block *',
-            selectedExpRecType: 'Expense Recurrence Type *',
-            selectedAppList: 'Applicable to Unit *',
-            selectedExpType: 'Expense Type *',
-            selDistribution: 'Select Distribution Type *',
-            selectedBank: 'Select Bank *',
-            selPayeeBank: 'Payee Bank Name *',
-            selPayMethod: 'Select Payment Method *',
+            selectedBlockAdd: 'Select Block',
+            selectedExpRecType: 'Expense Recurrence Type',
+            selectedAppList: 'Applicable to Unit',
+            selectedExpType: 'Expense Type',
+            selDistribution: 'Select Distribution Type',
+            selectedBank: 'Select Bank',
+            selPayeeBank: 'Payee Bank Name',
+            selPayMethod: 'Select Payment Method',
             blockIdAdd: '',
             poNumberList: [{value: 'PO1', details: 'PO1'}, {value: 'PO2', details: 'PO2'}],
             selectedPoNum: 'PO1',
@@ -138,13 +140,51 @@ class Expenses extends React.Component {
         this.bindComponent = this.bindComponent.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.didFocusListener = this.props.navigation.addListener(
+            'didFocus',
+            () =>  {console.log('Get the All ApIs');
+                this.setState({isLoading:true})
+                this.getTheBlockList()
+                this.getExpenseRecurrenceType();
+                this.getExpenseApplicableUnitList();
+                this.getPaymentMethodsList();
+                this.getUnitName();
+            this.updateValues()}
+        );
+    }
+
+    componentWillUnmount() {
+        this.didFocusListener.remove();
+    }
+    updateValues(){
+        let self=this;
+        self.setState({
+            selectedBlock:'Select Block',
+            blockId: '',
+            getIndex: 0,
+            expensesList: [],
+            expensesAllList: [],
+            statusSelected: [],
+            amountStart:'0',
+            amountEnd:'0',
+            fromDate: '',
+            toDate: '',
+            expenseNameFil: '',
+            expListByDates:[],
+            isTabSelected: 0,
+            isModalVisible:false
+        })
+
+    }
+
+    /*componentWillMount() {
         this.getTheBlockList()
         this.getExpenseRecurrenceType();
         this.getExpenseApplicableUnitList();
         this.getPaymentMethodsList();
         this.getUnitName();
-    }
+    }*/
 
     onSelectionsChange = (statusSelected) => {
         console.log('data@@@@@@', statusSelected)
@@ -235,6 +275,7 @@ class Expenses extends React.Component {
 
     async getPaymentMethodsList() {
         let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.userReducer.SelectedAssociationID)
+        console.log('Pay list',stat)
         try {
             if (stat.success && stat.data.paymentMethod.length !== 0) {
                 let paymentList = [];
@@ -290,9 +331,11 @@ class Expenses extends React.Component {
      let input = {
             //"POEAmnt"   :'',
             //"BPID"      : '',
+         "EXDCreated":moment(this.state.expenditureDate).format('YYYY-MM-DD'),
             "EXHead": this.state.expHead,
             "EXDesc": this.state.expDesc,
             "EXPAmnt": this.state.amountPaid,
+            //"EXDate":moment(this.state.expenditureDate).format('YYYY-MM-DD'),
             "EXApplTO": this.state.selectedAppList,
             "EXRecurr": this.state.selectedExpRecType,
             "EXType": this.state.selectedExpType,
@@ -313,6 +356,8 @@ class Expenses extends React.Component {
             "UnUniIden":this.state.unitName
 
         };
+
+        console.log('Sending Data',input)
         let stat = this.state.isEditExpense?await base.services.OyeLivingApi.updateExpense(input):
             await base.services.OyeLivingApi.addNewExpense(input);
         try {
@@ -443,7 +488,7 @@ class Expenses extends React.Component {
                 let expensesList = stat.data.expenseByBlock;
                 let newList = []
                 for (let i = 0; i < expensesList.length; i++) {
-                    newList.push({item: expensesList[i], open: false})
+                    newList.push({item: expensesList[i], open: false,isChecked:false})
                 }
                 self.setState({
                     expensesList: newList,
@@ -477,7 +522,7 @@ class Expenses extends React.Component {
             "enddate"    :moment(self.state.toDate).format('YYYY-MM-DD')
     };
         console.log('Selected dates',input);
-        let stat = await base.services.OyeLivingApi.getTheExpenseListByDates(input);
+        let stat = await base.services.OyeLivingApi.getTheExpenseListByDates(input)
         self.setState({isLoading:false})
         console.log('data from the stat',stat)
         try{
@@ -485,7 +530,7 @@ class Expenses extends React.Component {
                 let expensesList = stat.data.expense;
                 let newList = []
                 for (let i = 0; i < expensesList.length; i++) {
-                    newList.push({item: expensesList[i], open: false})
+                    newList.push({item: expensesList[i], open: false,isChecked:false})
                 }
                 self.setState({
                     expListByDates: newList,
@@ -517,20 +562,6 @@ class Expenses extends React.Component {
 
     }
 
-    async generateInvoice(){
-        let self=this;
-        console.log('Invoiced list',self.props.userReducer.SelectedAssociationID,self.state.blockId)
-        let stat = await base.services.OyeLivingApi.generateInvoiceList(self.props.userReducer.SelectedAssociationID,self.state.blockId)
-        console.log('Generated Invoice List',stat)
-        try {
-            if (stat.success) {
-                // self.props.navigation.navigate('invoices')
-            }
-        }catch(error){
-            console.log('Error in the file',error)
-        }
-
-    }
 
     onModalOpen() {
         this.setState({
@@ -554,6 +585,25 @@ class Expenses extends React.Component {
         )
     }
 
+    async generateInvoices(){
+        let self = this;
+        let associationId = self.props.userReducer.SelectedAssociationID;
+        console.log('Get the Details for generate invoice', self.props,associationId,self.state.blockId)
+        let stat = await base.services.OyeLivingApi.getInvoices(associationId,self.state.blockId) // 1, 4
+        console.log("Stat in generate invoices:",stat)
+        try {
+            if (stat.success) {
+                await self.getTheExpenseList(self.state.selectedBlock, self.state.getIndex)
+            } else {
+                Alert.alert(stat.error.message)
+            }
+        }catch(error){
+            console.log(error);
+            Alert.alert('No Expenses To Be Invoiced')
+        }
+
+    }
+
     render() {
         console.log("State:@@@@@@", this.state.expensesList,this.state.expensesAllList)
         return (
@@ -561,27 +611,26 @@ class Expenses extends React.Component {
             <View style={{
                 height: '100%',
                 width: '100%',
-                backgroundColor: this.state.isModalVisible ? 'rgba(52, 52, 52, 0.05)' : base.theme.colors.white
+                backgroundColor: this.state.isModalVisible ? 'rgba(52, 52, 52, 0.09)' : base.theme.colors.white
             }}>
-                <TouchableOpacity style={{width:'100%',justifyContent:'flex-end',alignItems:'flex-end',height:30,position:'absolute',alignSelf:'flex-end',marginBottom:160}} onPress={() => {
-                    this.generateInvoice();
+                {this.state.isTabSelected !==0?
+                <TouchableOpacity style={{width:'100%',justifyContent:'flex-end',alignItems:'flex-end',height:25,paddingRight:15,alignSelf:'flex-end',}} onPress={() => {
+                   this.generateInvoices()
                 }}>
                     <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
                 </TouchableOpacity>
+                    :
+                    <View/>}
                 <View>
-                    <View style={{position: 'absolute' ,}}>
-                        {this.renderModal()}
-                    </View>
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         width: wp('95'),
                         alignSelf: 'center',
-                        marginTop:30 //temp purpose
                     }}>
                         <Dropdown
-                            value={'Select Block'}
+                            value={this.state.selectedBlock}
                             labelFontSize={18}
                             labelPadding={-5}
                             placeHolder={'Selected Block'}
@@ -601,7 +650,7 @@ class Expenses extends React.Component {
                         />
                         <TouchableOpacity
                             underlayColor={base.theme.colors.transparent}
-                            onPress={() => this.state.selectedBlock==''?Alert.alert('Please select block to Apply filters'):this.onModalOpen()}
+                            onPress={() => this.state.selectedBlock=='' || this.state.selectedBlock=='Select Block' ?Alert.alert('Please select block to Apply filters'):this.onModalOpen()}
                             style={{
                                 marginTop: 5,
                                 flexDirection: 'row',
@@ -783,7 +832,14 @@ class Expenses extends React.Component {
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     <Text style={{fontSize: 13, marginRight: 2}}>Between</Text>
                                     <TextInput
-                                        onChangeText={(text) => this.setState({amountStart:text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({amountStart:num})
+                                            }}}
+                                       // onChangeText={(text) => this.setState({amountStart:text})}
                                         value={this.state.amountStart}
                                         style={{
                                             width: 60,
@@ -796,12 +852,20 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.greyHead,
                                             borderWidth: 1
                                         }}
+                                        maxLength={20}
                                         placeholderTextColor={base.theme.colors.grey}
                                         keyboardType={'phone-pad'}
                                     />
                                     <Text style={{fontSize: 13, marginRight: 2, marginLeft: 2}}>To</Text>
                                     <TextInput
-                                        onChangeText={(text) => this.setState({amountEnd:text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({amountEnd:num})
+                                            }}}
+                                        //onChangeText={(text) => this.setState({amountEnd:text})}
                                         value={this.state.amountEnd}
                                         style={{
                                             width: 60,
@@ -816,6 +880,7 @@ class Expenses extends React.Component {
                                         }}
                                         placeholderTextColor={base.theme.colors.grey}
                                         keyboardType={'phone-pad'}
+                                        maxLength={20}
                                     />
                                 </View>
                             </Collapsible>
@@ -860,9 +925,19 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.greyHead,
                                             borderWidth: 1
                                         }}
-                                        onChangeText={(text) => this.setState({expenseNameFil: text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({expenseNameFil:value})
+                                            }}}
+                                        maxLength={20}
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                        //onChangeText={(text) => this.setState({expenseNameFil: text})}
                                         value={this.state.expenseNameFil}
                                         placeholderTextColor={base.theme.colors.grey}
+
                                     />
                                 </View>
                             </Collapsible>
@@ -894,7 +969,7 @@ class Expenses extends React.Component {
                                                 borderWidth: 1,
                                                 borderColor: base.theme.colors.lightgrey,
                                                 alignItems: 'center'}}>
-                                            <Text style={{width:80,}}>{this.state.fromDate==''?this.state.fromDate:moment(this.state.fromDate).format('DD-MM-YYYY')}</Text>
+                                            <Text style={{width:80,color:base.theme.colors.black}}>{this.state.fromDate==''?this.state.fromDate:moment(this.state.fromDate).format('DD-MM-YYYY')}</Text>
                                             </View>
                                                 <Image
                                                 resizeMode={'contain'}
@@ -918,7 +993,7 @@ class Expenses extends React.Component {
                                                 borderWidth: 1,
                                                 borderColor: base.theme.colors.lightgrey,
                                                 alignItems: 'center'}}>
-                                            <Text style={{width:80,}}>{this.state.toDate==''?this.state.toDate:moment(this.state.toDate).format('DD-MM-YYYY')}</Text>
+                                            <Text style={{width:80,color:base.theme.colors.black}}>{this.state.toDate==''?this.state.toDate:moment(this.state.toDate).format('DD-MM-YYYY')}</Text>
                                             </View>
                                             <Image
                                                 resizeMode={'contain'}
@@ -1076,6 +1151,13 @@ class Expenses extends React.Component {
                                     showsVerticalScrollIndicator={false}>
                             <View style={[AddExpenseStyles.scrollContainer]}>
                                 <View style={{width: '100%'}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Select Block
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedBlockAdd} //Select Block *
                                         labelFontSize={18}
@@ -1091,7 +1173,7 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                         }}
                                         dropdownOffset={{top: 10, left: 0}}
-                                        dropdownPosition={-3}
+                                        dropdownPosition={-5}
                                         rippleOpacity={0}
                                         onChangeText={(value, index) => {
                                             this.setState({
@@ -1102,9 +1184,16 @@ class Expenses extends React.Component {
                                     />
                                 </View>
                                 <View style={{backgroundColor: base.theme.colors.greyCard}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>PO Number
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <View style={{width: '100%'}}>
                                         <Dropdown
-                                            value={'PO Number *'} //this.state.selectedPoNum
+                                            value={'PO Number'} //this.state.selectedPoNum
                                             labelFontSize={18}
                                             labelPadding={-5}
                                             baseColor="rgba(0, 0, 0, 1)"
@@ -1140,11 +1229,14 @@ class Expenses extends React.Component {
                                                 borderColor: base.theme.colors.lightgrey,
                                                 paddingBottom: 5
                                             }}
+
                                             onChangeText={(text) => this.setState({bpIdentifier: text})}
                                             value={this.state.bpIdentifier}
                                             placeholder="Budget Projection Identifier"
                                             placeholderTextColor={base.theme.colors.grey}
                                             editable={false}
+                                            keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+
                                         />
                                     </View>
                                     <View style={AddExpenseStyles.textInputView}>
@@ -1168,6 +1260,8 @@ class Expenses extends React.Component {
                                             placeholder="Remaining Approved Budget"
                                             placeholderTextColor={base.theme.colors.grey}
                                             editable={false}
+                                            keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+
                                         />
                                     </View>
                                     <View style={AddExpenseStyles.textInputView}>
@@ -1191,6 +1285,8 @@ class Expenses extends React.Component {
                                             placeholder="Vendor Name"
                                             placeholderTextColor={base.theme.colors.grey}
                                             editable={false}
+                                            keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+
                                         />
                                     </View>
                                     <View style={AddExpenseStyles.textInputView}>
@@ -1214,6 +1310,8 @@ class Expenses extends React.Component {
                                             placeholder="PO Value"
                                             placeholderTextColor={base.theme.colors.grey}
                                             editable={false}
+                                            keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+
                                         />
                                     </View>
                                 </View>
@@ -1232,10 +1330,19 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                             paddingBottom: 5
                                         }}
-                                        onChangeText={(text) => this.setState({expHead: text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({expHead:value})
+                                            }}}
+                                       // onChangeText={(text) => this.setState({expHead: text})}
                                         value={this.state.expHead}
                                         placeholder="Expense Head"
+                                        maxLength={20}
                                         placeholderTextColor={base.theme.colors.grey}
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
                                     />
                                 </View>
                                 <View style={AddExpenseStyles.textInputView}>
@@ -1253,13 +1360,30 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                             paddingBottom: 5
                                         }}
-                                        onChangeText={(text) => this.setState({expDesc: text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({expDesc:value})
+                                            }}}
+                                       // onChangeText={(text) => this.setState({expDesc: text})}
                                         value={this.state.expDesc}
                                         placeholder="Expense Description"
+                                        maxLength={40}
                                         placeholderTextColor={base.theme.colors.grey}
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+
                                     />
                                 </View>
                                 <View style={{paddingTop: 5, paddingBottom: 5, width: '100%'}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Expense Recurrence Type
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedExpRecType} //'Expense Recurrence Type *'
                                         labelFontSize={18}
@@ -1284,7 +1408,14 @@ class Expenses extends React.Component {
                                         }}
                                     />
                                 </View>
-                                <View style={{width: '100%', flexDirection: 'row'}}>
+                                <View style={{width:'100%',}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Applicable to Unit
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedAppList} // 'Applicable to Unit *'
                                         labelFontSize={18}
@@ -1292,7 +1423,7 @@ class Expenses extends React.Component {
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={this.state.expAppList}
                                         containerStyle={{
-                                            width: '50%',
+                                            width: '100%',
                                         }}
                                         textColor={base.theme.colors.black}
                                         inputContainerStyle={{
@@ -1308,6 +1439,16 @@ class Expenses extends React.Component {
                                             })
                                         }}
                                     />
+                                </View>
+                                <View style={{width: '100%', }}>
+
+                                        <Text style={{
+                                            fontSize: 14,
+                                            color: base.theme.colors.black,
+                                            textAlign: 'left',
+                                            paddingTop: 5,
+                                        }}>Expense Type
+                                            <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedExpType} // 'Expense Type *'
                                         labelFontSize={18}
@@ -1315,7 +1456,7 @@ class Expenses extends React.Component {
                                         baseColor="rgba(0, 0, 0, 1)"
                                         data={this.state.expType}
                                         containerStyle={{
-                                            width: '50%',
+                                            width: '100%',
                                         }}
                                         textColor={base.theme.colors.black}
                                         inputContainerStyle={{
@@ -1348,11 +1489,18 @@ class Expenses extends React.Component {
                                                 borderColor: base.theme.colors.lightgrey,
                                                 paddingBottom: 5
                                             }}
-                                            onChangeText={(text) => this.setState({amountPaid: text})}
+                                            onChangeText={(value) =>{
+                                                let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
+                                                if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({amountPaid:num})
+                                            }}}
                                             value={this.state.amountPaid}
                                             placeholder="Amount Paid"
                                             placeholderTextColor={base.theme.colors.grey}
                                             keyboardType={'numeric'}
+                                            maxLength={30}
                                         />
                                     </View>
                                     <Image
@@ -1361,6 +1509,13 @@ class Expenses extends React.Component {
                                     />
                                 </View>
                                 <View style={{paddingTop: 5, paddingBottom: 5, width: '100%'}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Select Distribution Type
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selDistribution} // 'Select Distribution Type *'
                                         labelFontSize={18}
@@ -1384,7 +1539,15 @@ class Expenses extends React.Component {
                                         }}
                                     />
                                 </View>
+                                {this.state.selPayMethod!="Cash"?
                                 <View style={{paddingTop: 5, paddingBottom: 5, width: '100%'}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Select Bank
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedBank} // 'Select Bank *'
                                         labelFontSize={18}
@@ -1407,10 +1570,17 @@ class Expenses extends React.Component {
                                             })
                                         }}
                                     />
-                                </View>
+                                </View>:
+                                    <View/>}
                                 <View style={{width: '100%', flexDirection: 'row'}}>
-                                    <View style={{width: '70%', flexDirection: 'row'}}>
-
+                                    <View style={{width: '70%',}}>
+                                        <Text style={{
+                                            fontSize: 14,
+                                            color: base.theme.colors.black,
+                                            textAlign: 'left',
+                                            paddingTop: 5,
+                                        }}>Select Payment Method
+                                            <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                         <Dropdown
                                             value={this.state.selPayMethod} // 'Select Payment Method *'
                                             labelFontSize={18}
@@ -1455,16 +1625,30 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                             paddingBottom: 5
                                         }}
-                                        onChangeText={(text) => this.setState({payeeName: text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({payeeName:value})
+                                            }}}
+                                       // onChangeText={(text) => this.setState({payeeName: text})}
                                         value={this.state.payeeName}
                                         placeholder="Payee Name"
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
                                         placeholderTextColor={base.theme.colors.grey}
+                                        maxLength={20}
                                     />
                                 </View>
-                                <View style={{paddingTop: 5, paddingBottom: 5, width: '100%', flexDirection: 'row'}}>
-                                    {/*
-                        <Text style={{color: base.theme.colors.primary, fontSize: 14,position:'absolute',marginLeft:140,marginTop:16}}>*</Text>
-*/}
+                                {this.state.selPayMethod!="Cash"?
+                                <View style={{paddingTop: 5, paddingBottom: 5, width: '100%',}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Payee Bank Name
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selPayeeBank} // 'Payee Bank Name *'
                                         labelFontSize={18}
@@ -1487,7 +1671,8 @@ class Expenses extends React.Component {
                                             })
                                         }}
                                     />
-                                </View>
+                                </View>:
+                                    <View/>}
                                 <View style={[AddExpenseStyles.textInputView, {
                                     flexDirection: 'row',
                                     borderBottomWidth: 1,
@@ -1507,9 +1692,10 @@ class Expenses extends React.Component {
                                         <TextInput
                                             style={{
                                                 height: 30,
-                                                borderBottomWidth: 1,
-                                                borderColor: base.theme.colors.lightgrey,
-                                                paddingBottom: 5
+                                               // borderBottomWidth: 1,
+                                               // borderColor: base.theme.colors.lightgrey,
+                                                paddingBottom: 5,
+                                                color:base.theme.colors.black
                                             }}
                                             value={moment(this.state.expenditureDate).format("MMM DD YYYY")}
                                             placeholder="Expenditure Date"
@@ -1539,10 +1725,19 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                             paddingBottom: 5
                                         }}
-                                        onChangeText={(text) => this.setState({invoiceNum: text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({invoiceNum:value})
+                                            }}}
+                                     //   onChangeText={(text) => this.setState({invoiceNum: text})}
                                         value={this.state.invoiceNum}
                                         placeholder="Invoice No / Receipt No"
                                         placeholderTextColor={base.theme.colors.grey}
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                        maxLength={20}
                                     />
                                 </View>
                                 <View style={[AddExpenseStyles.textInputView, {paddingTop: 25, paddingBottom: 10}]}>
@@ -1671,30 +1866,31 @@ class Expenses extends React.Component {
         } else if (base.utils.validate.isBlank(this.state.expDesc)) {
             Alert.alert('Expense Description is Mandatory', message)
 
-        } else if (base.utils.validate.isBlank(this.state.selectedExpRecType) || (this.state.selectedExpRecType =='Expense Recurrence Type *')) {
+        } else if (base.utils.validate.isBlank(this.state.selectedExpRecType) || (this.state.selectedExpRecType =='Expense Recurrence Type')) {
             Alert.alert('Expense Recurrence is Mandatory', message)
 
-        } else if (base.utils.validate.isBlank(this.state.selectedAppList) || (this.state.selectedAppList =='Applicable to Unit *')) {
+        } else if (base.utils.validate.isBlank(this.state.selectedAppList) || (this.state.selectedAppList =='Applicable to Unit')) {
             Alert.alert('Expense Applicability is Mandatory', message)
 
-        } else if (base.utils.validate.isBlank(this.state.selectedExpType) || (this.state.selectedExpType =='Applicable to Unit *')) {
+        } else if (base.utils.validate.isBlank(this.state.selectedExpType) || (this.state.selectedExpType =='Expense Type')) {
             Alert.alert('Expense Type is Mandatory', message)
 
         } else if (base.utils.validate.isBlank(this.state.amountPaid)) {
             Alert.alert('Amount paid to an expense is Mandatory', message)
-        } else if (base.utils.validate.isBlank(this.state.selDistribution) || (this.state.selDistribution =='Select Distribution Type *')) {
+        } else if (base.utils.validate.isBlank(this.state.selDistribution) || (this.state.selDistribution =='Select Distribution Type')) {
             Alert.alert('Type of distribution is Mandatory', message)
-        } else if (base.utils.validate.isBlank(this.state.selectedBank) || (this.state.selectedBank =='Select Bank *')) {
+        } else if (this.state.selPayMethod!="Cash" && (base.utils.validate.isBlank(this.state.selectedBank) || (this.state.selectedBank =='Select Bank'))) {
             Alert.alert('Select the bank  is Mandatory', message)
-        } else if (base.utils.validate.isBlank(this.state.selPayMethod) || (this.state.selPayMethod =='Select Payment Method *')) {
+        } else if (base.utils.validate.isBlank(this.state.selPayMethod) || (this.state.selPayMethod =='Select Payment Method')) {
             Alert.alert('Select the payment method is Mandatory', message)
         } else if (base.utils.validate.isBlank(this.state.payeeName) ) {
             Alert.alert('Select the payee name is Mandatory', message)
-        } else if (base.utils.validate.isBlank(this.state.selPayeeBank) || (this.state.selPayeeBank =='Payee Bank Name *')) {
+        } else if (this.state.selPayMethod!="Cash" && (base.utils.validate.isBlank(this.state.selPayeeBank) || (this.state.selPayeeBank =='Payee Bank Name'))) {
             Alert.alert('Select the payee bank is Mandatory', message)
         } else {
             this.uploadFile()
         }
+
 
 
     }
@@ -1925,6 +2121,12 @@ class Expenses extends React.Component {
             expensesList: listOfExpenses
         })
     }
+    checkTheExpense=(index,value)=>{
+        let data = [...this.state.expensesList];
+        data[index].isChecked = !value;
+        this.setState({expensesList: data});
+    };
+
 
 
     selectedExpense(item) {
@@ -1939,13 +2141,24 @@ class Expenses extends React.Component {
             }}
                               onPress={() => this.toggleCollapsible(item.index, item.item.open)}>
                 <View style={{flexDirection: 'row', marginTop: 10}}>
+                    {/*<View style={{flexDirection:'row',width:'10%',padding:5,alignItems:'center',justifyContent:'center',alignSelf:'center'}}>
+                    <CheckBox
+                        style={{flex: 1,
+                            }}
+                        checkBoxColor={base.theme.colors.grey}
+                        checkedCheckBoxColor={base.theme.colors.blue}
+                        onClick={() => {
+                            this.checkTheExpense(item.index,item.item.isChecked)
+                        }}
+                        isChecked={item.item.isChecked} />
+                    </View>*/}
                     <View style={{marginLeft:5}}>
                         <Image
                             style={{height: 25, width: 25,}}
                             source={require('../../../icons/OyeLiving.png')}
                         />
                     </View>
-                    <View style={{marginLeft:10, marginRight: 5}}>
+                    <View style={{marginLeft:10, marginRight: 5,width:'45%'}}>
                         <Text
                             style={{fontSize: 14, color: base.theme.colors.black, paddingBottom: 5, fontWeight: 'bold'}}
                             numberOfLines={1}>
@@ -1966,8 +2179,8 @@ class Expenses extends React.Component {
                                 <Text style={{fontWeight: 'bold'}}> {this.props.userReducer.MyFirstName}</Text></Text>
                         </Collapsible>
                     </View>
-                    <View>
-                        <Text style={{color: base.theme.colors.primary,width:80,}} numberOfLines={1}>{selectedExpense.unUniIden}</Text>
+                    <View style={{marginLeft:1, marginRight: 5,width:'20%'}}>
+                        <Text style={{color: base.theme.colors.primary,width:80,}} numberOfLines={2}>{selectedExpense.unUniIden}</Text>
                     </View>
 
                 </View>
@@ -2281,14 +2494,14 @@ class Expenses extends React.Component {
             invoiceCopyList: [],
             blockIdAdd: '',
             invoiceNum: '',
-            selectedBlockAdd: 'Select Block *',
-            selectedExpRecType: 'Expense Recurrence Type *',
-            selectedAppList: 'Applicable to Unit *',
-            selectedExpType: 'Expense Type *',
-            selDistribution: 'Select Distribution Type *',
-            selectedBank: 'Select Bank *',
-            selPayeeBank: 'Payee Bank Name *',
-            selPayMethod: 'Select Payment Method *',
+            selectedBlockAdd: 'Select Block',
+            selectedExpRecType: 'Expense Recurrence Type',
+            selectedAppList: 'Applicable to Unit',
+            selectedExpType: 'Expense Type',
+            selDistribution: 'Select Distribution Type',
+            selectedBank: 'Select Bank',
+            selPayeeBank: 'Payee Bank Name',
+            selPayMethod: 'Select Payment Method',
             selExpenseId:self.state.isEditExpense?self.state.selExpenseId:'',
         });
     }

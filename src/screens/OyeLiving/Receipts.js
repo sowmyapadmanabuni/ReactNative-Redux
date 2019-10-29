@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra
  * @Date: 2019-10-07 11:58:24
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-09 13:05:47
+ * @Last Modified time: 2019-10-25 18:24:53
  */
 
 
@@ -17,7 +17,15 @@ import {
     TouchableOpacity,
     TextInput,
     Alert,
-    Platform, DatePickerIOS, DatePickerAndroid, Dimensions, SafeAreaView, Linking, StyleSheet, BackHandler
+    Platform,
+    DatePickerIOS,
+    DatePickerAndroid,
+    Dimensions,
+    SafeAreaView,
+    Linking,
+    StyleSheet,
+    BackHandler,
+    PermissionsAndroid
 } from 'react-native';
 
 const {width} = Dimensions.get('screen');
@@ -44,6 +52,7 @@ import CreateSOSStyles from "../SOS/CreateSOSStyles";
 import PDFView from "react-native-view-pdf";
 import {captureRef, captureScreen} from "react-native-view-shot";
 import Share from "react-native-share";
+import RNImageToPdf from 'react-native-image-to-pdf';
 
 let RNFS = require('react-native-fs');
 
@@ -64,14 +73,14 @@ class Receipts extends React.Component {
         this.state = {
             isLoading:true,
             blockList: [],
-            selectedBlock:'',
+            selectedBlock:'Select Block',
             blockId: '',
             isModalVisible: false,
             receiptsList: [],
             receiptsAllList: [],
             fromDate:'',
             toDate:'',
-            selPayMethod: 'Select Payment Method *',
+            selPayMethod: 'Select Payment Method',
             payMethodId: '',
             isCalenderOpen: false,
             unitName: '',
@@ -90,7 +99,7 @@ class Receipts extends React.Component {
             paymentDesc:'',
             getIndex:0,
             unitId:'',
-            selectedUnit:'select Unit *',
+            selectedUnit:'select Unit',
             value: {
                 format: "png",
                 quality: 0.9,
@@ -98,17 +107,56 @@ class Receipts extends React.Component {
                 snapshotContentContainer: false
             },
             previewSource: catsSource,
+            shareSelected:false,
+            isShare:false,
+            isPermitted: false,
+
         };
 
         this.bindComponent = this.bindComponent.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        if (Platform.OS === 'android') {
+            this.getAndroidPermissions()
+        } else {
+            this.setState({
+                isPermitted: true
+            })
+        }
+        this.didFocusListener = this.props.navigation.addListener(
+            'didFocus',
+            () =>  {console.log('Get the All ApIs');
+            this.setState({isLoading:true})
+                this.getTheBlockList()
+        this.getPaymentMethodsList();
+        this.getUnitName();
+        this.getAssociationName();this.updateFields() }
+        );
+    }
+    updateFields(){
+       let self=this;
+       self.setState({
+           selectedBlock:'Select Block',
+           blockId: '',
+           receiptsList: [],
+           receiptsAllList: [],
+           getIndex:0,
+           isModalVisible: false,
+       })
+    }
+
+    componentWillUnmount() {
+        this.didFocusListener.remove();
+    }
+
+
+    /*componentWillMount() {
         this.getTheBlockList()
         this.getPaymentMethodsList();
         this.getUnitName();
         this.getAssociationName();
-    }
+    }*/
 
    async getAssociationName(){
        let stat = await base.services.OyeLivingApi.getAssociationNameById(this.props.userReducer.SelectedAssociationID)
@@ -204,7 +252,7 @@ class Receipts extends React.Component {
        let blockId = self.state.blockList[index].details.blBlockID;
         console.log('Get the changed block details',value,index,blockId)
 
-        let stat = await base.services.OyeLivingApi.getReceiptsListByBlockId(13714) //self.state.blockId)
+        let stat = await base.services.OyeLivingApi.getReceiptsListByBlockId(self.state.blockId) //13714self.state.blockId)
         console.log('Get the receipts List::',stat)
 
         self.setState({
@@ -287,6 +335,7 @@ class Receipts extends React.Component {
     }
 
     render() {
+        console.log('Get the props@@@@@',this.props)
         return (
             <TouchableOpacity  onPress={() =>{this.clearTheFilters()}} disabled={!this.state.isModalVisible}>
                 <View style={{
@@ -306,7 +355,7 @@ class Receipts extends React.Component {
                             alignSelf: 'center',
                         }}>
                             <Dropdown
-                                value={'Select Block'}
+                                value={this.state.selectedBlock}
                                 labelFontSize={18}
                                 labelPadding={-5}
                                 placeHolder={'Selected Block'}
@@ -325,7 +374,7 @@ class Receipts extends React.Component {
                             />
                             <TouchableOpacity
                                 underlayColor={base.theme.colors.transparent}
-                                onPress={() => this.state.selectedBlock==''?Alert.alert('Please select block to Apply filters'):this.onModalOpen()}
+                                onPress={() => this.state.selectedBlock=='' || this.state.selectedBlock=='Select Block'?Alert.alert('Please select block to Apply filters'):this.onModalOpen()}
                                 style={{
                                     marginTop: 5,
                                     flexDirection: 'row',
@@ -471,7 +520,7 @@ class Receipts extends React.Component {
                                                         borderWidth: 1,
                                                         borderColor: base.theme.colors.lightgrey,
                                                         alignItems: 'center'}}>
-                                                        <Text style={{width:80,}}>{this.state.fromDate==''?this.state.fromDate:moment(this.state.fromDate).format('DD-MM-YYYY')}</Text>
+                                                        <Text style={{width:80,color:base.theme.colors.black}}>{this.state.fromDate==''?this.state.fromDate:moment(this.state.fromDate).format('DD-MM-YYYY')}</Text>
                                                     </View>
                                                     <Image
                                                         resizeMode={'contain'}
@@ -495,7 +544,7 @@ class Receipts extends React.Component {
                                                         borderWidth: 1,
                                                         borderColor: base.theme.colors.lightgrey,
                                                         alignItems: 'center'}}>
-                                                        <Text style={{width:80,}}>{this.state.toDate==''?this.state.toDate:moment(this.state.toDate).format('DD-MM-YYYY')}</Text>
+                                                        <Text style={{width:80,color:base.theme.colors.black}}>{this.state.toDate==''?this.state.toDate:moment(this.state.toDate).format('DD-MM-YYYY')}</Text>
                                                     </View>
                                                     <Image
                                                         resizeMode={'contain'}
@@ -535,7 +584,28 @@ class Receipts extends React.Component {
 
         )
     }
+    getAndroidPermissions() {
+        let that = this;
 
+        async function requestExternalWritePermission() {
+            try {
+                const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    //If WRITE_EXTERNAL_STORAGE Permission is granted
+                    //changing the state to show Create PDF option
+                    that.setState({isPermitted: true});
+                } else {
+                    alert('WRITE_EXTERNAL_STORAGE permission denied');
+                }
+            } catch (err) {
+                alert('Write permission err', err);
+                console.warn(err);
+            }
+        }
+
+        //Calling the External Write permission function
+        requestExternalWritePermission();
+    }
     snapshot = refname => () =>
         (refname
                 ? captureRef(this.refs[refname], this.state.value)
@@ -555,19 +625,83 @@ class Receipts extends React.Component {
             .catch(
                 error => (
                     console.warn(error),
-                        this.setState({error, res: null, previewSource: null})
+
+                        this.setState({error, res: null, previewSource: null,isLoading:false})
                 )
             );
 
     share() {
-        let shareImageBase64 = {
-            title: 'PDF',
-            message: 'PDF',
-            url: this.state.previewSource.uri
-        };
-        Share.open(shareImageBase64).then((response) => {
-            console.log(response)
-        });
+        var image_data = this.state.previewSource.uri.split('data:image/png;base64,');
+        console.log("Image:",this.state.previewSource.uri,this.state.isShare)
+
+            image_data = image_data[1] //this.state.previewSource.uri;
+            console.log("Image Data:",image_data)
+
+            var path = RNFS.ExternalStorageDirectoryPath + '/image.png';
+            RNFS.writeFile(path, image_data, 'base64')
+                .then((success) => {
+                    console.log('FILE WRITTEN!',path);
+                    this.convertImageToPdf(path);
+                })
+                .catch((err) => {
+                    this.setState({isLoading:false})
+                    console.log(err.message);
+                });
+    }
+
+    async convertImageToPdf(path){
+        try {
+            // RNFS.exists(path).then(exists => {
+            //     if (exists) {
+                let updatedpath = path
+                    const options = {
+                        imagePaths: [updatedpath],
+                        name: 'PDFName.pdf',
+                     //   quality: .7, // optional compression paramter
+                    };
+                    console.log(updatedpath)
+                    const pdf = await RNImageToPdf.createPDFbyImages(options);
+                    console.log(pdf)
+                    console.log(pdf.filePath)
+
+                    var path = pdf.filePath;
+                    var rnd = Math.random();
+                    var path1 = RNFS.ExternalStorageDirectoryPath + '/invoice-'+rnd+".pdf";
+
+                    RNFS.copyFile(path, path1)
+                  .then((success) => {
+                    console.log('FILE WRITTEN!',path);
+                      this.setState({isLoading:false})
+                      this.shareReceipt(path)
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                    this.setState({isLoading:false})
+
+                });
+        
+            //     }
+            // })
+
+            
+            console.log(options);
+        } catch(e) {
+            this.setState({isLoading:false})
+            console.log(e);
+        }
+    }
+
+    shareReceipt(path,type = "application/pdf"){
+        Share.open({
+            url: "file://"+path,
+            title: 'Receipt'
+          })
+    }
+
+    getSharePdf(){
+        let self=this;
+        self.setState({isShare:true,isLoading:true})
+        self.snapshot("View")
     }
 
     viewReceiptScreen(){
@@ -615,7 +749,7 @@ class Receipts extends React.Component {
                                     source={require('../../../icons/OyespaceSafe.png')}
                                 />
                             </View>
-                            <TouchableOpacity style={{
+                            <View style={{
                                 padding: 10,
                                 width: 40,
                                 height: 40,
@@ -623,13 +757,22 @@ class Receipts extends React.Component {
                                 marginTop:5,
                                 alignItems:'center',
                                 justifyContent:'center'
-                            }} onPress={this.snapshot("View")}>
+                            }}></View>
+                            {/*<TouchableOpacity style={{
+                                padding: 10,
+                                width: 40,
+                                height: 40,
+                                borderRadius: 5,
+                                marginTop:5,
+                                alignItems:'center',
+                                justifyContent:'center'
+                            }} onPress={()=>this.getSharePdf()}>
                                 <Image
                                     resizeMode={'contain'}
                                     style={{height: 20, width: 20,}}
                                     source={require('../../../icons/share.png')}
                                 />
-                            </TouchableOpacity>
+                            </TouchableOpacity>*/}
                         </View>
                         <View style={{backgroundColor:'#ffffff',width:'100%'}} ref='View'>
                         <View style={AddExpenseStyles.headerView}>
@@ -702,15 +845,15 @@ class Receipts extends React.Component {
                             </View>
                         </View>
                         <View style={{flexDirection:'row',width:'100%',height:'20%',}}>
-                            <View style={{width:'50%',height:'100%',alignItems:'center',justifyContent:'flex-end',paddingBottom:5,}}>
-                                <TouchableOpacity style={{width:'55%',height:'30%',borderRadius:20,
+                            <View style={{width:'60%',height:'100%',alignItems:'center',justifyContent:'flex-end',paddingBottom:15,}}>
+                                <TouchableOpacity style={{width:'60%',height:'30%',borderRadius:20,
                                     backgroundColor:base.theme.colors.primary,alignItems:'center',justifyContent:'center'}}
                                                   onPress={this.snapshot("View")}
                                 >
-                                    <Text style={{fontSize:14,color:base.theme.colors.white}}>Print Receipt</Text>
+                                    <Text style={{fontSize:14,color:base.theme.colors.white}}>Share Receipt</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{width:'50%',alignItems:'center',marginTop:30}}>
+                            <View style={{width:'50%',alignItems:'center',marginTop:30,right:15}}>
                                 <Image
                                     resizeMode="contain"
                                     source={require('../../../icons/oyesafe.png')}
@@ -800,6 +943,14 @@ class Receipts extends React.Component {
                                     showsVerticalScrollIndicator={false}>
                             <View style={[AddExpenseStyles.scrollContainer]}>
                                 <View style={{width: '100%'}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5
+                                    }}>Select unit
+                                        <Text
+                                            style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedUnit} //Select Block *
                                         labelFontSize={18}
@@ -841,8 +992,17 @@ class Receipts extends React.Component {
                                         borderColor: base.theme.colors.lightgrey,
                                         paddingBottom: 5
                                     }}
-                                    onChangeText={(text) => this.setState({invoiceNumber: text})}
+                                    onChangeText={(value) =>{
+                                        let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                        if (isNaN(num)) {
+                                            // Its not a number
+                                        } else {
+                                            this.setState({invoiceNumber:value})
+                                        }}}
+                                    keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                    //onChangeText={(text) => this.setState({invoiceNumber: text})}
                                     value={this.state.invoiceNumber}
+                                    maxLength={20}
                                     placeholder="Invoice Number"
                                     placeholderTextColor={base.theme.colors.grey}
                                 />
@@ -863,8 +1023,16 @@ class Receipts extends React.Component {
                                         borderColor: base.theme.colors.lightgrey,
                                         paddingBottom: 5
                                     }}
-                                    onChangeText={(text) => this.setState({amountDue: text})}
+                                    onChangeText={(value) =>{
+                                        let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
+                                        if (isNaN(num)) {
+                                            // Its not a number
+                                        } else {
+                                            this.setState({amountDue:num})
+                                        }}}
+                                   // onChangeText={(text) => this.setState({amountDue: text})}
                                     value={this.state.amountDue}
+                                    maxLength={20}
                                     placeholder="Amount Due"
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'number-pad'}
@@ -887,12 +1055,19 @@ class Receipts extends React.Component {
                                         borderColor: base.theme.colors.lightgrey,
                                         paddingBottom: 5
                                     }}
-                                    onChangeText={(text) => this.setState({amountPaid: text})}
+                                    onChangeText={(value) =>{
+                                        let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
+                                        if (isNaN(num)) {
+                                            // Its not a number
+                                        } else {
+                                            this.setState({amountPaid:num})
+                                        }}}
+                                   // onChangeText={(text) => this.setState({amountPaid: text})}
                                     value={this.state.amountPaid}
                                     placeholder="Amount Paid"
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'phone-pad'}
-
+                                    maxLength={20}
                                 />
                             </View>
                                 <View style={AddExpenseStyles.textInputView}>
@@ -909,8 +1084,17 @@ class Receipts extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                             paddingBottom: 5
                                         }}
-                                        onChangeText={(text) => this.setState({paymentDesc: text})}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({paymentDesc:value})
+                                            }}}
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                       // onChangeText={(text) => this.setState({paymentDesc: text})}
                                         value={this.state.paymentDesc}
+                                        maxLength={40}
                                         placeholder="Payment Description"
                                         placeholderTextColor={base.theme.colors.grey}
                                     />
@@ -955,7 +1139,15 @@ class Receipts extends React.Component {
                                    {(Platform.OS === 'ios') ? this.openIOSCalenderAdd() : <View/>}
 
                                 </View>
-                                <View style={{width: '100%', flexDirection: 'row'}}>
+                                <View style={{width: '100%', }}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5
+                                    }}>Select Payment Method
+                                        <Text
+                                            style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
 
                                     <Dropdown
                                         value={this.state.selPayMethod} // 'Select Payment Method *'
@@ -1017,15 +1209,73 @@ class Receipts extends React.Component {
         )
     }
 
+    openIOSCalenderAdd() {
+        return (
+            <Modal
+                visible={this.state.isCalenderOpenAdd}
+                onRequestClose={this.close}>
+                <View style={PatrollingReportStyles.ModalMainView}>
+                    <View style={{flex: 1, justifyContent: 'center', width: width - 30}}>
+                        <DatePickerIOS
+                            date={this.state.paymentDate}
+                            style={{backgroundColor: base.theme.colors.white}}
+                            maximumDate={_dt}
+                            mode="date"
+                            onDateChange={(date) => {
+                                this.setState({paymentDate: date})
+                            }}/>
+                        <TouchableHighlight onPress={() => this.closeIOSCalenderAdd()} underlayColor='transparent'>
+                            <View style={[PatrollingReportStyles.modalView, {width: width - 30}]}>
+                                <Text
+                                    style={PatrollingReportStyles.modalText}>{moment(this.state.paymentDate).format("MMM DD YYYY")}</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>
+        );
+    }
+
+    closeIOSCalenderAdd() {
+        this.setState({
+            isCalenderOpenAdd: false,
+        })
+    }
+
+    openCalenderAdd() {
+        let dt = new Date();
+        dt.setDate(dt.getDate());
+        let _dt = dt;
+        let self = this;
+        Platform.OS === 'ios' ? (self.setState({isCalenderOpenAdd: true})) : self.showPickerAdd('cal', {
+            date: _dt,
+            maxDate: _dt
+        });
+    }
+
+    showPickerAdd = async (stateKey, options) => {
+        try {
+            const {action, year, month, day} = await DatePickerAndroid.open(options);
+            if (action === DatePickerAndroid.dismissedAction) {
+            } else {
+                let date = new Date(year, month, day);
+                this.setState({paymentDate: date})
+            }
+        } catch ({code, message}) {
+            console.warn('Cannot open date picker', message);
+        }
+    };
+
+
     clearAllFields(){
         let self=this;
         self.setState({
             amountPaid:'',
             invoiceNumber:'',
            unitId:'',
-            selectedUnit:'Select unit *',
+            selectedUnit:'Select unit',
             payMethodId:'',
-            selPayMethod:'Select Payment method *',
+            selPayMethod:'Select Payment method',
             paymentDesc:'',
             amountDue:'',
             isGenRecModal:false
@@ -1090,6 +1340,7 @@ class Receipts extends React.Component {
             }
         }catch(error){
             self.setState({isLoading:false})
+            Alert.alert('Invalid payment information')
             console.log('error',error)
         }
     }

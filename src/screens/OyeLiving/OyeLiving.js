@@ -62,7 +62,7 @@ class OyeLiving extends React.Component {
                         >
                             Expenses
                       </Text>
-                    )
+                    ),
                 },
             },
             budgetProjection: {
@@ -74,7 +74,7 @@ class OyeLiving extends React.Component {
                         >
                             Budget Projection
                       </Text>
-                    )
+                    ),
                 }
             },
             purchaseOrder: {
@@ -86,7 +86,7 @@ class OyeLiving extends React.Component {
                         >
                             Purchase Order
                       </Text>
-                    )
+                    ),
                 }
             },
             vendors: {

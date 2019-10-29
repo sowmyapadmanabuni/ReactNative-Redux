@@ -84,10 +84,6 @@ export default class OyeLivingApi {
         return await instance.post('Vehicle/VehicleStatusUpdate', data);
     }
 
-    static async getTheListOfBlocksByAssociation(assId){
-        return await instance.get('Block/GetBlockListByAssocID/' +assId);
-    }
-
     static async getExpenseRecTypeList(assId){
         return await instance.get('GetExpenseReccurranceList');
     }
@@ -127,6 +123,35 @@ export default class OyeLivingApi {
         return await instance.get('Unit/GetUnitListByUnitID/'+uniId);
     }
 
+    static async getInvoices(associationId,blockId){
+        return await instance.get(`invoice/list/${associationId}/${blockId}`)
+    }
+
+    static  async getInvoiceData(AssociationID,BlockID){
+        return await instance.get(`invoice/view/${AssociationID}/${BlockID}`)
+    }
+
+    static  async sendInvoiceViaMail(detail){
+        return await instance.post(`GetInvoiceOwnerListByInvoiceId`,detail)
+    }
+
+    static  async updateDiscVal(detail){
+        return await  instance.post('UpdateInvoiceDiscountValueAndInsert',detail)
+    }
+
+
+    static async getInvoiceDetail(invoiceId,unitId){
+        return await instance.get(`invoice/details/${invoiceId}/${unitId} `)
+    }
+
+    static async getAssDetail(assId){
+        return await instance.get(`association/getAssociationList/${assId}`)
+    }
+
+    static async getTheListOfBlocksByAssociation(assId){
+        return await instance.get('Block/GetBlockListByAssocID/' +assId);
+    }
+
     static async generateInvoiceList(assId,blockId){
         return await instance.get('invoice/list/' + assId + '/' + blockId);
     }
@@ -145,25 +170,6 @@ export default class OyeLivingApi {
     static async createNewReceipt(input){
         return await instance.post('payment/add',input);
     }
-    static async getInvoices(associationId,blockId){
-        return await instance.get(`/invoice/list/${associationId}/${blockId}`)
-    }
-
-    static  async getInvoiceData(AssociationID,BlockID){
-        return await instance.get(`invoice/view/${AssociationID}/${BlockID} `)
-    }
-
-    static  async sendInvoiceViaMail(detail){
-        return await instance.post(`GetInvoiceOwnerListByInvoiceId`,detail)
-    }
-
-    static  async updateDiscVal(detail){
-        return await  instance.post('UpdateInvoiceDiscountValueAndInsert',detail)
-    }
-
-    static async getInvoiceDetail(invoiceId,unitId){
-        return await instance.get(`invoice/details/${invoiceId}/${unitId} `)
-    }
 
     static  async getInvoiceListByDates(detail){
         return await  instance.post('invoice/InvoiceListByDatesAndID ',detail)
@@ -172,10 +178,6 @@ export default class OyeLivingApi {
     static async getInvoiceListByInvoiceNumber(invoiceNum){
         return await instance.get(`Invoice/InvoiceListByInvoiceNumber/`+invoiceNum)
     }
-
-
-
-
 
 
 
