@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra
  * @Date: 2019-10-07 12:14:58
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-28 12:49:35
+ * @Last Modified time: 2019-10-29 15:12:28
  */
 
 
@@ -268,7 +268,7 @@ class Invoices extends React.Component {
 
 
     render() {
-        console.log("State of invoices@@@@:", this.props)
+        console.log("State of invoices@@@@:", this.state.invoiceList)
         return (
             <View style={{
                 height: '100%',
@@ -334,7 +334,9 @@ class Invoices extends React.Component {
                         keyExtractor={(item, index) => index.toFixed()}
                         data={this.state.invoiceList}
                         showsVerticalScrollIndicator={false}
-                        renderItem={(item, index) => this._renderInvoiceList(item, index)} /> :
+                        renderItem={(item, index) => this._renderInvoiceList(item, index)}
+                        extraData={this.state}
+                        /> :
                     <View style={{ height: hp('70'), width: wp('100'), justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ color: base.theme.colors.primary, fontSize: hp('2'), fontFamily: base.theme.fonts.medium }}>No Invoices to display</Text>
                     </View>}
@@ -788,6 +790,7 @@ class Invoices extends React.Component {
                             />
                         </View>
                         <TouchableHighlight
+                        underlayColor={base.theme.colors.transparent}
                         onPress={()=>this.shareInvoice(invoiceData)}
                         style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
                             <Image
@@ -1139,7 +1142,7 @@ class Invoices extends React.Component {
                     </View>
                     <View style={{ height: hp('10'), borderWidth: 0, justifyContent: 'center', alignSelf: 'center', left: hp('1'), width: wp('80') }}>
                         <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inNumber}</Text>
-                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), marginTop: hp('1') }}>Current Invoice Number:₹<Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inTotVal}</Text></Text>
+                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), marginTop: hp('1') }}>Current Invoice Amount:₹<Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inTotVal}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Date: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{moment(invoiceDetail.inGenDate).format("DD-MM-YYYY")}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Billed: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: invoiceDetail.ineSent ? base.theme.colors.black : base.theme.colors.red }}>{invoiceDetail.ineSent ? "Yes" : "No"}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Due Date: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{moment(invoiceDetail.toDate).format(("DD-MM-YYYY"))}</Text></Text>
@@ -1214,8 +1217,8 @@ class Invoices extends React.Component {
         console.log("Invoice  Details:", stat,self.state.invoiceNumber);
         let invoiceData=[];
         try {
-            if(stat.success){
-                 invoiceData=stat.data.invoices;
+            if(stat){
+                 invoiceData=(stat.data.invoices);
                 self.applyFilters(difference,stAmount,endAmount,invoiceData)
             }
             else{
@@ -1261,6 +1264,7 @@ class Invoices extends React.Component {
     applyFilters(difference,stAmount,endAmount,invoiceByNum){
         let self=this;
         let invoicesList=[];
+        console.log('Invoice By Nume:',invoiceByNum,self.state.invoiceListByDates)
         if(invoiceByNum.length===0 && self.state.invoiceListByDates.length===0){
             invoicesList=self.state.invoiceListAll
         }
@@ -1296,6 +1300,9 @@ class Invoices extends React.Component {
         }else{
             newList=invoicesList;
         }
+
+
+        console.log("Filtered Invoice List:",newList,invoiceByNum);
 
         self.setState({
             invoiceList:newList,

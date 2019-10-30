@@ -162,7 +162,7 @@ class PatrolSchedule extends React.Component {
                         </View>}
                 </View>
                 {this.openMapModal()}
-                <FloatingButton onBtnClick={() => this.changePage()}/>
+                <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
             </Container>
         )
     }
