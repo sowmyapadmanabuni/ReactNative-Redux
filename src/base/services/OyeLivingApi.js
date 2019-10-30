@@ -103,9 +103,9 @@ export default class OyeLivingApi {
         return await instance.post('Expense/ExpenseUpdate',input);
     }
 
-    static async getTheExpenseListByAssociationId(input){
+   /* static async getTheExpenseListByAssociationId(input){
         return await instance.get('Expense/GetExpenseListByAssocID/'+assId);
-    }
+    }*/
 
     static async getTheExpenseListByBlockId(blockId){
         return await instance.get('Expense/GetExpenseListByBlockID/'+blockId);

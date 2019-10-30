@@ -134,7 +134,14 @@ class Expenses extends React.Component {
             openPdf: false,
             selExpenseId:'',
             selectedImage:{},
-            expListByDates:[]
+            expListByDates:[],
+            exChqNo  : '', //min 6 digits max 12
+            exChqDate :'', //it should allow future date upto 3 months from current date
+            exVoucherNo:'', //
+            exDDNo   : '', // min 6 digits max 12
+            exDDDate : '' ,//it should allow past date upto 3 months from current date,
+            inCopyListExp:[{},{},{},{},{}]
+
         };
 
         this.bindComponent = this.bindComponent.bind(this);
@@ -318,8 +325,9 @@ class Expenses extends React.Component {
     }
 
     async createExpense() {
-        if(this.state.isEditExpense){
         var imgUrl=this.state.uploadedFile;
+
+        if(this.state.isEditExpense){
         let invoiceCopyList=this.state.invoiceCopyList;
         if(invoiceCopyList.length !==0){
             for(let i=0;i<invoiceCopyList.length;i++){
@@ -1641,6 +1649,176 @@ class Expenses extends React.Component {
                                         maxLength={20}
                                     />
                                 </View>
+                               {/* {this.state.selPayMethod =="Cheque"?
+                                <View style={AddExpenseStyles.textInputView}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Cheque Number
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <TextInput
+                                        style={{
+                                            height: 30,
+                                            borderBottomWidth: 1,
+                                            borderColor: base.theme.colors.lightgrey,
+                                            paddingBottom: 5
+                                        }}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/[^0-9]/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({exChqNo:value})
+                                            }}}
+                                        value={this.state.exChqNo}
+                                        placeholder="Cheque Number"
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                        placeholderTextColor={base.theme.colors.grey}
+                                        maxLength={20}
+                                    />
+                                </View>
+                                    :<View/>}
+                                {this.state.selPayMethod =="Cheque"?
+                                    <View style={[AddExpenseStyles.textInputView, {
+                                        flexDirection: 'row',
+                                        borderBottomWidth: 1,
+                                        borderColor: base.theme.colors.lightgrey,
+                                        alignItems: 'flex-end',
+                                        justifyContent: 'space-between'
+                                    }]}>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 14,
+                                                color: base.theme.colors.black,
+                                                textAlign: 'left',
+                                                paddingTop: 5,
+                                            }}>Cheque Date
+                                                <Text
+                                                    style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                            <TextInput
+                                                style={{
+                                                    height: 30,
+                                                    paddingBottom: 5,
+                                                    color:base.theme.colors.black
+                                                }}
+                                                value={moment(this.state.exChqDate).format("MMM DD YYYY")}
+                                                placeholder="Cheque Date"
+                                                placeholderTextColor={base.theme.colors.grey}
+                                                editable={false}
+                                            />
+                                        </View>
+                                        <TouchableOpacity onPress={() => this.openCalenderAdd(0,'CHEQUE')}>
+                                            <Image
+                                                style={{height: 25, width: 25, marginBottom: 7}}
+                                                source={require('../../../icons/calender.png')}
+                                            />
+                                        </TouchableOpacity>
+                                        {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(0,'CHEQUE') : <View/>}
+                                    </View>
+                                    :<View/>}
+                                {this.state.selPayMethod =="DD"?
+                                <View style={AddExpenseStyles.textInputView}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>DD Number
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <TextInput
+                                        style={{
+                                            height: 30,
+                                            borderBottomWidth: 1,
+                                            borderColor: base.theme.colors.lightgrey,
+                                            paddingBottom: 5
+                                        }}
+                                        onChangeText={(value) =>{
+                                            let num = value.replace(/[^0-9]/g,  '');
+                                            if (isNaN(num)) {
+                                                // Its not a number
+                                            } else {
+                                                this.setState({payeeName:value})
+                                            }}}
+                                        // onChangeText={(text) => this.setState({payeeName: text})}
+                                        value={this.state.exDDNo}
+                                        placeholder="DD Number"
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                        placeholderTextColor={base.theme.colors.grey}
+                                        maxLength={20}
+                                    />
+                                </View>
+                                    :<View/>}
+                                {this.state.selPayMethod =="DD"?
+                                    <View style={[AddExpenseStyles.textInputView, {
+                                        flexDirection: 'row',
+                                        borderBottomWidth: 1,
+                                        borderColor: base.theme.colors.lightgrey,
+                                        alignItems: 'flex-end',
+                                        justifyContent: 'space-between'
+                                    }]}>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 14,
+                                                color: base.theme.colors.black,
+                                                textAlign: 'left',
+                                                paddingTop: 5,
+                                            }}>DD Date
+                                                <Text
+                                                    style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                            <TextInput
+                                                style={{
+                                                    height: 30,
+                                                    paddingBottom: 5,
+                                                    color:base.theme.colors.black
+                                                }}
+                                                value={moment(this.state.exDDDate).format("MMM DD YYYY")}
+                                                placeholder="DD Date"
+                                                placeholderTextColor={base.theme.colors.grey}
+                                                editable={false}
+                                            />
+                                        </View>
+                                        <TouchableOpacity onPress={() => this.openCalenderAdd(1,'DD')}>
+                                            <Image
+                                                style={{height: 25, width: 25, marginBottom: 7}}
+                                                source={require('../../../icons/calender.png')}
+                                            />
+                                        </TouchableOpacity>
+                                        {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(1,'DD') : <View/>}
+                                    </View>
+                                    :<View/>}
+                                {this.state.selPayMethod =="Cash"?
+                                    <View style={AddExpenseStyles.textInputView}>
+                                        <Text style={{
+                                            fontSize: 14,
+                                            color: base.theme.colors.black,
+                                            textAlign: 'left',
+                                            paddingTop: 5,
+                                        }}>Voucher Number
+                                            <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <TextInput
+                                            style={{
+                                                height: 30,
+                                                borderBottomWidth: 1,
+                                                borderColor: base.theme.colors.lightgrey,
+                                                paddingBottom: 5
+                                            }}
+                                            onChangeText={(value) =>{
+                                                let num = value.replace(/[^0-9]/g,  '');
+                                                if (isNaN(num)) {
+                                                    // Its not a number
+                                                } else {
+                                                    this.setState({exVoucherNo:value})
+                                                }}}
+                                            value={this.state.exVoucherNo}
+                                            placeholder="Payee Name"
+                                            keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                            placeholderTextColor={base.theme.colors.grey}
+                                            maxLength={20}
+                                        />
+                                    </View>
+                                    :<View/>}*/}
                                 {this.state.selPayMethod!="Cash"?
                                 <View style={{paddingTop: 5, paddingBottom: 5, width: '100%',}}>
                                     <Text style={{
@@ -2184,6 +2362,29 @@ class Expenses extends React.Component {
                                 <Text style={{fontWeight: 'bold'}}> {selectedExpense.exApplTO}</Text></Text>
                             <Text style={{fontSize: 13, color: base.theme.colors.black}}>Added By:
                                 <Text style={{fontWeight: 'bold'}}> {this.props.userReducer.MyFirstName}</Text></Text>
+                            <View style={{
+                                borderRadius: 5,
+                                flexDirection: 'row',
+                                borderStyle: 'dashed',
+                                height: 90,
+                                width: '95%',
+                                alignSelf: 'center',
+                                borderWidth: 1.8,
+                                borderColor: base.theme.colors.blue,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginBottom: this.state.isCollapse ? 0 : 60
+                            }}>
+                                {this.state.inCopyListExp.length !== 0 ?
+                                    <FlatList
+                                        keyExtractor={(item, index) => index.toString()}
+                                        data={this.state.inCopyListExp}
+                                        renderItem={(item, index) => this.renderImages(item, index)}
+                                        horizontal={true}
+                                    />
+                                    : <View/>}
+                            </View>
+
                         </Collapsible>
                     </View>
                     <View style={{marginLeft:1, marginRight: 5,width:'20%'}}>

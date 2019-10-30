@@ -897,7 +897,12 @@ class Invoices extends React.Component {
                         style={{borderWidth:1,bottom:hp('5')}}
                         resizeMode={'contain'}
                         source={require('../../../icons/logo_QR.png')} />
+                        <TouchableOpacity onPress={() => Linking.openURL(
+                            "https://www.oyespace.com"
+                        )}
+                        >
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.5'), color: base.theme.colors.blue,bottom:hp('6') }}>Powered By Oyeliving</Text>
+                        </TouchableOpacity>
                     </View>
                     </View> 
                     </View>
