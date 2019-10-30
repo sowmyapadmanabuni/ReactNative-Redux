@@ -241,7 +241,7 @@ class PatrollingCheckPoints extends React.Component {
                             <Text>No Check Points available</Text>
                         </View>}
                 </View>
-                <FloatingActionButton marginTop={heightPercentageToDP('70')} onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
+                <FloatingActionButton marginTop={heightPercentageToDP('80')} onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
             </View>
         )
     }
