@@ -1085,7 +1085,7 @@ class Receipts extends React.Component {
                                             paddingBottom: 5
                                         }}
                                         onChangeText={(value) =>{
-                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            let num = value.replace(/^[a-zA-Z0-9 ]+$/g,  '');
                                             if (isNaN(num)) {
                                                 // Its not a number
                                             } else {

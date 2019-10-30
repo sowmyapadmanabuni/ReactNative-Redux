@@ -334,7 +334,7 @@ class Expenses extends React.Component {
          "EXDCreated":moment(this.state.expenditureDate).format('YYYY-MM-DD'),
             "EXHead": this.state.expHead,
             "EXDesc": this.state.expDesc,
-            "EXPAmnt": this.state.amountPaid,
+            "EXPAmnt": parseFloat(this.state.amountPaid).toFixed(2),
             //"EXDate":moment(this.state.expenditureDate).format('YYYY-MM-DD'),
             "EXApplTO": this.state.selectedAppList,
             "EXRecurr": this.state.selectedExpRecType,
@@ -589,10 +589,11 @@ class Expenses extends React.Component {
         let self = this;
         let associationId = self.props.userReducer.SelectedAssociationID;
         console.log('Get the Details for generate invoice', self.props,associationId,self.state.blockId)
-        let stat = await base.services.OyeLivingApi.getInvoices(associationId,self.state.blockId) // 1, 4
+        let stat = await base.services.OyeLivingApi.getInvoices(associationId,self.state.blockId); // 1, 4
         console.log("Stat in generate invoices:",stat)
         try {
             if (stat.success) {
+                Alert.alert('Invoices generated successfully')
                 await self.getTheExpenseList(self.state.selectedBlock, self.state.getIndex)
             } else {
                 Alert.alert(stat.error.message)
@@ -926,7 +927,7 @@ class Expenses extends React.Component {
                                             borderWidth: 1
                                         }}
                                         onChangeText={(value) =>{
-                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            let num = value.replace(/^[a-zA-Z0-9 ]+$/g,  '');
                                             if (isNaN(num)) {
                                                 // Its not a number
                                             } else {
@@ -1331,7 +1332,7 @@ class Expenses extends React.Component {
                                             paddingBottom: 5
                                         }}
                                         onChangeText={(value) =>{
-                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            let num = value.replace(/^[a-zA-Z0-9 ]+$/g,  '');
                                             if (isNaN(num)) {
                                                 // Its not a number
                                             } else {
@@ -1361,7 +1362,7 @@ class Expenses extends React.Component {
                                             paddingBottom: 5
                                         }}
                                         onChangeText={(value) =>{
-                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            let num = value.replace(/^[a-zA-Z0-9 ]+$/g,  '');
                                             if (isNaN(num)) {
                                                 // Its not a number
                                             } else {
@@ -1490,7 +1491,7 @@ class Expenses extends React.Component {
                                                 paddingBottom: 5
                                             }}
                                             onChangeText={(value) =>{
-                                                let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
+                                                let num = value.replace(/[^0-9].[^0-9]{2}/g,  '');
                                                 if (isNaN(num)) {
                                                 // Its not a number
                                             } else {
@@ -1626,7 +1627,7 @@ class Expenses extends React.Component {
                                             paddingBottom: 5
                                         }}
                                         onChangeText={(value) =>{
-                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
+                                            let num = value.replace(/^[a-zA-Z ]+$/g,  '');
                                             if (isNaN(num)) {
                                                 // Its not a number
                                             } else {
@@ -2094,9 +2095,12 @@ class Expenses extends React.Component {
         let self = this;
         let listOfExpenses = [];
         if (id === 0) {
+            console.log('Id###########111111', id, expensesList);
+
             let j = 0;
             for (let i = 0; i < expensesList.length; i++) {
-                if (expensesList[i].exIsInvD) {
+                console.log('Id###########2222', id, expensesList,expensesList[i].item.exIsInvD);
+                if (expensesList[i].item.exIsInvD) {
                     listOfExpenses[j] = expensesList[i]
                     j = j + 1;
                 }
@@ -2104,12 +2108,15 @@ class Expenses extends React.Component {
         } else if (id === 1) {
             let j = 0;
             for (let i = 0; i < expensesList.length; i++) {
-                if (!expensesList[i].exIsInvD) {
-                    listOfExpenses[j] = expensesList[i]
+                console.log('Id###########33333', id, expensesList);
+                if (!expensesList[i].item.exIsInvD) {
+                    listOfExpenses[j] = expensesList[i];
                     j = j + 1;
                 }
             }
         } else if (id === 2) {
+            console.log('Id###########44444', id, expensesList);
+
             listOfExpenses = expensesList;
         }
 
@@ -2117,7 +2124,7 @@ class Expenses extends React.Component {
 
         self.setState({
             isLoading:false,
-            isTabSelected: id,
+            isTabSelected:id,
             expensesList: listOfExpenses
         })
     }

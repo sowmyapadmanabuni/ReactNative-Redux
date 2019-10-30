@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra
  * @Date: 2019-10-07 12:14:58
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-29 12:07:57
+ * @Last Modified time: 2019-10-29 15:12:28
  */
 
 
@@ -1211,7 +1211,6 @@ class Invoices extends React.Component {
         let stat = await base.services.OyeLivingApi.getInvoiceListByInvoiceNumber(self.state.invoiceNumber);
         console.log("Invoice  Details:", stat,self.state.invoiceNumber);
         let invoiceData=[];
-        //invoices list not coming as array
         try {
             if(stat){
                  invoiceData=(stat.data.invoices);
@@ -1222,7 +1221,6 @@ class Invoices extends React.Component {
             }
 
         } catch (e) {
-            self.applyFilters(difference,stAmount,endAmount,invoiceData)
             console.log("e:", e)
         }
     }
@@ -1250,9 +1248,11 @@ class Invoices extends React.Component {
         if(difference<0){
             self.setState({isLoading:false})
             Alert.alert('Please enter valid amount')
-        }else{
-            self.getInvoiceByInvoiceNumber(difference,stAmount,endAmount);
-
+        }else if(self.state.invoiceNumber !=''){
+                self.getInvoiceByInvoiceNumber(difference, stAmount, endAmount);
+        }else {
+            let invoiceByNum=[]
+            self.applyFilters(difference,stAmount,endAmount,invoiceByNum)
         }
     }
 
@@ -1272,6 +1272,7 @@ class Invoices extends React.Component {
         else if(invoiceByNum.length !==0 && self.state.invoiceListByDates.length !==0) {
             let j=0;
             for(let i=0;i<self.state.invoiceListByDates.length;i++){
+
                if(invoiceByNum[i].inNumber===self.state.invoiceListByDates[i].inNumber){
                    invoicesList[j]=invoiceByNum[i];
                    j=j+1;
