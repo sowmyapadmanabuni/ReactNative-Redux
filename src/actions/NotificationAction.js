@@ -643,7 +643,6 @@ export const createUserNotification = (
   accountID,
   associationID,
   ntDesc,
-  announcement,
   sbUnitID,
   sbMemID,
   sbSubID,
@@ -653,7 +652,8 @@ export const createUserNotification = (
   occupancyDate,
   soldDate,
   refresh,
-  senderId
+  senderId,
+  announcement
 ) => {
   return dispatch => {
     let headers = {
@@ -667,6 +667,26 @@ export const createUserNotification = (
     // alert(refresh);
     // console.log(notifType);
     if (notifType === 'Join') {
+      console.log(
+        {
+          ACAccntID: accountID,
+          ASAssnID: associationID,
+          NTType: notifType,
+          NTDesc: ntDesc,
+          SBUnitID: sbUnitID,
+          SBMemID: sbMemID,
+          SBSubID: sbSubID,
+          SBRoleID: sbRoleId,
+          ASAsnName: associationName,
+          MRRolName: unitName,
+          NTDCreated: formatdate,
+          NTDUpdated: formatdate,
+          UNOcSDate: occupancyDate,
+          UNSldDate: soldDate,
+          ACNotifyID: senderId
+        },
+        'join_request_body'
+      );
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,
