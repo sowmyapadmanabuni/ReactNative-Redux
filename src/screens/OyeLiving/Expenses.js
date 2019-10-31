@@ -136,10 +136,10 @@ class Expenses extends React.Component {
             selectedImage:{},
             expListByDates:[],
             exChqNo  : '', //min 6 digits max 12
-            exChqDate :'', //it should allow future date upto 3 months from current date
+            exChqDate :_dt, //it should allow future date upto 3 months from current date
             exVoucherNo:'', //
             exDDNo   : '', // min 6 digits max 12
-            exDDDate : '' ,//it should allow past date upto 3 months from current date,
+            exDDDate : _dt ,//it should allow past date upto 3 months from current date,
             inCopyListExp:[{},{},{},{},{}]
 
         };
@@ -326,6 +326,7 @@ class Expenses extends React.Component {
 
     async createExpense() {
         var imgUrl=this.state.uploadedFile;
+        console.log('Get the values to create expense',this.state.uploadedFile)
 
         if(this.state.isEditExpense){
         let invoiceCopyList=this.state.invoiceCopyList;
@@ -339,7 +340,7 @@ class Expenses extends React.Component {
      let input = {
             //"POEAmnt"   :'',
             //"BPID"      : '',
-         "EXDCreated":moment(this.state.expenditureDate).format('YYYY-MM-DD'),
+            "EXDCreated":moment(this.state.expenditureDate).format('YYYY-MM-DD'),
             "EXHead": this.state.expHead,
             "EXDesc": this.state.expDesc,
             "EXPAmnt": parseFloat(this.state.amountPaid).toFixed(2),
@@ -351,8 +352,8 @@ class Expenses extends React.Component {
             "PMID": this.state.payMethodId,
             "EXPName": this.state.payeeName,
             "EXPBName": this.state.selPayeeBank,
-            //"EXChqNo"   : "",
-            //"EXChqDate" : moment(this.state.expenditureDate).format('YYYY-MM-DD'),
+            "EXChqNo"   : this.state.exChqNo,
+            "EXChqDate" :this.state.exChqNo !=''?moment(this.state.exChqDate).format('YYYY-MM-DD'):'',
             "EXPyCopy": imgUrl,
             "VNName": '',
             "EXDisType": this.state.selDistribution,
@@ -361,13 +362,18 @@ class Expenses extends React.Component {
             "ASAssnID": this.props.userReducer.SelectedAssociationID,
             "INNumber": this.state.invoiceNum,
             "EXID":this.state.isEditExpense?this.state.selExpenseId:'',
-            "UnUniIden":this.state.unitName
+            "UnUniIden":this.state.unitName,
+            "EXDDNo"    : this.state.exDDNo,
+            "EXDDDate"  : this.state.exDDNo !=''?moment(this.state.exDDDate).format('YYYY-MM-DD'):'',
+            "EXVoucherNo":this.state.exVoucherNo
 
         };
 
-        console.log('Sending Data',input)
+        console.log('Sending Data',input,this.state.isEditExpense)
         let stat = this.state.isEditExpense?await base.services.OyeLivingApi.updateExpense(input):
             await base.services.OyeLivingApi.addNewExpense(input);
+
+        console.log('Get the data',stat)
         try {
             if (stat.success) {
                 this.setState({
@@ -401,7 +407,7 @@ class Expenses extends React.Component {
             );
             await RNFS.readFile(res.uri, 'base64').then(data => {
                 let img = this.state.invoiceCopyList;
-                img.push({fileUrl: data, type: 'Pdf', res: res,isUpload:false})
+                img.push({fileUrl: data, type: 'Pdf',  res: res,isUpload:false})
                 this.setState({
                     invoiceCopyList: img,
                 });
@@ -451,10 +457,11 @@ class Expenses extends React.Component {
     }
 
     async uploadFile() {
+        console.log('List coming to upload file',this.state.invoiceCopyList);
         this.setState({isLoading:true})
         let self = this;
         let invoiceCopies = self.state.invoiceCopyList;
-        for (let i = 0; i < invoiceCopies.length; i++) {
+      for (let i = 0; i < invoiceCopies.length; i++) {
             if(!invoiceCopies[i].isUpload) {
                 let source = (Platform.OS === 'ios') ? invoiceCopies[i].res.uri : invoiceCopies[i].res.uri;
                 const form = new FormData();
@@ -496,6 +503,18 @@ class Expenses extends React.Component {
                 let expensesList = stat.data.expenseByBlock;
                 let newList = []
                 for (let i = 0; i < expensesList.length; i++) {
+                    let imageString= expensesList[i].exPyCopy
+                    let imageArray=imageString==''?[]:imageString.split(',');
+                    let img=[];
+                    for(let j=0;j<imageArray.length;j++){
+                        let imgType=imageArray.length !=0?imageArray[j].split('.'):[];
+                        img.push({fileUrl:imageArray[j],isUpload:true,type:imgType[1]=="pdf"?'Pdf':'Image'})
+                    }
+                    console.log('Expense List@@@@', expensesList[i] )
+
+                    expensesList[i].imgArray=img
+                    console.log('Expense List@@@@#######', expensesList[i] )
+
                     newList.push({item: expensesList[i], open: false,isChecked:false})
                 }
                 self.setState({
@@ -1037,7 +1056,7 @@ class Expenses extends React.Component {
 
                 {(Platform.OS === 'ios') ? this.openIOSCalender() : <View/>}
                 {this.state.isAddExpenseModal ? this.addExpenseScreen() : <View/>}
-
+                {this._renderModal1()}
             </View>
             </TouchableOpacity>
 
@@ -1045,6 +1064,8 @@ class Expenses extends React.Component {
     }
 
     editExpense(selectedExpense) {
+
+        console.log('Get the details',selectedExpense)
         this.setState({isLoading:true})
         let blockName = '';
         let blockList=this.state.blockListAdd;
@@ -1068,8 +1089,10 @@ class Expenses extends React.Component {
         let img=[];
         for(let i=0;i<imageArray.length;i++){
             let imgType=imageArray.length !=0?imageArray[i].split('.'):[];
-            img.push({fileUrl: "https://mediaupload.oyespace.com/"+imageArray[i], isUpload:true,type:imgType[1]=="pdf"?'Pdf':'Image'})
+            img.push({fileUrl: imageArray[i], isUpload:true,type:imgType[1]=="pdf"?'Pdf':'Image'})
         }
+        console.log('Get the details111111111',img)
+
         this.setState({
             expHead: selectedExpense.exHead,
             expDesc: selectedExpense.exDesc,
@@ -1093,7 +1116,12 @@ class Expenses extends React.Component {
             selectedBlockAdd:blockName,
             selPayMethod:paymentName,
             isLoading:false,
-            selExpenseId:selectedExpense.exid
+            selExpenseId:selectedExpense.exid,
+            exChqNo  : selectedExpense.exChqNo,
+            exChqDate :selectedExpense.exChqDate,
+            exVoucherNo:selectedExpense.exVoucherNo,
+            exDDNo   : selectedExpense.exddNo,
+            exDDDate : selectedExpense.exddDate
         })
     }
 
@@ -1608,8 +1636,16 @@ class Expenses extends React.Component {
                                             rippleOpacity={0}
                                             onChangeText={(value, index) => {
                                                 this.setState({
+                                                    selectedBank: 'Select Bank',
+                                                    selPayeeBank: 'Payee Bank Name',
+                                                    exChqNo  : '',
+                                                    exChqDate :_dt,
+                                                    exVoucherNo:'',
+                                                    exDDNo   : '',
+                                                    exDDDate : _dt,
                                                     selPayMethod: value,
                                                     payMethodId: this.state.paymentMethodList[index].details.pmid,
+
                                                 })
                                             }}
                                         />
@@ -1649,7 +1685,7 @@ class Expenses extends React.Component {
                                         maxLength={20}
                                     />
                                 </View>
-                               {/* {this.state.selPayMethod =="Cheque"?
+                             {this.state.selPayMethod =="Cheque"?
                                 <View style={AddExpenseStyles.textInputView}>
                                     <Text style={{
                                         fontSize: 14,
@@ -1666,7 +1702,7 @@ class Expenses extends React.Component {
                                             paddingBottom: 5
                                         }}
                                         onChangeText={(value) =>{
-                                            let num = value.replace(/[^0-9]/g,  '');
+                                            let num = value.replace("." , '');
                                             if (isNaN(num)) {
                                                 // Its not a number
                                             } else {
@@ -1674,9 +1710,9 @@ class Expenses extends React.Component {
                                             }}}
                                         value={this.state.exChqNo}
                                         placeholder="Cheque Number"
-                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                        keyboardType={'phone-pad'}
                                         placeholderTextColor={base.theme.colors.grey}
-                                        maxLength={20}
+                                        maxLength={12}
                                     />
                                 </View>
                                     :<View/>}
@@ -1709,13 +1745,13 @@ class Expenses extends React.Component {
                                                 editable={false}
                                             />
                                         </View>
-                                        <TouchableOpacity onPress={() => this.openCalenderAdd(0,'CHEQUE')}>
+                                        <TouchableOpacity onPress={() => this.openCalenderAdd(0)}>
                                             <Image
                                                 style={{height: 25, width: 25, marginBottom: 7}}
                                                 source={require('../../../icons/calender.png')}
                                             />
                                         </TouchableOpacity>
-                                        {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(0,'CHEQUE') : <View/>}
+                                        {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(0) : <View/>}
                                     </View>
                                     :<View/>}
                                 {this.state.selPayMethod =="DD"?
@@ -1735,18 +1771,18 @@ class Expenses extends React.Component {
                                             paddingBottom: 5
                                         }}
                                         onChangeText={(value) =>{
-                                            let num = value.replace(/[^0-9]/g,  '');
+                                            let num = value.replace("." , '');
                                             if (isNaN(num)) {
                                                 // Its not a number
                                             } else {
-                                                this.setState({payeeName:value})
+                                                this.setState({exDDNo:value})
                                             }}}
                                         // onChangeText={(text) => this.setState({payeeName: text})}
                                         value={this.state.exDDNo}
                                         placeholder="DD Number"
-                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                        keyboardType={'phone-pad'}
                                         placeholderTextColor={base.theme.colors.grey}
-                                        maxLength={20}
+                                        maxLength={12}
                                     />
                                 </View>
                                     :<View/>}
@@ -1779,13 +1815,13 @@ class Expenses extends React.Component {
                                                 editable={false}
                                             />
                                         </View>
-                                        <TouchableOpacity onPress={() => this.openCalenderAdd(1,'DD')}>
+                                        <TouchableOpacity onPress={() => this.openCalenderAdd(1)}>
                                             <Image
                                                 style={{height: 25, width: 25, marginBottom: 7}}
                                                 source={require('../../../icons/calender.png')}
                                             />
                                         </TouchableOpacity>
-                                        {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(1,'DD') : <View/>}
+                                        {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(1) : <View/>}
                                     </View>
                                     :<View/>}
                                 {this.state.selPayMethod =="Cash"?
@@ -1805,20 +1841,20 @@ class Expenses extends React.Component {
                                                 paddingBottom: 5
                                             }}
                                             onChangeText={(value) =>{
-                                                let num = value.replace(/[^0-9]/g,  '');
+                                                let num = value.replace(".", '');
                                                 if (isNaN(num)) {
                                                     // Its not a number
                                                 } else {
                                                     this.setState({exVoucherNo:value})
                                                 }}}
                                             value={this.state.exVoucherNo}
-                                            placeholder="Payee Name"
-                                            keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                                            placeholder="Voucher NUmber"
+                                            keyboardType={'phone-pad'}
                                             placeholderTextColor={base.theme.colors.grey}
                                             maxLength={20}
                                         />
                                     </View>
-                                    :<View/>}*/}
+                                    :<View/>}
                                 {this.state.selPayMethod!="Cash"?
                                 <View style={{paddingTop: 5, paddingBottom: 5, width: '100%',}}>
                                     <Text style={{
@@ -1882,13 +1918,13 @@ class Expenses extends React.Component {
                                             editable={false}
                                         />
                                     </View>
-                                    <TouchableOpacity onPress={() => this.openCalenderAdd()}>
+                                    <TouchableOpacity onPress={() => this.openCalenderAdd(2)}>
                                         <Image
                                             style={{height: 25, width: 25, marginBottom: 7}}
                                             source={require('../../../icons/calender.png')}
                                         />
                                     </TouchableOpacity>
-                                    {(Platform.OS === 'ios') ? this.openIOSCalenderAdd() : <View/>}
+                                    {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(2) : <View/>}
                                 </View>
                                 <View style={AddExpenseStyles.textInputView}>
                                     <Text style={{
@@ -1944,6 +1980,7 @@ class Expenses extends React.Component {
                                         <FlatList
                                             keyExtractor={(item, index) => index.toString()}
                                             data={this.state.invoiceCopyList}
+                                            extraData={this.state}
                                             renderItem={(item, index) => this.renderImages(item, index)}
                                             horizontal={true}
                                         />
@@ -2064,9 +2101,21 @@ class Expenses extends React.Component {
             Alert.alert('Select the payment method is Mandatory', message)
         } else if (base.utils.validate.isBlank(this.state.payeeName) ) {
             Alert.alert('Select the payee name is Mandatory', message)
-        } else if (this.state.selPayMethod!="Cash" && (base.utils.validate.isBlank(this.state.selPayeeBank) || (this.state.selPayeeBank =='Payee Bank Name'))) {
+        }  else if (this.state.selPayMethod=="Cash" && base.utils.validate.isBlank(this.state.exVoucherNo) ) {
+            Alert.alert('VoucherNumber is mandatory', message)
+        } else if (this.state.selPayMethod=="Cheque" && base.utils.validate.isBlank(this.state.exChqNo) ) {
+            Alert.alert('ChequeNumber is mandatory', message)
+        }else if (this.state.selPayMethod=="Cheque" && this.state.exChqNo.length<6 ) {
+            Alert.alert('Cheque Minimum length is 6 ', message)
+        }else if (this.state.selPayMethod=="DD" && base.utils.validate.isBlank(this.state.exDDNo) ) {
+            Alert.alert('DD number is mandatory', message)
+        }else if (this.state.selPayMethod=="DD" && this.state.exDDNo.length<6) {
+            Alert.alert('DD number Minimum length is 6', message)
+        }
+        else if (this.state.selPayMethod!="Cash" && (base.utils.validate.isBlank(this.state.selPayeeBank) || (this.state.selPayeeBank =='Payee Bank Name'))) {
             Alert.alert('Select the payee bank is Mandatory', message)
-        } else {
+        }
+        else {
             this.uploadFile()
         }
 
@@ -2316,8 +2365,9 @@ class Expenses extends React.Component {
 
     selectedExpense(item) {
         let selectedExpense = item.item.item;
+        console.log('Get the time',item)
         return (
-            <TouchableOpacity style={{
+            <View style={{
                 borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
                 shadowColor: base.theme.colors.greyHead,
                 shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
@@ -2362,28 +2412,7 @@ class Expenses extends React.Component {
                                 <Text style={{fontWeight: 'bold'}}> {selectedExpense.exApplTO}</Text></Text>
                             <Text style={{fontSize: 13, color: base.theme.colors.black}}>Added By:
                                 <Text style={{fontWeight: 'bold'}}> {this.props.userReducer.MyFirstName}</Text></Text>
-                            <View style={{
-                                borderRadius: 5,
-                                flexDirection: 'row',
-                                borderStyle: 'dashed',
-                                height: 90,
-                                width: '95%',
-                                alignSelf: 'center',
-                                borderWidth: 1.8,
-                                borderColor: base.theme.colors.blue,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginBottom: this.state.isCollapse ? 0 : 60
-                            }}>
-                                {this.state.inCopyListExp.length !== 0 ?
-                                    <FlatList
-                                        keyExtractor={(item, index) => index.toString()}
-                                        data={this.state.inCopyListExp}
-                                        renderItem={(item, index) => this.renderImages(item, index)}
-                                        horizontal={true}
-                                    />
-                                    : <View/>}
-                            </View>
+
 
                         </Collapsible>
                     </View>
@@ -2392,6 +2421,28 @@ class Expenses extends React.Component {
                     </View>
 
                 </View>
+                <Collapsible duration={100} collapsed={!item.item.open}>
+                    {item.item.item.imgArray.length !== 0 ?
+                        <View style={{
+                        borderRadius: 5,
+                        flexDirection: 'row',
+                        height: 90,
+                        width: '95%',
+                        alignItems: 'center',
+                        justifyContent:'center',
+                        margin:10,
+                    }}>
+                            <FlatList
+                                keyExtractor={(item, index) => index.toString()}
+                                data={item.item.item.imgArray}
+                                extraData={this.state.expensesList}
+                                renderItem={(item, index) => this.renderImages(item, index,true)}
+                                horizontal={true}
+                            />
+
+                    </View>
+                        : <View/>}
+                </Collapsible>
                 {selectedExpense.exIsInvD ?
                     <View/> :
                     <View style={{
@@ -2430,17 +2481,18 @@ class Expenses extends React.Component {
                             />
                         </TouchableOpacity>
                     </View>}
-                <View style={{alignSelf: 'center', marginBottom: 10, marginTop: 10}}>
-                    <TouchableOpacity style={{
+                <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10, marginTop: 10,width:'100%',
+                    height:20,alignItems:'center',justifyContent:'center'}} onPress={() => this.toggleCollapsible(item.index, item.item.open)}>
+                    <View style={{
                         width: 35,
                         borderRadius: 15,
                         height:4,
                         backgroundColor: base.theme.colors.lightgrey,
                         alignSelf: 'center'
-                    }} onPress={() => this.toggleCollapsible(item.index, item.item.open)}>
-                    </TouchableOpacity>
-                </View>
-            </TouchableOpacity>
+                    }} >
+                    </View>
+                </TouchableOpacity>
+            </View>
         )
     }
 
@@ -2450,25 +2502,19 @@ class Expenses extends React.Component {
         this.setState({expensesList: data});
     };
 
-    _renderModal1() {
-        return (
-            <FlatList
-                keyExtractor={(item, index) => index.toString()}
-                data={this.state.invoiceCopyList}
-                horizontal={true}
-                renderItem={(item, index) => this._renderModal(item, index)}
-            />
-        )
-    }
+
 
     _enlargeImage(imageURI) {
+        console.log('openimg',imageURI)
         this.setState({
             selectedImage: imageURI,
             isModalOpen: true
         })
     }
 
-    _renderModal() {
+    _renderModal1() {
+        console.log('openimg111111111',this.state.selectedImage)
+
         return (
             <Modal
                 onRequestClose={() => this.setState({isModalOpen: false})}
@@ -2494,8 +2540,9 @@ class Expenses extends React.Component {
         )
     }
 
-    renderImages(item, index) {
-        let imageURI = {uri: item.item.fileUrl};
+    renderImages(item, index,isList) {
+        console.log('hjghjgjhggjh',item,isList)
+        let imageURI = {uri:item.item.isUpload?"https://mediaupload.oyespace.com/"+ item.item.fileUrl:item.item.fileUrl};
 
         return (
             <View style={{
@@ -2520,13 +2567,14 @@ class Expenses extends React.Component {
                     </TouchableOpacity> :
                     <TouchableOpacity style={{alignSelf: 'flex-end',}}
                                       onPress={() => {
-                                          item.item.isUpload? Linking.openURL(item.item.fileUrl):this.openPdfModal(item)
+                                          item.item.isUpload? Linking.openURL("https://mediaupload.oyespace.com/"+item.item.fileUrl):this.openPdfModal(item)
                                       }}>
                         <Image
                             style={CreateSOSStyles.imageViewExp}
                             source={require('../../../icons/file_upload.png')}
                         />
                     </TouchableOpacity>}
+                {isList? <View/> :
                 <TouchableOpacity
                     style={{height: 20, width: 20,}}
                     onPress={() => this.deleteImageFromList(item)}
@@ -2535,7 +2583,7 @@ class Expenses extends React.Component {
                         style={{height: 20, width: 20, position: 'absolute', alignSelf: 'flex-start', marginLeft: 3}}
                         source={require('../../../icons/close_btn1.png')}
                     />
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
         )
 
@@ -2664,24 +2712,41 @@ class Expenses extends React.Component {
         })
     }
 
-    openCalenderAdd() {
+    openCalenderAdd(calKey) {
+        console.log('CAL KEY11111',calKey)
         let dt = new Date();
         dt.setDate(dt.getDate());
         let _dt = dt;
+        let maxDate=new Date(moment().add(90, 'days').calendar());
+        let minDate=new Date(moment().subtract(90, 'days').calendar());
+        let exMin=new Date("1900-01-02");
+        console.log('CAL KEY22222',_dt,maxDate,minDate,exMin)
         let self = this;
         Platform.OS === 'ios' ? (self.setState({isCalenderOpenAdd: true})) : self.showPickerAdd('cal', {
             date: _dt,
-            maxDate: _dt
-        });
+            minDate:calKey===0?_dt:calKey===1?minDate:exMin,
+            maxDate: calKey===0?maxDate:calKey===1?_dt:_dt,
+        }, calKey);
     }
 
-    showPickerAdd = async (stateKey, options) => {
+    showPickerAdd = async (stateKey, options,calKey) => {
+        console.log('CAL KEY',calKey)
         try {
             const {action, year, month, day} = await DatePickerAndroid.open(options);
             if (action === DatePickerAndroid.dismissedAction) {
             } else {
                 let date = new Date(year, month, day);
-                this.setState({expenditureDate: date})
+                if(calKey===0){
+                    this.setState({exChqDate: date})
+
+                }
+                else if(calKey===1){
+                    this.setState({exDDDate: date})
+
+                }else if(calKey==2){
+                    this.setState({expenditureDate: date})
+
+                }
             }
         } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
@@ -2711,6 +2776,11 @@ class Expenses extends React.Component {
             selPayeeBank: 'Payee Bank Name',
             selPayMethod: 'Select Payment Method',
             selExpenseId:self.state.isEditExpense?self.state.selExpenseId:'',
+            exChqNo  : '',
+            exChqDate :_dt,
+            exVoucherNo:'',
+            exDDNo   : '',
+            exDDDate : _dt
         });
     }
 

@@ -1275,13 +1275,24 @@ class Invoices extends React.Component {
             invoicesList=invoiceByNum
         }
         else if(invoiceByNum.length !==0 && self.state.invoiceListByDates.length !==0) {
-            let j=0;
-            for(let i=0;i<self.state.invoiceListByDates.length;i++){
+            if (invoiceByNum.length >= self.state.invoiceListByDates.length) {
+                let j = 0;
 
-               if(invoiceByNum[i].inNumber===self.state.invoiceListByDates[i].inNumber){
-                   invoicesList[j]=invoiceByNum[i];
-                   j=j+1;
-               }
+                for (let i = 0; i < self.state.invoiceListByDates.length; i++) {
+
+                    if (invoiceByNum[i].inNumber === self.state.invoiceListByDates[i].inNumber) {
+                        invoicesList[j] = invoiceByNum[i];
+                        j = j + 1;
+                    }
+                }
+            } else {
+                let j = 0;
+                for (let i = 0; i < invoiceByNum.length; i++) {
+                    if (invoiceByNum[i].inNumber === self.state.invoiceListByDates[i].inNumber) {
+                        invoicesList[j] = invoiceByNum[i];
+                        j = j + 1;
+                    }
+                }
             }
         }
 

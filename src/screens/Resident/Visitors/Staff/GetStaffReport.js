@@ -204,7 +204,7 @@ class GetStaffReport extends React.Component {
                 // console.log("Diffrence:",initialDate,reportsData);
                 for (let i = 0; i < reportsData.length; i++) {
                     let rowData = [];
-                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('MM-DD-YYYY'));
                     rowData.push(reportsData[i].vlengName);
                     rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'));
                     rowData.push(reportsData[i].vlexgName);
@@ -219,7 +219,7 @@ class GetStaffReport extends React.Component {
                 let datesArr = [];
                 for (let i = 0; i < difference + 1; i++) {
                     let tempArr = [];
-                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('MM-DD-YYYY'));
                     tempArr.push('No Entry on this Date');
                     datesArr.push(tempArr);
 
