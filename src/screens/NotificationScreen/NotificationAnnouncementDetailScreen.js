@@ -186,10 +186,10 @@ class NotificationAnnouncementDetailScreen extends Component {
     });
   };
 
-  // pause = () => {
-  //   this.sound.pause();
-  //   this.setState({ paused: true, playBtnId: 0 });
-  // };
+  pause = () => {
+    this.sound.pause();
+    this.setState({ paused: true, playBtnId: 0 });
+  };
 
   onStartPlay = async () => {
     const path = Platform.select({
@@ -238,9 +238,10 @@ class NotificationAnnouncementDetailScreen extends Component {
     this.setState({
       isLoading: true
     });
+    //http://apidev.oyespace.com/oyesafe/api/v1/Announcement/GetAnnouncementDetailsByAssocAndAnnouncementID/%7BAssociationID%7D/%7BAnnouncementID%7D
     axios
       .get(
-        `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/GetAnnouncementDetailsByAssocAndAcntAndAnnouncementID/${associationid}/${accountid}/${notifyid}`,
+        `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/GetAnnouncementDetailsByAssocAndAnnouncementID/${associationid}/${notifyid}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -249,6 +250,7 @@ class NotificationAnnouncementDetailScreen extends Component {
         }
       )
       .then(response => {
+        console.log('Announcement_response', response);
         let accounceDetails = response.data.data.announcements[0];
 
         RNFetchBlob.config({
@@ -504,9 +506,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                       </TouchableOpacity>
                     ) : (
                       <View>
-                        <TouchableOpacity
-                        // onPress={() => this.pause()}
-                        >
+                        <TouchableOpacity onPress={() => this.pause()}>
                           <Image
                             source={require('../../../icons/leave_vender_stopcopy.png')}
                           />

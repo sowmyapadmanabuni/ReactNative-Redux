@@ -867,6 +867,26 @@ export const createUserNotification = (
           console.log('notification not joinstatus succ', error);
         });
     } else if (notifType === 'Announcement') {
+      console.log(
+        {
+          ACAccntID: accountID,
+          ASAssnID: associationID,
+          NTType: notifType,
+          NTDesc: ntDesc,
+          SBUnitID: sbUnitID,
+          SBMemID: sbMemID,
+          SBSubID: sbSubID,
+          SBRoleID: sbRoleId,
+          ASAsnName: associationName,
+          MRRolName: unitName,
+          NTDCreated: formatdate,
+          NTDUpdated: formatdate,
+          UNOcSDate: occupancyDate,
+          UNSldDate: soldDate,
+          ACNotifyID: announcement
+        },
+        'notification_create_announcment'
+      );
       axios
         .post(
           `http://${oyeURL}/oyesafe/api/v1/Notification/Notificationcreate`,

@@ -399,10 +399,11 @@ class NotificationScreen extends PureComponent {
             updatedTime: res.data.data.currentDateTime
             // status:
           })
-          .then(() => {
+          .then(response => {
             //    if (item.opened) {
             //      this.props.onNotificationOpen(notifications, index, oyeURL);
             //    }
+            console.log('RESPONSE_', response);
           });
       })
       .catch(error => {

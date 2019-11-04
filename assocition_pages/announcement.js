@@ -744,24 +744,42 @@ class Announcement extends Component {
                   isLoading: false
                 });
                 memberList.map(data => {
-                  console.log('adminssss', data);
+                  console.log('adminssss', ntType, data);
                   this.props.createUserNotification(
                     ntType,
                     this.props.oyeURL,
                     data.acAccntID,
                     this.props.dashboardReducer.assId.toString(),
                     ntDesc,
-                    announcement,
-                    // sbUnitID.toString(),
-                    // sbMemID.toString(),
-                    // sbSubID.toString(),
-                    // sbRoleId,
-                    // this.props.navigation.state.params.associationName,
-                    // unitName.toString(),
-                    // occupancyDate,
-                    // soldDate,
+                    'announcment',
+                    'announcment',
+                    'announcement',
+                    'announcment',
+                    'announcment',
+                    'announcment',
+                    'announcment',
+                    'announcment',
                     false,
-                    this.props.userReducer.MyAccountID
+                    this.props.userReducer.MyAccountID,
+                    announcement
+
+                    // ntType,
+                    // this.props.oyeURL,
+                    // data.acAccntID,
+                    // this.props.dashboardReducer.assId.toString(),
+                    // ntDesc,
+
+                    // // sbUnitID.toString(),
+                    // // sbMemID.toString(),
+                    // // sbSubID.toString(),
+                    // // sbRoleId,
+                    // // this.props.navigation.state.params.associationName,
+                    // // unitName.toString(),
+                    // // occupancyDate,
+                    // // soldDate,
+                    // false,
+                    // this.props.userReducer.MyAccountID,
+                    // announcement
                   );
                 });
                 this.props.navigation.goBack();
