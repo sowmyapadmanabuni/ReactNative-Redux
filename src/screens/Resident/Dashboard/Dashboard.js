@@ -1730,13 +1730,13 @@ class Dashboard extends PureComponent {
             >
               <Text>Oyeliving</Text>
             </Button>
-            {/* <Button
+            <Button
               bordered
               style={styles.button1}
               onPress={() => this.props.navigation.navigate("reportsTab")}
           >
             <Text>Reports</Text>
-          </Button> */}
+          </Button>
 
           <AnimatedTouchable
             animation={'swing'}
