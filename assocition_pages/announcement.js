@@ -19,8 +19,8 @@ import ImagePicker from 'react-native-image-picker';
 import ProgressLoader from 'rn-progress-loader';
 import {
   Card,
-  CardItem,
   Button,
+  CardItem,
   Item,
   Label,
   Input,
@@ -31,13 +31,17 @@ import { Dropdown } from 'react-native-material-dropdown';
 import ZoomImage from 'react-native-zoom-image';
 import { Easing } from 'react-native';
 import axios from 'axios';
-import AudioRecorderPlayer, {
-  AVEncoderAudioQualityIOSType,
-  AVEncodingOption,
-  AudioEncoderAndroidType,
-  AudioSet,
-  AudioSourceAndroidType
-} from 'react-native-audio-recorder-player';
+
+import Sound from 'react-native-sound';
+import AudioRecord from 'react-native-audio-record';
+
+// import AudioRecorderPlayer, {
+//   AVEncoderAudioQualityIOSType,
+//   AVEncodingOption,
+//   AudioEncoderAndroidType,
+//   AudioSet,
+//   AudioSourceAndroidType
+// } from 'react-native-audio-recorder-player';
 import { ratio, screenWidth } from './VendorStyles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -48,9 +52,10 @@ import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 import utils from '../src/base/utils';
 
-var audioRecorderPlayer;
+// var audioRecorderPlayer;
 
 class Announcement extends Component {
+  sound = null;
   constructor(props) {
     super(props);
     this.state = {
@@ -98,20 +103,159 @@ class Announcement extends Component {
       comment: '',
       dropdownValue: '',
 
-      announcementId: ''
+      announcementId: '',
+
+      audioFile: '',
+      recording: false,
+      loaded: false,
+      paused: true
     };
-    this.audioRecorderPlayer = new AudioRecorderPlayer();
-    this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
+    // this.audioRecorderPlayer = new AudioRecorderPlayer();
+    // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
   }
 
   componentDidMount() {
+    this.checkPermission();
     let self = this;
     setTimeout(() => {
       this.setState({
         isLoading: false
       });
     }, 1500);
+
+    const options = {
+      sampleRate: 44100,
+      channels: 1,
+      bitsPerSample: 16,
+      wavFile: 'test.wav'
+    };
+
+    AudioRecord.init(options);
+
+    // AudioRecord.on('data', data => {
+    //   const chunk = Buffer.from(data, 'base64');
+    //   console.log('chunk size', chunk.byteLength);
+    //   // do something with audio chunk
+    // });
   }
+
+  checkPermission = async () => {
+    const p = await PermissionsAndroid.check('microphone');
+    console.log('permission check', p);
+    if (p === 'authorized') return;
+    return this.requestPermission();
+  };
+
+  requestPermission = async () => {
+    const p = await PermissionsAndroid.request('microphone');
+    console.log('permission request', p);
+  };
+  start = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Permissions for write access',
+            message: 'Give permission to your storage to write a file',
+            buttonPositive: 'ok'
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the storage');
+        } else {
+          console.log('permission denied');
+          return;
+        }
+      } catch (err) {
+        console.warn(err);
+        return;
+      }
+    }
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          {
+            title: 'Permissions for write access',
+            message: 'Give permission to your storage to write a file',
+            buttonPositive: 'ok'
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the camera');
+        } else {
+          console.log('permission denied');
+          return;
+        }
+      } catch (err) {
+        console.warn(err);
+        return;
+      }
+    }
+    console.log('start record');
+    this.setState({
+      audioFile: '',
+      recording: true,
+      loaded: false,
+      buttonId: 2
+    });
+    AudioRecord.start();
+  };
+
+  stop = async () => {
+    if (!this.state.recording) return;
+    console.log('stop record');
+    let audioFile = await AudioRecord.stop();
+    console.log('audioFile', audioFile);
+    this.setState({ audioFile, recording: false, buttonId: 1, playBtnId: 1 });
+    this.uploadAudio(audioFile);
+  };
+
+  load = () => {
+    return new Promise((resolve, reject) => {
+      if (!this.state.audioFile) {
+        return reject('file path is empty');
+      }
+
+      this.sound = new Sound(this.state.audioFile, '', error => {
+        if (error) {
+          console.log('failed to load the file', error);
+          return reject(error);
+        }
+        this.setState({ loaded: true });
+        return resolve();
+      });
+    });
+  };
+
+  play = async () => {
+    if (!this.state.loaded) {
+      try {
+        await this.load();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    this.setState({ paused: false, playBtnId: 2 });
+    Sound.setCategory('Playback');
+
+    this.sound.play(success => {
+      if (success) {
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed due to audio decoding errors');
+      }
+      this.setState({ paused: true });
+      // this.sound.release();
+    });
+  };
+
+  pause = () => {
+    this.sound.pause();
+    this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
+  };
 
   componentDidUpdate() {
     setTimeout(() => {
@@ -304,8 +448,8 @@ class Announcement extends Component {
 
     formData.append('file', {
       uri: path,
-      name: 'hello.aac',
-      type: 'audio/aac'
+      name: 'hello.wav',
+      type: 'audio/wav'
     });
 
     console.log(formData, 'FormData');
@@ -496,7 +640,6 @@ class Announcement extends Component {
   };
 
   onStopPlay = async () => {
-    console.log('onStopPlay');
     this.audioRecorderPlayer.stopPlayer();
     this.audioRecorderPlayer.removePlayBackListener();
     this.setState({
@@ -568,9 +711,9 @@ class Announcement extends Component {
           response,
           response.data.data.announcement.anid
         );
-        // this.setState({
-        //   isLoading: false
-        // });
+        this.setState({
+          isLoading: false
+        });
         axios
           .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
             admin: 'false',
@@ -646,6 +789,7 @@ class Announcement extends Component {
   };
 
   render() {
+    const { recording, paused, audioFile } = this.state;
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
@@ -1245,17 +1389,45 @@ class Announcement extends Component {
               )}
             </ScrollView>
 
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+              <View
+                style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
+              >
+                <Button
+                  onPress={this.start}
+                  title="Record"
+                  disabled={recording}
+                />
+                <Button
+                  onPress={this.stop}
+                  title="Stop"
+                  disabled={!recording}
+                />
+                {paused ? (
+                  <Button
+                    onPress={this.play}
+                    title="Play"
+                    disabled={!audioFile}
+                  />
+                ) : (
+                  <Button
+                    onPress={this.pause}
+                    title="Pause"
+                    disabled={!audioFile}
+                  />
+                )}
+              </View>
+            </View>
             <View
               style={{
                 flexDirection: 'row',
                 width: '100%',
                 marginTop: hp('2%')
-                // backgroundColor: 'yellow'
               }}
             >
               <View>
                 {this.state.buttonId === 1 ? (
-                  <TouchableOpacity onPress={() => this.onStartRecord()}>
+                  <TouchableOpacity onPress={() => this.start()}>
                     <Image
                       style={{
                         width: hp('5%'),
@@ -1266,7 +1438,7 @@ class Announcement extends Component {
                     />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity onPress={() => this.onStopRecord()}>
+                  <TouchableOpacity onPress={() => this.stop()}>
                     <Image
                       style={{
                         width: hp('5%'),
@@ -1291,14 +1463,15 @@ class Announcement extends Component {
                     <Text>Click mic to record</Text>
                   ) : (
                     <Text style={styles.txtRecordCounter}>
-                      {this.state.recordTime}
+                      {/* {this.state.recordTime} */}
+                      Recording...
                     </Text>
                   )}
                 </View>
                 <View style={styles.viewPlayer}>
                   <TouchableOpacity
                     style={styles.viewBarWrapper}
-                    onPress={this.onStatusPress}
+                    // onPress={this.onStatusPress}
                   >
                     <View style={styles.viewBar}>
                       <View
@@ -1310,7 +1483,8 @@ class Announcement extends Component {
                 <View>
                   {this.state.playBtnId === 2 ? (
                     <Text style={styles.txtCounter}>
-                      {this.state.playTime} / {this.state.duration}
+                      {/* {this.state.playTime} / {this.state.duration} */}
+                      Playing...
                     </Text>
                   ) : (
                     <View></View>
@@ -1332,23 +1506,18 @@ class Announcement extends Component {
                 ) : (
                   <View>
                     {this.state.playBtnId === 1 ? (
-                      <TouchableOpacity onPress={() => this.onStartPlay()}>
+                      <TouchableOpacity onPress={() => this.play()}>
                         <Image
                           source={require('../icons/leave_vender_play.png')}
                         />
                       </TouchableOpacity>
                     ) : (
                       <View>
-                        {/* {this.state.buttonId === 1 &&
-                      this.state.playBtnId === 2 ? ( */}
-                        <TouchableOpacity onPress={() => this.onStopPlay()}>
+                        <TouchableOpacity onPress={() => this.pause()}>
                           <Image
                             source={require('../icons/leave_vender_stopcopy.png')}
                           />
                         </TouchableOpacity>
-                        {/* ) : (
-                        <View></View>
-                      )} */}
                       </View>
                     )}
                   </View>

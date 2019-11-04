@@ -263,6 +263,7 @@ class App extends React.Component {
     // const time = item.vlEntryT;
     // const entertiming = time.subString();
     // console.log(entertiming);
+    let color = '';
     gateFirebase
       .database()
       .ref(`NotificationSync/A_${item.asAssnID}/${item.vlVisLgID}`)
@@ -270,9 +271,11 @@ class App extends React.Component {
       .then(snapshot => {
         let val = snapshot.val();
         console.log(val, 'value_firebase');
-        this.setState({
-          buttonColor: val.buttonColor
-        });
+        color = val.buttonColor;
+        console.log('COLOR', color);
+        // this.setState({
+        //   buttonColor: val.buttonColor
+        // });
       });
 
     return (
@@ -479,8 +482,7 @@ class App extends React.Component {
                   <Text style={{ color: '#38bcdb' }}>{item.vlComName}</Text>
                 </Text>
               </View>
-              {item.vlExitT === '0001-01-01T00:00:00' &&
-              this.state.buttonColor === '#75be6f' ? (
+              {item.vlExitT === '0001-01-01T00:00:00' && color === '#75be6f' ? (
                 <View
                   style={{
                     justifyContent: 'center',
