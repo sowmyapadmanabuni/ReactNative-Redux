@@ -27,7 +27,7 @@ import axios from 'axios';
 
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
-
+import RNFetchBlob from 'rn-fetch-blob';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -249,49 +249,90 @@ class NotificationAnnouncementDetailScreen extends Component {
         }
       )
       .then(response => {
-        console.log('Announcement_Dataaaa', response);
-        this.setState({
-          isLoading: false,
-          imageData: response.data.data.announcements[0].anImages,
-          image1:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[0],
-          image2:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[1],
-          image3:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[2],
-          image4:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[3],
-          image5:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[4],
-          voice: response.data.data.announcements[0].anVoice,
-          notes: response.data.data.announcements[0].anCmnts
-        });
-        console.log('Announcement_Data', response.data.data.announcements[0]);
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[0]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[1]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[2]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[4]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[3]
-        );
+        let accounceDetails = response.data.data.announcements[0];
+
+        RNFetchBlob.config({
+          fileCache: true,
+          // by adding this option, the temp files will have a file extension
+          appendExt: 'wav'
+        })
+          .fetch(
+            'GET',
+            `http://mediaupload.oyespace.com/${accounceDetails.anVoice}`,
+            {
+              //some headers ..
+            }
+          )
+          .then(res => {
+            // the temp file path with file extension `png`
+            console.log('The file saved to ', res.path());
+
+            console.log('Announcement_Dataaaa', response);
+            this.setState({
+              isLoading: false,
+              imageData: response.data.data.announcements[0].anImages,
+              image1:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[0],
+              image2:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[1],
+              image3:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[2],
+              image4:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[3],
+              image5:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[4],
+              voice: response.data.data.announcements[0].anVoice,
+              notes: response.data.data.announcements[0].anCmnts
+            });
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[0]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[1]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[2]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[4]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[3]
+            );
+
+            this.setState({
+              audioFile:
+                Platform.OS === 'android'
+                  ? 'file://' + res.path()
+                  : '' + res.path()
+            });
+            // Beware that when using a file path as Image source on Android,
+            // you must prepend "file://"" before the file path
+            // imageView = (
+            //   <Image
+            //     source={{
+            //       uri:
+            //         Platform.OS === 'android'
+            //           ? 'file://' + res.path()
+            //           : '' + res.path()
+            //     }}
+            //   />
+            // );
+          });
       }).catch = e => {
       console.log(e);
     };

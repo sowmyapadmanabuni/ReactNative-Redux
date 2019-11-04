@@ -462,7 +462,7 @@ class Announcement extends Component {
       console.log(e);
     }
 
-    console.log('Stat222222222222222222222222:', stat);
+    console.log('Stat222222222222222222222222, UPLOAD:', stat);
   };
 
   image1Exp = () => {};
@@ -536,7 +536,7 @@ class Announcement extends Component {
     console.log(dirs.MusicDir, 'dir');
 
     const path = Platform.select({
-      ios: 'hello.m4a',
+      ios: 'hello.mp4',
       android: 'sdcard/hello.mp4'
       // android: `${dirs.MusicDir}/announcement/hello.mp4` //here?
     });
