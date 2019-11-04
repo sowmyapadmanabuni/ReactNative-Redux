@@ -24,6 +24,10 @@ import {
 } from 'native-base';
 import ZoomImage from 'react-native-zoom-image';
 import axios from 'axios';
+
+import Sound from 'react-native-sound';
+import AudioRecord from 'react-native-audio-record';
+
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -41,7 +45,6 @@ import base from '../../base';
 import { Easing } from 'react-native';
 import { connect } from 'react-redux';
 
-var audioRecorderPlayer;
 class NotificationAnnouncementDetailScreen extends Component {
   constructor(props) {
     super(props);
@@ -96,7 +99,12 @@ class NotificationAnnouncementDetailScreen extends Component {
       image4: '',
       image5: '',
       voice: '',
-      notes: ''
+      notes: '',
+
+      audioFile: '',
+      recording: false,
+      loaded: false,
+      paused: true
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -135,19 +143,58 @@ class NotificationAnnouncementDetailScreen extends Component {
     return true;
   }
 
-  onStatusPress = e => {
-    const touchX = e.nativeEvent.locationX;
-    console.log(`touchX: ${touchX}`);
-    const playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth.width - 56 * ratio);
-    console.log(`currentPlayWidth: ${playWidth}`);
+  load = () => {
+    return new Promise((resolve, reject) => {
+      if (!this.state.audioFile) {
+        return reject('file path is empty');
+      }
+
+      this.sound = new Sound(this.state.audioFile, '', error => {
+        if (error) {
+          console.log('failed to load the file', error);
+          return reject(error);
+        }
+        this.setState({ loaded: true });
+        return resolve();
+      });
+    });
   };
+
+  play = async () => {
+    if (!this.state.loaded) {
+      try {
+        await this.load();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    this.setState({ paused: false, playBtnId: 1 });
+    Sound.setCategory('Playback');
+
+    this.sound.play(success => {
+      if (success) {
+        console.log('successfully finished playing');
+        this.setState({
+          playBtnId: 0
+        });
+      } else {
+        console.log('playback failed due to audio decoding errors');
+      }
+      this.setState({ paused: true, playBtnId: 1 });
+      // this.sound.release();
+    });
+  };
+
+  // pause = () => {
+  //   this.sound.pause();
+  //   this.setState({ paused: true, playBtnId: 0 });
+  // };
 
   onStartPlay = async () => {
     const path = Platform.select({
-      ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4'
+      ios: 'hello.aac',
+      android: 'hello.aac'
     });
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
@@ -409,14 +456,16 @@ class NotificationAnnouncementDetailScreen extends Component {
                 ) : (
                   <View>
                     {this.state.playBtnId === 0 ? (
-                      <TouchableOpacity onPress={() => this.onStartPlay()}>
+                      <TouchableOpacity onPress={() => this.play()}>
                         <Image
                           source={require('../../../icons/leave_vender_play.png')}
                         />
                       </TouchableOpacity>
                     ) : (
                       <View>
-                        <TouchableOpacity onPress={() => this.onStopPlay()}>
+                        <TouchableOpacity
+                        // onPress={() => this.pause()}
+                        >
                           <Image
                             source={require('../../../icons/leave_vender_stopcopy.png')}
                           />
