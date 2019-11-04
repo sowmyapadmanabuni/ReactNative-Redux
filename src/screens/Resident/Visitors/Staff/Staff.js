@@ -6,7 +6,7 @@ import Share from 'react-native-share';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import OSButton from "../../../../components/osButton/OSButton";
 import moment from "moment";
-import {DatePickerDialog} from "react-native-datepicker-dialog";
+import DatePicker from "react-native-datepicker";
 import {connect} from "react-redux";
 import {updateStaffInfo} from "../../../../actions";
 import StaffStyle from "./StaffStyle";

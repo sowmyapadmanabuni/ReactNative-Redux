@@ -71,7 +71,7 @@ class PatrollingCommonHeader extends React.Component {
                     <Image
                         resizeMode={'cover'}
                         style={styles.logo}
-                        source={require('../../../icons/headerLogo.png')}
+                        source={require('../../../icons/oyesafe.png')}
                     />
                 </View>
                 {!isHidden ?

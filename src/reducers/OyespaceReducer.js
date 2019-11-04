@@ -5,12 +5,12 @@
     2. apidev  --- For develpment server
     3. api     --- For production server
 */
-let urlType = 'apidev';
+let urlType = 'apiuat';
 
 const oyeURL = `${urlType}.oyespace.com`; //Validation/
 //Image Domains
-const mediaUpload = 'https://mediauploaddev.oyespace.com/Images/'; //Development
-//const mediaUpload = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
+//const mediaUpload = 'https://mediauploaddev.oyespace.com/Images/'; //Development
+const mediaUpload = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
 //const mediaUpload = 'https://mediaupload.oyespace.com/Images/'; //Production
 const oyeBaseURL = 'http://' + oyeURL + '/oye247/api/v1/';
 
@@ -18,7 +18,6 @@ const INITIAL_STATE = {
   oyeURL,
   champBaseURL: 'http://' + oyeURL + '/oyeliving/api/v1/',
   oye247BaseURL: 'https://' + oyeURL + '/oye247/api/v1/',
-
   oyeBaseURL,
   viewImageURL: 'http://' + oyeBaseURL + '/Images/',
   uploadImageURL:

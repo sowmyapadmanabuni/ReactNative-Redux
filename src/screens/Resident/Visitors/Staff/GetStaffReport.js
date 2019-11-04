@@ -95,14 +95,15 @@ class GetStaffReport extends React.Component {
 
         async function requestExternalWritePermission() {
             try {
-                const granted = await PermissionsAndroid.request(
+                /*const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     {
                         title: 'OyeSafe App External Storage Write Permission',
                         message:
                             'OyeSafe App needs access to Storage data in your SD Card ',
                     }
-                );
+                );*/
+                const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                     //If WRITE_EXTERNAL_STORAGE Permission is granted
                     //changing the state to show Create PDF option
@@ -203,7 +204,7 @@ class GetStaffReport extends React.Component {
                 // console.log("Diffrence:",initialDate,reportsData);
                 for (let i = 0; i < reportsData.length; i++) {
                     let rowData = [];
-                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+                    rowData.push(moment(reportsData[i].vldUpdated, 'YYYY-MM-DD').format('MM-DD-YYYY'));
                     rowData.push(reportsData[i].vlengName);
                     rowData.push(moment(reportsData[i].vlEntryT).format('hh:mm' + ' A'));
                     rowData.push(reportsData[i].vlexgName);
@@ -218,7 +219,7 @@ class GetStaffReport extends React.Component {
                 let datesArr = [];
                 for (let i = 0; i < difference + 1; i++) {
                     let tempArr = [];
-                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('MM-DD-YYYY'));
                     tempArr.push('No Entry on this Date');
                     datesArr.push(tempArr);
 

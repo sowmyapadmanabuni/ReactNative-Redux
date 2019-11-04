@@ -70,6 +70,9 @@ class ReportScreen extends React.Component {
                 isPermitted: true
             })
         }
+        
+
+
         this.setState({
             slotName: this.props.navigation.state.params.detail.slotName,
             slotTime: this.props.navigation.state.params.detail.slotTime
@@ -172,13 +175,16 @@ class ReportScreen extends React.Component {
 
     async getReport(props) {
         let self = this;
-        let input = self.props.navigation.state.params.detail;    //Uncpmmet
-        // let input = {
-        //     "FromDate" : "2019-07-12",
-        //     "ToDate"   : "2019-07-30",
-        //     "ASAssnID" : 8,
-        //     "PSPtrlSID": 1
-        // };
+       let input = self.props.navigation.state.params.detail;
+
+        /* let input = {
+
+                "FromDate" : "2019-08-25",
+                "ToDate"   : "2019-08-25",
+                "ASAssnID" : 11640,
+                "PSPtrlSID": 2034
+
+         };*/
 
         let stat = await base.services.OyeSafeApi.getReport(input);
         let startDate = input.FromDate;
@@ -186,47 +192,59 @@ class ReportScreen extends React.Component {
         let initialDateString = moment(input.FromDate, "YYYY-MM-DDTHH:mm:ss a");
         let endDateString = moment(input.ToDate, "YYYY-MM-DDTHH:mm:ss a");
         let duration = moment.duration(endDateString.diff(initialDateString));
-        base.utils.logger.log(duration.days());
+        await base.utils.logger.log(duration.days());
         let difference = duration.as('days');
-        base.utils.logger.log(stat);
+        let selectedDate = input.FromDate;
+
+        console.log("Stat in report scren:",stat,input)
         try {
             if (stat !== null && stat.data.patrolling.length !== 0) {
-                let reportsData = stat.data.patrolling;
-                let reprArr = [];
-                if (difference !== 0) {
-                    for (let i = 0; i <= difference; i++) {
-                        console.log(startDate, moment(reportsData[i].ptdCreated).format("YYYY-MM-DD"));
-                        if (!reportsData[i] || startDate == moment(reportsData[i].ptdCreated).format('YYYY-MM-DD')) {
-                            let arr = [
-                                moment(startDate).format('DD-MM-YYYY'),
-                                ' Patrolling is not Done'
-                            ];
-                            reprArr.push(arr)
 
-                        } else {
-                            let arr = [
-                                moment(reportsData[i].ptdCreated).format('DD-MM-YYYY'),
-                                moment(reportsData[i].ptsDateT).format("hh:mm A"),
-                                moment(reportsData[i].pteDateT).format("hh:mm A"),
-                                reportsData[i].ptStatus === "" ? "N/A" : reportsData[i].ptStatus,
-                                reportsData[i].wkfName];
-                            reprArr.push(arr)
-                        }
-                        if (startDate !== endDate) {
-                            startDate = moment(startDate).add(1, 'day').format('YYYY-MM-DD');
-                        }
+                let reportsData = stat.data.patrolling;
+                let tableData = [];
+                for (let i = 0; i < reportsData.length; i++) {
+                    let rowData = [];
+                    rowData.push(moment(reportsData[i].ptdCreated, 'YYYY-MM-DD').format('MM-DD-YYYY'));
+                    rowData.push(moment(reportsData[i].ptsDateT).format('hh:mm' + ' A'));
+                    rowData.push( moment(reportsData[i].pteDateT).format('hh:mm' + ' A'));
+                    rowData.push(reportsData[i].ptStatus === "" ? "N/A" : reportsData[i].ptStatus,);
+                    rowData.push(reportsData[i].wkfName);
+                    if (startDate !== endDate) {
+                        startDate = moment(startDate).add(1, 'day').format('YYYY-MM-DD')
+                    }
+                    tableData.push(rowData);
+                }
+                let datesArr = [];
+                for (let i = 0; i < difference + 1; i++) {
+                    let tempArr = [];
+                    tempArr.push(moment(selectedDate, 'YYYY-MM-DD').format('MM-DD-YYYY'));
+                    tempArr.push('No Entry on this Date');
+                    datesArr.push(tempArr);
+
+                    if (selectedDate !== endDate) {
+                        selectedDate = moment(selectedDate).add(1, 'day').format('YYYY-MM-DD')
                     }
 
-                } else {
-                    let arr = [
-                        moment(reportsData[0].ptdCreated).format('DD-MM-YYYY'),
-                        moment(reportsData[0].ptsDateT).format("hh:mm A"),
-                        moment(reportsData[0].pteDateT).format("hh:mm A"),
-                        reportsData[0].ptStatus === "" ? "N/A" : reportsData[0].ptStatus,
-                        reportsData[0].wkfName];
-                    reprArr.push(arr)
                 }
-                let numberOfPages = reprArr.length / self.state.pageLimit;
+                for (let i = 0; i < datesArr.length; i++) {
+                    let dataMatched = false;
+                    for (let j = 0; j < tableData.length; j++) {
+                        if (datesArr[i][0] == tableData[j][0]) {
+                            dataMatched = true;
+                        }
+                    }
+                    if (!dataMatched) {
+                        tableData.push(datesArr[i]);
+                        console.log("data not matched with", datesArr[i]);
+                    }
+                }
+
+                let sortedDate = tableData.sort(function (a, b) {
+                    console.log('@@@@@@@@@', a[0], b[0], moment(a[0]).format(), new Date(moment(a[0]).format()), new Date(a[0]), new Date(b[0]));
+                    return new Date(moment(a[0]).format()) - new Date(moment(b[0]).format());
+                });
+                console.log('Final sorted Data', sortedDate);
+                let numberOfPages = tableData.length / self.state.pageLimit;
                 let dataBottomList = [];
                 if (numberOfPages !== parseInt(numberOfPages)) {
                     numberOfPages = parseInt(numberOfPages) + 1
@@ -235,21 +253,84 @@ class ReportScreen extends React.Component {
                 for (let i = 0; i < numberOfPages; i++) {
                     dataBottomList[i] = i + 1
                 }
-
                 self.setState({
+                    patrollingReport: tableData,
+                    data: tableData,
+                    tableData: tableData,
                     numberOfPages: numberOfPages,
-                    bottomPageIndicator: dataBottomList,
-                    tableData: reprArr,
-                    patrollingReport: reprArr,
-                    data: reprArr
-
+                    bottomPageIndicator: dataBottomList
                 });
 
-                self.changeTheData(self.state.pageNumber)
+                this.changeTheData(self.state.pageNumber)
 
             } else {
-                self.setState({data: []})
+
+                self.setState({
+                    tableData: []
+                })
+
             }
+
+            /*  if (stat !== null && stat.data.patrolling.length !== 0) {
+                  let reportsData = stat.data.patrolling;
+                  let reprArr = [];
+                  if (difference !== 0) {
+                      for (let i = 0; i <= difference; i++) {
+                          console.log(startDate, moment(reportsData[i].ptdCreated).format("YYYY-MM-DD"));
+                          if (!reportsData[i] || startDate == moment(reportsData[i].ptdCreated).format('YYYY-MM-DD')) {
+                              let arr = [
+                                  moment(startDate).format('DD-MM-YYYY'),
+                                  ' Patrolling is not Done'
+                              ];
+                              reprArr.push(arr)
+
+                          } else {
+                              let arr = [
+                                  moment(reportsData[i].ptdCreated).format('DD-MM-YYYY'),
+                                  moment(reportsData[i].ptsDateT).format("hh:mm A"),
+                                  moment(reportsData[i].pteDateT).format("hh:mm A"),
+                                  reportsData[i].ptStatus === "" ? "N/A" : reportsData[i].ptStatus,
+                                  reportsData[i].wkfName];
+                              reprArr.push(arr)
+                          }
+                          if (startDate !== endDate) {
+                              startDate = moment(startDate).add(1, 'day').format('YYYY-MM-DD');
+                          }
+                      }
+
+                  } else {
+                      let arr = [
+                          moment(reportsData[0].ptdCreated).format('DD-MM-YYYY'),
+                          moment(reportsData[0].ptsDateT).format("hh:mm A"),
+                          moment(reportsData[0].pteDateT).format("hh:mm A"),
+                          reportsData[0].ptStatus === "" ? "N/A" : reportsData[0].ptStatus,
+                          reportsData[0].wkfName];
+                      reprArr.push(arr)
+                  }
+                  let numberOfPages = reprArr.length / self.state.pageLimit;
+                  let dataBottomList = [];
+                  if (numberOfPages !== parseInt(numberOfPages)) {
+                      numberOfPages = parseInt(numberOfPages) + 1
+                  }
+
+                  for (let i = 0; i < numberOfPages; i++) {
+                      dataBottomList[i] = i + 1
+                  }
+
+                  self.setState({
+                      numberOfPages: numberOfPages,
+                      bottomPageIndicator: dataBottomList,
+                      tableData: reprArr,
+                      patrollingReport: reprArr,
+                      data: reprArr
+
+                  });
+
+                  self.changeTheData(self.state.pageNumber)
+
+              } else {
+                  self.setState({data: []})
+              }*/
         } catch (error) {
             base.utils.logger.log(error)
         }

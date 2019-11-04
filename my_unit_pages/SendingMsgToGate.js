@@ -106,6 +106,22 @@ class SendingMsgToGate extends Component {
         isLoading: false
       });
     }, 1500);
+
+    axios
+      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        }
+      })
+      .then(res => {
+        console.log(res.data, 'current time');
+        this.setState({ currentTime: res.data.data.currentDateTime });
+      })
+      .catch(error => {
+        console.log(error, 'erro_fetching_data');
+        this.setState({ currentTime: 'failed' });
+      });
   }
 
   componentDidUpdate() {
@@ -655,7 +671,7 @@ class SendingMsgToGate extends Component {
           .ref(`NotificationSync/A_${associationId}/${id}`)
           .update({
             newAttachment: true,
-            attachmentTime: anotherString
+            attachmentTime: this.state.currentTime
           });
         // alert('Success');
         this.setState({

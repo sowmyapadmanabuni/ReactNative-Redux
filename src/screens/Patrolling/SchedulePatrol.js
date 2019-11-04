@@ -343,6 +343,7 @@ class SchedulePatrol extends React.Component {
             PSPtrlSID: self.state.patrolId,
             PCIDs: pcids
         };
+        console.log("Detail on Updating Patrol:",detail);
         let stat = await base.services.OyeSafeApi.updatePatrol(detail);
         console.log("KHJDKVHDV<HDKJVDV<:", stat, detail);
         try {
@@ -480,6 +481,7 @@ class SchedulePatrol extends React.Component {
         let dayArr = this.state.days;
         let daysString = "";
         let patrolCheckPointID = "";
+        let currentDate = moment().format("YYYY-MM-DD");
         for (let i in dayArr) {
             if (dayArr[i].isSelected) {
                 daysString = daysString === "" ? daysString + dayArr[i].day : daysString + "," + dayArr[i].day
@@ -490,13 +492,28 @@ class SchedulePatrol extends React.Component {
             patrolCheckPointID = patrolCheckPointID === "" ? patrolCheckPointID + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID : patrolCheckPointID + "," + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID
         }
 
+        
         let startTime = moment(this.state.startTime).format("HH:mm");
         let endTime = moment(this.state.endTime).format("HH:mm");
-        console.log('Time at validation:', (this.state.startTime), (this.state.endTime));
+        let newStartTime = moment(currentDate+" "+startTime);
+        let newEndTime = moment(currentDate+" "+endTime)
+        console.log('Time at validation:', newStartTime.format("a"),newEndTime.format('a'));
+        let sT = newStartTime.format("a");
+        let eT = newEndTime.format("a");
+        if(sT === "am"){
+            if(eT === "am"){
 
-        console.log("Disfffff:", this.compareTime(startTime, endTime));
-        let diff = this.compareTime(startTime, endTime);
-        if (!diff) {
+            }
+            else{
+
+            }
+        }else{
+            
+        }
+
+        // console.log("Disfffff:", this.compareTime(newStartTime, newEndTime));
+        let diff = this.compareTime(newStartTime.format(), newEndTime.format());
+        if (diff) {
             alert("Patrol end time can not be earlier than or equal to patrol start time");
         } else if (daysString.length === 0) {
             alert("Please select patrolling days")
@@ -513,27 +530,28 @@ class SchedulePatrol extends React.Component {
 
 
     compareTime(startTime, endTime) {
-        let startTimeArr = startTime.split(":");
-        let endTimeArr = endTime.split(":");
-        console.log("Time Arr:", startTimeArr, endTimeArr);
+        // console.log("Start Time1:",startTime);
+        // console.log("End Time1:",endTime);
+        // console.log("Complete:",moment(startTime).format("DD-MM-YYYY,HH:mm")+'\n'+moment(endTime).format("DD-MM-YYYY,HH:mm"))
 
-        if (startTimeArr[0] > endTimeArr[0]) {
-            return false
-        } else if (startTimeArr[0] < endTimeArr[0]) {
-            return true
-        } else {
-            if (startTimeArr[1] > endTimeArr[1]) {
-                return false
-            } else if (startTimeArr[0] === endTimeArr[0]) {
-                if (startTimeArr[1] === endTimeArr[1]) {
-                    return false
-                } else {
-                    return true
-                }
-            } else {
-                return true
-            }
-        }
+        // console.log("Difference:",moment(startTime).isBefore(moment(endTime)))
+        // let startTimeArr = startTime.split(":");
+        // let endTimeArr = endTime.split(":");
+        // console.log("Time Arr:", startTimeArr, endTimeArr);
+
+        // if (startTimeArr[0] > endTimeArr[0]) {
+        //     return true
+        // } else if (startTimeArr[0] < endTimeArr[0]) {
+        //     return false
+        // } else {
+        //     if (startTimeArr[1] > endTimeArr[1]) {
+        //         return false
+        //     } else if (startTimeArr[0] === endTimeArr[0]) {
+        //         return startTimeArr[1] !== endTimeArr[1];
+        //     } else {
+        //         return true
+        //     }
+        // }
 
 
     }

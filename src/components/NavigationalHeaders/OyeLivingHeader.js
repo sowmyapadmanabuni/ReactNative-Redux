@@ -2,12 +2,12 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-10-07 12:10:39 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-07 12:14:16
+ * @Last Modified time: 2019-10-23 10:56:40
  */
 
 
 import React from 'react';
-import {BackHandler, Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { BackHandler, Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import base from '../../base';
 import {
     heightPercentageToDP as hp,
@@ -19,7 +19,7 @@ class OyeLivingHeader extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log("Props in OyeLivingHeader:",props)
+        console.log("Props in OyeLivingHeader:", props)
     }
 
     componentDidUpdate() {
@@ -40,21 +40,21 @@ class OyeLivingHeader extends React.Component {
 
     processBackPress() {
         console.log('Part');
-        const {goBack} = this.props.navigation;
+        const { goBack } = this.props.navigation;
         goBack(null);
     }
 
     render() {
-        console.log('Props@@@@@',this.props)
-        const {goBack} = this.props.navigation;
-        if(this.props.isOther){
-           return  null
+        console.log('Props@@@@@', this.props)
+        const { goBack } = this.props.navigation;
+        if (this.props.isOther) {
+            return null
         }
         else {
             return (
                 <View style={styles.container}>
-                    <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                        <View style={[styles.viewStyle, {flexDirection: 'row'}]}>
+                    <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                        <View style={[styles.viewStyle, { flexDirection: 'row' }]}>
                             <View style={styles.viewDetails1}>
                                 <TouchableOpacity
                                     onPress={() => {
@@ -89,15 +89,15 @@ class OyeLivingHeader extends React.Component {
                                     source={require('../../../icons/OyespaceSafe.png')}
                                 />
                             </View>
-                            <View style={{flex: 0.2}}>
+                            <View style={{ flex: 0.2 }}>
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
+                        <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
                     </SafeAreaView>
 
                     {this.props.isSub === true ?
-                        <View/> :
+                        <View /> :
                         <Text style={styles.titleOfScreen}> Expense Management </Text>
                     }
 
@@ -161,14 +161,14 @@ const styles = StyleSheet.create({
         width: widthPercentageToDP('20%'),
         fontFamily: base.theme.fonts.medium
     },
-    reportImage: {height: '50%', width: widthPercentageToDP('20%')},
+    reportImage: { height: '50%', width: widthPercentageToDP('20%') },
 
     viewStyle: {
         backgroundColor: '#fff',
         height: hp('7%'),
         width: Dimensions.get('screen').width,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         elevation: 2,
         position: 'relative'
