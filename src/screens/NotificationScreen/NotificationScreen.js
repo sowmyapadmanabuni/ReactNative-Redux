@@ -62,6 +62,10 @@ class NotificationScreen extends PureComponent {
     );
     this.doNetwork(null, this.props.notifications);
     firebase.notifications().removeAllDeliveredNotifications();
+    console.log(
+      `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
+      'timeeee'
+    );
     axios
       .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
         headers: {
@@ -373,29 +377,69 @@ class NotificationScreen extends PureComponent {
     oldNotif[index].opened = true;
     this.props.onGateApp(oldNotif);
 
-    let timeFormat = moment.utc().format();
-    let anotherString = timeFormat.replace(/Z/g, '');
-    console.log(anotherString, 'another_string');
-
     // let
 
     // alert(oldNotif[index].opened)
-
-    gateFirebase
-      .database()
-      .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-      .set({
+    console.log(
+      {
         buttonColor: '#75be6f',
         opened: true,
         newAttachment: false,
         visitorlogId: visitorId,
         updatedTime: this.state.currentTime
         // status:
+      },
+      'fireeeeeehfhfhfhf'
+    );
+
+    axios
+      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        }
       })
-      .then(() => {
-        //    if (item.opened) {
-        //      this.props.onNotificationOpen(notifications, index, oyeURL);
-        //    }
+      .then(res => {
+        console.log(res.data, 'current time');
+        this.setState({ currentTime: res.data.data.currentDateTime });
+
+        gateFirebase
+          .database()
+          .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+          .set({
+            buttonColor: '#75be6f',
+            opened: true,
+            newAttachment: false,
+            visitorlogId: visitorId,
+            updatedTime: res.data.data.currentDateTime
+            // status:
+          })
+          .then(() => {
+            //    if (item.opened) {
+            //      this.props.onNotificationOpen(notifications, index, oyeURL);
+            //    }
+          });
+      })
+      .catch(error => {
+        console.log(error, 'erro_fetching_data');
+        this.setState({ currentTime: 'failed' });
+
+        gateFirebase
+          .database()
+          .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+          .set({
+            buttonColor: '#75be6f',
+            opened: true,
+            newAttachment: false,
+            visitorlogId: visitorId,
+            updatedTime: null
+            // status:
+          })
+          .then(() => {
+            //    if (item.opened) {
+            //      this.props.onNotificationOpen(notifications, index, oyeURL);
+            //    }
+          });
       });
   };
 
