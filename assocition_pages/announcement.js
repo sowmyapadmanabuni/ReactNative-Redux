@@ -130,26 +130,35 @@ class Announcement extends Component {
       wavFile: 'test.wav'
     };
 
-    AudioRecord.init(options);
-
     // AudioRecord.on('data', data => {
     //   const chunk = Buffer.from(data, 'base64');
     //   console.log('chunk size', chunk.byteLength);
     //   // do something with audio chunk
     // });
+
+    if (Platform.OS === 'ios') {
+      AudioRecord.init(options);
+    }
   }
 
   checkPermission = async () => {
     const p = await PermissionsAndroid.check('microphone');
     console.log('permission check', p);
-    if (p === 'authorized') return;
+    if (p === 'granted') {
+      AudioRecord.init(options);
+      return;
+    }
     return this.requestPermission();
   };
 
   requestPermission = async () => {
     const p = await PermissionsAndroid.request('microphone');
+    if (p === 'granted') {
+      AudioRecord.init(options);
+    }
     console.log('permission request', p);
   };
+
   start = async () => {
     if (Platform.OS === 'android') {
       try {
