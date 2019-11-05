@@ -263,16 +263,19 @@ class App extends React.Component {
     // const time = item.vlEntryT;
     // const entertiming = time.subString();
     // console.log(entertiming);
+    var color = null;
+    let isButtonColorAvailable = false;
     gateFirebase
       .database()
       .ref(`NotificationSync/A_${item.asAssnID}/${item.vlVisLgID}`)
-      .once('value')
-      .then(snapshot => {
+      .on('value', function(snapshot) {
         let val = snapshot.val();
-        console.log(val, 'value_firebase');
-        this.setState({
-          buttonColor: val.buttonColor
-        });
+        if (val !== null) {
+          console.log(val, 'value_firebase');
+          color = val.buttonColor;
+          isButtonColorAvailable = color !== undefined && color !== null;
+          console.log('COLOR', color, isButtonColorAvailable);
+        }
       });
 
     return (
@@ -479,8 +482,9 @@ class App extends React.Component {
                   <Text style={{ color: '#38bcdb' }}>{item.vlComName}</Text>
                 </Text>
               </View>
-              {item.vlExitT === '0001-01-01T00:00:00' &&
-              this.state.buttonColor === '#75be6f' ? (
+              {(item.vlExitT === '0001-01-01T00:00:00' &&
+                isButtonColorAvailable) ||
+              color == '#75be6f' ? (
                 <View
                   style={{
                     justifyContent: 'center',

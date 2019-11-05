@@ -24,6 +24,10 @@ import {
 } from 'native-base';
 import ZoomImage from 'react-native-zoom-image';
 import axios from 'axios';
+
+import Sound from 'react-native-sound';
+import AudioRecord from 'react-native-audio-record';
+import RNFetchBlob from 'rn-fetch-blob';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -41,7 +45,6 @@ import base from '../../base';
 import { Easing } from 'react-native';
 import { connect } from 'react-redux';
 
-var audioRecorderPlayer;
 class NotificationAnnouncementDetailScreen extends Component {
   constructor(props) {
     super(props);
@@ -96,7 +99,12 @@ class NotificationAnnouncementDetailScreen extends Component {
       image4: '',
       image5: '',
       voice: '',
-      notes: ''
+      notes: '',
+
+      audioFile: '',
+      recording: false,
+      loaded: false,
+      paused: true
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -135,19 +143,58 @@ class NotificationAnnouncementDetailScreen extends Component {
     return true;
   }
 
-  onStatusPress = e => {
-    const touchX = e.nativeEvent.locationX;
-    console.log(`touchX: ${touchX}`);
-    const playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth.width - 56 * ratio);
-    console.log(`currentPlayWidth: ${playWidth}`);
+  load = () => {
+    return new Promise((resolve, reject) => {
+      if (!this.state.audioFile) {
+        return reject('file path is empty');
+      }
+
+      this.sound = new Sound(this.state.audioFile, '', error => {
+        if (error) {
+          console.log('failed to load the file', error);
+          return reject(error);
+        }
+        this.setState({ loaded: true });
+        return resolve();
+      });
+    });
+  };
+
+  play = async () => {
+    if (!this.state.loaded) {
+      try {
+        await this.load();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    this.setState({ paused: false, playBtnId: 1 });
+    Sound.setCategory('Playback');
+
+    this.sound.play(success => {
+      if (success) {
+        console.log('successfully finished playing');
+        this.setState({
+          playBtnId: 0
+        });
+      } else {
+        console.log('playback failed due to audio decoding errors');
+      }
+      this.setState({ paused: true, playBtnId: 1 });
+      // this.sound.release();
+    });
+  };
+
+  pause = () => {
+    this.sound.pause();
+    this.setState({ paused: true, playBtnId: 0 });
   };
 
   onStartPlay = async () => {
     const path = Platform.select({
-      ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4'
+      ios: 'hello.aac',
+      android: 'hello.aac'
     });
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
@@ -191,9 +238,10 @@ class NotificationAnnouncementDetailScreen extends Component {
     this.setState({
       isLoading: true
     });
+    //http://apidev.oyespace.com/oyesafe/api/v1/Announcement/GetAnnouncementDetailsByAssocAndAnnouncementID/%7BAssociationID%7D/%7BAnnouncementID%7D
     axios
       .get(
-        `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/GetAnnouncementDetailsByAssocAndAcntAndAnnouncementID/${associationid}/${accountid}/${notifyid}`,
+        `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/GetAnnouncementDetailsByAssocAndAnnouncementID/${associationid}/${notifyid}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -202,49 +250,91 @@ class NotificationAnnouncementDetailScreen extends Component {
         }
       )
       .then(response => {
-        console.log('Announcement_Dataaaa', response);
-        this.setState({
-          isLoading: false,
-          imageData: response.data.data.announcements[0].anImages,
-          image1:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[0],
-          image2:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[1],
-          image3:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[2],
-          image4:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[3],
-          image5:
-            'https://mediaupload.oyespace.com/' +
-            response.data.data.announcements[0].anImages.split(',')[4],
-          voice: response.data.data.announcements[0].anVoice,
-          notes: response.data.data.announcements[0].anCmnts
-        });
-        console.log('Announcement_Data', response.data.data.announcements[0]);
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[0]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[1]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[2]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[4]
-        );
-        console.log(
-          'Announcement_Data',
-          response.data.data.announcements[0].anImages.split(',')[3]
-        );
+        console.log('Announcement_response', response);
+        let accounceDetails = response.data.data.announcements[0];
+
+        RNFetchBlob.config({
+          fileCache: true,
+          // by adding this option, the temp files will have a file extension
+          appendExt: 'wav'
+        })
+          .fetch(
+            'GET',
+            `http://mediaupload.oyespace.com/${accounceDetails.anVoice}`,
+            {
+              //some headers ..
+            }
+          )
+          .then(res => {
+            // the temp file path with file extension `png`
+            console.log('The file saved to ', res.path());
+
+            console.log('Announcement_Dataaaa', response);
+            this.setState({
+              isLoading: false,
+              imageData: response.data.data.announcements[0].anImages,
+              image1:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[0],
+              image2:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[1],
+              image3:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[2],
+              image4:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[3],
+              image5:
+                'https://mediaupload.oyespace.com/' +
+                response.data.data.announcements[0].anImages.split(',')[4],
+              voice: response.data.data.announcements[0].anVoice,
+              notes: response.data.data.announcements[0].anCmnts
+            });
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[0]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[1]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[2]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[4]
+            );
+            console.log(
+              'Announcement_Data',
+              response.data.data.announcements[0].anImages.split(',')[3]
+            );
+
+            this.setState({
+              audioFile:
+                Platform.OS === 'android'
+                  ? 'file://' + res.path()
+                  : '' + res.path()
+            });
+            // Beware that when using a file path as Image source on Android,
+            // you must prepend "file://"" before the file path
+            // imageView = (
+            //   <Image
+            //     source={{
+            //       uri:
+            //         Platform.OS === 'android'
+            //           ? 'file://' + res.path()
+            //           : '' + res.path()
+            //     }}
+            //   />
+            // );
+          });
       }).catch = e => {
       console.log(e);
     };
@@ -409,14 +499,14 @@ class NotificationAnnouncementDetailScreen extends Component {
                 ) : (
                   <View>
                     {this.state.playBtnId === 0 ? (
-                      <TouchableOpacity onPress={() => this.onStartPlay()}>
+                      <TouchableOpacity onPress={() => this.play()}>
                         <Image
                           source={require('../../../icons/leave_vender_play.png')}
                         />
                       </TouchableOpacity>
                     ) : (
                       <View>
-                        <TouchableOpacity onPress={() => this.onStopPlay()}>
+                        <TouchableOpacity onPress={() => this.pause()}>
                           <Image
                             source={require('../../../icons/leave_vender_stopcopy.png')}
                           />
