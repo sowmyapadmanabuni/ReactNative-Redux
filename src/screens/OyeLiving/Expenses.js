@@ -140,8 +140,8 @@ class Expenses extends React.Component {
             exVoucherNo:'', //
             exDDNo   : '', // min 6 digits max 12
             exDDDate : _dt ,//it should allow past date upto 3 months from current date,
-            inCopyListExp:[{},{},{},{},{}]
-
+            inCopyListExp:[],
+            expenseListByIds:[],
         };
 
         this.bindComponent = this.bindComponent.bind(this);
@@ -538,36 +538,57 @@ class Expenses extends React.Component {
     }
 
     async filterExpListByDates(){
-        console.log('Selected dates',this.state.fromDate,this.state.toDate,moment(this.state.fromDate).format('YYYY-MM-DD'),
-            moment(this.state.toDate).format('YYYY-MM-DD'))
+        console.log('Selected dates',this.state.fromDate,this.state.toDate)
         let self=this;
-        self.setState({isLoading:true})
-        let input = {
-            "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
-            "BLBlockID"    : self.state.blockId,
-            "startdate"    :moment(self.state.fromDate).format('YYYY-MM-DD'),
-            "enddate"    :moment(self.state.toDate).format('YYYY-MM-DD')
-    };
-        console.log('Selected dates',input);
-        let stat = await base.services.OyeLivingApi.getTheExpenseListByDates(input)
-        self.setState({isLoading:false})
-        console.log('data from the stat',stat)
-        try{
-            if (stat.success && stat.data.expense.length !== 0) {
-                let expensesList = stat.data.expense;
+        if(moment(self.state.fromDate).format('YYYY-MM-DD') !="Invalid date" && moment(self.state.toDate).format('YYYY-MM-DD') !="Invalid date"){
+            self.setState({isLoading:true})
+            let input = {
+                "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
+                "BLBlockID"    : self.state.blockId,
+                "startdate"    :moment(self.state.fromDate).format('YYYY-MM-DD'),
+                "enddate"    :moment(self.state.toDate).format('YYYY-MM-DD')
+            };
+            console.log('Selected dates',input);
+            let stat = await base.services.OyeLivingApi.getTheExpenseListByDates(input)
+            self.setState({isLoading:false})
+            console.log('data from the stat',stat)
+            try{
                 let newList = []
-                for (let i = 0; i < expensesList.length; i++) {
-                    newList.push({item: expensesList[i], open: false,isChecked:false})
+
+                if (stat.success && stat.data.expense.length !== 0) {
+                    let expensesList = stat.data.expense;
+                    for (let i = 0; i < expensesList.length; i++) {
+                        let imageString= expensesList[i].exPyCopy
+                        let imageArray=imageString==''?[]:imageString.split(',');
+                        let img=[];
+                        for(let j=0;j<imageArray.length;j++){
+                            let imgType=imageArray.length !=0?imageArray[j].split('.'):[];
+                            img.push({fileUrl:imageArray[j],isUpload:true,type:imgType[1]=="pdf"?'Pdf':'Image'})
+                        }
+                        expensesList[i].imgArray=img
+                        console.log('Expense List@@@@#######', expensesList[i] )
+                        newList.push({item: expensesList[i], open: false,isChecked:false})
+                    }
+
+                    console.log('@@@@@@>>>>>>>>>>>#######', newList)
+
+                    self.setState({
+                        expListByDates:newList,
+                    });
+                    self.getSelectedInvoices(self.state.isTabSelected,newList)
+
                 }
+                else{
+                    self.getSelectedInvoices(self.state.isTabSelected,newList)
+                }
+            }catch(error){
                 self.setState({
-                    expListByDates: newList,
-                });
+                    expListByDates:[],
+                    expensesList:[]
+                })
+                console.log('error',error)
             }
-        }catch(error){
-            self.setState({
-                expListByDates:[]
-            })
-          console.log('error',error)
+
         }
 
 
@@ -631,9 +652,37 @@ class Expenses extends React.Component {
         }
 
     }
+    async generateInvoicesByExpIds(){
+
+
+        let self = this;
+        let associationId = self.props.userReducer.SelectedAssociationID;
+        console.log('Get the Details for generate invoice', self.props,associationId,self.state.blockId)
+       let input={
+            "ASAssnID" : associationId ,
+            "BlockID"  : self.state.blockId,
+            "expenses" :self.state.expenseListByIds
+        };
+
+        let stat = await base.services.OyeLivingApi.generateInvoiceByExpIds(input); // 1, 4
+        console.log("Stat in generate invoices:",stat);
+        try {
+            if (stat.success) {
+                Alert.alert('Invoices generated successfully')
+                await self.getTheExpenseList(self.state.selectedBlock, self.state.getIndex)
+            } else {
+                Alert.alert(stat.error.message)
+            }
+        }catch(error){
+            console.log(error);
+            Alert.alert('No Expenses To Be Invoiced')
+        }
+
+    }
+
 
     render() {
-        console.log("State:@@@@@@", this.state.expensesList,this.state.expensesAllList)
+        console.log("State:@@@@@@#########",this.state)
         return (
             <TouchableOpacity  onPress={() =>{this.clearTheFilters(this.state.isTabSelected,this.state.expensesAllList)}} disabled={!this.state.isModalVisible}>
             <View style={{
@@ -643,7 +692,7 @@ class Expenses extends React.Component {
             }}>
                 {this.state.isTabSelected !==0?
                 <TouchableOpacity style={{width:'100%',justifyContent:'flex-end',alignItems:'flex-end',height:25,paddingRight:15,alignSelf:'flex-end',}} onPress={() => {
-                   this.generateInvoices()
+                    this.state.expenseListByIds.length===0? Alert.alert('Please select expense to generate invoice'): this.generateInvoicesByExpIds()
                 }}>
                     <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
                 </TouchableOpacity>
@@ -1926,7 +1975,7 @@ class Expenses extends React.Component {
                                     </TouchableOpacity>
                                     {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(2) : <View/>}
                                 </View>
-                                <View style={AddExpenseStyles.textInputView}>
+                                {/*<View style={AddExpenseStyles.textInputView}>
                                     <Text style={{
                                         fontSize: 14,
                                         color: base.theme.colors.black,
@@ -1954,7 +2003,7 @@ class Expenses extends React.Component {
                                         keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
                                         maxLength={20}
                                     />
-                                </View>
+                                </View>*/}
                                 <View style={[AddExpenseStyles.textInputView, {paddingTop: 25, paddingBottom: 10}]}>
                                     <Text style={{
                                         fontSize: 14,
@@ -2180,6 +2229,8 @@ class Expenses extends React.Component {
     showPicker = async (stateKey, options) => {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open(options);
+            console.log('DATES IS COMING#######', this.state.selType)
+
             if (action !== DatePickerAndroid.dismissedAction) {
                 let date = new Date(year, month, day);
                 if (this.state.selType === 1) {
@@ -2328,6 +2379,7 @@ class Expenses extends React.Component {
             for (let i = 0; i < expensesList.length; i++) {
                 console.log('Id###########2222', id, expensesList,expensesList[i].item.exIsInvD);
                 if (expensesList[i].item.exIsInvD) {
+                    expensesList[i].isChecked=false
                     listOfExpenses[j] = expensesList[i]
                     j = j + 1;
                 }
@@ -2337,28 +2389,46 @@ class Expenses extends React.Component {
             for (let i = 0; i < expensesList.length; i++) {
                 console.log('Id###########33333', id, expensesList);
                 if (!expensesList[i].item.exIsInvD) {
+                    expensesList[i].isChecked=false
                     listOfExpenses[j] = expensesList[i];
                     j = j + 1;
                 }
             }
         } else if (id === 2) {
             console.log('Id###########44444', id, expensesList);
+            let j=0;
+            for (let i = 0; i < expensesList.length; i++) {
+                console.log('Id###########444444', id, expensesList);
+                expensesList[i].isChecked=false
+                listOfExpenses[j] = expensesList[i];
+                j = j + 1;
+            }
 
-            listOfExpenses = expensesList;
         }
-
         console.log('Expenses List', id, listOfExpenses)
-
         self.setState({
             isLoading:false,
             isTabSelected:id,
             expensesList: listOfExpenses
         })
     }
+
     checkTheExpense=(index,value)=>{
         let data = [...this.state.expensesList];
         data[index].isChecked = !value;
-        this.setState({expensesList: data});
+
+        let listOfExp=data;
+        console.log('Get the Details ', listOfExp)
+        let arr=[]
+        for(let i=0;i<listOfExp.length;i++){
+            if(listOfExp[i].isChecked){
+                arr.push({"EXID":listOfExp[i].item.exid})
+            }
+        }
+        console.log('Get the list by jjgjgj',arr)
+
+        this.setState({expensesList: data,
+            expenseListByIds:arr});
     };
 
 
@@ -2376,8 +2446,9 @@ class Expenses extends React.Component {
             }}
                               onPress={() => this.toggleCollapsible(item.index, item.item.open)}>
                 <View style={{flexDirection: 'row', marginTop: 10}}>
-                    {/*<View style={{flexDirection:'row',width:'10%',padding:5,alignItems:'center',justifyContent:'center',alignSelf:'center'}}>
-                    <CheckBox
+                  {!item.item.item.exIsInvD ?
+                        <View style={{flexDirection:'row',width:'10%',padding:5,alignItems:'center',justifyContent:'center',alignSelf:'center'}}>
+                     <CheckBox
                         style={{flex: 1,
                             }}
                         checkBoxColor={base.theme.colors.grey}
@@ -2386,7 +2457,11 @@ class Expenses extends React.Component {
                             this.checkTheExpense(item.index,item.item.isChecked)
                         }}
                         isChecked={item.item.isChecked} />
-                    </View>*/}
+
+                    </View>
+                        :
+                        <View/>}
+
                     <View style={{marginLeft:5}}>
                         <Image
                             style={{height: 25, width: 25,}}
@@ -2412,8 +2487,10 @@ class Expenses extends React.Component {
                                 <Text style={{fontWeight: 'bold'}}> {selectedExpense.exApplTO}</Text></Text>
                             <Text style={{fontSize: 13, color: base.theme.colors.black}}>Added By:
                                 <Text style={{fontWeight: 'bold'}}> {this.props.userReducer.MyFirstName}</Text></Text>
-
-
+                            {item.item.item.exIsInvD && selectedExpense.inNumber?
+                            <Text style={{fontSize: 13, color: base.theme.colors.black}}>Invoice Number:
+                                <Text style={{fontWeight: 'bold'}}> {selectedExpense.inNumber}</Text></Text>
+                                :<View/>}
                         </Collapsible>
                     </View>
                     <View style={{marginLeft:1, marginRight: 5,width:'20%'}}>
@@ -2422,7 +2499,7 @@ class Expenses extends React.Component {
 
                 </View>
                 <Collapsible duration={100} collapsed={!item.item.open}>
-                    {item.item.item.imgArray.length !== 0 ?
+                   {item.item.item.imgArray.length !== 0 ?
                         <View style={{
                         borderRadius: 5,
                         flexDirection: 'row',

@@ -593,15 +593,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    // timer.setInterval(
-    //   this,
-    //   'syncData',
-    //   () => {
-    //     this.syncData();
+    /* timer.setInterval(
+       this,
+      'syncData',
+      () => {
+       this.syncData();
     //     //     // alert("hererereerrrereer");
-    //   },
-    //   5000
-    // );
+       },
+       5000
+     );*/
   }
 
   async roleCheckForAdmin(index) {
