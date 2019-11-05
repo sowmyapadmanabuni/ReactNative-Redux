@@ -363,7 +363,7 @@ class AddVehicle extends Component {
                                     style={{
                                         right: 19,
                                         textAlign: 'left',
-                                        fontFamily: base.theme.fonts.light,
+                                        // fontFamily: base.theme.fonts.light,
                                         fontSize: hp('2.5%')
                                     }}
                                     value={'Select Parking lot'}

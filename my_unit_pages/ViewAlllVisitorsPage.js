@@ -832,7 +832,7 @@ const styles = StyleSheet.create({
     },
     unitTextStyle: {
         fontSize: hp("1.5%"),fontWeight:'bold',
-        fontFamily: base.theme.fonts.bold, 
+        // fontFamily: base.theme.fonts.bold, 
         marginBottom: 6, 
     },
     subNameTextStyleOne: {
