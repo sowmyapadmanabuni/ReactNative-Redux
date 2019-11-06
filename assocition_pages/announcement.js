@@ -453,11 +453,16 @@ class Announcement extends Component {
   uploadAudio = async result => {
     const newUri = result.replace('file://', 'file:///');
 
-    console.log('Audio', result);
-    const path = Platform.OS === 'ios' ? result : newUri;
-    console.log('PATH', path);
+    // alert(JSON.stringify(result));
 
+    console.log('Audio', result);
+    const path = Platform.OS === 'ios' ? result : `file://${result}`;
+    // console.log('PATH', path);
+
+    alert(JSON.stringify(path));
     const formData = new FormData();
+
+    // alert(JSON.stringify(stat));
 
     formData.append('file', {
       uri: path,
@@ -475,6 +480,7 @@ class Announcement extends Component {
       console.log(e);
     }
 
+    alert(JSON.stringify(stat));
     console.log('Stat222222222222222222222222, UPLOAD:', stat);
   };
 
