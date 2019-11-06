@@ -59,6 +59,7 @@
     "react-native-material-textfield": "^0.12.0",
     "react-native-modal": "^11.1.0",
     "react-native-modal-datetime-picker": "^6.0.0",
+    "react-native-permissions": "^2.0.3",
     "react-native-phone-input": "^0.2.1",
     "react-native-qrcode-svg": "^5.2.0",
     "react-native-responsive-screen": "^1.2.0",

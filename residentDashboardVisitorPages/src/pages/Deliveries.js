@@ -482,8 +482,8 @@ class App extends React.Component {
                   <Text style={{ color: '#38bcdb' }}>{item.vlComName}</Text>
                 </Text>
               </View>
-              {(item.vlExitT === '0001-01-01T00:00:00' &&
-                isButtonColorAvailable) ||
+              {item.vlExitT === '0001-01-01T00:00:00' &&
+              isButtonColorAvailable &&
               color == '#75be6f' ? (
                 <View
                   style={{

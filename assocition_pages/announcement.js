@@ -34,7 +34,7 @@ import axios from 'axios';
 
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
-
+import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 // import AudioRecorderPlayer, {
 //   AVEncoderAudioQualityIOSType,
 //   AVEncodingOption,
@@ -53,6 +53,13 @@ import { connect } from 'react-redux';
 import utils from '../src/base/utils';
 
 // var audioRecorderPlayer;
+
+const options = {
+  sampleRate: 44100,
+  channels: 1,
+  bitsPerSample: 16,
+  wavFile: 'test.wav'
+};
 
 class Announcement extends Component {
   sound = null;
@@ -108,7 +115,9 @@ class Announcement extends Component {
       audioFile: '',
       recording: false,
       loaded: false,
-      paused: true
+      paused: true,
+
+      timestamp: ''
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
     // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -123,84 +132,81 @@ class Announcement extends Component {
       });
     }, 1500);
 
-    const options = {
-      sampleRate: 44100,
-      channels: 1,
-      bitsPerSample: 16,
-      wavFile: 'test.wav'
-    };
-
     AudioRecord.init(options);
-
-    // AudioRecord.on('data', data => {
-    //   const chunk = Buffer.from(data, 'base64');
-    //   console.log('chunk size', chunk.byteLength);
-    //   // do something with audio chunk
-    // });
   }
 
   checkPermission = async () => {
-    const p = await PermissionsAndroid.check('microphone');
-    console.log('permission check', p);
-    if (p === 'authorized') return;
-    return this.requestPermission();
+    AudioRecord.init(options);
+    if (Platform.OS === 'android') {
+      check(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            this.requestPermission();
+            console.log(
+              'This feature is not available (on this device / in this context)'
+            );
+            break;
+          case RESULTS.DENIED:
+            this.requestPermission();
+            console.log(
+              'The permission has not been requested / is denied but requestable'
+            );
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      });
+    } else {
+      check(PERMISSIONS.IOS.MICROPHONE).then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            this.requestPermission();
+            console.log(
+              'This feature is not available (on this device / in this context)'
+            );
+            break;
+          case RESULTS.DENIED:
+            this.requestPermission();
+            console.log(
+              'The permission has not been requested / is denied but requestable'
+            );
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      });
+    }
   };
 
   requestPermission = async () => {
-    const p = await PermissionsAndroid.request('microphone');
-    console.log('permission request', p);
+    AudioRecord.init(options);
+    if (Platform.OS === 'ios') {
+      request(PERMISSIONS.IOS.MICROPHONE).then(result => {});
+    } else {
+      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {});
+    }
   };
+
   start = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the storage');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the camera');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-    console.log('start record');
+    // AudioRecord.init(options);
+    // setTimeout(() => {
+    AudioRecord.init(options);
+    AudioRecord.start();
     this.setState({
       audioFile: '',
       recording: true,
       loaded: false,
       buttonId: 2
     });
-    AudioRecord.start();
+    this.timeStamp();
   };
 
   stop = async () => {
@@ -210,6 +216,13 @@ class Announcement extends Component {
     console.log('audioFile', audioFile);
     this.setState({ audioFile, recording: false, buttonId: 1, playBtnId: 1 });
     this.uploadAudio(audioFile);
+  };
+
+  timeStamp = () => {
+    var time = Math.floor(Date.now());
+    this.setState({
+      timestamp: time
+    });
   };
 
   load = () => {
@@ -440,15 +453,20 @@ class Announcement extends Component {
   uploadAudio = async result => {
     const newUri = result.replace('file://', 'file:///');
 
-    console.log('Audio', result);
-    const path = Platform.OS === 'ios' ? result : newUri;
-    console.log('PATH', path);
+    // alert(JSON.stringify(result));
 
+    console.log('Audio', result);
+    const path = Platform.OS === 'ios' ? result : `file://${result}`;
+    // console.log('PATH', path);
+
+    alert(JSON.stringify(path));
     const formData = new FormData();
+
+    // alert(JSON.stringify(stat));
 
     formData.append('file', {
       uri: path,
-      name: 'hello.wav',
+      name: `${this.state.timestamp}hello.wav`,
       type: 'audio/wav'
     });
 
@@ -459,9 +477,10 @@ class Announcement extends Component {
         mp3: stat
       });
     } catch (e) {
-      console.log(e);
+      console.log('Errorrrrrrrrrrrrrr', e);
     }
 
+    alert(JSON.stringify(stat));
     console.log('Stat222222222222222222222222, UPLOAD:', stat);
   };
 
@@ -487,166 +506,166 @@ class Announcement extends Component {
     );
   }
 
-  onStartRecord = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the storage');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the camera');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
+  // onStartRecord = async () => {
+  //   if (Platform.OS === 'android') {
+  //     try {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  //         {
+  //           title: 'Permissions for write access',
+  //           message: 'Give permission to your storage to write a file',
+  //           buttonPositive: 'ok'
+  //         }
+  //       );
+  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //         console.log('You can use the storage');
+  //       } else {
+  //         console.log('permission denied');
+  //         return;
+  //       }
+  //     } catch (err) {
+  //       console.warn(err);
+  //       return;
+  //     }
+  //   }
+  //   if (Platform.OS === 'android') {
+  //     try {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+  //         {
+  //           title: 'Permissions for write access',
+  //           message: 'Give permission to your storage to write a file',
+  //           buttonPositive: 'ok'
+  //         }
+  //       );
+  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //         console.log('You can use the camera');
+  //       } else {
+  //         console.log('permission denied');
+  //         return;
+  //       }
+  //     } catch (err) {
+  //       console.warn(err);
+  //       return;
+  //     }
+  //   }
 
-    const dirs = RNFetchBlob.fs.dirs;
+  //   const dirs = RNFetchBlob.fs.dirs;
 
-    console.log(dirs.MusicDir, 'dir');
+  //   console.log(dirs.MusicDir, 'dir');
 
-    const path = Platform.select({
-      ios: 'hello.mp4',
-      android: 'sdcard/hello.mp4'
-      // android: `${dirs.MusicDir}/announcement/hello.mp4` //here?
-    });
+  //   const path = Platform.select({
+  //     ios: 'hello.mp4',
+  //     android: 'sdcard/hello.mp4'
+  //     // android: `${dirs.MusicDir}/announcement/hello.mp4` //here?
+  //   });
 
-    const audioSet = {
-      AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-      AudioSourceAndroid: AudioSourceAndroidType.MIC,
-      AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-      AVNumberOfChannelsKeyIOS: 2,
-      AVFormatIDKeyIOS: AVEncodingOption.aac
-    };
-    // console.log('audioSet', audioSet);
-    const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
+  //   const audioSet = {
+  //     AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+  //     AudioSourceAndroid: AudioSourceAndroidType.MIC,
+  //     AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+  //     AVNumberOfChannelsKeyIOS: 2,
+  //     AVFormatIDKeyIOS: AVEncodingOption.aac
+  //   };
+  //   // console.log('audioSet', audioSet);
+  //   const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
 
-    // console.log(uri, 'URI_PATH');
+  //   // console.log(uri, 'URI_PATH');
 
-    this.audioRecorderPlayer.addRecordBackListener(e => {
-      this.setState({
-        recordSecs: e.current_position,
-        recordTime: this.audioRecorderPlayer.mmssss(
-          Math.floor(e.current_position)
-        ),
-        buttonId: 2
-      });
-    });
-    // alert('Recording Started');
-    // console.log(`uri: ${uri}`);
-  };
+  //   this.audioRecorderPlayer.addRecordBackListener(e => {
+  //     this.setState({
+  //       recordSecs: e.current_position,
+  //       recordTime: this.audioRecorderPlayer.mmssss(
+  //         Math.floor(e.current_position)
+  //       ),
+  //       buttonId: 2
+  //     });
+  //   });
+  //   // alert('Recording Started');
+  //   // console.log(`uri: ${uri}`);
+  // };
 
-  onStopRecord = async () => {
-    const result = await this.audioRecorderPlayer.stopRecorder();
-    this.audioRecorderPlayer.removeRecordBackListener();
-    this.setState({
-      recordSecs: 0,
-      buttonId: 1,
-      playBtnId: 1,
+  // onStopRecord = async () => {
+  //   const result = await this.audioRecorderPlayer.stopRecorder();
+  //   this.audioRecorderPlayer.removeRecordBackListener();
+  //   this.setState({
+  //     recordSecs: 0,
+  //     buttonId: 1,
+  //     playBtnId: 1,
 
-      mp3uri: result
-    });
-    // alert('Recording Stop');
-    // console.log('.substring(14, 23)', result.substring(14, 23));
-    // console.log('this state uri', this.state.mp3uri);
-    // this.uploadAudio(result.match('hello.m4a') || result.match('hello.mp3'));
-    this.uploadAudio(result);
-  };
+  //     mp3uri: result
+  //   });
+  //   // alert('Recording Stop');
+  //   // console.log('.substring(14, 23)', result.substring(14, 23));
+  //   // console.log('this state uri', this.state.mp3uri);
+  //   // this.uploadAudio(result.match('hello.m4a') || result.match('hello.mp3'));
+  //   this.uploadAudio(result);
+  // };
 
-  onStatusPress = e => {
-    const touchX = e.nativeEvent.locationX;
-    console.log(`touchX: ${touchX}`);
-    const playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth - 56 * ratio);
-    console.log(`currentPlayWidth: ${playWidth}`);
+  // onStatusPress = e => {
+  //   const touchX = e.nativeEvent.locationX;
+  //   console.log(`touchX: ${touchX}`);
+  //   const playWidth =
+  //     (this.state.currentPositionSec / this.state.currentDurationSec) *
+  //     (screenWidth - 56 * ratio);
+  //   console.log(`currentPlayWidth: ${playWidth}`);
 
-    const currentPosition = Math.round(this.state.currentPositionSec);
-    console.log(`currentPosition: ${currentPosition}`);
+  //   const currentPosition = Math.round(this.state.currentPositionSec);
+  //   console.log(`currentPosition: ${currentPosition}`);
 
-    if (playWidth && playWidth < touchX) {
-      const addSecs = Math.round(currentPosition + 3000);
-      this.audioRecorderPlayer.seekToPlayer(addSecs);
-      console.log(`addSecs: ${addSecs}`);
-    } else {
-      const subSecs = Math.round(currentPosition - 3000);
-      this.audioRecorderPlayer.seekToPlayer(subSecs);
-      console.log(`subSecs: ${subSecs}`);
-    }
-  };
+  //   if (playWidth && playWidth < touchX) {
+  //     const addSecs = Math.round(currentPosition + 3000);
+  //     this.audioRecorderPlayer.seekToPlayer(addSecs);
+  //     console.log(`addSecs: ${addSecs}`);
+  //   } else {
+  //     const subSecs = Math.round(currentPosition - 3000);
+  //     this.audioRecorderPlayer.seekToPlayer(subSecs);
+  //     console.log(`subSecs: ${subSecs}`);
+  //   }
+  // };
 
-  onStartPlay = async () => {
-    // this.setState({
-    //   playBtnId: 2
-    // });
-    // console.log('Play Button', this.state.playBtnId);
-    const path = Platform.select({
-      ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4'
-    });
-    const msg = await this.audioRecorderPlayer.startPlayer(path);
-    console.log('Message', msg);
-    this.audioRecorderPlayer.setVolume(1.0);
-    console.log(msg);
-    this.audioRecorderPlayer.addPlayBackListener(e => {
-      if (e.current_position === e.duration) {
-        console.log('finished');
-        this.audioRecorderPlayer.stopPlayer();
-        this.setState({
-          playBtnId: 2
-        });
-      }
-      this.setState({
-        currentPositionSec: e.current_position,
-        currentDurationSec: e.duration,
-        playTime: this.audioRecorderPlayer.mmssss(
-          Math.floor(e.current_position)
-        ),
-        duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)),
-        playBtnId: 2
-      });
-      console.log('Play Button Id', this.state.playTime);
-    });
-  };
+  // onStartPlay = async () => {
+  //   // this.setState({
+  //   //   playBtnId: 2
+  //   // });
+  //   // console.log('Play Button', this.state.playBtnId);
+  //   const path = Platform.select({
+  //     ios: 'hello.m4a',
+  //     android: 'sdcard/hello.mp4'
+  //   });
+  //   const msg = await this.audioRecorderPlayer.startPlayer(path);
+  //   console.log('Message', msg);
+  //   this.audioRecorderPlayer.setVolume(1.0);
+  //   console.log(msg);
+  //   this.audioRecorderPlayer.addPlayBackListener(e => {
+  //     if (e.current_position === e.duration) {
+  //       console.log('finished');
+  //       this.audioRecorderPlayer.stopPlayer();
+  //       this.setState({
+  //         playBtnId: 2
+  //       });
+  //     }
+  //     this.setState({
+  //       currentPositionSec: e.current_position,
+  //       currentDurationSec: e.duration,
+  //       playTime: this.audioRecorderPlayer.mmssss(
+  //         Math.floor(e.current_position)
+  //       ),
+  //       duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)),
+  //       playBtnId: 2
+  //     });
+  //     console.log('Play Button Id', this.state.playTime);
+  //   });
+  // };
 
-  onStopPlay = async () => {
-    this.audioRecorderPlayer.stopPlayer();
-    this.audioRecorderPlayer.removePlayBackListener();
-    this.setState({
-      playBtnId: 1,
-      buttonId: 1
-    });
-  };
+  // onStopPlay = async () => {
+  //   this.audioRecorderPlayer.stopPlayer();
+  //   this.audioRecorderPlayer.removePlayBackListener();
+  //   this.setState({
+  //     playBtnId: 1,
+  //     buttonId: 1
+  //   });
+  // };
 
   datasend = () => {
     let self = this;
@@ -1552,7 +1571,6 @@ class Announcement extends Component {
             <View style={{ marginTop: hp('2%'), marginBottom: hp('1%') }}>
               <Text style={{ fontSize: hp('1.8%') }}>Comment *</Text>
             </View>
-
             <View
               style={{
                 borderColor: base.theme.colors.primary,

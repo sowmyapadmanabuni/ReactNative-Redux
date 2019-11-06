@@ -268,6 +268,7 @@ class NotificationAnnouncementDetailScreen extends Component {
           .then(res => {
             // the temp file path with file extension `png`
             console.log('The file saved to ', res.path());
+            // alert(JSON.stringify(res.path()));
 
             console.log('Announcement_Dataaaa', response);
             this.setState({
@@ -316,11 +317,15 @@ class NotificationAnnouncementDetailScreen extends Component {
               response.data.data.announcements[0].anImages.split(',')[3]
             );
 
+            // this.setState({
+            //   audioFile:
+            //     Platform.OS === 'android'
+            //       ? 'file://' + res.path()
+            //       : '' + res.path()
+            // });
+
             this.setState({
-              audioFile:
-                Platform.OS === 'android'
-                  ? 'file://' + res.path()
-                  : '' + res.path()
+              audioFile: res.path()
             });
             // Beware that when using a file path as Image source on Android,
             // you must prepend "file://"" before the file path
