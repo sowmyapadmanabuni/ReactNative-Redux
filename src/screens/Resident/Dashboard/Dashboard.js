@@ -586,14 +586,14 @@ class Dashboard extends PureComponent {
     //         }
     //     });
 
-    //Adding an event listner om focus
+    //Adding an event listner on focus
     //So whenever the screen will have focus it will set the state to zero
 
     if (!this.props.called) {
       this.didMount();
     }
 
-    /* timer.setInterval(
+     timer.setInterval(
        this,
       'syncData',
       () => {
@@ -601,7 +601,7 @@ class Dashboard extends PureComponent {
     //     //     // alert("hererereerrrereer");
        },
        5000
-     );*/
+     );
   }
 
   async roleCheckForAdmin(index) {

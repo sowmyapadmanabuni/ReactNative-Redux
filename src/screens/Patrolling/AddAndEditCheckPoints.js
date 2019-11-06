@@ -202,7 +202,7 @@ class AddAndEditCheckPoints extends React.Component {
                                     {cancelable: false}
                                 )
                             },
-                            {enableHighAccuracy: false, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
+                            {enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
                         );
                     } else {
                         console.log("Permission deny");
@@ -240,7 +240,7 @@ class AddAndEditCheckPoints extends React.Component {
                         longitudeDelta: LONGITUDE_DELTA,
                         latitudeDelta: LATITUDE_DELTA,
                     },
-                    gpsLocation: parseFloat(LocationData.latitude).toFixed(5) + "," + parseFloat(LocationData.longitude).toFixed(5),
+                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
                     locationArrStored: locationArrStored
                 },()=>this.renderUserLocation())
             },
@@ -248,7 +248,7 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log(error);
             },
             {
-                enableHighAccuracy: false,
+                enableHighAccuracy: true,
                 distanceFilter: 1,
                 interval: 5000,
                 fastestInterval: 2000,
@@ -597,7 +597,7 @@ class AddAndEditCheckPoints extends React.Component {
                         alignSelf: 'center',
                         justifySelf:'center',
                         justifyContent:'center',
-                         width: wp('55%'),
+                         //width: wp('55%'),
                          borderRadius:hp('20'),
                          flexDirection:'row',
                          height:hp('50%'),

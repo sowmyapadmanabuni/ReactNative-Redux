@@ -55,6 +55,7 @@ let dt = new Date();
 dt.setDate(dt.getDate());
 let _dt = dt;
 
+
 class Expenses extends React.Component {
     constructor(props) {
         super(props);
@@ -99,16 +100,16 @@ class Expenses extends React.Component {
             expApplicabilityId: '',
             expType: [{value: 'Fixed', details: 'E1'}, {value: 'Variable', details: 'E2'}],
             distributionType: [{value: 'Dimension Based', details: 'D1'}, {value: 'Per Unit', details: 'D2'}],
-            selectBankList: [{value: 'SBI', details: 'B1'}, {value: 'Andra Bank', details: 'B2'}, {
-                value: 'ICICI Bank',
+            selectBankList: [{value: 'SBI', details: 'B1'}, {value: 'ANDRA BANK', details: 'B2'}, {
+                value: 'ICICI BANK',
                 details: 'B3'
-            }, {value: 'HDFC Bank', details: 'B3'},
-                {value: 'AXIS Bank', details: 'B5'}, {value: 'Canera Bank', details: 'B6'}],
-            payeeBankList: [{value: 'SBI', details: 'B1'}, {value: 'Andra Bank', details: 'B2'}, {
-                value: 'ICICI Bank',
+            }, {value: 'HDFC BANK', details: 'B3'},
+                {value: 'AXIS BANK', details: 'B5'}, {value: 'CANARA BANK', details: 'B6'}],
+            payeeBankList: [{value: 'SBI', details: 'B1'}, {value: 'ANDRA BANK', details: 'B2'}, {
+                value: 'ICICI BANK',
                 details: 'B3'
-            }, {value: 'HDFC Bank', details: 'B3'},
-                {value: 'AXIS Bank', details: 'B5'}, {value: 'Canera Bank', details: 'B6'}],
+            }, {value: 'HDFC BANK', details: 'B3'},
+                {value: 'AXIS BANK', details: 'B5'}, {value: 'CANARA BANK', details: 'B6'}],
             paymentMethodList: [],
             payMethodId: '',
             payeeName: '',
@@ -126,7 +127,8 @@ class Expenses extends React.Component {
             uploadedFile: '',
             isModalOpen: false,
             isCollapse: false,
-            unitName: '',
+            unitName: 'Select unit',
+            unitId:'',
             isAddExpenseModal: false,
             isEditExpense: false,
             selectedExpToEdit: {},
@@ -142,6 +144,8 @@ class Expenses extends React.Component {
             exDDDate : _dt ,//it should allow past date upto 3 months from current date,
             inCopyListExp:[],
             expenseListByIds:[],
+            unitList:[],
+            isExpDisable:false,
         };
 
         this.bindComponent = this.bindComponent.bind(this);
@@ -156,7 +160,7 @@ class Expenses extends React.Component {
                 this.getExpenseRecurrenceType();
                 this.getExpenseApplicableUnitList();
                 this.getPaymentMethodsList();
-                this.getUnitName();
+               // this.getUnitName();
             this.updateValues()}
         );
     }
@@ -190,6 +194,7 @@ class Expenses extends React.Component {
         this.getExpenseRecurrenceType();
         this.getExpenseApplicableUnitList();
         this.getPaymentMethodsList();
+        this.getUnitListByBlocks();
         this.getUnitName();
     }*/
 
@@ -200,6 +205,8 @@ class Expenses extends React.Component {
 
     async getTheBlockList() {
         let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.userReducer.SelectedAssociationID)
+        console.log('data@@@@@@', stat)
+
         try {
             if (stat.success && stat.data.blocksByAssoc.length !== 0) {
                 let blockList = [];
@@ -221,6 +228,40 @@ class Expenses extends React.Component {
             this.setState({
                 isLoading:false
             })
+            console.log('error', error)
+        }
+
+    }
+    async getUnitListByBlocks(blockId) {
+        let self=this;
+        let stat = await base.services.OyeLivingApi.getUnitListByBlockId(blockId)
+        console.log('data@@@@@@##########>>>>>>>', stat)
+
+        try {
+            if (stat.success && stat.data.unitsByBlockID.length !=0) {
+                let unitList = [];
+                let data = stat.data.unitsByBlockID;
+
+                for (let i = 0; i < data.length; i++) {
+                    unitList.push({
+                        value: data[i].unUniName,
+                        details: data[i]
+                    })
+                }
+                console.log('data@@@@@@##########>>>>>>>', unitList)
+
+                self.setState({
+                  unitList:unitList
+              })
+            }
+            else{
+                self.setState({
+                    unitList:[]
+                })
+            }
+        } catch (error) {
+
+
             console.log('error', error)
         }
 
@@ -255,6 +296,7 @@ class Expenses extends React.Component {
 
     async getExpenseApplicableUnitList() {
         let stat = await base.services.OyeLivingApi.getExpenseApplicabilityList(this.props.userReducer.SelectedAssociationID)
+        console.log('jhjhjhjkkhkhk',stat)
         try {
             if (stat.success && stat.data.expenseApplicabilites.length !== 0) {
                 let expAppList = [];
@@ -283,6 +325,9 @@ class Expenses extends React.Component {
     async getPaymentMethodsList() {
         let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.userReducer.SelectedAssociationID)
         console.log('Pay list',stat)
+        this.setState({
+            isLoading:false
+        })
         try {
             if (stat.success && stat.data.paymentMethod.length !== 0) {
                 let paymentList = [];
@@ -357,15 +402,17 @@ class Expenses extends React.Component {
             "EXPyCopy": imgUrl,
             "VNName": '',
             "EXDisType": this.state.selDistribution,
-            "UNUnitID": this.props.dashBoardReducer.uniID,
+            "UNUnitID": this.state.unitId,
             "BLBlockID": this.state.blockIdAdd,
             "ASAssnID": this.props.userReducer.SelectedAssociationID,
             "INNumber": this.state.invoiceNum,
             "EXID":this.state.isEditExpense?this.state.selExpenseId:'',
-            "UnUniIden":this.state.unitName,
+            "UnUniIden":this.state.isExpDisable?this.state.unitName:'',
             "EXDDNo"    : this.state.exDDNo,
             "EXDDDate"  : this.state.exDDNo !=''?moment(this.state.exDDDate).format('YYYY-MM-DD'):'',
-            "EXVoucherNo":this.state.exVoucherNo
+            "EXVoucherNo":this.state.exVoucherNo,
+            "EXAddedBy":this.props.userReducer.MyFirstName
+
 
         };
 
@@ -1170,8 +1217,14 @@ class Expenses extends React.Component {
             exChqDate :selectedExpense.exChqDate,
             exVoucherNo:selectedExpense.exVoucherNo,
             exDDNo   : selectedExpense.exddNo,
-            exDDDate : selectedExpense.exddDate
+            exDDDate : selectedExpense.exddDate,
+            unitName:selectedExpense.unUniIden,
+            unitId:selectedExpense.unUnitID ,
+            isExpDisable:selectedExpense.unUniIden==""? false:true
+
         })
+        this.getUnitListByBlocks(selectedExpense.blBlockID);
+
     }
 
     closeExpenseScreen() {
@@ -1266,6 +1319,7 @@ class Expenses extends React.Component {
                                                 selectedBlockAdd: value,
                                                 blockIdAdd: this.state.blockListAdd[index].details.blBlockID
                                             })
+                                            this.getUnitListByBlocks(this.state.blockListAdd[index].details.blBlockID);
                                         }}
                                     />
                                 </View>
@@ -1519,14 +1573,54 @@ class Expenses extends React.Component {
                                         dropdownPosition={-5}
                                         rippleOpacity={0}
                                         onChangeText={(value, index) => {
+                                            console.log('Get the values @@@$$$$',value ,this.state.expAppList[index].details.eaid)
+
+
                                             this.setState({
+                                                selectedExpType: this.state.expAppList[index].details.eaid==11?'Actuals':'Expense Type',
+                                                isExpDisable:this.state.expAppList[index].details.eaid==11?true:false,
                                                 selectedAppList: value,
-                                                expApplicabilityId: this.state.expAppList[index].details.eaid,
+                                                expApplicabilityId:this.state.expAppList[index].details.eaid,
                                             })
                                         }}
                                     />
                                 </View>
-                                <View style={{width: '100%', }}>
+                                {this.state.isExpDisable && this.state.selectedBlockAdd !='Select Block'?
+                                    <View style={{width:'100%',}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Unit List
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <Dropdown
+                                        value={this.state.unitName} // 'Applicable to Unit *'
+                                        labelFontSize={18}
+                                        labelPadding={-5}
+                                        baseColor="rgba(0, 0, 0, 1)"
+                                        data={this.state.unitList}
+                                        containerStyle={{
+                                            width: '100%',
+                                        }}
+                                        textColor={base.theme.colors.black}
+                                        inputContainerStyle={{
+                                            borderColor: base.theme.colors.lightgrey,
+                                        }}
+                                        dropdownOffset={{top: 10, left: 0}}
+                                        dropdownPosition={-5}
+                                        rippleOpacity={0}
+                                        onChangeText={(value, index) => {
+                                            console.log('Get the values @@@$$$$',value)
+                                            this.setState({
+                                                unitName:value,
+                                                unitId:this.state.unitList[index].details.unUnitID
+                                            })
+                                        }}
+                                    />
+                                </View>:
+                                <View/>}
+                                <View style={{width: '100%',backgroundColor:this.state.isExpDisable?base.theme.colors.greyHead:base.theme.colors.white }}>
 
                                         <Text style={{
                                             fontSize: 14,
@@ -1556,6 +1650,7 @@ class Expenses extends React.Component {
                                                 selectedExpType: value
                                             })
                                         }}
+                                        disabled={this.state.isExpDisable}
                                     />
                                 </View>
                                 <View style={{width: '100%', flexDirection: 'row',}}>
@@ -1625,7 +1720,7 @@ class Expenses extends React.Component {
                                         }}
                                     />
                                 </View>
-                                {this.state.selPayMethod!="Cash"?
+                                {this.state.selPayMethod!="Select Payment Method" && this.state.selPayMethod!="Cash"  ?
                                 <View style={{paddingTop: 5, paddingBottom: 5, width: '100%'}}>
                                     <Text style={{
                                         fontSize: 14,
@@ -1731,7 +1826,7 @@ class Expenses extends React.Component {
                                         placeholder="Payee Name"
                                         keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
                                         placeholderTextColor={base.theme.colors.grey}
-                                        maxLength={20}
+                                        maxLength={30}
                                     />
                                 </View>
                              {this.state.selPayMethod =="Cheque"?
@@ -1904,7 +1999,7 @@ class Expenses extends React.Component {
                                         />
                                     </View>
                                     :<View/>}
-                                {this.state.selPayMethod!="Cash"?
+                                {this.state.selPayMethod!="Select Payment Method" && this.state.selPayMethod!="Cash" ?
                                 <View style={{paddingTop: 5, paddingBottom: 5, width: '100%',}}>
                                     <Text style={{
                                         fontSize: 14,
@@ -2124,6 +2219,7 @@ class Expenses extends React.Component {
     }
 
     createExpenseValidation(title, message) {
+        console.log('jhgjgjghjgjh',this.state)
         if (base.utils.validate.isBlank(this.state.blockIdAdd)) {
             Alert.alert('Please select the block', message)
         } else if (base.utils.validate.isBlank(this.state.expHead)) {
@@ -2136,7 +2232,8 @@ class Expenses extends React.Component {
 
         } else if (base.utils.validate.isBlank(this.state.selectedAppList) || (this.state.selectedAppList =='Applicable to Unit')) {
             Alert.alert('Expense Applicability is Mandatory', message)
-
+        }else if (this.state.isExpDisable &&   (this.state.unitName =='Select unit') ){
+            Alert.alert('Select the unit to add Expense', message)
         } else if (base.utils.validate.isBlank(this.state.selectedExpType) || (this.state.selectedExpType =='Expense Type')) {
             Alert.alert('Expense Type is Mandatory', message)
 
@@ -2282,10 +2379,12 @@ class Expenses extends React.Component {
     }
 
     applyFilters(difference,stAmount,endAmount) {
-        console.log('Filtered list')
 
         let self=this;
+        console.log('Filtered list',self.state.expListByDates)
+
         let presentList =self.state.expensesAllList;
+
         if(self.state.expListByDates.length!=0){
             presentList=self.state.expListByDates
         }
@@ -2302,10 +2401,8 @@ class Expenses extends React.Component {
                 }
             }
         }else{
-            newList=self.state.expensesAllList;
+            newList=presentList;
         }
-        console.log('Filtered list222233333',newList)
-
 
         let filteredList=[];
         let statusFilters=self.state.statusSelected;
@@ -2486,16 +2583,18 @@ class Expenses extends React.Component {
                             <Text style={{fontSize: 13, color: base.theme.colors.black, paddingBottom: 3}}>Applicability:
                                 <Text style={{fontWeight: 'bold'}}> {selectedExpense.exApplTO}</Text></Text>
                             <Text style={{fontSize: 13, color: base.theme.colors.black}}>Added By:
-                                <Text style={{fontWeight: 'bold'}}> {this.props.userReducer.MyFirstName}</Text></Text>
+                                <Text style={{fontWeight: 'bold'}}> {selectedExpense.exAddedBy}</Text></Text>
                             {item.item.item.exIsInvD && selectedExpense.inNumber?
                             <Text style={{fontSize: 13, color: base.theme.colors.black}}>Invoice Number:
                                 <Text style={{fontWeight: 'bold'}}> {selectedExpense.inNumber}</Text></Text>
                                 :<View/>}
                         </Collapsible>
                     </View>
+                    {selectedExpense.unUniIden!=""?
                     <View style={{marginLeft:1, marginRight: 5,width:'20%'}}>
                         <Text style={{color: base.theme.colors.primary,width:80,}} numberOfLines={2}>{selectedExpense.unUniIden}</Text>
-                    </View>
+                    </View>:
+                        <View/>}
 
                 </View>
                 <Collapsible duration={100} collapsed={!item.item.open}>
@@ -2857,7 +2956,10 @@ class Expenses extends React.Component {
             exChqDate :_dt,
             exVoucherNo:'',
             exDDNo   : '',
-            exDDDate : _dt
+            exDDDate : _dt,
+            isExpDisable:false,
+            unitName:'Select unit',
+            unitId:''
         });
     }
 
