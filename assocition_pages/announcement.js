@@ -34,7 +34,7 @@ import axios from 'axios';
 
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
-
+import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 // import AudioRecorderPlayer, {
 //   AVEncoderAudioQualityIOSType,
 //   AVEncodingOption,
@@ -53,6 +53,13 @@ import { connect } from 'react-redux';
 import utils from '../src/base/utils';
 
 // var audioRecorderPlayer;
+
+const options = {
+  sampleRate: 44100,
+  channels: 1,
+  bitsPerSample: 16,
+  wavFile: 'test.wav'
+};
 
 class Announcement extends Component {
   sound = null;
@@ -125,87 +132,80 @@ class Announcement extends Component {
       });
     }, 1500);
 
-    const options = {
-      sampleRate: 44100,
-      channels: 1,
-      bitsPerSample: 16,
-      wavFile: 'test.wav'
-    };
-
-    if (Platform.OS === 'ios') {
-      AudioRecord.init(options);
-    }
+    AudioRecord.init(options);
   }
 
   checkPermission = async () => {
-    const p = await PermissionsAndroid.check('microphone');
-    console.log('permission check', p);
-    if (p === 'granted') {
-      AudioRecord.init(options);
-      return;
+    AudioRecord.init(options);
+    if (Platform.OS === 'android') {
+      check(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            this.requestPermission();
+            console.log(
+              'This feature is not available (on this device / in this context)'
+            );
+            break;
+          case RESULTS.DENIED:
+            this.requestPermission();
+            console.log(
+              'The permission has not been requested / is denied but requestable'
+            );
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      });
+    } else {
+      check(PERMISSIONS.IOS.MICROPHONE).then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            this.requestPermission();
+            console.log(
+              'This feature is not available (on this device / in this context)'
+            );
+            break;
+          case RESULTS.DENIED:
+            this.requestPermission();
+            console.log(
+              'The permission has not been requested / is denied but requestable'
+            );
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      });
     }
-    return this.requestPermission();
   };
 
   requestPermission = async () => {
-    const p = await PermissionsAndroid.request('microphone');
-    if (p === 'granted') {
-      AudioRecord.init(options);
+    AudioRecord.init(options);
+    if (Platform.OS === 'ios') {
+      request(PERMISSIONS.IOS.MICROPHONE).then(result => {});
+    } else {
+      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {});
     }
-    console.log('permission request', p);
   };
 
   start = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the storage');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the camera');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-    console.log('start record');
+    // AudioRecord.init(options);
+    // setTimeout(() => {
+    AudioRecord.init(options);
+    AudioRecord.start();
     this.setState({
       audioFile: '',
       recording: true,
       loaded: false,
       buttonId: 2
     });
-    AudioRecord.start();
     this.timeStamp();
   };
 

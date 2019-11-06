@@ -21,6 +21,13 @@ target 'OyeSpace' do
   'CxxBridge',
   'DevSupport'
   ]
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-BluetoothPeripheral', :path => "#{permissions_path}/BluetoothPeripheral.podspec"
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+  pod 'Permission-MediaLibrary', :path => "#{permissions_path}/MediaLibrary.podspec"
+  pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone.podspec"
  
   
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
@@ -80,6 +87,7 @@ pod 'Firebase/Messaging', '~> 5.19.0'
   pod 'RCTSystemSetting', :path => '../node_modules/react-native-system-setting'
 
   pod 'RNAudioRecord', :path => '../node_modules/react-native-audio-record'
+  
 
 end
   
