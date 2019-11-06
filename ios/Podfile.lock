@@ -92,6 +92,14 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - Permission-BluetoothPeripheral (2.0.3):
+    - RNPermissions
+  - Permission-Camera (2.0.3):
+    - RNPermissions
+  - Permission-MediaLibrary (2.0.3):
+    - RNPermissions
+  - Permission-Microphone (2.0.3):
+    - RNPermissions
   - Protobuf (3.10.0)
   - RCTSystemSetting (1.7.3):
     - React
@@ -178,6 +186,8 @@ PODS:
     - React
   - RNGestureHandler (1.4.1):
     - React
+  - RNPermissions (2.0.3):
+    - React
   - RNSVG (9.11.1):
     - React
   - RNVectorIcons (6.6.0):
@@ -195,6 +205,10 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec`)
+  - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
+  - Permission-MediaLibrary (from `../node_modules/react-native-permissions/ios/MediaLibrary.podspec`)
+  - Permission-Microphone (from `../node_modules/react-native-permissions/ios/Microphone.podspec`)
   - RCTSystemSetting (from `../node_modules/react-native-system-setting`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
@@ -221,6 +235,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNViewShot (from `../node_modules/react-native-view-shot`)
@@ -250,6 +265,14 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-BluetoothPeripheral:
+    :path: "../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec"
+  Permission-Camera:
+    :path: "../node_modules/react-native-permissions/ios/Camera.podspec"
+  Permission-MediaLibrary:
+    :path: "../node_modules/react-native-permissions/ios/MediaLibrary.podspec"
+  Permission-Microphone:
+    :path: "../node_modules/react-native-permissions/ios/Microphone.podspec"
   RCTSystemSetting:
     :path: "../node_modules/react-native-system-setting"
   React:
@@ -278,6 +301,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
@@ -305,6 +330,10 @@ SPEC CHECKSUMS:
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  Permission-BluetoothPeripheral: 091a53a4625e149312f7ca153e4b913ca5c38348
+  Permission-Camera: 019cd09a9b6fa90f7e5b2f7a4a9e32c54027f123
+  Permission-MediaLibrary: 04ac4ce4511d25bda3bded67ce1187b6b1f80d3f
+  Permission-Microphone: 747e8e6364c9fa266f2acf5dd7cebaf0fce2e177
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
   RCTSystemSetting: 2870be06565f2398a8786bfe8486ff6880a4326a
   React: 36d0768f9e93be2473b37e7fa64f92c1d5341eef
@@ -320,11 +349,12 @@ SPEC CHECKSUMS:
   RNDeviceInfo: a88be26a64ada7cbc2bc0ebbd1662d340304874e
   RNFS: 54da03c2b7d862c42ea3ca8c7f86f892760a535a
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
+  RNPermissions: 332fd0d0c33ba71d83a22f584fce7b2270488ae0
   RNSVG: be27aa7c58819f97399388ae53d7fa0572f32c7f
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 684513b14b03201579ba3cee20218c9d1298b0cc
 
-PODFILE CHECKSUM: 34e4604edae0c58d6e305cc7737a9ff9f00fc451
+PODFILE CHECKSUM: b1dd99f13c5935f05068a102ef2c23ca3ae6e6ab
 
 COCOAPODS: 1.8.3

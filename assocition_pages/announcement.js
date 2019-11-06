@@ -452,7 +452,7 @@ class Announcement extends Component {
 
   uploadAudio = async result => {
     const newUri = result.replace('file://', 'file:///');
-
+    console.log('NEW_URI', newUri);
     console.log('Audio', result);
     const path = Platform.OS === 'ios' ? result : newUri;
     console.log('PATH', path);
@@ -472,7 +472,7 @@ class Announcement extends Component {
         mp3: stat
       });
     } catch (e) {
-      console.log(e);
+      console.log('Errorrrrrrrrrrrrrr', e);
     }
 
     console.log('Stat222222222222222222222222, UPLOAD:', stat);
