@@ -1708,7 +1708,7 @@ class Dashboard extends PureComponent {
           <CardView
             height={'100%'}
             width={'25%'}
-            cardText={'Role Management'}
+            cardText={'Role    Management'}
             cardIcon={require('../../../../icons/role.png')}
             marginTop={20}
             iconWidth={Platform.OS === 'ios' ? 40 : 35}
