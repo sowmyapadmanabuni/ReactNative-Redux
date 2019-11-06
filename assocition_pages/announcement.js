@@ -51,6 +51,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 import utils from '../src/base/utils';
+import _ from 'lodash';
 
 // var audioRecorderPlayer;
 
@@ -730,9 +731,9 @@ class Announcement extends Component {
           response,
           response.data.data.announcement.anid
         );
-        this.setState({
-          isLoading: false
-        });
+        // this.setState({
+        //   isLoading: false
+        // });
         axios
           .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
             admin: 'false',
@@ -757,12 +758,18 @@ class Announcement extends Component {
               .then(res => {
                 let memberList = res.data.data.memberListByAssociation;
                 let announcement = response.data.data.announcement.anid;
-
-                console.log('memberList1111', memberList, announcement);
+                console.log('RESPONSE', res);
                 this.setState({
                   isLoading: false
                 });
-                memberList.map(data => {
+                let removedDuplicates = _.uniqBy(memberList, 'acAccntID');
+                console.log(
+                  'memberList1111',
+                  memberList,
+                  removedDuplicates,
+                  announcement
+                );
+                removedDuplicates.map(data => {
                   console.log('adminssss', ntType, data);
                   this.props.createUserNotification(
                     ntType,
@@ -781,24 +788,6 @@ class Announcement extends Component {
                     false,
                     this.props.userReducer.MyAccountID,
                     announcement
-
-                    // ntType,
-                    // this.props.oyeURL,
-                    // data.acAccntID,
-                    // this.props.dashboardReducer.assId.toString(),
-                    // ntDesc,
-
-                    // // sbUnitID.toString(),
-                    // // sbMemID.toString(),
-                    // // sbSubID.toString(),
-                    // // sbRoleId,
-                    // // this.props.navigation.state.params.associationName,
-                    // // unitName.toString(),
-                    // // occupancyDate,
-                    // // soldDate,
-                    // false,
-                    // this.props.userReducer.MyAccountID,
-                    // announcement
                   );
                 });
                 this.props.navigation.goBack();
