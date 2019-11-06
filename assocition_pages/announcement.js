@@ -1426,7 +1426,7 @@ class Announcement extends Component {
               )}
             </ScrollView>
 
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            {/* <View style={{ flex: 1, justifyContent: 'center' }}>
               <View
                 style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
               >
@@ -1454,7 +1454,7 @@ class Announcement extends Component {
                   />
                 )}
               </View>
-            </View>
+            </View> */}
             <View
               style={{
                 flexDirection: 'row',
