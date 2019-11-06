@@ -268,7 +268,7 @@ class NotificationAnnouncementDetailScreen extends Component {
           .then(res => {
             // the temp file path with file extension `png`
             console.log('The file saved to ', res.path());
-            alert(JSON.stringify(res.path()));
+            // alert(JSON.stringify(res.path()));
 
             console.log('Announcement_Dataaaa', response);
             this.setState({

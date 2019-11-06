@@ -51,7 +51,9 @@ class NotificationScreen extends PureComponent {
       Date: [],
       Time: [],
       Date1: [],
-      Time1: []
+      Time1: [],
+
+      visitorID: []
     };
     this.renderCollapseData = this.renderCollapseData.bind(this);
   }
@@ -293,6 +295,9 @@ class NotificationScreen extends PureComponent {
       } else if (type === 'vlexgName') {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlexgName : '';
+      } else if (type === 'vlVisLgID') {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.vlVisLgID : '';
       }
     }
 
@@ -318,6 +323,7 @@ class NotificationScreen extends PureComponent {
           )
           .then(res => {
             let responseData = res.data.data;
+
             for (let i = 0; i < this.props.notifications.length; i++) {
               if (
                 this.props.notifications[i].sbMemID ===
@@ -328,6 +334,8 @@ class NotificationScreen extends PureComponent {
                   this.props.notifications[i].sbMemID,
                   responseData.visitorLog.vlVisLgID
                 );
+                console.log('RESPONSE$$$', responseData.visitorLog.vlVisLgID);
+
                 this.props.notifications[i].vlEntryImg =
                   responseData.visitorLog.vlEntryImg;
                 this.props.notifications[i].vlGtName =
@@ -352,6 +360,8 @@ class NotificationScreen extends PureComponent {
                   responseData.visitorLog.vldUpdated;
                 this.props.notifications[i].vlExitT =
                   responseData.visitorLog.vlExitT;
+                this.props.notifications[i].vlVisLgID =
+                  responseData.visitorLog.vlVisLgID;
               }
             }
             this.setState(
@@ -886,6 +896,14 @@ class NotificationScreen extends PureComponent {
                               fontSize: 14
                             }}
                           />
+                          <View>
+                            {item.vlVisLgID ? (
+                              <Text>{item.vlVisLgID}^*^&*</Text>
+                            ) : (
+                              <Text>Not Found</Text>
+                            )}
+                          </View>
+
                           <Button
                             onPress={() =>
                               this.declinegateVisitor(
