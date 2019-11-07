@@ -52,7 +52,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 import utils from '../src/base/utils';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 // var audioRecorderPlayer;
 
