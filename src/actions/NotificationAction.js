@@ -211,7 +211,7 @@ export const createNotification = (
             )
               .then(response => response.json())
               .then(responseJson => {
-                // console.log(responseJson.data.notificationListByAcctID)
+                console.log("RESPONSESSSSSS",responseJson.data.notificationListByAcctID);
                 let resData = responseJson.data.notificationListByAcctID;
 
                 let activeNotifications = [];

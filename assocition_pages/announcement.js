@@ -52,7 +52,6 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 import utils from '../src/base/utils';
-// import _ from 'lodash';
 
 // var audioRecorderPlayer;
 
@@ -1572,25 +1571,39 @@ class Announcement extends Component {
               <View>
                 {this.state.buttonId === 1 ? (
                   <TouchableOpacity onPress={() => this.start()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%')
                       }}
-                      source={require('../icons/leave_vender_record.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%'),
+                          marginLeft: hp('1%')
+                        }}
+                        source={require('../icons/leave_vender_record.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity onPress={() => this.stop()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%')
                       }}
-                      source={require('../icons/leave_vender_stop.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%'),
+                          marginLeft: hp('1%')
+                        }}
+                        source={require('../icons/leave_vender_stop.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 )}
               </View>

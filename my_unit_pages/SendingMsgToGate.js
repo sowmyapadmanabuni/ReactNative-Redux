@@ -111,7 +111,7 @@ class SendingMsgToGate extends Component {
       recording: false,
       loaded: false,
       paused: true,
-
+currentTime:'',
       timestamp: ''
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();

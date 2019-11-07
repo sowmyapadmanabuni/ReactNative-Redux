@@ -53,7 +53,9 @@ class NotificationScreen extends PureComponent {
       Date1: [],
       Time1: [],
 
-      visitorID: []
+      visitorID: [],
+
+      buttonData: ''
     };
     this.renderCollapseData = this.renderCollapseData.bind(this);
   }
@@ -397,7 +399,6 @@ class NotificationScreen extends PureComponent {
       .then(res => {
         console.log(res.data, 'current time');
         this.setState({ currentTime: res.data.data.currentDateTime });
-
         gateFirebase
           .database()
           .ref(`NotificationSync/A_${associationid}/${visitorId}`)
@@ -408,12 +409,29 @@ class NotificationScreen extends PureComponent {
             visitorlogId: visitorId,
             updatedTime: res.data.data.currentDateTime
             // status:
+          });
+        axios
+          .post(
+            `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+            {
+              VLApprStat: 'Approved',
+              VLVisLgID: visitorId
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+              }
+            }
+          )
+          .then(responses => {
+            console.log('_RESP_', responses);
+            this.setState({
+              buttonData: responses.data.visitorLog.vlApprStat
+            });
           })
-          .then(response => {
-            //    if (item.opened) {
-            //      this.props.onNotificationOpen(notifications, index, oyeURL);
-            //    }
-            console.log('RESPONSE_', response);
+          .catch(e => {
+            console.log(e);
           });
       })
       .catch(error => {
@@ -455,16 +473,38 @@ class NotificationScreen extends PureComponent {
       .then(res => {
         console.log(res.data, 'current time');
         this.setState({ currentTime: res.data.data.currentDateTime });
-
         gateFirebase
           .database()
           .ref(`NotificationSync/A_${associationid}/${visitorId}`)
           .set({
             buttonColor: '#ff0000',
-            opened: false,
+            opened: true,
             newAttachment: true,
             visitorlogId: visitorId,
             updatedTime: res.data.data.currentDateTime
+          });
+        axios
+          .post(
+            `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+            {
+              VLApprStat: 'Rejected',
+              VLVisLgID: visitorId
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+              }
+            }
+          )
+          .then(response => {
+            console.log('_RESP_', response);
+            this.setState({
+              buttonData: responses.data.visitorLog.vlApprStat
+            });
+          })
+          .catch(e => {
+            console.log(e);
           });
       })
       .catch(error => {
@@ -476,7 +516,7 @@ class NotificationScreen extends PureComponent {
           .ref(`NotificationSync/A_${associationid}/${visitorId}`)
           .set({
             buttonColor: '#ff0000',
-            opened: false,
+            opened: true,
             newAttachment: true,
             visitorlogId: visitorId,
             updatedTime: null
@@ -488,6 +528,19 @@ class NotificationScreen extends PureComponent {
     const { savedNoifId, notifications, oyeURL } = this.props;
 
     let status = _.includes(savedNoifId, item.ntid);
+    console.log('ITEMS', item.asAssnID, item.vlVisLgID);
+    var opens = null;
+    gateFirebase
+      .database()
+      .ref(`NotificationSync/A_${item.asAssnID}/${item.vlVisLgID}`)
+      .on('value', function(snapshot) {
+        let val = snapshot.val();
+        if (val !== null) {
+          console.log(val, 'value_firebase');
+          opens = val.opened;
+          console.log('__OPEN__', opens);
+        }
+      });
 
     if (item.ntType !== 'gate_app') {
       return (
@@ -800,13 +853,13 @@ class NotificationScreen extends PureComponent {
                             {moment(item.vlEntryT).format('hh:mm A')}
                           </Text>
                         </Text>
-                        {/* <View>
+                        <View>
                           {item.vlVisLgID ? (
                             <Text>{item.vlVisLgID}^*^&*</Text>
                           ) : (
                             <Text>Not Found</Text>
                           )}
-                        </View> */}
+                        </View>
                         {item.vlengName !== '' ? (
                           <Text
                             style={{
@@ -880,46 +933,53 @@ class NotificationScreen extends PureComponent {
                         <View />
                       )}
                       {item.opened ? null : (
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            marginTop: 15
-                          }}
-                        >
-                          <Button
-                            buttonStyle={{ borderColor: '#75be6f' }}
-                            onPress={() =>
-                              this.acceptgateVisitor(
-                                item.sbMemID,
-                                index,
-                                item.asAssnID
-                              )
-                            }
-                            title="Accept"
-                            type="outline"
-                            titleStyle={{
-                              color: '#75be6f',
-                              fontSize: 14
-                            }}
-                          />
+                        <View>
+                          {this.state.buttonData !== 'Approved' ||
+                          this.state.buttonData !== 'Rejected' ? (
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                marginTop: 15
+                              }}
+                            >
+                              <Button
+                                buttonStyle={{ borderColor: '#75be6f' }}
+                                onPress={() =>
+                                  this.acceptgateVisitor(
+                                    item.sbMemID,
+                                    index,
+                                    item.asAssnID
+                                  )
+                                }
+                                title="Accept"
+                                type="outline"
+                                titleStyle={{
+                                  color: '#75be6f',
+                                  fontSize: 14
+                                }}
+                              />
 
-                          <Button
-                            onPress={() =>
-                              this.declinegateVisitor(
-                                item.sbMemID,
-                                index,
-                                item.asAssnID
-                              )
-                            }
-                            buttonStyle={{ borderColor: '#ff0000' }}
-                            title="Decline"
-                            titleStyle={{
-                              color: '#ff0000',
-                              fontSize: 14
-                            }}
-                            type="outline"
-                          />
+                              <Button
+                                onPress={() =>
+                                  this.declinegateVisitor(
+                                    item.sbMemID,
+                                    index,
+                                    item.asAssnID
+                                  )
+                                }
+                                buttonStyle={{ borderColor: '#ff0000' }}
+                                title="Decline"
+                                titleStyle={{
+                                  color: '#ff0000',
+                                  fontSize: 14
+                                }}
+                                type="outline"
+                              />
+                            </View>
+                          ) : (
+                            <View></View>
+                          )}
                         </View>
                       )}
                     </View>
