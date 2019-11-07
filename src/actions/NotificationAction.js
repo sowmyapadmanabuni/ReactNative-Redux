@@ -108,29 +108,9 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
                 let val = snapshot.val();
                 firebaseNoti.push({ ...data, ...val });
                 console.log(snapshot.val(), 'value_firebase');
-
-                // alert(JSON.stringify(snapshot.val()));
               });
-            // .once('value')
-            // .then(snapshot => {
-            //   let val = snapshot.val();
-            //   firebaseNoti.push({ ...data, ...val });
-            //   console.log(snapshot.val(), 'value_firebase');
-
-            //   // data = snapshot.val();
-            //   //   alert('here');
-            // })
-            // .catch(error => {
-            //   firebaseNoti.push({ ...data, opened: false });
-            //   console.log(error, 'error_reading');
-            //   //   alert('error');
-            // });
           }
         });
-
-        // sorted.map(data => {
-        //   console.log(data.ntIsActive);
-        // });
 
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
@@ -630,9 +610,26 @@ export const refreshNotifications = (
         // const sorted = _.sortBy(allNotifs, ["ntdUpdated"]);
         const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
 
+        let firebaseNoti = [];
+
+        sorted.map((data, index) => {
+          if (data.ntType !== 'gate_app') {
+            firebaseNoti.push({ ...data });
+          } else {
+            firebase
+              .database()
+              .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
+              .on('value', snapshot => {
+                let val = snapshot.val();
+                firebaseNoti.push({ ...data, ...val });
+                console.log(snapshot.val(), 'value_firebase');
+              });
+          }
+        });
+
         dispatch({
           type: REFRESH_NOTIFICATION_SUCCESS,
-          payload: [...sorted]
+          payload: [...firebaseNoti]
         });
       })
       .catch(error => {
