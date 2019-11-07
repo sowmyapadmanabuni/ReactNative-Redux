@@ -104,30 +104,17 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             firebase
               .database()
               .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
-              .once('value')
-              .then(snapshot => {
+              .on('value', snapshot => {
                 let val = snapshot.val();
                 firebaseNoti.push({ ...data, ...val });
                 console.log(snapshot.val(), 'value_firebase');
-
-                // data = snapshot.val();
-                //   alert('here');
-              })
-              .catch(error => {
-                firebaseNoti.push({ ...data, opened: false });
-                console.log(error, 'error_reading');
-                //   alert('error');
               });
           }
         });
 
-        // sorted.map(data => {
-        //   console.log(data.ntIsActive);
-        // });
-
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
-          payload: firebaseNoti
+          payload: [...firebaseNoti]
         });
       })
       .catch(error => {
@@ -512,10 +499,18 @@ export const refreshNotifications = (
 ) => {
   return dispatch => {
     let page = 1;
+    // console.log("Notification_URLS", oyeURL, MyAccountID);
+    // console.log(
+    //   "http://" +
+    //     oyeURL +
+    //     "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
+    //     MyAccountID +
+    //     "/" +
+    //     page
+    // );
     dispatch({
       type: REFRESH_NOTIFICATION_START
     });
-
     fetch(
       'http://' +
         oyeURL +
@@ -533,20 +528,21 @@ export const refreshNotifications = (
     )
       .then(response => response.json())
       .then(responseJson => {
+        console.log('Check list', responseJson);
         let resData = responseJson.data.notificationListByAcctID;
-
+        console.log('resData', resData);
         let activeNotifications = [];
 
         _.forEach(resData, function(value) {
           activeNotifications.push({ ...value, read: false });
         });
 
-        console.log(activeNotifications, 'activeNotifications');
         // console.log("sorted", sorted);
         let joinNotif = [];
         let joinStatNotif = [];
         let gateAppNotif = [];
         let announcement = [];
+
         activeNotifications.map((data, index) => {
           if (data.ntType === 'gate_app') {
             gateAppNotif.push({ open: true, ...data });
@@ -561,8 +557,6 @@ export const refreshNotifications = (
 
         const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
         const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
-        // const uniqueJoinStat = [...joinStatNotif];
-        // const uniqueJoin = [...joinNotif];
         let allNotifs = [
           ...gateAppNotif,
           ...uniqueJoinStat,
@@ -570,72 +564,195 @@ export const refreshNotifications = (
           ...announcement
         ];
 
-        allNotifs.map((data, index) => {
-          if (data.ntType === 'gate_app') {
-            axios
-              .get(
-                `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
-                //data.sbMemID`,
-                {
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                  }
-                }
-              )
-              .then(res => {
-                let responseData = res.data.data;
-                for (let i = 0; i < allNotifs.length; i++) {
-                  if (
-                    allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
-                  ) {
-                    console.log(
-                      '&&&&&&&&&&&&&&&&',
-                      allNotifs[i].sbMemID,
-                      responseData,
-                      responseData.visitorLog.vlVisLgID
-                    );
-                    allNotifs[i].vlEntryImg =
-                      responseData.visitorLog.vlEntryImg;
-                    allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
-                    allNotifs[i].vlfName = responseData.visitorLog.vlfName;
-                    allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
-                    allNotifs[i].vlComName = responseData.visitorLog.vlComName;
-                    allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
-                    allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
-                    allNotifs[i].vldCreated =
-                      responseData.visitorLog.vldCreated;
-                    allNotifs[i].vlengName = responseData.visitorLog.vlengName;
-                    allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
-                    allNotifs[i].vldUpdated =
-                      responseData.visitorLog.vldUpdated; //date
-                    allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
-                  }
-                }
-              })
-              .catch(error => {
-                console.log(error, 'error while fetching networks');
+        // const sorted = _.sortBy(allNotifs, [
+        //   "ntdCreated",
+        //   "ntdUpdated"
+        // ]).reverse();
+
+        console.log('allNotifs', allNotifs);
+        const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+
+        let firebaseNoti = [];
+
+        sorted.map((data, index) => {
+          if (data.ntType !== 'gate_app') {
+            firebaseNoti.push({ ...data });
+          } else {
+            firebase
+              .database()
+              .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
+              .on('value', snapshot => {
+                let val = snapshot.val();
+                firebaseNoti.push({ ...data, ...val });
+                console.log(snapshot.val(), 'value_firebase');
               });
           }
-          console.log('Props  notifications~~~~~', allNotifs);
         });
-
-        // const sorted = _.sortBy(allNotifs, ["ntdUpdated"]);
-        const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
 
         dispatch({
           type: REFRESH_NOTIFICATION_SUCCESS,
-          payload: [...sorted]
+          payload: [...firebaseNoti]
         });
       })
       .catch(error => {
-        console.log(error);
+        console.log(error, 'error fetching notifications');
         dispatch({
           type: REFRESH_NOTIFICATION_FAILED
+          // payload: []
         });
       });
   };
 };
+
+// export const refreshNotifications = (
+//   oyeURL,
+//   MyAccountID,
+//   page,
+//   notifications
+// ) => {
+//   return dispatch => {
+//     let page = 1;
+//     dispatch({
+//       type: REFRESH_NOTIFICATION_START
+//     });
+
+//     fetch(
+//       'http://' +
+//         oyeURL +
+//         '/oyesafe/api/v1/Notification/GetNotificationListByAccntID/' +
+//         MyAccountID +
+//         '/' +
+//         page,
+//       {
+//         method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+//         }
+//       }
+//     )
+//       .then(response => response.json())
+//       .then(responseJson => {
+//         let resData = responseJson.data.notificationListByAcctID;
+
+//         let activeNotifications = [];
+
+//         _.forEach(resData, function(value) {
+//           activeNotifications.push({ ...value, read: false });
+//         });
+
+//         console.log(activeNotifications, 'activeNotifications');
+//         // console.log("sorted", sorted);
+//         let joinNotif = [];
+//         let joinStatNotif = [];
+//         let gateAppNotif = [];
+//         let announcement = [];
+//         activeNotifications.map((data, index) => {
+//           if (data.ntType === 'gate_app') {
+//             gateAppNotif.push({ open: true, ...data });
+//           } else if (data.ntType === 'Join_Status') {
+//             joinStatNotif.push(data);
+//           } else if (data.ntType === 'Join') {
+//             joinNotif.push(data);
+//           } else if (data.ntType === 'Announcement') {
+//             announcement.push(data);
+//           }
+//         });
+
+//         const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
+//         const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
+//         // const uniqueJoinStat = [...joinStatNotif];
+//         // const uniqueJoin = [...joinNotif];
+//         let allNotifs = [
+//           ...gateAppNotif,
+//           ...uniqueJoinStat,
+//           ...uniqueJoin,
+//           ...announcement
+//         ];
+
+//         allNotifs.map((data, index) => {
+//           if (data.ntType === 'gate_app') {
+//             axios
+//               .get(
+//                 `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+//                 //data.sbMemID`,
+//                 {
+//                   headers: {
+//                     'Content-Type': 'application/json',
+//                     'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+//                   }
+//                 }
+//               )
+//               .then(res => {
+//                 let responseData = res.data.data;
+//                 for (let i = 0; i < allNotifs.length; i++) {
+//                   if (
+//                     allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
+//                   ) {
+//                     console.log(
+//                       '&&&&&&&&&&&&&&&&',
+//                       allNotifs[i].sbMemID,
+//                       responseData,
+//                       responseData.visitorLog.vlVisLgID
+//                     );
+//                     allNotifs[i].vlEntryImg =
+//                       responseData.visitorLog.vlEntryImg;
+//                     allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
+//                     allNotifs[i].vlfName = responseData.visitorLog.vlfName;
+//                     allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
+//                     allNotifs[i].vlComName = responseData.visitorLog.vlComName;
+//                     allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
+//                     allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
+//                     allNotifs[i].vldCreated =
+//                       responseData.visitorLog.vldCreated;
+//                     allNotifs[i].vlengName = responseData.visitorLog.vlengName;
+//                     allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
+//                     allNotifs[i].vldUpdated =
+//                       responseData.visitorLog.vldUpdated; //date
+//                     allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
+//                   }
+//                 }
+//               })
+//               .catch(error => {
+//                 console.log(error, 'error while fetching networks');
+//               });
+//           }
+//           console.log('Props  notifications~~~~~', allNotifs);
+//         });
+
+//         // const sorted = _.sortBy(allNotifs, ["ntdUpdated"]);
+//         const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+
+//         let firebaseNoti = [];
+
+//         sorted.map((data, index) => {
+//           if (data.ntType !== 'gate_app') {
+//             firebaseNoti.push({ ...data });
+//           } else {
+//             firebase
+//               .database()
+//               .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
+//               .on('value', snapshot => {
+//                 let val = snapshot.val();
+//                 firebaseNoti.push({ ...data, ...val });
+//                 console.log(snapshot.val(), 'value_firebases');
+//               });
+//           }
+//         });
+
+//         dispatch({
+//           type: REFRESH_NOTIFICATION_SUCCESS,
+//           payload: [...firebaseNoti]
+//         });
+//       })
+//       .catch(error => {
+//         console.log(error);
+//         dispatch({
+//           type: REFRESH_NOTIFICATION_FAILED
+//         });
+//       });
+//   };
+// };
 
 export const createUserNotification = (
   notifType,
