@@ -104,20 +104,27 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             firebase
               .database()
               .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
-              .once('value')
-              .then(snapshot => {
+              .on('value', snapshot => {
                 let val = snapshot.val();
                 firebaseNoti.push({ ...data, ...val });
                 console.log(snapshot.val(), 'value_firebase');
 
-                // data = snapshot.val();
-                //   alert('here');
-              })
-              .catch(error => {
-                firebaseNoti.push({ ...data, opened: false });
-                console.log(error, 'error_reading');
-                //   alert('error');
+                // alert(JSON.stringify(snapshot.val()));
               });
+            // .once('value')
+            // .then(snapshot => {
+            //   let val = snapshot.val();
+            //   firebaseNoti.push({ ...data, ...val });
+            //   console.log(snapshot.val(), 'value_firebase');
+
+            //   // data = snapshot.val();
+            //   //   alert('here');
+            // })
+            // .catch(error => {
+            //   firebaseNoti.push({ ...data, opened: false });
+            //   console.log(error, 'error_reading');
+            //   //   alert('error');
+            // });
           }
         });
 
@@ -127,7 +134,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
         dispatch({
           type: GET_NOTIFICATIONS_SUCCESS,
-          payload: firebaseNoti
+          payload: [...firebaseNoti]
         });
       })
       .catch(error => {
