@@ -800,13 +800,13 @@ class NotificationScreen extends PureComponent {
                             {moment(item.vlEntryT).format('hh:mm A')}
                           </Text>
                         </Text>
-                        {/* <View>
+                        <View>
                           {item.vlVisLgID ? (
                             <Text>{item.vlVisLgID}^*^&*</Text>
                           ) : (
                             <Text>Not Found</Text>
                           )}
-                        </View> */}
+                        </View>
                         {item.vlengName !== '' ? (
                           <Text
                             style={{
