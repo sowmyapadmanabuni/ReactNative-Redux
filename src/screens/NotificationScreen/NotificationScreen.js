@@ -461,7 +461,7 @@ class NotificationScreen extends PureComponent {
           .ref(`NotificationSync/A_${associationid}/${visitorId}`)
           .set({
             buttonColor: '#ff0000',
-            opened: false,
+            opened: true,
             newAttachment: true,
             visitorlogId: visitorId,
             updatedTime: res.data.data.currentDateTime
@@ -476,7 +476,7 @@ class NotificationScreen extends PureComponent {
           .ref(`NotificationSync/A_${associationid}/${visitorId}`)
           .set({
             buttonColor: '#ff0000',
-            opened: false,
+            opened: true,
             newAttachment: true,
             visitorlogId: visitorId,
             updatedTime: null
@@ -488,6 +488,19 @@ class NotificationScreen extends PureComponent {
     const { savedNoifId, notifications, oyeURL } = this.props;
 
     let status = _.includes(savedNoifId, item.ntid);
+    console.log('ITEMS', item.asAssnID, item.vlVisLgID);
+    var opens = null;
+    gateFirebase
+      .database()
+      .ref(`NotificationSync/A_${item.asAssnID}/${item.vlVisLgID}`)
+      .on('value', function(snapshot) {
+        let val = snapshot.val();
+        if (val !== null) {
+          console.log(val, 'value_firebase');
+          opens = val.opened;
+          console.log('__OPEN__', opens);
+        }
+      });
 
     if (item.ntType !== 'gate_app') {
       return (
@@ -880,46 +893,50 @@ class NotificationScreen extends PureComponent {
                         <View />
                       )}
                       {item.opened ? null : (
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            marginTop: 15
-                          }}
-                        >
-                          <Button
-                            buttonStyle={{ borderColor: '#75be6f' }}
-                            onPress={() =>
-                              this.acceptgateVisitor(
-                                item.sbMemID,
-                                index,
-                                item.asAssnID
-                              )
-                            }
-                            title="Accept"
-                            type="outline"
-                            titleStyle={{
-                              color: '#75be6f',
-                              fontSize: 14
-                            }}
-                          />
+                        <View>
+                          {opens === true ? null : (
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                marginTop: 15
+                              }}
+                            >
+                              <Button
+                                buttonStyle={{ borderColor: '#75be6f' }}
+                                onPress={() =>
+                                  this.acceptgateVisitor(
+                                    item.sbMemID,
+                                    index,
+                                    item.asAssnID
+                                  )
+                                }
+                                title="Accept"
+                                type="outline"
+                                titleStyle={{
+                                  color: '#75be6f',
+                                  fontSize: 14
+                                }}
+                              />
 
-                          <Button
-                            onPress={() =>
-                              this.declinegateVisitor(
-                                item.sbMemID,
-                                index,
-                                item.asAssnID
-                              )
-                            }
-                            buttonStyle={{ borderColor: '#ff0000' }}
-                            title="Decline"
-                            titleStyle={{
-                              color: '#ff0000',
-                              fontSize: 14
-                            }}
-                            type="outline"
-                          />
+                              <Button
+                                onPress={() =>
+                                  this.declinegateVisitor(
+                                    item.sbMemID,
+                                    index,
+                                    item.asAssnID
+                                  )
+                                }
+                                buttonStyle={{ borderColor: '#ff0000' }}
+                                title="Decline"
+                                titleStyle={{
+                                  color: '#ff0000',
+                                  fontSize: 14
+                                }}
+                                type="outline"
+                              />
+                            </View>
+                          )}
                         </View>
                       )}
                     </View>

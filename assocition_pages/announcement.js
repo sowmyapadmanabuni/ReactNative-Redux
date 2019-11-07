@@ -52,7 +52,6 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 import utils from '../src/base/utils';
-// import _ from 'lodash';
 
 // var audioRecorderPlayer;
 
@@ -1575,14 +1574,14 @@ class Announcement extends Component {
                     <View
                       style={{
                         width: hp('8%'),
-                        height: hp('8%'),
+                        height: hp('8%')
                       }}
                     >
                       <Image
                         style={{
                           width: hp('5%'),
                           height: hp('5%'),
-                          marginLeft: hp('1%'),
+                          marginLeft: hp('1%')
                         }}
                         source={require('../icons/leave_vender_record.png')}
                       />
