@@ -1591,9 +1591,8 @@ class Announcement extends Component {
                   <TouchableOpacity onPress={() => this.stop()}>
                     <View
                       style={{
-                        width: hp('10%'),
-                        height: hp('10%'),
-                        backgroundColor: 'yellow'
+                        width: hp('8%'),
+                        height: hp('8%')
                       }}
                     >
                       <Image

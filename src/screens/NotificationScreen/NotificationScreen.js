@@ -53,7 +53,9 @@ class NotificationScreen extends PureComponent {
       Date1: [],
       Time1: [],
 
-      visitorID: []
+      visitorID: [],
+
+      buttonData: ''
     };
     this.renderCollapseData = this.renderCollapseData.bind(this);
   }
@@ -397,7 +399,6 @@ class NotificationScreen extends PureComponent {
       .then(res => {
         console.log(res.data, 'current time');
         this.setState({ currentTime: res.data.data.currentDateTime });
-
         gateFirebase
           .database()
           .ref(`NotificationSync/A_${associationid}/${visitorId}`)
@@ -408,12 +409,29 @@ class NotificationScreen extends PureComponent {
             visitorlogId: visitorId,
             updatedTime: res.data.data.currentDateTime
             // status:
+          });
+        axios
+          .post(
+            `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+            {
+              VLApprStat: 'Approved',
+              VLVisLgID: visitorId
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+              }
+            }
+          )
+          .then(responses => {
+            console.log('_RESP_', responses);
+            this.setState({
+              buttonData: responses.data.visitorLog.vlApprStat
+            });
           })
-          .then(response => {
-            //    if (item.opened) {
-            //      this.props.onNotificationOpen(notifications, index, oyeURL);
-            //    }
-            console.log('RESPONSE_', response);
+          .catch(e => {
+            console.log(e);
           });
       })
       .catch(error => {
@@ -455,7 +473,6 @@ class NotificationScreen extends PureComponent {
       .then(res => {
         console.log(res.data, 'current time');
         this.setState({ currentTime: res.data.data.currentDateTime });
-
         gateFirebase
           .database()
           .ref(`NotificationSync/A_${associationid}/${visitorId}`)
@@ -465,6 +482,29 @@ class NotificationScreen extends PureComponent {
             newAttachment: true,
             visitorlogId: visitorId,
             updatedTime: res.data.data.currentDateTime
+          });
+        axios
+          .post(
+            `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+            {
+              VLApprStat: 'Rejected',
+              VLVisLgID: visitorId
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+              }
+            }
+          )
+          .then(response => {
+            console.log('_RESP_', response);
+            this.setState({
+              buttonData: responses.data.visitorLog.vlApprStat
+            });
+          })
+          .catch(e => {
+            console.log(e);
           });
       })
       .catch(error => {
@@ -894,7 +934,8 @@ class NotificationScreen extends PureComponent {
                       )}
                       {item.opened ? null : (
                         <View>
-                          {opens === true ? null : (
+                          {this.state.buttonData !== 'Approved' ||
+                          this.state.buttonData !== 'Rejected' ? (
                             <View
                               style={{
                                 flexDirection: 'row',
@@ -936,6 +977,8 @@ class NotificationScreen extends PureComponent {
                                 type="outline"
                               />
                             </View>
+                          ) : (
+                            <View></View>
                           )}
                         </View>
                       )}

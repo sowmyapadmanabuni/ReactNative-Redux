@@ -31,20 +31,32 @@ import { Dropdown } from 'react-native-material-dropdown';
 import ZoomImage from 'react-native-zoom-image';
 import { Easing } from 'react-native';
 import axios from 'axios';
-import AudioRecorderPlayer, {
-  AVEncoderAudioQualityIOSType,
-  AVEncodingOption,
-  AudioEncoderAndroidType,
-  AudioSet,
-  AudioSourceAndroidType
-} from 'react-native-audio-recorder-player';
+
+import gateFirebase from 'firebase';
+import Sound from 'react-native-sound';
+import AudioRecord from 'react-native-audio-record';
+import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
+// import AudioRecorderPlayer, {
+//   AVEncoderAudioQualityIOSType,
+//   AVEncodingOption,
+//   AudioEncoderAndroidType,
+//   AudioSet,
+//   AudioSourceAndroidType
+// } from 'react-native-audio-recorder-player';
 import { ratio, screenWidth } from './VendorStyles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import StaffStyle from './StaffStyle.js';
 
-var audioRecorderPlayer;
+// var audioRecorderPlayer;
+const options = {
+  sampleRate: 44100,
+  channels: 1,
+  bitsPerSample: 16,
+  wavFile: 'test.wav'
+};
+
 class StaffLeaveWithVendor extends Component {
   constructor(props) {
     super(props);
@@ -91,19 +103,182 @@ class StaffLeaveWithVendor extends Component {
       visitorList: [],
 
       comment: '',
-      dropdownValue: ''
+      dropdownValue: '',
+
+      announcementId: '',
+
+      audioFile: '',
+      recording: false,
+      loaded: false,
+      paused: true,
+      currentTime: '',
+
+      timestamp: ''
     };
-    this.audioRecorderPlayer = new AudioRecorderPlayer();
-    this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
+    // this.audioRecorderPlayer = new AudioRecorderPlayer();
+    // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
   }
 
+  checkPermission = async () => {
+    AudioRecord.init(options);
+    if (Platform.OS === 'android') {
+      check(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            this.requestPermission();
+            console.log(
+              'This feature is not available (on this device / in this context)'
+            );
+            break;
+          case RESULTS.DENIED:
+            this.requestPermission();
+            console.log(
+              'The permission has not been requested / is denied but requestable'
+            );
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      });
+    } else {
+      check(PERMISSIONS.IOS.MICROPHONE).then(result => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            this.requestPermission();
+            console.log(
+              'This feature is not available (on this device / in this context)'
+            );
+            break;
+          case RESULTS.DENIED:
+            this.requestPermission();
+            console.log(
+              'The permission has not been requested / is denied but requestable'
+            );
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            break;
+        }
+      });
+    }
+  };
+
+  requestPermission = async () => {
+    AudioRecord.init(options);
+    if (Platform.OS === 'ios') {
+      request(PERMISSIONS.IOS.MICROPHONE).then(result => {});
+    } else {
+      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {});
+    }
+  };
+
+  start = async () => {
+    // AudioRecord.init(options);
+    // setTimeout(() => {
+    AudioRecord.init(options);
+    AudioRecord.start();
+    this.setState({
+      audioFile: '',
+      recording: true,
+      loaded: false,
+      buttonId: 2
+    });
+    this.timeStamp();
+  };
+
+  stop = async () => {
+    if (!this.state.recording) return;
+    console.log('stop record');
+    let audioFile = await AudioRecord.stop();
+    console.log('audioFile', audioFile);
+    this.setState({ audioFile, recording: false, buttonId: 1, playBtnId: 1 });
+    this.uploadAudio(audioFile);
+  };
+
+  timeStamp = () => {
+    var time = Math.floor(Date.now());
+    this.setState({
+      timestamp: time
+    });
+  };
+
+  load = () => {
+    return new Promise((resolve, reject) => {
+      if (!this.state.audioFile) {
+        return reject('file path is empty');
+      }
+
+      this.sound = new Sound(this.state.audioFile, '', error => {
+        if (error) {
+          console.log('failed to load the file', error);
+          return reject(error);
+        }
+        this.setState({ loaded: true });
+        return resolve();
+      });
+    });
+  };
+
+  play = async () => {
+    if (!this.state.loaded) {
+      try {
+        await this.load();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    this.setState({ paused: false, playBtnId: 2 });
+    Sound.setCategory('Playback');
+
+    this.sound.play(success => {
+      if (success) {
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed due to audio decoding errors');
+      }
+      this.setState({ paused: true });
+      // this.sound.release();
+    });
+  };
+
+  pause = () => {
+    this.sound.pause();
+    this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
+  };
+
   componentDidMount() {
+    this.checkPermission();
     let self = this;
     setTimeout(() => {
       this.setState({
         isLoading: false
       });
     }, 1500);
+    AudioRecord.init(options);
+
+    axios
+      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        }
+      })
+      .then(res => {
+        console.log(res.data, 'current time');
+        this.setState({ currentTime: res.data.data.currentDateTime });
+      })
+      .catch(error => {
+        console.log(error, 'erro_fetching_data');
+        this.setState({ currentTime: 'failed' });
+      });
   }
 
   componentDidUpdate() {
@@ -284,17 +459,49 @@ class StaffLeaveWithVendor extends Component {
     }
   }
 
-  uploadAudio = async result => {
-    console.log('Audio', result[0]);
-    const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
-    console.log('PATH', result[0], path);
+  // uploadAudio = async result => {
+  //   console.log('Audio', result[0]);
+  //   const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
+  //   console.log('PATH', result[0], path);
 
+  //   const formData = new FormData();
+
+  //   formData.append('file', {
+  //     uri: path,
+  //     name: 'hello1111.aac',
+  //     type: 'audio/aac'
+  //   });
+
+  //   console.log(formData, 'FormData');
+  //   let stat = await base.services.MediaUploadApi.uploadRelativeImage(formData);
+  //   try {
+  //     this.setState({
+  //       mp3: stat
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  //   console.log('Stat222222222222222222222222:', stat);
+  // };
+
+  uploadAudio = async result => {
+    const newUri = result.replace('file://', 'file:///');
+
+    // alert(JSON.stringify(result));
+
+    console.log('Audio', result);
+    const path = Platform.OS === 'ios' ? result : `file://${result}`;
+    // console.log('PATH', path);
+
+    alert(JSON.stringify(path));
     const formData = new FormData();
+
+    // alert(JSON.stringify(stat));
 
     formData.append('file', {
       uri: path,
-      name: 'hello1111.aac',
-      type: 'audio/aac'
+      name: `${this.state.timestamp}hello.wav`,
+      type: 'audio/wav'
     });
 
     console.log(formData, 'FormData');
@@ -304,9 +511,11 @@ class StaffLeaveWithVendor extends Component {
         mp3: stat
       });
     } catch (e) {
-      console.log(e);
+      console.log('Errorrrrrrrrrrrrrr', e);
     }
-    console.log('Stat222222222222222222222222:', stat);
+
+    alert(JSON.stringify(stat));
+    console.log('Stat222222222222222222222222, UPLOAD:', stat);
   };
 
   image1Exp = () => {};
@@ -491,7 +700,7 @@ class StaffLeaveWithVendor extends Component {
     let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
     let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
     let comments = self.state.comment ? self.state.comment : '';
-    let visitorid = self.state.visitorId;
+    let visitorid = this.props.navigation.state.params.StaffId;
     let visitorname = self.state.visitorName;
     let mp3 = self.state.mp3;
     console.log(
@@ -509,45 +718,41 @@ class StaffLeaveWithVendor extends Component {
       self.props.dashboardReducer.uniID,
       this.props.oyeURL
     );
-
-    if (visitorid.length === 0) {
-      return alert('Please select vendor from dropdown');
-    } else {
-      this.setState({
-        isLoading: true
-      });
-      axios
-        .post(
-          `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
-          {
-            VLVenName: `${visitorname}`,
-            VLCmnts: `${comments}`,
-            VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
-            VLVoiceNote: mp3,
-            VLVisLgID: visitorid
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-            }
+    this.setState({
+      isLoading: true
+    });
+    axios
+      .post(
+        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
+        {
+          VLVenName: `${visitorname}`,
+          VLCmnts: `${comments}`,
+          VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
+          VLVoiceNote: mp3,
+          VLVisLgID: visitorid
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
           }
-        )
+        }
+      )
 
-        .then(response => {
-          console.log('Respo1111:', response);
-          // alert('Success');
-          this.setState({
-            isLoading: false
-          });
-          this.props.navigation.goBack();
-        })
-        .catch(error => {
-          console.log('Crash in profile', error);
+      .then(response => {
+        console.log('Respo1111', response);
+        this.setState({
+          isLoading: false
         });
-    }
+        alert('Success');
+        this.props.navigation.goBack();
+      })
+      .catch(error => {
+        console.log('Crash in profile', error);
+      });
   };
   render() {
+    const { recording, paused, audioFile } = this.state;
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
@@ -1150,7 +1355,7 @@ class StaffLeaveWithVendor extends Component {
             >
               <View>
                 {this.state.buttonId === 1 ? (
-                  <TouchableOpacity onPress={() => this.onStartRecord()}>
+                  <TouchableOpacity onPress={() => this.start()}>
                     <Image
                       style={{
                         width: hp('5%'),
@@ -1161,7 +1366,7 @@ class StaffLeaveWithVendor extends Component {
                     />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity onPress={() => this.onStopRecord()}>
+                  <TouchableOpacity onPress={() => this.stop()}>
                     <Image
                       style={{
                         width: hp('5%'),
@@ -1186,14 +1391,15 @@ class StaffLeaveWithVendor extends Component {
                     <Text>Click mic to record</Text>
                   ) : (
                     <Text style={styles.txtRecordCounter}>
-                      {this.state.recordTime}
+                      {/* {this.state.recordTime} */}
+                      Recording...
                     </Text>
                   )}
                 </View>
                 <View style={styles.viewPlayer}>
                   <TouchableOpacity
                     style={styles.viewBarWrapper}
-                    onPress={this.onStatusPress}
+                    // onPress={this.onStatusPress}
                   >
                     <View style={styles.viewBar}>
                       <View
@@ -1205,7 +1411,8 @@ class StaffLeaveWithVendor extends Component {
                 <View>
                   {this.state.playBtnId === 2 ? (
                     <Text style={styles.txtCounter}>
-                      {this.state.playTime} / {this.state.duration}
+                      {/* {this.state.playTime} / {this.state.duration} */}
+                      Playing...
                     </Text>
                   ) : (
                     <View></View>
@@ -1229,23 +1436,18 @@ class StaffLeaveWithVendor extends Component {
                 ) : (
                   <View>
                     {this.state.playBtnId === 1 ? (
-                      <TouchableOpacity onPress={() => this.onStartPlay()}>
+                      <TouchableOpacity onPress={() => this.play()}>
                         <Image
                           source={require('../../../../../icons/leave_vender_play.png')}
                         />
                       </TouchableOpacity>
                     ) : (
                       <View>
-                        {/* {this.state.buttonId === 1 &&
-                      this.state.playBtnId === 2 ? ( */}
-                        <TouchableOpacity onPress={() => this.onStopPlay()}>
+                        <TouchableOpacity onPress={() => this.pause()}>
                           <Image
                             source={require('../../../../../icons/leave_vender_stopcopy.png')}
                           />
                         </TouchableOpacity>
-                        {/* ) : (
-                        <View></View>
-                      )} */}
                       </View>
                     )}
                   </View>
