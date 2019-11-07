@@ -1322,7 +1322,7 @@ class Receipts extends React.Component {
             "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
             "PYTax"    : "",
             "PMID" : self.state.payMethodId,
-            "PYDesc"   : self.state.paymentDesc
+            "PYDesc"  : self.state.paymentDesc
         };
         console.log('Selected dates',input);
         let stat = await base.services.OyeLivingApi.createNewReceipt(input);

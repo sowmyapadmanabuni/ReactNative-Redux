@@ -15,6 +15,7 @@ class OSButton extends React.Component {
         oSBTextColor: PropTypes.string,
         onButtonClick: PropTypes.func,
         oSBType: PropTypes.oneOf(['normal', 'custom']).isRequired,
+        disabled: PropTypes.boolean,
     };
     static defaultProps = {
         height: '30%',
@@ -24,6 +25,7 @@ class OSButton extends React.Component {
         oSBBackground: base.theme.colors.primary,
         oSBType: 'normal',
         oSBTextColor: base.theme.colors.white,
+        disabled:false
 
     };
 
@@ -47,6 +49,7 @@ class OSButton extends React.Component {
         return (
 
             <TouchableOpacity onPress={this.onButtonClick.bind(this)}
+                              disabled={this.props.disabled}
                               style={[oSBStyle, {
                                   height: (this.props.height),
                                   width: (this.props.width),

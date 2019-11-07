@@ -593,7 +593,7 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-     timer.setInterval(
+    /* timer.setInterval(
        this,
       'syncData',
       () => {
@@ -601,7 +601,7 @@ class Dashboard extends PureComponent {
     //     //     // alert("hererereerrrereer");
        },
        5000
-     );
+     );*/
   }
 
   async roleCheckForAdmin(index) {
