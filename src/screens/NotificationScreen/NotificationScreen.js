@@ -800,6 +800,13 @@ class NotificationScreen extends PureComponent {
                             {moment(item.vlEntryT).format('hh:mm A')}
                           </Text>
                         </Text>
+                        {/* <View>
+                          {item.vlVisLgID ? (
+                            <Text>{item.vlVisLgID}^*^&*</Text>
+                          ) : (
+                            <Text>Not Found</Text>
+                          )}
+                        </View> */}
                         {item.vlengName !== '' ? (
                           <Text
                             style={{
@@ -896,13 +903,6 @@ class NotificationScreen extends PureComponent {
                               fontSize: 14
                             }}
                           />
-                          <View>
-                            {item.vlVisLgID ? (
-                              <Text>{item.vlVisLgID}^*^&*</Text>
-                            ) : (
-                              <Text>Not Found</Text>
-                            )}
-                          </View>
 
                           <Button
                             onPress={() =>
