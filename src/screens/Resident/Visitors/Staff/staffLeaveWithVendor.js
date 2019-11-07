@@ -256,6 +256,11 @@ class StaffLeaveWithVendor extends Component {
 
   componentDidMount() {
     this.checkPermission();
+    console.log(
+      'IDDDDDDD',
+      this.props.navigation.state.params.StaffId,
+      this.props.navigation.state.params.StaffName
+    );
     let self = this;
     setTimeout(() => {
       this.setState({
@@ -700,8 +705,8 @@ class StaffLeaveWithVendor extends Component {
     let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
     let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
     let comments = self.state.comment ? self.state.comment : '';
-    let visitorid = this.props.navigation.state.params.StaffId;
-    let visitorname = self.state.visitorName;
+    let visitorid = self.props.navigation.state.params.StaffId;
+    let visitorname = self.props.navigation.state.params.StaffName;
     let mp3 = self.state.mp3;
     console.log(
       'All Data',
@@ -721,34 +726,139 @@ class StaffLeaveWithVendor extends Component {
     this.setState({
       isLoading: true
     });
-    axios
-      .post(
-        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
-        {
+    fetch(
+      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        },
+        body: JSON.stringify({
           VLVenName: `${visitorname}`,
           VLCmnts: `${comments}`,
           VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
           VLVoiceNote: mp3,
           VLVisLgID: visitorid
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-          }
-        }
-      )
-
-      .then(response => {
-        console.log('Respo1111', response);
+        })
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
+        console.log('Reports_Data', responseJson);
         this.setState({
-          isLoading: false
+          isLoading: false,
+          relativeImage1: '',
+          relativeImage2: '',
+          relativeImage3: '',
+          relativeImage4: '',
+          relativeImage5: '',
+
+          myProfileImage1: '',
+          myProfileImage2: '',
+          myProfileImage3: '',
+          myProfileImage4: '',
+          myProfileImage5: '',
+
+          mp3uri: '',
+          mp3: '',
+
+          imageUrl: '',
+          photo: null,
+          photoDetails: null,
+          isPhotoAvailable: false,
+          filePath: '',
+          imagePath: '',
+          id: '',
+
+          buttonId: 1,
+          playBtnId: 0,
+
+          recordSecs: 0,
+          recordTime: '00:00:00',
+          currentPositionSec: 0,
+          currentDurationSec: 0,
+          playTime: '00:00:00',
+          duration: '00:00:00',
+          datasource: [],
+
+          visitorName: '',
+          visitorId: '',
+          visitorList: [],
+
+          comment: '',
+          dropdownValue: '',
+
+          announcementId: '',
+
+          audioFile: '',
+          recording: false,
+          loaded: false,
+          paused: true,
+          currentTime: '',
+
+          timestamp: ''
         });
         alert('Success');
-        this.props.navigation.goBack();
+        // this.props.navigation.goBack();
       })
+
       .catch(error => {
-        console.log('Crash in profile', error);
+        this.setState({
+          isLoading: false,
+          relativeImage1: '',
+          relativeImage2: '',
+          relativeImage3: '',
+          relativeImage4: '',
+          relativeImage5: '',
+
+          myProfileImage1: '',
+          myProfileImage2: '',
+          myProfileImage3: '',
+          myProfileImage4: '',
+          myProfileImage5: '',
+
+          mp3uri: '',
+          mp3: '',
+
+          imageUrl: '',
+          photo: null,
+          photoDetails: null,
+          isPhotoAvailable: false,
+          filePath: '',
+          imagePath: '',
+          id: '',
+
+          buttonId: 1,
+          playBtnId: 0,
+
+          recordSecs: 0,
+          recordTime: '00:00:00',
+          currentPositionSec: 0,
+          currentDurationSec: 0,
+          playTime: '00:00:00',
+          duration: '00:00:00',
+          datasource: [],
+          visitorName: '',
+          visitorId: '',
+          visitorList: [],
+
+          comment: '',
+          dropdownValue: '',
+
+          announcementId: '',
+
+          audioFile: '',
+          recording: false,
+          loaded: false,
+          paused: true,
+          currentTime: '',
+
+          timestamp: ''
+        });
+        alert('Media not uploaded');
+        console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
       });
   };
   render() {
@@ -1492,6 +1602,7 @@ class StaffLeaveWithVendor extends Component {
                   autoCapitalize="none"
                   keyboardType="email-address"
                   placeholder="Write a comment here..."
+                  value={this.state.comment}
                   onChangeText={comment => this.setState({ comment: comment })}
                 />
               </Item>
@@ -1523,13 +1634,13 @@ class StaffLeaveWithVendor extends Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <ProgressLoader
+        {/* <ProgressLoader
           isHUD={true}
           isModal={true}
           visible={this.state.isLoading}
           color={base.theme.colors.primary}
           hudColor={base.theme.colors.white}
-        />
+        /> */}
       </View>
     );
   }
