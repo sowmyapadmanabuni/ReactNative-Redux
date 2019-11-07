@@ -52,6 +52,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 import utils from '../src/base/utils';
+import _ from 'lodash';
 
 // var audioRecorderPlayer;
 
@@ -679,44 +680,89 @@ class Announcement extends Component {
           }
         }
       )
-      .then(res => {
-        let memberList = res.data.data.memberListByAssociation;
-        // let announcement = response.data.data.announcement.anid;
-        let removedDuplicates = _.uniqBy(memberList, 'acAccntID');
-
-        console.log('memberList1111', memberList, removedDuplicates);
+      .then(response => {
+        console.log(
+          'Respo1111:',
+          response,
+          response.data.data.announcement.anid
+        );
         // this.setState({
         //   isLoading: false
         // });
-        // memberList.map(data => {
-        //   console.log('adminssss', ntType, data);
-        //   this.props.createUserNotification(
-        //     ntType,
-        //     this.props.oyeURL,
-        //     data.acAccntID,
-        //     this.props.dashboardReducer.assId.toString(),
-        //     ntDesc,
-        //     'announcment',
-        //     'announcment',
-        //     'announcement',
-        //     'announcment',
-        //     'announcment',
-        //     'announcment',
-        //     'announcment',
-        //     'announcment',
-        //     false,
-        //     this.props.userReducer.MyAccountID,
-        //     announcement
-        //   );
-        // });
-        // this.props.navigation.goBack();
+        axios
+          .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
+            admin: 'false',
+            ntType: ntType,
+            ntDesc: ntDesc,
+            ntTitle: ntTitle,
+            associationID: associationId
+          })
+          .then(response_3 => {
+            console.log('response_3', response_3);
+            // this.setState({ loading: false });
+            axios
+              .get(
+                `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
+                {
+                  headers: {
+                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                    'Content-Type': 'application/json'
+                  }
+                }
+              )
+              .then(res => {
+                let memberList = res.data.data.memberListByAssociation;
+                let announcement = response.data.data.announcement.anid;
+                console.log('RESPONSE', res);
+                this.setState({
+                  isLoading: false
+                });
+                let removedDuplicates = _.uniqBy(memberList, 'acAccntID');
+                console.log(
+                  'memberList1111',
+                  memberList,
+                  removedDuplicates,
+                  announcement
+                );
+                removedDuplicates.map(data => {
+                  console.log('adminssss', ntType, data);
+                  this.props.createUserNotification(
+                    ntType,
+                    this.props.oyeURL,
+                    data.acAccntID,
+                    this.props.dashboardReducer.assId.toString(),
+                    ntDesc,
+                    'announcment',
+                    'announcment',
+                    'announcement',
+                    'announcment',
+                    'announcment',
+                    'announcment',
+                    'announcment',
+                    'announcment',
+                    false,
+                    this.props.userReducer.MyAccountID,
+                    announcement
+                  );
+                });
+                this.props.navigation.goBack();
 
-        // getAssoMembers(oyeURL, MyAccountID);
+                // getAssoMembers(oyeURL, MyAccountID);
 
-        // this.props.updateJoinedAssociation(
-        //   this.props.joinedAssociations,
-        //   unitList.unUnitID
-        // );
+                // this.props.updateJoinedAssociation(
+                //   this.props.joinedAssociations,
+                //   unitList.unUnitID
+                // );
+              })
+              .catch(error => {
+                // getAssoMembers(oyeURL, MyAccountID);
+                this.setState({
+                  loading: false
+                });
+
+                console.log(error, 'errorAdmin');
+              });
+          });
       })
       .catch(error => {
         // getAssoMembers(oyeURL, MyAccountID);

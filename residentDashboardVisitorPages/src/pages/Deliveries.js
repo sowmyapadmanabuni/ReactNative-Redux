@@ -416,6 +416,9 @@ class App extends React.Component {
                 </View>
               }
               </View> */}
+              {/* <View>
+                <Text>{item.vlVisLgID}</Text>
+              </View> */}
             </View>
           </TouchableOpacity>
           <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 0 }}>
