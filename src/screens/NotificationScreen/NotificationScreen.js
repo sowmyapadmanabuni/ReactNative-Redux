@@ -107,6 +107,7 @@ class NotificationScreen extends PureComponent {
         this.processBackPress()
       );
     }, 100);
+    // this.doNetwork(null, this.props.notifications);
   }
 
   componentWillUnmount() {
