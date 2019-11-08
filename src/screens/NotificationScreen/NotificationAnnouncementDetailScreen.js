@@ -472,79 +472,54 @@ class NotificationAnnouncementDetailScreen extends Component {
                 </View>
               )}
             </View>
-
-            <View style={Styles.secondview}>
-              <Image
-                style={Styles.mic}
-                source={require('../../../icons/leave_vender_record.png')}
-              />
-
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <View style={{ alignItems: 'center' }}>
-                  <Text>Click to play</Text>
-                </View>
-
-                <View style={Styles.viewPlayer}>
-                  <TouchableOpacity
-                    style={Styles.viewBarWrapper}
-                    // onPress={this.onStatusPress}
+            {this.state.voice === '' ? null : (
+              <View style={Styles.secondview}>
+                <Card style={Styles.playcardstyle}>
+                  <View
+                    style={{
+                      width: hp('5%'),
+                      height: hp('5%'),
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
                   >
-                    <View style={Styles.viewBar}>
+                    <TouchableOpacity onPress={() => this.play()}>
                       <View
-                        style={[
-                          Styles.viewBarPlay
-                          // { width: playWidth }
-                        ]}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <Card style={Styles.playcardstyle}>
-                {this.state.voice === '' ? (
-                  <Image
-                    source={require('../../../icons/leave_vender_play1.png')}
-                  />
-                ) : (
-                  <View>
-                    {this.state.playBtnId === 0 ? (
-                      <TouchableOpacity onPress={() => this.play()}>
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%'),
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
                         <Image
                           source={require('../../../icons/leave_vender_play.png')}
                         />
-                      </TouchableOpacity>
-                    ) : (
-                      <View>
-                        <TouchableOpacity onPress={() => this.pause()}>
-                          <Image
-                            source={require('../../../icons/leave_vender_stopcopy.png')}
-                          />
-                        </TouchableOpacity>
                       </View>
-                    )}
+                    </TouchableOpacity>
                   </View>
-                )}
-              </Card>
-            </View>
-
-            <View style={Styles.thirdview}>
-              <View style={Styles.message}>
-                <Text style={Styles.messages}>Message</Text>
+                </Card>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: hp('2.8%')
+                  }}
+                >
+                  <Text>Click to play</Text>
+                </View>
               </View>
-              <View style={Styles.textbox}>
-                <Text style={Styles.notes}>{this.state.notes}</Text>
-              </View>
-            </View>
+            )}
           </View>
         </Card>
-
+        <View style={Styles.thirdview}>
+          <View style={Styles.message}>
+            <Text style={Styles.messages}>Message</Text>
+          </View>
+          <View style={Styles.textbox}>
+            <Text style={Styles.notes}>{this.state.notes}</Text>
+          </View>
+        </View>
         <ProgressLoader
           isHUD={true}
           isModal={true}

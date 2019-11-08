@@ -235,7 +235,7 @@ class StaffLeaveWithVendor extends Component {
       }
     }
 
-    this.setState({ paused: false, playBtnId: 2 });
+    this.setState({ paused: false });
     Sound.setCategory('Playback');
 
     this.sound.play(success => {
@@ -498,7 +498,7 @@ class StaffLeaveWithVendor extends Component {
     const path = Platform.OS === 'ios' ? result : `file://${result}`;
     // console.log('PATH', path);
 
-    alert(JSON.stringify(path));
+    // alert(JSON.stringify(path));
     const formData = new FormData();
 
     // alert(JSON.stringify(stat));
@@ -519,7 +519,7 @@ class StaffLeaveWithVendor extends Component {
       console.log('Errorrrrrrrrrrrrrr', e);
     }
 
-    alert(JSON.stringify(stat));
+    // alert(JSON.stringify(stat));
     console.log('Stat222222222222222222222222, UPLOAD:', stat);
   };
 
@@ -1466,73 +1466,78 @@ class StaffLeaveWithVendor extends Component {
               style={{
                 flexDirection: 'row',
                 width: '100%',
-                marginTop: hp('2%')
-                // backgroundColor: 'yellow'
+                marginTop: hp('2%'),
+                height: hp('8%')
               }}
             >
-              <View>
+              <View
+                style={{
+                  width: hp('8%'),
+                  height: hp('8%'),
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
                 {this.state.buttonId === 1 ? (
                   <TouchableOpacity onPress={() => this.start()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%'),
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
-                      source={require('../../../../../icons/leave_vender_record.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%')
+                        }}
+                        source={require('../../../../../icons/leave_vender_record.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity onPress={() => this.stop()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%'),
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
-                      source={require('../../../../../icons/leave_vender_stop.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%')
+                        }}
+                        source={require('../../../../../icons/leave_vender_stop.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 )}
               </View>
               <View
                 style={{
                   flex: 1,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                  height: hp('8%')
                 }}
               >
-                <View style={{ alignItems: 'center' }}>
+                <View
+                  style={{
+                    flex: 1,
+                    height: hp('5%'),
+                    alignItems: 'flex-start',
+                    justifyContent: 'center'
+                  }}
+                >
                   {this.state.buttonId === 1 ? (
                     <Text>Click mic to record</Text>
                   ) : (
-                    <Text style={styles.txtRecordCounter}>
-                      {/* {this.state.recordTime} */}
-                      Recording...
-                    </Text>
-                  )}
-                </View>
-                <View style={styles.viewPlayer}>
-                  <TouchableOpacity
-                    style={styles.viewBarWrapper}
-                    // onPress={this.onStatusPress}
-                  >
-                    <View style={styles.viewBar}>
-                      <View
-                        style={[styles.viewBarPlay, { width: playWidth }]}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  {this.state.playBtnId === 2 ? (
-                    <Text style={styles.txtCounter}>
-                      {/* {this.state.playTime} / {this.state.duration} */}
-                      Playing...
-                    </Text>
-                  ) : (
-                    <View></View>
+                    <Text style={styles.txtRecordCounter}>Recording...</Text>
                   )}
                 </View>
               </View>
@@ -1540,7 +1545,7 @@ class StaffLeaveWithVendor extends Component {
                 style={{
                   width: hp('5%'),
                   height: hp('5%'),
-                  marginRight: hp('1%'),
+                  marginRight: hp('2%'),
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: hp('1%')
@@ -1552,20 +1557,21 @@ class StaffLeaveWithVendor extends Component {
                   />
                 ) : (
                   <View>
-                    {this.state.playBtnId === 1 ? (
+                    {this.state.playBtnId === 1 && (
                       <TouchableOpacity onPress={() => this.play()}>
-                        <Image
-                          source={require('../../../../../icons/leave_vender_play.png')}
-                        />
-                      </TouchableOpacity>
-                    ) : (
-                      <View>
-                        <TouchableOpacity onPress={() => this.pause()}>
+                        <View
+                          style={{
+                            width: hp('5%'),
+                            height: hp('5%'),
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
                           <Image
-                            source={require('../../../../../icons/leave_vender_stopcopy.png')}
+                            source={require('../../../../../icons/leave_vender_play.png')}
                           />
-                        </TouchableOpacity>
-                      </View>
+                        </View>
+                      </TouchableOpacity>
                     )}
                   </View>
                 )}
