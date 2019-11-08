@@ -45,6 +45,8 @@ import base from '../../base';
 import { Easing } from 'react-native';
 import { connect } from 'react-redux';
 
+import { storeOpenedNotif, onNotificationOpen } from '../../actions';
+
 class NotificationAnnouncementDetailScreen extends Component {
   constructor(props) {
     super(props);
@@ -112,6 +114,15 @@ class NotificationAnnouncementDetailScreen extends Component {
 
   componentDidMount() {
     let self = this;
+    const { navigation } = this.props;
+    // const details = navigation.getParam("details", "NO-ID");
+    const index = navigation.getParam('index', 'NO-ID');
+    const notifications = navigation.getParam('notifications', 'NO-ID');
+    const ntid = navigation.getParam('ntid', 'NO-ID');
+    const oyeURL = navigation.getParam('oyeURL', 'NO-ID');
+    const savedNoifId = navigation.getParam('savedNoifId', 'NO-ID');
+    this.props.onNotificationOpen(notifications, index, oyeURL);
+    this.props.storeOpenedNotif(savedNoifId, ntid);
     setTimeout(() => {
       this.setState({
         isLoading: false
@@ -553,4 +564,7 @@ const mapStateToProps = state => {
     userReducer: state.UserReducer
   };
 };
-export default connect(mapStateToProps)(NotificationAnnouncementDetailScreen);
+export default connect(
+  mapStateToProps,
+  { onNotificationOpen, storeOpenedNotif }
+)(NotificationAnnouncementDetailScreen);

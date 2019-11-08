@@ -747,6 +747,15 @@ class StaffLeaveWithVendor extends Component {
       .then(responseJson => {
         //var count = Object.keys(responseJson.data.visitorlogbydate).length;
         console.log('Reports_Data', responseJson);
+        gateFirebase
+          .database()
+          .ref(
+            `NotificationSync/A_${this.props.dashboardReducer.assId}/${visitorid}`
+          )
+          .update({
+            newAttachment: true,
+            attachmentTime: this.state.currentTime
+          });
         this.setState({
           isLoading: false,
           relativeImage1: '',
@@ -800,8 +809,7 @@ class StaffLeaveWithVendor extends Component {
 
           timestamp: ''
         });
-        alert('Success');
-        // this.props.navigation.goBack();
+        this.props.navigation.goBack();
       })
 
       .catch(error => {
@@ -857,7 +865,6 @@ class StaffLeaveWithVendor extends Component {
 
           timestamp: ''
         });
-        alert('Media not uploaded');
         console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
       });
   };

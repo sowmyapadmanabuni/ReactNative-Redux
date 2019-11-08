@@ -507,175 +507,165 @@ class Announcement extends Component {
     );
   }
 
-  // onStartRecord = async () => {
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-  //         {
-  //           title: 'Permissions for write access',
-  //           message: 'Give permission to your storage to write a file',
-  //           buttonPositive: 'ok'
+  // datasend = () => {
+  //   axios
+  //     .get(
+  //       `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
+  //       {
+  //         headers: {
+  //           'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+  //           'Content-Type': 'application/json'
   //         }
-  //       );
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         console.log('You can use the storage');
-  //       } else {
-  //         console.log('permission denied');
-  //         return;
   //       }
-  //     } catch (err) {
-  //       console.warn(err);
-  //       return;
-  //     }
-  //   }
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-  //         {
-  //           title: 'Permissions for write access',
-  //           message: 'Give permission to your storage to write a file',
-  //           buttonPositive: 'ok'
-  //         }
+  //     )
+  //     .then(response => {
+  //       console.log(
+  //         'Respo1111:',
+  //         response,
+  //         response.data.data.announcement.anid
   //       );
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         console.log('You can use the camera');
-  //       } else {
-  //         console.log('permission denied');
-  //         return;
-  //       }
-  //     } catch (err) {
-  //       console.warn(err);
-  //       return;
-  //     }
-  //   }
+  //       // this.setState({
+  //       //   isLoading: false
+  //       // });
+  //       axios
+  //         .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
+  //           admin: 'false',
+  //           ntType: ntType,
+  //           ntDesc: ntDesc,
+  //           ntTitle: ntTitle,
+  //           associationID: associationId
+  //         })
+  //         .then(response_3 => {
+  //           console.log('response_3', response_3);
+  //           // this.setState({ loading: false });
+  //           axios
+  //             .get(
+  //               `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
+  //               {
+  //                 headers: {
+  //                   'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+  //                   'Content-Type': 'application/json'
+  //                 }
+  //               }
+  //             )
+  //             .then(res => {
+  //               let memberList = res.data.data.memberListByAssociation;
+  //               let announcement = response.data.data.announcement.anid;
+  //               console.log('RESPONSE', res);
+  //               this.setState({
+  //                 isLoading: false
+  //               });
+  //               let removedDuplicates = _.uniqBy(memberList, 'acAccntID');
+  //               console.log(
+  //                 'memberList1111',
+  //                 memberList,
+  //                 removedDuplicates,
+  //                 announcement
+  //               );
+  //               removedDuplicates.map(data => {
+  //                 console.log('adminssss', ntType, data);
+  //                 this.props.createUserNotification(
+  //                   ntType,
+  //                   this.props.oyeURL,
+  //                   data.acAccntID,
+  //                   this.props.dashboardReducer.assId.toString(),
+  //                   ntDesc,
+  //                   'announcment',
+  //                   'announcment',
+  //                   'announcement',
+  //                   'announcment',
+  //                   'announcment',
+  //                   'announcment',
+  //                   'announcment',
+  //                   'announcment',
+  //                   false,
+  //                   this.props.userReducer.MyAccountID,
+  //                   announcement
+  //                 );
+  //               });
+  //               this.props.navigation.goBack();
 
-  //   const dirs = RNFetchBlob.fs.dirs;
+  //               // getAssoMembers(oyeURL, MyAccountID);
 
-  //   console.log(dirs.MusicDir, 'dir');
+  //               // this.props.updateJoinedAssociation(
+  //               //   this.props.joinedAssociations,
+  //               //   unitList.unUnitID
+  //               // );
+  //             })
+  //             .catch(error => {
+  //               // getAssoMembers(oyeURL, MyAccountID);
+  //               this.setState({
+  //                 loading: false
+  //               });
 
-  //   const path = Platform.select({
-  //     ios: 'hello.mp4',
-  //     android: 'sdcard/hello.mp4'
-  //     // android: `${dirs.MusicDir}/announcement/hello.mp4` //here?
-  //   });
-
-  //   const audioSet = {
-  //     AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-  //     AudioSourceAndroid: AudioSourceAndroidType.MIC,
-  //     AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-  //     AVNumberOfChannelsKeyIOS: 2,
-  //     AVFormatIDKeyIOS: AVEncodingOption.aac
-  //   };
-  //   // console.log('audioSet', audioSet);
-  //   const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
-
-  //   // console.log(uri, 'URI_PATH');
-
-  //   this.audioRecorderPlayer.addRecordBackListener(e => {
-  //     this.setState({
-  //       recordSecs: e.current_position,
-  //       recordTime: this.audioRecorderPlayer.mmssss(
-  //         Math.floor(e.current_position)
-  //       ),
-  //       buttonId: 2
-  //     });
-  //   });
-  //   // alert('Recording Started');
-  //   // console.log(`uri: ${uri}`);
-  // };
-
-  // onStopRecord = async () => {
-  //   const result = await this.audioRecorderPlayer.stopRecorder();
-  //   this.audioRecorderPlayer.removeRecordBackListener();
-  //   this.setState({
-  //     recordSecs: 0,
-  //     buttonId: 1,
-  //     playBtnId: 1,
-
-  //     mp3uri: result
-  //   });
-  //   // alert('Recording Stop');
-  //   // console.log('.substring(14, 23)', result.substring(14, 23));
-  //   // console.log('this state uri', this.state.mp3uri);
-  //   // this.uploadAudio(result.match('hello.m4a') || result.match('hello.mp3'));
-  //   this.uploadAudio(result);
-  // };
-
-  // onStatusPress = e => {
-  //   const touchX = e.nativeEvent.locationX;
-  //   console.log(`touchX: ${touchX}`);
-  //   const playWidth =
-  //     (this.state.currentPositionSec / this.state.currentDurationSec) *
-  //     (screenWidth - 56 * ratio);
-  //   console.log(`currentPlayWidth: ${playWidth}`);
-
-  //   const currentPosition = Math.round(this.state.currentPositionSec);
-  //   console.log(`currentPosition: ${currentPosition}`);
-
-  //   if (playWidth && playWidth < touchX) {
-  //     const addSecs = Math.round(currentPosition + 3000);
-  //     this.audioRecorderPlayer.seekToPlayer(addSecs);
-  //     console.log(`addSecs: ${addSecs}`);
-  //   } else {
-  //     const subSecs = Math.round(currentPosition - 3000);
-  //     this.audioRecorderPlayer.seekToPlayer(subSecs);
-  //     console.log(`subSecs: ${subSecs}`);
-  //   }
-  // };
-
-  // onStartPlay = async () => {
-  //   // this.setState({
-  //   //   playBtnId: 2
-  //   // });
-  //   // console.log('Play Button', this.state.playBtnId);
-  //   const path = Platform.select({
-  //     ios: 'hello.m4a',
-  //     android: 'sdcard/hello.mp4'
-  //   });
-  //   const msg = await this.audioRecorderPlayer.startPlayer(path);
-  //   console.log('Message', msg);
-  //   this.audioRecorderPlayer.setVolume(1.0);
-  //   console.log(msg);
-  //   this.audioRecorderPlayer.addPlayBackListener(e => {
-  //     if (e.current_position === e.duration) {
-  //       console.log('finished');
-  //       this.audioRecorderPlayer.stopPlayer();
+  //               console.log(error, 'errorAdmin');
+  //             });
+  //         });
+  //     })
+  //     .catch(error => {
+  //       // getAssoMembers(oyeURL, MyAccountID);
   //       this.setState({
-  //         playBtnId: 2
+  //         loading: false
   //       });
-  //     }
-  //     this.setState({
-  //       currentPositionSec: e.current_position,
-  //       currentDurationSec: e.duration,
-  //       playTime: this.audioRecorderPlayer.mmssss(
-  //         Math.floor(e.current_position)
-  //       ),
-  //       duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)),
-  //       playBtnId: 2
-  //     });
-  //     console.log('Play Button Id', this.state.playTime);
-  //   });
-  // };
 
-  // onStopPlay = async () => {
-  //   this.audioRecorderPlayer.stopPlayer();
-  //   this.audioRecorderPlayer.removePlayBackListener();
-  //   this.setState({
-  //     playBtnId: 1,
-  //     buttonId: 1
-  //   });
+  //       console.log(error, 'errorAdmin');
+  //     });
   // };
 
   datasend = () => {
+    let self = this;
+    let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
+    let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
+    let img3 = self.state.relativeImage3 ? self.state.relativeImage3 : '';
+    let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
+    let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
+    let comments = self.state.comment ? self.state.comment : '';
+    let visitorid = self.state.visitorId;
+    let visitorname = self.state.visitorName;
+    let mp3 = self.state.mp3;
+    accountId = self.props.userReducer.MyAccountID;
+    assocID = self.props.dashboardReducer.assId;
+    console.log(
+      'All Data',
+      img1,
+      img2,
+      img3,
+      img4,
+      img5,
+      comments,
+      mp3,
+      accountId,
+      self.props.dashboardReducer.assId,
+
+      visitorid,
+      visitorname,
+      self.props.dashboardReducer.uniID,
+      this.props.oyeURL
+    );
+    let ntTitle = 'Announcement';
+    let ntDesc = `${comments}`;
+    let ntType = `Announcement`;
+    let associationId = self.props.dashboardReducer.assId;
+
+    let image = `${img1},${img2},${img3},${img4},${img5}`;
+
+    this.setState({
+      isLoading: true
+    });
     axios
-      .get(
-        `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
+      .post(
+        `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
+        {
+          ANImages: image,
+          ANCmnts: `${comments}`,
+          ACAccntID: accountId,
+          ASAssnID: assocID,
+          ANVoice: mp3
+        },
         {
           headers: {
-            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
           }
         }
       )
@@ -685,9 +675,9 @@ class Announcement extends Component {
           response,
           response.data.data.announcement.anid
         );
-        // this.setState({
-        //   isLoading: false
-        // });
+        this.setState({
+          isLoading: false
+        });
         axios
           .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
             admin: 'false',
@@ -745,7 +735,6 @@ class Announcement extends Component {
                   );
                 });
                 this.props.navigation.goBack();
-
                 // getAssoMembers(oyeURL, MyAccountID);
 
                 // this.props.updateJoinedAssociation(
@@ -764,172 +753,9 @@ class Announcement extends Component {
           });
       })
       .catch(error => {
-        // getAssoMembers(oyeURL, MyAccountID);
-        this.setState({
-          loading: false
-        });
-
-        console.log(error, 'errorAdmin');
+        console.log('Crash in Announcement', error);
       });
   };
-
-  // datasend = () => {
-  //   let self = this;
-  //   let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
-  //   let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
-  //   let img3 = self.state.relativeImage3 ? self.state.relativeImage3 : '';
-  //   let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
-  //   let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
-  //   let comments = self.state.comment ? self.state.comment : '';
-  //   let visitorid = self.state.visitorId;
-  //   let visitorname = self.state.visitorName;
-  //   let mp3 = self.state.mp3;
-  //   accountId = self.props.userReducer.MyAccountID;
-  //   assocID = self.props.dashboardReducer.assId;
-  //   console.log(
-  //     'All Data',
-  //     img1,
-  //     img2,
-  //     img3,
-  //     img4,
-  //     img5,
-  //     comments,
-  //     mp3,
-  //     accountId,
-  //     self.props.dashboardReducer.assId,
-
-  //     visitorid,
-  //     visitorname,
-  //     self.props.dashboardReducer.uniID,
-  //     this.props.oyeURL
-  //   );
-  //   let ntTitle = 'Announcement';
-  //   let ntDesc = `${comments}`;
-  //   let ntType = `Announcement`;
-  //   let associationId = self.props.dashboardReducer.assId;
-
-  //   let image = `${img1},${img2},${img3},${img4},${img5}`;
-
-  //   this.setState({
-  //     isLoading: true
-  //   });
-  //   axios
-  //     .post(
-  //       `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
-  //       {
-  //         ANImages: image,
-  //         ANCmnts: `${comments}`,
-  //         ACAccntID: accountId,
-  //         ASAssnID: assocID,
-  //         ANVoice: mp3
-  //       },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-  //         }
-  //       }
-  //     )
-  //     .then(response => {
-  //       console.log(
-  //         'Respo1111:',
-  //         response,
-  //         response.data.data.announcement.anid
-  //       );
-  //       this.setState({
-  //         isLoading: false
-  //       });
-  //       axios
-  //         .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
-  //           admin: 'false',
-  //           ntType: ntType,
-  //           ntDesc: ntDesc,
-  //           ntTitle: ntTitle,
-  //           associationID: associationId
-  //         })
-  //         .then(response_3 => {
-  //           console.log('response_3', response_3);
-  //           // this.setState({ loading: false });
-  //           axios
-  //             .get(
-  //               `http://${this.props.oyeURL}/oyeliving/api/v1/Member/GetMemberListByAssocID/${this.props.dashboardReducer.assId}`,
-  //               {
-  //                 headers: {
-  //                   'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-  //                   'Content-Type': 'application/json'
-  //                 }
-  //               }
-  //             )
-  //             .then(res => {
-  //               let memberList = res.data.data.memberListByAssociation;
-  //               let announcement = response.data.data.announcement.anid;
-
-  //               console.log('memberList1111', memberList, announcement);
-  //               this.setState({
-  //                 isLoading: false
-  //               });
-  //               memberList.map(data => {
-  //                 console.log('adminssss', ntType, data);
-  //                 this.props.createUserNotification(
-  //                   ntType,
-  //                   this.props.oyeURL,
-  //                   data.acAccntID,
-  //                   this.props.dashboardReducer.assId.toString(),
-  //                   ntDesc,
-  //                   'announcment',
-  //                   'announcment',
-  //                   'announcement',
-  //                   'announcment',
-  //                   'announcment',
-  //                   'announcment',
-  //                   'announcment',
-  //                   'announcment',
-  //                   false,
-  //                   this.props.userReducer.MyAccountID,
-  //                   announcement
-
-  //                   // ntType,
-  //                   // this.props.oyeURL,
-  //                   // data.acAccntID,
-  //                   // this.props.dashboardReducer.assId.toString(),
-  //                   // ntDesc,
-
-  //                   // // sbUnitID.toString(),
-  //                   // // sbMemID.toString(),
-  //                   // // sbSubID.toString(),
-  //                   // // sbRoleId,
-  //                   // // this.props.navigation.state.params.associationName,
-  //                   // // unitName.toString(),
-  //                   // // occupancyDate,
-  //                   // // soldDate,
-  //                   // false,
-  //                   // this.props.userReducer.MyAccountID,
-  //                   // announcement
-  //                 );
-  //               });
-  //               this.props.navigation.goBack();
-
-  //               // getAssoMembers(oyeURL, MyAccountID);
-
-  //               // this.props.updateJoinedAssociation(
-  //               //   this.props.joinedAssociations,
-  //               //   unitList.unUnitID
-  //               // );
-  //             })
-  //             .catch(error => {
-  //               // getAssoMembers(oyeURL, MyAccountID);
-  //               this.setState({
-  //                 loading: false
-  //               });
-
-  //               console.log(error, 'errorAdmin');
-  //             });
-  //         });
-  //     })
-  //     .catch(error => {
-  //       console.log('Crash in Announcement', error);
-  //     });
-  // };
 
   render() {
     const { recording, paused, audioFile } = this.state;

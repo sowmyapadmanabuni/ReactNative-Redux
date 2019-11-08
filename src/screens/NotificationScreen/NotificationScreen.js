@@ -944,6 +944,7 @@ class NotificationScreen extends PureComponent {
                               }}
                             >
                               <Button
+                                disabled={item.vlVisType === 'STAFF'}
                                 buttonStyle={{ borderColor: '#75be6f' }}
                                 onPress={() =>
                                   this.acceptgateVisitor(
@@ -961,6 +962,7 @@ class NotificationScreen extends PureComponent {
                               />
 
                               <Button
+                                disabled={item.vlVisType === 'STAFF'}
                                 onPress={() =>
                                   this.declinegateVisitor(
                                     item.sbMemID,
