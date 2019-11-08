@@ -80,6 +80,7 @@ class AddAndEditCheckPoints extends React.Component {
             locationArrStored: [],
             isLottieModalOpen:false,
             progress: new Animated.Value(0),
+            accuracy:0
         });
 
         this.thread = null;
@@ -202,7 +203,7 @@ class AddAndEditCheckPoints extends React.Component {
                                     {cancelable: false}
                                 )
                             },
-                            {enableHighAccuracy: false, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
+                            {enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
                         );
                     } else {
                         console.log("Permission deny");
@@ -240,20 +241,19 @@ class AddAndEditCheckPoints extends React.Component {
                         longitudeDelta: LONGITUDE_DELTA,
                         latitudeDelta: LATITUDE_DELTA,
                     },
-                    gpsLocation: parseFloat(LocationData.latitude).toFixed(5) + "," + parseFloat(LocationData.longitude).toFixed(5),
-                    locationArrStored: locationArrStored
+                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
+                    locationArrStored: locationArrStored,
+                    accuracy:LocationData.accuracy
                 },()=>this.renderUserLocation())
             },
             (error) => {
                 console.log(error);
             },
             {
-                enableHighAccuracy: false,
-                distanceFilter: 1,
-                interval: 5000,
-                fastestInterval: 2000,
-                useSignificantChanges: true,
-                timeout: 1000
+                enableHighAccuracy: true,
+                distanceFilter: 5,
+                timeout: 15000,
+                maximumAge:15000
             }
         );
     }
@@ -513,6 +513,9 @@ class AddAndEditCheckPoints extends React.Component {
                             {this.renderUserLocation()}
                         </MapView>
                     </View>
+                    <View style={{height:hp('1'),top:hp('3'),width:wp('80'),alignSelf:'center',justifyContent:'center',alignItems:'center'}}>
+                        <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
+                    </View>
 
                     <View style={AddAndEditCheckPointStyles.textView}>
                         <TextField
@@ -575,8 +578,9 @@ class AddAndEditCheckPoints extends React.Component {
                                   oSBBackground={base.theme.colors.red}
                                   height={30} borderRadius={10}/>
                         <OSButton onButtonClick={() => this.validateFields()}
+                                  disabled={this.state.accuracy < 8}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  oSBBackground={this.state.isDataCorrect ? base.theme.colors.primary : base.theme.colors.grey}
+                                  oSBBackground={this.state.accuracy < 8 ? base.theme.colors.grey : base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>
@@ -597,7 +601,7 @@ class AddAndEditCheckPoints extends React.Component {
                         alignSelf: 'center',
                         justifySelf:'center',
                         justifyContent:'center',
-                         width: wp('55%'),
+                         //width: wp('55%'),
                          borderRadius:hp('20'),
                          flexDirection:'row',
                          height:hp('50%'),

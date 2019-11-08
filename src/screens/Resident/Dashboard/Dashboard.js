@@ -586,22 +586,22 @@ class Dashboard extends PureComponent {
     //         }
     //     });
 
-    //Adding an event listner om focus
+    //Adding an event listner on focus
     //So whenever the screen will have focus it will set the state to zero
 
     if (!this.props.called) {
       this.didMount();
     }
 
-    // timer.setInterval(
-    //   this,
-    //   'syncData',
-    //   () => {
-    //     this.syncData();
+     timer.setInterval(
+       this,
+      'syncData',
+      () => {
+       this.syncData();
     //     //     // alert("hererereerrrereer");
-    //   },
-    //   5000
-    // );
+       },
+       5000
+     );
   }
 
   async roleCheckForAdmin(index) {
@@ -1760,7 +1760,7 @@ class Dashboard extends PureComponent {
             }
             backgroundColor={base.theme.colors.cardBackground}
           />
-          <CardView
+          {/*<CardView
             height={'100%'}
             width={'25%'}
             cardText={'Accounting'}
@@ -1770,7 +1770,7 @@ class Dashboard extends PureComponent {
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.props.navigation.navigate('oyeLiving')}
-          />
+          />*/}
           <CardView
             height={'100%'}
             width={'25%'}
