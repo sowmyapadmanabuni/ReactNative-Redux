@@ -578,9 +578,9 @@ class AddAndEditCheckPoints extends React.Component {
                                   oSBBackground={base.theme.colors.red}
                                   height={30} borderRadius={10}/>
                         <OSButton onButtonClick={() => this.validateFields()}
-                                  disabled={this.state.accuracy < 8}
+                                  disabled={this.state.accuracy > 8}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  oSBBackground={this.state.accuracy < 8 ? base.theme.colors.grey : base.theme.colors.primary}
+                                  oSBBackground={this.state.accuracy > 8 ? base.theme.colors.grey : base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>

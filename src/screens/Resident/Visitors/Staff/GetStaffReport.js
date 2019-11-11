@@ -198,6 +198,7 @@ class GetStaffReport extends React.Component {
 
         try {
             if (stat && stat.data.worker && stat.data.worker.length !== 0) {
+                console.log('Get the data>>>>>>',stat.data.worker)
 
                 let reportsData = stat.data.worker;
                 let tableData = [];
