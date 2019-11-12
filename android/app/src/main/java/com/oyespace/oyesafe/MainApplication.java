@@ -42,6 +42,8 @@ import java.util.List;
 import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
+import com.synclovis.RNLocationSatellitesPackage;
+
 
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 
@@ -92,7 +94,9 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new SystemSettingPackage(),
                     new SvgPackage(),
                     new GeolocationPackage(),
-                    new RNImageToPdfPackage()
+                    new RNImageToPdfPackage(),
+                    new RNLocationSatellitesPackage()
+
             );
         }
 

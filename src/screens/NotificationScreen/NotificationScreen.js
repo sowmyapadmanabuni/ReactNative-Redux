@@ -62,29 +62,29 @@ class NotificationScreen extends PureComponent {
 
   componentDidMount() {
     base.utils.validate.checkSubscription(
-      this.props.userReducer.SelectedAssociationID
+        this.props.userReducer.SelectedAssociationID
     );
     this.doNetwork(null, this.props.notifications);
     firebase.notifications().removeAllDeliveredNotifications();
     console.log(
-      `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
-      'timeeee'
+        `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
+        'timeeee'
     );
     axios
-      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-        }
-      })
-      .then(res => {
-        console.log(res.data, 'current time');
-        this.setState({ currentTime: res.data.data.currentDateTime });
-      })
-      .catch(error => {
-        console.log(error, 'erro_fetching_data');
-        this.setState({ currentTime: 'failed' });
-      });
+        .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          }
+        })
+        .then(res => {
+          console.log(res.data, 'current time');
+          this.setState({ currentTime: res.data.data.currentDateTime });
+        })
+        .catch(error => {
+          console.log(error, 'erro_fetching_data');
+          this.setState({ currentTime: 'failed' });
+        });
 
     //   alert('mounted');
     //   gateFirebase
@@ -104,15 +104,16 @@ class NotificationScreen extends PureComponent {
   componentDidUpdate() {
     setTimeout(() => {
       BackHandler.addEventListener('hardwareBackPress', () =>
-        this.processBackPress()
+          this.processBackPress()
       );
     }, 100);
+    // this.doNetwork(null, this.props.notifications);
   }
 
   componentWillUnmount() {
     setTimeout(() => {
       BackHandler.removeEventListener('hardwareBackPress', () =>
-        this.processBackPress()
+          this.processBackPress()
       );
     }, 0);
   }
@@ -128,10 +129,10 @@ class NotificationScreen extends PureComponent {
   onPress = (item, index) => {
     const { notifications, savedNoifId, oyeURL } = this.props;
     if (
-      item.ntType === 'Join' ||
-      item.ntType === 'Join_Status'
+        item.ntType === 'Join' ||
+        item.ntType === 'Join_Status'
 
-      // item.ntType === "gate_app"
+    // item.ntType === "gate_app"
     ) {
       this.props.navigation.navigate('NotificationDetailScreen', {
         details: item,
@@ -206,46 +207,46 @@ class NotificationScreen extends PureComponent {
     const { details } = this.props.navigation.state.params;
     // console.log("@#@$#$#@%#%#%#%@#%@#%", details.sbMemID);
     fetch(
-      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
+        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
         details.sbMemID,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          }
         }
-      }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log('Response from server notification list', responseJson);
-        this.setState({
-          gateDetails: responseJson.data.visitorLog,
-          Date:
-            responseJson.data.visitorLog.vldCreated.substring(8, 10) +
-            '-' +
-            responseJson.data.visitorLog.vldCreated.substring(5, 7) +
-            '-' +
-            responseJson.data.visitorLog.vldCreated.substring(0, 4),
-          Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
-          Date1:
-            responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
-            '-' +
-            responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
-            '-' +
-            responseJson.data.visitorLog.vldUpdated.substring(0, 4),
-          Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log('Response from server notification list', responseJson);
+          this.setState({
+            gateDetails: responseJson.data.visitorLog,
+            Date:
+                responseJson.data.visitorLog.vldCreated.substring(8, 10) +
+                '-' +
+                responseJson.data.visitorLog.vldCreated.substring(5, 7) +
+                '-' +
+                responseJson.data.visitorLog.vldCreated.substring(0, 4),
+            Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
+            Date1:
+                responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
+                '-' +
+                responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
+                '-' +
+                responseJson.data.visitorLog.vldUpdated.substring(0, 4),
+            Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
+          });
+          console.log(
+              '@#!@$@#%#%#$^$^$%^$%^Gate Details',
+              this.state.gateDetails,
+              this.state.Date,
+              this.state.Time
+          );
+        })
+        .catch(error => {
+          console.log(error);
         });
-        console.log(
-          '@#!@$@#%#%#$^$^$%^$%^Gate Details',
-          this.state.gateDetails,
-          this.state.Date,
-          this.state.Time
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
   };
 
   renderCollapseData(type, id) {
@@ -284,13 +285,13 @@ class NotificationScreen extends PureComponent {
       } else if (type === 'vldCreated') {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData
-          ? moment(foundData.vldCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')
-          : '';
+            ? moment(foundData.vldCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')
+            : '';
       } else if (type === 'vldUpdated') {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData
-          ? moment(foundData.vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY')
-          : '';
+            ? moment(foundData.vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY')
+            : '';
       } else if (type === 'vlengName') {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlengName : '';
@@ -313,71 +314,71 @@ class NotificationScreen extends PureComponent {
     this.props.notifications.map((data, index) => {
       if (data.ntType === 'gate_app') {
         axios
-          .get(
-            `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
-            //data.sbMemID`,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-              }
-            }
-          )
-          .then(res => {
-            let responseData = res.data.data;
+            .get(
+                `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+                //data.sbMemID`,
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                  }
+                }
+            )
+            .then(res => {
+              let responseData = res.data.data;
 
-            for (let i = 0; i < this.props.notifications.length; i++) {
-              if (
-                this.props.notifications[i].sbMemID ===
-                responseData.visitorLog.vlVisLgID
-              ) {
-                console.log(
-                  'Ids equal',
-                  this.props.notifications[i].sbMemID,
-                  responseData.visitorLog.vlVisLgID
-                );
-                console.log('RESPONSE$$$', responseData.visitorLog.vlVisLgID);
+              for (let i = 0; i < this.props.notifications.length; i++) {
+                if (
+                    this.props.notifications[i].sbMemID ===
+                    responseData.visitorLog.vlVisLgID
+                ) {
+                  console.log(
+                      'Ids equal',
+                      this.props.notifications[i].sbMemID,
+                      responseData.visitorLog.vlVisLgID
+                  );
+                  console.log('RESPONSE$$$', responseData.visitorLog.vlVisLgID);
 
-                this.props.notifications[i].vlEntryImg =
-                  responseData.visitorLog.vlEntryImg;
-                this.props.notifications[i].vlGtName =
-                  responseData.visitorLog.vlGtName;
-                this.props.notifications[i].vlfName =
-                  responseData.visitorLog.vlfName;
-                this.props.notifications[i].vlVisType =
-                  responseData.visitorLog.vlVisType;
-                this.props.notifications[i].vlComName =
-                  responseData.visitorLog.vlComName;
-                this.props.notifications[i].vlMobile =
-                  responseData.visitorLog.vlMobile;
-                this.props.notifications[i].vlEntryT =
-                  responseData.visitorLog.vlEntryT;
-                this.props.notifications[i].vldCreated =
-                  responseData.visitorLog.vldCreated;
-                this.props.notifications[i].vlengName =
-                  responseData.visitorLog.vlengName;
-                this.props.notifications[i].vlexgName =
-                  responseData.visitorLog.vlexgName;
-                this.props.notifications[i].vldUpdated =
-                  responseData.visitorLog.vldUpdated;
-                this.props.notifications[i].vlExitT =
-                  responseData.visitorLog.vlExitT;
-                this.props.notifications[i].vlVisLgID =
-                  responseData.visitorLog.vlVisLgID;
+                  this.props.notifications[i].vlEntryImg =
+                      responseData.visitorLog.vlEntryImg;
+                  this.props.notifications[i].vlGtName =
+                      responseData.visitorLog.vlGtName;
+                  this.props.notifications[i].vlfName =
+                      responseData.visitorLog.vlfName;
+                  this.props.notifications[i].vlVisType =
+                      responseData.visitorLog.vlVisType;
+                  this.props.notifications[i].vlComName =
+                      responseData.visitorLog.vlComName;
+                  this.props.notifications[i].vlMobile =
+                      responseData.visitorLog.vlMobile;
+                  this.props.notifications[i].vlEntryT =
+                      responseData.visitorLog.vlEntryT;
+                  this.props.notifications[i].vldCreated =
+                      responseData.visitorLog.vldCreated;
+                  this.props.notifications[i].vlengName =
+                      responseData.visitorLog.vlengName;
+                  this.props.notifications[i].vlexgName =
+                      responseData.visitorLog.vlexgName;
+                  this.props.notifications[i].vldUpdated =
+                      responseData.visitorLog.vldUpdated;
+                  this.props.notifications[i].vlExitT =
+                      responseData.visitorLog.vlExitT;
+                  this.props.notifications[i].vlVisLgID =
+                      responseData.visitorLog.vlVisLgID;
+                }
               }
-            }
-            this.setState(
-              (prevState, newEmployer) => ({
-                gateDetails: prevState.gateDetails.concat([
-                  { ...responseData.visitorLog, ...data }
-                ])
-              }),
-              () => {}
-            );
-          })
-          .catch(error => {
-            console.log(error, 'error while fetching networks');
-          });
+              this.setState(
+                  (prevState, newEmployer) => ({
+                    gateDetails: prevState.gateDetails.concat([
+                      { ...responseData.visitorLog, ...data }
+                    ])
+                  }),
+                  () => {}
+              );
+            })
+            .catch(error => {
+              console.log(error, 'error while fetching networks');
+            });
       }
       console.log('Props  notifications~~~~~', this.props.notifications);
     });
@@ -390,71 +391,73 @@ class NotificationScreen extends PureComponent {
     this.props.onGateApp(oldNotif);
 
     axios
-      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-        }
-      })
-      .then(res => {
-        console.log(res.data, 'current time');
-        this.setState({ currentTime: res.data.data.currentDateTime });
-        gateFirebase
-          .database()
-          .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-          .set({
-            buttonColor: '#75be6f',
-            opened: true,
-            newAttachment: false,
-            visitorlogId: visitorId,
-            updatedTime: res.data.data.currentDateTime
-            // status:
-          });
-        axios
-          .post(
-            `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
-            {
-              VLApprStat: 'Approved',
-              VLVisLgID: visitorId
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-              }
-            }
-          )
-          .then(responses => {
-            console.log('_RESP_', responses);
-            this.setState({
-              buttonData: responses.data.visitorLog.vlApprStat
-            });
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      })
-      .catch(error => {
-        console.log(error, 'erro_fetching_data');
-        this.setState({ currentTime: 'failed' });
+        .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          }
+        })
+        .then(res => {
+          console.log(res.data, 'current time');
+          this.setState({ currentTime: res.data.data.currentDateTime });
+          gateFirebase
+              .database()
+              .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+              .set({
+                buttonColor: '#75be6f',
+                opened: true,
+                newAttachment: false,
+                visitorlogId: visitorId,
+                updatedTime: res.data.data.currentDateTime
+                // status:
+              });
+          this.props.navigation.navigate('Dashboard');
+          axios
+              .post(
+                  `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+                  {
+                    VLApprStat: 'Approved',
+                    VLVisLgID: visitorId
+                  },
+                  {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                    }
+                  }
+              )
+              .then(responses => {
+                console.log('_RESP_', responses);
+                this.setState({
+                  buttonData: responses.data.visitorLog.vlApprStat
+                });
+                this.props.navigation.navigate('Dashboard');
+              })
+              .catch(e => {
+                console.log(e);
+              });
+        })
+        .catch(error => {
+          console.log(error, 'erro_fetching_data');
+          this.setState({ currentTime: 'failed' });
 
-        gateFirebase
-          .database()
-          .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-          .set({
-            buttonColor: '#75be6f',
-            opened: true,
-            newAttachment: false,
-            visitorlogId: visitorId,
-            updatedTime: null
-            // status:
-          })
-          .then(() => {
-            //    if (item.opened) {
-            //      this.props.onNotificationOpen(notifications, index, oyeURL);
-            //    }
-          });
-      });
+          gateFirebase
+              .database()
+              .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+              .set({
+                buttonColor: '#75be6f',
+                opened: true,
+                newAttachment: false,
+                visitorlogId: visitorId,
+                updatedTime: null
+                // status:
+              })
+              .then(() => {
+                //    if (item.opened) {
+                //      this.props.onNotificationOpen(notifications, index, oyeURL);
+                //    }
+              });
+        });
   };
 
   declinegateVisitor = (visitorId, index, associationid) => {
@@ -464,64 +467,66 @@ class NotificationScreen extends PureComponent {
     this.props.onGateApp(oldNotif);
 
     axios
-      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-        }
-      })
-      .then(res => {
-        console.log(res.data, 'current time');
-        this.setState({ currentTime: res.data.data.currentDateTime });
-        gateFirebase
-          .database()
-          .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-          .set({
-            buttonColor: '#ff0000',
-            opened: true,
-            newAttachment: true,
-            visitorlogId: visitorId,
-            updatedTime: res.data.data.currentDateTime
-          });
-        axios
-          .post(
-            `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
-            {
-              VLApprStat: 'Rejected',
-              VLVisLgID: visitorId
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-              }
-            }
-          )
-          .then(response => {
-            console.log('_RESP_', response);
-            this.setState({
-              buttonData: responses.data.visitorLog.vlApprStat
-            });
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      })
-      .catch(error => {
-        console.log(error, 'erro_fetching_data');
-        this.setState({ currentTime: 'failed' });
+        .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          }
+        })
+        .then(res => {
+          console.log(res.data, 'current time');
+          this.setState({ currentTime: res.data.data.currentDateTime });
+          gateFirebase
+              .database()
+              .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+              .set({
+                buttonColor: '#ff0000',
+                opened: true,
+                newAttachment: true,
+                visitorlogId: visitorId,
+                updatedTime: res.data.data.currentDateTime
+              });
+          this.props.navigation.navigate('Dashboard');
+          axios
+              .post(
+                  `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+                  {
+                    VLApprStat: 'Rejected',
+                    VLVisLgID: visitorId
+                  },
+                  {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                    }
+                  }
+              )
+              .then(response => {
+                console.log('_RESP_', response);
+                this.setState({
+                  buttonData: responses.data.visitorLog.vlApprStat
+                });
+                this.props.navigation.navigate('Dashboard');
+              })
+              .catch(e => {
+                console.log(e);
+              });
+        })
+        .catch(error => {
+          console.log(error, 'erro_fetching_data');
+          this.setState({ currentTime: 'failed' });
 
-        gateFirebase
-          .database()
-          .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-          .set({
-            buttonColor: '#ff0000',
-            opened: true,
-            newAttachment: true,
-            visitorlogId: visitorId,
-            updatedTime: null
-          });
-      });
+          gateFirebase
+              .database()
+              .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+              .set({
+                buttonColor: '#ff0000',
+                opened: true,
+                newAttachment: true,
+                visitorlogId: visitorId,
+                updatedTime: null
+              });
+        });
   };
 
   renderItem = ({ item, index }) => {
@@ -531,464 +536,477 @@ class NotificationScreen extends PureComponent {
     console.log('ITEMS', item.asAssnID, item.vlVisLgID);
     var opens = null;
     gateFirebase
-      .database()
-      .ref(`NotificationSync/A_${item.asAssnID}/${item.vlVisLgID}`)
-      .on('value', function(snapshot) {
-        let val = snapshot.val();
-        if (val !== null) {
-          console.log(val, 'value_firebase');
-          opens = val.opened;
-          console.log('__OPEN__', opens);
-        }
-      });
+        .database()
+        .ref(`NotificationSync/A_${item.asAssnID}/${item.vlVisLgID}`)
+        .on('value', function(snapshot) {
+          let val = snapshot.val();
+          if (val !== null) {
+            console.log(val, 'value_firebase');
+            opens = val.opened;
+            console.log('__OPEN__', opens);
+          }
+        });
 
     if (item.ntType !== 'gate_app') {
       return (
-        <Card>
-          <Text style={{ fontSize: hp('2.5%'), color: '#000' }}>
-            {moment(item.ntdCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
-            {'     '}
-            {moment(item.ntdCreated).format('hh:mm A')}
-          </Text>
-          {item.ntType !== 'gate_app' ? (
-            <ListItem
-              onPress={() => this.onPress(item, index)}
-              title={this.renderTitle(item.ntType, item)}
-              subtitle={item.ntDesc}
-              leftIcon={{
-                name: this.renderIcons('name', item, index),
-                type: this.renderIcons('type', item, index),
-                color: '#ED8A19'
-              }}
-              containerStyle={this.renderIcons('style', item, index)}
-            />
-          ) : (
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: 'column' }}>
-                <Text>{item.ntDesc}</Text>
-                <Text> {item.ntdCreated}</Text>
-              </View>
-              <Collapsible
-                duration={100}
-                style={{ flex: 1 }}
-                collapsed={item.open}
-              >
-                <View style={{ backgroundColor: '#ED8A19' }}></View>
-              </Collapsible>
-            </View>
-          )}
-        </Card>
+          <Card>
+            <Text style={{ fontSize: hp('2.5%'), color: '#000' }}>
+              {moment(item.ntdCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
+              {'     '}
+              {moment(item.ntdCreated).format('hh:mm A')}
+            </Text>
+            {item.ntType !== 'gate_app' ? (
+                <ListItem
+                    onPress={() => this.onPress(item, index)}
+                    title={this.renderTitle(item.ntType, item)}
+                    subtitle={item.ntDesc}
+                    leftIcon={{
+                      name: this.renderIcons('name', item, index),
+                      type: this.renderIcons('type', item, index),
+                      color: '#ED8A19'
+                    }}
+                    containerStyle={this.renderIcons('style', item, index)}
+                />
+            ) : (
+                <View style={{ flex: 1 }}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <Text>{item.ntDesc}</Text>
+                    <Text> {item.ntdCreated}</Text>
+                  </View>
+                  <Collapsible
+                      duration={100}
+                      style={{ flex: 1 }}
+                      collapsed={item.open}
+                  >
+                    <View style={{ backgroundColor: '#ED8A19' }}></View>
+                  </Collapsible>
+                </View>
+            )}
+          </Card>
       );
     } else {
       console.log(
-        'Gate app Notifications98989898',
-        item,
-        this.state.gateDetails
+          'Gate app Notifications98989898',
+          item,
+          this.state.gateDetails
       );
       return (
-        <TouchableWithoutFeedback
-          onPress={() => {
-            console.log(
-              'Clicked on the gate app notification ######',
-              item,
-              index
-            );
-            if (item.ntIsActive) {
-              this.props.onNotificationOpen(notifications, index, oyeURL);
-            }
-            this.props.toggleCollapsible(notifications, item.open, index);
-          }}
-        >
-          <Card containerStyle={this.renderStyle(item.ntIsActive)}>
-            {item.ntType !== 'gate_app' ? (
-              <ListItem
-                onPress={() => this.onPress(item, index)}
-                title={this.renderTitle(item.ntType, item)}
-                subtitle={item.ntDesc}
-                leftIcon={{
-                  name: this.renderIcons('name', item, index),
-                  type: this.renderIcons('type', item, index),
-                  color: '#ED8A19'
-                }}
-                containerStyle={this.renderIcons('style', item, index)}
-              />
-            ) : (
-              <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text
-                    style={{
-                      fontSize: hp('2.5%'),
-                      color: '#000'
-                    }}
-                  >
-                    {moment(item.ntdCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
-                    {'     '}
-                    {moment(item.ntdCreated).format('hh:mm A')}
-                  </Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View>
-                      <Text>{item.ntDesc}</Text>
-                    </View>
-                  </View>
-                  <View style={{ flex: 1, alignItems: 'center' }}>
-                    {item.open ? (
-                      <TouchableOpacity
-                        style={{
-                          alignItems: 'flex-end',
-                          justifyContent: 'flex-end',
-                          flexDirection: 'row',
-                          marginTop: hp('1%')
-                        }}
-                        // onPress={()=>console.log('Check it is opened or not', item)}
-                        onPress={() => {
-                          console.log(
-                            'Clicked on the gate app notification ######',
-                            item,
-                            index
-                          );
-                          if (item.ntIsActive) {
-                            this.props.onNotificationOpen(
-                              notifications,
-                              index,
-                              oyeURL
-                            );
-                          }
-                          this.props.toggleCollapsible(
-                            notifications,
-                            item.open,
-                            index
-                          );
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: '#ff8c00',
-                            marginRight: hp('0.6%')
-                          }}
-                        >
-                          More
-                        </Text>
-                        <Icon
-                          color="#ff8c00"
-                          size={hp('2%')}
-                          name="show_more"
-                        />
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={{
-                          alignItems: 'flex-end',
-                          justifyContent: 'flex-end',
-                          flexDirection: 'row',
-                          marginTop: hp('1%'),
-                          marginBottom: hp('1%')
-                        }}
-                        onPress={() => {
-                          console.log(
-                            'Clicked on the gate app notification ######',
-                            item,
-                            index
-                          );
-                          if (item.ntIsActive) {
-                            this.props.onNotificationOpen(
-                              notifications,
-                              index,
-                              oyeURL
-                            );
-                          }
-                          this.props.toggleCollapsible(
-                            notifications,
-                            item.open,
-                            index
-                          );
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: '#ff8c00',
-                            marginRight: hp('0.6%')
-                          }}
-                        >
-                          Less
-                        </Text>
-                        <Icon
-                          color="#ff8c00"
-                          size={hp('2%')}
-                          name="show_less"
-                        />
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                </View>
-                <Collapsible
-                  duration={100}
-                  style={{ flex: 1 }}
-                  collapsed={item.open}
-                  align="center"
-                >
-                  {item.sbMemID === 0 ? (
-                    <View>
-                      <Text>No Data</Text>
-                    </View>
-                  ) : (
+          <TouchableWithoutFeedback
+              onPress={() => {
+                console.log(
+                    'Clicked on the gate app notification ######',
+                    item,
+                    index
+                );
+                if (item.ntIsActive) {
+                  this.props.onNotificationOpen(notifications, index, oyeURL);
+                }
+                this.props.toggleCollapsible(notifications, item.open, index);
+              }}
+          >
+            <Card containerStyle={this.renderStyle(item.ntIsActive)}>
+              {item.ntType !== 'gate_app' ? (
+                  <ListItem
+                      onPress={() => this.onPress(item, index)}
+                      title={this.renderTitle(item.ntType, item)}
+                      subtitle={item.ntDesc}
+                      leftIcon={{
+                        name: this.renderIcons('name', item, index),
+                        type: this.renderIcons('type', item, index),
+                        color: '#ED8A19'
+                      }}
+                      containerStyle={this.renderIcons('style', item, index)}
+                  />
+              ) : (
+                  <View style={{ flex: 1 }}>
                     <View style={{ flexDirection: 'column' }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'space-between'
-                        }}
+                      <Text
+                          style={{
+                            fontSize: hp('2.5%'),
+                            color: '#000'
+                          }}
                       >
+                        {moment(item.ntdCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')}
+                        {'     '}
+                        {moment(item.ntdCreated).format('hh:mm A')}
+                      </Text>
+                      <View style={{ flexDirection: 'row' }}>
                         <View>
-                          {item.vlEntryImg == '' ? (
-                            <Image
-                              style={styles.img}
-                              source={{
-                                uri:
-                                  'https://mediaupload.oyespace.com/' +
-                                  base.utils.strings.noImageCapturedPlaceholder
-                              }}
-                            />
-                          ) : (
-                            <Image
-                              style={styles.img}
-                              source={{
-                                uri:
-                                  `${this.props.mediaupload}` + item.vlEntryImg
-                              }}
-                            />
-                          )}
+                          <Text>{item.ntDesc}</Text>
                         </View>
-                        <View>
-                          <Text
-                            style={{
-                              color: base.theme.colors.black,
-                              fontSize: hp('1.7%'),
-                              fontWeight: '500',
-                              marginLeft: 10
-                            }}
-                            numberOfLines={1}
-                            maxLength={15}
-                          >
-                            {item.vlGtName} Association
-                          </Text>
-                          <Text
-                            style={{
-                              color: base.theme.colors.black,
-                              marginLeft: 10
-                            }}
-                            numberOfLines={1}
-                          >
-                            {item.vlfName}
-                            {''}
-                          </Text>
-                          <Text
-                            style={{
-                              color: base.theme.colors.black,
-                              marginLeft: 10
-                            }}
-                            numberOfLines={1}
-                          >
-                            {item.vlVisType}
-                            {''}{' '}
-                            <Text style={{ color: '#38bcdb' }}>
-                              {item.vlComName}
-                              {''}
-                            </Text>
-                          </Text>
-                          <TouchableOpacity
-                            onPress={() => {
-                              {
-                                Platform.OS === 'android'
-                                  ? Linking.openURL(`tel:${item.vlMobile}`)
-                                  : Linking.openURL(`tel:${item.vlMobile}`);
-                              }
-                            }}
-                          >
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                marginLeft: 10
-                              }}
+                      </View>
+                      <View style={{ flex: 1, alignItems: 'center' }}>
+                        {item.open ? (
+                            <TouchableOpacity
+                                style={{
+                                  alignItems: 'flex-end',
+                                  justifyContent: 'flex-end',
+                                  flexDirection: 'row',
+                                  marginTop: hp('1%')
+                                }}
+                                // onPress={()=>console.log('Check it is opened or not', item)}
+                                onPress={() => {
+                                  console.log(
+                                      'Clicked on the gate app notification ######',
+                                      item,
+                                      index
+                                  );
+                                  if (item.ntIsActive) {
+                                    this.props.onNotificationOpen(
+                                        notifications,
+                                        index,
+                                        oyeURL
+                                    );
+                                  }
+                                  this.props.toggleCollapsible(
+                                      notifications,
+                                      item.open,
+                                      index
+                                  );
+                                }}
                             >
                               <Text
-                                style={{
-                                  color: base.theme.colors.primary,
-                                  fontWeight: 'bold'
-                                }}
+                                  style={{
+                                    color: '#ff8c00',
+                                    marginRight: hp('0.6%')
+                                  }}
                               >
-                                {item.vlMobile}
+                                More
                               </Text>
-                              {/* <Icon
+                              <Icon
+                                  color="#ff8c00"
+                                  size={hp('2%')}
+                                  name="show_more"
+                              />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                                style={{
+                                  alignItems: 'flex-end',
+                                  justifyContent: 'flex-end',
+                                  flexDirection: 'row',
+                                  marginTop: hp('1%'),
+                                  marginBottom: hp('1%')
+                                }}
+                                onPress={() => {
+                                  console.log(
+                                      'Clicked on the gate app notification ######',
+                                      item,
+                                      index
+                                  );
+                                  if (item.ntIsActive) {
+                                    this.props.onNotificationOpen(
+                                        notifications,
+                                        index,
+                                        oyeURL
+                                    );
+                                  }
+                                  this.props.toggleCollapsible(
+                                      notifications,
+                                      item.open,
+                                      index
+                                  );
+                                }}
+                            >
+                              <Text
+                                  style={{
+                                    color: '#ff8c00',
+                                    marginRight: hp('0.6%')
+                                  }}
+                              >
+                                Less
+                              </Text>
+                              <Icon
+                                  color="#ff8c00"
+                                  size={hp('2%')}
+                                  name="show_less"
+                              />
+                            </TouchableOpacity>
+                        )}
+                      </View>
+                    </View>
+                    <Collapsible
+                        duration={100}
+                        style={{ flex: 1 }}
+                        collapsed={item.open}
+                        align="center"
+                    >
+                      {item.sbMemID === 0 ? (
+                          <View>
+                            <Text>No Data</Text>
+                          </View>
+                      ) : (
+                          <View style={{ flexDirection: 'column' }}>
+                            <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'space-between'
+                                }}
+                            >
+                              <View>
+                                {item.vlEntryImg == '' ? (
+                                    <Image
+                                        style={styles.img}
+                                        source={{
+                                          uri:
+                                              'https://mediaupload.oyespace.com/' +
+                                              base.utils.strings.noImageCapturedPlaceholder
+                                        }}
+                                    />
+                                ) : (
+                                    <Image
+                                        style={styles.img}
+                                        source={{
+                                          uri:
+                                              `${this.props.mediaupload}` + item.vlEntryImg
+                                        }}
+                                    />
+                                )}
+                              </View>
+                              <View>
+                                <Text
+                                    style={{
+                                      color: base.theme.colors.black,
+                                      fontSize: hp('1.7%'),
+                                      fontWeight: '500',
+                                      marginLeft: 10
+                                    }}
+                                    numberOfLines={1}
+                                    maxLength={15}
+                                >
+                                  {item.vlGtName} Association
+                                </Text>
+                                <Text
+                                    style={{
+                                      color: base.theme.colors.black,
+                                      marginLeft: 10
+                                    }}
+                                    numberOfLines={1}
+                                >
+                                  {item.vlfName}
+                                  {''}
+                                </Text>
+                                <Text
+                                    style={{
+                                      color: base.theme.colors.black,
+                                      marginLeft: 10
+                                    }}
+                                    numberOfLines={1}
+                                >
+                                  {item.vlVisType}
+                                  {''}{' '}
+                                  <Text style={{ color: '#38bcdb' }}>
+                                    {item.vlComName}
+                                    {''}
+                                  </Text>
+                                </Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                      {
+                                        Platform.OS === 'android'
+                                            ? Linking.openURL(`tel:${item.vlMobile}`)
+                                            : Linking.openURL(`tel:${item.vlMobile}`);
+                                      }
+                                    }}
+                                >
+                                  <View
+                                      style={{
+                                        flexDirection: 'row',
+                                        marginLeft: 10
+                                      }}
+                                  >
+                                    <Text
+                                        style={{
+                                          color: base.theme.colors.primary,
+                                          fontWeight: 'bold'
+                                        }}
+                                    >
+                                      {item.vlMobile}
+                                    </Text>
+                                    {/* <Icon
                                 color="#ff8c00"
                                 size={hp('2.2%')}
                                 name="call"
                               /> */}
+                                  </View>
+                                </TouchableOpacity>
+                              </View>
                             </View>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'space-between'
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: base.theme.colors.primary,
-                            fontWeight: 'bold'
-                          }}
-                        >
-                          Entry:{' '}
-                          <Text
-                            style={{
-                              color: base.theme.colors.black,
-                              fontWeight: 'normal',
-                              marginLeft: 5
-                            }}
-                          >
-                            {moment(item.vldCreated, 'YYYY-MM-DD').format(
-                              'DD-MM-YYYY'
-                            )}{' '}
-                            {moment(item.vlEntryT).format('hh:mm A')}
-                          </Text>
-                        </Text>
-                        <View>
+                            <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'space-between'
+                                }}
+                            >
+                              <Text
+                                  style={{
+                                    color: base.theme.colors.primary,
+                                    fontWeight: 'bold'
+                                  }}
+                              >
+                                Entry:{' '}
+                                <Text
+                                    style={{
+                                      color: base.theme.colors.black,
+                                      fontWeight: 'normal',
+                                      marginLeft: 5
+                                    }}
+                                >
+                                  {moment(item.vldCreated, 'YYYY-MM-DD').format(
+                                      'DD-MM-YYYY'
+                                  )}{' '}
+                                  {moment(item.vlEntryT).format('hh:mm A')}
+                                </Text>
+                              </Text>
+                              {/* <Text>{item.vlVisType.slice(0, 4)}</Text> */}
+                              {/* <View>
                           {item.vlVisLgID ? (
                             <Text>{item.vlVisLgID}^*^&*</Text>
                           ) : (
                             <Text>Not Found</Text>
                           )}
-                        </View>
-                        {item.vlengName !== '' ? (
-                          <Text
-                            style={{
-                              color: base.theme.colors.primary,
-                              fontWeight: 'bold',
-                              marginLeft: 25
-                            }}
-                          >
-                            From:{' '}
-                            <Text
-                              style={{
-                                color: base.theme.colors.black,
-                                fontWeight: 'normal',
-                                marginLeft: 5
-                              }}
-                            >
-                              {item.vlengName}{' '}
-                            </Text>
-                          </Text>
-                        ) : (
-                          <View />
-                        )}
-                      </View>
-                      {item.vlexgName !== '' ? (
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'space-between'
-                          }}
-                        >
-                          <Text
-                            style={{
-                              color: base.theme.colors.primary,
-                              fontWeight: 'bold'
-                            }}
-                          >
-                            Exit:{' '}
-                            <Text
-                              style={{
-                                color: base.theme.colors.black,
-                                fontWeight: 'normal',
-                                marginLeft: 5
-                              }}
-                            >
-                              {moment(item.vldUpdated, 'YYYY-MM-DD').format(
-                                'DD-MM-YYYY'
-                              )}{' '}
-                              {moment(item.vlExitT).format('hh:mm A')}{' '}
-                            </Text>
-                          </Text>
-                          <Text
-                            style={{
-                              color: base.theme.colors.primary,
-                              fontWeight: 'bold',
-                              marginLeft: 25
-                            }}
-                          >
-                            From:{' '}
-                            <Text
-                              style={{
-                                color: base.theme.colors.black,
-                                fontWeight: 'normal',
-                                marginLeft: 5
-                              }}
-                            >
-                              {item.vlexgName}
-                            </Text>
-                          </Text>
-                        </View>
-                      ) : (
-                        <View />
-                      )}
-                      {item.opened ? null : (
-                        <View>
-                          {this.state.buttonData !== 'Approved' ||
-                          this.state.buttonData !== 'Rejected' ? (
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                marginTop: 15
-                              }}
-                            >
-                              <Button
-                                buttonStyle={{ borderColor: '#75be6f' }}
-                                onPress={() =>
-                                  this.acceptgateVisitor(
-                                    item.sbMemID,
-                                    index,
-                                    item.asAssnID
-                                  )
-                                }
-                                title="Accept"
-                                type="outline"
-                                titleStyle={{
-                                  color: '#75be6f',
-                                  fontSize: 14
-                                }}
-                              />
-
-                              <Button
-                                onPress={() =>
-                                  this.declinegateVisitor(
-                                    item.sbMemID,
-                                    index,
-                                    item.asAssnID
-                                  )
-                                }
-                                buttonStyle={{ borderColor: '#ff0000' }}
-                                title="Decline"
-                                titleStyle={{
-                                  color: '#ff0000',
-                                  fontSize: 14
-                                }}
-                                type="outline"
-                              />
+                        </View> */}
+                              {item.vlengName !== '' ? (
+                                  <Text
+                                      style={{
+                                        color: base.theme.colors.primary,
+                                        fontWeight: 'bold',
+                                        marginLeft: 25
+                                      }}
+                                  >
+                                    From:{' '}
+                                    <Text
+                                        style={{
+                                          color: base.theme.colors.black,
+                                          fontWeight: 'normal',
+                                          marginLeft: 5
+                                        }}
+                                    >
+                                      {item.vlengName}{' '}
+                                    </Text>
+                                  </Text>
+                              ) : (
+                                  <View />
+                              )}
                             </View>
-                          ) : (
-                            <View></View>
-                          )}
-                        </View>
+                            {item.vlexgName !== '' ? (
+                                <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      alignItems: 'space-between'
+                                    }}
+                                >
+                                  <Text
+                                      style={{
+                                        color: base.theme.colors.primary,
+                                        fontWeight: 'bold'
+                                      }}
+                                  >
+                                    Exit:{' '}
+                                    <Text
+                                        style={{
+                                          color: base.theme.colors.black,
+                                          fontWeight: 'normal',
+                                          marginLeft: 5
+                                        }}
+                                    >
+                                      {moment(item.vldUpdated, 'YYYY-MM-DD').format(
+                                          'DD-MM-YYYY'
+                                      )}{' '}
+                                      {moment(item.vlExitT).format('hh:mm A')}{' '}
+                                    </Text>
+                                  </Text>
+                                  <Text
+                                      style={{
+                                        color: base.theme.colors.primary,
+                                        fontWeight: 'bold',
+                                        marginLeft: 25
+                                      }}
+                                  >
+                                    From:{' '}
+                                    <Text
+                                        style={{
+                                          color: base.theme.colors.black,
+                                          fontWeight: 'normal',
+                                          marginLeft: 5
+                                        }}
+                                    >
+                                      {item.vlexgName}
+                                    </Text>
+                                  </Text>
+                                </View>
+                            ) : (
+                                <View />
+                            )}
+                            {item.opened ? null : (
+                                <View>
+                                  {this.state.buttonData !== 'Approved' ||
+                                  this.state.buttonData !== 'Rejected' ? (
+                                      <View>
+                                        {item.vlVisType === 'Delivery' ? (
+                                            <View
+                                                style={{
+                                                  flexDirection: 'row',
+                                                  justifyContent: 'space-around',
+                                                  marginTop: 15
+                                                }}
+                                            >
+                                              <Button
+                                                  disabled={item.vlVisType !== 'Delivery'}
+                                                  buttonStyle={{ borderColor: '#75be6f' }}
+                                                  onPress={() => {
+                                                    console.log(
+                                                        'Data map to firebase@@@@@@@',
+                                                        item
+                                                    );
+                                                    this.acceptgateVisitor(
+                                                        item.vlVisLgID,
+                                                        index,
+                                                        item.asAssnID
+                                                    );
+                                                  }}
+                                                  title="Accept"
+                                                  type="outline"
+                                                  titleStyle={{
+                                                    color: '#75be6f',
+                                                    fontSize: 14
+                                                  }}
+                                              />
+
+                                              <Button
+                                                  disabled={item.vlVisType !== 'Delivery'}
+                                                  onPress={() =>
+                                                      this.declinegateVisitor(
+                                                          item.vlVisLgID,
+                                                          index,
+                                                          item.asAssnID
+                                                      )
+                                                  }
+                                                  buttonStyle={{ borderColor: '#ff0000' }}
+                                                  title="Decline"
+                                                  titleStyle={{
+                                                    color: '#ff0000',
+                                                    fontSize: 14
+                                                  }}
+                                                  type="outline"
+                                              />
+                                            </View>
+                                        ) : (
+                                            <View></View>
+                                        )}
+                                      </View>
+                                  ) : (
+                                      <View></View>
+                                  )}
+                                </View>
+                            )}
+                          </View>
                       )}
-                    </View>
-                  )}
-                </Collapsible>
-              </View>
-            )}
-          </Card>
-        </TouchableWithoutFeedback>
+                    </Collapsible>
+                  </View>
+              )}
+            </Card>
+          </TouchableWithoutFeedback>
       );
     }
   };
@@ -1010,68 +1028,68 @@ class NotificationScreen extends PureComponent {
 
     if (loading) {
       return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#fff'
-          }}
-        >
-          <ActivityIndicator />
-        </View>
+          <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#fff'
+              }}
+          >
+            <ActivityIndicator />
+          </View>
       );
     } else {
       return (
-        <Fragment>
-          <FlatList
-            keyExtractor={this.keyExtractor}
-            contentContainerStyle={{ flexGrow: 1 }}
-            style={{ flex: 1 }}
-            ListFooterComponentStyle={{
-              flex: 1,
-              justifyContent: 'flex-end'
-            }}
-            data={notifications}
-            ListFooterComponent={() =>
-              footerLoading ? (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginVertical: 10
-                  }}
-                >
-                  <ActivityIndicator />
-                </View>
-              ) : null
-            }
-            renderItem={this.renderItem}
-            extraData={this.props.notifications}
-            onEndReachedThreshold={0.5}
-            onEndReached={() => {
-              // console.log("End Reached");
-              // alert("On end")
-              // this.props.onEndReached(oyeURL, page, notifications, MyAccountID);
-            }}
-            refreshControl={
-              <RefreshControl
-                refreshing={refresh}
-                onRefresh={() => {
-                  refreshNotifications(
-                    oyeURL,
-                    MyAccountID,
-                    null,
-                    notifications
-                  );
+          <Fragment>
+            <FlatList
+                keyExtractor={this.keyExtractor}
+                contentContainerStyle={{ flexGrow: 1 }}
+                style={{ flex: 1 }}
+                ListFooterComponentStyle={{
+                  flex: 1,
+                  justifyContent: 'flex-end'
                 }}
-                progressBackgroundColor="#fff"
-                tintColor="#ED8A19"
-                colors={['#ED8A19']}
-              />
-            }
-          />
-        </Fragment>
+                data={notifications}
+                ListFooterComponent={() =>
+                    footerLoading ? (
+                        <View
+                            style={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              marginVertical: 10
+                            }}
+                        >
+                          <ActivityIndicator />
+                        </View>
+                    ) : null
+                }
+                renderItem={this.renderItem}
+                extraData={this.props.notifications}
+                onEndReachedThreshold={0.5}
+                onEndReached={() => {
+                  // console.log("End Reached");
+                  // alert("On end")
+                  // this.props.onEndReached(oyeURL, page, notifications, MyAccountID);
+                }}
+                refreshControl={
+                  <RefreshControl
+                      refreshing={refresh}
+                      onRefresh={() => {
+                        refreshNotifications(
+                            oyeURL,
+                            MyAccountID,
+                            null,
+                            notifications
+                        );
+                      }}
+                      progressBackgroundColor="#fff"
+                      tintColor="#ED8A19"
+                      colors={['#ED8A19']}
+                  />
+                }
+            />
+          </Fragment>
       );
     }
   };
@@ -1082,52 +1100,52 @@ class NotificationScreen extends PureComponent {
     // console.log(this.state.gateDetails, "gateDetails");
     // console.log("rendered");
     return (
-      <View style={styles.container}>
-        <NavigationEvents />
+        <View style={styles.container}>
+          <NavigationEvents />
 
-        <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
-          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
-            <View style={styles.viewDetails1}>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate('ResDashBoard');
-                }}
-              >
-                <View
-                  style={{
-                    height: hp('4%'),
-                    width: wp('15%'),
-                    alignItems: 'flex-start',
-                    justifyContent: 'center'
-                  }}
+          <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+            <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
+              <View style={styles.viewDetails1}>
+                <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('ResDashBoard');
+                    }}
                 >
-                  <Image
-                    resizeMode="contain"
-                    source={require('../../../icons/back.png')}
-                    style={styles.viewDetails2}
-                  />
-                </View>
-              </TouchableOpacity>
+                  <View
+                      style={{
+                        height: hp('4%'),
+                        width: wp('15%'),
+                        alignItems: 'flex-start',
+                        justifyContent: 'center'
+                      }}
+                  >
+                    <Image
+                        resizeMode="contain"
+                        source={require('../../../icons/back.png')}
+                        style={styles.viewDetails2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+              >
+                <Image
+                    style={[styles.image1]}
+                    source={require('../../../icons/OyespaceSafe.png')}
+                />
+              </View>
+              <View style={{ flex: 0.2 }}></View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Image
-                style={[styles.image1]}
-                source={require('../../../icons/OyespaceSafe.png')}
-              />
-            </View>
-            <View style={{ flex: 0.2 }}></View>
-          </View>
-          <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
-        </SafeAreaView>
+            <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
+          </SafeAreaView>
 
-        <View style={{ flex: 1 }}>{this.renderComponent()}</View>
-      </View>
+          <View style={{ flex: 1 }}>{this.renderComponent()}</View>
+        </View>
     );
   }
 }
@@ -1196,14 +1214,14 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-  mapStateToProps,
-  {
-    onNotificationOpen,
-    storeOpenedNotif,
-    getNotifications,
-    refreshNotifications,
-    toggleCollapsible,
-    onEndReached,
-    onGateApp
-  }
+    mapStateToProps,
+    {
+      onNotificationOpen,
+      storeOpenedNotif,
+      getNotifications,
+      refreshNotifications,
+      toggleCollapsible,
+      onEndReached,
+      onGateApp
+    }
 )(NotificationScreen);

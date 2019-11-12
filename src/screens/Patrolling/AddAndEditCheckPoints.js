@@ -16,7 +16,7 @@ import {
     Text,
     View,
     TouchableHighlight,
-    Animated,Easing
+    Animated,Easing,NativeEventEmitter
 } from 'react-native';
 import {connect} from 'react-redux';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
@@ -33,6 +33,8 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import wifi from 'react-native-android-wifi';
 import LottieView from 'lottie-react-native';
 import Modal from "react-native-modal";
+import {RNLocationSatellites} from 'react-native-location-satellites';
+const GPSEventEmitter = new NativeEventEmitter(RNLocationSatellites)
 
 
 
@@ -80,7 +82,8 @@ class AddAndEditCheckPoints extends React.Component {
             locationArrStored: [],
             isLottieModalOpen:false,
             progress: new Animated.Value(0),
-            accuracy:0
+            accuracy:0,
+            satelliteCount:0
         });
 
         this.thread = null;
@@ -98,7 +101,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentDidUpdate() {
-        
+
         setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
         }, 100)
@@ -119,6 +122,7 @@ class AddAndEditCheckPoints extends React.Component {
 
     async componentWillMount() {
         console.log("SCDMVD:", this.props.navigation.state.params);
+        this.updateSatelliteCount();
         let params = this.props.navigation.state.params !== undefined ? this.props.navigation.state.params.data.item : null;
         if (params === null) {
             (Platform.OS === 'ios' ? this.getUserLocation(params) : this.checkGPSStatus(params))
@@ -219,12 +223,21 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     componentDidMount() {
-       
+        console.log(RNLocationSatellites)
+        this.updateSatelliteCount();
         this.watchuserPosition();
     }
 
-    handleLocationThread = (message) =>{
-        console.log("Message Recevied from Thread:",message);
+    updateSatelliteCount(){
+        let self = this;
+        RNLocationSatellites.startLocationUpdate();
+
+        GPSEventEmitter.addListener('RNSatellite', (event) => {
+            console.log(":RN SATELLITE:",event)
+            self.setState({
+                satelliteCount:event.satellites
+            })
+        })
     }
 
     watchuserPosition() {
@@ -234,6 +247,14 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("sdvdfgddhdgs", position);
                 let LocationData = position.coords;
                 locationArrStored.push(LocationData);
+                RNLocationSatellites.startLocationUpdate();
+
+                GPSEventEmitter.addListener('RNSatellite', (event) => {
+                    console.log(":RN SATELLITE:",event)
+                    this.setState({
+                        satelliteCount:event.satellites
+                    })
+                })
                 this.setState({
                     region: {
                         latitude: LocationData.latitude,
@@ -260,6 +281,8 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     componentWillUnmount() {
+        GPSEventEmitter.removeListener('RNSatellite')
+        GPSEventEmitter.removeListener('EVENT_NAME')
         if (this.watchId !== null) {
             Geolocation.clearWatch(this.watchId);
         }
@@ -293,6 +316,7 @@ class AddAndEditCheckPoints extends React.Component {
         try {
             await navigator.geolocation.getCurrentPosition((data) => {
                 let LocationData = (data.coords);
+                console.log("Lcoation data:",LocationData);
                 self.setState({
                     region: {
                         latitude: LocationData.latitude,
@@ -301,6 +325,7 @@ class AddAndEditCheckPoints extends React.Component {
                         latitudeDelta: LATITUDE_DELTA,
 
                     },
+                    accuracy:LocationData.accuracy,
                     isEditing: params === null ? false : true,
                     checkPointName: params !== null ? params.cpCkPName : this.state.checkPointName,
                     gpsLocation: LocationData.latitude + "," + LocationData.longitude,
@@ -365,7 +390,7 @@ class AddAndEditCheckPoints extends React.Component {
                 self.setState({
                     cpArray: stat.data.checkPointListByAssocID,
                     lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                })
+                },()=>self.updateSatelliteCount())
             }
         } catch (e) {
             base.utils.logger.log(e);
@@ -380,11 +405,11 @@ class AddAndEditCheckPoints extends React.Component {
         return (
             <View>
                 <Marker.Animated key={1024+'_' + Date.now()}
-                        pinColor={base.theme.colors.green}
-                        style={{alignItems: 'center', justifyContent: 'center'}}
-                        animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
-                        coordinate={{latitude: lat, longitude: long}}>
-                            
+                                 pinColor={base.theme.colors.green}
+                                 style={{alignItems: 'center', justifyContent: 'center'}}
+                                 animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
+                                 coordinate={{latitude: lat, longitude: long}}>
+
                 </Marker.Animated>
             </View>
         )
@@ -395,20 +420,20 @@ class AddAndEditCheckPoints extends React.Component {
             alert("Please enter Check Point Name")
         } else {
             let self = this;
-                self.setState({isLottieModalOpen:true})
-                Animated.timing(self.state.progress, {
-                    toValue: 1,
-                    duration: 2000,
-                    easing: Easing.linear,
-                  }).start();
-                  setTimeout(()=>{
-                    self.setState({
-                        isLottieModalOpen:false
-                    })
-                  },2100);
-                    self.addCheckPoint()
+            self.setState({isLottieModalOpen:true})
+            Animated.timing(self.state.progress, {
+                toValue: 1,
+                duration: 2000,
+                easing: Easing.linear,
+            }).start();
+            setTimeout(()=>{
+                self.setState({
+                    isLottieModalOpen:false
+                })
+            },2100);
+            self.addCheckPoint()
 
-            }
+        }
     }
 
     async addCheckPoint() {
@@ -431,7 +456,7 @@ class AddAndEditCheckPoints extends React.Component {
                     "CPGPSPnt": gpsLocation,
                     "ASAssnID": self.props.SelectedAssociationID,
                     "CPCPntAt": self.state.checkPointType,
-                   "CPSurrName": '[]'
+                    "CPSurrName": '[]'
                 };
             }
 
@@ -578,9 +603,9 @@ class AddAndEditCheckPoints extends React.Component {
                                   oSBBackground={base.theme.colors.red}
                                   height={30} borderRadius={10}/>
                         <OSButton onButtonClick={() => this.validateFields()}
-                                  disabled={this.state.accuracy > 8}
+                                  disabled={this.state.satelliteCount < 4}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  oSBBackground={this.state.accuracy > 8 ? base.theme.colors.grey : base.theme.colors.primary}
+                                  oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>
@@ -592,36 +617,36 @@ class AddAndEditCheckPoints extends React.Component {
     openLottieModal(){
         return(
             <Modal isVisible={this.state.isLottieModalOpen}
-            animationOutTiming={500}
-            backdropOpacity={0.12}
+                   animationOutTiming={500}
+                   backdropOpacity={0.12}
                    style={{
-                        top:hp('35'),
-                        flex:0.3,
+                       top:hp('35'),
+                       flex:0.3,
+                       backgroundColor: base.theme.colors.white,
+                       alignSelf: 'center',
+                       justifySelf:'center',
+                       justifyContent:'center',
+                       //width: wp('55%'),
+                       borderRadius:hp('20'),
+                       flexDirection:'row',
+                       height:hp('50%'),
+                       width:wp('60')
+                   }}>
+
+                <LottieView
+                    progress={this.state.progress}
+                    loop={true}
+                    style={{
+
                         backgroundColor: base.theme.colors.white,
                         alignSelf: 'center',
-                        justifySelf:'center',
                         justifyContent:'center',
-                         //width: wp('55%'),
-                         borderRadius:hp('20'),
-                         flexDirection:'row',
-                         height:hp('50%'),
-                         width:wp('60')
-                        }}>
-                            
-                       <LottieView
-                            progress={this.state.progress}
-                            loop={true}
-                            style={{
-                               
-                                backgroundColor: base.theme.colors.white,
-                                alignSelf: 'center',
-                                justifyContent:'center',
-                                }}
-                            source={require('../../assets/gps.json')}
-                        />
-                        <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
-                        
-                   </Modal>
+                    }}
+                    source={require('../../assets/gps.json')}
+                />
+                <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
+
+            </Modal>
         )
     }
 }

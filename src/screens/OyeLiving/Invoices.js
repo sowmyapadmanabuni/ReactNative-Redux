@@ -834,8 +834,8 @@ class Invoices extends React.Component {
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.white }}>Invoice</Text>
                     </View>
                     <View style={{ height: hp('5'), width: wp('100'), justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', backgroundColor: base.theme.colors.white, marginTop: 10, borderBottomWidth: 1, borderBottomColor: base.theme.colors.primary }}>
-                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.5'), color: base.theme.colors.black,paddingLeft:10 }}>Invoice Date: <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black }}>{moment(invoiceData.inGenDate).format("DD-MM-YYYY")}</Text></Text>
-                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.5'), color: base.theme.colors.black ,paddingRight:10}}>Invoice No. <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black }}>{(invoiceData.inNumber)}</Text></Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.7'), color: base.theme.colors.black,paddingLeft:10 }}>Invoice Date: <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black }}>{moment(invoiceData.inGenDate).format("DD-MM-YYYY")}</Text></Text>
+                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.7'), color: base.theme.colors.black ,paddingRight:10}}>Invoice No. <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black }}>{(invoiceData.inNumber)}</Text></Text>
                     </View>
                     <View style={{ height: hp('9'), width: wp('100'), borderBottomWidth: 0, borderBottomColor: base.theme.colors.primary }}>
                         <View style={{ height: hp('3'), width: wp('95'), justifyContent: 'space-between', flexDirection: 'row', alignSelf: 'center', alignItems: 'center', backgroundColor: base.theme.colors.white, marginTop: 10, borderBottomWidth: 0, borderBottomColor: base.theme.colors.primary }}>
@@ -861,56 +861,73 @@ class Invoices extends React.Component {
                             keyExtractor={(item, index) => index.toString()}
                             data={newArr} renderItem={(item, index) => this._renderDes(item, index, newArr)} />
                     </View>
-                    <View style={{ width: wp('100'), }}>
-                        <View style={{ alignItems: 'flex-end',height:hp('5'), width: wp('100'),
-                            borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.grey, }}>
+                    <View style={{ width: wp('100'), flexDirection:'row'}}>
+                        <View style={{width:wp('50'),alignItems:'center'}}>
+                            <Image
+                                resizeMode={'cover'}
+                                style={{ height:120, width: wp('42'), }}
+                                source={require('../../../icons/paid.png')} />
+                        </View>
+                        <View style={{width:wp('50')}}>
+                        <View style={{ alignItems: 'flex-end',height:hp('5'), width: wp('50')}}>
                             <View style={{ width: wp('50'), borderWidth: 0, justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center',
                                 right: hp('2'),height:hp('5')}}>
                                 <Text style={{ color: base.theme.colors.primary }}>Sub Total </Text>
                                 <Text style={{ color: base.theme.colors.black }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal}</Text>
                             </View>
                         </View>
-                        <View style={{ alignItems: 'flex-end', width: wp('100'),
+                        <View style={{ alignItems: 'flex-end', width: wp('50'),
                             borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.grey, height: hp('4.5') }}>
                             <View style={{ width: wp('45'), borderWidth: 0, height: hp('4.5'),justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', right: hp('2') }}>
                                 <Text style={{ color: base.theme.colors.primary }}>Tax </Text>
                                 <Text style={{ color: base.theme.colors.black }}>₹0</Text>
                             </View>
                         </View>
-                        <View style={{ alignItems: 'flex-end', width: wp('100'), borderBottomWidth: 0, borderBottomColor: base.theme.colors.grey,
+                        <View style={{ alignItems: 'flex-end', width: wp('50'), borderBottomWidth: 0, borderBottomColor: base.theme.colors.grey,
                             height: hp('5') }}>
                             <View style={{ width: wp('53'), height: hp('5'),borderWidth: 0, justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', right: hp('2') }}>
                                 <Text style={{ color: base.theme.colors.primary }}>Total Due </Text>
                                 <Text style={{ color: base.theme.colors.black }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal}</Text>
                             </View>
                         </View>
+                        </View>
                         <View>
 
                         </View>
                     </View>
-                    <View style={{ height: hp('5'), width: wp('100'), backgroundColor: '#e1e1e1', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <ElevatedView elevation={2} style={{ height: hp('5'), width: wp('100'), backgroundColor: base.theme.colors.shadedWhite, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <View style={{ width: wp('85'), alignItems: 'center', marginTop: hp('0'), flexDirection: 'row', alignSelf: 'center', left: hp('3') }}>
                             <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black}}>Total Due: </Text>
-                            <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: base.theme.colors.black }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal} only</Text>
+                            <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: base.theme.colors.black }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal} Only</Text>
                         </View>
                         {/*<View style={{ height: hp('4'), borderRadius: hp('2'), width: wp('20'), backgroundColor: base.theme.colors.primary, right: hp('5'), justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.white }}>Pay Now</Text>
                         </View> */}
-                    </View>
-                    <View style={{ height: hp('12'), width: wp('86'), justifyContent: 'flex-start', backgroundColor: base.theme.colors.white, marginTop: 10,paddingLeft:10 }}>
+                    </ElevatedView>
+                    <View style={{ height: hp('15'), width: wp('100'), borderBottomWidth:1,borderBottomColor:base.theme.colors.grey,
+                        justifyContent: 'flex-start', backgroundColor: base.theme.colors.white, marginTop: 15,paddingLeft:10,marginBottom:5, }}>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.red ,}}>Due upon receipt</Text>
                         <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: base.theme.colors.black ,marginTop:hp('.5')}}>{this.props.dashBoardReducer.selectedDropdown}</Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black,marginTop:hp('.5') }}>Tel: {this.props.userReducer.MyMobileNumber}</Text>
-                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black,marginTop:hp('.5') }}>{this.state.assDetail.asCity} {this.state.assDetail.asCountry}</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black,marginTop:hp('.5'),}}>{this.state.assDetail.asCity} {this.state.assDetail.asCountry}</Text>
                     </View>
                     <View style={{marginBottom:150,
-                        width:wp('100'),height:hp('7'),borderWidth:0,alignSelf:'center',alignItems:'center',flexDirection:'row',
-                        justifyContent:'space-between',paddingLeft:10,paddingRight:10}}>
-                    <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={this.snapshot("view")} style={{ height: hp('3.5'),
-                        borderRadius: hp('5'), width: wp('25'),
-                        backgroundColor: base.theme.colors.primary,alignSelf:'flex-end', justifyContent: 'center',alignItems:'center', }}>
-                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.5'), color: base.theme.colors.white, }}>Print Invoice</Text>
+                        width:wp('100'),height:hp('7'),borderWidth:0,
+                        flexDirection:'row',
+                        paddingLeft:10,paddingRight:10,}}>
+                        <TouchableOpacity   onPress={this.snapshot("view")} style={{ justifyContent: 'center',alignItems:'center', }}>
+                            <Image
+                                resizeMode={'center'}
+                                style={{ height:hp('10'), width: wp('8'),alignSelf:'flex-start' }}
+                                source={require('../../../icons/printer.png')} />
+                        </TouchableOpacity>
+                        <View style={{width:'90%',alignItems:'center',justifyContent:'center'}}>
+                    <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={this.openReceiptModalBox()} style={{ height: hp('4.5'),
+                        borderRadius: hp('5'), width: wp('31'),
+                        backgroundColor: base.theme.colors.primary, justifyContent: 'center',alignItems:'center', }}>
+                        <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Show Receipt</Text>
                     </TouchableHighlight>
+                        </View>
                     {/*<View style={{ height: hp('5'),width: wp('30'),alignSelf:'flex-start',
                         justifyContent: 'center',alignItems:'center',flexDirection:'column' }}>
                     <Image
@@ -930,6 +947,19 @@ class Invoices extends React.Component {
                 </SafeAreaView>
             </View>
         )
+    }
+
+    openReceiptModalBox(){
+        console.log('Modal box for receipt')
+
+    }
+
+    viewReceiptScreen(){
+
+    }
+
+    generateReceiptScreen(){
+
     }
 
     _renderDes(item, index, newArr) {
