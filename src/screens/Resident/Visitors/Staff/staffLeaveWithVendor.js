@@ -866,6 +866,7 @@ class StaffLeaveWithVendor extends Component {
 
           timestamp: ''
         });
+        this.pause();
         this.props.navigation.goBack();
       })
 

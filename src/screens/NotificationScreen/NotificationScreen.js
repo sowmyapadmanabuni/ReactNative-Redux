@@ -877,7 +877,7 @@ class NotificationScreen extends PureComponent {
                           </Text>
                         </Text>
                         <Text>{item.unUniName}</Text>
-                        <View>
+                        {/* <View>
                           {item.vlVisLgID ? (
                             <Text>{item.vlVisLgID}</Text>
                           ) : (
@@ -890,7 +890,7 @@ class NotificationScreen extends PureComponent {
                           ) : (
                             <Text>Not Found</Text>
                           )}
-                        </View>
+                        </View> */}
                         {item.vlengName !== '' ? (
                           <Text
                             style={{

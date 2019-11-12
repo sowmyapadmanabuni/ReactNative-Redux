@@ -675,6 +675,7 @@ class Announcement extends Component {
           response,
           response.data.data.announcement.anid
         );
+        
         this.setState({
           isLoading: false
         });
@@ -734,6 +735,62 @@ class Announcement extends Component {
                     announcement
                   );
                 });
+                this.state = {
+                  relativeImage1: '',
+                  relativeImage2: '',
+                  relativeImage3: '',
+                  relativeImage4: '',
+                  relativeImage5: '',
+            
+                  myProfileImage1: '',
+                  myProfileImage2: '',
+                  myProfileImage3: '',
+                  myProfileImage4: '',
+                  myProfileImage5: '',
+            
+                  mp3uri: '',
+                  mp3: '',
+            
+                  imageUrl: '',
+                  photo: null,
+                  photoDetails: null,
+                  isPhotoAvailable: false,
+                  filePath: '',
+                  imagePath: '',
+                  id: '',
+            
+                  buttonId: 1,
+                  playBtnId: 0,
+            
+                  recordSecs: 0,
+                  recordTime: '00:00:00',
+                  currentPositionSec: 0,
+                  currentDurationSec: 0,
+                  playTime: '00:00:00',
+                  duration: '00:00:00',
+            
+                  isLoading: false,
+            
+                  datasource: [],
+            
+                  visitorName: '',
+                  visitorId: '',
+                  visitorList: [],
+            
+                  comment: '',
+                  dropdownValue: '',
+            
+                  announcementId: '',
+            
+                  audioFile: '',
+                  recording: false,
+                  loaded: false,
+                  paused: true,
+            
+                  timestamp: '',
+                  loading: false
+                };
+                this.pause();
                 this.props.navigation.goBack();
                 // getAssoMembers(oyeURL, MyAccountID);
 
@@ -744,9 +801,61 @@ class Announcement extends Component {
               })
               .catch(error => {
                 // getAssoMembers(oyeURL, MyAccountID);
-                this.setState({
+                this.state = {
+                  relativeImage1: '',
+                  relativeImage2: '',
+                  relativeImage3: '',
+                  relativeImage4: '',
+                  relativeImage5: '',
+            
+                  myProfileImage1: '',
+                  myProfileImage2: '',
+                  myProfileImage3: '',
+                  myProfileImage4: '',
+                  myProfileImage5: '',
+            
+                  mp3uri: '',
+                  mp3: '',
+            
+                  imageUrl: '',
+                  photo: null,
+                  photoDetails: null,
+                  isPhotoAvailable: false,
+                  filePath: '',
+                  imagePath: '',
+                  id: '',
+            
+                  buttonId: 1,
+                  playBtnId: 0,
+            
+                  recordSecs: 0,
+                  recordTime: '00:00:00',
+                  currentPositionSec: 0,
+                  currentDurationSec: 0,
+                  playTime: '00:00:00',
+                  duration: '00:00:00',
+            
+                  isLoading: false,
+            
+                  datasource: [],
+            
+                  visitorName: '',
+                  visitorId: '',
+                  visitorList: [],
+            
+                  comment: '',
+                  dropdownValue: '',
+            
+                  announcementId: '',
+            
+                  audioFile: '',
+                  recording: false,
+                  loaded: false,
+                  paused: true,
+            
+                  timestamp: '',
                   loading: false
-                });
+                };
 
                 console.log(error, 'errorAdmin');
               });
