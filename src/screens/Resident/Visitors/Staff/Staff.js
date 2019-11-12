@@ -23,6 +23,7 @@ class Staff extends React.Component {
             staffName: "",
             departmentName: "",
             staffPic: "",
+            workId:'',
             staffMobileNum: "",
             staffId: '',
             selectedInitialDate: new Date(),
@@ -92,10 +93,12 @@ class Staff extends React.Component {
                     departmentName: staffNamesList[0].staffDetails.wkDesgn,
                     staffPic: staffNamesList[0].staffDetails.wkEntryImg,
                     staffMobileNum: staffNamesList[0].staffDetails.wkMobile,
+                    workId:staffNamesList[0].staffDetails.wkWorkID,
                     staffList: staffNamesList,
                     staffId: staffNamesList[0].staffDetails.wkWorkID,
                     minDate: moment(staffNamesList[0].staffDetails.wkdCreated).format('DD-MM-YYYY'),
                 })
+                console.log("staffNamesList",staffNamesList)
             }
         } catch (error) {
             await base.utils.logger.log(error)
@@ -318,7 +321,7 @@ class Staff extends React.Component {
                         : <View/>}
 
                         {this.state.staffList.length !== 0 &&
-                            <AnimatedTouchable animation={'swing'} onPress={()=> this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId, Pic: this.state.staffPic, DeptName:this.state.departmentName})}>
+                            <AnimatedTouchable animation={'swing'} onPress={()=> this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId,workerId:this.state.workId, Pic: this.state.staffPic, DeptName:this.state.departmentName})}>
                             <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:base.theme.colors.primary,borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}><Text style={{fontSize:hp('2%'), color:base.theme.colors.primary}}>Leave with Vendor</Text></View>
                             </AnimatedTouchable>
                         }

@@ -97,6 +97,7 @@ class StaffLeaveWithVendor extends Component {
       isLoading: false,
 
       datasource: [],
+      dataSource: [],
 
       visitorName: '',
       visitorId: '',
@@ -113,7 +114,8 @@ class StaffLeaveWithVendor extends Component {
       paused: true,
       currentTime: '',
 
-      timestamp: ''
+      timestamp: '',
+      visworkID: ''
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
     // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -256,6 +258,7 @@ class StaffLeaveWithVendor extends Component {
 
   componentDidMount() {
     this.checkPermission();
+    this.visitorID();
     console.log(
       'IDDDDDDD',
       this.props.navigation.state.params.StaffId,
@@ -697,6 +700,60 @@ class StaffLeaveWithVendor extends Component {
     });
   };
 
+  visitorID = () => {
+    fetch(
+      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
+      {
+        method: 'POST',
+        headers: {
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          StartDate: new Date(),
+          EndDate: new Date(),
+          ASAssnID: this.props.dashboardReducer.assId,
+          UNUnitID: this.props.dashboardReducer.uniID,
+          ACAccntID: this.props.userReducer.MyAccountID
+        })
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
+        //console.log("fsbkfh", count);
+        console.log('Deliveries___', responseJson);
+        if (responseJson.success) {
+          for (let i = 0; i < responseJson.data.visitorlog.length; i++) {
+            if (
+              responseJson.data.visitorlog[i].reRgVisID ==
+              this.props.navigation.state.params.StaffId
+            ) {
+              this.setState({
+                isLoading: false,
+                dataSource: responseJson.data.visitorlog,
+                visworkID: responseJson.data.visitorlog[i].vlVisLgID
+              });
+            }
+            console.log(
+              'visworkID',
+              this.state.visworkID,
+              responseJson.data.visitorlog[i].reRgVisID ===
+                this.props.navigation.state.params.StaffId
+            );
+          }
+        } else {
+          this.setState({
+            isLoading: false
+          });
+        }
+      })
+
+      .catch(error => {
+        this.setState({ error, loading: false });
+        console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+      });
+  };
   datasend = () => {
     let self = this;
     let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
@@ -705,7 +762,7 @@ class StaffLeaveWithVendor extends Component {
     let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
     let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
     let comments = self.state.comment ? self.state.comment : '';
-    let visitorid = self.props.navigation.state.params.StaffId;
+    let visitorid = this.state.visworkID;
     let visitorname = self.props.navigation.state.params.StaffName;
     let mp3 = self.state.mp3;
     console.log(
@@ -754,7 +811,7 @@ class StaffLeaveWithVendor extends Component {
           )
           .update({
             newAttachment: true,
-            attachmentTime: this.state.currentTime
+            updatedTime: this.state.currentTime
           });
         this.setState({
           isLoading: false,

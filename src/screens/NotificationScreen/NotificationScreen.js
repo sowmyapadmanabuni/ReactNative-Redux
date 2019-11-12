@@ -301,6 +301,14 @@ class NotificationScreen extends PureComponent {
       } else if (type === 'vlVisLgID') {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlVisLgID : '';
+      } else if (type === 'unUnitID') {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.unUnitID : '';
+      }
+      //unUniName
+      else if (type === 'unUniName') {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.unUniName : '';
       }
     }
 
@@ -337,7 +345,11 @@ class NotificationScreen extends PureComponent {
                   this.props.notifications[i].sbMemID,
                   responseData.visitorLog.vlVisLgID
                 );
-                console.log('RESPONSE$$$', responseData.visitorLog.vlVisLgID);
+                console.log(
+                  'RESPONSE$$$',
+                  responseData,
+                  responseData.visitorLog.vlVisLgID
+                );
 
                 this.props.notifications[i].vlEntryImg =
                   responseData.visitorLog.vlEntryImg;
@@ -365,6 +377,12 @@ class NotificationScreen extends PureComponent {
                   responseData.visitorLog.vlExitT;
                 this.props.notifications[i].vlVisLgID =
                   responseData.visitorLog.vlVisLgID;
+                //unUnitID
+                this.props.notifications[i].unUnitID =
+                  responseData.visitorLog.unUnitID;
+                //unUniName
+                this.props.notifications[i].unUniName =
+                  responseData.visitorLog.unUniName;
               }
             }
             this.setState(
@@ -411,6 +429,7 @@ class NotificationScreen extends PureComponent {
             updatedTime: res.data.data.currentDateTime
             // status:
           });
+        this.props.navigation.navigate('Dashboard');
         axios
           .post(
             `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
@@ -430,6 +449,7 @@ class NotificationScreen extends PureComponent {
             this.setState({
               buttonData: responses.data.visitorLog.vlApprStat
             });
+            this.props.navigation.navigate('Dashboard');
           })
           .catch(e => {
             console.log(e);
@@ -484,6 +504,7 @@ class NotificationScreen extends PureComponent {
             visitorlogId: visitorId,
             updatedTime: res.data.data.currentDateTime
           });
+        this.props.navigation.navigate('Dashboard');
         axios
           .post(
             `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
@@ -503,6 +524,7 @@ class NotificationScreen extends PureComponent {
             this.setState({
               buttonData: responses.data.visitorLog.vlApprStat
             });
+            this.props.navigation.navigate('Dashboard');
           })
           .catch(e => {
             console.log(e);
@@ -854,13 +876,21 @@ class NotificationScreen extends PureComponent {
                             {moment(item.vlEntryT).format('hh:mm A')}
                           </Text>
                         </Text>
-                        {/* <View>
+                        <Text>{item.unUniName}</Text>
+                        <View>
                           {item.vlVisLgID ? (
-                            <Text>{item.vlVisLgID}^*^&*</Text>
+                            <Text>{item.vlVisLgID}</Text>
                           ) : (
                             <Text>Not Found</Text>
                           )}
-                        </View> */}
+                        </View>
+                        <View>
+                          {item.unUnitID ? (
+                            <Text>  {item.unUnitID}</Text>
+                          ) : (
+                            <Text>Not Found</Text>
+                          )}
+                        </View>
                         {item.vlengName !== '' ? (
                           <Text
                             style={{
@@ -937,48 +967,58 @@ class NotificationScreen extends PureComponent {
                         <View>
                           {this.state.buttonData !== 'Approved' ||
                           this.state.buttonData !== 'Rejected' ? (
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                marginTop: 15
-                              }}
-                            >
-                              <Button
-                                disabled={item.vlVisType === 'STAFF'}
-                                buttonStyle={{ borderColor: '#75be6f' }}
-                                onPress={() =>
-                                  this.acceptgateVisitor(
-                                    item.sbMemID,
-                                    index,
-                                    item.asAssnID
-                                  )
-                                }
-                                title="Accept"
-                                type="outline"
-                                titleStyle={{
-                                  color: '#75be6f',
-                                  fontSize: 14
-                                }}
-                              />
+                            <View>
+                              {item.vlVisType === 'Delivery' ? (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    marginTop: 15
+                                  }}
+                                >
+                                  <Button
+                                    disabled={item.vlVisType !== 'Delivery'}
+                                    buttonStyle={{ borderColor: '#75be6f' }}
+                                    onPress={() => {
+                                      console.log(
+                                        'Data map to firebase@@@@@@@',
+                                        item
+                                      );
+                                      this.acceptgateVisitor(
+                                        item.vlVisLgID,
+                                        index,
+                                        item.asAssnID
+                                      );
+                                    }}
+                                    title="Accept"
+                                    type="outline"
+                                    titleStyle={{
+                                      color: '#75be6f',
+                                      fontSize: 14
+                                    }}
+                                  />
 
-                              <Button
-                                disabled={item.vlVisType === 'STAFF'}
-                                onPress={() =>
-                                  this.declinegateVisitor(
-                                    item.sbMemID,
-                                    index,
-                                    item.asAssnID
-                                  )
-                                }
-                                buttonStyle={{ borderColor: '#ff0000' }}
-                                title="Decline"
-                                titleStyle={{
-                                  color: '#ff0000',
-                                  fontSize: 14
-                                }}
-                                type="outline"
-                              />
+                                  <Button
+                                    disabled={item.vlVisType !== 'Delivery'}
+                                    onPress={() =>
+                                      this.declinegateVisitor(
+                                        item.vlVisLgID,
+                                        index,
+                                        item.asAssnID
+                                      )
+                                    }
+                                    buttonStyle={{ borderColor: '#ff0000' }}
+                                    title="Decline"
+                                    titleStyle={{
+                                      color: '#ff0000',
+                                      fontSize: 14
+                                    }}
+                                    type="outline"
+                                  />
+                                </View>
+                              ) : (
+                                <View></View>
+                              )}
                             </View>
                           ) : (
                             <View></View>

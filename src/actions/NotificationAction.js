@@ -108,6 +108,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
             return dbRef.once('value').then(snapshot => {
               let val = snapshot.val();
+              console.log('DARALoad', val);
               firebaseNoti.push({ ...data, ...val });
               // return firebaseNoti;
               // console.log(snapshot.val(), 'value_firebase');
