@@ -74,6 +74,8 @@ import City from '../assocition_pages/City.js';
 import SubscriptionManagement from '../src/screens/Subscription/SubscriptionManagement';
 import PatrolShuffling from '../src/screens/Patrolling/PatrolShuffling';
 import OyeLiving from '../src/screens/OyeLiving/OyeLiving';
+import Accounting from '../src/screens/OyeLiving/Accounting';
+
 import reportsTab from '../src/screens/Reports/reportsTab';
 import ReportsHeader from '../src/components/NavigationalHeaders/ReportsHeader';
 
@@ -137,6 +139,15 @@ const ResApp = createStackNavigator({
       header: props => <OyeLivingHeader isVisitors={true} {...props} />
     })
   },
+  //Accounting
+  Accounting: {
+    screen: Accounting,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Accounting',
+      header: null
+    })
+  },
+
   //reportsTab
   reportsTab: {
     screen: reportsTab,

@@ -946,6 +946,15 @@ class Receipts extends React.Component {
                                     <Text style={{fontSize:12}}>Unit Name
                                         <Text style={{color:base.theme.colors.black}}>A101</Text>
                                     </Text>
+                                    <Text style={{fontSize:12}}>Unit Name
+                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
+                                    </Text>
+                                    <Text style={{fontSize:12}}>Unit Name
+                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
+                                    </Text>
+                                    <Text style={{fontSize:12}}>Unit Name
+                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
+                                    </Text>
                                 </View>
 
                                 <View style={{

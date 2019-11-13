@@ -301,6 +301,14 @@ class NotificationScreen extends PureComponent {
       } else if (type === 'vlVisLgID') {
         let foundData = _.find(gateDetails, { sbMemID: id });
         value = foundData ? foundData.vlVisLgID : '';
+      } else if (type === 'unUnitID') {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.unUnitID : '';
+      }
+      //unUniName
+      else if (type === 'unUniName') {
+        let foundData = _.find(gateDetails, { sbMemID: id });
+        value = foundData ? foundData.unUniName : '';
       }
     }
 
@@ -337,7 +345,11 @@ class NotificationScreen extends PureComponent {
                       this.props.notifications[i].sbMemID,
                       responseData.visitorLog.vlVisLgID
                   );
-                  console.log('RESPONSE$$$', responseData.visitorLog.vlVisLgID);
+                  console.log(
+                      'RESPONSE$$$',
+                      responseData,
+                      responseData.visitorLog.vlVisLgID
+                  );
 
                   this.props.notifications[i].vlEntryImg =
                       responseData.visitorLog.vlEntryImg;
@@ -365,6 +377,12 @@ class NotificationScreen extends PureComponent {
                       responseData.visitorLog.vlExitT;
                   this.props.notifications[i].vlVisLgID =
                       responseData.visitorLog.vlVisLgID;
+                  //unUnitID
+                  this.props.notifications[i].unUnitID =
+                      responseData.visitorLog.unUnitID;
+                  //unUniName
+                  this.props.notifications[i].unUniName =
+                      responseData.visitorLog.unUniName;
                 }
               }
               this.setState(
@@ -530,6 +548,8 @@ class NotificationScreen extends PureComponent {
   };
 
   renderItem = ({ item, index }) => {
+    console.log('ITEMSOFNOTIFICATION#######', item);
+
     const { savedNoifId, notifications, oyeURL } = this.props;
 
     let status = _.includes(savedNoifId, item.ntid);
@@ -858,10 +878,17 @@ class NotificationScreen extends PureComponent {
                                   {moment(item.vlEntryT).format('hh:mm A')}
                                 </Text>
                               </Text>
-                              {/* <Text>{item.vlVisType.slice(0, 4)}</Text> */}
+                              <Text>{item.unUniName}</Text>
                               {/* <View>
                           {item.vlVisLgID ? (
-                            <Text>{item.vlVisLgID}^*^&*</Text>
+                            <Text>{item.vlVisLgID}</Text>
+                          ) : (
+                            <Text>Not Found</Text>
+                          )}
+                        </View>
+                        <View>
+                          {item.unUnitID ? (
+                            <Text>  {item.unUnitID}</Text>
                           ) : (
                             <Text>Not Found</Text>
                           )}
@@ -1082,6 +1109,7 @@ class NotificationScreen extends PureComponent {
                             null,
                             notifications
                         );
+                        //this.doNetwork()
                       }}
                       progressBackgroundColor="#fff"
                       tintColor="#ED8A19"

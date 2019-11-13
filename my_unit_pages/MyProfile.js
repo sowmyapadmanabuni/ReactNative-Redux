@@ -379,13 +379,13 @@ class MyProfile extends Component {
                     }}
                   >
                     <QRCode
-                        logo={require('../icons/logo_QR.png')}
-                        logoSize={hp('6%')}
-                        size={hp('20%')}
-                        content={this.state.number}
-                        codeStyle="square"
-                        outerEyeStyle="square"
-                        innerEyeStyle="square"
+                      logo={require('../icons/logo_QR.png')}
+                      logoSize={hp('6%')}
+                      size={hp('20%')}
+                      content={this.state.number}
+                      codeStyle="square"
+                      outerEyeStyle="square"
+                      innerEyeStyle="square"
                     />
                   </View>
                 ) : null}

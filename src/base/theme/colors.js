@@ -24,7 +24,8 @@ const colors = {
   greyCard: '#EDEDED',
   textLight: '#474749',
   imageShadow: '#f2f2f2',
-  playprogressbar: '#ccc'
+  playprogressbar: '#ccc',
+  text: '#909091'
 };
 
 export default colors;

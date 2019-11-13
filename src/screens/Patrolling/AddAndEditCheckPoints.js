@@ -416,23 +416,27 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     validateFields() {
-        if (base.utils.validate.isBlank(this.state.checkPointName)) {
-            alert("Please enter Check Point Name")
-        } else {
-            let self = this;
-            self.setState({isLottieModalOpen:true})
-            Animated.timing(self.state.progress, {
-                toValue: 1,
-                duration: 2000,
-                easing: Easing.linear,
-            }).start();
-            setTimeout(()=>{
-                self.setState({
-                    isLottieModalOpen:false
-                })
-            },2100);
-            self.addCheckPoint()
-
+        if(this.state.satelliteCount > 4) {
+            if (base.utils.validate.isBlank(this.state.checkPointName)) {
+                alert("Please enter Check Point Name")
+            } else {
+                let self = this;
+                self.setState({isLottieModalOpen: true})
+                Animated.timing(self.state.progress, {
+                    toValue: 1,
+                    duration: 2000,
+                    easing: Easing.linear,
+                }).start();
+                setTimeout(() => {
+                    self.setState({
+                        isLottieModalOpen: false
+                    })
+                }, 2100);
+                self.addCheckPoint()
+            }
+        }
+        else{
+            Alert.alert("Satellite count is less than 4","Can't proceed further")
         }
     }
 
@@ -540,6 +544,7 @@ class AddAndEditCheckPoints extends React.Component {
                     </View>
                     <View style={{height:hp('1'),top:hp('3'),width:wp('80'),alignSelf:'center',justifyContent:'center',alignItems:'center'}}>
                         <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
+                        <Text>Satellite Count: {this.state.satelliteCount}</Text>
                     </View>
 
                     <View style={AddAndEditCheckPointStyles.textView}>
@@ -603,9 +608,10 @@ class AddAndEditCheckPoints extends React.Component {
                                   oSBBackground={base.theme.colors.red}
                                   height={30} borderRadius={10}/>
                         <OSButton onButtonClick={() => this.validateFields()}
-                                  disabled={this.state.satelliteCount < 4}
+                            //disabled={this.state.satelliteCount < 4}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
+                            //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
+                                  oSBBackground={base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>
