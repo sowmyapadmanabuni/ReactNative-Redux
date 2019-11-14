@@ -83,7 +83,7 @@ class AddAndEditCheckPoints extends React.Component {
             isLottieModalOpen:false,
             progress: new Animated.Value(0),
             accuracy:0,
-            satelliteCount:0
+            satelliteCount:0,
         });
 
         this.thread = null;
@@ -107,12 +107,11 @@ class AddAndEditCheckPoints extends React.Component {
         }, 100)
     }
 
-    componentWillUnmount() {
+   /* componentWillUnmount() {
         setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
         }, 0)
-
-    }
+    }*/
 
     processBackPress() {
         console.log("Part");
@@ -267,12 +266,19 @@ class AddAndEditCheckPoints extends React.Component {
 
     componentDidMount() {
         console.log(RNLocationSatellites)
-        this.updateSatelliteCount();
+        //this.updateSatelliteCount();
+        this.interval = setInterval(() => {
+            this.updateSatelliteCount();
+        }, 10000);
         this.watchuserPosition();
     }
 
+    callMe(){
+        console.log("Calling...");
+    }
+
     updateSatelliteCount(){
-        console.log("updateSatelliteCount...");
+        /*console.log("updateSatelliteCount...");
         let self = this;
         console.log("startLocationUpdate>> ",RNLocationSatellites.startLocationUpdate());
 
@@ -281,7 +287,19 @@ class AddAndEditCheckPoints extends React.Component {
             self.setState({
                 satelliteCount : event.satellites
             })
+        });*/
+
+        console.log("updateSatelliteCount...");
+        let self = this;
+        GPSEventEmitter.removeListener('RNSatellite');
+        GPSEventEmitter.addListener('RNSatellite', (event) => {
+            console.log(":RN SATELLITE:",event)
+            self.setState({
+                satelliteCount : event.satellites
+            })
         });
+        RNLocationSatellites.startLocationUpdate();
+
     }
 
     watchuserPosition() {
@@ -326,11 +344,15 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     componentWillUnmount() {
+        clearInterval(this.interval);
         GPSEventEmitter.removeListener('RNSatellite')
         GPSEventEmitter.removeListener('EVENT_NAME')
         if (this.watchId !== null) {
             Geolocation.clearWatch(this.watchId);
         }
+        setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)
     }
 
 
@@ -466,7 +488,7 @@ class AddAndEditCheckPoints extends React.Component {
             this.validateFields()
         }
         else{
-            if (this.state.accuracy >=12 && this.state.accuracy<=15){
+            if (this.state.accuracy<=15){
                 this.validateFields()
             }
             else{
