@@ -16,7 +16,9 @@ const AddExpenseStyles = StyleSheet.create({
         borderWidth:1,
         borderColor:base.theme.colors.lightgrey,
         paddingLeft:6,
-        paddingRight:6
+        paddingRight:6,
+        alignItems:'center',
+        justifyContent:'center'
     },
     headerView:{
         alignItems:'center',

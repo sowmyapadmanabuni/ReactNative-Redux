@@ -8,10 +8,14 @@ import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-n
 import PropTypes from 'prop-types';
 import base from "../../base";
 import EmptyView from "../common/EmptyView";
-import {widthPercentageToDP} from "react-native-responsive-screen";
 import {connect} from 'react-redux';
 import Share from 'react-native-share';
 import {updateSelectedCheckPoints} from '../../actions';
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp,
+    widthPercentageToDP
+} from 'react-native-responsive-screen';
 
 
 class PatrollingCommonHeader extends React.Component {
@@ -70,8 +74,12 @@ class PatrollingCommonHeader extends React.Component {
                 <View style={styles.logoView}>
                     <Image
                         resizeMode={'cover'}
-                        style={styles.logo}
-                        source={require('../../../icons/oyesafe.png')}
+                        style={{width: wp('34%'),
+                            height: hp('18%'),
+                            marginLeft: hp('3%'),
+                            alignSelf:'center'
+                            }}
+                        source={require('../../../icons/OyespaceSafe.png')}
                     />
                 </View>
                 {!isHidden ?

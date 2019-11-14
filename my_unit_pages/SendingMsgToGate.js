@@ -111,7 +111,7 @@ class SendingMsgToGate extends Component {
       recording: false,
       loaded: false,
       paused: true,
-currentTime:'',
+      currentTime: '',
       timestamp: ''
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
@@ -263,7 +263,7 @@ currentTime:'',
       }
     }
 
-    this.setState({ paused: false, playBtnId: 2 });
+    this.setState({ paused: false });
     Sound.setCategory('Playback');
 
     this.sound.play(success => {
@@ -460,33 +460,6 @@ currentTime:'',
     }
   }
 
-  // uploadAudio = async result => {
-  //   const newUri = result.replace('file://', 'file:///');
-  //   console.log('Audio', result);
-  //   const path = Platform.OS === 'ios' ? result : newUri; //`Images/${result[0]}`;
-  //   console.log('PATH', result[0], path);
-
-  //   const formData = new FormData();
-
-  //   formData.append('file', {
-  //     uri: path,
-  //     name: 'hello1111.aac',
-  //     type: 'audio/aac'
-  //   });
-
-  //   console.log(formData, 'FormData');
-  //   let stat = await base.services.MediaUploadApi.uploadRelativeImage(formData);
-  //   console.log('Voice_Data', stat);
-  //   try {
-  //     this.setState({
-  //       mp3: stat
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  //   console.log('Stat222222222222222222222222:', stat, this.state.mp3);
-  // };
-
   uploadAudio = async result => {
     const newUri = result.replace('file://', 'file:///');
 
@@ -496,7 +469,7 @@ currentTime:'',
     const path = Platform.OS === 'ios' ? result : `file://${result}`;
     // console.log('PATH', path);
 
-    alert(JSON.stringify(path));
+    // alert(JSON.stringify(path));
     const formData = new FormData();
 
     // alert(JSON.stringify(stat));
@@ -517,7 +490,7 @@ currentTime:'',
       console.log('Errorrrrrrrrrrrrrr', e);
     }
 
-    alert(JSON.stringify(stat));
+    // alert(JSON.stringify(stat));
     console.log('Stat222222222222222222222222, UPLOAD:', stat);
   };
 
@@ -542,158 +515,6 @@ currentTime:'',
       </View>
     );
   }
-
-  // onStartRecord = async () => {
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-  //         {
-  //           title: 'Permissions for write access',
-  //           message: 'Give permission to your storage to write a file',
-  //           buttonPositive: 'ok'
-  //         }
-  //       );
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         console.log('You can use the storage');
-  //       } else {
-  //         console.log('permission denied');
-  //         return;
-  //       }
-  //     } catch (err) {
-  //       console.warn(err);
-  //       return;
-  //     }
-  //   }
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-  //         {
-  //           title: 'Permissions for write access',
-  //           message: 'Give permission to your storage to write a file',
-  //           buttonPositive: 'ok'
-  //         }
-  //       );
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         console.log('You can use the camera');
-  //       } else {
-  //         console.log('permission denied');
-  //         return;
-  //       }
-  //     } catch (err) {
-  //       console.warn(err);
-  //       return;
-  //     }
-  //   }
-  //   const path = Platform.select({
-  //     ios: 'hello.m4a',
-  //     android: 'sdcard/hello.aac' //here?
-  //   });
-
-  //   const audioSet = {
-  //     AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-  //     AudioSourceAndroid: AudioSourceAndroidType.MIC,
-  //     AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-  //     AVNumberOfChannelsKeyIOS: 2,
-  //     AVFormatIDKeyIOS: AVEncodingOption.aac
-  //   };
-  //   console.log('audioSet', audioSet);
-  //   const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
-  //   this.audioRecorderPlayer.addRecordBackListener(e => {
-  //     this.setState({
-  //       recordSecs: e.current_position,
-  //       recordTime: this.audioRecorderPlayer.mmssss(
-  //         Math.floor(e.current_position)
-  //       ),
-  //       buttonId: 2
-  //     });
-  //   });
-  //   // alert('Recording Started');
-  //   // console.log(`uri: ${uri}`);
-  // };
-
-  // onStopRecord = async () => {
-  //   const result = await this.audioRecorderPlayer.stopRecorder();
-  //   this.audioRecorderPlayer.removeRecordBackListener();
-  //   this.setState({
-  //     recordSecs: 0,
-  //     buttonId: 1,
-  //     playBtnId: 1,
-
-  //     mp3uri: result
-  //   });
-  //   // alert('Recording Stop');
-  //   // console.log('.substring(14, 23)', result.substring(14, 23));
-  //   // console.log('this state uri', this.state.mp3uri);
-  //   // this.uploadAudio(result.match('hello.m4a') || result.match('hello.mp3'));
-  //   this.uploadAudio(result);
-  // };
-
-  // onStatusPress = e => {
-  //   const touchX = e.nativeEvent.locationX;
-  //   console.log(`touchX: ${touchX}`);
-  //   const playWidth =
-  //     (this.state.currentPositionSec / this.state.currentDurationSec) *
-  //     (screenWidth - 56 * ratio);
-  //   console.log(`currentPlayWidth: ${playWidth}`);
-
-  //   const currentPosition = Math.round(this.state.currentPositionSec);
-  //   console.log(`currentPosition: ${currentPosition}`);
-
-  //   if (playWidth && playWidth < touchX) {
-  //     const addSecs = Math.round(currentPosition + 3000);
-  //     this.audioRecorderPlayer.seekToPlayer(addSecs);
-  //     console.log(`addSecs: ${addSecs}`);
-  //   } else {
-  //     const subSecs = Math.round(currentPosition - 3000);
-  //     this.audioRecorderPlayer.seekToPlayer(subSecs);
-  //     console.log(`subSecs: ${subSecs}`);
-  //   }
-  // };
-
-  // onStartPlay = async () => {
-  //   // this.setState({
-  //   //   playBtnId: 2
-  //   // });
-  //   // console.log('Play Button', this.state.playBtnId);
-  //   const path = Platform.select({
-  //     ios: 'hello.m4a',
-  //     android: 'sdcard/hello.mp4'
-  //   });
-  //   const msg = await this.audioRecorderPlayer.startPlayer(path);
-  //   this.audioRecorderPlayer.setVolume(1.0);
-  //   console.log(msg);
-  //   this.audioRecorderPlayer.addPlayBackListener(e => {
-  //     if (e.current_position === e.duration) {
-  //       console.log('finished');
-  //       this.audioRecorderPlayer.stopPlayer();
-  //       this.setState({
-  //         playBtnId: 2
-  //       });
-  //     }
-  //     this.setState({
-  //       currentPositionSec: e.current_position,
-  //       currentDurationSec: e.duration,
-  //       playTime: this.audioRecorderPlayer.mmssss(
-  //         Math.floor(e.current_position)
-  //       ),
-  //       duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)),
-  //       playBtnId: 2
-  //     });
-  //     console.log('Play Button Id', this.state.playTime);
-  //   });
-  // };
-
-  // onStopPlay = async () => {
-  //   console.log('onStopPlay');
-  //   this.audioRecorderPlayer.stopPlayer();
-  //   this.audioRecorderPlayer.removePlayBackListener();
-  //   this.setState({
-  //     playBtnId: 1,
-  //     buttonId: 1
-  //   });
-  // };
 
   visitorData = async () => {
     this.setState({ isLoading: true });
@@ -1525,72 +1346,78 @@ currentTime:'',
               style={{
                 flexDirection: 'row',
                 width: '100%',
-                marginTop: hp('2%')
+                marginTop: hp('2%'),
+                height: hp('8%')
               }}
             >
-              <View>
+              <View
+                style={{
+                  width: hp('8%'),
+                  height: hp('8%'),
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
                 {this.state.buttonId === 1 ? (
                   <TouchableOpacity onPress={() => this.start()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%'),
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
-                      source={require('../icons/leave_vender_record.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%')
+                        }}
+                        source={require('../icons/leave_vender_record.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity onPress={() => this.stop()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%'),
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
-                      source={require('../icons/leave_vender_stop.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%')
+                        }}
+                        source={require('../icons/leave_vender_stop.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 )}
               </View>
               <View
                 style={{
                   flex: 1,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                  height: hp('8%')
                 }}
               >
-                <View style={{ alignItems: 'center' }}>
+                <View
+                  style={{
+                    flex: 1,
+                    height: hp('5%'),
+                    alignItems: 'flex-start',
+                    justifyContent: 'center'
+                  }}
+                >
                   {this.state.buttonId === 1 ? (
                     <Text>Click mic to record</Text>
                   ) : (
-                    <Text style={styles.txtRecordCounter}>
-                      {/* {this.state.recordTime} */}
-                      Recording...
-                    </Text>
-                  )}
-                </View>
-                <View style={styles.viewPlayer}>
-                  <TouchableOpacity
-                    style={styles.viewBarWrapper}
-                    // onPress={this.onStatusPress}
-                  >
-                    <View style={styles.viewBar}>
-                      <View
-                        style={[styles.viewBarPlay, { width: playWidth }]}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  {this.state.playBtnId === 2 ? (
-                    <Text style={styles.txtCounter}>
-                      {/* {this.state.playTime} / {this.state.duration} */}
-                      Playing...
-                    </Text>
-                  ) : (
-                    <View></View>
+                    <Text style={styles.txtRecordCounter}>Recording...</Text>
                   )}
                 </View>
               </View>
@@ -1598,7 +1425,7 @@ currentTime:'',
                 style={{
                   width: hp('5%'),
                   height: hp('5%'),
-                  marginRight: hp('1%'),
+                  marginRight: hp('2%'),
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: hp('1%')
@@ -1608,20 +1435,21 @@ currentTime:'',
                   <Image source={require('../icons/leave_vender_play1.png')} />
                 ) : (
                   <View>
-                    {this.state.playBtnId === 1 ? (
+                    {this.state.playBtnId === 1 && (
                       <TouchableOpacity onPress={() => this.play()}>
-                        <Image
-                          source={require('../icons/leave_vender_play.png')}
-                        />
-                      </TouchableOpacity>
-                    ) : (
-                      <View>
-                        <TouchableOpacity onPress={() => this.pause()}>
+                        <View
+                          style={{
+                            width: hp('5%'),
+                            height: hp('5%'),
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
                           <Image
-                            source={require('../icons/leave_vender_stopcopy.png')}
+                            source={require('../icons/leave_vender_play.png')}
                           />
-                        </TouchableOpacity>
-                      </View>
+                        </View>
+                      </TouchableOpacity>
                     )}
                   </View>
                 )}
@@ -1635,7 +1463,7 @@ currentTime:'',
             }}
           >
             <View style={{ marginTop: hp('2%'), marginBottom: hp('1%') }}>
-              <Text style={{ fontSize: hp('1.8%') }}>Comment *</Text>
+              <Text style={{ fontSize: hp('1.8%') }}>Message</Text>
             </View>
 
             <View

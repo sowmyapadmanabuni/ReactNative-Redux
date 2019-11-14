@@ -68,7 +68,7 @@ const Styles = StyleSheet.create({
   },
   card: {
     width: Dimensions.get('window').width - 80,
-    height: hp('50%'),
+    height: hp('30%'),
     alignSelf: 'center',
     borderRadius: hp('2%'),
 
@@ -133,13 +133,13 @@ const Styles = StyleSheet.create({
   playcardstyle: {
     width: hp('5%'),
     height: hp('5%'),
-    marginRight: hp('1%'),
+    marginLeft: hp('4%'),
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: hp('1%')
   },
   thirdview: {},
-  message: { marginHorizontal: hp('2%'), marginTop: hp('3 %') },
+  message: { marginHorizontal: hp('5%'), marginTop: hp('3 %') },
   messages: {
     fontWeight: 'bold',
     fontSize: hp('1.8%')

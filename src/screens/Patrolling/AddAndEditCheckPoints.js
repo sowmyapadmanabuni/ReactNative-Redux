@@ -300,7 +300,6 @@ class AddAndEditCheckPoints extends React.Component {
                         satelliteCount:event.satellites
                     })
                 });*/
-
                 this.setState({
                     region: {
                         latitude: LocationData.latitude,
@@ -311,7 +310,6 @@ class AddAndEditCheckPoints extends React.Component {
                     gpsLocation: LocationData.latitude + "," + LocationData.longitude,
                     locationArrStored: locationArrStored,
                     accuracy:LocationData.accuracy
-
                 },()=>this.renderUserLocation())
             },
             (error) => {
@@ -495,7 +493,7 @@ class AddAndEditCheckPoints extends React.Component {
                 }, 2100);
                 self.addCheckPoint()
             }
-    }
+        }
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);

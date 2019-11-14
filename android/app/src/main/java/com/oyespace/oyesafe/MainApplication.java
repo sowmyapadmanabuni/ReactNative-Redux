@@ -44,6 +44,7 @@ import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
+
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 
 public class MainApplication extends Application implements ShareApplication, ReactApplication {
@@ -63,7 +64,6 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNLocationSatellitesPackage(),
             new RNPermissionsPackage(),
             new RNAudioRecordPackage(),
                     new PDFViewPackage(),
@@ -94,7 +94,9 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new SystemSettingPackage(),
                     new SvgPackage(),
                     new GeolocationPackage(),
-                    new RNImageToPdfPackage()
+                    new RNImageToPdfPackage(),
+                    new RNLocationSatellitesPackage()
+
             );
         }
 

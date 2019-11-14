@@ -97,6 +97,7 @@ class StaffLeaveWithVendor extends Component {
       isLoading: false,
 
       datasource: [],
+      dataSource: [],
 
       visitorName: '',
       visitorId: '',
@@ -113,7 +114,8 @@ class StaffLeaveWithVendor extends Component {
       paused: true,
       currentTime: '',
 
-      timestamp: ''
+      timestamp: '',
+      visworkID: ''
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
     // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -235,7 +237,7 @@ class StaffLeaveWithVendor extends Component {
       }
     }
 
-    this.setState({ paused: false, playBtnId: 2 });
+    this.setState({ paused: false });
     Sound.setCategory('Playback');
 
     this.sound.play(success => {
@@ -256,6 +258,12 @@ class StaffLeaveWithVendor extends Component {
 
   componentDidMount() {
     this.checkPermission();
+    this.visitorID();
+    console.log(
+      'IDDDDDDD',
+      this.props.navigation.state.params.StaffId,
+      this.props.navigation.state.params.StaffName
+    );
     let self = this;
     setTimeout(() => {
       this.setState({
@@ -493,7 +501,7 @@ class StaffLeaveWithVendor extends Component {
     const path = Platform.OS === 'ios' ? result : `file://${result}`;
     // console.log('PATH', path);
 
-    alert(JSON.stringify(path));
+    // alert(JSON.stringify(path));
     const formData = new FormData();
 
     // alert(JSON.stringify(stat));
@@ -514,7 +522,7 @@ class StaffLeaveWithVendor extends Component {
       console.log('Errorrrrrrrrrrrrrr', e);
     }
 
-    alert(JSON.stringify(stat));
+    // alert(JSON.stringify(stat));
     console.log('Stat222222222222222222222222, UPLOAD:', stat);
   };
 
@@ -692,6 +700,60 @@ class StaffLeaveWithVendor extends Component {
     });
   };
 
+  visitorID = () => {
+    fetch(
+      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
+      {
+        method: 'POST',
+        headers: {
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          StartDate: new Date(),
+          EndDate: new Date(),
+          ASAssnID: this.props.dashboardReducer.assId,
+          UNUnitID: this.props.dashboardReducer.uniID,
+          ACAccntID: this.props.userReducer.MyAccountID
+        })
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
+        //console.log("fsbkfh", count);
+        console.log('Deliveries___', responseJson);
+        if (responseJson.success) {
+          for (let i = 0; i < responseJson.data.visitorlog.length; i++) {
+            if (
+              responseJson.data.visitorlog[i].reRgVisID ==
+              this.props.navigation.state.params.StaffId
+            ) {
+              this.setState({
+                isLoading: false,
+                dataSource: responseJson.data.visitorlog,
+                visworkID: responseJson.data.visitorlog[i].vlVisLgID
+              });
+            }
+            console.log(
+              'visworkID',
+              this.state.visworkID,
+              responseJson.data.visitorlog[i].reRgVisID ===
+                this.props.navigation.state.params.StaffId
+            );
+          }
+        } else {
+          this.setState({
+            isLoading: false
+          });
+        }
+      })
+
+      .catch(error => {
+        this.setState({ error, loading: false });
+        console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+      });
+  };
   datasend = () => {
     let self = this;
     let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
@@ -700,8 +762,8 @@ class StaffLeaveWithVendor extends Component {
     let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
     let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
     let comments = self.state.comment ? self.state.comment : '';
-    let visitorid = this.props.navigation.state.params.StaffId;
-    let visitorname = self.state.visitorName;
+    let visitorid = this.state.visworkID;
+    let visitorname = self.props.navigation.state.params.StaffName;
     let mp3 = self.state.mp3;
     console.log(
       'All Data',
@@ -721,34 +783,147 @@ class StaffLeaveWithVendor extends Component {
     this.setState({
       isLoading: true
     });
-    axios
-      .post(
-        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
-        {
+    fetch(
+      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        },
+        body: JSON.stringify({
           VLVenName: `${visitorname}`,
           VLCmnts: `${comments}`,
           VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
           VLVoiceNote: mp3,
           VLVisLgID: visitorid
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-          }
-        }
-      )
-
-      .then(response => {
-        console.log('Respo1111', response);
+        })
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
+        console.log('Reports_Data', responseJson);
+        gateFirebase
+          .database()
+          .ref(
+            `NotificationSync/A_${this.props.dashboardReducer.assId}/${visitorid}`
+          )
+          .update({
+            newAttachment: true,
+            updatedTime: this.state.currentTime
+          });
         this.setState({
-          isLoading: false
+          isLoading: false,
+          relativeImage1: '',
+          relativeImage2: '',
+          relativeImage3: '',
+          relativeImage4: '',
+          relativeImage5: '',
+
+          myProfileImage1: '',
+          myProfileImage2: '',
+          myProfileImage3: '',
+          myProfileImage4: '',
+          myProfileImage5: '',
+
+          mp3uri: '',
+          mp3: '',
+
+          imageUrl: '',
+          photo: null,
+          photoDetails: null,
+          isPhotoAvailable: false,
+          filePath: '',
+          imagePath: '',
+          id: '',
+
+          buttonId: 1,
+          playBtnId: 0,
+
+          recordSecs: 0,
+          recordTime: '00:00:00',
+          currentPositionSec: 0,
+          currentDurationSec: 0,
+          playTime: '00:00:00',
+          duration: '00:00:00',
+          datasource: [],
+
+          visitorName: '',
+          visitorId: '',
+          visitorList: [],
+
+          comment: '',
+          dropdownValue: '',
+
+          announcementId: '',
+
+          audioFile: '',
+          recording: false,
+          loaded: false,
+          paused: true,
+          currentTime: '',
+
+          timestamp: ''
         });
-        alert('Success');
+        this.pause();
         this.props.navigation.goBack();
       })
+
       .catch(error => {
-        console.log('Crash in profile', error);
+        this.setState({
+          isLoading: false,
+          relativeImage1: '',
+          relativeImage2: '',
+          relativeImage3: '',
+          relativeImage4: '',
+          relativeImage5: '',
+
+          myProfileImage1: '',
+          myProfileImage2: '',
+          myProfileImage3: '',
+          myProfileImage4: '',
+          myProfileImage5: '',
+
+          mp3uri: '',
+          mp3: '',
+
+          imageUrl: '',
+          photo: null,
+          photoDetails: null,
+          isPhotoAvailable: false,
+          filePath: '',
+          imagePath: '',
+          id: '',
+
+          buttonId: 1,
+          playBtnId: 0,
+
+          recordSecs: 0,
+          recordTime: '00:00:00',
+          currentPositionSec: 0,
+          currentDurationSec: 0,
+          playTime: '00:00:00',
+          duration: '00:00:00',
+          datasource: [],
+          visitorName: '',
+          visitorId: '',
+          visitorList: [],
+
+          comment: '',
+          dropdownValue: '',
+
+          announcementId: '',
+
+          audioFile: '',
+          recording: false,
+          loaded: false,
+          paused: true,
+          currentTime: '',
+
+          timestamp: ''
+        });
+        console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
       });
   };
   render() {
@@ -1349,73 +1524,78 @@ class StaffLeaveWithVendor extends Component {
               style={{
                 flexDirection: 'row',
                 width: '100%',
-                marginTop: hp('2%')
-                // backgroundColor: 'yellow'
+                marginTop: hp('2%'),
+                height: hp('8%')
               }}
             >
-              <View>
+              <View
+                style={{
+                  width: hp('8%'),
+                  height: hp('8%'),
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
                 {this.state.buttonId === 1 ? (
                   <TouchableOpacity onPress={() => this.start()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%'),
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
-                      source={require('../../../../../icons/leave_vender_record.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%')
+                        }}
+                        source={require('../../../../../icons/leave_vender_record.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity onPress={() => this.stop()}>
-                    <Image
+                    <View
                       style={{
-                        width: hp('5%'),
-                        height: hp('5%'),
-                        marginLeft: hp('1%')
+                        width: hp('8%'),
+                        height: hp('8%'),
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
-                      source={require('../../../../../icons/leave_vender_stop.png')}
-                    />
+                    >
+                      <Image
+                        style={{
+                          width: hp('5%'),
+                          height: hp('5%')
+                        }}
+                        source={require('../../../../../icons/leave_vender_stop.png')}
+                      />
+                    </View>
                   </TouchableOpacity>
                 )}
               </View>
               <View
                 style={{
                   flex: 1,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                  height: hp('8%')
                 }}
               >
-                <View style={{ alignItems: 'center' }}>
+                <View
+                  style={{
+                    flex: 1,
+                    height: hp('5%'),
+                    alignItems: 'flex-start',
+                    justifyContent: 'center'
+                  }}
+                >
                   {this.state.buttonId === 1 ? (
                     <Text>Click mic to record</Text>
                   ) : (
-                    <Text style={styles.txtRecordCounter}>
-                      {/* {this.state.recordTime} */}
-                      Recording...
-                    </Text>
-                  )}
-                </View>
-                <View style={styles.viewPlayer}>
-                  <TouchableOpacity
-                    style={styles.viewBarWrapper}
-                    // onPress={this.onStatusPress}
-                  >
-                    <View style={styles.viewBar}>
-                      <View
-                        style={[styles.viewBarPlay, { width: playWidth }]}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  {this.state.playBtnId === 2 ? (
-                    <Text style={styles.txtCounter}>
-                      {/* {this.state.playTime} / {this.state.duration} */}
-                      Playing...
-                    </Text>
-                  ) : (
-                    <View></View>
+                    <Text style={styles.txtRecordCounter}>Recording...</Text>
                   )}
                 </View>
               </View>
@@ -1423,7 +1603,7 @@ class StaffLeaveWithVendor extends Component {
                 style={{
                   width: hp('5%'),
                   height: hp('5%'),
-                  marginRight: hp('1%'),
+                  marginRight: hp('2%'),
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: hp('1%')
@@ -1435,20 +1615,21 @@ class StaffLeaveWithVendor extends Component {
                   />
                 ) : (
                   <View>
-                    {this.state.playBtnId === 1 ? (
+                    {this.state.playBtnId === 1 && (
                       <TouchableOpacity onPress={() => this.play()}>
-                        <Image
-                          source={require('../../../../../icons/leave_vender_play.png')}
-                        />
-                      </TouchableOpacity>
-                    ) : (
-                      <View>
-                        <TouchableOpacity onPress={() => this.pause()}>
+                        <View
+                          style={{
+                            width: hp('5%'),
+                            height: hp('5%'),
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
                           <Image
-                            source={require('../../../../../icons/leave_vender_stopcopy.png')}
+                            source={require('../../../../../icons/leave_vender_play.png')}
                           />
-                        </TouchableOpacity>
-                      </View>
+                        </View>
+                      </TouchableOpacity>
                     )}
                   </View>
                 )}
@@ -1492,6 +1673,7 @@ class StaffLeaveWithVendor extends Component {
                   autoCapitalize="none"
                   keyboardType="email-address"
                   placeholder="Write a comment here..."
+                  value={this.state.comment}
                   onChangeText={comment => this.setState({ comment: comment })}
                 />
               </Item>
@@ -1523,13 +1705,13 @@ class StaffLeaveWithVendor extends Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <ProgressLoader
+        {/* <ProgressLoader
           isHUD={true}
           isModal={true}
           visible={this.state.isLoading}
           color={base.theme.colors.primary}
           hudColor={base.theme.colors.white}
-        />
+        /> */}
       </View>
     );
   }

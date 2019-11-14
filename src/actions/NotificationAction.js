@@ -60,7 +60,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           activeNotifications.push({ ...value, read: false });
         });
 
-        // console.log("sorted", sorted);
+        console.log("GET_INITIAL_NOTIF", activeNotifications);
         let joinNotif = [];
         let joinStatNotif = [];
         let gateAppNotif = [];
@@ -93,29 +93,60 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         // ]).reverse();
 
         console.log('allNotifs', allNotifs);
-        const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+        const sorted = [...allNotifs];
 
         let firebaseNoti = [];
 
-        sorted.map((data, index) => {
+        var promises = sorted.map(function(data, index) {
           if (data.ntType !== 'gate_app') {
             firebaseNoti.push({ ...data });
+            return firebaseNoti;
           } else {
-            firebase
+            let dbRef = firebase
               .database()
-              .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
-              .on('value', snapshot => {
-                let val = snapshot.val();
-                firebaseNoti.push({ ...data, ...val });
-                console.log(snapshot.val(), 'value_firebase');
-              });
+              .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`);
+
+            return dbRef.once('value').then(snapshot => {
+
+              let val = snapshot.val();
+              console.log('DARALoad', val);
+              firebaseNoti.push({ ...data, ...val });
+              // return firebaseNoti;
+              // console.log(snapshot.val(), 'value_firebase');
+              // dispatch({
+              //   type: GET_NOTIFICATIONS_SUCCESS,
+              //   payload: [...firebaseNoti]
+              // });
+            });
           }
         });
 
-        dispatch({
-          type: GET_NOTIFICATIONS_SUCCESS,
-          payload: [...firebaseNoti]
+        Promise.all(promises).then(function(results) {
+          let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+          dispatch({
+            type: GET_NOTIFICATIONS_SUCCESS,
+            payload: [...succ]
+          });
         });
+
+        // sorted.map((data, index) => {
+        //   if (data.ntType !== 'gate_app') {
+        //     firebaseNoti.push({ ...data });
+        //   } else {
+        //     firebase
+        //       .database()
+        //       .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
+        //       .on('value', snapshot => {
+        //         let val = snapshot.val();
+        //         firebaseNoti.push({ ...data, ...val });
+        //         // console.log(snapshot.val(), 'value_firebase');
+        //         dispatch({
+        //           type: GET_NOTIFICATIONS_SUCCESS,
+        //           payload: [...firebaseNoti]
+        //         });
+        //       });
+        //   }
+        // });
       })
       .catch(error => {
         console.log(error, 'error fetching notifications');
@@ -537,7 +568,7 @@ export const refreshNotifications = (
           activeNotifications.push({ ...value, read: false });
         });
 
-        // console.log("sorted", sorted);
+         console.log("REFRESH_NOTIFICATION@@@@@____",activeNotifications);
         let joinNotif = [];
         let joinStatNotif = [];
         let gateAppNotif = [];
@@ -570,29 +601,116 @@ export const refreshNotifications = (
         // ]).reverse();
 
         console.log('allNotifs', allNotifs);
-        const sorted = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+        const sorted = [...allNotifs];
 
-        let firebaseNoti = [];
+                  allNotifs.map((data, index) => {
+         if (data.ntType === 'gate_app') {
+         axios
+               .get(
+                 `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+                //data.sbMemID`,
+               {
+                  headers: {
+                     'Content-Type': 'application/json',
+                     'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                   }
+                 }
+               )
+               .then(res => {
+                 let responseData = res.data.data;
+                 for (let i = 0; i < allNotifs.length; i++) {
+                   if (
+                     allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
+                   ) {
+                     console.log(
+                       '&&&&&&&&&&&&&&&&',
+                       allNotifs[i].sbMemID,
+                       responseData,
+                       responseData.visitorLog.vlVisLgID
+                     );
+                     allNotifs[i].vlEntryImg =
+                       responseData.visitorLog.vlEntryImg;
+                     allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
+                   allNotifs[i].vlfName = responseData.visitorLog.vlfName;
+                    allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
+                    allNotifs[i].vlComName = responseData.visitorLog.vlComName;
+                    allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
+                    allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
+                    allNotifs[i].vldCreated =
+                       responseData.visitorLog.vldCreated;
+                    allNotifs[i].vlengName = responseData.visitorLog.vlengName;
+                     allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
+                     allNotifs[i].vldUpdated =
+                      responseData.visitorLog.vldUpdated; //date
+                    allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
+                  }
+                 }
+               })
+               .catch(error => {
+                 console.log(error, 'error while fetching networks');
+               });
+           }
+           console.log('Props  notifications~~~~~', allNotifs);
+         });
+          console.log('NOTIFICATIONS_NOTIFICATIONS######', allNotifs);
 
-        sorted.map((data, index) => {
+
+          let firebaseNoti = [];
+          var promises = sorted.map(function(data, index) {
           if (data.ntType !== 'gate_app') {
             firebaseNoti.push({ ...data });
+            return firebaseNoti;
           } else {
-            firebase
+            let dbRef = firebase
               .database()
-              .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
-              .on('value', snapshot => {
-                let val = snapshot.val();
-                firebaseNoti.push({ ...data, ...val });
-                console.log(snapshot.val(), 'value_firebase');
-              });
+              .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`);
+
+            return dbRef.once('value').then(snapshot => {
+              let val = snapshot.val();
+              firebaseNoti.push({ ...data, ...val });
+              // return firebaseNoti;
+              // console.log(snapshot.val(), 'value_firebase');
+              // dispatch({
+              //   type: GET_NOTIFICATIONS_SUCCESS,
+              //   payload: [...firebaseNoti]
+              // });
+            });
           }
         });
 
-        dispatch({
-          type: REFRESH_NOTIFICATION_SUCCESS,
-          payload: [...firebaseNoti]
+        // Promise.all(promises).then(function(results) {
+        //   dispatch({
+        //     type: REFRESH_NOTIFICATION_SUCCESS,
+        //     payload: [...firebaseNoti]
+        //   });
+        // });
+
+        Promise.all(promises).then(function(results) {
+          let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+          dispatch({
+            type: REFRESH_NOTIFICATION_SUCCESS,
+            payload: [...succ]
+          });
         });
+
+        // sorted.map((data, index) => {
+        //   if (data.ntType !== 'gate_app') {
+        //     firebaseNoti.push({ ...data });
+        //   } else {
+        //     firebase
+        //       .database()
+        //       .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
+        //       .on('value', snapshot => {
+        //         let val = snapshot.val();
+        //         firebaseNoti.push({ ...data, ...val });
+        //         // console.log(snapshot.val(), 'value_firebase');
+        //         dispatch({
+        //           type: REFRESH_NOTIFICATION_SUCCESS,
+        //           payload: [...firebaseNoti]
+        //         });
+        //       });
+        //   }
+        // });
       })
       .catch(error => {
         console.log(error, 'error fetching notifications');

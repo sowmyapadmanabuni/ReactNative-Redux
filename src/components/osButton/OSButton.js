@@ -18,7 +18,6 @@ class OSButton extends React.Component {
         disabled:PropTypes.bool
     };
     static defaultProps = {
-        disabled:true,
         height: '30%',
         width: '35%',
         borderRadius: 5,
@@ -26,6 +25,7 @@ class OSButton extends React.Component {
         oSBBackground: base.theme.colors.primary,
         oSBType: 'normal',
         oSBTextColor: base.theme.colors.white,
+        disabled:false
 
     };
 
@@ -49,6 +49,7 @@ class OSButton extends React.Component {
         return (
 
             <TouchableOpacity onPress={this.onButtonClick.bind(this)}
+                              disabled={this.props.disabled}
                               style={[oSBStyle, {
                                   height: (this.props.height),
                                   width: (this.props.width),

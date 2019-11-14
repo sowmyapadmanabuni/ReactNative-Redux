@@ -943,237 +943,21 @@ class Receipts extends React.Component {
                         <ScrollView style={AddExpenseStyles.mainContainer}
                                     showsVerticalScrollIndicator={false}>
                             <View style={[AddExpenseStyles.scrollContainer]}>
-                                <View style={{width: '100%'}}>
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: base.theme.colors.black,
-                                        textAlign: 'left',
-                                        paddingTop: 5
-                                    }}>Select unit
-                                        <Text
-                                            style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
-                                    <Dropdown
-                                        value={this.state.selectedUnit} //Select Block *
-                                        labelFontSize={18}
-                                        labelPadding={-5}
-                                        placeHolder={'Select unit *'}
-                                        baseColor="rgba(0, 0, 0, 1)"
-                                        data={dropDown}
-                                        containerStyle={{
-                                            width: '100%',
-                                        }}
-                                        textColor={base.theme.colors.black}
-                                        inputContainerStyle={{
-                                            borderColor: base.theme.colors.lightgrey,
-                                        }}
-                                        dropdownOffset={{top: 10, left: 0}}
-                                        dropdownPosition={dropDown.length<=2?-2:-5}
-                                        rippleOpacity={0}
-                                        onChangeText={(value, index) => {
-                                            this.setState({
-                                                selectedUnit: value,
-                                                unitId:this.props.dashBoardReducer.dropdown1[index].unitId
-                                            })
-                                        }}
-                                    />
+                                <View style={{width:'80%',marginTop:20}}>
+                                    <Text style={{fontSize:12}}>Unit Name
+                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
+                                    </Text>
+                                    <Text style={{fontSize:12}}>Unit Name
+                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
+                                    </Text>
+                                    <Text style={{fontSize:12}}>Unit Name
+                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
+                                    </Text>
+                                    <Text style={{fontSize:12}}>Unit Name
+                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
+                                    </Text>
                                 </View>
-                            <View style={AddExpenseStyles.textInputView}>
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: base.theme.colors.black,
-                                    textAlign: 'left',
-                                    paddingTop: 5
-                                }}>Invoice Number
-                                    <Text
-                                        style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
-                                <TextInput
-                                    style={{
-                                        height: 30,
-                                        borderBottomWidth: 1,
-                                        borderColor: base.theme.colors.lightgrey,
-                                        paddingBottom: 5
-                                    }}
-                                    onChangeText={(value) =>{
-                                        let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
-                                        if (isNaN(num)) {
-                                            // Its not a number
-                                        } else {
-                                            this.setState({invoiceNumber:value})
-                                        }}}
-                                    keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
-                                    //onChangeText={(text) => this.setState({invoiceNumber: text})}
-                                    value={this.state.invoiceNumber}
-                                    maxLength={20}
-                                    placeholder="Invoice Number"
-                                    placeholderTextColor={base.theme.colors.grey}
-                                />
-                            </View>
-                            <View style={AddExpenseStyles.textInputView}>
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: base.theme.colors.black,
-                                    textAlign: 'left',
-                                    paddingTop: 5
-                                }}>Amount Due
-                                    <Text
-                                        style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
-                                <TextInput
-                                    style={{
-                                        height: 30,
-                                        borderBottomWidth: 1,
-                                        borderColor: base.theme.colors.lightgrey,
-                                        paddingBottom: 5
-                                    }}
-                                    onChangeText={(value) =>{
-                                        let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
-                                        if (isNaN(num)) {
-                                            // Its not a number
-                                        } else {
-                                            this.setState({amountDue:num})
-                                        }}}
-                                   // onChangeText={(text) => this.setState({amountDue: text})}
-                                    value={this.state.amountDue}
-                                    maxLength={20}
-                                    placeholder="Amount Due"
-                                    placeholderTextColor={base.theme.colors.grey}
-                                    keyboardType={'number-pad'}
 
-                                />
-                            </View>
-                            <View style={AddExpenseStyles.textInputView}>
-                                <Text style={{
-                                    fontSize: 14,
-                                    color: base.theme.colors.black,
-                                    textAlign: 'left',
-                                    paddingTop: 5
-                                }}>Amount Paid
-                                    <Text
-                                        style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
-                                <TextInput
-                                    style={{
-                                        height: 30,
-                                        borderBottomWidth: 1,
-                                        borderColor: base.theme.colors.lightgrey,
-                                        paddingBottom: 5
-                                    }}
-                                    onChangeText={(value) =>{
-                                        let num = value.replace(/[^0-9].[^0-9]{1,2}/g,  '');
-                                        if (isNaN(num)) {
-                                            // Its not a number
-                                        } else {
-                                            this.setState({amountPaid:num})
-                                        }}}
-                                   // onChangeText={(text) => this.setState({amountPaid: text})}
-                                    value={this.state.amountPaid}
-                                    placeholder="Amount Paid"
-                                    placeholderTextColor={base.theme.colors.grey}
-                                    keyboardType={'phone-pad'}
-                                    maxLength={20}
-                                />
-                            </View>
-                                <View style={AddExpenseStyles.textInputView}>
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: base.theme.colors.black,
-                                        textAlign: 'left',
-                                        paddingTop: 5
-                                    }}>Payment Description</Text>
-                                    <TextInput
-                                        style={{
-                                            height: 30,
-                                            borderBottomWidth: 1,
-                                            borderColor: base.theme.colors.lightgrey,
-                                            paddingBottom: 5
-                                        }}
-                                        onChangeText={(value) =>{
-                                            let num = value.replace(/^[a-zA-Z0-9 ]+$/g,  '');
-                                            if (isNaN(num)) {
-                                                // Its not a number
-                                            } else {
-                                                this.setState({paymentDesc:value})
-                                            }}}
-                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
-                                       // onChangeText={(text) => this.setState({paymentDesc: text})}
-                                        value={this.state.paymentDesc}
-                                        maxLength={40}
-                                        placeholder="Payment Description"
-                                        placeholderTextColor={base.theme.colors.grey}
-                                    />
-                                </View>
-                                <View style={[AddExpenseStyles.textInputView, {
-                                    flexDirection: 'row',
-                                    borderBottomWidth: 1,
-                                    borderColor: base.theme.colors.lightgrey,
-                                    alignItems: 'flex-end',
-                                    justifyContent: 'space-between'
-                                }]}>
-                                    <View>
-                                        <Text style={{
-                                            fontSize: 14,
-                                            color: base.theme.colors.black,
-                                            textAlign: 'left',
-                                            paddingTop: 5,
-                                        }}>Payment Date
-                                            <Text
-                                                style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
-                                        <TextInput
-                                            style={{
-                                                height: 30,
-                                                //borderBottomWidth: 1,
-                                                //borderColor: base.theme.colors.lightgrey,
-                                                paddingBottom: 5,
-                                                color:base.theme.colors.black
-                                            }}
-                                            value={moment(this.state.paymentDate).format("MMM DD YYYY")}
-                                            placeholder="Payment Date"
-                                            placeholderTextColor={base.theme.colors.grey}
-                                            editable={false}
-                                        />
-                                    </View>
-                                    <TouchableOpacity onPress={() => this.openCalenderAdd()}>
-                                        <Image
-                                            style={{height: 25, width: 25, marginBottom: 7}}
-                                            source={require('../../../icons/calender.png')}
-                                        />
-                                    </TouchableOpacity>
-
-                                   {(Platform.OS === 'ios') ? this.openIOSCalenderAdd() : <View/>}
-
-                                </View>
-                                <View style={{width: '100%', }}>
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: base.theme.colors.black,
-                                        textAlign: 'left',
-                                        paddingTop: 5
-                                    }}>Select Payment Method
-                                        <Text
-                                            style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
-
-                                    <Dropdown
-                                        value={this.state.selPayMethod} // 'Select Payment Method *'
-                                        labelFontSize={18}
-                                        labelPadding={-5}
-                                        baseColor="rgba(0, 0, 0, 1)"
-                                        data={this.state.paymentMethodList}
-                                        containerStyle={{
-                                            width: '100%',
-                                        }}
-                                        textColor={base.theme.colors.black}
-                                        inputContainerStyle={{
-                                            borderColor: base.theme.colors.lightgrey,
-                                        }}
-                                        dropdownOffset={{top: 10, left: 0}}
-                                        dropdownPosition={-5}
-                                        rippleOpacity={0}
-                                        onChangeText={(value, index) => {
-                                            this.setState({
-                                                selPayMethod: value,
-                                                payMethodId: this.state.paymentMethodList[index].details.pmid,
-                                            })
-                                        }}
-                                    />
-                                </View>
                                 <View style={{
                                     alignSelf: 'center',
                                     width: '60%',
@@ -1198,7 +982,7 @@ class Receipts extends React.Component {
                                         width={'45%'}
                                         borderRadius={20}
                                         oSBBackground={base.theme.colors.primary}
-                                        oSBText={'Create'}
+                                        oSBText={'Submit'}
                                         onButtonClick={() => this.createExpenseValidation()}/>
                                 </View>
                             </View>
@@ -1323,7 +1107,7 @@ class Receipts extends React.Component {
             "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
             "PYTax"    : "",
             "PMID" : self.state.payMethodId,
-            "PYDesc"   : self.state.paymentDesc
+            "PYDesc"  : self.state.paymentDesc
         };
         console.log('Selected dates',input);
         let stat = await base.services.OyeLivingApi.createNewReceipt(input);

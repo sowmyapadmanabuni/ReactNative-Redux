@@ -179,6 +179,15 @@ export default class OyeLivingApi {
         return await instance.get(`Invoice/InvoiceListByInvoiceNumber/`+invoiceNum)
     }
 
+    static  async generateInvoiceByExpIds(input){
+        return await  instance.post('invoice/list',input)
+    }
+
+    static async getUnitListByBlockId(blockId){
+        return await instance.get(`Unit/GetUnitListByBlockID/`+blockId)
+    }
+
+
 
 
 
