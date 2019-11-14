@@ -89,6 +89,12 @@ pod 'Firebase/Messaging', '~> 5.19.0'
   pod 'RNAudioRecord', :path => '../node_modules/react-native-audio-record'
   
 
+  pod 'lottie-ios', :path => '../node_modules/lottie-ios'
+
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
+  pod 'RNPDF', :path => '../node_modules/react-native-view-pdf'
+
 end
   
 post_install do |installer|

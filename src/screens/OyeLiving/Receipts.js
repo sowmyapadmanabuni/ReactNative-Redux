@@ -584,6 +584,7 @@ class Receipts extends React.Component {
 
         )
     }
+
     getAndroidPermissions() {
         let that = this;
 
@@ -1356,11 +1357,6 @@ class Receipts extends React.Component {
         self.snapshot()
 
     }
-
-
-
-
-
 
 }
 

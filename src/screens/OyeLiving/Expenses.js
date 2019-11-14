@@ -1253,7 +1253,7 @@ class Expenses extends React.Component {
                                             height: hp('4%'),
                                             width: wp('15%'),
                                             alignItems: 'flex-start',
-                                            justifyContent: 'center'
+                                            justifyContent: 'center',
                                         }}
                                     >
                                         <Image

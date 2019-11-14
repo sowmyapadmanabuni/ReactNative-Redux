@@ -413,7 +413,9 @@ class MyFamilyList extends React.Component {
             <View style={Style.mainView}>
                 {/* <Header /> */}
 
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
+                <SafeAreaView style={{
+                    backgroundColor: '#ff8c00'
+                }}>
                     <View style={[Style.viewStyle1, {flexDirection: 'row'}]}>
                         <View style={Style.viewDetails1}>
                             <TouchableOpacity

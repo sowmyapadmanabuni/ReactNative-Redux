@@ -167,6 +167,7 @@ class AddAndEditCheckPoints extends React.Component {
         if (Platform.OS === "android") {
             RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
                 .then(data => {
+                    console.log("locationPermissionsAccess...")
                     this.locationPermissionsAccess(params);
                 }).catch(err => {
 
@@ -177,22 +178,64 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
 
-    locationPermissionsAccess(params) {
-        (async () => {
+    //locationPermissionsAccess(params) {
+    async locationPermissionsAccess(params) {
+        console.log("locationPermissionsAccess")
+        try {
+            console.log("INSIDE")
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        console.log("Honor ", params);
+                        this.getUserLocation(params)
+
+                    },
+                    (error) => {
+                        console.log("error-> ", error);
+                        Alert.alert(
+                            'Location',
+                            'We are not able to get your current location.',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => this.props.navigation.navigate('ResDashBoard'),
+                                    style: 'cancel'
+                                },
+                                {text: 'Try Again', onPress: () => this.getUserLocation(params)},
+                            ],
+                            {cancelable: false}
+                        )
+                    },
+                    {enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
+                );
+            } else {
+                console.log("Permission deny");
+                this.props.navigation.navigate("ResDashBoard")
+
+            }
+        } catch (err) {
+            console.error("No Access  to location" + err);
+        }
+
+        /*(async () => {
             {
                 try {
+                    console.log("INSIDE")
                     const granted = await PermissionsAndroid.request(
                         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     );
-
-
                     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                         navigator.geolocation.getCurrentPosition(
                             (position) => {
+                                console.log("Honor ", params);
                                 this.getUserLocation(params)
 
                             },
                             (error) => {
+                                console.log("error-> ", error);
                                 Alert.alert(
                                     'Location',
                                     'We are not able to get your current location.',
@@ -218,7 +261,7 @@ class AddAndEditCheckPoints extends React.Component {
                     console.error("No Access  to location" + err);
                 }
             }
-        })();
+        })();*/
     }
 
 
@@ -229,18 +272,20 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     updateSatelliteCount(){
+        console.log("updateSatelliteCount...");
         let self = this;
-        RNLocationSatellites.startLocationUpdate();
+        console.log("startLocationUpdate>> ",RNLocationSatellites.startLocationUpdate());
 
         GPSEventEmitter.addListener('RNSatellite', (event) => {
             console.log(":RN SATELLITE:",event)
             self.setState({
-                satelliteCount:event.satellites
+                satelliteCount : event.satellites
             })
-        })
+        });
     }
 
     watchuserPosition() {
+        console.log("watchuserPosition...");
         let locationArrStored = [];
         this.watchId = Geolocation.watchPosition(
             (position) => {
@@ -249,12 +294,12 @@ class AddAndEditCheckPoints extends React.Component {
                 locationArrStored.push(LocationData);
                 RNLocationSatellites.startLocationUpdate();
 
-                GPSEventEmitter.addListener('RNSatellite', (event) => {
+                /*GPSEventEmitter.addListener('RNSatellite', (event) => {
                     console.log(":RN SATELLITE:",event)
                     this.setState({
                         satelliteCount:event.satellites
                     })
-                })
+                });*/
                 this.setState({
                     region: {
                         latitude: LocationData.latitude,
@@ -312,6 +357,7 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     async getUserLocation(params) {
+
         let self = this;
         try {
             await navigator.geolocation.getCurrentPosition((data) => {
@@ -323,7 +369,6 @@ class AddAndEditCheckPoints extends React.Component {
                         longitude: LocationData.longitude,
                         longitudeDelta: LONGITUDE_DELTA,
                         latitudeDelta: LATITUDE_DELTA,
-
                     },
                     accuracy:LocationData.accuracy,
                     isEditing: params === null ? false : true,
@@ -342,6 +387,7 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     showDenialAlertMessage(error) {
+        console.log("error ",error)
         if (Platform.OS === 'ios') {
             Alert.alert(
                 'Location permission denied',
@@ -382,8 +428,8 @@ class AddAndEditCheckPoints extends React.Component {
         let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
         //let stat = await OyeSafeApi.getCheckPointList(8);
 
-
         try {
+            console.log("stat ",stat);
             if (stat.success) {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
@@ -415,8 +461,21 @@ class AddAndEditCheckPoints extends React.Component {
         )
     }
 
-    validateFields() {
+    checkCount(){
         if(this.state.satelliteCount > 4) {
+            this.validateFields()
+        }
+        else{
+            if (this.state.accuracy >=12 && this.state.accuracy<=15){
+                this.validateFields()
+            }
+            else{
+                Alert.alert("Failed to get accurate user position","Can't proceed further")
+            }
+        }
+    }
+
+    validateFields() {
             if (base.utils.validate.isBlank(this.state.checkPointName)) {
                 alert("Please enter Check Point Name")
             } else {
@@ -435,10 +494,6 @@ class AddAndEditCheckPoints extends React.Component {
                 self.addCheckPoint()
             }
         }
-        else{
-            Alert.alert("Satellite count is less than 4","Can't proceed further")
-        }
-    }
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);
@@ -518,7 +573,9 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     render() {
-        console.log("State", this.state);
+        console.log("this.state.satelliteCount ",this.state.satelliteCount)
+        //(":RN SATELLITE:",event)
+        //console.log("State", this.state);
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
         return (
             <ScrollView onPress={() => Keyboard.dismiss()}>
@@ -607,10 +664,10 @@ class AddAndEditCheckPoints extends React.Component {
                                   oSBType={"custom"}
                                   oSBBackground={base.theme.colors.red}
                                   height={30} borderRadius={10}/>
-                        <OSButton onButtonClick={() => this.validateFields()}
-                            //disabled={this.state.satelliteCount < 4}
+                        {/* <OSButton onButtonClick={() => this.validateFields()} */}
+                        <OSButton onButtonClick={() => this.checkCount()}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                            //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
+                                  //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
                                   oSBBackground={base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>

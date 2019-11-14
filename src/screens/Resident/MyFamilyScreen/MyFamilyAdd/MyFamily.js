@@ -101,7 +101,10 @@ class MyFamily extends Component {
             <View style={Style.container}>
 
                 <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
-                    <View style={[Style.viewStyle1, {flexDirection: "row"}]}>
+                    <View style={[
+                        Style.viewStyle1,
+                        {flexDirection: "row"}
+                        ]}>
                         <View style={Style.viewDetails1}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -128,7 +131,7 @@ class MyFamily extends Component {
                             style={{
                                 flex: 1,
                                 justifyContent: "center",
-                                alignItems: "center"
+                                alignItems: "center",
                             }}
                         >
                             <Image
@@ -150,7 +153,7 @@ class MyFamily extends Component {
                     <View style={Style.subContainer}>
                         <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
                             {this.state.relativeImage === '' ?
-                                <Image style={{height: 40, width: 40, borderRadius: 20, alignSelf: 'center'}}
+                                <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
                                        source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                 />
                                 :

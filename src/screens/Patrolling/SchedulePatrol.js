@@ -160,7 +160,7 @@ class SchedulePatrol extends React.Component {
         let days = this.state.days;
         let receivedDays = data.psRepDays.split(',');
         console.log("Days:", data.deName, this.state.deviceNameList);
-        
+
         for (let i in days) {
             for (let j in receivedDays) {
                 if (days[i].day === receivedDays[j]) {
@@ -266,7 +266,7 @@ class SchedulePatrol extends React.Component {
                             };
                             deviceName.push(deviceDetail)
                         }
-
+                        return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
                         self.setState({
                             deviceNameList: deviceName,
                             selectedDevice: dataReceived[0].deGateNo
@@ -281,8 +281,6 @@ class SchedulePatrol extends React.Component {
 
     async schedulePatrol(days, patrolCheckPointID) {
         let self = this;
-
-
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
             PSSTime: moment(self.state.startTime).format("HH:MM:ss"),
@@ -380,6 +378,7 @@ class SchedulePatrol extends React.Component {
     }
 
     render() {
+        console.log("deviceNameList ", this.state.deviceNameList);
         let deviceList = this.state.deviceNameList.map((d, i) => {
             return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
         });

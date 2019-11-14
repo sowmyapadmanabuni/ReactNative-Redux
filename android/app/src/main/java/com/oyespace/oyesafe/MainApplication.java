@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.synclovis.RNLocationSatellitesPackage;
 import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
 import com.goodatlas.audiorecord.RNAudioRecordPackage;
 import com.rumax.reactnative.pdfviewer.PDFViewPackage;
@@ -42,7 +43,6 @@ import java.util.List;
 import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
-import com.synclovis.RNLocationSatellitesPackage;
 
 
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;

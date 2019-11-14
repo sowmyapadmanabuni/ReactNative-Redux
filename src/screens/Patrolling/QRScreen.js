@@ -132,7 +132,6 @@ class QRScreen extends React.Component {
         updateQRBase64({value: this.state.qrBase64})
     }
 
-
     render() {
         return (
             <View style={QRScreenStyles.container}>
@@ -144,10 +143,12 @@ class QRScreen extends React.Component {
                     <View style={QRScreenStyles.qrView}>
                         <QRCode
                             value={this.state.latLong}
-                            logo={require('../../../icons/headerLogo.png')}
+                            logo={require('../../../icons/headerLogo.png') }
+                            color={"grey"}
+                            logoBackgroundColor='transparent'
                             // getRef={(c) => (this.qrcode = c)}
                             size={200}
-                            logoSize={50}
+                            logoSize={60}
                         />
                     </View>
                     <Text style={{
@@ -170,7 +171,7 @@ class QRScreen extends React.Component {
                 <EmptyView height={30}/>
                 <TouchableHighlight
                     underlayColor={base.theme.colors.transparent}
-                    onPress={() => this.props.navigation.goBack(null)}
+                    //onPress={() => this.props.navigation.goBack(null)}
                     style={QRScreenStyles.cpTextView}>
                     <Text style={QRScreenStyles.cpTextStyle}>Patrolling Check Points QR Code</Text>
                 </TouchableHighlight>
