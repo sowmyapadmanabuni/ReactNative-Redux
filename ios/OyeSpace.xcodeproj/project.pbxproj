@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -87,6 +86,8 @@
 		FD735809232914EC005D887E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD7357D0232914AB005D887E /* icomoon.ttf */; };
 		FDA79208233B71720034094B /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDA79203233B715D0034094B /* libRNSound.a */; };
 		FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */; };
+		0BDB4F93EFAC4269A833DD35 /* libRNImageToPdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7832287E1BF4467918A6AC3 /* libRNImageToPdf.a */; };
+		9D9C81365F0D4459BA78100D /* libRNLocationSatellites.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26BC40904E4A4FEAB7D5712E /* libRNLocationSatellites.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -627,6 +628,10 @@
 		FDA791C9233B715D0034094B /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FDDD9F7D233B36C700F1EBCE /* libRNAudioRecorderPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAudioRecorderPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4234C07A0424A3FB7953955 /* RNImageToPdf.xcodeproj */ = {isa = PBXFileReference; name = "RNImageToPdf.xcodeproj"; path = "../node_modules/react-native-image-to-pdf/ios/RNImageToPdf.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		A7832287E1BF4467918A6AC3 /* libRNImageToPdf.a */ = {isa = PBXFileReference; name = "libRNImageToPdf.a"; path = "libRNImageToPdf.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		C41F6240964040B7ABEEB76D /* RNLocationSatellites.xcodeproj */ = {isa = PBXFileReference; name = "RNLocationSatellites.xcodeproj"; path = "../node_modules/react-native-location-satellites/ios/RNLocationSatellites.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		26BC40904E4A4FEAB7D5712E /* libRNLocationSatellites.a */ = {isa = PBXFileReference; name = "libRNLocationSatellites.a"; path = "libRNLocationSatellites.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -661,6 +666,8 @@
 				F0D76AD689F1208DBD46DFD1 /* libPods-OyeSpace.a in Frameworks */,
 				1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */,
 				9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */,
+				0BDB4F93EFAC4269A833DD35 /* libRNImageToPdf.a in Frameworks */,
+				9D9C81365F0D4459BA78100D /* libRNLocationSatellites.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -934,6 +941,8 @@
 				6EA84CBBF5AD40688D7FE07D /* reactnativeuilib.xcodeproj */,
 				CC36C29DFEB94E1C86A11A53 /* RazorpayCheckout.xcodeproj */,
 				7B1D4D427E654E448D8EF7BA /* RCTRestart.xcodeproj */,
+				C4234C07A0424A3FB7953955 /* RNImageToPdf.xcodeproj */,
+				C41F6240964040B7ABEEB76D /* RNLocationSatellites.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1931,6 +1940,8 @@
 					"$(SRCROOT)/../node_modules/react-native-ui-lib/lib/ios/reactnativeuilib/**",
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-restart/ios/RCTRestart",
+					"$(SRCROOT)/../node_modules/react-native-image-to-pdf/ios",
+					"$(SRCROOT)/../node_modules/react-native-location-satellites/ios/**",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1938,6 +1949,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"\"$(SRCROOT)/OyeSpace\"",
+					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1980,6 +1993,8 @@
 					"$(SRCROOT)/../node_modules/react-native-ui-lib/lib/ios/reactnativeuilib/**",
 					"$(SRCROOT)/../node_modules/react-native-razorpay/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-restart/ios/RCTRestart",
+					"$(SRCROOT)/../node_modules/react-native-image-to-pdf/ios",
+					"$(SRCROOT)/../node_modules/react-native-location-satellites/ios/**",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1987,6 +2002,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"\"$(SRCROOT)/OyeSpace\"",
+					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
 				OTHER_LDFLAGS = (

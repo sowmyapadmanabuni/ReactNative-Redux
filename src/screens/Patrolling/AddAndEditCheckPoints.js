@@ -16,7 +16,7 @@ import {
     Text,
     View,
     TouchableHighlight,
-    Animated,Easing
+    Animated,Easing,NativeEventEmitter
 } from 'react-native';
 import {connect} from 'react-redux';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
@@ -33,6 +33,8 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import wifi from 'react-native-android-wifi';
 import LottieView from 'lottie-react-native';
 import Modal from "react-native-modal";
+import {RNLocationSatellites} from 'react-native-location-satellites';
+const GPSEventEmitter = new NativeEventEmitter(RNLocationSatellites)
 
 
 
@@ -80,6 +82,8 @@ class AddAndEditCheckPoints extends React.Component {
             locationArrStored: [],
             isLottieModalOpen:false,
             progress: new Animated.Value(0),
+            accuracy:0,
+            satelliteCount:0
         });
 
         this.thread = null;
@@ -97,7 +101,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentDidUpdate() {
-        
+
         setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
         }, 100)
@@ -118,6 +122,7 @@ class AddAndEditCheckPoints extends React.Component {
 
     async componentWillMount() {
         console.log("SCDMVD:", this.props.navigation.state.params);
+        this.updateSatelliteCount();
         let params = this.props.navigation.state.params !== undefined ? this.props.navigation.state.params.data.item : null;
         if (params === null) {
             (Platform.OS === 'ios' ? this.getUserLocation(params) : this.checkGPSStatus(params))
@@ -162,6 +167,7 @@ class AddAndEditCheckPoints extends React.Component {
         if (Platform.OS === "android") {
             RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({interval: 10000, fastInterval: 5000})
                 .then(data => {
+                    console.log("locationPermissionsAccess...")
                     this.locationPermissionsAccess(params);
                 }).catch(err => {
 
@@ -172,22 +178,64 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
 
-    locationPermissionsAccess(params) {
-        (async () => {
+    //locationPermissionsAccess(params) {
+    async locationPermissionsAccess(params) {
+        console.log("locationPermissionsAccess")
+        try {
+            console.log("INSIDE")
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        console.log("Honor ", params);
+                        this.getUserLocation(params)
+
+                    },
+                    (error) => {
+                        console.log("error-> ", error);
+                        Alert.alert(
+                            'Location',
+                            'We are not able to get your current location.',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => this.props.navigation.navigate('ResDashBoard'),
+                                    style: 'cancel'
+                                },
+                                {text: 'Try Again', onPress: () => this.getUserLocation(params)},
+                            ],
+                            {cancelable: false}
+                        )
+                    },
+                    {enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
+                );
+            } else {
+                console.log("Permission deny");
+                this.props.navigation.navigate("ResDashBoard")
+
+            }
+        } catch (err) {
+            console.error("No Access  to location" + err);
+        }
+
+        /*(async () => {
             {
                 try {
+                    console.log("INSIDE")
                     const granted = await PermissionsAndroid.request(
                         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     );
-
-
                     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                         navigator.geolocation.getCurrentPosition(
                             (position) => {
+                                console.log("Honor ", params);
                                 this.getUserLocation(params)
 
                             },
                             (error) => {
+                                console.log("error-> ", error);
                                 Alert.alert(
                                     'Location',
                                     'We are not able to get your current location.',
@@ -202,7 +250,7 @@ class AddAndEditCheckPoints extends React.Component {
                                     {cancelable: false}
                                 )
                             },
-                            {enableHighAccuracy: false, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
+                            {enableHighAccuracy: true, timeout: 5000, maximumAge: 1000, distanceFilter: 1}
                         );
                     } else {
                         console.log("Permission deny");
@@ -213,26 +261,46 @@ class AddAndEditCheckPoints extends React.Component {
                     console.error("No Access  to location" + err);
                 }
             }
-        })();
+        })();*/
     }
 
 
     componentDidMount() {
-       
+        console.log(RNLocationSatellites)
+        this.updateSatelliteCount();
         this.watchuserPosition();
     }
 
-    handleLocationThread = (message) =>{
-        console.log("Message Recevied from Thread:",message);
+    updateSatelliteCount(){
+        console.log("updateSatelliteCount...");
+        let self = this;
+        console.log("startLocationUpdate>> ",RNLocationSatellites.startLocationUpdate());
+
+        GPSEventEmitter.addListener('RNSatellite', (event) => {
+            console.log(":RN SATELLITE:",event)
+            self.setState({
+                satelliteCount : event.satellites
+            })
+        });
     }
 
     watchuserPosition() {
+        console.log("watchuserPosition...");
         let locationArrStored = [];
         this.watchId = Geolocation.watchPosition(
             (position) => {
                 console.log("sdvdfgddhdgs", position);
                 let LocationData = position.coords;
                 locationArrStored.push(LocationData);
+                RNLocationSatellites.startLocationUpdate();
+
+                /*GPSEventEmitter.addListener('RNSatellite', (event) => {
+                    console.log(":RN SATELLITE:",event)
+                    this.setState({
+                        satelliteCount:event.satellites
+                    })
+                });*/
+
                 this.setState({
                     region: {
                         latitude: LocationData.latitude,
@@ -240,26 +308,28 @@ class AddAndEditCheckPoints extends React.Component {
                         longitudeDelta: LONGITUDE_DELTA,
                         latitudeDelta: LATITUDE_DELTA,
                     },
-                    gpsLocation: parseFloat(LocationData.latitude).toFixed(5) + "," + parseFloat(LocationData.longitude).toFixed(5),
-                    locationArrStored: locationArrStored
+                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
+                    locationArrStored: locationArrStored,
+                    accuracy:LocationData.accuracy
+
                 },()=>this.renderUserLocation())
             },
             (error) => {
                 console.log(error);
             },
             {
-                enableHighAccuracy: false,
-                distanceFilter: 1,
-                interval: 5000,
-                fastestInterval: 2000,
-                useSignificantChanges: true,
-                timeout: 1000
+                enableHighAccuracy: true,
+                distanceFilter: 5,
+                timeout: 15000,
+                maximumAge:15000
             }
         );
     }
 
 
     componentWillUnmount() {
+        GPSEventEmitter.removeListener('RNSatellite')
+        GPSEventEmitter.removeListener('EVENT_NAME')
         if (this.watchId !== null) {
             Geolocation.clearWatch(this.watchId);
         }
@@ -289,18 +359,20 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     async getUserLocation(params) {
+
         let self = this;
         try {
             await navigator.geolocation.getCurrentPosition((data) => {
                 let LocationData = (data.coords);
+                console.log("Lcoation data:",LocationData);
                 self.setState({
                     region: {
                         latitude: LocationData.latitude,
                         longitude: LocationData.longitude,
                         longitudeDelta: LONGITUDE_DELTA,
                         latitudeDelta: LATITUDE_DELTA,
-
                     },
+                    accuracy:LocationData.accuracy,
                     isEditing: params === null ? false : true,
                     checkPointName: params !== null ? params.cpCkPName : this.state.checkPointName,
                     gpsLocation: LocationData.latitude + "," + LocationData.longitude,
@@ -317,6 +389,7 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     showDenialAlertMessage(error) {
+        console.log("error ",error)
         if (Platform.OS === 'ios') {
             Alert.alert(
                 'Location permission denied',
@@ -357,15 +430,15 @@ class AddAndEditCheckPoints extends React.Component {
         let stat = await OyeSafeApi.getCheckPointList(self.props.SelectedAssociationID);
         //let stat = await OyeSafeApi.getCheckPointList(8);
 
-
         try {
+            console.log("stat ",stat);
             if (stat.success) {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
                     cpArray: stat.data.checkPointListByAssocID,
                     lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                })
+                },()=>self.updateSatelliteCount())
             }
         } catch (e) {
             base.utils.logger.log(e);
@@ -380,34 +453,47 @@ class AddAndEditCheckPoints extends React.Component {
         return (
             <View>
                 <Marker.Animated key={1024+'_' + Date.now()}
-                        pinColor={base.theme.colors.green}
-                        style={{alignItems: 'center', justifyContent: 'center'}}
-                        animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
-                        coordinate={{latitude: lat, longitude: long}}>
-                            
+                                 pinColor={base.theme.colors.green}
+                                 style={{alignItems: 'center', justifyContent: 'center'}}
+                                 animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
+                                 coordinate={{latitude: lat, longitude: long}}>
+
                 </Marker.Animated>
             </View>
         )
     }
 
+    checkCount(){
+        if(this.state.satelliteCount > 4) {
+            this.validateFields()
+        }
+        else{
+            if (this.state.accuracy >=12 && this.state.accuracy<=15){
+                this.validateFields()
+            }
+            else{
+                Alert.alert("Failed to get accurate user position","Can't proceed further")
+            }
+        }
+    }
+
     validateFields() {
-        if (base.utils.validate.isBlank(this.state.checkPointName)) {
-            alert("Please enter Check Point Name")
-        } else {
-            let self = this;
-                self.setState({isLottieModalOpen:true})
+            if (base.utils.validate.isBlank(this.state.checkPointName)) {
+                alert("Please enter Check Point Name")
+            } else {
+                let self = this;
+                self.setState({isLottieModalOpen: true})
                 Animated.timing(self.state.progress, {
                     toValue: 1,
                     duration: 2000,
                     easing: Easing.linear,
-                  }).start();
-                  setTimeout(()=>{
+                }).start();
+                setTimeout(() => {
                     self.setState({
-                        isLottieModalOpen:false
+                        isLottieModalOpen: false
                     })
-                  },2100);
-                    self.addCheckPoint()
-
+                }, 2100);
+                self.addCheckPoint()
             }
     }
 
@@ -431,7 +517,7 @@ class AddAndEditCheckPoints extends React.Component {
                     "CPGPSPnt": gpsLocation,
                     "ASAssnID": self.props.SelectedAssociationID,
                     "CPCPntAt": self.state.checkPointType,
-                   "CPSurrName": '[]'
+                    "CPSurrName": '[]'
                 };
             }
 
@@ -489,7 +575,9 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     render() {
-        console.log("State", this.state);
+        console.log("this.state.satelliteCount ",this.state.satelliteCount)
+        //(":RN SATELLITE:",event)
+        //console.log("State", this.state);
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
         return (
             <ScrollView onPress={() => Keyboard.dismiss()}>
@@ -512,6 +600,10 @@ class AddAndEditCheckPoints extends React.Component {
                         >
                             {this.renderUserLocation()}
                         </MapView>
+                    </View>
+                    <View style={{height:hp('1'),top:hp('3'),width:wp('80'),alignSelf:'center',justifyContent:'center',alignItems:'center'}}>
+                        <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
+                        <Text>Satellite Count: {this.state.satelliteCount}</Text>
                     </View>
 
                     <View style={AddAndEditCheckPointStyles.textView}>
@@ -574,9 +666,11 @@ class AddAndEditCheckPoints extends React.Component {
                                   oSBType={"custom"}
                                   oSBBackground={base.theme.colors.red}
                                   height={30} borderRadius={10}/>
-                        <OSButton onButtonClick={() => this.validateFields()}
+                        {/* <OSButton onButtonClick={() => this.validateFields()} */}
+                        <OSButton onButtonClick={() => this.checkCount()}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  oSBBackground={this.state.isDataCorrect ? base.theme.colors.primary : base.theme.colors.grey}
+                                  //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
+                                  oSBBackground={base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>
                 </View>
@@ -588,36 +682,36 @@ class AddAndEditCheckPoints extends React.Component {
     openLottieModal(){
         return(
             <Modal isVisible={this.state.isLottieModalOpen}
-            animationOutTiming={500}
-            backdropOpacity={0.12}
+                   animationOutTiming={500}
+                   backdropOpacity={0.12}
                    style={{
-                        top:hp('35'),
-                        flex:0.3,
+                       top:hp('35'),
+                       flex:0.3,
+                       backgroundColor: base.theme.colors.white,
+                       alignSelf: 'center',
+                       justifySelf:'center',
+                       justifyContent:'center',
+                       //width: wp('55%'),
+                       borderRadius:hp('20'),
+                       flexDirection:'row',
+                       height:hp('50%'),
+                       width:wp('60')
+                   }}>
+
+                <LottieView
+                    progress={this.state.progress}
+                    loop={true}
+                    style={{
+
                         backgroundColor: base.theme.colors.white,
                         alignSelf: 'center',
-                        justifySelf:'center',
                         justifyContent:'center',
-                         width: wp('55%'),
-                         borderRadius:hp('20'),
-                         flexDirection:'row',
-                         height:hp('50%'),
-                         width:wp('60')
-                        }}>
-                            
-                       <LottieView
-                            progress={this.state.progress}
-                            loop={true}
-                            style={{
-                               
-                                backgroundColor: base.theme.colors.white,
-                                alignSelf: 'center',
-                                justifyContent:'center',
-                                }}
-                            source={require('../../assets/gps.json')}
-                        />
-                        <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
-                        
-                   </Modal>
+                    }}
+                    source={require('../../assets/gps.json')}
+                />
+                <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
+
+            </Modal>
         )
     }
 }

@@ -15,8 +15,10 @@ class OSButton extends React.Component {
         oSBTextColor: PropTypes.string,
         onButtonClick: PropTypes.func,
         oSBType: PropTypes.oneOf(['normal', 'custom']).isRequired,
+        disabled:PropTypes.bool
     };
     static defaultProps = {
+        disabled:true,
         height: '30%',
         width: '35%',
         borderRadius: 5,

@@ -1070,7 +1070,7 @@ const styles = StyleSheet.create({
     datePickerButtonView: {
         marginTop: hp("1%"),
         flexDirection: "row",
-        justifyContent: "flex-end",
+        //justifyContent: "flex-end",
         justifyContent: "space-around",
         marginHorizontal: hp('2%')
     },

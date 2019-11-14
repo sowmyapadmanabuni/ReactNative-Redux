@@ -347,7 +347,7 @@ class CreateSOS extends React.Component {
 
             data.append('oyespace', imgObj);
 
-            statForMediaUpload = await base.services.MediaUploadApi.uploadRelativeImage(data);
+            let statForMediaUpload = await base.services.MediaUploadApi.uploadRelativeImage(data);
             console.log("Stat in Media Upload:", "http://mediaupload.oyespace.com/oyeliving/api/V1/", statForMediaUpload);
             let sosImage = "http://mediaupload.oyespace.com/" + statForMediaUpload;
             let imgArr = this.state.imageArr;

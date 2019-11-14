@@ -3,6 +3,7 @@ package com.oyespace.oyesafe;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.synclovis.RNLocationSatellitesPackage;
 import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
 import com.goodatlas.audiorecord.RNAudioRecordPackage;
 import com.rumax.reactnative.pdfviewer.PDFViewPackage;
@@ -62,6 +63,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNLocationSatellitesPackage(),
             new RNPermissionsPackage(),
             new RNAudioRecordPackage(),
                     new PDFViewPackage(),

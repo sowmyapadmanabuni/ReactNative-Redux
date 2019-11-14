@@ -172,6 +172,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-location-satellites')
     implementation project(':react-native-permissions')
     implementation project(':react-native-audio-record')
     implementation project(':react-native-view-pdf')

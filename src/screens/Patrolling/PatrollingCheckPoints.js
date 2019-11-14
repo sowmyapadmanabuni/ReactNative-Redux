@@ -268,7 +268,9 @@ class PatrollingCheckPoints extends React.Component {
 
     openMapModal() {
         return (
-            <Modal isVisible={this.state.isModalOpen}
+            <Modal
+                transparent={false}
+                isVisible={this.state.isModalOpen}
                 style={PatrollingCheckPointsStyles.mapViewModal}>
                 <View
                     style={PatrollingCheckPointsStyles.modalView}>

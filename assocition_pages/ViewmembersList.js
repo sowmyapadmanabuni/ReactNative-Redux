@@ -276,13 +276,14 @@ class Resident extends React.Component {
     };
 
     handleSearch(text) {
+        console.log("Search (",text,")");
         this.setState({query: text});
         let sortResident = this.state.clonedList; //search from entire list
         let filteredArray = [];
         console.log('Res List', sortResident);
         let roleId = "";
         if (text.length === 0) {
-            filteredArray.push(this.state.clonedList)
+            console.log("filteredArray ",filteredArray);
         } else {
             for (let i in sortResident) {
                 console.log("Sort:", sortResident[i]);
