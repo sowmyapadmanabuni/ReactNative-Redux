@@ -201,7 +201,6 @@ class Resident extends React.Component {
 
     changeRole = (title, message) => {
         try {
-
             const {getDashUnits, selectedAssociation} = this.props;
             console.log('Props in role managment', this.props);
             const url = `http://${this.props.oyeURL}/oyeliving/api/v1/MemberRoleChangeToOwnerToAdminUpdate`;
@@ -434,7 +433,9 @@ class Resident extends React.Component {
                                         keyExtractor={(item, index) => index.toString()}
                                         extraData={this.state}
                                         renderItem={({item, index}) => (
+
                                             <Card style={{height: hp("14%")}}>
+                                                {console.log("item: ",item)}
                                                 <View style={{height: 1, backgroundColor: "lightgray"}}/>
                                                 <View style={{flexDirection: "row", flex: 1}}>
                                                     <View style={{flex: 1}}>
@@ -463,6 +464,7 @@ class Resident extends React.Component {
                                                 </View>
                                                 <View style={{height: 1, backgroundColor: "lightgray"}}/>
                                             </Card>
+
                                         )}
                                     />
 
