@@ -1109,7 +1109,7 @@ class NotificationScreen extends PureComponent {
                             null,
                             notifications
                         );
-                        //this.doNetwork()
+                        this.doNetwork(null, this.props.notifications)
                       }}
                       progressBackgroundColor="#fff"
                       tintColor="#ED8A19"

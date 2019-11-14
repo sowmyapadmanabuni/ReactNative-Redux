@@ -603,7 +603,7 @@ export const refreshNotifications = (
         console.log('allNotifs', allNotifs);
         const sorted = [...allNotifs];
 
-                  allNotifs.map((data, index) => {
+                /*  allNotifs.map((data, index) => {
          if (data.ntType === 'gate_app') {
          axios
                .get(
@@ -652,7 +652,7 @@ export const refreshNotifications = (
            }
            console.log('Props  notifications~~~~~', allNotifs);
          });
-          console.log('NOTIFICATIONS_NOTIFICATIONS######', allNotifs);
+          console.log('NOTIFICATIONS_NOTIFICATIONS######', allNotifs);*/
 
 
           let firebaseNoti = [];
