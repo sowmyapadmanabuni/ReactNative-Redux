@@ -295,7 +295,8 @@ class AddAndEditCheckPoints extends React.Component {
         GPSEventEmitter.addListener('RNSatellite', (event) => {
             console.log(":RN SATELLITE:",event)
             self.setState({
-                satelliteCount : event.satellites
+                satelliteCount : event.satellites,
+                accuracy : event.accuracy,
             })
         });
         RNLocationSatellites.startLocationUpdate();
