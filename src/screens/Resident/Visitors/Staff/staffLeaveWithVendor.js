@@ -800,7 +800,7 @@ class StaffLeaveWithVendor extends Component {
           VLCmnts: `${comments}`,
           VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
           VLVoiceNote: mp3,
-          VLVisLgID:''
+          VLVisLgID:17268
         })
       }
     )

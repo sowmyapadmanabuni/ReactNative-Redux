@@ -95,6 +95,60 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         console.log('allNotifs', allNotifs);
         const sorted = [...allNotifs];
 
+          allNotifs.map((data, index) => {
+              if (data.ntType === 'gate_app') {
+                  axios
+                      .get(
+                          `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+                          //data.sbMemID`,
+                          {
+                              headers: {
+                                  'Content-Type': 'application/json',
+                                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                              }
+                          }
+                      )
+                      .then(res => {
+                          let responseData = res.data.data;
+                          for (let i = 0; i < allNotifs.length; i++) {
+                              if (
+                                  allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
+                              ) {
+                                  console.log(
+                                      '&&&&&&&&&&&&&&&&',
+                                      allNotifs[i].sbMemID,
+                                      responseData,
+                                      responseData.visitorLog.vlVisLgID
+                                  );
+                                  allNotifs[i].vlEntryImg =
+                                      responseData.visitorLog.vlEntryImg;
+                                  allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
+                                  allNotifs[i].vlfName = responseData.visitorLog.vlfName;
+                                  allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
+                                  allNotifs[i].vlComName = responseData.visitorLog.vlComName;
+                                  allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
+                                  allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
+                                  allNotifs[i].vldCreated =
+                                      responseData.visitorLog.vldCreated;
+                                  allNotifs[i].vlengName = responseData.visitorLog.vlengName;
+                                  allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
+                                  allNotifs[i].vldUpdated =responseData.visitorLog.vldUpdated; //date
+                                  allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
+                                  allNotifs[i].vlVisLgID = responseData.visitorLog.vlVisLgID;
+                                  allNotifs[i].unUnitID = responseData.visitorLog.unUnitID;
+                                  allNotifs[i].unUniName = responseData.visitorLog.unUniName;
+                                  allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
+
+                              }
+                          }
+                      })
+                      .catch(error => {
+                          console.log(error, 'error while fetching networks');
+                      });
+              }
+              console.log('Props  notifications~~~~~', allNotifs);
+          });
+
         let firebaseNoti = [];
 
         var promises = sorted.map(function(data, index) {
@@ -469,7 +523,7 @@ export const newNotifInstance = data => {
 
 export const onNotificationOpen = (notif, index, oyeURL) => {
   return dispatch => {
-    newNotif = Object.assign([], notif);
+    let newNotif = Object.assign([], notif);
     newNotif[index].read = true;
     newNotif[index].read = true;
     newNotif[index].ntIsActive = false;
@@ -603,7 +657,7 @@ export const refreshNotifications = (
         console.log('allNotifs', allNotifs);
         const sorted = [...allNotifs];
 
-                /*  allNotifs.map((data, index) => {
+                 allNotifs.map((data, index) => {
          if (data.ntType === 'gate_app') {
          axios
                .get(
@@ -640,10 +694,14 @@ export const refreshNotifications = (
                        responseData.visitorLog.vldCreated;
                     allNotifs[i].vlengName = responseData.visitorLog.vlengName;
                      allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
-                     allNotifs[i].vldUpdated =
-                      responseData.visitorLog.vldUpdated; //date
+                     allNotifs[i].vldUpdated =responseData.visitorLog.vldUpdated; //date
                     allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
-                  }
+                    allNotifs[i].vlVisLgID = responseData.visitorLog.vlVisLgID;
+                    allNotifs[i].unUnitID = responseData.visitorLog.unUnitID;
+                    allNotifs[i].unUniName = responseData.visitorLog.unUniName;
+                    allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
+
+                     }
                  }
                })
                .catch(error => {
@@ -652,7 +710,7 @@ export const refreshNotifications = (
            }
            console.log('Props  notifications~~~~~', allNotifs);
          });
-          console.log('NOTIFICATIONS_NOTIFICATIONS######', allNotifs);*/
+          console.log('NOTIFICATIONS_NOTIFICATIONS######', allNotifs);
 
 
           let firebaseNoti = [];

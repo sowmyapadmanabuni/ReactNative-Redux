@@ -546,6 +546,7 @@ class Dashboard extends PureComponent {
       getDashSub,
       getDashAssoSync
     } = this.props;
+    console.log('SYNC_FUNCTION@@@@@')
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
@@ -568,6 +569,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
+    console.log('Props in dashboard did mount ####',this.props,this.props.dashBoardReducer.isPatrollingScreens)
 
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
     // getAssoMembers(oyeURL, MyAccountID);
@@ -593,16 +595,19 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-   timer.setInterval(
-      this,
-      'syncData',
-      () => {
-        this.syncData();
-        //     //     // alert("hererereerrrereer");
-      },
-      5000
-    );
-  }
+     timer.setInterval(
+         this,
+         'syncData',
+         () => {
+
+           this.syncData();
+           //     //     // alert("hererereerrrereer");
+         },
+         5000
+     );
+
+   }
+
 
   async roleCheckForAdmin(index) {
     const { dropdown, dropdown1 } = this.props;
