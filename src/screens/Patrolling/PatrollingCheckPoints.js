@@ -324,7 +324,6 @@ class PatrollingCheckPoints extends React.Component {
         )
     }
 
-
     mapModal(data) {
         console.log("Data:", data);
         let res = data.item.cpgpsPnt.split(" ");

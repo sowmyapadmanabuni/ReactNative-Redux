@@ -348,25 +348,32 @@ class Dashboard extends PureComponent {
 
   showLocalNotification = notification => {
     try {
+
       // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
         'channel_id',
         'Oyespace',
-        firebase.notifications.Android.Importance.Max
-      ).setDescription('Oyespace channel');
+        firebase.notifications.Android.Importance.High
+      ).setDescription('Oyespace channel')
+          .setSound('oye_msg_tone.mp3');
+    //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
       channel.enableLights(true);
       // channel.enableVibration(true);
       // channel.vibrationPattern([500]);
       firebase.notifications().android.createChannel(channel);
 
       const notificationBuild = new firebase.notifications.Notification({
-        sound: 'default',
-        show_in_foreground: true
+        //sound: 'default',
+        //sound: 'oye_msg_tone',
+        show_in_foreground: true,
+        show_in_background: true,
       })
         .setTitle(notification._title)
         .setBody(notification._body)
         .setNotificationId(notification._notificationId)
-        // .setSound('default')
+          //.setSound(channel.sound)
+          .setSound('oye_msg_tone.mp3')
+          //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
         .setData({
           ...notification._data,
           foreground: true
@@ -376,8 +383,9 @@ class Dashboard extends PureComponent {
         .android.setLargeIcon('ic_notif')
         .android.setSmallIcon('ic_stat_ic_notification')
         .android.setChannelId('channel_id')
-        .android.setVibrate('default')
-        .setSound('default')
+        .android.setVibrate([1000,1000])
+          //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+
 
         // .android.setChannelId('notification-action')
         .android.setPriority(firebase.notifications.Android.Priority.Max);
