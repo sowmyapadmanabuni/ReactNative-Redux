@@ -348,7 +348,7 @@ class Dashboard extends PureComponent {
 
   showLocalNotification = notification => {
     try {
-      // console.log(notification);
+       console.log("ON_NOTif: ",notification);
       const channel = new firebase.notifications.Android.Channel(
         'channel_id',
         'Oyespace',
@@ -358,11 +358,11 @@ class Dashboard extends PureComponent {
       // channel.enableVibration(true);
       // channel.vibrationPattern([500]);
       firebase.notifications().android.createChannel(channel);
-
+      let sound = ('oye_msg_tone.mp3')
       const notificationBuild = new firebase.notifications.Notification({
-        sound: 'default',
+        sound: sound,
         show_in_foreground: true
-      })
+      }).setSound('oye_msg_tone.mp3')
         .setTitle(notification._title)
         .setBody(notification._body)
         .setNotificationId(notification._notificationId)
@@ -377,7 +377,7 @@ class Dashboard extends PureComponent {
         .android.setSmallIcon('ic_stat_ic_notification')
         .android.setChannelId('channel_id')
         .android.setVibrate('default')
-        .setSound('default')
+        
 
         // .android.setChannelId('notification-action')
         .android.setPriority(firebase.notifications.Android.Priority.Max);
@@ -593,15 +593,15 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-   timer.setInterval(
-      this,
-      'syncData',
-      () => {
+  //  timer.setInterval(
+  //     this,
+  //     'syncData',
+  //     () => {
         this.syncData();
         //     //     // alert("hererereerrrereer");
-      },
-      5000
-    );
+    //   },
+    //   5000
+    // );
   }
 
   async roleCheckForAdmin(index) {
