@@ -270,7 +270,7 @@ class AddAndEditCheckPoints extends React.Component {
         this.interval = setInterval(() => {
             this.updateSatelliteCount();
         }, 10000);
-        this.watchuserPosition();
+        //this.watchuserPosition();
     }
 
     callMe(){

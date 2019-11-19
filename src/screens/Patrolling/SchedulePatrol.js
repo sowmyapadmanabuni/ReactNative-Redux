@@ -120,6 +120,7 @@ class SchedulePatrol extends React.Component {
         if (data !== null || data !== undefined) {
             this.setState({ patrolId: data, pcid: pcid }, () => this.getDeviceList())
         }
+
         // this.getDeviceList();
     }
 
@@ -259,18 +260,32 @@ class SchedulePatrol extends React.Component {
                     if (stat) {
                         let dataReceived = stat.data.data.deviceListByAssocID;
                         let deviceName = [];
+                        console.log("device ",dataReceived);
+                        for (let j in dataReceived){
+                            console.log("deviceid ",dataReceived[j].deGateNo);
+                        }
+                        let deviceDetail
                         for (let i in dataReceived) {
-                            let deviceDetail = {
+                            deviceDetail = {
                                 deviceName: dataReceived[i].deGateNo,
                                 deviceId: dataReceived[i].deid
                             };
                             deviceName.push(deviceDetail)
                         }
-                        return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
                         self.setState({
                             deviceNameList: deviceName,
                             selectedDevice: dataReceived[0].deGateNo
                         }, () => this.getPatrolData());
+
+                        console.log("check>> ",this.state.deviceNameList);
+                        console.log("deviceDetail ",deviceName)
+                        //return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
+
+                        // self.setState({
+                        //     deviceNameList: deviceName,
+                        //     selectedDevice: dataReceived[0].deGateNo
+                        // }, () => this.getPatrolData());
+                        console.log("deviceNameList ", this.state.deviceNameList);
                     }
                 } catch (e) {
                     console.log(e)
@@ -378,7 +393,7 @@ class SchedulePatrol extends React.Component {
     }
 
     render() {
-        console.log("deviceNameList ", this.state.deviceNameList);
+        console.log("deviceNameList>> ", this.state.deviceNameList);
         let deviceList = this.state.deviceNameList.map((d, i) => {
             return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
         });
