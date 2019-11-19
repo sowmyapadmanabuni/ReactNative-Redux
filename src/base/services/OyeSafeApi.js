@@ -106,7 +106,10 @@ export default class OyeSafeApi {
     };
 
     static async getReport(detail) {
-        return await instance.post('GetPatrollingReportByDates', detail)
+        let res = await instance.post('GetPatrollingReportByDates', detail);
+        console.log("res>>> ", res);
+        return res
+
     }
 
     static async getStaffListByAssociationId(associationId, accountId) {

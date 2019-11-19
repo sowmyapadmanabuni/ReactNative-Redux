@@ -349,6 +349,19 @@ class Dashboard extends PureComponent {
   showLocalNotification = notification => {
     try {
 
+      // --------------------------- New code --------------------------------------------------------------------------
+      this.sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.oye_msg_tone)
+      const attributes = new AudioAttributes.Builder()
+          .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+          .build();
+
+      const mChannel = new NotificationChannel(CHANNEL_ID,
+          context.getString(R.string.app_name),
+          NotificationManager.IMPORTANCE_HIGH);
+      mChannel.setSound(sound, attributes);
+      // ---------------------------------------------------------------------------------------------------------------
+
+
       // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
         'channel_id',
@@ -356,6 +369,10 @@ class Dashboard extends PureComponent {
         firebase.notifications.Android.Importance.High
       ).setDescription('Oyespace channel')
           .setSound('oye_msg_tone.mp3');
+
+
+
+
     //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
       channel.enableLights(true);
       // channel.enableVibration(true);
@@ -407,7 +424,6 @@ class Dashboard extends PureComponent {
       this.notificationDisplayedListener = firebase
         .notifications()
         .onNotificationDisplayed(notification => {
-          // console.log('___________')
           // console.log(notification)
           // console.log('____________')
           // Process your notification as required

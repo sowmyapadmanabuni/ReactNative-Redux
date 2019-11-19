@@ -55,6 +55,7 @@ class PatrollingCommonHeader extends React.Component {
     }
 
     render() {
+
         let isHidden = this.props.isHidden;
         let isReportVisible = this.props.isReportVisible;
         let isShareVisible = this.props.isShareVisible;
@@ -100,7 +101,8 @@ class PatrollingCommonHeader extends React.Component {
 
     handleIconPress(isShareVisible) {
         if (isShareVisible) {
-            console.log("Base 64:", this.props);
+            console.log(">>>>>" ,this.props.selectedCheckPoints)
+            console.log("Base 64:", this.props.dashboardReducer);
             let base64Image = this.props.selectedCheckPoints.qrBase64.value;
             let shareImageBase64 = {
                 title: "Check Point QR",
