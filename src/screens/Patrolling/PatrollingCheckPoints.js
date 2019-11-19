@@ -327,6 +327,7 @@ class PatrollingCheckPoints extends React.Component {
     mapModal(data) {
         console.log("Data:", data);
         let res = data.item.cpgpsPnt.split(" ");
+
         console.log("Res:", parseFloat(res[0]), parseFloat(res[1]));
         this.setState({
             isModalOpen: !this.state.isModalOpen,

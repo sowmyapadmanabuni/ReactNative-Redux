@@ -1842,7 +1842,7 @@ const styles = StyleSheet.create({
     height: hp('5%'),
     borderRadius: 25,
     borderWidth: 2,
-    backgroundColor: base.theme.colors.white,
+    //backgroundColor: base.theme.colors.white,
     justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,

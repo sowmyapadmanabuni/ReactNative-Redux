@@ -350,7 +350,7 @@ class Dashboard extends PureComponent {
     try {
 
       // --------------------------- New code --------------------------------------------------------------------------
-      this.sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.oye_msg_tone)
+      /*this.sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.oye_sms)
       const attributes = new AudioAttributes.Builder()
           .setUsage(AudioAttributes.USAGE_NOTIFICATION)
           .build();
@@ -358,7 +358,7 @@ class Dashboard extends PureComponent {
       const mChannel = new NotificationChannel(CHANNEL_ID,
           context.getString(R.string.app_name),
           NotificationManager.IMPORTANCE_HIGH);
-      mChannel.setSound(sound, attributes);
+      mChannel.setSound(sound, attributes);*/
       // ---------------------------------------------------------------------------------------------------------------
 
 
@@ -368,9 +368,7 @@ class Dashboard extends PureComponent {
         'Oyespace',
         firebase.notifications.Android.Importance.High
       ).setDescription('Oyespace channel')
-          .setSound('oye_msg_tone.mp3');
-
-
+          .setSound('oye_sms.mp3');
 
 
     //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
@@ -381,7 +379,7 @@ class Dashboard extends PureComponent {
 
       const notificationBuild = new firebase.notifications.Notification({
         //sound: 'default',
-        //sound: 'oye_msg_tone',
+        //sound: 'oye_sms.mp3',
         show_in_foreground: true,
         show_in_background: true,
       })
@@ -389,11 +387,11 @@ class Dashboard extends PureComponent {
         .setBody(notification._body)
         .setNotificationId(notification._notificationId)
           //.setSound(channel.sound)
-          .setSound('oye_msg_tone.mp3')
+          .setSound('oye_sms.mp3')
           //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
         .setData({
           ...notification._data,
-          foreground: true
+          foreground: true,
         })
         .android.setAutoCancel(true)
         .android.setColor('#FF9100')
@@ -408,7 +406,9 @@ class Dashboard extends PureComponent {
         .android.setPriority(firebase.notifications.Android.Priority.Max);
 
       firebase.notifications().displayNotification(notificationBuild);
-      this.setState({ foregroundNotif: notification._data });
+      this.setState({
+        foregroundNotif: notification._data
+      });
     } catch (e) {
       console.log('FAILED_NOTIF');
     }
