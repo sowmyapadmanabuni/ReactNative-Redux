@@ -112,10 +112,13 @@ class SchedulePatrol extends React.Component {
 
 
     async componentWillMount() {
+
         let key = base.utils.strings.patrolId;
         let key1 = "PCID";
         let data = await AsyncStorage.getItem(key);
         let pcid = await AsyncStorage.getItem(key1);
+        console.log("PCID!!!!!!:", data);
+
         console.log("PCID:", pcid);
         if (data !== null || data !== undefined) {
             this.setState({ patrolId: data, pcid: pcid }, () => this.getDeviceList())
@@ -245,7 +248,7 @@ class SchedulePatrol extends React.Component {
         console.log("OyeURL:", oyeURL);
 
         //let stat = await base.services.OyeSafeApi.getDeviceList(associationId);
-        let associationId = this.props.SelectedAssociationID;
+        let associationId = self.props.SelectedAssociationID;
         //let associationId = 8;
         axios
             .get(
@@ -272,7 +275,10 @@ class SchedulePatrol extends React.Component {
                             };
                             deviceName.push(deviceDetail)
                         }
-                        self.setState({
+/*
+                        return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
+*/
+                self.setState({
                             deviceNameList: deviceName,
                             selectedDevice: dataReceived[0].deGateNo
                         }, () => this.getPatrolData());
@@ -288,7 +294,7 @@ class SchedulePatrol extends React.Component {
                         console.log("deviceNameList ", this.state.deviceNameList);
                     }
                 } catch (e) {
-                    console.log(e)
+                    console.log("error in patrolling dev count",e)
                 }
             })
 
@@ -742,6 +748,7 @@ const mapStateToProps = state => {
         SelectedAssociationID: state.DashboardReducer.assId,
         selectedCheckPoints: state.PatrollingReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
+
     }
 };
 
