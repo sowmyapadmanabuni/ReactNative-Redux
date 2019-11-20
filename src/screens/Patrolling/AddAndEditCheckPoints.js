@@ -101,7 +101,6 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentDidUpdate() {
-
         setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
         }, 100)
@@ -269,7 +268,7 @@ class AddAndEditCheckPoints extends React.Component {
         //this.updateSatelliteCount();
         this.interval = setInterval(() => {
             this.updateSatelliteCount();
-        }, 10000);
+        }, 20000);
         //this.watchuserPosition();
     }
 
@@ -294,11 +293,26 @@ class AddAndEditCheckPoints extends React.Component {
         GPSEventEmitter.removeListener('RNSatellite');
         GPSEventEmitter.addListener('RNSatellite', (event) => {
             console.log(":RN SATELLITE:",event)
+            var sat = self.state.satelliteCount;
+            var currentSat = event.satellites;
+            if(sat != 0 && event.satelliteCount == 0){
+                    currentSat = sat;
+            }
             self.setState({
-                satelliteCount : event.satellites,
-                accuracy : event.accuracy,
-            })
+                satelliteCount : currentSat,
+                accuracy:event.accuracy,
+                region: {
+                    latitude: parseFloat(event.latitude),
+                    longitude: parseFloat(event.longitude),
+                    longitudeDelta: LONGITUDE_DELTA,
+                    latitudeDelta: LATITUDE_DELTA,
+                },
+                gpsLocation: parseFloat(event.latitude) + "," + parseFloat(event.longitude),
+            },()=>self.renderUserLocation())
+
         });
+        console.log(":RN SATELLITE:########:",self.state)
+
         RNLocationSatellites.startLocationUpdate();
 
     }
@@ -348,9 +362,10 @@ class AddAndEditCheckPoints extends React.Component {
         clearInterval(this.interval);
         GPSEventEmitter.removeListener('RNSatellite')
         GPSEventEmitter.removeListener('EVENT_NAME')
-        if (this.watchId !== null) {
+        /*if (this.watchId !== null) {
             Geolocation.clearWatch(this.watchId);
-        }
+        }*/
+
         setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
         }, 0)
@@ -382,30 +397,31 @@ class AddAndEditCheckPoints extends React.Component {
     async getUserLocation(params) {
 
         let self = this;
-        try {
-            await navigator.geolocation.getCurrentPosition((data) => {
-                let LocationData = (data.coords);
-                console.log("Lcoation data:",LocationData);
-                self.setState({
-                    region: {
-                        latitude: LocationData.latitude,
-                        longitude: LocationData.longitude,
-                        longitudeDelta: LONGITUDE_DELTA,
-                        latitudeDelta: LATITUDE_DELTA,
-                    },
-                    accuracy:LocationData.accuracy,
-                    isEditing: params === null ? false : true,
-                    checkPointName: params !== null ? params.cpCkPName : this.state.checkPointName,
-                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
-                    selectedIndex: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedIndex,
-                    checkPointId: params !== null ? params.cpChkPntID : this.state.checkPointId,
-                    selectedValue: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedValue,
-                }, () => this.getAllCheckPoints())
-            });
-        } catch (e) {
-            console.log("Error:", e);
-            self.showDenialAlertMessage(error)
-        }
+        this.getAllCheckPoints()
+        // try {
+        //     await navigator.geolocation.getCurrentPosition((data) => {
+        //         let LocationData = (data.coords);
+        //         console.log("Lcoation data:",LocationData);
+        //         self.setState({
+        //             region: {
+        //                 latitude: LocationData.latitude,
+        //                 longitude: LocationData.longitude,
+        //                 longitudeDelta: LONGITUDE_DELTA,
+        //                 latitudeDelta: LATITUDE_DELTA,
+        //             },
+        //             accuracy:LocationData.accuracy,
+        //             isEditing: params === null ? false : true,
+        //             checkPointName: params !== null ? params.cpCkPName : this.state.checkPointName,
+        //             gpsLocation: LocationData.latitude + "," + LocationData.longitude,
+        //             selectedIndex: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedIndex,
+        //             checkPointId: params !== null ? params.cpChkPntID : this.state.checkPointId,
+        //             selectedValue: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedValue,
+        //         }, () => this.getAllCheckPoints())
+        //     });
+        // } catch (e) {
+        //     console.log("Error:", e);
+        //     self.showDenialAlertMessage(error)
+        // }
     }
 
 
@@ -459,7 +475,9 @@ class AddAndEditCheckPoints extends React.Component {
                 self.setState({
                     cpArray: stat.data.checkPointListByAssocID,
                     lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                },()=>self.updateSatelliteCount())
+                }
+                //,()=>self.updateSatelliteCount()
+                )
             }
         } catch (e) {
             base.utils.logger.log(e);
@@ -471,6 +489,7 @@ class AddAndEditCheckPoints extends React.Component {
         let self = this;
         let lat = self.state.region.latitude;
         let long = self.state.region.longitude;
+        console.log(':RN SATELLITE:@@@@@@@',lat,long,self.state.region)
         return (
             <View>
                 <Marker.Animated key={1024+'_' + Date.now()}
@@ -744,7 +763,9 @@ const mapStateToProps = state => {
         oye247BaseURL: state.OyespaceReducer.oye247BaseURL,
         oyeBaseURL: state.OyespaceReducer.oyeBaseURL,
         userReducer: state.UserReducer,
-        SelectedAssociationID: state.DashboardReducer.assId
+        SelectedAssociationID: state.DashboardReducer.assId,
+        dashBoardReducer: state.DashboardReducer
+
     }
 };
 

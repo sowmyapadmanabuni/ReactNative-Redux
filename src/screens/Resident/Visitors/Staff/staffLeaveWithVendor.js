@@ -755,6 +755,9 @@ class StaffLeaveWithVendor extends Component {
       });
   };
   datasend = () => {
+
+    console.log('Enter in data to Send#####', )
+
     let self = this;
     let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
     let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
@@ -762,11 +765,11 @@ class StaffLeaveWithVendor extends Component {
     let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
     let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
     let comments = self.state.comment ? self.state.comment : '';
-    let visitorid = this.state.visworkID;
+    let visitorid = self.state.visworkID;
     let visitorname = self.props.navigation.state.params.StaffName;
     let mp3 = self.state.mp3;
     console.log(
-      'All Data',
+      'All Data @@@@@@@@',
       img1,
       img2,
       img3,
@@ -778,9 +781,10 @@ class StaffLeaveWithVendor extends Component {
       visitorname,
       self.props.dashboardReducer.assId,
       self.props.dashboardReducer.uniID,
-      this.props.oyeURL
+      self.props.oyeURL,
+        this.props.oyeURL
     );
-    this.setState({
+    self.setState({
       isLoading: true
     });
     fetch(
@@ -796,21 +800,21 @@ class StaffLeaveWithVendor extends Component {
           VLCmnts: `${comments}`,
           VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
           VLVoiceNote: mp3,
-          VLVisLgID: visitorid
+          VLVisLgID:17268
         })
       }
     )
       .then(response => response.json())
       .then(responseJson => {
         //var count = Object.keys(responseJson.data.visitorlogbydate).length;
-        console.log('Reports_Data', responseJson);
+        console.log('Reports_Data@@@@@@', responseJson);
         gateFirebase
           .database()
           .ref(
             `NotificationSync/A_${this.props.dashboardReducer.assId}/${visitorid}`
           )
           .update({
-            newAttachment: true,
+            newAttachment:true,
             updatedTime: this.state.currentTime
           });
         this.setState({
@@ -926,6 +930,8 @@ class StaffLeaveWithVendor extends Component {
         console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
       });
   };
+
+
   render() {
     const { recording, paused, audioFile } = this.state;
     let playWidth =
