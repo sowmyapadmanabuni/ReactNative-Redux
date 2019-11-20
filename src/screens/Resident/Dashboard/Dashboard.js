@@ -32,7 +32,6 @@ import {
 import * as fb from 'firebase';
 import CountdownCircle from 'react-native-countdown-circle';
 import * as Animatable from 'react-native-animatable';
-import DeviceInfo from 'react-native-device-info';
 
 import {
   createNotification,
@@ -396,69 +395,35 @@ class Dashboard extends PureComponent {
         //sound: 'oye_sms.mp3',
         show_in_foreground: true,
         show_in_background: true,
-      })
-      if ( DeviceInfo.getAPILevel() >= 27){
-        console.log('API LEVEL#######IF')
-        notificationBuild
-            .setTitle(notification._title)
-            .setBody(notification._body)
-            .setNotificationId(notification._notificationId)
-            //.setSound(channel.sound)
-            .setSound('oye_msg_tone.mp3')
-           // .setSound('oye_msg_tone')
-           //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
-            .setData({
-              ...notification._data,
-              foreground: true
-            })
-            .android.setAutoCancel(true)
-            .android.setColor('#FF9100')
-            .android.setLargeIcon('ic_notif')
-            .android.setSmallIcon('ic_stat_ic_notification')
-            .android.setChannelId('channel_id')
-            .android.setVibrate([1000,1000])
-        //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+      });
+
+      notificationBuild
+          .setTitle(notification._title)
+          .setBody(notification._body)
+          .setNotificationId(notification._notificationId)
+          //.setSound(channel.sound)
+          .setSound('oye_msg_tone.mp3')
+          // .setSound('oye_msg_tone')
+          //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+          .setData({
+            ...notification._data,
+            foreground: true
+          })
+          .android.setAutoCancel(true)
+          .android.setColor('#FF9100')
+          .android.setLargeIcon('ic_notif')
+          .android.setSmallIcon('ic_stat_ic_notification')
+          .android.setChannelId('channel_id')
+          .android.setVibrate([1000,1000])
+      //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
 
 
 
-        // .android.setChannelId('notification-action')
-            .android.setPriority(firebase.notifications.Android.Priority.Max);
+      // .android.setChannelId('notification-action')
+          .android.setPriority(firebase.notifications.Android.Priority.Max);
 
-        firebase.notifications().displayNotification(notificationBuild);
-        this.setState({ foregroundNotif: notification._data });
-
-      //  notificationBuild.setSound('oye_msg_tone');
-      }
-      else{
-        console.log('API LEVEL#######ELSE')
-        notificationBuild
-            .setTitle(notification._title)
-            .setBody(notification._body)
-            .setNotificationId(notification._notificationId)
-            //.setSound(channel.sound)
-            .setSound('oye_msg_tone.mp3')
-            //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
-            .setData({
-              ...notification._data,
-              foreground: true
-            })
-            .android.setAutoCancel(true)
-            .android.setColor('#FF9100')
-            .android.setLargeIcon('ic_notif')
-            .android.setSmallIcon('ic_stat_ic_notification')
-            .android.setChannelId('channel_id')
-            .android.setVibrate([1000,1000])
-        //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
-
-
-        // .android.setChannelId('notification-action')
-            .android.setPriority(firebase.notifications.Android.Priority.Max);
-
-        firebase.notifications().displayNotification(notificationBuild);
-        this.setState({ foregroundNotif: notification._data });
-
-      }
-
+      firebase.notifications().displayNotification(notificationBuild);
+      this.setState({ foregroundNotif: notification._data });
     } catch (e) {
       console.log('FAILED_NOTIF');
     }

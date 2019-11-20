@@ -41,6 +41,7 @@ import gateFirebase from 'firebase';
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../../assets/selection.json';
 
+
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 class NotificationScreen extends PureComponent {
@@ -772,11 +773,6 @@ class NotificationScreen extends PureComponent {
                                                             >
                                                                 {item.vlMobile}
                                                             </Text>
-                                                            {/* <Icon
-                                color="#ff8c00"
-                                size={hp('2.2%')}
-                                name="call"
-                              /> */}
                                                         </View>
                                                     </TouchableOpacity>
                                                 </View>
@@ -807,21 +803,6 @@ class NotificationScreen extends PureComponent {
                                                         {moment(item.vlEntryT).format('hh:mm A')}
                                                     </Text>
                                                 </Text>
-                                                {/*<Text>{item.unUniName}</Text>*/}
-                                                {/* <View>
-                          {item.vlVisLgID ? (
-                            <Text>{item.vlVisLgID}</Text>
-                          ) : (
-                            <Text>Not Found</Text>
-                          )}
-                        </View>
-                        <View>
-                          {item.unUnitID ? (
-                            <Text>  {item.unUnitID}</Text>
-                          ) : (
-                            <Text>Not Found</Text>
-                          )}
-                        </View> */}
                                                 {item.vlengName !== '' ? (
                                                     <Text
                                                         style={{
@@ -894,7 +875,8 @@ class NotificationScreen extends PureComponent {
                                             ) : (
                                                 <View/>
                                             )}
-                                            {item.vlApprStat !="Pending" ?
+                                            { item.vlVisType =="Delivery" ?
+                                                item.vlApprStat !="Pending" ?
                                             <View>
                                                 <Text style={{color:base.theme.colors.primary,fontSize:14}}>Status :
                                                     <Text style={{fontSize:12,color:base.theme.colors.black}}> {item.vlApprStat}</Text>
@@ -904,9 +886,9 @@ class NotificationScreen extends PureComponent {
                                                         <Text style={{fontSize:12,color:base.theme.colors.black}}> {item.vlApprdBy} </Text>
                                                     </Text>
                                                     :<Text/>}
-                                            </View> :<View></View>}
-                                            {item.opened ? null : (
-                                                <View>
+                                            </View> :<View></View> :<View/>}
+                                            <View>
+                                                    {item.vlVisType =="Delivery" ?
                                                         <View>
                                                             {item.vlApprStat === 'Pending' ? (
                                                                 <View
@@ -960,8 +942,9 @@ class NotificationScreen extends PureComponent {
                                                                 <View></View>
                                                             )}
                                                         </View>
+                                                        :
+                                                        <View/>}
                                                 </View>
-                                            )}
                                         </View>
                                     )}
                                 </Collapsible>
