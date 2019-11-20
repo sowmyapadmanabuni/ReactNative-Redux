@@ -302,10 +302,15 @@ class SchedulePatrol extends React.Component {
 
     async schedulePatrol(days, patrolCheckPointID) {
         let self = this;
+        console.log("Start time: ", self.state.startTime);
+        console.log("End time: ", self.state.endTime);
+
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
-            PSSTime: moment(self.state.startTime).format("HH:MM:ss"),
-            PSETime: moment(self.state.endTime).format("HH:MM:ss"),
+            //PSSTime: moment(self.state.startTime).format("HH:MM:ss"),
+            PSSTime: moment(self.state.startTime).format("hh:mm:ss"),
+            //PSETime: moment(self.state.endTime).format("HH:MM:ss"),
+            PSETime: moment(self.state.endTime).format("hh:mm:ss"),
             PSRepDays: days,
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,

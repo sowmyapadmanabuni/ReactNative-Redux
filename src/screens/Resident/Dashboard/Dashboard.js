@@ -351,6 +351,19 @@ class Dashboard extends PureComponent {
   showLocalNotification = notification => {
     try {
 
+      // --------------------------- New code --------------------------------------------------------------------------
+      /*this.sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.oye_sms)
+      const attributes = new AudioAttributes.Builder()
+          .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+          .build();
+
+      const mChannel = new NotificationChannel(CHANNEL_ID,
+          context.getString(R.string.app_name),
+          NotificationManager.IMPORTANCE_HIGH);
+      mChannel.setSound(sound, attributes);*/
+      // ---------------------------------------------------------------------------------------------------------------
+
+
       // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
         'channel_id',
@@ -372,7 +385,7 @@ class Dashboard extends PureComponent {
 
       const notificationBuild = new firebase.notifications.Notification({
         //sound: 'default',
-        //sound: 'oye_msg_tone',
+        //sound: 'oye_sms.mp3',
         show_in_foreground: true,
         show_in_background: true,
       })
@@ -516,7 +529,6 @@ class Dashboard extends PureComponent {
       this.notificationDisplayedListener = firebase
         .notifications()
         .onNotificationDisplayed(notification => {
-          // console.log('___________')
           // console.log(notification)
           // console.log('____________')
           // Process your notification as required
