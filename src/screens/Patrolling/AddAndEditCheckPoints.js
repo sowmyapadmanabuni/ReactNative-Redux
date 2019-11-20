@@ -296,7 +296,7 @@ class AddAndEditCheckPoints extends React.Component {
             var sat = self.state.satelliteCount;
             var currentSat = event.satellites;
             if(sat != 0 && event.satelliteCount == 0){
-                currentSat = sat;
+                    currentSat = sat;
             }
             self.setState({
                 satelliteCount : currentSat,
@@ -473,10 +473,10 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
-                        cpArray: stat.data.checkPointListByAssocID,
-                        lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                    }
-                    //,()=>self.updateSatelliteCount()
+                    cpArray: stat.data.checkPointListByAssocID,
+                    lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
+                }
+                //,()=>self.updateSatelliteCount()
                 )
             }
         } catch (e) {

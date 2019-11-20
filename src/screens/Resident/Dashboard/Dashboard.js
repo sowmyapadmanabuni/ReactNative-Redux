@@ -32,6 +32,7 @@ import {
 import * as fb from 'firebase';
 import CountdownCircle from 'react-native-countdown-circle';
 import * as Animatable from 'react-native-animatable';
+import DeviceInfo from 'react-native-device-info';
 
 import {
   createNotification,
@@ -354,8 +355,22 @@ class Dashboard extends PureComponent {
       });
   };
 
+
   showLocalNotification = notification => {
     try {
+
+      // --------------------------- New code --------------------------------------------------------------------------
+      /*this.sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.oye_sms)
+      const attributes = new AudioAttributes.Builder()
+          .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+          .build();
+
+      const mChannel = new NotificationChannel(CHANNEL_ID,
+          context.getString(R.string.app_name),
+          NotificationManager.IMPORTANCE_HIGH);
+      mChannel.setSound(sound, attributes);*/
+      // ---------------------------------------------------------------------------------------------------------------
+
 
       // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
@@ -378,7 +393,7 @@ class Dashboard extends PureComponent {
 
       const notificationBuild = new firebase.notifications.Notification({
         //sound: 'default',
-        //sound: 'oye_msg_tone',
+        //sound: 'oye_sms.mp3',
         show_in_foreground: true,
         show_in_background: true,
       })
@@ -405,6 +420,7 @@ class Dashboard extends PureComponent {
         //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
 
 
+
         // .android.setChannelId('notification-action')
             .android.setPriority(firebase.notifications.Android.Priority.Max);
 
@@ -420,8 +436,8 @@ class Dashboard extends PureComponent {
             .setBody(notification._body)
             .setNotificationId(notification._notificationId)
             //.setSound(channel.sound)
-            //.setSound('oye_msg_tone.mp3')
-            .setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+            .setSound('oye_msg_tone.mp3')
+            //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
             .setData({
               ...notification._data,
               foreground: true
@@ -447,6 +463,70 @@ class Dashboard extends PureComponent {
       console.log('FAILED_NOTIF');
     }
   };
+  // showLocalNotification = notification => {
+  //   try {
+
+  //      console.log("showLocalNotification",notification);
+  //     const channel = new firebase.notifications.Android.Channel(
+  //       'Oyespace',
+  //       'Oyespace',
+  //       firebase.notifications.Android.Importance.High
+  //     ).setDescription('Oyespace')
+  //         .setSound('oye_msg_tone');
+  //   //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+  //     channel.enableLights(true);
+  //     // channel.enableVibration(true);
+  //     // channel.vibrationPattern([500]);
+  //     firebase.notifications().android.createChannel(channel);
+
+
+  //     const channel_for = new firebase.notifications.Android.Channel(
+  //       'oye_channel',
+  //       'oye_channel',
+  //       firebase.notifications.Android.Importance.High
+  //     ).setDescription('oye_channel')
+  //         .setSound('oye_msg_tone');    
+  //         channel_for.enableLights(true);
+  //         channel_for.enableVibration(true);
+  //         channel_for.vibrationPattern([500]);
+  //     firebase.notifications().android.createChannel(channel_for);
+
+  //     const notificationBuild = new firebase.notifications.Notification({
+  //       //sound: 'default',
+  //       //sound: 'oye_msg_tone',
+  //       show_in_foreground: true,
+  //       show_in_background: true,
+  //     })
+  //       .setTitle(notification._title)
+  //       .setBody(notification._body)
+  //       .setNotificationId(notification._notificationId)
+  //         //.setSound(channel.sound)
+  //         .setSound('oye_msg_tone')
+  //         //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+  //       .setData({
+  //         ...notification._data,
+  //         foreground: true
+  //       })
+  //       .android.setAutoCancel(true)
+  //       .android.setColor('#FF9100')
+  //       .android.setLargeIcon('ic_notif')
+  //       .android.setSmallIcon('ic_stat_ic_notification')
+  //       .android.setChannelId('Oyespace')
+  //       .android.setVibrate([1000,1000])   
+  //       .setSound('oye_msg_tone')   
+        
+  //         //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+
+
+  //       // .android.setChannelId('notification-action')
+  //       .android.setPriority(firebase.notifications.Android.Priority.High);
+  //       console.log("DISPLAY")
+  //     firebase.notifications().displayNotification(notificationBuild);
+  //     this.setState({ foregroundNotif: notification._data });
+  //   } catch (e) {
+  //     console.log('FAILED_NOTIF',e);
+  //   }
+  // };
 
   listenForNotif = () => {
     if (
@@ -458,7 +538,6 @@ class Dashboard extends PureComponent {
       this.notificationDisplayedListener = firebase
         .notifications()
         .onNotificationDisplayed(notification => {
-          // console.log('___________')
           // console.log(notification)
           // console.log('____________')
           // Process your notification as required
@@ -468,6 +547,9 @@ class Dashboard extends PureComponent {
       this.notificationListener = firebase
         .notifications()
         .onNotification(notification => {
+
+          
+
           console.log('___________');
           console.log(notification);
           console.log('____________');
@@ -663,7 +745,6 @@ class Dashboard extends PureComponent {
     if (!this.props.called) {
       this.didMount();
     }
-
      timer.setInterval(
          this,
          'syncData',
@@ -676,7 +757,6 @@ class Dashboard extends PureComponent {
      );
 
    }
-
 
   async roleCheckForAdmin(index) {
     const { dropdown, dropdown1 } = this.props;

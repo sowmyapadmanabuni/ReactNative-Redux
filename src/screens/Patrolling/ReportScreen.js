@@ -70,9 +70,9 @@ class ReportScreen extends React.Component {
                 isPermitted: true
             })
         }
-        
 
 
+        console.log("slote time ",this.props);
         this.setState({
             slotName: this.props.navigation.state.params.detail.slotName,
             slotTime: this.props.navigation.state.params.detail.slotTime
@@ -176,34 +176,40 @@ class ReportScreen extends React.Component {
     async getReport(props) {
         let self = this;
        let input = self.props.navigation.state.params.detail;
+       console.log("self.props ",self.props);
+       console.log("input ",input);
 
-        /* let input = {
+        let dummyObject = {
 
-                "FromDate" : "2019-08-25",
-                "ToDate"   : "2019-08-25",
-                "ASAssnID" : 11640,
-                "PSPtrlSID": 2034
+                "FromDate" : "2019-11-15",
+                "ToDate"   : "2019-11-18",
+                "ASAssnID" : "14948",
+                "PSPtrlSID": "2081",
+                "slotName" : 'Sagar slot 1',
+                "slotTime":"01:01AM - 02:00AM"
+         };
 
-         };*/
 
         let stat = await base.services.OyeSafeApi.getReport(input);
         let startDate = input.FromDate;
         let endDate = input.ToDate;
         let initialDateString = moment(input.FromDate, "YYYY-MM-DDTHH:mm:ss a");
         let endDateString = moment(input.ToDate, "YYYY-MM-DDTHH:mm:ss a");
-        let duration = moment.duration(endDateString.diff(initialDateString));
-        await base.utils.logger.log(duration.days());
+        let duration = moment.duration(endDateString.diff(initialDateString));await base.utils.logger.log(duration.days());
         let difference = duration.as('days');
         let selectedDate = input.FromDate;
+        console.log("Test>> ",selectedDate);
 
         console.log("Stat in report scren:",stat,input)
         try {
+            console.log("stat>> ",stat);
             if (stat !== null && stat.data.patrolling.length !== 0) {
 
                 let reportsData = stat.data.patrolling;
                 let tableData = [];
                 for (let i = 0; i < reportsData.length; i++) {
                     let rowData = [];
+                    console.log("reportsData[i] ",reportsData[i])
                     rowData.push(moment(reportsData[i].ptdCreated, 'YYYY-MM-DD').format('MM-DD-YYYY'));
                     rowData.push(moment(reportsData[i].ptsDateT).format('hh:mm' + ' A'));
                     rowData.push( moment(reportsData[i].pteDateT).format('hh:mm' + ' A'));
@@ -351,6 +357,7 @@ class ReportScreen extends React.Component {
                     />
                     <View style={ReportScreenStyles.slotTimeView}>
                         <Text>{this.state.slotName}</Text>
+                        {console.log("slotTime ", this.state.slotTime )}
                         <Text>{this.state.slotTime}</Text>
                     </View>
                     {this.state.data === undefined || this.state.data.length !== 0 ?
