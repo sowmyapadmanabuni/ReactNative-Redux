@@ -106,11 +106,11 @@ class AddAndEditCheckPoints extends React.Component {
         }, 100)
     }
 
-   /* componentWillUnmount() {
-        setTimeout(() => {
-            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
-    }*/
+    /* componentWillUnmount() {
+         setTimeout(() => {
+             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+         }, 0)
+     }*/
 
     processBackPress() {
         console.log("Part");
@@ -268,7 +268,7 @@ class AddAndEditCheckPoints extends React.Component {
         //this.updateSatelliteCount();
         this.interval = setInterval(() => {
             this.updateSatelliteCount();
-        }, 15000);
+        }, 20000);
         //this.watchuserPosition();
     }
 
@@ -293,8 +293,13 @@ class AddAndEditCheckPoints extends React.Component {
         GPSEventEmitter.removeListener('RNSatellite');
         GPSEventEmitter.addListener('RNSatellite', (event) => {
             console.log(":RN SATELLITE:",event)
+            var sat = self.state.satelliteCount;
+            var currentSat = event.satellites;
+            if(sat != 0 && event.satelliteCount == 0){
+                currentSat = sat;
+            }
             self.setState({
-                satelliteCount : event.satellites,
+                satelliteCount : currentSat,
                 accuracy:event.accuracy,
                 region: {
                     latitude: parseFloat(event.latitude),
@@ -392,30 +397,31 @@ class AddAndEditCheckPoints extends React.Component {
     async getUserLocation(params) {
 
         let self = this;
-        try {
-            await navigator.geolocation.getCurrentPosition((data) => {
-                let LocationData = (data.coords);
-                console.log("Lcoation data:",LocationData);
-                self.setState({
-                    region: {
-                        latitude: LocationData.latitude,
-                        longitude: LocationData.longitude,
-                        longitudeDelta: LONGITUDE_DELTA,
-                        latitudeDelta: LATITUDE_DELTA,
-                    },
-                    accuracy:LocationData.accuracy,
-                    isEditing: params === null ? false : true,
-                    checkPointName: params !== null ? params.cpCkPName : this.state.checkPointName,
-                    gpsLocation: LocationData.latitude + "," + LocationData.longitude,
-                    selectedIndex: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedIndex,
-                    checkPointId: params !== null ? params.cpChkPntID : this.state.checkPointId,
-                    selectedValue: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedValue,
-                }, () => this.getAllCheckPoints())
-            });
-        } catch (e) {
-            console.log("Error:", e);
-            self.showDenialAlertMessage(error)
-        }
+        this.getAllCheckPoints()
+        // try {
+        //     await navigator.geolocation.getCurrentPosition((data) => {
+        //         let LocationData = (data.coords);
+        //         console.log("Lcoation data:",LocationData);
+        //         self.setState({
+        //             region: {
+        //                 latitude: LocationData.latitude,
+        //                 longitude: LocationData.longitude,
+        //                 longitudeDelta: LONGITUDE_DELTA,
+        //                 latitudeDelta: LATITUDE_DELTA,
+        //             },
+        //             accuracy:LocationData.accuracy,
+        //             isEditing: params === null ? false : true,
+        //             checkPointName: params !== null ? params.cpCkPName : this.state.checkPointName,
+        //             gpsLocation: LocationData.latitude + "," + LocationData.longitude,
+        //             selectedIndex: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedIndex,
+        //             checkPointId: params !== null ? params.cpChkPntID : this.state.checkPointId,
+        //             selectedValue: params !== null ? params.cpcPntAt === "StartPoint" ? 0 : params.cpcPntAt === "EndPoint" ? 1 : 2 : this.state.selectedValue,
+        //         }, () => this.getAllCheckPoints())
+        //     });
+        // } catch (e) {
+        //     console.log("Error:", e);
+        //     self.showDenialAlertMessage(error)
+        // }
     }
 
 
@@ -467,9 +473,11 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
-                    cpArray: stat.data.checkPointListByAssocID,
-                    lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                },()=>self.updateSatelliteCount())
+                        cpArray: stat.data.checkPointListByAssocID,
+                        lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
+                    }
+                    //,()=>self.updateSatelliteCount()
+                )
             }
         } catch (e) {
             base.utils.logger.log(e);
@@ -510,24 +518,24 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     validateFields() {
-            if (base.utils.validate.isBlank(this.state.checkPointName)) {
-                alert("Please enter Check Point Name")
-            } else {
-                let self = this;
-                self.setState({isLottieModalOpen: true})
-                Animated.timing(self.state.progress, {
-                    toValue: 1,
-                    duration: 2000,
-                    easing: Easing.linear,
-                }).start();
-                setTimeout(() => {
-                    self.setState({
-                        isLottieModalOpen: false
-                    })
-                }, 2100);
-                self.addCheckPoint()
-            }
+        if (base.utils.validate.isBlank(this.state.checkPointName)) {
+            alert("Please enter Check Point Name")
+        } else {
+            let self = this;
+            self.setState({isLottieModalOpen: true})
+            Animated.timing(self.state.progress, {
+                toValue: 1,
+                duration: 2000,
+                easing: Easing.linear,
+            }).start();
+            setTimeout(() => {
+                self.setState({
+                    isLottieModalOpen: false
+                })
+            }, 2100);
+            self.addCheckPoint()
         }
+    }
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);
@@ -701,7 +709,7 @@ class AddAndEditCheckPoints extends React.Component {
                         {/* <OSButton onButtonClick={() => this.validateFields()} */}
                         <OSButton onButtonClick={() => this.checkCount()}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
+                            //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
                                   oSBBackground={base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>

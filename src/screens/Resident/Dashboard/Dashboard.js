@@ -60,6 +60,9 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../assets/selection.json';
 import moment from 'moment';
 
+import DeviceInfo from 'react-native-device-info';
+
+
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 const Profiler = React.unstable_Profiler;
@@ -112,6 +115,10 @@ class Dashboard extends PureComponent {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
+    console.log('API LEVEL#######',DeviceInfo.getAPILevel())
+    console.log('API LEVEL#######1111111',DeviceInfo.getBaseOS())
+    console.log('API LEVEL#######444444',DeviceInfo.getSystemVersion())
+
   }
 
   readFBRTB(isNotificationClicked) {
@@ -294,6 +301,7 @@ class Dashboard extends PureComponent {
         let data = response.data.data.memberListByAccount;
         console.log(data, 'memList');
 
+
         firebase.messaging().subscribeToTopic('' + MyAccountID + 'admin');
         data.map(units => {
           if (receiveNotifications) {
@@ -353,8 +361,11 @@ class Dashboard extends PureComponent {
       const channel = new firebase.notifications.Android.Channel(
         'channel_id',
         'Oyespace',
-        firebase.notifications.Android.Importance.High
-      ).setDescription('Oyespace channel')
+        //firebase.notifications.Android.Importance.High
+      firebase.notifications.Android.Importance.Max
+
+
+    ).setDescription('Oyespace channel')
           .setSound('oye_msg_tone.mp3');
     //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
       channel.enableLights(true);
@@ -362,36 +373,76 @@ class Dashboard extends PureComponent {
       // channel.vibrationPattern([500]);
       firebase.notifications().android.createChannel(channel);
 
+
+
+
       const notificationBuild = new firebase.notifications.Notification({
         //sound: 'default',
         //sound: 'oye_msg_tone',
         show_in_foreground: true,
         show_in_background: true,
       })
-        .setTitle(notification._title)
-        .setBody(notification._body)
-        .setNotificationId(notification._notificationId)
-          //.setSound(channel.sound)
-          .setSound('oye_msg_tone.mp3')
-          //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
-        .setData({
-          ...notification._data,
-          foreground: true
-        })
-        .android.setAutoCancel(true)
-        .android.setColor('#FF9100')
-        .android.setLargeIcon('ic_notif')
-        .android.setSmallIcon('ic_stat_ic_notification')
-        .android.setChannelId('channel_id')
-        .android.setVibrate([1000,1000])
-          //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+      if ( DeviceInfo.getAPILevel() >= 27){
+        console.log('API LEVEL#######IF')
+        notificationBuild
+            .setTitle(notification._title)
+            .setBody(notification._body)
+            .setNotificationId(notification._notificationId)
+            //.setSound(channel.sound)
+            .setSound('oye_msg_tone.mp3')
+           // .setSound('oye_msg_tone')
+           //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+            .setData({
+              ...notification._data,
+              foreground: true
+            })
+            .android.setAutoCancel(true)
+            .android.setColor('#FF9100')
+            .android.setLargeIcon('ic_notif')
+            .android.setSmallIcon('ic_stat_ic_notification')
+            .android.setChannelId('channel_id')
+            .android.setVibrate([1000,1000])
+        //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
 
 
         // .android.setChannelId('notification-action')
-        .android.setPriority(firebase.notifications.Android.Priority.Max);
+            .android.setPriority(firebase.notifications.Android.Priority.Max);
 
-      firebase.notifications().displayNotification(notificationBuild);
-      this.setState({ foregroundNotif: notification._data });
+        firebase.notifications().displayNotification(notificationBuild);
+        this.setState({ foregroundNotif: notification._data });
+
+      //  notificationBuild.setSound('oye_msg_tone');
+      }
+      else{
+        console.log('API LEVEL#######ELSE')
+        notificationBuild
+            .setTitle(notification._title)
+            .setBody(notification._body)
+            .setNotificationId(notification._notificationId)
+            //.setSound(channel.sound)
+            //.setSound('oye_msg_tone.mp3')
+            .setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+            .setData({
+              ...notification._data,
+              foreground: true
+            })
+            .android.setAutoCancel(true)
+            .android.setColor('#FF9100')
+            .android.setLargeIcon('ic_notif')
+            .android.setSmallIcon('ic_stat_ic_notification')
+            .android.setChannelId('channel_id')
+            .android.setVibrate([1000,1000])
+        //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+
+
+        // .android.setChannelId('notification-action')
+            .android.setPriority(firebase.notifications.Android.Priority.Max);
+
+        firebase.notifications().displayNotification(notificationBuild);
+        this.setState({ foregroundNotif: notification._data });
+
+      }
+
     } catch (e) {
       console.log('FAILED_NOTIF');
     }
@@ -424,6 +475,13 @@ class Dashboard extends PureComponent {
           if (notification._data.associationID) {
             // this.props.createNotification(notification._data, navigationInstance, false)
           }
+
+          console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
+          const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+          const { oyeURL } = this.props.oyespaceReducer;
+          this.props.refreshNotifications(oyeURL, MyAccountID);
+          //this.props.getNotifications(oyeURL, MyAccountID);
+
 
           this.showLocalNotification(notification);
 
@@ -492,6 +550,8 @@ class Dashboard extends PureComponent {
             // );
           }
         } else if (notificationOpen.notification._data.admin === 'gate_app') {
+        //  this.props.getNotifications(oyeURL, MyAccountID);
+
           this.props.refreshNotifications(oyeURL, MyAccountID);
           // this.props.newNotifInstance(notificationOpen.notification);
           // this.props.createNotification(
@@ -577,6 +637,7 @@ class Dashboard extends PureComponent {
     } = this.props;
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
+
     console.log('Props in dashboard did mount ####',this.props,this.props.dashBoardReducer.isPatrollingScreens)
 
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);

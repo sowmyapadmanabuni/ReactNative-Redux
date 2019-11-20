@@ -432,7 +432,8 @@ class NotificationScreen extends PureComponent {
                         `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
                         {
                             VLApprStat: 'Approved',
-                            VLVisLgID: visitorId
+                            VLVisLgID: visitorId,
+                            VLApprdBy:this.props.userReducer.MyFirstName
                         },
                         {
                             headers: {
@@ -454,11 +455,14 @@ class NotificationScreen extends PureComponent {
                                 updatedTime: res.data.data.currentDateTime
                                 // status:
                             });
-                         this.props.navigation.navigate('ResDashBoard');
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
+                        this.props.navigation.navigate('ResDashBoard');
+
 
                     })
                     .catch(e => {
                         console.log(e);
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
 
                     });
@@ -483,6 +487,7 @@ class NotificationScreen extends PureComponent {
                         //      this.props.onNotificationOpen(notifications, index, oyeURL);
                         //    }
                     });
+                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                 this.props.navigation.navigate('ResDashBoard');
 
             });
@@ -509,7 +514,8 @@ class NotificationScreen extends PureComponent {
                         `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
                         {
                             VLApprStat: 'Rejected',
-                            VLVisLgID: visitorId
+                            VLVisLgID: visitorId,
+                            VLApprdBy:this.props.userReducer.MyFirstName
                         },
                         {
                             headers: {
@@ -530,10 +536,12 @@ class NotificationScreen extends PureComponent {
                                 visitorlogId: visitorId,
                                 updatedTime: res.data.data.currentDateTime
                             });
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
                     })
                     .catch(e => {
                         console.log(e);
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
 
                     });
@@ -551,6 +559,7 @@ class NotificationScreen extends PureComponent {
                         visitorlogId: visitorId,
                         updatedTime: null
                     });
+                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                 this.props.navigation.navigate('ResDashBoard');
 
             });
@@ -798,7 +807,7 @@ class NotificationScreen extends PureComponent {
                                                         {moment(item.vlEntryT).format('hh:mm A')}
                                                     </Text>
                                                 </Text>
-                                                <Text>{item.unUniName}</Text>
+                                                {/*<Text>{item.unUniName}</Text>*/}
                                                 {/* <View>
                           {item.vlVisLgID ? (
                             <Text>{item.vlVisLgID}</Text>
@@ -885,6 +894,17 @@ class NotificationScreen extends PureComponent {
                                             ) : (
                                                 <View/>
                                             )}
+                                            {item.vlApprStat !="Pending" ?
+                                            <View>
+                                                <Text style={{color:base.theme.colors.primary,fontSize:14}}>Status :
+                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}> {item.vlApprStat}</Text>
+                                                </Text>
+                                                {item.vlApprdBy !="" ?
+                                                    <Text style={{color:base.theme.colors.primary,fontSize:14}}>{item.vlApprStat =="Rejected"? "Rejected by" : "Approved by"} :
+                                                        <Text style={{fontSize:12,color:base.theme.colors.black}}> {item.vlApprdBy} </Text>
+                                                    </Text>
+                                                    :<Text/>}
+                                            </View> :<View></View>}
                                             {item.opened ? null : (
                                                 <View>
                                                         <View>

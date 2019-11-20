@@ -67,6 +67,9 @@
                 android:name="io.fabric.ApiKey"
                 android:value="71ecc6e51aa1c6a10438249055c5140043157bc1"
         />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="Oyespace"/>
     </application>
 
 </manifest>
