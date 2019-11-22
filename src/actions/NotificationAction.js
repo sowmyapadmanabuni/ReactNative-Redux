@@ -139,6 +139,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
                                   allNotifs[i].unUniName = responseData.visitorLog.unUniName;
                                   allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
                                   allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
+                                  allNotifs[i].vlSelfImg = responseData.visitorLog.vlSelfImg;
 
                               }
                           }
@@ -535,7 +536,7 @@ export const onNotificationOpen = (notif, index, oyeURL) => {
       'Content-Type': 'application/json'
     };
 
-    console.log(newNotif[index]);
+    console.log("NOTIFICATION READ",newNotif[index]);
 
     axios
       .get(
@@ -702,6 +703,8 @@ export const refreshNotifications = (
                     allNotifs[i].unUniName = responseData.visitorLog.unUniName;
                     allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
                     allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
+                       allNotifs[i].vlSelfImg = responseData.visitorLog.vlSelfImg;
+
                    }
                  }
                })

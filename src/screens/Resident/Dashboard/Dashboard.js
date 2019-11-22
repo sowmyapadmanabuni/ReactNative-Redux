@@ -710,7 +710,7 @@ class Dashboard extends PureComponent {
     if (!this.props.called) {
       this.didMount();
     }
-     timer.setInterval(
+    /* timer.setInterval(
          this,
          'syncData',
          () => {
@@ -719,7 +719,7 @@ class Dashboard extends PureComponent {
            //     //     // alert("hererereerrrereer");
          },
          5000
-     );
+     );*/
 
    }
 
