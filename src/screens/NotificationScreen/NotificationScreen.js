@@ -41,6 +41,7 @@ import gateFirebase from 'firebase';
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../../assets/selection.json';
 
+
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 class NotificationScreen extends PureComponent {
@@ -432,7 +433,8 @@ class NotificationScreen extends PureComponent {
                         `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
                         {
                             VLApprStat: 'Approved',
-                            VLVisLgID: visitorId
+                            VLVisLgID: visitorId,
+                            VLApprdBy:this.props.userReducer.MyFirstName
                         },
                         {
                             headers: {
@@ -454,11 +456,14 @@ class NotificationScreen extends PureComponent {
                                 updatedTime: res.data.data.currentDateTime
                                 // status:
                             });
-                         this.props.navigation.navigate('ResDashBoard');
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
+                        this.props.navigation.navigate('ResDashBoard');
+
 
                     })
                     .catch(e => {
                         console.log(e);
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
 
                     });
@@ -483,6 +488,7 @@ class NotificationScreen extends PureComponent {
                         //      this.props.onNotificationOpen(notifications, index, oyeURL);
                         //    }
                     });
+                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                 this.props.navigation.navigate('ResDashBoard');
 
             });
@@ -509,7 +515,8 @@ class NotificationScreen extends PureComponent {
                         `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
                         {
                             VLApprStat: 'Rejected',
-                            VLVisLgID: visitorId
+                            VLVisLgID: visitorId,
+                            VLApprdBy:this.props.userReducer.MyFirstName
                         },
                         {
                             headers: {
@@ -530,10 +537,12 @@ class NotificationScreen extends PureComponent {
                                 visitorlogId: visitorId,
                                 updatedTime: res.data.data.currentDateTime
                             });
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
                     })
                     .catch(e => {
                         console.log(e);
+                        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
 
                     });
@@ -551,6 +560,7 @@ class NotificationScreen extends PureComponent {
                         visitorlogId: visitorId,
                         updatedTime: null
                     });
+                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                 this.props.navigation.navigate('ResDashBoard');
 
             });
@@ -763,11 +773,6 @@ class NotificationScreen extends PureComponent {
                                                             >
                                                                 {item.vlMobile}
                                                             </Text>
-                                                            {/* <Icon
-                                color="#ff8c00"
-                                size={hp('2.2%')}
-                                name="call"
-                              /> */}
                                                         </View>
                                                     </TouchableOpacity>
                                                 </View>
@@ -795,6 +800,7 @@ class NotificationScreen extends PureComponent {
                                                         {moment(item.vlEntryT).format('hh:mm A')}
                                                     </Text>
                                                 </Text>
+
                                                 <Text>{'  '+item.unUniName}</Text>
                                                 </View>
 
@@ -884,8 +890,20 @@ class NotificationScreen extends PureComponent {
                                             ) : (
                                                 <View/>
                                             )}
-                                            {item.opened ? null : (
-                                                <View>
+                                            { item.vlVisType =="Delivery" ?
+                                                item.vlApprStat !="Pending" ?
+                                            <View>
+                                                <Text style={{color:base.theme.colors.primary,fontSize:14}}>Status :
+                                                    <Text style={{fontSize:12,color:base.theme.colors.black}}> {item.vlApprStat}</Text>
+                                                </Text>
+                                                {item.vlApprdBy !="" ?
+                                                    <Text style={{color:base.theme.colors.primary,fontSize:14}}>{item.vlApprStat =="Rejected"? "Rejected by" : "Approved by"} :
+                                                        <Text style={{fontSize:12,color:base.theme.colors.black}}> {item.vlApprdBy} </Text>
+                                                    </Text>
+                                                    :<Text/>}
+                                            </View> :<View></View> :<View/>}
+                                            <View>
+                                                    {item.vlVisType =="Delivery" ?
                                                         <View>
                                                             {item.vlApprStat === 'Pending' ? (
                                                                 <View
@@ -939,8 +957,9 @@ class NotificationScreen extends PureComponent {
                                                                 <View></View>
                                                             )}
                                                         </View>
+                                                        :
+                                                        <View/>}
                                                 </View>
-                                            )}
                                         </View>
                                     )}
                                 </Collapsible>

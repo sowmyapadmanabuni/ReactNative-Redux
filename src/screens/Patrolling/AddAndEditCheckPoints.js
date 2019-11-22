@@ -106,11 +106,11 @@ class AddAndEditCheckPoints extends React.Component {
         }, 100)
     }
 
-   /* componentWillUnmount() {
-        setTimeout(() => {
-            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
-    }*/
+    /* componentWillUnmount() {
+         setTimeout(() => {
+             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+         }, 0)
+     }*/
 
     processBackPress() {
         console.log("Part");
@@ -518,24 +518,24 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     validateFields() {
-            if (base.utils.validate.isBlank(this.state.checkPointName)) {
-                alert("Please enter Check Point Name")
-            } else {
-                let self = this;
-                self.setState({isLottieModalOpen: true})
-                Animated.timing(self.state.progress, {
-                    toValue: 1,
-                    duration: 2000,
-                    easing: Easing.linear,
-                }).start();
-                setTimeout(() => {
-                    self.setState({
-                        isLottieModalOpen: false
-                    })
-                }, 2100);
-                self.addCheckPoint()
-            }
+        if (base.utils.validate.isBlank(this.state.checkPointName)) {
+            alert("Please enter Check Point Name")
+        } else {
+            let self = this;
+            self.setState({isLottieModalOpen: true})
+            Animated.timing(self.state.progress, {
+                toValue: 1,
+                duration: 2000,
+                easing: Easing.linear,
+            }).start();
+            setTimeout(() => {
+                self.setState({
+                    isLottieModalOpen: false
+                })
+            }, 2100);
+            self.addCheckPoint()
         }
+    }
 
     async addCheckPoint() {
         base.utils.logger.log(this.props);
@@ -709,7 +709,7 @@ class AddAndEditCheckPoints extends React.Component {
                         {/* <OSButton onButtonClick={() => this.validateFields()} */}
                         <OSButton onButtonClick={() => this.checkCount()}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
-                                  //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
+                            //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
                                   oSBBackground={base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>

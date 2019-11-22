@@ -138,6 +138,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
                                   allNotifs[i].unUnitID = responseData.visitorLog.unUnitID;
                                   allNotifs[i].unUniName = responseData.visitorLog.unUniName;
                                   allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
+                                  allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
 
                               }
                           }
@@ -700,8 +701,8 @@ export const refreshNotifications = (
                     allNotifs[i].unUnitID = responseData.visitorLog.unUnitID;
                     allNotifs[i].unUniName = responseData.visitorLog.unUniName;
                     allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
-
-                     }
+                    allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
+                   }
                  }
                })
                .catch(error => {
