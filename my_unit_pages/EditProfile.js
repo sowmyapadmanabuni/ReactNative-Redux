@@ -28,6 +28,7 @@ import CountryPicker from "react-native-country-picker-modal"
 import base from "../src/base";
 
 import {updateUserInfo,} from '../src/actions'
+import Style from "../src/screens/Resident/MyFamilyScreen/MyFamilyAdd/Style";
 
 const RNFS = require('react-native-fs');
 
@@ -372,11 +373,16 @@ class EditProfile extends Component {
                                             </View>
 
                                             <View style={styles.imagesmallCircle}>
-                                                <Image
+                                                {/*<Image
                                                     style={[styles.smallImage]}
+                                                    source={require("../icons/cam_with_gray_bg.png")}
+                                                />*/}
+                                                <Image
+                                                    style={[styles.camStyle]}
                                                     source={require("../icons/cam_with_gray_bg.png")}
                                                 />
                                             </View>
+
                                         </View>
                                     </TouchableOpacity>
 
@@ -689,11 +695,12 @@ const styles = StyleSheet.create({
     containerView_ForProfilePicViewStyle: {
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "white",
+        //backgroundColor: "yellow",
         alignSelf: "center",
         flexDirection: "row",
         borderColor: "orange"
     },
+
     viewForProfilePicImageStyle: {
         width: wp("15%"),
         height: hp("15%"),
@@ -708,6 +715,8 @@ const styles = StyleSheet.create({
         //backgroundColor: "yellow",
         width: 110,
         height: 110,
+        //width:wp('20%'),
+        //height:hp('20%'),
         borderColor: "orange",
         borderRadius: 55,
         borderWidth: hp("0.2%") / PixelRatio.get()
@@ -720,8 +729,9 @@ const styles = StyleSheet.create({
         height: 10,
         marginTop: hp("6%"),
         marginLeft: hp("3%"),
-        borderRadius: 5
+        borderRadius: 5,
     },
+
     smallImage: {
         width: wp("8%"),
         height: hp("4%"),
@@ -729,6 +739,16 @@ const styles = StyleSheet.create({
         alignItems: "flex-end"
         //alignItems: center
     },
+
+    camStyle:{
+        //backgroundColor:'yellow',
+        width: wp("11%"),
+        height: hp("6%"),
+        justifyContent: "flex-start",
+        alignItems: "flex-end"
+        //alignItems: center
+    },
+
     viewForPaddingAboveAndBelowButtons: {
         flexDirection: "row",
         justifyContent: "space-around",

@@ -207,20 +207,20 @@ class InviteGuests extends Component {
         let startDate = this.state.dobText + ' ' + this.state.datetime;
         let endDate = this.state.dobText1 + ' ' + this.state.datetime1;
 
-        fname = this.state.fname;
-        lname = this.state.lname;
-        cca2 = this.state.cca2;
-        callingCode = this.state.callingCode;
-        mobNum = this.state.mobNo;
-        vehNo = this.state.vehNo;
-        emailId = this.state.emailId;
+        let fname = this.state.fname;
+        let lname = this.state.lname;
+        let cca2 = this.state.cca2;
+        let callingCode = this.state.callingCode;
+        let mobNum = this.state.mobNo;
+        let vehNo = this.state.vehNo;
+        let emailId = this.state.emailId;
         let purpose = this.state.purpose;
-        dobDate = this.state.dobText;
-        dobDate1 = this.state.dobText1;
+        let dobDate = this.state.dobText;
+        let dobDate1 = this.state.dobText1;
         time = this.state.datetime;
-        time1 = this.state.datetime1;
-        switches = this.state.switch;
-        count = this.state.count;
+        let time1 = this.state.datetime1;
+        let switches = this.state.switch;
+        let count = this.state.count;
 
         const oyeMobileRegex = /^[0]?[456789]\d{9}$/;
 
@@ -263,10 +263,10 @@ class InviteGuests extends Component {
             return false;
         }*/
         else if (dobDate > dobDate1) {
-            Alert.alert('Enter valid start date to till date');
+            Alert.alert('Enter valid start date to Till date');
             return false;
         } else if (time == time1 && dobDate == dobDate1) {
-            Alert.alert('Enter valid start time to till time');
+            Alert.alert('Enter valid start time to Till time');
             return false;
         } else {
 //http://apidev.oyespace.com/oye247/api/v1/Invitation/create
@@ -301,7 +301,7 @@ class InviteGuests extends Component {
                 .then(response => response.json())
                 .then(responseJson => {
                     console.log('Response JSON', responseJson);
-                    Alert.alert("Invitation created, please share the invitation using the share button");
+                    Alert.alert("","Invitation created, please share the invitation using the share button");
                     this.props.navigation.goBack()
                 })
                 .catch(error => console.log(error))
@@ -572,7 +572,7 @@ const styles = StyleSheet.create({
         marginRight: '5%',
         width: wp('14%'),
         height: hp('3.5%'),
-        borderWidth: hp('0.1%'),
+        //borderWidth: hp('0.1%'),
         borderColor: 'orange',
         borderRadius: hp('0.6%'),
     },

@@ -20,11 +20,13 @@ import {updateIdDashboard} from '../src/actions';
 
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../src/assets/selection.json';
+import FloatingButton from "../src/components/FloatingButton";
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 class VehicleList extends Component {
     static navigationOptions = {
+        listLength: 0,
         title: 'Vehicle List',
         header: null
     };
@@ -93,13 +95,16 @@ class VehicleList extends Component {
                 console.log('Vehicle List ------', responseJson);
                 this.setState({
                     isLoading: false,
-                    dataSource: responseJson.data.vehicleListByUnitID
+                    dataSource: responseJson.data.vehicleListByUnitID,
+                    listLength: responseJson.data.vehicleListByUnitID.length,
                 });
+                console.log("dataSource ",this.state.dataSource);
                 const {updateIdDashboard} = this.props;
                 updateIdDashboard({
                     prop: 'vehiclesCount',
                     value: responseJson.data.vehicleListByUnitID.length
                 });
+                console.log("responseJson.data ",responseJson.data);
             })
 
             .catch(error => {
@@ -153,9 +158,12 @@ class VehicleList extends Component {
             rowId: this.props.index,
             section: 1
         };
+        console.log("item ",item, index);
         return (
             // <Swipeout {...swipeSettings} style={{backgroundColor:'#fff'}}>
-            <View style={styles.maincolumn}>
+            <View style={[styles.maincolumn ,{
+                marginBottom: index == (this.state.listLength-1) ? 70 : 0
+            }]}>
                 <View style={styles.divider}/>
                 <View style={styles.firstRow}>
                     <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
@@ -460,7 +468,18 @@ class VehicleList extends Component {
                
                 <View style={{height: hp('7%')}}></View>
 
-                <TouchableOpacity
+                <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'absolute',
+                    bottom: hp('5%'),
+                    right: hp('3.5%'),
+                    height: hp('6.5%'),
+                }}>
+                    <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
+                </View>
+
+                {/*<TouchableOpacity
                     style={styles.floatButton}
                     onPress={() => this.props.navigation.navigate('AddVehiclesScreen')}
                 >
@@ -469,11 +488,14 @@ class VehicleList extends Component {
                     >
                         +
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
 
                 
             </View>
         );
+    }
+    changePage(){
+        this.props.navigation.navigate('AddVehiclesScreen')
     }
 }
 
@@ -498,7 +520,7 @@ const styles = StyleSheet.create({
     },
     centerEmptySet: { justifyContent: 'center', alignItems: 'center', height: '100%' },
     maincolumn: {
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     divider: {
         backgroundColor: 'lightgray',

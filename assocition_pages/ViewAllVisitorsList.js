@@ -58,7 +58,6 @@ class ViewAllVisitorsList extends Component {
         this.arrayholder = [];
     }
 
-
     //Date Picker
     onDOBPress = () => {
         let dobDate = this.state.dobDate;
@@ -102,8 +101,8 @@ class ViewAllVisitorsList extends Component {
         });
     };
 
-
     searchFilterFunction = text => {
+        console.log("text ",text)
         this.setState({
             value: text
         });
@@ -114,6 +113,7 @@ class ViewAllVisitorsList extends Component {
 
             return itemData.indexOf(textData) > -1;
         });
+        console.log("newData ",newData);
         this.setState({
             dataSource: newData
         });
@@ -125,12 +125,14 @@ class ViewAllVisitorsList extends Component {
         this.myVisitorsGetList();
     }
 
-    myVisitorsGetList = () => {
-        console.log("-----------------------"); //2019/05/02
+    myVisitorsGetList(){
+        console.log("AAAAAAAAAAA");
+        console.log("---------- Call -------------"); //2019/05/02
         if (this.state.dobText1 < this.state.dobText) {
             Alert.alert("From Date should be less than To Date");
 
         } else {
+            console.log("ELSE")
             fetch(
                 `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDates`,
                 {
@@ -147,6 +149,7 @@ class ViewAllVisitorsList extends Component {
                 })
                 .then((response) => response.json())
                 .then((responseJson) => {
+                    console.log("responseJson",responseJson );
                     this.setState({
                         dataSource: responseJson.data.visitorlog.sort((a, b) => Date.parse(b.vldCreated) - Date.parse(a.vldCreated)),
                         isLoading: false
@@ -440,11 +443,11 @@ class ViewAllVisitorsList extends Component {
                     justifyContent: 'space-evenly',
                     marginTop: 15
                 }}>
-                    <View style={{alignItems: 'center', justifyContent: 'space-around', alignItems: 'center'}}>
+                    <View style={{justifyContent: 'space-around', alignItems: 'center'}}>
                         <Text style={{fontSize: hp('2.2%'), color: '#474749',}}>Visitors Count: <Text
                             style={{color: 'black', fontWeight: 'bold'}}>{this.state.totalVisitors}</Text></Text>
                     </View>
-                    <View style={{alignItems: 'center', justifyContent: 'space-around', alignItems: 'center'}}>
+                    <View style={{justifyContent: 'space-around', alignItems: 'center'}}>
                         <Text style={{fontSize: hp('2.2%'), color: '#474749',}}>Entries: <Text
                             style={{color: 'black', fontWeight: 'bold'}}>{this.state.dataSource.length}</Text></Text>
                     </View>
@@ -508,7 +511,7 @@ const styles = StyleSheet.create({
     datePickerButtonView: {
         marginTop: hp("1%"),
         flexDirection: "row",
-        justifyContent: "flex-end",
+        //justifyContent: "flex-end",
         justifyContent: "space-around",
         marginHorizontal: hp('2%')
     },
@@ -523,7 +526,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     mainView: {
-        flex: 1
+        flex: 1,
     },
     titleOfScreen: {
         textAlign: "center",
@@ -534,7 +537,7 @@ const styles = StyleSheet.create({
         color: '#ff8c00' //orange hex
     },
     tableView: {
-        flexDirection: "column"
+        flexDirection: "column",
     },
     lineForCellView: {
         backgroundColor: "lightgray",

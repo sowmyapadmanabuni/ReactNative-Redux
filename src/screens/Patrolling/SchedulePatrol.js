@@ -322,6 +322,7 @@ class SchedulePatrol extends React.Component {
         console.log("Detail for network call:", detail);
 
         let stat = await base.services.OyeSafeApi.schedulePatrol(detail);
+        console.log("stat>> ",stat);
         try {
             if (stat) {
                 if (stat.success) {

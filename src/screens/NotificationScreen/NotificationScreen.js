@@ -774,16 +774,13 @@ class NotificationScreen extends PureComponent {
                                             </View>
                                             <View
                                                 style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'space-between'
+                                                    //flexDirection: 'row',
+                                                    //alignItems: 'space-between',
+                                                    //backgroundColor:'yellow',
                                                 }}
                                             >
-                                                <Text
-                                                    style={{
-                                                        color: base.theme.colors.primary,
-                                                        fontWeight: 'bold'
-                                                    }}
-                                                >
+                                                <View style={{flexDirection: 'row'}}>
+                                                <Text style={{ color: base.theme.colors.primary, fontWeight: 'bold'}}>
                                                     Entry:{' '}
                                                     <Text
                                                         style={{
@@ -798,7 +795,9 @@ class NotificationScreen extends PureComponent {
                                                         {moment(item.vlEntryT).format('hh:mm A')}
                                                     </Text>
                                                 </Text>
-                                                <Text>{item.unUniName}</Text>
+                                                <Text>{'  '+item.unUniName}</Text>
+                                                </View>
+
                                                 {/* <View>
                           {item.vlVisLgID ? (
                             <Text>{item.vlVisLgID}</Text>
@@ -818,7 +817,7 @@ class NotificationScreen extends PureComponent {
                                                         style={{
                                                             color: base.theme.colors.primary,
                                                             fontWeight: 'bold',
-                                                            marginLeft: 25
+                                                            //marginLeft: 25
                                                         }}
                                                     >
                                                         From:{' '}

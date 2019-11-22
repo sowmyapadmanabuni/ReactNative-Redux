@@ -28,6 +28,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../src/assets/selection.json';
 
 import gateFirebase from 'firebase';
+import backgroundHandler from "../../../src/components/backgroundHandler";
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
@@ -83,6 +84,7 @@ class App extends React.Component {
         isLoading: false,
         dataSource: newDataSource
       });
+      console.log("newDataSource ",newDataSource);
     }, 1000);
     // console.log("Association Id", this.props.dashBoardReducer.assId);
   }
@@ -422,8 +424,13 @@ class App extends React.Component {
             </View>
           </TouchableOpacity>
           <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 0 }}>
+
             <Card style={{ marginTop: 0 }}>
               <TouchableOpacity
+                  style={{
+                    justifyContent:'center',
+                    alignItems:'center',
+                  }}
                 onPress={() => {
                   {
                     Platform.OS === 'android'
@@ -433,10 +440,12 @@ class App extends React.Component {
                 }}
               >
                 <CardItem bordered>
-                  <Icon color="#ff8c00" style={styles.images} name="call" />
+                  <Icon color="#ff8c00" style={styles.image0} name="call" />
                 </CardItem>
+
               </TouchableOpacity>
             </Card>
+
           </View>
         </View>
         <View
@@ -581,7 +590,7 @@ class App extends React.Component {
 
   render() {
     console.log('View All Visitor', this.props.dashBoardReducer.assId);
-    console.log(this.state.dataSource, '*******************************');
+    console.log('*******************************',this.state.dataSource);
     console.log('123123123#####', this.props);
     return (
       <View style={{ flex: 1, marginTop: hp('1%') }}>
@@ -792,7 +801,7 @@ const styles = StyleSheet.create({
   datePickerButtonView: {
     marginTop: hp('1.5%'),
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    //justifyContent: 'flex-end',
     justifyContent: 'space-around',
     marginHorizontal: hp('2%')
   },
@@ -891,11 +900,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     shadowOpacity: 0.6
   },
+  image0:{
+    width: hp('2%'),
+    height: hp('2%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   images: {
     width: hp('1.6%'),
     height: hp('1.6%'),
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   inputItem: {
     marginTop: wp('1%'),
