@@ -89,7 +89,8 @@ class Dashboard extends PureComponent {
       unitName: '',
       unitId: null,
       falmilyMemebCount: null,
-      vehiclesCount: null,
+      //vehiclesCount: null,
+      vehiclesCount:0,
       visitorCount: null,
       role: '',
       assdNameHide: false,
@@ -661,8 +662,8 @@ class Dashboard extends PureComponent {
       getDashSub,
       getDashAssoSync
     } = this.props;
-    console.log('SYNC_FUNCTION@@@@@')
-
+    console.log('SYNC_FUNCTION@@@@@');
+    console.log("userReducer>> ", this.props.userReducer);
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
@@ -710,7 +711,9 @@ class Dashboard extends PureComponent {
     if (!this.props.called) {
       this.didMount();
     }
-    /* timer.setInterval(
+
+
+    /*timer.setInterval(
          this,
          'syncData',
          () => {
@@ -1047,6 +1050,7 @@ class Dashboard extends PureComponent {
         value: 0
       });
     } else {
+      console.log("<< INSIDE >>");
       this.getVehicleList();
       this.myFamilyListGetData();
     }
@@ -1133,6 +1137,7 @@ class Dashboard extends PureComponent {
     )
       .then(response => response.json())
       .then(responseJson => {
+        console.log("res: ",responseJson);
         console.log(
           'VehicleRespponse####',
           this.props.dashBoardReducer.uniID,
@@ -1142,8 +1147,15 @@ class Dashboard extends PureComponent {
           //Object.keys(responseJson.data.unitsByBlockID).length
           vehiclesCount: responseJson.data.vehicleListByUnitID.length
         });
+        const { updateIdDashboard } = this.props;
+        updateIdDashboard({
+          prop: 'vehiclesCount',
+          value: responseJson.data.vehicleListByUnitID.length
+        });
+        console.log("res>> ", responseJson.data.vehicleListByUnitID.length)
       })
       .catch(error => {
+        console.log("catch ",error);
         this.setState({ loading: false });
         this.setState({
           //Object.keys(responseJson.data.unitsByBlockID).length
@@ -1250,6 +1262,7 @@ class Dashboard extends PureComponent {
   };
 
   render() {
+    console.log("vehiclesCount ",this.state.vehiclesCount);
     const {
       dropdown,
       dropdown1,
@@ -1568,6 +1581,7 @@ class Dashboard extends PureComponent {
             iconHeight={Platform.OS === 'ios' ? 40 : 20}
             cardIcon={require('../../../../icons/vehicle.png')}
             cardCount={this.props.dashBoardReducer.vehiclesCount}
+            //cardCount={this.state.vehiclesCount}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>

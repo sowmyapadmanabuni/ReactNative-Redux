@@ -27,7 +27,7 @@ const Style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 8,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   supportContainer: {
     height: '6%',
@@ -113,7 +113,7 @@ const Style = StyleSheet.create({
     width: '45%',
     alignItems: 'center',
     justifyContent: 'space-around',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   invoiceNumberText: {
     fontSize: 14,

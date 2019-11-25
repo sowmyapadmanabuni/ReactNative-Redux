@@ -44,6 +44,7 @@ class PatrolSchedule extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            listLength: 0,
             patrollingCheckPoint: [],
             isModalOpen: false,
             isSnoozeEnabled: false,
@@ -112,7 +113,8 @@ class PatrolSchedule extends React.Component {
             if (stat.success) {
                 self.setState({
                     patrollingCheckPoint: stat.data.patrollingShifts,
-                    isDataVisible: true
+                    isDataVisible: true,
+                    listLength : stat.data.patrollingShifts.length,
                 }, () => this.getCheckPointList())
             } else {
                 self.setState({
@@ -243,9 +245,12 @@ class PatrolSchedule extends React.Component {
     }
 
     _renderPatrollingCheckPoints(item, index) {
+        console.log("item: ",item.index,this.state.listLength);
         let data = item.item;
         return (
-            <View style={PatrollingScheduleStyles.flatListView}>
+            <View style={[ PatrollingScheduleStyles.flatListView, {
+                marginBottom: item.index == (this.state.listLength-1) ? 80 : 0
+            }]}>
                 <TouchableHighlight onPress={() => this.mapModal(data)}
                                     underlayColor={base.theme.colors.transparent}
                                     style={{justifyContent: 'center'}}>

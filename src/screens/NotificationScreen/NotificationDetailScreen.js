@@ -35,6 +35,7 @@ import gateFirebase from 'firebase';
 import _ from 'lodash';
 import base from '../../base';
 import firebase from 'react-native-firebase';
+import moment from "moment";
 
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
@@ -733,13 +734,13 @@ class NotificationDetailScreen extends PureComponent {
       } else {
         if (adminStat === 'Accepted') {
           return (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={{ justifyContent: 'center', alignItems: 'center',marginTop:10 }}>
               <Text style={{ fontWeight: '500' }}> {'Request Accepted'} </Text>
-            </View>
-          );
+                  </View>
+                  );
         } else if (adminStat === 'Rejected') {
           return (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ justifyContent: 'center', alignItems: 'center',marginTop:10 }}>
               <Text style={{ fontWeight: '500' }}> {'Request Rejected'} </Text>
             </View>
           );
@@ -772,59 +773,13 @@ class NotificationDetailScreen extends PureComponent {
             }
           } else {
             status = (
-              <View stlye={{}}>
-                <View style={styles.buttonContainer}>
+              <View >
                   <View
-                    style={{
-                      flexDirection: 'column',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Avatar
-                      onPress={() => this.reject(details)}
-                      overlayContainerStyle={{
-                        backgroundColor: 'red'
-                      }}
-                      rounded
-                      icon={{
-                        name: 'close',
-                        type: 'font-awesome',
-                        size: 15,
-                        color: '#fff'
-                      }}
-                    />
-                    <Text style={{ color: 'red' }}> Reject </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Avatar
-                      onPress={() => this.approve(details)}
-                      overlayContainerStyle={{
-                        backgroundColor: 'orange'
-                      }}
-                      rounded
-                      icon={{
-                        name: 'check',
-                        type: 'font-awesome',
-                        size: 15,
-                        color: '#fff'
-                      }}
-                    />
-                    <Text style={{ color: 'orange' }}> Approve </Text>
-                  </View>
-                </View>
-
-                <View
                   style={{
                     flexDirection: 'column',
-                    marginTop: hp('10%'),
-                    marginBottom: hp('2%'),
+                      marginTop:hp('2%'),
+                   // marginTop: hp('10%'),
+                  //  marginBottom: hp('2%'),
                     marginLeft: hp('2%')
                   }}
                 >
@@ -836,12 +791,12 @@ class NotificationDetailScreen extends PureComponent {
                       <Text>Name</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row' }}>
-                      <Text>
-                        {details.ntDesc !== undefined
+                        <Text style={{color:base.theme.colors.black}}>
+                            {details.ntDesc !== undefined
                           ? details.ntDesc.split(' ')[0].trim()
                           : ''}{' '}
                       </Text>
-                      <Text>
+                        <Text style={{color:base.theme.colors.black}}>
                         {details.ntDesc !== undefined
                           ? details.ntDesc.split(' ')[1].trim()
                           : ''}
@@ -852,24 +807,11 @@ class NotificationDetailScreen extends PureComponent {
                     <View style={{ flex: 2.5 }}>
                       <Text>Mobile</Text>
                     </View>
-                    <View style={{ flex: 5 }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          Platform.OS === 'android'
-                            ? Linking.openURL(`tel:${this.state.requestorMob1}`)
-                            : Linking.openURL(
-                                `tel:${this.state.requestorMob1}`
-                              );
-                        }}
-                      >
+                 <View style={{ flex: 5 }}>
+
                         <View style={{ flexDirection: 'row' }}>
-                          <Text>{this.state.requestorMob1}</Text>
-                          <Image
-                            style={{ width: hp('2%'), height: hp('2%') }}
-                            source={require('../../../icons/call.png')}
-                          />
+                          <Text style={{color:base.theme.colors.black}}>{this.state.requestorMob1}</Text>
                         </View>
-                      </TouchableOpacity>
                     </View>
                   </View>
                   <View style={{ flexDirection: 'row' }}>
@@ -877,7 +819,7 @@ class NotificationDetailScreen extends PureComponent {
                       <Text>Unit</Text>
                     </View>
                     <View style={{ flex: 2 }}>
-                      <Text>
+                        <Text style={{color:base.theme.colors.black}}>
                         {details.ntDesc !== undefined
                           ? details.ntDesc.split(' ')[5].trim()
                           : ''}{' '}
@@ -887,18 +829,38 @@ class NotificationDetailScreen extends PureComponent {
                   <View
                     style={{
                       borderWidth: 1,
-                      borderColor: '#E5E5E5',
+                      borderColor: base.theme.colors.greyCard,
                       marginTop: hp('1%'),
                       marginBottom: hp('3%')
                     }}
                   />
                 </View>
+                  <View style={{flexDirection:'row',alignItems:'flex-end',alignSelf:'flex-end',position:'absolute',marginTop:'80%'}}>
+                      <TouchableOpacity onPress={() => {
+                          this.approve(details)
+                      }}
+                                        style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
+                          <Image
+                              style={{width:30,height:30}}
+                              source={require('../../../icons/allow.png')}
+                          />
+                          <Text style={{fontSize:16,color:base.theme.colors.primary,}}>Allow</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() =>
+                          this.reject(details)
+                      }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
+                          <Image
+                              style={{width:30,height:30}}
+                              source={require('../../../icons/deny.png')}
+                          />
+                          <Text style={{fontSize:16,color:base.theme.colors.red,}}>Deny</Text>
+                      </TouchableOpacity>
+                  </View>
               </View>
             );
           }
         }
       }
-
       return status;
     }
   };
@@ -909,7 +871,7 @@ class NotificationDetailScreen extends PureComponent {
 
     console.log('DETAILS', details);
     return (
-      <View style={{ marginTop: hp('20%') }}>
+      <View >
         <View style={{ marginLeft: hp('2%') }}>
           <Text style={{ color: '#ff8c00' }}>Current Status</Text>
         </View>
@@ -918,11 +880,11 @@ class NotificationDetailScreen extends PureComponent {
             <Text>Occupancy</Text>
           </View>
           <View style={{ flex: 2 }}>
-            <Text>{this.state.dataSource3} </Text>
+              <Text style={{color:base.theme.colors.black}}>
+                {this.state.dataSource3} </Text>
           </View>
         </View>
         <FlatList
-          style={{ height: '100%' }}
           data={this.state.dataSource2.reverse()}
           renderItem={({ item }) => (
             <View
@@ -934,41 +896,35 @@ class NotificationDetailScreen extends PureComponent {
                     <Text>Resident Name</Text>
                   </View>
                   <View style={{ flex: 2 }}>
-                    <Text>{item.name} </Text>
+                      <Text style={{color:base.theme.colors.black}}>
+                        {item.name} </Text>
                   </View>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                   <View style={{ flex: 2.5 }}>
                     <Text>Mobile</Text>
                   </View>
-                  <View style={{ flex: 5, zIndex: 100 }}>
-                    <TouchableOpacity
-                      // onPress={() => alert("here")}
+                <View style={{ flex: 5, zIndex: 100 }}>
 
-                      onPress={() => {
-                        Platform.OS === 'android'
-                          ? Linking.openURL(
-                              `tel:${item.number ? item.number : ''}`
-                            )
-                          : Linking.openURL(
-                              `tel:${item.number ? item.number : ''}`
-                            );
-                      }}
-                    >
                       <View style={{ flexDirection: 'row' }}>
-                        <Text>{item.number ? item.number : ''}</Text>
-                        <Image
-                          style={{ width: hp('2%'), height: hp('2%') }}
-                          source={require('../../../icons/call.png')}
-                        />
+                          <Text style={{color:base.theme.colors.black}}>
+                            {item.number ? item.number : ''}</Text>
                       </View>
-                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
             </View>
           )}
         />
+          <View
+              style={{
+                  borderBottomWidth: 1,
+                  borderColor:base.theme.colors.greyCard,
+                  marginTop:10
+
+              }}
+          />
+
       </View>
     );
   };
@@ -976,10 +932,27 @@ class NotificationDetailScreen extends PureComponent {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
-    // console.log("DETAILS", details)
-    console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
+      let inDate=new Date()
+      let enDate=new Date(details.ntdCreated)
+      let duration = Math.abs(inDate-enDate)
+      let days=Math.floor(duration / (1000 * 60 * 60 * 24));
+      let hours=Math.floor(duration / (1000 * 60 *60));
+      let mins=Math.floor(duration / (1000 *60));
+      let valueDis= days >1? moment(details.ntdCreated).format('DD MMM YYYY'): days==1 ? "Yesterday": mins>=120? hours + " hours ago" :(mins<120 && mins>=60)? hours + " hour ago"
+          :mins==0 ?"Just now":mins+" mins ago";
+      console.log("DETAILS", details,valueDis)
+
+      console.log(this.state.adminStat, this.state.adminStatLoading, 'adminStat');
     return (
-      <View style={styles.container}>
+      <View style={{
+          borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
+          shadowColor: base.theme.colors.greyHead,
+          shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0.5},
+          shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+          shadowRadius: 0.5, elevation: 3,  borderBottomWidth: 0.5,
+          width:'100%',
+          height:'80%'
+      }}>
         <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
@@ -1022,13 +995,22 @@ class NotificationDetailScreen extends PureComponent {
           </View>
           <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
-        <View style={{ marginTop: hp('2%') }}>
-          <Text style={styles.titleStyle}> {details.ntDesc} </Text>
-        </View>
-
-        <View style={{ height: hp('8%') }}>
+          <View style={{flexDirection:'row',width:'100%',height:'10%',backgroundColor:base.theme.colors.shadedWhite,marginTop:20}}>
+             <View style={{width:'15%',}}>
+              <Image
+                  resizeMode={'center'}
+                  style={{width:50, height:50,alignItems:'center',justifyContent:'center'}}
+                  source={require('../../../icons/notification1.png')}
+              />
+             </View>
+              <View style={{width:'65%',alignItems:'center',justifyContent:'center'}}>
+              <Text style={{color:base.theme.colors.black,fontSize:12}}> {details.ntDesc} </Text>
+              </View>
+              <View style={{width:'20%',alignItems:'center',justifyContent:'center'}}>
+                  <Text style={{color:base.theme.colors.grey,fontSize:12}}>{valueDis}</Text>
+              </View>
+          </View>
           {details.ntType === 'Join_Status' ? null : this.renderButton()}
-        </View>
         {this.state.dataSource3 === '' ? (
           <View></View>
         ) : (
@@ -1076,7 +1058,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    flex: 1,
+   // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 15

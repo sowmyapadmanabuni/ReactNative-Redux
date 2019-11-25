@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     ActivityIndicator,
-    Alert,
+    Alert, AsyncStorage,
     BackHandler,
     FlatList,
     Image,
@@ -13,13 +13,14 @@ import {
     View
 } from 'react-native';
 // import Header from "./src/components/common/Header";
+
 import { NavigationEvents } from 'react-navigation';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import moment from 'moment';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import { connect } from 'react-redux';
-import { Button, Card, CardItem, Form, Input, Item } from 'native-base';
-
+import {Button, Card, CardItem, Container, Form, Input, Item} from 'native-base';
+import FloatingButton from "../../../src/components/FloatingButton";
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../src/assets/selection.json';
 import base from "../../../src/base";
@@ -668,7 +669,11 @@ class MyGuests extends Component {
                         }
                     />
                 }
-                <TouchableOpacity
+                <View style={styles.floatingButton}>
+                    <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
+                </View>
+
+                {/*<TouchableOpacity
                     style={styles.floatButton}
                     onPress={() => this.props.navigation.navigate('InviteGuests')}
                 >
@@ -677,12 +682,18 @@ class MyGuests extends Component {
                     >
                         +
                     </Text>
-                
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
+
             </View>
         );
     }
+    changePage() {
+        console.log("HI")
+        this.props.navigation.navigate('InviteGuests')
+    }
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -709,7 +720,7 @@ const styles = StyleSheet.create({
         marginTop: hp('1.5%'),
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        justifyContent: 'space-around',
+        //justifyContent: 'space-around',
         marginHorizontal: hp('2%')
     },
     datePickerBox: {
@@ -744,7 +755,7 @@ const styles = StyleSheet.create({
         borderColor: 'orange'
     },
     listItem: {
-        paddingRight: hp('1.6%'),
+        //paddingRight: hp('1.6%'),
         paddingBottom: hp('2%'),
         paddingTop: hp('1%'),
         paddingRight: 0,
@@ -788,6 +799,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: hp('1.5%'),
         color: '#ff8c00'
+    },
+
+    floatingButton:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: hp('5%'),
+        right: hp('3.5%'),
+        height: hp('6.5%'),
     },
 
     floatButton: {

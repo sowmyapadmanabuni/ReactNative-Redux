@@ -163,7 +163,7 @@ class Staff extends React.Component {
                         <View style={StaffStyle.noStaffData}>
                             <Image source={require('../../../../../icons/service.png')}
                                    style={{width: hp('10%'), height: hp('10%'), margin: hp('1%')}}/>
-                            <Text style={StaffStyle.noStaffDataText}> No staff is there in the Selected
+                            <Text style={StaffStyle.noStaffDataText}> No staff is there in the selected
                                 Association </Text>
                         </View>}
                     {this.state.staffList.length !== 0 ?

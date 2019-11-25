@@ -197,10 +197,8 @@ class App extends React.Component {
                 .then(responseJson => {
                     //var count = Object.keys(responseJson.data.visitorlogbydate).length;
                     //console.log("fsbkfh", count);
-                    console.log(
-                        responseJson,
-                        "View Alll Visitors"
-                    );
+
+                    console.log("View Alll Visitors ",responseJson.data.visitorlog);
                     this.setState({
                         isLoading: false,
                         dataSource: responseJson.data.visitorlog,
@@ -709,10 +707,14 @@ class App extends React.Component {
                             </Text>
                         </View>
                     ) : (
+
                         <FlatList
                             style={{marginTop: hp("2%")}}
-                            data={this.state.dataSource.sort((a, b) =>
-                                a.vlfName.localeCompare(b.vlfName)
+                            // data={this.state.dataSource.sort((a, b) =>
+                            //     a.vlfName.localeCompare(b.vlfName)
+                            // )}
+                            data={this.state.dataSource.sort((b, a) =>
+                                a.vldCreated.localeCompare(b.vldCreated),
                             )}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => item.vlVisLgID.toString()}
@@ -733,7 +735,7 @@ const styles = StyleSheet.create({
         marginTop: hp("1.5%"),
         flexDirection: "row",
         justifyContent: "flex-end",
-        justifyContent: "space-around",
+        //justifyContent: "space-around",
         marginHorizontal: hp("2%")
     },
     container: {
@@ -762,6 +764,7 @@ const styles = StyleSheet.create({
     },
     lineForCellView: {
         backgroundColor: "lightgray",
+        //backgroundColor: "yellow",
         //height: hp("0.1%")
     },
     cellView: {
@@ -771,12 +774,12 @@ const styles = StyleSheet.create({
         paddingTop: hp("0.8%"),
         marginBottom: hp("0.8%"),
         justifyContent: "space-between",
-        borderBottomWidth: hp("0.1%")
+        borderBottomWidth: hp("0.1%"),
     },
     containerImageView: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
         //margin: 5
     },
     mainCardItemImage: {
@@ -797,12 +800,12 @@ const styles = StyleSheet.create({
         flex: 3,
         flexDirection: "column",
         alignItems: "flex-start",
-        justifyContent: "center"
+        justifyContent: "center",
     },
     viewTextStyle: {
         flexDirection: "row",
         alignItems: "center",
-        paddingLeft: hp("1.3%")
+        paddingLeft: hp("1.3%"),
     },
     viewImageStyle: {
         flexDirection: "row",

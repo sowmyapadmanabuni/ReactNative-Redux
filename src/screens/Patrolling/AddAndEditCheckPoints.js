@@ -742,7 +742,6 @@ class AddAndEditCheckPoints extends React.Component {
                     progress={this.state.progress}
                     loop={true}
                     style={{
-
                         backgroundColor: base.theme.colors.white,
                         alignSelf: 'center',
                         justifyContent:'center',

@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: hp("2%"),
         fontWeight: "bold",
-        color: "black",
+        //color: "black",
         marginBottom: hp("1.6%"),
         color: '#ff8c00',
     },

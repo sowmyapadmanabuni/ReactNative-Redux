@@ -27,6 +27,7 @@ import {updateIdDashboard} from '../../../../actions';
 
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../../assets/selection.json';
+import FloatingButton from "../../../../components/FloatingButton";
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
@@ -521,8 +522,18 @@ class MyFamilyList extends React.Component {
                         </View>
                             }
                         />
-                    
-                    <TouchableOpacity
+
+                    <View style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'absolute',
+                        bottom: hp('5%'),
+                        right: hp('3.5%'),
+                        height: hp('6.5%'),
+                    }}>
+                        <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
+                    </View>
+                    {/*<TouchableOpacity
                     style={Style.floatButton}
                     onPress={() => this.props.navigation.navigate('MyFamily')}
                 >
@@ -531,11 +542,14 @@ class MyFamilyList extends React.Component {
                     >
                         +
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
 
                 </View>
             </View>
         );
+    }
+    changePage(){
+        this.props.navigation.navigate('MyFamily')
     }
 }
 
