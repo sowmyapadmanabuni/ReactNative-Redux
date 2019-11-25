@@ -308,6 +308,15 @@ class InviteGuests extends Component {
         }
     };
 
+    mobileNumberInputCheck(text) {
+
+        let check = /^\d$/;
+        if (check.test(text[text.length - 1]) || text.length === 0) {
+            console.log("text ",text)
+            this.setState({ mobNo: text })
+        }
+    }
+
 
     render() {
         console.log("My Account Id -", this.props.accountId);
@@ -380,7 +389,8 @@ class InviteGuests extends Component {
                                        keyboardType="number-pad"
                                        placeholder="Mobile Number"
                                        maxLength={10}
-                                       onChangeText={mobNo => this.setState({mobNo: mobNo})}
+                                       onChangeText={mobNo => this.mobileNumberInputCheck(mobNo)}
+                                       value={this.state.mobNo}
                                 />
                             </Item>
                             <Item style={{flex: 0.5}}>

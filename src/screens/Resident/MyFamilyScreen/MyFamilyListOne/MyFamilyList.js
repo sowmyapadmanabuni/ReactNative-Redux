@@ -209,7 +209,7 @@ class MyFamilyList extends React.Component {
 
     renderItem = ({item, index}) => {
         let itemID = item.id;
-        console.log('Image issue', item, index);
+        console.log('ITEM', item, index);
         return (
             <View
                 style={[

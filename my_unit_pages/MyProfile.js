@@ -134,6 +134,7 @@ class MyProfile extends Component {
     return true;
   }
 
+
   render() {
     console.log(
       'State in My Profile:',

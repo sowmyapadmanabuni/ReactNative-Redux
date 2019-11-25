@@ -267,6 +267,7 @@ class Announcement extends Component {
   };
 
   pause = () => {
+    console.log("PAUSE");
     this.sound.pause();
     this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
   };
@@ -623,8 +624,8 @@ class Announcement extends Component {
     let visitorid = self.state.visitorId;
     let visitorname = self.state.visitorName;
     let mp3 = self.state.mp3;
-    accountId = self.props.userReducer.MyAccountID;
-    assocID = self.props.dashboardReducer.assId;
+    let accountId = self.props.userReducer.MyAccountID;
+    let assocID = self.props.dashboardReducer.assId;
     console.log(
       'All Data',
       img1,
@@ -877,7 +878,7 @@ class Announcement extends Component {
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
-          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
+          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>ss
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {
@@ -1775,7 +1776,7 @@ const styles = StyleSheet.create({
     height: hp('5%'),
     borderRadius: 25,
     borderWidth: 2,
-    backgroundColor: base.theme.colors.white,
+    //backgroundColor: base.theme.colors.white,
     justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,

@@ -253,6 +253,7 @@ class Dashboard extends PureComponent {
   }
 
   requestNotifPermission = () => {
+    console.log("requestNotifPermission -------------------------- ");
     const {
       MyAccountID,
       champBaseURL,
@@ -354,7 +355,6 @@ class Dashboard extends PureComponent {
         this.roleCheckForAdmin();
       });
   };
-
 
   showLocalNotification = notification => {
     try {
@@ -712,17 +712,16 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    /*timer.setInterval(
+    timer.setInterval(
          this,
          'syncData',
          () => {
-
+           console.log("I am Timer");
            this.syncData();
            //     //     // alert("hererereerrrereer");
          },
          5000
-     );*/
-
+     );
    }
 
   async roleCheckForAdmin(index) {

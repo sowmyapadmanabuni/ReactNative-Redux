@@ -49,6 +49,7 @@ class MyFamily extends Component {
                     value: "Other",
                     id: 5
                 }],
+            singleDigit:'',
             relationName: "",
             cCode: '',
             mobileNumber: "",
@@ -92,6 +93,13 @@ class MyFamily extends Component {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
+    }
+
+    mobileNumberInputCheck(text) {
+        let check = /^\d$/;
+        if (check.test(text[text.length - 1]) || text.length === 0) {
+            this.setState({ mobileNumber: text })
+        }
     }
 
     render() {
@@ -145,7 +153,6 @@ class MyFamily extends Component {
                     </View>
                     <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
                 </SafeAreaView>
-
 
                 <Text style={Style.titleOfScreen}>Add Family Member</Text>
 
@@ -211,7 +218,8 @@ class MyFamily extends Component {
                                 placeholderTextColor={base.theme.colors.grey}
                             />
                         </View>
-                        {this.state.isMinor ?
+                        {
+                            this.state.isMinor ?
                             <View style={{
                                 flexDirection: 'row',
                                 height: '6%',
@@ -252,8 +260,10 @@ class MyFamily extends Component {
                                     })}
                                 </RadioForm>
                             </View>
-                            : <View/>}
-                        {this.state.isMinor && this.state.isMinorSelected === 0 ?
+                            : <View/>
+                        }
+                        {
+                            this.state.isMinor && this.state.isMinorSelected === 0 ?
                             <View style={Style.textInputView}>
                                 <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Guardian's
                                     Name
@@ -267,7 +277,9 @@ class MyFamily extends Component {
                                     keyboardType={'default'}
                                 />
                             </View>
-                            : <View/>}
+                            : <View/>
+                        }
+
                         <View style={[Style.textInputView, {
                             borderBottomWidth: 1,
                             borderColor: base.theme.colors.lightgrey, marginBottom: 10
@@ -281,10 +293,11 @@ class MyFamily extends Component {
                             <View style={Style.mobNumView}>
                                 <TextInput
                                     style={{height: 50, width: '80%',}}
-                                    onChangeText={(text) => this.setState({mobileNumber: text})}
+                                    onChangeText={(text) => this.mobileNumberInputCheck(text)}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
                                     keyboardType='numeric'
+                                    maxLength={10}
                                     placeholderTextColor={base.theme.colors.grey}
                                 />
                                 <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
@@ -540,6 +553,7 @@ class MyFamily extends Component {
         console.log('Props**!!!', this.props, this.state);
 
         let self = this;
+        console.log("self.state.isMinor ",self.state.isMinor, self.state.isMinorSelected);
         const OyeFirstName = /^[a-zA-Z ]+$/;
         const OyeLastName = /^[a-zA-Z ]+$/;
         const reg = /^[0]?[6789]\d{9}$/;
@@ -548,9 +562,11 @@ class MyFamily extends Component {
             alert('Please Select relation')
         } else if (self.state.firstName === "") {
             alert('First Name is required')
-        } else if (self.state.isMinor && self.state.isMinorSelected === 0 && self.state.guardianName === '') {
+        }
+        else if (self.state.isMinor && self.state.isMinorSelected === 0 && self.state.guardianName === '') {
             alert('Guardian name is Mandatory')
-        } else if (OyeFirstName.test(self.state.firstName) === false) {
+        }
+        else if (OyeFirstName.test(self.state.firstName) === false) {
             Alert.alert('First Name should not contain Special Character & numbers');
             return false
         } else if (self.state.lastName === "") {

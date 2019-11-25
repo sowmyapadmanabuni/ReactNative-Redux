@@ -84,6 +84,13 @@ class EditProfile extends Component {
         return true;
     }
 
+    mobileNumberInputCheck(text) {
+        let check = /^\d$/;
+        if (check.test(text[text.length - 1]) || text.length === 0) {
+            this.setState({ primaryMobNum: text })
+        }
+    }
+
     validation = () => {
 
         if (base.utils.validate.isBlank(this.state.firstName)) {
@@ -494,15 +501,16 @@ class EditProfile extends Component {
                                                     placeholder="Mobile Number"
                                                     autoCorrect={false}
                                                     keyboardType="phone-pad"
-                                                    maxLength={20}
-                                                    onChangeText={(value) => {
-                                                        let num = value.replace(".", '');
+                                                    maxLength={10}
+                                                    onChangeText={(value) =>
+                                                        this.mobileNumberInputCheck(value)
+                                                        /*let num = value.replace(".", '');
                                                         if (isNaN(num)) {
                                                             // Its not a number
                                                         } else {
                                                             this.setState({primaryMobNum: num})
-                                                        }
-                                                    }}
+                                                        }*/
+                                                    }
                                                     value={this.state.primaryMobNum}
                                                 />
                                             </Item>
