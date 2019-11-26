@@ -95,6 +95,8 @@ pod 'Firebase/Messaging', '~> 5.19.0'
 
   pod 'RNPDF', :path => '../node_modules/react-native-view-pdf'
 
+#  pod 'react-native-location-satellites', :path => '../node_modules/react-native-location-satellites'
+
 end
   
 post_install do |installer|
