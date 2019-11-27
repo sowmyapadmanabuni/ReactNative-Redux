@@ -140,6 +140,7 @@ class NotificationAnnouncementDetailScreen extends Component {
   }
 
   componentWillUnmount() {
+    this.pause();
     setTimeout(() => {
       BackHandler.removeEventListener('hardwareBackPress', () =>
         this.processBackPress()
@@ -172,6 +173,7 @@ class NotificationAnnouncementDetailScreen extends Component {
   };
 
   play = async () => {
+    console.log("PLAY");
     if (!this.state.loaded) {
       try {
         await this.load();
@@ -198,6 +200,7 @@ class NotificationAnnouncementDetailScreen extends Component {
   };
 
   pause = () => {
+    console.log("PAUSE...")
     this.sound.pause();
     this.setState({ paused: true, playBtnId: 0 });
   };

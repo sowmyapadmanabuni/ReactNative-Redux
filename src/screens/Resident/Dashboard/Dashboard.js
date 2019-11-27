@@ -253,6 +253,7 @@ class Dashboard extends PureComponent {
   }
 
   requestNotifPermission = () => {
+    console.log("requestNotifPermission -------------------------- ");
     const {
       MyAccountID,
       champBaseURL,
@@ -355,7 +356,6 @@ class Dashboard extends PureComponent {
       });
   };
 
-
   showLocalNotification = notification => {
     try {
 
@@ -451,7 +451,7 @@ class Dashboard extends PureComponent {
   //       'oye_channel',
   //       firebase.notifications.Android.Importance.High
   //     ).setDescription('oye_channel')
-  //         .setSound('oye_msg_tone');    
+  //         .setSound('oye_msg_tone');
   //         channel_for.enableLights(true);
   //         channel_for.enableVibration(true);
   //         channel_for.vibrationPattern([500]);
@@ -478,9 +478,9 @@ class Dashboard extends PureComponent {
   //       .android.setLargeIcon('ic_notif')
   //       .android.setSmallIcon('ic_stat_ic_notification')
   //       .android.setChannelId('Oyespace')
-  //       .android.setVibrate([1000,1000])   
-  //       .setSound('oye_msg_tone')   
-        
+  //       .android.setVibrate([1000,1000])
+  //       .setSound('oye_msg_tone')
+
   //         //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
 
 
@@ -514,7 +514,7 @@ class Dashboard extends PureComponent {
         .notifications()
         .onNotification(notification => {
 
-          
+
 
           console.log('___________');
           console.log(notification);
@@ -713,17 +713,16 @@ class Dashboard extends PureComponent {
     }
 
 
-    /*timer.setInterval(
+    timer.setInterval(
          this,
          'syncData',
          () => {
-
+           console.log("I am Timer");
            this.syncData();
            //     //     // alert("hererereerrrereer");
          },
          5000
-     );*/
-
+     );
    }
 
   async roleCheckForAdmin(index) {
@@ -1739,7 +1738,8 @@ class Dashboard extends PureComponent {
           animation={'wobble'}
           delay={1000}
           duration={1000}
-          onPress={() => this.props.navigation.navigate('Announcement')}
+          onPress={() => this.props.navigation.navigate('Announcement')
+          }
         >
           <View
             style={{

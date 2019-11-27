@@ -69,7 +69,7 @@ class NotificationScreen extends PureComponent {
             this.props.userReducer.SelectedAssociationID
         );
         console.log('Get the deatails',this.props)
-        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
+        this.props.refreshNotifications(this.props.oyeURL, this.props.MyAccountID);
 
         //this.doNetwork(null, this.props.notifications);
 
@@ -591,16 +591,16 @@ class NotificationScreen extends PureComponent {
                     console.log('__OPEN__', opens);
                 }
             });
-        let inDate=new Date()
-        let enDate=new Date(item.ntdCreated)
-        let duration = Math.abs(inDate-enDate)
+        let inDate=moment()._d
+        let enDate= moment(item.ntdCreated)._d
+        let duration = Math.abs(inDate-enDate);
         //let duration2=Math.ceil(duration / (1000 * 60 * 60 * 24));
         let days=Math.floor(duration / (1000 * 60 * 60 * 24));
         let hours=Math.floor(duration / (1000 * 60 *60));
         let mins=Math.floor(duration / (1000 *60));
         let valueDis= days >1? moment(item.ntdCreated).format('DD MMM YYYY'): days==1 ? "Yesterday": mins>=120? hours + " hours ago" :(mins<120 && mins>=60)? hours + " hour ago"
             :mins==0 ?"Just now":mins+" mins ago";
-        console.log('Gate app Notifications98989898TIME',days,hours,mins,item.ntdCreated,valueDis)
+        console.log('Gate app Notifications98989898TIME',inDate,enDate,mins,hours,days)
         if(item.ntType !== 'gate_app'){
             return(
                 <TouchableOpacity style={{
@@ -652,6 +652,7 @@ class NotificationScreen extends PureComponent {
                 this.props.mediaupload,
                 this.state.gateDetails
             );
+            console.log('ITEM IS ACTIVE TILL',item.ntIsActive);
 
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
@@ -697,10 +698,11 @@ class NotificationScreen extends PureComponent {
                              <Text style={{fontSize:14,color:base.theme.colors.black}}>{' '}{item.vlVisType=="Delivery"? item.vlVisType:""}</Text>
                          </Text>
                          {item.unUniName !=="" ?
-                         <Text style={{fontSize:14,color:base.theme.colors.black,width:150,textAlign:'right',marginRight:10,}}>Visiting
-                             <Text style={{fontSize:14,color:base.theme.colors.blue,}} numberOfLines={3}>{' '}{item.unUniName}</Text>
-                         </Text>
-                             :<Text/>}
+                             <View style={{flexDirection:'row',width:'40%'}}>
+                         <Text style={{fontSize:14,color:base.theme.colors.black,textAlign:'right',marginRight:10,}}>Visiting</Text>
+                             <Text style={{fontSize:14,color:base.theme.colors.blue,width:100,}} numberOfLines={3}>{item.unUniName}</Text>
+                             </View> :
+                             <View/>}
                      </View>
                  </View>
                     <View style={{backgroundColor:base.theme.colors.white}}>
@@ -708,9 +710,9 @@ class NotificationScreen extends PureComponent {
                             <Text style={{fontSize:16,color:base.theme.colors.black,marginTop:30}}>{item.vlfName}</Text>
 
                         </View>
-                        {item.ntIsActive?
-                        <View style={{alignItems:'center',justifyContent:'flex-end',height:60}}>
-                            <LottieView source={require('../../assets/notifblinker.json')} autoPlay loop />
+                        { item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive ?
+                        <View style={{alignItems:'center',height:60,}}>
+                            <LottieView source={require('../../assets/panimation.json')} autoPlay loop />
                         </View>
                             :
                             <View/>}
@@ -720,7 +722,7 @@ class NotificationScreen extends PureComponent {
                             </View>
                         <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                             <Text style={{fontSize:14,color:base.theme.colors.primary,marginLeft:15}}>Entry on :
-                                <Text style={{fontSize:14, color:base.theme.colors.black,}}>{ moment(item.ntdCreated).format('DD-MM-YYYY')} {'    '} {moment(item.vlEntryT).format('hh:mm A')}
+                                <Text style={{fontSize:14, color:base.theme.colors.black,}}>{' '}{moment(item.ntdCreated).format('DD-MM-YYYY')} {'    '} {moment(item.vlEntryT).format('hh:mm A')}
                             </Text>
                             </Text>
                             <Text style={{fontSize:14,color:base.theme.colors.primary,marginRight:15}}>From:
@@ -729,11 +731,10 @@ class NotificationScreen extends PureComponent {
                         </View>
                         {item.vlexgName !="" && item.vlApprStat !="Expired" ?
                         <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                            <Text style={{fontSize:14,color:base.theme.colors.primary,marginLeft:15}}>Exit on :
-                                <Text style={{fontSize:14,color:base.theme.colors.black,}}> {moment(item.vldUpdated, 'YYYY-MM-DD').format(
+                            <Text style={{fontSize:14,color:base.theme.colors.primary,marginLeft:15}}>Exit on   :
+                                <Text style={{fontSize:14,color:base.theme.colors.black,}}>{' '}{moment(item.vldUpdated, 'YYYY-MM-DD').format(
                                 'DD-MM-YYYY'
-                            )}{'    '}
-                                {moment(item.vlExitT).format('hh:mm A')}</Text>
+                            )}{'    '}  {moment(item.vlExitT).format('hh:mm A')}</Text>
                             </Text>
                             <Text style={{fontSize:14,color:base.theme.colors.primary,marginRight:15}}>From:
                                 <Text style={{fontSize:14,color:base.theme.colors.black,}}>{' '}{item.vlexgName}</Text>
@@ -752,7 +753,7 @@ class NotificationScreen extends PureComponent {
                             <View/>}
                             {item.vlApprStat =="Expired" ?
                                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start'}}>
-                                    <Text style={{fontSize:16,color:base.theme.colors.primary,alignSelf:'flex-start',marginLeft:15}}>Status:
+                                    <Text style={{fontSize:16,color:base.theme.colors.primary,alignSelf:'flex-start',marginLeft:15}}>Status  :
                                         <Text style={{fontSize:14,color:base.theme.colors.black,}}>{' '}{item.vlApprStat}</Text>
                                     </Text>
                                 </View>:

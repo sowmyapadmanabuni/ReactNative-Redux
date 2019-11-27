@@ -107,6 +107,13 @@ class MyFamilyEdit extends Component {
         return true;
     }
 
+    mobileNumberInputCheck(text) {
+        let check = /^\d$/;
+        if (check.test(text[text.length - 1]) || text==="+" || text.length === 0) {
+            this.setState({ mobileNumber: text })
+        }
+    }
+
     render() {
 
         let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number";
@@ -288,9 +295,10 @@ class MyFamilyEdit extends Component {
                             <View style={Style.mobNumView}>
                                 <TextInput
                                     style={{height: 50, width: '80%',}}
-                                    onChangeText={(text) => this.setState({mobileNumber: text})}
+                                    onChangeText={(text) => this.mobileNumberInputCheck(text)}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
+                                    maxLength={13}
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'phone-pad'}
                                 />

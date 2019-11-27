@@ -715,6 +715,8 @@ class NotificationDetailScreen extends PureComponent {
     let subId = details.sbSubID;
     // let status = _.includes(approvedAdmins, subId);
     // let status = false;
+      let val=details.ntDesc.split(' ')
+      console.log('DETAILS',details,val)
 
     let status;
 
@@ -796,11 +798,11 @@ class NotificationDetailScreen extends PureComponent {
                           ? details.ntDesc.split(' ')[0].trim()
                           : ''}{' '}
                       </Text>
-                        <Text style={{color:base.theme.colors.black}}>
+                        {/*<Text style={{color:base.theme.colors.black}}>
                         {details.ntDesc !== undefined
                           ? details.ntDesc.split(' ')[1].trim()
                           : ''}
-                      </Text>
+                      </Text>*/}
                     </View>
                   </View>
                   <View style={{ flexDirection: 'row' }}>
@@ -821,7 +823,7 @@ class NotificationDetailScreen extends PureComponent {
                     <View style={{ flex: 2 }}>
                         <Text style={{color:base.theme.colors.black}}>
                         {details.ntDesc !== undefined
-                          ? details.ntDesc.split(' ')[5].trim()
+                          ? details.ntDesc.split(' ')[4].trim()
                           : ''}{' '}
                       </Text>
                     </View>
@@ -932,8 +934,9 @@ class NotificationDetailScreen extends PureComponent {
   render() {
     const { navigation } = this.props;
     const details = navigation.getParam('details', 'NO-ID');
-      let inDate=new Date()
-      let enDate=new Date(details.ntdCreated)
+
+      let inDate=moment()._d
+      let enDate= moment(details.ntdCreated)._d
       let duration = Math.abs(inDate-enDate)
       let days=Math.floor(duration / (1000 * 60 * 60 * 24));
       let hours=Math.floor(duration / (1000 * 60 *60));

@@ -267,6 +267,7 @@ class Announcement extends Component {
   };
 
   pause = () => {
+    console.log("PAUSE");
     this.sound.pause();
     this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
   };
@@ -623,8 +624,8 @@ class Announcement extends Component {
     let visitorid = self.state.visitorId;
     let visitorname = self.state.visitorName;
     let mp3 = self.state.mp3;
-    accountId = self.props.userReducer.MyAccountID;
-    assocID = self.props.dashboardReducer.assId;
+    let accountId = self.props.userReducer.MyAccountID;
+    let assocID = self.props.dashboardReducer.assId;
     console.log(
       'All Data',
       img1,
@@ -648,6 +649,8 @@ class Announcement extends Component {
     let associationId = self.props.dashboardReducer.assId;
 
     let image = `${img1},${img2},${img3},${img4},${img5}`;
+
+    console.log('INPUT FOR ANN@@@@@',image,ntDesc,accountId,assocID,mp3)
 
     this.setState({
       isLoading: true
@@ -675,7 +678,7 @@ class Announcement extends Component {
           response,
           response.data.data.announcement.anid
         );
-        
+
         this.setState({
           isLoading: false
         });
@@ -741,16 +744,16 @@ class Announcement extends Component {
                   relativeImage3: '',
                   relativeImage4: '',
                   relativeImage5: '',
-            
+
                   myProfileImage1: '',
                   myProfileImage2: '',
                   myProfileImage3: '',
                   myProfileImage4: '',
                   myProfileImage5: '',
-            
+
                   mp3uri: '',
                   mp3: '',
-            
+
                   imageUrl: '',
                   photo: null,
                   photoDetails: null,
@@ -758,35 +761,35 @@ class Announcement extends Component {
                   filePath: '',
                   imagePath: '',
                   id: '',
-            
+
                   buttonId: 1,
                   playBtnId: 0,
-            
+
                   recordSecs: 0,
                   recordTime: '00:00:00',
                   currentPositionSec: 0,
                   currentDurationSec: 0,
                   playTime: '00:00:00',
                   duration: '00:00:00',
-            
+
                   isLoading: false,
-            
+
                   datasource: [],
-            
+
                   visitorName: '',
                   visitorId: '',
                   visitorList: [],
-            
+
                   comment: '',
                   dropdownValue: '',
-            
+
                   announcementId: '',
-            
+
                   audioFile: '',
                   recording: false,
                   loaded: false,
                   paused: true,
-            
+
                   timestamp: '',
                   loading: false
                 };
@@ -807,16 +810,16 @@ class Announcement extends Component {
                   relativeImage3: '',
                   relativeImage4: '',
                   relativeImage5: '',
-            
+
                   myProfileImage1: '',
                   myProfileImage2: '',
                   myProfileImage3: '',
                   myProfileImage4: '',
                   myProfileImage5: '',
-            
+
                   mp3uri: '',
                   mp3: '',
-            
+
                   imageUrl: '',
                   photo: null,
                   photoDetails: null,
@@ -824,35 +827,35 @@ class Announcement extends Component {
                   filePath: '',
                   imagePath: '',
                   id: '',
-            
+
                   buttonId: 1,
                   playBtnId: 0,
-            
+
                   recordSecs: 0,
                   recordTime: '00:00:00',
                   currentPositionSec: 0,
                   currentDurationSec: 0,
                   playTime: '00:00:00',
                   duration: '00:00:00',
-            
+
                   isLoading: false,
-            
+
                   datasource: [],
-            
+
                   visitorName: '',
                   visitorId: '',
                   visitorList: [],
-            
+
                   comment: '',
                   dropdownValue: '',
-            
+
                   announcementId: '',
-            
+
                   audioFile: '',
                   recording: false,
                   loaded: false,
                   paused: true,
-            
+
                   timestamp: '',
                   loading: false
                 };
@@ -1775,7 +1778,7 @@ const styles = StyleSheet.create({
     height: hp('5%'),
     borderRadius: 25,
     borderWidth: 2,
-    backgroundColor: base.theme.colors.white,
+    //backgroundColor: base.theme.colors.white,
     justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,

@@ -1,15 +1,16 @@
 package com.oyespace.oyesafe;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.react.ReactApplication;
+import com.dooboolab.RNAudioRecorderPlayerPackage;
+import com.goodatlas.audiorecord.RNAudioRecordPackage;
 import com.synclovis.RNLocationSatellitesPackage;
 import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
-import com.goodatlas.audiorecord.RNAudioRecordPackage;
 import com.rumax.reactnative.pdfviewer.PDFViewPackage;
 import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
-import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.devstepbcn.wifi.AndroidWifiPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -38,8 +39,13 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
@@ -64,13 +70,13 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNPermissionsPackage(),
+            new RNAudioRecorderPlayerPackage(),
             new RNAudioRecordPackage(),
+            new RNPermissionsPackage(),
                     new PDFViewPackage(),
                     new DocumentPickerPackage(),
 
                     new RNHTMLtoPDFPackage(),
-                    new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
                     new RNDeviceInfo(),
                     new RNSpinkitPackage(),
@@ -114,8 +120,48 @@ public class MainApplication extends Application implements ShareApplication, Re
     @Override
     public void onCreate() {
         super.onCreate();
+       /*Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+                                      @Override
+                                      public void run() {
+                                          deleteCache(getApplicationContext());
+                                      }
+                                  },
+                0, 20000);*/
+
         SoLoader.init(this, /* native exopackage */ false);
         Fabric.with(this, new Crashlytics());
 
+        //deleteCache(getApplicationContext());
     }
+
+    //----------------------------------------------------------------------------------------------
+
+
+    /*public static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) { e.printStackTrace();}
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
+    }*/
+
+
+    //----------------------------------------------------------------------------------------------
 }

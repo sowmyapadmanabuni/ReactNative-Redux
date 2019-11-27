@@ -145,7 +145,6 @@ class PatrolSchedule extends React.Component {
         }
     }
 
-
     render() {
         console.log("State:", this.state);
         return (

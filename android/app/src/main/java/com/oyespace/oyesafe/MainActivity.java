@@ -1,6 +1,10 @@
 package com.oyespace.oyesafe;
 
+import android.content.Context;
+
 import com.facebook.react.ReactActivity;
+
+import java.io.File;
 
 
 public class MainActivity extends ReactActivity {
@@ -11,6 +15,10 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
+
         return "OyeSpace";
     }
+
+
+
 }

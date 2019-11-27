@@ -47,8 +47,17 @@ class MobileValid extends Component {
         } else {
             this.setState({Mobilenumber: mobilenumber});
         }
-
     };
+
+    mobileNumberInputCheck(text) {
+        let check = /^\d$/;
+        if (check.test(text[text.length - 1]) || text.length === 0) {
+            //console.log("text ",text)
+            this.setState({ Mobilenumber: text })
+        }else{
+            this.setState({ Mobilenumber: this.state.Mobilenumber.replace(text,'')})
+        }
+    }
 
     getOtp = mobilenumber => {
 
@@ -67,14 +76,14 @@ class MobileValid extends Component {
             alert("Please enter a valid (10 digit) Mobile number");
             return false;
         } else {
-            anu = {
+            let anu = {
                 CountryCode: countryCode,
                 MobileNumber: mobilenumber
             };
 
             console.log('jhgjhghjgjh', this.props);
 
-            url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/sendotp`;
+            let url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/sendotp`;
             //  http://api.oyespace.com/champ/api/v1/account/sendotp
 
             this.setState({
@@ -228,7 +237,10 @@ class MobileValid extends Component {
                                                 keyboardType="numeric"
                                                 returnKeyType="done"
                                                 maxLength={10}
-                                                onChangeText={this.handleMobile}
+                                                //onChangeText={this.handleMobile}
+                                                onChangeText={(val)=> this.mobileNumberInputCheck(val)}
+                                                value={this.state.Mobilenumber}
+
                                             />
                                         </View>
                                     </View>
