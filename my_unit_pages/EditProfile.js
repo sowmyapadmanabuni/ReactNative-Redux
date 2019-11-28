@@ -304,6 +304,27 @@ class EditProfile extends Component {
         })
     }
 
+    resetData(){
+        this.setState({
+            firstName: "",
+            lastName: "",
+            primaryMobNum: "",
+            primeCCode: "",
+            primeCName: "",
+            primaryEmail: "",
+            alterEmail: "",
+            myProfileImage: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
+            imageUrl: "",
+            primeCca: "",
+            alterCca: "",
+            alterCName: "",
+            alterMobNum: "",
+            alterCCode: "",
+            profileName: "",
+            isPhotoAvailable: false,
+        })
+    }
+
     render() {
 
         console.log('AGHGHGHGH', this.state, this.state.myProfileImage, this.props);
@@ -621,10 +642,11 @@ class EditProfile extends Component {
                                             dark
                                             style={styles.buttonFamily}
                                             onPress={() => {
-                                                this.props.navigation.goBack()
+                                                //this.props.navigation.goBack()
+                                                this.resetData()
                                             }}
                                         >
-                                            <Text style={styles.textFamilyVehicle}>Cancel</Text>
+                                            <Text style={styles.textFamilyVehicle}>Reset</Text>
                                         </Button>
                                         <Button
                                             bordered

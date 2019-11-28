@@ -537,7 +537,7 @@ class NotificationScreen extends PureComponent {
                             .set({
                                 buttonColor: '#ff0000',
                                 opened: true,
-                                newAttachment: true,
+                                newAttachment: false,
                                 visitorlogId: visitorId,
                                 updatedTime: res.data.data.currentDateTime
                             });
@@ -560,7 +560,7 @@ class NotificationScreen extends PureComponent {
                     .set({
                         buttonColor: '#ff0000',
                         opened: true,
-                        newAttachment: true,
+                        newAttachment: false,
                         visitorlogId: visitorId,
                         updatedTime: null
                     });
@@ -671,7 +671,7 @@ class NotificationScreen extends PureComponent {
                       this.props.toggleCollapsible(notifications, item.open, index)}}>
                  <View style={{backgroundColor:base.theme.colors.greyCard,
                  }}>
-                  <View style={{flexDirection:'row',backgroundColor:base.theme.colors.greyCard,
+                  <View style={{flexDirection:'row',backgroundColor:item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive?"#FFE49B":base.theme.colors.greyCard,
                       alignItems:'center',justifyContent:'space-between',
                       borderBottomWidth:0.5,borderBottomColor:base.theme.colors.greyHead,height:50}}>
                       {item.ntIsActive? //item.read -->Not updating
@@ -710,12 +710,12 @@ class NotificationScreen extends PureComponent {
                             <Text style={{fontSize:16,color:base.theme.colors.black,marginTop:30}}>{item.vlfName}</Text>
 
                         </View>
-                        { item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive ?
-                        <View style={{alignItems:'center',height:60,}}>
-                            <LottieView source={require('../../assets/panimation.json')} autoPlay loop />
+                        {/*{ item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive ?
+                        <View style={{width:'100%',alignItems:'center',justifyContent:'center'}}>
+                            <LottieView style={{width:'30%',}} source={require('../../assets/swipe_arrow.json')} autoPlay loop />
                         </View>
                             :
-                            <View/>}
+                            <View/>}*/}
                         <Collapsible duration={100} collapsed={item.open}>
                             <View style={{alignItems:'center',justifyContent:'center'}}>
                                 <Text style={{fontSize:16,color:base.theme.colors.primary,paddingBottom:10}}>{item.vlMobile}</Text>

@@ -35,6 +35,7 @@ class Staff extends React.Component {
             dayRadioProps: [{label: 'YESTERDAY', value: 0}, {label: 'TODAY', value: 1}],
             daySelected: -1,
             radioButtonMonth: [{label: 'MONTH TILL DATE', value: 0}],
+            visitorId:""
         };
         this.getListOfStaff = this.getListOfStaff.bind(this);
     }
@@ -56,6 +57,53 @@ class Staff extends React.Component {
         }, 0)
 
     }
+
+    visitorID = (workerId) => {
+        console.log("WORKER DATA",this.props.oyeURL,moment()._d,this.props.dashboardReducer.assId,this.props.dashboardReducer.uniID,this.props.userReducer.MyAccountID)
+        fetch(
+            `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
+            {
+                method: 'POST',
+                headers: {
+                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    StartDate: moment()._d,
+                    EndDate: moment()._d,
+                    ASAssnID: this.props.dashboardReducer.assId,
+                    UNUnitID: this.props.dashboardReducer.uniID,
+                    ACAccntID: this.props.userReducer.MyAccountID
+                })
+            }
+        )
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log('Deliveries___', responseJson);
+                if (responseJson.success) {
+                    for (let i = 0; i < responseJson.data.visitorlog.length; i++) {
+                        console.log('Deliveries___#####',responseJson.data.visitorlog[i].reRgVisID,workerId,responseJson.data.visitorlog[i].vlVisLgID);
+
+                        if ((responseJson.data.visitorlog[i].reRgVisID ==workerId) && (responseJson.data.visitorlog[i].vlApprStat !="Exited") ) {
+                            console.log('Deliveries___#####',i);
+                            this.setState({
+                                visitorId:responseJson.data.visitorlog[i].vlVisLgID
+                            });
+
+                        }
+                    }
+                } else {
+                    this.setState({
+                        isLoading: false
+                    });
+                }
+            })
+
+            .catch(error => {
+                console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+            });
+    };
+
 
     processBackPress() {
         console.log("Part");
@@ -98,6 +146,7 @@ class Staff extends React.Component {
                     staffId: staffNamesList[0].staffDetails.wkWorkID,
                     minDate: moment(staffNamesList[0].staffDetails.wkdCreated).format('DD-MM-YYYY'),
                 })
+                self.visitorID(staffNamesList[0].staffDetails.wkWorkID)
                 console.log("staffNamesList",staffNamesList)
             }
         } catch (error) {
@@ -320,9 +369,10 @@ class Staff extends React.Component {
                             onButtonClick={() => this.getStaffReport()}/>
                         : <View/>}
 
-                        {this.state.staffList.length !== 0 &&
-                            <AnimatedTouchable animation={'swing'} onPress={()=> this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId,workerId:this.state.workId, Pic: this.state.staffPic, DeptName:this.state.departmentName})}>
-                            <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:base.theme.colors.primary,borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}><Text style={{fontSize:hp('2%'), color:base.theme.colors.primary}}>Leave with Vendor</Text></View>
+                        {this.state.staffList.length !== 0 && this.state.visitorId !="" &&
+                            <AnimatedTouchable animation={'swing'} onPress={()=>this.setStaffData()}>
+                            <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:base.theme.colors.primary,borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}>
+                                <Text style={{fontSize:hp('2%'), color:base.theme.colors.primary}}>Leave with Vendor</Text></View>
                             </AnimatedTouchable>
                         }
                 </View>
@@ -331,6 +381,18 @@ class Staff extends React.Component {
                     <ActivityIndicator size="large" color={base.theme.colors.primary}/>
                 </View>
         )
+    }
+
+    setStaffData(){
+        let self=this;
+        console.log('STAFFF DETAILS::',self.state.departmentName)
+        const {updateStaffInfo} = this.props;
+        updateStaffInfo({prop: "staffName", value: self.state.staffName});
+        updateStaffInfo({prop: "staffId", value: self.state.visitorId});
+        updateStaffInfo({prop: "staffProfilePic", value: self.state.staffPic});
+        updateStaffInfo({prop: "staffDesignation", value: self.state.departmentName});
+        this.props.navigation.navigate('StaffLeaveWithVendor')
+        //this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId,workerId:this.state.workId, Pic: this.state.staffPic, DeptName:this.state.departmentName}
     }
 
     setDateInCalendar(value, index) {
@@ -440,6 +502,7 @@ class Staff extends React.Component {
             minDate: moment(minDate).format('DD-MM-YYYY'),
 
         });
+        self.visitorID( workerId)
 
     }
 }
@@ -448,7 +511,9 @@ const mapStateToProps = state => {
     return {
         userReducer: state.UserReducer,
         staffReducer: state.StaffReducer,
-        dashboardReducer: state.DashboardReducer
+        dashboardReducer: state.DashboardReducer,
+        oyeURL: state.OyespaceReducer.oyeURL,
+
     };
 };
 

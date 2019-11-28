@@ -9,9 +9,10 @@ import {
   ScrollView,
   PermissionsAndroid,
   Platform,
-  BackHandler
+  BackHandler, TextInput, TouchableHighlight, Linking, KeyboardAvoidingView, Alert
 } from 'react-native';
 import {
+  heightPercentageToDP,
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
@@ -36,20 +37,16 @@ import gateFirebase from 'firebase';
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
-// import AudioRecorderPlayer, {
-//   AVEncoderAudioQualityIOSType,
-//   AVEncodingOption,
-//   AudioEncoderAndroidType,
-//   AudioSet,
-//   AudioSourceAndroidType
-// } from 'react-native-audio-recorder-player';
 import { ratio, screenWidth } from './VendorStyles.js';
 import moment from 'moment';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import StaffStyle from './StaffStyle.js';
+import OSButton from "../../../../components/osButton/OSButton";
+import {FlatList} from "react-native-gesture-handler";
+import CreateSOSStyles from "../../../SOS/CreateSOSStyles";
+import Modal from "react-native-modal";
 
-// var audioRecorderPlayer;
 const options = {
   sampleRate: 44100,
   channels: 1,
@@ -61,67 +58,73 @@ class StaffLeaveWithVendor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      relativeImage1: '',
-      relativeImage2: '',
-      relativeImage3: '',
-      relativeImage4: '',
-      relativeImage5: '',
-
-      myProfileImage1: '',
-      myProfileImage2: '',
-      myProfileImage3: '',
-      myProfileImage4: '',
-      myProfileImage5: '',
-
-      mp3uri: '',
-      mp3: '',
-
-      imageUrl: '',
-      photo: null,
-      photoDetails: null,
-      isPhotoAvailable: false,
-      filePath: '',
-      imagePath: '',
-      id: '',
-
-      buttonId: 1,
-      playBtnId: 0,
-
-      recordSecs: 0,
-      recordTime: '00:00:00',
-      currentPositionSec: 0,
-      currentDurationSec: 0,
-      playTime: '00:00:00',
-      duration: '00:00:00',
-
-      isLoading: false,
-
-      datasource: [],
-      dataSource: [],
-
-      visitorName: '',
-      visitorId: '',
-      visitorList: [],
-
-      comment: '',
-      dropdownValue: '',
-
-      announcementId: '',
-
-      audioFile: '',
-      recording: false,
-      loaded: false,
-      paused: true,
-      currentTime: '',
-
-      timestamp: '',
-      visworkID: ''
+        vendorImages:[],
+      imagesString:"",
+      comment:"",
+      audioRecord:"",
+      audioToServer:"",
+      currentTime:"",
+      timeStamp:"",
+      selectedImage: "",
+      isModalOpen:false,
+      isRecord:false,
+      isPlay:true,
     };
-    // this.audioRecorderPlayer = new AudioRecorderPlayer();
-    // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
+
+  }
+  componentDidMount() {
+     this.checkPermission()
+    this.getCurrentTime();
+
   }
 
-  checkPermission = async () => {
+  componentDidUpdate() {
+    setTimeout(() => {
+      BackHandler.addEventListener('hardwareBackPress', () =>
+          this.processBackPress()
+      );
+    }, 100);
+  }
+
+  componentWillUnmount() {
+    this.pause();
+    setTimeout(() => {
+      BackHandler.removeEventListener('hardwareBackPress', () =>
+          this.processBackPress()
+      );
+    }, 0);
+  }
+
+  processBackPress() {
+    console.log('Part');
+    const { goBack } = this.props.navigation;
+    goBack(null);
+    return true;
+  }
+
+  getCurrentTime(){
+    console.log('GET DATAAAAA',this.props.oyeURL)
+    axios
+        .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          }
+        })
+        .then(res => {
+         // console.log('current time',res);
+          console.log('current time',res.data.data.currentDateTime);
+
+          this.setState({ currentTime:res.data.data.currentDateTime });
+        })
+        .catch(error => {
+          console.log(error, 'erro_fetching_data');
+          this.setState({ currentTime: 'failed' });
+        });
+  }
+
+
+    checkPermission = async () => {
     AudioRecord.init(options);
     if (Platform.OS === 'android') {
       check(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
@@ -129,13 +132,13 @@ class StaffLeaveWithVendor extends Component {
           case RESULTS.UNAVAILABLE:
             this.requestPermission();
             console.log(
-              'This feature is not available (on this device / in this context)'
+                'This feature is not available (on this device / in this context)'
             );
             break;
           case RESULTS.DENIED:
             this.requestPermission();
             console.log(
-              'The permission has not been requested / is denied but requestable'
+                'The permission has not been requested / is denied but requestable'
             );
             break;
           case RESULTS.GRANTED:
@@ -152,13 +155,13 @@ class StaffLeaveWithVendor extends Component {
           case RESULTS.UNAVAILABLE:
             this.requestPermission();
             console.log(
-              'This feature is not available (on this device / in this context)'
+                'This feature is not available (on this device / in this context)'
             );
             break;
           case RESULTS.DENIED:
             this.requestPermission();
             console.log(
-              'The permission has not been requested / is denied but requestable'
+                'The permission has not been requested / is denied but requestable'
             );
             break;
           case RESULTS.GRANTED:
@@ -181,27 +184,358 @@ class StaffLeaveWithVendor extends Component {
     }
   };
 
+
+
+  render() {
+    return(
+    <View style={{width:'100%',height:'100%'}}>
+       <View style={{alignItems:'center',justifyContent:'center',marginTop:10,}}>
+         <Text style={{fontSize:18,color:base.theme.colors.primary}}>Leave with Vendor </Text>
+       </View>
+      <View style={{flexDirection: 'row', alignItems: 'center',marginLeft:20,marginTop:20}}>
+        {this.props.staffReducer.staffProfilePic === '' ?
+            <Image style={StaffStyle.staffImg}
+                   source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
+            />
+            :
+            <Image style={StaffStyle.staffImg}
+                   source={{uri: base.utils.strings.imageUrl + this.props.staffReducer.staffProfilePic}}/>
+        }
+        <View style={{ marginLeft: 10,height:'100%',
+          width: '80%',flexDirection:'row',alignItems:'center',justifyContent:'flex-start'}}>
+          <Text style={StaffStyle.staffText}
+                numberofLines={1}
+                ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
+          {this.props.staffReducer.staffDesignation !="" ?
+              <Text style={StaffStyle.desigText}> ({' '}{this.props.staffReducer.staffDesignation}{' '})</Text>
+              : <View/>}
+        </View>
+
+      </View>
+      <View style={{height:'38%',width:'95%',alignSelf:'center',marginTop:25,
+        borderRadius:8, borderColor: base.theme.colors.lightgrey,  backgroundColor: base.theme.colors.white,
+        shadowColor: base.theme.colors.greyHead,
+        shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+        shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+        shadowRadius: 1, elevation: 5, padding: 5, borderBottomWidth: 0.5,}}>
+        <View style={{marginTop:15,flexDirection:'row',marginRight:10}}>
+          {this.state.vendorImages.length !==0 ?
+              <FlatList
+                  keyExtractor={(item, index) => index.toString()}
+                  data={this.state.vendorImages}
+                  renderItem={(item, index) => this.renderImages(item, index)}
+                  horizontal={true}
+              />
+              : <View/>}
+          {this.state.vendorImages.length===5?
+              <View/>:
+              <TouchableOpacity style={{width:80,height:80,backgroundColor:base.theme.colors.shadedWhite,
+              alignItems:'center',justifyContent:'center',borderRadius:10,marginLeft:10}}
+                                onPress={() => this.selectImage()}>
+                <Image borderStyle
+                       style={{height:40,width:40,marginBottom:5}}
+                       source={require('../../../../../icons/leave_vender_add.png')}
+                />
+                <Text style={{fontSize:12,color:base.theme.colors.black}}>
+                  Add Photo
+                </Text>
+              </TouchableOpacity>}
+        </View>
+        <View style={{flexDirection:'row',alignItems:'space-between',marginTop:50,marginLeft:10,marginRight:10}}>
+          {!this.state.isRecord ?
+            <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={() =>this.start()}>
+              <Image borderStyle
+                     style={{height:40,width:40}}
+                     source={require('../../../../../icons/leave_vender_record.png')}
+              />
+            </TouchableOpacity> :
+          <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}}  onPress={() =>this.stop()}>
+            <Image borderStyle
+                   style={{height:40,width:40}}
+                   source={require('../../../../../icons/leave_vender_stop.png')}
+            />
+          </TouchableOpacity>}
+          <View style={{width:'70%',height:40,marginLeft:10,alignItems:'flex-start',justifyContent:'center',}}>
+            <Text style={{fontSize:16,color:base.theme.colors.grey,marginBottom:5}}>{!this.state.isRecord? "Click to record":"Recording...."}</Text>
+            <View style={{width:'100%',height:'10%',backgroundColor:base.theme.colors.shadedWhite,borderRadius:5}}></View>
+          </View>
+          {this.state.audioRecord == "" ?
+              <TouchableOpacity style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: 40,
+                width: 40,
+                marginLeft: 10,
+                borderRadius: 8,
+                borderColor: base.theme.colors.lightgrey,
+                backgroundColor: base.theme.colors.white,
+                shadowColor: base.theme.colors.greyHead,
+                shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+                shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+                shadowRadius: 1,
+                elevation: 5,
+                borderBottomWidth: 0.5,
+              }} onPress={() => Alert.alert('Please record a audio to listen')}>
+                <Image resizeMode={'center'}
+                       style={{height: 40, width: 40}}
+                       source={require('../../../../../icons/leave_vender_play1.png')}
+                />
+              </TouchableOpacity>
+              :
+              this.state.isPlay ?
+                  <TouchableOpacity style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 40,
+                    width: 40,
+                    marginLeft: 10,
+                    borderRadius: 8,
+                    borderColor: base.theme.colors.lightgrey,
+                    backgroundColor: base.theme.colors.white,
+                    shadowColor: base.theme.colors.greyHead,
+                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+                    shadowRadius: 1,
+                    elevation: 5,
+                    borderBottomWidth: 0.5,
+                  }} onPress={() => this.play()}>
+                    <Image resizeMode={'center'}
+                           style={{height: 40, width: 40}}
+                           source={require('../../../../../icons/leave_vender_play.png')}
+                    />
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 40,
+                    width: 40,
+                    marginLeft: 10,
+                    borderRadius: 8,
+                    borderColor: base.theme.colors.lightgrey,
+                    backgroundColor: base.theme.colors.white,
+                    shadowColor: base.theme.colors.greyHead,
+                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+                    shadowRadius: 1,
+                    elevation: 5,
+                    borderBottomWidth: 0.5,
+                  }} onPress={() =>this.pause()}>
+                    <Image resizeMode={'center'}
+                           style={{height: 40, width: 40}}
+                           source={require('../../../../../icons/leave_vender_pause.png')}
+                    />
+                  </TouchableOpacity>
+          }
+        </View>
+      </View>
+
+      <View style={{height:'20%',width:'90%',alignSelf:'center',marginTop:20,}}>
+        <Text style={{fontSize:15,color:base.theme.colors.black}}>Comment</Text>
+        <View style={{height:'70%',width:'100%',borderColor:base.theme.colors.primary,
+          borderWidth:1.5,borderRadius:10,marginTop:10,
+          justifyContent:'center',alignItems:'center'}}>
+          <TextInput
+              style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5,width:'90%'}}
+              onChangeText={(text) => this.setState({comment:text})}
+              value={this.state.comment}
+              placeholder="Write a comment here..."
+              placeholderTextColor={base.theme.colors.grey}
+          />
+        </View>
+
+      </View>
+      <View style={{height:'10%',width:'100%',alignItems:'center',justifyContent:'center',marginTop:10,}}>
+      <OSButton
+          height={'65%'}
+          width={'30%'}
+          borderRadius={25}
+          oSBText={'Submit'}
+          onButtonClick={() => this.checkValidation()}/>
+      </View>
+      {this._renderModal1()}
+    </View>
+    );
+  }
+
+  renderImages(item, index) {
+    console.log('Images list ',item)
+    let imageURI = {uri: item.item.fileUrl};
+
+    return (
+        <View style={{
+          height: 80,
+          width: 90,
+          flexDirection: 'row',
+          marginLeft: 10,
+          backgroundColor: base.theme.colors.shadedWhite,
+          borderRadius: 10,
+          padding: 5
+        }}>
+                     <TouchableOpacity
+                    style={{alignSelf: 'flex-end',}}
+                    onPress={() => this._enlargeImage(imageURI)}
+                >
+                  <Image
+                      style={CreateSOSStyles.imageViewExp}
+                      source={imageURI}
+                  />
+                </TouchableOpacity>
+              <TouchableOpacity
+                  style={{height: 20, width: 20,}}
+                  onPress={() => this.deleteImageFromList(item)}
+              >
+                <Image
+                    style={{height: 20, width: 20, position: 'absolute', alignSelf: 'flex-start', marginLeft: 3}}
+                    source={require('../../../../../icons/close_btn1.png')}
+                />
+              </TouchableOpacity>
+        </View>
+
+    )
+
+  }
+
+  deleteImageFromList(item) {
+    let self = this;
+    let imageList = self.state.vendorImages;
+    let newImgList = [];
+    let j = 0;
+    for (let i = 0; i < imageList.length; i++) {
+      if (item.index != i) {
+        newImgList[j] = imageList[i]
+        j = j + 1
+      }
+    }
+    self.setState({
+      vendorImages: newImgList
+    })
+  }
+  _enlargeImage(imageURI) {
+    console.log("Sele:", imageURI);
+    this.setState({
+      selectedImage: imageURI,
+      isModalOpen: true
+    })
+  }
+  _renderModal1() {
+    return (
+        <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={this.state.vendorImages}
+            horizontal={true}
+            renderItem={(item, index) => this._renderModal(item, index)}
+        />
+    )
+  }
+  _renderModal() {
+    return (
+        <Modal
+            onRequestClose={() => this.setState({isModalOpen: false})}
+            isVisible={this.state.isModalOpen}>
+          <View style={{height: heightPercentageToDP('30%'), justifyContent: 'center', alignItems: 'center',borderRadius:10}}>
+            <Image
+                resizeMode={'contain'}
+                style={{
+                  height: heightPercentageToDP('40%'),
+                  width: heightPercentageToDP('40%'),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                source={this.state.selectedImage}
+            />
+            <TouchableHighlight
+                underlayColor={base.theme.colors.transparent}
+                style={{top: 20}}
+                onPress={() => this.setState({isModalOpen: false})}>
+              <Text style={CreateSOSStyles.emergencyHeader}>Close</Text>
+            </TouchableHighlight>
+          </View>
+        </Modal>
+    )
+  }
+
+  checkValidation(){
+    let self=this;
+    if(self.state.audioRecord==""){
+      Alert.alert('Please record audio.It is mandatory')
+    }
+    else{
+      self.uploadAudio(self.state.audioRecord)
+    }
+  }
+
+  selectImage() {
+    console.log('Set Image');
+    const options = {
+      quality: 0.5,
+      maxWidth: 250,
+      maxHeight: 250,
+      cameraRoll: false,
+      storageOptions: {
+        skipBackup: true,
+        path: 'tmp_files'
+      },
+    };
+    let self = this;
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else if (response.customButton) {
+      } else {
+        console.log('ImagePicker : ', response);
+        let img = self.state.vendorImages;
+        img.push({fileUrl: response.uri, type: 'Image', res:response,isUpload:false})
+        self.setState({
+          vendorImages: img,
+        })
+
+      }
+    });
+
+  }
+
+  async uploadFile() {
+    console.log('List coming to upload file',this.state.vendorImages);
+    this.setState({isLoading:true})
+    let self = this;
+    let vendorImages = self.state.vendorImages;
+    for (let i = 0; i < vendorImages.length; i++) {
+      if(!vendorImages[i].isUpload) {
+        let source = (Platform.OS === 'ios') ? vendorImages[i].res.uri : vendorImages[i].res.uri;
+        const form = new FormData();
+        let imgObj = {
+          name: (vendorImages[i].res.fileName || vendorImages[i].res.name !== undefined) ? vendorImages[i].res.fileName ? vendorImages[i].res.fileName : vendorImages[i].res.name : "XXXXX.jpg",
+          uri: source,
+          type: (vendorImages[i].res.type !== undefined || vendorImages[i].res.type != null) ? vendorImages[i].res.type : "image/jpeg"
+        };
+        form.append('image', imgObj);
+
+        let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
+        console.log('List coming to upload file666666',stat);
+
+        if (stat) {
+          try {
+            self.setState({
+              imagesString: self.state.imagesString != '' ? self.state.imagesString + ',' + stat : stat,
+            })
+          } catch (err) {
+            self.setState({
+              isLoading: false
+            })
+            console.log('err', err)
+          }
+        }
+      }
+    }
+    self.submitVendorDetails()
+  }
+
   start = async () => {
-    // AudioRecord.init(options);
-    // setTimeout(() => {
     AudioRecord.init(options);
     AudioRecord.start();
-    this.setState({
-      audioFile: '',
-      recording: true,
-      loaded: false,
-      buttonId: 2
-    });
+    this.setState({isRecord:true})
     this.timeStamp();
-  };
-
-  stop = async () => {
-    if (!this.state.recording) return;
-    console.log('stop record');
-    let audioFile = await AudioRecord.stop();
-    console.log('audioFile', audioFile);
-    this.setState({ audioFile, recording: false, buttonId: 1, playBtnId: 1 });
-    this.uploadAudio(audioFile);
   };
 
   timeStamp = () => {
@@ -211,13 +545,78 @@ class StaffLeaveWithVendor extends Component {
     });
   };
 
+  stop = async () => {
+    this.setState({isRecord:false})
+    console.log('stop record');
+    let audioFile = await AudioRecord.stop();
+    console.log('audioFile', audioFile);
+    this.setState({audioRecord:audioFile})
+    //this.uploadAudio(audioFile);
+  };
+
+  uploadAudio = async result => {
+
+    const path = Platform.OS === 'ios' ? result : `file://${result}`;
+   console.log('UPLOADING AUDIO',path,result)
+    const formData = new FormData();
+
+    formData.append('file', {
+      uri: path,
+      name: `${this.state.timestamp}hello.wav`,
+      type: 'audio/wav'
+    });
+
+    console.log(formData, 'FormData');
+    let stat = await base.services.MediaUploadApi.uploadRelativeImage(formData);
+    console.log('Uploaded Audio file',stat)
+    try {
+      this.setState({
+        audioToServer:stat
+      });
+    } catch (e) {
+      console.log('Errorrrrrrrrrrrrrr', e);
+    }
+
+    this.uploadFile()
+
+
+  };
+
+  play = async () => {
+    this.setState({isPlay:false})
+
+    try {
+        await this.load();
+      } catch (error) {
+        console.log(error);
+
+
+    }
+
+    Sound.setCategory('Playback');
+
+    this.sound.play(success => {
+      if (success) {
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed due to audio decoding errors');
+      }
+      this.setState({isPlay:true})
+    });
+  };
+
+  pause = () => {
+    this.sound.pause();
+    this.setState({isPlay:true})
+  };
+
   load = () => {
     return new Promise((resolve, reject) => {
-      if (!this.state.audioFile) {
+      if (!this.state.audioRecord) {
         return reject('file path is empty');
       }
 
-      this.sound = new Sound(this.state.audioFile, '', error => {
+      this.sound = new Sound(this.state.audioRecord, '', error => {
         if (error) {
           console.log('failed to load the file', error);
           return reject(error);
@@ -228,1626 +627,93 @@ class StaffLeaveWithVendor extends Component {
     });
   };
 
-  play = async () => {
-    if (!this.state.loaded) {
-      try {
-        await this.load();
-      } catch (error) {
-        console.log(error);
+  async submitVendorDetails(){
+    var imgUrl=this.state.imagesString;
+
+    let vendorImages=this.state.vendorImages;
+    if(vendorImages.length !==0){
+      for(let i=0;i<vendorImages.length;i++){
+        if(vendorImages[i].isUpload){
+          imgUrl=imgUrl !=''?imgUrl+','+vendorImages[i].fileUrl:vendorImages[i].fileUrl
+        }
       }
     }
-
-    this.setState({ paused: false });
-    Sound.setCategory('Playback');
-
-    this.sound.play(success => {
-      if (success) {
-        console.log('successfully finished playing');
-      } else {
-        console.log('playback failed due to audio decoding errors');
-      }
-      this.setState({ paused: true });
-      // this.sound.release();
-    });
-  };
-
-  pause = () => {
-    this.sound.pause();
-    this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
-  };
-
-  componentDidMount() {
-    this.checkPermission();
-    this.visitorID();
-    console.log(
-      'IDDDDDDD',
-      this.props.navigation.state.params.StaffId,
-      this.props.navigation.state.params.StaffName
-    );
-    let self = this;
-    setTimeout(() => {
-      this.setState({
-        isLoading: false
-      });
-    }, 1500);
-    AudioRecord.init(options);
-
-    axios
-      .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-        }
-      })
-      .then(res => {
-        console.log(res.data, 'current time');
-        this.setState({ currentTime: res.data.data.currentDateTime });
-      })
-      .catch(error => {
-        console.log(error, 'erro_fetching_data');
-        this.setState({ currentTime: 'failed' });
-      });
-  }
-
-  componentDidUpdate() {
-    setTimeout(() => {
-      BackHandler.addEventListener('hardwareBackPress', () =>
-        this.processBackPress()
-      );
-    }, 100);
-  }
-
-  componentWillUnmount() {
-    setTimeout(() => {
-      BackHandler.removeEventListener('hardwareBackPress', () =>
-        this.processBackPress()
-      );
-    }, 0);
-  }
-
-  processBackPress() {
-    console.log('Part');
-    const { goBack } = this.props.navigation;
-    goBack(null);
-    return true;
-  }
-
-  setImage() {
-    console.log('Set Image');
-    const options = {
-      quality: 0.5,
-      maxWidth: 250,
-      maxHeight: 250,
-      cameraRoll: true,
-      storageOptions: {
-        skipBackup: true,
-        path: 'tmp_files'
-      }
-    };
-    let self = this;
-    ImagePicker.launchCamera(options, response => {
-      console.log('response:', response);
-      if (response.didCancel) {
-      } else if (response.error) {
-      } else if (response.customButton) {
-      } else {
-        console.log('ImagePicker : ', response);
-        switch (this.state.id) {
-          case 1:
-            self.setState({
-              myProfileImage1: response.uri
-            });
-            this.uploadImage(response);
-            // alert(response.uri);
-            break;
-          case 2:
-            self.setState({
-              myProfileImage2: response.uri
-            });
-            this.uploadImage(response);
-            // alert(response.uri);
-            break;
-          case 3:
-            self.setState({
-              myProfileImage3: response.uri
-            });
-            this.uploadImage(response);
-            // alert(response.uri);
-            break;
-          case 4:
-            self.setState({
-              myProfileImage4: response.uri
-            });
-            this.uploadImage(response);
-            // alert(response.uri);
-            break;
-          case 5:
-            self.setState({
-              myProfileImage5: response.uri
-            });
-            this.uploadImage(response);
-            // alert(response.uri);
-            break;
-        }
-        // self.setState(
-        //   {
-        //     photo: response.uri,
-        //     photoDetails: response,
-        //     isPhotoAvailable: true,
-        //     imagePath: response.path,
-        //     relativeImage1: response.uri,
-        //   },
-        //   () => self.uploadImage(response),
-        //   alert(response.uri),
-        //   console.log('Image Details5', response.uri),
-        // );
-      }
-    });
-  }
-  async uploadImage(response) {
-    console.log('Image upload before', response);
-    let self = this;
-    let source = Platform.OS === 'ios' ? response.uri : response.uri;
-    console.log('Source', source);
-    const form = new FormData();
-    let imgObj = {
-      name: response.fileName !== undefined ? response.fileName : 'XXXXX.jpg',
-      uri: source,
-      type:
-        response.type !== undefined || response.type != null
-          ? response.type
-          : 'image/jpeg'
-    };
-    form.append('image', imgObj);
-    console.log('ImageObj', imgObj);
-    let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
-    // console.log('Photo upload response', stat, response);
-    if (stat) {
-      try {
-        switch (this.state.id) {
-          case 1:
-            self.setState({
-              relativeImage1: stat,
-              isPhotoAvailable: true,
-              photo: response.uri,
-              photoDetails: response,
-              imagePath: response.path
-            });
-            break;
-          case 2:
-            self.setState({
-              relativeImage2: stat,
-              isPhotoAvailable: true,
-              photo: response.uri,
-              photoDetails: response,
-              imagePath: response.path
-            });
-            break;
-          case 3:
-            self.setState({
-              relativeImage3: stat,
-              isPhotoAvailable: true,
-              photo: response.uri,
-              photoDetails: response,
-              imagePath: response.path
-            });
-            break;
-          case 4:
-            self.setState({
-              relativeImage4: stat,
-              isPhotoAvailable: true,
-              photo: response.uri,
-              photoDetails: response,
-              imagePath: response.path
-            });
-            break;
-          case 5:
-            self.setState({
-              relativeImage5: stat,
-              isPhotoAvailable: true,
-              photo: response.uri,
-              photoDetails: response,
-              imagePath: response.path
-            });
-            break;
-        }
-        console.log(
-          'Photo upload response',
-          stat,
-          response,
-          this.state.relativeImage1,
-          this.state.relativeImage2,
-          this.state.relativeImage3,
-          this.state.relativeImage4,
-          this.state.relativeImage5
-        );
-      } catch (err) {
-        console.log('err', err);
-      }
-    }
-  }
-
-  // uploadAudio = async result => {
-  //   console.log('Audio', result[0]);
-  //   const path = Platform.OS === 'ios' ? result : result; //`Images/${result[0]}`;
-  //   console.log('PATH', result[0], path);
-
-  //   const formData = new FormData();
-
-  //   formData.append('file', {
-  //     uri: path,
-  //     name: 'hello1111.aac',
-  //     type: 'audio/aac'
-  //   });
-
-  //   console.log(formData, 'FormData');
-  //   let stat = await base.services.MediaUploadApi.uploadRelativeImage(formData);
-  //   try {
-  //     this.setState({
-  //       mp3: stat
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  //   console.log('Stat222222222222222222222222:', stat);
-  // };
-
-  uploadAudio = async result => {
-    const newUri = result.replace('file://', 'file:///');
-
-    // alert(JSON.stringify(result));
-
-    console.log('Audio', result);
-    const path = Platform.OS === 'ios' ? result : `file://${result}`;
-    // console.log('PATH', path);
-
-    // alert(JSON.stringify(path));
-    const formData = new FormData();
-
-    // alert(JSON.stringify(stat));
-
-    formData.append('file', {
-      uri: path,
-      name: `${this.state.timestamp}hello.wav`,
-      type: 'audio/wav'
-    });
-
-    console.log(formData, 'FormData');
-    let stat = await base.services.MediaUploadApi.uploadRelativeImage(formData);
-    try {
-      this.setState({
-        mp3: stat
-      });
-    } catch (e) {
-      console.log('Errorrrrrrrrrrrrrr', e);
-    }
-
-    // alert(JSON.stringify(stat));
-    console.log('Stat222222222222222222222222, UPLOAD:', stat);
-  };
-
-  image1Exp = () => {};
-  image2Exp() {
-    // alert('Button CLicked');
-    return (
-      <View>
-        <ZoomImage
-          source={{ uri: this.state.relativeImage2 }}
-          imgStyle={{
-            height: hp('4%'),
-            width: hp('4%'),
-            borderRadius: hp('2%'),
-            borderColor: 'orange',
-            borderWidth: hp('0.1%')
-          }}
-          duration={200}
-          enableScaling={false}
-          easingFunc={Easing.ease}
-        />
-      </View>
-    );
-  }
-
-  onStartRecord = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the storage');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-          {
-            title: 'Permissions for write access',
-            message: 'Give permission to your storage to write a file',
-            buttonPositive: 'ok'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the camera');
-        } else {
-          console.log('permission denied');
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
-    const path = Platform.select({
-      ios: 'hello.m4a',
-      android: 'sdcard/hello.aac' //here?
-    });
-
-    const audioSet = {
-      AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
-      AudioSourceAndroid: AudioSourceAndroidType.MIC,
-      AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
-      AVNumberOfChannelsKeyIOS: 2,
-      AVFormatIDKeyIOS: AVEncodingOption.aac
-    };
-    console.log('audioSet', audioSet);
-    const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
-    this.audioRecorderPlayer.addRecordBackListener(e => {
-      this.setState({
-        recordSecs: e.current_position,
-        recordTime: this.audioRecorderPlayer.mmssss(
-          Math.floor(e.current_position)
-        ),
-        buttonId: 2
-      });
-    });
-    // alert('Recording Started');
-    // console.log(`uri: ${uri}`);
-  };
-
-  onStopRecord = async () => {
-    const result = await this.audioRecorderPlayer.stopRecorder();
-    this.audioRecorderPlayer.removeRecordBackListener();
-    this.setState({
-      recordSecs: 0,
-      buttonId: 1,
-      playBtnId: 1,
-
-      mp3uri: result
-    });
-    // alert('Recording Stop');
-    // console.log('.substring(14, 23)', result.substring(14, 23));
-    // console.log('this state uri', this.state.mp3uri);
-    // this.uploadAudio(result.match('hello.m4a') || result.match('hello.mp3'));
-    this.uploadAudio(result);
-  };
-
-  onStatusPress = e => {
-    const touchX = e.nativeEvent.locationX;
-    console.log(`touchX: ${touchX}`);
-    const playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth - 56 * ratio);
-    console.log(`currentPlayWidth: ${playWidth}`);
-
-    const currentPosition = Math.round(this.state.currentPositionSec);
-    console.log(`currentPosition: ${currentPosition}`);
-
-    if (playWidth && playWidth < touchX) {
-      const addSecs = Math.round(currentPosition + 3000);
-      this.audioRecorderPlayer.seekToPlayer(addSecs);
-      console.log(`addSecs: ${addSecs}`);
-    } else {
-      const subSecs = Math.round(currentPosition - 3000);
-      this.audioRecorderPlayer.seekToPlayer(subSecs);
-      console.log(`subSecs: ${subSecs}`);
-    }
-  };
-
-  onStartPlay = async () => {
-    // this.setState({
-    //   playBtnId: 2
-    // });
-    // console.log('Play Button', this.state.playBtnId);
-    const path = Platform.select({
-      ios: 'hello.m4a',
-      android: 'sdcard/hello.mp4'
-    });
-    const msg = await this.audioRecorderPlayer.startPlayer(path);
-    this.audioRecorderPlayer.setVolume(1.0);
-    console.log(msg);
-    this.audioRecorderPlayer.addPlayBackListener(e => {
-      if (e.current_position === e.duration) {
-        console.log('finished');
-        this.audioRecorderPlayer.stopPlayer();
-        this.setState({
-          playBtnId: 2
-        });
-      }
-      this.setState({
-        currentPositionSec: e.current_position,
-        currentDurationSec: e.duration,
-        playTime: this.audioRecorderPlayer.mmssss(
-          Math.floor(e.current_position)
-        ),
-        duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)),
-        playBtnId: 2
-      });
-      console.log('Play Button Id', this.state.playTime);
-    });
-  };
-
-  onStopPlay = async () => {
-    console.log('onStopPlay');
-    this.audioRecorderPlayer.stopPlayer();
-    this.audioRecorderPlayer.removePlayBackListener();
-    this.setState({
-      playBtnId: 1,
-      buttonId: 1
-    });
-  };
-
-  visitorID = () => {
-    fetch(
-      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID`,
-      {
-        method: 'POST',
-        headers: {
-          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          StartDate: new Date(),
-          EndDate: new Date(),
-          ASAssnID: this.props.dashboardReducer.assId,
-          UNUnitID: this.props.dashboardReducer.uniID,
-          ACAccntID: this.props.userReducer.MyAccountID
-        })
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
-        //console.log("fsbkfh", count);
-        console.log('Deliveries___', responseJson);
-        if (responseJson.success) {
-          for (let i = 0; i < responseJson.data.visitorlog.length; i++) {
-            if (
-              responseJson.data.visitorlog[i].reRgVisID ==
-              this.props.navigation.state.params.StaffId
-            ) {
-              this.setState({
-                isLoading: false,
-                dataSource: responseJson.data.visitorlog,
-                visworkID: responseJson.data.visitorlog[i].vlVisLgID
-              });
-            }
-            console.log(
-              'visworkID',
-              this.state.visworkID,
-              responseJson.data.visitorlog[i].reRgVisID ===
-                this.props.navigation.state.params.StaffId
-            );
-          }
-        } else {
-          this.setState({
-            isLoading: false
-          });
-        }
-      })
-
-      .catch(error => {
-        this.setState({ error, loading: false });
-        console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-      });
-  };
-  datasend = () => {
-
-    console.log('Enter in data to Send#####', )
-
-    let self = this;
-    let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
-    let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
-    let img3 = self.state.relativeImage3 ? self.state.relativeImage3 : '';
-    let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
-    let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
-    let comments = self.state.comment ? self.state.comment : '';
-    let visitorid = self.state.visworkID;
-    let visitorname = self.props.navigation.state.params.StaffName;
-    let mp3 = self.state.mp3;
-    console.log(
-      'All Data @@@@@@@@',
-      img1,
-      img2,
-      img3,
-      img4,
-      img5,
-      mp3,
-      comments,
-      visitorid,
-      visitorname,
-      self.props.dashboardReducer.assId,
-      self.props.dashboardReducer.uniID,
-      self.props.oyeURL,
-        this.props.oyeURL
-    );
+    let self=this
+    console.log('List coming to upload file&&&&&&',imgUrl)
     self.setState({
       isLoading: true
     });
+    let visitorId=self.props.staffReducer.staffId
+    console.log('UPDATE FIELDS IN STAFF',self.props.staffReducer.staffName,self.state.comment,imgUrl,self.state.audioToServer,visitorId)
     fetch(
-      `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-        },
-        body: JSON.stringify({
-          VLVenName: `${visitorname}`,
-          VLCmnts: `${comments}`,
-          VLVenImg: `${img1},${img2},${img3},${img4},${img5}`,
-          VLVoiceNote: mp3,
-          VLVisLgID:17268
-        })
-      }
+        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/UpdateLeaveWithVendor`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          },
+          body: JSON.stringify({
+            VLVenName: self.props.staffReducer.staffName,
+            VLCmnts: self.state.comment,
+            VLVenImg: imgUrl,
+            VLVoiceNote:self.state.audioToServer,
+            VLVisLgID:visitorId
+          })
+        }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        //var count = Object.keys(responseJson.data.visitorlogbydate).length;
-        console.log('Reports_Data@@@@@@', responseJson);
-        gateFirebase
-          .database()
-          .ref(
-            `NotificationSync/A_${this.props.dashboardReducer.assId}/${visitorid}`
-          )
-          .update({
-            newAttachment:true,
-            updatedTime: this.state.currentTime
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log('Reports_Data@@@@@@', responseJson);
+          gateFirebase
+              .database()
+              .ref(
+                  `NotificationSync/A_${this.props.dashboardReducer.assId}/${visitorId}`
+              )
+              .update({
+                newAttachment:true,
+                updatedTime:self.state.currentTime
+              });
+          this.setState({
+            isLoading: false,
           });
-        this.setState({
-          isLoading: false,
-          relativeImage1: '',
-          relativeImage2: '',
-          relativeImage3: '',
-          relativeImage4: '',
-          relativeImage5: '',
-
-          myProfileImage1: '',
-          myProfileImage2: '',
-          myProfileImage3: '',
-          myProfileImage4: '',
-          myProfileImage5: '',
-
-          mp3uri: '',
-          mp3: '',
-
-          imageUrl: '',
-          photo: null,
-          photoDetails: null,
-          isPhotoAvailable: false,
-          filePath: '',
-          imagePath: '',
-          id: '',
-
-          buttonId: 1,
-          playBtnId: 0,
-
-          recordSecs: 0,
-          recordTime: '00:00:00',
-          currentPositionSec: 0,
-          currentDurationSec: 0,
-          playTime: '00:00:00',
-          duration: '00:00:00',
-          datasource: [],
-
-          visitorName: '',
-          visitorId: '',
-          visitorList: [],
-
-          comment: '',
-          dropdownValue: '',
-
-          announcementId: '',
-
-          audioFile: '',
-          recording: false,
-          loaded: false,
-          paused: true,
-          currentTime: '',
-
-          timestamp: ''
+        //  this.pause();
+          this.setState({
+            vendorImages:[],
+            imagesString:"",
+            comment:"",
+            audioRecord:"",
+            audioToServer:"",
+            currentTime:"",
+            timeStamp:"",
+            selectedImage: "",
+            isModalOpen:false,
+            isRecord:false,
+            isPlay:true,
+          })
+          this.props.navigation.goBack();
+        })
+        .catch(error => {
+          this.setState({
+            isLoading: false,
+          });
+          console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
         });
-        this.pause();
-        this.props.navigation.goBack();
-      })
-
-      .catch(error => {
-        this.setState({
-          isLoading: false,
-          relativeImage1: '',
-          relativeImage2: '',
-          relativeImage3: '',
-          relativeImage4: '',
-          relativeImage5: '',
-
-          myProfileImage1: '',
-          myProfileImage2: '',
-          myProfileImage3: '',
-          myProfileImage4: '',
-          myProfileImage5: '',
-
-          mp3uri: '',
-          mp3: '',
-
-          imageUrl: '',
-          photo: null,
-          photoDetails: null,
-          isPhotoAvailable: false,
-          filePath: '',
-          imagePath: '',
-          id: '',
-
-          buttonId: 1,
-          playBtnId: 0,
-
-          recordSecs: 0,
-          recordTime: '00:00:00',
-          currentPositionSec: 0,
-          currentDurationSec: 0,
-          playTime: '00:00:00',
-          duration: '00:00:00',
-          datasource: [],
-          visitorName: '',
-          visitorId: '',
-          visitorList: [],
-
-          comment: '',
-          dropdownValue: '',
-
-          announcementId: '',
-
-          audioFile: '',
-          recording: false,
-          loaded: false,
-          paused: true,
-          currentTime: '',
-
-          timestamp: ''
-        });
-        console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-      });
-  };
-
-
-  render() {
-    const { recording, paused, audioFile } = this.state;
-    let playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth - 56 * ratio);
-    if (!playWidth) playWidth = 0;
-    console.log('COMMENT', this.state.comment.length);
-    console.log('PROPS:', this.props.navigation.state.params);
-    return (
-      <View style={styles.container}>
-        <View style={styles.viewForMyProfileText}>
-          <Text
-            style={{
-              fontSize: hp('2.5%'),
-              color: base.theme.colors.primary,
-              textAlign: 'center'
-            }}
-          >
-            Leave with Vendor
-          </Text>
-        </View>
-        <KeyboardAwareScrollView>
-          {/* <View
-            style={{ justifyContent: 'center', alignItems: 'center' }}
-          >
-
-          </View> */}
-          <View style={StaffStyle.detailsMainView}>
-            <View
-              style={{ ...StaffStyle.detailsLeftView, marginLeft: hp('2%') }}
-            >
-              {this.props.navigation.state.params.Pic === '' ? (
-                <Image
-                  style={StaffStyle.staffImg}
-                  source={{
-                    uri:
-                      'https://mediaupload.oyespace.com/' +
-                      base.utils.strings.noImageCapturedPlaceholder
-                  }}
-                />
-              ) : (
-                <Image
-                  style={StaffStyle.staffImg}
-                  source={{
-                    uri:
-                      base.utils.strings.imageUrl +
-                      this.props.navigation.state.params.Pic
-                  }}
-                />
-              )}
-              <View style={StaffStyle.textView1}>
-                <Text style={StaffStyle.staffText1} numberofLines={1}>
-                  {this.props.navigation.state.params.StaffName}
-                </Text>
-              </View>
-              {this.props.navigation.state.params.DeptName && (
-                <Text style={StaffStyle.desigText}>
-                  {' '}
-                  ({this.props.navigation.state.params.DeptName})
-                </Text>
-              )}
-            </View>
-          </View>
-
-          <Card
-            style={{
-              height: hp('25%'),
-              borderRadius: 10,
-              marginLeft: hp('2%'),
-              marginRight: hp('2%'),
-              marginTop: hp('2%'),
-              flexDirection: 'column'
-            }}
-          >
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              <View style={styles.relativeImgView}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ id: 1 }), this.setImage();
-                  }}
-                >
-                  {this.state.relativeImage1 === '' ? (
-                    <View
-                      style={{
-                        justifyContent: 'space-evenly',
-                        height: hp('8%')
-                      }}
-                    >
-                      <View
-                        style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          width: hp('4.5%'),
-                          height: hp('4.5%'),
-                          alignSelf: 'center'
-                        }}
-                      >
-                        <Image
-                          style={{ width: hp('4%'), height: hp('4%') }}
-                          source={require('../../../../../icons/leave_vender_add.png')}
-                        />
-                      </View>
-                      <View style={{ marginTop: hp('0.5%') }}>
-                        <Text style={{ fontSize: hp('1.4%') }}>Add Photo</Text>
-                      </View>
-                    </View>
-                  ) : (
-                    <View style={styles.containerView_ForProfilePicViewStyle}>
-                      <View>
-                        <Image
-                          style={{
-                            height: hp('10%'),
-                            width: hp('10%'),
-                            borderRadius: hp('1%')
-                          }}
-                          source={{ uri: this.state.myProfileImage1 }}
-                        />
-                      </View>
-                      {/* <TouchableOpacity>
-                        <View style={styles.imagesmallCircle}>
-                          <View
-                            style={{
-                              width: hp('5%'),
-                              height: hp('5%'),
-                              zIndex: 100
-                            }}
-                          >
-                            <ZoomImage
-                              style={[styles.smallImage]}
-                              source={{ uri: this.state.myProfileImage1 }}
-                              imgStyle={{
-                                height: hp('4%'),
-                                width: hp('4%'),
-                                borderRadius: hp('2%'),
-                                borderColor: 'orange',
-                                borderWidth: hp('0.1%'),
-                                marginRight: hp('2%')
-                              }}
-                            />
-                          </View>
-
-                          <View
-                            style={{
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              position: 'absolute',
-                              zIndex: 110
-                            }}
-                          >
-                            <Text
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                fontSize: hp('3%'),
-                                marginLeft: hp('1.5%'),
-                                color: base.theme.colors.black,
-                                fontWeight: '500'
-                              }}
-                            >
-                              +
-                            </Text>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                     */}
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </View>
-              {this.state.relativeImage1 ? (
-                <View style={styles.relativeImgView}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.setState({ id: 2 }), this.setImage();
-                    }}
-                  >
-                    {this.state.relativeImage2 === '' ? (
-                      <View
-                        style={{
-                          justifyContent: 'space-evenly',
-                          height: hp('8%')
-                        }}
-                      >
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: hp('4.5%'),
-                            height: hp('4.5%'),
-                            alignSelf: 'center'
-                          }}
-                        >
-                          <Image
-                            style={{ width: hp('4%'), height: hp('4%') }}
-                            source={require('../../../../../icons/leave_vender_add.png')}
-                          />
-                        </View>
-                        <View style={{ marginTop: hp('0.5%') }}>
-                          <Text style={{ fontSize: hp('1.4%') }}>
-                            Add Photo
-                          </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <View style={styles.containerView_ForProfilePicViewStyle}>
-                        <View>
-                          <Image
-                            style={{
-                              height: hp('10%'),
-                              width: hp('10%'),
-                              borderRadius: hp('1%')
-                            }}
-                            source={{ uri: this.state.myProfileImage2 }}
-                          />
-                        </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}> */}
-                        {/* <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage2 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View> */}
-
-                        {/* <Image
-                            style={{
-                              width: hp('6%'),
-                              height: hp('6%'),
-                              marginBottom: hp('15%'),
-                              position: 'absolute',
-                              marginRight: hp('5%')
-                              // backgroundColor: 'red'
-                            }}
-                            source={require('../../../../../icons/zoom_in_white.png')}
-                          /> */}
-                        {/* </View>
-                        </TouchableOpacity> */}
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View></View>
-              )}
-              {this.state.relativeImage1 && this.state.relativeImage2 ? (
-                <View style={styles.relativeImgView}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.setState({ id: 3 }), this.setImage();
-                    }}
-                  >
-                    {this.state.relativeImage3 === '' ? (
-                      <View
-                        style={{
-                          justifyContent: 'space-evenly',
-                          height: hp('8%')
-                        }}
-                      >
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: hp('4.5%'),
-                            height: hp('4.5%'),
-                            alignSelf: 'center'
-                          }}
-                        >
-                          <Image
-                            style={{ width: hp('4%'), height: hp('4%') }}
-                            source={require('../../../../../icons/leave_vender_add.png')}
-                          />
-                        </View>
-                        <View style={{ marginTop: hp('0.5%') }}>
-                          <Text style={{ fontSize: hp('1.4%') }}>
-                            Add Photo
-                          </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <View style={styles.containerView_ForProfilePicViewStyle}>
-                        <View>
-                          <Image
-                            style={{
-                              height: hp('10%'),
-                              width: hp('10%'),
-                              borderRadius: hp('1%')
-                            }}
-                            source={{ uri: this.state.myProfileImage3 }}
-                          />
-                        </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}>
-                            <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage3 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                       */}
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View></View>
-              )}
-              {this.state.relativeImage1 &&
-              this.state.relativeImage2 &&
-              this.state.relativeImage3 ? (
-                <View style={styles.relativeImgView}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.setState({ id: 4 }), this.setImage();
-                    }}
-                  >
-                    {this.state.relativeImage4 === '' ? (
-                      <View
-                        style={{
-                          justifyContent: 'space-evenly',
-                          height: hp('8%')
-                        }}
-                      >
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: hp('4.5%'),
-                            height: hp('4.5%'),
-                            alignSelf: 'center'
-                          }}
-                        >
-                          <Image
-                            style={{ width: hp('4%'), height: hp('4%') }}
-                            source={require('../../../../../icons/leave_vender_add.png')}
-                          />
-                        </View>
-                        <View style={{ marginTop: hp('0.5%') }}>
-                          <Text style={{ fontSize: hp('1.4%') }}>
-                            Add Photo
-                          </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <View style={styles.containerView_ForProfilePicViewStyle}>
-                        <View>
-                          <Image
-                            style={{
-                              height: hp('10%'),
-                              width: hp('10%'),
-                              borderRadius: hp('1%')
-                            }}
-                            source={{ uri: this.state.myProfileImage4 }}
-                          />
-                        </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}>
-                            <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage4 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                       */}
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View></View>
-              )}
-
-              {this.state.relativeImage1 &&
-              this.state.relativeImage2 &&
-              this.state.relativeImage3 &&
-              this.state.relativeImage4 ? (
-                <View style={styles.relativeImgView}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.setState({ id: 5 }), this.setImage();
-                    }}
-                  >
-                    {this.state.relativeImage5 === '' ? (
-                      <View
-                        style={{
-                          justifyContent: 'space-evenly',
-                          height: hp('8%')
-                        }}
-                      >
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: hp('4.5%'),
-                            height: hp('4.5%'),
-                            alignSelf: 'center'
-                          }}
-                        >
-                          <Image
-                            style={{
-                              width: hp('4%'),
-                              height: hp('4%')
-                            }}
-                            source={require('../../../../../icons/leave_vender_add.png')}
-                          />
-                        </View>
-                        <View style={{ marginTop: hp('0.3%') }}>
-                          <Text style={{ fontSize: hp('1.4%') }}>
-                            Add Photo
-                          </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <View style={styles.containerView_ForProfilePicViewStyle}>
-                        <View>
-                          <Image
-                            style={{
-                              height: hp('10%'),
-                              width: hp('10%'),
-                              borderRadius: hp('1%')
-                            }}
-                            source={{ uri: this.state.myProfileImage5 }}
-                          />
-                        </View>
-                        {/* <TouchableOpacity>
-                          <View style={styles.imagesmallCircle}>
-                            <View
-                              style={{
-                                width: hp('5%'),
-                                height: hp('5%'),
-                                zIndex: 100
-                              }}
-                            >
-                              <ZoomImage
-                                style={[styles.smallImage]}
-                                source={{ uri: this.state.myProfileImage5 }}
-                                imgStyle={{
-                                  height: hp('4%'),
-                                  width: hp('4%'),
-                                  borderRadius: hp('2%'),
-                                  borderColor: 'orange',
-                                  borderWidth: hp('0.1%'),
-                                  marginRight: hp('2%')
-                                }}
-                              />
-                            </View>
-
-                            <View
-                              style={{
-                                width: hp('6%'),
-                                height: hp('6%'),
-                                position: 'absolute',
-                                zIndex: 110
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  width: hp('6%'),
-                                  height: hp('6%'),
-                                  fontSize: hp('3%'),
-                                  marginLeft: hp('1.5%'),
-                                  color: base.theme.colors.black,
-                                  fontWeight: '500'
-                                }}
-                              >
-                                +
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                       */}
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View></View>
-              )}
-            </ScrollView>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                marginTop: hp('2%'),
-                height: hp('8%')
-              }}
-            >
-              <View
-                style={{
-                  width: hp('8%'),
-                  height: hp('8%'),
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                {this.state.buttonId === 1 ? (
-                  <TouchableOpacity onPress={() => this.start()}>
-                    <View
-                      style={{
-                        width: hp('8%'),
-                        height: hp('8%'),
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <Image
-                        style={{
-                          width: hp('5%'),
-                          height: hp('5%')
-                        }}
-                        source={require('../../../../../icons/leave_vender_record.png')}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity onPress={() => this.stop()}>
-                    <View
-                      style={{
-                        width: hp('8%'),
-                        height: hp('8%'),
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <Image
-                        style={{
-                          width: hp('5%'),
-                          height: hp('5%')
-                        }}
-                        source={require('../../../../../icons/leave_vender_stop.png')}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                )}
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'flex-start',
-                  justifyContent: 'center',
-                  height: hp('8%')
-                }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    height: hp('5%'),
-                    alignItems: 'flex-start',
-                    justifyContent: 'center'
-                  }}
-                >
-                  {this.state.buttonId === 1 ? (
-                    <Text>Click mic to record</Text>
-                  ) : (
-                    <Text style={styles.txtRecordCounter}>Recording...</Text>
-                  )}
-                </View>
-              </View>
-              <Card
-                style={{
-                  width: hp('5%'),
-                  height: hp('5%'),
-                  marginRight: hp('2%'),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: hp('1%')
-                }}
-              >
-                {this.state.playBtnId === 0 ? (
-                  <Image
-                    source={require('../../../../../icons/leave_vender_play1.png')}
-                  />
-                ) : (
-                  <View>
-                    {this.state.playBtnId === 1 && (
-                      <TouchableOpacity onPress={() => this.play()}>
-                        <View
-                          style={{
-                            width: hp('5%'),
-                            height: hp('5%'),
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}
-                        >
-                          <Image
-                            source={require('../../../../../icons/leave_vender_play.png')}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                )}
-              </Card>
-            </View>
-          </Card>
-          <View
-            style={{
-              marginHorizontal: hp('3%'),
-              marginTop: hp('2%')
-            }}
-          >
-            <View style={{ marginTop: hp('2%'), marginBottom: hp('1%') }}>
-              <Text style={{ fontSize: hp('1.8%') }}>Comment *</Text>
-            </View>
-
-            <View
-              style={{
-                borderColor: base.theme.colors.primary,
-                borderWidth: hp('0.1%'),
-                borderRadius: hp('1%'),
-                height: hp('12%'),
-                justifyContent: 'flex-end'
-              }}
-            >
-              <Item
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: hp('2%'),
-                  marginRight: hp('2%'),
-                  // marginHorizontal: hp('3%'),
-                  marginBottom: hp('3%')
-                }}
-              >
-                <Input
-                  multiline={true}
-                  numberOfLines={4}
-                  style={{ fontSize: hp('1.8%') }}
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  placeholder="Write a comment here..."
-                  value={this.state.comment}
-                  onChangeText={comment => this.setState({ comment: comment })}
-                />
-              </Item>
-            </View>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginVertical: hp('2%')
-              }}
-            >
-              <Button
-                bordered
-                warning
-                style={styles.button}
-                disabled={this.state.comment.length === 0}
-                onPress={() => this.datasend()}
-              >
-                <Text
-                  style={{
-                    color: 'white',
-                    fontSize: hp('2%'),
-                    fontWeight: '500'
-                  }}
-                >
-                  Submit
-                </Text>
-              </Button>
-            </View>
-          </View>
-        </KeyboardAwareScrollView>
-        {/* <ProgressLoader
-          isHUD={true}
-          isModal={true}
-          visible={this.state.isLoading}
-          color={base.theme.colors.primary}
-          hudColor={base.theme.colors.white}
-        /> */}
-      </View>
-    );
   }
+
+
+
+
 }
 
 const mapStateToProps = state => {
   return {
     oyeURL: state.OyespaceReducer.oyeURL,
     dashboardReducer: state.DashboardReducer,
-    userReducer: state.UserReducer
+    userReducer: state.UserReducer,
+    staffReducer: state.StaffReducer,
+
   };
 };
 export default connect(mapStateToProps)(StaffLeaveWithVendor);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  viewStyle1: {
-    backgroundColor: base.theme.colors.white,
-    height: hp('7%'),
-    width: '100%',
-    shadowColor: base.theme.colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    position: 'relative'
-  },
-  viewDetails1: {
-    width: '30%',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginLeft: 10
-  },
-  viewDetails2: {
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    width: hp('3%'),
-    height: hp('3%'),
-    marginTop: 5
-    // marginLeft: 10
-  },
-  image: {
-    width: wp('34%'),
-    height: hp('18%')
-  },
-
-  subContainer: {
-    height: '35%',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row'
-  },
-  relativeImgView: {
-    height: hp('10%'),
-    width: hp('10%'),
-    borderRadius: hp('1%'),
-    // borderWidth: 2,
-    marginHorizontal: 10,
-    marginTop: hp('2%'),
-    borderColor: base.theme.colors.primary,
-    backgroundColor: base.theme.colors.imageShadow,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column'
-  },
-  viewForMyProfileText: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    marginTop: hp('1.8%')
-  },
-  containerView_ForProfilePicViewStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'yellow',
-    height: hp('20%'),
-    width: hp('12%')
-    // marginTop: hp('2%')
-  },
-  imagesmallCircle: {
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    width: wp('40%'),
-    height: hp('2%'),
-    flexDirection: 'row'
-
-    // backgroundColor: 'yellow'
-  },
-  smallImage: {
-    width: hp('3.5%'),
-    height: hp('3.5%'),
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    marginBottom: hp('2%'),
-    marginRight: hp('1%')
-    // backgroundColor: 'yellow'
-  },
-  viewPlayer: {
-    marginTop: 8 * ratio,
-    alignSelf: 'stretch',
-    alignItems: 'center'
-  },
-  viewBar: {
-    backgroundColor: base.theme.colors.playprogressbar,
-    height: 4 * ratio,
-    alignSelf: 'stretch'
-  },
-  viewBarPlay: {
-    backgroundColor: 'white',
-    height: 4 * ratio,
-    width: 0
-  },
-  viewBarWrapper: {
-    marginTop: 1 * ratio,
-    marginHorizontal: 28 * ratio,
-    alignSelf: 'stretch'
-  },
-  button: {
-    width: hp('12%'),
-    height: hp('5%'),
-    borderRadius: 25,
-    borderWidth: 2,
-    //backgroundColor: base.theme.colors.white,
-    justifyContent: 'center',
-    marginLeft: 30,
-    marginRight: 30,
-    borderColor: base.theme.colors.white,
-    marginBottom: hp('2%'),
-    backgroundColor: base.theme.colors.primary
-  }
-});

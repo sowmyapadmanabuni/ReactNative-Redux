@@ -116,12 +116,10 @@ class AddRegularVisitor extends Component {
 
                         console.log('Association check', responseJson.success);
 
-                        this.props.navigation.navigate("App"); // Navigate to Join Association
+                        this.props.navigation.navigate('CreateOrJoinScreen')
                     } else {
-                        console.log("hiii", "failed");
                         alert("failed to add user !");
                     }
-                    console.log("suvarna", "hi");
                 })
                 .catch(error => {
                     console.error(error);
@@ -188,7 +186,7 @@ class AddRegularVisitor extends Component {
         }
     }
 
-    
+
 
     render() {
         return (
@@ -358,7 +356,7 @@ class AddRegularVisitor extends Component {
                                 JABM Property Managers Pvt Ltd{" "}
                             </Text>
                         </View>
-                        
+
                     </View>
                 </ScrollView>
             </View>
