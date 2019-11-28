@@ -1878,20 +1878,20 @@ class Dashboard extends PureComponent {
           />
         </View>
         <View style={{ ...Style.elevatedView, marginTop: 20 }}>
-         {/* <CardView
+         <CardView
             height={'100%'}
             width={'25%'}
             cardText={'Subscription'}
             cardIcon={require('../../../../icons/subscription_management.png')}
             marginTop={20}
             iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS == = 'ios' ? 40 : 20}
+            iconHeight={Platform.OS === 'ios' ? 40 : 20}
             onCardClick={() =>
               this.props.navigation.navigate('subscriptionManagement')
             }
             backgroundColor={base.theme.colors.cardBackground}
           />
-          {/* <CardView
+           <CardView
             height={'100%'}
             width={'25%'}
             cardText={'Accounting'}
@@ -1900,10 +1900,10 @@ class Dashboard extends PureComponent {
             cardIcon={require('../../../../icons/vehicle.png')}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
-            // onCardClick={() => this.props.navigation.navigate('oyeLiving')}
-            onCardClick={() => this.props.navigation.navigate('Accounting')}
-          /> */}
-          {/* <CardView
+             onCardClick={() => this.props.navigation.navigate('oyeLiving')}
+            //onCardClick={() => this.props.navigation.navigate('Accounting')}
+          /> 
+           <CardView
             height={'100%'}
             width={'25%'}
             cardText={'Reports'}
@@ -1914,7 +1914,7 @@ class Dashboard extends PureComponent {
             iconBorderRadius={0}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.props.navigation.navigate('reportsTab')}
-          /> */}
+          />
         </View>
         <View
           style={{
