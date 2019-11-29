@@ -723,7 +723,7 @@ class Dashboard extends PureComponent {
     }
 
 
-/* timer.setInterval(
+timer.setInterval(
          this,
          'syncData',
          () => {
@@ -732,7 +732,7 @@ class Dashboard extends PureComponent {
            //     //     // alert("hererereerrrereer");
          },
          5000
-     );*/
+     );
    }
 
 
