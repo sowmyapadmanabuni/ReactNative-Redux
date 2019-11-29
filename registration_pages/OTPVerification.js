@@ -97,7 +97,7 @@ class OTPVerification extends Component {
             };
 
             //http://122.166.168.160/champ/api/v1/account/verifyotp
-            url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/verifyotp`;
+            let url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/verifyotp`;
             console.log("req verifyotp ", JSON.stringify(anu) + " " + url);
 
             fetch(url, {

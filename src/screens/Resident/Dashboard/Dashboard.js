@@ -102,6 +102,7 @@ class Dashboard extends PureComponent {
       isConnected: true
 
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.backButtonListener = null;
     this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
@@ -121,6 +122,7 @@ class Dashboard extends PureComponent {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     console.log('API LEVEL#######',DeviceInfo.getAPILevel())
     console.log('API LEVEL#######1111111',DeviceInfo.getBaseOS())
     console.log('API LEVEL#######444444',DeviceInfo.getSystemVersion())
@@ -199,25 +201,30 @@ class Dashboard extends PureComponent {
     // );
   }
 
-  componentDidUpdate() {
+  /*componentDidUpdate() {
     if (Platform.OS === 'android') {
       setTimeout(() => {
         this.backButtonListener = BackHandler.addEventListener(
           'hardwareBackPress',
           () => {
             if (this.currentRouteName !== 'Main') {
-              return false;
+              console.log("<< 1 >>")
+              this.props.navigation.goBack(null);
+              //return false;
             }
-
             if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-              this.showExitAlert();
-              // BackHandler.exitApp();
-              //return true;
-            }
-            if (this.state.isSelectedCard === 'UNIT') {
+              console.log("<< 2 >>")
               this.showExitAlert();
               //BackHandler.exitApp();
+              return true;
+            }
+            if (this.state.isSelectedCard === 'UNIT') {
+              console.log("<< 3 >>", this.state.isSelectedCard);
+              this.showExitAlert();
+              return true;
+              //BackHandler.exitApp();
             } else {
+              console.log("<< else >>")
               this.changeCardStatus('UNIT');
             }
 
@@ -228,13 +235,43 @@ class Dashboard extends PureComponent {
         );
       }, 100);
     }
+  }*/
+
+  componentDidUpdate() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
   componentWillUnmount() {
+    console.log("componentWillUnmount")
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    // this.setState({
+    //   isSelectedCard:""
+    // });
+
     NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
-    this.backButtonListener.remove();
-    this.focusListener.remove();
+    //this.backButtonListener.remove();
+    //this.focusListener.remove();
   }
+
+  handleBackButtonClick() {
+    console.log("handleBackButtonClick ", this.state.isSelectedCard, this.currentRouteName)
+    if (this.state.isSelectedCard !== "UNIT") {
+      console.log("<< 1 >>");
+      this.changeCardStatus('UNIT');
+      this.props.navigation.goBack(null);
+    }
+    else if (this.currentRouteName !== 'Main') {
+      console.log("<< 2 >>");
+      this.props.navigation.goBack(null);
+    }
+    else{
+      console.log("<< 3 >>");
+      this.showExitAlert()
+    }
+    return true;
+    //this.props.navigation.goBack(null);
+  }
+
 
   showExitAlert() {
     Alert.alert(
@@ -723,7 +760,7 @@ class Dashboard extends PureComponent {
     }
 
 
-timer.setInterval(
+/*timer.setInterval(
          this,
          'syncData',
          () => {
@@ -732,7 +769,7 @@ timer.setInterval(
            //     //     // alert("hererereerrrereer");
          },
          5000
-     );
+     );*/
    }
 
 
