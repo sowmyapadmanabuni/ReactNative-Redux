@@ -74,7 +74,7 @@ class Dashboard extends PureComponent {
     this.props = props;
 
     this.state = {
-      myUnitCardHeight: '80%',
+      myUnitCardHeight: Platform.OS === 'ios'?'90%':'80%',
       myUnitCardWidth: '25%',
       adminCardHeight: '60%',
       adminCardWidth: '20%',
@@ -99,13 +99,20 @@ class Dashboard extends PureComponent {
       isDataVisible: false,
       isNoAssJoin: false,
       isSOSSelected: false,
-      isConnected: true
+      isConnected: true,
+      myUnitIconWidth:Platform.OS === 'ios' ? 30 : 20,
+      myUnitIconHeight:Platform.OS === 'ios' ? 30 : 20,
+      myAdminIconWidth:Platform.OS === 'ios' ? 20 : 20,
+      myAdminIconHeight:Platform.OS === 'ios' ? 20 : 20,
 
-    };
+
+  };
+
     this.backButtonListener = null;
     this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
   }
+
 
 
   componentWillMount() {
@@ -724,7 +731,7 @@ class Dashboard extends PureComponent {
 
 
 timer.setInterval(
-         this,
+        this,
          'syncData',
          () => {
            console.log("I am Timer");
@@ -1310,151 +1317,171 @@ timer.setInterval(
       this.props
     );
 
-    return (
-        this.state.isConnected?
-            <View style={{ height: '100%', width: '100%' }}>
-              <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
-              {!this.props.isLoading ? (
-                  <View style={Style.container}>
-                    <View style={Style.dropDownContainer}>
-                      <View style={Style.leftDropDown}>
-                        {this.state.assdNameHide === false ? (
-                            <Dropdown
-                                value={
-                                  selectedDropdown.length > maxLen
-                                      ? selectedDropdown.substring(0, maxLen - 2) + '...'
-                                      : selectedDropdown
-                                }
-                                label="Association Name"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={dropdown}
-                                containerStyle={{
-                                  width: '100%'
-                                }}
-                                textColor={base.theme.colors.black}
-                                inputContainerStyle={{
-                                  borderBottomColor: 'transparent'
-                                }}
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={dropdown.length > 2 ? -5 : -2}
-                                rippleOpacity={0}
-                                // onChangeText={(value, index) =>
-                                //   this.onAssociationChange(value, index)
-                                // }
-                                onChangeText={(value, index) => {
-                                  this.onAssociationChange(value, index);
+    if(!this.state.isConnected){
+      console.log('CHECK NET!!!!!!',this.state.isConnected)
 
-                                  this.props.updateuserRole({
-                                    prop: 'role',
-                                    value: dropdown[index].roleId
-                                  });
-                                  updateDropDownIndex(index);
+      return(
+          <View style={{height:'100%',width:'100%',alignItems:'center',justifyContent:'flex-start',marginTop:Platform.OS === 'ios'?50:100}}>
+            <TouchableOpacity  style={{height:'50%',width:'100%',}}
+                                              onPress={() =>
+                                                  NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange)}>
+            <Image
+                resizeMode={Platform.OS === 'ios'?'contain':'center'}
+                style={{height:'100%',width:'100%',}}
+                source={require('../../../../icons/nointernet1.png')}
+            />
+            </TouchableOpacity>
+          </View>
+      )
 
-                                  this.setState({
-                                    associationSelected: true
-                                  });
-                                }}
-                            />
-                        ) : (
-                            <View />
-                        )}
-                      </View>
-                      <View style={Style.rightDropDown}>
-                        {this.state.unitNameHide === false ? (
-                            <Dropdown
-                                // value={this.state.unitName}
-                                value={
-                                  selectedDropdown1.length > maxLenUnit
-                                      ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
-                                      : selectedDropdown1
-                                }
-                                containerStyle={{
-                                  width: '95%'
-                                  /*width: "70%",
-                                          marginLeft: "30%",
-                                          borderBottomWidth: hp("0.05%"),
-                                          borderBottomColor: "#474749"*/
-                                }}
-                                label="Unit"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={dropdown1}
-                                inputContainerStyle={{
-                                  borderBottomColor: 'transparent'
-                                }}
-                                textColor="#000"
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={
-                                  dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
-                                }
-                                rippleOpacity={0}
-                                // onChangeText={(value, index) => {
-                                //   this.updateUnit(value, index);
-                                // }}
-                                onChangeText={(value, index) => {
-                                  updateUserInfo({
-                                    prop: 'SelectedUnitID',
-                                    value: dropdown1[index].unitId
-                                  });
-                                  updateIdDashboard({
-                                    prop: 'uniID',
-                                    value: dropdown1[index].unitId
-                                  });
-                                  updateSelectedDropDown({
-                                    prop: 'uniID',
-                                    value: dropdown1[index].unitId
-                                  });
-                                  updateSelectedDropDown({
-                                    prop: 'selectedDropdown1',
-                                    value: dropdown1[index].value
-                                  });
-                                  this.updateUnit(value, index);
+    }
+    else{
+      console.log('CHECK NET!!!!!!@@@@@',this.state.isConnected)
+      return(
+          <View style={{ height: '100%', width: '100%' }}>
+            <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
+            {!this.props.isLoading ? (
+                <View style={Style.container}>
+                  <View style={Style.dropDownContainer}>
+                    <View style={Style.leftDropDown}>
+                      {this.state.assdNameHide === false ? (
+                          <Dropdown
+                              value={
+                                selectedDropdown.length > maxLen
+                                    ? selectedDropdown.substring(0, maxLen - 2) + '...'
+                                    : selectedDropdown
+                              }
+                              label="Association Name"
+                              baseColor="rgba(0, 0, 0, 1)"
+                              data={dropdown}
+                              containerStyle={{
+                                width: '100%'
+                              }}
+                              textColor={base.theme.colors.black}
+                              inputContainerStyle={{
+                                borderBottomColor: 'transparent'
+                              }}
+                              dropdownOffset={{ top: 10, left: 0 }}
+                              dropdownPosition={dropdown.length > 2 ? -5 : -2}
+                              rippleOpacity={0}
+                              // onChangeText={(value, index) =>
+                              //   this.onAssociationChange(value, index)
+                              // }
+                              onChangeText={(value, index) => {
+                                this.onAssociationChange(value, index);
 
-                                  // console.log(value);
-                                  // console.log(index);
-                                }}
-                                // itemTextStyle={{}}
-                            />
-                        ) : (
-                            <View />
-                        )}
-                      </View>
-                    </View>
-                    {this.state.isSelectedCard === 'UNIT'
-                        ? this.myUnitCard()
-                        : this.state.isSelectedCard === 'ADMIN'
-                            ? this.adminCard()
-                            : this.offersZoneCard()}
-                    <View style={Style.bottomCards}>
-                      <CardView
-                          height={this.state.myUnitCardHeight}
-                          width={this.state.myUnitCardWidth}
-                          cardText={'My Unit'}
-                          iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                          iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                          cardIcon={require('../../../../icons/my_unit.png')}
-                          onCardClick={() => this.changeCardStatus('UNIT')}
-                          textWeight={'bold'}
-                          textFontSize={10}
-                          disabled={this.state.isSelectedCard === 'UNIT'}
-                      />
-                      {this.props.dashBoardReducer.role === 1 &&
-                      dropdown1.length !== 0 ? (
-                          <CardView
-                              height={this.state.adminCardHeight}
-                              width={this.state.adminCardWidth}
-                              cardText={'Admin'}
-                              textWeight={'bold'}
-                              iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                              iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                              onCardClick={() => this.changeCardStatus('ADMIN')}
-                              cardIcon={require('../../../../icons/user.png')}
-                              disabled={this.state.isSelectedCard === 'ADMIN'}
+                                this.props.updateuserRole({
+                                  prop: 'role',
+                                  value: dropdown[index].roleId
+                                });
+                                updateDropDownIndex(index);
+
+                                this.setState({
+                                  associationSelected: true
+                                });
+                              }}
                           />
                       ) : (
                           <View />
                       )}
+                    </View>
+                    <View style={Style.rightDropDown}>
+                      {this.state.unitNameHide === false ? (
+                          <Dropdown
+                              // value={this.state.unitName}
+                              value={
+                                selectedDropdown1.length > maxLenUnit
+                                    ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
+                                    : selectedDropdown1
+                              }
+                              containerStyle={{
+                                width: '95%'
+                                /*width: "70%",
+                                        marginLeft: "30%",
+                                        borderBottomWidth: hp("0.05%"),
+                                        borderBottomColor: "#474749"*/
+                              }}
+                              label="Unit"
+                              baseColor="rgba(0, 0, 0, 1)"
+                              data={dropdown1}
+                              inputContainerStyle={{
+                                borderBottomColor: 'transparent'
+                              }}
+                              textColor="#000"
+                              dropdownOffset={{ top: 10, left: 0 }}
+                              dropdownPosition={
+                                dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
+                              }
+                              rippleOpacity={0}
+                              // onChangeText={(value, index) => {
+                              //   this.updateUnit(value, index);
+                              // }}
+                              onChangeText={(value, index) => {
+                                updateUserInfo({
+                                  prop: 'SelectedUnitID',
+                                  value: dropdown1[index].unitId
+                                });
+                                updateIdDashboard({
+                                  prop: 'uniID',
+                                  value: dropdown1[index].unitId
+                                });
+                                updateSelectedDropDown({
+                                  prop: 'uniID',
+                                  value: dropdown1[index].unitId
+                                });
+                                updateSelectedDropDown({
+                                  prop: 'selectedDropdown1',
+                                  value: dropdown1[index].value
+                                });
+                                this.updateUnit(value, index);
 
-                      {/* <CardView
+                                // console.log(value);
+                                // console.log(index);
+                              }}
+                              // itemTextStyle={{}}
+                          />
+                      ) : (
+                          <View />
+                      )}
+                    </View>
+                  </View>
+                  {this.state.isSelectedCard === 'UNIT'
+                      ? this.myUnitCard()
+                      : this.state.isSelectedCard === 'ADMIN'
+                          ? this.adminCard()
+                          : this.offersZoneCard()}
+                  <View style={Style.bottomCards}>
+                    <CardView
+                        height={this.state.myUnitCardHeight}
+                        width={this.state.myUnitCardWidth}
+                        cardText={'My Unit'}
+                        iconWidth={this.state.myUnitIconWidth}
+                        iconHeight={this.state.myUnitIconHeight}
+                        cardIcon={require('../../../../icons/my_unit.png')}
+                        onCardClick={() => this.changeCardStatus('UNIT')}
+                        textWeight={'bold'}
+                        textFontSize={Platform.OS === 'ios'?8:10}
+                        disabled={this.state.isSelectedCard === 'UNIT'}
+                    />
+                    {this.props.dashBoardReducer.role === 1 &&
+                    dropdown1.length !== 0 ? (
+                        <CardView
+                            height={this.state.adminCardHeight}
+                            width={this.state.adminCardWidth}
+                            cardText={'Admin'}
+                            textWeight={'bold'}
+                            iconWidth={this.state.myAdminIconWidth}
+                            iconHeight={this.state.myAdminIconHeight}
+                            textFontSize={Platform.OS === 'ios'?8:10}
+                            onCardClick={() => this.changeCardStatus('ADMIN')}
+                            cardIcon={require('../../../../icons/user.png')}
+                            disabled={this.state.isSelectedCard === 'ADMIN'}
+                        />
+                    ) : (
+                        <View />
+                    )}
+
+                    {/* <CardView
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
@@ -1463,58 +1490,53 @@ timer.setInterval(
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-                    </View>
-                    <View style={Style.supportContainer}>
-                      <View style={Style.subSupportView}>
-                        <TouchableOpacity
-                            onPress={() => {
-                              {
-                                Platform.OS === 'android'
-                                    ? Linking.openURL(`tel:9343121121`)
-                                    : Linking.openURL(`tel:9343121121`);
-                              }
-                            }}
-                        >
-                          <Icon
-                              color="#38bcdb"
-                              size={hp('2.2%')}
-                              // style={Style.supportIcon }
-                              name="call1"
-                          />
-                        </TouchableOpacity>
+                  </View>
+                  <View style={Style.supportContainer}>
+                    <View style={Style.subSupportView}>
+                      <TouchableOpacity
+                          onPress={() => {
+                            {
+                              Platform.OS === 'android'
+                                  ? Linking.openURL(`tel:9343121121`)
+                                  : Linking.openURL(`tel:9343121121`);
+                            }
+                          }}
+                      >
+                        <Icon
+                            color="#38bcdb"
+                            size={hp('2.2%')}
+                            // style={Style.supportIcon }
+                            name="call1"
+                        />
+                      </TouchableOpacity>
 
-                        <TouchableOpacity
-                            onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
-                            //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
-                        >
-                          <Image
-                              style={Style.supportIcon}
-                              source={require('../../../../icons/Group771.png')}
-                          />
-                        </TouchableOpacity>
-                      </View>
+                      <TouchableOpacity
+                          onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
+                          //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
+                      >
+                        <Image
+                            style={Style.supportIcon}
+                            source={require('../../../../icons/Group771.png')}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
-              ) : (
-                  <View />
-              )}
-              <ProgressLoader
-                  isHUD={true}
-                  isModal={true}
-                  visible={this.props.isLoading}
-                  color={base.theme.colors.primary}
-                  hudColor={'#FFFFFF'}
-              />
-            </View>
-            :
-            <View style={{height:'100%',width:'100%',alignItems:'center',justifyContent:'flex-start',marginTop:100}}>
-              <Image
-                  resizeMode={'center'}
-                  style={{height:'50%',width:'100%',}}
-                  source={require('../../../../icons/nointernet1.png')}
-              />
-            </View>
-    );
+                </View>
+            ) : (
+                <View />
+            )}
+            <ProgressLoader
+                isHUD={true}
+                isModal={true}
+                visible={this.props.isLoading}
+                color={base.theme.colors.primary}
+                hudColor={'#FFFFFF'}
+            />
+          </View>
+      );
+    }
+
+
   }
 
   changeCardStatus(status) {
@@ -1523,31 +1545,40 @@ timer.setInterval(
     });
     if (status == 'UNIT') {
       this.setState({
-        myUnitCardHeight: '80%',
+        myUnitCardHeight: Platform.OS === 'ios'?'90%':'80%',
         myUnitCardWidth: '26%',
         adminCardHeight: '70%',
         adminCardWidth: '22%',
         offersCardHeight: '70%',
         offersCardWidth: '20%',
+        myUnitIconWidth:Platform.OS === 'ios' ? 30 : 20,
+        myUnitIconHeight:Platform.OS === 'ios' ? 30 : 20,
+        myAdminIconWidth:Platform.OS === 'ios' ? 20 : 20,
+         myAdminIconHeight:Platform.OS === 'ios' ? 20 : 20,
 
         assdNameHide: false,
         unitNameHide: false
       });
     } else if (status == 'ADMIN') {
       this.setState({
-        myUnitCardHeight: '70%',
+        myUnitCardHeight: Platform.OS === 'ios'?'80%':'70%',
         myUnitCardWidth: '22%',
         adminCardHeight: '80%',
         adminCardWidth: '25%',
         offersCardHeight: '70%',
         offersCardWidth: '20%',
+        myUnitIconWidth:Platform.OS === 'ios' ? 20 : 20,
+        myUnitIconHeight:Platform.OS === 'ios' ? 20 : 20,
+        myAdminIconWidth:Platform.OS === 'ios' ? 30 : 20,
+        myAdminIconHeight:Platform.OS === 'ios' ? 30 : 20,
+
 
         assdNameHide: true,
         unitNameHide: true
       });
     } else if (status == 'OFFERS') {
       this.setState({
-        myUnitCardHeight: '70%',
+        myUnitCardHeight: Platform.OS === 'ios'?'80%':'70%',
         myUnitCardWidth: '22%',
         adminCardHeight: '70%',
         adminCardWidth: '20%',
@@ -1588,8 +1619,10 @@ timer.setInterval(
             cardIcon={require('../../../../icons/view_all_visitors.png')}
             cardCount={this.props.dashBoardReducer.familyMemberCount}
             marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+            iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+            textFontSize={Platform.OS === 'ios'?8:12}
+
             onCardClick={() =>
               dropdown.length === 0
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
@@ -1597,19 +1630,22 @@ timer.setInterval(
                 ? alert('Unit is not available')
                 : this.props.navigation.navigate('MyFamilyList')
             }
+
             backgroundColor={base.theme.colors.cardBackground}
           />
           <CardView
             height={'100%'}
             width={'25%'}
             cardText={'Vehicles'}
-            iconWidth={Platform.OS === 'ios' ? 40 : 25}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? hp('5') : 25}
+            iconHeight={Platform.OS === 'ios' ?hp('5') : 20}
             cardIcon={require('../../../../icons/vehicle.png')}
             cardCount={this.props.dashBoardReducer.vehiclesCount}
             //cardCount={this.state.vehiclesCount}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
+            textFontSize={Platform.OS === 'ios'?8:12}
+
             onCardClick={() =>
               dropdown.length === 0
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
@@ -1624,10 +1660,12 @@ timer.setInterval(
             cardText={'Visitors'}
             cardIcon={require('../../../../icons/view_all_visitors.png')}
             marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? hp('5'): 35}
+            iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
             iconBorderRadius={0}
             backgroundColor={base.theme.colors.cardBackground}
+            textFontSize={Platform.OS === 'ios'?8:12}
+
             onCardClick={() => this.goToFirstTab()}
           />
         </View>
@@ -1871,8 +1909,9 @@ timer.setInterval(
             cardText={'Role    Management'}
             cardIcon={require('../../../../icons/role.png')}
             marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+            iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+            textFontSize={Platform.OS === 'ios'?8:12}
             onCardClick={() =>
               this.props.navigation.navigate('ViewmembersScreen')
             }
@@ -1882,8 +1921,9 @@ timer.setInterval(
             height={'100%'}
             width={'25%'}
             cardText={'View All Visitors'}
-            iconWidth={Platform.OS === 'ios' ? 40 : 25}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+            iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+            textFontSize={Platform.OS === 'ios'?8:12}
             cardIcon={require('../../../../icons/view_all_visitors.png')}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
@@ -1897,8 +1937,9 @@ timer.setInterval(
             cardText={'Patrolling'}
             cardIcon={require('../../../../icons/patrolling.png')}
             marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
+            iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+            iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+            textFontSize={Platform.OS === 'ios'?8:12}
             iconBorderRadius={0}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>

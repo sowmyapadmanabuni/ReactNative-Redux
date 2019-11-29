@@ -54,6 +54,7 @@ class AddAndEditCheckPoints extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({
+            signalState:false,
             gpsLocation: "Set GPS Location",
             region: {
                 latitude: 0,
@@ -296,7 +297,7 @@ class AddAndEditCheckPoints extends React.Component {
             var sat = self.state.satelliteCount;
             var currentSat = event.satellites;
             if(sat != 0 && event.satelliteCount == 0){
-                    currentSat = sat;
+                currentSat = sat;
             }
             self.setState({
                 satelliteCount : currentSat,
@@ -473,10 +474,10 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
-                    cpArray: stat.data.checkPointListByAssocID,
-                    lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                }
-                //,()=>self.updateSatelliteCount()
+                        cpArray: stat.data.checkPointListByAssocID,
+                        lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
+                    }
+                    //,()=>self.updateSatelliteCount()
                 )
             }
         } catch (e) {
@@ -512,12 +513,14 @@ class AddAndEditCheckPoints extends React.Component {
                 this.validateFields()
             }
             else{
+                this.setState({signalState:false});
                 Alert.alert("Failed to get accurate user position","Can't proceed further")
             }
         }
     }
 
     validateFields() {
+        this.setState({signalState:true});
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
         } else {
@@ -641,9 +644,38 @@ class AddAndEditCheckPoints extends React.Component {
                             {this.renderUserLocation()}
                         </MapView>
                     </View>
-                    <View style={{height:hp('1'),top:hp('3'),width:wp('80'),alignSelf:'center',justifyContent:'center',alignItems:'center'}}>
-                        <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
-                        <Text>Satellite Count: {this.state.satelliteCount}</Text>
+
+                    <View style={{
+                        flexDirection:'row', alignItems:'center',justifyContent:'center',top:hp('3'),}}>
+                        <View style={{
+                            height:hp('1'),
+                            //top:hp('3'),
+                            //width:wp('80'),
+                            //alignSelf:'center',
+                            justifyContent:'center',
+                            //alignItems:'center',
+                        }}>
+                            <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
+                            <Text>Satellite Count: {this.state.satelliteCount}</Text>
+                        </View>
+                        <View
+                            style={{
+                                marginLeft:wp(3),
+                                //top:hp(30)
+                            }}
+                        >
+                            <Image
+                                resizeMode={'contain'}
+                                style={AddAndEditCheckPointStyles.signalIcon}
+                                source={
+                                    this.state.signalState ?
+                                        require('../../../icons/goodSignal.png')
+                                        :
+                                        require('../../../icons/poorSignal.png')
+
+                                }
+                            />
+                        </View>
                     </View>
 
                     <View style={AddAndEditCheckPointStyles.textView}>
@@ -749,7 +781,6 @@ class AddAndEditCheckPoints extends React.Component {
                     source={require('../../assets/gps.json')}
                 />
                 <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
-
             </Modal>
         )
     }

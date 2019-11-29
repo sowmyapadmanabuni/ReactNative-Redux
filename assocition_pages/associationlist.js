@@ -10,7 +10,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Keyboard
+  Keyboard, Platform
 } from 'react-native';
 import { Button, Form, Input, Item } from 'native-base';
 import {
@@ -263,7 +263,7 @@ class BlockDetail extends React.Component {
                       onPress={() => {
                         // console.log(item)
                         console.log(item, "kjhgfhiljkhgfdsghjkhgfg");
-    
+
                         this.props.navigation.navigate("EditAssociation", {
                           associationDetails: item,
                           associationDetails1: item.asCountry
@@ -768,16 +768,17 @@ const styles = StyleSheet.create({
   },
   addUnitButton: {
     width: wp('20%'),
-    height: hp('3.6%'),
+    height: Platform.OS === 'ios' ?hp('4.2%'):hp('3.6%'),
     borderRadius: hp('2%'),
     //borderWidth: hp("0.2%"),
     borderColor: '#ff8c00',
     backgroundColor: '#ff8c00',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   addUnitText: {
     color: 'white',
     fontWeight: '700',
+    //paddingBottom:Platform.OS === 'ios' ?5:0,
     fontSize: hp('1.6%')
   },
   searchTextStyle: {

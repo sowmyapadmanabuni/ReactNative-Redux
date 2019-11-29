@@ -97,7 +97,7 @@ class OTPVerification extends Component {
             };
 
             //http://122.166.168.160/champ/api/v1/account/verifyotp
-            url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/verifyotp`;
+            let url = `http://${this.props.oyeURL}/oyeliving/api/v1/account/verifyotp`;
             console.log("req verifyotp ", JSON.stringify(anu) + " " + url);
 
             fetch(url, {
@@ -443,7 +443,7 @@ class OTPVerification extends Component {
                             </View>
                         </View>
 
-                        <View>
+                        <View style={{alignItems:'center',justifyContent:'center'}}>
                             {this.state.timer === 1 ? (
                                 <Text> </Text>
                             ) : (
@@ -458,38 +458,43 @@ class OTPVerification extends Component {
                                     Resend OTP in {this.state.timer} seconds{" "}
                                 </Text>
                             )}
-                            <TouchableOpacity
-                                style={[styles.mybutton, {
-                                    borderColor: this.state.timer === 1 && this.state.isSmsLimit ? "#ff8c00" : base.theme.colors.grey,
-                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.primary : base.theme.colors.grey,
-                                }]}
+
+                            <Button
                                 onPress={this.getOtp1.bind(this, this.state.OTPNumber)}
                                 disabled={this.state.timer !== 1 || !this.state.isSmsLimit}
+                                style={{
+                                    marginTop:5,
+                                    width: wp("40%"),
+                                    height: hp("5%"),
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.primary : base.theme.colors.grey,
+                                }}
+                                rounded
                             >
-                                <Text style={[styles.submitButtonText, {
-                                    color: base.theme.colors.white
-                                }]}>
-                                    Resend OTP <Image/>
+                                <Text style={{color: "white", fontSize: hp("2%")}}>
+                                    Resend OTP
                                 </Text>
-                            </TouchableOpacity>
+                            </Button>
 
+                            <Button
+                                onPress={() => this.getOTP()}
+                                disabled={this.state.timer !== 1 || !this.state.isCallLimit}
+                                style={{
+                                    marginTop:15,
+                                    width: wp("40%"),
+                                    height: hp("5%"),
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.primary : base.theme.colors.grey,
+                                }}
+                                rounded
+                            >
+                                <Text style={{color: "white", fontSize: hp("2%")}}>
+                                    Receive OTP By Call
+                                </Text>
+                            </Button>
 
-                            <View style={{alignSelf: "center", marginTop: hp("4%")}}>
-                                <TouchableOpacity
-                                    style={[styles.mybutton, {
-                                        borderColor: this.state.timer === 1 && this.state.isCallLimit ? "#ff8c00" : base.theme.colors.grey,
-                                        backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.primary : base.theme.colors.grey,
-                                    }]}
-                                    onPress={() => this.getOTP()}
-                                    disabled={this.state.timer !== 1 || !this.state.isCallLimit}
-                                >
-                                    <Text style={[styles.submitButtonText, {
-                                        color: base.theme.colors.white,
-                                    }]}>
-                                        Receive OTP By Call <Image/>
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
                         </View>
                         <View
                             style={{
