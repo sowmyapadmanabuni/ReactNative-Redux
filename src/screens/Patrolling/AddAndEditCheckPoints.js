@@ -270,7 +270,10 @@ class AddAndEditCheckPoints extends React.Component {
         this.interval = setInterval(() => {
             this.updateSatelliteCount();
         }, 20000);
-        //this.watchuserPosition();
+        if(Platform.OS === 'ios'){
+            this.watchuserPosition();
+        }
+        //
     }
 
     callMe(){
@@ -278,26 +281,22 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     updateSatelliteCount(){
-        /*console.log("updateSatelliteCount...");
-        let self = this;
-        console.log("startLocationUpdate>> ",RNLocationSatellites.startLocationUpdate());
+       if(Platform.OS === 'android'){
+           this.accessLocationSatellites();
+       }
+    }
 
-        GPSEventEmitter.addListener('RNSatellite', (event) => {
-            console.log(":RN SATELLITE:",event)
-            self.setState({
-                satelliteCount : event.satellites
-            })
-        });*/
-
-        console.log("updateSatelliteCount...");
+    accessLocationSatellites(){
+        console.log("updateSatelliteCount...",GPSEventEmitter);
         let self = this;
+        
         GPSEventEmitter.removeListener('RNSatellite');
         GPSEventEmitter.addListener('RNSatellite', (ev) => {
             let event = Platform.OS==='ios'?ev[0]:ev;
-            console.log(":RN SATELLITE:",event)
+            console.log(":RN SATELLITE_QQ",event)
             var sat = self.state.satelliteCount;
             var currentSat = event.satellites;
-            if(sat != 0 && event.satelliteCount == 0){
+            if(sat != 0 && event.satelliteCount == 0 || event.satellites == undefined){
                 currentSat = sat;
             }
             self.setState({
@@ -310,7 +309,7 @@ class AddAndEditCheckPoints extends React.Component {
                     latitudeDelta: LATITUDE_DELTA,
                 },
                 gpsLocation: parseFloat(event.latitude) + "," + parseFloat(event.longitude),
-            },()=>{console.log("LOCATION_UPDATE:",self.state.region); self.renderUserLocation()})
+            },()=>{console.log("LOCATION_UPDATE:",self.state.region); self.setSignalStateIcon(); self.renderUserLocation()})
 
         });
         console.log(":RN SATELLITE:########:",self.state)
@@ -322,12 +321,13 @@ class AddAndEditCheckPoints extends React.Component {
     watchuserPosition() {
         console.log("watchuserPosition...");
         let locationArrStored = [];
+        let self = this;
         this.watchId = Geolocation.watchPosition(
             (position) => {
                 console.log("sdvdfgddhdgs", position);
                 let LocationData = position.coords;
                 locationArrStored.push(LocationData);
-                RNLocationSatellites.startLocationUpdate();
+                //RNLocationSatellites.startLocationUpdate();
 
                 /*GPSEventEmitter.addListener('RNSatellite', (event) => {
                     console.log(":RN SATELLITE:",event)
@@ -345,7 +345,7 @@ class AddAndEditCheckPoints extends React.Component {
                     gpsLocation: LocationData.latitude + "," + LocationData.longitude,
                     locationArrStored: locationArrStored,
                     accuracy:LocationData.accuracy
-                },()=>this.renderUserLocation())
+                },()=>{self.setSignalStateIcon();self.renderUserLocation()})
             },
             (error) => {
                 console.log(error);
@@ -508,6 +508,21 @@ class AddAndEditCheckPoints extends React.Component {
         )
     }
 
+
+    setSignalStateIcon(){
+        if(this.state.satelliteCount > 4) {
+            this.setState({signalState:true})
+        }
+        else{
+            if (this.state.accuracy<=15){
+                this.setState({signalState:true})
+            }
+            else{
+                this.setState({signalState:false});                
+            }
+        }
+    }
+
     checkCount(){
         if(this.state.satelliteCount > 4) {
             this.validateFields()
@@ -647,7 +662,7 @@ class AddAndEditCheckPoints extends React.Component {
                             showsBuildings={true}
                             zoomEnabled={true}
                             zoomTapEnabled={true}
-                            minZoomLevel={20}
+                            minZoomLevel={Platform.OS==='ios'?16:20}
                             scrollEnabled={true}
                             onUserLocationChange={(data)=>this.renderUserLocation()}
                         >
@@ -659,7 +674,7 @@ class AddAndEditCheckPoints extends React.Component {
                     <View style={{
                         flexDirection:'row', alignItems:'center',justifyContent:'center',top:hp('3'),}}>
                         <View style={{
-                            height:hp('1'),
+                            //height:hp('1'),
                             //top:hp('3'),
                             //width:wp('80'),
                             //alignSelf:'center',
@@ -667,7 +682,11 @@ class AddAndEditCheckPoints extends React.Component {
                             //alignItems:'center',
                         }}>
                             <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
-                            <Text>Satellite Count: {this.state.satelliteCount}</Text>
+                            {
+                                Platform.OS==='android'?
+                                <Text>Satellite Count: {this.state.satelliteCount}</Text>:
+                                <View/>
+                            }
                         </View>
                         <View
                             style={{
