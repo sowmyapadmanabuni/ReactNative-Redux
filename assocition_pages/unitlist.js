@@ -5,7 +5,7 @@ import {
     BackHandler,
     Dimensions,
     FlatList,
-    Image,
+    Image, Platform,
     SafeAreaView,
     StyleSheet,
     Text,
@@ -1352,7 +1352,7 @@ const styles = StyleSheet.create({
     },
     addUnitButton: {
         width: wp("30%"),
-        height: hp("3.6%"),
+        height: Platform.OS === 'ios' ?hp('4.2%'):hp('3.6%'),
         borderRadius: hp("2%"),
         //borderWidth: hp("0.2%"),
         borderColor: "#ff8c00",

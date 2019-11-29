@@ -1,5 +1,5 @@
 import {Platform, StyleSheet} from "react-native";
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../base";
 
 /**
@@ -44,7 +44,10 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
     gpsIcon: {
         height: Platform.OS === 'ios' ? 30 : 20,
         width: Platform.OS === 'ios' ? 60 : 20,
-
+    },
+    signalIcon: {
+        height: Platform.OS === 'ios' ? 30 : 20,
+        width: Platform.OS === 'ios' ? 60 : 20,
     },
     gpsButtonView: {
         borderWidth: 1,
