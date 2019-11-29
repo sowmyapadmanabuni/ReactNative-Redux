@@ -217,13 +217,15 @@ class Dashboard extends PureComponent {
             }
 
             if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-              this.showExitAlert();
+              //this.showExitAlert();
               // BackHandler.exitApp();
               //return true;
             }
             if (this.state.isSelectedCard === 'UNIT') {
-              this.showExitAlert();
-              //BackHandler.exitApp();
+              //this.showExitAlert();
+              //this.props.navigation.goBack(null);
+
+              BackHandler.exitApp();
             } else {
               this.changeCardStatus('UNIT');
             }
@@ -930,26 +932,30 @@ timer.setInterval(
             this.setState({
               isNoAssJoin: true
             });
-            Alert.alert(
-              'Join association',
+            this.props.navigation.navigate('CreateOrJoinScreen')
 
-              'Please join in any association to access Data  ?',
-              [
-                {
-                  text: 'Yes',
-                  onPress: () =>
-                    this.props.navigation.navigate('CreateOrJoinScreen')
-                },
-                { text: 'No', style: 'cancel' }
-              ]
-            );
+            /* Alert.alert(
+               'Join association',
+
+               'Please join in any association to access Data  ?',
+               [
+                 {
+                   text: 'Yes',
+                   onPress: () =>
+                     this.props.navigation.navigate('CreateOrJoinScreen')
+                 },
+                 { text: 'No', style: 'cancel' }
+               ]
+             );*/
           }
         } catch (error) {
           console.log('Error details', error);
           this.setState({
             isNoAssJoin: true
           });
-          Alert.alert(
+          this.props.navigation.navigate('CreateOrJoinScreen')
+
+          /*Alert.alert(
             'Join association',
 
             'Please join in any association to access Data  ?',
@@ -961,7 +967,7 @@ timer.setInterval(
               },
               { text: 'No', style: 'cancel' }
             ]
-          );
+          );*/
         }
       })
       .catch(error => {
@@ -969,7 +975,10 @@ timer.setInterval(
         this.setState({
           isNoAssJoin: true
         });
-        Alert.alert(
+
+        this.props.navigation.navigate('CreateOrJoinScreen')
+
+        /*Alert.alert(
           'Join association',
 
           'Please join in any association to access Data  ?',
@@ -981,7 +990,7 @@ timer.setInterval(
             },
             { text: 'No', style: 'cancel' }
           ]
-        );
+        );*/
       });
   }
 
