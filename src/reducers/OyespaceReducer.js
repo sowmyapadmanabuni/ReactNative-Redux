@@ -25,7 +25,7 @@ const INITIAL_STATE = {
   oyeMobileRegex: /^[0]?[456789]d{9}$/,
   oyeNonSpecialRegex: /[^0-9A-Za-z ,]/,
   oyeNonSpecialNameRegex: /[^0-9A-Za-z .]/,
-  oyeEmailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  oyeEmailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   OyeFullName: /^[a-zA-Z ]+$/,
   mediaupload: mediaUpload
   // noImage: noImage

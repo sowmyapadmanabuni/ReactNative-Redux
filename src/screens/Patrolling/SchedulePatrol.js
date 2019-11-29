@@ -275,10 +275,10 @@ class SchedulePatrol extends React.Component {
                             };
                             deviceName.push(deviceDetail)
                         }
-/*
-                        return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
-*/
-                self.setState({
+                        /*
+                                                return <Picker.Item key={d.deviceId} label={d.deviceName} value={d.deviceName} />
+                        */
+                        self.setState({
                             deviceNameList: deviceName,
                             selectedDevice: dataReceived[0].deGateNo
                         }, () => this.getPatrolData());
@@ -301,16 +301,17 @@ class SchedulePatrol extends React.Component {
     };
 
     async schedulePatrol(days, patrolCheckPointID) {
+        console.log("schedulePatrol______________");
         let self = this;
-        console.log("Start time: ", self.state.startTime);
+        console.log("Start time: ", moment(self.state.startTime).format("HH:MM:ss "));
         console.log("End time: ", self.state.endTime);
 
         let detail = {
             PSSnooze: self.state.isSnoozeEnabled,
-            //PSSTime: moment(self.state.startTime).format("HH:MM:ss"),
-            PSSTime: moment(self.state.startTime).format("hh:mm:ss"),
-            //PSETime: moment(self.state.endTime).format("HH:MM:ss"),
-            PSETime: moment(self.state.endTime).format("hh:mm:ss"),
+            PSSTime: moment(self.state.startTime).format("HH:mm"),
+            //PSSTime: moment(self.state.startTime).format("hh:mm:ss"),
+            PSETime: moment(self.state.endTime).format("HH:mm"),
+            //PSETime: moment(self.state.endTime).format("hh:mm:ss"),
             PSRepDays: days,
             PSChkPIDs: patrolCheckPointID,
             DEName: self.state.selectedDevice,
@@ -319,7 +320,7 @@ class SchedulePatrol extends React.Component {
             //ASAssnID: 8
         };
 
-        console.log("Detail for network call:", detail);
+        console.log("Detail:", detail);
 
         let stat = await base.services.OyeSafeApi.schedulePatrol(detail);
         console.log("stat>> ",stat);
@@ -489,13 +490,13 @@ class SchedulePatrol extends React.Component {
                 </View>
                 <View style={SchedulePatrolStyles.osButtonView}>
                     <OSButton onButtonClick={() => this.props.navigation.goBack(null)}
-                        oSBText={'Cancel'} oSBType={"custom"}
-                        oSBBackground={base.theme.colors.red}
-                        height={30} borderRadius={10} />
+                              oSBText={'Cancel'} oSBType={"custom"}
+                              oSBBackground={base.theme.colors.red}
+                              height={30} borderRadius={10} />
                     <OSButton onButtonClick={() => this.validateFields()}
-                        oSBText={this.state.patrolId === null ? 'Save' : 'Update'} oSBType={"custom"}
-                        oSBBackground={base.theme.colors.primary}
-                        height={30} borderRadius={10} />
+                              oSBText={this.state.patrolId === null ? 'Save' : 'Update'} oSBType={"custom"}
+                              oSBBackground={base.theme.colors.primary}
+                              height={30} borderRadius={10} />
                 </View>
                 <EmptyView height={60} />
                 {this.renderTimeSpinnerModal()}
@@ -518,7 +519,7 @@ class SchedulePatrol extends React.Component {
             patrolCheckPointID = patrolCheckPointID === "" ? patrolCheckPointID + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID : patrolCheckPointID + "," + this.props.selectedCheckPoints.selectedCheckPoints[i].cpChkPntID
         }
 
-        
+
         let startTime = moment(this.state.startTime).format("HH:mm");
         let endTime = moment(this.state.endTime).format("HH:mm");
         let newStartTime = moment(currentDate+" "+startTime);
@@ -534,7 +535,7 @@ class SchedulePatrol extends React.Component {
 
             }
         }else{
-            
+
         }
 
         // console.log("Disfffff:", this.compareTime(newStartTime, newEndTime));
@@ -602,7 +603,7 @@ class SchedulePatrol extends React.Component {
         for (let i in dayArr) {
             if (dayArr[i].day === data.day) {
                 dayArr[i].isSelected = !dayArr[i].isSelected;
-                
+
             }
         }
 
@@ -685,7 +686,7 @@ class SchedulePatrol extends React.Component {
 
         return (
             <Modal isVisible={Platform.OS === 'ios' ? this.state.isSpinnerOpen : false}
-                style={SchedulePatrolStyles.spinModal}
+                   style={SchedulePatrolStyles.spinModal}
             >
                 <View
                     style={SchedulePatrolStyles.spinMainView}>
@@ -740,7 +741,6 @@ class SchedulePatrol extends React.Component {
             this.setState({ endTime: selTime, isSpinnerOpen: false })
         }
     }
-
 
 }
 

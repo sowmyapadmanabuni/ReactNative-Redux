@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
   BackHandler,
-  ToastAndroid
+  ToastAndroid, NetInfo
 } from 'react-native';
 import base from '../../../base';
 import { connect } from 'react-redux';
@@ -98,21 +98,26 @@ class Dashboard extends PureComponent {
       isDataLoading: false,
       isDataVisible: false,
       isNoAssJoin: false,
-      isSOSSelected: false
+      isSOSSelected: false,
+      isConnected: true
+
     };
     this.backButtonListener = null;
     this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
   }
 
+
   componentWillMount() {
     this.setState({
       isDataLoading: true,
-      isDataVisible: true
+      isDataVisible: true,
+
     });
     this.getListOfAssociation();
     this.myProfileNet();
     this.listenRoleChange();
+
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
@@ -205,12 +210,12 @@ class Dashboard extends PureComponent {
             }
 
             if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-              //this.showExitAlert();
+              this.showExitAlert();
               // BackHandler.exitApp();
               //return true;
             }
             if (this.state.isSelectedCard === 'UNIT') {
-              //this.showExitAlert();
+              this.showExitAlert();
               //BackHandler.exitApp();
             } else {
               this.changeCardStatus('UNIT');
@@ -226,6 +231,7 @@ class Dashboard extends PureComponent {
   }
 
   componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     this.backButtonListener.remove();
     this.focusListener.remove();
   }
@@ -451,7 +457,7 @@ class Dashboard extends PureComponent {
   //       'oye_channel',
   //       firebase.notifications.Android.Importance.High
   //     ).setDescription('oye_channel')
-  //         .setSound('oye_msg_tone');    
+  //         .setSound('oye_msg_tone');
   //         channel_for.enableLights(true);
   //         channel_for.enableVibration(true);
   //         channel_for.vibrationPattern([500]);
@@ -478,9 +484,9 @@ class Dashboard extends PureComponent {
   //       .android.setLargeIcon('ic_notif')
   //       .android.setSmallIcon('ic_stat_ic_notification')
   //       .android.setChannelId('Oyespace')
-  //       .android.setVibrate([1000,1000])   
-  //       .setSound('oye_msg_tone')   
-        
+  //       .android.setVibrate([1000,1000])
+  //       .setSound('oye_msg_tone')
+
   //         //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
 
 
@@ -495,6 +501,8 @@ class Dashboard extends PureComponent {
   // };
 
   listenForNotif = () => {
+    console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222')
+
     if (
       this.notificationDisplayedListener == undefined ||
       this.notificationDisplayedListener == null
@@ -514,7 +522,7 @@ class Dashboard extends PureComponent {
         .notifications()
         .onNotification(notification => {
 
-          
+
 
           console.log('___________');
           console.log(notification);
@@ -527,7 +535,7 @@ class Dashboard extends PureComponent {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-          this.props.refreshNotifications(oyeURL, MyAccountID);
+           this.props.refreshNotifications(oyeURL, MyAccountID);
           //this.props.getNotifications(oyeURL, MyAccountID);
 
 
@@ -686,7 +694,9 @@ class Dashboard extends PureComponent {
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
-    console.log('Props in dashboard did mount ####',this.props,this.props.dashBoardReducer.isPatrollingScreens)
+    console.log('Props in dashboard did mount ####',this.props)
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+
 
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
     // getAssoMembers(oyeURL, MyAccountID);
@@ -712,7 +722,8 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    timer.setInterval(
+
+ timer.setInterval(
          this,
          'syncData',
          () => {
@@ -723,6 +734,16 @@ class Dashboard extends PureComponent {
          5000
      );
    }
+
+
+  handleConnectivityChange = isConnected => {
+    console.log('CONNECTION DATA',isConnected)
+    if (isConnected) {
+      this.setState({isConnected});
+    } else {
+      this.setState({isConnected});
+    }
+  };
 
   async roleCheckForAdmin(index) {
     const { dropdown, dropdown1 } = this.props;
@@ -799,15 +820,15 @@ class Dashboard extends PureComponent {
         () => {
           const { updateuserRole } = this.props;
           console.log('Role123456:', updateuserRole);
-          // updateuserRole({
-          //   prop: 'role',
-          //   value: role
-          // });
+          updateuserRole({
+           prop: 'role',
+           value: role
+         });
           const { updateIdDashboard } = this.props;
-          // updateIdDashboard({
-          //   prop: 'roleId',
-          //   value: role
-          // });
+          updateIdDashboard({
+            prop: 'roleId',
+            value: role
+           });
           console.log('ROLE_UPDATE', role);
         }
       );
@@ -1290,150 +1311,150 @@ class Dashboard extends PureComponent {
     );
 
     return (
-      // <Profiler id={"Dashboard"} onRender={this.logMeasurement}>
-      <View style={{ height: '100%', width: '100%' }}>
-        <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
-        {!this.props.isLoading ? (
-          <View style={Style.container}>
-            <View style={Style.dropDownContainer}>
-              <View style={Style.leftDropDown}>
-                {this.state.assdNameHide === false ? (
-                  <Dropdown
-                    value={
-                      selectedDropdown.length > maxLen
-                        ? selectedDropdown.substring(0, maxLen - 2) + '...'
-                        : selectedDropdown
-                    }
-                    label="Association Name"
-                    baseColor="rgba(0, 0, 0, 1)"
-                    data={dropdown}
-                    containerStyle={{
-                      width: '100%'
-                    }}
-                    textColor={base.theme.colors.black}
-                    inputContainerStyle={{
-                      borderBottomColor: 'transparent'
-                    }}
-                    dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={dropdown.length > 2 ? -5 : -2}
-                    rippleOpacity={0}
-                    // onChangeText={(value, index) =>
-                    //   this.onAssociationChange(value, index)
-                    // }
-                    onChangeText={(value, index) => {
-                      this.onAssociationChange(value, index);
+        this.state.isConnected?
+            <View style={{ height: '100%', width: '100%' }}>
+              <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
+              {!this.props.isLoading ? (
+                  <View style={Style.container}>
+                    <View style={Style.dropDownContainer}>
+                      <View style={Style.leftDropDown}>
+                        {this.state.assdNameHide === false ? (
+                            <Dropdown
+                                value={
+                                  selectedDropdown.length > maxLen
+                                      ? selectedDropdown.substring(0, maxLen - 2) + '...'
+                                      : selectedDropdown
+                                }
+                                label="Association Name"
+                                baseColor="rgba(0, 0, 0, 1)"
+                                data={dropdown}
+                                containerStyle={{
+                                  width: '100%'
+                                }}
+                                textColor={base.theme.colors.black}
+                                inputContainerStyle={{
+                                  borderBottomColor: 'transparent'
+                                }}
+                                dropdownOffset={{ top: 10, left: 0 }}
+                                dropdownPosition={dropdown.length > 2 ? -5 : -2}
+                                rippleOpacity={0}
+                                // onChangeText={(value, index) =>
+                                //   this.onAssociationChange(value, index)
+                                // }
+                                onChangeText={(value, index) => {
+                                  this.onAssociationChange(value, index);
 
-                      this.props.updateuserRole({
-                        prop: 'role',
-                        value: dropdown[index].roleId
-                      });
-                      updateDropDownIndex(index);
+                                  this.props.updateuserRole({
+                                    prop: 'role',
+                                    value: dropdown[index].roleId
+                                  });
+                                  updateDropDownIndex(index);
 
-                      this.setState({
-                        associationSelected: true
-                      });
-                    }}
-                  />
-                ) : (
-                  <View />
-                )}
-              </View>
-              <View style={Style.rightDropDown}>
-                {this.state.unitNameHide === false ? (
-                  <Dropdown
-                    // value={this.state.unitName}
-                    value={
-                      selectedDropdown1.length > maxLenUnit
-                        ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
-                        : selectedDropdown1
-                    }
-                    containerStyle={{
-                      width: '95%'
-                      /*width: "70%",
-                              marginLeft: "30%",
-                              borderBottomWidth: hp("0.05%"),
-                              borderBottomColor: "#474749"*/
-                    }}
-                    label="Unit"
-                    baseColor="rgba(0, 0, 0, 1)"
-                    data={dropdown1}
-                    inputContainerStyle={{
-                      borderBottomColor: 'transparent'
-                    }}
-                    textColor="#000"
-                    dropdownOffset={{ top: 10, left: 0 }}
-                    dropdownPosition={
-                      dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
-                    }
-                    rippleOpacity={0}
-                    // onChangeText={(value, index) => {
-                    //   this.updateUnit(value, index);
-                    // }}
-                    onChangeText={(value, index) => {
-                      updateUserInfo({
-                        prop: 'SelectedUnitID',
-                        value: dropdown1[index].unitId
-                      });
-                      updateIdDashboard({
-                        prop: 'uniID',
-                        value: dropdown1[index].unitId
-                      });
-                      updateSelectedDropDown({
-                        prop: 'uniID',
-                        value: dropdown1[index].unitId
-                      });
-                      updateSelectedDropDown({
-                        prop: 'selectedDropdown1',
-                        value: dropdown1[index].value
-                      });
-                      this.updateUnit(value, index);
+                                  this.setState({
+                                    associationSelected: true
+                                  });
+                                }}
+                            />
+                        ) : (
+                            <View />
+                        )}
+                      </View>
+                      <View style={Style.rightDropDown}>
+                        {this.state.unitNameHide === false ? (
+                            <Dropdown
+                                // value={this.state.unitName}
+                                value={
+                                  selectedDropdown1.length > maxLenUnit
+                                      ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
+                                      : selectedDropdown1
+                                }
+                                containerStyle={{
+                                  width: '95%'
+                                  /*width: "70%",
+                                          marginLeft: "30%",
+                                          borderBottomWidth: hp("0.05%"),
+                                          borderBottomColor: "#474749"*/
+                                }}
+                                label="Unit"
+                                baseColor="rgba(0, 0, 0, 1)"
+                                data={dropdown1}
+                                inputContainerStyle={{
+                                  borderBottomColor: 'transparent'
+                                }}
+                                textColor="#000"
+                                dropdownOffset={{ top: 10, left: 0 }}
+                                dropdownPosition={
+                                  dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
+                                }
+                                rippleOpacity={0}
+                                // onChangeText={(value, index) => {
+                                //   this.updateUnit(value, index);
+                                // }}
+                                onChangeText={(value, index) => {
+                                  updateUserInfo({
+                                    prop: 'SelectedUnitID',
+                                    value: dropdown1[index].unitId
+                                  });
+                                  updateIdDashboard({
+                                    prop: 'uniID',
+                                    value: dropdown1[index].unitId
+                                  });
+                                  updateSelectedDropDown({
+                                    prop: 'uniID',
+                                    value: dropdown1[index].unitId
+                                  });
+                                  updateSelectedDropDown({
+                                    prop: 'selectedDropdown1',
+                                    value: dropdown1[index].value
+                                  });
+                                  this.updateUnit(value, index);
 
-                      // console.log(value);
-                      // console.log(index);
-                    }}
-                    // itemTextStyle={{}}
-                  />
-                ) : (
-                  <View />
-                )}
-              </View>
-            </View>
-            {this.state.isSelectedCard === 'UNIT'
-              ? this.myUnitCard()
-              : this.state.isSelectedCard === 'ADMIN'
-              ? this.adminCard()
-              : this.offersZoneCard()}
-            <View style={Style.bottomCards}>
-              <CardView
-                height={this.state.myUnitCardHeight}
-                width={this.state.myUnitCardWidth}
-                cardText={'My Unit'}
-                iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                cardIcon={require('../../../../icons/my_unit.png')}
-                onCardClick={() => this.changeCardStatus('UNIT')}
-                textWeight={'bold'}
-                textFontSize={10}
-                disabled={this.state.isSelectedCard === 'UNIT'}
-              />
-              {this.props.dashBoardReducer.role === 1 &&
-              dropdown1.length !== 0 ? (
-                <CardView
-                  height={this.state.adminCardHeight}
-                  width={this.state.adminCardWidth}
-                  cardText={'Admin'}
-                  textWeight={'bold'}
-                  iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                  iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                  onCardClick={() => this.changeCardStatus('ADMIN')}
-                  cardIcon={require('../../../../icons/user.png')}
-                  disabled={this.state.isSelectedCard === 'ADMIN'}
-                />
-              ) : (
-                <View />
-              )}
+                                  // console.log(value);
+                                  // console.log(index);
+                                }}
+                                // itemTextStyle={{}}
+                            />
+                        ) : (
+                            <View />
+                        )}
+                      </View>
+                    </View>
+                    {this.state.isSelectedCard === 'UNIT'
+                        ? this.myUnitCard()
+                        : this.state.isSelectedCard === 'ADMIN'
+                            ? this.adminCard()
+                            : this.offersZoneCard()}
+                    <View style={Style.bottomCards}>
+                      <CardView
+                          height={this.state.myUnitCardHeight}
+                          width={this.state.myUnitCardWidth}
+                          cardText={'My Unit'}
+                          iconWidth={Platform.OS === 'ios' ? 35 : 20}
+                          iconHeight={Platform.OS === 'ios' ? 35 : 20}
+                          cardIcon={require('../../../../icons/my_unit.png')}
+                          onCardClick={() => this.changeCardStatus('UNIT')}
+                          textWeight={'bold'}
+                          textFontSize={10}
+                          disabled={this.state.isSelectedCard === 'UNIT'}
+                      />
+                      {this.props.dashBoardReducer.role === 1 &&
+                      dropdown1.length !== 0 ? (
+                          <CardView
+                              height={this.state.adminCardHeight}
+                              width={this.state.adminCardWidth}
+                              cardText={'Admin'}
+                              textWeight={'bold'}
+                              iconWidth={Platform.OS === 'ios' ? 35 : 20}
+                              iconHeight={Platform.OS === 'ios' ? 35 : 20}
+                              onCardClick={() => this.changeCardStatus('ADMIN')}
+                              cardIcon={require('../../../../icons/user.png')}
+                              disabled={this.state.isSelectedCard === 'ADMIN'}
+                          />
+                      ) : (
+                          <View />
+                      )}
 
-              {/* <CardView
+                      {/* <CardView
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
@@ -1442,50 +1463,57 @@ class Dashboard extends PureComponent {
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-            </View>
-            <View style={Style.supportContainer}>
-              <View style={Style.subSupportView}>
-                <TouchableOpacity
-                  onPress={() => {
-                    {
-                      Platform.OS === 'android'
-                        ? Linking.openURL(`tel:9343121121`)
-                        : Linking.openURL(`tel:9343121121`);
-                    }
-                  }}
-                >
-                  <Icon
-                    color="#38bcdb"
-                    size={hp('2.2%')}
-                    // style={Style.supportIcon }
-                    name="call1"
-                  />
-                </TouchableOpacity>
+                    </View>
+                    <View style={Style.supportContainer}>
+                      <View style={Style.subSupportView}>
+                        <TouchableOpacity
+                            onPress={() => {
+                              {
+                                Platform.OS === 'android'
+                                    ? Linking.openURL(`tel:9343121121`)
+                                    : Linking.openURL(`tel:9343121121`);
+                              }
+                            }}
+                        >
+                          <Icon
+                              color="#38bcdb"
+                              size={hp('2.2%')}
+                              // style={Style.supportIcon }
+                              name="call1"
+                          />
+                        </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
-                  //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
-                >
-                  <Image
-                    style={Style.supportIcon}
-                    source={require('../../../../icons/Group771.png')}
-                  />
-                </TouchableOpacity>
-              </View>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
+                            //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
+                        >
+                          <Image
+                              style={Style.supportIcon}
+                              source={require('../../../../icons/Group771.png')}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+              ) : (
+                  <View />
+              )}
+              <ProgressLoader
+                  isHUD={true}
+                  isModal={true}
+                  visible={this.props.isLoading}
+                  color={base.theme.colors.primary}
+                  hudColor={'#FFFFFF'}
+              />
             </View>
-          </View>
-        ) : (
-          <View />
-        )}
-        <ProgressLoader
-          isHUD={true}
-          isModal={true}
-          visible={this.props.isLoading}
-          color={base.theme.colors.primary}
-          hudColor={'#FFFFFF'}
-        />
-      </View>
-      // </Profiler>
+            :
+            <View style={{height:'100%',width:'100%',alignItems:'center',justifyContent:'flex-start',marginTop:100}}>
+              <Image
+                  resizeMode={'center'}
+                  style={{height:'50%',width:'100%',}}
+                  source={require('../../../../icons/nointernet1.png')}
+              />
+            </View>
     );
   }
 
@@ -1737,7 +1765,8 @@ class Dashboard extends PureComponent {
           animation={'wobble'}
           delay={1000}
           duration={1000}
-          onPress={() => this.props.navigation.navigate('Announcement')}
+          onPress={() => this.props.navigation.navigate('Announcement')
+          }
         >
           <View
             style={{

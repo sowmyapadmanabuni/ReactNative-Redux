@@ -175,22 +175,23 @@ class ReportScreen extends React.Component {
 
     async getReport(props) {
         let self = this;
-       let input = self.props.navigation.state.params.detail;
-       console.log("self.props ",self.props);
-       console.log("input ",input);
+        let input = self.props.navigation.state.params.detail;
+        console.log("self.props ",self.props);
+        console.log("input ",input);
 
         let dummyObject = {
 
-                "FromDate" : "2019-11-15",
-                "ToDate"   : "2019-11-18",
-                "ASAssnID" : "14948",
-                "PSPtrlSID": "2081",
-                "slotName" : 'Sagar slot 1',
-                "slotTime":"01:01AM - 02:00AM"
-         };
+            "FromDate" : "2019-11-15",
+            "ToDate"   : "2019-11-18",
+            "ASAssnID" : "14948",
+            "PSPtrlSID": "2081",
+            "slotName" : 'Sagar slot 1',
+            "slotTime":"01:01AM - 02:00AM"
+        };
 
 
         let stat = await base.services.OyeSafeApi.getReport(input);
+        console.log("stat: ",stat);
         let startDate = input.FromDate;
         let endDate = input.ToDate;
         let initialDateString = moment(input.FromDate, "YYYY-MM-DDTHH:mm:ss a");
@@ -209,17 +210,21 @@ class ReportScreen extends React.Component {
                 let tableData = [];
                 for (let i = 0; i < reportsData.length; i++) {
                     let rowData = [];
-                    console.log("reportsData[i] ",reportsData[i])
+                    console.log("reportsData[i] ",reportsData[i]);
                     rowData.push(moment(reportsData[i].ptdCreated, 'YYYY-MM-DD').format('MM-DD-YYYY'));
-                    rowData.push(moment(reportsData[i].ptsDateT).format('hh:mm' + ' A'));
-                    rowData.push( moment(reportsData[i].pteDateT).format('hh:mm' + ' A'));
+                    // rowData.push(moment(reportsData[i].ptsDateT).format('hh:mm' + ' A'));
+                    // rowData.push( moment(reportsData[i].pteDateT).format('hh:mm' + ' A'));
+                    rowData.push(moment(reportsData[i].ptsDateT).format('h:mm' + 'A'));
+                    rowData.push( moment(reportsData[i].pteDateT).format('h:mm' + 'A'));
                     rowData.push(reportsData[i].ptStatus === "" ? "N/A" : reportsData[i].ptStatus,);
                     rowData.push(reportsData[i].wkfName);
                     if (startDate !== endDate) {
                         startDate = moment(startDate).add(1, 'day').format('YYYY-MM-DD')
+                        console.log("startDate ",startDate);
                     }
                     tableData.push(rowData);
                 }
+                console.log("tableData ",tableData);
                 let datesArr = [];
                 for (let i = 0; i < difference + 1; i++) {
                     let tempArr = [];
@@ -259,6 +264,7 @@ class ReportScreen extends React.Component {
                 for (let i = 0; i < numberOfPages; i++) {
                     dataBottomList[i] = i + 1
                 }
+
                 self.setState({
                     patrollingReport: tableData,
                     data: tableData,
@@ -437,9 +443,12 @@ class ReportScreen extends React.Component {
             <View style={{height: hp('65%')}}>
                 {this.state.data.length !== 0 ?
                     <Table borderStyle={{borderWidth: 1, borderColor: base.theme.colors.grey}}>
-                        <Row data={this.state.tableHead} style={ReportScreenStyles.headRow}
-                             textStyle={ReportScreenStyles.textRow}
-                             onClickIcon={(item) => this.onCellClick(this.state.pageNumber)}/>
+                        <Row
+                            data={this.state.tableHead}
+                            style={ReportScreenStyles.headRow}
+                            textStyle={ReportScreenStyles.textRow}
+                            onClickIcon={(item) => this.onCellClick(this.state.pageNumber)}
+                        />
                         {this.state.tableData.map((rowData, index) => (
                             <TableWrapper key={index} style={{height: 40, flexDirection: 'row',}}>
                                 {

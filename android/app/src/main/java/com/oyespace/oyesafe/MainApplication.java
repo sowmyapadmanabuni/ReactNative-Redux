@@ -4,13 +4,13 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.ReactApplication;
+import com.dooboolab.RNAudioRecorderPlayerPackage;
+import com.goodatlas.audiorecord.RNAudioRecordPackage;
 import com.synclovis.RNLocationSatellitesPackage;
 import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
-import com.goodatlas.audiorecord.RNAudioRecordPackage;
 import com.rumax.reactnative.pdfviewer.PDFViewPackage;
 import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
-import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.devstepbcn.wifi.AndroidWifiPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -70,13 +70,13 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNPermissionsPackage(),
+            new RNAudioRecorderPlayerPackage(),
             new RNAudioRecordPackage(),
+            new RNPermissionsPackage(),
                     new PDFViewPackage(),
                     new DocumentPickerPackage(),
 
                     new RNHTMLtoPDFPackage(),
-                    new RNAudioRecorderPlayerPackage(),
                     new AndroidWifiPackage(),
                     new RNDeviceInfo(),
                     new RNSpinkitPackage(),
@@ -120,15 +120,15 @@ public class MainApplication extends Application implements ShareApplication, Re
     @Override
     public void onCreate() {
         super.onCreate();
-        /*Timer timer = new Timer();
+       /*Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
                                       @Override
                                       public void run() {
                                           deleteCache(getApplicationContext());
                                       }
                                   },
-                0, 20000);
-        */
+                0, 20000);*/
+
         SoLoader.init(this, /* native exopackage */ false);
         Fabric.with(this, new Crashlytics());
 
@@ -137,8 +137,8 @@ public class MainApplication extends Application implements ShareApplication, Re
 
     //----------------------------------------------------------------------------------------------
 
-/*
-    public static void deleteCache(Context context) {
+
+    /*public static void deleteCache(Context context) {
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
@@ -160,8 +160,8 @@ public class MainApplication extends Application implements ShareApplication, Re
         } else {
             return false;
         }
-    }
+    }*/
 
-*/
+
     //----------------------------------------------------------------------------------------------
 }

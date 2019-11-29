@@ -650,6 +650,8 @@ class Announcement extends Component {
 
     let image = `${img1},${img2},${img3},${img4},${img5}`;
 
+    console.log('INPUT FOR ANN@@@@@',image,ntDesc,accountId,assocID,mp3)
+
     this.setState({
       isLoading: true
     });
@@ -676,7 +678,7 @@ class Announcement extends Component {
           response,
           response.data.data.announcement.anid
         );
-        
+
         this.setState({
           isLoading: false
         });
@@ -742,16 +744,16 @@ class Announcement extends Component {
                   relativeImage3: '',
                   relativeImage4: '',
                   relativeImage5: '',
-            
+
                   myProfileImage1: '',
                   myProfileImage2: '',
                   myProfileImage3: '',
                   myProfileImage4: '',
                   myProfileImage5: '',
-            
+
                   mp3uri: '',
                   mp3: '',
-            
+
                   imageUrl: '',
                   photo: null,
                   photoDetails: null,
@@ -759,35 +761,35 @@ class Announcement extends Component {
                   filePath: '',
                   imagePath: '',
                   id: '',
-            
+
                   buttonId: 1,
                   playBtnId: 0,
-            
+
                   recordSecs: 0,
                   recordTime: '00:00:00',
                   currentPositionSec: 0,
                   currentDurationSec: 0,
                   playTime: '00:00:00',
                   duration: '00:00:00',
-            
+
                   isLoading: false,
-            
+
                   datasource: [],
-            
+
                   visitorName: '',
                   visitorId: '',
                   visitorList: [],
-            
+
                   comment: '',
                   dropdownValue: '',
-            
+
                   announcementId: '',
-            
+
                   audioFile: '',
                   recording: false,
                   loaded: false,
                   paused: true,
-            
+
                   timestamp: '',
                   loading: false
                 };
@@ -808,16 +810,16 @@ class Announcement extends Component {
                   relativeImage3: '',
                   relativeImage4: '',
                   relativeImage5: '',
-            
+
                   myProfileImage1: '',
                   myProfileImage2: '',
                   myProfileImage3: '',
                   myProfileImage4: '',
                   myProfileImage5: '',
-            
+
                   mp3uri: '',
                   mp3: '',
-            
+
                   imageUrl: '',
                   photo: null,
                   photoDetails: null,
@@ -825,35 +827,35 @@ class Announcement extends Component {
                   filePath: '',
                   imagePath: '',
                   id: '',
-            
+
                   buttonId: 1,
                   playBtnId: 0,
-            
+
                   recordSecs: 0,
                   recordTime: '00:00:00',
                   currentPositionSec: 0,
                   currentDurationSec: 0,
                   playTime: '00:00:00',
                   duration: '00:00:00',
-            
+
                   isLoading: false,
-            
+
                   datasource: [],
-            
+
                   visitorName: '',
                   visitorId: '',
                   visitorList: [],
-            
+
                   comment: '',
                   dropdownValue: '',
-            
+
                   announcementId: '',
-            
+
                   audioFile: '',
                   recording: false,
                   loaded: false,
                   paused: true,
-            
+
                   timestamp: '',
                   loading: false
                 };
@@ -878,7 +880,7 @@ class Announcement extends Component {
     return (
       <View style={styles.container}>
         <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
-          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>ss
+          <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity
                 onPress={() => {

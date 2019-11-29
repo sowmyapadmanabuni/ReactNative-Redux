@@ -19,6 +19,7 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {connect} from "react-redux";
 import base from "../../../src/base";
+import ProgressLoader from "rn-progress-loader";
 
 var multipleEntries = "FALSE";
 
@@ -31,6 +32,10 @@ class InviteGuests extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
+            isLoading:false,
+            buttonDisable:false,
+
             fname: "",
             lname: "",
 
@@ -199,8 +204,10 @@ class InviteGuests extends Component {
         console.log('Switch doNotDisturb is: ' + multipleEntries)
     };
 
-
     sendInvitation = () => {
+        this.setState({
+            isLoading:true,
+        });
 
         console.log("Send Invitation List", this.state, this.props);
 
@@ -236,27 +243,27 @@ class InviteGuests extends Component {
 
         if (fname.length == 0 || fname == '') {
             Alert.alert('Enter First Name');
-            return false;
+            //return false;
         } else if (lname.length == 0 || lname == '') {
             Alert.alert('Enter Last Name');
-            return false;
-
+            //return false;
         } else if (OyeFirstName.test(fname) === false) {
             Alert.alert('First Name should not contain Special Character & numbers');
-            return false
+            //return false
         } else if (OyeLastName.test(lname) === false) {
             Alert.alert('Last Name should not contain Special Character & numbers');
-            return false
+            //return false
         } else if (oyeNonSpecialRegex.test(vehNo) === true) {
             Alert.alert("Vehicle Number cannot contain special characters.")
         } else if (mobNum.length == 0) {
-            Alert.alert('Enter Mobile Number')
+            //Alert.alert('Enter Mobile Number')
+            return false
         } else if (mobNum.length < 10) {
             Alert.alert('Mobile number should not be less than 10 digits');
-            return false;
+            //return false;
         } else if (purpose.length == 0 || purpose == '') {
             Alert.alert('Enter Purpose');
-            return false;
+            //return false;
         }
         /*else if(!base.utils.validate.alphabetValidation(purpose)){
             Alert.alert('Special characters not allowed in purpose');
@@ -264,11 +271,12 @@ class InviteGuests extends Component {
         }*/
         else if (dobDate > dobDate1) {
             Alert.alert('Enter valid start date to Till date');
-            return false;
+            //return false;
         } else if (time == time1 && dobDate == dobDate1) {
             Alert.alert('Enter valid start time to Till time');
-            return false;
-        } else {
+            //return false;
+        } else
+        {
 //http://apidev.oyespace.com/oye247/api/v1/Invitation/create
             console.log('Dates', dobDate + ' ' + time, dobDate1 + ' ' + time1);
 
@@ -306,6 +314,9 @@ class InviteGuests extends Component {
                 })
                 .catch(error => console.log(error))
         }
+        this.setState({
+            isLoading:false,
+        });
     };
 
     mobileNumberInputCheck(text) {
@@ -316,7 +327,6 @@ class InviteGuests extends Component {
             this.setState({ mobNo: text })
         }
     }
-
 
     render() {
         console.log("My Account Id -", this.props.accountId);
@@ -501,12 +511,12 @@ class InviteGuests extends Component {
                                 <Text style={{fontSize: hp('1.8%'), marginRight: hp('2%')}}>Guests Expected : </Text>
                             </View>
                             {/* <View style={{flexDirection:'row'}}>
-                    
-                      {this.state.count <=1 ? 
+
+                      {this.state.count <=1 ?
                         <TouchableOpacity><Text style={{height:0}}></Text></TouchableOpacity> :
                         <TouchableOpacity underlayColor='#fff' onPress={()=>{this.decrementCount()}}><Text style={{ color:'#25CCF7',fontSize:17 }}>-</Text></TouchableOpacity>
-                      }    
-                      <Text style={{color:'#25CCF7',fontSize:17}}>{this.state.count}</Text>    
+                      }
+                      <Text style={{color:'#25CCF7',fontSize:17}}>{this.state.count}</Text>
                       <TouchableOpacity underlayColor='#fff' onPress={()=>{this.incrementCount()}}><Text style={{color:'#25CCF7',fontSize:17}}>+</Text></TouchableOpacity>
                   </View> */}
                             <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -547,12 +557,24 @@ class InviteGuests extends Component {
                             <Text style={{color: 'white', fontSize: hp('2%'), fontWeight: '500'}}>Cancel</Text>
                         </Button>
                         <Button bordered warning style={[styles.button, {backgroundColor: 'orange'}]}
-                                onPress={() => this.sendInvitation()}>
+                            //onPress={() => this.sendInvitation()}
+                                onPress={() => {
+                                    this.sendInvitation()
+                                }}
+                                disabled={this.state.buttonDisable}
+                        >
                             <Text style={{color: 'white', fontSize: hp('2%'), fontWeight: '500'}}>Submit</Text>
                         </Button>
                     </View>
 
                 </KeyboardAwareScrollView>
+                <ProgressLoader
+                    isHUD={true}
+                    isModal={true}
+                    visible={this.state.isLoading}
+                    color={base.theme.colors.primary}
+                    hudColor={"#FFFFFF"}
+                />
             </View>
         );
     }

@@ -15,7 +15,6 @@ export default class CreateCheckPoint extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
             currentposition: '',
             lat: '',
             long: '',

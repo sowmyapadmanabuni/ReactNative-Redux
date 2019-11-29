@@ -302,7 +302,7 @@ class GetStaffReport extends React.Component {
                                       numberofLines={1}
                                       ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
                             </View>
-                            {this.props.staffReducer.staffDesignation ?
+                            {this.props.staffReducer.staffDesignation !=="" ?
 
                                 <Text style={StaffStyle.desigText}> ({this.props.staffReducer.staffDesignation})</Text>
                                 : <View/>}

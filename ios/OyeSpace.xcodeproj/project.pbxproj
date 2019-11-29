@@ -60,6 +60,7 @@
 		967B8AB0A6A94F16A283D204 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D8FED1A448A4B69B4222891 /* MaterialIcons.ttf */; };
 		9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9332DBD6EE4F83BBCE6AFB /* RNHTMLtoPDFTests.xctest */; };
 		9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */; };
+		9D9C81365F0D4459BA78100D /* libRNLocationSatellites.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26BC40904E4A4FEAB7D5712E /* libRNLocationSatellites.a */; };
 		9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06026B22C4FF5200DA17C8 /* MapKit.framework */; };
 		9F675E6E22E5C99500D175F9 /* libRCTContactsWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F675E3A22E5C98800D175F9 /* libRCTContactsWrapper.a */; };
 		9FB793932355CA3700D8145E /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9FB793922355CA3700D8145E /* sound_1.mp3 */; };
@@ -879,6 +880,22 @@
 				FD3E1430226060720021E700 /* libjsiexecutor.a */,
 				FD3E1432226060720021E700 /* libjsi-tvOS.a */,
 				FD3E1434226060720021E700 /* libjsiexecutor-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1E2C186E238D2BE3000D0001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1E2C1872238D2BE3000D0001 /* libRNImageToPdf.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1E2C1873238D2BE4000D0001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1E2C1877238D2BE4000D0001 /* libRNLocationSatellites.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";

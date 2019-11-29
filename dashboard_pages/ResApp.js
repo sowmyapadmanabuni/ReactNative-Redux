@@ -82,6 +82,8 @@ import ReportsHeader from '../src/components/NavigationalHeaders/ReportsHeader';
 import Announcement from '../assocition_pages/announcement.js';
 import AddExpense from "../src/screens/OyeLiving/Expenses/AddExpense";
 import EditExpense from "../src/screens/OyeLiving/Expenses/EditExpense";
+import StaffLeaveWithVendor from '../src/screens/Resident/Visitors/Staff/staffLeaveWithVendor.js';
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -247,7 +249,9 @@ const ResApp = createStackNavigator({
   CreateOrJoinScreen: {
     screen: CreateOrJoin,
     navigationOptions: {
-      title: 'Association'
+      title: 'Association',
+      header: props => <DashBoardHeader {...props} />
+
       // headerStyle: { backgroundColor: '#FA9917' },
       // headerTintColor: '#ffffff',
     }

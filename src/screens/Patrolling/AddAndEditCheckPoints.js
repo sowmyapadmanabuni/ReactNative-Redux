@@ -291,7 +291,8 @@ class AddAndEditCheckPoints extends React.Component {
         console.log("updateSatelliteCount...");
         let self = this;
         GPSEventEmitter.removeListener('RNSatellite');
-        GPSEventEmitter.addListener('RNSatellite', (event) => {
+        GPSEventEmitter.addListener('RNSatellite', (ev) => {
+            let event = Platform.OS==='ios'?ev[0]:ev;
             console.log(":RN SATELLITE:",event)
             var sat = self.state.satelliteCount;
             var currentSat = event.satellites;
@@ -308,7 +309,7 @@ class AddAndEditCheckPoints extends React.Component {
                     latitudeDelta: LATITUDE_DELTA,
                 },
                 gpsLocation: parseFloat(event.latitude) + "," + parseFloat(event.longitude),
-            },()=>self.renderUserLocation())
+            },()=>{console.log("LOCATION_UPDATE:",self.state.region); self.renderUserLocation()})
 
         });
         console.log(":RN SATELLITE:########:",self.state)
@@ -489,16 +490,19 @@ class AddAndEditCheckPoints extends React.Component {
         let self = this;
         let lat = self.state.region.latitude;
         let long = self.state.region.longitude;
-        console.log(':RN SATELLITE:@@@@@@@',lat,long,self.state.region)
+        console.log(':RN SATELLITE:@@@@@@@',lat,long,self.state.region,!isNaN(lat) && !isNaN(long))
         return (
             <View>
+                {
+                    (!isNaN(lat) && !isNaN(long))?
                 <Marker.Animated key={1024+'_' + Date.now()}
                                  pinColor={base.theme.colors.green}
                                  style={{alignItems: 'center', justifyContent: 'center'}}
                                  animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
                                  coordinate={{latitude: lat, longitude: long}}>
 
-                </Marker.Animated>
+                </Marker.Animated>:<View/>
+    }
             </View>
         )
     }
@@ -619,6 +623,11 @@ class AddAndEditCheckPoints extends React.Component {
         //(":RN SATELLITE:",event)
         //console.log("State", this.state);
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
+        var region = this.state.region;
+        if(isNaN(region.latitude) || isNaN(region.longitude)){
+            region.latitude = 0
+            region.longitude = 0
+        }
         return (
             <ScrollView onPress={() => Keyboard.dismiss()}>
                 <View style={AddAndEditCheckPointStyles.container}>
@@ -626,10 +635,11 @@ class AddAndEditCheckPoints extends React.Component {
                         <Text style={AddAndEditCheckPointStyles.headerText}>{headerText}</Text>
                     </View>
                     <View style={AddAndEditCheckPointStyles.mapBox}>
+                        {
                         <MapView
                             provider={PROVIDER_GOOGLE}
                             style={AddAndEditCheckPointStyles.map}
-                            region={this.state.region}
+                            region={region}
                             showsUserLocation={true}
                             showsBuildings={true}
                             zoomEnabled={true}
@@ -640,6 +650,7 @@ class AddAndEditCheckPoints extends React.Component {
                         >
                             {this.renderUserLocation()}
                         </MapView>
+                    }
                     </View>
                     <View style={{height:hp('1'),top:hp('3'),width:wp('80'),alignSelf:'center',justifyContent:'center',alignItems:'center'}}>
                         <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
@@ -742,7 +753,6 @@ class AddAndEditCheckPoints extends React.Component {
                     progress={this.state.progress}
                     loop={true}
                     style={{
-
                         backgroundColor: base.theme.colors.white,
                         alignSelf: 'center',
                         justifyContent:'center',
