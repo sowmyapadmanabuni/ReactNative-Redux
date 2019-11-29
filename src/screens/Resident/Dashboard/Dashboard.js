@@ -723,18 +723,18 @@ class Dashboard extends PureComponent {
     }
 
 
- timer.setInterval(
-         this,
-         'syncData',
-         () => {
-           console.log("I am Timer");
-           this.syncData();
-           //     //     // alert("hererereerrrereer");
-         },
-         5000
-     );
-   }
-
+//  timer.setInterval(
+//          this,
+//          'syncData',
+//          () => {
+//            console.log("I am Timer");
+            this.syncData();
+//            //     //     // alert("hererereerrrereer");
+//          },
+//          5000
+//      );
+//    }
+  }
 
   handleConnectivityChange = isConnected => {
     console.log('CONNECTION DATA',isConnected)

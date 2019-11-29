@@ -457,12 +457,14 @@ class StaffLeaveWithVendor extends Component {
 
   checkValidation(){
     let self=this;
-    if(self.state.audioRecord==""){
+   /* if(self.state.audioRecord==""){
       Alert.alert('Please record audio.It is mandatory')
     }
     else{
       self.uploadAudio(self.state.audioRecord)
-    }
+    }*/
+    self.uploadAudio(self.state.audioRecord)
+
   }
 
   selectImage() {
@@ -684,7 +686,7 @@ class StaffLeaveWithVendor extends Component {
             comment:"",
             audioRecord:"",
             audioToServer:"",
-            currentTime:"",
+           // currentTime:"",
             timeStamp:"",
             selectedImage: "",
             isModalOpen:false,

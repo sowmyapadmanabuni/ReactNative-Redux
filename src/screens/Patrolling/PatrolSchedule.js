@@ -163,7 +163,7 @@ class PatrolSchedule extends React.Component {
                         </View>}
                 </View>
                 {this.openMapModal()}
-                <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
+                <FloatingButton marginTop={hp('75%')} onBtnClick={() => this.changePage()}/>
             </Container>
         )
     }
@@ -325,7 +325,7 @@ class PatrolSchedule extends React.Component {
                     <EmptyView height={10}/>
                     <ElevatedView elevation={0}>
                         <Switch
-                            style={{width: Platform.OS === 'ios' ? wp('12%') : wp('10%')}}
+                            style={{width: Platform.OS === 'ios' ? wp('15%') : wp('10%')}}
                             onValueChange={() => this.changeSnooze(data)}
                             value={data.psSnooze}/>
                     </ElevatedView>

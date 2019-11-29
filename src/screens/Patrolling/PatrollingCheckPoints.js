@@ -40,6 +40,7 @@ class PatrollingCheckPoints extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            listLength: 0,
             checkPointArray: [],
             isChecked: false,
             isModalOpen: false,
@@ -137,6 +138,10 @@ class PatrollingCheckPoints extends React.Component {
         console.log("Stat in Patrolling CP:", stat);
         try {
             if (stat && stat !== undefined) {
+                this.setState({
+                    listLength : stat.data.checkPointListByAssocID.length
+                });
+
                 let cpList = stat.data.checkPointListByAssocID;
                 if (this.props.navigation.state.params !== undefined && this.props.navigation.state.params.isRefreshing) {
                     // let cpListIDs = this.props.navigation.state.params.data.psChkPIDs;
@@ -241,7 +246,7 @@ class PatrollingCheckPoints extends React.Component {
                             <Text>No Check Points available</Text>
                         </View>}
                 </View>
-                <FloatingActionButton marginTop={heightPercentageToDP('80')} onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
+                <FloatingActionButton marginTop={heightPercentageToDP('75%')} onBtnClick={() => this.props.navigation.navigate('addCheckPoint')} />
             </View>
         )
     }
@@ -315,9 +320,9 @@ class PatrollingCheckPoints extends React.Component {
         return (
             <View>
                 <Marker key={1024}
-                    pinColor={base.theme.colors.primary}
-                    style={PatrollingCheckPointsStyles.marker}
-                    coordinate={{ latitude: lat, longitude: long }}>
+                        pinColor={base.theme.colors.primary}
+                        style={PatrollingCheckPointsStyles.marker}
+                        coordinate={{ latitude: lat, longitude: long }}>
 
                 </Marker>
             </View>
@@ -354,9 +359,11 @@ class PatrollingCheckPoints extends React.Component {
 
     _renderCheckPoints(item) {
         let data = item;
-        console.log("Item:", item.item);
+        console.log("Item:", this.state.listLength);
         return (
-            <View style={PatrollingCheckPointsStyles.checkBoxView}>
+            <View style={[PatrollingCheckPointsStyles.checkBoxView,
+                {marginBottom: item.index == (this.state.listLength-1) ? 80 : 0}
+            ]}>
                 <View style={PatrollingCheckPointsStyles.checkPoint}>
                     <CheckBox
                         style={PatrollingCheckPointsStyles.checkBoxStyle}
@@ -367,8 +374,8 @@ class PatrollingCheckPoints extends React.Component {
                         isChecked={item.item.isChecked} />
                 </View>
                 <TouchableHighlight onPress={() => this.mapModal(data)}
-                    underlayColor={base.theme.colors.transparent}
-                    style={{ justifyContent: 'center' }}>
+                                    underlayColor={base.theme.colors.transparent}
+                                    style={{ justifyContent: 'center' }}>
                     <View>
                         <Image
                             style={PatrollingCheckPointsStyles.mapImage}
@@ -393,10 +400,10 @@ class PatrollingCheckPoints extends React.Component {
                             resizeMode={'contain'}
                         />
                         <Text numberOfLines={1}
-                            style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>
+                              style={PatrollingCheckPointsStyles.locationText}>{data.item.cpgpsPnt}</Text>
                     </View>
                     <View style={PatrollingCheckPointsStyles.locationView}>
-                    <Image
+                        <Image
                             resizeMode={'center'}
                             style={PatrollingCheckPointsStyles.locationImageStyle}
                             source={require('../../../icons/checkpoint.png')}
@@ -410,7 +417,7 @@ class PatrollingCheckPoints extends React.Component {
                             underlayColor={base.theme.colors.transparent}
                             onPress={() => this.navigateToQRScree(data)}>
                             <Image style={PatrollingCheckPointsStyles.rightImageStyle}
-                                source={require('../../../icons/qr-codes.png')} />
+                                   source={require('../../../icons/qr-codes.png')} />
                         </TouchableHighlight>
                     </ElevatedView>
                     <EmptyView height={10} />
@@ -457,9 +464,6 @@ class PatrollingCheckPoints extends React.Component {
     selectDeleteType(data) {
         (this.state.isEditing) ? this.deleteSlotCP(data) : this.deleteCP(data);
     }
-
-
-
 
     async deleteSlotCP(data) {
         let self = this;

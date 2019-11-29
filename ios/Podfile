@@ -116,6 +116,9 @@ target 'OyeSpace' do
   pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
 
   pod 'RNPDF', :path => '../node_modules/react-native-view-pdf'
+  
+
+
 
 #  pod 'react-native-location-satellites', :path => '../node_modules/react-native-location-satellites'
 
