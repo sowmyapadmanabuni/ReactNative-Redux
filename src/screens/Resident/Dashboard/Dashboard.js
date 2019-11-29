@@ -217,13 +217,15 @@ class Dashboard extends PureComponent {
             }
 
             if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-              this.showExitAlert();
+              //this.showExitAlert();
               // BackHandler.exitApp();
               //return true;
             }
             if (this.state.isSelectedCard === 'UNIT') {
-              this.showExitAlert();
-              //BackHandler.exitApp();
+              //this.showExitAlert();
+              //this.props.navigation.goBack(null);
+
+              BackHandler.exitApp();
             } else {
               this.changeCardStatus('UNIT');
             }
