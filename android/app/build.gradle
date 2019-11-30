@@ -121,8 +121,8 @@ android {
         applicationId "com.oyespace.oyesafe"
         minSdkVersion 19
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "10.17"
+        versionCode 18
+        versionName "10.18"
         multiDexEnabled true
         ndk {
             // abiFilters "armeabi-v7a", "x86"

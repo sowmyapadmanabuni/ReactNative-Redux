@@ -674,6 +674,7 @@ export const refreshNotifications = (
                )
                .then(res => {
                  let responseData = res.data.data;
+                 console.log('RESPONSE DATA IN REFRESH NOTIFICATIONS',responseData,allNotifs)
                  for (let i = 0; i < allNotifs.length; i++) {
                    if (
                      allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID

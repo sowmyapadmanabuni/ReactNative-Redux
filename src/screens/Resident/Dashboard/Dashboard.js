@@ -99,7 +99,6 @@ class Dashboard extends PureComponent {
       isDataVisible: false,
       isNoAssJoin: false,
       isSOSSelected: false,
-      isConnected: true,
       myUnitIconWidth:Platform.OS === 'ios' ? 30 : 20,
       myUnitIconHeight:Platform.OS === 'ios' ? 30 : 20,
       myAdminIconWidth:Platform.OS === 'ios' ? 20 : 20,
@@ -121,9 +120,12 @@ class Dashboard extends PureComponent {
       isDataVisible: true,
 
     });
-    this.getListOfAssociation();
-    this.myProfileNet();
-    this.listenRoleChange();
+    if(this.props.dashBoardReducer.isInternetConnected){
+      this.getListOfAssociation();
+      this.myProfileNet();
+      this.listenRoleChange();
+    }
+
 
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
@@ -240,7 +242,6 @@ class Dashboard extends PureComponent {
   }
 
   componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     this.backButtonListener.remove();
     this.focusListener.remove();
   }
@@ -544,8 +545,8 @@ class Dashboard extends PureComponent {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-           this.props.refreshNotifications(oyeURL, MyAccountID);
-          //this.props.getNotifications(oyeURL, MyAccountID);
+           //this.props.refreshNotifications(oyeURL, MyAccountID);
+          this.props.getNotifications(oyeURL, MyAccountID);
 
 
           this.showLocalNotification(notification);
@@ -704,7 +705,6 @@ class Dashboard extends PureComponent {
     const { oyeURL } = this.props.oyespaceReducer;
 
     console.log('Props in dashboard did mount ####',this.props)
-    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
 
 
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
@@ -745,14 +745,6 @@ timer.setInterval(
    }
 
 
-  handleConnectivityChange = isConnected => {
-    console.log('CONNECTION DATA',isConnected)
-    if (isConnected) {
-      this.setState({isConnected});
-    } else {
-      this.setState({isConnected});
-    }
-  };
 
   async roleCheckForAdmin(index) {
     const { dropdown, dropdown1 } = this.props;
@@ -1325,15 +1317,17 @@ timer.setInterval(
       dropdown1.length,
       this.props
     );
+    console.log('CHECK NET!!!!!!',this.props.dashBoardReducer.isInternetConnected)
 
-    if(!this.state.isConnected){
-      console.log('CHECK NET!!!!!!',this.state.isConnected)
+
+    if(!this.props.dashBoardReducer.isInternetConnected){
+      console.log('CHECK NET!!!!!!',this.props.dashBoardReducer.isInternetConnected)
 
       return(
           <View style={{height:'100%',width:'100%',alignItems:'center',justifyContent:'flex-start',marginTop:Platform.OS === 'ios'?50:100}}>
             <TouchableOpacity  style={{height:'50%',width:'100%',}}
-                                              onPress={() =>
-                                                  NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange)}>
+                                              onPress={() => console.log('RELOAD PAGE')
+                                              }>
             <Image
                 resizeMode={Platform.OS === 'ios'?'contain':'center'}
                 style={{height:'100%',width:'100%',}}
