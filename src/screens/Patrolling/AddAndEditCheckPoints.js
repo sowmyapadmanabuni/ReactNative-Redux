@@ -475,10 +475,10 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
-                        cpArray: stat.data.checkPointListByAssocID,
-                        lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                    }
-                    //,()=>self.updateSatelliteCount()
+                    cpArray: stat.data.checkPointListByAssocID,
+                    lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
+                }
+                //,()=>self.updateSatelliteCount()
                 )
             }
         } catch (e) {
@@ -695,8 +695,8 @@ class AddAndEditCheckPoints extends React.Component {
                             }}
                         >
                             <Image
-                                resizeMode={'contain'}
-                                style={AddAndEditCheckPointStyles.signalIcon}
+                                resizeMode={Platform.OS === 'ios'?'contain':'center'}
+                                style={{height:hp('5%'),width:wp('5%')}}
                                 source={
                                     this.state.signalState ?
                                         require('../../../icons/goodSignal.png')
@@ -763,7 +763,7 @@ class AddAndEditCheckPoints extends React.Component {
                         </RadioForm>
                     </View>
                     <EmptyView height={0}/>
-                    <View style={AddAndEditCheckPointStyles.buttonView}>
+                    <View style={[AddAndEditCheckPointStyles.buttonView,{marginBottom:40}]}>
                         <OSButton onButtonClick={() => this.props.navigation.goBack(null)} oSBText={"Cancel"}
                                   oSBType={"custom"}
                                   oSBBackground={base.theme.colors.red}
@@ -811,6 +811,7 @@ class AddAndEditCheckPoints extends React.Component {
                     source={require('../../assets/gps.json')}
                 />
                 <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
+
             </Modal>
         )
     }

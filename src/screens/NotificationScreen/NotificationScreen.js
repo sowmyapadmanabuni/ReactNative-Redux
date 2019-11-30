@@ -69,8 +69,8 @@ class NotificationScreen extends PureComponent {
             this.props.userReducer.SelectedAssociationID
         );
         console.log('Get the deatails',this.props)
-        this.props.refreshNotifications(this.props.oyeURL, this.props.MyAccountID);
-
+        //this.props.refreshNotifications(this.props.oyeURL, this.props.MyAccountID);
+        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
         //this.doNetwork(null, this.props.notifications);
 
         firebase.notifications().removeAllDeliveredNotifications();
@@ -327,7 +327,7 @@ class NotificationScreen extends PureComponent {
 
 
     renderItem = ({item, index}) => {
-        console.log('ITEMSOFNOTIFICATION#######', item,index); //11600
+        console.log('ITEMSOFNOTIFICATION#######', item,index);
 
         const {savedNoifId, notifications, oyeURL} = this.props;
 
@@ -615,6 +615,7 @@ class NotificationScreen extends PureComponent {
             oyeURL,
             MyAccountID,
             footerLoading,
+            getNotifications,
             page
         } = this.props;
         // console.log(loading)
@@ -670,7 +671,7 @@ class NotificationScreen extends PureComponent {
                             <RefreshControl
                                 refreshing={refresh}
                                 onRefresh={() => {
-                                    refreshNotifications(
+                                    getNotifications(
                                         oyeURL,
                                         MyAccountID,
                                         null,
