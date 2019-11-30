@@ -740,7 +740,7 @@ timer.setInterval(
            this.syncData();
            //     //     // alert("hererereerrrereer");
          },
-         5000
+         10000
      );
    }
 
