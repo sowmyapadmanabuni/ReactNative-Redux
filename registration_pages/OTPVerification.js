@@ -170,7 +170,7 @@ class OTPVerification extends Component {
                     console.log("suvarna", "hi");
                 })
                 .catch(error => {
-                    console.error("err " + error);
+                   // console.error("err " + error);
                     console.log("Verification", "error " + error);
                     alert("OTP Verification failed");
                 });

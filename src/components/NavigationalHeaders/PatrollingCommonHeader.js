@@ -68,7 +68,7 @@ class PatrollingCommonHeader extends React.Component {
                     // onPress={() => goBack(null)}   //Passing null for as a parameter in the case of nested StackNavigators   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
                     style={styles.buttonView}>
                     <Image
-                        resizeMode={'center'}
+                        resizeMode={'contain'}
                         style={styles.backButton}
                         source={require('../../../icons/arrowBack.png')}
                     />
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
         paddingTop: 3
     },
     backButton: {
-        height: '50%'
+        height: '45%'
     },
     logoView: {
         height: 50,
