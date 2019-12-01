@@ -222,6 +222,7 @@ class MyGuests extends Component {
   };
 
   renderItem = ({ item, index }) => {
+    console.log("EntryImg ",item.vlEntryImg)
     console.log('List in visited ', item, index);
     return (
       <View
@@ -285,6 +286,7 @@ class MyGuests extends Component {
                 style={styles.profilePicImageStyle}
                 source={{
                   uri: `${this.props.mediaupload}` + item.vlEntryImg
+                  //uri: `${this.props.mediaupload}` + "02467acf-9c62-43c8-a69c-d25650f30c49_pic.jpg"
                 }}
               />
             )}
@@ -519,6 +521,7 @@ class MyGuests extends Component {
   };
 
   render() {
+    console.log("this.props.mediaupload ",this.props.mediaupload);
     return (
       <View style={{ flex: 1, marginTop: hp('1%') }}>
         {/* <Header /> */}
@@ -708,7 +711,7 @@ const styles = StyleSheet.create({
   datePickerButtonView: {
     marginTop: hp('1.5%'),
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    //justifyContent: 'flex-end',
     justifyContent: 'space-around',
     marginHorizontal: hp('2%')
   },

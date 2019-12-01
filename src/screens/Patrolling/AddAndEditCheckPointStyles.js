@@ -7,9 +7,11 @@ import base from "../../base";
  */
 const AddAndEditCheckPointStyles = StyleSheet.create({
     container: {
-        height: hp("100%"),
+        //height: hp("100%"),
+        marginBottom:hp(3),
         backgroundColor: base.theme.colors.white,
-        paddingBottom: Platform.OS === 'ios' ? hp('80%') : hp('70%')
+        //paddingBottom: Platform.OS === 'ios' ? hp('80%') : hp('70%')
+        //paddingBottom: Platform.OS === 'ios' ? hp('80%') : hp('70%')
     },
     header: {
         alignItems: 'center',
@@ -62,20 +64,25 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
         color: base.theme.colors.primary
     },
     buttonView: {
+        marginTop:hp(5),
         borderWidth: 0,
         width: "100%",
-        height: hp('10%'),
+        //height: hp('10%'),
         justifyContent: 'space-around',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     map: {
         ...StyleSheet.absoluteFillObject,
     },
     radioView: {
-        height: "15%",
-        width: "90%",
-        alignSelf: 'center'
+        //height: "15%",
+        //width: "90%",
+        alignItems:'center',
+        justifyContent:'center',
+        alignSelf: 'center',
+        //backgroundColor:'yellow',
+        marginTop:hp(5),
     },
     radioButtonWrap: {
         marginRight: 5

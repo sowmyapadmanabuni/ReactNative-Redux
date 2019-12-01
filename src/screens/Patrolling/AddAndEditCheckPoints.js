@@ -91,7 +91,6 @@ class AddAndEditCheckPoints extends React.Component {
 
         this.getUserLocation = this.getUserLocation.bind(this)
 
-
     }
 
 
@@ -269,7 +268,11 @@ class AddAndEditCheckPoints extends React.Component {
         //this.updateSatelliteCount();
         this.interval = setInterval(() => {
             this.updateSatelliteCount();
+            this.checkCount("start");
         }, 20000);
+        // this.signal = setInterval(() => {
+        //     //this.checkCount("start");
+        // }, 1000);
         //this.watchuserPosition();
     }
 
@@ -297,7 +300,7 @@ class AddAndEditCheckPoints extends React.Component {
             var sat = self.state.satelliteCount;
             var currentSat = event.satellites;
             if(sat != 0 && event.satelliteCount == 0){
-                    currentSat = sat;
+                currentSat = sat;
             }
             self.setState({
                 satelliteCount : currentSat,
@@ -361,6 +364,7 @@ class AddAndEditCheckPoints extends React.Component {
 
     componentWillUnmount() {
         clearInterval(this.interval);
+        //clearInterval(this.signal);
         GPSEventEmitter.removeListener('RNSatellite')
         GPSEventEmitter.removeListener('EVENT_NAME')
         /*if (this.watchId !== null) {
@@ -474,10 +478,10 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
-                    cpArray: stat.data.checkPointListByAssocID,
-                    lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                }
-                //,()=>self.updateSatelliteCount()
+                        cpArray: stat.data.checkPointListByAssocID,
+                        lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
+                    }
+                    //,()=>self.updateSatelliteCount()
                 )
             }
         } catch (e) {
@@ -504,23 +508,21 @@ class AddAndEditCheckPoints extends React.Component {
         )
     }
 
-    checkCount(){
-        if(this.state.satelliteCount > 4) {
+    checkCount(type){
+        if(this.state.satelliteCount > 4 || this.state.accuracy<=15) {
+            this.setState({signalState:true});
+            if(type === "by click")
             this.validateFields()
         }
         else{
-            if (this.state.accuracy<=15){
-                this.validateFields()
-            }
-            else{
-                this.setState({signalState:false});
+            this.setState({signalState:false});
+            if(type === "by click")
                 Alert.alert("Failed to get accurate user position","Can't proceed further")
-            }
         }
     }
 
     validateFields() {
-        this.setState({signalState:true});
+
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
         } else {
@@ -623,7 +625,10 @@ class AddAndEditCheckPoints extends React.Component {
         //console.log("State", this.state);
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
         return (
-            <ScrollView onPress={() => Keyboard.dismiss()}>
+            <ScrollView
+
+                onPress={() => Keyboard.dismiss()}
+            >
                 <View style={AddAndEditCheckPointStyles.container}>
                     <View style={AddAndEditCheckPointStyles.header}>
                         <Text style={AddAndEditCheckPointStyles.headerText}>{headerText}</Text>
@@ -646,9 +651,15 @@ class AddAndEditCheckPoints extends React.Component {
                     </View>
 
                     <View style={{
-                        flexDirection:'row', alignItems:'center',justifyContent:'center',top:hp('3'),}}>
+                        flexDirection:'row',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        top:hp('3'),
+                        //backgroundColor:'yellow'
+                    }}>
                         <View style={{
-                            height:hp('1'),
+                            //flex:1,
+                            //height:hp('1'),
                             //top:hp('3'),
                             //width:wp('80'),
                             //alignSelf:'center',
@@ -704,7 +715,7 @@ class AddAndEditCheckPoints extends React.Component {
                             }}>{this.state.gpsLocation}</Text>
                         </View>
                     </View>
-                    <EmptyView height={35}/>
+                    {/*<EmptyView height={35}/>*/}
                     <View style={AddAndEditCheckPointStyles.radioView}>
                         <RadioForm
                             formHorizontal={true}
@@ -732,21 +743,24 @@ class AddAndEditCheckPoints extends React.Component {
                             })}
                         </RadioForm>
                     </View>
-                    <EmptyView height={0}/>
+                    {/*<EmptyView height={0}/>*/}
+
                     <View style={AddAndEditCheckPointStyles.buttonView}>
                         <OSButton onButtonClick={() => this.props.navigation.goBack(null)} oSBText={"Cancel"}
                                   oSBType={"custom"}
                                   oSBBackground={base.theme.colors.red}
                                   height={30} borderRadius={10}/>
                         {/* <OSButton onButtonClick={() => this.validateFields()} */}
-                        <OSButton onButtonClick={() => this.checkCount()}
+                        <OSButton onButtonClick={() => this.checkCount("by click")}
                                   oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
                             //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
                                   oSBBackground={base.theme.colors.primary}
                                   height={30} borderRadius={10}/>
                     </View>
+
                 </View>
                 {this.openLottieModal()}
+
             </ScrollView>
         )
     }
@@ -781,7 +795,6 @@ class AddAndEditCheckPoints extends React.Component {
                     source={require('../../assets/gps.json')}
                 />
                 <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
-
             </Modal>
         )
     }

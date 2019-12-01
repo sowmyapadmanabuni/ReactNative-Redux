@@ -313,7 +313,7 @@ class MyProfile extends Component {
                   </View>
                 </View>
 
-                <View style={{ alignItems: 'center', marginBottom: hp('4%') }}>
+                <View style={{ marginTop:hp('2%'),alignItems: 'center', marginBottom: hp('4%') }}>
                   <Text style={styles.itemTextValues1}>
                     {this.state.datasource
                       ? this.state.datasource.data.account[0].acfName +
@@ -439,6 +439,7 @@ class MyProfile extends Component {
           </View>
           <View
             style={{
+              marginTop:hp('1%'),
               bottom: hp('3%'),
               alignItems: 'flex-end',
               right: hp('3%')

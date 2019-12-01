@@ -167,252 +167,6 @@ class NotificationScreen extends PureComponent {
         }
     };
 
-    renderIcons = (type, item, index) => {
-        const {savedNoifId} = this.props;
-        // let status = _.includes(savedNoifId, item.ntid);
-
-        if (type === 'name') {
-            if (!item.ntIsActive) {
-                return 'mail-read';
-            } else {
-                return 'ios-mail-unread';
-            }
-        } else if (type === 'type') {
-            if (!item.ntIsActive) {
-                return 'octicon';
-            } else {
-                return 'ionicon';
-            }
-        } else if (type === 'style') {
-            if (!item.ntIsActive) {
-                return {backgroundColor: '#fff'};
-            } else {
-                return {backgroundColor: '#eee'};
-            }
-        }
-    };
-
-    renderTitle = type => {
-        if (type === 'Join') {
-            return 'Request to Join';
-        } else if (type === 'Join_Status') {
-            return 'Request to Join Status';
-        } else if (type === 'gate_app') {
-            return 'Gate App Notification';
-        } else if (type === 'Announcement') {
-            return 'Announcement';
-        }
-    };
-
-    renderStyle = active => {
-        if (active) {
-            return {backgroundColor: '#eee'};
-        } else return {backgroundColor: '#fff'};
-    };
-
-    gateAppNotif = () => {
-        const {details} = this.props.navigation.state.params;
-        // console.log("@#@$#$#@%#%#%#%@#%@#%", details.sbMemID);
-        fetch(
-            `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/` +
-            details.sbMemID,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log('Response from server notification list', responseJson);
-                this.setState({
-                    gateDetails: responseJson.data.visitorLog,
-                    Date:
-                        responseJson.data.visitorLog.vldCreated.substring(8, 10) +
-                        '-' +
-                        responseJson.data.visitorLog.vldCreated.substring(5, 7) +
-                        '-' +
-                        responseJson.data.visitorLog.vldCreated.substring(0, 4),
-                    Time: responseJson.data.visitorLog.vlEntryT.substring(11, 16),
-                    Date1:
-                        responseJson.data.visitorLog.vldUpdated.substring(8, 10) +
-                        '-' +
-                        responseJson.data.visitorLog.vldUpdated.substring(5, 7) +
-                        '-' +
-                        responseJson.data.visitorLog.vldUpdated.substring(0, 4),
-                    Time1: responseJson.data.visitorLog.vlExitT.substring(11, 16)
-                });
-                console.log(
-                    '@#!@$@#%#%#$^$^$%^$%^Gate Details',
-                    this.state.gateDetails,
-                    this.state.Date,
-                    this.state.Time
-                );
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
-
-    renderCollapseData(type, id) {
-        console.log('Gate app get data$$$$$$', type, id);
-        const {gateDetails} = this.state;
-        let value = '';
-
-        if (gateDetails.length <= 0) {
-            value = '';
-        } else {
-            if (type === 'vlGtName') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                console.log('founddata in notification', foundData);
-                value = foundData ? foundData.vlGtName : '';
-            } else if (type === 'vlfName') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlfName : '';
-            } else if (type === 'vlVisType') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlVisType : '';
-            } else if (type === 'vlComName') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlComName : ' ';
-            } else if (type === 'vlMobile') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlMobile : '';
-            } else if (type === 'vlEntryImg') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlEntryImg : '';
-            } else if (type === 'vlEntryT') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? moment(foundData.vlEntryT).format('hh:mm A') : '';
-            } else if (type === 'vlExitT') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? moment(foundData.vlExitT).format('hh:mm A') : '';
-            } else if (type === 'vldCreated') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData
-                    ? moment(foundData.vldCreated, 'YYYY-MM-DD').format('DD-MM-YYYY')
-                    : '';
-            } else if (type === 'vldUpdated') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData
-                    ? moment(foundData.vldUpdated, 'YYYY-MM-DD').format('DD-MM-YYYY')
-                    : '';
-            } else if (type === 'vlengName') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlengName : '';
-            } else if (type === 'vlexgName') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlexgName : '';
-            } else if (type === 'vlVisLgID') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.vlVisLgID : '';
-            } else if (type === 'unUnitID') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.unUnitID : '';
-            }
-            //unUniName
-            else if (type === 'unUniName') {
-                let foundData = _.find(gateDetails, {sbMemID: id});
-                value = foundData ? foundData.unUniName : '';
-            }
-        }
-
-        console.log('return value', value);
-        return value;
-    }
-
-    doNetwork = (item, notifications) => {
-        let gateDetailsArr = [];
-
-        console.log('Get the data in this API',this.props.notifications,this.props.notifications.length)
-
-        this.props.notifications.map((data, index) => {
-            if (data.ntType === 'gate_app') {
-                axios
-                    .get(
-                        `http://${this.props.oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
-                        //data.sbMemID`,
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                            }
-                        }
-                    )
-                    .then(res => {
-                        let responseData = res.data.data;
-
-                        for (let i = 0; i < this.props.notifications.length; i++) {
-                            if (
-                                this.props.notifications[i].sbMemID ===
-                                responseData.visitorLog.vlVisLgID
-                            ) {
-                                console.log(
-                                    'Ids equal',
-                                    this.props.notifications[i].sbMemID,
-                                    responseData.visitorLog.vlVisLgID
-                                );
-                                console.log(
-                                    'RESPONSE$$$',
-                                    responseData,
-                                    responseData.visitorLog.vlVisLgID
-                                );
-
-                                this.props.notifications[i].vlEntryImg =
-                                    responseData.visitorLog.vlEntryImg;
-                                this.props.notifications[i].vlGtName =
-                                    responseData.visitorLog.vlGtName;
-                                this.props.notifications[i].vlfName =
-                                    responseData.visitorLog.vlfName;
-                                this.props.notifications[i].vlVisType =
-                                    responseData.visitorLog.vlVisType;
-                                this.props.notifications[i].vlComName =
-                                    responseData.visitorLog.vlComName;
-                                this.props.notifications[i].vlMobile =
-                                    responseData.visitorLog.vlMobile;
-                                this.props.notifications[i].vlEntryT =
-                                    responseData.visitorLog.vlEntryT;
-                                this.props.notifications[i].vldCreated =
-                                    responseData.visitorLog.vldCreated;
-                                this.props.notifications[i].vlengName =
-                                    responseData.visitorLog.vlengName;
-                                this.props.notifications[i].vlexgName =
-                                    responseData.visitorLog.vlexgName;
-                                this.props.notifications[i].vldUpdated =
-                                    responseData.visitorLog.vldUpdated;
-                                this.props.notifications[i].vlExitT =
-                                    responseData.visitorLog.vlExitT;
-                                this.props.notifications[i].vlVisLgID =
-                                    responseData.visitorLog.vlVisLgID;
-                                //unUnitID
-                                this.props.notifications[i].unUnitID =
-                                    responseData.visitorLog.unUnitID;
-                                //unUniName
-                                this.props.notifications[i].unUniName =
-                                    responseData.visitorLog.unUniName;
-                                this.props.notifications[i].vlApprStat =
-                                    responseData.visitorLog.vlApprStat;
-                            }
-                        }
-                        this.setState(
-                            (prevState, newEmployer) => ({
-                                gateDetails: prevState.gateDetails.concat([
-                                    {...responseData.visitorLog, ...data}
-                                ])
-                            }),
-                            () => {
-                            }
-                        );
-                    })
-                    .catch(error => {
-                        console.log(error, 'error while fetching networks');
-                    });
-            }
-            console.log('Props  notifications~~~~~', this.props.notifications);
-        });
-    };
 
     acceptgateVisitor = (visitorId, index, associationid) => {
         let oldNotif = [...this.props.notifications];
@@ -612,6 +366,7 @@ class NotificationScreen extends PureComponent {
                     width:'100%',
                     height:80,
                     marginTop:10,
+                    marginBottom:this.props.notifications.length-1==index ?100:0
                 }} onPress={() => this.onPress(item, index)}>
                     <View style={{flexDirection:'row',width:'100%',height:80,backgroundColor:base.theme.colors.shadedWhite}}>
                         <View style={{width:'15%',}}>
@@ -663,6 +418,7 @@ class NotificationScreen extends PureComponent {
                     shadowRadius: 0.5, elevation: 3,  borderBottomWidth: 0.5,
                     width:'100%',
                     marginTop:10,
+                    marginBottom:this.props.notifications.length-1==index ?100:0
                 }}
                       onPress={() =>{
                           if (item.ntIsActive) {
@@ -840,7 +596,10 @@ class NotificationScreen extends PureComponent {
                             />}
 
                     </View>
+
+
                 </TouchableOpacity>
+
             );
         }
     };

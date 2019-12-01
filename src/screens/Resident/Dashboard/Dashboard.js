@@ -74,7 +74,7 @@ class Dashboard extends PureComponent {
     this.props = props;
 
     this.state = {
-      myUnitCardHeight: '80%',
+      myUnitCardHeight: Platform.OS === 'ios'?'90%':'80%',
       myUnitCardWidth: '25%',
       adminCardHeight: '60%',
       adminCardWidth: '20%',
@@ -99,21 +99,23 @@ class Dashboard extends PureComponent {
       isDataVisible: false,
       isNoAssJoin: false,
       isSOSSelected: false,
-      isConnected: true
+      isConnected: true,
+      myUnitIconWidth:Platform.OS === 'ios' ? 30 : 20,
+      myUnitIconHeight:Platform.OS === 'ios' ? 30 : 20,
+      myAdminIconWidth:Platform.OS === 'ios' ? 20 : 20,
+      myAdminIconHeight:Platform.OS === 'ios' ? 20 : 20,
+
 
     };
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.backButtonListener = null;
     this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
   }
 
-
   componentWillMount() {
     this.setState({
       isDataLoading: true,
       isDataVisible: true,
-
     });
     this.getListOfAssociation();
     this.myProfileNet();
@@ -122,7 +124,6 @@ class Dashboard extends PureComponent {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     console.log('API LEVEL#######',DeviceInfo.getAPILevel())
     console.log('API LEVEL#######1111111',DeviceInfo.getBaseOS())
     console.log('API LEVEL#######444444',DeviceInfo.getSystemVersion())
@@ -137,23 +138,23 @@ class Dashboard extends PureComponent {
       let MyAccountID = this.props.userReducer.MyAccountID;
       let self = this;
       fb.database()
-        .ref('SOS/' + SelectedAssociationID + '/' + MyAccountID + '/')
-        .on('value', function(snapshot) {
-          let receivedData = snapshot.val();
-          console.log('ReceiveddataDash', snapshot.val());
-          if (receivedData !== null) {
-            count = count + 1;
-            if (receivedData.isActive && receivedData.userId) {
-              self.props.navigation.navigate('sosScreen', {
-                isActive: true,
-                images:
-                  receivedData.emergencyImages === undefined
-                    ? []
-                    : receivedData.emergencyImages
-              });
+          .ref('SOS/' + SelectedAssociationID + '/' + MyAccountID + '/')
+          .on('value', function(snapshot) {
+            let receivedData = snapshot.val();
+            console.log('ReceiveddataDash', snapshot.val());
+            if (receivedData !== null) {
+              count = count + 1;
+              if (receivedData.isActive && receivedData.userId) {
+                self.props.navigation.navigate('sosScreen', {
+                  isActive: true,
+                  images:
+                      receivedData.emergencyImages === undefined
+                          ? []
+                          : receivedData.emergencyImages
+                });
+              }
             }
-          }
-        });
+          });
     }
 
     if (count === 0 && isNotificationClicked) {
@@ -196,102 +197,74 @@ class Dashboard extends PureComponent {
   shouldComponentUpdate(nextProps, nextState) {
     // return (
     return (
-      !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
+        !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
     );
     // );
   }
 
-  /*componentDidUpdate() {
+  componentDidUpdate() {
     if (Platform.OS === 'android') {
       setTimeout(() => {
         this.backButtonListener = BackHandler.addEventListener(
-          'hardwareBackPress',
-          () => {
-            if (this.currentRouteName !== 'Main') {
-              console.log("<< 1 >>")
-              this.props.navigation.goBack(null);
-              //return false;
-            }
-            if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-              console.log("<< 2 >>")
-              this.showExitAlert();
-              //BackHandler.exitApp();
+            'hardwareBackPress',
+            () => {
+              if (this.currentRouteName !== 'Main') {
+                console.log("<< 1 >>");
+                this.props.navigation.goBack(null);
+                //return false;
+              }
+              if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
+                console.log("<< 2 >>");
+                this.props.navigation.goBack(null);
+                this.showExitAlert();
+                // BackHandler.exitApp();
+                return true;
+              }
+              if (this.state.isSelectedCard === 'UNIT') {
+                //this.props.navigation.goBack(null);
+                console.log("<< 3 >>");
+                this.showExitAlert();
+                //this.props.navigation.goBack(null);
+                BackHandler.exitApp();
+              } else {
+                console.log("<< else >>")
+                this.changeCardStatus('UNIT');
+              }
+
+              this.lastBackButtonPress = new Date().getTime();
+
               return true;
             }
-            if (this.state.isSelectedCard === 'UNIT') {
-              console.log("<< 3 >>", this.state.isSelectedCard);
-              this.showExitAlert();
-              return true;
-              //BackHandler.exitApp();
-            } else {
-              console.log("<< else >>")
-              this.changeCardStatus('UNIT');
-            }
-
-            this.lastBackButtonPress = new Date().getTime();
-
-            return true;
-          }
         );
       }, 100);
     }
-  }*/
-
-  componentDidUpdate() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
   componentWillUnmount() {
-    console.log("componentWillUnmount")
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // this.setState({
-    //   isSelectedCard:""
-    // });
-
     NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
-    //this.backButtonListener.remove();
-    //this.focusListener.remove();
+    this.backButtonListener.remove();
+    this.focusListener.remove();
   }
-
-  handleBackButtonClick() {
-    console.log("handleBackButtonClick ", this.state.isSelectedCard, this.currentRouteName)
-    if (this.state.isSelectedCard !== "UNIT") {
-      console.log("<< 1 >>");
-      this.changeCardStatus('UNIT');
-      this.props.navigation.goBack(null);
-    }
-    else if (this.currentRouteName !== 'Main') {
-      console.log("<< 2 >>");
-      this.props.navigation.goBack(null);
-    }
-    else{
-      console.log("<< 3 >>");
-      this.showExitAlert()
-    }
-    return true;
-    //this.props.navigation.goBack(null);
-  }
-
 
   showExitAlert() {
     Alert.alert(
-      'Exit Oyespace ?',
-      'Are you sure, You want to exit the application ?',
-      [
-        {
-          text: 'No',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel'
-        },
-        {
-          text: 'Yes',
-          onPress: () => {
-            BackHandler.exitApp();
-            return true;
+        'Exit Oyespace ?',
+        'Are you sure, You want to exit the application ?',
+        [
+          {
+            text: 'No',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel'
+          },
+          {
+            text: 'Yes',
+            onPress: () => {
+              BackHandler.exitApp();
+              return true;
+            }
           }
-        }
-      ],
-      { cancelable: false }
+        ],
+        { cancelable: false }
     );
   }
 
@@ -305,30 +278,30 @@ class Dashboard extends PureComponent {
     } = this.props;
 
     firebase
-      .messaging()
-      .hasPermission()
-      .then(enabled => {
-        if (enabled) {
-          if (receiveNotifications) {
-            this.listenForNotif();
+        .messaging()
+        .hasPermission()
+        .then(enabled => {
+          if (enabled) {
+            if (receiveNotifications) {
+              this.listenForNotif();
+            }
+            // user has permissions
+          } else {
+            firebase
+                .messaging()
+                .requestPermission()
+                .then(() => {
+                  if (receiveNotifications) {
+                    this.listenForNotif();
+                  }
+                  // User has authorised
+                })
+                .catch(error => {
+                  // User has rejected permissions
+                });
+            // user doesn't have permission
           }
-          // user has permissions
-        } else {
-          firebase
-            .messaging()
-            .requestPermission()
-            .then(() => {
-              if (receiveNotifications) {
-                this.listenForNotif();
-              }
-              // User has authorised
-            })
-            .catch(error => {
-              // User has rejected permissions
-            });
-          // user doesn't have permission
-        }
-      });
+        });
 
     var headers = {
       'Content-Type': 'application/json',
@@ -336,67 +309,67 @@ class Dashboard extends PureComponent {
     };
 
     axios
-      .get(
-        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
-        {
-          headers: headers
-        }
-      )
-      .then(response => {
-        let data = response.data.data.memberListByAccount;
-        console.log(data, 'memList');
-
-
-        firebase.messaging().subscribeToTopic('' + MyAccountID + 'admin');
-        data.map(units => {
-          if (receiveNotifications) {
-            //alert(MyAccountID + "admin");
-            firebase
-              .messaging()
-              .subscribeToTopic(
-                '' + MyAccountID + units.unUnitID + 'usernotif'
-              );
-            console.log('date_asAssnID', units.asAssnID);
-            //alert(""+MyAccountID+units.unUnitID+"usernotif")
-            firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
-
-            // firebase.messaging().sendMessage("topic here")
-            // firebase.messaging().subscribeToTopic( + 'admin');
-            // alert(MyAccountID + 'admin');
-            // firebase.messaging().subscribeToTopic('7548admin');
-
-            firebase
-              .messaging()
-              .subscribeToTopic(units.asAssnID + 'Announcement');
-
-            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-              // console.log(units, 'units');
-              // firebase.messaging().subscribeToTopic(units.unUnitID + 'admin');
-              // alert(units.unUnitID + 'admin');
-            } else if (units.mrmRoleID === 1) {
-              // console.log(units, 'unitsadmin');
-              firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
-              // console.log(units.asAssnID + 'admin', 'subadmin');
-              // if (units.asAssnID + 'admin' === '7548admin') {
-              //   alert('Accepted');
-              // }
-              if (units.meIsActive) {
-                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
-                firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
-              } else {
-                firebase
-                  .messaging()
-                  .unsubscribeFromTopic(units.asAssnID + 'admin');
-              }
+        .get(
+            `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
+            {
+              headers: headers
             }
-          } else if (!receiveNotifications) {
-            // firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
-            firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
-            firebase.messaging().unsubscribeFromTopic(units.asAssnID + 'admin');
-          }
+        )
+        .then(response => {
+          let data = response.data.data.memberListByAccount;
+          console.log(data, 'memList');
+
+
+          firebase.messaging().subscribeToTopic('' + MyAccountID + 'admin');
+          data.map(units => {
+            if (receiveNotifications) {
+              //alert(MyAccountID + "admin");
+              firebase
+                  .messaging()
+                  .subscribeToTopic(
+                      '' + MyAccountID + units.unUnitID + 'usernotif'
+                  );
+              console.log('date_asAssnID', units.asAssnID);
+              //alert(""+MyAccountID+units.unUnitID+"usernotif")
+              firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+
+              // firebase.messaging().sendMessage("topic here")
+              // firebase.messaging().subscribeToTopic( + 'admin');
+              // alert(MyAccountID + 'admin');
+              // firebase.messaging().subscribeToTopic('7548admin');
+
+              firebase
+                  .messaging()
+                  .subscribeToTopic(units.asAssnID + 'Announcement');
+
+              if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
+                // console.log(units, 'units');
+                // firebase.messaging().subscribeToTopic(units.unUnitID + 'admin');
+                // alert(units.unUnitID + 'admin');
+              } else if (units.mrmRoleID === 1) {
+                // console.log(units, 'unitsadmin');
+                firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+                // console.log(units.asAssnID + 'admin', 'subadmin');
+                // if (units.asAssnID + 'admin' === '7548admin') {
+                //   alert('Accepted');
+                // }
+                if (units.meIsActive) {
+                  //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                  firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+                } else {
+                  firebase
+                      .messaging()
+                      .unsubscribeFromTopic(units.asAssnID + 'admin');
+                }
+              }
+            } else if (!receiveNotifications) {
+              // firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
+              firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
+              firebase.messaging().unsubscribeFromTopic(units.asAssnID + 'admin');
+            }
+          });
+          this.roleCheckForAdmin();
         });
-        this.roleCheckForAdmin();
-      });
   };
 
   showLocalNotification = notification => {
@@ -417,15 +390,15 @@ class Dashboard extends PureComponent {
 
       // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
-        'channel_id',
-        'Oyespace',
-        //firebase.notifications.Android.Importance.High
-      firebase.notifications.Android.Importance.Max
+          'channel_id',
+          'Oyespace',
+          //firebase.notifications.Android.Importance.High
+          firebase.notifications.Android.Importance.Max
 
 
-    ).setDescription('Oyespace channel')
+      ).setDescription('Oyespace channel')
           .setSound('oye_msg_tone.mp3');
-    //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+      //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
       channel.enableLights(true);
       // channel.enableVibration(true);
       // channel.vibrationPattern([500]);
@@ -541,53 +514,53 @@ class Dashboard extends PureComponent {
     console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222')
 
     if (
-      this.notificationDisplayedListener == undefined ||
-      this.notificationDisplayedListener == null
+        this.notificationDisplayedListener == undefined ||
+        this.notificationDisplayedListener == null
     ) {
       let navigationInstance = this.props.navigation;
 
       this.notificationDisplayedListener = firebase
-        .notifications()
-        .onNotificationDisplayed(notification => {
-          // console.log(notification)
-          // console.log('____________')
-          // Process your notification as required
-          // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-        });
+          .notifications()
+          .onNotificationDisplayed(notification => {
+            // console.log(notification)
+            // console.log('____________')
+            // Process your notification as required
+            // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+          });
 
       this.notificationListener = firebase
-        .notifications()
-        .onNotification(notification => {
+          .notifications()
+          .onNotification(notification => {
 
 
 
-          console.log('___________');
-          console.log(notification);
-          console.log('____________');
+            console.log('___________');
+            console.log(notification);
+            console.log('____________');
 
-          if (notification._data.associationID) {
-            // this.props.createNotification(notification._data, navigationInstance, false)
-          }
+            if (notification._data.associationID) {
+              // this.props.createNotification(notification._data, navigationInstance, false)
+            }
 
-          console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
-          const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-          const { oyeURL } = this.props.oyespaceReducer;
-           this.props.refreshNotifications(oyeURL, MyAccountID);
-          //this.props.getNotifications(oyeURL, MyAccountID);
+            console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
+            const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+            const { oyeURL } = this.props.oyespaceReducer;
+            this.props.refreshNotifications(oyeURL, MyAccountID);
+            //this.props.getNotifications(oyeURL, MyAccountID);
 
 
-          this.showLocalNotification(notification);
+            this.showLocalNotification(notification);
 
-          // showMessage({
-          //   message: notification.title,
-          //   description: notification.body,
-          //   type: "default",
-          //   backgroundColor: "#FF9100",
-          //   onPress: () => {
-          //     this.props.navigation.navigate("NotificationScreen");
-          //   }
-          // });
-        });
+            // showMessage({
+            //   message: notification.title,
+            //   description: notification.body,
+            //   type: "default",
+            //   backgroundColor: "#FF9100",
+            //   onPress: () => {
+            //     this.props.navigation.navigate("NotificationScreen");
+            //   }
+            // });
+          });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {
         const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
@@ -643,7 +616,7 @@ class Dashboard extends PureComponent {
             // );
           }
         } else if (notificationOpen.notification._data.admin === 'gate_app') {
-        //  this.props.getNotifications(oyeURL, MyAccountID);
+          //  this.props.getNotifications(oyeURL, MyAccountID);
 
           this.props.refreshNotifications(oyeURL, MyAccountID);
           // this.props.newNotifInstance(notificationOpen.notification);
@@ -661,7 +634,7 @@ class Dashboard extends PureComponent {
         }
         // this.props.getNotifications(oyeURL, MyAccountID);
         console.log(
-          '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+            '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
         );
         // let self = this;
         // // const { MyAccountID, SelectedAssociationID } = self.props.userReducer;
@@ -760,17 +733,17 @@ class Dashboard extends PureComponent {
     }
 
 
-/*timer.setInterval(
-         this,
-         'syncData',
-         () => {
-           console.log("I am Timer");
-           this.syncData();
-           //     //     // alert("hererereerrrereer");
-         },
-         5000
-     );*/
-   }
+    /*timer.setInterval(
+             this,
+             'syncData',
+             () => {
+               console.log("I am Timer");
+               this.syncData();
+               //     //     // alert("hererereerrrereer");
+             },
+             5000
+         );*/
+  }
 
 
   handleConnectivityChange = isConnected => {
@@ -787,7 +760,7 @@ class Dashboard extends PureComponent {
     console.log('Check unit and Association available@@@', dropdown, dropdown1);
     try {
       let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
-        this.state.assocId
+          this.state.assocId
       );
       let role = '';
       let isAdminFound = false;
@@ -800,16 +773,16 @@ class Dashboard extends PureComponent {
         assnId = assnId.trim() + 'admin';
 
         if (
-          responseJson.data.members[i].meIsActive &&
-          this.props.userReducer.MyAccountID ===
+            responseJson.data.members[i].meIsActive &&
+            this.props.userReducer.MyAccountID ===
             responseJson.data.members[i].acAccntID &&
-          parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
+            parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
         ) {
           console.log(
-            'Id_eq',
-            this.props.userReducer.MyAccountID,
-            responseJson.data.members[i].acAccntID,
-            responseJson.data.members[i].mrmRoleID
+              'Id_eq',
+              this.props.userReducer.MyAccountID,
+              responseJson.data.members[i].acAccntID,
+              responseJson.data.members[i].mrmRoleID
           );
           role = responseJson.data.members[i].mrmRoleID;
           if (role === 1) {
@@ -851,23 +824,23 @@ class Dashboard extends PureComponent {
 
       console.log(role, 'role');
       this.setState(
-        {
-          role: role
-        },
-        () => {
-          const { updateuserRole } = this.props;
-          console.log('Role123456:', updateuserRole);
-          updateuserRole({
-           prop: 'role',
-           value: role
-         });
-          const { updateIdDashboard } = this.props;
-          updateIdDashboard({
-            prop: 'roleId',
-            value: role
-           });
-          console.log('ROLE_UPDATE', role);
-        }
+          {
+            role: role
+          },
+          () => {
+            const { updateuserRole } = this.props;
+            console.log('Role123456:', updateuserRole);
+            updateuserRole({
+              prop: 'role',
+              value: role
+            });
+            const { updateIdDashboard } = this.props;
+            updateIdDashboard({
+              prop: 'roleId',
+              value: role
+            });
+            console.log('ROLE_UPDATE', role);
+          }
       );
       // })
       // .catch(error => {
@@ -890,77 +863,100 @@ class Dashboard extends PureComponent {
     self.setState({ isLoading: true });
 
     axios
-      .get(
-        `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
-        {
-          headers: {
-            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      .then(stat => {
-        console.log(
-          'API data for association list',
-          this.props.userReducer,
-          this.props.userReducer.MyAccountID,
-          this.props.oyeURL
-        );
-
-        console.log('Response_Association: ', stat);
-
-        try {
-          if (stat && stat.data.success) {
-            this.setState({
-              isNoAssJoin: false
-            });
-            let assocList = [];
-            for (
-              let i = 0;
-              i < stat.data.data.memberListByAccount.length;
-              i++
-            ) {
-              if (stat.data.data.memberListByAccount[i].asAsnName !== '') {
-                assocList.push({
-                  value: stat.data.data.memberListByAccount[i].asAsnName,
-                  details: stat.data.data.memberListByAccount[i]
-                });
+        .get(
+            `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
+            {
+              headers: {
+                'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                'Content-Type': 'application/json'
               }
             }
-            let sortedArr = assocList.sort(
-              base.utils.validate.compareAssociationNames
-            ); //open chrome
-            console.log('Sorted and All Asc List', sortedArr, assocList);
+        )
+        .then(stat => {
+          console.log(
+              'API data for association list',
+              this.props.userReducer,
+              this.props.userReducer.MyAccountID,
+              this.props.oyeURL
+          );
 
-            let removedDuplicates = _.uniqBy(sortedArr, 'value');
-            console.log('Removed duplicates', sortedArr, assocList);
+          console.log('Response_Association: ', stat);
 
-            self.setState({
-              assocList: removedDuplicates,
-              assocName: sortedArr[0].details.asAsnName,
-              assocId: sortedArr[0].details.asAssnID
-            });
-            const { updateIdDashboard } = this.props;
-            console.log('updateIdDashboard1', this.props);
-            updateIdDashboard({
-              prop: 'assId',
-              value: sortedArr[0].details.asAssnID
-            });
-            // updateIdDashboard({ prop: "memberList", value: sortedArr });
-            const { updateUserInfo } = this.props;
-            updateUserInfo({
-              prop: 'SelectedAssociationID',
-              value: sortedArr[0].details.asAssnID
-            });
-            base.utils.validate.checkSubscription(
-              this.props.userReducer.SelectedAssociationID
-            );
-            self.getUnitListByAssoc();
-          } else if (!stat.data.success) {
+          try {
+            if (stat && stat.data.success) {
+              this.setState({
+                isNoAssJoin: false
+              });
+              let assocList = [];
+              for (
+                  let i = 0;
+                  i < stat.data.data.memberListByAccount.length;
+                  i++
+              ) {
+                if (stat.data.data.memberListByAccount[i].asAsnName !== '') {
+                  assocList.push({
+                    value: stat.data.data.memberListByAccount[i].asAsnName,
+                    details: stat.data.data.memberListByAccount[i]
+                  });
+                }
+              }
+              let sortedArr = assocList.sort(
+                  base.utils.validate.compareAssociationNames
+              ); //open chrome
+              console.log('Sorted and All Asc List', sortedArr, assocList);
+
+              let removedDuplicates = _.uniqBy(sortedArr, 'value');
+              console.log('Removed duplicates', sortedArr, assocList);
+
+              self.setState({
+                assocList: removedDuplicates,
+                assocName: sortedArr[0].details.asAsnName,
+                assocId: sortedArr[0].details.asAssnID
+              });
+              const { updateIdDashboard } = this.props;
+              console.log('updateIdDashboard1', this.props);
+              updateIdDashboard({
+                prop: 'assId',
+                value: sortedArr[0].details.asAssnID
+              });
+              // updateIdDashboard({ prop: "memberList", value: sortedArr });
+              const { updateUserInfo } = this.props;
+              updateUserInfo({
+                prop: 'SelectedAssociationID',
+                value: sortedArr[0].details.asAssnID
+              });
+              base.utils.validate.checkSubscription(
+                  this.props.userReducer.SelectedAssociationID
+              );
+              self.getUnitListByAssoc();
+            } else if (!stat.data.success) {
+              this.setState({
+                isNoAssJoin: true
+              });
+              this.props.navigation.navigate('CreateOrJoinScreen')
+
+              /* Alert.alert(
+                 'Join association',
+
+                 'Please join in any association to access Data  ?',
+                 [
+                   {
+                     text: 'Yes',
+                     onPress: () =>
+                       this.props.navigation.navigate('CreateOrJoinScreen')
+                   },
+                   { text: 'No', style: 'cancel' }
+                 ]
+               );*/
+            }
+          } catch (error) {
+            console.log('Error details', error);
             this.setState({
               isNoAssJoin: true
             });
-            Alert.alert(
+            this.props.navigation.navigate('CreateOrJoinScreen')
+
+            /*Alert.alert(
               'Join association',
 
               'Please join in any association to access Data  ?',
@@ -972,14 +968,18 @@ class Dashboard extends PureComponent {
                 },
                 { text: 'No', style: 'cancel' }
               ]
-            );
+            );*/
           }
-        } catch (error) {
-          console.log('Error details', error);
+        })
+        .catch(error => {
+          console.log('Error in list of Association', error);
           this.setState({
             isNoAssJoin: true
           });
-          Alert.alert(
+
+          this.props.navigation.navigate('CreateOrJoinScreen')
+
+          /*Alert.alert(
             'Join association',
 
             'Please join in any association to access Data  ?',
@@ -991,28 +991,8 @@ class Dashboard extends PureComponent {
               },
               { text: 'No', style: 'cancel' }
             ]
-          );
-        }
-      })
-      .catch(error => {
-        console.log('Error in list of Association', error);
-        this.setState({
-          isNoAssJoin: true
+          );*/
         });
-        Alert.alert(
-          'Join association',
-
-          'Please join in any association to access Data  ?',
-          [
-            {
-              text: 'Yes',
-              onPress: () =>
-                this.props.navigation.navigate('CreateOrJoinScreen')
-            },
-            { text: 'No', style: 'cancel' }
-          ]
-        );
-      });
   }
 
   onAssociationChange = (value, index) => {
@@ -1033,12 +1013,12 @@ class Dashboard extends PureComponent {
 
     // console.log(value, "Valuessss");
     getDashUnits(
-      dropdown[index].associationId,
-      oyeURL,
-      MyAccountID,
-      dropdown,
-      dropdown[index].associationId,
-      dropdown1
+        dropdown[index].associationId,
+        oyeURL,
+        MyAccountID,
+        dropdown,
+        dropdown[index].associationId,
+        dropdown1
     );
 
     const { updateIdDashboard } = this.props;
@@ -1085,11 +1065,11 @@ class Dashboard extends PureComponent {
   checkUnitIsThere() {
     const { dropdown1 } = this.props;
     console.log(
-      'CheckUnit;s is there',
-      this.props,
-      this.props.dashBoardReducer.uniID,
-      dropdown1,
-      dropdown1.length
+        'CheckUnit;s is there',
+        this.props,
+        this.props.dashBoardReducer.uniID,
+        dropdown1,
+        dropdown1.length
     );
     if (dropdown1.length === 0) {
       this.setState({
@@ -1119,7 +1099,7 @@ class Dashboard extends PureComponent {
 
     console.log('APi1233', self.state.assocId);
     let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
-      self.state.assocId
+        self.state.assocId
     );
     self.setState({ isLoading: false, isDataLoading: false });
     console.log('STAT123', stat, self.state.assocId);
@@ -1182,54 +1162,54 @@ class Dashboard extends PureComponent {
     console.log('Get ID for vehicle', this.props.dashBoardReducer.uniID);
 
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+        `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+          }
         }
-      }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("res: ",responseJson);
-        console.log(
-          'VehicleRespponse####',
-          this.props.dashBoardReducer.uniID,
-          responseJson
-        );
-        this.setState({
-          //Object.keys(responseJson.data.unitsByBlockID).length
-          vehiclesCount: responseJson.data.vehicleListByUnitID.length
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log("res: ",responseJson);
+          console.log(
+              'VehicleRespponse####',
+              this.props.dashBoardReducer.uniID,
+              responseJson
+          );
+          this.setState({
+            //Object.keys(responseJson.data.unitsByBlockID).length
+            vehiclesCount: responseJson.data.vehicleListByUnitID.length
+          });
+          const { updateIdDashboard } = this.props;
+          updateIdDashboard({
+            prop: 'vehiclesCount',
+            value: responseJson.data.vehicleListByUnitID.length
+          });
+          console.log("res>> ", responseJson.data.vehicleListByUnitID.length)
+        })
+        .catch(error => {
+          console.log("catch ",error);
+          this.setState({ loading: false });
+          this.setState({
+            //Object.keys(responseJson.data.unitsByBlockID).length
+            vehiclesCount: 0
+          });
+          const { updateIdDashboard } = this.props;
+          updateIdDashboard({
+            prop: 'vehiclesCount',
+            value: 0
+          });
+          console.log('error in net call', error);
         });
-        const { updateIdDashboard } = this.props;
-        updateIdDashboard({
-          prop: 'vehiclesCount',
-          value: responseJson.data.vehicleListByUnitID.length
-        });
-        console.log("res>> ", responseJson.data.vehicleListByUnitID.length)
-      })
-      .catch(error => {
-        console.log("catch ",error);
-        this.setState({ loading: false });
-        this.setState({
-          //Object.keys(responseJson.data.unitsByBlockID).length
-          vehiclesCount: 0
-        });
-        const { updateIdDashboard } = this.props;
-        updateIdDashboard({
-          prop: 'vehiclesCount',
-          value: 0
-        });
-        console.log('error in net call', error);
-      });
   };
 
   myProfileNet = async () => {
     console.log('AccId@@@@@', this.props);
     let response = await base.services.OyeLivingApi.getProfileFromAccount(
-      this.props.userReducer.MyAccountID
+        this.props.userReducer.MyAccountID
     );
     console.log('Joe', response);
     const { updateUserInfo } = this.props;
@@ -1246,16 +1226,16 @@ class Dashboard extends PureComponent {
   async myFamilyListGetData() {
     this.setState({ loading: true });
     console.log(
-      'Data sending to get family',
-      this.props,
-      this.props.dashBoardReducer.assId,
-      this.props.dashBoardReducer.uniID,
-      this.props.userReducer.MyAccountID
+        'Data sending to get family',
+        this.props,
+        this.props.dashBoardReducer.assId,
+        this.props.dashBoardReducer.uniID,
+        this.props.userReducer.MyAccountID
     );
     let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
-      this.props.dashBoardReducer.uniID,
-      this.props.dashBoardReducer.assId,
-      this.props.userReducer.MyAccountID
+        this.props.dashBoardReducer.uniID,
+        this.props.dashBoardReducer.assId,
+        this.props.userReducer.MyAccountID
     );
     console.log('Get Family Data', myFamilyList);
 
@@ -1288,28 +1268,28 @@ class Dashboard extends PureComponent {
 
   getVisitorList = () => {
     fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+        `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+          }
         }
-      }
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log('Manas', responseJson);
-        this.setState({
-          //Object.keys(responseJson.data.unitsByBlockID).length
-          vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-            .length
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log('Manas', responseJson);
+          this.setState({
+            //Object.keys(responseJson.data.unitsByBlockID).length
+            vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
+                .length
+          });
+        })
+        .catch(error => {
+          this.setState({ loading: false });
+          console.log(error);
         });
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-        console.log(error);
-      });
   };
 
   logMeasurement = async (id, phase, actualDuration, baseDuration) => {
@@ -1341,157 +1321,177 @@ class Dashboard extends PureComponent {
     let maxLenUnit = 10;
     let text = 'ALL THE GLITTERS IS NOT GOLD';
     console.log(
-      'To check the @@@@@@',
-      dropdown.length,
-      dropdown1.length,
-      this.props
+        'To check the @@@@@@',
+        dropdown.length,
+        dropdown1.length,
+        this.props
     );
 
-    return (
-        this.state.isConnected?
-            <View style={{ height: '100%', width: '100%' }}>
-              <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
-              {!this.props.isLoading ? (
-                  <View style={Style.container}>
-                    <View style={Style.dropDownContainer}>
-                      <View style={Style.leftDropDown}>
-                        {this.state.assdNameHide === false ? (
-                            <Dropdown
-                                value={
-                                  selectedDropdown.length > maxLen
-                                      ? selectedDropdown.substring(0, maxLen - 2) + '...'
-                                      : selectedDropdown
-                                }
-                                label="Association Name"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={dropdown}
-                                containerStyle={{
-                                  width: '100%'
-                                }}
-                                textColor={base.theme.colors.black}
-                                inputContainerStyle={{
-                                  borderBottomColor: 'transparent'
-                                }}
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={dropdown.length > 2 ? -5 : -2}
-                                rippleOpacity={0}
-                                // onChangeText={(value, index) =>
-                                //   this.onAssociationChange(value, index)
-                                // }
-                                onChangeText={(value, index) => {
-                                  this.onAssociationChange(value, index);
+    if(!this.state.isConnected){
+      console.log('CHECK NET!!!!!!',this.state.isConnected)
 
-                                  this.props.updateuserRole({
-                                    prop: 'role',
-                                    value: dropdown[index].roleId
-                                  });
-                                  updateDropDownIndex(index);
+      return(
+          <View style={{height:'100%',width:'100%',alignItems:'center',justifyContent:'flex-start',marginTop:Platform.OS === 'ios'?50:100}}>
+            <TouchableOpacity  style={{height:'50%',width:'100%',}}
+                               onPress={() =>
+                                   NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange)}>
+              <Image
+                  resizeMode={Platform.OS === 'ios'?'contain':'center'}
+                  style={{height:'100%',width:'100%',}}
+                  source={require('../../../../icons/nointernet1.png')}
+              />
+            </TouchableOpacity>
+          </View>
+      )
 
-                                  this.setState({
-                                    associationSelected: true
-                                  });
-                                }}
-                            />
-                        ) : (
-                            <View />
-                        )}
-                      </View>
-                      <View style={Style.rightDropDown}>
-                        {this.state.unitNameHide === false ? (
-                            <Dropdown
-                                // value={this.state.unitName}
-                                value={
-                                  selectedDropdown1.length > maxLenUnit
-                                      ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
-                                      : selectedDropdown1
-                                }
-                                containerStyle={{
-                                  width: '95%'
-                                  /*width: "70%",
-                                          marginLeft: "30%",
-                                          borderBottomWidth: hp("0.05%"),
-                                          borderBottomColor: "#474749"*/
-                                }}
-                                label="Unit"
-                                baseColor="rgba(0, 0, 0, 1)"
-                                data={dropdown1}
-                                inputContainerStyle={{
-                                  borderBottomColor: 'transparent'
-                                }}
-                                textColor="#000"
-                                dropdownOffset={{ top: 10, left: 0 }}
-                                dropdownPosition={
-                                  dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
-                                }
-                                rippleOpacity={0}
-                                // onChangeText={(value, index) => {
-                                //   this.updateUnit(value, index);
-                                // }}
-                                onChangeText={(value, index) => {
-                                  updateUserInfo({
-                                    prop: 'SelectedUnitID',
-                                    value: dropdown1[index].unitId
-                                  });
-                                  updateIdDashboard({
-                                    prop: 'uniID',
-                                    value: dropdown1[index].unitId
-                                  });
-                                  updateSelectedDropDown({
-                                    prop: 'uniID',
-                                    value: dropdown1[index].unitId
-                                  });
-                                  updateSelectedDropDown({
-                                    prop: 'selectedDropdown1',
-                                    value: dropdown1[index].value
-                                  });
-                                  this.updateUnit(value, index);
+    }
+    else{
+      console.log('CHECK NET!!!!!!@@@@@',this.state.isConnected)
+      return(
+          <View style={{ height: '100%', width: '100%' }}>
+            <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
+            {!this.props.isLoading ? (
+                <View style={Style.container}>
+                  <View style={Style.dropDownContainer}>
+                    <View style={Style.leftDropDown}>
+                      {this.state.assdNameHide === false ? (
+                          <Dropdown
+                              value={
+                                selectedDropdown.length > maxLen
+                                    ? selectedDropdown.substring(0, maxLen - 2) + '...'
+                                    : selectedDropdown
+                              }
+                              label="Association Name"
+                              baseColor="rgba(0, 0, 0, 1)"
+                              data={dropdown}
+                              containerStyle={{
+                                width: '100%'
+                              }}
+                              textColor={base.theme.colors.black}
+                              inputContainerStyle={{
+                                borderBottomColor: 'transparent'
+                              }}
+                              dropdownOffset={{ top: 10, left: 0 }}
+                              dropdownPosition={dropdown.length > 2 ? -5 : -2}
+                              rippleOpacity={0}
+                              // onChangeText={(value, index) =>
+                              //   this.onAssociationChange(value, index)
+                              // }
+                              onChangeText={(value, index) => {
+                                this.onAssociationChange(value, index);
 
-                                  // console.log(value);
-                                  // console.log(index);
-                                }}
-                                // itemTextStyle={{}}
-                            />
-                        ) : (
-                            <View />
-                        )}
-                      </View>
-                    </View>
-                    {this.state.isSelectedCard === 'UNIT'
-                        ? this.myUnitCard()
-                        : this.state.isSelectedCard === 'ADMIN'
-                            ? this.adminCard()
-                            : this.offersZoneCard()}
-                    <View style={Style.bottomCards}>
-                      <CardView
-                          height={this.state.myUnitCardHeight}
-                          width={this.state.myUnitCardWidth}
-                          cardText={'My Unit'}
-                          iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                          iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                          cardIcon={require('../../../../icons/my_unit.png')}
-                          onCardClick={() => this.changeCardStatus('UNIT')}
-                          textWeight={'bold'}
-                          textFontSize={10}
-                          disabled={this.state.isSelectedCard === 'UNIT'}
-                      />
-                      {this.props.dashBoardReducer.role === 1 &&
-                      dropdown1.length !== 0 ? (
-                          <CardView
-                              height={this.state.adminCardHeight}
-                              width={this.state.adminCardWidth}
-                              cardText={'Admin'}
-                              textWeight={'bold'}
-                              iconWidth={Platform.OS === 'ios' ? 35 : 20}
-                              iconHeight={Platform.OS === 'ios' ? 35 : 20}
-                              onCardClick={() => this.changeCardStatus('ADMIN')}
-                              cardIcon={require('../../../../icons/user.png')}
-                              disabled={this.state.isSelectedCard === 'ADMIN'}
+                                this.props.updateuserRole({
+                                  prop: 'role',
+                                  value: dropdown[index].roleId
+                                });
+                                updateDropDownIndex(index);
+
+                                this.setState({
+                                  associationSelected: true
+                                });
+                              }}
                           />
                       ) : (
                           <View />
                       )}
+                    </View>
+                    <View style={Style.rightDropDown}>
+                      {this.state.unitNameHide === false ? (
+                          <Dropdown
+                              // value={this.state.unitName}
+                              value={
+                                selectedDropdown1.length > maxLenUnit
+                                    ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
+                                    : selectedDropdown1
+                              }
+                              containerStyle={{
+                                width: '95%'
+                                /*width: "70%",
+                                        marginLeft: "30%",
+                                        borderBottomWidth: hp("0.05%"),
+                                        borderBottomColor: "#474749"*/
+                              }}
+                              label="Unit"
+                              baseColor="rgba(0, 0, 0, 1)"
+                              data={dropdown1}
+                              inputContainerStyle={{
+                                borderBottomColor: 'transparent'
+                              }}
+                              textColor="#000"
+                              dropdownOffset={{ top: 10, left: 0 }}
+                              dropdownPosition={
+                                dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
+                              }
+                              rippleOpacity={0}
+                              // onChangeText={(value, index) => {
+                              //   this.updateUnit(value, index);
+                              // }}
+                              onChangeText={(value, index) => {
+                                updateUserInfo({
+                                  prop: 'SelectedUnitID',
+                                  value: dropdown1[index].unitId
+                                });
+                                updateIdDashboard({
+                                  prop: 'uniID',
+                                  value: dropdown1[index].unitId
+                                });
+                                updateSelectedDropDown({
+                                  prop: 'uniID',
+                                  value: dropdown1[index].unitId
+                                });
+                                updateSelectedDropDown({
+                                  prop: 'selectedDropdown1',
+                                  value: dropdown1[index].value
+                                });
+                                this.updateUnit(value, index);
 
-                      {/* <CardView
+                                // console.log(value);
+                                // console.log(index);
+                              }}
+                              // itemTextStyle={{}}
+                          />
+                      ) : (
+                          <View />
+                      )}
+                    </View>
+                  </View>
+                  {this.state.isSelectedCard === 'UNIT'
+                      ? this.myUnitCard()
+                      : this.state.isSelectedCard === 'ADMIN'
+                          ? this.adminCard()
+                          : this.offersZoneCard()}
+                  <View style={Style.bottomCards}>
+                    <CardView
+                        height={this.state.myUnitCardHeight}
+                        width={this.state.myUnitCardWidth}
+                        cardText={'My Unit'}
+                        iconWidth={this.state.myUnitIconWidth}
+                        iconHeight={this.state.myUnitIconHeight}
+                        cardIcon={require('../../../../icons/my_unit.png')}
+                        onCardClick={() => this.changeCardStatus('UNIT')}
+                        textWeight={'bold'}
+                        textFontSize={Platform.OS === 'ios'?8:10}
+                        disabled={this.state.isSelectedCard === 'UNIT'}
+                    />
+                    {this.props.dashBoardReducer.role === 1 &&
+                    dropdown1.length !== 0 ? (
+                        <CardView
+                            height={this.state.adminCardHeight}
+                            width={this.state.adminCardWidth}
+                            cardText={'Admin'}
+                            textWeight={'bold'}
+                            iconWidth={this.state.myAdminIconWidth}
+                            iconHeight={this.state.myAdminIconHeight}
+                            textFontSize={Platform.OS === 'ios'?8:10}
+                            onCardClick={() => this.changeCardStatus('ADMIN')}
+                            cardIcon={require('../../../../icons/user.png')}
+                            disabled={this.state.isSelectedCard === 'ADMIN'}
+                        />
+                    ) : (
+                        <View />
+                    )}
+
+                    {/* <CardView
                         height={this.state.offersCardHeight}
                         width={this.state.offersCardWidth}
                         cardText={'Offers Zone'}
@@ -1500,58 +1500,53 @@ class Dashboard extends PureComponent {
                         onCardClick={() => this.changeCardStatus("OFFERS")}
                         disabled={this.state.isSelectedCard=== "OFFERS"}
                     /> */}
-                    </View>
-                    <View style={Style.supportContainer}>
-                      <View style={Style.subSupportView}>
-                        <TouchableOpacity
-                            onPress={() => {
-                              {
-                                Platform.OS === 'android'
-                                    ? Linking.openURL(`tel:9343121121`)
-                                    : Linking.openURL(`tel:9343121121`);
-                              }
-                            }}
-                        >
-                          <Icon
-                              color="#38bcdb"
-                              size={hp('2.2%')}
-                              // style={Style.supportIcon }
-                              name="call1"
-                          />
-                        </TouchableOpacity>
+                  </View>
+                  <View style={Style.supportContainer}>
+                    <View style={Style.subSupportView}>
+                      <TouchableOpacity
+                          onPress={() => {
+                            {
+                              Platform.OS === 'android'
+                                  ? Linking.openURL(`tel:9343121121`)
+                                  : Linking.openURL(`tel:9343121121`);
+                            }
+                          }}
+                      >
+                        <Icon
+                            color="#38bcdb"
+                            size={hp('2.2%')}
+                            // style={Style.supportIcon }
+                            name="call1"
+                        />
+                      </TouchableOpacity>
 
-                        <TouchableOpacity
-                            onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
-                            //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
-                        >
-                          <Image
-                              style={Style.supportIcon}
-                              source={require('../../../../icons/Group771.png')}
-                          />
-                        </TouchableOpacity>
-                      </View>
+                      <TouchableOpacity
+                          onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
+                          //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
+                      >
+                        <Image
+                            style={Style.supportIcon}
+                            source={require('../../../../icons/Group771.png')}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
-              ) : (
-                  <View />
-              )}
-              <ProgressLoader
-                  isHUD={true}
-                  isModal={true}
-                  visible={this.props.isLoading}
-                  color={base.theme.colors.primary}
-                  hudColor={'#FFFFFF'}
-              />
-            </View>
-            :
-            <View style={{height:'100%',width:'100%',alignItems:'center',justifyContent:'flex-start',marginTop:100}}>
-              <Image
-                  resizeMode={'center'}
-                  style={{height:'50%',width:'100%',}}
-                  source={require('../../../../icons/nointernet1.png')}
-              />
-            </View>
-    );
+                </View>
+            ) : (
+                <View />
+            )}
+            <ProgressLoader
+                isHUD={true}
+                isModal={true}
+                visible={this.props.isLoading}
+                color={base.theme.colors.primary}
+                hudColor={'#FFFFFF'}
+            />
+          </View>
+      );
+    }
+
+
   }
 
   changeCardStatus(status) {
@@ -1560,31 +1555,40 @@ class Dashboard extends PureComponent {
     });
     if (status == 'UNIT') {
       this.setState({
-        myUnitCardHeight: '80%',
+        myUnitCardHeight: Platform.OS === 'ios'?'90%':'80%',
         myUnitCardWidth: '26%',
         adminCardHeight: '70%',
         adminCardWidth: '22%',
         offersCardHeight: '70%',
         offersCardWidth: '20%',
+        myUnitIconWidth:Platform.OS === 'ios' ? 30 : 20,
+        myUnitIconHeight:Platform.OS === 'ios' ? 30 : 20,
+        myAdminIconWidth:Platform.OS === 'ios' ? 20 : 20,
+        myAdminIconHeight:Platform.OS === 'ios' ? 20 : 20,
 
         assdNameHide: false,
         unitNameHide: false
       });
     } else if (status == 'ADMIN') {
       this.setState({
-        myUnitCardHeight: '70%',
+        myUnitCardHeight: Platform.OS === 'ios'?'80%':'70%',
         myUnitCardWidth: '22%',
         adminCardHeight: '80%',
         adminCardWidth: '25%',
         offersCardHeight: '70%',
         offersCardWidth: '20%',
+        myUnitIconWidth:Platform.OS === 'ios' ? 20 : 20,
+        myUnitIconHeight:Platform.OS === 'ios' ? 20 : 20,
+        myAdminIconWidth:Platform.OS === 'ios' ? 30 : 20,
+        myAdminIconHeight:Platform.OS === 'ios' ? 30 : 20,
+
 
         assdNameHide: true,
         unitNameHide: true
       });
     } else if (status == 'OFFERS') {
       this.setState({
-        myUnitCardHeight: '70%',
+        myUnitCardHeight: Platform.OS === 'ios'?'80%':'70%',
         myUnitCardWidth: '22%',
         adminCardHeight: '70%',
         adminCardWidth: '20%',
@@ -1616,60 +1620,67 @@ class Dashboard extends PureComponent {
     ];
     console.log('FamilyList count', this.props.dashBoardReducer);
     return (
-      <ElevatedView elevation={6} style={Style.mainElevatedView}>
-        <View style={Style.elevatedView}>
-          <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={' Family Members'}
-            cardIcon={require('../../../../icons/view_all_visitors.png')}
-            cardCount={this.props.dashBoardReducer.familyMemberCount}
-            marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            onCardClick={() =>
-              dropdown.length === 0
-                ? this.props.navigation.navigate('CreateOrJoinScreen')
-                : dropdown1.length === 0
-                ? alert('Unit is not available')
-                : this.props.navigation.navigate('MyFamilyList')
-            }
-            backgroundColor={base.theme.colors.cardBackground}
-          />
-          <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'Vehicles'}
-            iconWidth={Platform.OS === 'ios' ? 40 : 25}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            cardIcon={require('../../../../icons/vehicle.png')}
-            cardCount={this.props.dashBoardReducer.vehiclesCount}
-            //cardCount={this.state.vehiclesCount}
-            marginTop={20}
-            backgroundColor={base.theme.colors.cardBackground}
-            onCardClick={() =>
-              dropdown.length === 0
-                ? this.props.navigation.navigate('CreateOrJoinScreen')
-                : dropdown1.length === 0
-                ? alert('Unit is not available')
-                : this.props.navigation.navigate('MyVehicleListScreen')
-            }
-          />
-          <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'Visitors'}
-            cardIcon={require('../../../../icons/view_all_visitors.png')}
-            marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            iconBorderRadius={0}
-            backgroundColor={base.theme.colors.cardBackground}
-            onCardClick={() => this.goToFirstTab()}
-          />
-        </View>
-        <View style={Style.elevatedViewSub}>
-          {/* <CardView
+        <ElevatedView elevation={6} style={Style.mainElevatedView}>
+          <View style={Style.elevatedView}>
+            <CardView
+                height={'100%'}
+                width={'25%'}
+                cardText={' Family Members'}
+                cardIcon={require('../../../../icons/view_all_visitors.png')}
+                cardCount={this.props.dashBoardReducer.familyMemberCount}
+                marginTop={20}
+                iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+                iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+                textFontSize={Platform.OS === 'ios'?8:12}
+
+                onCardClick={() =>
+                    dropdown.length === 0
+                        ? this.props.navigation.navigate('CreateOrJoinScreen')
+                        : dropdown1.length === 0
+                        ? alert('Unit is not available')
+                        : this.props.navigation.navigate('MyFamilyList')
+                }
+
+                backgroundColor={base.theme.colors.cardBackground}
+            />
+            <CardView
+                height={'100%'}
+                width={'25%'}
+                cardText={'Vehicles'}
+                iconWidth={Platform.OS === 'ios' ? hp('5') : 25}
+                iconHeight={Platform.OS === 'ios' ?hp('5') : 20}
+                cardIcon={require('../../../../icons/vehicle.png')}
+                cardCount={this.props.dashBoardReducer.vehiclesCount}
+                //cardCount={this.state.vehiclesCount}
+                marginTop={20}
+                backgroundColor={base.theme.colors.cardBackground}
+                textFontSize={Platform.OS === 'ios'?8:12}
+
+                onCardClick={() =>
+                    dropdown.length === 0
+                        ? this.props.navigation.navigate('CreateOrJoinScreen')
+                        : dropdown1.length === 0
+                        ? alert('Unit is not available')
+                        : this.props.navigation.navigate('MyVehicleListScreen')
+                }
+            />
+            <CardView
+                height={'100%'}
+                width={'25%'}
+                cardText={'Visitors'}
+                cardIcon={require('../../../../icons/view_all_visitors.png')}
+                marginTop={20}
+                iconWidth={Platform.OS === 'ios' ? hp('5'): 35}
+                iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+                iconBorderRadius={0}
+                backgroundColor={base.theme.colors.cardBackground}
+                textFontSize={Platform.OS === 'ios'?8:12}
+
+                onCardClick={() => this.goToFirstTab()}
+            />
+          </View>
+          <View style={Style.elevatedViewSub}>
+            {/* <CardView
                         height={"100%"}
                         width={"39%"} cardText={'Documents'}
                         cardIcon={require("../../../../icons/report.png")}
@@ -1683,8 +1694,8 @@ class Dashboard extends PureComponent {
                         cardCount={2}
                         backgroundColor={base.theme.colors.shadedWhite}
                     /> */}
-        </View>
-        {/* <ElevatedView elevation={0} style={Style.invoiceCardView}>
+          </View>
+          {/* <ElevatedView elevation={0} style={Style.invoiceCardView}>
                     <View style={Style.invoiceHeadingView}>
                         <Text style={Style.invoiceText}>Invoices</Text>
                         <TouchableOpacity>
@@ -1709,80 +1720,80 @@ class Dashboard extends PureComponent {
                 </ElevatedView>
             */}
 
-        {this.props.dropdown.length === 0 ? (
-          <View />
-        ) : (
-          <View
-            style={{
-              alignSelf: 'flex-end',
-              height: 50,
-              width: 50,
-              justifyContent: 'center',
-              marginTop: hp('20')
-            }}
-          >
-            {!this.state.isSOSSelected ? (
-              <TouchableHighlight
-                underlayColor={base.theme.colors.transparent}
-                onPress={() => this.selectSOS()}
-              >
-                <Image
+          {this.props.dropdown.length === 0 ? (
+              <View />
+          ) : (
+              <View
                   style={{
-                    width: wp('18%'),
-                    height: hp('10%'),
-                    right: 20,
-                    justifyContent: 'center'
+                    alignSelf: 'flex-end',
+                    height: 50,
+                    width: 50,
+                    justifyContent: 'center',
+                    marginTop: hp('20')
                   }}
-                  source={require('../../../../icons/sos_btn.png')}
-                />
-              </TouchableHighlight>
-            ) : (
-              <View style={{ flexDirection: 'row', right: 45 }}>
-                <TouchableHighlight
-                  style={{ alignSelf: 'flex-end', right: 2 }}
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={() => this.selectSOS()}
-                >
-                  <Text
-                    style={{
-                      alignSelf: 'flex-end',
-                      right: 5,
-                      color: base.theme.colors.red
-                    }}
-                  >
-                    Cancel
-                  </Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={() =>
-                    this.props.navigation.navigate('sosScreen', {
-                      isActive: false
-                    })
-                  }
-                >
-                  <CountdownCircle
-                    seconds={5}
-                    radius={25}
-                    borderWidth={7}
-                    color={base.theme.colors.primary}
-                    updateText={(elapsedSeconds, totalSeconds) =>
-                      ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
-                    }
-                    bgColor="#fff"
-                    textStyle={{ fontSize: 15, textAlign: 'center' }}
-                    onTimeElapsed={() =>
-                      this.props.navigation.navigate('sosScreen', {
-                        isActive: false
-                      })
-                    }
-                  />
-                </TouchableHighlight>
+              >
+                {!this.state.isSOSSelected ? (
+                    <TouchableHighlight
+                        underlayColor={base.theme.colors.transparent}
+                        onPress={() => this.selectSOS()}
+                    >
+                      <Image
+                          style={{
+                            width: wp('18%'),
+                            height: hp('10%'),
+                            right: 20,
+                            justifyContent: 'center'
+                          }}
+                          source={require('../../../../icons/sos_btn.png')}
+                      />
+                    </TouchableHighlight>
+                ) : (
+                    <View style={{ flexDirection: 'row', right: 45 }}>
+                      <TouchableHighlight
+                          style={{ alignSelf: 'flex-end', right: 2 }}
+                          underlayColor={base.theme.colors.transparent}
+                          onPress={() => this.selectSOS()}
+                      >
+                        <Text
+                            style={{
+                              alignSelf: 'flex-end',
+                              right: 5,
+                              color: base.theme.colors.red
+                            }}
+                        >
+                          Cancel
+                        </Text>
+                      </TouchableHighlight>
+                      <TouchableHighlight
+                          underlayColor={base.theme.colors.transparent}
+                          onPress={() =>
+                              this.props.navigation.navigate('sosScreen', {
+                                isActive: false
+                              })
+                          }
+                      >
+                        <CountdownCircle
+                            seconds={5}
+                            radius={25}
+                            borderWidth={7}
+                            color={base.theme.colors.primary}
+                            updateText={(elapsedSeconds, totalSeconds) =>
+                                ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                            }
+                            bgColor="#fff"
+                            textStyle={{ fontSize: 15, textAlign: 'center' }}
+                            onTimeElapsed={() =>
+                                this.props.navigation.navigate('sosScreen', {
+                                  isActive: false
+                                })
+                            }
+                        />
+                      </TouchableHighlight>
+                    </View>
+                )}
               </View>
-            )}
-          </View>
-        )}
-      </ElevatedView>
+          )}
+        </ElevatedView>
     );
   }
 
@@ -1794,34 +1805,34 @@ class Dashboard extends PureComponent {
 
   adminCard() {
     const AnimatedTouchable = Animatable.createAnimatableComponent(
-      TouchableOpacity
+        TouchableOpacity
     );
     return (
-      <ElevatedView elevation={6} style={Style.mainElevatedView}>
-        <AnimatedTouchable
-          animation={'wobble'}
-          delay={1000}
-          duration={1000}
-          onPress={() => this.props.navigation.navigate('Announcement')
-          }
-        >
-          <View
-            style={{
-              alignItems: 'flex-end'
-            }}
+        <ElevatedView elevation={6} style={Style.mainElevatedView}>
+          <AnimatedTouchable
+              animation={'wobble'}
+              delay={1000}
+              duration={1000}
+              onPress={() => this.props.navigation.navigate('Announcement')
+              }
           >
-            <Image
-              style={{
-                width: hp('5%'),
-                height: hp('5%'),
-                marginRight: hp('2%')
-              }}
-              source={require('../../../../icons/announcement.png')}
-            />
-            {/*  */}
-          </View>
-        </AnimatedTouchable>
-        {/* <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+            <View
+                style={{
+                  alignItems: 'flex-end'
+                }}
+            >
+              <Image
+                  style={{
+                    width: hp('5%'),
+                    height: hp('5%'),
+                    marginRight: hp('2%')
+                  }}
+                  source={require('../../../../icons/announcement.png')}
+              />
+              {/*  */}
+            </View>
+          </AnimatedTouchable>
+          {/* <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <TouchableOpacity>
             <Text>Roll Management</Text>
           </TouchableOpacity>
@@ -1834,7 +1845,7 @@ class Dashboard extends PureComponent {
           </TouchableOpacity>
         </View> */}
 
-        {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
+          {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
                   <Card style={{ flex: 0.5 }}>
                     <CardItem style={{ height: hp("27%") }}>
                       <View style={{ flexDirection: "column" }}>
@@ -1901,50 +1912,53 @@ class Dashboard extends PureComponent {
                   </Card>
                 </View> */}
 
-        <View style={{ ...Style.elevatedView, marginTop: hp('3%') }}>
-          <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'Role    Management'}
-            cardIcon={require('../../../../icons/role.png')}
-            marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            onCardClick={() =>
-              this.props.navigation.navigate('ViewmembersScreen')
-            }
-            backgroundColor={base.theme.colors.cardBackground}
-          />
-          <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'View All Visitors'}
-            iconWidth={Platform.OS === 'ios' ? 40 : 25}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            cardIcon={require('../../../../icons/view_all_visitors.png')}
-            marginTop={20}
-            backgroundColor={base.theme.colors.cardBackground}
-            onCardClick={() =>
-              this.props.navigation.navigate('ViewAlllVisitorsPage')
-            }
-          />
-          <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'Patrolling'}
-            cardIcon={require('../../../../icons/patrolling.png')}
-            marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            iconBorderRadius={0}
-            backgroundColor={base.theme.colors.cardBackground}
-            onCardClick={() =>
-              this.props.navigation.navigate('schedulePatrolling')
-            }
-          />
-        </View>
-        <View style={{ ...Style.elevatedView, marginTop: 20 }}>
-         {/* <CardView
+          <View style={{ ...Style.elevatedView, marginTop: hp('3%') }}>
+            <CardView
+                height={'100%'}
+                width={'25%'}
+                cardText={'Role    Management'}
+                cardIcon={require('../../../../icons/role.png')}
+                marginTop={20}
+                iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+                iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+                textFontSize={Platform.OS === 'ios'?8:12}
+                onCardClick={() =>
+                    this.props.navigation.navigate('ViewmembersScreen')
+                }
+                backgroundColor={base.theme.colors.cardBackground}
+            />
+            <CardView
+                height={'100%'}
+                width={'25%'}
+                cardText={'View All Visitors'}
+                iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+                iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+                textFontSize={Platform.OS === 'ios'?8:12}
+                cardIcon={require('../../../../icons/view_all_visitors.png')}
+                marginTop={20}
+                backgroundColor={base.theme.colors.cardBackground}
+                onCardClick={() =>
+                    this.props.navigation.navigate('ViewAlllVisitorsPage')
+                }
+            />
+            <CardView
+                height={'100%'}
+                width={'25%'}
+                cardText={'Patrolling'}
+                cardIcon={require('../../../../icons/patrolling.png')}
+                marginTop={20}
+                iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
+                iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
+                textFontSize={Platform.OS === 'ios'?8:12}
+                iconBorderRadius={0}
+                backgroundColor={base.theme.colors.cardBackground}
+                onCardClick={() =>
+                    this.props.navigation.navigate('schedulePatrolling')
+                }
+            />
+          </View>
+          <View style={{ ...Style.elevatedView, marginTop: 20 }}>
+            {/* <CardView
             height={'100%'}
             width={'25%'}
             cardText={'Subscription'}
@@ -1969,7 +1983,7 @@ class Dashboard extends PureComponent {
             // onCardClick={() => this.props.navigation.navigate('oyeLiving')}
             onCardClick={() => this.props.navigation.navigate('Accounting')}
           /> */}
-          {/* <CardView
+            {/* <CardView
             height={'100%'}
             width={'25%'}
             cardText={'Reports'}
@@ -1981,16 +1995,16 @@ class Dashboard extends PureComponent {
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.props.navigation.navigate('reportsTab')}
           /> */}
-        </View>
-        <View
-          style={{
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center'
-          }}
-        >
-          {/* <Button
+          </View>
+          <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center'
+              }}
+          >
+            {/* <Button
                 bordered
                 style={styles.button1}
                 onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
@@ -1998,7 +2012,7 @@ class Dashboard extends PureComponent {
               <Text>Role Management</Text>
             </Button> */}
 
-          {/* <Button
+            {/* <Button
                 bordered
                 style={styles.button1}
                 onPress={() =>
@@ -2007,14 +2021,14 @@ class Dashboard extends PureComponent {
             >
               <Text>View All Visitors</Text>
             </Button> */}
-          {/* <Button
+            {/* <Button
                 bordered
                 style={styles.button1}
                 onPress={() => this.props.navigation.navigate('schedulePatrolling')}
             >
               <Text>Patrolling</Text>
             </Button> */}
-          {/* <Button
+            {/* <Button
                 bordered
                 style={styles.button1}
                 onPress={() =>
@@ -2023,14 +2037,14 @@ class Dashboard extends PureComponent {
             >
               <Text>Subscription</Text>
             </Button> */}
-          {/* <Button
+            {/* <Button
                 bordered
                 style={styles.button1}
                 onPress={() => this.props.navigation.navigate("oyeLiving")}
             >
               <Text>Accounting</Text>
             </Button> */}
-          {/* <Button
+            {/* <Button
               bordered
               style={styles.button1}
               onPress={() => this.props.navigation.navigate("reportsTab")}
@@ -2038,130 +2052,130 @@ class Dashboard extends PureComponent {
             <Text>Reports</Text>
           </Button> */}
 
-          {/* <AnimatedTouchable
+            {/* <AnimatedTouchable
             animation={'swing'}
             onPress={() => this.props.navigation.navigate('Announcement')}
           >
           <Image source={require('../../../../icons/add.png')}/>
           </AnimatedTouchable> */}
-        </View>
-        {this.props.dropdown.length == 0 ? (
-          <View />
-        ) : (
-          <View
-            style={{
-              alignSelf: 'flex-end',
-              height: 50,
-              width: 50,
-              justifyContent: 'center',
-              marginTop: hp('49%'),
-              position: 'absolute',
-              right: hp('1')
-            }}
-          >
-            {!this.state.isSOSSelected ? (
-              <TouchableHighlight
-                underlayColor={base.theme.colors.transparent}
-                onPress={() => this.selectSOS()}
-              >
-                <Image
-                  style={{
-                    width: wp('18%'),
-                    height: hp('10%'),
-                    right: 20,
-                    justifyContent: 'center'
-                  }}
-                  source={require('../../../../icons/sos_btn.png')}
-                />
-              </TouchableHighlight>
-            ) : (
-              <View style={{ flexDirection: 'row', right: 45 }}>
-                <TouchableHighlight
-                  style={{ alignSelf: 'flex-end', right: 2 }}
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={() => this.selectSOS()}
-                >
-                  <Text
-                    style={{
-                      alignSelf: 'flex-end',
-                      right: 5,
-                      color: base.theme.colors.red
-                    }}
-                  >
-                    Cancel
-                  </Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  underlayColor={base.theme.colors.transparent}
-                  onPress={() =>
-                    this.props.navigation.navigate('sosScreen', {
-                      isActive: false
-                    })
-                  }
-                >
-                  <CountdownCircle
-                    seconds={5}
-                    radius={25}
-                    borderWidth={7}
-                    color={base.theme.colors.primary}
-                    updateText={(elapsedSeconds, totalSeconds) =>
-                      ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
-                    }
-                    bgColor="#fff"
-                    textStyle={{ fontSize: 15, textAlign: 'center' }}
-                    onTimeElapsed={() =>
-                      this.props.navigation.navigate('sosScreen', {
-                        isActive: false
-                      })
-                    }
-                  />
-                </TouchableHighlight>
-              </View>
-            )}
           </View>
-        )}
-      </ElevatedView>
+          {this.props.dropdown.length == 0 ? (
+              <View />
+          ) : (
+              <View
+                  style={{
+                    alignSelf: 'flex-end',
+                    height: 50,
+                    width: 50,
+                    justifyContent: 'center',
+                    marginTop: hp('49%'),
+                    position: 'absolute',
+                    right: hp('1')
+                  }}
+              >
+                {!this.state.isSOSSelected ? (
+                    <TouchableHighlight
+                        underlayColor={base.theme.colors.transparent}
+                        onPress={() => this.selectSOS()}
+                    >
+                      <Image
+                          style={{
+                            width: wp('18%'),
+                            height: hp('10%'),
+                            right: 20,
+                            justifyContent: 'center'
+                          }}
+                          source={require('../../../../icons/sos_btn.png')}
+                      />
+                    </TouchableHighlight>
+                ) : (
+                    <View style={{ flexDirection: 'row', right: 45 }}>
+                      <TouchableHighlight
+                          style={{ alignSelf: 'flex-end', right: 2 }}
+                          underlayColor={base.theme.colors.transparent}
+                          onPress={() => this.selectSOS()}
+                      >
+                        <Text
+                            style={{
+                              alignSelf: 'flex-end',
+                              right: 5,
+                              color: base.theme.colors.red
+                            }}
+                        >
+                          Cancel
+                        </Text>
+                      </TouchableHighlight>
+                      <TouchableHighlight
+                          underlayColor={base.theme.colors.transparent}
+                          onPress={() =>
+                              this.props.navigation.navigate('sosScreen', {
+                                isActive: false
+                              })
+                          }
+                      >
+                        <CountdownCircle
+                            seconds={5}
+                            radius={25}
+                            borderWidth={7}
+                            color={base.theme.colors.primary}
+                            updateText={(elapsedSeconds, totalSeconds) =>
+                                ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                            }
+                            bgColor="#fff"
+                            textStyle={{ fontSize: 15, textAlign: 'center' }}
+                            onTimeElapsed={() =>
+                                this.props.navigation.navigate('sosScreen', {
+                                  isActive: false
+                                })
+                            }
+                        />
+                      </TouchableHighlight>
+                    </View>
+                )}
+              </View>
+          )}
+        </ElevatedView>
     );
   }
 
   offersZoneCard() {
     return (
-      <ElevatedView elevation={6} style={Style.mainElevatedView}>
-        <Text>OFFERS ZONE</Text>
-      </ElevatedView>
+        <ElevatedView elevation={6} style={Style.mainElevatedView}>
+          <Text>OFFERS ZONE</Text>
+        </ElevatedView>
     );
   }
 
   listOfInvoices(item) {
     base.utils.logger.log(item);
     return (
-      <TouchableHighlight underlayColor={'transparent'}>
-        <View style={Style.invoiceView}>
-          <View style={Style.invoiceSubView}>
-            <Text style={Style.invoiceNumberText}>
-              Invoice No. {item.item.invoiceNumber}
-            </Text>
-            <Text style={Style.billText}>
-              <Text style={Style.rupeeIcon}>{'\u20B9'}</Text>
-              {item.item.bill}
-            </Text>
+        <TouchableHighlight underlayColor={'transparent'}>
+          <View style={Style.invoiceView}>
+            <View style={Style.invoiceSubView}>
+              <Text style={Style.invoiceNumberText}>
+                Invoice No. {item.item.invoiceNumber}
+              </Text>
+              <Text style={Style.billText}>
+                <Text style={Style.rupeeIcon}>{'\u20B9'}</Text>
+                {item.item.bill}
+              </Text>
+            </View>
+            <View style={Style.invoiceSubView}>
+              <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
+              <OSButton
+                  height={'80%'}
+                  width={'25%'}
+                  borderRadius={15}
+                  oSBBackground={
+                    item.item.status === 'PAID'
+                        ? base.theme.colors.grey
+                        : base.theme.colors.primary
+                  }
+                  oSBText={item.item.status === 'PAID' ? 'Paid' : 'Pay Now'}
+              />
+            </View>
           </View>
-          <View style={Style.invoiceSubView}>
-            <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
-            <OSButton
-              height={'80%'}
-              width={'25%'}
-              borderRadius={15}
-              oSBBackground={
-                item.item.status === 'PAID'
-                  ? base.theme.colors.grey
-                  : base.theme.colors.primary
-              }
-              oSBText={item.item.status === 'PAID' ? 'Paid' : 'Pay Now'}
-            />
-          </View>
-        </View>
-      </TouchableHighlight>
+        </TouchableHighlight>
     );
   }
 
@@ -2170,10 +2184,10 @@ class Dashboard extends PureComponent {
   goToFirstTab() {
     const { dropdown, dropdown1 } = this.props;
     dropdown.length === 0
-      ? this.props.navigation.navigate('CreateOrJoinScreen')
-      : dropdown1.length === 0
-      ? alert('Unit is not available')
-      : this.props.navigation.navigate('firstTab');
+        ? this.props.navigation.navigate('CreateOrJoinScreen')
+        : dropdown1.length === 0
+        ? alert('Unit is not available')
+        : this.props.navigation.navigate('firstTab');
   }
 }
 
@@ -2343,24 +2357,24 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-  mapStateToProps,
-  {
-    newNotifInstance,
-    createNotification,
-    getNotifications,
-    updateJoinedAssociation,
-    getDashSub,
-    getDashAssociation,
-    getDashUnits,
-    updateUserInfo,
-    getAssoMembers,
-    updateApproveAdmin,
-    updateDropDownIndex,
-    createUserNotification,
-    refreshNotifications,
-    updateIdDashboard,
-    updateSelectedDropDown,
-    updateuserRole,
-    getDashAssoSync
-  }
+    mapStateToProps,
+    {
+      newNotifInstance,
+      createNotification,
+      getNotifications,
+      updateJoinedAssociation,
+      getDashSub,
+      getDashAssociation,
+      getDashUnits,
+      updateUserInfo,
+      getAssoMembers,
+      updateApproveAdmin,
+      updateDropDownIndex,
+      createUserNotification,
+      refreshNotifications,
+      updateIdDashboard,
+      updateSelectedDropDown,
+      updateuserRole,
+      getDashAssoSync
+    }
 )(Dashboard);

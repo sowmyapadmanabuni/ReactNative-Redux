@@ -5,7 +5,7 @@
     2. apidev  --- For develpment server
     3. api     --- For production server
 */
-let urlType = 'apidev';
+let urlType = 'apiuat';
 
 const oyeURL = `${urlType}.oyespace.com`; //Validation/
 //Image Domains

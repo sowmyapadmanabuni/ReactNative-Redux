@@ -788,12 +788,13 @@ const styles = StyleSheet.create({
     },
     buttonFamily: {
         width: wp("25%"),
-        height: hp("4%"),
+        height: Platform.OS === 'ios'? hp("4.5%") : hp("4%"),
         borderRadius: hp("2.5%"),
         borderWidth: hp("0.2%"),
         borderColor: "#EF3939",
         backgroundColor: "#EF3939",
-        justifyContent: "center"
+        justifyContent: "center",
+        //alignItems:'center'
     },
     textFamilyVehicle: {
         color: "white",
@@ -802,7 +803,7 @@ const styles = StyleSheet.create({
     },
     buttonVehicle: {
         width: wp("25%"),
-        height: hp("4%"),
+        height:Platform.OS === 'ios'?hp("4.5%"): hp("4%"),
         borderRadius: hp("2.5%"),
         borderWidth: hp("0.2%"),
         borderColor: "orange",

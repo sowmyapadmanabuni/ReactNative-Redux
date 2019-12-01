@@ -201,7 +201,9 @@ class MyFamilyList extends React.Component {
     }
 
     processBackPress() {
-        console.log('Part');
+        //BackHandler.removeEventListener('hardwareBackPress', ()=> this.props.navigation.goBack(null));
+        //this.props.navigation.goBack(null)
+        console.log('Part-------');
         const {goBack} = this.props.navigation;
         goBack(null);
         return true;
@@ -352,6 +354,7 @@ class MyFamilyList extends React.Component {
     }
 
     render() {
+        console.log("Family")
         const {navigate} = this.props.navigation;
 
         console.log('Item issue', this.props);
