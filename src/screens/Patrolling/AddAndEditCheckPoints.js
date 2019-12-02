@@ -533,14 +533,14 @@ class AddAndEditCheckPoints extends React.Component {
                 this.validateFields()
             }
             else{
-                this.setState({signalState:false});
+                //this.setState({signalState:false});
                 Alert.alert("Failed to get accurate user position","Can't proceed further")
             }
         }
     }
 
     validateFields() {
-        this.setState({signalState:true});
+        //this.setState({signalState:true});
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
         } else {
@@ -731,7 +731,7 @@ class AddAndEditCheckPoints extends React.Component {
                             />
                             <Text style={{
                                 fontFamily: base.theme.fonts.medium,
-                                fontSize: hp('2.5%')
+                                fontSize: hp('2.5%'),marginLeft:2
                             }}>{this.state.gpsLocation}</Text>
                         </View>
                     </View>
