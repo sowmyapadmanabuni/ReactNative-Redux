@@ -40,11 +40,12 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
         marginLeft: "5%",
         borderBottomWidth: 0.6,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingBottom: Platform.OS==='ios'?3:0
     },
     gpsIcon: {
-        height: Platform.OS === 'ios' ? 30 : 20,
-        width: Platform.OS === 'ios' ? 60 : 20,
+        height: Platform.OS === 'ios' ? 24 : 20,
+        width: Platform.OS === 'ios' ? 24 : 20,        
     },
     signalIcon: {
         height: Platform.OS === 'ios' ? 30 : 20,
