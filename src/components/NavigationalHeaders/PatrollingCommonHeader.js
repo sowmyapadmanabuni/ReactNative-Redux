@@ -68,16 +68,16 @@ class PatrollingCommonHeader extends React.Component {
                     // onPress={() => goBack(null)}   //Passing null for as a parameter in the case of nested StackNavigators   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
                     style={styles.buttonView}>
                     <Image
-                        resizeMode={'contain'}
+                        resizeMode={Platform.OS === 'ios'?'contain':'center'}
                         style={styles.backButton}
                         source={require('../../../icons/arrowBack.png')}
                     />
                 </TouchableOpacity>
                 <View style={styles.logoView}>
                     <Image
-                        resizeMode={'contain'}
-                        style={{width: wp('34%'),
-                            height: hp('14%'),
+                        resizeMode={Platform.OS === 'ios'?'contain':'center'}
+                        style={{width: Platform.OS === 'ios'?wp('34%'):wp('30%'),
+                            height:Platform.OS === 'ios'? hp('14%'):hp('12%'),
                             marginLeft: hp('3%'),
                             alignSelf:'center'
                             }}
@@ -91,7 +91,7 @@ class PatrollingCommonHeader extends React.Component {
                             <Text style={styles.scheduleTextStyle}>Next</Text>
                         </TouchableOpacity>
                         : <TouchableOpacity onPress={() => this.handleIconPress(isShareVisible)}><Image
-                            resizeMode={'contain'}
+                            resizeMode={Platform.OS === 'ios'?'contain':'center'}
                             style={styles.reportImage}
                             source={isShareVisible ? require('../../../icons/share.png') : require('../../../icons/report.png')}/>
                         </TouchableOpacity>
@@ -125,7 +125,7 @@ class PatrollingCommonHeader extends React.Component {
             if (this.props.selectedCheckPoints.selectedCheckPoints === null || this.props.selectedCheckPoints.selectedCheckPoints.length === 0) {
                 alert("Please select Checkpoint before scheduling the patrolling");
             } else {
-                
+
                 this.schedulePatrolling();
             }
         }
@@ -147,7 +147,7 @@ class PatrollingCommonHeader extends React.Component {
             alert("The last checkpoint should be an end point")
         }
         else{
-            this.props.navigation.navigate("schPatrolling")  
+            this.props.navigation.navigate("schPatrolling")
         }
 
 
@@ -175,7 +175,7 @@ class PatrollingCommonHeader extends React.Component {
         }
         if (spCount === 1 && epCount === 1 && isCP && cpCount >= 2) {
             this.props.navigation.navigate("reshufflePatrol")
-            
+
         } else if (spCount > 1) {
             alert("Please select only one Start Point")
         } else if (epCount > 1) {
@@ -204,11 +204,12 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderBottomWidth: 1,
         borderColor: "orange",
-        flexDirection: 'row',flex:1,
+        flexDirection: 'row',
+        flex: Platform.OS === 'ios' ? 1 : 0  ,
         alignItems: 'center',
         //justifyContent: 'center',
         paddingLeft: 10,
-        paddingTop: Platform.OS === 'ios' ? 0 : 0        
+        paddingTop: Platform.OS === 'ios' ? 0 : 0
     },
     buttonView: {
         width: "17%",

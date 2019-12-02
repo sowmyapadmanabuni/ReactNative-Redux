@@ -68,7 +68,7 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
         height: hp('10%'),
         justifyContent: 'space-around',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     map: {
         ...StyleSheet.absoluteFillObject,

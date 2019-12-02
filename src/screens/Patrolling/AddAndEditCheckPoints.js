@@ -146,7 +146,7 @@ class AddAndEditCheckPoints extends React.Component {
 
         console.log("Params:", params);
 
-    };
+    };f
 
 
     scanWifiStrength(callback) {
@@ -289,7 +289,7 @@ class AddAndEditCheckPoints extends React.Component {
     accessLocationSatellites(){
         console.log("updateSatelliteCount...",GPSEventEmitter);
         let self = this;
-        
+
         GPSEventEmitter.removeListener('RNSatellite');
         GPSEventEmitter.addListener('RNSatellite', (ev) => {
             let event = Platform.OS==='ios'?ev[0]:ev;
@@ -312,7 +312,7 @@ class AddAndEditCheckPoints extends React.Component {
             },()=>{console.log("LOCATION_UPDATE:",self.state.region); self.setSignalStateIcon(); self.renderUserLocation()})
 
         });
-        console.log(":RN SATELLITE:########:",self.state)
+        console.log(":RN SATELrunLITE:########:",self.state)
 
         RNLocationSatellites.startLocationUpdate();
 
@@ -510,6 +510,7 @@ class AddAndEditCheckPoints extends React.Component {
 
 
     setSignalStateIcon(){
+        console.log("Setting signal strength:: ",this.state.accuracy)
         if(this.state.satelliteCount > 4) {
             this.setState({signalState:true})
         }
@@ -518,7 +519,7 @@ class AddAndEditCheckPoints extends React.Component {
                 this.setState({signalState:true})
             }
             else{
-                this.setState({signalState:false});                
+                this.setState({signalState:false});
             }
         }
     }
@@ -763,7 +764,7 @@ class AddAndEditCheckPoints extends React.Component {
                         </RadioForm>
                     </View>
                     <EmptyView height={0}/>
-                    <View style={[AddAndEditCheckPointStyles.buttonView,{marginBottom:40}]}>
+                    <View style={[AddAndEditCheckPointStyles.buttonView,{marginBottom:0}]}>
                         <OSButton onButtonClick={() => this.props.navigation.goBack(null)} oSBText={"Cancel"}
                                   oSBType={"custom"}
                                   oSBBackground={base.theme.colors.red}
