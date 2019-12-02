@@ -8,10 +8,9 @@ import base from "../../base";
 const AddAndEditCheckPointStyles = StyleSheet.create({
     container: {
         //height: hp("100%"),
-        marginBottom:hp(3),
+        flex:1,
         backgroundColor: base.theme.colors.white,
-        //paddingBottom: Platform.OS === 'ios' ? hp('80%') : hp('70%')
-        //paddingBottom: Platform.OS === 'ios' ? hp('80%') : hp('70%')
+        paddingBottom: Platform.OS === 'ios' ? hp('30%') : hp('70%')
     },
     header: {
         alignItems: 'center',

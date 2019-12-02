@@ -270,10 +270,10 @@ class AddAndEditCheckPoints extends React.Component {
             this.updateSatelliteCount();
             this.checkCount("start");
         }, 20000);
-        // this.signal = setInterval(() => {
-        //     //this.checkCount("start");
-        // }, 1000);
-        //this.watchuserPosition();
+        if(Platform.OS === 'ios'){
+            this.watchuserPosition();
+        }
+        //
     }
 
     callMe(){
@@ -281,25 +281,22 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     updateSatelliteCount(){
-        /*console.log("updateSatelliteCount...");
-        let self = this;
-        console.log("startLocationUpdate>> ",RNLocationSatellites.startLocationUpdate());
+       if(Platform.OS === 'android'){
+           this.accessLocationSatellites();
+       }
+    }
 
-        GPSEventEmitter.addListener('RNSatellite', (event) => {
-            console.log(":RN SATELLITE:",event)
-            self.setState({
-                satelliteCount : event.satellites
-            })
-        });*/
-
-        console.log("updateSatelliteCount...");
+    accessLocationSatellites(){
+        console.log("updateSatelliteCount...",GPSEventEmitter);
         let self = this;
+        
         GPSEventEmitter.removeListener('RNSatellite');
-        GPSEventEmitter.addListener('RNSatellite', (event) => {
-            console.log(":RN SATELLITE:",event)
+        GPSEventEmitter.addListener('RNSatellite', (ev) => {
+            let event = Platform.OS==='ios'?ev[0]:ev;
+            console.log(":RN SATELLITE_QQ",event)
             var sat = self.state.satelliteCount;
             var currentSat = event.satellites;
-            if(sat != 0 && event.satelliteCount == 0){
+            if(sat != 0 && event.satelliteCount == 0 || event.satellites == undefined){
                 currentSat = sat;
             }
             self.setState({
@@ -312,7 +309,7 @@ class AddAndEditCheckPoints extends React.Component {
                     latitudeDelta: LATITUDE_DELTA,
                 },
                 gpsLocation: parseFloat(event.latitude) + "," + parseFloat(event.longitude),
-            },()=>self.renderUserLocation())
+            },()=>{console.log("LOCATION_UPDATE:",self.state.region); self.setSignalStateIcon(); self.renderUserLocation()})
 
         });
         console.log(":RN SATELLITE:########:",self.state)
@@ -324,12 +321,13 @@ class AddAndEditCheckPoints extends React.Component {
     watchuserPosition() {
         console.log("watchuserPosition...");
         let locationArrStored = [];
+        let self = this;
         this.watchId = Geolocation.watchPosition(
             (position) => {
                 console.log("sdvdfgddhdgs", position);
                 let LocationData = position.coords;
                 locationArrStored.push(LocationData);
-                RNLocationSatellites.startLocationUpdate();
+                //RNLocationSatellites.startLocationUpdate();
 
                 /*GPSEventEmitter.addListener('RNSatellite', (event) => {
                     console.log(":RN SATELLITE:",event)
@@ -347,7 +345,7 @@ class AddAndEditCheckPoints extends React.Component {
                     gpsLocation: LocationData.latitude + "," + LocationData.longitude,
                     locationArrStored: locationArrStored,
                     accuracy:LocationData.accuracy
-                },()=>this.renderUserLocation())
+                },()=>{self.setSignalStateIcon();self.renderUserLocation()})
             },
             (error) => {
                 console.log(error);
@@ -478,10 +476,10 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
-                        cpArray: stat.data.checkPointListByAssocID,
-                        lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                    }
-                    //,()=>self.updateSatelliteCount()
+                    cpArray: stat.data.checkPointListByAssocID,
+                    lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
+                }
+                //,()=>self.updateSatelliteCount()
                 )
             }
         } catch (e) {
@@ -494,24 +492,40 @@ class AddAndEditCheckPoints extends React.Component {
         let self = this;
         let lat = self.state.region.latitude;
         let long = self.state.region.longitude;
-        console.log(':RN SATELLITE:@@@@@@@',lat,long,self.state.region)
+        console.log(':RN SATELLITE:@@@@@@@',lat,long,self.state.region,!isNaN(lat) && !isNaN(long))
         return (
             <View>
+                {
+                    (!isNaN(lat) && !isNaN(long))?
                 <Marker.Animated key={1024+'_' + Date.now()}
                                  pinColor={base.theme.colors.green}
                                  style={{alignItems: 'center', justifyContent: 'center'}}
                                  animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
                                  coordinate={{latitude: lat, longitude: long}}>
 
-                </Marker.Animated>
+                </Marker.Animated>:<View/>
+    }
             </View>
         )
     }
 
-    checkCount(type){
-        if(this.state.satelliteCount > 4 || this.state.accuracy<=15) {
-            this.setState({signalState:true});
-            if(type === "by click")
+
+    setSignalStateIcon(){
+        if(this.state.satelliteCount > 4) {
+            this.setState({signalState:true})
+        }
+        else{
+            if (this.state.accuracy<=15){
+                this.setState({signalState:true})
+            }
+            else{
+                this.setState({signalState:false});                
+            }
+        }
+    }
+
+    checkCount(){
+        if(this.state.satelliteCount > 4) {
             this.validateFields()
         }
         else{
@@ -624,6 +638,11 @@ class AddAndEditCheckPoints extends React.Component {
         //(":RN SATELLITE:",event)
         //console.log("State", this.state);
         let headerText = this.state.isEditing ? "Edit Check Point" : "Add Check Point";
+        var region = this.state.region;
+        if(isNaN(region.latitude) || isNaN(region.longitude)){
+            region.latitude = 0
+            region.longitude = 0
+        }
         return (
             <ScrollView
 
@@ -634,20 +653,22 @@ class AddAndEditCheckPoints extends React.Component {
                         <Text style={AddAndEditCheckPointStyles.headerText}>{headerText}</Text>
                     </View>
                     <View style={AddAndEditCheckPointStyles.mapBox}>
+                        {
                         <MapView
                             provider={PROVIDER_GOOGLE}
                             style={AddAndEditCheckPointStyles.map}
-                            region={this.state.region}
+                            region={region}
                             showsUserLocation={true}
                             showsBuildings={true}
                             zoomEnabled={true}
                             zoomTapEnabled={true}
-                            minZoomLevel={20}
+                            minZoomLevel={Platform.OS==='ios'?16:20}
                             scrollEnabled={true}
                             onUserLocationChange={(data)=>this.renderUserLocation()}
                         >
                             {this.renderUserLocation()}
                         </MapView>
+                    }
                     </View>
 
                     <View style={{
@@ -658,7 +679,6 @@ class AddAndEditCheckPoints extends React.Component {
                         //backgroundColor:'yellow'
                     }}>
                         <View style={{
-                            //flex:1,
                             //height:hp('1'),
                             //top:hp('3'),
                             //width:wp('80'),
@@ -667,7 +687,11 @@ class AddAndEditCheckPoints extends React.Component {
                             //alignItems:'center',
                         }}>
                             <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
-                            <Text>Satellite Count: {this.state.satelliteCount}</Text>
+                            {
+                                Platform.OS==='android'?
+                                <Text>Satellite Count: {this.state.satelliteCount}</Text>:
+                                <View/>
+                            }
                         </View>
                         <View
                             style={{
@@ -676,8 +700,8 @@ class AddAndEditCheckPoints extends React.Component {
                             }}
                         >
                             <Image
-                                resizeMode={'contain'}
-                                style={AddAndEditCheckPointStyles.signalIcon}
+                                resizeMode={Platform.OS === 'ios'?'contain':'center'}
+                                style={{height:hp('5%'),width:wp('5%')}}
                                 source={
                                     this.state.signalState ?
                                         require('../../../icons/goodSignal.png')
@@ -743,9 +767,8 @@ class AddAndEditCheckPoints extends React.Component {
                             })}
                         </RadioForm>
                     </View>
-                    {/*<EmptyView height={0}/>*/}
-
-                    <View style={AddAndEditCheckPointStyles.buttonView}>
+                    <EmptyView height={0}/>
+                    <View style={[AddAndEditCheckPointStyles.buttonView,{marginBottom:40}]}>
                         <OSButton onButtonClick={() => this.props.navigation.goBack(null)} oSBText={"Cancel"}
                                   oSBType={"custom"}
                                   oSBBackground={base.theme.colors.red}
@@ -795,6 +818,7 @@ class AddAndEditCheckPoints extends React.Component {
                     source={require('../../assets/gps.json')}
                 />
                 <Text style={{top:hp('23'),color:base.theme.colors.primary,fontSize:hp('2')}}>Optimising Location...</Text>
+
             </Modal>
         )
     }

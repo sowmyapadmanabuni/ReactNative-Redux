@@ -58,6 +58,7 @@ class PatrollingCommonHeader extends React.Component {
 
         let isHidden = this.props.isHidden;
         let isReportVisible = this.props.isReportVisible;
+        console.log("reports_hidden?",isHidden+" - "+isReportVisible)
         let isShareVisible = this.props.isShareVisible;
         const {goBack} = this.props.navigation;
         return (
@@ -67,20 +68,20 @@ class PatrollingCommonHeader extends React.Component {
                     // onPress={() => goBack(null)}   //Passing null for as a parameter in the case of nested StackNavigators   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
                     style={styles.buttonView}>
                     <Image
-                        resizeMode={'center'}
+                        resizeMode={'contain'}
                         style={styles.backButton}
                         source={require('../../../icons/arrowBack.png')}
                     />
                 </TouchableOpacity>
                 <View style={styles.logoView}>
                     <Image
-                        resizeMode={'cover'}
+                        resizeMode={'contain'}
                         style={{width: wp('34%'),
-                            height: hp('18%'),
+                            height: hp('14%'),
                             marginLeft: hp('3%'),
                             alignSelf:'center'
                             }}
-                        source={require('../../../icons/OyespaceSafe.png')}
+                        source={require('../../../icons/OyeSpace.png')}
                     />
                 </View>
                 {!isHidden ?
@@ -198,16 +199,16 @@ class PatrollingCommonHeader extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        height: "8%",
+        height: "10%",
         width: "100%",
         backgroundColor: "white",
         borderBottomWidth: 1,
         borderColor: "orange",
-        flexDirection: 'row',
+        flexDirection: 'row',flex:1,
         alignItems: 'center',
         //justifyContent: 'center',
         paddingLeft: 10,
-        marginTop: Platform.OS === 'ios' ? 20 : 0
+        paddingTop: Platform.OS === 'ios' ? 0 : 0        
     },
     buttonView: {
         width: "17%",
@@ -216,18 +217,18 @@ const styles = StyleSheet.create({
         paddingTop: 3
     },
     backButton: {
-        height: '50%'
+        height: '45%'
     },
     logoView: {
-        height: 40,
+        height: 50,
         width: widthPercentageToDP('60%'),
         backgroundColor: base.theme.colors.white,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 20
+        marginRight:Platform.OS==='ios'?14:20
     },
     logo: {
-        height: 50,
+        height: 30,
         width: 100,
         alignSelf: 'center'
     },
@@ -236,9 +237,10 @@ const styles = StyleSheet.create({
         height: "40%",
         width: widthPercentageToDP("15%"),
         borderRadius: 10,
-        marginRight: widthPercentageToDP('35%'),
+       // marginRight: widthPercentageToDP('35%'),
         alignItems: 'center',
         justifyContent: 'center',
+        marginRight:8,
         borderColor: 'orange'
     },
     scheduleTextStyle: {
@@ -247,7 +249,7 @@ const styles = StyleSheet.create({
         width: widthPercentageToDP('20%'),
         fontFamily: base.theme.fonts.medium
     },
-    reportImage: {height: "50%", width: widthPercentageToDP("20%")}
+    reportImage: {height: "45%", width: widthPercentageToDP("20%")}
 });
 
 

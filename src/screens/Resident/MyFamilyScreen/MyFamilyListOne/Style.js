@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, Platform } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
@@ -90,14 +90,17 @@ const Style = StyleSheet.create({
     marginBottom: hp('0.5%')
   },
   tableView: {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent:'center',flex:1
   },
   cellView: {
+    alignSelf:'center',flex:1,
     flexDirection: 'row',
     marginLeft: wp('3%'),
     marginRight: wp('4%'),
-    marginVertical: hp('0.8%'),
-    justifyContent: 'flex-start'
+    marginVertical: hp('1%'),
+    alignItems:'center',
+    justifyContent: 'center'
   },
   imageContainerViewStyle: {
     height: '20%',
@@ -186,6 +189,7 @@ const Style = StyleSheet.create({
     width: hp('3%'),
     height: hp('3%'),
     justifyContent: 'center',
+    marginVertical:Platform.OS==='ios'?4:1,
     alignItems: 'center'
   },
   formSearch: {

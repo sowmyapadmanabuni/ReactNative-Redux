@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
 import {Dimensions, NetInfo, Platform, StyleSheet, Text, View} from 'react-native';
 import base from "../index";
+import {updateIdDashboard} from "../../actions";
+import {connect} from "react-redux";
 
 const {width} = Dimensions.get('window');
 
@@ -26,11 +28,18 @@ class CheckInternet extends PureComponent {
     }
 
     handleConnectivityChange = isConnected => {
+        console.log('GET THE CHAGE LOG',isConnected)
         if (isConnected) {
             this.setState({isConnected});
         } else {
             this.setState({isConnected});
         }
+        const { updateIdDashboard } = this.props;
+        updateIdDashboard({
+            prop: 'isInternetConnected',
+            value: isConnected
+        });
+
     };
 
     render() {
@@ -56,4 +65,11 @@ const styles = StyleSheet.create({
     offlineText: {color: '#fff'}
 });
 
-export default CheckInternet;
+const mapStateToProps = state => {
+    return {
+        dashBoardReducer: state.DashboardReducer
+    }
+};
+
+
+export default connect(mapStateToProps,{updateIdDashboard})(CheckInternet);

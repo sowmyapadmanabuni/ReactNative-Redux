@@ -2,7 +2,7 @@ PODS:
   - boost-for-react-native (1.63.0)
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
-  - DoubleConversion (1.1.5)
+  - DoubleConversion (1.1.6)
   - Fabric (1.10.2)
   - Firebase/Core (5.19.0):
     - Firebase/CoreOnly
@@ -88,11 +88,11 @@ PODS:
   - GoogleUtilities/UserDefaults (5.8.0):
     - GoogleUtilities/Logger
   - lottie-ios (3.0.3)
-  - nanopb (0.3.901):
-    - nanopb/decode (= 0.3.901)
-    - nanopb/encode (= 0.3.901)
-  - nanopb/decode (0.3.901)
-  - nanopb/encode (0.3.901)
+  - nanopb (0.3.9011):
+    - nanopb/decode (= 0.3.9011)
+    - nanopb/encode (= 0.3.9011)
+  - nanopb/decode (0.3.9011)
+  - nanopb/encode (0.3.9011)
   - Permission-BluetoothPeripheral (2.0.3):
     - RNPermissions
   - Permission-Camera (2.0.3):
@@ -101,7 +101,7 @@ PODS:
     - RNPermissions
   - Permission-Microphone (2.0.3):
     - RNPermissions
-  - Protobuf (3.10.0)
+  - Protobuf (3.11.0)
   - RCTSystemSetting (1.7.3):
     - React
   - React (0.59.10):
@@ -203,6 +203,7 @@ PODS:
 
 DEPENDENCIES:
   - Crashlytics
+  - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Fabric
   - Firebase/Core (~> 5.19.0)
   - Firebase/Messaging (~> 5.19.0)
@@ -253,7 +254,6 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - Crashlytics
-    - DoubleConversion
     - Fabric
     - Firebase
     - FirebaseAnalytics
@@ -269,6 +269,8 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
+  DoubleConversion:
+    :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
@@ -329,7 +331,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
-  DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
+  DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: c60d49e9c2630875a96207d15e2affb8364996d1
   FirebaseAnalytics: fd72a26bf8dac84cefba2f0864366f718555a5b0
@@ -344,12 +346,12 @@ SPEC CHECKSUMS:
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
   lottie-ios: 6037add6441183d4ffd100d2ac78724aa8d919d4
-  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Permission-BluetoothPeripheral: 091a53a4625e149312f7ca153e4b913ca5c38348
   Permission-Camera: 019cd09a9b6fa90f7e5b2f7a4a9e32c54027f123
   Permission-MediaLibrary: 04ac4ce4511d25bda3bded67ce1187b6b1f80d3f
   Permission-Microphone: 747e8e6364c9fa266f2acf5dd7cebaf0fce2e177
-  Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
+  Protobuf: 394b2bf29ec303f4325e3ee4892c09e675647152
   RCTSystemSetting: 2870be06565f2398a8786bfe8486ff6880a4326a
   React: 36d0768f9e93be2473b37e7fa64f92c1d5341eef
   react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
@@ -372,6 +374,6 @@ SPEC CHECKSUMS:
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 684513b14b03201579ba3cee20218c9d1298b0cc
 
-PODFILE CHECKSUM: 38e0803ae840c4e74a670f8f35b356c5c6c8daf3
+PODFILE CHECKSUM: 7d95ec144f24f381ac8539fa07dd722b3bdb8cc7
 
 COCOAPODS: 1.8.4

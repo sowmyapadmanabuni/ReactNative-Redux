@@ -28,15 +28,15 @@
 
   
   //Uncomment code below to check Postscript name of the fonts   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
-  /*for (NSString *fontFamilyName in [UIFont familyNames]) {
+  for (NSString *fontFamilyName in [UIFont familyNames]) {
     for (NSString *fontName in [UIFont fontNamesForFamilyName:fontFamilyName]) {
       NSLog(@"Family: %@ Font: %@", fontFamilyName, fontName);
     }
-  }*/
+  }
   //debug
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+  //jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   //Release
-//  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   
   
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation

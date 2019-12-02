@@ -40,7 +40,7 @@ const INITIAL_STATE = {
     familyMemberCount: 0,
     vehiclesCount: 0,
     roleId: null,
-    isPatrollingScreens:false
+    isInternetConnected:true
 };
 
 export default (state = INITIAL_STATE, action) => {
