@@ -281,15 +281,15 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     updateSatelliteCount(){
-       if(Platform.OS === 'android'){
-           this.accessLocationSatellites();
-       }
+        if(Platform.OS === 'android'){
+            this.accessLocationSatellites();
+        }
     }
 
     accessLocationSatellites(){
         console.log("updateSatelliteCount...",GPSEventEmitter);
         let self = this;
-        
+
         GPSEventEmitter.removeListener('RNSatellite');
         GPSEventEmitter.addListener('RNSatellite', (ev) => {
             let event = Platform.OS==='ios'?ev[0]:ev;
@@ -476,10 +476,10 @@ class AddAndEditCheckPoints extends React.Component {
                 console.log("Stat in ALl CP List:", stat.data.checkPointListByAssocID);
                 let cpListLength = stat.data.checkPointListByAssocID.length;
                 self.setState({
-                    cpArray: stat.data.checkPointListByAssocID,
-                    lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
-                }
-                //,()=>self.updateSatelliteCount()
+                        cpArray: stat.data.checkPointListByAssocID,
+                        lastLatLong: stat.data.checkPointListByAssocID[cpListLength - 1].cpgpsPnt
+                    }
+                    //,()=>self.updateSatelliteCount()
                 )
             }
         } catch (e) {
@@ -497,14 +497,14 @@ class AddAndEditCheckPoints extends React.Component {
             <View>
                 {
                     (!isNaN(lat) && !isNaN(long))?
-                <Marker.Animated key={1024+'_' + Date.now()}
-                                 pinColor={base.theme.colors.green}
-                                 style={{alignItems: 'center', justifyContent: 'center'}}
-                                 animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
-                                 coordinate={{latitude: lat, longitude: long}}>
+                        <Marker.Animated key={1024+'_' + Date.now()}
+                                         pinColor={base.theme.colors.green}
+                                         style={{alignItems: 'center', justifyContent: 'center'}}
+                                         animateMarkerToCoordinate={(data)=>console.log("Data:",data)}
+                                         coordinate={{latitude: lat, longitude: long}}>
 
-                </Marker.Animated>:<View/>
-    }
+                        </Marker.Animated>:<View/>
+                }
             </View>
         )
     }
@@ -519,13 +519,14 @@ class AddAndEditCheckPoints extends React.Component {
                 this.setState({signalState:true})
             }
             else{
-                this.setState({signalState:false});                
+                this.setState({signalState:false});
             }
         }
     }
 
-    checkCount(){
+    checkCount(type){
         if(this.state.satelliteCount > 4) {
+            if(type === "by click")
             this.validateFields()
         }
         else{
@@ -654,21 +655,21 @@ class AddAndEditCheckPoints extends React.Component {
                     </View>
                     <View style={AddAndEditCheckPointStyles.mapBox}>
                         {
-                        <MapView
-                            provider={PROVIDER_GOOGLE}
-                            style={AddAndEditCheckPointStyles.map}
-                            region={region}
-                            showsUserLocation={true}
-                            showsBuildings={true}
-                            zoomEnabled={true}
-                            zoomTapEnabled={true}
-                            minZoomLevel={Platform.OS==='ios'?16:20}
-                            scrollEnabled={true}
-                            onUserLocationChange={(data)=>this.renderUserLocation()}
-                        >
-                            {this.renderUserLocation()}
-                        </MapView>
-                    }
+                            <MapView
+                                provider={PROVIDER_GOOGLE}
+                                style={AddAndEditCheckPointStyles.map}
+                                region={region}
+                                showsUserLocation={true}
+                                showsBuildings={true}
+                                zoomEnabled={true}
+                                zoomTapEnabled={true}
+                                minZoomLevel={Platform.OS==='ios'?16:20}
+                                scrollEnabled={true}
+                                onUserLocationChange={(data)=>this.renderUserLocation()}
+                            >
+                                {this.renderUserLocation()}
+                            </MapView>
+                        }
                     </View>
 
                     <View style={{
@@ -689,8 +690,8 @@ class AddAndEditCheckPoints extends React.Component {
                             <Text>Accuracy: {parseFloat(this.state.accuracy).toFixed(4)}</Text>
                             {
                                 Platform.OS==='android'?
-                                <Text>Satellite Count: {this.state.satelliteCount}</Text>:
-                                <View/>
+                                    <Text>Satellite Count: {this.state.satelliteCount}</Text>:
+                                    <View/>
                             }
                         </View>
                         <View

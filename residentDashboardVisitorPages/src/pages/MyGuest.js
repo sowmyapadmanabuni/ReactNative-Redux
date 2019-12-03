@@ -60,6 +60,7 @@ class MyGuests extends Component {
 
             open: false
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.arrayholder = [];
     }
 
@@ -78,28 +79,34 @@ class MyGuests extends Component {
                 dataSource: newDataSource
             });
         }, 1500);
-
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            console.log("MyGuest");
-            this.props.navigation.goBack(null);
-            return true;
-        });
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        // this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        //     console.log("MyGuest");
+        //     this.props.navigation.goBack(null);
+        //     return true;
+        // });
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 100);
+        }, 100);*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 0);
+        }, 0);*/
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     processBackPress() {

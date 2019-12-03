@@ -29,6 +29,7 @@ import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../../assets/selection.json';
 import FloatingButton from "../../../../components/FloatingButton";
 
+
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 class MyFamilyList extends React.Component {
@@ -51,7 +52,7 @@ class MyFamilyList extends React.Component {
             isModelVisible: true,
             searchText: ''
         };
-
+        this.processBackPress = this.processBackPress.bind(this);
         this.arrayholder = [];
     }
 
@@ -182,30 +183,21 @@ class MyFamilyList extends React.Component {
         }, 1500);
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
         this.myFamilyListGetData();
-    }
-
-    componentDidUpdate() {
-        setTimeout(() => {
-            BackHandler.addEventListener('hardwareBackPress', () =>
-                this.processBackPress()
-            );
-        }, 100);
+        BackHandler.addEventListener('hardwareBackPress', this.processBackPress);
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        console.log("componentWillUnmount");
+        BackHandler.removeEventListener('hardwareBackPress', this.processBackPress);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 0);
+        }, 0);*/
     }
 
     processBackPress() {
-        //BackHandler.removeEventListener('hardwareBackPress', ()=> this.props.navigation.goBack(null));
-        //this.props.navigation.goBack(null)
-        console.log('Part-------');
-        const {goBack} = this.props.navigation;
-        goBack(null);
+        this.props.navigation.goBack(null);
         return true;
     }
 

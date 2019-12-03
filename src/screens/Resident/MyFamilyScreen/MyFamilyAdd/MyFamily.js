@@ -611,10 +611,13 @@ class MyFamily extends Component {
     }
 
     async addRelativeDetails(title, message) {
+
         console.log('Props**', this.props, this.state);
+
         let self = this;
         let mobNum = self.state.sendNum;
         let cCode = self.state.cCode;
+        console.log("associantion id",self.props.dashBoardReducer.assId);
         if (cCode === "") {
             cCode = "+91";
             mobNum = self.state.mobileNumber
@@ -635,6 +638,7 @@ class MyFamily extends Component {
         console.log('MyFam', input);
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input);
         console.log('Stat in Add family', stat);
+        console.log("full stat",input, stat);
         this.setState({
             isLoading: true
         });

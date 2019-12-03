@@ -71,9 +71,11 @@ class MyGuests extends Component {
     base.utils.validate.checkSubscription(
       this.props.userReducer.SelectedAssociationID
     );
+    console.log("dataSource ",this.state.dataSource);
     this.state.dataSource.map(data => {
       newDataSource.push({ ...data, open: false });
     });
+    console.log("newDataSource ",newDataSource);
     setTimeout(() => {
       self.getInvitationList();
       self.setState({
@@ -81,6 +83,9 @@ class MyGuests extends Component {
         dataSource: newDataSource
       });
     }, 1000);
+
+
+
   }
 
   componentDidUpdate() {
@@ -521,6 +526,7 @@ class MyGuests extends Component {
   };
 
   render() {
+    console.log("this.state.dataSource ",this.state.dataSource);
     console.log("this.props.mediaupload ",this.props.mediaupload);
     return (
       <View style={{ flex: 1, marginTop: hp('1%') }}>
@@ -655,7 +661,12 @@ class MyGuests extends Component {
               a.vlfName.localeCompare(b.vlfName)
             )}
             renderItem={this.renderItem}
-            keyExtractor={(item, index) => item.vlVisLgID.toString()}
+            keyExtractor={(item, index) =>{
+              console.log("item ", item);
+              item.vlVisLgID.toString()
+            }
+
+            }
             ListEmptyComponent={
               <View
                 style={{

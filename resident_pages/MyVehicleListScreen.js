@@ -40,6 +40,7 @@ class VehicleList extends Component {
             dataSource: [],
             activeRowKey: null
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentDidMount() {
@@ -51,23 +52,29 @@ class VehicleList extends Component {
             });
         }, 1500);
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
-
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 100);
+        }, 100);*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 0);
+        }, 0);*/
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     

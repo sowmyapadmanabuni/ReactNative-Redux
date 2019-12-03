@@ -107,6 +107,7 @@ class Dashboard extends PureComponent {
 
 
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.backButtonListener = null;
     this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
@@ -124,10 +125,80 @@ class Dashboard extends PureComponent {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     console.log('API LEVEL#######',DeviceInfo.getAPILevel())
     console.log('API LEVEL#######1111111',DeviceInfo.getBaseOS())
     console.log('API LEVEL#######444444',DeviceInfo.getSystemVersion())
 
+  }
+
+  /*componentDidUpdate() {
+    if (Platform.OS === 'android') {
+      setTimeout(() => {
+        this.backButtonListener = BackHandler.addEventListener(
+            'hardwareBackPress',
+            () => {
+              console.log("this.props.navigation.state.routeName", this.props.navigation.state.routeName);
+              if (this.currentRouteName !== 'Main') {
+                console.log("<< 1 >>");
+                this.props.navigation.goBack(null);
+                //return false;
+              }
+              if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
+                console.log("<< 2 >>");
+                this.props.navigation.goBack(null);
+                this.showExitAlert();
+                // BackHandler.exitApp();
+                return true;
+              }
+              if (this.state.isSelectedCard === 'UNIT') {
+                //this.props.navigation.goBack(null);
+                console.log("<< 3 >>");
+                this.showExitAlert();
+
+                //this.props.navigation.goBack(null);
+                //BackHandler.exitApp();
+              } else if(this.state.isSelectedCard !== 'UNIT'){
+                console.log("<< else >>")
+                this.changeCardStatus('UNIT');
+              }
+              else{
+                this.props.navigation.goBack(null);
+              }
+
+              this.lastBackButtonPress = new Date().getTime();
+              console.log("return true;");
+              return true;
+            }
+        );
+      }, 100);
+    }
+  }*/
+
+  componentWillUnmount() {
+    //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+    this.backButtonListener.remove();
+    this.focusListener.remove();
+  }
+
+  handleBackButtonClick() {
+    if (Platform.OS === 'android') {
+      if (this.state.isSelectedCard === 'UNIT') {
+        //this.props.navigation.goBack(null);
+        console.log("<< 3 >>");
+        this.showExitAlert();
+
+        //this.props.navigation.goBack(null);
+        //BackHandler.exitApp();
+      } else if(this.state.isSelectedCard !== 'UNIT'){
+        console.log("<< else >>")
+        this.changeCardStatus('UNIT');
+      }
+      this.lastBackButtonPress = new Date().getTime();
+      console.log("return true;");
+      return true;
+    }
   }
 
   readFBRTB(isNotificationClicked) {
@@ -202,7 +273,7 @@ class Dashboard extends PureComponent {
     // );
   }
 
-  componentDidUpdate() {
+  /*componentDidUpdate() {
     if (Platform.OS === 'android') {
       setTimeout(() => {
         this.backButtonListener = BackHandler.addEventListener(
@@ -238,13 +309,7 @@ class Dashboard extends PureComponent {
         );
       }, 100);
     }
-  }
-
-  componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
-    this.backButtonListener.remove();
-    this.focusListener.remove();
-  }
+  }*/
 
   showExitAlert() {
     Alert.alert(
@@ -757,6 +822,7 @@ class Dashboard extends PureComponent {
 
   async roleCheckForAdmin(index) {
     const { dropdown, dropdown1 } = this.props;
+    console.log("this.state.assocId ",this.state.assocId);
     console.log('Check unit and Association available@@@', dropdown, dropdown1);
     try {
       let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
