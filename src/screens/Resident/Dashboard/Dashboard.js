@@ -312,8 +312,8 @@ class Dashboard extends PureComponent {
 
   showExitAlert() {
     Alert.alert(
-        'Exit Oyespace ?',
-        'Are you sure, You want to exit the application ?',
+        'Exit Notification',
+        'Are you sure,You want to exit ?',
         [
           {
             text: 'No',
@@ -1243,6 +1243,8 @@ class Dashboard extends PureComponent {
               this.props.dashBoardReducer.uniID,
               responseJson
           );
+
+          console.log("vehicle count: ", responseJson.data.vehicleListByUnitID.length);
           this.setState({
             //Object.keys(responseJson.data.unitsByBlockID).length
             vehiclesCount: responseJson.data.vehicleListByUnitID.length
