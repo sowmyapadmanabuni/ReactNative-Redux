@@ -1243,6 +1243,8 @@ class Dashboard extends PureComponent {
               this.props.dashBoardReducer.uniID,
               responseJson
           );
+
+          console.log("vehicle count: ", responseJson.data.vehicleListByUnitID.length);
           this.setState({
             //Object.keys(responseJson.data.unitsByBlockID).length
             vehiclesCount: responseJson.data.vehicleListByUnitID.length
