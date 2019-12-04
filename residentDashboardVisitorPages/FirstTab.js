@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Text } from 'react-native';
+import {BackHandler, Dimensions, Text} from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MyGuests from './src/pages/MyGuests.js';
 import Deliveries from './src/pages/Deliveries.js';
@@ -14,6 +14,7 @@ import {
 import GetStaffReport from '../src/screens/Resident/Visitors/Staff/GetStaffReport';
 
 class FirstTab extends Component {
+
   render() {
     const AppTabNavigator = createMaterialTopTabNavigator(
       {

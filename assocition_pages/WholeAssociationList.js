@@ -10,7 +10,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Keyboard
+  Keyboard, Platform
 } from 'react-native';
 import { Button, Form, Input, Item } from 'native-base';
 import {
@@ -21,7 +21,6 @@ import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-
 class WholeAssociationList extends React.Component {
   static navigationOptions = {
     title: 'WholeAssociationList',
@@ -58,26 +57,19 @@ class WholeAssociationList extends React.Component {
         () => this.myJoinAssociationListGetData()
       );
     }, 1000);
-    this.keyboardDidShow = Keyboard.addListener(
-      'keyboardDidShow',
-      this.keyboardDidShow
-    );
-    this.keyboardWillShow = Keyboard.addListener(
-      'keyboardWillShow',
-      this.keyboardWillShow
-    );
-    this.keyboardWillHide = Keyboard.addListener(
-      'keyboardWillHide',
-      this.keyboardWillHide
-    );
+    this.keyboardDidShow = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardWillShow = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
+    this.keyboardWillHide = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
     this.keyboardDidHide = Keyboard.addListener(
       'keyboardDidHide',
       this.keyboardDidHide
     );
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+
+
+    /*this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack(null); // works best when the goBack is async
       return true;
-    });
+    });*/
   }
 
   keyboardDidShow = () => {
@@ -95,8 +87,13 @@ class WholeAssociationList extends React.Component {
     this.setState({ searchBarFocused: false });
   };
   componentWillUnmount() {
-    this.backHandler.remove();
+    console.log("Part>>>>>>>")
+    /*BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.navigation.goBack(null)
+    });
+    this.backHandler.remove();*/
   }
+
 
   // searchFilterFunction = text => {
   //   const newData = this.arrayholder.filter(item => {
@@ -635,7 +632,7 @@ const styles = StyleSheet.create({
   floatButton: {
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0)',
-    alignItems: 'center',
+    //alignItems: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     width: hp('8%'),
