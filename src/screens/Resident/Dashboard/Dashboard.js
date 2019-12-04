@@ -129,7 +129,6 @@ class Dashboard extends PureComponent {
     console.log('API LEVEL#######',DeviceInfo.getAPILevel())
     console.log('API LEVEL#######1111111',DeviceInfo.getBaseOS())
     console.log('API LEVEL#######444444',DeviceInfo.getSystemVersion())
-
   }
 
   /*componentDidUpdate() {
@@ -176,7 +175,7 @@ class Dashboard extends PureComponent {
   }*/
 
   componentWillUnmount() {
-    //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
     this.backButtonListener.remove();
     this.focusListener.remove();
@@ -810,7 +809,6 @@ class Dashboard extends PureComponent {
          );*/
   }
 
-
   handleConnectivityChange = isConnected => {
     console.log('CONNECTION DATA',isConnected)
     if (isConnected) {
@@ -1412,7 +1410,7 @@ class Dashboard extends PureComponent {
 
     }
     else{
-      console.log('CHECK NET!!!!!!@@@@@',this.state.isConnected)
+      console.log('CHECK NET!!!!!!@@@@@',this.state.isConnected);
       return(
           <View style={{ height: '100%', width: '100%' }}>
             <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
@@ -2125,7 +2123,8 @@ class Dashboard extends PureComponent {
           <Image source={require('../../../../icons/add.png')}/>
           </AnimatedTouchable> */}
           </View>
-          {this.props.dropdown.length == 0 ? (
+          {
+            this.props.dropdown.length == 0 ? (
               <View />
           ) : (
               <View
@@ -2199,7 +2198,8 @@ class Dashboard extends PureComponent {
                     </View>
                 )}
               </View>
-          )}
+          )
+          }
         </ElevatedView>
     );
   }

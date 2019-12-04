@@ -53,30 +53,36 @@ class AddVehicle extends Component {
 
             isLoading: false
         };
-
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.getUnitDetail = this.getUnitDetail.bind(this);
     }
 
     componentWillMount() {
         this.getUnitDetail();
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
-
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 100);
+        }, 100);*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 0);
+        }, 0);*/
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     processBackPress() {

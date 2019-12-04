@@ -524,20 +524,26 @@ class AddAndEditCheckPoints extends React.Component {
         }
     }
 
-    checkCount(type){
-        if(this.state.satelliteCount > 4) {
-            if(type === "by click")
-            this.validateFields()
-        }
-        else{
+    checkCount(type) {
+        if (this.state.satelliteCount > 4) {
             this.setState({signalState:false});
-            if(type === "by click")
-                Alert.alert("Failed to get accurate user position","Can't proceed further")
+            if (type === "by click")
+                this.validateFields()
+        } else {
+            if (this.state.accuracy <= 15) {
+                this.setState({signalState:false});
+                if (type === "by click")
+                this.validateFields()
+            } else {
+                this.setState({signalState:false});
+                if (type === "by click")
+                Alert.alert("Failed to get accurate user position", "Can't proceed further")
+            }
         }
     }
 
     validateFields() {
-
+        //this.setState({signalState:true});
         if (base.utils.validate.isBlank(this.state.checkPointName)) {
             alert("Please enter Check Point Name")
         } else {
@@ -736,7 +742,7 @@ class AddAndEditCheckPoints extends React.Component {
                             />
                             <Text style={{
                                 fontFamily: base.theme.fonts.medium,
-                                fontSize: hp('2.5%')
+                                fontSize: hp('2.5%'),marginLeft:2
                             }}>{this.state.gpsLocation}</Text>
                         </View>
                     </View>

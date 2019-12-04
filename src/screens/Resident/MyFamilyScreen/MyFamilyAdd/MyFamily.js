@@ -71,28 +71,33 @@ class MyFamily extends Component {
             isLoading: false,
             isPhoneBookOpened: false
         }
+        this.processBackPress = this.processBackPress.bind(this);
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.processBackPress)
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
+        }, 0)*/
 
     }
     componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.processBackPress);
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
     }
 
     processBackPress() {
-        console.log("Part");
-        const {goBack} = this.props.navigation;
-        goBack(null);
+        // console.log("Part");
+        // const {goBack} = this.props.navigation;
+        // goBack(null);
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     mobileNumberInputCheck(text) {

@@ -43,6 +43,7 @@ class MyProfile extends Component {
       number: '',
       isLoading: true
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.backButtonListener = null;
     this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
@@ -96,6 +97,7 @@ class MyProfile extends Component {
   };
 
   componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     console.log('Unit ID', this.props.dashBoardReducer.uniID);
     let self = this;
     setTimeout(() => {
@@ -110,21 +112,24 @@ class MyProfile extends Component {
   }
 
   componentDidUpdate() {
-    if (Platform.OS === 'android') {
+    /*if (Platform.OS === 'android') {
       setTimeout(() => {
         BackHandler.addEventListener('hardwareBackPress', () =>
           this.processBackPress()
         );
       }, 100);
-    }
+    }*/
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     // BackHandler.removeEventListener('backPress');
+    //BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress());
+  }
 
-    BackHandler.removeEventListener('hardwareBackPress', () =>
-      this.processBackPress()
-    );
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
   }
 
   processBackPress(stat) {

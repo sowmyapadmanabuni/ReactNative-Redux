@@ -74,7 +74,7 @@ class SchedulePatrol extends React.Component {
 
         console.log("TIME:", props);
         this.getDeviceList = this.getDeviceList.bind(this);
-
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     };
 
     onValueChange(data, key) {
@@ -91,18 +91,28 @@ class SchedulePatrol extends React.Component {
         }
     }
 
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
-
+        }, 0)*/
     }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
+
 
     processBackPress() {
         console.log("Part");

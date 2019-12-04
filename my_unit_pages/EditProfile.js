@@ -58,21 +58,53 @@ class EditProfile extends Component {
             profileName: "",
             isPhotoAvailable: false,
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.selectPhotoTapped = this.selectPhotoTapped.bind(this);
+    }
 
+    componentWillMount(){
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+
+
+        console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params, this.props.navigation.state.params.primeCName, this.props.navigation.state.params.alterCName);
+        this.setState({
+            firstName: this.props.navigation.state.params.firstName,
+            lastName: this.props.navigation.state.params.lastName,
+            primaryMobNum: this.props.navigation.state.params.primaryMobNum,
+            primeCCode: this.props.navigation.state.params.primeCCode,
+            primeCName: this.props.navigation.state.params.primeCName == "+91" ? 'IN' : this.props.navigation.state.params.primeCName,
+            alterMobNum: this.props.navigation.state.params.alterMobNum,
+            alterCCode: this.props.navigation.state.params.alterCCode,
+            alterCName: this.props.navigation.state.params.alterCName == "+91" ? 'IN' : this.props.navigation.state.params.alterCName,
+            primaryEmail: this.props.navigation.state.params.primaryEmail,
+            alterEmail: this.props.navigation.state.params.alterEmail,
+            myProfileImage: this.props.navigation.state.params.myProfileImage !== "" ?
+                "https://mediaupload.oyespace.com/" + this.props.navigation.state.params.myProfileImage : "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
+            imageUrl: this.props.navigation.state.params.myProfileImage,
+            alterCca: this.props.navigation.state.params.alterCca,
+            primeCca: this.props.navigation.state.params.primeCca,
+            profileName: this.props.navigation.state.params.firstName,
+        })
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
+        }, 0)*/
+    }
 
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
 //MyProfileScreen
@@ -250,33 +282,7 @@ class EditProfile extends Component {
             });
     }
 
-    componentWillMount() {
 
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
-
-
-        console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params, this.props.navigation.state.params.primeCName, this.props.navigation.state.params.alterCName);
-        this.setState({
-            firstName: this.props.navigation.state.params.firstName,
-            lastName: this.props.navigation.state.params.lastName,
-            primaryMobNum: this.props.navigation.state.params.primaryMobNum,
-            primeCCode: this.props.navigation.state.params.primeCCode,
-            primeCName: this.props.navigation.state.params.primeCName == "+91" ? 'IN' : this.props.navigation.state.params.primeCName,
-            alterMobNum: this.props.navigation.state.params.alterMobNum,
-            alterCCode: this.props.navigation.state.params.alterCCode,
-            alterCName: this.props.navigation.state.params.alterCName == "+91" ? 'IN' : this.props.navigation.state.params.alterCName,
-            primaryEmail: this.props.navigation.state.params.primaryEmail,
-            alterEmail: this.props.navigation.state.params.alterEmail,
-            myProfileImage: this.props.navigation.state.params.myProfileImage !== "" ?
-                "https://mediaupload.oyespace.com/" + this.props.navigation.state.params.myProfileImage : "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
-            imageUrl: this.props.navigation.state.params.myProfileImage,
-            alterCca: this.props.navigation.state.params.alterCca,
-            primeCca: this.props.navigation.state.params.primeCca,
-            profileName: this.props.navigation.state.params.firstName,
-        })
-
-
-    }
 
     selectPhotoTapped() {
         const options = {

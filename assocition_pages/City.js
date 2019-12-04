@@ -33,26 +33,38 @@ export default class City extends Component {
                 {key: 'Kolkata'}
             ]
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 100);
+        }, 100);*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () =>
                 this.processBackPress()
             );
-        }, 0);
+        }, 0);*/
+    }
+
+    handleBackButtonClick() {
+        console.log("Aaaaaaaaaaaaa");
+        this.props.navigation.goBack(null);
+        return true
     }
 
     processBackPress() {
-        console.log('Part');
+        console.log('PartLlllllllllllllll');
         const {goBack} = this.props.navigation;
         goBack(null);
     }
