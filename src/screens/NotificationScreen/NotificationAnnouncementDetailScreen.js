@@ -140,7 +140,9 @@ class NotificationAnnouncementDetailScreen extends Component {
   }
 
   componentWillUnmount() {
-    this.pause();
+   if(!this.state.paused){
+     this.pause();
+   }
     setTimeout(() => {
       BackHandler.removeEventListener('hardwareBackPress', () =>
         this.processBackPress()
