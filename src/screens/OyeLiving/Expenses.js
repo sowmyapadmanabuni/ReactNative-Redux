@@ -1,6 +1,6 @@
 /*
- * @Author: Sarthak Mishra 
- * @Date: 2019-10-07 11:58:24 
+ * @Author: Sarthak Mishra
+ * @Date: 2019-10-07 11:58:24
  * @Last Modified by: Sarthak Mishra
  * @Last Modified time: 2019-10-22 12:21:21
  */
@@ -1323,7 +1323,7 @@ class Expenses extends React.Component {
                                         }}
                                     />
                                 </View>
-                                <View style={{backgroundColor: base.theme.colors.greyCard}}>
+                                <View style={{backgroundColor: base.theme.colors.greyCard,width:'100%'}}>
                                     <Text style={{
                                         fontSize: 14,
                                         color: base.theme.colors.black,

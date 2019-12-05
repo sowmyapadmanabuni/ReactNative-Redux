@@ -60,6 +60,7 @@ class PatrollingCheckPoints extends React.Component {
         };
         this.getCheckPoints = this.getCheckPoints.bind(this);
         console.log("Receicved Porp@@@@@@@@@:", props)
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     };
 
     componentWillMount() {
@@ -73,17 +74,27 @@ class PatrollingCheckPoints extends React.Component {
         // this.updateStore();
     }
 
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
+        }, 0)*/
+        updateSelectedCheckPoints({ value: null });
+    }
 
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     processBackPress() {
@@ -217,10 +228,6 @@ class PatrollingCheckPoints extends React.Component {
         //     }
         // }
 
-    }
-
-    componentWillUnmount() {
-        updateSelectedCheckPoints({ value: null });
     }
 
     onBackButtonPressAndroid() {

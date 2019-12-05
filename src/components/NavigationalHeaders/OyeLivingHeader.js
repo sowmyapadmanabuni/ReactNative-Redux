@@ -118,7 +118,7 @@ class OyeLivingHeader extends React.Component {
                   alignItems: 'center'
                 }}
               >
-                <Image
+               {/* <Image
                   style={{
                     height: hp('1%'),
                     width: hp('1%'),
@@ -128,7 +128,7 @@ class OyeLivingHeader extends React.Component {
                     alignItems: 'center'
                   }}
                   source={require('../../../icons/settings.png')}
-                />
+                />*/}
               </View>
             </View>
           )}

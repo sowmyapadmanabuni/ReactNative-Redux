@@ -90,7 +90,7 @@ class AddAndEditCheckPoints extends React.Component {
         this.thread = null;
 
         this.getUserLocation = this.getUserLocation.bind(this)
-
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
 
@@ -101,9 +101,9 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     /* componentWillUnmount() {
@@ -112,11 +112,47 @@ class AddAndEditCheckPoints extends React.Component {
          }, 0)
      }*/
 
-    processBackPress() {
+    componentWillUnmount() {
+        clearInterval(this.interval);
+        //clearInterval(this.signal);
+        GPSEventEmitter.removeListener('RNSatellite')
+        GPSEventEmitter.removeListener('EVENT_NAME')
+        /*if (this.watchId !== null) {
+            Geolocation.clearWatch(this.watchId);
+        }*/
+
+        /*setTimeout(() => {
+            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
+        }, 0)*/
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentDidMount() {
+        console.log(RNLocationSatellites)
+        //this.updateSatelliteCount();
+        this.interval = setInterval(() => {
+            this.updateSatelliteCount();
+            this.checkCount("start");
+        }, 20000);
+        if(Platform.OS === 'ios'){
+            this.watchuserPosition();
+        }
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        //
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
+
+        processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
         goBack(null);
     }
+
+
 
     async componentWillMount() {
         console.log("SCDMVD:", this.props.navigation.state.params);
@@ -263,18 +299,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
 
-    componentDidMount() {
-        console.log(RNLocationSatellites)
-        //this.updateSatelliteCount();
-        this.interval = setInterval(() => {
-            this.updateSatelliteCount();
-            this.checkCount("start");
-        }, 20000);
-        if(Platform.OS === 'ios'){
-            this.watchuserPosition();
-        }
-        //
-    }
+
 
     callMe(){
         console.log("Calling...");
@@ -360,19 +385,7 @@ class AddAndEditCheckPoints extends React.Component {
     }
 
 
-    componentWillUnmount() {
-        clearInterval(this.interval);
-        //clearInterval(this.signal);
-        GPSEventEmitter.removeListener('RNSatellite')
-        GPSEventEmitter.removeListener('EVENT_NAME')
-        /*if (this.watchId !== null) {
-            Geolocation.clearWatch(this.watchId);
-        }*/
 
-        setTimeout(() => {
-            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
-    }
 
 
     async requestLocationPermission() {
