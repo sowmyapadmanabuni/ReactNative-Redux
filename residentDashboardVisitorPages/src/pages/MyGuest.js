@@ -505,6 +505,252 @@ class MyGuests extends Component {
             </View>
         );
     };
+
+    renderItem2 = ({ item, index }) => {
+        console.log('Item  Index', item, index);
+        return (
+            <View
+                style={{
+                    flexDirection: 'column',
+                    marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0
+                }}
+            >
+                <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
+                {/* <View style={{ flexDirection: 'row' }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginTop: hp('1%') }}>Unit - {this.props.dashBoardReducer.selectedDropdown1}</Text>
+          </View>
+          <View style={{}}>
+            <Text style={{ color: '#ff8c00', fontSize: hp('1.6%'), marginRight: hp('1%'), marginTop: hp('1%') }}>{moment(item.indCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>
+          </View>
+        </View> */}
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={styles.iconContainer}>
+                        <Text style={styles.contactIcon}>
+                            {item.infName[0].toUpperCase()}
+                        </Text>
+                    </View>
+
+                    <View style={[styles.listItem]}>
+                        {/* <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}> */}
+                        <View style={styles.infoContainer}>
+                            <Text style={styles.infoText}>
+                                {item.infName} {item.inlName}
+                            </Text>
+                            <View>
+                                <Text
+                                    style={{
+                                        fontSize: hp('1.6%'),
+                                        marginLeft: hp('1%'),
+                                        marginBottom: hp('0.5%')
+                                    }}
+                                >
+                                    Purpose of Invitation: {item.inpOfInv}
+                                </Text>
+                            </View>
+                            {/* <View style={{ flexDirection: "row" }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image source={require('../../../icons/phone.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                    <Text>{"  "}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.infoNumber}>{item.inMobile}</Text>
+                  </View>
+                </View> */}
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image
+                                        source={require('../../../icons/datetime.png')}
+                                        style={{ width: hp('1.5%'), height: hp('1.5%') }}
+                                    />
+                                    <Text>{'  '}</Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
+                                        Entry Date:{' '}
+                                        {moment(item.insDate, 'YYYY-MM-DD').format('DD-MM-YYYY')}
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
+                                        Entry Time:{' '}
+                                        {item.insDate.substring(11, 16)}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Image
+                                        source={require('../../../icons/datetime.png')}
+                                        style={{ width: hp('1.5%'), height: hp('1.5%') }}
+                                    />
+                                    <Text>{'  '}</Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
+                                        Exit Date:{' '}
+                                        {moment(item.ineDate, 'YYYY-MM-DD').format('DD-MM-YYYY')}
+                                        {'       '}
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: hp('1.4%') }}>
+                                        Exit Time:{' '}
+                                        {item.ineDate.substring(11, 16)}
+                                    </Text>
+                                </View>
+                            </View>
+                            {/* <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                    <Text>{"  "}</Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: hp('1.4%') }}>Entry Date: {moment(item.indCreated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"  "}</Text>
+                  </View>
+                  <View>
+                    <Text style={{ fontSize: hp('1.4%') }}>Entry Time: {item.indCreated.substring(11, 16)}</Text>
+                  </View>
+                </View> */}
+
+                            {/* {item.indUpdated === '0001-01-01T12:00:00' ?
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                      <Text>{"  "}</Text>
+                    </View>
+                    <View>
+                      <Text style={{ fontSize: hp('1.4%') }}>Exit Date: N.A.{"  "}</Text>
+                    </View>
+                    <View>
+                      <Text style={{ fontSize: hp('1.4%') }}>Exit Time: N.A.</Text>
+                    </View>
+                  </View>
+                  :
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Image source={require('../../../icons/datetime.png')} style={{ width: hp('1.5%'), height: hp('1.5%') }} />
+                      <Text>{"  "}</Text>
+                    </View>
+                    <View>
+                      <Text style={{ fontSize: hp('1.4%') }}>Exit Date: {moment(item.indUpdated, "YYYY-MM-DD").format("DD-MM-YYYY")}{"  "}</Text>
+                    </View>
+                    <View>
+                      <Text style={{ fontSize: hp('1.4%') }}>Exit Time: {item.indUpdated.substring(11, 16)}</Text>
+                    </View>
+                  </View>
+                } */}
+
+                            <View style={{ flexDirection: 'column' }}>
+                                {/* <View>
+                    <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Purpose of Invitation: {item.inpOfInv}</Text>
+                  </View> */}
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text
+                                        style={{
+                                            fontSize: hp('1.6%'),
+                                            marginLeft: hp('1%'),
+                                            marginBottom: hp('0.5%')
+                                        }}
+                                    >
+                                        Guests Expected: {item.inVisCnt}
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                        {/* </TouchableOpacity> */}
+                    </View>
+
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'flex-end',
+                            paddingRight: 0
+                        }}
+                    >
+                        <Card style={{ paddingTop: 0 }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('QRCodeGeneration', {
+                                        value: this.state.dataSource[index]
+                                    });
+                                }}
+                            >
+                                <CardItem bordered>
+                                    <Icon color="#ff8c00" name="share" size={hp('2.5%')} />
+                                </CardItem>
+                            </TouchableOpacity>
+                        </Card>
+                        <Card style={{ marginTop: 0 }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    {
+                                        Platform.OS === 'android'
+                                            ? Linking.openURL(`tel:${item.inMobile}`)
+                                            : Linking.openURL(`telprompt:${item.inMobile}`);
+                                    }
+                                }}
+                            >
+                                <CardItem bordered>
+                                    <Icon color="#ff8c00" name="call" size={hp('2.5%')} />
+                                    {/*  */}
+                                </CardItem>
+                            </TouchableOpacity>
+                        </Card>
+                    </View>
+                </View>
+                {/* <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+          <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}>
+            <View style={{ alignItems: 'center', marginRight: hp('1%') }}>
+              {item.open ?
+                <View /> :
+                <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
+                  <Text style={{ color: '#ff8c00', }}>More</Text>
+                  <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_more.png')} />
+                </View>
+              }
+            </View>
+          </TouchableOpacity>
+        </View> */}
+                {/* <Collapsible
+          duration={100}
+          collapsed={!item.open}>
+          <View style={{ flexDirection: 'column' }}> */}
+                {/* <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%') }}>Invited On: <Text style={{ color: '#38bcdb' }}>{moment(item.insDate, "YYYY-MM-DD").format("DD-MM-YYYY")}</Text>{" "}</Text>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), color: '#38bcdb' }}>{item.insDate.substring(11, 16)}</Text>
+            </View> */}
+                {/* <View>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Purpose of Invitation: {item.inpOfInv}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Total Guests: {item.inVisCnt}</Text>
+            </View>
+            <TouchableOpacity onPress={() => this.toggleCollapsible(index, item.open)}>
+              <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
+
+                {!item.open ?
+                  <View>
+                  </View> :
+
+                  <View style={{ flexDirection: 'row', marginBottom: hp('0.5%') }}>
+                    <Text style={{ color: '#ff8c00', }}>Less</Text>
+                    <Image style={{ width: hp('1.8%'), height: hp('1.8%') }} source={require('../../../icons/show_less.png')} />
+                  </View>
+                }
+              </View>
+            </TouchableOpacity>
+
+
+
+          </View>
+        </Collapsible> */}
+
+                <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
+            </View>
+        );
+    };
     toggleCollapsible = (index, value) => {
         let data = [...this.state.dataSource];
 
@@ -652,7 +898,7 @@ class MyGuests extends Component {
                         data={this.state.dataSource.sort((a, b) =>
                             b.insDate.localeCompare(a.insDate)
                         )}
-                        renderItem={this.renderItem}
+                        renderItem={this.renderItem2}
                         keyExtractor={(item, index) => item.inInvtID.toString()}
                         ListEmptyComponent={
                             <View
