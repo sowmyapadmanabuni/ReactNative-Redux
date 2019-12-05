@@ -30,6 +30,8 @@ import {heightPercentageToDP, widthPercentageToDP} from 'react-native-responsive
 import Modal from 'react-native-modal';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import SystemSetting from 'react-native-system-setting'
+import Geolocation from 'react-native-geolocation-service';
+
 
 var Sound = require('react-native-sound');
 var RNFS = require('react-native-fs')
@@ -135,6 +137,7 @@ class CreateSOS extends React.Component {
             }
         });
 
+        
         Platform.OS === 'ios' ? this.getCurrentLocation() : this.checkGPS();
     }
 
@@ -309,7 +312,8 @@ class CreateSOS extends React.Component {
         console.log("User Reducer Data:", this.props);
         let self = this;
         try {
-            await navigator.geolocation.getCurrentPosition((data) => {
+            Geolocation.requestAuthorization();
+            Geolocation.getCurrentPosition((data) => {
                 let LocationData = (data.coords);
                 console.log("Location data:", LocationData);
                 self.setState({
@@ -319,10 +323,15 @@ class CreateSOS extends React.Component {
                         longitudeDelta: LONGITUDE_DELTA,
                         latitudeDelta: LATITUDE_DELTA
                     }
-                }, () => this.props.navigation.state.params.isActive ? self.readUserData() : self.createSOS())
-            });
+                }, () => self.props.navigation.state.params.isActive ? self.readUserData() : self.createSOS())
+            },
+            (error) => {
+              console.log("map error: ",error);
+                console.log(error.code, error.message);
+            },
+            { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 });
         } catch (e) {
-            console.log("Error:", e);
+            console.log("SOS_ERRR", e);
         }
     }
 

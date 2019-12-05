@@ -89,6 +89,8 @@
 	<string>OyeSpace would like to use your camera for profile image</string>
 	<key>NSContactsUsageDescription</key>
 	<string>OyeSpace would like to access your contacts</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>OyeSpace would like to use your location for patrolling</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>OyeSpace would like to use your location for patrolling</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -136,6 +138,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
