@@ -318,7 +318,7 @@ class SendingMsgToGate extends Component {
       }
     };
     let self = this;
-    ImagePicker.launchCamera(options, response => {
+    ImagePicker.showImagePicker(options, response => {
       console.log('response:', response);
       if (response.didCancel) {
       } else if (response.error) {

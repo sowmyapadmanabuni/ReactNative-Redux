@@ -797,7 +797,7 @@ class Dashboard extends PureComponent {
     }
 
 
- /*   timer.setInterval(
+  /* timer.setInterval(
              this,
              'syncData',
              () => {
