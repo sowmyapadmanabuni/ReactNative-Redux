@@ -204,7 +204,7 @@ const SchedulePatrolStyles = StyleSheet.create({
     spinModal: {
         flex: 1,
         backgroundColor: base.theme.colors.transparent,
-        height: 50,
+        //height: 50,
         alignSelf: 'center',
         width: wp('90%'),
     },
@@ -216,9 +216,9 @@ const SchedulePatrolStyles = StyleSheet.create({
     closeTextView: {
         height: hp('7%'),
         justifyContent: 'center',
-        alignItems: 'flex-end',
-        alignSelf: 'flex-end',
-        width: wp('20%'),
+        alignItems: 'flex-start',
+        alignSelf: 'flex-start',
+        //width: wp('20%'),
     },
     closeText: {
         alignSelf: 'center',

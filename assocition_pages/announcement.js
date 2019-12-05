@@ -120,6 +120,7 @@ class Announcement extends Component {
 
       timestamp: ''
     };
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
     // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
   }
@@ -132,8 +133,41 @@ class Announcement extends Component {
         isLoading: false
       });
     }, 1500);
-
     AudioRecord.init(options);
+    if(Platform.OS!='ios'){
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+  }
+
+  componentDidUpdate() {
+    /*setTimeout(() => {
+      BackHandler.addEventListener('hardwareBackPress', () =>
+          this.processBackPress()
+      );
+    }, 100);*/
+  }
+
+  componentWillUnmount() {
+    if(Platform.OS!='ios'){
+      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    /*setTimeout(() => {
+      BackHandler.removeEventListener('hardwareBackPress', () =>
+          this.processBackPress()
+      );
+    }, 0);*/
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
+  }
+
+  processBackPress() {
+    console.log('Part');
+    const { goBack } = this.props.navigation;
+    goBack(null);
+    return true;
   }
 
   checkPermission = async () => {
@@ -271,29 +305,6 @@ class Announcement extends Component {
     this.sound.pause();
     this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
   };
-
-  componentDidUpdate() {
-    setTimeout(() => {
-      BackHandler.addEventListener('hardwareBackPress', () =>
-        this.processBackPress()
-      );
-    }, 100);
-  }
-
-  componentWillUnmount() {
-    setTimeout(() => {
-      BackHandler.removeEventListener('hardwareBackPress', () =>
-        this.processBackPress()
-      );
-    }, 0);
-  }
-
-  processBackPress() {
-    console.log('Part');
-    const { goBack } = this.props.navigation;
-    goBack(null);
-    return true;
-  }
 
   setImage() {
     console.log('Set Image');

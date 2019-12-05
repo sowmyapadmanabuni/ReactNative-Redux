@@ -9,8 +9,8 @@ import base from '../../base';
 
 export default class EmptyView extends React.Component {
   static propTypes = {
-    height: PropTypes.string || PropTypes.number,
-    width: PropTypes.number || PropTypes.string,
+    height: PropTypes.any,
+    width: PropTypes.any,
     backgroundColor: PropTypes.string
   };
   static defaultProps = {
@@ -24,6 +24,7 @@ export default class EmptyView extends React.Component {
   }
 
   render() {
+    console.log("EMPTY_VIEW",this.props.height,this.props.width)
     return (
       <View
         style={{

@@ -71,24 +71,33 @@ class PatrolSchedule extends React.Component {
         };
 
         this.getPatrollingList = this.getPatrollingList.bind(this);
-
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentWillMount() {
         this.getPatrollingList();
     }
 
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
+        }, 0)*/
+    }
 
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     processBackPress() {
@@ -337,7 +346,7 @@ class PatrolSchedule extends React.Component {
     editPatrol(data) {
 
         let key = base.utils.strings.patrolId;
-        Platform.OS === 'ios' ? AsyncStorage.setItem(key, data.psPtrlSID) : AsyncStorage.setItem(key, (data.psPtrlSID).toString());
+        Platform.OS === 'ios' ? AsyncStorage.setItem(key, ""+data.psPtrlSID) : AsyncStorage.setItem(key, (data.psPtrlSID).toString());
         this.props.navigation.navigate('patrollingCheckPoint', {data: data,isEditing:true})
     }
 

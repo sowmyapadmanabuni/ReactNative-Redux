@@ -74,8 +74,8 @@ class CreateSOS extends React.Component {
             if(error){
                 console.log('failed to load the sound', error);
             }
-        })
-
+        });
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentWillMount() {
@@ -136,6 +136,30 @@ class CreateSOS extends React.Component {
         });
 
         Platform.OS === 'ios' ? this.getCurrentLocation() : this.checkGPS();
+    }
+
+    componentDidMount() {
+        let self = this;
+
+        self.readUserData();
+
+//        self.props.navigation.state.params.isActive ? self.readUserData() : self.createSOS()
+        if (Platform.OS === 'android')
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+    }
+
+    componentDidUpdate() {
+        /*if (Platform.OS === 'android') {
+            setTimeout(() => {
+                BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
+            }, 100)
+        }*/
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        //this.stopSound();
     }
 
     checkGPS() {
@@ -229,15 +253,24 @@ class CreateSOS extends React.Component {
         }
     }
 
+    handleBackButtonClick() {
+        console.log("Part");
 
-    componentDidUpdate() {
-        if (Platform.OS === 'android') {
-            setTimeout(() => {
-                BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-            }, 100)
-        }
+        Alert.alert(
+            'Stop SOS?',
+            'Do you want to stop this SOS? ',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'Yes', onPress: () => this.stopSOS()},
+            ],
+            {cancelable: false},
+        );
+        return true;
     }
-
 
     processBackPress(stat) {
         console.log("Part", stat);
@@ -267,13 +300,9 @@ class CreateSOS extends React.Component {
             } else {
                 console.log('playback failed due to audio decoding errors');
             }
+            return true;
         });
         // });
-    }
-
-    componentWillUnmount() {
-        this.stopSound()
-        BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress());
     }
 
     async getCurrentLocation() {
@@ -296,16 +325,6 @@ class CreateSOS extends React.Component {
             console.log("Error:", e);
         }
     }
-
-    componentDidMount() {
-        let self = this;
-
-        self.readUserData();
-
-//        self.props.navigation.state.params.isActive ? self.readUserData() : self.createSOS()
-
-    }
-
 
     async createSOS() {
         console.log("STSTATATATATSTFCTSFCGJSGCSCGMSCGCH<JMGC,",this.state)

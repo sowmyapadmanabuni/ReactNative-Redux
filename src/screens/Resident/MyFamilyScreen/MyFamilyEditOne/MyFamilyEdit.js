@@ -66,9 +66,11 @@ class MyFamilyEdit extends Component {
             isPhotoAvailable: false,
             filePath: '',
         }
+        this.processBackPress = this.processBackPress.bind(this);
     }
 
     componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.processBackPress);
         console.log('Props in Edit Family', this.props.navigation.state.params);
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
 
@@ -88,22 +90,24 @@ class MyFamilyEdit extends Component {
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.processBackPress);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
+        }, 0)*/
 
     }
 
     processBackPress() {
-        console.log("Part");
-        const {goBack} = this.props.navigation;
-        goBack(null);
+        // console.log("Part");
+        // const {goBack} = this.props.navigation;
+        // goBack(null);
+        this.props.navigation.goBack(null);
         return true;
     }
 

@@ -49,6 +49,7 @@ class EditVehicle extends Component {
             vehParkingSlotNum: "",
             id: ""
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentWillMount() {
@@ -76,20 +77,25 @@ class EditVehicle extends Component {
                 : ""
         })
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
-
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentDidUpdate() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100)
+        }, 100)*/
     }
 
     componentWillUnmount() {
-        setTimeout(() => {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
+        }, 0)*/
+    }
 
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
     processBackPress() {
@@ -129,11 +135,11 @@ class EditVehicle extends Component {
 
         // id = Veid
         value = this.state.text;
-        vehName = this.state.vehName;
-        vehNum = this.state.vehNum;
-        vehStickerNum = this.state.vehStickerNum;
-        parkingSlotNum = this.state.vehParkingSlotNum;
-        vehType = this.state.text;
+        let vehName = this.state.vehName;
+        let vehNum = this.state.vehNum;
+        let vehStickerNum = this.state.vehStickerNum;
+        let parkingSlotNum = this.state.vehParkingSlotNum;
+        let vehType = this.state.text;
 
         const reg = /^[0]?[6789]\d{9}$/;
         const OyeFullName = /^[a-zA-Z ]+$/;
