@@ -2024,7 +2024,8 @@ class Dashboard extends PureComponent {
             />
           </View>
           <View style={{ ...Style.elevatedView, marginTop: 20 }}>
-           {/* <CardView
+
+            {/* <CardView
                 height={'100%'}
                 width={'25%'}
                 cardText={'Accounting'}

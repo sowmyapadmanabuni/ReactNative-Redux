@@ -66,7 +66,9 @@ class NotificationScreen extends PureComponent {
     }
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        if(Platform.OS!='ios'){
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        }
         base.utils.validate.checkSubscription(
             this.props.userReducer.SelectedAssociationID
         );
@@ -120,7 +122,9 @@ class NotificationScreen extends PureComponent {
     }
 
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        if(Platform.OS!='ios'){
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        }
         /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () =>
                 this.processBackPress()

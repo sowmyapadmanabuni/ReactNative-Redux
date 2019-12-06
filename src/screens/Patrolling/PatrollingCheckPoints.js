@@ -23,7 +23,7 @@ import ElevatedView from 'react-native-elevated-view';
 import EmptyView from "../../components/common/EmptyView";
 import { updateSelectedCheckPoints } from '../../../src/actions';
 import Modal from "react-native-modal";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
 import { heightPercentageToDP } from 'react-native-responsive-screen';
 
@@ -45,8 +45,8 @@ class PatrollingCheckPoints extends React.Component {
             isChecked: false,
             isModalOpen: false,
             region: {
-                latitude: '',
-                longitude: '',
+                latitude: 0,
+                longitude: 0,
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
@@ -297,21 +297,18 @@ class PatrollingCheckPoints extends React.Component {
                             <Text style={PatrollingCheckPointsStyles.modalText}>Close</Text>
                         </TouchableHighlight>
                     </View>
-                    <MapView
-                        ref={map => {
-                            this.map = map
-                        }}
+                    <MapView                    
+                        style={{flex:1}}                        
                         provider={PROVIDER_GOOGLE}
-                        style={PatrollingCheckPointsStyles.map}
-                        region={this.state.region}
-                        showsUserLocation={false}
-                        showsBuildings={true}
+                        initialRegion={this.state.region}
                         scrollEnabled={false}
+                        minZoomLevel={20}                        
+                        zoomTapEnabled={false}
                         zoomEnabled={false}
+                        loadingEnabled={true}
                         pitchEnabled={false}
-                        rotateEnabled={false}
-                        followsUserLocation={true}
-                        minZoomLevel={20}
+                        rotateEnabled={false}                          
+                        showsUserLocation={false}                                                                        
                     >
                         {this.renderUserLocation()}
                     </MapView>
@@ -323,15 +320,22 @@ class PatrollingCheckPoints extends React.Component {
     renderUserLocation() {
         let self = this;
         let lat = self.state.region.latitude;
-        let long = self.state.region.longitude;
+        let lon = self.state.region.longitude;
+        if(lat=='' || lon == '' || lat == null){
+            lat = 0;
+            lon = 0;
+        }
+        console.log("LATTTT",""+lat+" - "+lon+" - ")
+        
+        //return(<View/>)
         return (
             <View>
+                
                 <Marker key={1024}
-                        pinColor={base.theme.colors.primary}
-                        style={PatrollingCheckPointsStyles.marker}
-                        coordinate={{ latitude: lat, longitude: long }}>
-
+                        pinColor={base.theme.colors.primary}                        
+                        coordinate={{ latitude: lat, longitude: lon }}>
                 </Marker>
+                
             </View>
         )
     }
