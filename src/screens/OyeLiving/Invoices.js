@@ -236,7 +236,7 @@ class Invoices extends React.Component {
             blockId: blockId,
             getIndex: index
         });
-        console.log("Selected Block Data:", val, index);
+        console.log("Selected Block Data:", val, index,associationId,blockId);
         let stat = await base.services.OyeLivingApi.getInvoiceData(associationId, blockId);
         console.log("Stat111111:", stat);
         try {
@@ -661,8 +661,8 @@ class Invoices extends React.Component {
     share() {
         var image_data = this.state.previewSource.uri.split('data:image/png;base64,');
         console.log("Image:",this.state.previewSource.uri)
-            
-            
+
+
             image_data = image_data[1]//this.state.previewSource.uri;
             console.log("Image Data:",image_data)
 
@@ -703,11 +703,11 @@ class Invoices extends React.Component {
                 .catch((err) => {
                     console.log(err.message);
                 });
-        
+
             //     }
             // })
 
-            
+
             console.log(options);
         } catch(e) {
             console.log(e);

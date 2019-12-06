@@ -39,7 +39,7 @@ const CardViewStyles = StyleSheet.create({
     subView: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '55%',
+        width: '60%',
         justifyContent: 'space-between'
     },
     count: {
