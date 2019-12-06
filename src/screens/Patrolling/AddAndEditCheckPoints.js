@@ -34,7 +34,7 @@ import wifi from 'react-native-android-wifi';
 import LottieView from 'lottie-react-native';
 import Modal from "react-native-modal";
 import {RNLocationSatellites} from 'react-native-location-satellites';
-const GPSEventEmitter = new NativeEventEmitter(RNLocationSatellites)
+const GPSEventEmitter = new NativeEventEmitter(RNLocationSatellites);
 
 
 

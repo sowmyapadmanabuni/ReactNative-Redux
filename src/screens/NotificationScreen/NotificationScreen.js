@@ -70,7 +70,7 @@ class NotificationScreen extends PureComponent {
         base.utils.validate.checkSubscription(
             this.props.userReducer.SelectedAssociationID
         );
-        console.log('Get the deatails',this.props)
+        console.log('Get the deatails',this.props);
         //this.props.refreshNotifications(this.props.oyeURL, this.props.MyAccountID);
         this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
         //this.doNetwork(null, this.props.notifications);
@@ -175,6 +175,59 @@ class NotificationScreen extends PureComponent {
         }
     };
 
+
+    async acceptVisitorExit(associationid, visitorstat, by, logId){
+        let approverVisitorExitDetail = {
+            VLApprStat : visitorstat,
+            VLApprdBy     : by,
+            VLVisLgID  : logId
+        }
+        console.log("VisitorExitDetail ",approverVisitorExitDetail);
+        axios
+            .post(
+                `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+                {
+                    VLApprStat : visitorstat,
+                    VLApprdBy     : by,
+                    VLVisLgID  : logId
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+                    }
+                }
+            )
+            .then(responses => {
+                console.log('_RESP_#####///########@@@@@@@', responses,logId);
+                gateFirebase
+                    .database()
+                    .ref(`NotificationSync/A_${associationid}/${logId}`)
+                    .set({
+                        buttonColor: '#75be6f',
+                        opened: true,
+                        newAttachment: false,
+                        visitorlogId: logId,
+                        //updatedTime: res.data.data.currentDateTime
+                        // status:
+                    });
+                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
+                this.props.navigation.navigate('ResDashBoard');
+
+
+            })
+            .catch(e => {
+                console.log("ERROR ",e);
+                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
+                this.props.navigation.navigate('ResDashBoard');
+
+            });
+        //let stat = await base.services.OyeSafeApi.updateExitVisitorRequest(approverVisitorExitDetail);
+    }
+
+    rejectVisitorExit(){
+
+    }
 
     acceptgateVisitor = (visitorId, index, associationid) => {
         let oldNotif = [...this.props.notifications];
@@ -333,9 +386,8 @@ class NotificationScreen extends PureComponent {
             });
     };
 
-
-
     renderItem = ({item, index}) => {
+        if (item.vlVisType === "Delivery")
         console.log('ITEMSOFNOTIFICATION#######', item,index);
 
         const {savedNoifId, notifications, oyeURL} = this.props;
@@ -405,7 +457,6 @@ class NotificationScreen extends PureComponent {
                             <Text style={{color:base.theme.colors.grey,fontSize:12}}>{valueDis}</Text>
                         </View>
                     </View>
-
                 </TouchableOpacity>
             )
         }
@@ -434,6 +485,8 @@ class NotificationScreen extends PureComponent {
                                           this.props.onNotificationOpen(notifications, index, oyeURL);
                                       }
                                       this.props.toggleCollapsible(notifications, item.open, index)}}>
+
+
                     <View style={{backgroundColor:base.theme.colors.greyCard,
                     }}>
                         <View style={{flexDirection:'row',backgroundColor:item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive?"#FFE49B":base.theme.colors.greyCard,
@@ -525,7 +578,7 @@ class NotificationScreen extends PureComponent {
                                 <View/>}
 
                             {
-                                item.vlVisType =="Delivery" && item.vlApprStat=="Pending" ?
+                                item.vlVisType === "Delivery" && item.vlApprStat === "Pending" ?
                                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
                                         marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
                                         <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Entry</Text>
@@ -562,6 +615,47 @@ class NotificationScreen extends PureComponent {
                                     </View>:
                                     <View/>
                             }
+
+                            {/*------------------------------------------------------------------------------------------*/}
+                            {
+                                item.vlEntryT !=="" && item.vlExitT === "" && item.vlVisType === "Delivery" || true ?
+                                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
+                                        marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Exit</Text>
+                                        <View style={{flexDirection:'row'}}>
+                                            <TouchableOpacity onPress={() => {
+                                                this.acceptVisitorExit(
+                                                    item.asAssnID,
+                                                    item.vlApprStat,
+                                                    item.vlApprdBy,
+                                                    item.vlVisLgID
+                                                );
+                                            }}
+                                                              style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
+                                                <Image
+                                                    style={{width:30,height:30}}
+                                                    source={require('../../../icons/allow.png')}
+                                                />
+                                                <Text style={{fontSize:16,color:base.theme.colors.primary,}}>Allow</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() =>
+                                                this.rejectVisitorExit()
+                                            }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
+                                                <Image
+                                                    style={{width:30,height:30}}
+                                                    source={require('../../../icons/deny.png')}
+                                                />
+                                                <Text style={{fontSize:16,color:base.theme.colors.red,}}>Deny</Text>
+                                            </TouchableOpacity>
+                                        </View>
+
+                                    </View>:
+                                    <View/>
+                            }
+                            {/*------------------------------------------------------------------------------------------*/}
+
+
+
                         </Collapsible>
                         <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10,width:'100%',
                             height:20,alignItems:'center',justifyContent:'center'}} onPress={() =>{
@@ -614,7 +708,6 @@ class NotificationScreen extends PureComponent {
             );
         }
     };
-
 
     renderComponent = () => {
         const {
