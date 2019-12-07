@@ -372,7 +372,7 @@ class Staff extends React.Component {
                         {this.state.staffList.length !== 0 && this.state.visitorId !="" &&
                             <AnimatedTouchable animation={'swing'} onPress={()=>this.setStaffData()}>
                             <View  style={{height:hp('5%'), width:hp('20%'), borderRadius:hp('4%'),marginTop:hp('3%'),borderColor:base.theme.colors.primary,borderWidth:hp('0.1%'),justifyContent:'center', alignItems:'center'}}>
-                                <Text style={{fontSize:hp('2%'), color:base.theme.colors.primary}}>Leave with Vendor</Text></View>
+                                <Text style={{fontSize:hp('2%'), color:base.theme.colors.primary}}>Leave with Staff</Text></View>
                             </AnimatedTouchable>
                         }
                 </View>

@@ -804,7 +804,9 @@ class Announcement extends Component {
                   timestamp: '',
                   loading: false
                 };
-                this.pause();
+                if(!this.state.paused){
+                  this.pause();
+                }
                 this.props.navigation.goBack();
                 // getAssoMembers(oyeURL, MyAccountID);
 
