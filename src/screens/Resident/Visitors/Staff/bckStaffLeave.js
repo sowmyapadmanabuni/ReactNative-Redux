@@ -514,8 +514,8 @@ class StaffLeaveWithVendor extends Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    StartDate: moment()._d,
-                    EndDate: moment()._d,
+                    StartDate: new Date(),
+                    EndDate: new Date(),
                     ASAssnID: this.props.dashboardReducer.assId,
                     UNUnitID: this.props.dashboardReducer.uniID,
                     ACAccntID: this.props.userReducer.MyAccountID

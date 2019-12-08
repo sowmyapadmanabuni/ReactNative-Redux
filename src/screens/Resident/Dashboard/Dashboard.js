@@ -1982,7 +1982,7 @@ class Dashboard extends PureComponent {
             <CardView
                 height={'100%'}
                 width={'25%'}
-                cardText={'Role    Management'}
+                cardText={'Role Management'}
                 cardIcon={require('../../../../icons/role.png')}
                 marginTop={20}
                 iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
@@ -2025,7 +2025,7 @@ class Dashboard extends PureComponent {
           </View>
           <View style={{ ...Style.elevatedView, marginTop: 20 }}>
 
-            {/* <CardView
+           {/*<CardView
                 height={'100%'}
                 width={'25%'}
                 cardText={'Accounting'}

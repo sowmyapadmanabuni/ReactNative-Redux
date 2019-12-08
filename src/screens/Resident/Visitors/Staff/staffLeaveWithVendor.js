@@ -188,101 +188,83 @@ class StaffLeaveWithVendor extends Component {
 
   render() {
     return(
-    <View style={{width:'100%',height:'100%'}}>
-       <View style={{alignItems:'center',justifyContent:'center',marginTop:10,}}>
-         <Text style={{fontSize:18,color:base.theme.colors.primary}}>Leave with Vendor </Text>
-       </View>
-      <View style={{flexDirection: 'row', alignItems: 'center',marginLeft:20,marginTop:20}}>
-        {this.props.staffReducer.staffProfilePic === '' ?
-            <Image style={StaffStyle.staffImg}
-                   source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
-            />
-            :
-            <Image style={StaffStyle.staffImg}
-                   source={{uri: base.utils.strings.imageUrl + this.props.staffReducer.staffProfilePic}}/>
-        }
-        <View style={{ marginLeft: 10,height:'100%',
-          width: '80%',flexDirection:'row',alignItems:'center',justifyContent:'flex-start'}}>
-          <Text style={StaffStyle.staffText}
-                numberofLines={1}
-                ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
-          {this.props.staffReducer.staffDesignation !="" ?
-              <Text style={StaffStyle.desigText}> ({' '}{this.props.staffReducer.staffDesignation}{' '})</Text>
-              : <View/>}
-        </View>
-
-      </View>
-      <View style={{height:'38%',width:'95%',alignSelf:'center',marginTop:25,
-        borderRadius:8, borderColor: base.theme.colors.lightgrey,  backgroundColor: base.theme.colors.white,
-        shadowColor: base.theme.colors.greyHead,
-        shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
-        shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
-        shadowRadius: 1, elevation: 5, padding: 5, borderBottomWidth: 0.5,}}>
-        <View style={{marginTop:15,flexDirection:'row',marginRight:10}}>
-          {this.state.vendorImages.length !==0 ?
-              <FlatList
-                  keyExtractor={(item, index) => index.toString()}
-                  data={this.state.vendorImages}
-                  renderItem={(item, index) => this.renderImages(item, index)}
-                  horizontal={true}
-              />
-              : <View/>}
-          {this.state.vendorImages.length===5?
-              <View/>:
-              <TouchableOpacity style={{width:80,height:80,backgroundColor:base.theme.colors.shadedWhite,
-              alignItems:'center',justifyContent:'center',borderRadius:10,marginLeft:10}}
-                                onPress={() => this.selectImage()}>
-                <Image borderStyle
-                       style={{height:40,width:40,marginBottom:5}}
-                       source={require('../../../../../icons/leave_vender_add.png')}
-                />
-                <Text style={{fontSize:12,color:base.theme.colors.black}}>
-                  Add Photo
-                </Text>
-              </TouchableOpacity>}
-        </View>
-        <View style={{flexDirection:'row',alignItems:'space-between',marginTop:50,marginLeft:10,marginRight:10}}>
-          {!this.state.isRecord ?
-            <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={() =>this.start()}>
-              <Image borderStyle
-                     style={{height:40,width:40}}
-                     source={require('../../../../../icons/leave_vender_record.png')}
-              />
-            </TouchableOpacity> :
-          <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}}  onPress={() =>this.stop()}>
-            <Image borderStyle
-                   style={{height:40,width:40}}
-                   source={require('../../../../../icons/leave_vender_stop.png')}
-            />
-          </TouchableOpacity>}
-          <View style={{width:'70%',height:40,marginLeft:10,alignItems:'flex-start',justifyContent:'center',}}>
-            <Text style={{fontSize:16,color:base.theme.colors.grey,marginBottom:5}}>{!this.state.isRecord? "Click to record":"Recording...."}</Text>
-            <View style={{width:'100%',height:'10%',backgroundColor:base.theme.colors.shadedWhite,borderRadius:5}}></View>
+    <View style={{height:'100%',width:'100%'}}>
+      <KeyboardAwareScrollView>
+        <View style={{height:'100%',width:'100%',backgroundColor:base.theme.colors.white}}>
+          <View style={{alignItems:'center',justifyContent:'center',marginTop:10,}}>
+            <Text style={{fontSize:18,color:base.theme.colors.primary}}>Leave with Staff </Text>
           </View>
-          {this.state.audioRecord == "" ?
-              <TouchableOpacity style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 40,
-                width: 40,
-                marginLeft: 10,
-                borderRadius: 8,
-                borderColor: base.theme.colors.lightgrey,
-                backgroundColor: base.theme.colors.white,
-                shadowColor: base.theme.colors.greyHead,
-                shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
-                shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
-                shadowRadius: 1,
-                elevation: 5,
-                borderBottomWidth: 0.5,
-              }} onPress={() => Alert.alert('Please record a audio to listen')}>
-                <Image resizeMode={'center'}
-                       style={{height: 40, width: 40}}
-                       source={require('../../../../../icons/leave_vender_play1.png')}
+          <View style={{flexDirection: 'row', alignItems: 'center',marginLeft:20,marginTop:20,}}>
+            {this.props.staffReducer.staffProfilePic === '' ?
+                <Image style={StaffStyle.staffImg}
+                       source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                 />
-              </TouchableOpacity>
-              :
-              this.state.isPlay ?
+                :
+                <Image style={StaffStyle.staffImg}
+                       source={{uri: base.utils.strings.imageUrl + this.props.staffReducer.staffProfilePic}}/>
+            }
+            <View style={{ marginLeft: 10,height:'100%',
+              width: '80%',flexDirection:'row',alignItems:'center',justifyContent:'flex-start'}}>
+              <Text style={StaffStyle.staffText}
+                    numberofLines={1}
+                    ellipsizeMode={'tail'}>{this.props.staffReducer.staffName}</Text>
+              {this.props.staffReducer.staffDesignation !="" ?
+                  <Text style={StaffStyle.desigText}> ({' '}{this.props.staffReducer.staffDesignation}{' '})</Text>
+                  : <View/>}
+            </View>
+          </View>
+          <View style={{width:'95%',alignSelf:'center',marginTop:25,
+            borderRadius:10, borderColor: base.theme.colors.shadedWhite,
+            shadowColor: base.theme.colors.darkgrey,
+            shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+            shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
+            shadowRadius:Platform.OS === 'ios' ? 2: 1, elevation: 5,  borderWidth: 0.5,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor:base.theme.colors.white
+            }}>
+            <View style={{marginTop:15,flexDirection:'row',marginRight:10,alignSelf:'flex-start'}}>
+              {this.state.vendorImages.length !==0 ?
+                  <FlatList
+                      keyExtractor={(item, index) => index.toString()}
+                      data={this.state.vendorImages}
+                      renderItem={(item, index) => this.renderImages(item, index)}
+                      horizontal={true}
+                  />
+                  : <View/>}
+              {this.state.vendorImages.length===5?
+                  <View/>:
+                  <TouchableOpacity style={{width:80,height:80,backgroundColor:base.theme.colors.shadedWhite,
+                    alignItems:'center',justifyContent:'center',borderRadius:10,marginLeft:10}}
+                                    onPress={() => this.selectImage()}>
+                    <Image borderStyle
+                           style={{height:40,width:40,marginBottom:5}}
+                           source={require('../../../../../icons/leave_vender_add.png')}
+                    />
+                    <Text style={{fontSize:12,color:base.theme.colors.black}}>
+                      Add Photo
+                    </Text>
+                  </TouchableOpacity>}
+            </View>
+            <View style={{flexDirection:'row',alignItems:'space-between',marginTop:35,marginLeft:5,marginRight:5,marginBottom:20}}>
+              {!this.state.isRecord ?
+                  <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={() =>this.start()}>
+                    <Image borderStyle
+                           style={{height:40,width:40}}
+                           source={require('../../../../../icons/leave_vender_record.png')}
+                    />
+                  </TouchableOpacity> :
+                  <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}}  onPress={() =>this.stop()}>
+                    <Image borderStyle
+                           style={{height:40,width:40}}
+                           source={require('../../../../../icons/leave_vender_stop.png')}
+                    />
+                  </TouchableOpacity>}
+              <View style={{width:'65%',height:40,marginLeft:7,alignItems:'flex-start',justifyContent:'center',}}>
+                <Text style={{fontSize:16,color:base.theme.colors.grey,marginBottom:5}}>{!this.state.isRecord? "Click to record":"Recording...."}</Text>
+                <View style={{width:'100%',height:'10%',backgroundColor:base.theme.colors.shadedWhite,borderRadius:5}}></View>
+              </View>
+              {this.state.audioRecord == "" ?
                   <TouchableOpacity style={{
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -298,62 +280,88 @@ class StaffLeaveWithVendor extends Component {
                     shadowRadius: 1,
                     elevation: 5,
                     borderBottomWidth: 0.5,
-                  }} onPress={() => this.play()}>
+                  }} onPress={() => Alert.alert('Please record a audio to listen')}>
                     <Image resizeMode={'center'}
                            style={{height: 40, width: 40}}
-                           source={require('../../../../../icons/leave_vender_play.png')}
+                           source={require('../../../../../icons/leave_vender_play1.png')}
                     />
                   </TouchableOpacity>
                   :
-                  <TouchableOpacity style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: 40,
-                    width: 40,
-                    marginLeft: 10,
-                    borderRadius: 8,
-                    borderColor: base.theme.colors.lightgrey,
-                    backgroundColor: base.theme.colors.white,
-                    shadowColor: base.theme.colors.greyHead,
-                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
-                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
-                    shadowRadius: 1,
-                    elevation: 5,
-                    borderBottomWidth: 0.5,
-                  }} onPress={() =>this.pause()}>
-                    <Image resizeMode={'center'}
-                           style={{height: 40, width: 40}}
-                           source={require('../../../../../icons/leave_vender_pause.png')}
-                    />
-                  </TouchableOpacity>
-          }
-        </View>
-      </View>
+                  this.state.isPlay ?
+                      <TouchableOpacity style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: 40,
+                        width: 40,
+                        marginLeft: 10,
+                        borderRadius: 8,
+                        borderColor: base.theme.colors.lightgrey,
+                        backgroundColor: base.theme.colors.white,
+                        shadowColor: base.theme.colors.greyHead,
+                        shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+                        shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+                        shadowRadius: 1,
+                        elevation: 5,
+                        borderBottomWidth: 0.5,
+                      }} onPress={() => this.play()}>
+                        <Image resizeMode={'center'}
+                               style={{height: 40, width: 40}}
+                               source={require('../../../../../icons/leave_vender_play.png')}
+                        />
+                      </TouchableOpacity>
+                      :
+                      <TouchableOpacity style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: 40,
+                        width: 40,
+                        marginLeft: 10,
+                        borderRadius: 8,
+                        borderColor: base.theme.colors.lightgrey,
+                        backgroundColor: base.theme.colors.white,
+                        shadowColor: base.theme.colors.greyHead,
+                        shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+                        shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+                        shadowRadius: 1,
+                        elevation: 5,
+                        borderBottomWidth: 0.5,
+                      }} onPress={() =>this.pause()}>
+                        <Image resizeMode={'center'}
+                               style={{height: 40, width: 40}}
+                               source={require('../../../../../icons/leave_vender_pause.png')}
+                        />
+                      </TouchableOpacity>
+              }
+            </View>
+          </View>
+          <View style={{width:'90%',alignSelf:'center',marginTop:20,marginBottom:30}}>
+            <Text style={{fontSize:15,color:base.theme.colors.black}}>Comment</Text>
+            <View style={{height:80,width:'100%',borderColor:base.theme.colors.primary,
+              borderWidth:1.5,borderRadius:10,marginTop:10,
+              justifyContent:'center',alignItems:'center'}}>
+              <TextInput
+                  style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5,width:'90%'}}
+                  onChangeText={(text) => this.setState({comment:text})}
+                  value={this.state.comment}
+                  placeholder="Write a comment here..."
+                  placeholderTextColor={base.theme.colors.grey}
+              />
 
-      <View style={{height:'20%',width:'90%',alignSelf:'center',marginTop:20,}}>
-        <Text style={{fontSize:15,color:base.theme.colors.black}}>Comment</Text>
-        <View style={{height:'70%',width:'100%',borderColor:base.theme.colors.primary,
-          borderWidth:1.5,borderRadius:10,marginTop:10,
-          justifyContent:'center',alignItems:'center'}}>
-          <TextInput
-              style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5,width:'90%'}}
-              onChangeText={(text) => this.setState({comment:text})}
-              value={this.state.comment}
-              placeholder="Write a comment here..."
-              placeholderTextColor={base.theme.colors.grey}
-          />
-        </View>
+            </View>
+            <View style={{width:'100%',alignItems:'center',justifyContent:'center',marginTop:10,marginBottom:30}}>
+              <OSButton
+                  height={'35%'}
+                  width={'30%'}
+                  borderRadius={25}
+                  oSBText={'Submit'}
+                  onButtonClick={() => this.checkValidation()}/>
+            </View>
 
-      </View>
-      <View style={{height:'10%',width:'100%',alignItems:'center',justifyContent:'center',marginTop:10,}}>
-      <OSButton
-          height={'65%'}
-          width={'30%'}
-          borderRadius={25}
-          oSBText={'Submit'}
-          onButtonClick={() => this.checkValidation()}/>
-      </View>
-      {this._renderModal1()}
+          </View>
+
+        </View>
+      </KeyboardAwareScrollView>
+
     </View>
     );
   }
@@ -457,14 +465,12 @@ class StaffLeaveWithVendor extends Component {
 
   checkValidation(){
     let self=this;
-   /* if(self.state.audioRecord==""){
+    if(self.state.audioRecord==""){
       Alert.alert('Please record audio.It is mandatory')
     }
     else{
       self.uploadAudio(self.state.audioRecord)
-    }*/
-    self.uploadAudio(self.state.audioRecord)
-
+    }
   }
 
   selectImage() {
