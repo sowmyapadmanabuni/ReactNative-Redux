@@ -2024,6 +2024,7 @@ class Dashboard extends PureComponent {
             />
           </View>
           <View style={{ ...Style.elevatedView, marginTop: 20 }}>
+
             {/* <CardView
                 height={'100%'}
                 width={'25%'}
@@ -2035,7 +2036,7 @@ class Dashboard extends PureComponent {
                 backgroundColor={base.theme.colors.cardBackground}
                 onCardClick={() => this.props.navigation.navigate('oyeLiving')}
                 // onCardClick={() => this.props.navigation.navigate('Accounting')}
-            /> */}
+            />*/}
             {/* <CardView
             height={'100%'}
             width={'25%'}
