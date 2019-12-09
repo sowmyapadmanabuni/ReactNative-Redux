@@ -110,6 +110,7 @@ class Receipts extends React.Component {
             shareSelected:false,
             isShare:false,
             isPermitted: false,
+            selPayMode:'Select mode of payment'
 
         };
 
@@ -680,11 +681,11 @@ class Receipts extends React.Component {
                     this.setState({isLoading:false})
 
                 });
-        
+
             //     }
             // })
 
-            
+
             console.log(options);
         } catch(e) {
             this.setState({isLoading:false})
@@ -781,14 +782,14 @@ class Receipts extends React.Component {
                                 style={AddExpenseStyles.headerText}>View Receipt</Text>
                         </View>
                         <View style={{flexDirection:'row',alignItems:'center',width:'90%',
-                        justifyContent:'space-between',paddingBottom:5,alignSelf:'center'}}>
+                        justifyContent:'space-between',paddingBottom:10,alignSelf:'center'}}>
                             <Text style={{width:'50%',fontSize:16,color:base.theme.colors.black,}} numberOfLines={2}>{this.state.associationName}</Text>
                             <Text style={{width:'50%',textAlign:'right',fontSize:16,color:base.theme.colors.black,}} numberOfLines={2}>{selReceipt.unUniName==''?this.state.unitName:selReceipt.unUniName}</Text>
 
                         </View>
-                        <View style={{backgroundColor:base.theme.colors.primary,width:'100%',alignItems:'center',justifyContent:'center',
+                        <View style={{backgroundColor:base.theme.colors.greyCard,width:'100%',alignItems:'center',justifyContent:'center',
                             paddingTop:5,paddingBottom:5}}>
-                            <Text style={{fontSize:16,color:base.theme.colors.white,}}>Receipt Summary</Text>
+                            <Text style={{fontSize:17,color:base.theme.colors.mediumGrey,}}>Receipt Summary</Text>
                         </View>
                         <View style={{paddingTop:10,paddingBottom:10,width:'100%',flexDirection:'row',
                             borderBottomColor:base.theme.colors.greyHead,borderBottomWidth:1}}>
@@ -838,7 +839,7 @@ class Receipts extends React.Component {
                                         paddingBottom: 5, color:base.theme.colors.black
                                     }}
                                     onChangeText={(text) => this.setState({raBudget: text})}
-                                    value={selReceipt.pyDesc.toString()}
+                                    value={"receipt desc"} //selReceipt.pyDesc.toString()
                                     placeholder="Payment Description"
                                     placeholderTextColor={base.theme.colors.grey}
                                     editable={false}
@@ -942,21 +943,81 @@ class Receipts extends React.Component {
                         </View>
                         <ScrollView style={AddExpenseStyles.mainContainer}
                                     showsVerticalScrollIndicator={false}>
-                            <View style={[AddExpenseStyles.scrollContainer]}>
+                            <View style={[AddExpenseStyles.scrollContainer,{height:'100%'}]}>
                                 <View style={{width:'80%',marginTop:20}}>
-                                    <Text style={{fontSize:12}}>Unit Name
-                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
-                                    </Text>
-                                    <Text style={{fontSize:12}}>Unit Name
-                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
-                                    </Text>
-                                    <Text style={{fontSize:12}}>Unit Name
-                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
-                                    </Text>
-                                    <Text style={{fontSize:12}}>Unit Name
-                                        <Text style={{color:base.theme.colors.black}}>A101</Text>
-                                    </Text>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                    <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Unit Name</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>A101</Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Invoice No.</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>A101</Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Invoice Date</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>A101</Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Amount Due</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}A101</Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Amount Paid</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}A101</Text>
+                                    </View>
                                 </View>
+                                <View style={{width:'85%',marginTop:20,height:'0.5%',borderRadius:5,backgroundColor:base.theme.colors.primary}}>
+                                </View>
+                                <TouchableOpacity style={{flexDirection:'row',width:'85%',marginTop:20,height:'10%',
+                                    borderRadius:5,backgroundColor:base.theme.colors.greyCard,alignItems:'center',marginBottom:20
+                                }}>
+                                    <Image
+                                        resizeMode={'contain'}
+                                        style={{
+                                            height: hp('6%'),
+                                            width: wp('6%'),
+                                            tintColor: base.theme.colors.primary,
+                                            alignSelf: 'center',
+                                            marginLeft:10
+                                        }}
+                                        source={require('../../../icons/calender.png')}
+                                    />
+                                    <Text style={{marginLeft:10,fontSize:16,color:base.theme.colors.black}}>Payment Date</Text>
+                                </TouchableOpacity>
+
+                                <View style={{width: '85%',}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Select mode of payment
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <Dropdown
+                                        value={this.state.selPayMode} // 'Select Payment Method *'
+                                        labelFontSize={16}
+                                        labelPadding={-5}
+                                        baseColor="rgba(0, 0, 0, 1)"
+                                        data={this.state.paymentMethodList}
+                                        containerStyle={{
+                                            width: '100%',
+                                        }}
+                                        textColor={base.theme.colors.black}
+                                        inputContainerStyle={{
+                                            borderColor: base.theme.colors.lightgrey,
+                                        }}
+                                        dropdownOffset={{top: 10, left: 0}}
+                                        dropdownPosition={-5}
+                                        rippleOpacity={0}
+                                        onChangeText={(value, index) => {
+                                            this.setState({
+                                                selPayMode: value,
+                                            })
+                                        }}
+                                    />
+                                </View>
+
+
 
                                 <View style={{
                                     alignSelf: 'center',
@@ -1132,7 +1193,8 @@ class Receipts extends React.Component {
 
     bindComponent() {
         this.setState({
-            isGenRecModal: true,
+            isViewRecModal:true
+           // isGenRecModal: true,
         })
     }
 

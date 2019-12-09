@@ -20,7 +20,7 @@ export default class FloatingActionButton extends React.Component {
         btnBackground: PropTypes.string,
         onBtnClick: PropTypes.func.isRequired,
         marginTop: PropTypes.number,
-        imgSrc: PropTypes.string
+        imgSrc: PropTypes.any
     };
     static defaultProps = {
         height: 50,

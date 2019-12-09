@@ -66,7 +66,9 @@ class NotificationScreen extends PureComponent {
     }
 
     componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        if(Platform.OS!='ios'){
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        }
         base.utils.validate.checkSubscription(
             this.props.userReducer.SelectedAssociationID
         );
@@ -120,7 +122,9 @@ class NotificationScreen extends PureComponent {
     }
 
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        if(Platform.OS!='ios'){
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        }
         /*setTimeout(() => {
             BackHandler.removeEventListener('hardwareBackPress', () =>
                 this.processBackPress()
@@ -618,7 +622,7 @@ class NotificationScreen extends PureComponent {
 
                             {/*------------------------------------------------------------------------------------------*/}
                             {
-                                item.vlEntryT !=="" && item.vlExitT === "" && item.vlVisType === "Delivery" || true ?
+                                item.vlEntryT !=="" && item.vlExitT === "" && item.vlVisType === "Delivery" || false ?
                                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
                                         marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
                                         <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Exit</Text>

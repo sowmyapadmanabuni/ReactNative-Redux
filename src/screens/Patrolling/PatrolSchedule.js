@@ -346,7 +346,7 @@ class PatrolSchedule extends React.Component {
     editPatrol(data) {
 
         let key = base.utils.strings.patrolId;
-        Platform.OS === 'ios' ? AsyncStorage.setItem(key, data.psPtrlSID) : AsyncStorage.setItem(key, (data.psPtrlSID).toString());
+        Platform.OS === 'ios' ? AsyncStorage.setItem(key, ""+data.psPtrlSID) : AsyncStorage.setItem(key, (data.psPtrlSID).toString());
         this.props.navigation.navigate('patrollingCheckPoint', {data: data,isEditing:true})
     }
 

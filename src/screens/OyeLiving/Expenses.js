@@ -1,6 +1,6 @@
 /*
- * @Author: Sarthak Mishra 
- * @Date: 2019-10-07 11:58:24 
+ * @Author: Sarthak Mishra
+ * @Date: 2019-10-07 11:58:24
  * @Last Modified by: Sarthak Mishra
  * @Last Modified time: 2019-10-22 12:21:21
  */
@@ -426,10 +426,10 @@ class Expenses extends React.Component {
                 this.setState({
                     isEditExpense:false,
                     isAddExpenseModal: false,
-                });
-                this.clearAllFields();
+                    isTabSelected:1
+                },()=>{this.clearAllFields();
+                this.getTheExpenseList(this.state.selectedBlock, this.state.getIndex)});
 
-                await this.getTheExpenseList(this.state.selectedBlock, this.state.getIndex)
             }
         } catch (error) {
             this.setState({
@@ -700,8 +700,6 @@ class Expenses extends React.Component {
 
     }
     async generateInvoicesByExpIds(){
-
-
         let self = this;
         let associationId = self.props.userReducer.SelectedAssociationID;
         console.log('Get the Details for generate invoice', self.props,associationId,self.state.blockId)
@@ -712,11 +710,13 @@ class Expenses extends React.Component {
         };
 
         let stat = await base.services.OyeLivingApi.generateInvoiceByExpIds(input); // 1, 4
-        console.log("Stat in generate invoices:",stat);
+        console.log("Stat in generate invoices:",stat,input);
         try {
             if (stat.success) {
                 Alert.alert('Invoices generated successfully')
-                await self.getTheExpenseList(self.state.selectedBlock, self.state.getIndex)
+                self.setState({
+                    isTabSelected:0
+                },()=> self.getTheExpenseList(self.state.selectedBlock, self.state.getIndex));
             } else {
                 Alert.alert(stat.error.message)
             }
@@ -1323,7 +1323,7 @@ class Expenses extends React.Component {
                                         }}
                                     />
                                 </View>
-                                <View style={{backgroundColor: base.theme.colors.greyCard}}>
+                                <View style={{backgroundColor: base.theme.colors.greyCard,width:'100%'}}>
                                     <Text style={{
                                         fontSize: 14,
                                         color: base.theme.colors.black,

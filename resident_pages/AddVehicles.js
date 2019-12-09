@@ -218,7 +218,8 @@ class AddVehicle extends Component {
                     }
                 })
                 .catch(
-                    error => Alert.alert(responseJson.error.message),
+
+                    error =>  console.log('error######',error),
                     this.setState({
                         isLoading: false
                     })

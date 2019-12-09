@@ -689,7 +689,9 @@ class SchedulePatrol extends React.Component {
     renderTimeSpinnerModal() {
         let sTime = this.state.startTime;
         let eTime = this.state.endTime;
-        let selectedDate = this.state.selType === 0 ? sTime : eTime;
+        var selectedDate = this.state.selType === 0 ? sTime : eTime;
+        selectedDate = new Date(selectedDate)
+        console.log("selectedDate",selectedDate)
 
         return (
             <Modal isVisible={Platform.OS === 'ios' ? this.state.isSpinnerOpen : false}
@@ -697,17 +699,30 @@ class SchedulePatrol extends React.Component {
             >
                 <View
                     style={SchedulePatrolStyles.spinMainView}>
-                    <TouchableHighlight
-                        underlayColor={base.theme.colors.transparent}
-                        style={SchedulePatrolStyles.closeTextView}
-                        onPress={() => this.setState({ isSpinnerOpen: false })}>
-                        <Text style={SchedulePatrolStyles.closeText}>Close</Text>
-                    </TouchableHighlight>
+                    <View style={{flexDirection:'row',width:'100%',justifyContent:'space-between',paddingHorizontal:12}}>
+                        <TouchableHighlight
+                            underlayColor={base.theme.colors.transparent}
+                            style={SchedulePatrolStyles.closeTextView}
+                            onPress={() => this.setState({ isSpinnerOpen: false })}>
+                            <Text style={SchedulePatrolStyles.closeText}>Close</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            underlayColor={base.theme.colors.transparent}
+                            style={{
+                                height: hp('7%'),
+                                justifyContent: 'center',
+                                alignItems: 'flex-end',
+                                alignSelf: 'flex-end',
+                                
+                            }}
+                            onPress={() => this.setState({ isSpinnerOpen: false })}>
+                            <Text style={SchedulePatrolStyles.closeText}>Save</Text>
+                        </TouchableHighlight>
+                    </View>
                     <DatePickerIOS
                         date={selectedDate}
-                        mode={'time'}
-                        height={100}
-                        style={{ height: 100 }}
+                        mode={'time'} 
+                        style={{flex:1}}                       
                         onDateChange={(time) => this.changeTime(time)}
                     />
                 </View>
@@ -741,11 +756,19 @@ class SchedulePatrol extends React.Component {
     changeTime(time) {
         console.log("Old Time:", time);
         let selTime = time === "Invalid Date" ? currentDate : time;
-        console.log("Time:", selTime, (time), currentDate);
+        console.log("Time:", selTime, time, currentDate);
         if (this.state.selType === 0) {
-            this.setState({ startTime: selTime, isSpinnerOpen: false })
+            if(Platform.OS==='ios'){
+                this.setState({ startTime: selTime})
+            }else{
+                this.setState({ startTime: selTime, isSpinnerOpen: false })
+            }
         } else {
-            this.setState({ endTime: selTime, isSpinnerOpen: false })
+            if(Platform.OS==='ios'){
+                this.setState({ endTime: selTime})
+            }else{
+                this.setState({ endTime: selTime, isSpinnerOpen: false })
+            }
         }
     }
 

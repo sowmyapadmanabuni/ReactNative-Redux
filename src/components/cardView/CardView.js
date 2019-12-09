@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import CardViewStyles from '../cardView/CardViewStyles'
 import base from "../../base";
 
+import MarqueeText from 'react-native-marquee';
+import HeaderStyles from "../dashBoardHeader/HeaderStyles";
+
+
 class CardView extends React.Component {
     static propTypes = {
         height: PropTypes.any,
@@ -90,13 +94,27 @@ class CardView extends React.Component {
                         <Text style={CardViewStyles.count}>
                             {this.props.cardCount}
                         </Text>
-                        <Text style={[CardViewStyles.cardText, {
+                        <MarqueeText
+                            //style={HeaderStyles.residentName}
+                            style={[CardViewStyles.cardText, {
+                                fontWeight: this.props.textWeight, fontSize: this.props.textFontSize,
+
+                            }]}
+                            duration={4000}
+                            marqueeOnStart
+                            loop={true}
+                            marqueeDelay={1000}
+                            marqueeResetDelay={1000}
+                        >
+                            {this.props.cardText}
+                        </MarqueeText>
+                        {/*<Text style={[CardViewStyles.cardText, {
                             fontWeight: this.props.textWeight, fontSize: this.props.textFontSize,
 
                         }]}
                               numberOfLines={2}>
                             {this.props.cardText}
-                        </Text>
+                        </Text>*/}
 
                     </View>
                 </View>

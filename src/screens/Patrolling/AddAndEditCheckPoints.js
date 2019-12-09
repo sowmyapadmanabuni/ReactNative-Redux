@@ -347,6 +347,7 @@ class AddAndEditCheckPoints extends React.Component {
         console.log("watchuserPosition...");
         let locationArrStored = [];
         let self = this;
+        Geolocation.requestAuthorization();
         this.watchId = Geolocation.watchPosition(
             (position) => {
                 console.log("sdvdfgddhdgs", position);

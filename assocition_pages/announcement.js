@@ -134,7 +134,9 @@ class Announcement extends Component {
       });
     }, 1500);
     AudioRecord.init(options);
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    if(Platform.OS!='ios'){
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
   }
 
   componentDidUpdate() {
@@ -146,7 +148,9 @@ class Announcement extends Component {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    if(Platform.OS!='ios'){
+      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
     /*setTimeout(() => {
       BackHandler.removeEventListener('hardwareBackPress', () =>
           this.processBackPress()

@@ -802,7 +802,7 @@ class Dashboard extends PureComponent {
              () => {
                console.log("I am Timer");
                this.syncData();
-               //     //     // alert("hererereerrrereer");
+                 // alert("hererereerrrereer");
              },
              5000
          );*/
@@ -2023,6 +2023,19 @@ class Dashboard extends PureComponent {
             />
           </View>
           <View style={{ ...Style.elevatedView, marginTop: 20 }}>
+
+            {/* <CardView
+                height={'100%'}
+                width={'25%'}
+                cardText={'Accounting'}
+                iconWidth={Platform.OS === 'ios' ? 40 : 25}
+                iconHeight={Platform.OS === 'ios' ? 40 : 20}
+                cardIcon={require('../../../../icons/vehicle.png')}
+                marginTop={20}
+                backgroundColor={base.theme.colors.cardBackground}
+                onCardClick={() => this.props.navigation.navigate('oyeLiving')}
+                // onCardClick={() => this.props.navigation.navigate('Accounting')}
+            />*/}
             {/* <CardView
             height={'100%'}
             width={'25%'}
@@ -2036,7 +2049,7 @@ class Dashboard extends PureComponent {
             }
             backgroundColor={base.theme.colors.cardBackground}
           />
-          {/* <CardView
+           <CardView
             height={'100%'}
             width={'25%'}
             cardText={'Accounting'}
@@ -2045,9 +2058,9 @@ class Dashboard extends PureComponent {
             cardIcon={require('../../../../icons/vehicle.png')}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
-            // onCardClick={() => this.props.navigation.navigate('oyeLiving')}
-            onCardClick={() => this.props.navigation.navigate('Accounting')}
-          /> */}
+            onCardClick={() => this.props.navigation.navigate('oyeLiving')}
+           // onCardClick={() => this.props.navigation.navigate('Accounting')}
+          />
             {/* <CardView
             height={'100%'}
             width={'25%'}

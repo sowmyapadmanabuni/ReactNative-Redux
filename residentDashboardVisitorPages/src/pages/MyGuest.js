@@ -814,7 +814,7 @@ class MyGuests extends Component {
                                 <Text style={styles.datePickerText}>
                                     {moment(this.state.dobText).format('YYYY-MM-DD')}{' '}
                                 </Text>
-                                <DatePickerDialog
+                                <DatePickerDialog                                
                                     ref="dobDialog"
                                     onDatePicked={this.onDOBDatePicked.bind(this)}
                                 />
