@@ -14,7 +14,7 @@ const isMandatory = ' is required';
     3. api     --- For production server
     4. staging --- For Staging server //For staging server Media upload url same as uat
 */
-const urlType = 'staging';
+const urlType = 'apiuat';
 
 
 const api = {
