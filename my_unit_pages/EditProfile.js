@@ -4,7 +4,7 @@ import {
     BackHandler,
     Dimensions,
     Image,
-    Keyboard,
+    Keyboard, PermissionsAndroid,
     PixelRatio,
     Platform,
     SafeAreaView,
@@ -29,6 +29,7 @@ import base from "../src/base";
 
 import {updateUserInfo,} from '../src/actions'
 import Style from "../src/screens/Resident/MyFamilyScreen/MyFamilyAdd/Style";
+import ContactsWrapper from "react-native-contacts-wrapper";
 
 const RNFS = require('react-native-fs');
 
@@ -282,7 +283,63 @@ class EditProfile extends Component {
             });
     }
 
+    async getTheContact() {
+        console.log('Get details', Platform.OS);
+        let isGranted = false;
+        if (Platform.OS === 'android') {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                isGranted = true
+            }
 
+        } else {
+            isGranted = true
+        }
+
+        if (isGranted) {
+            console.log(">>>>>>>>>>>>>>>>>.<<<<<<<<<<<<<<<<")
+            ContactsWrapper.getContact()
+                .then((contact) => {
+                    console.log('Details for mob', contact);
+                    let name = contact.name.split(" ");
+                    let mobCode = contact.phone.split( "");
+                    console.log("name ",mobCode);
+                    let mobNum = contact.phone.replaceAll(/[ !@#$%^&*()_\-=\[\]{};':"\\|,.<>\/?]/, '');
+                    let sendMob = contact.phone.split(" ");
+                    console.log("mobCode ",mobCode);
+                    if (mobCode[0] === '+') {
+                        console.log('plus');
+                        let mobCode2 = contact.phone.split(" ");
+                        console.log('mobCode', sendMob, mobCode, mobCode2, mobCode2[0]);
+                        let arr = '';
+                        for (let i = 1; i < sendMob.length; i++) {
+                            arr = arr + sendMob[i]
+                        }
+                        console.log('mobbbbbb', arr);
+                        this.setState({
+                            cCode: mobCode2[0],
+                            sendNum: arr
+                        })
+
+                    } else {
+                        this.setState({
+                            primaryMobNum: mobNum
+                        })
+                    }
+                    this.setState({
+                        isPhoneBookOpened: true
+                    })
+
+                })
+                .catch((error) => {
+                    console.log("error ",error)
+                    console.log("ERROR CODE: ", error.code);
+                    console.log("ERROR MESSAGE: ", error.message);
+                });
+        }
+    }
 
     selectPhotoTapped() {
         const options = {
@@ -483,6 +540,28 @@ class EditProfile extends Component {
                                             />
                                         </Item>
 
+
+                                        {/*--------------------------------------------------------------------------------------*}
+                                        <View style={{
+                                            flexDirection:'row',
+                                            backgroundColor:'yellow',
+                                            //position:'absolute',
+                                        }}>
+                                            <Text style={{
+                                                fontSize:18
+                                            }}>
+                                                Hello
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontSize: hp("2.2%"),
+                                                    color: "red"
+                                                }}
+                                            >
+                                                *
+                                            </Text>
+                                        </View>
+
                                         <View style={styles.number}>
                                             <View
                                                 style={{
@@ -522,10 +601,99 @@ class EditProfile extends Component {
                                                 </Text>
                                             </View>
 
-                                            <Item style={styles.inputItem1} stackedLabel>
+                                            <Item style={[styles.inputItem1,{ flexDirection:'row'}]} stackedLabel>
+                                                {this.state.primaryMobNum === '' &&
+                                                    <View style={{
+                                                        paddingLeft: wp(2),
+                                                        flexDirection: 'row',
+                                                        alignSelf: 'center',
+                                                        //position:'absolute',
+                                                    }}>
+                                                        <Text style={{
+                                                            fontSize: 18
+                                                        }}>
+                                                            Hello
+                                                        </Text>
+                                                        <Text
+                                                            style={{
+                                                                fontSize: hp("2.2%"),
+                                                                color: "red"
+                                                            }}
+                                                        >
+                                                            *
+                                                        </Text>
+                                                    </View>
+                                                }
+
                                                 <Input
+                                                    style={{alignSelf:'center'}}
                                                     marginBottom={hp("-1%")}
-                                                    placeholder="Mobile Number"
+                                                    //placeholder={"Mobile Number"}
+                                                    autoCorrect={false}
+                                                    keyboardType="phone-pad"
+                                                    maxLength={10}
+                                                    onChangeText={(value) =>
+                                                        this.mobileNumberInputCheck(value)
+
+                                                    }
+                                                    //value={this.state.primaryMobNum}
+                                                />
+
+                                                <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
+                                                    <Image source={require("../icons/phone-book.png")}
+                                                           style={{width: 25, height: 25,}}/>
+                                                </TouchableOpacity>
+
+                                            </Item>
+
+                                        </View>
+
+                                        {/--------------------------------------------------------------------------------------*/}
+
+                                        <View style={styles.number}>
+                                            <View
+                                                style={{
+                                                    flex: 0.1,
+                                                    flexDirection: "row",
+                                                    alignItems: "center"
+                                                }}
+                                            >
+                                                <CountryPicker
+                                                    hideAlphabetFilter={true}
+                                                    onChange={value => {
+                                                        console.log("CCA:", value);
+                                                        this.setState({
+                                                            primeCca: value.cca2,
+                                                            primeCCode: "+" + value.callingCode,
+                                                            primeCName: value.cca2,
+                                                        })
+                                                    }}
+                                                    //cca2={this.state.cca2}
+                                                    cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    translation="eng"
+                                                />
+                                            </View>
+
+                                            <View
+                                                style={{
+                                                    flex: 0.15,
+                                                    flexDirection: "row",
+                                                    marginLeft: hp("0.5%"),
+                                                    alignItems: "center",
+                                                    marginBottom: hp("-0.8%")
+                                                }}
+                                            >
+                                                <Text style={{color: "black", fontSize: hp("2%")}}>
+                                                    {this.state.primeCCode}
+                                                </Text>
+                                            </View>
+
+                                            <Item style={[styles.inputItem1,{ flexDirection:'row'}]} stackedLabel>
+                                                <Input
+                                                    style={{alignSelf:'center'}}
+                                                    marginBottom={hp("-1%")}
+                                                    placeholder={"Mobile Number"}
                                                     autoCorrect={false}
                                                     keyboardType="phone-pad"
                                                     maxLength={10}
@@ -540,7 +708,13 @@ class EditProfile extends Component {
                                                     }
                                                     value={this.state.primaryMobNum}
                                                 />
+                                                <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
+                                                    <Image source={require("../icons/phone-book.png")}
+                                                           style={{width: 25, height: 25,}}/>
+                                                </TouchableOpacity>
+
                                             </Item>
+
                                         </View>
 
                                         <View style={styles.number}>
@@ -581,10 +755,11 @@ class EditProfile extends Component {
                                                 </Text>
                                             </View>
 
-                                            <Item style={styles.inputItem1} stackedLabel>
+                                            <Item style={[styles.inputItem1,{ flexDirection:'row',}]} stackedLabel>
                                                 <Input
+                                                    style={{alignSelf:'center'}}
                                                     marginTop={hp("-0.5%")}
-                                                    placeholder="Alternate Mobile Number"
+                                                    placeholder="Alternate Number"
                                                     autoCorrect={false}
                                                     keyboardType="phone-pad"
                                                     maxLength={20}
@@ -598,6 +773,10 @@ class EditProfile extends Component {
                                                     }}
                                                     value={this.state.alterMobNum}
                                                 />
+                                                <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
+                                                    <Image source={require("../icons/phone-book.png")}
+                                                           style={{width: 25, height: 25,}}/>
+                                                </TouchableOpacity>
                                             </Item>
                                         </View>
 

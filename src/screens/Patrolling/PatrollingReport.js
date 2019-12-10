@@ -111,21 +111,30 @@ class PatrollingReport extends React.Component {
                 <View style={PatrollingReportStyles.header}>
                     <Text style={PatrollingReportStyles.headerText}>Patrolling Report</Text>
                 </View>
+
                 <View style={PatrollingReportStyles.dropdownView}>
                     <Dropdown
                         label='Select Schedule'
-                        dropdownPosition={Platform.OS === 'ios' ? 0 : -1.5}
+                        //dropdownPosition={Platform.OS === 'ios' ? 0 : -1.5}
+                        dropdownPosition={Platform.OS === 'ios' ? 0 : 0.5}
                         fontSize={20}
                         inputContainerStyle={{
+                            //backgroundColor:'green',
                             borderBottomColor: 'transparent',
                             bottom: Platform.OS === 'ios' ? 10 : 10
                         }}
-                        containerStyle={{height: hp('5%'), justifyContent: 'center',marginBottom:hp('1')}}
+                        containerStyle={{
+                            height: hp('5%'),
+                            justifyContent: 'center',
+                            //marginBottom:hp('1'),
+                            //backgroundColor:'green',
+                        }}
                         pickerStyle={PatrollingReportStyles.pickerStyles}
                         data={this.state.slotData}
                         onChangeText={(args, index, data) => this.setSelectedPatrol(args, data)}
                     />
                 </View>
+
                 {this.state.isSelected ? this.renderView() : <View/>}
                 {(Platform.OS === 'ios') ? this.openIOSCalender() : <View/>}
             </View>

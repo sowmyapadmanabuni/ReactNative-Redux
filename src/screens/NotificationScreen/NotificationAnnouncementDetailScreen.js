@@ -262,7 +262,7 @@ class NotificationAnnouncementDetailScreen extends Component {
     let associationid = params.associationid;
     let accountid = params.accountid;
     let notifyid = params.notifyid;
-    console.log('params', notifyid, accountid, associationid);
+    console.log('params', notifyid, accountid, associationid,this.props.oyeURL);
     this.setState({
       isLoading: true
     });
@@ -369,7 +369,9 @@ class NotificationAnnouncementDetailScreen extends Component {
             // );
           });
       }).catch = e => {
-      console.log(e);
+      this.setState({
+        isLoading: false,})
+      console.log("ERROR IN ANNOUNCEMENT",e);
     };
   };
   render() {

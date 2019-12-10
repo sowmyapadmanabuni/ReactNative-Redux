@@ -25,7 +25,7 @@ import base from '../../base';
 import { Dropdown } from 'react-native-material-dropdown';
 import Modal from "react-native-modal";
 import {
-    heightPercentageToDP as hp,
+    heightPercentageToDP as hp, widthPercentageToDP,
     widthPercentageToDP as wp
 } from "react-native-responsive-screen";
 import SelectMultiple from 'react-native-select-multiple';
@@ -41,6 +41,7 @@ import PatrollingReportStyles from "../Patrolling/PatrollingReportStyles";
 import RNFS from 'react-native-fs';
 import RNImageToPdf from 'react-native-image-to-pdf';
 import ProgressLoader from "rn-progress-loader";
+import OSButton from "../../components/osButton/OSButton";
 
 
 var radio_props1 = [
@@ -114,7 +115,21 @@ class Invoices extends React.Component {
             amountEnd:'0',
             isDisEnabled:false,
             assDetail:{},
-            isPermitted:false
+            isPermitted:false,
+            valueRec: {
+                format: "png",
+                quality: 0.9,
+                result: "data-uri",
+                snapshotContentContainer: false
+            },
+            isGenRecModal: false,
+            isViewRecModal:false,
+            selectedReceipt:{},
+            associationName:"",
+            selPayMode:'Select mode of payment',
+            paymentMethodList:[],
+            payMethodId:""
+
         }
     }
 
@@ -129,12 +144,41 @@ class Invoices extends React.Component {
         this.didFocusListener = this.props.navigation.addListener(
             'didFocus',
             () =>  {console.log('Get the All ApIs');
-                this.setState({isLoading:true})
+               /* this.setState({isLoading:true})
                 this.getBlockList();
                 this.getAssiciationDetail();
-            this.updateValues()}
+                this.getAssociationName();
+                this.getPaymentMethodsList()
+            this.updateValues()*/
+            }
         );
     }
+    async getPaymentMethodsList() {
+        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.userReducer.SelectedAssociationID)
+        try {
+            if (stat.success && stat.data.paymentMethod.length !== 0) {
+                let paymentList = [];
+                let data = stat.data.paymentMethod;
+
+                for (let i = 0; i < data.length; i++) {
+                    paymentList.push({
+                        value: data[i].pmName,
+                        details: data[i]
+                    })
+                }
+                this.setState({
+                    paymentMethodList: paymentList
+                })
+            }
+        } catch (error) {
+
+            this.setState({
+                isLoading:false
+            })
+            console.log('error', error)
+        }
+    }
+
     updateValues(){
         let self=this;
         self.setState({
@@ -603,14 +647,18 @@ class Invoices extends React.Component {
                     </View>
 
                     : <View />}
-                <ScrollView>
-
+                    {this.state.isDiscountModalOpen ?
                     <Modal
                         onBackdropPress={() => this.setState({ isDiscountModalOpen: false })}
                         isVisible={this.state.isDiscountModalOpen}>
                         {this.renderDiscountModal()}
                     </Modal>
-                    <Modal
+                        :
+                        <View/>}
+
+                <ScrollView>
+
+                <Modal
                         coverScreen={true}
                         backdropColor={base.theme.colors.black}
                         onBackdropPress={() => this.setState({ showDetailedInvoice: false })}
@@ -627,7 +675,558 @@ class Invoices extends React.Component {
                     hudColor={"#FFFFFF"}
                 />*/}
                 {(Platform.OS === 'ios') ? this.openIOSCalender() : <View/>}
+                {this.state.isGenRecModal ? this.generateReceiptScreen() : <View/>}
+                {this.state.isViewRecModal ? this.viewReceiptScreen() : <View/>}
             </View>
+        )
+    }
+
+    async getAssociationName(){
+        let stat = await base.services.OyeLivingApi.getAssociationNameById(this.props.userReducer.SelectedAssociationID)
+
+        this.setState({
+            isLoading:false
+        })
+        console.log('Get stat data',stat)
+        try {
+            if (stat.success && stat.data) {
+                this.setState({
+                    associationName:stat.data.association.asAsnName
+                })
+            }
+        } catch (error) {
+            console.log('Error', error)
+        }
+    }
+
+    isVieRecModal(item){
+        console.log('DATA COMING TO INVOCE ITEM@@@@@',item)
+        let self=this;
+        self.setState({
+            isViewRecModal:true,
+            selectedReceipt:item.payment[0]
+
+        })
+    }
+
+    viewReceiptScreen(){
+        console.log('Selected receipt data in list',this.state.selectedReceipt)
+        let selReceipt=this.state.selectedReceipt;
+
+        return (
+            <Modal
+                style={{height: '110%', width: '100%', alignSelf: 'center',}}
+                visible={this.state.isViewRecModal}
+                transparent={true}
+                onRequestClose={this.close}>
+                <View style={{height: '106%', width: '100%', backgroundColor: base.theme.colors.white}} >
+                    <SafeAreaView style={AddExpenseStyles.safeArea}>
+                        <View style={[styles.viewStyle, {flexDirection: 'row'}]}>
+                            <View style={[styles.viewDetails1,]}>
+                                <TouchableOpacity
+                                    onPress={() => this.closeReceiptScreen()}
+                                >
+                                    <View
+                                        style={{
+                                            height: hp('4%'),
+                                            width: wp('15%'),
+                                            alignItems: 'flex-start',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <Image
+                                            resizeMode="contain"
+                                            source={require('../../../icons/back.png')}
+                                            style={styles.viewDetails2}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Image
+                                    style={[styles.image1]}
+                                    source={require('../../../icons/OyespaceSafe.png')}
+                                />
+                            </View>
+                            <View style={{
+                                padding: 10,
+                                width: 40,
+                                height: 40,
+                                borderRadius: 5,
+                                marginTop:5,
+                                alignItems:'center',
+                                justifyContent:'center'
+                            }}></View>
+                            {/*<TouchableOpacity style={{
+                                padding: 10,
+                                width: 40,
+                                height: 40,
+                                borderRadius: 5,
+                                marginTop:5,
+                                alignItems:'center',
+                                justifyContent:'center'
+                            }} onPress={()=>this.getSharePdf()}>
+                                <Image
+                                    resizeMode={'contain'}
+                                    style={{height: 20, width: 20,}}
+                                    source={require('../../../icons/share.png')}
+                                />
+                            </TouchableOpacity>*/}
+                        </View>
+                        <View style={{backgroundColor:'#ffffff',width:'100%'}} ref='View'>
+                            <View style={AddExpenseStyles.headerView}>
+                                <Text
+                                    style={AddExpenseStyles.headerText}>View Receipt</Text>
+                            </View>
+                            <View style={{flexDirection:'row',alignItems:'center',width:'90%',
+                                justifyContent:'space-between',paddingBottom:10,alignSelf:'center'}}>
+                                <Text style={{width:'50%',fontSize:16,color:base.theme.colors.black,}} numberOfLines={2}>{this.state.associationName}</Text>
+                                <Text style={{width:'50%',textAlign:'right',fontSize:16,color:base.theme.colors.black,}} numberOfLines={2}>{selReceipt.unUniName==''?this.state.unitName:selReceipt.unUniName}</Text>
+
+                            </View>
+                            <View style={{backgroundColor:base.theme.colors.greyCard,width:'100%',alignItems:'center',justifyContent:'center',
+                                paddingTop:5,paddingBottom:5}}>
+                                <Text style={{fontSize:17,color:base.theme.colors.mediumGrey,}}>Receipt Summary</Text>
+                            </View>
+                            <View style={{paddingTop:10,paddingBottom:10,width:'100%',flexDirection:'row',
+                                borderBottomColor:base.theme.colors.greyHead,borderBottomWidth:1}}>
+                                <View style={{width:'50%',paddingLeft:15}}>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,}}>Invoice No. -
+                                        <Text style={{color:base.theme.colors.grey}} numberOfLines={2}>{selReceipt.inNumber}</Text></Text>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,fontWeight:'normal',marginBottom:15}}>Receipt ID - <Text style={{fontWeight:'normal',color:base.theme.colors.primary}}>{selReceipt.pyid}</Text></Text>
+                                    {/*<Text style={{color:base.theme.colors.black,fontSize:15,fontWeight:'normal'}}>Transaction ID -
+                                     <Text style={{color:base.theme.colors.grey,fontWeight:'normal',}} numberOfLines={2}>{selReceipt.pyRefNo}</Text></Text>*/}
+
+                                </View>
+                                <View style={{width:'50%',paddingRight:15}}>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>Payment Date</Text>
+                                    <Text style={{color:base.theme.colors.primary,fontSize:15,textAlign:'right'}}>{selReceipt.pydCreated ==''?'': moment(selReceipt.pydCreated).format('DD-MM-YYYY')}</Text>
+
+                                </View>
+                            </View>
+                            <View style={{padding:10,width:'100%',}}>
+                                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'left'}}>Amount Due</Text>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>{base.utils.strings.rupeeIconCode}{' '}{selReceipt.pyAmtDue}</Text>
+
+                                </View>
+                                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingBottom:5,
+                                    borderBottomColor:base.theme.colors.greyCard,borderBottomWidth:1}}>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'left'}}>Amount Paid</Text>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>{base.utils.strings.rupeeIconCode}{' '}{selReceipt.pyAmtPaid}</Text>
+                                </View>
+                                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingBottom:25,paddingTop:5}}>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'left'}}>Current Outstanding</Text>
+                                    <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>(-){' '}{base.utils.strings.rupeeIconCode}{' '}{selReceipt.pyBal}</Text>
+
+                                </View>
+                                {/*   <View style={AddExpenseStyles.textInputView}>
+                                <Text style={{
+                                    fontSize: 14,
+                                    color: base.theme.colors.black,
+                                    textAlign: 'left',
+                                    paddingTop: 5,
+                                    fontWeight:'bold'
+                                }}>Description</Text>
+                                <TextInput
+                                    style={{
+                                        height: 30,
+                                        borderBottomWidth: 1,
+                                        borderColor: base.theme.colors.lightgrey,
+                                        paddingBottom: 5, color:base.theme.colors.black
+                                    }}
+                                    onChangeText={(text) => this.setState({raBudget: text})}
+                                    value={"receipt desc"} //selReceipt.pyDesc.toString()
+                                    placeholder="Payment Description"
+                                    placeholderTextColor={base.theme.colors.grey}
+                                    editable={false}
+                                />
+                            </View>*/}
+                            </View>
+                            <View style={{flexDirection:'row',width:'100%',height:'20%',}}>
+                                <View style={{width:'100%',height:'100%',alignItems:'center',justifyContent:'flex-end',paddingBottom:15,}}>
+                                    <TouchableOpacity style={{width:'30%',height:'35%',borderRadius:20,
+                                        backgroundColor:base.theme.colors.primary,alignItems:'center',justifyContent:'center'}}
+                                                      onPress={this.snapshotRec("View")}
+                                    >
+                                        <Text style={{fontSize:14,color:base.theme.colors.white}}>Share Receipt</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {/*<View style={{width:'50%',alignItems:'center',marginTop:30,right:15}}>
+                                <Image
+                                    resizeMode="contain"
+                                    source={require('../../../icons/oyesafe.png')}
+                                    style={{width:50,height:50}}
+                                />
+                                <TouchableOpacity onPress={() => Linking.openURL(
+                                    "https://www.oyespace.com"
+                                )}
+                                >
+                                <Text style={{
+                                    fontSize: 14,
+                                    color: base.theme.colors.hyperLink,
+                                    textDecorationLine: 'underline'}}>Powered by OyeLiving</Text>
+                                </TouchableOpacity>
+
+                            </View>*/}
+                            </View>
+                        </View>
+
+                    </SafeAreaView>
+                </View>
+            </Modal>
+        )
+    }
+
+    closeReceiptScreen() {
+        this.setState({isGenRecModal: false,isViewRecModal:false})
+    }
+    clearAllFields(){
+        let self=this;
+        self.setState({
+            amountPaid:'',
+            invoiceNumber:'',
+            unitId:'',
+            selectedUnit:'Select unit',
+            payMethodId:'',
+            selPayMethod:'Select Payment method',
+            paymentDesc:'',
+            amountDue:'',
+            isGenRecModal:false
+        })
+    }
+
+    snapshotRec = refname => () =>
+        (refname
+                ? captureRef(this.refs[refname], this.state.valueRec)
+                : captureScreen(this.state.valueRec)
+        )
+            .then(
+                res =>
+                    new Promise((success, failure) =>
+                        Image.getSize(res, (width, height) => (
+                            console.log("image ####",res, width, height), success(res)
+                        ), failure))).then(res => this.setState({
+                error: null, res, previewSource: {
+                    uri: this.state.valueRec.result === "base64" ? "data:image/" + this.state.valueRec.format + ";base64," + res : res
+                }
+            }, () => this.shareReceiptInit())
+        )
+            .catch(
+                error => (
+                    console.warn(error),
+
+                        this.setState({error, res: null, previewSource: null,isLoading:false})
+                )
+            );
+
+    shareReceiptInit() {
+        var image_data = this.state.previewSource.uri.split('data:image/png;base64,');
+        console.log("Image:",this.state.previewSource.uri,this.state.isShare)
+
+        image_data = image_data[1] //this.state.previewSource.uri;
+        console.log("Image Data:",image_data)
+
+        var path = RNFS.ExternalStorageDirectoryPath + '/image.png';
+        RNFS.writeFile(path, image_data, 'base64')
+            .then((success) => {
+                console.log('FILE WRITTEN!',path);
+                this.convertImageToPdfRec(path);
+            })
+            .catch((err) => {
+                this.setState({isLoading:false})
+                console.log(err.message);
+            });
+    }
+
+    async convertImageToPdfRec(path){
+        try {
+            // RNFS.exists(path).then(exists => {
+            //     if (exists) {
+            let updatedpath = path
+            const options = {
+                imagePaths: [updatedpath],
+                name: 'PDFName.pdf',
+                //   quality: .7, // optional compression paramter
+            };
+            console.log(updatedpath)
+            const pdf = await RNImageToPdf.createPDFbyImages(options);
+            console.log(pdf)
+            console.log(pdf.filePath)
+
+            var path = pdf.filePath;
+            var rnd = Math.random();
+            var path1 = RNFS.ExternalStorageDirectoryPath + '/invoice-'+rnd+".pdf";
+
+            RNFS.copyFile(path, path1)
+                .then((success) => {
+                    console.log('FILE WRITTEN!',path);
+                    this.setState({isLoading:false})
+                    this.shareReceipt(path)
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                    this.setState({isLoading:false})
+
+                });
+
+            //     }
+            // })
+
+
+            console.log(options);
+        } catch(e) {
+            this.setState({isLoading:false})
+            console.log(e);
+        }
+    }
+
+    shareReceipt(path,type = "application/pdf"){
+        Share.open({
+            url: "file://"+path,
+            title: 'Receipt'
+        })
+    }
+
+    bindComponent(item) {
+        this.setState({
+            //isViewRecModal:true
+             isGenRecModal: true,
+           // selectedReceipt:item.payment[0]
+
+        })
+    }
+    async createExpenseValidation(title, message) {
+        console.log('Validation for generate invoice')
+        let self=this;
+        console.log('State values',self.state)
+
+        /* if(self.state.unitId==''){
+             Alert.alert('Please select unit')
+         }
+         else if(self.state.invoiceNumber==''){
+             Alert.alert('Please enter invoice number')
+         }
+         else if(self.state.amountDue==''){
+             Alert.alert('Please enter amount due')
+         }
+         else if(self.state.amountPaid==''){
+             Alert.alert('Please enter amount paid')
+         }
+         else*/
+        if(self.state.payMethodId==''){
+            Alert.alert('Please select payment method')
+        }
+        else{
+            await self.createReceipt()
+        }
+
+    }
+
+    async createReceipt(){
+        console.log('Create receipt')
+        let self=this;
+        self.setState({isLoading:true})
+        let input = {
+            "MEMemID"  : "",
+            "PYRefNo"  : "",
+            "PYBkDet"  : "",
+            "PYAmtPaid": self.state.amountPaid,
+            "INNumber" : self.state.invoiceNumber,
+            "UNUnitID" : self.state.unitId,
+            "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
+            "PYTax"    : "",
+            "PMID" : self.state.payMethodId,
+            "PYDesc"  : self.state.paymentDesc
+        };
+        console.log('Selected dates',input);
+        let stat = await base.services.OyeLivingApi.createNewReceipt(input);
+        // self.setState({isLoading:false})
+        console.log('data from the stat',stat)
+        try{
+            if (stat.success) {
+                self.setState({
+                    isGenRecModal:false
+                })
+                await self.getReceiptsList(self.state.selectedBlock,self.state.getIndex)
+            }
+            else{
+                Alert.alert(stat.error.message)
+            }
+        }catch(error){
+            self.setState({isLoading:false})
+            Alert.alert('Invalid payment information')
+            console.log('error',error)
+        }
+    }
+
+    generateReceiptScreen() {
+        return (
+            <Modal
+                style={{height: '110%', width: '100%', alignSelf: 'center',}}
+                visible={this.state.isGenRecModal}
+                transparent={true}
+                onRequestClose={this.close}>
+                <View style={{height: '106%', width: '100%', backgroundColor: base.theme.colors.white}}>
+                    <SafeAreaView style={AddExpenseStyles.safeArea}>
+                        <View style={[styles.viewStyle, {flexDirection: 'row'}]}>
+                            <View style={[styles.viewDetails1,]}>
+                                <TouchableOpacity
+                                    onPress={() => this.closeReceiptScreen()}
+                                >
+                                    <View
+                                        style={{
+                                            height: hp('4%'),
+                                            width: wp('15%'),
+                                            alignItems: 'flex-start',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <Image
+                                            resizeMode="contain"
+                                            source={require('../../../icons/back.png')}
+                                            style={styles.viewDetails2}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Image
+                                    style={[styles.image1]}
+                                    source={require('../../../icons/OyespaceSafe.png')}
+                                />
+                            </View>
+                            <View style={{flex: 0.2}}>
+                            </View>
+                        </View>
+                        <View style={AddExpenseStyles.headerView}>
+                            <Text
+                                style={AddExpenseStyles.headerText}>Generate Receipt</Text>
+                        </View>
+                        <ScrollView style={AddExpenseStyles.mainContainer}
+                                    showsVerticalScrollIndicator={false}>
+                            <View style={[AddExpenseStyles.scrollContainer,{height:'100%'}]}>
+                                <View style={{width:'80%',marginTop:20}}>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Unit Name</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}></Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Invoice No.</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>A101</Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Invoice Date</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>A101</Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Amount Due</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}A101</Text>
+                                    </View>
+                                    <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                                        <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Amount Paid</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}A101</Text>
+                                    </View>
+                                </View>
+                                <View style={{width:'85%',marginTop:20,height:'0.5%',borderRadius:5,backgroundColor:base.theme.colors.primary}}>
+                                </View>
+                                <TouchableOpacity style={{flexDirection:'row',width:'85%',marginTop:20,height:'10%',
+                                    borderRadius:5,backgroundColor:base.theme.colors.greyCard,alignItems:'center',marginBottom:20
+                                }}>
+                                    <Image
+                                        resizeMode={'contain'}
+                                        style={{
+                                            height: hp('6%'),
+                                            width: wp('6%'),
+                                            tintColor: base.theme.colors.primary,
+                                            alignSelf: 'center',
+                                            marginLeft:10
+                                        }}
+                                        source={require('../../../icons/calender.png')}
+                                    />
+                                    <Text style={{marginLeft:10,fontSize:16,color:base.theme.colors.black}}>Payment Date</Text>
+                                </TouchableOpacity>
+
+                                <View style={{width: '85%',}}>
+                                    <Text style={{
+                                        fontSize: 14,
+                                        color: base.theme.colors.black,
+                                        textAlign: 'left',
+                                        paddingTop: 5,
+                                    }}>Select mode of payment
+                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <Dropdown
+                                        value={this.state.selPayMode} // 'Select Payment Method *'
+                                        labelFontSize={16}
+                                        labelPadding={-5}
+                                        baseColor="rgba(0, 0, 0, 1)"
+                                        data={this.state.paymentMethodList}
+                                        containerStyle={{
+                                            width: '100%',
+                                        }}
+                                        textColor={base.theme.colors.black}
+                                        inputContainerStyle={{
+                                            borderColor: base.theme.colors.lightgrey,
+                                        }}
+                                        dropdownOffset={{top: 10, left: 0}}
+                                        dropdownPosition={-5}
+                                        rippleOpacity={0}
+                                        onChangeText={(value, index) => {
+                                            this.setState({
+                                                selPayMode: value,
+                                                payMethodId:index
+                                            })
+                                        }}
+                                    />
+                                </View>
+
+
+
+                                <View style={{
+                                    alignSelf: 'center',
+                                    width: '60%',
+                                    flexDirection: 'row',
+                                    paddingTop: 25,
+                                    paddingBottom: 25,
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    marginBottom: 50,
+                                    paddingLeft: 15,
+                                    paddingRight: 15
+                                }}>
+                                    <OSButton
+                                        height={30}
+                                        width={'45%'}
+                                        borderRadius={20}
+                                        oSBBackground={base.theme.colors.red}
+                                        oSBText={'Cancel'}
+                                        onButtonClick={() => this.clearAllFields()}/>
+                                    <OSButton
+                                        height={30}
+                                        width={'45%'}
+                                        borderRadius={20}
+                                        oSBBackground={base.theme.colors.primary}
+                                        oSBText={'Submit'}
+                                        onButtonClick={() => this.createExpenseValidation()}/>
+                                </View>
+                            </View>
+                        </ScrollView>
+                    </SafeAreaView>
+                </View>
+
+            </Modal>
         )
     }
 
@@ -716,6 +1315,8 @@ class Invoices extends React.Component {
 
 
     _renderDetailedView() {
+
+        console.log('DATA COMING TO INVOCE ITEM',this.state.selectedVal)
         let invoiceData = this.state.selectedVal;
         let invoiceBreakUp = this.state.invoiceDetailedArr;
         let userDetail = this.state.userDetail;
@@ -863,10 +1464,14 @@ class Invoices extends React.Component {
                     </View>
                     <View style={{ width: wp('100'), flexDirection:'row'}}>
                         <View style={{width:wp('50'),alignItems:'center'}}>
+                            {/*inPaid now it is not changing*/}
+                            { invoiceData.payment !=undefined && invoiceData.payment.length !=0 ?
                             <Image
                                 resizeMode={'cover'}
                                 style={{ height:120, width: wp('42'), }}
                                 source={require('../../../icons/paid.png')} />
+                                :
+                                <View/>}
                         </View>
                         <View style={{width:wp('50')}}>
                         <View style={{ alignItems: 'flex-end',height:hp('5'), width: wp('50')}}>
@@ -922,25 +1527,21 @@ class Invoices extends React.Component {
                                 source={require('../../../icons/printer.png')} />
                         </TouchableOpacity>
                         <View style={{width:'90%',alignItems:'center',justifyContent:'center'}}>
-                    <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={this.openReceiptModalBox()} style={{ height: hp('4.5'),
+                            {invoiceData.payment !=undefined && invoiceData.payment.length !=0?
+                    <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={()=>this.isVieRecModal(invoiceData)} style={{ height: hp('4.5'),
                         borderRadius: hp('5'), width: wp('31'),
                         backgroundColor: base.theme.colors.primary, justifyContent: 'center',alignItems:'center', }}>
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Show Receipt</Text>
                     </TouchableHighlight>
+                                :
+                            <View/>
+                            }
+                          {/*  <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={()=>this.bindComponent(invoiceData)} style={{ height: hp('4.5'),
+                                borderRadius: hp('5'), width: wp('33'),
+                                backgroundColor: base.theme.colors.primary, justifyContent: 'center',alignItems:'center', }}>
+                                <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Generate Receipt</Text>
+                            </TouchableHighlight>*/}
                         </View>
-                    {/*<View style={{ height: hp('5'),width: wp('30'),alignSelf:'flex-start',
-                        justifyContent: 'center',alignItems:'center',flexDirection:'column' }}>
-                    <Image
-                        style={{width:wp('18'),height:hp('18'),borderWidth:1,}}
-                        resizeMode="contain"
-                        source={require('../../../icons/oyesafe.png')} />
-                        <TouchableOpacity onPress={() => Linking.openURL(
-                            "https://www.oyespace.com"
-                        )}
-                        >
-                        <Text style={{ textDecorationLine: 'underline',fontFamily: base.theme.fonts.medium, fontSize: hp('1.5'), color: base.theme.colors.hyperLink,bottom:hp('6') }}>Powered By Oyeliving</Text>
-                        </TouchableOpacity>
-                    </View>*/}
                     </View>
                         </ScrollView>
                     </View>
@@ -949,18 +1550,9 @@ class Invoices extends React.Component {
         )
     }
 
-    openReceiptModalBox(){
-        console.log('Modal box for receipt')
 
-    }
 
-    viewReceiptScreen(){
 
-    }
-
-    generateReceiptScreen(){
-
-    }
 
     _renderDes(item, index, newArr) {
         let billDetail = item.item;
@@ -1094,7 +1686,7 @@ class Invoices extends React.Component {
 
     setData(invoiceDetail) {
         this.setState({
-            isDiscountModalOpen: !this.state.isDiscountModalOpen,
+            isDiscountModalOpen: true,
             selectedVal: invoiceDetail,
             dAmount: invoiceDetail.inDsCVal
         })
@@ -1175,7 +1767,6 @@ class Invoices extends React.Component {
 
     _renderInvoiceList(item, index) {
         let invoiceDetail = item.item;
-        //console.log("Item:",invoiceDetail);
         return (
             <View style={{ borderRadius: 5, borderColor: base.theme.colors.lightgrey,
                 shadowColor: base.theme.colors.greyHead,
@@ -1184,16 +1775,18 @@ class Invoices extends React.Component {
                 shadowRadius: 1, elevation: 5, padding: 5, borderBottomWidth: 0.5, marginBottom: 10,flexDirection: 'row', marginTop: 10,
                 height: hp('20'),
                 width: wp('100'),  alignSelf: 'center', backgroundColor: base.theme.colors.white }}>
-                <View style={{ flexDirection: 'row', height: hp('20'), alignItems: 'center' }}>
-                    <View style={{ height: hp('11'), width: wp('10') }}>
+                <View style={{ flexDirection: 'row', height: hp('20'), alignItems: 'flex-start',}}>
+                    <View style={{ height: hp('8'), width: wp('8'), marginRight:5}}>
                         <Image
+                            resizeMode={Platform.OS === 'ios'? 'contain':'center'}
+                            style={{height:hp('8'),width:wp('8')}}
                             source={require('../../../icons/documents.png')} />
                     </View>
-                    <View style={{ height: hp('10'), borderWidth: 0, justifyContent: 'center', alignSelf: 'center', left: hp('1'), width: wp('80') }}>
+                    <View style={{ height: hp('10'), borderWidth: 0, justifyContent: 'center',left: hp('1'), width: wp('80') ,marginTop:20}}>
                         <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inNumber}</Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), marginTop: hp('1') }}>Current Invoice Amount:₹<Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inTotVal}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Date: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{moment(invoiceDetail.inGenDate).format("DD-MM-YYYY")}</Text></Text>
-                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Billed: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: invoiceDetail.ineSent ? base.theme.colors.black : base.theme.colors.red }}>{invoiceDetail.ineSent ? "Yes" : "No"}</Text></Text>
+                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Paid: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: invoiceDetail.ineSent ? base.theme.colors.black : base.theme.colors.red }}>{invoiceDetail.ineSent ? "Yes" : "No"}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Due Date: <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>{moment(invoiceDetail.toDate).format(("DD-MM-YYYY"))}</Text></Text>
                     </View>
                     <View style={{ flexDirection: 'column', borderWidth: 0 ,right:15}}>
@@ -1476,5 +2069,95 @@ const mapStateToProps = state => {
 
     }
 };
+
+const styles = StyleSheet.create({
+    container: {
+        // flex: 1,
+        backgroundColor: '#fff'
+    },
+    buttonView: {
+        width: '17%',
+        justifyContent: 'center',
+        height: '90%',
+        paddingTop: 3,
+        alignItems: 'center'
+    },
+    backButton: {
+        height: '30%',
+        width: '30%'
+    },
+    logoView: {
+        height: 40,
+        width: widthPercentageToDP('60%'),
+        backgroundColor: base.theme.colors.white,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 20
+    },
+    logo: {
+        height: 50,
+        width: 100,
+        alignSelf: 'center'
+    },
+    scheduleReport: {
+        borderWidth: 1,
+        height: '40%',
+        width: widthPercentageToDP('15%'),
+        borderRadius: 10,
+        marginRight: widthPercentageToDP('35%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: 'orange'
+    },
+    scheduleTextStyle: {
+        color: 'orange',
+        textAlign: 'center',
+        width: widthPercentageToDP('20%'),
+        fontFamily: base.theme.fonts.medium
+    },
+    reportImage: {height: '50%', width: widthPercentageToDP('20%')},
+
+    viewStyle: {
+        backgroundColor: '#fff',
+        height: hp('7%'),
+        width: Dimensions.get('screen').width,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.2,
+        elevation: 2,
+        position: 'relative'
+    },
+    image1: {
+        width: wp('34%'),
+        height: hp('18%'),
+        marginRight: hp('3%')
+    },
+
+    viewDetails1: {
+        flex: 0.3,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 3
+    },
+    viewDetails2: {
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        width: hp('3%'),
+        height: hp('3%'),
+        marginTop: 5
+        // marginLeft: 10
+    },
+
+    titleOfScreen: {
+        marginTop: hp('1.6%'),
+        textAlign: 'center',
+        fontSize: hp('2%'),
+        fontWeight: 'bold',
+        color: '#ff8c00',
+        marginBottom: hp('1.6%')
+    }
+});
+
 
 export default (connect(mapStateToProps)(Invoices));
