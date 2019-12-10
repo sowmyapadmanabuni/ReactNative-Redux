@@ -738,6 +738,7 @@ class Dashboard extends PureComponent {
   };
 
   syncData = () => {
+    console.log("")
     const {
       getDashAssociation,
       getAssoMembers,
@@ -796,7 +797,7 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    /*timer.setInterval(
+    timer.setInterval(
              this,
              'syncData',
              () => {
@@ -805,7 +806,7 @@ class Dashboard extends PureComponent {
                  // alert("hererereerrrereer");
              },
              5000
-         );*/
+         );
   }
 
   handleConnectivityChange = isConnected => {
@@ -1981,7 +1982,7 @@ class Dashboard extends PureComponent {
             <CardView
                 height={'100%'}
                 width={'25%'}
-                cardText={'Role    Management'}
+                cardText={'Role Management'}
                 cardIcon={require('../../../../icons/role.png')}
                 marginTop={20}
                 iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
@@ -2024,7 +2025,7 @@ class Dashboard extends PureComponent {
           </View>
           <View style={{ ...Style.elevatedView, marginTop: 20 }}>
 
-            {/* <CardView
+           {/*<CardView
                 height={'100%'}
                 width={'25%'}
                 cardText={'Accounting'}

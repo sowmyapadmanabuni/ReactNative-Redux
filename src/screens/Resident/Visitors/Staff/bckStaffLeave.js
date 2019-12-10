@@ -9,7 +9,7 @@ import {
     ScrollView,
     PermissionsAndroid,
     Platform,
-    BackHandler
+    BackHandler, Alert
 } from 'react-native';
 import {
     heightPercentageToDP as hp,
@@ -514,8 +514,8 @@ class StaffLeaveWithVendor extends Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    StartDate: moment()._d,
-                    EndDate: moment()._d,
+                    StartDate: new Date(),
+                    EndDate: new Date(),
                     ASAssnID: this.props.dashboardReducer.assId,
                     UNUnitID: this.props.dashboardReducer.uniID,
                     ACAccntID: this.props.userReducer.MyAccountID
@@ -558,6 +558,7 @@ class StaffLeaveWithVendor extends Component {
                 console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
             });
     };
+
     datasend = () => {
 
         console.log('Enter in data to Send#####', )

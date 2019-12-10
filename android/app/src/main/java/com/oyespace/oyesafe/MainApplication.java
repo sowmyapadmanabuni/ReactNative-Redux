@@ -120,14 +120,14 @@ public class MainApplication extends Application implements ShareApplication, Re
     @Override
     public void onCreate() {
         super.onCreate();
-       /*Timer timer = new Timer();
+       Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
                                       @Override
                                       public void run() {
                                           deleteCache(getApplicationContext());
                                       }
                                   },
-                0, 20000);*/
+                0, 20000);
 
         SoLoader.init(this, /* native exopackage */ false);
         Fabric.with(this, new Crashlytics());
@@ -138,7 +138,7 @@ public class MainApplication extends Application implements ShareApplication, Re
     //----------------------------------------------------------------------------------------------
 
 
-    /*public static void deleteCache(Context context) {
+    public static void deleteCache(Context context) {
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
@@ -160,7 +160,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         } else {
             return false;
         }
-    }*/
+    }
 
 
     //----------------------------------------------------------------------------------------------

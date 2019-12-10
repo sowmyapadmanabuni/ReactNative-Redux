@@ -106,13 +106,18 @@ class NotificationAnnouncementDetailScreen extends Component {
       audioFile: '',
       recording: false,
       loaded: false,
-      paused: true
+      paused: true,
+
+      isPause: true,
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
+
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     let self = this;
     const { navigation } = this.props;
     // const details = navigation.getParam("details", "NO-ID");
@@ -131,23 +136,29 @@ class NotificationAnnouncementDetailScreen extends Component {
     }, 1000);
   }
 
-  componentDidUpdate() {
+  /*componentDidUpdate() {
     setTimeout(() => {
       BackHandler.addEventListener('hardwareBackPress', () =>
         this.processBackPress()
       );
     }, 100);
-  }
+  }*/
 
   componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
    if(!this.state.paused){
      this.pause();
    }
-    setTimeout(() => {
+    /*setTimeout(() => {
       BackHandler.removeEventListener('hardwareBackPress', () =>
         this.processBackPress()
       );
-    }, 0);
+    }, 0);*/
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
   }
 
   processBackPress() {
@@ -191,7 +202,8 @@ class NotificationAnnouncementDetailScreen extends Component {
       if (success) {
         console.log('successfully finished playing');
         this.setState({
-          playBtnId: 0
+          isPause: true,
+          playBtnId: 0,
         });
       } else {
         console.log('playback failed due to audio decoding errors');
@@ -488,18 +500,26 @@ class NotificationAnnouncementDetailScreen extends Component {
                       justifyContent: 'center'
                     }}
                   >
-                    <TouchableOpacity onPress={() => this.play()}>
+                    <TouchableOpacity onPress={() => {
+                      this.setState({
+                        isPause: !this.state.isPause
+                      });
+                      this.state.isPause ? this.play() : this.pause()
+                    }
+                    }>
                       <View
                         style={{
                           width: hp('5%'),
                           height: hp('5%'),
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
                         }}
                       >
-                        <Image
-                          source={require('../../../icons/leave_vender_play.png')}
-                        />
+                        <Image source={
+                          this.state.isPause ?
+                              require('../../../icons/leave_vender_play.png'):
+                              require('../../../icons/leave_vender_pause.png')
+                        } />
                       </View>
                     </TouchableOpacity>
                   </View>

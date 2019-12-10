@@ -93,7 +93,6 @@ class AddAndEditCheckPoints extends React.Component {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
-
     setPointName(text) {
         this.setState({
             checkPointName: text
