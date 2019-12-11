@@ -42,6 +42,7 @@ import RNFS from 'react-native-fs';
 import RNImageToPdf from 'react-native-image-to-pdf';
 import ProgressLoader from "rn-progress-loader";
 import OSButton from "../../components/osButton/OSButton";
+import DatePicker from "react-native-datepicker";
 
 
 var radio_props1 = [
@@ -130,6 +131,8 @@ class Invoices extends React.Component {
             paymentMethodList:[],
             payMethodId:"",
             unitName:"",
+            selPaymentDate:moment().format('DD-MM-YYYY'),
+            todayDate:moment().format('DD-MM-YYYY')
 
         }
     }
@@ -460,7 +463,7 @@ class Invoices extends React.Component {
                                         onChangeText={(text) => this.setState({ invoiceNumber: text })}
                                         value={this.state.invoiceNumber}
                                         style={{
-                                            width: wp('50'),
+                                         /*   width: wp('50'),
                                             fontSize: 12,
                                             alignItems: 'center',
                                             justifyContent: 'center',
@@ -468,7 +471,19 @@ class Invoices extends React.Component {
                                             paddingTop: 10,
                                             marginTop: hp('2'),
                                             borderColor: base.theme.colors.greyHead,
+                                            borderWidth: 1,*/
+
+                                            width: 150,
+                                            fontSize: 12,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            height: 20,
+                                            marginTop:5,
+                                            paddingTop: -10,
+                                            paddingBottom: -10,
+                                            borderColor: base.theme.colors.greyHead,
                                             borderWidth: 1
+
                                         }}
                                         placeholderTextColor={base.theme.colors.grey}
                                     />
@@ -1021,40 +1036,47 @@ class Invoices extends React.Component {
              Alert.alert('Please enter amount paid')
          }
          else*/
-        if(self.state.payMethodId==''){
+        /*if(self.state.payMethodId==''){
             Alert.alert('Please select payment method')
         }
         else{
             await self.createReceipt()
-        }
+        }*/
+        await self.createReceipt()
 
     }
 
     async createReceipt(){
-        console.log('Create receipt')
         let self=this;
+        let selVisit=self.state.selectedReceipt
+        console.log('Create receipt',selVisit,self.state.selPaymentDate,moment(self.state.selPaymentDate).format('YYYY-MM-DD HH:mm:ss'))
+
         self.setState({isLoading:true})
         let input = {
             "MEMemID"  : "",
             "PYRefNo"  : "",
             "PYBkDet"  : "",
-            "PYAmtPaid": self.state.amountPaid,
-            "INNumber" : self.state.invoiceNumber,
-            "UNUnitID" : self.state.unitId,
-            "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
+            "PYAmtPaid": selVisit.inAmtPaid,
+            "INNumber" : selVisit.inNumber,
+            "UNUnitID" : selVisit.unUnitID,
+            "ASAssnID" : selVisit.asAssnID,
             "PYTax"    : "",
-            "PMID" : self.state.payMethodId,
-            "PYDesc"  : self.state.paymentDesc
+            "PMID" :self.state.payMethodId,
+            "PYDesc"  : "",
+            "PYDate":moment(self.state.selPaymentDate,'DD-MM-YYYY').format('YYYY-MM-DD HH:mm:ss') //yyyy-mm-dd HH:mm:ss
+
         };
         console.log('Selected dates',input);
         let stat = await base.services.OyeLivingApi.createNewReceipt(input);
-        // self.setState({isLoading:false})
+
         console.log('data from the stat',stat)
+
         try{
             if (stat.success) {
                 self.setState({
-                    isGenRecModal:false
-                })
+                    isGenRecModal:false,
+                    isLoading:false
+                });
                 await self.getReceiptsList(self.state.selectedBlock,self.state.getIndex)
             }
             else{
@@ -1146,6 +1168,9 @@ class Invoices extends React.Component {
                                 </View>
                                 <View style={{width:'85%',marginTop:20,height:'0.5%',borderRadius:5,backgroundColor:base.theme.colors.primary}}>
                                 </View>
+                                <View style={{width:'85%',marginTop:10,}}>
+                                <Text style={{marginLeft:10,fontSize:15,color:base.theme.colors.black,}}>Payment Date</Text>
+                                </View>
                                 <TouchableOpacity style={{flexDirection:'row',width:'85%',marginTop:20,height:'10%',
                                     borderRadius:5,backgroundColor:base.theme.colors.greyCard,alignItems:'center',marginBottom:20
                                 }}>
@@ -1160,7 +1185,37 @@ class Invoices extends React.Component {
                                         }}
                                         source={require('../../../icons/calender.png')}
                                     />
-                                    <Text style={{marginLeft:10,fontSize:16,color:base.theme.colors.black}}>Payment Date</Text>
+                                    <DatePicker
+                                        style={{width: 150, alignItems: 'center',}}
+                                        date={this.state.selPaymentDate}
+                                        showIcon={false}
+                                        mode="date"
+                                        placeholder="select date"
+                                        format="DD-MM-YYYY"
+                                        minDate={'01-1-1991'}
+                                        maxDate={this.state.todayDate}
+                                        confirmBtnText="Confirm"
+                                        cancelBtnText="Cancel"
+                                       // iconSource={require('../../../icons/calender.png')}
+                                        customStyles={{
+                                            dateIcon: {
+                                                left: 2,
+                                                alignSelf: 'center',
+                                                marginLeft: 0,
+                                            },
+                                            dateInput: {
+                                                borderWidth: 0,
+                                                color: base.theme.colors.black,
+                                                height: 30,
+                                                width: 30
+
+                                            }
+                                        }}
+                                        onDateChange={(date) => {
+                                            console.log('Date selected',date)
+                                            this.setState({selPaymentDate: date})
+                                        }}
+                                    />
                                 </TouchableOpacity>
 
                                 <View style={{width: '85%',}}>
@@ -1543,6 +1598,7 @@ class Invoices extends React.Component {
                                     backgroundColor: base.theme.colors.primary, justifyContent: 'center',alignItems:'center', }}>
                                     <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Generate Receipt</Text>
                                 </TouchableHighlight>
+
                             }
                         </View>
                     </View>
@@ -1935,7 +1991,8 @@ class Invoices extends React.Component {
         let invoicesList=[];
         console.log('Invoice By Nume:',invoiceByNum,self.state.invoiceListByDates)
         if(invoiceByNum.length===0 && self.state.invoiceListByDates.length===0){
-            invoicesList=self.state.invoiceListAll
+            //invoicesList=self.state.invoiceListAll
+            invoicesList=[]
         }
         else if(invoiceByNum.length===0 && self.state.invoiceListByDates.length !==0){
             invoicesList=self.state.invoiceListByDates

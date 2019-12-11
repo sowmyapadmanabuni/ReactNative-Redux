@@ -111,6 +111,15 @@ class MyGuests extends Component {
   }
 
   getInvitationList = () => {
+    let tempObject={
+      ASAssnID: this.props.dashBoardReducer.assId,
+      INInvVis: 'Visited',
+      UNUnitID: this.props.dashBoardReducer.uniID,
+      ACAccntID: this.props.userReducer.MyAccountID,
+      StartDate: this.state.dobText,
+      ToDate: this.state.dobText1
+    }
+    console.log("tempObject: ",tempObject);
     console.log(
       'Visitighfghfghfg@@@@@@@@@',
       this.props.dashBoardReducer.assId,
@@ -137,8 +146,9 @@ class MyGuests extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
+        console.log("responseJson ",responseJson)
         console.log(
-          'Visitighfghfghfg@@@@@@@@@',
+          'responseJson and some more-> ',
           responseJson,
           this.props.userReducer.SelectedAssociationID,
           this.props.dashBoardReducer.uniID,
@@ -153,6 +163,7 @@ class MyGuests extends Component {
         this.arrayholder = responseJson.data.invitation;
       })
       .catch(error => {
+        console.log("ERROR responseJson");
         this.setState({ error, loading: false });
       });
   };

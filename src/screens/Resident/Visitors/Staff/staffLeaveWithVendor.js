@@ -190,7 +190,11 @@ class StaffLeaveWithVendor extends Component {
     return(
     <View style={{height:'100%',width:'100%'}}>
       <KeyboardAwareScrollView>
-        <View style={{height:'100%',width:'100%',backgroundColor:base.theme.colors.white}}>
+        <View style={{
+          height:'100%',
+          width:'100%',
+          backgroundColor:base.theme.colors.white,
+        }}>
           <View style={{alignItems:'center',justifyContent:'center',marginTop:10,}}>
             <Text style={{fontSize:18,color:base.theme.colors.primary}}>Leave with Staff </Text>
           </View>

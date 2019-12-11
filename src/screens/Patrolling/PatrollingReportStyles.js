@@ -27,13 +27,16 @@ const PatrollingReportStyles = StyleSheet.create({
         alignSelf: 'center',
         borderWidth: 2,
         borderColor: base.theme.colors.grey,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        //alignItems:'center',
+        //backgroundColor:'gray',
     },
     pickerStyles: {
         width: wp('80%'),
         alignSelf: 'center',
         marginLeft: 15,
-        bottom: Platform.OS === 'ios' ? 13 : 0
+        bottom: Platform.OS === 'ios' ? 13 : 0,
+        //backgroundColor:'yellow'
     },
     viewStyle: {
         height: hp('85%'),
