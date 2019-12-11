@@ -128,7 +128,8 @@ class Invoices extends React.Component {
             associationName:"",
             selPayMode:'Select mode of payment',
             paymentMethodList:[],
-            payMethodId:""
+            payMethodId:"",
+            unitName:"",
 
         }
     }
@@ -144,12 +145,12 @@ class Invoices extends React.Component {
         this.didFocusListener = this.props.navigation.addListener(
             'didFocus',
             () =>  {console.log('Get the All ApIs');
-               /* this.setState({isLoading:true})
+               this.setState({isLoading:true})
                 this.getBlockList();
                 this.getAssiciationDetail();
                 this.getAssociationName();
                 this.getPaymentMethodsList()
-            this.updateValues()*/
+            this.updateValues()
             }
         );
     }
@@ -998,7 +999,7 @@ class Invoices extends React.Component {
         this.setState({
             //isViewRecModal:true
              isGenRecModal: true,
-           // selectedReceipt:item.payment[0]
+           selectedReceipt:item
 
         })
     }
@@ -1067,6 +1068,9 @@ class Invoices extends React.Component {
     }
 
     generateReceiptScreen() {
+        console.log('INVOICE DATA GENERATE INVOICE',this.state.selectedReceipt)
+        let genDetails=this.state.selectedReceipt;
+
         return (
             <Modal
                 style={{height: '110%', width: '100%', alignSelf: 'center',}}
@@ -1121,23 +1125,23 @@ class Invoices extends React.Component {
                                 <View style={{width:'80%',marginTop:20}}>
                                     <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
                                         <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Unit Name</Text>
-                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}></Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{this.state.unitName}</Text>
                                     </View>
                                     <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
                                         <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Invoice No.</Text>
-                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>A101</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{genDetails.inNumber}</Text>
                                     </View>
                                     <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
                                         <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Invoice Date</Text>
-                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>A101</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{moment(genDetails.indCreated).format("DD-MM-YYYY")}</Text>
                                     </View>
                                     <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
                                         <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Amount Due</Text>
-                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}A101</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}{genDetails.inTotVal}</Text>
                                     </View>
                                     <View style={{width:'100%',flexDirection:'row',marginBottom:10,alignItems:'center'}}>
                                         <Text style={{width:'40%',fontSize:16,color:base.theme.colors.mediumGrey,}}>Amount Paid</Text>
-                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}A101</Text>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,fontFamily:base.theme.fonts.medium}}>{base.utils.strings.rupeeIconCode}{' '}{genDetails.inAmtPaid}</Text>
                                     </View>
                                 </View>
                                 <View style={{width:'85%',marginTop:20,height:'0.5%',borderRadius:5,backgroundColor:base.theme.colors.primary}}>
@@ -1429,7 +1433,7 @@ class Invoices extends React.Component {
                         <Text style={{
                             fontSize: 17,
                             color: base.theme.colors.black
-                        }}>{this.props.dashBoardReducer.selectedDropdown1}</Text>
+                        }}>{this.state.unitName}</Text>
                     </View>
                     <View style={{ height: hp('5'), width: wp('100'), justifyContent: 'center', alignItems: 'center', backgroundColor: base.theme.colors.primary, marginTop: 10 }}>
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.white }}>Invoice</Text>
@@ -1440,13 +1444,13 @@ class Invoices extends React.Component {
                     </View>
                     <View style={{ height: hp('9'), width: wp('100'), borderBottomWidth: 0, borderBottomColor: base.theme.colors.primary }}>
                         <View style={{ height: hp('3'), width: wp('95'), justifyContent: 'space-between', flexDirection: 'row', alignSelf: 'center', alignItems: 'center', backgroundColor: base.theme.colors.white, marginTop: 10, borderBottomWidth: 0, borderBottomColor: base.theme.colors.primary }}>
-                            <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.black }}>To:
-                                <Text style={{fontFamily: base.theme.fonts.light,color:base.theme.colors.black}}>{userDetail.uofName} {userDetail.uolName}</Text>
+                            <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.black }}>To:{' '}
+                                <Text style={{fontFamily: base.theme.fonts.light,color:base.theme.colors.black}}> {(userDetail.utfName==null || userDetail.utfName==undefined)? userDetail.uofName:userDetail.utfName} {(userDetail.utlName==null || userDetail.utlName==undefined)?userDetail.uolName:userDetail.utlName}</Text>
                                 </Text>
                             <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.black }}>Due Date</Text>
                         </View>
                         <View style={{ height: hp('2'), width: wp('95'), justifyContent: 'space-between', alignSelf: 'center', flexDirection: 'row', alignItems: 'flex-start', backgroundColor: base.theme.colors.white, marginTop: 0 }}>
-                            <Text numberOfLines={1} style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black, width: wp('50') }}>{userDetail.uoEmail}</Text>
+                            <Text numberOfLines={1} style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black, width: wp('50') }}>{(userDetail.utEmail==null || userDetail.utEmail==undefined)? userDetail.uoEmail:userDetail.utEmail}</Text>
                             <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.red }}>{moment().format('DD-MM-YYYY')}</Text>
                         </View>
                     </View>
@@ -1514,7 +1518,7 @@ class Invoices extends React.Component {
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.red ,}}>Due upon receipt</Text>
                         <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: base.theme.colors.black ,marginTop:hp('.5')}}>{this.props.dashBoardReducer.selectedDropdown}</Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black,marginTop:hp('.5') }}>Tel: {this.props.userReducer.MyMobileNumber}</Text>
-                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black,marginTop:hp('.5'),}}>{this.state.assDetail.asCity} {this.state.assDetail.asCountry}</Text>
+                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black,marginTop:hp('.5'),}}>{this.state.assDetail.asCity} {this.state.assDetail.asCountry} {this.state.assDetail.asPinCode}</Text>
                     </View>
                     <View style={{marginBottom:150,
                         width:wp('100'),height:hp('7'),borderWidth:0,
@@ -1534,13 +1538,12 @@ class Invoices extends React.Component {
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Show Receipt</Text>
                     </TouchableHighlight>
                                 :
-                            <View/>
+                                <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={()=>this.bindComponent(invoiceData)} style={{ height: hp('4.5'),
+                                    borderRadius: hp('5'), width: wp('33'),
+                                    backgroundColor: base.theme.colors.primary, justifyContent: 'center',alignItems:'center', }}>
+                                    <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Generate Receipt</Text>
+                                </TouchableHighlight>
                             }
-                          {/*  <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={()=>this.bindComponent(invoiceData)} style={{ height: hp('4.5'),
-                                borderRadius: hp('5'), width: wp('33'),
-                                backgroundColor: base.theme.colors.primary, justifyContent: 'center',alignItems:'center', }}>
-                                <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Generate Receipt</Text>
-                            </TouchableHighlight>*/}
                         </View>
                     </View>
                         </ScrollView>
@@ -1594,6 +1597,10 @@ class Invoices extends React.Component {
         console.log("Detil:", detail);
         let stat = await base.services.OyeLivingApi.updateDiscVal(detail);
         console.log("Stat in disc val update:", stat)
+        self.setState({
+            reason:"",
+            dAmount:0,
+        })
 
 
     }
@@ -1754,12 +1761,18 @@ class Invoices extends React.Component {
 
         let rResp = await base.services.OyeLivingApi.getUnitDetailByUnitId(unitId);
         try {
-            console.log("User Detail:", rResp);
+
             if (rResp.success) {
+                let dataToShow= rResp.data.unit.tenant.length==0? rResp.data.unit.owner.length==0  ? {}:rResp.data.unit.owner[0]:rResp.data.unit.tenant[0]
+
                 self.setState({
-                    userDetail: rResp.data.unit.owner[0]
+                    userDetail: dataToShow,
+                    unitName:rResp.data.unit.unUniName
                 })
+                console.log("User Detail:", rResp,dataToShow);
+
             }
+
         } catch (e) {
             console.log("e:", e)
         }
@@ -1896,9 +1909,23 @@ class Invoices extends React.Component {
             self.setState({isLoading:false})
             Alert.alert('Please enter valid amount')
         }else if(self.state.invoiceNumber !=''){
+            self.setState({
+                amountStart:'0',
+                amountEnd:'0',
+                fromDate:'',
+                toDate:'',
+                invoiceNumber:'',
+            })
                 self.getInvoiceByInvoiceNumber(difference, stAmount, endAmount);
         }else {
             let invoiceByNum=[]
+            self.setState({
+                amountStart:'0',
+                amountEnd:'0',
+                fromDate:'',
+                toDate:'',
+                invoiceNumber:'',
+            })
             self.applyFilters(difference,stAmount,endAmount,invoiceByNum)
         }
     }
