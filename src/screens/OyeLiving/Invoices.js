@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra
  * @Date: 2019-10-07 12:14:58
  * @Last Modified by: Anooj Krishnan G
- * @Last Modified time: 2019-12-12 13:45:59
+ * @Last Modified time: 2019-12-12 15:06:21
  */
 
 
@@ -405,7 +405,7 @@ class Invoices extends React.Component {
                             <View style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                height: hp('5'),
+                                height: hp('8'),
                                 width: wp('59.5'),
                                 backgroundColor: base.theme.colors.shadedWhite,
                                 alignItems: 'center',
