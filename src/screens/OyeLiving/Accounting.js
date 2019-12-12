@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
   Platform,
-  ScrollView, TextInput, SafeAreaView, TouchableHighlight,Linking
+  ScrollView, TextInput, SafeAreaView, TouchableHighlight,Linking,Alert
 } from 'react-native';
 import AddExpenseStyles from "./Expenses/AddExpenseStyles";
 import Dropdown from "react-native-material-dropdown/src/components/dropdown";
@@ -563,7 +563,7 @@ class Accounting extends Component {
                           })
                       }}
                   />
-                  <TouchableOpacity style={{alignItems:'center',marginTop:10}} >
+                  <TouchableOpacity style={{alignItems:'center',marginTop:10}} onPress={() => this.updateUnitDetailsApi()}>
                       <Text style={{color:base.theme.colors.blue,fontSize:16}}>UPDATE</Text>
                   </TouchableOpacity>
               </View>
@@ -593,8 +593,59 @@ class Accounting extends Component {
     )
   }
 
-    createAccounting(){
+    async createAccounting(){
       console.log('CreateAccounting')
+        let self=this;
+        let input={
+            "ASAssnID"  : this.props.dashBoardReducer.selectedDropdown,
+            "ASMtType"  : "FlatRate",
+            "ASMtDimBs" :self.state.maintenanceValue,
+            "ASMtFRate" : self.state.flatRateValue,
+            "ASLPCType" : self.state.paymentType,
+            "ASLPChrg"  : self.state.paymentCharge,
+            "InvGAuto"  : self.state.isMinorSelected1,
+            "ASDPyDate" :self.state.dueDate,
+            "BLBlockID" : self.state.blockId,
+            "BankDetails" :
+                [{
+                    "BABName " : self.state.selectedBank,
+                    "BAIFSC"    : self.state.ifscCode,
+                    "BAActNo"   : self.state.accountNumber,
+                    //"BAActID"   : 1
+                }]
+        }
+
+
+        let stat = await base.services.OyeLivingApi.updateBlockDetails(input)
+        console.log('STATUS IN CREATE ACCOUNTING',input,stat)
+        if(stat.data.success) {
+            Alert.alert('Block Details updated Successfully')
+        }
+            this.props.navigation.navigate('oyeLiving')
+
+
+
+
+    }
+
+    async updateUnitDetailsApi(){
+      let self=this;
+
+        let input= {
+            "UNRate"    : self.state.unitRate,
+            "UNCalType" : self.state.selDistribution,
+            "UNDimens"  : self.state.unitDimension,
+            "UNOcStat"  : self.state.selectedAppList,
+            "BLBlockID" : self.state.blockId,
+            "UNUnitID"  : self.state.unitId
+        }
+
+
+        let stat = await base.services.OyeLivingApi.updateUnitDetails(input)
+        console.log('STATUS IN CREATE ACCOUNTING #######',input,stat)
+        if(stat.data.success){
+            Alert.alert('Unit Details Updated successfully ')
+        }
     }
 
 

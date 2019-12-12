@@ -798,7 +798,7 @@ class Dashboard extends PureComponent {
     }
 
 
-    /*timer.setInterval(
+    timer.setInterval(
              this,
              'syncData',
              () => {
@@ -807,7 +807,7 @@ class Dashboard extends PureComponent {
                  // alert("hererereerrrereer");
              },
              5000
-         );*/
+         );
   }
 
   handleConnectivityChange = isConnected => {
@@ -2035,8 +2035,8 @@ class Dashboard extends PureComponent {
                 cardIcon={require('../../../../icons/vehicle.png')}
                 marginTop={20}
                 backgroundColor={base.theme.colors.cardBackground}
-              // onCardClick={() => this.props.navigation.navigate('oyeLiving')}
-                onCardClick={() => this.props.navigation.navigate('Accounting')}
+               onCardClick={() => this.props.navigation.navigate('oyeLiving')}
+               // onCardClick={() => this.props.navigation.navigate('Accounting')}
             />
             {/* <CardView
             height={'100%'}
