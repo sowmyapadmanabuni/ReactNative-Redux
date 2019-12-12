@@ -146,7 +146,7 @@ const ResApp = createStackNavigator({
     screen: Accounting,
     navigationOptions: ({ navigation }) => ({
       title: 'Accounting',
-      header: null
+      header: props => <OyeLivingHeader isVisitors={true} isSub={true} {...props} />
     })
   },
 

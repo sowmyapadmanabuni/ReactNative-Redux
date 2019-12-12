@@ -911,10 +911,10 @@ class Invoices extends React.Component {
             unitId:'',
             selectedUnit:'Select unit',
             payMethodId:'',
-            selPayMethod:'Select Payment method',
+            selPayMode:'Select Payment method',
             paymentDesc:'',
             amountDue:'',
-            isGenRecModal:false
+            isGenRecModal:false,
         })
     }
 
@@ -1245,7 +1245,7 @@ class Invoices extends React.Component {
                                         onChangeText={(value, index) => {
                                             this.setState({
                                                 selPayMode: value,
-                                                payMethodId:index
+                                                payMethodId: this.state.paymentMethodList[index].details.pmid,
                                             })
                                         }}
                                     />
