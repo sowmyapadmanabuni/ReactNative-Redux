@@ -1950,7 +1950,9 @@ class Invoices extends React.Component {
             fromDate:'',
             toDate:'',
             invoiceNumber:'',
-            isModalVisible:false
+            isModalVisible:false,
+            invoiceList:self.state.invoiceListAll
+
         })
     }
 
