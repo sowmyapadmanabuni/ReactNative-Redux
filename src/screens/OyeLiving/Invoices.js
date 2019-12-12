@@ -1,8 +1,8 @@
 /*
  * @Author: Sarthak Mishra
  * @Date: 2019-10-07 12:14:58
- * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-29 15:12:28
+ * @Last Modified by: Anooj Krishnan G
+ * @Last Modified time: 2019-12-12 15:06:21
  */
 
 
@@ -132,7 +132,8 @@ class Invoices extends React.Component {
             payMethodId:"",
             unitName:"",
             selPaymentDate:moment().format('DD-MM-YYYY'),
-            todayDate:moment().format('DD-MM-YYYY')
+            todayDate:moment().format('DD-MM-YYYY'),
+            isCalenderOpen:false
 
         }
     }
@@ -404,7 +405,7 @@ class Invoices extends React.Component {
                             <View style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                height: hp('5'),
+                                height: hp('8'),
                                 width: wp('59.5'),
                                 backgroundColor: base.theme.colors.shadedWhite,
                                 alignItems: 'center',
@@ -2055,6 +2056,11 @@ class Invoices extends React.Component {
 
 
     openIOSCalender() {
+        var _date = this.state.selType === 0 ? this.state.fromDate : this.state.toDate;
+        if(_date == "" || _date == null){
+            _date = new Date()
+        }
+        console.log("IOSDATE::",this.state.selType === 0 ? this.state.fromDate : this.state.toDate)
         return (
             <Modal
                 visible={this.state.isCalenderOpen}
@@ -2062,7 +2068,7 @@ class Invoices extends React.Component {
                 <View style={PatrollingReportStyles.ModalMainView}>
                     <View style={{flex: 1, justifyContent: 'center', width: width - 30}}>
                         <DatePickerIOS
-                            date={this.state.selType === 0 ? this.state.fromDate : this.state.toDate}
+                            date={_date}
                             style={{backgroundColor: base.theme.colors.white}}
                             maximumDate={_dt}
                             mode="date"
