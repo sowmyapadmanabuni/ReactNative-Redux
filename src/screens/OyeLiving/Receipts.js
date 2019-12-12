@@ -253,7 +253,7 @@ class Receipts extends React.Component {
        let blockId = self.state.blockList[index].details.blBlockID;
         console.log('Get the changed block details',value,index,blockId)
 
-        let stat = await base.services.OyeLivingApi.getReceiptsListByBlockId(self.state.blockId) //13714self.state.blockId)
+        let stat = await base.services.OyeLivingApi.getReceiptsListByBlockId(blockId) //13714self.state.blockId)
         console.log('Get the receipts List::',stat)
 
         self.setState({
@@ -563,10 +563,10 @@ class Receipts extends React.Component {
 
                         : <View/>}
 
-                    <TouchableOpacity style={{margin:10,alignSelf:'flex-end',backgroundColor:base.theme.colors.primary,borderRadius:30,
+                   {/* <TouchableOpacity style={{margin:10,alignSelf:'flex-end',backgroundColor:base.theme.colors.primary,borderRadius:30,
                         width:'40%',height:'6%',alignItems:'center',justifyContent:'center'}} onPress={this.bindComponent}>
                     <Text style={{color:base.theme.colors.white,fontSize:16,}}>Generate Receipt</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>*/}
                     <ProgressLoader
                         isHUD={true}
                         isModal={true}
@@ -794,9 +794,11 @@ class Receipts extends React.Component {
                         <View style={{paddingTop:10,paddingBottom:10,width:'100%',flexDirection:'row',
                             borderBottomColor:base.theme.colors.greyHead,borderBottomWidth:1}}>
                             <View style={{width:'50%',paddingLeft:15}}>
-                                <Text style={{color:base.theme.colors.black,fontSize:15,fontWeight:'normal'}}>Receipt ID - <Text style={{fontWeight:'normal',color:base.theme.colors.primary}}>{selReceipt.pyid}</Text></Text>
-                                <Text style={{color:base.theme.colors.black,fontSize:15,fontWeight:'normal'}}>Transaction ID -
-                                     <Text style={{color:base.theme.colors.grey,fontWeight:'normal',}} numberOfLines={2}>{selReceipt.pyRefNo}</Text></Text>
+                                <Text style={{color:base.theme.colors.black,fontSize:15,}}>Invoice No. -
+                                    <Text style={{color:base.theme.colors.grey}} numberOfLines={2}>{selReceipt.inNumber}</Text></Text>
+                                <Text style={{color:base.theme.colors.black,fontSize:15,fontWeight:'normal',marginBottom:15}}>Receipt ID - <Text style={{fontWeight:'normal',color:base.theme.colors.primary}}>{selReceipt.pyid}</Text></Text>
+                                {/*<Text style={{color:base.theme.colors.black,fontSize:15,fontWeight:'normal'}}>Transaction ID -
+                                     <Text style={{color:base.theme.colors.grey,fontWeight:'normal',}} numberOfLines={2}>{selReceipt.pyRefNo}</Text></Text>*/}
 
                             </View>
                             <View style={{width:'50%',paddingRight:15}}>
@@ -806,24 +808,22 @@ class Receipts extends React.Component {
                             </View>
                         </View>
                         <View style={{padding:10,width:'100%',}}>
-                            <Text style={{color:base.theme.colors.black,fontSize:15,paddingBottom:20}}>Invoice No. -
-                                <Text style={{color:base.theme.colors.grey}} numberOfLines={2}>{selReceipt.inNumber}</Text></Text>
                             <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                                 <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'left'}}>Amount Due</Text>
-                                <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>{base.utils.strings.rupeeIconCode}{selReceipt.pyAmtDue}</Text>
+                                <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>{base.utils.strings.rupeeIconCode}{' '}{selReceipt.pyAmtDue}</Text>
 
                             </View>
                             <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingBottom:5,
                                 borderBottomColor:base.theme.colors.greyCard,borderBottomWidth:1}}>
                                 <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'left'}}>Amount Paid</Text>
-                                <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>{base.utils.strings.rupeeIconCode}{selReceipt.pyAmtPaid}</Text>
+                                <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>{base.utils.strings.rupeeIconCode}{' '}{selReceipt.pyAmtPaid}</Text>
                             </View>
                             <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingBottom:25,paddingTop:5}}>
                                 <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'left'}}>Current Outstanding</Text>
-                                <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>{base.utils.strings.rupeeIconCode}{selReceipt.pyBal}</Text>
+                                <Text style={{color:base.theme.colors.black,fontSize:15,textAlign:'right'}}>(-){' '}{base.utils.strings.rupeeIconCode}{' '}{selReceipt.pyBal}</Text>
 
                             </View>
-                            <View style={AddExpenseStyles.textInputView}>
+                         {/*   <View style={AddExpenseStyles.textInputView}>
                                 <Text style={{
                                     fontSize: 14,
                                     color: base.theme.colors.black,
@@ -844,18 +844,18 @@ class Receipts extends React.Component {
                                     placeholderTextColor={base.theme.colors.grey}
                                     editable={false}
                                 />
-                            </View>
+                            </View>*/}
                         </View>
                         <View style={{flexDirection:'row',width:'100%',height:'20%',}}>
-                            <View style={{width:'60%',height:'100%',alignItems:'center',justifyContent:'flex-end',paddingBottom:15,}}>
-                                <TouchableOpacity style={{width:'60%',height:'30%',borderRadius:20,
+                            <View style={{width:'100%',height:'100%',alignItems:'center',justifyContent:'flex-end',paddingBottom:15,}}>
+                                <TouchableOpacity style={{width:'30%',height:'35%',borderRadius:20,
                                     backgroundColor:base.theme.colors.primary,alignItems:'center',justifyContent:'center'}}
                                                   onPress={this.snapshot("View")}
                                 >
-                                    <Text style={{fontSize:14,color:base.theme.colors.white}}>Share Receipt</Text>
+                                    <Text style={{fontSize:14,color:base.theme.colors.white}}>Print Receipt</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{width:'50%',alignItems:'center',marginTop:30,right:15}}>
+                            {/*<View style={{width:'50%',alignItems:'center',marginTop:30,right:15}}>
                                 <Image
                                     resizeMode="contain"
                                     source={require('../../../icons/oyesafe.png')}
@@ -871,7 +871,7 @@ class Receipts extends React.Component {
                                     textDecorationLine: 'underline'}}>Powered by OyeLiving</Text>
                                 </TouchableOpacity>
 
-                            </View>
+                            </View>*/}
                         </View>
                         </View>
 
@@ -1133,7 +1133,7 @@ class Receipts extends React.Component {
         let self=this;
         console.log('State values',self.state)
 
-        if(self.state.unitId==''){
+       /* if(self.state.unitId==''){
             Alert.alert('Please select unit')
         }
         else if(self.state.invoiceNumber==''){
@@ -1145,7 +1145,8 @@ class Receipts extends React.Component {
         else if(self.state.amountPaid==''){
             Alert.alert('Please enter amount paid')
         }
-        else if(self.state.payMethodId==''){
+        else*/
+       if(self.state.payMethodId==''){
             Alert.alert('Please select payment method')
         }
         else{
@@ -1193,8 +1194,8 @@ class Receipts extends React.Component {
 
     bindComponent() {
         this.setState({
-            isViewRecModal:true
-           // isGenRecModal: true,
+            //isViewRecModal:true
+            isGenRecModal: true,
         })
     }
 
@@ -1376,7 +1377,7 @@ class Receipts extends React.Component {
                                 source={require('../../../icons/share.png')}
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{
+                       {/* <TouchableOpacity style={{
                             padding: 8,
                             width: 40,
                             height: 40,
@@ -1392,7 +1393,7 @@ class Receipts extends React.Component {
                                 style={{height: 20, width: 20}}
                                 source={require('../../../icons/eye.png')}
                             />
-                        </TouchableOpacity>
+                        </TouchableOpacity>*/}
                     </View>
                 </View>
 

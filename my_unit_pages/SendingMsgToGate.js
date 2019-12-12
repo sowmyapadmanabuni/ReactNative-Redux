@@ -9,7 +9,7 @@ import {
   ScrollView,
   PermissionsAndroid,
   Platform,
-  BackHandler
+  BackHandler, Alert
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -112,7 +112,8 @@ class SendingMsgToGate extends Component {
       loaded: false,
       paused: true,
       currentTime: '',
-      timestamp: ''
+      timestamp: '',
+      isPause:true,
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
     // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -268,6 +269,9 @@ class SendingMsgToGate extends Component {
 
     this.sound.play(success => {
       if (success) {
+        this.setState({
+          isPause: true
+        });
         console.log('successfully finished playing');
       } else {
         console.log('playback failed due to audio decoding errors');
@@ -731,6 +735,15 @@ class SendingMsgToGate extends Component {
         console.log('Crash in profile', error);
       });
   };
+
+  validateAnnouncement(){
+    if (!this.state.audioFile)
+      Alert.alert("","Audio cannot be empty");
+    else if(this.state.comment.length === 0)
+      Alert.alert("", "Message cannot be empty");
+    else
+      this.datasend()
+  }
 
   render() {
     const { recording, paused, audioFile } = this.state;
@@ -1436,7 +1449,12 @@ class SendingMsgToGate extends Component {
                 ) : (
                   <View>
                     {this.state.playBtnId === 1 && (
-                      <TouchableOpacity onPress={() => this.play()}>
+                      <TouchableOpacity onPress={() => {
+                        this.setState({
+                          isPause: !this.state.isPause
+                        });
+                        this.state.isPause ? this.play() : this.pause()
+                      }}>
                         <View
                           style={{
                             width: hp('5%'),
@@ -1446,7 +1464,11 @@ class SendingMsgToGate extends Component {
                           }}
                         >
                           <Image
-                            source={require('../icons/leave_vender_play.png')}
+                            source={
+                              this.state.isPause ?
+                                  require('../icons/leave_vender_play.png'):
+                                  require('../icons/leave_vender_pause.png')
+                            }
                           />
                         </View>
                       </TouchableOpacity>
@@ -1509,8 +1531,8 @@ class SendingMsgToGate extends Component {
                 bordered
                 warning
                 style={styles.button}
-                disabled={this.state.comment.length === 0}
-                onPress={() => this.datasend()}
+                //disabled={this.state.comment.length === 0}
+                onPress={() => this.validateAnnouncement()}
               >
                 <Text
                   style={{
@@ -1656,7 +1678,7 @@ const styles = StyleSheet.create({
     height: hp('5%'),
     borderRadius: 25,
     borderWidth: 2,
-    backgroundColor: base.theme.colors.white,
+    //backgroundColor: base.theme.colors.white,
     justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,

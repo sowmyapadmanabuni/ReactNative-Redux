@@ -2532,7 +2532,7 @@ class Expenses extends React.Component {
 
     selectedExpense(item) {
         let selectedExpense = item.item.item;
-        console.log('Get the time',item)
+        console.log('Get the time',item) ///*exdCreated*/ Date format is wrong
         return (
             <View style={{
                 borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -2579,7 +2579,8 @@ class Expenses extends React.Component {
                         <Collapsible duration={100} collapsed={!item.item.open}>
                             <Text style={{fontSize: 13, color: base.theme.colors.black, paddingBottom: 3}}>Invoice Date:
                                 <Text
-                                    style={{color: base.theme.colors.black}}> {moment(selectedExpense.exdCreated).format('DD-MM-YYYY')}</Text></Text>
+                                    style={{color: base.theme.colors.black}}> {moment(selectedExpense.exdUpdated).format('DD-MM-YYYY')}</Text>
+                            </Text>
                             <Text style={{fontSize: 13, color: base.theme.colors.black, paddingBottom: 3}}>Applicability:
                                 <Text style={{fontWeight: 'bold'}}> {selectedExpense.exApplTO}</Text></Text>
                             <Text style={{fontSize: 13, color: base.theme.colors.black}}>Added By:

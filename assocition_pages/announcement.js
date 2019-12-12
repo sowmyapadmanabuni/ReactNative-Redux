@@ -9,7 +9,8 @@ import {
   ScrollView,
   PermissionsAndroid,
   Platform,
-  BackHandler
+  BackHandler,
+  Alert
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -118,7 +119,9 @@ class Announcement extends Component {
       loaded: false,
       paused: true,
 
-      timestamp: ''
+      timestamp: '',
+
+      isPause: true,
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
@@ -291,6 +294,9 @@ class Announcement extends Component {
 
     this.sound.play(success => {
       if (success) {
+        this.setState({
+          isPause: true
+        });
         console.log('successfully finished playing');
       } else {
         console.log('playback failed due to audio decoding errors');
@@ -624,7 +630,12 @@ class Announcement extends Component {
   //     });
   // };
 
+  playPause(){
+    console.log("isPause ",this.state.isPause);
+  }
+
   datasend = () => {
+    console.log("datasend ??")
     let self = this;
     let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
     let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
@@ -881,6 +892,15 @@ class Announcement extends Component {
         console.log('Crash in Announcement', error);
       });
   };
+
+  validateAnnouncement(){
+    if (!this.state.audioFile)
+      Alert.alert("","Audio cannot be empty");
+    else if(this.state.comment.length === 0)
+      Alert.alert("", "Message cannot be empty");
+    else
+      this.datasend()
+  }
 
   render() {
     const { recording, paused, audioFile } = this.state;
@@ -1555,6 +1575,7 @@ class Announcement extends Component {
                   )}
                 </View>
               </View>
+
               <Card
                 style={{
                   width: hp('5%'),
@@ -1562,15 +1583,33 @@ class Announcement extends Component {
                   marginRight: hp('2%'),
                   alignItems: 'center',
                   justifyContent: 'center',
-                  borderRadius: hp('1%')
+                  borderRadius: hp('1%'),
+                  //elevation: 5,
+                  //shadowColor: base.theme.colors.darkgrey,
+                  //shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+                  //shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
+                  //shadowRadius:Platform.OS === 'ios' ? 2: 1, elevation: 5,  borderWidth: 0.5,
                 }}
               >
+
                 {this.state.playBtnId === 0 ? (
-                  <Image source={require('../icons/leave_vender_play1.png')} />
+                  <Image source={
+                    this.state.isPause ?
+                    require('../icons/leave_vender_play1.png'):
+                    require('../icons/leave_vender_pause.png')
+                  } />
                 ) : (
                   <View>
                     {this.state.playBtnId === 1 && (
-                      <TouchableOpacity onPress={() => this.play()}>
+                      <TouchableOpacity onPress={() =>{
+                        console.log("this.state.isPause ",this.state.isPause);
+                        this.setState({
+                          isPause: !this.state.isPause
+                        });
+                        this.state.isPause ? this.play() : this.pause()
+                      }
+                      }
+                          >
                         <View
                           style={{
                             width: hp('5%'),
@@ -1580,14 +1619,20 @@ class Announcement extends Component {
                           }}
                         >
                           <Image
-                            source={require('../icons/leave_vender_play.png')}
+                            source={
+                              this.state.isPause ?
+                                  require('../icons/leave_vender_play.png'):
+                                  require('../icons/leave_vender_pause.png')
+                            }
                           />
                         </View>
                       </TouchableOpacity>
                     )}
                   </View>
                 )}
+
               </Card>
+
             </View>
           </Card>
           <View
@@ -1641,8 +1686,8 @@ class Announcement extends Component {
                 bordered
                 warning
                 style={styles.button}
-                disabled={this.state.comment.length === 0}
-                onPress={() => this.datasend()}
+                //disabled={this.state.comment.length === 0}
+                onPress={() => this.validateAnnouncement()}
               >
                 <Text
                   style={{

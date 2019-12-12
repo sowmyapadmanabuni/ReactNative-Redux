@@ -34,7 +34,7 @@ import wifi from 'react-native-android-wifi';
 import LottieView from 'lottie-react-native';
 import Modal from "react-native-modal";
 import {RNLocationSatellites} from 'react-native-location-satellites';
-const GPSEventEmitter = new NativeEventEmitter(RNLocationSatellites)
+const GPSEventEmitter = new NativeEventEmitter(RNLocationSatellites);
 
 
 
@@ -92,7 +92,6 @@ class AddAndEditCheckPoints extends React.Component {
         this.getUserLocation = this.getUserLocation.bind(this)
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
-
 
     setPointName(text) {
         this.setState({

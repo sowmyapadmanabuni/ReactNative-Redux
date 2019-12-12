@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   View,
   BackHandler,
-  ToastAndroid, NetInfo
+  ToastAndroid,
+  NetInfo,
 } from 'react-native';
 import base from '../../../base';
 import { connect } from 'react-redux';
@@ -186,16 +187,27 @@ class Dashboard extends PureComponent {
       if (this.state.isSelectedCard === 'UNIT') {
         //this.props.navigation.goBack(null);
         console.log("<< 3 >>");
-        this.showExitAlert();
+        ToastAndroid.show('Press again to exit app', ToastAndroid.SHORT);
 
-        //this.props.navigation.goBack(null);
-        //BackHandler.exitApp();
+       var doubleClick = BackHandler.addEventListener('hardwareBackPress', () => {
+          console.log("hit it")
+          BackHandler.exitApp()
+        });
+        setTimeout(
+            () => {
+              console.log("TIMER");
+              doubleClick.remove()
+            },
+            1500
+        );
+        //console.log("TIME: ",new Date().getTime())
+        //this.showExitAlert();
       } else if(this.state.isSelectedCard !== 'UNIT'){
-        console.log("<< else >>")
+        console.log("<< else >>");
         this.changeCardStatus('UNIT');
       }
       this.lastBackButtonPress = new Date().getTime();
-      console.log("return true;");
+      //console.log("return true;");
       return true;
     }
   }
@@ -380,6 +392,7 @@ class Dashboard extends PureComponent {
             }
         )
         .then(response => {
+          console.log("respons ",response);
           let data = response.data.data.memberListByAccount;
           console.log(data, 'memList');
 
@@ -438,19 +451,6 @@ class Dashboard extends PureComponent {
 
   showLocalNotification = notification => {
     try {
-
-      // --------------------------- New code --------------------------------------------------------------------------
-      /*this.sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + context.getPackageName() + "/" + R.raw.oye_sms)
-      const attributes = new AudioAttributes.Builder()
-          .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-          .build();
-
-      const mChannel = new NotificationChannel(CHANNEL_ID,
-          context.getString(R.string.app_name),
-          NotificationManager.IMPORTANCE_HIGH);
-      mChannel.setSound(sound, attributes);*/
-      // ---------------------------------------------------------------------------------------------------------------
-
 
       // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
@@ -738,6 +738,7 @@ class Dashboard extends PureComponent {
   };
 
   syncData = () => {
+    console.log("")
     const {
       getDashAssociation,
       getAssoMembers,
@@ -797,7 +798,7 @@ class Dashboard extends PureComponent {
     }
 
 
-   timer.setInterval(
+    /*timer.setInterval(
              this,
              'syncData',
              () => {
@@ -806,7 +807,7 @@ class Dashboard extends PureComponent {
                  // alert("hererereerrrereer");
              },
              5000
-         );
+         );*/
   }
 
   handleConnectivityChange = isConnected => {
@@ -2025,7 +2026,7 @@ class Dashboard extends PureComponent {
           </View>
           <View style={{ ...Style.elevatedView, marginTop: 20 }}>
 
-           {/*<CardView
+       <CardView
                 height={'100%'}
                 width={'25%'}
                 cardText={'Accounting'}
@@ -2035,8 +2036,8 @@ class Dashboard extends PureComponent {
                 marginTop={20}
                 backgroundColor={base.theme.colors.cardBackground}
                 onCardClick={() => this.props.navigation.navigate('oyeLiving')}
-                // onCardClick={() => this.props.navigation.navigate('Accounting')}
-            />*/}
+               // onCardClick={() => this.props.navigation.navigate('Accounting')}
+            />
             {/* <CardView
             height={'100%'}
             width={'25%'}
@@ -2140,80 +2141,80 @@ class Dashboard extends PureComponent {
           </View>
           {
             this.props.dropdown.length == 0 ? (
-              <View />
-          ) : (
-              <View
-                  style={{
-                    alignSelf: 'flex-end',
-                    height: 50,
-                    width: 50,
-                    justifyContent: 'center',
-                    marginTop: hp('49%'),
-                    position: 'absolute',
-                    right: hp('1')
-                  }}
-              >
-                {!this.state.isSOSSelected ? (
-                    <TouchableHighlight
-                        underlayColor={base.theme.colors.transparent}
-                        onPress={() => this.selectSOS()}
-                    >
-                      <Image
-                          style={{
-                            width: wp('18%'),
-                            height: hp('10%'),
-                            right: 20,
-                            justifyContent: 'center'
-                          }}
-                          source={require('../../../../icons/sos_btn.png')}
-                      />
-                    </TouchableHighlight>
-                ) : (
-                    <View style={{ flexDirection: 'row', right: 45 }}>
+                <View />
+            ) : (
+                <View
+                    style={{
+                      alignSelf: 'flex-end',
+                      height: 50,
+                      width: 50,
+                      justifyContent: 'center',
+                      marginTop: hp('49%'),
+                      position: 'absolute',
+                      right: hp('1')
+                    }}
+                >
+                  {!this.state.isSOSSelected ? (
                       <TouchableHighlight
-                          style={{ alignSelf: 'flex-end', right: 2 }}
                           underlayColor={base.theme.colors.transparent}
                           onPress={() => this.selectSOS()}
                       >
-                        <Text
+                        <Image
                             style={{
-                              alignSelf: 'flex-end',
-                              right: 5,
-                              color: base.theme.colors.red
+                              width: wp('18%'),
+                              height: hp('10%'),
+                              right: 20,
+                              justifyContent: 'center'
                             }}
-                        >
-                          Cancel
-                        </Text>
+                            source={require('../../../../icons/sos_btn.png')}
+                        />
                       </TouchableHighlight>
-                      <TouchableHighlight
-                          underlayColor={base.theme.colors.transparent}
-                          onPress={() =>
-                              this.props.navigation.navigate('sosScreen', {
-                                isActive: false
-                              })
-                          }
-                      >
-                        <CountdownCircle
-                            seconds={5}
-                            radius={25}
-                            borderWidth={7}
-                            color={base.theme.colors.primary}
-                            updateText={(elapsedSeconds, totalSeconds) =>
-                                ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
-                            }
-                            bgColor="#fff"
-                            textStyle={{ fontSize: 15, textAlign: 'center' }}
-                            onTimeElapsed={() =>
+                  ) : (
+                      <View style={{ flexDirection: 'row', right: 45 }}>
+                        <TouchableHighlight
+                            style={{ alignSelf: 'flex-end', right: 2 }}
+                            underlayColor={base.theme.colors.transparent}
+                            onPress={() => this.selectSOS()}
+                        >
+                          <Text
+                              style={{
+                                alignSelf: 'flex-end',
+                                right: 5,
+                                color: base.theme.colors.red
+                              }}
+                          >
+                            Cancel
+                          </Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            underlayColor={base.theme.colors.transparent}
+                            onPress={() =>
                                 this.props.navigation.navigate('sosScreen', {
                                   isActive: false
                                 })
                             }
-                        />
-                      </TouchableHighlight>
-                    </View>
-                )}
-              </View>
-          )
+                        >
+                          <CountdownCircle
+                              seconds={5}
+                              radius={25}
+                              borderWidth={7}
+                              color={base.theme.colors.primary}
+                              updateText={(elapsedSeconds, totalSeconds) =>
+                                  ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                              }
+                              bgColor="#fff"
+                              textStyle={{ fontSize: 15, textAlign: 'center' }}
+                              onTimeElapsed={() =>
+                                  this.props.navigation.navigate('sosScreen', {
+                                    isActive: false
+                                  })
+                              }
+                          />
+                        </TouchableHighlight>
+                      </View>
+                  )}
+                </View>
+            )
           }
         </ElevatedView>
     );
