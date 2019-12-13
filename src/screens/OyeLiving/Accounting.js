@@ -220,27 +220,41 @@ class Accounting extends Component {
                   }}
               />
               <View style={AddExpenseStyles.textInputView}>
-                  <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>Account Number
-                      <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                  <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>Account Number</Text>
                   <TextInput
                       style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5
                       }}
-                      onChangeText={(text) => this.setState({accountNumber: text})}
                       value={this.state.accountNumber}
                       placeholder="Account Number"
                       placeholderTextColor={base.theme.colors.grey}
+                      onChangeText={(value) =>{
+                          let num = value.replace(".", '');
+                          if (isNaN(num)) {
+                              // Its not a number
+                          } else {
+                              this.setState({accountNumber:value})
+                          }}}
+                      keyboardType={'phone-pad'}
+                      maxLength={20}
                   />
               </View>
               <View style={AddExpenseStyles.textInputView}>
-                  <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>IFSC Code
-                      <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                  <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>IFSC Code</Text>
                   <TextInput
                       style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5
                       }}
-                      onChangeText={(text) => this.setState({ifscCode: text})}
                       value={this.state.ifscCode}
                       placeholder="IFSC Code"
                       placeholderTextColor={base.theme.colors.grey}
+                      onChangeText={(value) =>{
+                          let num = value.replace(/^[a-zA-Z0-9 ]+$/g,  '');
+                          if (isNaN(num)) {
+                              // Its not a number
+                          } else {
+                              this.setState({ifscCode:value})
+                          }}}
+                      keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+                      maxLength={20}
                   />
               </View>
               <View style={AddExpenseStyles.textInputView}>
@@ -292,10 +306,17 @@ class Accounting extends Component {
                       <TextInput
                           style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5,width:'95%'
                           }}
-                          onChangeText={(text) => this.setState({flatRateValue: text})}
                           value={this.state.flatRateValue}
                           placeholder="Flat Rate Value"
                           placeholderTextColor={base.theme.colors.grey}
+                          onChangeText={(value) =>{
+                              let num = value.replace(/[^0-9].[^0-9]{2}/g,  '');
+                              if (isNaN(num)) {
+                                  // Its not a number
+                              } else {
+                                  this.setState({flatRateValue:num})
+                              }}}
+                          keyboardType={'numeric'}
                       />
                       <Text style={{fontSize: 14, color: base.theme.colors.red, textAlign: 'left',paddingTop:5,}}>Amount to be changed</Text>
                   </View>
@@ -304,10 +325,18 @@ class Accounting extends Component {
                       <TextInput
                           style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5,width:'95%'
                           }}
-                          onChangeText={(text) => this.setState({maintenanceValue: text})}
                           value={this.state.maintenanceValue}
                           placeholder="Maintenance Value"
                           placeholderTextColor={base.theme.colors.grey}
+                          onChangeText={(value) =>{
+                              let num = value.replace(/[^0-9].[^0-9]{2}/g,  '');
+                              if (isNaN(num)) {
+                                  // Its not a number
+                              } else {
+                                  this.setState({maintenanceValue:num})
+                              }}}
+                          keyboardType={'numeric'}
+
                       />
                       <Text style={{fontSize: 14, color: base.theme.colors.red, textAlign: 'left',paddingTop:5,}}>RATE (SQFT/SQMTR)</Text>
                   </View>
@@ -321,8 +350,8 @@ class Accounting extends Component {
                       mode="date"
                       placeholder="select date"
                       format="DD-MM-YYYY"
-                      minDate={'01-01-1991'}
-                      maxDate={this.state.todayDate}
+                      minDate={this.state.todayDate}
+                     // maxDate={this.state.todayDate}
                       confirmBtnText="Confirm"
                       cancelBtnText="Cancel"
                       showIcon={false}
@@ -386,10 +415,18 @@ class Accounting extends Component {
                   <TextInput
                       style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5
                       }}
-                      onChangeText={(text) => this.setState({paymentCharge: text})}
                       value={this.state.paymentCharge}
                       placeholder="Payment Charge"
                       placeholderTextColor={base.theme.colors.grey}
+                      onChangeText={(value) =>{
+                          let num = value.replace(/[^0-9].[^0-9]{2}/g,  '');
+                          if (isNaN(num)) {
+                              // Its not a number
+                          } else {
+                              this.setState({paymentCharge:num})
+                          }}}
+                      keyboardType={'numeric'}
+
                   />
               </View>
               <View style={AddExpenseStyles.textInputView}>
@@ -465,7 +502,7 @@ class Accounting extends Component {
                   value={this.state.selectedUnit}
                   labelFontSize={18}
                   labelPadding={-5}
-                  placeHolder={'Selected Block'}
+                  placeHolder={'Selected Unit'}
                   baseColor="rgba(0, 0, 0, 1)"
                   data={this.state.unitList}
                   containerStyle={{
@@ -498,14 +535,21 @@ class Accounting extends Component {
                       <TextInput
                           style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5
                           }}
-                          onChangeText={(text) => this.setState({unitRate: text})}
                           value={this.state.unitRate}
                           placeholder="Unit Rate"
                           placeholderTextColor={base.theme.colors.grey}
+                          onChangeText={(value) =>{
+                              let num = value.replace(/[^0-9].[^0-9]{2}/g,  '');
+                              if (isNaN(num)) {
+                                  // Its not a number
+                              } else {
+                                  this.setState({unitRate:num})
+                              }}}
+                          keyboardType={'numeric'}
                       />
                   </View>
                   <Dropdown
-                      value={'Select Distribution Type *'} //this.state.selDistribution
+                      value={'Select Distribution Type'} //this.state.selDistribution
                       labelFontSize={18}
                       labelPadding={-5}
                       baseColor="rgba(0, 0, 0, 1)"
@@ -527,14 +571,22 @@ class Accounting extends Component {
                       }}
                   />
                   <View style={AddExpenseStyles.textInputView}>
-                      <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>Unit Rate</Text>
+                      <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>Unit Dimension</Text>
                       <TextInput
                           style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5
                           }}
-                          onChangeText={(text) => this.setState({unitDimension: text})}
                           value={this.state.unitDimension}
                           placeholder="Unit Dimension"
                           placeholderTextColor={base.theme.colors.grey}
+                          onChangeText={(value) =>{
+                              let num = value.replace(/[^0-9].[^0-9]{2}/g,  '');
+                              if (isNaN(num)) {
+                                  // Its not a number
+                              } else {
+                                  this.setState({unitDimension:num})
+                              }}}
+                          keyboardType={'numeric'}
+
                       />
                   </View>
                   <Dropdown
@@ -597,31 +649,28 @@ class Accounting extends Component {
       console.log('CreateAccounting')
         let self=this;
         let input={
-            "ASAssnID"  : this.props.dashBoardReducer.selectedDropdown,
+            "ASAssnID"  : this.props.dashBoardReducer.assId,
             "ASMtType"  : "FlatRate",
-            "ASMtDimBs" :self.state.maintenanceValue,
+            "ASMtDimBs" : self.state.maintenanceValue,
             "ASMtFRate" : self.state.flatRateValue,
             "ASLPCType" : self.state.paymentType,
             "ASLPChrg"  : self.state.paymentCharge,
-            "InvGAuto"  : self.state.isMinorSelected1,
-            "ASDPyDate" :self.state.dueDate,
+            "InvGAuto"  : false,
+            "ASDPyDate" : moment(self.state.dueDate,'DD-MM-YYYY').format('YYYY-MM-DD'),
             "BLBlockID" : self.state.blockId,
             "BankDetails" :
                 [{
-                    "BABName " : self.state.selectedBank,
+                    "BABName" : self.state.selectedBank=='Select Bank'?"":self.state.selectedBank,
                     "BAIFSC"    : self.state.ifscCode,
-                    "BAActNo"   : self.state.accountNumber,
-                    //"BAActID"   : 1
+                    "BAActNo"   : self.state.accountNumber
                 }]
         }
-
-
         let stat = await base.services.OyeLivingApi.updateBlockDetails(input)
         console.log('STATUS IN CREATE ACCOUNTING',input,stat)
-        if(stat.data.success) {
+        if(stat.success) {
             Alert.alert('Block Details updated Successfully')
         }
-            this.props.navigation.navigate('oyeLiving')
+           // this.props.navigation.navigate('oyeLiving')
 
 
 

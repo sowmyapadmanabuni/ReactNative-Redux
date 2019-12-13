@@ -1477,12 +1477,13 @@ class Expenses extends React.Component {
                                             } else {
                                                 this.setState({expHead:value})
                                             }}}
-                                       // onChangeText={(text) => this.setState({expHead: text})}
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+
+                                        // onChangeText={(text) => this.setState({expHead: text})}
                                         value={this.state.expHead}
                                         placeholder="Expense Head"
                                         maxLength={20}
                                         placeholderTextColor={base.theme.colors.grey}
-                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
                                     />
                                 </View>
                                 <View style={AddExpenseStyles.textInputView}>
@@ -1677,10 +1678,11 @@ class Expenses extends React.Component {
                                             } else {
                                                 this.setState({amountPaid:num})
                                             }}}
+                                            keyboardType={'numeric'}
+
                                             value={this.state.amountPaid}
                                             placeholder="Amount Paid"
                                             placeholderTextColor={base.theme.colors.grey}
-                                            keyboardType={'numeric'}
                                             maxLength={30}
                                         />
                                     </View>
@@ -1822,9 +1824,10 @@ class Expenses extends React.Component {
                                                 this.setState({payeeName:value})
                                             }}}
                                        // onChangeText={(text) => this.setState({payeeName: text})}
+                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
+
                                         value={this.state.payeeName}
                                         placeholder="Payee Name"
-                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
                                         placeholderTextColor={base.theme.colors.grey}
                                         maxLength={30}
                                     />
@@ -1991,9 +1994,9 @@ class Expenses extends React.Component {
                                                 } else {
                                                     this.setState({exVoucherNo:value})
                                                 }}}
+                                            keyboardType={'phone-pad'}
                                             value={this.state.exVoucherNo}
                                             placeholder="Voucher NUmber"
-                                            keyboardType={'phone-pad'}
                                             placeholderTextColor={base.theme.colors.grey}
                                             maxLength={20}
                                         />
@@ -2378,7 +2381,7 @@ class Expenses extends React.Component {
         }
     }
 
-    applyFilters(difference,stAmount,endAmount) {
+    async applyFilters(difference,stAmount,endAmount) {
 
         let self=this;
         console.log('Filtered list',self.state.expListByDates)
@@ -2429,14 +2432,29 @@ class Expenses extends React.Component {
         let filteredNameList=[];
         let j=0;
         if(self.state.expenseNameFil!=''){
-            for(let i=0;i<filteredList.length;i++){
+
+            let stat = await base.services.OyeLivingApi.getTheExpenseListByExpenseName(self.state.expenseNameFil);
+                console.log("Expense  Details:", stat,self.state.expenseNameFil);
+                try {
+                    if(stat){
+                        filteredNameList=(stat.data.expenses);
+                    }
+                    else{
+                        filteredNameList=filteredList
+                    }
+
+                } catch (e) {
+                    console.log("e:", e)
+                }
+
+           /* for(let i=0;i<filteredList.length;i++){
                 console.log('Filtered list66666',filteredList,i,self.state.expenseNameFil.toUpperCase(),filteredList[i].item.exHead.toUpperCase())
                 if(self.state.expenseNameFil.toUpperCase()===filteredList[i].item.exHead.toUpperCase()){
                     console.log('Filtered list77777',filteredList,i,self.state.expenseNameFil.toUpperCase(),filteredList[i].item.exHead.toUpperCase())
                       filteredNameList[j]=filteredList[i]
                     j=j+1;
                 }
-            }
+            }*/
         }
         else{
             filteredNameList=filteredList
