@@ -180,7 +180,6 @@ class NotificationScreen extends PureComponent {
         }
     };
 
-
     async acceptVisitorExit(associationid, visitorstat, by, logId){
         let approverVisitorExitDetail = {
             VLApprStat : visitorstat,
@@ -473,7 +472,7 @@ class NotificationScreen extends PureComponent {
                 this.state.gateDetails
             );
             console.log('ITEM IS ACTIVE TILL',item.ntIsActive);
-
+            console.log("item: ",item);
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -583,7 +582,7 @@ class NotificationScreen extends PureComponent {
                                 <View/>}
 
                             {
-                                item.vlVisType === "Delivery" && item.vlApprStat === "Pending" ?
+                                item.vlVisType === "Delivery" && item.vlApprStat === "Pending" && item.vlEntryT === "0001-01-01T00:00:00" ?
                                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
                                         marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
                                         <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Entry</Text>
@@ -621,8 +620,8 @@ class NotificationScreen extends PureComponent {
                                     <View/>
                             }
 
-                        {/*    {
-                                item.vlEntryT !=="" && item.vlExitT === "" && item.vlVisType === "Delivery" || false ?
+                            {
+                                item.vlVisType === "Delivery" && item.vlEntryT !== "0001-01-01T00:00:00" && item.vlExitT === "0001-01-01T00:00:00" ?
                                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
                                         marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
                                         <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Exit</Text>
@@ -655,7 +654,7 @@ class NotificationScreen extends PureComponent {
 
                                     </View>:
                                     <View/>
-                            }*/}
+                            }
 
 
 

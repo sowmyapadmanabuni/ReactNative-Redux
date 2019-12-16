@@ -122,6 +122,10 @@ target 'OyeSpace' do
 
 #  pod 'react-native-location-satellites', :path => '../node_modules/react-native-location-satellites'
 
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
 end
   
 post_install do |installer|

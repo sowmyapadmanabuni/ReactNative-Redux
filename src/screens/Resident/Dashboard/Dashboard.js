@@ -60,8 +60,9 @@ import timer from 'react-native-timer';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../assets/selection.json';
 import moment from 'moment';
-
+import strings from "../../../base/utils/strings";
 import DeviceInfo from 'react-native-device-info';
+import announcement from "../../../../assocition_pages/announcement";
 
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -113,6 +114,17 @@ class Dashboard extends PureComponent {
     this.currentRouteName = 'Main';
     this.lastBackButtonPress = null;
   }
+
+
+  static navigationOptions = {
+    drawerLabel: 'Dashboard',
+    drawerIcon: ({ tintColor }) => (
+      <Image
+        source={require('../../../../icons/my_unit.png')}
+        style={[styles.icon, { tintColor: tintColor }]}
+      />
+    ),
+  };
 
   componentWillMount() {
     this.setState({
@@ -798,7 +810,7 @@ class Dashboard extends PureComponent {
     }
 
 
-  /* timer.setInterval(
+    /*timer.setInterval(
              this,
              'syncData',
              () => {

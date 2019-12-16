@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BackHandler, Dimensions, Text} from 'react-native';
+import {BackHandler, Dimensions, Text, Platform} from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MyGuests from './src/pages/MyGuests.js';
 import Deliveries from './src/pages/Deliveries.js';
@@ -8,9 +8,9 @@ import SendingMsgToGate from '../my_unit_pages/SendingMsgToGate.js';
 import StaffLeaveWithVendor from '../src/screens/Resident/Visitors/Staff/staffLeaveWithVendor.js';
 
 import {
-  createAppContainer,
-  createMaterialTopTabNavigator
+  createAppContainer
 } from 'react-navigation';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import GetStaffReport from '../src/screens/Resident/Visitors/Staff/GetStaffReport';
 
 class FirstTab extends Component {
@@ -23,7 +23,7 @@ class FirstTab extends Component {
           navigationOptions: {
             tabBarLabel: (
               <Text
-                style={{ textTransform: 'capitalize', fontSize: hp('2.2%') }}
+                style={{ textTransform: 'capitalize', fontSize: hp('2.2%'),height: Platform.OS=='ios'?42:hp('8%') }}
               >
                 My Guests
               </Text>
@@ -35,7 +35,7 @@ class FirstTab extends Component {
           navigationOptions: {
             tabBarLabel: (
               <Text
-                style={{ textTransform: 'capitalize', fontSize: hp('2.2%') }}
+                style={{ textTransform: 'capitalize', fontSize: hp('2.2%'),height: Platform.OS=='ios'?42:hp('8%') }}
               >
                 Deliveries
               </Text>
@@ -47,7 +47,7 @@ class FirstTab extends Component {
           navigationOptions: {
             tabBarLabel: (
               <Text
-                style={{ textTransform: 'capitalize', fontSize: hp('2.2%') }}
+                style={{ textTransform: 'capitalize', fontSize: hp('2.2%'),height: Platform.OS=='ios'?42:hp('8%') }}
               >
                 Staff
               </Text>
@@ -91,7 +91,7 @@ class FirstTab extends Component {
           },
           tabStyle: {
             width: Dimensions.get('window').width / 3,
-            height: hp('8%')
+            height: Platform.OS=='ios'?42:hp('8%')
           },
           showIcon: true
         },
