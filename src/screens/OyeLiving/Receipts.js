@@ -1320,7 +1320,8 @@ class Receipts extends React.Component {
            fromDate:'',
            toDate:'',
            amountFilter:'',
-           isModalVisible:false
+           isModalVisible:false,
+           receiptsList: self.state.receiptsAllList,
        })
 
     }

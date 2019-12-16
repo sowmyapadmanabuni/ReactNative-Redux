@@ -53,6 +53,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { createUserNotification } from '../src/actions';
 import { connect } from 'react-redux';
 import utils from '../src/base/utils';
+import strings from "../src/base/utils/strings";
 
 // var audioRecorderPlayer;
 
@@ -151,6 +152,7 @@ class Announcement extends Component {
   }
 
   componentWillUnmount() {
+    this.pause();
     if(Platform.OS!='ios'){
       BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
@@ -665,7 +667,7 @@ class Announcement extends Component {
       self.props.dashboardReducer.uniID,
       this.props.oyeURL
     );
-    let ntTitle = 'Announcement';
+    let ntTitle =  strings.announcement; //'Announcement';
     let ntDesc = `${comments}`;
     let ntType = `Announcement`;
     let associationId = self.props.dashboardReducer.assId;
@@ -894,10 +896,10 @@ class Announcement extends Component {
   };
 
   validateAnnouncement(){
-    if (!this.state.audioFile)
-      Alert.alert("","Audio cannot be empty");
-    else if(this.state.comment.length === 0)
+    if(this.state.comment.length === 0)
       Alert.alert("", "Message cannot be empty");
+    /*else if (!this.state.audioFile)
+      Alert.alert("","Audio cannot be empty");*/
     else
       this.datasend()
   }
@@ -963,7 +965,7 @@ class Announcement extends Component {
               textAlign: 'center'
             }}
           >
-            Announcement
+            {strings.announcement}
           </Text>
         </View>
         <KeyboardAwareScrollView>
@@ -975,12 +977,14 @@ class Announcement extends Component {
 
           <Card
             style={{
-              height: hp('25%'),
+              flex:1,
+              //height: hp('25%'),
               borderRadius: 10,
               marginLeft: hp('2%'),
               marginRight: hp('2%'),
               marginTop: hp('2%'),
-              flexDirection: 'column'
+              paddingBottom: hp('2%'),
+              flexDirection: 'column',
             }}
           >
             <ScrollView
@@ -1503,12 +1507,13 @@ class Announcement extends Component {
               )}
             </ScrollView>
 
-            <View
+            {/*<View
               style={{
                 flexDirection: 'row',
                 width: '100%',
                 marginTop: hp('2%'),
-                height: hp('8%')
+                height: hp('8%'),
+                backgroundColor:"yellow",
               }}
             >
               <View>
@@ -1633,7 +1638,7 @@ class Announcement extends Component {
 
               </Card>
 
-            </View>
+            </View>*/}
           </Card>
           <View
             style={{

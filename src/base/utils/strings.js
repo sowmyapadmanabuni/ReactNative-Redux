@@ -40,8 +40,8 @@ const api = {
 };
 
 //const imageUrl = 'https://mediauploaddev.oyespace.com/Images/'; //Development
-//const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
-const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
+const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
+//const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
 const strings = {
   urlType: urlType,
@@ -93,7 +93,9 @@ const strings = {
     paymentSuccess: 'We will release payment gateway feature soon !!!',
     subscriptionAlert1: 'Your subscription is going to end in',
     subscriptionAlert2: 'days. Please contact your association admin'
-  }
+  },
+
+  announcement:"Broadcast",
 };
 
 export default strings;

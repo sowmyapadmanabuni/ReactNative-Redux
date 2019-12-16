@@ -60,8 +60,9 @@ import timer from 'react-native-timer';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../assets/selection.json';
 import moment from 'moment';
-
+import strings from "../../../base/utils/strings";
 import DeviceInfo from 'react-native-device-info';
+import announcement from "../../../../assocition_pages/announcement";
 
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -809,16 +810,16 @@ class Dashboard extends PureComponent {
     }
 
     this.syncData();
-    // timer.setInterval(
-    //          this,
-    //          'syncData',
-    //          () => {
-    //            console.log("I am Timer");
-    //            this.syncData();
-    //              // alert("hererereerrrereer");
-    //          },
-    //          5000
-    //      );
+    /*timer.setInterval(
+             this,
+             'syncData',
+             () => {
+               console.log("I am Timer");
+               this.syncData();
+                 // alert("hererereerrrereer");
+             },
+             5000
+         );*/
   }
 
   handleConnectivityChange = isConnected => {
@@ -2046,8 +2047,8 @@ class Dashboard extends PureComponent {
                 cardIcon={require('../../../../icons/vehicle.png')}
                 marginTop={20}
                 backgroundColor={base.theme.colors.cardBackground}
-               onCardClick={() => this.props.navigation.navigate('oyeLiving')}
-               // onCardClick={() => this.props.navigation.navigate('Accounting')}
+              // onCardClick={() => this.props.navigation.navigate('oyeLiving')}
+                onCardClick={() => this.props.navigation.navigate('Accounting')}
             />
             {/* <CardView
             height={'100%'}
