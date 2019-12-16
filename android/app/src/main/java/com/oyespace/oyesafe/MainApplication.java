@@ -72,11 +72,11 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNScreensPackage(),
-            new ReanimatedPackage(),
-            new RNAudioRecorderPlayerPackage(),
-            new RNAudioRecordPackage(),
-            new RNPermissionsPackage(),
+                    new RNScreensPackage(),
+                    new ReanimatedPackage(),
+                    new RNAudioRecorderPlayerPackage(),
+                    new RNAudioRecordPackage(),
+                    new RNPermissionsPackage(),
                     new PDFViewPackage(),
                     new DocumentPickerPackage(),
 
@@ -124,7 +124,7 @@ public class MainApplication extends Application implements ShareApplication, Re
     @Override
     public void onCreate() {
         super.onCreate();
-       Timer timer = new Timer();
+        Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
                                       @Override
                                       public void run() {
