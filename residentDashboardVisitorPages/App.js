@@ -3,7 +3,8 @@ import {Dimensions, Image, SafeAreaView, StyleSheet, View} from "react-native";
 // import Header from './src/components/common/Header';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import FirstTab from './FirstTab.js';
-import {createAppContainer, createStackNavigator} from "react-navigation";
+import { createStackNavigator} from "react-navigation-stack";
+import { createAppContainer } from 'react-navigation';
 //import QRCodeGeneration from './src/pages/QRCodeGeneration.js';
 
 // export default class App extends Component {

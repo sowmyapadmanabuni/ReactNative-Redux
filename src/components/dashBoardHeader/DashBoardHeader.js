@@ -12,6 +12,8 @@ import HeaderStyles from './HeaderStyles';
 import { Icon, withBadge } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MarqueeText from 'react-native-marquee';
+import MenuDrawer from 'react-native-side-drawer'
+import { DrawerActions } from 'react-navigation-drawer';
 
 class DashBoardHeader extends React.Component {
   constructor(props) {
@@ -88,12 +90,22 @@ class DashBoardHeader extends React.Component {
     }
   }
 
+  openDrawer(){
+    this.props.navigation.dispatch(DrawerActions.toggleDrawer());
+  }
+
   render() {
     return (
       <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
         <View style={HeaderStyles.container}>
           <View style={HeaderStyles.subContainerLeft}>
-            <TouchableOpacity
+            <TouchableOpacity onPress={()=>this.openDrawer()}>
+            <Image
+                  style={{height:24,width:24,alignSelf:'center'}}
+                  source={require('../../../icons/menu_drawer.png')}
+                />
+            </TouchableOpacity>
+            {/* <TouchableOpacity
               onPress={() => this.props.navigation.navigate('MyProfileScreen')}
             >
               {this.props.userReducer.userProfilePic === null ||
@@ -136,17 +148,7 @@ class DashBoardHeader extends React.Component {
                       ? this.props.userReducer.userData.data.account[0].acfName
                       : null}
                   </MarqueeText>
-                  {/* <Text
-                    style={HeaderStyles.residentName} //{this.props.userName} {this.props.userStatus}
-                    numberOfLines={1}
-                  >
-                    {this.props.userReducer.userData
-                      ? this.props.userReducer.userData.data.account[0].acfName.substring(
-                          0,
-                          8
-                        )
-                      : null}
-                  </Text> */}
+                  
                 </TouchableOpacity>
                 {this.props.userReducer.SelectedAssociationID != null ? (
                   <Text style={HeaderStyles.statusText} numberOfLines={1}>
@@ -171,7 +173,8 @@ class DashBoardHeader extends React.Component {
                 />
               </View>
             </TouchableOpacity>
-          </View>
+          */}
+          </View> 
           <View style={HeaderStyles.subContainerRight}>
             <Image
               style={HeaderStyles.appLogoStyles}
@@ -183,11 +186,7 @@ class DashBoardHeader extends React.Component {
               onPress={() =>
                 this.props.navigation.navigate('NotificationScreen')
               }
-            >
-              {/* <Image
-              style={HeaderStyles.logoStyles}
-              source={require("../../../icons/notifications.png")}
-            />*/}
+            >            
               {this.renderBadge()}
             </TouchableOpacity>
           </View>

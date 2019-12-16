@@ -115,6 +115,17 @@ class Dashboard extends PureComponent {
     this.lastBackButtonPress = null;
   }
 
+
+  static navigationOptions = {
+    drawerLabel: 'Dashboard',
+    drawerIcon: ({ tintColor }) => (
+      <Image
+        source={require('../../../../icons/my_unit.png')}
+        style={[styles.icon, { tintColor: tintColor }]}
+      />
+    ),
+  };
+
   componentWillMount() {
     this.setState({
       isDataLoading: true,
@@ -798,7 +809,7 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-
+    this.syncData();
     /*timer.setInterval(
              this,
              'syncData',

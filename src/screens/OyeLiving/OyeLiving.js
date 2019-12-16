@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Dimensions, Text ,View} from 'react-native';
+import { Dimensions, Text ,View,Platform} from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import {
-    createAppContainer,
-    createMaterialTopTabNavigator,
+import {        
     createStackNavigator
-} from 'react-navigation';
+} from 'react-navigation-stack';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import { createAppContainer } from 'react-navigation';
 
 //Screens
 import Expenses from './Expenses';
@@ -58,7 +58,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15 }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),alignItems:'center',justifyContent:'center',alignSelf:'center',height: Platform.OS=='ios'?42:hp('6%') }}
                         >
                             Expenses
                       </Text>
@@ -70,7 +70,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15 }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
                         >
                             Budget Projection
                       </Text>
@@ -82,7 +82,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15 }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
                         >
                             Purchase Order
                       </Text>
@@ -94,7 +94,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15 }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
                         >
                             Vendors
                       </Text>
@@ -107,7 +107,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%') ,paddingBottom:15}}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%') ,paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%')}}
                         >
                             Invoices
                       </Text>
@@ -119,7 +119,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15 }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
                         >Receipts
                       </Text>
                     ),
@@ -145,7 +145,7 @@ class OyeLiving extends React.Component {
                     },
                     tabStyle: {
                         width: Dimensions.get('window').width / 2.9,
-                        height: hp('6%'),
+                        height: Platform.OS=='ios'?42:hp('6%'),
                         alignItems:'center'
                     },
                     showIcon: true

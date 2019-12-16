@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.ReactApplication;
+import com.swmansion.rnscreens.RNScreensPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
 import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.goodatlas.audiorecord.RNAudioRecordPackage;
 import com.synclovis.RNLocationSatellitesPackage;
@@ -70,6 +72,8 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNScreensPackage(),
+            new ReanimatedPackage(),
             new RNAudioRecorderPlayerPackage(),
             new RNAudioRecordPackage(),
             new RNPermissionsPackage(),

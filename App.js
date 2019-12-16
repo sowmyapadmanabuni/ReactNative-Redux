@@ -10,11 +10,10 @@ import {
   View
 } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  createAppContainer,
-  createStackNavigator,
-  createSwitchNavigator
-} from 'react-navigation';
+import {  
+  createStackNavigator  
+} from 'react-navigation-stack';
+import { createAppContainer,createSwitchNavigator } from 'react-navigation';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp
