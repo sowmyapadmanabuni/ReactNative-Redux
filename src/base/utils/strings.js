@@ -93,7 +93,9 @@ const strings = {
     paymentSuccess: 'We will release payment gateway feature soon !!!',
     subscriptionAlert1: 'Your subscription is going to end in',
     subscriptionAlert2: 'days. Please contact your association admin'
-  }
+  },
+
+  announcement:"Broadcast",
 };
 
 export default strings;

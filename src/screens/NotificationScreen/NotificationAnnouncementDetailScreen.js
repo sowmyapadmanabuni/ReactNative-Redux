@@ -44,7 +44,7 @@ import Styles from './NotificationAnnouncementDetailScreenStyles.js';
 import base from '../../base';
 import { Easing } from 'react-native';
 import { connect } from 'react-redux';
-
+import strings from "../../base/utils/strings";
 import { storeOpenedNotif, onNotificationOpen } from '../../actions';
 
 class NotificationAnnouncementDetailScreen extends Component {
@@ -419,7 +419,7 @@ class NotificationAnnouncementDetailScreen extends Component {
           <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
         <View style={Styles.mainview}>
-          <Text style={Styles.maintext}>Announcements</Text>
+          <Text style={Styles.maintext}>{strings.announcement}</Text>
         </View>
         <Card style={Styles.card}>
           <View style={Styles.outerview}>
@@ -491,7 +491,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                 </View>
               )}
             </View>
-            {this.state.voice === '' ? null : (
+            {/* this.state.voice === '' ? null : (
               <View style={Styles.secondview}>
                 <Card style={Styles.playcardstyle}>
                   <View
@@ -536,7 +536,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                   <Text>Click to play</Text>
                 </View>
               </View>
-            )}
+            ) */}
           </View>
         </Card>
         <View style={Styles.thirdview}>

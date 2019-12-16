@@ -739,8 +739,8 @@ class SendingMsgToGate extends Component {
   validateAnnouncement(){
     if (!this.state.audioFile)
       Alert.alert("","Audio cannot be empty");
-    else if(this.state.comment.length === 0)
-      Alert.alert("", "Message cannot be empty");
+    /*else if(this.state.comment.length === 0)
+      Alert.alert("", "Message cannot be empty");*/
     else
       this.datasend()
   }
@@ -825,16 +825,7 @@ class SendingMsgToGate extends Component {
             </View>
           </View>
 
-          <Card
-            style={{
-              height: hp('25%'),
-              borderRadius: 10,
-              marginLeft: hp('2%'),
-              marginRight: hp('2%'),
-              marginTop: hp('2%'),
-              flexDirection: 'column'
-            }}
-          >
+          <Card style={{height: hp('25%'), borderRadius: 10, marginLeft: hp('2%'), marginRight: hp('2%'), marginTop: hp('2%'), flexDirection: 'column'}}>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}
@@ -1354,7 +1345,6 @@ class SendingMsgToGate extends Component {
                 <View></View>
               )}
             </ScrollView>
-
             <View
               style={{
                 flexDirection: 'row',
@@ -1484,11 +1474,11 @@ class SendingMsgToGate extends Component {
               marginTop: hp('2%')
             }}
           >
-            <View style={{ marginTop: hp('2%'), marginBottom: hp('1%') }}>
+            {/*<View style={{ marginTop: hp('2%'), marginBottom: hp('1%') }}>
               <Text style={{ fontSize: hp('1.8%') }}>Message</Text>
-            </View>
+            </View>*/}
 
-            <View
+            {/*<View
               style={{
                 borderColor: base.theme.colors.primary,
                 borderWidth: hp('0.1%'),
@@ -1519,7 +1509,7 @@ class SendingMsgToGate extends Component {
                   onChangeText={comment => this.setState({ comment: comment })}
                 />
               </Item>
-            </View>
+            </View>*/}
             <View
               style={{
                 justifyContent: 'center',

@@ -60,8 +60,9 @@ import timer from 'react-native-timer';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../assets/selection.json';
 import moment from 'moment';
-
+import strings from "../../../base/utils/strings";
 import DeviceInfo from 'react-native-device-info';
+import announcement from "../../../../assocition_pages/announcement";
 
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -798,7 +799,7 @@ class Dashboard extends PureComponent {
     }
 
 
-    timer.setInterval(
+    /*timer.setInterval(
              this,
              'syncData',
              () => {
@@ -807,7 +808,7 @@ class Dashboard extends PureComponent {
                  // alert("hererereerrrereer");
              },
              5000
-         );
+         );*/
   }
 
   handleConnectivityChange = isConnected => {

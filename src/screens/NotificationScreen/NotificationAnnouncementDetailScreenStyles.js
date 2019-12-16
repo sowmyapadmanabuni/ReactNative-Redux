@@ -68,7 +68,8 @@ const Styles = StyleSheet.create({
   },
   card: {
     width: Dimensions.get('window').width - 80,
-    height: hp('30%'),
+    //height: hp('30%'),
+    height: hp('17%'),
     alignSelf: 'center',
     borderRadius: hp('2%'),
 
@@ -80,7 +81,10 @@ const Styles = StyleSheet.create({
     },
     shadowOpacity: 0.2
   },
-  outerview: { width: Dimensions.get('window').width - 80, height: hp('60%') },
+  outerview: {
+    width: Dimensions.get('window').width - 80,
+    height: hp('60%')
+  },
   firstview: {
     height: hp('14%'),
     margin: hp('1.4%')
@@ -123,7 +127,7 @@ const Styles = StyleSheet.create({
   secondview: {
     flexDirection: 'row',
     width: '100%',
-    marginTop: hp('2%')
+    marginTop: hp('2%'),
   },
   mic: {
     width: hp('5%'),
