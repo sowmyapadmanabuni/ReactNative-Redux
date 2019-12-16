@@ -739,8 +739,8 @@ class SendingMsgToGate extends Component {
   validateAnnouncement(){
     if (!this.state.audioFile)
       Alert.alert("","Audio cannot be empty");
-    else if(this.state.comment.length === 0)
-      Alert.alert("", "Message cannot be empty");
+    /*else if(this.state.comment.length === 0)
+      Alert.alert("", "Message cannot be empty");*/
     else
       this.datasend()
   }

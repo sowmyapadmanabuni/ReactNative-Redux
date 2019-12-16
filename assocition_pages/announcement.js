@@ -894,9 +894,9 @@ class Announcement extends Component {
   };
 
   validateAnnouncement(){
-    if (!this.state.audioFile)
-      Alert.alert("","Audio cannot be empty");
-    else if(this.state.comment.length === 0)
+ /*   if (!this.state.audioFile)
+      Alert.alert("","Audio cannot be empty");*/
+    if(this.state.comment.length === 0)
       Alert.alert("", "Message cannot be empty");
     else
       this.datasend()
@@ -963,7 +963,7 @@ class Announcement extends Component {
               textAlign: 'center'
             }}
           >
-            Announcement
+            Broadcast
           </Text>
         </View>
         <KeyboardAwareScrollView>

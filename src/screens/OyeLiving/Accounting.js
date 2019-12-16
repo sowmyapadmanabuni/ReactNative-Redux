@@ -29,7 +29,7 @@ class Accounting extends Component {
     super(props);
     this.state={
        selectedBank:"Select Bank",
-        listOfBanks:[{value:'SBI',details:'B1'},{value:'Andra Bank',details:'B2'},{value:'ICICI Bank',details:'B3'},{value:'HDFC Bank',details:'B3'},
+        listOfBanks:[{value:'SBI',details:'B1'},{value:'Andhra Bank',details:'B2'},{value:'ICICI Bank',details:'B3'},{value:'HDFC Bank',details:'B3'},
             {value:'AXIS Bank',details:'B5'},{value:'Canera Bank',details:'B6'}],
         accountNumber:"",
         ifscCode:"",
@@ -345,21 +345,25 @@ class Accounting extends Component {
                   alignItems:'center',justifyContent:'space-between'
               }}>
                   <DatePicker
-                      style={{width: '85%'}}
+                      style={{width: '100%',}}
                       date={this.state.dueDate}
                       mode="date"
                       placeholder="select date"
                       format="DD-MM-YYYY"
                       minDate={this.state.todayDate}
                      // maxDate={this.state.todayDate}
+                      iconSource={require('../../../icons/calender.png')}
                       confirmBtnText="Confirm"
                       cancelBtnText="Cancel"
-                      showIcon={false}
+                      showIcon={true}
                       customStyles={{
                           dateIcon: {
                               left: 2,
-                              alignSelf: 'center',
+                              alignSelf: 'flex-end',
                               marginLeft: 0,
+                              marginBottom:2
+
+
                           },
                           dateInput: {
                               borderWidth: 0,
@@ -374,7 +378,7 @@ class Accounting extends Component {
                           this.setState({dueDate:date})
                       }}
                   />
-                  <Image
+                  {/*<Image
                       resizeMode={'contain'}
                       style={{
                           height: hp('6%'),
@@ -384,7 +388,7 @@ class Accounting extends Component {
                           marginLeft:10
                       }}
                       source={require('../../../icons/calender.png')}
-                  />
+                  />*/}
               </TouchableOpacity>
               <Dropdown
                   value={this.state.paymentType}
@@ -487,7 +491,7 @@ class Accounting extends Component {
                       borderColor:base.theme.colors.lightgrey,
                   }}
                   dropdownOffset={{ top: 10, left: 0 }}
-                  dropdownPosition={-5}
+                  dropdownPosition={this.state.blockList.length > 2 ? -5 : -2}
                   rippleOpacity={0}
                   onChangeText={(value, index) => {
                       this.setState({
@@ -615,11 +619,10 @@ class Accounting extends Component {
                           })
                       }}
                   />
-                  <TouchableOpacity style={{alignItems:'center',marginTop:10}} onPress={() => this.updateUnitDetailsApi()}>
+                  <TouchableOpacity style={{alignItems:'center',marginTop:10,height:'10%'}} onPress={() => this.validationForUpdateUnitDetails()}>
                       <Text style={{color:base.theme.colors.blue,fontSize:16}}>UPDATE</Text>
                   </TouchableOpacity>
               </View>
-
               </View>
               <View style={{alignSelf:'center',width:'70%',flexDirection:'row',paddingTop:25,paddingBottom:25,alignItems:'center',justifyContent:'space-between',
                   marginBottom:150,paddingLeft:15,paddingRight:15}}>
@@ -667,13 +670,38 @@ class Accounting extends Component {
         }
         let stat = await base.services.OyeLivingApi.updateBlockDetails(input)
         console.log('STATUS IN CREATE ACCOUNTING',input,stat)
+
         if(stat.success) {
-            Alert.alert('Block Details updated Successfully')
+            Alert.alert('Accounting Details updated Successfully')
+            this.props.navigation.navigate('oyeLiving')
         }
-           // this.props.navigation.navigate('oyeLiving')
+
+  }
 
 
-
+    validationForUpdateUnitDetails(){
+      let self=this;
+      if(base.utils.validate.isBlank(self.state.blockId)){
+          Alert.alert('Please select the block to update unit details')
+      }
+      else if(base.utils.validate.isBlank(self.state.unitId)){
+          Alert.alert('Please select the unit to update unit details')
+      }
+      else if(base.utils.validate.isBlank(self.state.unitRate)){
+          Alert.alert('Please select the unit Rate to update unit details')
+      }
+      else if(base.utils.validate.isBlank(self.state.selDistribution)){
+          Alert.alert('Please select the distribution type to update unit details')
+      }
+      else if(base.utils.validate.isBlank(self.state.unitDimension)){
+          Alert.alert('Please select the unit dimension to update unit details')
+      }
+      else if(base.utils.validate.isBlank(self.state.selectedAppList)){
+          Alert.alert('Please select the Occupancy & Ownership status to update unit details')
+      }
+      else {
+          self.updateUnitDetailsApi()
+      }
 
     }
 

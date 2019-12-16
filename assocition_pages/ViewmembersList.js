@@ -140,7 +140,7 @@ class Resident extends React.Component {
 
     async addUnitDetail(memberArr, associationId) {
         let self = this;
-        console.log("Stat12345");
+     //   console.log("Stat12345");
 
         let stat = await base.services.OyeLivingApi.getUnitListByAssociationId(associationId);
         try {
@@ -433,7 +433,6 @@ class Resident extends React.Component {
                                         renderItem={({item, index}) => (
 
                                             <Card style={{height: hp("14%")}}>
-                                                {console.log("item: ",item)}
                                                 <View style={{height: 1, backgroundColor: "lightgray"}}/>
                                                 <View style={{flexDirection: "row", flex: 1}}>
                                                     <View style={{flex: 1}}>
