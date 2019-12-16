@@ -7,8 +7,11 @@
  */
 
 import React from 'react';
-import { Platform } from 'react-native';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { Platform,Dimensions } from 'react-native';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createAppContainer } from 'react-navigation';
+
 
 import associationlist from '../assocition_pages/associationlist';
 import WholeAssociationList from '../assocition_pages/WholeAssociationList';
@@ -84,6 +87,7 @@ import AddExpense from "../src/screens/OyeLiving/Expenses/AddExpense";
 import EditExpense from "../src/screens/OyeLiving/Expenses/EditExpense";
 import StaffLeaveWithVendor from '../src/screens/Resident/Visitors/Staff/staffLeaveWithVendor.js';
 
+import DrawerMenu from './DrawerMenu'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -117,15 +121,45 @@ const NotificationStack = createStackNavigator({
   }
 });
 
+const dashStack = createStackNavigator({
+  ResDashBoard:{
+    screen: Dashboard,
+    headerMode: 'float',
+      navigationOptions: {
+        headerMode: 'float',
+    title: 'Dashboard',
+    header: props => <DashBoardHeader {...props} />
+  }
+  }
+})
 
-
+const drawerDashboard = createDrawerNavigator({
+  ResDashBoard:{
+    screen:dashStack,
+    navigationOptions: () => ({
+      header: null
+    })
+  }
+},{
+  //For the Custom sidebar menu we have to provide our CustomSidebarMenu
+  contentComponent: DrawerMenu,
+  overlayColor: '#00000050',
+  //Sidebar width
+  drawerWidth: '65%'//Dimensions.get('window').width - 130,
+})
+// {
+//   screen: Dashboard,
+//   navigationOptions: {
+//     title: 'Dashboard',
+//     header: props => <DashBoardHeader {...props} />
+//   }
+// }
 const ResApp = createStackNavigator({
   ResDashBoard: {
-    screen: Dashboard,
-    navigationOptions: {
-      title: 'Dashboard',
-      header: props => <DashBoardHeader {...props} />
-    }
+    screen:drawerDashboard,
+    navigationOptions: () => ({
+      header: null
+    })
   },
   firstTab: {
     screen: FirstTab,

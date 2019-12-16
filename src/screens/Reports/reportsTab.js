@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Dimensions, Text } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import {
-  createAppContainer,
-  createMaterialTopTabNavigator
+  createAppContainer  
 } from 'react-navigation';
-
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 //Screens
 import BalanceSheet from './BalanceSheet';
 import CustomerStatement from './CustomerStatement';

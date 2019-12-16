@@ -1,7 +1,8 @@
 import InviteGuests from './InviteGuests.js';
 import MyGuest from './MyGuest.js';
 import QRCodeGeneration from './QRCodeGeneration.js';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
 
 const MainNavigator = createStackNavigator(
   {
