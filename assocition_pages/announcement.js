@@ -152,7 +152,6 @@ class Announcement extends Component {
   }
 
   componentWillUnmount() {
-    this.pause();
     if(Platform.OS!='ios'){
       BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
@@ -309,9 +308,11 @@ class Announcement extends Component {
   };
 
   pause = () => {
-    console.log("PAUSE");
-    this.sound.pause();
-    this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
+    if (!this.state.audioFile){
+      console.log("PAUSE");
+      this.sound.pause();
+      this.setState({ paused: true, playBtnId: 1, buttonId: 1 });
+    }
   };
 
   setImage() {
