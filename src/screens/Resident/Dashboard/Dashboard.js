@@ -778,6 +778,7 @@ class Dashboard extends PureComponent {
       receiveNotifications,
       dropdown
     } = this.props;
+
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
