@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Platform,
-  ScrollView, TextInput, SafeAreaView, TouchableHighlight,Linking,Alert
+    Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Platform,
+    ScrollView, TextInput, SafeAreaView, TouchableHighlight, Linking, Alert, BackHandler
 } from 'react-native';
 import AddExpenseStyles from "./Expenses/AddExpenseStyles";
 import Dropdown from "react-native-material-dropdown/src/components/dropdown";
@@ -64,13 +64,31 @@ class Accounting extends Component {
 
 
     }
+      this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentWillMount() {
-    this.getExpenseRecurrenceType()
-      this.getTheBlockList()
-      this.getExpenseApplicableUnitList()
+        this.getExpenseRecurrenceType();
+        this.getTheBlockList();
+        this.getExpenseApplicableUnitList()
+    }
+
+  componentDidMount() {
+      if(Platform.OS!='ios'){
+          BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+      }
   }
+
+  componentWillUnmount() {
+      if(Platform.OS!='ios'){
+          BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+      }
+  }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
 
     async getExpenseRecurrenceType(){
         let stat = await base.services.OyeLivingApi.getExpenseRecTypeList(this.props.userReducer.SelectedAssociationID)
@@ -180,9 +198,6 @@ class Accounting extends Component {
         }
 
     }
-
-
-
 
     render() {
     return(
@@ -724,10 +739,6 @@ class Accounting extends Component {
             Alert.alert('Unit Details Updated successfully ')
         }
     }
-
-
-
-
 }
 
 const mapStateToProps = state => {
