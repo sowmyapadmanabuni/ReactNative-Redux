@@ -100,12 +100,12 @@ class Expenses extends React.Component {
             expApplicabilityId: '',
             expType: [{value: 'Fixed', details: 'E1'}, {value: 'Variable', details: 'E2'}],
             distributionType: [{value: 'Dimension Based', details: 'D1'}, {value: 'Per Unit', details: 'D2'}],
-            selectBankList: [{value: 'SBI', details: 'B1'}, {value: 'ANDRA BANK', details: 'B2'}, {
+            selectBankList: [{value: 'SBI', details: 'B1'}, {value: 'ANDHRA BANK', details: 'B2'}, {
                 value: 'ICICI BANK',
                 details: 'B3'
             }, {value: 'HDFC BANK', details: 'B3'},
                 {value: 'AXIS BANK', details: 'B5'}, {value: 'CANARA BANK', details: 'B6'}],
-            payeeBankList: [{value: 'SBI', details: 'B1'}, {value: 'ANDRA BANK', details: 'B2'}, {
+            payeeBankList: [{value: 'SBI', details: 'B1'}, {value: 'ANDHRA BANK', details: 'B2'}, {
                 value: 'ICICI BANK',
                 details: 'B3'
             }, {value: 'HDFC BANK', details: 'B3'},
@@ -160,7 +160,6 @@ class Expenses extends React.Component {
                 this.getExpenseRecurrenceType();
                 this.getExpenseApplicableUnitList();
                 this.getPaymentMethodsList();
-               // this.getUnitName();
             this.updateValues()}
         );
     }
@@ -767,7 +766,8 @@ class Expenses extends React.Component {
                                 borderBottomWidth: 1,
                             }}
                             dropdownOffset={{top: 10, left: 0}}
-                            dropdownPosition={-5}
+                            dropdownPosition={this.state.blockList.length > 2 ? -5 : -2}
+
                             rippleOpacity={0}
                             onChangeText={(value, index) => {this.setState({isLoading:true});
                                 this.getTheExpenseList(value, index)}}
@@ -1578,7 +1578,7 @@ class Expenses extends React.Component {
 
 
                                             this.setState({
-                                                selectedExpType: this.state.expAppList[index].details.eaid==11?'Actuals':'Expense Type',
+                                                selDistribution: this.state.expAppList[index].details.eaid==11?'Actuals':'Expense Type',
                                                 isExpDisable:this.state.expAppList[index].details.eaid==11?true:false,
                                                 selectedAppList: value,
                                                 expApplicabilityId:this.state.expAppList[index].details.eaid,
@@ -1621,7 +1621,7 @@ class Expenses extends React.Component {
                                     />
                                 </View>:
                                 <View/>}
-                                <View style={{width: '100%',backgroundColor:this.state.isExpDisable?base.theme.colors.greyHead:base.theme.colors.white }}>
+                                <View style={{width: '100%', }}>
 
                                         <Text style={{
                                             fontSize: 14,
@@ -1651,7 +1651,6 @@ class Expenses extends React.Component {
                                                 selectedExpType: value
                                             })
                                         }}
-                                        disabled={this.state.isExpDisable}
                                     />
                                 </View>
                                 <View style={{width: '100%', flexDirection: 'row',}}>
@@ -1691,7 +1690,7 @@ class Expenses extends React.Component {
                                         source={require('../../../icons/rupee1.png')}
                                     />
                                 </View>
-                                <View style={{paddingTop: 5, paddingBottom: 5, width: '100%'}}>
+                                <View style={{paddingTop: 5, paddingBottom: 5, width: '100%',backgroundColor:this.state.isExpDisable?base.theme.colors.greyHead:base.theme.colors.white}}>
                                     <Text style={{
                                         fontSize: 14,
                                         color: base.theme.colors.black,
@@ -1720,6 +1719,8 @@ class Expenses extends React.Component {
                                                 selDistribution: value
                                             })
                                         }}
+                                        disabled={this.state.isExpDisable}
+
                                     />
                                 </View>
                                 {this.state.selPayMethod!="Select Payment Method" && this.state.selPayMethod!="Cash"  ?
@@ -2433,7 +2434,7 @@ class Expenses extends React.Component {
         let j=0;
         if(self.state.expenseNameFil!=''){
 
-            let stat = await base.services.OyeLivingApi.getTheExpenseListByExpenseName(self.state.expenseNameFil);
+            let stat = await base.services.OyeLivingApi.getTheExpenseListByExpenseName(this.props.dashBoardReducer.assId,self.state.expenseNameFil);
                 console.log("Expense  Details:", stat,self.state.expenseNameFil);
                 try {
                     if(stat){

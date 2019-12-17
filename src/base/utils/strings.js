@@ -14,7 +14,7 @@ const isMandatory = ' is required';
     3. api     --- For production server
     4. staging --- For Staging server //For staging server Media upload url same as uat
 */
-const urlType = 'apiuat';
+const urlType = 'api';
 
 const api = {
   oyeSafeApiDomainFamily: isDev
@@ -40,8 +40,8 @@ const api = {
 };
 
 //const imageUrl = 'https://mediauploaddev.oyespace.com/Images/'; //Development
-const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
-//const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
+//const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
+const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
 const strings = {
   urlType: urlType,

@@ -809,7 +809,7 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    this.syncData();
+
     /*timer.setInterval(
              this,
              'syncData',

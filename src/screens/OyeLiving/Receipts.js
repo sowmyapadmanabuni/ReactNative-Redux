@@ -369,8 +369,8 @@ class Receipts extends React.Component {
                                     borderBottomWidth: 1,
                                 }}
                                 dropdownOffset={{top: 10, left: 0}}
-                                dropdownPosition={-5}
                                 rippleOpacity={0}
+                                dropdownPosition={this.state.blockList.length > 2 ? -5 : -2}
                                 onChangeText={(value, index) => {this.setState({isLoading:true});this.getReceiptsList(value,index)}}
                             />
                             <TouchableOpacity
