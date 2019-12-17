@@ -2,7 +2,7 @@ PODS:
   - boost-for-react-native (1.63.0)
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
-  - DoubleConversion (1.1.6)
+  - DoubleConversion (1.1.5)
   - Fabric (1.10.2)
   - Firebase/Core (5.19.0):
     - Firebase/CoreOnly
@@ -87,12 +87,11 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.8.0):
     - GoogleUtilities/Logger
-  - lottie-ios (3.0.3)
-  - nanopb (0.3.9011):
-    - nanopb/decode (= 0.3.9011)
-    - nanopb/encode (= 0.3.9011)
-  - nanopb/decode (0.3.9011)
-  - nanopb/encode (0.3.9011)
+  - nanopb (0.3.901):
+    - nanopb/decode (= 0.3.901)
+    - nanopb/encode (= 0.3.901)
+  - nanopb/decode (0.3.901)
+  - nanopb/encode (0.3.901)
   - Permission-BluetoothPeripheral (2.0.3):
     - RNPermissions
   - Permission-Camera (2.0.3):
@@ -101,13 +100,11 @@ PODS:
     - RNPermissions
   - Permission-Microphone (2.0.3):
     - RNPermissions
-  - Protobuf (3.11.0)
+  - Protobuf (3.10.0)
   - RCTSystemSetting (1.7.3):
     - React
   - React (0.59.10):
     - React/Core (= 0.59.10)
-  - react-native-document-picker (3.2.4):
-    - React
   - react-native-geolocation (2.0.2):
     - React
   - react-native-google-maps (0.24.2):
@@ -187,15 +184,9 @@ PODS:
     - React
   - RNFS (2.15.2):
     - React
-  - RNGestureHandler (1.5.2):
-    - React
-  - RNPDF (0.10.1):
+  - RNGestureHandler (1.4.1):
     - React
   - RNPermissions (2.0.3):
-    - React
-  - RNReanimated (1.4.0):
-    - React
-  - RNScreens (1.0.0-alpha.23):
     - React
   - RNSVG (9.11.1):
     - React
@@ -207,7 +198,6 @@ PODS:
 
 DEPENDENCIES:
   - Crashlytics
-  - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Fabric
   - Firebase/Core (~> 5.19.0)
   - Firebase/Messaging (~> 5.19.0)
@@ -215,13 +205,11 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
-  - lottie-ios (from `../node_modules/lottie-ios`)
   - Permission-BluetoothPeripheral (from `../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec`)
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - Permission-MediaLibrary (from `../node_modules/react-native-permissions/ios/MediaLibrary.podspec`)
   - Permission-Microphone (from `../node_modules/react-native-permissions/ios/Microphone.podspec`)
   - RCTSystemSetting (from `../node_modules/react-native-system-setting`)
-  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
@@ -247,10 +235,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
-  - RNReanimated (from `../node_modules/react-native-reanimated`)
-  - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNViewShot (from `../node_modules/react-native-view-shot`)
@@ -260,6 +245,7 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - Crashlytics
+    - DoubleConversion
     - Fabric
     - Firebase
     - FirebaseAnalytics
@@ -275,14 +261,10 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
-  DoubleConversion:
-    :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
-  lottie-ios:
-    :path: "../node_modules/lottie-ios"
   Permission-BluetoothPeripheral:
     :path: "../node_modules/react-native-permissions/ios/BluetoothPeripheral.podspec"
   Permission-Camera:
@@ -295,8 +277,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-system-setting"
   React:
     :path: "../node_modules/react-native"
-  react-native-document-picker:
-    :path: "../node_modules/react-native-document-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
@@ -321,14 +301,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNPDF:
-    :path: "../node_modules/react-native-view-pdf"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
-  RNReanimated:
-    :path: "../node_modules/react-native-reanimated"
-  RNScreens:
-    :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
@@ -341,7 +315,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
-  DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
+  DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: c60d49e9c2630875a96207d15e2affb8364996d1
   FirebaseAnalytics: fd72a26bf8dac84cefba2f0864366f718555a5b0
@@ -355,16 +329,14 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 1624046ab1bcc5e170061a56ef5679000b079c8e
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
-  lottie-ios: 6037add6441183d4ffd100d2ac78724aa8d919d4
-  nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Permission-BluetoothPeripheral: 091a53a4625e149312f7ca153e4b913ca5c38348
   Permission-Camera: 019cd09a9b6fa90f7e5b2f7a4a9e32c54027f123
   Permission-MediaLibrary: 04ac4ce4511d25bda3bded67ce1187b6b1f80d3f
   Permission-Microphone: 747e8e6364c9fa266f2acf5dd7cebaf0fce2e177
-  Protobuf: 394b2bf29ec303f4325e3ee4892c09e675647152
+  Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
   RCTSystemSetting: 2870be06565f2398a8786bfe8486ff6880a4326a
   React: 36d0768f9e93be2473b37e7fa64f92c1d5341eef
-  react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 568cb03d0eae7fef93626f65d05be55642404ed4
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
@@ -376,16 +348,13 @@ SPEC CHECKSUMS:
   RNAudioRecorderPlayer: ad2dd78ab2c98e24a8daecbbb923771a1d441721
   RNDeviceInfo: a88be26a64ada7cbc2bc0ebbd1662d340304874e
   RNFS: 54da03c2b7d862c42ea3ca8c7f86f892760a535a
-  RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
-  RNPDF: 8a40fafbed2714e7e8fe4e7c9f6f9815f52a939c
+  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNPermissions: 332fd0d0c33ba71d83a22f584fce7b2270488ae0
-  RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
-  RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNSVG: be27aa7c58819f97399388ae53d7fa0572f32c7f
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNViewShot: 05672e0b3c36cd70633466614b4451869a70c6c7
   yoga: 684513b14b03201579ba3cee20218c9d1298b0cc
 
-PODFILE CHECKSUM: 1ebee16908ee78000814d3884b53d12a8fbd39cf
+PODFILE CHECKSUM: b1dd99f13c5935f05068a102ef2c23ca3ae6e6ab
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.8.3

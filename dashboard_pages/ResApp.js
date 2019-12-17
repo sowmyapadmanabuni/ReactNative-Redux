@@ -88,6 +88,7 @@ import EditExpense from "../src/screens/OyeLiving/Expenses/EditExpense";
 import StaffLeaveWithVendor from '../src/screens/Resident/Visitors/Staff/staffLeaveWithVendor.js';
 
 import DrawerMenu from './DrawerMenu'
+import SettingsScreen from "./SettingsScreen";
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -648,7 +649,21 @@ const ResApp = createStackNavigator({
     navigationOptions: {
       header: props => <MyFamilyHeader isOyeLiving={true} {...props} />
     }
-  }
+  },
+  settingsScreen: {
+    screen: SettingsScreen,
+    navigationOptions: {
+      title: 'Settings Screen',
+      header: props => (
+          <PatrollingCommonHeader
+              isReportVisible={false}
+              isHidden={false}
+              isReshuffling={false}
+              {...props}
+          />
+      )
+    }
+  },
 });
 
 export default createAppContainer(ResApp);

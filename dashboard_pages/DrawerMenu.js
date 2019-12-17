@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Icon, withBadge } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MarqueeText from 'react-native-marquee';
+import SettingsScreen from "./SettingsScreen";
  
 class DrawerMenu extends Component {
     constructor(props) {
@@ -60,11 +61,20 @@ class DrawerMenu extends Component {
 
       renderMenuItems(menu, index){
           //borderBottomColor:'#00000010',borderBottomWidth:1
-          return(
+          /*return(
             <View style={{height:48,width:'100%',flexDirection:'row',alignItems:'center'}}>
                 <Image style={{height:22,width:22}} source={menu.icon}/>
                 <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
             </View>
+          )*/
+          return(
+              <TouchableOpacity
+                  style={{height:48,width:'100%',alignItems:'center',flexDirection:'row'}}
+                  onPress={()=> this.props.navigation.navigate("settingsScreen")}
+              >
+                      <Image style={{height:22,width:22}} source={menu.icon}/>
+                      <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
+              </TouchableOpacity>
           )
       }
 

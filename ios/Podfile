@@ -1,6 +1,6 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
-#require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
 target 'OyeSpace' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
@@ -22,16 +22,6 @@ target 'OyeSpace' do
   'DevSupport'
   ]
 
-
-
-  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-
-  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
-  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
-  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
-
-
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-BluetoothPeripheral', :path => "#{permissions_path}/BluetoothPeripheral.podspec"
@@ -44,7 +34,7 @@ target 'OyeSpace' do
   
 
   pod 'Firebase/Core', '~> 5.19.0'
-  pod 'Firebase/Messaging', '~> 5.19.0'
+pod 'Firebase/Messaging', '~> 5.19.0'
   
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
   
@@ -57,7 +47,7 @@ target 'OyeSpace' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   
 
-  #pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
   pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
   
   pod 'Fabric'
@@ -65,20 +55,8 @@ target 'OyeSpace' do
   
   # Third party deps podspec link
   #  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
-  # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
-  # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
-  # pod 'React-cxxreact', :path => '../node_modules/react-native/ReactCommon/cxxreact'
-  # pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
-  # pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
-  # pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
-  # pod 'ReactCommon/jscallinvoker', :path => "../node_modules/react-native/ReactCommon"
-  # pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
-  # pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-
-  # pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
-  # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
-  # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   
 
 
@@ -116,15 +94,6 @@ target 'OyeSpace' do
   pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
 
   pod 'RNPDF', :path => '../node_modules/react-native-view-pdf'
-  
-
-
-
-#  pod 'react-native-location-satellites', :path => '../node_modules/react-native-location-satellites'
-
-  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
-
-  pod 'RNScreens', :path => '../node_modules/react-native-screens'
 
 end
   
@@ -135,19 +104,6 @@ post_install do |installer|
     end
   end
 end
-
-# post_install do |installer|
-#   installer.pods_project.targets.each do |target|
-#     if target.name == 'react-native-google-maps'
-#       target.build_configurations.each do |config|
-#         config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
-#       end
-#     end
-#     if target.name == "React"
-#       target.remove_from_project
-#     end
-#   end
-# end
 
 # post_install do |installer|
 #   installer.pods_project.targets.each do |target|
