@@ -198,16 +198,13 @@ class Dashboard extends PureComponent {
     if (Platform.OS === 'android') {
       if (this.state.isSelectedCard === 'UNIT') {
         //this.props.navigation.goBack(null);
-        console.log("<< 3 >>");
         ToastAndroid.show('Press again to exit app', ToastAndroid.SHORT);
 
        var doubleClick = BackHandler.addEventListener('hardwareBackPress', () => {
-          console.log("hit it")
           BackHandler.exitApp()
         });
         setTimeout(
             () => {
-              console.log("TIMER");
               doubleClick.remove()
             },
             1500
@@ -215,11 +212,9 @@ class Dashboard extends PureComponent {
         //console.log("TIME: ",new Date().getTime())
         //this.showExitAlert();
       } else if(this.state.isSelectedCard !== 'UNIT'){
-        console.log("<< else >>");
         this.changeCardStatus('UNIT');
       }
       this.lastBackButtonPress = new Date().getTime();
-      //console.log("return true;");
       return true;
     }
   }
@@ -235,7 +230,7 @@ class Dashboard extends PureComponent {
           .ref('SOS/' + SelectedAssociationID + '/' + MyAccountID + '/')
           .on('value', function(snapshot) {
             let receivedData = snapshot.val();
-            console.log('ReceiveddataDash', snapshot.val());
+            snapshot.val();
             if (receivedData !== null) {
               count = count + 1;
               if (receivedData.isActive && receivedData.userId) {
@@ -276,7 +271,6 @@ class Dashboard extends PureComponent {
 
           let firebaseMessaging = firebase.messaging();
           let tok = await firebaseMessaging.getToken();
-          console.log('ROLE_CHANGE_FRTDB_MSG', tok);
           self.requestNotifPermission();
           self.roleCheckForAdmin(self.state.assocId);
         } else {
@@ -357,7 +351,6 @@ class Dashboard extends PureComponent {
   }
 
   requestNotifPermission = () => {
-    console.log("requestNotifPermission -------------------------- ");
     const {
       MyAccountID,
       champBaseURL,
@@ -1214,6 +1207,7 @@ class Dashboard extends PureComponent {
   }
 
   updateUnit(value, index) {
+    console.log("updateUnit: ",value,index);
     let self = this;
     let unitList = self.state.unitList;
     let unitName, unitId;
@@ -1426,6 +1420,7 @@ class Dashboard extends PureComponent {
     }
     else{
       console.log('CHECK NET!!!!!!@@@@@',this.state.isConnected);
+
       return(
           <View style={{ height: '100%', width: '100%' }}>
             <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
@@ -1503,6 +1498,7 @@ class Dashboard extends PureComponent {
                               }
                               rippleOpacity={0}
                               // onChangeText={(value, index) => {
+                              //   console.log("value/index ",value, index);
                               //   this.updateUnit(value, index);
                               // }}
                               onChangeText={(value, index) => {
@@ -1523,9 +1519,6 @@ class Dashboard extends PureComponent {
                                   value: dropdown1[index].value
                                 });
                                 this.updateUnit(value, index);
-
-                                // console.log(value);
-                                // console.log(index);
                               }}
                               // itemTextStyle={{}}
                           />
@@ -1632,7 +1625,7 @@ class Dashboard extends PureComponent {
     this.setState({
       isSelectedCard: status
     });
-    if (status == 'UNIT') {
+    if (status === 'UNIT') {
       this.setState({
         myUnitCardHeight: Platform.OS === 'ios'?'90%':'80%',
         myUnitCardWidth: '26%',
@@ -1648,7 +1641,7 @@ class Dashboard extends PureComponent {
         assdNameHide: false,
         unitNameHide: false
       });
-    } else if (status == 'ADMIN') {
+    } else if (status === 'ADMIN') {
       this.setState({
         myUnitCardHeight: Platform.OS === 'ios'?'80%':'70%',
         myUnitCardWidth: '22%',
@@ -1665,7 +1658,7 @@ class Dashboard extends PureComponent {
         assdNameHide: true,
         unitNameHide: true
       });
-    } else if (status == 'OFFERS') {
+    } else if (status === 'OFFERS') {
       this.setState({
         myUnitCardHeight: Platform.OS === 'ios'?'80%':'70%',
         myUnitCardWidth: '22%',
