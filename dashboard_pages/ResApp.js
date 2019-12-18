@@ -654,14 +654,8 @@ const ResApp = createStackNavigator({
     screen: SettingsScreen,
     navigationOptions: {
       title: 'Settings Screen',
-      header: props => (
-          <PatrollingCommonHeader
-              isReportVisible={false}
-              isHidden={false}
-              isReshuffling={false}
-              {...props}
-          />
-      )
+      header: props => <MyFamilyHeader isOyeLiving={true} {...props} />
+
     }
   },
 });

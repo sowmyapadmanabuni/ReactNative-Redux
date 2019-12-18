@@ -65,6 +65,8 @@ class NotificationScreen extends PureComponent {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
+  //  #ff0000-ExitRejected
+
     componentDidMount() {
 
         if(Platform.OS!='ios'){
@@ -212,8 +214,8 @@ class NotificationScreen extends PureComponent {
                         opened: true,
                         newAttachment: false,
                         visitorlogId: logId,
-                        //updatedTime: res.data.data.currentDateTime
-                        // status:
+                        updatedTime: responses.data.data.currentDateTime,
+                        status:"ExitApproved"
                     });
                 this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                 this.props.navigation.navigate('ResDashBoard');
@@ -222,6 +224,17 @@ class NotificationScreen extends PureComponent {
             })
             .catch(e => {
                 console.log("ERROR ",e);
+                gateFirebase
+                    .database()
+                    .ref(`NotificationSync/A_${associationid}/${logId}`)
+                    .set({
+                        buttonColor: '#75be6f',
+                        opened: true,
+                        newAttachment: false,
+                        visitorlogId: logId,
+                        updatedTime: null,
+                        status:"ExitApproved"
+                    });
                 this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                 this.props.navigation.navigate('ResDashBoard');
 
@@ -258,7 +271,8 @@ class NotificationScreen extends PureComponent {
                         {
                             VLApprStat: 'Approved',
                             VLVisLgID: visitorId,
-                            VLApprdBy:this.props.userReducer.MyFirstName
+                            VLApprdBy:this.props.userReducer.MyFirstName,
+
                         },
                         {
                             headers: {
@@ -277,8 +291,8 @@ class NotificationScreen extends PureComponent {
                                 opened: true,
                                 newAttachment: false,
                                 visitorlogId: visitorId,
-                                updatedTime: res.data.data.currentDateTime
-                                // status:
+                                updatedTime: res.data.data.currentDateTime,
+                                status:"EntryApproved"
                             });
                         this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
@@ -304,7 +318,9 @@ class NotificationScreen extends PureComponent {
                         opened: true,
                         newAttachment: false,
                         visitorlogId: visitorId,
-                        updatedTime: null
+                        updatedTime: null,
+                        status:"EntryApproved"
+
                         // status:
                     })
                     .then(() => {
@@ -359,7 +375,9 @@ class NotificationScreen extends PureComponent {
                                 opened: true,
                                 newAttachment: false,
                                 visitorlogId: visitorId,
-                                updatedTime: res.data.data.currentDateTime
+                                updatedTime: res.data.data.currentDateTime,
+                                status:"EntryRejected"
+
                             });
                         this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
@@ -382,7 +400,9 @@ class NotificationScreen extends PureComponent {
                         opened: true,
                         newAttachment: false,
                         visitorlogId: visitorId,
-                        updatedTime: null
+                        updatedTime: null,
+                        status:"EntryRejected"
+
                     });
                 this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                 this.props.navigation.navigate('ResDashBoard');

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity, FlatList, Platform, Switch} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity, FlatList, Platform, Switch,ScrollView} from 'react-native';
 import HeaderStyles from '../src/components/dashBoardHeader/HeaderStyles';
 import base from '../src/base';
 import { connect } from 'react-redux';
@@ -49,17 +49,26 @@ class SettingsScreen extends Component {
         this.setState({isLoading: false, loading: false});
         try {
             if (myFamilyList.success && myFamilyList.data) {
+                 let familyData=myFamilyList.data.familyMembers;
+                 console.log('GET THE DATA',familyData)
+
+                for(let i=0; i<familyData.length;i++){
+                    if(this.props.MyAccountID===familyData[i].acAccntID){
+                        familyData[i].isFSelected=true;
+                    }
+                    else{
+                        familyData[i].isFSelected=false;
+                    }
+                }
+            console.log('FAMILY DATA',familyData)
+
                 this.setState({
-                    myfamily11: myFamilyList.data.familyMembers.sort((a, b) =>
+                    myfamily11:familyData.sort((a, b) =>
                         a.fmName > b.fmName ? 1 : -1
                     ),
-                    clonedList: myFamilyList.data.familyMembers.sort((a, b) =>
-                        a.fmName > b.fmName ? 1 : -1
-                    )
                 });
-                this.setState({familyData: myFamilyList});
             } else {
-                this.showAlert(stat.error.message, true);
+                this.showAlert(myFamilyList.error.message, true);
             }
         } catch (error) {
             base.utils.logger.log(error);
@@ -73,39 +82,49 @@ class SettingsScreen extends Component {
         console.log("data>> ", item.item.fmlName)
         return(
 
-            <View
-                //elevation={8}
+            <TouchableOpacity
                 style={{
-                    borderTopLeftRadius:5,
-                    borderTopRightRadius:5,
-                    width:wp(20),
-                    height:hp(4),
+                    shadowOpacity: Platform.OS === 'ios' ?0.0015 * 10 + 0.18 :0,
+                    shadowRadius:Platform.OS === 'ios' ? 0.54 * 10 :0,
+                    shadowOffset: {
+                        height: Platform.OS === 'ios' ? 0.6 * 10: 0,
+                    },
+                    borderTopLeftRadius:12,
+                    borderTopRightRadius:12,
+                    width:wp(25),
+                    height:hp(5),
                     marginRight:wp('5'),
                     borderColor: base.theme.colors.shadedWhite,
-                    //shadowColor: base.theme.colors.darkgrey,
-                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
-                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                    shadowRadius:Platform.OS === 'ios' ? 2: 1, elevation: 5,  borderWidth: 0.5,
+                    shadowColor: base.theme.colors.shadedWhite,
+                   // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
+                   // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
+                   // shadowRadius:Platform.OS === 'ios' ? 2: 0,
+                    elevation: 10,
+                    borderWidth:0.5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor:base.theme.colors.white
+                    backgroundColor:item.item.isFSelected? base.theme.colors.white :base.theme.colors.greyHead,
                 }}
+                onPress={()=>this.changeTheMember(item)}
+
             >
                 <Text>
                     {item.item.fmName}
                 </Text>
-            </View>
+            </TouchableOpacity>
         )
     }
 
+    changeTheMember(item){
+      console.log('GET THE CHANGES IN ANDROID')
+    }
+
     render(){
-        //console.log("userReducer", userReducer);
         return(
             <View style={{flex:1}}>
-
                 <View
                     style={{
-                        //backgroundColor:'#aaa',
+                        backgroundColor:base.theme.colors.white,
                         flexDirection:'row',
                         marginTop:hp(5),
                     }}
@@ -114,13 +133,11 @@ class SettingsScreen extends Component {
                             style={{
                                 width:wp(60),
                                 marginLeft:wp('18'),
-                                //marginTop:hp(5),
-                                //backgroundColor:'yellow',
+                                backgroundColor:base.theme.colors.white,
                             }}
                             horizontal={true}
                             data={this.state.myfamily11}
                             renderItem={(item) => this.renderTopViews(item)}
-                            //keyExtractor={item => item.id}
                         />
 
                     <ElevatedView
@@ -129,7 +146,7 @@ class SettingsScreen extends Component {
                             borderTopLeftRadius:5,
                             borderTopRightRadius:5,
                             width:wp(10),
-                            height:hp(4),
+                            height:hp(5),
                             marginRight:wp('5'),
                             alignItems:'center',
                             justifyContent:'center',
@@ -307,7 +324,7 @@ class SettingsScreen extends Component {
                             />
                         </View>
 
-                        <View style={{ flexDirection:'row' , alignItems:'center', backgroundColor:'yellow'}}>
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
                             <Text>
                                 SMS
                             </Text>
