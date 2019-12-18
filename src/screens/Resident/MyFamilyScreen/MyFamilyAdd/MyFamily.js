@@ -622,7 +622,7 @@ class MyFamily extends Component {
         let self = this;
         let mobNum = self.state.sendNum;
         let cCode = self.state.cCode;
-        console.log("associantion id",self.props.dashBoardReducer.assId);
+        console.log("associantion id",self.props.dashBoardReducer);
         if (cCode === "") {
             cCode = "+91";
             mobNum = self.state.mobileNumber

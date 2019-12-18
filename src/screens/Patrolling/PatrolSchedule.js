@@ -30,6 +30,8 @@ import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from "react-native-maps";
 import {captureRef, captureScreen} from "react-native-view-shot";
 import Share from "react-native-share";
 import PatrollingScheduleStyles from "./PatrollingScheduleStyles";
+import Card from "react-navigation-stack/src/views/StackView/StackViewCard";
+import CardView from "../../components/cardView/CardView";
 
 const catsSource = {
     uri: "https://i.imgur.com/5EOyTDQ.jpg"
@@ -136,7 +138,6 @@ class PatrolSchedule extends React.Component {
         }
     }
 
-
     async getCheckPointList() {
         let self = this;
 
@@ -176,6 +177,7 @@ class PatrolSchedule extends React.Component {
             </Container>
         )
     }
+
 
     changePage() {
         AsyncStorage.removeItem(base.utils.strings.patrolId);
@@ -423,7 +425,6 @@ class PatrolSchedule extends React.Component {
             console.log(response)
         });
     }
-
 
     openMapModal() {
         let data = this.state.cpData;

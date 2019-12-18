@@ -349,11 +349,12 @@ class Invoices extends React.Component {
                             borderBottomWidth: 1,
                         }}
                         dropdownOffset={{ top: 10, left: 0 }}
-                        dropdownPosition={-5}
                         rippleOpacity={0}
                         onChangeText={(value, index) => {
                             this.getInvoiceList(value, index)
                         }}
+                        dropdownPosition={this.state.blockList.length > 2 ? -5 : -2}
+
                     />
                     <TouchableOpacity
                         underlayColor={base.theme.colors.transparent}

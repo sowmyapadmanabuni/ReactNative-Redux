@@ -4,7 +4,7 @@
     1. apiuat  --- For testing server
     2. apidev  --- For develpment server
     3. api     --- For production server
-    4. staging --- For Staging server ////For staging server Media upload url same as uat
+    4. staging --- For Staging server //For staging server Media upload url same as uat
 */
 
 let urlType = 'apiuat';

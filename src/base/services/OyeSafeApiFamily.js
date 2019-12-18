@@ -2,6 +2,8 @@ import axios from "axios"
 import React from "react"
 import utils from "../utils"
 
+
+////baseURL: utils.strings.oyeSafeUrlFamily,
 let instance = axios.create({
     baseURL: utils.strings.oyeSafeUrlFamily,
     timeout: 10000,
@@ -38,6 +40,7 @@ export default class OyeSafeApiFamily {
 
     static async myFamilyAddMember(input) {
         console.log("MyFamily add member", input);
+        //return await instance.post("FamilyMember/create", input)
         return await instance.post("FamilyMember/create", input)
     }
 

@@ -339,7 +339,7 @@ class StaffLeaveWithVendor extends Component {
             </View>
           </View>
           <View style={{width:'90%',alignSelf:'center',marginTop:20,marginBottom:30}}>
-            <Text style={{fontSize:15,color:base.theme.colors.black}}>Comment</Text>
+            {/*<Text style={{fontSize:15,color:base.theme.colors.black}}>Comment</Text>
             <View style={{height:80,width:'100%',borderColor:base.theme.colors.primary,
               borderWidth:1.5,borderRadius:10,marginTop:10,
               justifyContent:'center',alignItems:'center'}}>
@@ -351,7 +351,7 @@ class StaffLeaveWithVendor extends Component {
                   placeholderTextColor={base.theme.colors.grey}
               />
 
-            </View>
+            </View>*/}
             <View style={{width:'100%',alignItems:'center',justifyContent:'center',marginTop:10,marginBottom:30}}>
               <OSButton
                   height={'35%'}
