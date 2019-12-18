@@ -911,6 +911,44 @@ class SettingsScreen extends Component {
                             />
                         </View>
 
+                        <View
+                            style={{
+                                //backgroundColor:'yellow',
+                                height:hp(5),
+                                alignSelf:'center',
+                                justifyContent:'center'
+                            }}
+                        >
+                            <View
+                                style={{
+                                    backgroundColor:'#D3D3D3',
+                                    width:wp(90),
+                                    height:hp(0.2),
+                                    alignSelf:'center',
+                                }}
+                            />
+                        </View>
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                            <Text>
+                                Invoice & Receipts
+                            </Text>
+                            <Switch
+                                style={{
+                                    flex:1,
+                                    alignSelf:'flex-end',
+                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                }}
+                                trackColor={{true: '#FFB400', false: 'grey'}}
+                                thumbTintColor="white"
+                                onValueChange = {()=> this.setState({telegramBroadcast: !this.state.telegramBroadcast})}
+                                value = {this.state.telegramBroadcast}
+                            />
+                        </View>
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
+                            <Text>Invoices Generated </Text>
+                        </View>
 
 
 
