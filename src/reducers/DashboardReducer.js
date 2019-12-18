@@ -21,6 +21,7 @@ const INITIAL_STATE = {
     datasource: null,
     dropdown: [],
     dropdown1: [],
+    allAssociations:[],
     associationid: null,
     residentList: [],
     sold: 0,
@@ -56,6 +57,7 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 dropdown: action.payload.dropdown,
                 associationid: action.payload.associationid,
+                allAssociations:action.payload.allAssociations,
                 isLoading: false,
                 called: true
             };

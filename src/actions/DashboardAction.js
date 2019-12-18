@@ -20,6 +20,7 @@ import {
 import axios from 'axios';
 import _ from 'lodash';
 import base from '../base';
+import firebase from 'react-native-firebase'
 
 export const getDashAssoSync = (
   oyeURL,
@@ -225,6 +226,7 @@ export const getDashSub = (oyeURL, SelectedAssociationID) => {
 };
 
 export const getDashAssociation = (oyeURL, MyAccountID) => {
+  console.log("getDashAssociation_ACTI",`http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`)
   return dispatch => {
     //  ("http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/1");
     fetch(
@@ -254,12 +256,33 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
               id: index,
               associationId: `${data.asAssnID}`,
               memberId: data.meMemID,
-              roleId: data.mrmRoleID
+              roleId: data.mrmRoleID,
+              raw:data
             });
             associationIds.push({
               id: data.asAssnID
             });
           });
+
+
+          let assnList = _.filter(associations, item => item.unUniName != "");
+          console.log("ASSNIST_II",assnList)
+          firebase.messaging().hasPermission().
+    then((enabled) => {
+      console.log("FCM_PERMI",enabled)
+        if (enabled) {
+            messaging.getToken()
+                .then(token => { console.log("FCMTOKE::",token) })
+                .catch(error => { console.log("FCMTOKE::",error)  });
+        } else {
+            messaging.requestPermission()
+                .then(() => { console.log("FCMTOKE::GOTPERMISSION")  })
+                .catch(error => { console.log("FCMTOKE::NOPERMISSION") });
+        }
+    })
+    .catch(error => { console.log("FCMTOKE::NOPERMISSION_CATCH") });
+
+
 
           let withoutString = [];
 
@@ -280,6 +303,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
             type: DASHBOARD_ASSOCIATION,
             payload: {
               dropdown: sorted,
+              allAssociations:associations,
               associationid: associationIds
             }
           });
@@ -342,7 +366,8 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
                         name: data.unUniName,
                         unitId: data.unUnitID,
                         id: index,
-                        myRoleId: data.mrmRoleID
+                        myRoleId: data.mrmRoleID,
+                        raw:data
                       });
                     });
 
@@ -445,6 +470,7 @@ export const getDashUnits = (
   return dispatch => {
     dispatch({ type: DASHBOARD_UNITS_START });
     console.log('called from sync');
+    console.log('DASH_UNITS_ACTI',`http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`)
     axios
       .get(
         `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${MyAccountID}/${unit}`,
