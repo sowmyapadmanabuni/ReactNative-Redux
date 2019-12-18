@@ -331,7 +331,7 @@ class SettingsScreen extends Component {
                             />
                         </View>
 
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                        <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
                             <Text>Entry</Text>
                         </View>
 
@@ -755,7 +755,7 @@ class SettingsScreen extends Component {
                         </View>
 
 
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                        <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
                             <Text>
                                 In-App Request
                             </Text>
@@ -949,6 +949,7 @@ class SettingsScreen extends Component {
                         <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
                             <Text>Invoices Generated </Text>
                         </View>
+
 
 
 
