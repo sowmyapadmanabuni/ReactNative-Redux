@@ -531,39 +531,50 @@ class SettingsScreen extends Component {
 
     renderSideBar(item) {
         console.log("renderSideBar ", item);
-        let id = item.item.id;
         return (
             <TouchableOpacity
+                style={{
+                    shadowOpacity: Platform.OS === 'ios' ? 0.0015 * 10 + 0.18 : 0,
+                    shadowRadius: Platform.OS === 'ios' ? 0.54 * 10 : 0,
+                    shadowOffset: {
+                        height: Platform.OS === 'ios' ? 0.6 * 10 : 0,
+                    },
+                    shadowColor: base.theme.colors.greyHead,
+                    borderColor: base.theme.colors.greyHead,
+                    borderTopLeftRadius: 5,
+                    borderBottomLeftRadius: 5,
+                    ///height: wp(50),
+                    width: wp(10),
+                    // width: wp(25),
+                    // height: hp(5),
+                    marginTop:hp(6),
+                    // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
+                    // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
+                    // shadowRadius:Platform.OS === 'ios' ? 2: 0,
+                    elevation: 10,
+                    borderWidth: 0.5,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: item.item.isSelected ? base.theme.colors.white : base.theme.colors.greyHead,
+
+                }}
+                disabled={item.item.isSelected}
                 onPress={() => this.changeTheScreen(item)}
+
             >
-                <ElevatedView
-                    elevation={3}
-                    style={{
-                        marginTop: hp(6),
-                        borderTopLeftRadius: 5,
-                        borderBottomLeftRadius: 5,
-                        height: wp(40),
-                        width: wp(7),
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: item.item.isSelected ? "white" : "F5F5F5"
-                        //backgroundColor: (!this.state.setting ? "#F5F5F5" : "white"),
-                        //backgroundColor: this.state.setting ? "#F5F5F5" : "white"
-                    }}
-                >
-                    <View style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        //backgroundColor:'yellow',
-                        //height:hp(10),
-                        width: wp(40),
-                        transform: [{rotate: '-90deg'}]
-                    }}>
-                        <Text>
-                            {item.item.name}
-                        </Text>
-                    </View>
-                </ElevatedView>
+                <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    //backgroundColor:'yellow',
+                    //height:hp(10),
+                    width: wp(40),
+                    transform: [{rotate: '-90deg'}]
+                }}>
+                    <Text style={{fontSize:14,color:base.theme.colors.black,paddingTop:hp('10'),
+                        paddingBottom:hp('10')}}>
+                        {item.item.name}
+                    </Text>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -839,7 +850,6 @@ class SettingsScreen extends Component {
     }
 
     render() {
-        //console.log("userReducer", userReducer);
         return (
             <View style={{flex: 1}}>
 
@@ -882,9 +892,6 @@ class SettingsScreen extends Component {
                                               width: wp(15),
                                               height: hp(5),
                                               marginLeft: wp('5'),
-                                              // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
-                                              // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-                                              // shadowRadius:Platform.OS === 'ios' ? 2: 0,
                                               elevation: 10,
                                               borderWidth: 0.5,
                                               alignItems: 'center',
@@ -921,8 +928,7 @@ class SettingsScreen extends Component {
 
                         </View>
 
-                        <ElevatedView
-                            elevation={8}
+                        <View
                             style={{
                                 borderTopLeftRadius:20,
                                 flex:1,
@@ -930,6 +936,24 @@ class SettingsScreen extends Component {
                                 paddingTop:hp(5),
                                 //paddingLeft:wp(8),
                                 //paddingRight:wp(8),
+                                borderWidth: 1,
+                               // alignItems: 'center',
+                               // justifyContent: 'center',
+                                backgroundColor: base.theme.colors.white,
+                                shadowOpacity: Platform.OS === 'ios' ? 0.0015 * 8 + 0.18 : 0,
+                                shadowRadius: Platform.OS === 'ios' ? 0.54 * 8 : 0,
+                                shadowOffset: {
+                                    height: Platform.OS === 'ios' ? 0.6 * 8 : 0,
+                                },
+                                shadowColor: base.theme.colors.greyHead,
+                                borderColor: base.theme.colors.greyHead,
+                                elevation:8,
+                               // borderTopLeftRadius: 20,
+                                //flex: 1,
+                              //  width: wp(90),
+                              //  paddingTop: hp(5),
+                               // paddingLeft: wp(8),
+                               // paddingRight: wp(8),
                             }}
                         >
                             <View style={{
@@ -1417,7 +1441,7 @@ class SettingsScreen extends Component {
 
 
                             </View>
-                        </ElevatedView>
+                        </View>
                     </View>
 
                 </ScrollView>
