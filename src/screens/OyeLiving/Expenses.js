@@ -1312,7 +1312,7 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                         }}
                                         dropdownOffset={{top: 10, left: 0}}
-                                        dropdownPosition={-5}
+                                        dropdownPosition={this.state.blockListAdd.length > 2 ? -5 : -2}
                                         rippleOpacity={0}
                                         onChangeText={(value, index) => {
                                             this.setState({

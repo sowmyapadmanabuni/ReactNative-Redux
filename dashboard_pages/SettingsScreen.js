@@ -70,15 +70,6 @@ class SettingsScreen extends Component {
             <View
                 //elevation={8}
                 style={{
-                    // borderTopLeftRadius:5,
-                    // borderTopRightRadius:5,
-                    // width:wp(20),
-                    // height:hp(4),
-                    // marginRight:wp('2'),
-                    // alignItems:'center',
-                    // justifyContent:'center',
-
-
                     borderTopLeftRadius:5,
                     borderTopRightRadius:5,
                     width:wp(20),
@@ -95,7 +86,7 @@ class SettingsScreen extends Component {
                 }}
             >
                 <Text>
-                    {item.item.fmlName}
+                    {item.item.fmName}
                 </Text>
             </View>
         )
