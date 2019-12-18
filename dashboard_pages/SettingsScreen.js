@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
-import {FlatList, Image, Platform, ScrollView, Switch, Text, TouchableOpacity, View} from 'react-native';
+
+import React, { Component } from 'react';
+import {View, StyleSheet, Image, Text, TouchableOpacity, FlatList, Platform, Switch,ScrollView} from 'react-native';
+import HeaderStyles from '../src/components/dashBoardHeader/HeaderStyles';
 import base from '../src/base';
 import {connect} from 'react-redux';
 import ElevatedView from "react-native-elevated-view";
@@ -7,80 +9,268 @@ import ToggleSwitch from 'toggle-switch-react-native'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 
 class SettingsScreen extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            myfamily11:[],
-            familyData:[],
-            vendorSwitchValue:false,
+        this.state = {
+            myfamily11: [],
+            familyData: [],
+            vendorSwitchValue: false,
             inAppRequest: false,
             inAppNotification: false,
-            ivr:false,
-            telegram:false,
+            ivr: false,
+            telegram: false,
             sms: false,
-            inAppRequestExit:false,
-            inAppNotificationExit:false,
-            ivrExit:false,
-            telegramExit:false,
-            smsExit:false,
-            sideBarData:[{name:"Notification Settings",id:0,isSelected:false},{name:"SOS",id:1,isSelected: false}],
+            inAppRequestExit: false,
+            inAppNotificationExit: false,
+            ivrExit: false,
+            telegramExit: false,
+            smsExit: false,
+            broadcastValue:false,
+            sideBarData: [{name: "Notification Settings", id: 0, isSelected: false}, {
+                name: "SOS",
+                id: 1,
+                isSelected: false
+            }],
             vendorListData: [
-                {title:"In-App Request", id:0, isSelected:false},
-                {title:"In-App Notification", id:1, isSelected:false},
-                {title:"IVR Call Request", id:2, isSelected:false},
-                {title:"Telegram Notification", id:3, isSelected:false},
-                {title:"SMS", id:4, isSelected:false},
+                {title: "In-App Request", id: 0, isSelected: false},
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "IVR Call Request", id: 2, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "SMS", id: 4, isSelected: false},
             ],
 
             vendorExitListData: [
-                {title:"In-App Request", id:0, isSelected:false},
-                {title:"In-App Notification", id:1, isSelected:false},
-                {title:"IVR Call Request", id:2, isSelected:false},
-                {title:"Telegram Notification", id:3, isSelected:false},
-                {title:"SMS", id:4, isSelected:false},
+                {title: "In-App Request", id: 0, isSelected: false},
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "IVR Call Request", id: 2, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "SMS", id: 4, isSelected: false},
             ],
 
             KidExitList: [
-                {title:"In-App Request", id:0, isSelected:false},
-                {title:"In-App Notification", id:1, isSelected:false},
-                {title:"IVR Call Request", id:2, isSelected:false},
-                {title:"Telegram Notification", id:3, isSelected:false},
-                {title:"SMS", id:4, isSelected:false},
+                {title: "In-App Request", id: 0, isSelected: false},
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "IVR Call Request", id: 2, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "SMS", id: 4, isSelected: false},
             ],
 
             serviceList: [
-                {title:"In-App Notification", id:1, isSelected:false},
-                {title:"Telegram Notification", id:3, isSelected:false},
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
             ],
 
-            kidExit:false,
-            inAppRequestKid:false,
-            inAppNotificationEid:false,
-            ivrKid:false,
-            telegramKid:false,
-            smsKid:false,
-            Service:false,
-            notificationService:false,
-            telegramService:false,
-            guestValue:false,
-            inAppRequestGuest:false,
-            inAppNotificationGuest:false,
-            ivrGuest:false,
-            telegramGuest:false,
-            smsGuest:false,
-            notificationBroadcast:false,
-            telegramBroadcast:false,
-            InvoiceValue:false,
-            notificationInvoice:false,
-            telegramInvoices:false,
-            notificationInvoiceDue:false,
-            telegramInvoicesDue:false,
-            notificationReceipts:false,
-            telegramInvoicesReceipts:false,
+            guestList: [
+                {title: "In-App Request", id: 0, isSelected: false},
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "IVR Call Request", id: 2, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "SMS", id: 4, isSelected: false},
+            ],
 
-            setting:true,
-            sos:false,
-            isSelected:0,
+            broadcastList: [
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+            ],
+
+            invoiceGeneratedList: [
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+            ],
+
+            invoiceDueList: [
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+            ],
+
+            receiptsGeneratedList: [
+                {title: "In-App Notification", id: 1, isSelected: false},
+                {title: "Telegram Notification", id: 3, isSelected: false},
+            ],
+
+            kidExit: false,
+            inAppRequestKid: false,
+            inAppNotificationEid: false,
+            ivrKid: false,
+            telegramKid: false,
+            smsKid: false,
+            Service: false,
+            notificationService: false,
+            telegramService: false,
+            guestValue: false,
+            inAppRequestGuest: false,
+            inAppNotificationGuest: false,
+            ivrGuest: false,
+            telegramGuest: false,
+            smsGuest: false,
+            notificationBroadcast: false,
+            telegramBroadcast: false,
+            InvoiceValue: false,
+            notificationInvoice: false,
+            telegramInvoices: false,
+            notificationInvoiceDue: false,
+            telegramInvoicesDue: false,
+            notificationReceipts: false,
+            telegramInvoicesReceipts: false,
+
+            setting: true,
+            sos: false,
+            isSelected: 0,
+
+        }
+    }
+
+    vendorSwitchValueOff(){
+        if (this.state.vendorSwitchValue){
+            this.setState({
+                vendorSwitchValue:false
+            });
+            let setData = this.state.vendorListData;
+            for (let i = 0; i < setData.length; i++) {
+                setData[i].isSelected = false
+            }
+            this.setState({
+                vendorListData: setData
+            })
+
+            let setData2 = this.state.vendorExitListData;
+            for (let i = 0; i < setData2.length; i++) {
+                setData2[i].isSelected = false
+
+            }
+            this.setState({
+                vendorExitListData: setData2
+            })
+        }
+        else{
+            this.setState({
+                vendorSwitchValue:true
+            });
+        }
+
+
+    }
+
+    kidExitValueOff(){
+        if (this.state.kidExit){
+            this.setState({
+                kidExit:false
+            });
+
+            let setData = this.state.KidExitList;
+            for (let i = 0; i < setData.length; i++) {
+                setData[i].isSelected = false
+            }
+            this.setState({
+                KidExitList: setData
+            })
+        }
+        else{
+            this.setState({
+                kidExit: true
+            })
+        }
+
+    }
+
+    serviceValueOff(){
+        if(this.state.Service){
+            this.setState({
+                Service:false
+            });
+            let setData = this.state.serviceList;
+            for (let i = 0; i < setData.length; i++) {
+                setData[i].isSelected = false
+
+            }
+            this.setState({
+                serviceList: setData
+            })
+        }
+        else{
+            this.setState({
+                Service:true
+            })
+        }
+
+    }
+
+    guestValueOff(){
+        if(this.state.guestValue) {
+            this.setState({
+                guestValue: false
+            });
+            let setData = this.state.guestList;
+            for (let i = 0; i < setData.length; i++) {
+                setData[i].isSelected = false
+            }
+            this.setState({
+                guestList: setData
+            })
+        }
+        else{
+            this.setState({
+                guestValue:true
+            })
+        }
+    }
+
+    broadcastValueOff(){
+        if(this.state.broadcastValue) {
+            this.setState({
+                broadcastValue: false
+            });
+            let setData = this.state.broadcastList;
+            for (let i = 0; i < setData.length; i++) {
+                    setData[i].isSelected = !setData[i].isSelected
+
+            }
+            this.setState({
+                broadcastList: setData
+            })
+        }
+        else{
+            this.setState({
+                broadcastValue:true
+            })
+        }
+    }
+
+    InvoiceValueOff(){
+        if(this.state.InvoiceValue) {
+            this.setState({
+                InvoiceValue: false
+            });
+            let setData = this.state.invoiceGeneratedList;
+            for (let i = 0; i < setData.length; i++) {
+                setData[i].isSelected = false
+            }
+            this.setState({
+                invoiceGeneratedList: setData
+            })
+
+            let setData2 = this.state.invoiceGeneratedList;
+            for (let i = 0; i < setData2.length; i++) {
+                setData2[i].isSelected = false
+
+            }
+            this.setState({
+                invoiceGeneratedList: setData2
+            })
+
+            let setData3 = this.state.invoiceGeneratedList;
+            for (let i = 0; i < setData3.length; i++) {
+                setData3[i].isSelected = false
+
+            }
+            this.setState({
+                invoiceGeneratedList: setData3
+            })
+        }
+        else{
+            this.setState({
+                InvoiceValue:true
+            })
         }
     }
 
@@ -107,17 +297,25 @@ class SettingsScreen extends Component {
         this.setState({isLoading: false, loading: false});
         try {
             if (myFamilyList.success && myFamilyList.data) {
+                let familyData = myFamilyList.data.familyMembers;
+                console.log('GET THE DATA', familyData)
+
+                for (let i = 0; i < familyData.length; i++) {
+                    if (this.props.MyAccountID === familyData[i].acAccntID) {
+                        familyData[i].isFSelected = true;
+                    } else {
+                        familyData[i].isFSelected = false;
+                    }
+                }
+                console.log('FAMILY DATA', familyData)
+
                 this.setState({
-                    myfamily11: myFamilyList.data.familyMembers.sort((a, b) =>
+                    myfamily11: familyData.sort((a, b) =>
                         a.fmName > b.fmName ? 1 : -1
                     ),
-                    clonedList: myFamilyList.data.familyMembers.sort((a, b) =>
-                        a.fmName > b.fmName ? 1 : -1
-                    )
                 });
-                this.setState({familyData: myFamilyList});
             } else {
-                this.showAlert(stat.error.message, true);
+                this.showAlert(myFamilyList.error.message, true);
             }
         } catch (error) {
             base.utils.logger.log(error);
@@ -126,151 +324,240 @@ class SettingsScreen extends Component {
         }
     }
 
-    renderTopViews(item){
+    renderTopViews(item) {
         console.log("item ", item);
         console.log("data>> ", item.item.fmlName)
-        return(
+        return (
 
-            <View
-                //elevation={8}
+            <TouchableOpacity
                 style={{
-                    // borderTopLeftRadius:5,
-                    // borderTopRightRadius:5,
-                    // width:wp(20),
-                    // height:hp(4),
-                    // marginRight:wp('2'),
-                    // alignItems:'center',
-                    // justifyContent:'center',
-
-
-                    borderTopLeftRadius:5,
-                    borderTopRightRadius:5,
-                    width:wp(20),
-                    height:hp(4),
-                    marginRight:wp('5'),
-                    borderColor: base.theme.colors.shadedWhite,
-                    //shadowColor: base.theme.colors.darkgrey,
-                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
-                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                    shadowRadius:Platform.OS === 'ios' ? 2: 1, elevation: 5,  borderWidth: 0.5,
+                    shadowOpacity: Platform.OS === 'ios' ? 0.0015 * 10 + 0.18 : 0,
+                    shadowRadius: Platform.OS === 'ios' ? 0.54 * 10 : 0,
+                    shadowOffset: {
+                        height: Platform.OS === 'ios' ? 0.6 * 10 : 0,
+                    },
+                    shadowColor: base.theme.colors.greyHead,
+                    borderColor: base.theme.colors.greyHead,
+                    borderTopLeftRadius: 12,
+                    borderTopRightRadius: 12,
+                    width: wp(25),
+                    height: hp(5),
+                    marginRight: wp('5'),
+                    // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
+                    // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
+                    // shadowRadius:Platform.OS === 'ios' ? 2: 0,
+                    elevation: 10,
+                    borderWidth: 0.5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor:base.theme.colors.white
+                    backgroundColor: item.item.isFSelected ? base.theme.colors.white : base.theme.colors.greyHead,
                 }}
+                disabled={item.item.isFSelected}
+                onPress={() => this.changeTheMember(item)}
+
             >
                 <Text>
-                    {item.item.fmlName}
+                    {item.item.fmName}
                 </Text>
-            </View>
+            </TouchableOpacity>
         )
     }
 
-    changeTheScreen(item){
-        let setData=this.state.sideBarData;
-        console.log('GET THE ITEM VAL###',item,setData)
+    changeTheScreen(item) {
+        let setData = this.state.sideBarData;
+        console.log('GET THE ITEM VAL###', item, setData)
 
-        for(let i=0;i<setData.length;i++){
-            if (item.item.id === i){
-                setData[i].isSelected=true
-            }
-            else{
-                setData[i].isSelected=false
+        for (let i = 0; i < setData.length; i++) {
+            if (item.item.id === i) {
+                setData[i].isSelected = true
+            } else {
+                setData[i].isSelected = false
 
             }
-            console.log("----> ",i);
+            console.log("----> ", i);
         }
         this.setState({
-            sideBarData:setData
+            sideBarData: setData
         })
     }
 
-    vendorToggle(item){
-        console.log(">>>>>",item)
+    vendorToggle(item) {
+        if(this.state.vendorSwitchValue) {
+            console.log(">>>>>", item)
 
-        let setData=this.state.vendorListData;
-        for(let i=0;i<setData.length;i++){
-            if (item.item.id === i){
-                setData[i].isSelected= !setData[i].isSelected
+            let setData = this.state.vendorListData;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
             }
+            this.setState({
+                vendorListData: setData
+            })
         }
-        this.setState({
-            vendorListData:setData
-        })
     }
 
-    vendorExitToggle(item){
-        console.log(">>>>>",item)
+    vendorExitToggle(item) {
+        if(this.state.vendorSwitchValue) {
+            console.log(">>>>>", item)
 
-        let setData=this.state.vendorExitListData;
-        for(let i=0;i<setData.length;i++){
-            if (item.item.id === i){
-                setData[i].isSelected= !setData[i].isSelected
+            let setData = this.state.vendorExitListData;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
             }
+            this.setState({
+                vendorExitListData: setData
+            })
         }
-        this.setState({
-            vendorExitListData:setData
-        })
     }
 
-    KidExitToggle(item){
-        console.log(">>>>>",item);
+    KidExitToggle(item) {
+        if(this.state.kidExit) {
+            console.log(">>>>>", item);
 
-        let setData=this.state.KidExitList;
-        for(let i=0;i<setData.length;i++){
-            if (item.item.id === i){
-                setData[i].isSelected= !setData[i].isSelected
+            let setData = this.state.KidExitList;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
             }
+            this.setState({
+                KidExitList: setData
+            })
         }
-        this.setState({
-            KidExitList:setData
-        })
-    }
-
-    serviceToggle(item){
-        console.log(">>>>>",item);
-
-        let setData=this.state.serviceList;
-        for(let i=0;i<setData.length;i++){
-            if (item.item.id === i){
-                setData[i].isSelected= !setData[i].isSelected
-            }
-        }
-        this.setState({
-            serviceList:setData
-        })
     }
 
 
+    guestToggle(item) {
+        if(this.state.guestValue) {
+            console.log(">>>>>", item);
 
-    renderSideBar(item){
-        console.log("renderSideBar ",item);
-        let id= item.item.id;
-        return(
+            let setData = this.state.guestList;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
+            }
+            this.setState({
+                guestList: setData
+            })
+        }
+    }
+
+    broadcastToggle(item) {
+        if(this.state.broadcastValue) {
+            console.log(">>>>>", item);
+
+            let setData = this.state.broadcastList;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
+            }
+            this.setState({
+                broadcastList: setData
+            })
+        }
+    }
+
+    invoiceGeneratedToggle(item) {
+        if(this.state.InvoiceValue) {
+            console.log(">>>>>", item);
+
+            let setData = this.state.invoiceGeneratedList;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
+            }
+            this.setState({
+                invoiceGeneratedList: setData
+            })
+        }
+    }
+
+    invoiceDueToggle(item) {
+        if(this.state.InvoiceValue) {
+            console.log(">>>>>", item);
+
+            let setData = this.state.invoiceGeneratedList;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
+            }
+            this.setState({
+                invoiceGeneratedList: setData
+            })
+        }
+    }
+
+
+    receiptGeneratedToggle(item) {
+        if(this.state.InvoiceValue) {
+            console.log(">>>>>", item);
+
+            let setData = this.state.invoiceGeneratedList;
+            for (let i = 0; i < setData.length; i++) {
+                if (item.item.id === i) {
+                    setData[i].isSelected = !setData[i].isSelected
+                }
+            }
+            this.setState({
+                invoiceGeneratedList: setData
+            })
+        }
+    }
+
+
+
+
+    serviceToggle(item) {
+        console.log(">>>>>", item);
+
+        let setData = this.state.serviceList;
+        for (let i = 0; i < setData.length; i++) {
+            if (item.item.id === i) {
+                setData[i].isSelected = !setData[i].isSelected
+            }
+        }
+        this.setState({
+            serviceList: setData
+        })
+    }
+
+
+    renderSideBar(item) {
+        console.log("renderSideBar ", item);
+        let id = item.item.id;
+        return (
             <TouchableOpacity
-                onPress={()=> this.changeTheScreen(item)}
+                onPress={() => this.changeTheScreen(item)}
             >
                 <ElevatedView
                     elevation={3}
                     style={{
-                        marginTop:hp(6),
-                        borderTopLeftRadius:5,
-                        borderBottomLeftRadius:5,
-                        height:wp(40),
-                        width:wp(7),
-                        alignItems:'center',
-                        justifyContent:'center',
+                        marginTop: hp(6),
+                        borderTopLeftRadius: 5,
+                        borderBottomLeftRadius: 5,
+                        height: wp(40),
+                        width: wp(7),
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         backgroundColor: item.item.isSelected ? "white" : "F5F5F5"
                         //backgroundColor: (!this.state.setting ? "#F5F5F5" : "white"),
                         //backgroundColor: this.state.setting ? "#F5F5F5" : "white"
                     }}
                 >
                     <View style={{
-                        alignItems:'center',
-                        justifyContent:'center',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         //backgroundColor:'yellow',
                         //height:hp(10),
-                        width:wp(40),
-                        transform: [{ rotate: '-90deg'}]
+                        width: wp(40),
+                        transform: [{rotate: '-90deg'}]
                     }}>
                         <Text>
                             {item.item.name}
@@ -281,11 +568,11 @@ class SettingsScreen extends Component {
         )
     }
 
-    VendorList(item){
-        console.log("item ",item);
-        return(
-            <View style={{ flexDirection:'row' ,alignSelf:'center', alignItems:'center',}}>
-                <View style={{width:wp(80), flex:1}}>
+    VendorList(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
                     </Text>
@@ -293,9 +580,9 @@ class SettingsScreen extends Component {
                 <View
                     style={{
                         //backgroundColor:'yellow',
-                        flex:1,
-                        alignItems:'flex-end',
-                        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
                     <ToggleSwitch
@@ -311,11 +598,11 @@ class SettingsScreen extends Component {
         )
     }
 
-    VendorExitList(item){
-        console.log("item ",item);
-        return(
-            <View style={{ flexDirection:'row' ,alignSelf:'center', alignItems:'center',}}>
-                <View style={{width:wp(80), flex:1}}>
+    VendorExitList(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
                     </Text>
@@ -323,9 +610,9 @@ class SettingsScreen extends Component {
                 <View
                     style={{
                         //backgroundColor:'yellow',
-                        flex:1,
-                        alignItems:'flex-end',
-                        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
                     <ToggleSwitch
@@ -341,11 +628,11 @@ class SettingsScreen extends Component {
         )
     }
 
-    KidExit(item){
-        console.log("item ",item);
-        return(
-            <View style={{ flexDirection:'row' ,alignSelf:'center', alignItems:'center',}}>
-                <View style={{width:wp(80), flex:1}}>
+    KidExit(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
                     </Text>
@@ -353,9 +640,9 @@ class SettingsScreen extends Component {
                 <View
                     style={{
                         //backgroundColor:'yellow',
-                        flex:1,
-                        alignItems:'flex-end',
-                        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
                     <ToggleSwitch
@@ -371,11 +658,11 @@ class SettingsScreen extends Component {
         )
     }
 
-    service(item){
-        console.log("item ",item);
-        return(
-            <View style={{ flexDirection:'row' ,alignSelf:'center', alignItems:'center',}}>
-                <View style={{width:wp(80), flex:1}}>
+    guest(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
                     </Text>
@@ -383,9 +670,39 @@ class SettingsScreen extends Component {
                 <View
                     style={{
                         //backgroundColor:'yellow',
-                        flex:1,
-                        alignItems:'flex-end',
-                        transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
+                    }}
+                >
+                    <ToggleSwitch
+                        isOn={item.item.isSelected}
+                        onColor="#FFB400"
+                        offColor="grey"
+                        size="small"
+                        onToggle={isOn => this.guestToggle(item)}
+                    />
+                </View>
+
+            </View>
+        )
+    }
+
+    service(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
+                    <Text>
+                        {item.item.title}
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        //backgroundColor:'yellow',
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
                     <ToggleSwitch
@@ -401,55 +718,188 @@ class SettingsScreen extends Component {
         )
     }
 
-    render(){
+    broadcast(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
+                    <Text>
+                        {item.item.title}
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        //backgroundColor:'yellow',
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
+                    }}
+                >
+                    <ToggleSwitch
+                        isOn={item.item.isSelected}
+                        onColor="#FFB400"
+                        offColor="grey"
+                        size="small"
+                        onToggle={isOn => this.broadcastToggle(item)}
+                    />
+                </View>
+
+            </View>
+        )
+    }
+
+    invoiceGenerated(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
+                    <Text>
+                        {item.item.title}
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        //backgroundColor:'yellow',
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
+                    }}
+                >
+                    <ToggleSwitch
+                        isOn={item.item.isSelected}
+                        onColor="#FFB400"
+                        offColor="grey"
+                        size="small"
+                        onToggle={isOn => this.invoiceGeneratedToggle(item)}
+                    />
+                </View>
+
+            </View>
+        )
+    }
+
+    invoiceDue(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
+                    <Text>
+                        {item.item.title}
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        //backgroundColor:'yellow',
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
+                    }}
+                >
+                    <ToggleSwitch
+                        isOn={item.item.isSelected}
+                        onColor="#FFB400"
+                        offColor="grey"
+                        size="small"
+                        onToggle={isOn => this.invoiceDueToggle(item)}
+                    />
+                </View>
+
+            </View>
+        )
+    }
+
+    receiptGenerated(item) {
+        console.log("item ", item);
+        return (
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+                <View style={{width: wp(80), flex: 1}}>
+                    <Text>
+                        {item.item.title}
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        //backgroundColor:'yellow',
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
+                    }}
+                >
+                    <ToggleSwitch
+                        isOn={item.item.isSelected}
+                        onColor="#FFB400"
+                        offColor="grey"
+                        size="small"
+                        onToggle={isOn => this.receiptGeneratedToggle(item)}
+                    />
+                </View>
+
+            </View>
+        )
+    }
+
+    render() {
         //console.log("userReducer", userReducer);
-        return(
-            <View style={{flex:1}}>
+        return (
+            <View style={{flex: 1}}>
+
                 <ScrollView>
 
                     <View
                         style={{
-                            //backgroundColor:'#aaa',
-                            flexDirection:'row',
-                            marginTop:hp(5),
+
+                            backgroundColor: base.theme.colors.white,
+                            flexDirection: 'row',
+                            marginTop: hp(5),
                         }}
                     >
                         <FlatList
                             showsHorizontalScrollIndicator={false}
                             style={{
-                                width:wp(60),
-                                marginLeft:wp('18'),
-                                //marginTop:hp(5),
-                                //backgroundColor:'yellow',
+                                width: wp(60),
+                                marginLeft: wp('18'),
+                                backgroundColor: base.theme.colors.white,
                             }}
                             horizontal={true}
                             data={this.state.myfamily11}
                             renderItem={(item) => this.renderTopViews(item)}
-                            //keyExtractor={item => item.id}
+                            extraData={this.state}
                         />
 
-                        <ElevatedView
-                            elevation={3}
-                            style={{
-                                borderTopLeftRadius:5,
-                                borderTopRightRadius:5,
-                                width:wp(10),
-                                height:hp(4),
-                                marginRight:wp('5'),
-                                alignItems:'center',
-                                justifyContent:'center',
-                            }}
+
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate("MyFamily")}
+
+                                          style={{
+                                              shadowOpacity: Platform.OS === 'ios' ? 0.0015 * 10 + 0.18 : 0,
+                                              shadowRadius: Platform.OS === 'ios' ? 0.54 * 10 : 0,
+                                              shadowOffset: {
+                                                  height: Platform.OS === 'ios' ? 0.6 * 10 : 0,
+                                              },
+                                              shadowColor: base.theme.colors.greyHead,
+                                              borderColor: base.theme.colors.greyHead,
+                                              borderTopLeftRadius: 10,
+                                              borderTopRightRadius: 10,
+                                              width: wp(15),
+                                              height: hp(5),
+                                              marginLeft: wp('5'),
+                                              // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
+                                              // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
+                                              // shadowRadius:Platform.OS === 'ios' ? 2: 0,
+                                              elevation: 10,
+                                              borderWidth: 0.5,
+                                              alignItems: 'center',
+                                              justifyContent: 'center',
+                                              backgroundColor: base.theme.colors.white,
+                                          }}
                         >
-                            <TouchableOpacity onPress={()=> this.props.navigation.navigate("MyFamily")}>
-                                <Image
-                                    resizeMode="contain"
-                                    source={require('../icons/add.png')}
-                                    style={{
-                                        height:hp(2.5)
-                                    }}
-                                />
-                            </TouchableOpacity>
-                        </ElevatedView>
+                            <Image
+                                resizeMode="contain"
+                                source={require('../icons/add.png')}
+                                style={{
+                                    height: hp(2.5)
+                                }}
+                            />
+                        </TouchableOpacity>
 
                     </View>
 
@@ -469,60 +919,6 @@ class SettingsScreen extends Component {
                                 //keyExtractor={item => item.id}
                             />
 
-                            {/*<ElevatedView
-                            elevation={3}
-                            style={{
-                                marginTop:hp(6),
-                                borderTopLeftRadius:5,
-                                borderBottomLeftRadius:5,
-                                height:wp(40),
-                                width:wp(7),
-                                alignItems:'center',
-                                justifyContent:'center',
-                            }}
-                        >
-                            <View style={{
-                                alignItems:'center',
-                                justifyContent:'center',
-                                //backgroundColor:'yellow',
-                                //height:hp(10),
-                                width:wp(40),
-                                transform: [{ rotate: '-90deg'}]
-                            }}>
-                                <Text >
-                                    Notification Settings
-                                </Text>
-                            </View>
-
-                        </ElevatedView>
-
-                        <ElevatedView
-                            elevation={3}
-                            style={{
-                                marginTop:hp(8),
-                                borderTopLeftRadius:5,
-                                borderBottomLeftRadius:5,
-                                height:wp(16),
-                                width:wp(7),
-                                alignItems:'center',
-                                justifyContent:'center',
-                            }}
-                        >
-                            <View style={{
-                                alignItems:'center',
-                                justifyContent:'center',
-                                //backgroundColor:'yellow',
-                                //height:hp(10),
-                                width:wp(10),
-                                transform: [{ rotate: '-90deg'}]
-                            }}>
-                                <Text >
-                                    SOS
-                                </Text>
-                            </View>
-
-                        </ElevatedView>*/}
-
                         </View>
 
                         <ElevatedView
@@ -537,32 +933,43 @@ class SettingsScreen extends Component {
                             }}
                         >
                             <View style={{
+                                //backgroundColor:'red',
                                 marginLeft:wp(8),
                                 marginRight:wp(8)
                             }}>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text style={{
-                                        fontSize:20,
-                                    }}>Vendors/Deliveries</Text>
+                                    <View style={{width: wp(60), }}>
+                                        <Text style={{
+                                            fontSize:20,
+                                        }}>Vendors/Deliveries</Text>
+                                    </View>
+                                    <View style={{ flex:1, alignItems: 'flex-end'}}>
                                     <Switch
                                         style={{
                                             flex:1,
-                                            //alignSelf:'flex-end',
+                                            alignSelf:'flex-end',
+                                            marginLeft:wp(2),
+                                            //alignItems: 'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: 'grey'}}
                                         thumbTintColor="white"
-                                        //onValueChange = {(value)=>this.toggleSwitch(value)}
-                                        onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
+                                        onValueChange = {()=>this.vendorSwitchValueOff()}
+                                        // onValueChange = {()=> {
+                                        //     this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})
+                                        //     if (this.state.vendorSwitchValue){
+                                        //         this.vendorSwitchValueOff()
+                                        //     }
+                                        // }}
                                         value = {this.state.vendorSwitchValue}
                                     />
+                                    </View>
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
                                     <Text>Entry</Text>
                                 </View>
-
 
                                 <FlatList
                                     showsHorizontalScrollIndicator={false}
@@ -576,108 +983,6 @@ class SettingsScreen extends Component {
                                     renderItem={(item) => this.VendorList(item)}
                                     //keyExtractor={item => item.id}
                                 />
-
-
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center', width:wp(80)}}>
-                            <Text>
-                                In-App Request
-                            </Text>
-                            <View
-                                style={{
-                                    backgroundColor:'yellow',
-                                    flex:1,
-                                    alignItems:'flex-end',
-                                    transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
-                                }}
-                            >
-                                <ToggleSwitch
-                                    isOn={this.state.inAppRequest}
-                                    onColor="#FFB400"
-                                    offColor="grey"
-                                    //label="Example label"
-                                    //labelStyle={{ color: "black", fontWeight: "900" }}
-                                    size="small"
-                                    onToggle={isOn => this.setState({inAppRequest: !this.state.inAppRequest})}
-                                />
-                            </View>
-
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', width:wp(80)}}>
-                            <Text>
-                                In-App Notification
-                            </Text>
-                            <View
-                                style={{
-                                    backgroundColor:'yellow',
-                                    flex:1,
-                                    alignItems:'flex-end',
-                                    transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
-                                }}
-                            >
-                                <ToggleSwitch
-                                    isOn={this.state.inAppNotification}
-                                    onColor="#FFB400"
-                                    offColor="grey"
-                                    //label="Example label"
-                                    //labelStyle={{ color: "black", fontWeight: "900" }}
-                                    size="small"
-                                    onToggle={isOn => this.setState({inAppNotification: !this.state.inAppNotification})}
-                                />
-                            </View>
-
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                ivr Call Request
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({ivr: !this.state.ivr})}
-                                value = {this.state.ivr}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                Telegram Notification
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({telegram: !this.state.telegram})}
-                                value = {this.state.telegram}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                SMS
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({sms: !this.state.sms})}
-                                value = {this.state.sms}
-                            />
-                        </View>*/}
 
                                 <View
                                     style={{
@@ -701,7 +1006,6 @@ class SettingsScreen extends Component {
                                     <Text>Exit</Text>
                                 </View>
 
-
                                 <FlatList
                                     showsHorizontalScrollIndicator={false}
                                     style={{
@@ -714,93 +1018,6 @@ class SettingsScreen extends Component {
                                     renderItem={(item) => this.VendorExitList(item)}
                                     //keyExtractor={item => item.id}
                                 />
-
-
-
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                In-App Request
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({inAppRequestExit: !this.state.inAppRequestExit})}
-                                value = {this.state.inAppRequestExit}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                In-App Notification
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({inAppNotificationExit: !this.state.inAppNotificationExit})}
-                                value = {this.state.inAppNotificationExit}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                ivr Call Request
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({ivrExit: !this.state.ivrExit})}
-                                value = {this.state.ivrExit}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                Telegram Notification
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({telegramExit: !this.state.telegramExit})}
-                                value = {this.state.telegramExit}
-                            />
-                        </View>
-
-                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                            <Text>
-                                SMS
-                            </Text>
-                            <Switch
-                                style={{
-                                    flex:1,
-                                    alignSelf:'flex-end',
-                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                }}
-                                trackColor={{true: '#FFB400', false: 'grey'}}
-                                thumbTintColor="white"
-                                onValueChange = {()=> this.setState({smsExit: !this.state.smsExit})}
-                                value = {this.state.smsExit}
-                            />
-                        </View>*/}
 
                                 <View
                                     style={{
@@ -820,11 +1037,11 @@ class SettingsScreen extends Component {
                                     />
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', alignSelf:'center', backgroundColor:'yellow'}}>
+                                <View style={{ flexDirection:'row' , alignItems:'center', alignSelf:'center', marginBottom:hp(2)}}>
                                     <View style={{width:wp(80), flex:1}}>
-                                    <Text style={{
-                                        fontSize:20
-                                    }}>Kid Exit</Text>
+                                        <Text style={{
+                                            fontSize:20
+                                        }}>Kid Exit</Text>
                                     </View>
 
                                     <Switch
@@ -835,8 +1052,8 @@ class SettingsScreen extends Component {
                                         }}
                                         trackColor={{true: '#45B591', false: 'grey'}}
                                         thumbTintColor="white"
-                                        //onValueChange = {(value)=>this.toggleSwitch(value)}
-                                        onValueChange = {()=> this.setState({kidExit: !this.state.kidExit})}
+                                        onValueChange = {()=>this.kidExitValueOff()}
+                                        //onValueChange = {()=> this.setState({kidExit: !this.state.kidExit})}
                                         value = {this.state.kidExit}
                                     />
                                 </View>
@@ -853,91 +1070,6 @@ class SettingsScreen extends Component {
                                     renderItem={(item) => this.KidExit(item)}
                                     //keyExtractor={item => item.id}
                                 />
-
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),}}>
-                                    <Text>
-                                        In-App Request
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({inAppRequestKid: !this.state.inAppRequestKid})}
-                                        value = {this.state.inAppRequestKid}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        In-App Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({inAppNotificationEid: !this.state.inAppNotificationEid})}
-                                        value = {this.state.inAppNotificationEid}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        ivr Call Request
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({ivrKid: !this.state.ivrKid})}
-                                        value = {this.state.ivrKid}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        Telegram Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({telegramKid: !this.state.telegramKid})}
-                                        value = {this.state.telegramKid}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        SMS
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({smsKid: !this.state.smsKid})}
-                                        value = {this.state.smsKid}
-                                    />
-                                </View>*/}
 
                                 <View
                                     style={{
@@ -969,8 +1101,8 @@ class SettingsScreen extends Component {
                                         }}
                                         trackColor={{true: '#45B591', false: 'grey'}}
                                         thumbTintColor="white"
-                                        //onValueChange = {(value)=>this.toggleSwitch(value)}
-                                        onValueChange = {()=> this.setState({Service: !this.state.Service})}
+                                        onValueChange = {()=>this.serviceValueOff()}
+                                        //onValueChange = {()=> this.setState({Service: !this.state.Service})}
                                         value = {this.state.Service}
                                     />
 
@@ -989,40 +1121,6 @@ class SettingsScreen extends Component {
                                     //keyExtractor={item => item.id}
                                 />
 
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),}}>
-                                    <Text>
-                                        In-App Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({notificationService: !this.state.notificationService})}
-                                        value = {this.state.notificationService}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        Telegram Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({telegramService: !this.state.telegramService})}
-                                        value = {this.state.telegramService}
-                                    />
-                                </View>*/}
-
                                 <View
                                     style={{
                                         //backgroundColor:'yellow',
@@ -1041,7 +1139,7 @@ class SettingsScreen extends Component {
                                     />
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                                <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
                                     <Text style={{
                                         fontSize:20
                                     }}>Surprise Guest</Text>
@@ -1053,98 +1151,26 @@ class SettingsScreen extends Component {
                                         }}
                                         trackColor={{true: '#45B591', false: 'grey'}}
                                         thumbTintColor="white"
-                                        //onValueChange = {(value)=>this.toggleSwitch(value)}
-                                        onValueChange = {()=> this.setState({guestValue: !this.state.guestValue})}
+                                        onValueChange = {()=>this.guestValueOff()}
+                                        //onValueChange = {()=> this.setState({guestValue: !this.state.guestValue})}
                                         value = {this.state.guestValue}
                                     />
                                 </View>
 
 
+                                <FlatList
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{
+                                        width:wp(80),
+                                        //marginLeft:wp('18'),
+                                        //marginTop:hp(5),
+                                        //backgroundColor:'yellow',
+                                    }}
+                                    data={this.state.guestList}
+                                    renderItem={(item) => this.guest(item)}
+                                    //keyExtractor={item => item.id}
+                                />
 
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
-                                    <Text>
-                                        In-App Request
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({inAppRequestGuest: !this.state.inAppRequestGuest})}
-                                        value = {this.state.inAppRequestGuest}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        In-App Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({inAppNotificationGuest: !this.state.inAppNotificationGuest})}
-                                        value = {this.state.inAppNotificationGuest}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        ivr Call Request
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({ivrGuest: !this.state.ivrGuest})}
-                                        value = {this.state.ivrGuest}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        Telegram Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({telegramGuest: !this.state.telegramGuest})}
-                                        value = {this.state.telegramGuest}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        SMS
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({smsGuest: !this.state.smsGuest})}
-                                        value = {this.state.smsGuest}
-                                    />
-                                </View>*/}
 
                                 <View
                                     style={{
@@ -1165,7 +1191,7 @@ class SettingsScreen extends Component {
                                 </View>
 
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                                <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
                                     <Text style={{
                                         fontSize:20
                                     }}>Broadcast</Text>
@@ -1177,45 +1203,24 @@ class SettingsScreen extends Component {
                                         }}
                                         trackColor={{true: '#EF3939', false: 'grey'}}
                                         thumbTintColor="white"
-                                        //onValueChange = {(value)=>this.toggleSwitch(value)}
-                                        onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
-                                        value = {this.state.vendorSwitchValue}
+                                        onValueChange = {(value)=>this.broadcastValueOff(value)}
+                                        //onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
+                                        value = {this.state.broadcastValue}
                                     />
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),}}>
-                                    <Text>
-                                        In-App Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({notificationBroadcast: !this.state.notificationBroadcast})}
-                                        value = {this.state.notificationBroadcast}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        Telegram Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({telegramBroadcast: !this.state.telegramBroadcast})}
-                                        value = {this.state.telegramBroadcast}
-                                    />
-                                </View>
+                                <FlatList
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{
+                                        width:wp(80),
+                                        //marginLeft:wp('18'),
+                                        //marginTop:hp(5),
+                                        //backgroundColor:'yellow',
+                                    }}
+                                    data={this.state.broadcastList}
+                                    renderItem={(item) => this.broadcast(item)}
+                                    //keyExtractor={item => item.id}
+                                />
 
                                 <View
                                     style={{
@@ -1247,8 +1252,8 @@ class SettingsScreen extends Component {
                                         }}
                                         trackColor={{true: '#45B591', false: 'grey'}}
                                         thumbTintColor="white"
-                                        //onValueChange = {(value)=>this.toggleSwitch(value)}
-                                        onValueChange = {()=> this.setState({InvoiceValue: !this.state.InvoiceValue})}
+                                        onValueChange = {(value)=>this.InvoiceValueOff(value)}
+                                        //onValueChange = {()=> this.setState({InvoiceValue: !this.state.InvoiceValue})}
                                         value = {this.state.InvoiceValue}
                                     />
                                 </View>
@@ -1257,7 +1262,21 @@ class SettingsScreen extends Component {
                                     <Text>Invoices Generated </Text>
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center',}}>
+                                <FlatList
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{
+                                        width:wp(80),
+                                        //marginLeft:wp('18'),
+                                        //marginTop:hp(5),
+                                        //backgroundColor:'yellow',
+                                    }}
+                                    data={this.state.invoiceGeneratedList}
+                                    renderItem={(item) => this.invoiceGenerated(item)}
+                                    //keyExtractor={item => item.id}
+                                />
+
+
+                                {/*<View style={{ flexDirection:'row' , alignItems:'center',}}>
                                     <Text>
                                         In-App Notification
                                     </Text>
@@ -1289,16 +1308,27 @@ class SettingsScreen extends Component {
                                         onValueChange = {()=> this.setState({telegramInvoices: !this.state.telegramInvoices})}
                                         value = {this.state.telegramInvoices}
                                     />
-                                </View>
-
-
+                                </View>*/}
 
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
                                     <Text>Invoices Due </Text>
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center',}}>
+                                <FlatList
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{
+                                        width:wp(80),
+                                        //marginLeft:wp('18'),
+                                        //marginTop:hp(5),
+                                        //backgroundColor:'yellow',
+                                    }}
+                                    data={this.state.invoiceDueList}
+                                    renderItem={(item) => this.invoiceDue(item)}
+                                    //keyExtractor={item => item.id}
+                                />
+
+                                {/*<View style={{ flexDirection:'row' , alignItems:'center',}}>
                                     <Text>
                                         In-App Notification
                                     </Text>
@@ -1330,18 +1360,27 @@ class SettingsScreen extends Component {
                                         onValueChange = {()=> this.setState({telegramInvoicesDue: !this.state.telegramInvoicesDue})}
                                         value = {this.state.telegramInvoicesDue}
                                     />
-                                </View>
-
-
-
-
+                                </View>*/}
 
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
                                     <Text>Receipts Generated </Text>
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center',}}>
+                                <FlatList
+                                    showsHorizontalScrollIndicator={false}
+                                    style={{
+                                        width:wp(80),
+                                        //marginLeft:wp('18'),
+                                        //marginTop:hp(5),
+                                        //backgroundColor:'yellow',
+                                    }}
+                                    data={this.state.receiptsGeneratedList}
+                                    renderItem={(item) => this.receiptGenerated(item)}
+                                    //keyExtractor={item => item.id}
+                                />
+
+                                {/*<View style={{ flexDirection:'row' , alignItems:'center',}}>
                                     <Text>
                                         In-App Notification
                                     </Text>
@@ -1373,7 +1412,7 @@ class SettingsScreen extends Component {
                                         onValueChange = {()=> this.setState({telegramInvoicesReceipts: !this.state.telegramInvoicesReceipts})}
                                         value = {this.state.telegramInvoicesReceipts}
                                     />
-                                </View>
+                                </View>*/}
 
 
 
@@ -1382,8 +1421,28 @@ class SettingsScreen extends Component {
                     </View>
 
                 </ScrollView>
+
             </View>
         )
+    }
+
+    changeTheMember(item) {
+        let self = this;
+        let familyData = self.state.myfamily11;
+        console.log('GET THE CHANGES IN ANDROID', item, familyData)
+
+        for (let i = 0; i < familyData.length; i++) {
+            console.log('GET THE ID', item.item.fmid, familyData[i].fmid)
+            if (familyData[i].fmid === item.item.fmid) {
+                console.log('GET THE ID1111', item.item.fmid, familyData[i].fmid)
+                familyData[i].isFSelected = true
+            } else {
+                familyData[i].isFSelected = false
+            }
+            self.setState({
+                myfamily11: familyData
+            })
+        }
     }
 }
 

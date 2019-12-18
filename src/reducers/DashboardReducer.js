@@ -28,7 +28,7 @@ const INITIAL_STATE = {
     sold2: 0,
     unsold2: 0,
     unsold: 0,
-    isLoading: true,
+    isLoading:true,
     selectedAssociation: null,
     memberList: [],
     assId: null,

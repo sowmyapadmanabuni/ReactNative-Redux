@@ -440,7 +440,7 @@ class Dashboard extends PureComponent {
                 // alert(units.unUnitID + 'admin');
               } else if (units.mrmRoleID === 1) {
                 // console.log(units, 'unitsadmin');
-                
+
                 //UNCOMMENT_IF_ROLLBACK///////************************///////////
                 firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
                 //************************///////////
@@ -796,6 +796,7 @@ class Dashboard extends PureComponent {
       receiveNotifications,
       dropdown,allAssociations
     } = this.props;
+
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
@@ -919,7 +920,7 @@ class Dashboard extends PureComponent {
         ///ROLLBACK///////
         firebase.messaging().subscribeToTopic(assnId);
         //************************///////////
-        
+
         // if (assnId === '7548admin') {
         //   // alert('Sub');
         // }
@@ -1414,7 +1415,7 @@ class Dashboard extends PureComponent {
 
  createTopicListener(associationList,_switch){
     if(associationList != undefined && associationList.length > 0){
-      
+
 
       try{
         // const fcmToken_ = firebase.messaging().getToken();
@@ -1423,7 +1424,7 @@ class Dashboard extends PureComponent {
         //   console.log("STARTE ROVEKING_TOK",s)
         // })
 
-        
+
 
         firebase.messaging().hasPermission().
     then((enabled) => {
@@ -1452,7 +1453,7 @@ class Dashboard extends PureComponent {
       for(unit of assnList){
         console.log("createTopicListener_3",unit)
 
-        
+
         if(_switch){
           console.log("SUBSCRIBING_TOPIS",unit.asAssnID+"_STAFFENTRY_"+unit.unUnitID)
           firebase.messaging().subscribeToTopic(unit.asAssnID+"_STAFFENTRY_"+unit.unUnitID).then((s)=>{
@@ -1510,7 +1511,7 @@ class Dashboard extends PureComponent {
     );
 
     //console.log("RENDER_ALLASSOC_0",allAssociations)
-    
+
 
     if(!this.state.isConnected){
       console.log('CHECK NET!!!!!!',this.state.isConnected)
@@ -2526,7 +2527,7 @@ const mapStateToProps = state => {
     notifications: state.NotificationReducer.notifications,
     joinedAssociations: state.AppReducer.joinedAssociations,
     datasource: state.DashboardReducer.datasource,
-    dropdown: state.DashboardReducer.dropdown,    
+    dropdown: state.DashboardReducer.dropdown,
     dropdown1: state.DashboardReducer.dropdown1,
     allAssociations: state.DashboardReducer.allAssociations,
     associationid: state.DashboardReducer.associationid,

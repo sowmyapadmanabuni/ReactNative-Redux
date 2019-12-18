@@ -1312,7 +1312,7 @@ class Expenses extends React.Component {
                                             borderColor: base.theme.colors.lightgrey,
                                         }}
                                         dropdownOffset={{top: 10, left: 0}}
-                                        dropdownPosition={-5}
+                                        dropdownPosition={this.state.blockListAdd.length > 2 ? -5 : -2}
                                         rippleOpacity={0}
                                         onChangeText={(value, index) => {
                                             this.setState({
@@ -2074,35 +2074,6 @@ class Expenses extends React.Component {
                                     </TouchableOpacity>
                                     {(Platform.OS === 'ios') ? this.openIOSCalenderAdd(2) : <View/>}
                                 </View>
-                                {/*<View style={AddExpenseStyles.textInputView}>
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: base.theme.colors.black,
-                                        textAlign: 'left',
-                                        paddingTop: 5,
-                                    }}>Invoice No / Receipt No</Text>
-                                    <TextInput
-                                        style={{
-                                            height: 30,
-                                            borderBottomWidth: 1,
-                                            borderColor: base.theme.colors.lightgrey,
-                                            paddingBottom: 5
-                                        }}
-                                        onChangeText={(value) =>{
-                                            let num = value.replace(/^[a-zA-Z0-9]+$/g,  '');
-                                            if (isNaN(num)) {
-                                                // Its not a number
-                                            } else {
-                                                this.setState({invoiceNum:value})
-                                            }}}
-                                     //   onChangeText={(text) => this.setState({invoiceNum: text})}
-                                        value={this.state.invoiceNum}
-                                        placeholder="Invoice No / Receipt No"
-                                        placeholderTextColor={base.theme.colors.grey}
-                                        keyboardType={Platform.OS === 'ios'? 'ascii-capable':'visible-password'}
-                                        maxLength={20}
-                                    />
-                                </View>*/}
                                 <View style={[AddExpenseStyles.textInputView, {paddingTop: 25, paddingBottom: 10}]}>
                                     <Text style={{
                                         fontSize: 14,
