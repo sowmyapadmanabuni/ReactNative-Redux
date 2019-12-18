@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, Text,TouchableOpacity,FlatList } from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity, FlatList, Platform} from 'react-native';
 import HeaderStyles from '../src/components/dashBoardHeader/HeaderStyles';
 import base from '../src/base';
 import { connect } from 'react-redux';
@@ -67,22 +67,37 @@ class SettingsScreen extends Component {
         console.log("data>> ", item.item.fmlName)
         return(
 
-            <ElevatedView
-                elevation={5}
+            <View
+                //elevation={8}
                 style={{
+                    // borderTopLeftRadius:5,
+                    // borderTopRightRadius:5,
+                    // width:wp(20),
+                    // height:hp(4),
+                    // marginRight:wp('2'),
+                    // alignItems:'center',
+                    // justifyContent:'center',
+
+
                     borderTopLeftRadius:5,
                     borderTopRightRadius:5,
                     width:wp(20),
                     height:hp(4),
-                    marginRight:wp('2'),
-                    alignItems:'center',
-                    justifyContent:'center',
+                    marginRight:wp('5'),
+                    borderColor: base.theme.colors.shadedWhite,
+                    //shadowColor: base.theme.colors.darkgrey,
+                    shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 1},
+                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
+                    shadowRadius:Platform.OS === 'ios' ? 2: 1, elevation: 5,  borderWidth: 0.5,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor:base.theme.colors.white
                 }}
             >
                 <Text>
                     {item.item.fmlName}
                 </Text>
-            </ElevatedView>
+            </View>
         )
     }
 
@@ -116,43 +131,84 @@ class SettingsScreen extends Component {
                         style={{
                             borderTopLeftRadius:5,
                             borderTopRightRadius:5,
-                            width:wp(8),
+                            width:wp(10),
                             height:hp(4),
                             marginRight:wp('5'),
                             alignItems:'center',
                             justifyContent:'center',
                         }}
                     >
-                        <Text>
-                            +
-                        </Text>
+                        <TouchableOpacity onPress={()=> this.props.navigation.navigate("MyFamily")}>
+                        <Image
+                            resizeMode="contain"
+                            source={require('../icons/add.png')}
+                            style={{
+                                height:hp(2.5)
+                            }}
+                        />
+                        </TouchableOpacity>
                     </ElevatedView>
 
                 </View>
 
-                <View style={{flex:1,flexDirection:'row'}}>
-                    <View >
+                <View style={{flex:1,flexDirection:'row', }}>
+                    <View style={{paddingLeft:wp(1)}}>
+
                         <ElevatedView
                             elevation={3}
                             style={{
+                                marginTop:hp(6),
                                 borderTopLeftRadius:5,
-                                borderBottomRightRadius:5,
+                                borderBottomLeftRadius:5,
                                 height:wp(40),
-                                width:wp(4),
+                                width:wp(7),
+                                alignItems:'center',
+                                justifyContent:'center',
                             }}
                         >
+                            <View style={{
+                                alignItems:'center',
+                                justifyContent:'center',
+                                //backgroundColor:'yellow',
+                                //height:hp(10),
+                                width:wp(40),
+                                transform: [{ rotate: '-90deg'}]
+                            }}>
+                                <Text >
+                                    Notification Settings
+                                </Text>
+                            </View>
+
                         </ElevatedView>
+
                         <ElevatedView
                             elevation={3}
                             style={{
+                                marginTop:hp(8),
                                 borderTopLeftRadius:5,
-                                borderBottomRightRadius:5,
-                                height:wp(10),
+                                borderBottomLeftRadius:5,
+                                height:wp(16),
                                 width:wp(7),
+                                alignItems:'center',
+                                justifyContent:'center',
                             }}
                         >
+                            <View style={{
+                                alignItems:'center',
+                                justifyContent:'center',
+                                //backgroundColor:'yellow',
+                                //height:hp(10),
+                                width:wp(10),
+                                transform: [{ rotate: '-90deg'}]
+                            }}>
+                                <Text >
+                                    SOS
+                                </Text>
+                            </View>
+
                         </ElevatedView>
                     </View>
+
                     <ElevatedView
                         elevation={8}
                         style={{
@@ -163,7 +219,6 @@ class SettingsScreen extends Component {
                             //alignSelf:'flex-end',
                         }}
                     >
-
                     </ElevatedView>
                 </View>
             </View>
