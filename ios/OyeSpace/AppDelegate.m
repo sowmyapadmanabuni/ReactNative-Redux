@@ -28,15 +28,15 @@
 
   
   //Uncomment code below to check Postscript name of the fonts   --Sarthak Mishra(Synclovis Systems Pvt. Ltd.)
-  /*for (NSString *fontFamilyName in [UIFont familyNames]) {
+  for (NSString *fontFamilyName in [UIFont familyNames]) {
     for (NSString *fontName in [UIFont fontNamesForFamilyName:fontFamilyName]) {
       NSLog(@"Family: %@ Font: %@", fontFamilyName, fontName);
     }
-  }*/
+  }
   //debug
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   //Release
-//  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+ // jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   
   
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
@@ -44,6 +44,9 @@
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  if (@available(iOS 13.0, *)) {
+    rootView.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+  }
   
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
