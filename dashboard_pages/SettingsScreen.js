@@ -294,8 +294,6 @@ class SettingsScreen extends Component {
                                 //keyExtractor={item => item.id}
                             />
 
-
-
                         </View>
 
                         <View
