@@ -429,7 +429,6 @@ class SettingsScreen extends Component {
         }
     }
 
-
     guestToggle(item) {
         if(this.state.guestValue) {
             console.log(">>>>>", item);
@@ -494,7 +493,6 @@ class SettingsScreen extends Component {
         }
     }
 
-
     receiptGeneratedToggle(item) {
         if(this.state.InvoiceValue) {
             console.log(">>>>>", item);
@@ -511,9 +509,6 @@ class SettingsScreen extends Component {
         }
     }
 
-
-
-
     serviceToggle(item) {
         console.log(">>>>>", item);
 
@@ -527,7 +522,6 @@ class SettingsScreen extends Component {
             serviceList: setData
         })
     }
-
 
     renderSideBar(item) {
         console.log("renderSideBar ", item);
@@ -582,7 +576,7 @@ class SettingsScreen extends Component {
     VendorList(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -599,7 +593,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.vendorToggle(item)}
                     />
@@ -612,7 +606,7 @@ class SettingsScreen extends Component {
     VendorExitList(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -629,7 +623,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.vendorExitToggle(item)}
                     />
@@ -642,7 +636,7 @@ class SettingsScreen extends Component {
     KidExit(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -659,7 +653,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.KidExitToggle(item)}
                     />
@@ -672,7 +666,7 @@ class SettingsScreen extends Component {
     guest(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -689,7 +683,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.guestToggle(item)}
                     />
@@ -702,7 +696,7 @@ class SettingsScreen extends Component {
     service(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -719,7 +713,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.serviceToggle(item)}
                     />
@@ -732,7 +726,7 @@ class SettingsScreen extends Component {
     broadcast(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -749,7 +743,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.broadcastToggle(item)}
                     />
@@ -762,7 +756,7 @@ class SettingsScreen extends Component {
     invoiceGenerated(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -779,7 +773,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.invoiceGeneratedToggle(item)}
                     />
@@ -792,7 +786,7 @@ class SettingsScreen extends Component {
     invoiceDue(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -809,7 +803,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.invoiceDueToggle(item)}
                     />
@@ -822,7 +816,7 @@ class SettingsScreen extends Component {
     receiptGenerated(item) {
         console.log("item ", item);
         return (
-            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',}}>
+            <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text>
                         {item.item.title}
@@ -839,7 +833,7 @@ class SettingsScreen extends Component {
                     <ToggleSwitch
                         isOn={item.item.isSelected}
                         onColor="#FFB400"
-                        offColor="grey"
+                        offColor="#DCDCE5"
                         size="small"
                         onToggle={isOn => this.receiptGeneratedToggle(item)}
                     />
@@ -959,13 +953,15 @@ class SettingsScreen extends Component {
                             <View style={{
                                 //backgroundColor:'red',
                                 marginLeft:wp(8),
-                                marginRight:wp(8)
+                                marginRight:wp(8),
+                                marginBottom:hp(8),
                             }}>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', }}>
                                     <View style={{width: wp(60), }}>
                                         <Text style={{
                                             fontSize:20,
+                                            color: base.theme.colors.black
                                         }}>Vendors/Deliveries</Text>
                                     </View>
                                     <View style={{ flex:1, alignItems: 'flex-end'}}>
@@ -977,7 +973,7 @@ class SettingsScreen extends Component {
                                             //alignItems: 'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: 'grey'}}
+                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.vendorSwitchValueOff()}
                                         // onValueChange = {()=> {
@@ -991,8 +987,8 @@ class SettingsScreen extends Component {
                                     </View>
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
-                                    <Text>Entry</Text>
+                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
+                                    <Text style={{color: base.theme.colors.black}}>Entry</Text>
                                 </View>
 
                                 <FlatList
@@ -1026,8 +1022,8 @@ class SettingsScreen extends Component {
                                     />
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>Exit</Text>
+                                <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(1)}}>
+                                    <Text style={{color: base.theme.colors.black}} >Exit</Text>
                                 </View>
 
                                 <FlatList
@@ -1046,7 +1042,7 @@ class SettingsScreen extends Component {
                                 <View
                                     style={{
                                         //backgroundColor:'yellow',
-                                        height:hp(5),
+                                        height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
                                     }}
@@ -1064,7 +1060,8 @@ class SettingsScreen extends Component {
                                 <View style={{ flexDirection:'row' , alignItems:'center', alignSelf:'center', marginBottom:hp(2)}}>
                                     <View style={{width:wp(80), flex:1}}>
                                         <Text style={{
-                                            fontSize:20
+                                            fontSize:20,
+                                            color: base.theme.colors.black
                                         }}>Kid Exit</Text>
                                     </View>
 
@@ -1074,7 +1071,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: 'grey'}}
+                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.kidExitValueOff()}
                                         //onValueChange = {()=> this.setState({kidExit: !this.state.kidExit})}
@@ -1098,7 +1095,7 @@ class SettingsScreen extends Component {
                                 <View
                                     style={{
                                         //backgroundColor:'yellow',
-                                        height:hp(5),
+                                        height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
                                     }}
@@ -1115,7 +1112,8 @@ class SettingsScreen extends Component {
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
                                     <Text style={{
-                                        fontSize:20
+                                        fontSize:20,
+                                        color: base.theme.colors.black
                                     }}>Service Provider/Staff</Text>
                                     <Switch
                                         style={{
@@ -1123,7 +1121,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: 'grey'}}
+                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.serviceValueOff()}
                                         //onValueChange = {()=> this.setState({Service: !this.state.Service})}
@@ -1148,7 +1146,7 @@ class SettingsScreen extends Component {
                                 <View
                                     style={{
                                         //backgroundColor:'yellow',
-                                        height:hp(5),
+                                        height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
                                     }}
@@ -1165,7 +1163,8 @@ class SettingsScreen extends Component {
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
                                     <Text style={{
-                                        fontSize:20
+                                        fontSize:20,
+                                        color: base.theme.colors.black
                                     }}>Surprise Guest</Text>
                                     <Switch
                                         style={{
@@ -1173,7 +1172,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: 'grey'}}
+                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.guestValueOff()}
                                         //onValueChange = {()=> this.setState({guestValue: !this.state.guestValue})}
@@ -1199,7 +1198,7 @@ class SettingsScreen extends Component {
                                 <View
                                     style={{
                                         //backgroundColor:'yellow',
-                                        height:hp(5),
+                                        height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
                                     }}
@@ -1217,7 +1216,8 @@ class SettingsScreen extends Component {
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
                                     <Text style={{
-                                        fontSize:20
+                                        fontSize:20,
+                                        color: base.theme.colors.black
                                     }}>Broadcast</Text>
                                     <Switch
                                         style={{
@@ -1225,7 +1225,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#EF3939', false: 'grey'}}
+                                        trackColor={{true: '#EF3939', false: '#DCDCE5'}}
                                         thumbTintColor="white"
                                         onValueChange = {(value)=>this.broadcastValueOff(value)}
                                         //onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
@@ -1249,7 +1249,7 @@ class SettingsScreen extends Component {
                                 <View
                                     style={{
                                         //backgroundColor:'yellow',
-                                        height:hp(5),
+                                        height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
                                     }}
@@ -1266,7 +1266,8 @@ class SettingsScreen extends Component {
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', }}>
                                     <Text style={{
-                                        fontSize:20
+                                        fontSize:20,
+                                        color: base.theme.colors.black
                                     }}>Invoice & Receipts</Text>
                                     <Switch
                                         style={{
@@ -1274,7 +1275,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: 'grey'}}
+                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
                                         thumbTintColor="white"
                                         onValueChange = {(value)=>this.InvoiceValueOff(value)}
                                         //onValueChange = {()=> this.setState({InvoiceValue: !this.state.InvoiceValue})}
@@ -1282,8 +1283,8 @@ class SettingsScreen extends Component {
                                     />
                                 </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
-                                    <Text>Invoices Generated </Text>
+                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
+                                    <Text style={{color: base.theme.colors.black}}>Invoices Generated </Text>
                                 </View>
 
                                 <FlatList
@@ -1300,43 +1301,10 @@ class SettingsScreen extends Component {
                                 />
 
 
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center',}}>
-                                    <Text>
-                                        In-App Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({notificationInvoice: !this.state.notificationInvoice})}
-                                        value = {this.state.notificationInvoice}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        Telegram Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({telegramInvoices: !this.state.telegramInvoices})}
-                                        value = {this.state.telegramInvoices}
-                                    />
-                                </View>*/}
 
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
-                                    <Text>Invoices Due </Text>
+                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
+                                    <Text style={{color: base.theme.colors.black}}>Invoices Due </Text>
                                 </View>
 
                                 <FlatList
@@ -1352,43 +1320,9 @@ class SettingsScreen extends Component {
                                     //keyExtractor={item => item.id}
                                 />
 
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center',}}>
-                                    <Text>
-                                        In-App Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({notificationInvoiceDue: !this.state.notificationInvoiceDue})}
-                                        value = {this.state.notificationInvoiceDue}
-                                    />
-                                </View>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        Telegram Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({telegramInvoicesDue: !this.state.telegramInvoicesDue})}
-                                        value = {this.state.telegramInvoicesDue}
-                                    />
-                                </View>*/}
-
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2)}}>
-                                    <Text>Receipts Generated </Text>
+                                <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
+                                    <Text style={{color: base.theme.colors.black}}>Receipts Generated </Text>
                                 </View>
 
                                 <FlatList
@@ -1403,41 +1337,6 @@ class SettingsScreen extends Component {
                                     renderItem={(item) => this.receiptGenerated(item)}
                                     //keyExtractor={item => item.id}
                                 />
-
-                                {/*<View style={{ flexDirection:'row' , alignItems:'center',}}>
-                                    <Text>
-                                        In-App Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({notificationReceipts: !this.state.notificationReceipts})}
-                                        value = {this.state.notificationReceipts}
-                                    />
-                                </View>
-
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <Text>
-                                        Telegram Notification
-                                    </Text>
-                                    <Switch
-                                        style={{
-                                            flex:1,
-                                            alignSelf:'flex-end',
-                                            //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
-                                        }}
-                                        trackColor={{true: '#FFB400', false: 'grey'}}
-                                        thumbTintColor="white"
-                                        onValueChange = {()=> this.setState({telegramInvoicesReceipts: !this.state.telegramInvoicesReceipts})}
-                                        value = {this.state.telegramInvoicesReceipts}
-                                    />
-                                </View>*/}
-
 
 
                             </View>
