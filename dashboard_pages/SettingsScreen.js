@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity, FlatList, Platform} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity, FlatList, Platform, Switch} from 'react-native';
 import HeaderStyles from '../src/components/dashBoardHeader/HeaderStyles';
 import base from '../src/base';
 import { connect } from 'react-redux';
@@ -17,6 +17,12 @@ class SettingsScreen extends Component {
         this.state={
             myfamily11:[],
             familyData:[],
+            vendorSwitchValue:false,
+            inAppRequest: false,
+            inAppNotification: false,
+            IVR:false,
+            telegram:false,
+            sms: false,
         }
     }
 
@@ -203,13 +209,121 @@ class SettingsScreen extends Component {
                     <ElevatedView
                         elevation={8}
                         style={{
-                            //backgroundColor:'green',
                             borderTopLeftRadius:20,
                             flex:1,
                             width:wp(80),
-                            //alignSelf:'flex-end',
+                            paddingTop:hp(5),
+                            paddingLeft:wp(8),
+                            paddingRight:wp(8),
                         }}
                     >
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                            <Text style={{
+                                fontSize:20
+                            }}>Vendors/Deliveries</Text>
+                            <Switch
+                                style={{
+                                    flex:1,
+                                    alignSelf:'flex-end',
+                                    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                }}
+                                trackColor={{true: '#45B591', false: 'grey'}}
+                                thumbTintColor="white"
+                                //onValueChange = {(value)=>this.toggleSwitch(value)}
+                                onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
+                                value = {this.state.vendorSwitchValue}
+                            />
+                        </View>
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                            <Text>Entry</Text>
+                        </View>
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                            <Text>
+                                In-App Request
+                            </Text>
+                            <Switch
+                                style={{
+                                    flex:1,
+                                    alignSelf:'flex-end',
+                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                }}
+                                trackColor={{true: '#FFB400', false: 'grey'}}
+                                thumbTintColor="white"
+                                onValueChange = {()=> this.setState({inAppRequest: !this.state.inAppRequest})}
+                                value = {this.state.inAppRequest}
+                            />
+                        </View>
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                            <Text>
+                                In-App Notification
+                            </Text>
+                            <Switch
+                                style={{
+                                    flex:1,
+                                    alignSelf:'flex-end',
+                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                }}
+                                trackColor={{true: '#FFB400', false: 'grey'}}
+                                thumbTintColor="white"
+                                onValueChange = {()=> this.setState({inAppNotification: !this.state.inAppNotification})}
+                                value = {this.state.inAppNotification}
+                            />
+                        </View>
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                            <Text>
+                                IVR Call Request
+                            </Text>
+                            <Switch
+                                style={{
+                                    flex:1,
+                                    alignSelf:'flex-end',
+                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                }}
+                                trackColor={{true: '#FFB400', false: 'grey'}}
+                                thumbTintColor="white"
+                                onValueChange = {()=> this.setState({IVR: !this.state.IVR})}
+                                value = {this.state.IVR}
+                            />
+                        </View>
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                            <Text>
+                                Telegram Notification
+                            </Text>
+                            <Switch
+                                style={{
+                                    flex:1,
+                                    alignSelf:'flex-end',
+                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                }}
+                                trackColor={{true: '#FFB400', false: 'grey'}}
+                                thumbTintColor="white"
+                                onValueChange = {()=> this.setState({telegram: !this.state.telegram})}
+                                value = {this.state.telegram}
+                            />
+                        </View>
+
+                        <View style={{ flexDirection:'row' , alignItems:'center', backgroundColor:'yellow'}}>
+                            <Text>
+                                SMS
+                            </Text>
+                            <Switch
+                                style={{
+                                    flex:1,
+                                    alignSelf:'flex-end',
+                                    //transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                }}
+                                trackColor={{true: '#FFB400', false: 'grey'}}
+                                thumbTintColor="white"
+                                onValueChange = {()=> this.setState({sms: !this.state.sms})}
+                                value = {this.state.sms}
+                            />
+                        </View>
+
                     </ElevatedView>
                 </View>
             </View>
