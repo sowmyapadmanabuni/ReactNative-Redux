@@ -69,7 +69,7 @@ const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
 const Profiler = React.unstable_Profiler;
 let counter = 0;
-
+var associationLoaded = false;
 class Dashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -401,8 +401,9 @@ class Dashboard extends PureComponent {
           let data = response.data.data.memberListByAccount;
           console.log(data, 'memList');
 
-
+          //UNCOMMENT_IF_ROLLBACK///////************************///////////
           firebase.messaging().subscribeToTopic('' + MyAccountID + 'admin');
+          //************************///////////
           data.map(units => {
             if (receiveNotifications) {
               //alert(MyAccountID + "admin");
@@ -413,7 +414,16 @@ class Dashboard extends PureComponent {
                   );
               console.log('date_asAssnID', units.asAssnID);
               //alert(""+MyAccountID+units.unUnitID+"usernotif")
+              console.log("UNSUBSCRIBING_FROM: "+MyAccountID + 'admin')
+              firebase
+                      .messaging()
+                      .unsubscribeFromTopic(MyAccountID + 'admin');
+                firebase
+                .messaging()
+                .unsubscribeFromTopic('14948admin');
+              //UNCOMMENT_IF_ROLLBACK///////************************///////////
               firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+              //************************///////////
 
               // firebase.messaging().sendMessage("topic here")
               // firebase.messaging().subscribeToTopic( + 'admin');
@@ -430,14 +440,21 @@ class Dashboard extends PureComponent {
                 // alert(units.unUnitID + 'admin');
               } else if (units.mrmRoleID === 1) {
                 // console.log(units, 'unitsadmin');
+
+                //UNCOMMENT_IF_ROLLBACK///////************************///////////
                 firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+                //************************///////////
+
                 // console.log(units.asAssnID + 'admin', 'subadmin');
                 // if (units.asAssnID + 'admin' === '7548admin') {
                 //   alert('Accepted');
                 // }
                 if (units.meIsActive) {
                   //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
+                  //UNCOMMENT_IF_ROLLBACK///////************************///////////
                   firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
+                  //************************///////////
+
                 } else {
                   firebase
                       .messaging()
@@ -748,6 +765,7 @@ class Dashboard extends PureComponent {
       getDashAssociation,
       getAssoMembers,
       getDashSub,
+      allAssociations,
       getDashAssoSync
     } = this.props;
     console.log('SYNC_FUNCTION@@@@@');
@@ -756,6 +774,13 @@ class Dashboard extends PureComponent {
     const { oyeURL } = this.props.oyespaceReducer;
 
     this.requestNotifPermission();
+
+    if(allAssociations != undefined && allAssociations.length > 0 && !associationLoaded){
+      console.log("RENDER_ALLASSOC",allAssociations)
+      associationLoaded = true;
+      this.createTopicListener(allAssociations,true)
+    }
+
     // this.props.getNotifications(oyeURL, MyAccountID);
 
     // getDashSub(oyeURL, SelectedAssociationID);
@@ -763,13 +788,13 @@ class Dashboard extends PureComponent {
     // getAssoMembers(oyeURL, MyAccountID);
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       getDashSub,
       getDashAssociation,
       getAssoMembers,
       receiveNotifications,
-      dropdown
+      dropdown,allAssociations
     } = this.props;
 
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
@@ -778,6 +803,18 @@ class Dashboard extends PureComponent {
     console.log('Props in dashboard did mount ####',this.props)
     NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
 
+    console.log("allAssociations_DIDM",allAssociations)
+
+//    const fcmToken = await firebase.messaging().getToken();
+// if (fcmToken) {
+//     // user has a device token
+//     console.log("FCM_TOKEN:",fcmToken)
+//     let tok = await firebase.messaging().unsubscribeFromTopic("14948_STAFFENTRY_40858");
+//     console.log("FCM_TOKEN:",tok)
+// } else {
+//     // user doesn't have a device token yet
+//     console.log("FCM_TOKEN: NOT AVAILABLE")
+// }
 
     this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
     // getAssoMembers(oyeURL, MyAccountID);
@@ -805,9 +842,10 @@ class Dashboard extends PureComponent {
 
 
     /*timer.setInterval(
+
              this,
              'syncData',
-             () => {
+             async () => {
                console.log("I am Timer");
                this.syncData();
                  // alert("hererereerrrereer");
@@ -879,7 +917,10 @@ class Dashboard extends PureComponent {
         // if(subscription == null || subscription == undefined){
 
         await base.utils.storage.storeData('ADMIN_NOTIF' + assnId, assnId);
+        ///ROLLBACK///////
         firebase.messaging().subscribeToTopic(assnId);
+        //************************///////////
+
         // if (assnId === '7548admin') {
         //   // alert('Sub');
         // }
@@ -1371,11 +1412,79 @@ class Dashboard extends PureComponent {
     if (__DEV__) console.log({ id, phase, actualDuration, baseDuration });
   };
 
+
+ createTopicListener(associationList,_switch){
+    if(associationList != undefined && associationList.length > 0){
+
+
+      try{
+        // const fcmToken_ = firebase.messaging().getToken();
+         console.log("STARTE ROVEKING")
+        // firebase.messaging().getToken().then(s=>{
+        //   console.log("STARTE ROVEKING_TOK",s)
+        // })
+
+
+
+        firebase.messaging().hasPermission().
+    then((enabled) => {
+        if (enabled) {
+            messaging.getToken()
+                .then(token => { console.log("FCMTOKE::",token) })
+                .catch(error => { console.log("FCMTOKE::",error)  });
+        } else {
+            messaging.requestPermission()
+                .then(() => { console.log("FCMTOKE::GOTPERMISSION")  })
+                .catch(error => { console.log("FCMTOKE::NOPERMISSION") });
+        }
+    })
+    .catch(error => { console.log("FCMTOKE::NOPERMISSION_CATCH") });
+
+
+      // let resp =  firebase.messaging().deleteToken().then((st)=>{
+      //   console.log("DELETE_TOK",st)
+      // });
+      //       firebase.initializeApp(base.utils.strings.firebaseconfig);
+      // console.log("REVOKING",resp)
+
+      console.log("createTopicListener",associationList)
+      let assnList = _.filter(associationList, item => item.unUniName != "");
+      console.log("createTopicListener_2",assnList)
+      for(unit of assnList){
+        console.log("createTopicListener_3",unit)
+
+
+        if(_switch){
+          console.log("SUBSCRIBING_TOPIS",unit.asAssnID+"_STAFFENTRY_"+unit.unUnitID)
+          firebase.messaging().subscribeToTopic(unit.asAssnID+"_STAFFENTRY_"+unit.unUnitID).then((s)=>{
+            console.log('subscribeToTopicSTST',s)
+          });
+          firebase.messaging().subscribeToTopic(unit.asAssnID+"_STAFFEXIT_"+unit.unUnitID);
+          firebase.messaging().subscribeToTopic(unit.asAssnID+"_VENDORENTRY_"+unit.unUnitID);
+          firebase.messaging().subscribeToTopic(unit.asAssnID+"_VENDOREXIT_"+unit.unUnitID);
+        }else{
+          console.log("UNSUBSCRIBING_TOPIS",unit.asAssnID+"_STAFFENTRY_"+unit.unUnitID)
+          firebase.messaging().unsubscribeFromTopic(unit.asAssnID+"_STAFFENTRY_"+unit.unUnitID).then((s)=>{
+            console.log('unsubscribeFromTopic',s)
+          });
+          firebase.messaging().unsubscribeFromTopic(unit.asAssnID+"_STAFFEXIT_"+unit.unUnitID);
+          firebase.messaging().unsubscribeFromTopic(unit.asAssnID+"_VENDORENTRY_"+unit.unUnitID);
+          firebase.messaging().unsubscribeFromTopic(unit.asAssnID+"_VENDOREXIT_"+unit.unUnitID);
+        }
+      }
+    }catch(e){
+      console.log("ERROR REVOKING ",e)
+    }
+    }
+  }
+
+
   render() {
     console.log("vehiclesCount ",this.state.vehiclesCount);
     const {
       dropdown,
       dropdown1,
+      allAssociations,
       residentList,
       sold,
       unsold,
@@ -1400,6 +1509,9 @@ class Dashboard extends PureComponent {
         dropdown1.length,
         this.props
     );
+
+    //console.log("RENDER_ALLASSOC_0",allAssociations)
+
 
     if(!this.state.isConnected){
       console.log('CHECK NET!!!!!!',this.state.isConnected)
@@ -1541,10 +1653,10 @@ class Dashboard extends PureComponent {
                         iconWidth={this.state.myUnitIconWidth}
                         iconHeight={this.state.myUnitIconHeight}
                         cardIcon={require('../../../../icons/my_unit.png')}
-                        onCardClick={() => this.changeCardStatus('UNIT')}
+                        onCardClick={() => this.createTopicListener(allAssociations,false)}
                         textWeight={'bold'}
                         textFontSize={Platform.OS === 'ios'?8:10}
-                        disabled={this.state.isSelectedCard === 'UNIT'}
+                        //disabled={this.state.isSelectedCard === 'UNIT'}
                     />
                     {this.props.dashBoardReducer.role === 1 &&
                     dropdown1.length !== 0 ? (
@@ -2417,6 +2529,7 @@ const mapStateToProps = state => {
     datasource: state.DashboardReducer.datasource,
     dropdown: state.DashboardReducer.dropdown,
     dropdown1: state.DashboardReducer.dropdown1,
+    allAssociations: state.DashboardReducer.allAssociations,
     associationid: state.DashboardReducer.associationid,
     residentList: state.DashboardReducer.residentList,
     selectedDropdown: state.DashboardReducer.selectedDropdown,

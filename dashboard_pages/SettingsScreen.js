@@ -94,8 +94,8 @@ class SettingsScreen extends Component {
                     width:wp(25),
                     height:hp(5),
                     marginRight:wp('5'),
-                    borderColor: base.theme.colors.shadedWhite,
-                    shadowColor: base.theme.colors.shadedWhite,
+                    borderColor: base.theme.colors.greyHead,
+                    shadowColor: base.theme.colors.greyHead,
                    // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
                    // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
                    // shadowRadius:Platform.OS === 'ios' ? 2: 0,
@@ -105,6 +105,7 @@ class SettingsScreen extends Component {
                     justifyContent: 'center',
                     backgroundColor:item.item.isFSelected? base.theme.colors.white :base.theme.colors.greyHead,
                 }}
+                disabled={item.item.isFSelected}
                 onPress={()=>this.changeTheMember(item)}
 
             >
@@ -116,7 +117,24 @@ class SettingsScreen extends Component {
     }
 
     changeTheMember(item){
-      console.log('GET THE CHANGES IN ANDROID')
+        let self=this;
+        let familyData=self.state.myfamily11;
+        console.log('GET THE CHANGES IN ANDROID',item,familyData)
+
+        for (let i=0;i<familyData.length;i++){
+            console.log('GET THE ID',item.item.fmid,familyData[i].fmid)
+            if(familyData[i].fmid===item.item.fmid){
+                console.log('GET THE ID1111',item.item.fmid,familyData[i].fmid)
+                familyData[i].isFSelected=true
+            }
+            else{
+                familyData[i].isFSelected=false
+            }
+            self.setState({
+                myfamily11:familyData
+            })
+
+        }
     }
 
     render(){
@@ -138,6 +156,7 @@ class SettingsScreen extends Component {
                             horizontal={true}
                             data={this.state.myfamily11}
                             renderItem={(item) => this.renderTopViews(item)}
+                            extraData={this.state}
                         />
 
                     <ElevatedView

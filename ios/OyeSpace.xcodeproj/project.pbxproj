@@ -15,7 +15,9 @@
 		043D2988225E33B60051E37D /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 043D297E225E338E0051E37D /* libRNFirebase.a */; };
 		049386FB225DFA370033CF63 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049386FA225DFA370033CF63 /* GoogleService-Info.plist */; };
 		0BDB4F93EFAC4269A833DD35 /* libRNImageToPdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7832287E1BF4467918A6AC3 /* libRNImageToPdf.a */; };
+		0E247C58238D24AF007EED53 /* libRNLocationSatellites.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E247C53238D2499007EED53 /* libRNLocationSatellites.a */; };
 		0EB496CCBD65402CB6101409 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 861BE436359B40A5B710E1BB /* Entypo.ttf */; };
+		0EEE611D238F65DB00BC57FA /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB61A68108700A75B9A /* Info.plist */; };
 		11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
@@ -29,7 +31,8 @@
 		179FDCDC0E1645AE8B76B3F3 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D465E8C2E0234F4389F8685B /* AntDesign.ttf */; };
 		1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA53C5321BB40CCA9D694E0 /* libRNHTMLtoPDF.a */; };
 		1E43B78323A8B7550034BB1C /* oye_msg_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E43B78223A8B7550034BB1C /* oye_msg_tone.mp3 */; };
-		1E7F82F123A9C5D200F096DC /* OyeSoace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7F82F023A9C5D200F096DC /* OyeSoace.swift */; };
+		1E44731723AA3906008CAFCE /* OyeSoace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E44731623AA3906008CAFCE /* OyeSoace.swift */; };
+		1E44731923AA3BF1008CAFCE /* oye_msg_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E44731823AA3BF1008CAFCE /* oye_msg_tone.mp3 */; };
 		1EB458D80BAA45129F1275C1 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8BAB1885F524E67B6415E52 /* rubicon-icon-font.ttf */; };
 		240306F65F3D4FAD950C1D2A /* HelveticaNeueHv.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 598D334FA25C41B08E24DE69 /* HelveticaNeueHv.ttf */; };
 		2451D65A86BF457FA86F22EE /* HelveticaNeueBd.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA03311D714E4B3487257C79 /* HelveticaNeueBd.ttf */; };
@@ -58,14 +61,12 @@
 		967B8AB0A6A94F16A283D204 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D8FED1A448A4B69B4222891 /* MaterialIcons.ttf */; };
 		9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9332DBD6EE4F83BBCE6AFB /* RNHTMLtoPDFTests.xctest */; };
 		9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */; };
-		9D9C81365F0D4459BA78100D /* libRNLocationSatellites.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26BC40904E4A4FEAB7D5712E /* libRNLocationSatellites.a */; };
 		9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06026B22C4FF5200DA17C8 /* MapKit.framework */; };
 		9F675E6E22E5C99500D175F9 /* libRCTContactsWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F675E3A22E5C98800D175F9 /* libRCTContactsWrapper.a */; };
 		9FB793932355CA3700D8145E /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9FB793922355CA3700D8145E /* sound_1.mp3 */; };
 		9FCBB88422FB063300C2E0AF /* libRNShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB87E22FB060100C2E0AF /* libRNShare.a */; };
 		9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB88522FB068100C2E0AF /* Social.framework */; };
 		9FCBB88822FB068F00C2E0AF /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB88722FB068F00C2E0AF /* MessageUI.framework */; };
-		9FDB8DC5235EECB5002DEBAC /* OyeSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDB8DC4235EECB5002DEBAC /* OyeSpace.swift */; };
 		A044B858230D4DA98A645E50 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A97874886154EAD8570A5A1 /* MaterialCommunityIcons.ttf */; };
 		A1E6D75E21DF2328006FE22F /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E6D75D21DF2328006FE22F /* libsqlite3.tbd */; };
 		A1E6D76021DF2331006FE22F /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E6D75F21DF2331006FE22F /* libsqlite3.0.tbd */; };
@@ -143,6 +144,20 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNFirebase;
 		};
+		0E247C52238D2499007EED53 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0E247C1E238D2498007EED53 /* RNLocationSatellites.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNLocationSatellites;
+		};
+		0EF8CBB2238D0633006C3793 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C4234C07A0424A3FB7953955 /* RNImageToPdf.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNImageToPdf;
+		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
@@ -164,26 +179,12 @@
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
 		};
-		1E43B72423A8B0800034BB1C /* PBXContainerItemProxy */ = {
+		1E44730D23AA3353008CAFCE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 117405FA1B9954BF004425E1;
 			remoteInfo = RNHTMLtoPDFTests;
-		};
-		1E92FBD723A9B8C900C2BE7D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C4234C07A0424A3FB7953955 /* RNImageToPdf.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNImageToPdf;
-		};
-		1E92FBDA23A9B8C900C2BE7D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C41F6240964040B7ABEEB76D /* RNLocationSatellites.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNLocationSatellites;
 		};
 		2D16E6711FA4F8DC00B85C8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -535,6 +536,8 @@
 		042936001371409F9D67B5D8 /* libreactnativeuilib.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libreactnativeuilib.a; sourceTree = "<group>"; };
 		049386FA225DFA370033CF63 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		049386FC225E00580033CF63 /* OyeSpace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = OyeSpace.entitlements; path = OyeSpace/OyeSpace.entitlements; sourceTree = "<group>"; };
+		0E247C1E238D2498007EED53 /* RNLocationSatellites.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNLocationSatellites.xcodeproj; path = "../node_modules/react-native-location-satellites/ios/RNLocationSatellites.xcodeproj"; sourceTree = "<group>"; };
+		0EF8CC0C238D17B0006C3793 /* OyeSpace-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OyeSpace-Bridging-Header.h"; sourceTree = "<group>"; };
 		102944E29C634BF6AAFA7678 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
@@ -548,8 +551,8 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		15D244A9D5F44951A3FE136F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		1E43B78223A8B7550034BB1C /* oye_msg_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = oye_msg_tone.mp3; path = ../src/screens/Resident/Dashboard/oye_msg_tone.mp3; sourceTree = "<group>"; };
-		1E7F82ED23A9C0DF00F096DC /* OyeSpace-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OyeSpace-Bridging-Header.h"; sourceTree = "<group>"; };
-		1E7F82F023A9C5D200F096DC /* OyeSoace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OyeSoace.swift; path = "../../../../../Desktop/BCKUP/ReactNative-Redux/ios/OyeSoace.swift"; sourceTree = "<group>"; };
+		1E44731623AA3906008CAFCE /* OyeSoace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OyeSoace.swift; sourceTree = "<group>"; };
+		1E44731823AA3BF1008CAFCE /* oye_msg_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = oye_msg_tone.mp3; sourceTree = "<group>"; };
 		227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Helvetica Neu Bold.ttf"; path = "../fonts/Helvetica Neu Bold.ttf"; sourceTree = "<group>"; };
 		22FE5082DA494D888B11412A /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		2328DDF9544647CC922A4556 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -603,7 +606,6 @@
 		9FCBB84822FB060100C2E0AF /* RNShare.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShare.xcodeproj; path = "../node_modules/react-native-share/ios/RNShare.xcodeproj"; sourceTree = "<group>"; };
 		9FCBB88522FB068100C2E0AF /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		9FCBB88722FB068F00C2E0AF /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		9FDB8DC4235EECB5002DEBAC /* OyeSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OyeSpace.swift; sourceTree = "<group>"; };
 		A10286B321E3730300CB1BC5 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		A1E6D75D21DF2328006FE22F /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A1E6D75F21DF2331006FE22F /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
@@ -619,7 +621,6 @@
 		B1F463979FCD4374B4C15313 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		B7C2B4B7C4E54C8EB258ED03 /* HelveticaNeue Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "HelveticaNeue Medium.ttf"; path = "../fonts/HelveticaNeue Medium.ttf"; sourceTree = "<group>"; };
 		C414C04D798746EBA1C72930 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		C41F6240964040B7ABEEB76D /* RNLocationSatellites.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNLocationSatellites.xcodeproj; path = "../node_modules/react-native-location-satellites/ios/RNLocationSatellites.xcodeproj"; sourceTree = "<group>"; };
 		C4234C07A0424A3FB7953955 /* RNImageToPdf.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImageToPdf.xcodeproj; path = "../node_modules/react-native-image-to-pdf/ios/RNImageToPdf.xcodeproj"; sourceTree = "<group>"; };
 		C5F442386F8645E7A7018261 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		C81EE116B58A407B802BD1A7 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
@@ -659,6 +660,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E247C58238D24AF007EED53 /* libRNLocationSatellites.a in Frameworks */,
 				FDA79208233B71720034094B /* libRNSound.a in Frameworks */,
 				9FCBB88822FB068F00C2E0AF /* MessageUI.framework in Frameworks */,
 				9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */,
@@ -687,7 +689,6 @@
 				1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */,
 				9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */,
 				0BDB4F93EFAC4269A833DD35 /* libRNImageToPdf.a in Frameworks */,
-				9D9C81365F0D4459BA78100D /* libRNLocationSatellites.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,6 +815,22 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		0E247C1F238D2498007EED53 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0E247C53238D2499007EED53 /* libRNLocationSatellites.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0EF8CBAF238D0633006C3793 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0EF8CBB3238D0633006C3793 /* libRNImageToPdf.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -837,7 +854,6 @@
 		13B07FAE1A68108700A75B9A /* OyeSpace */ = {
 			isa = PBXGroup;
 			children = (
-				1E7F82ED23A9C0DF00F096DC /* OyeSpace-Bridging-Header.h */,
 				049386FC225E00580033CF63 /* OyeSpace.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -847,6 +863,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				0EF8CC0C238D17B0006C3793 /* OyeSpace-Bridging-Header.h */,
 			);
 			name = OyeSpace;
 			sourceTree = "<group>";
@@ -870,22 +887,6 @@
 				FD3E1430226060720021E700 /* libjsiexecutor.a */,
 				FD3E1432226060720021E700 /* libjsi-tvOS.a */,
 				FD3E1434226060720021E700 /* libjsiexecutor-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		1E2C186E238D2BE3000D0001 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1E92FBD823A9B8C900C2BE7D /* libRNImageToPdf.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		1E2C1873238D2BE4000D0001 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1E92FBDB23A9B8C900C2BE7D /* libRNLocationSatellites.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -951,6 +952,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0E247C1E238D2498007EED53 /* RNLocationSatellites.xcodeproj */,
 				FDA791C9233B715D0034094B /* RNSound.xcodeproj */,
 				9FCBB84822FB060100C2E0AF /* RNShare.xcodeproj */,
 				FD57EA1522E98F05009A1AC7 /* RNSpinkit.xcodeproj */,
@@ -979,7 +981,6 @@
 				CC36C29DFEB94E1C86A11A53 /* RazorpayCheckout.xcodeproj */,
 				7B1D4D427E654E448D8EF7BA /* RCTRestart.xcodeproj */,
 				C4234C07A0424A3FB7953955 /* RNImageToPdf.xcodeproj */,
-				C41F6240964040B7ABEEB76D /* RNLocationSatellites.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -996,8 +997,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				1E7F82F023A9C5D200F096DC /* OyeSoace.swift */,
-				1E43B78223A8B7550034BB1C /* oye_msg_tone.mp3 */,
+				1E44731823AA3BF1008CAFCE /* oye_msg_tone.mp3 */,
+				1E44731623AA3906008CAFCE /* OyeSoace.swift */,
 				9FB793922355CA3700D8145E /* sound_1.mp3 */,
 				13B07FAE1A68108700A75B9A /* OyeSpace */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -1059,7 +1060,7 @@
 				FDA791AB233B6F630034094B /* sound_1.mp3 */,
 				A7832287E1BF4467918A6AC3 /* libRNImageToPdf.a */,
 				26BC40904E4A4FEAB7D5712E /* libRNLocationSatellites.a */,
-				9FDB8DC4235EECB5002DEBAC /* OyeSpace.swift */,
+				1E43B78223A8B7550034BB1C /* oye_msg_tone.mp3 */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1120,7 +1121,7 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-				1E43B72523A8B0800034BB1C /* RNHTMLtoPDFTests.xctest */,
+				1E44730E23AA3353008CAFCE /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1203,8 +1204,8 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = K5NJYU4T6K;
-						LastSwiftMigration = 1130;
-						ProvisioningStyle = Automatic;
+						LastSwiftMigration = 1110;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1335,12 +1336,12 @@
 					ProjectRef = A10286B321E3730300CB1BC5 /* RNImagePicker.xcodeproj */;
 				},
 				{
-					ProductGroup = 1E2C186E238D2BE3000D0001 /* Products */;
+					ProductGroup = 0EF8CBAF238D0633006C3793 /* Products */;
 					ProjectRef = C4234C07A0424A3FB7953955 /* RNImageToPdf.xcodeproj */;
 				},
 				{
-					ProductGroup = 1E2C1873238D2BE4000D0001 /* Products */;
-					ProjectRef = C41F6240964040B7ABEEB76D /* RNLocationSatellites.xcodeproj */;
+					ProductGroup = 0E247C1F238D2498007EED53 /* Products */;
+					ProjectRef = 0E247C1E238D2498007EED53 /* RNLocationSatellites.xcodeproj */;
 				},
 				{
 					ProductGroup = 9FCBB84922FB060100C2E0AF /* Products */;
@@ -1412,6 +1413,20 @@
 			remoteRef = 043D297D225E338E0051E37D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		0E247C53238D2499007EED53 /* libRNLocationSatellites.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNLocationSatellites.a;
+			remoteRef = 0E247C52238D2499007EED53 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EF8CBB3238D0633006C3793 /* libRNImageToPdf.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNImageToPdf.a;
+			remoteRef = 0EF8CBB2238D0633006C3793 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1433,25 +1448,11 @@
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		1E43B72523A8B0800034BB1C /* RNHTMLtoPDFTests.xctest */ = {
+		1E44730E23AA3353008CAFCE /* RNHTMLtoPDFTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = 1E43B72423A8B0800034BB1C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		1E92FBD823A9B8C900C2BE7D /* libRNImageToPdf.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNImageToPdf.a;
-			remoteRef = 1E92FBD723A9B8C900C2BE7D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		1E92FBDB23A9B8C900C2BE7D /* libRNLocationSatellites.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNLocationSatellites.a;
-			remoteRef = 1E92FBDA23A9B8C900C2BE7D /* PBXContainerItemProxy */;
+			remoteRef = 1E44730D23AA3353008CAFCE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */ = {
@@ -1795,7 +1796,9 @@
 				38B525F3545E455D8964C5F2 /* FontAwesome5_Brands.ttf in Resources */,
 				930F1F01B8FD42468E78DF39 /* FontAwesome5_Regular.ttf in Resources */,
 				A6A4F891D36D44499B5E3AA4 /* FontAwesome5_Solid.ttf in Resources */,
+				0EEE611D238F65DB00BC57FA /* Info.plist in Resources */,
 				71616948936E4306B3D6DBCC /* Foundation.ttf in Resources */,
+				1E44731923AA3BF1008CAFCE /* oye_msg_tone.mp3 in Resources */,
 				1E43B78323A8B7550034BB1C /* oye_msg_tone.mp3 in Resources */,
 				049386FB225DFA370033CF63 /* GoogleService-Info.plist in Resources */,
 				F12C89A5946E4D56B497B889 /* Ionicons.ttf in Resources */,
@@ -1956,9 +1959,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E44731723AA3906008CAFCE /* OyeSoace.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				1E7F82F123A9C5D200F096DC /* OyeSoace.swift in Sources */,
-				9FDB8DC5235EECB5002DEBAC /* OyeSpace.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1987,7 +1989,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OyeSpace/OyeSpace.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = K5NJYU4T6K;
@@ -2020,6 +2022,7 @@
 					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
+				MARKETING_VERSION = 10.19;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2027,7 +2030,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
 				PRODUCT_NAME = OyeSpace;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Anooj's_Mac_Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -2044,7 +2047,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OyeSpace/OyeSpace.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K5NJYU4T6K;
 				ENABLE_BITCODE = NO;
@@ -2076,6 +2079,7 @@
 					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
+				MARKETING_VERSION = 10.19;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2083,7 +2087,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
 				PRODUCT_NAME = OyeSpace;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Anooj's_Mac_Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
