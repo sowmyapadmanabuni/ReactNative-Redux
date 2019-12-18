@@ -965,9 +965,8 @@ class SettingsScreen extends Component {
                                         }}>Vendors/Deliveries</Text>
                                     </View>
                                     <View style={{ flex:1, alignItems: 'flex-end'}}>
-                                    <Switch
+                                   <Switch
                                         style={{
-                                            flex:1,
                                             alignSelf:'flex-end',
                                             marginLeft:wp(2),
                                             //alignItems: 'flex-end',
