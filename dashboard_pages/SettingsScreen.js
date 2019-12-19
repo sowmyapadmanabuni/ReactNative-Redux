@@ -350,7 +350,7 @@ class SettingsScreen extends Component {
                     borderWidth: 0.5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: item.item.isFSelected ? base.theme.colors.white : base.theme.colors.greyHead,
+                    backgroundColor: item.item.isFSelected ? base.theme.colors.white : base.theme.colors.greyCard,
                 }}
                 disabled={item.item.isFSelected}
                 onPress={() => this.changeTheMember(item)}
@@ -549,7 +549,7 @@ class SettingsScreen extends Component {
                     borderWidth: 0.5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: item.item.isSelected ? base.theme.colors.white : base.theme.colors.greyHead,
+                    backgroundColor: item.item.isSelected ? base.theme.colors.white : base.theme.colors.greyCard,
 
                 }}
                 disabled={item.item.isSelected}
@@ -578,7 +578,7 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{color:base.theme.colors.darkgrey,fontSize:14}}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -608,7 +608,7 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{fontSize:14,color:base.theme.colors.darkgrey}}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -960,7 +960,7 @@ class SettingsScreen extends Component {
                                 <View style={{ flexDirection:'row' , alignItems:'center', }}>
                                     <View style={{width: wp(60), }}>
                                         <Text style={{
-                                            fontSize:20,
+                                            fontSize:18,
                                             color: base.theme.colors.black
                                         }}>Vendors/Deliveries</Text>
                                     </View>
@@ -987,7 +987,7 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
-                                    <Text style={{color: base.theme.colors.black}}>Entry</Text>
+                                    <Text style={{color: base.theme.colors.black,fontSize:16}}>Entry</Text>
                                 </View>
 
                                 <FlatList
@@ -1022,7 +1022,7 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(1)}}>
-                                    <Text style={{color: base.theme.colors.black}} >Exit</Text>
+                                    <Text style={{color: base.theme.colors.black,fontSize:16}} >Exit</Text>
                                 </View>
 
                                 <FlatList
