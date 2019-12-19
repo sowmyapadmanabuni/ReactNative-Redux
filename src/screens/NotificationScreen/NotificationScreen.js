@@ -251,7 +251,6 @@ class NotificationScreen extends PureComponent {
         console.log(visitorId, 'visitorLogid');
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
-
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
                 headers: {
@@ -262,9 +261,9 @@ class NotificationScreen extends PureComponent {
             .then(res => {
                 console.log("res: ",res);
                 console.log('current time ',res.data);
+                console.log('current time ',res.data.data.currentDateTime);
                 this.setState({currentTime: res.data.data.currentDateTime});
 
-                // this.props.navigation.navigate('ResDashBoard');
                 axios
                     .post(
                         `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
@@ -282,7 +281,7 @@ class NotificationScreen extends PureComponent {
                         }
                     )
                     .then(responses => {
-                        console.log('_RESP_#############@@@@@@@', responses,visitorId);
+                        console.log('_RESP_#############@@@@@@@', responses,visitorId,res.data.data.currentDateTime);
                         gateFirebase
                             .database()
                             .ref(`NotificationSync/A_${associationid}/${visitorId}`)
