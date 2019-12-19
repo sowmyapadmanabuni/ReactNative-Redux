@@ -26,6 +26,7 @@ class SettingsScreen extends Component {
             telegramExit: false,
             smsExit: false,
             broadcastValue:false,
+            headValue:false,
             sideBarData: [{name: "Notification Settings", id: 0, isSelected: false}, {
                 name: "SOS",
                 id: 1,
@@ -342,9 +343,6 @@ class SettingsScreen extends Component {
                     width: wp(25),
                     height: hp(5),
                     marginRight: wp('5'),
-                    // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
-                    // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-                    // shadowRadius:Platform.OS === 'ios' ? 2: 0,
                     elevation: 10,
                     borderWidth: 0.5,
                     alignItems: 'center',
@@ -536,14 +534,8 @@ class SettingsScreen extends Component {
                     borderColor: base.theme.colors.greyHead,
                     borderTopLeftRadius: 5,
                     borderBottomLeftRadius: 5,
-                    ///height: wp(50),
                     width: wp(10),
-                    // width: wp(25),
-                    // height: hp(5),
                     marginTop:hp(6),
-                    // shadowOffset: {width: 0, height: Platform.OS === 'ios' ? 3 : 0,},
-                    // shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-                    // shadowRadius:Platform.OS === 'ios' ? 2: 0,
                     elevation: 10,
                     borderWidth: 0.5,
                     alignItems: 'center',
@@ -558,8 +550,6 @@ class SettingsScreen extends Component {
                 <View style={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    //backgroundColor:'yellow',
-                    //height:hp(10),
                     width: wp(40),
                     transform: [{rotate: '-90deg'}]
                 }}>
@@ -583,7 +573,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}],
@@ -614,7 +603,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -648,7 +636,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -682,7 +669,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -716,7 +702,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -750,7 +735,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -784,7 +768,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -818,7 +801,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -852,7 +834,6 @@ class SettingsScreen extends Component {
                 </View>
                 <View
                     style={{
-                        //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
                         right:wp(3),
@@ -876,7 +857,7 @@ class SettingsScreen extends Component {
         return (
             <View style={{flex: 1}}>
 
-                <ScrollView>
+                <ScrollView showsHorizontalScrollIndicator={false}>
 
                     <View
                         style={{
@@ -939,14 +920,10 @@ class SettingsScreen extends Component {
                             <FlatList
                                 style={{
                                     height:wp(100),
-                                    //marginLeft:wp('18'),
-                                    //marginTop:hp(5),
-                                    //backgroundColor:'yellow',
                                 }}
                                 extraData={this.state}
                                 data={this.state.sideBarData}
                                 renderItem={(item) => this.renderSideBar(item)}
-                                //keyExtractor={item => item.id}
                             />
 
                         </View>
@@ -957,10 +934,8 @@ class SettingsScreen extends Component {
                                 flex:1,
                                 width:wp(80),
                                 paddingTop:hp(5),
-                                //paddingLeft:wp(5),
                                 borderWidth: 1,
                                 backgroundColor: base.theme.colors.white,
-                                //backgroundColor:'yellow',
                                 shadowOpacity: Platform.OS === 'ios' ? 0.0015 * 8 + 0.18 : 0,
                                 shadowRadius: Platform.OS === 'ios' ? 0.54 * 8 : 0,
                                 shadowOffset: {
@@ -972,18 +947,76 @@ class SettingsScreen extends Component {
                             }}
                         >
                             <View style={{
-                                //alignSelf:'center',
-                                //backgroundColor:'red',
                                 marginLeft:wp(8),
                                 marginRight:wp(5),
                                 marginBottom:hp(8),
                             }}>
 
+
+
+
+
                                 <View style={{
                                     flex:1,
                                     flexDirection:'row' ,
-                                    //width: wp('100'),
-                                    //backgroundColor:'green',
+                                }}>
+                                    <View style={{
+                                        width: wp('80'),
+                                        flex:1,
+                                    }}>
+                                        <Text style={{
+                                            fontSize:20,
+                                            color: base.theme.colors.black
+                                        }}>Head of family</Text>
+                                    </View>
+                                    <View style={{
+                                        width:wp('20'),
+                                    }}>
+                                        <Switch
+                                            style={{
+                                                alignSelf:'flex-end',
+                                                transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
+                                            }}
+                                            trackColor={{true: base.theme.colors.whenMainSwitchOn, false: base.theme.colors.whenMainSwitchOff}}
+                                            ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
+                                            ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
+                                            thumbTintColor="white"
+                                            onValueChange = {()=>  this.setState({
+                                                headValue : !this.state.headValue
+                                            }) }
+                                            value = {this.state.headValue}
+                                        />
+                                    </View>
+                                </View>
+
+
+                                <View
+                                    style={{
+                                        height:hp(4),
+                                        alignSelf:'center',
+                                        justifyContent:'center'
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            backgroundColor:'#D3D3D3',
+                                            width:wp(90),
+                                            height:hp(0.2),
+                                            alignSelf:'center',
+                                        }}
+                                    />
+                                </View>
+
+
+
+
+
+
+
+
+                                <View style={{
+                                    flex:1,
+                                    flexDirection:'row' ,
                                 }}>
                                     <View style={{
                                         width: wp('80'),
@@ -1002,7 +1035,8 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#EF3939'}}
+                                        trackColor={{true: base.theme.colors.whenMainSwitchOn, false: base.theme.colors.whenMainSwitchOff}}
+                                        ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.vendorSwitchValueOff()}
                                         value = {this.state.vendorSwitchValue}
@@ -1018,18 +1052,13 @@ class SettingsScreen extends Component {
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.vendorListData}
                                     renderItem={(item) => this.VendorList(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
                                 <View
                                     style={{
-                                        //backgroundColor:'yellow',
                                         height:hp(3),
                                         alignSelf:'center',
                                         justifyContent:'center'
@@ -1053,18 +1082,13 @@ class SettingsScreen extends Component {
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.vendorExitListData}
                                     renderItem={(item) => this.VendorExitList(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
                                 <View
                                     style={{
-                                        //backgroundColor:'yellow',
                                         height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
@@ -1096,15 +1120,13 @@ class SettingsScreen extends Component {
                                     }}>
                                     <Switch
                                         style={{
-                                            //right:wp(3),
-                                            //flex:1,
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#EF3939'}}
+                                        trackColor={{true: base.theme.colors.whenMainSwitchOn, false: base.theme.colors.whenMainSwitchOff}}
+                                        ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.kidExitValueOff()}
-                                        //onValueChange = {()=> this.setState({kidExit: !this.state.kidExit})}
                                         value = {this.state.kidExit}
                                     />
                                     </View>
@@ -1114,18 +1136,13 @@ class SettingsScreen extends Component {
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.KidExitList}
                                     renderItem={(item) => this.KidExit(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
                                 <View
                                     style={{
-                                        //backgroundColor:'yellow',
                                         height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
@@ -1157,15 +1174,13 @@ class SettingsScreen extends Component {
                                     }}>
                                     <Switch
                                         style={{
-                                            //flex:1,
-                                            //right:wp(18),
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2}, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#EF3939'}}
+                                        trackColor={{true: base.theme.colors.whenMainSwitchOn, false: base.theme.colors.whenMainSwitchOff}}
+                                        ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.serviceValueOff()}
-                                        //onValueChange = {()=> this.setState({Service: !this.state.Service})}
                                         value = {this.state.Service}
                                     />
                                     </View>
@@ -1176,18 +1191,13 @@ class SettingsScreen extends Component {
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.serviceList}
                                     renderItem={(item) => this.service(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
                                 <View
                                     style={{
-                                        //backgroundColor:'yellow',
                                         height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
@@ -1219,14 +1229,13 @@ class SettingsScreen extends Component {
                                     }}>
                                     <Switch
                                         style={{
-                                            //flex:1,
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#EF3939'}}
+                                        trackColor={{true: base.theme.colors.whenMainSwitchOn, false: base.theme.colors.whenMainSwitchOff}}
+                                        ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.guestValueOff()}
-                                        //onValueChange = {()=> this.setState({guestValue: !this.state.guestValue})}
                                         value = {this.state.guestValue}
                                     />
                                     </View>
@@ -1237,19 +1246,14 @@ class SettingsScreen extends Component {
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.guestList}
                                     renderItem={(item) => this.guest(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
 
                                 <View
                                     style={{
-                                        //backgroundColor:'yellow',
                                         height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
@@ -1285,10 +1289,10 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#EF3939'}}
+                                        trackColor={{true: base.theme.colors.whenMainSwitchOn, false: base.theme.colors.whenMainSwitchOff}}
+                                        ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
                                         thumbTintColor="white"
                                         onValueChange = {(value)=>this.broadcastValueOff(value)}
-                                        //onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
                                         value = {this.state.broadcastValue}
                                     />
                                     </View>
@@ -1298,18 +1302,13 @@ class SettingsScreen extends Component {
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.broadcastList}
                                     renderItem={(item) => this.broadcast(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
                                 <View
                                     style={{
-                                        //backgroundColor:'yellow',
                                         height:hp(4),
                                         alignSelf:'center',
                                         justifyContent:'center'
@@ -1337,15 +1336,13 @@ class SettingsScreen extends Component {
                                     }}>
                                     <Switch
                                         style={{
-                                            //flex:1,
-                                            //right:wp(4),
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2}, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#EF3939'}}
+                                        trackColor={{true: base.theme.colors.whenMainSwitchOn, false: base.theme.colors.whenMainSwitchOff}}
+                                        ios_backgroundColor={base.theme.colors.whenMainSwitchOff}
                                         thumbTintColor="white"
                                         onValueChange = {(value)=>this.InvoiceValueOff(value)}
-                                        //onValueChange = {()=> this.setState({InvoiceValue: !this.state.InvoiceValue})}
                                         value = {this.state.InvoiceValue}
                                     />
                                     </View>
@@ -1362,7 +1359,6 @@ class SettingsScreen extends Component {
                                     }}
                                     data={this.state.invoiceGeneratedList}
                                     renderItem={(item) => this.invoiceGenerated(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
 
@@ -1379,7 +1375,6 @@ class SettingsScreen extends Component {
                                     }}
                                     data={this.state.invoiceDueList}
                                     renderItem={(item) => this.invoiceDue(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
 
@@ -1391,13 +1386,9 @@ class SettingsScreen extends Component {
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.receiptsGeneratedList}
                                     renderItem={(item) => this.receiptGenerated(item)}
-                                    //keyExtractor={item => item.id}
                                 />
 
 
