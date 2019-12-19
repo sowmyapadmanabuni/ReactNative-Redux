@@ -25,7 +25,8 @@ const colors = {
   textLight: '#474749',
   imageShadow: '#f2f2f2',
   playprogressbar: '#ccc',
-  text: '#909091'
+  text: '#909091',
+  notificationSecondaryTxtColor:'#9C9C9C',
 };
 
 export default colors;

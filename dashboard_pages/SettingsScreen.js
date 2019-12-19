@@ -577,7 +577,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }} >
                         {item.item.title}
                     </Text>
                 </View>
@@ -586,7 +588,8 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
-                        transform: [{scaleX: 0.8}, {scaleY: 0.8}]
+                        transform: [{scaleX: 0.8}, {scaleY: 0.8}],
+                        right:wp(3),
                     }}
                 >
                     <ToggleSwitch
@@ -607,7 +610,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -616,6 +621,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -637,7 +643,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -646,6 +654,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -667,7 +676,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -676,6 +687,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -697,7 +709,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -706,6 +720,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -727,7 +742,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -736,6 +753,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -757,7 +775,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -766,6 +786,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -787,7 +808,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -796,6 +819,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -817,7 +841,9 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text>
+                    <Text style={{
+                        color : base.theme.colors.notificationSecondaryTxtColor
+                    }}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -826,6 +852,7 @@ class SettingsScreen extends Component {
                         //backgroundColor:'yellow',
                         flex: 1,
                         alignItems: 'flex-end',
+                        right:wp(3),
                         transform: [{scaleX: 0.8}, {scaleY: 0.8}]
                     }}
                 >
@@ -927,12 +954,10 @@ class SettingsScreen extends Component {
                                 flex:1,
                                 width:wp(80),
                                 paddingTop:hp(5),
-                                //paddingLeft:wp(8),
-                                //paddingRight:wp(8),
+                                //paddingLeft:wp(5),
                                 borderWidth: 1,
-                               // alignItems: 'center',
-                               // justifyContent: 'center',
                                 backgroundColor: base.theme.colors.white,
+                                //backgroundColor:'yellow',
                                 shadowOpacity: Platform.OS === 'ios' ? 0.0015 * 8 + 0.18 : 0,
                                 shadowRadius: Platform.OS === 'ios' ? 0.54 * 8 : 0,
                                 shadowOffset: {
@@ -941,45 +966,43 @@ class SettingsScreen extends Component {
                                 shadowColor: base.theme.colors.greyHead,
                                 borderColor: base.theme.colors.greyHead,
                                 elevation:8,
-                               // borderTopLeftRadius: 20,
-                                //flex: 1,
-                              //  width: wp(90),
-                              //  paddingTop: hp(5),
-                               // paddingLeft: wp(8),
-                               // paddingRight: wp(8),
                             }}
                         >
                             <View style={{
+                                //alignSelf:'center',
                                 //backgroundColor:'red',
                                 marginLeft:wp(8),
                                 marginRight:wp(8),
                                 marginBottom:hp(8),
                             }}>
 
-                                <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <View style={{width: wp(60), }}>
+                                <View style={{
+                                    flex:1,
+                                    flexDirection:'row' ,
+                                    //width: wp('100'),
+                                    backgroundColor:'green',
+                                }}>
+                                    <View style={{
+                                        width: wp('80'),
+                                        flex:1,
+                                        //backgroundColor:'yellow'
+                                    }}>
                                         <Text style={{
                                             fontSize:20,
                                             color: base.theme.colors.black
                                         }}>Vendors/Deliveries</Text>
                                     </View>
-                                    <View style={{ flex:1, alignItems: 'flex-end'}}>
+                                    <View style={{
+                                        width:wp('20'),
+                                        //backgroundColor:'blue'
+                                    }}>
                                    <Switch
                                         style={{
-                                            alignSelf:'flex-end',
-                                            marginLeft:wp(2),
-                                            //alignItems: 'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.vendorSwitchValueOff()}
-                                        // onValueChange = {()=> {
-                                        //     this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})
-                                        //     if (this.state.vendorSwitchValue){
-                                        //         this.vendorSwitchValueOff()
-                                        //     }
-                                        // }}
                                         value = {this.state.vendorSwitchValue}
                                     />
                                     </View>
@@ -1056,7 +1079,7 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', alignSelf:'center', marginBottom:hp(2)}}>
-                                    <View style={{width:wp(80), flex:1}}>
+                                    <View style={{width:wp(80), marginLeft:wp(7)}}>
                                         <Text style={{
                                             fontSize:20,
                                             color: base.theme.colors.black
@@ -1065,6 +1088,7 @@ class SettingsScreen extends Component {
 
                                     <Switch
                                         style={{
+                                            right:wp(3),
                                             flex:1,
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
@@ -1109,13 +1133,16 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
+                                    <View style={{width:wp(80)}}>
                                     <Text style={{
                                         fontSize:20,
                                         color: base.theme.colors.black
                                     }}>Service Provider/Staff</Text>
+                                    </View>
                                     <Switch
                                         style={{
-                                            flex:1,
+                                            //flex:1,
+                                            right:wp(18),
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
@@ -1263,13 +1290,16 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', }}>
+                                    <View style={{width:wp(80)}}>
                                     <Text style={{
                                         fontSize:20,
                                         color: base.theme.colors.black
                                     }}>Invoice & Receipts</Text>
+                                    </View>
                                     <Switch
                                         style={{
                                             flex:1,
+                                            right:wp(4),
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}

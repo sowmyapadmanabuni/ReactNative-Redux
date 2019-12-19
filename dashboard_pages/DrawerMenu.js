@@ -70,7 +70,11 @@ class DrawerMenu extends Component {
           return(
               <TouchableOpacity
                   style={{height:48,width:'100%',alignItems:'center',flexDirection:'row'}}
-                  onPress={()=> this.props.navigation.navigate("settingsScreen")}
+                  onPress={()=>
+                  {
+                      this.props.navigation.navigate("settingsScreen")
+                  }
+                  }
               >
                       <Image style={{height:22,width:22}} source={menu.icon}/>
                       <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
