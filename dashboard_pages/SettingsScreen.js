@@ -56,8 +56,8 @@ class SettingsScreen extends Component {
             ],
 
             serviceList: [
-                {title: "In-App Notification", id: 1, isSelected: false},
-                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "In-App Notification", id: 0, isSelected: false},
+                {title: "Telegram Notification", id: 1, isSelected: false},
             ],
 
             guestList: [
@@ -69,23 +69,23 @@ class SettingsScreen extends Component {
             ],
 
             broadcastList: [
-                {title: "In-App Notification", id: 1, isSelected: false},
-                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "In-App Notification", id: 0, isSelected: false},
+                {title: "Telegram Notification", id: 1, isSelected: false},
             ],
 
             invoiceGeneratedList: [
-                {title: "In-App Notification", id: 1, isSelected: false},
-                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "In-App Notification", id: 0, isSelected: false},
+                {title: "Telegram Notification", id: 1, isSelected: false},
             ],
 
             invoiceDueList: [
-                {title: "In-App Notification", id: 1, isSelected: false},
-                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "In-App Notification", id: 0, isSelected: false},
+                {title: "Telegram Notification", id: 1, isSelected: false},
             ],
 
             receiptsGeneratedList: [
-                {title: "In-App Notification", id: 1, isSelected: false},
-                {title: "Telegram Notification", id: 3, isSelected: false},
+                {title: "In-App Notification", id: 0, isSelected: false},
+                {title: "Telegram Notification", id: 1, isSelected: false},
             ],
 
             kidExit: false,
@@ -222,8 +222,7 @@ class SettingsScreen extends Component {
             });
             let setData = this.state.broadcastList;
             for (let i = 0; i < setData.length; i++) {
-                    setData[i].isSelected = !setData[i].isSelected
-
+                    setData[i].isSelected = false
             }
             this.setState({
                 broadcastList: setData
@@ -249,22 +248,22 @@ class SettingsScreen extends Component {
                 invoiceGeneratedList: setData
             })
 
-            let setData2 = this.state.invoiceGeneratedList;
+            let setData2 = this.state.invoiceDueList;
             for (let i = 0; i < setData2.length; i++) {
                 setData2[i].isSelected = false
 
             }
             this.setState({
-                invoiceGeneratedList: setData2
+                invoiceDueList: setData2
             })
 
-            let setData3 = this.state.invoiceGeneratedList;
+            let setData3 = this.state.receiptsGeneratedList;
             for (let i = 0; i < setData3.length; i++) {
                 setData3[i].isSelected = false
 
             }
             this.setState({
-                invoiceGeneratedList: setData3
+                receiptsGeneratedList: setData3
             })
         }
         else{
@@ -481,14 +480,14 @@ class SettingsScreen extends Component {
         if(this.state.InvoiceValue) {
             console.log(">>>>>", item);
 
-            let setData = this.state.invoiceGeneratedList;
+            let setData = this.state.invoiceDueList;
             for (let i = 0; i < setData.length; i++) {
                 if (item.item.id === i) {
                     setData[i].isSelected = !setData[i].isSelected
                 }
             }
             this.setState({
-                invoiceGeneratedList: setData
+                invoiceDueList: setData
             })
         }
     }
@@ -497,14 +496,14 @@ class SettingsScreen extends Component {
         if(this.state.InvoiceValue) {
             console.log(">>>>>", item);
 
-            let setData = this.state.invoiceGeneratedList;
+            let setData = this.state.receiptsGeneratedList;
             for (let i = 0; i < setData.length; i++) {
                 if (item.item.id === i) {
                     setData[i].isSelected = !setData[i].isSelected
                 }
             }
             this.setState({
-                invoiceGeneratedList: setData
+                receiptsGeneratedList: setData
             })
         }
     }
@@ -949,7 +948,7 @@ class SettingsScreen extends Component {
                                             //alignItems: 'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
+                                        trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.vendorSwitchValueOff()}
                                         // onValueChange = {()=> {
@@ -1047,7 +1046,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
+                                        trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.kidExitValueOff()}
                                         //onValueChange = {()=> this.setState({kidExit: !this.state.kidExit})}
@@ -1097,7 +1096,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
+                                        trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.serviceValueOff()}
                                         //onValueChange = {()=> this.setState({Service: !this.state.Service})}
@@ -1148,7 +1147,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
+                                        trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.guestValueOff()}
                                         //onValueChange = {()=> this.setState({guestValue: !this.state.guestValue})}
@@ -1201,7 +1200,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#EF3939', false: '#DCDCE5'}}
+                                        trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
                                         onValueChange = {(value)=>this.broadcastValueOff(value)}
                                         //onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
@@ -1251,7 +1250,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#DCDCE5'}}
+                                        trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
                                         onValueChange = {(value)=>this.InvoiceValueOff(value)}
                                         //onValueChange = {()=> this.setState({InvoiceValue: !this.state.InvoiceValue})}
