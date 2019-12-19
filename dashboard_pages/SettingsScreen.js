@@ -969,7 +969,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             marginLeft:wp(2),
                                             //alignItems: 'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1067,7 +1067,7 @@ class SettingsScreen extends Component {
                                         style={{
                                             flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1117,7 +1117,7 @@ class SettingsScreen extends Component {
                                         style={{
                                             flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2}, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1168,7 +1168,7 @@ class SettingsScreen extends Component {
                                         style={{
                                             flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1221,7 +1221,7 @@ class SettingsScreen extends Component {
                                         style={{
                                             flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1271,7 +1271,7 @@ class SettingsScreen extends Component {
                                         style={{
                                             flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2}, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
