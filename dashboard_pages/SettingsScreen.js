@@ -349,7 +349,7 @@ class SettingsScreen extends Component {
                     borderWidth: 0.5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: item.item.isFSelected ? base.theme.colors.white : base.theme.colors.greyHead,
+                    backgroundColor: item.item.isFSelected ? base.theme.colors.white : base.theme.colors.greyCard,
                 }}
                 disabled={item.item.isFSelected}
                 onPress={() => this.changeTheMember(item)}
@@ -548,7 +548,7 @@ class SettingsScreen extends Component {
                     borderWidth: 0.5,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: item.item.isSelected ? base.theme.colors.white : base.theme.colors.greyHead,
+                    backgroundColor: item.item.isSelected ? base.theme.colors.white : base.theme.colors.greyCard,
 
                 }}
                 disabled={item.item.isSelected}
@@ -577,9 +577,7 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text style={{
-                        color : base.theme.colors.notificationSecondaryTxtColor
-                    }} >
+                    <Text style={{color:base.theme.colors.notificationSecondaryTxtColor,fontSize:14}}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -610,9 +608,7 @@ class SettingsScreen extends Component {
         return (
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
-                    <Text style={{
-                        color : base.theme.colors.notificationSecondaryTxtColor
-                    }}>
+                    <Text style={{fontSize:14,color:base.theme.colors.notificationSecondaryTxtColor}}>
                         {item.item.title}
                     </Text>
                 </View>
@@ -644,6 +640,7 @@ class SettingsScreen extends Component {
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text style={{
+                        fontSize:14,
                         color : base.theme.colors.notificationSecondaryTxtColor
                     }}>
                         {item.item.title}
@@ -677,6 +674,7 @@ class SettingsScreen extends Component {
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text style={{
+                        fontSize:14,
                         color : base.theme.colors.notificationSecondaryTxtColor
                     }}>
                         {item.item.title}
@@ -710,6 +708,7 @@ class SettingsScreen extends Component {
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text style={{
+                        fontSize:14,
                         color : base.theme.colors.notificationSecondaryTxtColor
                     }}>
                         {item.item.title}
@@ -743,6 +742,7 @@ class SettingsScreen extends Component {
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text style={{
+                        fontSize:14,
                         color : base.theme.colors.notificationSecondaryTxtColor
                     }}>
                         {item.item.title}
@@ -776,6 +776,7 @@ class SettingsScreen extends Component {
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text style={{
+                        fontSize:14,
                         color : base.theme.colors.notificationSecondaryTxtColor
                     }}>
                         {item.item.title}
@@ -809,6 +810,7 @@ class SettingsScreen extends Component {
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text style={{
+                        fontSize:14,
                         color : base.theme.colors.notificationSecondaryTxtColor
                     }}>
                         {item.item.title}
@@ -842,6 +844,7 @@ class SettingsScreen extends Component {
             <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center',marginBottom:hp(0.5)}}>
                 <View style={{width: wp(80), flex: 1}}>
                     <Text style={{
+                        fontSize:14,
                         color : base.theme.colors.notificationSecondaryTxtColor
                     }}>
                         {item.item.title}
@@ -972,7 +975,7 @@ class SettingsScreen extends Component {
                                 //alignSelf:'center',
                                 //backgroundColor:'red',
                                 marginLeft:wp(8),
-                                marginRight:wp(8),
+                                marginRight:wp(5),
                                 marginBottom:hp(8),
                             }}>
 
@@ -980,12 +983,11 @@ class SettingsScreen extends Component {
                                     flex:1,
                                     flexDirection:'row' ,
                                     //width: wp('100'),
-                                    backgroundColor:'green',
+                                    //backgroundColor:'green',
                                 }}>
                                     <View style={{
                                         width: wp('80'),
                                         flex:1,
-                                        //backgroundColor:'yellow'
                                     }}>
                                         <Text style={{
                                             fontSize:20,
@@ -994,11 +996,11 @@ class SettingsScreen extends Component {
                                     </View>
                                     <View style={{
                                         width:wp('20'),
-                                        //backgroundColor:'blue'
                                     }}>
                                    <Switch
                                         style={{
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            alignSelf:'flex-end',
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1009,7 +1011,7 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
-                                    <Text style={{color: base.theme.colors.black}}>Entry</Text>
+                                    <Text style={{color: base.theme.colors.black,fontSize:16}}>Entry</Text>
                                 </View>
 
                                 <FlatList
@@ -1044,7 +1046,7 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(1)}}>
-                                    <Text style={{color: base.theme.colors.black}} >Exit</Text>
+                                    <Text style={{color: base.theme.colors.black,fontSize:16}} >Exit</Text>
                                 </View>
 
                                 <FlatList
@@ -1079,19 +1081,25 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', alignSelf:'center', marginBottom:hp(2)}}>
-                                    <View style={{width:wp(80), marginLeft:wp(7)}}>
+                                    <View style={{
+                                        width: wp('80'),
+                                        flex:1,
+                                    }}>
                                         <Text style={{
                                             fontSize:20,
                                             color: base.theme.colors.black
                                         }}>Kid Exit</Text>
                                     </View>
 
+                                    <View style={{
+                                        width:wp('20'),
+                                    }}>
                                     <Switch
                                         style={{
-                                            right:wp(3),
-                                            flex:1,
+                                            //right:wp(3),
+                                            //flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1099,6 +1107,7 @@ class SettingsScreen extends Component {
                                         //onValueChange = {()=> this.setState({kidExit: !this.state.kidExit})}
                                         value = {this.state.kidExit}
                                     />
+                                    </View>
                                 </View>
 
                                 <FlatList
@@ -1133,18 +1142,25 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
-                                    <View style={{width:wp(80)}}>
+                                    <View style={{
+                                        width: wp('80'),
+                                        flex:1,
+                                    }}>
                                     <Text style={{
                                         fontSize:20,
                                         color: base.theme.colors.black
                                     }}>Service Provider/Staff</Text>
                                     </View>
+
+                                    <View style={{
+                                        width:wp('20'),
+                                    }}>
                                     <Switch
                                         style={{
                                             //flex:1,
-                                            right:wp(18),
+                                            //right:wp(18),
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2}, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1152,6 +1168,7 @@ class SettingsScreen extends Component {
                                         //onValueChange = {()=> this.setState({Service: !this.state.Service})}
                                         value = {this.state.Service}
                                     />
+                                    </View>
 
                                 </View>
 
@@ -1187,15 +1204,24 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
+                                    <View style={{
+                                        width: wp('80'),
+                                        flex:1,
+                                    }}>
                                     <Text style={{
                                         fontSize:20,
                                         color: base.theme.colors.black
                                     }}>Surprise Guest</Text>
+                                    </View>
+
+                                    <View style={{
+                                        width:wp('20'),
+                                    }}>
                                     <Switch
                                         style={{
-                                            flex:1,
+                                            //flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1203,6 +1229,7 @@ class SettingsScreen extends Component {
                                         //onValueChange = {()=> this.setState({guestValue: !this.state.guestValue})}
                                         value = {this.state.guestValue}
                                     />
+                                    </View>
                                 </View>
 
 
@@ -1240,15 +1267,23 @@ class SettingsScreen extends Component {
 
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginBottom:hp(2)}}>
+                                    <View style={{
+                                        width: wp('80'),
+                                        flex:1,
+                                    }}>
                                     <Text style={{
                                         fontSize:20,
                                         color: base.theme.colors.black
                                     }}>Broadcast</Text>
+                                    </View>
+                                    <View style={{
+                                        width:wp('20'),
+                                    }}>
                                     <Switch
                                         style={{
                                             flex:1,
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1256,6 +1291,7 @@ class SettingsScreen extends Component {
                                         //onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
                                         value = {this.state.broadcastValue}
                                     />
+                                    </View>
                                 </View>
 
                                 <FlatList
@@ -1290,18 +1326,21 @@ class SettingsScreen extends Component {
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', }}>
-                                    <View style={{width:wp(80)}}>
+                                    <View style={{width:wp(80), flex:1}}>
                                     <Text style={{
                                         fontSize:20,
                                         color: base.theme.colors.black
                                     }}>Invoice & Receipts</Text>
                                     </View>
+                                    <View style={{
+                                        width:wp('20'),
+                                    }}>
                                     <Switch
                                         style={{
-                                            flex:1,
-                                            right:wp(4),
+                                            //flex:1,
+                                            //right:wp(4),
                                             alignSelf:'flex-end',
-                                            transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
+                                            transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2}, { scaleY: Platform.OS === 'ios'? 1:1.2 }]
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
@@ -1309,19 +1348,17 @@ class SettingsScreen extends Component {
                                         //onValueChange = {()=> this.setState({InvoiceValue: !this.state.InvoiceValue})}
                                         value = {this.state.InvoiceValue}
                                     />
+                                    </View>
                                 </View>
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
-                                    <Text style={{color: base.theme.colors.black}}>Invoices Generated </Text>
+                                    <Text style={{color: base.theme.colors.black,fontSize:16}}>Invoices Generated </Text>
                                 </View>
 
                                 <FlatList
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.invoiceGeneratedList}
                                     renderItem={(item) => this.invoiceGenerated(item)}
@@ -1332,16 +1369,13 @@ class SettingsScreen extends Component {
 
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
-                                    <Text style={{color: base.theme.colors.black}}>Invoices Due </Text>
+                                    <Text style={{color: base.theme.colors.black,fontSize:16}}>Invoices Due </Text>
                                 </View>
 
                                 <FlatList
                                     showsHorizontalScrollIndicator={false}
                                     style={{
                                         width:wp(80),
-                                        //marginLeft:wp('18'),
-                                        //marginTop:hp(5),
-                                        //backgroundColor:'yellow',
                                     }}
                                     data={this.state.invoiceDueList}
                                     renderItem={(item) => this.invoiceDue(item)}
@@ -1350,7 +1384,7 @@ class SettingsScreen extends Component {
 
 
                                 <View style={{ flexDirection:'row' , alignItems:'center', marginTop:hp(2),marginBottom:hp(1)}}>
-                                    <Text style={{color: base.theme.colors.black}}>Receipts Generated </Text>
+                                    <Text style={{color: base.theme.colors.black,fontSize:16}}>Receipts Generated </Text>
                                 </View>
 
                                 <FlatList

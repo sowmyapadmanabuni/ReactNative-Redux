@@ -2086,11 +2086,11 @@ class Expenses extends React.Component {
                                     borderRadius: 5,
                                     flexDirection: 'row',
                                     borderStyle: 'dashed',
+                                    borderColor: base.theme.colors.blue,
+                                    borderWidth: 1.8,
                                     height: 90,
                                     width: '95%',
                                     alignSelf: 'center',
-                                    borderWidth: 1.8,
-                                    borderColor: base.theme.colors.blue,
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     marginBottom: this.state.isCollapse ? 0 : 60
