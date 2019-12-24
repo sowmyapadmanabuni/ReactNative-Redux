@@ -101,7 +101,7 @@ PODS:
     - RNPermissions
   - Permission-Microphone (2.0.3):
     - RNPermissions
-  - Protobuf (3.11.0)
+  - Protobuf (3.11.2)
   - RCTSystemSetting (1.7.3):
     - React
   - React (0.59.10):
@@ -361,7 +361,7 @@ SPEC CHECKSUMS:
   Permission-Camera: 019cd09a9b6fa90f7e5b2f7a4a9e32c54027f123
   Permission-MediaLibrary: 04ac4ce4511d25bda3bded67ce1187b6b1f80d3f
   Permission-Microphone: 747e8e6364c9fa266f2acf5dd7cebaf0fce2e177
-  Protobuf: 394b2bf29ec303f4325e3ee4892c09e675647152
+  Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   RCTSystemSetting: 2870be06565f2398a8786bfe8486ff6880a4326a
   React: 36d0768f9e93be2473b37e7fa64f92c1d5341eef
   react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
@@ -388,4 +388,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1ebee16908ee78000814d3884b53d12a8fbd39cf
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.8.4
