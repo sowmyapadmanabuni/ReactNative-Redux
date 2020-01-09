@@ -339,5 +339,48 @@ export class validate {
 
     }
 
+    static getICICIGateWay(response) {
+
+        console.log("RRRR@@@#@#@#@:", response);
+        this.iciciPayForm = {
+            txntype: response.txntype, //'sale'
+            timezone: response.timezone, //'Asia/Calcutta',
+            txndatetime: response.txndatetime, //this.utilService.getDateTime(),//,
+            hash_algorithm: response.hash_algorithm,
+            hash: response.response_hash,
+            storename: response.storename, //'3300002052',
+            mode: response.mode, // "payonly" ,
+            currency: response.currency,
+            responseSuccessURL: response.pgStatURL,
+            responseFailURL: response.pgStatURL,
+            language: response.language, //"en_US",
+            chargetotal: response.chargetotal,
+            oid: response.oid
+        }
+
+
+        let htmlContent ="<form #iciciform action=\"https://test.ipg-online.com/connect/gateway/processing\" method=\"POST\"\n" +
+            " name=\"iciciPayForm\">\n" +
+            " <input type=\"hidden\" name=\"chargetotal\" value=\"iciciPayForm.chargetotal\" />\n" +
+            " <input type=\"hidden\" name=\"txntype\" value=\"iciciPayForm.txntype\">\n" +
+            " <input type=\"hidden\" name=\"timezone\" value=\"iciciPayForm.timezone\" />\n" +
+            " <input type=\"hidden\" name=\"txndatetime\" value=\"iciciPayForm.txndatetime\" />\n" +
+            " <input type=\"hidden\" name=\"hash_algorithm\" value=\"iciciPayForm.hash_algorithm\" />\n" +
+            " <input type=\"hidden\" name=\"hash\" value=\"iciciPayForm.hash\" />\n" +
+            " <input type=\"hidden\" name=\"storename\" value=\"iciciPayForm.storename\" />\n" +
+            " <input type=\"hidden\" name=\"mode\" value=\"iciciPayForm.mode\" />\n" +
+            " <!-- <input type=\"hidden\" name=\"paymentMethod\" [ngModel]=\"iciciPayForm.paymentMethod\" /> -->\n" +
+            " <input type=\"hidden\" name=\"currency\" value=\"iciciPayForm.currency\" />\n" +
+            " <input type=\"hidden\" name=\"responseSuccessURL\" value=\"iciciPayForm.responseSuccessURL\" />\n" +
+            " <input type=\"hidden\" name=\"responseFailURL\" value=\"iciciPayForm.responseFailURL\" />\n" +
+            " <input type=\"hidden\" name=\"language\" value=\"iciciPayForm.language\" />\n" +
+            " <!-- <input type=\"submit\" value=\"Submit\"> -->\n" +
+            " </form>"
+        return htmlContent;
+
+    }
+
+
+
 
 }

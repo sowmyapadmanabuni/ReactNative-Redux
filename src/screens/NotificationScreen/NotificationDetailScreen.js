@@ -1,18 +1,18 @@
 import React, { PureComponent } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  Alert,
-  Image,
-  SafeAreaView,
-  Dimensions,
-  Linking,
-  Platform,
-  TouchableOpacity,
-  FlatList,
-  BackHandler
+    View,
+    Text,
+    StyleSheet,
+    ActivityIndicator,
+    Alert,
+    Image,
+    SafeAreaView,
+    Dimensions,
+    Linking,
+    Platform,
+    TouchableOpacity,
+    FlatList,
+    BackHandler, TextInput, KeyboardAvoidingView, TouchableHighlight
 } from 'react-native';
 import { Button, Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -28,14 +28,18 @@ import {
 } from '../../actions';
 
 import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp
+    heightPercentageToDP,
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
 import gateFirebase from 'firebase';
 import _ from 'lodash';
 import base from '../../base';
 import firebase from 'react-native-firebase';
 import moment from "moment";
+import Modal from "react-native-modal";
+import OSButton from "../../components/osButton/OSButton";
+import CreateSOSStyles from "../SOS/CreateSOSStyles";
 
 // ("ntJoinStat");
 class NotificationDetailScreen extends PureComponent {
@@ -63,7 +67,12 @@ class NotificationDetailScreen extends PureComponent {
       showButtons: true,
 
       appendButtonClicked: false,
-      replaceButtonClicked: false
+      replaceButtonClicked: false,
+        reasonForReject:"",
+        isRejModal:false,
+        detailsToReject:{},
+        selectedImage:"",
+        isModalOpen: false
     };
 
     this.checkAdminNotifStatus = this.checkAdminNotifStatus.bind(this);
@@ -396,7 +405,7 @@ class NotificationDetailScreen extends PureComponent {
               associationID: item.asAssnID
             })
             .then(() => {
-              DateUnit = {
+             let DateUnit = {
                 MemberID: item.sbMemID,
                 UnitID: item.sbUnitID,
                 MemberRoleID: item.sbRoleID,
@@ -404,7 +413,7 @@ class NotificationDetailScreen extends PureComponent {
                 UNOcSDate: item.unOcSDate
               };
 
-              UpdateTenant = {
+             let UpdateTenant = {
                 MEMemID: item.sbMemID,
                 UNUnitID: item.sbUnitID,
                 MRMRoleID: item.sbRoleID
@@ -465,7 +474,7 @@ class NotificationDetailScreen extends PureComponent {
                       console.log(JSON.stringify(UpdateTenant));
                       console.log(responseJson_2);
 
-                      StatusUpdate = {
+                     let StatusUpdate = {
                         NTID: item.ntid,
                         NTStatDesc: 'Request Sent'
                         //NTStatDesc: responseJson_2.data.string
@@ -566,6 +575,10 @@ class NotificationDetailScreen extends PureComponent {
   };
 
   reject = (item, status) => {
+      this.setState({
+          isRejModal:false
+      })
+      console.log('DETAILS DETAILS',item)
     const { oyeURL } = this.props;
     if (status) {
       Alert.alert(
@@ -595,7 +608,7 @@ class NotificationDetailScreen extends PureComponent {
           let roleName = item.sbRoleID === 1 ? 'Owner' : 'Tenant';
           axios
             .get(
-              `http://${this.props.oyeURL}/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${item.sbMemID}`,
+              `http://${this.props.oyeURL}/oyeliving/api/v1//Member/UpdateMemberStatusRejected/${item.sbMemID}/${this.state.reasonForReject}`,
               {
                 headers: {
                   'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
@@ -605,6 +618,7 @@ class NotificationDetailScreen extends PureComponent {
             )
             .then(succc => {
               console.log(succc, 'worked');
+              this.setState({reasonForReject:""})
               axios
                 .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                   sbSubID: item.sbSubID,
@@ -716,9 +730,8 @@ class NotificationDetailScreen extends PureComponent {
     // let status = _.includes(approvedAdmins, subId);
     // let status = false;
       let val=details.ntDesc.split(' ')
-      console.log('DETAILS',details,val)
-
-    let status;
+      console.log('DETAILS########',details)
+      let status;
 
     if (loading || adminStatLoading) {
       return (
@@ -776,13 +789,41 @@ class NotificationDetailScreen extends PureComponent {
           } else {
             status = (
               <View >
+                  <View style={{flexDirection:'row',width:'100%',alignItems:'center',justifyContent:'space-between'}}>
+                  <TouchableOpacity style={{  width: wp('10%'),
+                      height: hp('10%'),
+                      justifyContent: 'center', alignSelf:'center',
+                      alignItems: 'center',marginLeft:40}}
+                                    onPress={() => this._enlargeImage(details.userImage !="" ? "https://mediaupload.oyespace.com/" + details.userImage  :'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                  >
+                      {details.userImage !=""  ?
+
+                          <Image
+                              style={{width: 80,
+                                  height: 80,
+                                  borderRadius: 40, position: 'relative'
+                              }}
+                              source={{uri:"https://mediaupload.oyespace.com/" + details.userImage }}
+                          />
+                          :
+
+                          <Image
+                              style={{width: 80,
+                                  height: 80,
+                                  borderRadius: 40, position: 'relative'
+                              }}
+                              source={{uri:'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder}}
+                          />}
+
+                  </TouchableOpacity>
                   <View
                   style={{
+                      width:'70%',
                     flexDirection: 'column',
                       marginTop:hp('2%'),
                    // marginTop: hp('10%'),
                   //  marginBottom: hp('2%'),
-                    marginLeft: hp('2%')
+                    marginLeft: hp('2%'),
                   }}
                 >
                   <View>
@@ -798,11 +839,6 @@ class NotificationDetailScreen extends PureComponent {
                           ? details.ntDesc.split(' ')[0].trim()
                           : ''}{' '}
                       </Text>
-                        {/*<Text style={{color:base.theme.colors.black}}>
-                        {details.ntDesc !== undefined
-                          ? details.ntDesc.split(' ')[1].trim()
-                          : ''}
-                      </Text>*/}
                     </View>
                   </View>
                   <View style={{ flexDirection: 'row' }}>
@@ -837,6 +873,7 @@ class NotificationDetailScreen extends PureComponent {
                     }}
                   />
                 </View>
+                  </View>
                   <View style={{flexDirection:'row',alignItems:'flex-end',alignSelf:'flex-end',position:'absolute',marginTop:'80%'}}>
                       <TouchableOpacity onPress={() => {
                           this.approve(details)
@@ -848,8 +885,7 @@ class NotificationDetailScreen extends PureComponent {
                           />
                           <Text style={{fontSize:16,color:base.theme.colors.primary,}}>Allow</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() =>
-                          this.reject(details)
+                      <TouchableOpacity onPress={() => this.rejectModal(details)
                       }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
                           <Image
                               style={{width:30,height:30}}
@@ -866,6 +902,108 @@ class NotificationDetailScreen extends PureComponent {
       return status;
     }
   };
+
+    _enlargeImage(imageURI) {
+        console.log('openimg',imageURI)
+        let img={imageURI}
+        this.setState({
+            selectedImage:imageURI,
+            isModalOpen: true
+        })
+    }
+
+
+    _renderModal1() {
+        console.log('openimg111111111',this.state.selectedImage)
+
+        return (
+            <Modal
+                onRequestClose={() => this.setState({isModalOpen: false})}
+                isVisible={this.state.isModalOpen}>
+                <View style={{height: heightPercentageToDP('50%'), justifyContent: 'center', alignItems: 'center'}}>
+                    <Image
+                        style={{
+                            height: heightPercentageToDP('50%'),
+                            width: heightPercentageToDP('50%'),
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        source={{uri:this.state.selectedImage}}
+                    />
+                    <TouchableHighlight
+                        underlayColor={base.theme.colors.transparent}
+                        style={{top: 20}}
+                        onPress={() => this.setState({isModalOpen: false})}>
+                        <Text style={CreateSOSStyles.emergencyHeader}>Close</Text>
+                    </TouchableHighlight>
+                </View>
+            </Modal>
+        )
+    }
+  rejectModal(details){
+      console.log('DETAILS@@@@@@@@@@@',details)
+      this.setState({
+          isRejModal:true,
+          detailsToReject:details
+      })
+
+  }
+  renderRejectModal(){
+      console.log('REJECT MODAL BOX',this.state.isRejModal)
+      return (
+          <Modal
+              style={{height: '110%', width: '100%', alignSelf: 'center',backgroundColor:'transparent',alignItems:'center'}}
+              visible={this.state.isRejModal}
+              transparent={true}
+              onRequestClose={()=>this.setState({isRejModal:false})}>
+              <View style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor:'transparent',
+                  height:hp('100%'),
+                  width:wp('100%')
+              }}>
+              <View style={{width:'80%',height:230,backgroundColor:base.theme.colors.white,borderRadius:20,elevation:5,paddingTop:30,paddingLeft:15}}>
+                  <Text style={{fontSize:16,color:base.theme.colors.black}}> Reason for Rejection</Text>
+                  <TextInput
+                      onChangeText={(text) => this.setState({reasonForReject:text})}
+                      value={this.state.reasonForReject}
+                      style={{
+                          width: '80%',
+                          fontSize: 12,
+                          justifyContent:'flex-start',
+                         // alignItems: 'center',
+                          //justifyContent: 'center',
+                          height: 100,
+                          borderColor: base.theme.colors.greyHead,
+                          borderWidth: 1
+                      }}
+                      multiline={true}
+                      maxLength={100}
+                      placeholderTextColor={base.theme.colors.grey}
+                  />
+                  <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:20,width:'80%'}}>
+                      <OSButton
+                          height={'50%'}
+                          width={'30%'}
+                          oSBText={'Cancel'}
+                          borderRadius={10}
+                          onButtonClick={()=>this.setState({isRejModal:false,reasonForReject:""})}
+                      />
+                      <OSButton
+                          height={'50%'}
+                          width={'30%'}
+                          oSBText={'Submit'}
+                          borderRadius={10}
+                          onButtonClick={()=>this.reject(this.state.detailsToReject)}
+                      />
+                  </View>
+              </View>
+              </View>
+          </Modal>
+      )
+  }
 
   renderDetails = () => {
     const { navigation } = this.props;
@@ -908,10 +1046,15 @@ class NotificationDetailScreen extends PureComponent {
                   </View>
                 <View style={{ flex: 5, zIndex: 100 }}>
 
-                      <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => {
+                          {
+                              Platform.OS === 'android'
+                                  ? Linking.openURL(`tel:${item.number }`)
+                                  : Linking.openURL(`telprompt:${item.number }`);
+                          }}}>
                           <Text style={{color:base.theme.colors.black}}>
                             {item.number ? item.number : ''}</Text>
-                      </View>
+                      </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -1019,6 +1162,13 @@ class NotificationDetailScreen extends PureComponent {
         ) : (
           <View>{this.renderDetails()}</View>
         )}
+        <KeyboardAvoidingView>
+          {this.renderRejectModal()}
+        </KeyboardAvoidingView>
+
+          {this._renderModal1()}
+
+
       </View>
     );
   }
@@ -1082,7 +1232,9 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     MyAccountID: state.UserReducer.MyAccountID,
     page: state.NotificationReducer.page,
-    userReducer: state.UserReducer
+    userReducer: state.UserReducer,
+      mediaupload: state.OyespaceReducer.mediaupload,
+
   };
 };
 

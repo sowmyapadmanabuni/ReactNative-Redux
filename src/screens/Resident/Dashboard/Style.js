@@ -23,11 +23,13 @@ const Style = StyleSheet.create({
   },
   bottomCards: {
     height: '13%',
-    width: '80%',
+    width: '95%',
+    borderRadius:10,  
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 8,
+    marginTop: 0,
     alignItems: 'center',
+    backgroundColor:"#FFFFFF"
   },
   supportContainer: {
     height: '6%',
@@ -36,7 +38,7 @@ const Style = StyleSheet.create({
     backgroundColor: base.theme.colors.white,
     borderColor: base.theme.colors.primary,
     borderWidth: 1,
-    marginTop: 1,
+    marginTop: hp('5'),
     justifyContent: 'center',
     flexDirection: 'row'
   },
@@ -47,7 +49,7 @@ const Style = StyleSheet.create({
   },
   elevatedView: {
     alignItems: 'center',
-    height: '20%',
+    height: '30%',
     justifyContent: 'space-around',
     flexDirection: 'row'
   },
@@ -64,7 +66,7 @@ const Style = StyleSheet.create({
     width: '95%',
     borderRadius: 25,
     paddingHorizontal: 8,
-    paddingVertical: 12,
+    paddingVertical: 15,
     backgroundColor: base.theme.colors.white
   },
   invoiceCardView: {

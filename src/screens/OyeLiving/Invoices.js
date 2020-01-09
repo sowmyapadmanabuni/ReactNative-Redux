@@ -43,6 +43,7 @@ import RNImageToPdf from 'react-native-image-to-pdf';
 import ProgressLoader from "rn-progress-loader";
 import OSButton from "../../components/osButton/OSButton";
 import DatePicker from "react-native-datepicker";
+import axios from "axios";
 
 
 var radio_props1 = [
@@ -136,6 +137,79 @@ class Invoices extends React.Component {
             isCalenderOpen:false
 
         }
+    }
+    getPaymentGateWay(){
+        axios
+            .post(
+                `http://${this.props.oyeURL}/oyeliving/api/v1/PaymentICICI/Create`,
+                {
+                    "chargetotal":"2222",
+                    "customerID": 9539
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                        'Authorization':'my-auth-token'
+                    }
+                }
+            )
+            .then(response => {console.log('RESPONSE >>>>>',response);
+                setTimeout(_ => this.getICICInter(response), 1000)
+            }).catch(error => console.log("ERROR",error))
+    }
+
+    getICICInter(response){
+        let paymentData=response.data.data.paymentICICI;
+        console.log('RESPONSE !!!!!!',paymentData)
+        const reqData = new FormData();
+        // reqData.append('txntype',paymentData.txntype)
+        // reqData.append('timezone',paymentData.timezone)
+        // reqData.append('txndatetime',paymentData.txndatetime)
+        // reqData.append('hash_algorithm',paymentData.hash_algorithm)
+        // reqData.append('hash',paymentData.response_hash)
+        // reqData.append('storename',paymentData.storename)
+        // reqData.append('mode',paymentData.mode)
+        // reqData.append('currency',paymentData.currency)
+        // reqData.append('responseSuccessURL',paymentData.pgStatURL)
+        // reqData.append('responseFailURL',paymentData.pgStatURL)
+        // reqData.append('language',paymentData.language)
+        // reqData.append('chargetotal',paymentData.chargetotal)
+        // reqData.append('oid',paymentData.oid);
+
+
+        let iciciForm = {
+            txntype: paymentData.txntype, //'sale'
+            timezone: paymentData.timezone, //'Asia/Calcutta',
+            txndatetime: paymentData.txndatetime, //this.utilService.getDateTime(),//,
+            hash_algorithm: paymentData.hash_algorithm,
+            hash: paymentData.response_hash,
+            storename: paymentData.storename, //'3300002052',
+            mode: paymentData.mode, // "payonly" ,
+            currency: paymentData.currency,
+            responseSuccessURL: paymentData.pgStatURL,
+            responseFailURL: paymentData.pgStatURL,
+            language: paymentData.language, //"en_US",
+            chargetotal: paymentData.chargetotal,
+            // oid: paymentData.oid
+        };
+
+        reqData.append("iciciForm",JSON.stringify(iciciForm));
+
+        console.log('REQ DATA',iciciForm);
+        let fd = JSON.stringify(reqData);
+
+        setTimeout(()=>{
+            axios
+                .post(
+                    `https://test.ipg-online.com/connect/gateway/processing`,
+                    {
+                        reqData
+                    }
+                )
+                .then(response => {console.log('RESPONSE >>>>>',response);
+                    this.props.navigation.navigate('privacyPolicy',{htmlCode:response.data} )}).catch(error=>{console.log('ERROR',error)})
+        },1000)
     }
 
     componentDidMount() {
@@ -1566,9 +1640,24 @@ class Invoices extends React.Component {
                             <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black}}>Total Due: </Text>
                             <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: base.theme.colors.black }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal} Only</Text>
                         </View>
-                        {/*<View style={{ height: hp('4'), borderRadius: hp('2'), width: wp('20'), backgroundColor: base.theme.colors.primary, right: hp('5'), justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.white }}>Pay Now</Text>
-                        </View> */}
+                        {invoiceData.payment != undefined && invoiceData.payment.length != 0 ?
+                            <View/>:
+                            <View style={{
+                                height: hp('4'),
+                                borderRadius: hp('2'),
+                                width: wp('20'),
+                                backgroundColor: base.theme.colors.primary,
+                                right: hp('5'),
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontFamily: base.theme.fonts.medium,
+                                    fontSize: hp('2'),
+                                    color: base.theme.colors.white
+                                }}>Pay Now</Text>
+                            </View>
+                        }
                     </ElevatedView>
                     <View style={{ height: hp('15'), width: wp('100'), borderBottomWidth:1,borderBottomColor:base.theme.colors.grey,
                         justifyContent: 'flex-start', backgroundColor: base.theme.colors.white, marginTop: 15,paddingLeft:10,marginBottom:5, }}>

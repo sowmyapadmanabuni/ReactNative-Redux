@@ -94,7 +94,14 @@ class CardView extends React.Component {
                         <Text style={CardViewStyles.count}>
                             {this.props.cardCount}
                         </Text>
-                        <MarqueeText
+                        <Text style={[CardViewStyles.cardText, {
+                            fontWeight: this.props.textWeight, fontSize: this.props.textFontSize,
+
+                        }]}
+                              numberOfLines={2}>
+                            {this.props.cardText}
+                        </Text>
+                       {/* <MarqueeText
                             //style={HeaderStyles.residentName}
                             style={[CardViewStyles.cardText, {
                                 fontWeight: this.props.textWeight, fontSize: this.props.textFontSize,
@@ -107,14 +114,8 @@ class CardView extends React.Component {
                             marqueeResetDelay={1000}
                         >
                             {this.props.cardText}
-                        </MarqueeText>
-                        {/*<Text style={[CardViewStyles.cardText, {
-                            fontWeight: this.props.textWeight, fontSize: this.props.textFontSize,
+                        </MarqueeText>*/}
 
-                        }]}
-                              numberOfLines={2}>
-                            {this.props.cardText}
-                        </Text>*/}
 
                     </View>
                 </View>

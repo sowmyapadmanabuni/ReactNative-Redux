@@ -43,6 +43,7 @@ const api = {
 const imageUrl = 'https://mediauploaduat.oyespace.com/Images/'; //Validation
 //const imageUrl = 'https://mediaupload.oyespace.com/Images/'; //Production
 
+
 const strings = {
   urlType: urlType,
   appName: 'OyeSpace',
@@ -94,7 +95,6 @@ const strings = {
     subscriptionAlert1: 'Your subscription is going to end in',
     subscriptionAlert2: 'days. Please contact your association admin'
   },
-
   announcement:"Broadcast",
 };
 

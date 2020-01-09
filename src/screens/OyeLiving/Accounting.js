@@ -58,7 +58,9 @@ class Accounting extends Component {
         selDistribution:"",
         selectedAppList: '',
         expApplicabilityId:'',
-        expAppList:[]
+        expAppList:[],
+        iCFrequency:"",
+        iGDate:moment().format('DD-MM-YYYY')
 
 
 
@@ -286,6 +288,7 @@ class Accounting extends Component {
                   <RadioForm formHorizontal={true} animation={true}>
                       {this.state.minorProps.map((obj, i) => {
                           let onPress = (value, index) => {
+                              console.log('DATA',value,index)
                               this.setState({
                                   isMinorSelected: value,
                               })
@@ -356,7 +359,11 @@ class Accounting extends Component {
                       <Text style={{fontSize: 14, color: base.theme.colors.red, textAlign: 'left',paddingTop:5,}}>RATE (SQFT/SQMTR)</Text>
                   </View>
               </View>
-              <TouchableOpacity style={{width:'100%',borderBottomWidth:1,borderBottomColor:base.theme.colors.lightgrey,flexDirection:'row',
+                  <View style={AddExpenseStyles.textInputView}>
+                      <Text style={{fontSize: 14, color: base.theme.colors.grey, textAlign: 'left',paddingTop:15,}}>Due date</Text>
+                  </View>
+
+                  <TouchableOpacity style={{width:'100%',borderBottomWidth:1,borderBottomColor:base.theme.colors.lightgrey,flexDirection:'row',
                   alignItems:'center',justifyContent:'space-between'
               }}>
                   <DatePicker
@@ -430,12 +437,12 @@ class Accounting extends Component {
                   }}
               />
               <View style={AddExpenseStyles.textInputView}>
-                  <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>Payment Charge</Text>
+                  <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',paddingTop:5,}}>Late Payment Charge</Text>
                   <TextInput
                       style={{height:30, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,paddingBottom:5
                       }}
                       value={this.state.paymentCharge}
-                      placeholder="Payment Charge"
+                      placeholder="Late Payment Charge"
                       placeholderTextColor={base.theme.colors.grey}
                       onChangeText={(value) =>{
                           let num = value.replace(/[^0-9].[^0-9]{2}/g,  '');
@@ -491,6 +498,10 @@ class Accounting extends Component {
                       })}
                   </RadioForm>
               </View>
+{/*
+                  {this.state.isMinorSelected==0? :<View/> }
+*/}
+
               <Dropdown
                   value={this.state.selectedBlock}
                   labelFontSize={18}
@@ -668,12 +679,12 @@ class Accounting extends Component {
         let self=this;
         let input={
             "ASAssnID"  : this.props.dashBoardReducer.assId,
-            "ASMtType"  : "FlatRate",
+            "ASMtType"  : self.state.isMinorSelected===0? "Flat Rate" :"Dimension Based",
             "ASMtDimBs" : self.state.maintenanceValue,
             "ASMtFRate" : self.state.flatRateValue,
             "ASLPCType" : self.state.paymentType,
             "ASLPChrg"  : self.state.paymentCharge,
-            "InvGAuto"  : false,
+            "InvGAuto"  : self.state.isMinorSelected1 ===0?'Yes':'No',
             "ASDPyDate" : moment(self.state.dueDate,'DD-MM-YYYY').format('YYYY-MM-DD'),
             "BLBlockID" : self.state.blockId,
             "BankDetails" :

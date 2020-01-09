@@ -665,7 +665,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0)',
     alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
     width: hp('8%'),
     position: 'absolute',
     bottom: 20,

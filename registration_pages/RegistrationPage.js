@@ -1,8 +1,28 @@
 import React, {Component} from "react";
-import {Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {
+    Alert,
+    Dimensions,
+    Image,
+    PixelRatio,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
 // import RNExitApp from "react-native-exit-app";
 import {updateUserInfo} from "../src/actions";
 import {connect} from "react-redux";
+import base from "../src/base";
+import ImagePicker from "react-native-image-picker";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
+import {Button, Form, Input, Item, Label} from "native-base";
+import CountryPicker from "react-native-country-picker-modal";
+import Style from "../src/screens/Resident/MyFamilyScreen/MyFamilyAdd/Style";
+import OSButton from "../src/components/osButton/OSButton";
 
 console.disableYellowBox = true;
 
@@ -21,144 +41,161 @@ class AddRegularVisitor extends Component {
             valid: "",
             type: "",
             value: "",
-            isLoading: false
+            isLoading: false,
+            profileUrl:"",
+            urlToServer:"",
+            firstName:"",
+            lastName:"",
+            emailAdd:""
         };
 
         this.renderInfo = this.renderInfo.bind(this);
     }
 
-    Firstname = firstname => {
-        updateUserInfo;
-        this.setState({FirstName: firstname});
-    };
+    validations(title, message){
+        let self=this;
+        if (base.utils.validate.isBlank(self.state.firstName)) {
+            Alert.alert('First name is mandatory', message)
+        } else if (self.state.firstName.length<3) {
+            Alert.alert('Minimum number of characters should be 3', message)
+        } else if (base.utils.validate.isBlank(self.state.lastName)) {
+            Alert.alert('Last name is mandatory', message)
+        } else if (self.state.lastName.length<3) {
+            Alert.alert('Minimum number of characters should be 3', message)
+        }else if (base.utils.validate.isBlank(self.state.emailAdd)) {
+            Alert.alert('Email is mandatory', message)
+        }else if (!base.utils.validate.validateEmailId(self.state.emailAdd)) {
+            Alert.alert('Please enter valid email id', message)
+        }else if (base.utils.validate.isBlank(self.state.profileUrl)) {
+            Alert.alert('Profile Picture is mandatory', message)
+        }else{
+            this.uploadImage(self.state.urlToServer)
+        }
 
-    Lastname = lastname => {
-        this.setState({LastName: lastname});
-    };
+    }
 
-    Mobile = mobile => {
-        this.setState({MobileNumber: mobile});
-    };
+    sendRegData(img){
+        let self =this;
+        let member = {
+            ACFName: self.state.firstName,
+            ACLName: self.state.lastName,
+            ACMobile: this.props.MyMobileNumber,
+            ACMobile1: "",
+            ACMobile2: "",
+            ACMobile3: "",
+            ACMobile4: "",
+            ACEmail:self.state.emailAdd ,
+            ACEmail1: "",
+            ACEmail2: "",
+            ACEmail3: "",
+            ACEmail4: "",
+            ACISDCode: this.props.MyISDCode,
+            ACISDCode1: "",
+            ACISDCode2: "",
+            ACISDCode3: "",
+            ACISDCode4: "",
+            ACImgName:img //this.state.urlToServer
+        };
+        console.log('DATA TO REGISTER USER',member)
+        const url = this.props.champBaseURL + "account/signup";
 
-    Mail = email => {
-        this.setState({Mail: email});
-    };
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
+            },
+            body: JSON.stringify(member)
+        })
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log("response", responseJson);
 
-    AddMember = (first, last, email) => {
-        /*  this.setState({
-                 valid: this.phone.isValidNumber(),
-                 type: this.phone.getNumberType(),
-                 value: this.phone.getValue()
-             }); */
+                if (responseJson.success) {
+                    const {updateUserInfo} = this.props;
+                    const {
+                        acAccntID,
+                        acfName,
+                        aclName,
+                        acMobile,
+                        acEmail,
+                        acisdCode
+                    } = responseJson.data.account;
+                    updateUserInfo({prop: "MyAccountID", value: acAccntID});
+                    updateUserInfo({prop: "MyEmail", value: acEmail});
+                    updateUserInfo({prop: "MyMobileNumber", value: acMobile});
+                    updateUserInfo({prop: "MyFirstName", value: acfName});
+                    updateUserInfo({prop: "MyLastName", value: aclName});
+                    updateUserInfo({prop: "MyISDCode", value: acisdCode});
+                    updateUserInfo({prop: "signedIn", value: true});
 
-        var result = this.Validate(first, last, email);
+                    console.log('Association check', responseJson.success);
 
-        if (result === true) {
-            member = {
-                ACFName: first,
-                ACLName: last,
-                ACMobile: this.props.MyMobileNumber,
-                ACMobile1: "",
-                ACMobile2: "",
-                ACMobile3: "",
-                ACMobile4: "",
-                ACEmail: email,
-                ACEmail1: "",
-                ACEmail2: "",
-                ACEmail3: "",
-                ACEmail4: "",
-                ACISDCode: this.props.MyISDCode,
-                ACISDCode1: "",
-                ACISDCode2: "",
-                ACISDCode3: "",
-                ACISDCode4: ""
-            };
-
-            /* {
-          "ACFName"  : "basava",	"ACLName" : "rajesh",	"ACMobile"  : "9480107369",	"ACMobile1" : "",	"ACMobile2" : "", 	"ACMobile3" : "",
-          "ACMobile4" : "",	"ACEmail" : "basavarajeshk86@gmail.com",	"ACEmail1" : "",	"ACEmail2" : "",	"ACEmail3" : "",
-          "ACEmail4": "",	"ACISDCode" : "+91",	"ACISDCode1" : "",	"ACISDCode2" : "",	"ACISDCode3" : "",	"ACISDCode4" : ""
-      }*/
-            const url = this.props.champBaseURL + "account/signup";
-            //  const url = 'http://122.166.168.160/champ/api/v1/account/signup'
-
-            console.log("member", JSON.stringify(member));
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-                    "X-Champ-APIKey": "1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1"
-                },
-                body: JSON.stringify(member)
+                    this.props.navigation.navigate('CreateOrJoinScreen')
+                } else {
+                    alert("failed to add user !");
+                }
             })
-                .then(response => response.json())
-                .then(responseJson => {
-                    console.log("response", responseJson);
+            .catch(error => {
+                console.error(error);
+                alert("caught error in adding user");
+            });
+    }
 
-                    if (responseJson.success) {
-                        const {updateUserInfo} = this.props;
-                        const {
-                            acAccntID,
-                            acfName,
-                            aclName,
-                            acMobile,
-                            acEmail,
-                            acisdCode
-                        } = responseJson.data.account;
-                        updateUserInfo({prop: "MyAccountID", value: acAccntID});
-                        updateUserInfo({prop: "MyEmail", value: acEmail});
-                        updateUserInfo({prop: "MyMobileNumber", value: acMobile});
-                        updateUserInfo({prop: "MyFirstName", value: acfName});
-                        updateUserInfo({prop: "MyLastName", value: aclName});
-                        updateUserInfo({prop: "MyISDCode", value: acisdCode});
-                        updateUserInfo({prop: "signedIn", value: true});
-
-                        console.log('Association check', responseJson.success);
-
-                        this.props.navigation.navigate('CreateOrJoinScreen')
-                    } else {
-                        alert("failed to add user !");
-                    }
+    async uploadImage(response) {
+        console.log("Image upload before", response);
+        let self = this;
+        let source = (Platform.OS === 'ios') ? response.uri : response.uri;
+        const form = new FormData();
+        let imgObj = {
+            name: (response.fileName !== undefined) ? response.fileName : "XXXXX.jpg",
+            uri: source,
+            type: (response.type !== undefined || response.type != null) ? response.type : "image/jpeg"
+        };
+        form.append('image', imgObj);
+        let stat = await base.services.MediaUploadApi.uploadRelativeImage(form);
+        console.log('Photo upload response', stat, response);
+        if (stat) {
+            try {
+                self.setState({
+                   urlToServer:stat
                 })
-                .catch(error => {
-                    console.error(error);
-                    alert("caught error in adding user");
-                });
-        } else {
-            console.log("Validation", "Failed");
+                this.sendRegData(stat)
+            } catch (err) {
+                console.log('err', err)
+            }
         }
-        //583506
-    };
 
-    Validate(first, last, email) {
-        const reg = /^[0]?[6789]\d{9}$/;
-        if (first == "" || first == undefined) {
-            alert("Enter First Name");
-            return false;
-        } else if (first.length < 3) {
-            alert("Enter Minimum 3 Characters");
-            return false;
-        } else if (this.props.oyeNonSpecialNameRegex.test(first) === true) {
-            alert(" First Name should not contain Special Character");
-            return false;
-        } else if (last == "" || last == undefined) {
-            alert("Enter Last Name");
-            return false;
-        } else if (this.props.oyeNonSpecialNameRegex.test(last) === true) {
-            alert("Last Name should not contain Special Character");
-            return false;
-            //   } else if (reg.test(mobile) === false || first == undefined) {
-            //     alert('Enter valid Mobile Number')
-            //     return false;
-        } else if (email == "" || email == undefined) {
-            alert("Enter Email ID");
-            return false;
-        } else if (this.props.oyeEmailRegex.test(email) === false) {
-            alert("Invalid Email ID ");
-            return false;
-        }
-        return true;
+    }
+    selectPhotoTapped() {
+        const options = {
+            quality: 0.5,
+            maxWidth: 250,
+            maxHeight: 250,
+            cameraRoll: false,
+            storageOptions: {
+                skipBackup: true,
+                path: 'tmp_files'
+            },
+        };
+        //showImagePicker
+        ImagePicker.showImagePicker(options, response => {
+            //console.log("Response = ", response)
+            if (response.didCancel) {
+                console.log("User cancelled photo picker")
+            } else if (response.error) {
+                console.log("ImagePicker Error: ", response.error)
+            } else if (response.customButton) {
+                console.log("User tapped custom button: ", response.customButton)
+            } else {
+                console.log('Response',response)
+                this.setState({
+                    urlToServer:response,
+                    profileUrl:response.uri
+                })
+            }
+        })
     }
 
     renderInfo() {
@@ -190,174 +227,103 @@ class AddRegularVisitor extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={{height:'100%',width:'100%'}}>
                 <ScrollView>
-                    <View style={{flexDirection: "column"}}>
-                        <View style={{flexDirection: "column", height: "35%"}}>
-                            <Image
-                                source={require("../pages/assets/images/building_complex.png")}
-                                style={{width: "100%"}}
-                            />
-                        </View>
-
-                        <View style={{flexDirection: "row", marginTop: 25}}>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: "row",
-                                    marginLeft: "2%",
-                                    marginTop: 5,
-                                    height: 40,
-                                    borderColor: "#F2F2F2",
-                                    backgroundColor: "#F2F2F2",
-                                    borderWidth: 1.5,
-                                    borderRadius: 2
-                                }}
-                            >
-                                <Image
-                                    source={require("../pages/assets/images/man-user.png")}
-                                    style={styles.imagee}
-                                />
-                                <TextInput
-                                    style={styles.text1}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="First Name"
-                                    placeholderTextColor="#828282"
-                                    autoCapitalize="words"
-                                    maxLength={50}
-                                    //value={this.state.FirstName}
-                                    onChangeText={this.Firstname}
-                                />
-                            </View>
-
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: "row",
-                                    marginLeft: "2%",
-                                    marginRight: 5,
-                                    marginTop: 5,
-                                    height: 40,
-                                    borderColor: "#F2F2F2",
-                                    backgroundColor: "#F2F2F2",
-                                    borderWidth: 1.5,
-                                    borderRadius: 2
-                                }}
-                            >
-                                <Image
-                                    source={require("../pages/assets/images/man-user.png")}
-                                    style={styles.imagee}
-                                />
-                                <TextInput
-                                    style={styles.text1}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="Last Name"
-                                    placeholderTextColor="#828282"
-                                    autoCapitalize="words"
-                                    maxLength={50}
-                                    onChangeText={this.Lastname}
-                                />
-                            </View>
-                        </View>
-                        {/*   <View style={styles.input1}>
-                            <Image style={{ flex: 1 }}
-                                source={require('../pages/assets/images/call-answer.png')}
-                                style={styles.imagee} />
-                            <PhoneInput style={styles.text}
-                                style={{ flex: 2 }}
-                                ref={ref => {
-                                    this.phone = ref;
-                                }}
-                            />
-                            <TextInput
-                                style={styles.text}
-                                style={{ flex: 5 }}
-                                underlineColorAndroid="transparent"
-                                placeholder="Mobile Number"
-                                placeholderTextColor="#828282"
-                                autoCapitalize="none"
-                                keyboardType={'numeric'}
-                                maxLength={10}
-                                onChangeText={this.Mobile} />
-                        </View> */}
-                        <Text
-                            style={{
-                                fontSize: 13,
-                                color: "black",
-                                margin: 10,
-                                justifyContent: "center",
-                                alignSelf: "center",
-                                alignContent: "center"
-                            }}
-                        >
-                            {global.MyISDCode} {global.MyMobileNumber}{" "}
-                        </Text>
-                        <View style={styles.input1}>
-                            <Image
-                                source={require("../pages/assets/images/envelope.png")}
-                                style={styles.imagee}
-                            />
-                            <TextInput
-                                style={styles.text1}
-                                underlineColorAndroid="transparent"
-                                placeholder="Email ID"
-                                placeholderTextColor="#828282"
-                                autoCapitalize="none"
-                                maxLength={50}
-                                onChangeText={this.Mail}
-                            />
-                        </View>
-                        <TouchableOpacity
-                            style={styles.rectangle}
-                            onPress={this.AddMember.bind(
-                                this,
-                                this.state.FirstName,
-                                this.state.LastName,
-                                this.state.Mail
-                            )}
-                        >
-                            <Text
-                                style={{
-                                    fontSize: 16,
-                                    padding: 3,
-                                    alignSelf: "center",
-                                    color: "#ed8a19"
-                                }}
-                            >
-                                Register{" "}
-                            </Text>
-                        </TouchableOpacity>
-
-                        {/*  <View style={{ flexDirection: 'row', paddingTop: 40 }}>
-                            <View style={{ backgroundColor: '#929292', height: 1, flex: 1, alignSelf: 'center' }} />
-                            <Text style={{ alignSelf: 'center', paddingHorizontal: 5, fontSize: 18 }}>OR</Text>
-                            <View style={{ backgroundColor: '#929292', height: 1, flex: 1, alignSelf: 'center' }} />
-                        </View>
-                        <View style={{ flexDirection: 'row', paddingTop: 20 }}>
-                            <Text style={{ fontSize: 16, alignSelf: 'center', marginleft: 30 }}>
-                                Login with? </Text>
-                        </View> */}
-                        <View
-                            style={{
-                                backgroundColor: "white",
-                                padding: 5,
-                                margin: 15,
-                                alignContent: "center"
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    marginTop: 20,
-                                    fontSize: 16,
-                                    padding: 3,
-                                    alignSelf: "center"
-                                }}
-                            >
-                                JABM Property Managers Pvt Ltd{" "}
-                            </Text>
-                        </View>
-
+                    <View style={{height:200}}>
+                        <Image
+                            source={require("../pages/assets/images/building_complex.png")}
+                            style={{width: "100%",height:'100%'}}
+                        />
                     </View>
+                    <View style={{flexDirection:'column',height:'7%',alignItems:'center',}}>
+                     <Text style={{fontSize:20,color:base.theme.colors.primary}}> Registration</Text>
+                  </View>
+                    <KeyboardAwareScrollView>
+                        <View style={{ height: '22%',
+                            width: '100%',
+                            alignItems: 'center', }}>
+                            <TouchableOpacity style={Style.relativeImgView} onPress={() => this.selectPhotoTapped()}>
+                                {this.state.profileUrl === '' ?
+                                    <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
+                                           source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
+                                    />
+                                    :
+                                    <Image style={{height: 85, width: 85, borderRadius: 85 / 2, alignSelf: 'center'}}
+                                           source={{uri: this.state.profileUrl}}/>
+                                }
+                            </TouchableOpacity>
+
+                        </View>
+                        <View style={{height: '10%',
+                            width: '90%',
+                            marginTop: 20,alignSelf:'center',}}>
+                            <Text style={{fontSize: 14, color: base.theme.colors.gray, textAlign: 'left'}}>First Name
+                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                            <TextInput
+                                style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray}}
+                                onChangeText={(text) => this.setState({firstName: text})}
+                                value={this.state.firstName}
+                                placeholder="First Name"
+                                keyboardType="ascii-capable"
+                                placeholderTextColor={base.theme.colors.black}
+                            />
+                        </View>
+                        <View style={{height: '10%',
+                            width: '90%',
+                            marginTop: 20,alignSelf:'center',}}>
+                            <Text style={{fontSize: 14, color: base.theme.colors.gray, textAlign: 'left'}}>Last Name
+                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                            <TextInput
+                                style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray}}
+                                onChangeText={(text) => this.setState({lastName: text})}
+                                value={this.state.lastName}
+                                placeholder="Last Name"
+                                keyboardType="ascii-capable"
+                                placeholderTextColor={base.theme.colors.black}
+                            />
+                        </View>
+                        <View style={{height: '10%',
+                            width: '90%',
+                            marginTop: 20,alignSelf:'center',}}>
+                            <Text style={{fontSize: 14, color: base.theme.colors.gray, textAlign: 'left'}}>Mobile Number</Text>
+                                <Text style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray,textAlignVertical:'center'}}>{this.props.MyISDCode}{''}-{' '}{this.props.MyMobileNumber}
+                                </Text>
+                            {/*<TextInput
+                                style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray}}
+                               // onChangeText={(text) => this.setState({lastName: text})}
+                                value={this.props.MyMobileNumber}
+                                placeholder="Mobile Number"
+                                keyboardType="ascii-capable"
+                                placeholderTextColor={base.theme.colors.black}
+                                editable={false}
+                            />*/}
+                        </View>
+                        <View style={{height: '10%',
+                            width: '90%',
+                            marginTop: 20,alignSelf:'center',}}>
+                            <Text style={{fontSize: 14, color: base.theme.colors.gray, textAlign: 'left'}}>Email ID
+                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                            <TextInput
+                                style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray}}
+                                onChangeText={(text) => this.setState({emailAdd: text})}
+                                value={this.state.emailAdd}
+                                placeholder="Email address"
+                                keyboardType="email-address"
+                                placeholderTextColor={base.theme.colors.black}
+                            />
+                        </View>
+                        <View style={{height:10}}/>
+                    </KeyboardAwareScrollView>
+                    <View style={{alignSelf:'center',height:'5%',width:'30%'}}>
+                    <OSButton
+                        oSBText={'Register'}
+                        oSBBackground={base.theme.colors.primary}
+                        height={'100%'}
+                    width={'100%'}
+                    borderRadius={20}
+                    onButtonClick={()=>this.validations()}/>
+                    </View>
+                    <View style={{height:50}}/>
                 </ScrollView>
             </View>
         );
@@ -453,5 +419,182 @@ const styles = StyleSheet.create({
         height: 40
     },
 
-    submitButtonText: {color: "#FA9917"}
+    submitButtonText: {color: "#FA9917"},
+    textWrapper: {
+        height: hp("85%"),
+        width: wp("95%")
+    },
+    viewStyle: {
+        backgroundColor: "#fff",
+        height: hp("8%"),
+        width: '100%',
+        shadowColor: "#000",
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.2,
+        elevation: 2,
+        position: "relative"
+    },
+    image: {
+        width: wp("34%"),
+        height: hp("18%")
+    },
+    emptyViewStyle: {
+        flex: 1
+    },
+    mainViewStyle: {
+        flex: 1
+    },
+    mainContainer: {
+        flex: 1,
+        marginTop: 0,
+        paddingHorizontal: hp("1.4%"),
+        // paddingBottom: 10,
+        backgroundColor: "#fff",
+        flexDirection: "column"
+    },
+
+    myProfileFlexStyle: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        marginTop: hp("2%"),
+        marginBottom: 0
+    },
+
+    viewForMyProfileText: {
+        flex: 4,
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    myProfileTitleStyle: {
+        textAlign: "center",
+        fontSize: hp("2.5%"),
+        fontWeight: "500",
+        color: "#ff8c00"
+    },
+
+    containerView_ForProfilePicViewStyle: {
+        justifyContent: "center",
+        alignItems: "center",
+        //backgroundColor: "yellow",
+        alignSelf: "center",
+        flexDirection: "row",
+        borderColor: "orange"
+    },
+
+    viewForProfilePicImageStyle: {
+        width: wp("15%"),
+        height: hp("15%"),
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+        marginTop: hp("4%"),
+        marginBottom: hp("2%"),
+        marginLeft: hp("4%")
+    },
+    profilePicImageStyle: {
+        //backgroundColor: "yellow",
+        width: 110,
+        height: 110,
+        //width:wp('20%'),
+        //height:hp('20%'),
+        borderColor: "orange",
+        borderRadius: 55,
+        borderWidth: hp("0.2%") / PixelRatio.get()
+    },
+
+    imagesmallCircle: {
+        alignItems: "flex-end",
+        justifyContent: "flex-start",
+        width: 10,
+        height: 10,
+        marginTop: hp("6%"),
+        marginLeft: hp("3%"),
+        borderRadius: 5,
+    },
+
+    smallImage: {
+        width: wp("8%"),
+        height: hp("4%"),
+        justifyContent: "flex-start",
+        alignItems: "flex-end"
+        //alignItems: center
+    },
+
+    camStyle:{
+        //backgroundColor:'yellow',
+        width: wp("11%"),
+        height: hp("6%"),
+        justifyContent: "flex-start",
+        alignItems: "flex-end"
+        //alignItems: center
+    },
+
+    viewForPaddingAboveAndBelowButtons: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginTop: hp("4%"),
+        marginBottom: hp("2%"),
+        marginHorizontal: hp("2%")
+    },
+    buttonFamily: {
+        width: wp("25%"),
+        height: Platform.OS === 'ios'? hp("4.5%") : hp("4%"),
+        borderRadius: hp("2.5%"),
+        borderWidth: hp("0.2%"),
+        borderColor: "#EF3939",
+        backgroundColor: "#EF3939",
+        justifyContent: "center",
+        //alignItems:'center'
+    },
+    textFamilyVehicle: {
+        color: "white",
+        fontWeight: "600",
+        fontSize: hp("2%")
+    },
+    buttonVehicle: {
+        width: wp("25%"),
+        height:Platform.OS === 'ios'?hp("4.5%"): hp("4%"),
+        borderRadius: hp("2.5%"),
+        borderWidth: hp("0.2%"),
+        borderColor: "orange",
+        backgroundColor: "orange",
+        justifyContent: "center"
+    },
+    itemTextValues1: {
+        fontSize: hp("2.2%"),
+        fontWeight: "500",
+        paddingTop: hp("0.8%"),
+        paddingHorizontal: 0,
+
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        color: "#474749"
+    },
+    inputItem: {
+        marginTop: wp("2%"),
+        marginLeft: wp("4%"),
+        marginRight: wp("4%"),
+        borderColor: "#909091"
+    },
+    inputItem1: {
+        flex: 0.65,
+        marginTop: wp("2%"),
+        marginLeft: wp("3%"),
+        marginRight: wp("4%"),
+        borderColor: "#909091"
+    },
+    number: {
+        flexDirection: "row",
+        width: Dimensions.get("screen").width,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    viewDetails2: {
+        alignItems: "flex-start",
+        justifyContent: "center",
+        width: hp("2.5%"),
+        height: hp("2.5%"),
+        marginTop: 5
+        // marginLeft: 10
+    }
 });

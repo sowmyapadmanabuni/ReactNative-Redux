@@ -8,9 +8,9 @@ import {
     Linking,
     Platform,
     RefreshControl,
-    SafeAreaView,
+    SafeAreaView, ScrollView,
     StyleSheet,
-    Text,
+    Text, TouchableHighlight,
     TouchableOpacity,
     TouchableWithoutFeedback,
     View
@@ -30,6 +30,7 @@ import _ from 'lodash';
 import {NavigationEvents} from 'react-navigation';
 import Collapsible from 'react-native-collapsible';
 import {
+    heightPercentageToDP,
     heightPercentageToDP as hp,
     widthPercentageToDP as wp
 } from 'react-native-responsive-screen';
@@ -42,6 +43,8 @@ import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../../assets/selection.json';
 import timer from 'react-native-timer';
 import LottieView from "lottie-react-native";
+import Modal from "react-native-modal";
+import CreateSOSStyles from "../SOS/CreateSOSStyles";
 
 
 
@@ -59,7 +62,10 @@ class NotificationScreen extends PureComponent {
             Time1: [],
             visitorID: [],
 
-            buttonData: ''
+            buttonData: '',
+            deleteNotList:[],
+            selectedImage: "",
+            isModalOpen: false
         };
         // this.renderCollapseData = this.renderCollapseData.bind(this);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -182,75 +188,31 @@ class NotificationScreen extends PureComponent {
         }
     };
 
-    async acceptVisitorExit(associationid, visitorstat, by, logId){
-        let approverVisitorExitDetail = {
-            VLApprStat : visitorstat,
-            VLApprdBy     : by,
-            VLVisLgID  : logId
-        }
-        console.log("VisitorExitDetail ",approverVisitorExitDetail);
-        axios
-            .post(
-                `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
-                {
-                    VLApprStat : visitorstat,
-                    VLApprdBy     : by,
-                    VLVisLgID  : logId
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                    }
-                }
-            )
-            .then(responses => {
-                console.log('_RESP_#####///########@@@@@@@', responses,logId);
-                gateFirebase
-                    .database()
-                    .ref(`NotificationSync/A_${associationid}/${logId}`)
-                    .set({
-                        buttonColor: '#75be6f',
-                        opened: true,
-                        newAttachment: false,
-                        visitorlogId: logId,
-                        updatedTime: responses.data.data.currentDateTime,
-                        status:"ExitApproved"
-                    });
-                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
-                this.props.navigation.navigate('ResDashBoard');
+    acceptgateVisitor = (visitorId, index, associationid, visitorStatus,notifiId,approvedBy) => {
+
+        console.log('Visitor ID DATA @@@@@',visitorId,index,visitorStatus,associationid,notifiId,this.props.oyeURL)
 
 
-            })
-            .catch(e => {
-                console.log("ERROR ",e);
-                gateFirebase
-                    .database()
-                    .ref(`NotificationSync/A_${associationid}/${logId}`)
-                    .set({
-                        buttonColor: '#75be6f',
-                        opened: true,
-                        newAttachment: false,
-                        visitorlogId: logId,
-                        updatedTime: null,
-                        status:"ExitApproved"
-                    });
-                this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
-                this.props.navigation.navigate('ResDashBoard');
-
-            });
-        //let stat = await base.services.OyeSafeApi.updateExitVisitorRequest(approverVisitorExitDetail);
-    }
-
-    rejectVisitorExit(){
-
-    }
-
-    acceptgateVisitor = (visitorId, index, associationid) => {
         let oldNotif = [...this.props.notifications];
         console.log(visitorId, 'visitorLogid');
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
+        console.log('NOTIFICATIONS TO DELETE@@@@@@@@',oldNotif)
+        let delArray=[];
+        if(visitorStatus=="ExitApproved"){
+        for(let i=0;i<oldNotif.length;i++) {
+            console.log('NOTIFICATIONS TO DELETE11111',oldNotif.length,oldNotif[i].vlVisLgID,visitorId)
+
+            if(oldNotif[i].vlVisLgID===visitorId){
+                console.log('NOTIFICATIONS TO DELETE2222',i,oldNotif[i].vlVisLgID,visitorId)
+                if(oldNotif[i].ntid !=notifiId){
+                    console.log('NOTIFICATIONS TO DELETE3333',i,oldNotif[i].ntid,oldNotif[i].vlVisLgID,visitorId)
+                    delArray.push({"NTID":oldNotif[i].ntid})
+            }
+             }
+        }
+        }
+        console.log('NOTIFICATIONS TO DELETE',delArray)
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
                 headers: {
@@ -268,9 +230,10 @@ class NotificationScreen extends PureComponent {
                     .post(
                         `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
                         {
-                            VLApprStat: 'Approved',
+                            VLApprStat: visitorStatus,
                             VLVisLgID: visitorId,
-                            VLApprdBy:this.props.userReducer.MyFirstName,
+                            VLApprdBy:visitorStatus=="EntryApproved" ?this.props.userReducer.MyFirstName:approvedBy,
+                            VLExAprdBy:visitorStatus=="ExitApproved" ?this.props.userReducer.MyFirstName:"",
 
                         },
                         {
@@ -291,8 +254,30 @@ class NotificationScreen extends PureComponent {
                                 newAttachment: false,
                                 visitorlogId: visitorId,
                                 updatedTime: res.data.data.currentDateTime,
-                                status:"EntryApproved"
+                                status:visitorStatus,
                             });
+
+                        axios
+                            .delete(
+                                `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+                                {
+                                    headers: {
+                                        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    data: {
+                                        Notification:delArray
+                                    }
+                                },
+
+
+                            )
+                            .then(responses => {
+                                console.log('RESPONSE1111',responses)
+                            })
+                            .catch(e=>{
+                                console.log('RESPONSE2222',e)
+                            })
                         this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
 
@@ -318,7 +303,7 @@ class NotificationScreen extends PureComponent {
                         newAttachment: false,
                         visitorlogId: visitorId,
                         updatedTime: null,
-                        status:"EntryApproved"
+                        status:visitorStatus
 
                         // status:
                     })
@@ -333,11 +318,25 @@ class NotificationScreen extends PureComponent {
             });
     };
 
-    declinegateVisitor = (visitorId, index, associationid) => {
+    declinegateVisitor = (visitorId, index, associationid,visitorStatus,approvedBy) => {
         console.log(visitorId, 'visitorLogid');
         let oldNotif = [...this.props.notifications];
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
+        let delArray=[];
+        if(visitorStatus=="ExitRejected"){
+            for(let i=0;i<oldNotif.length;i++) {
+                console.log('NOTIFICATIONS TO DELETE11111',oldNotif.length,oldNotif[i].vlVisLgID,visitorId)
+
+                if(oldNotif[i].vlVisLgID===visitorId){
+                    console.log('NOTIFICATIONS TO DELETE2222',i,oldNotif[i].vlVisLgID,visitorId)
+                    if(oldNotif[i].ntid !=notifiId){
+                        console.log('NOTIFICATIONS TO DELETE3333',i,oldNotif[i].ntid,oldNotif[i].vlVisLgID,visitorId)
+                        delArray.push({"NTID":oldNotif[i].ntid})
+                    }
+                }
+            }
+        }
 
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
@@ -353,9 +352,10 @@ class NotificationScreen extends PureComponent {
                     .post(
                         `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
                         {
-                            VLApprStat: 'Rejected',
+                            VLApprStat: visitorStatus,
                             VLVisLgID: visitorId,
-                            VLApprdBy:this.props.userReducer.MyFirstName
+                            VLApprdBy:visitorStatus=="EntryRejected" ?this.props.userReducer.MyFirstName:approvedBy,
+                            VLExAprdBy:visitorStatus=="ExitRejected" ?this.props.userReducer.MyFirstName:"",
                         },
                         {
                             headers: {
@@ -375,9 +375,28 @@ class NotificationScreen extends PureComponent {
                                 newAttachment: false,
                                 visitorlogId: visitorId,
                                 updatedTime: res.data.data.currentDateTime,
-                                status:"EntryRejected"
+                                status:visitorStatus , //"EntryRejected"
 
                             });
+                        axios
+                            .delete(
+                                `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+                                {
+                                    headers: {
+                                        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    data: {
+                                        Notification:delArray
+                                    }
+                                },
+                            )
+                            .then(responses => {
+                                console.log('RESPONSE1111',responses)
+                            })
+                            .catch(e=>{
+                                console.log('RESPONSE2222',e)
+                            })
                         this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
                     })
@@ -400,7 +419,7 @@ class NotificationScreen extends PureComponent {
                         newAttachment: false,
                         visitorlogId: visitorId,
                         updatedTime: null,
-                        status:"EntryRejected"
+                        status:visitorStatus , //"EntryRejected"
 
                     });
                 this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
@@ -410,7 +429,6 @@ class NotificationScreen extends PureComponent {
     };
 
     renderItem = ({item, index}) => {
-        if (item.vlVisType === "Delivery")
         console.log('ITEMSOFNOTIFICATION#######', item,index);
 
         const {savedNoifId, notifications, oyeURL} = this.props;
@@ -512,7 +530,7 @@ class NotificationScreen extends PureComponent {
 
                     <View style={{backgroundColor:base.theme.colors.greyCard,
                     }}>
-                        <View style={{flexDirection:'row',backgroundColor:item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive?"#FFE49B":base.theme.colors.greyCard,
+                        <View style={{flexDirection:'row',backgroundColor:item.vlVisType =="Delivery" && item.vlApprStat=="Entry Pending" && item.ntIsActive?"#FFE49B":base.theme.colors.greyCard,
                             alignItems:'center',justifyContent:'space-between',
                             borderBottomWidth:0.5,borderBottomColor:base.theme.colors.greyHead,height:50}}>
                             {item.ntIsActive? //item.read -->Not updating
@@ -558,11 +576,17 @@ class NotificationScreen extends PureComponent {
                             :
                             <View/>}*/}
                         <Collapsible duration={100} collapsed={item.open}>
-                            <View style={{alignItems:'center',justifyContent:'center'}}>
+                            <TouchableOpacity   style={{alignItems:'center',justifyContent:'center'}} onPress={() => {
+                                {
+                                    Platform.OS === 'android'
+                                        ? Linking.openURL(`tel:${item.vlMobile}`)
+                                        : Linking.openURL(`telprompt:${item.vlMobile}`);
+                                }
+                            }}>
                                 <Text style={{fontSize:16,color:base.theme.colors.primary,paddingBottom:10}}>{item.vlMobile}</Text>
-                            </View>
+                            </TouchableOpacity>
                             <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                                <Text style={{fontSize:14,color:base.theme.colors.primary,marginLeft:15}}>Entry on :
+                                <Text style={{fontSize:14,color:base.theme.colors.primary,marginLeft:15}}>{item.vlVisType =="Kid Exit"?"Exit on":"Entry on :" }
                                     <Text style={{fontSize:14, color:base.theme.colors.black,}}>{' '}{moment(item.ntdCreated).format('DD-MM-YYYY')} {'    '} {moment(item.vlEntryT).format('hh:mm A')}
                                     </Text>
                                 </Text>
@@ -570,6 +594,15 @@ class NotificationScreen extends PureComponent {
                                     <Text style={{fontSize:14,color:base.theme.colors.black,}}>{' '}{item.vlengName}</Text>
                                 </Text>
                             </View>
+                            {item.vlApprdBy !=""?
+                                <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start'}}>
+                                    <Text style={{fontSize:16,color:base.theme.colors.primary,alignSelf:'flex-start',marginLeft:15}}>{item.vlApprStat == "Rejected" ?"Entry Rejected by :": "Entry Approved by :" }
+                                        <Text style={{fontSize:14,color:base.theme.colors.black,}}>{' '}{item.vlApprdBy}</Text>
+                                    </Text>
+                                </View>
+                                :
+                                <View/>}
+
                             {item.vlexgName !="" && item.vlApprStat !="Expired" ?
                                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                                     <Text style={{fontSize:14,color:base.theme.colors.primary,marginLeft:15}}>Exit on   :
@@ -584,10 +617,10 @@ class NotificationScreen extends PureComponent {
                                 :
                                 <View/>}
 
-                            {item.vlApprdBy !=""?
+                            {item.vlExAprdBy !=""?
                                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start'}}>
-                                    <Text style={{fontSize:16,color:base.theme.colors.primary,alignSelf:'flex-start',marginLeft:15}}>{item.vlApprStat == "Rejected" ?"Entry Rejected by :": "Entry Approved by :" }
-                                        <Text style={{fontSize:14,color:base.theme.colors.black,}}>{' '}{item.vlApprdBy}</Text>
+                                    <Text style={{fontSize:16,color:base.theme.colors.primary,alignSelf:'flex-start',marginLeft:15}}>{item.vlApprStat == "Rejected" ?"Exit Rejected by :": "Exit Approved by :" }
+                                        <Text style={{fontSize:14,color:base.theme.colors.black,}}>{' '}{item.vlExAprdBy}</Text>
                                     </Text>
                                 </View>
                                 :
@@ -601,7 +634,7 @@ class NotificationScreen extends PureComponent {
                                 <View/>}
 
                             {
-                                item.vlVisType === "Delivery" && item.vlApprStat === "Pending" && item.vlEntryT === "0001-01-01T00:00:00" ?
+                                item.vlVisType === "Delivery" && item.vlApprStat==="Entry Pending" ?
                                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
                                         marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
                                         <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Entry</Text>
@@ -610,10 +643,11 @@ class NotificationScreen extends PureComponent {
                                                 this.acceptgateVisitor(
                                                     item.vlVisLgID,
                                                     index,
-                                                    item.asAssnID
+                                                    item.asAssnID,
+                                                    "EntryApproved",
+                                                    item.ntid,
                                                 );
-                                            }}
-                                                              style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
+                                            }}  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
                                                 <Image
                                                     style={{width:30,height:30}}
                                                     source={require('../../../icons/allow.png')}
@@ -624,7 +658,10 @@ class NotificationScreen extends PureComponent {
                                                 this.declinegateVisitor(
                                                     item.vlVisLgID,
                                                     index,
-                                                    item.asAssnID
+                                                    item.asAssnID,
+                                                    "EntryRejected",
+                                                    item.ntid,
+
                                                 )
                                             }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
                                                 <Image
@@ -639,18 +676,21 @@ class NotificationScreen extends PureComponent {
                                     <View/>
                             }
 
-                            {
-                                item.vlVisType === "Delivery" && item.vlEntryT !== "0001-01-01T00:00:00" && item.vlExitT === "0001-01-01T00:00:00" ?
+                           {
+                                item.vlVisType === "Delivery" && item.vlApprStat === "ExitPending" ?
                                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
                                         marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
                                         <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Exit</Text>
                                         <View style={{flexDirection:'row'}}>
                                             <TouchableOpacity onPress={() => {
-                                                this.acceptVisitorExit(
+                                                this.acceptgateVisitor(
+                                                    item.vlVisLgID,
+                                                    index,
                                                     item.asAssnID,
-                                                    item.vlApprStat,
-                                                    item.vlApprdBy,
-                                                    item.vlVisLgID
+                                                    "ExitApproved",
+                                                    item.ntid,
+                                                    item.vlApprdBy
+
                                                 );
                                             }}
                                                               style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
@@ -661,7 +701,13 @@ class NotificationScreen extends PureComponent {
                                                 <Text style={{fontSize:16,color:base.theme.colors.primary,}}>Allow</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() =>
-                                                this.rejectVisitorExit()
+                                                this.declinegateVisitor(
+                                                    item.vlVisLgID,
+                                                    index,
+                                                    item.asAssnID,
+                                                    "ExitRejected",
+                                                    item.vlApprdBy
+                                                )
                                             }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
                                                 <Image
                                                     style={{width:30,height:30}}
@@ -674,8 +720,49 @@ class NotificationScreen extends PureComponent {
                                     </View>:
                                     <View/>
                             }
+                            {
+                                item.vlVisType === "Kid Exit" &&  item.vlApprStat==="Entry Pending"?
+                                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',
+                                        marginBottom:20,backgroundColor:base.theme.colors.shadedWhite,paddingTop:10,paddingBottom:10,marginTop:10}}>
+                                        <Text style={{fontSize:16,color:base.theme.colors.black,marginLeft:20}}>Approve Exit</Text>
+                                        <View style={{flexDirection:'row'}}>
+                                            <TouchableOpacity onPress={() => {
+                                                this.acceptgateVisitor(
+                                                    item.vlVisLgID,
+                                                    index,
+                                                    item.asAssnID,
+                                                    "ExitApproved",
+                                                    item.ntid,
+                                                );
+                                            }}
+                                                              style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
+                                                <Image
+                                                    style={{width:30,height:30}}
+                                                    source={require('../../../icons/allow.png')}
+                                                />
+                                                <Text style={{fontSize:16,color:base.theme.colors.primary,}}>Allow</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() =>
+                                                this.declinegateVisitor(
+                                                    item.vlVisLgID,
+                                                    index,
+                                                    item.asAssnID,
+                                                    "ExitRejected",
+                                                    item.ntid,
 
+                                                )
+                                            }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
+                                                <Image
+                                                    style={{width:30,height:30}}
+                                                    source={require('../../../icons/deny.png')}
+                                                />
+                                                <Text style={{fontSize:16,color:base.theme.colors.red,}}>Deny</Text>
+                                            </TouchableOpacity>
+                                        </View>
 
+                                    </View>:
+                                    <View/>
+                            }
 
                         </Collapsible>
                         <TouchableOpacity style={{alignSelf: 'center', marginBottom: 10,width:'100%',
@@ -694,10 +781,12 @@ class NotificationScreen extends PureComponent {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View style={{  width: wp('10%'),
+                    <TouchableOpacity style={{  width: wp('10%'),
                         height: hp('10%'),
                         justifyContent: 'center', alignSelf:'center',
-                        alignItems: 'center',position:'absolute',marginTop:80}} >
+                        alignItems: 'center',position:'absolute',marginTop:80}}
+                          onPress={() => this._enlargeImage(item.vlEntryImg !="" ? `${this.props.mediaupload}` + item.vlEntryImg :'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                    >
                         {item.vlEntryImg !="" ?
 
                             <Image
@@ -717,11 +806,10 @@ class NotificationScreen extends PureComponent {
                                     height: 80,
                                     borderRadius: 40, position: 'relative'
                                 }}
-                                source={{uri:'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder
-                                }}
+                                source={{uri:'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder}}
                             />}
 
-                    </View>
+                    </TouchableOpacity>
 
 
                 </TouchableOpacity>
@@ -729,6 +817,44 @@ class NotificationScreen extends PureComponent {
             );
         }
     };
+
+    _enlargeImage(imageURI) {
+        console.log('openimg',imageURI)
+        let img={imageURI}
+        this.setState({
+            selectedImage:imageURI,
+            isModalOpen: true
+        })
+    }
+
+
+    _renderModal1() {
+        console.log('openimg111111111',this.state.selectedImage)
+
+        return (
+            <Modal
+                onRequestClose={() => this.setState({isModalOpen: false})}
+                isVisible={this.state.isModalOpen}>
+                <View style={{height: heightPercentageToDP('50%'), justifyContent: 'center', alignItems: 'center'}}>
+                    <Image
+                        style={{
+                            height: heightPercentageToDP('50%'),
+                            width: heightPercentageToDP('50%'),
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        source={{uri:this.state.selectedImage}}
+                    />
+                    <TouchableHighlight
+                        underlayColor={base.theme.colors.transparent}
+                        style={{top: 20}}
+                        onPress={() => this.setState({isModalOpen: false})}>
+                        <Text style={CreateSOSStyles.emergencyHeader}>Close</Text>
+                    </TouchableHighlight>
+                </View>
+            </Modal>
+        )
+    }
 
     renderComponent = () => {
         const {
@@ -866,6 +992,8 @@ class NotificationScreen extends PureComponent {
                 </SafeAreaView>
 
                 <View style={{width:'100%',height:'100%'}}>{this.renderComponent()}</View>
+                {this._renderModal1()}
+
             </View>
         );
     }

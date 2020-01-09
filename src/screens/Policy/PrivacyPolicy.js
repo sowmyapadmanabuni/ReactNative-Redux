@@ -23,6 +23,7 @@ class PrivacyPolicy extends React.Component {
 
 
     render() {
+        console.log('GET THE PROPS DATA',this.props)
         return (
 
             <View style={styles.container}>
@@ -64,13 +65,16 @@ class PrivacyPolicy extends React.Component {
                             />
                         </View>
                         <View style={{flex: 0.2}}>
-                            {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                            {/* <Imrage source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
                     <View style={{borderWidth: 1, borderColor: "orange"}}/>
                 </SafeAreaView>
                 <WebView
                     source={{uri: "https://www.oyespace.com/privacy"}}
+                //   source={{html:this.props.navigation.state.params.htmlCode}}
+                 //  onLoadEnd={this.props.navigation.navigate('')}
+
                     style={{height: height, width: width}}
                 />
             </View>

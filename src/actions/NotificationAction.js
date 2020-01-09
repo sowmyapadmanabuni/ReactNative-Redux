@@ -51,16 +51,17 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log('Check list', responseJson);
+        //console.log('Check list', responseJson);
         let resData = responseJson.data.notificationListByAcctID;
-        console.log('resData', resData);
+        let userImage=responseJson.data.accountImage.acImgName;
+       // console.log('resData', resData,userImage);
         let activeNotifications = [];
 
         _.forEach(resData, function(value) {
           activeNotifications.push({ ...value, read: false });
         });
 
-        console.log("GET_INITIAL_NOTIF", activeNotifications);
+       // console.log("GET_INITIAL_NOTIF", activeNotifications);
         let joinNotif = [];
         let joinStatNotif = [];
         let gateAppNotif = [];
@@ -77,8 +78,14 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             announcement.push(data);
           }
         });
-
-        const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
+          for(let i=0;i<joinNotif.length;i++){
+              joinNotif[i].userImage=userImage
+          }
+          for(let i=0;i<joinStatNotif.length;i++){
+              joinStatNotif[i].userImage=userImage
+          }
+         // console.log('JOIN NOTIFICATIONS#####',joinNotif,joinStatNotif)
+          const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
         const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
         let allNotifs = [
           ...gateAppNotif,
@@ -92,7 +99,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         //   "ntdUpdated"
         // ]).reverse();
 
-        console.log('allNotifs', allNotifs);
+       // console.log('allNotifs', allNotifs);
         const sorted = [...allNotifs];
 
           allNotifs.map((data, index) => {
@@ -114,12 +121,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
                               if (
                                   allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
                               ) {
-                                  console.log(
-                                      '&&&&&&&&&&&&&&&&',
-                                      allNotifs[i].sbMemID,
-                                      responseData,
-                                      responseData.visitorLog.vlVisLgID
-                                  );
+
                                   allNotifs[i].vlEntryImg =
                                       responseData.visitorLog.vlEntryImg;
                                   allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
@@ -140,7 +142,8 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
                                   allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
                                   allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
                                   allNotifs[i].vlSelfImg = responseData.visitorLog.vlSelfImg;
-
+                                  allNotifs[i].vlExAprdBy = responseData.visitorLog.vlExAprdBy;
+                                 // allNotifs[i].residentImage = userImage;//vlExAprdBy userImage
                               }
                           }
                       })
@@ -148,7 +151,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
                           console.log(error, 'error while fetching networks');
                       });
               }
-              console.log('Props  notifications~~~~~', allNotifs);
+             // console.log('Props  notifications~~~~~', allNotifs);
           });
 
         let firebaseNoti = [];
@@ -165,7 +168,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             return dbRef.once('value').then(snapshot => {
 
               let val = snapshot.val();
-              console.log('DARALoad', val);
+             // console.log('DARALoad', val);
               firebaseNoti.push({ ...data, ...val });
               // return firebaseNoti;
               // console.log(snapshot.val(), 'value_firebase');

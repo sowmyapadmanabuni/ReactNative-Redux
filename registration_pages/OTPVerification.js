@@ -160,7 +160,7 @@ class OTPVerification extends Component {
                             global.MyLoginTime = moment(new Date()).format(
                                 "DD-MM-YYYY HH:mm:ss"
                             );
-                            this.props.navigation.navigate("ResDashBoard");
+                           this.props.navigation.navigate("ResDashBoard");
                         }
                     } else {
                         console.log("hiii", "failed" + anu);

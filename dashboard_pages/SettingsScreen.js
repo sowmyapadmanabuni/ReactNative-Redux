@@ -1223,7 +1223,7 @@ class SettingsScreen extends Component {
                                             alignSelf:'flex-end',
                                             transform: [{ scaleX: Platform.OS === 'ios'? 1:1.2 }, { scaleY: Platform.OS === 'ios'? 1:1.2}]
                                         }}
-                                        trackColor={{true: '#45B591', false: '#EF3939'}}
+                                        trackColor={{true: '#45B591', false:base.theme.colors.red}}
                                         thumbTintColor="white"
                                         onValueChange = {()=>this.guestValueOff()}
                                         //onValueChange = {()=> this.setState({guestValue: !this.state.guestValue})}
@@ -1287,6 +1287,7 @@ class SettingsScreen extends Component {
                                         }}
                                         trackColor={{true: '#45B591', false: '#EF3939'}}
                                         thumbTintColor="white"
+                                        ios_backgroundColor={'#EF3939'}
                                         onValueChange = {(value)=>this.broadcastValueOff(value)}
                                         //onValueChange = {()=> this.setState({vendorSwitchValue: !this.state.vendorSwitchValue})}
                                         value = {this.state.broadcastValue}
