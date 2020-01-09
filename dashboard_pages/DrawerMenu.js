@@ -11,23 +11,23 @@ import SettingsScreen from "./SettingsScreen";
 class DrawerMenu extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props)
+        console.log(this.props);
         this.state={
             menu:[{
-                id:0,
-                icon:require('../icons/settings_menu.png'),
-                title:'Settings'
+                id : 0,
+                icon : require('../icons/settings_menu.png'),
+                title : 'Settings',
             },
             {
                 id:1,
                 icon:require('../icons/info_menu.png'),
-                title:'About Us'
+                title:'About Us',
             }]
         }
     }
 
-    getRoleName(roleId) {
-        console.log("roleId_menu",roleId)
+    getRoleName(roleId){
+        console.log("roleId_menu",roleId);
         console.log(
           'State in dashboard header_MENU:',
           this.props.dashboardReducer,
@@ -35,7 +35,7 @@ class DrawerMenu extends Component {
           this.props.dashboardReducer.selectedDropdown1
         );
         let dropDown = this.props.dashboardReducer.dropdown1;
-        console.log("dropDown_MENU",dropDown)
+        console.log("dropDown_MENU",dropDown);
         let myRole = roleId;
         for (let i = 0; i < dropDown.length; i++) {
           if (this.props.dashboardReducer.selectedDropdown1 === dropDown[i].name) {
@@ -60,6 +60,8 @@ class DrawerMenu extends Component {
       }
 
       renderMenuItems(menu, index){
+        //console.log("unit ",this.props.dashboardReducer.uniID);
+          console.log("unit ",this.props.dashboardReducer.uniID );
           //borderBottomColor:'#00000010',borderBottomWidth:1
           /*return(
             <View style={{height:48,width:'100%',flexDirection:'row',alignItems:'center'}}>
@@ -67,20 +69,33 @@ class DrawerMenu extends Component {
                 <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
             </View>
           )*/
-          return(
-              <TouchableOpacity
-                  style={{height:48,width:'100%',alignItems:'center',flexDirection:'row'}}
-                  onPress={()=>
+          if (menu.title === "Settings" && this.props.dashboardReducer.uniID !== null ){
+              return(
+                  <TouchableOpacity
+                      style={{height:48,width:'100%',alignItems:'center',flexDirection:'row'}}
+                      onPress={()=>
                       {
                           if (menu.title === "Settings")
                               this.props.navigation.navigate("settingsScreen")
                       }
-                  }
-              >
+                      }
+                  >
                       <Image style={{height:22,width:22}} source={menu.icon}/>
                       <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
-              </TouchableOpacity>
-          )
+                  </TouchableOpacity>
+              )
+          }
+          else if(menu.title !== "Settings"){
+              return(
+                  <TouchableOpacity
+                      style={{height:48,width:'100%',alignItems:'center',flexDirection:'row'}}
+                  >
+                      <Image style={{height:22,width:22}} source={menu.icon}/>
+                      <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
+                  </TouchableOpacity>
+              )
+          }
+
       }
 
     render(){

@@ -25,6 +25,8 @@ const colors = {
   textLight: '#474749',
   imageShadow: '#f2f2f2',
   playprogressbar: '#ccc',
+  whenMainSwitchOn:"#45B591",
+  whenMainSwitchOff:"#EF3939",
   text: '#909091',
   notificationSecondaryTxtColor:'#9C9C9C',
 };
