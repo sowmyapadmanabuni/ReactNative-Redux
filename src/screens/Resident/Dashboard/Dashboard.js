@@ -1483,88 +1483,88 @@ class Dashboard extends PureComponent {
     this.setState({ selectedView: param })
   }
 
-  renderSOS(){
-    if(this.props.dropdown.length == 0){
-      return(
+  renderSOS() {
+    if (this.props.dropdown.length == 0) {
+      return (
         <View />
       )
     }
-    else{
-      return(
-<View
-            style={{
-              alignSelf: 'flex-end',
-              height: 50,
-              width: 50,
-              justifyContent: 'center',
-              marginTop: hp('47%'),
-              position: 'absolute',
-              right: hp('1')
-            }}
-          >
-            {!this.state.isSOSSelected ? (
-              <TouchableHighlight
-                underlayColor={base.theme.colors.transparent}
-                onPress={() => this.selectSOS()}
-              >
-                <Image
-                  style={{
-                    width: wp('18%'),
-                    height: hp('10%'),
-                    right: 20,
-                    justifyContent: 'center'
-                  }}
-                  source={require('../../../../icons/sos_btn.png')}
-                />
-              </TouchableHighlight>
-            ) : (
-                <View style={{ flexDirection: 'row', right: 45 }}>
-                  <TouchableHighlight
-                    style={{ alignSelf: 'flex-end', right: 2 }}
-                    underlayColor={base.theme.colors.transparent}
-                    onPress={() => this.selectSOS()}
+    else {
+      return (
+        <View
+          style={{
+            alignSelf: 'flex-end',
+            height: 50,
+            width: 50,
+            justifyContent: 'center',
+            marginTop: hp('47%'),
+            position: 'absolute',
+            right: hp('1')
+          }}
+        >
+          {!this.state.isSOSSelected ? (
+            <TouchableHighlight
+              underlayColor={base.theme.colors.transparent}
+              onPress={() => this.selectSOS()}
+            >
+              <Image
+                style={{
+                  width: wp('18%'),
+                  height: hp('10%'),
+                  right: 20,
+                  justifyContent: 'center'
+                }}
+                source={require('../../../../icons/sos_btn.png')}
+              />
+            </TouchableHighlight>
+          ) : (
+              <View style={{ flexDirection: 'row', right: 45 }}>
+                <TouchableHighlight
+                  style={{ alignSelf: 'flex-end', right: 2 }}
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={() => this.selectSOS()}
+                >
+                  <Text
+                    style={{
+                      alignSelf: 'flex-end',
+                      right: 5,
+                      color: base.theme.colors.red
+                    }}
                   >
-                    <Text
-                      style={{
-                        alignSelf: 'flex-end',
-                        right: 5,
-                        color: base.theme.colors.red
-                      }}
-                    >
-                      Cancel
+                    Cancel
                       </Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    underlayColor={base.theme.colors.transparent}
-                    onPress={() =>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  underlayColor={base.theme.colors.transparent}
+                  onPress={() =>
+                    this.props.navigation.navigate('sosScreen', {
+                      isActive: false
+                    })
+                  }
+                >
+                  <CountdownCircle
+                    seconds={5}
+                    radius={25}
+                    borderWidth={7}
+                    color={base.theme.colors.primary}
+                    updateText={(elapsedSeconds, totalSeconds) =>
+                      ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
+                    }
+                    bgColor="#fff"
+                    textStyle={{ fontSize: 15, textAlign: 'center' }}
+                    onTimeElapsed={() =>
                       this.props.navigation.navigate('sosScreen', {
                         isActive: false
                       })
                     }
-                  >
-                    <CountdownCircle
-                      seconds={5}
-                      radius={25}
-                      borderWidth={7}
-                      color={base.theme.colors.primary}
-                      updateText={(elapsedSeconds, totalSeconds) =>
-                        ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
-                      }
-                      bgColor="#fff"
-                      textStyle={{ fontSize: 15, textAlign: 'center' }}
-                      onTimeElapsed={() =>
-                        this.props.navigation.navigate('sosScreen', {
-                          isActive: false
-                        })
-                      }
-                    />
-                  </TouchableHighlight>
-                </View>
-              )}
-          </View>
+                  />
+                </TouchableHighlight>
+              </View>
+            )}
+        </View>
       )
     }
-    }
+  }
 
 
   render() {
@@ -1731,16 +1731,18 @@ class Dashboard extends PureComponent {
                 </View>
               </View>
               <ElevatedView elevation={10} style={{ height: hp(65), width: wp('90'), alignSelf: 'center', backgroundColor: "#F5F5F5", flexDirection: 'column', borderRadius: hp('5') }}>
-                <View style={{ height: hp(55), width: wp(90), backgroundColor: '#ffffff', borderBottomLeftRadius: selectedView === 0 ? hp(0) : hp(5), borderBottomRightRadius: selectedView !== 0 ? hp(0) : this.props.dashBoardReducer.role === 1 &&
-                    dropdown1.length !== 0?hp(5):hp(0), borderTopLeftRadius: hp(5), borderTopRightRadius: hp(5) }}>
+                <View style={{
+                  height: hp(55), width: wp(90), backgroundColor: '#ffffff', borderBottomLeftRadius: selectedView === 0 ? hp(0) : hp(5), borderBottomRightRadius: selectedView !== 0 ? hp(0) : this.props.dashBoardReducer.role === 1 &&
+                    dropdown1.length !== 0 ? hp(5) : hp(0), borderTopLeftRadius: hp(5), borderTopRightRadius: hp(5)
+                }}>
                   {this.state.selectedView === 0
                     ? this.myUnitCard()
                     : this.state.selectedView === 1
                       ? this.adminCard()
                       : this.offersZoneCard()}
-                      {this.renderSOS()}
+                  {this.renderSOS()}
                 </View>
-                <View style={{ flexDirection: 'row', alignSelf: 'flex-end', borderWidth: 0, alignItems: 'flex-end',backgroundColor:'transparent' }}>
+                <View style={{ flexDirection: 'row', alignSelf: 'flex-end', borderWidth: 0, alignItems: 'flex-end', backgroundColor: 'transparent' }}>
                   <TouchableHighlight
                     underlayColor={'transparent'}
                     onPress={() => this.setView(0)}>
@@ -1751,7 +1753,7 @@ class Dashboard extends PureComponent {
                       shadowRadius: 2,
                       borderBottomLeftRadius: hp(5), borderBottomRightRadius: hp(5),
                       width: this.props.dashBoardReducer.role !== 1 &&
-                      dropdown1.length === 0?wp('90'):wp('45'), alignSelf: 'center', backgroundColor: selectedView === 0 ? "#ffffff" : "#f5f5f5", justifyContent: 'center', alignItems: 'center'
+                        dropdown1.length === 0 ? wp('90') : wp('45'), alignSelf: 'center', backgroundColor: selectedView === 0 ? "#ffffff" : "#f5f5f5", justifyContent: 'center', alignItems: 'center'
                     }}>
 
                       <Image
@@ -1759,32 +1761,30 @@ class Dashboard extends PureComponent {
                         style={{ height: hp('4'), width: hp('4') }}
                         source={require('../../../../icons/my_unit.png')}
                       />
-                      <Text allowFontScaling={false} style={{ fontSize: hp('2'), fontFamily: base.theme.fonts.medium, color: '#666666',textAlign:'center' }}>My Unit</Text>
+                      <Text allowFontScaling={false} style={{ fontSize: hp('2'), fontFamily: base.theme.fonts.medium, color: '#666666', textAlign: 'center' }}>My Unit</Text>
                     </View>
                   </TouchableHighlight>
-                  <TouchableHighlight
-                    underlayColor={'transparent'}
-                    onPress={() => this.setView(1)}>
-                    <View style={{
-                      elevation: selectedView == 1 ? 0 : 0, height: hp(10), 
-                      width:this.props.dashBoardReducer.role === 1 &&
-                      dropdown1.length !== 0?0:wp('45'), borderBottomLeftRadius: hp(5),
-                      shadowColor: selectedView != 0 ? "#ffffff" : '#f5f5f5',
-                      shadowOffset: { width: 0, height: Platform.OS === 'ios' ? 3 : 2 },
-                      shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                      shadowRadius: 2,
-                      borderBottomRightRadius: hp(5), alignSelf: 'center', backgroundColor: selectedView !== 0 ? "#ffffff" : "#f5f5f5", justifyContent: 'center', alignItems: 'center'
-                    }}>
-                      {this.props.dashBoardReducer.role === 1 &&
-                    dropdown1.length !== 0?
-                      <Image
-                        resizeMode={'contain'}
-                        style={{ height: hp('3'), width: hp('3') }}
-                        source={require('../../../../icons/user.png')}
-                      />:null}
-                      <Text allowFontScaling={false} style={{ fontSize: hp('2'), fontFamily: base.theme.fonts.medium, color: '#666666',textAlign:'center' }}>Admin</Text>
-                    </View>
-                  </TouchableHighlight>
+                  {this.props.dashBoardReducer.role === 1 ?
+                    <TouchableHighlight
+                      underlayColor={'transparent'}
+                      onPress={() => this.setView(1)}>
+                      <View style={{
+                        elevation: selectedView == 1 ? 0 : 0, height: hp(10),
+                        width: wp('45'), borderBottomLeftRadius: hp(5),
+                        shadowColor: selectedView != 0 ? "#ffffff" : '#f5f5f5',
+                        shadowOffset: { width: 0, height: Platform.OS === 'ios' ? 3 : 2 },
+                        shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
+                        shadowRadius: 2,
+                        borderBottomRightRadius: hp(5), alignSelf: 'center', backgroundColor: selectedView !== 0 ? "#ffffff" : "#f5f5f5", justifyContent: 'center', alignItems: 'center'
+                      }}>
+                        <Image
+                          resizeMode={'contain'}
+                          style={{ height: hp('3'), width: hp('3') }}
+                          source={require('../../../../icons/user.png')}
+                        />
+                        <Text allowFontScaling={false} style={{ fontSize: hp('2'), fontFamily: base.theme.fonts.medium, color: '#666666', textAlign: 'center' }}>Admin</Text>
+                      </View>
+                    </TouchableHighlight> : null}
                 </View>
               </ElevatedView>
               <View style={Style.supportContainer}>
@@ -2085,7 +2085,7 @@ class Dashboard extends PureComponent {
                 </ElevatedView>
             */}
 
-        
+
       </View>
     );
   }

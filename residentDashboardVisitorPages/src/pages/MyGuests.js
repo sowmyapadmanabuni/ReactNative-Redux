@@ -22,14 +22,14 @@ export default class MyGuests extends Component {
             Invited: {
                 screen: Invited,
                 navigationOptions: {
-                    tabBarLabel: <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%'),}}>Invitation
+                    tabBarLabel:({focused, tintColor})=> <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%'), color:tintColor}} focused={focused}>Invitation
                         Details</Text>,
                 }
             },
             visited: {
                 screen: visited,
                 navigationOptions: {
-                    tabBarLabel: <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%')}}>visited</Text>,
+                    tabBarLabel:({focused, tintColor})=> <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%'), color:tintColor}} focused={focused}>visited</Text>,
 
                     //   tabBarIcon: ({ tintColor }) => (
                     //     <View>
@@ -43,7 +43,7 @@ export default class MyGuests extends Component {
             initialRouteName: 'Invited',
             tabBarPosition: 'top',
             tabBarOptions: {
-                activeTintColor: '#ff8c00',
+                activeTintColor: '#38BCDB',
                 inactiveTintColor: '#000',
                 style: {
                     backgroundColor: '#fff',

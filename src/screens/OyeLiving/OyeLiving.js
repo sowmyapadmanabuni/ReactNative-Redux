@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Dimensions, Text ,View,Platform} from 'react-native';
+import { Dimensions, Text, View, Platform, BackHandler } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import {        
+import {
     createStackNavigator
 } from 'react-navigation-stack';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
@@ -24,14 +24,37 @@ import base from "../../base";
 
 class OyeLiving extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    }
+
+    componentDidMount() {
+        if (Platform.OS != 'ios') {
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        }
+    }
+    componentWillUnmount() {
+        if (Platform.OS != 'ios') {
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        }
+    }
+
+    handleBackButtonClick() {
+        console.log("OyeLiving",'handleBackButtonClick')
+        this.props.navigation.goBack('Accounting');
+        return true;
+    }
+
     render() {
-        const OtherScreens = createStackNavigator( {
+        const OtherScreens = createStackNavigator({
             addExpenseScreen: {
                 screen: AddExpense,
                 navigationOptions: {
                     header: props => <OyeLivingHeader isOther={true} isOyeLiving={true} {...props} />
                 }
-            }, } );
+            },
+        });
         /*const FeedStack = createStackNavigator({
             addExpenseScreen: {
                 screen: AddExpense,
@@ -53,12 +76,12 @@ class OyeLiving extends React.Component {
         };*/
 
         const AppTabNavigator = createMaterialTopTabNavigator({
-                expenses: {
+            expenses: {
                 screen: Expenses,
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),alignItems:'center',justifyContent:'center',alignSelf:'center',height: Platform.OS=='ios'?42:hp('6%') }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'), alignItems: 'center', justifyContent: 'center', alignSelf: 'center', height: Platform.OS == 'ios' ? 42 : hp('6%') }}
                         >
                             Expenses
                       </Text>
@@ -70,7 +93,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'), paddingBottom: 15, height: Platform.OS == 'ios' ? 42 : hp('6%') }}
                         >
                             Budget Projection
                       </Text>
@@ -82,7 +105,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'), paddingBottom: 15, height: Platform.OS == 'ios' ? 42 : hp('6%') }}
                         >
                             Purchase Order
                       </Text>
@@ -94,7 +117,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'), paddingBottom: 15, height: Platform.OS == 'ios' ? 42 : hp('6%') }}
                         >
                             Vendors
                       </Text>
@@ -107,7 +130,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%') ,paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%')}}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'), paddingBottom: 15, height: Platform.OS == 'ios' ? 42 : hp('6%') }}
                         >
                             Invoices
                       </Text>
@@ -119,7 +142,7 @@ class OyeLiving extends React.Component {
                 navigationOptions: {
                     tabBarLabel: (
                         <Text
-                            style={{ textTransform: 'capitalize', fontSize: hp('2%'),paddingBottom:15,height: Platform.OS=='ios'?42:hp('6%') }}
+                            style={{ textTransform: 'capitalize', fontSize: hp('2%'), paddingBottom: 15, height: Platform.OS == 'ios' ? 42 : hp('6%') }}
                         >Receipts
                       </Text>
                     ),
@@ -130,7 +153,7 @@ class OyeLiving extends React.Component {
                 initialRouteName: 'expenses',
                 tabBarPosition: 'top',
                 tabBarOptions: {
-                    scrollEnabled:true,
+                    scrollEnabled: true,
                     activeTintColor: '#000',
                     inactiveTintColor: '#000',
                     style: {
@@ -139,14 +162,14 @@ class OyeLiving extends React.Component {
                     },
                     indicatorStyle: {
                         backgroundColor: base.theme.colors.primary,
-                        height:3,
-                        width:Dimensions.get('window').width /2.9,
-                        borderRadius:5,
+                        height: 3,
+                        width: Dimensions.get('window').width / 2.9,
+                        borderRadius: 5,
                     },
                     tabStyle: {
                         width: Dimensions.get('window').width / 2.9,
-                        height: Platform.OS=='ios'?42:hp('6%'),
-                        alignItems:'center'
+                        height: Platform.OS == 'ios' ? 42 : hp('6%'),
+                        alignItems: 'center'
                     },
                     showIcon: true
                 },

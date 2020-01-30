@@ -78,59 +78,25 @@ class QRCodeGeneration extends Component {
     console.log('Params@!@#!@#!@#', params);
     // let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
     //   +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inpOfInv +params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
-    let txt =
-      params.value.infName +
-      ',' +
-      params.value.inMobile.substring(0, 3) +
-      ',' +
-      params.value.inMobile.substring(3, 13) +
-      ',' +
-      params.value.inInvtID +
-      ',' +
-      params.value.unUnitID +
-      ',' +
-      ',' +
-      params.value.insDate.substring(0, 10) +
-      ',' +
-      params.value.insDate.substring(11, 16) +
-      ',,' +
-      params.value.inVisCnt +
-      ',' +
-      params.value.ineDate.substring(0, 10) +
-      ',' +
-      params.value.asAssnID +
-      ',' +
-      params.value.inMultiEy; //For time being we are not sending as shalini needs to change from gate app @jyothi // let txt1 = "You are invited to " + params.value.infName + "'s home @ " + params.value.unUnitID + " " + params.value.insDate;
 
-    /*  params.value.ineDate.substring(11, 16) +
-        "," +*/ let txt1 =
-      params.value.infName +
-      ',' +
-      params.value.inMobile.substring(0, 3) +
-      ',' +
-      params.value.inMobile.substring(3, 13) +
-      ',' +
-      params.value.inInvtID;
-    ',' +
-      params.value.unUnitID +
-      ',' +
-      ',' +
-      params.value.insDate.substring(0, 10) +
-      ',' +
-      params.value.insDate.substring(11, 16) +
-      ',,' +
-      params.value.inVisCnt +
-      ',' +
-      params.value.ineDate.substring(0, 10) +
-      ',' +
-      params.value.asAssnID +
-      ',' +
-      params.value.inMultiEy;
+
+    let qrCodeData = {
+      "infName": params.value.infName,
+      "inMobile": params.value.inMobile.substring(0, 13),
+      "inInvtID": params.value.inInvtID,
+      "unUnitID": params.value.unUnitID,
+      "insDate": params.value.insDate.substring(0, 16),
+      "ineDate": params.value.ineDate.substring(0, 10),
+      "inVisCnt": params.value.inVisCnt,
+      "asAssnID": params.value.asAssnID,
+      "inIsActive": true
+    }
+
     this.setState({
-      qrText: txt,
-      qrShare: txt1
+      qrText: JSON.stringify(qrCodeData),
+      qrShare: JSON.stringify(qrCodeData)
     });
-    console.log(txt);
+    // console.log(txt);
   };
 
   takeScreenShot = () => {
@@ -397,7 +363,7 @@ class QRCodeGeneration extends Component {
 
           <NavigationEvents
             onWillFocus={payload => this.qrGeneration()}
-            // onWillBlur={payload => this.getInvitationList()}
+          // onWillBlur={payload => this.getInvitationList()}
           />
           <Text style={styles.titleOfScreen}>Share QR Code</Text>
           {/* <Text>{this.state.qrShare}</Text> */}
@@ -481,17 +447,17 @@ class QRCodeGeneration extends Component {
                     </View>
                   </View>
                 ) : (
-                  <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <View style={{ flex: 0.9, marginLeft: hp('2%') }}>
-                      <Text style={{ color: 'grey' }}>Total Guests</Text>
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                      <View style={{ flex: 0.9, marginLeft: hp('2%') }}>
+                        <Text style={{ color: 'grey' }}>Total Guests</Text>
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ color: 'black', fontWeight: '500' }}>
+                          {this.props.navigation.state.params.value.inVisCnt}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ color: 'black', fontWeight: '500' }}>
-                        {this.props.navigation.state.params.value.inVisCnt}
-                      </Text>
-                    </View>
-                  </View>
-                )}
+                  )}
               </View>
 
               {/* <View style={{ flexDirection: "row", flex: 1 }}>
