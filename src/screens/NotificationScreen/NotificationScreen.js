@@ -13,7 +13,7 @@ import {
     Text, TouchableHighlight,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    View
+    View,ImageBackground, TextInput
 } from 'react-native';
 import {connect} from 'react-redux';
 import {Card, ListItem, Button} from 'react-native-elements';
@@ -65,13 +65,23 @@ class NotificationScreen extends PureComponent {
             buttonData: '',
             deleteNotList:[],
             selectedImage: "",
-            isModalOpen: false
+            isModalOpen: false,
+            headerText: "Notifications",
+            selectedView: 0,
+            unitNotification:[],
+            adminNotification:[],
+            searchKeyWord:""
         };
         // this.renderCollapseData = this.renderCollapseData.bind(this);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
   //  #ff0000-ExitRejected
+
+    componentWillMount(){
+        this.segregateNotification();
+        
+    }
 
     componentDidMount() {
 
@@ -100,12 +110,17 @@ class NotificationScreen extends PureComponent {
             })
             .then(res => {
                 console.log(res.data, 'current time');
-                this.setState({currentTime: res.data.data.currentDateTime});
+                this.setState({currentTime: res.data.data.currentDateTime},()=>{
+                    this.segregateNotification()
+                });
             })
             .catch(error => {
                 console.log(error, 'erro_fetching_data');
-                this.setState({currentTime: 'failed'});
+                this.setState({currentTime: 'failed'},()=>{
+                    this.segregateNotification()
+                });
             });
+
 
         //   alert('mounted');
         //   gateFirebase
@@ -120,6 +135,27 @@ class NotificationScreen extends PureComponent {
         //       console.log(error, 'error_reading');
         //     //   alert('error');
         //     });
+    }
+
+    segregateNotification(){
+        let notificationList = this.props.notifications;
+        let unitNotification = [];
+        let adminNotification = [];
+        console.log("================132456754321456743256:",this.props)
+
+        for(let i in notificationList){
+            if(notificationList[i].ntType === "joinrequest"){
+                adminNotification.push(notificationList[i])
+            }else{
+                unitNotification.push(notificationList[i])
+            }
+        }
+
+        this.setState({
+            adminNotification:adminNotification,
+            unitNotification:unitNotification
+        })
+        
     }
 
     componentDidUpdate() {
@@ -139,6 +175,10 @@ class NotificationScreen extends PureComponent {
                 this.processBackPress()
             );
         }, 0);*/
+    }
+
+    componentWillReceiveProps(props){
+        this.segregateNotification();
     }
 
     handleBackButtonClick() {
@@ -856,7 +896,7 @@ class NotificationScreen extends PureComponent {
         )
     }
 
-    renderComponent = () => {
+    renderComponent(){
         const {
             loading,
             isCreateLoading,
@@ -870,7 +910,11 @@ class NotificationScreen extends PureComponent {
             page
         } = this.props;
         // console.log(loading)
-        console.log('Data in notification', notifications);
+        console.log('Data in notification', this.state.adminNotification,this.state.unitNotification);
+        let unitNotification = this.state.unitNotification;
+        let adminNotification  = this.state.adminNotification;
+        let selectedView = this.state.selectedView;
+       // this.segregateNotification()
 
         if (loading) {
             return (
@@ -888,6 +932,8 @@ class NotificationScreen extends PureComponent {
         } else {
             return (
                 <Fragment>
+                    {this.state.selectedView === 0?
+                        unitNotification.length !==0?
                     <FlatList
                         keyExtractor={this.keyExtractor}
                         contentContainerStyle={{flexGrow: 1}}
@@ -896,7 +942,7 @@ class NotificationScreen extends PureComponent {
                             flex: 1,
                             justifyContent: 'flex-end'
                         }}
-                        data={notifications}
+                        data={unitNotification}
                         ListFooterComponent={() =>
                             footerLoading ? (
                                 <View
@@ -935,11 +981,64 @@ class NotificationScreen extends PureComponent {
                                 colors={['#ED8A19']}
                             />
                         }
-                    />
+                    />:<View style={{height:hp('30'),width:wp('95'),alignSelf:'center',justifyContent:'center',alignItems:'center'}}><Text allowFontScaling={false} style={{color:base.theme.colors.primary,fontFamily:base.theme.fonts.bold,fontSize:hp('2.5')}}>No Unit Notifications To Display</Text></View>:
+                        adminNotification.length!==0?
+                    <FlatList
+                    keyExtractor={this.keyExtractor}
+                    contentContainerStyle={{flexGrow: 1}}
+                    style={{width:'100%',height:'100%'}}
+                    ListFooterComponentStyle={{
+                        flex: 1,
+                        justifyContent: 'flex-end'
+                    }}
+                    data={adminNotification}
+                    ListFooterComponent={() =>
+                        footerLoading ? (
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginVertical: 10
+                                }}
+                            >
+                                <ActivityIndicator/>
+                            </View>
+                        ) : null
+                    }
+                    renderItem={this.renderItem}
+                    extraData={this.props.notifications}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={() => {
+                        // console.log("End Reached");
+                        // alert("On end")
+                        // this.props.onEndReached(oyeURL, page, notifications, MyAccountID);
+                    }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refresh}
+                            onRefresh={() => {
+                                getNotifications(
+                                    oyeURL,
+                                    MyAccountID,
+                                    null,
+                                    notifications
+                                );
+                                //this.doNetwork(null, this.props.notifications)
+                            }}
+                            progressBackgroundColor="#fff"
+                            tintColor="#ED8A19"
+                            colors={['#ED8A19']}
+                        />
+                    }
+                />:<View style={{height:hp('30'),width:wp('95'),alignSelf:'center',justifyContent:'center',alignItems:'center'}}><Text allowFontScaling={false} style={{color:base.theme.colors.primary,fontFamily:base.theme.fonts.bold,fontSize:hp('2.5')}}>No Admin Notifications To Display</Text></View>}
                 </Fragment>
             );
         }
     };
+
+    setView(param) {
+        this.setState({ selectedView: param })
+    }
 
     render() {
         const {navigation, notifications, oyeURL, MyAccountID} = this.props;
@@ -948,56 +1047,171 @@ class NotificationScreen extends PureComponent {
         // console.log("rendered");
         return (
             <View style={styles.container}>
-                <NavigationEvents/>
-
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                    <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
-                        <View style={styles.viewDetails1}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.navigate('ResDashBoard');
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        height: hp('4%'),
-                                        width: wp('15%'),
-                                        alignItems: 'flex-start',
-                                        justifyContent: 'center'
-                                    }}
-                                >
-                                    <Image
-                                        resizeMode="contain"
-                                        source={require('../../../icons/back.png')}
-                                        style={styles.viewDetails2}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <Image
-                                style={[styles.image1]}
-                                source={require('../../../icons/OyespaceSafe.png')}
-                            />
-                        </View>
-                        <View style={{flex: 0.2}}></View>
-                    </View>
-                    <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
-                </SafeAreaView>
-
-                <View style={{width:'100%',height:'100%'}}>{this.renderComponent()}</View>
+                {this.renderHeader()}
+                <View style={{ height: hp('7'), width: wp('100'), alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text allowFontScaling={false} style={{ fontFamily: base.theme.fonts.bold, color: base.theme.colors.primary }}>{this.state.headerText}</Text>
+                </View>
+                {this.renderAdminView()}
+            
                 {this._renderModal1()}
 
             </View>
         );
     }
+
+    renderHeader() {
+        return (
+            <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
+                    <View style={styles.viewDetails1}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.props.navigation.navigate('ResDashBoard');
+                            }}
+                        >
+                            <View
+                                style={{
+                                    height: hp('4%'),
+                                    width: wp('15%'),
+                                    alignItems: 'flex-start',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Image
+                                    resizeMode="contain"
+                                    source={require('../../../icons/back.png')}
+                                    style={styles.viewDetails2}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <Image
+                            style={[styles.image1]}
+                            source={require('../../../icons/OyespaceSafe.png')}
+                        />
+                    </View>
+                    <View style={{ flex: 0.2 }}></View>
+                </View>
+                <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
+            </SafeAreaView>
+        )
+    }
+
+
+    renderAdminView() {
+        let isAdmin = true;
+        let selectedView = this.state.selectedView;
+
+        return (
+            <ImageBackground
+                style={{ width: wp('100'), height: hp('105') }}
+                source={selectedView === 0 ? require('../../../icons/myunit_notifn.png') : require('../../../icons/admin_notifn.png')}>
+                <View style={{ flexDirection: 'row', top: hp('5'), justifyContent: 'space-between', width: wp('65'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
+                    <TouchableHighlight
+                        underlayColor={'transparent'}
+                        onPress={() => this.setView(0)}>
+                        <View style={{ flexDirection: 'row', bottom: hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
+                            <Text>My Unit(s)</Text>
+                            <Image
+                                resizeMode={'center'}
+                                style={{
+                                    width: hp('10%'),
+                                    height: hp('10%'),
+                                }}
+                                source={require('../../../icons/OyespaceSafe.png')}
+                            />
+                        </View>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        underlayColor={'transparent'}
+                        onPress={() => this.setView(1)}>
+                        <View style={{ flexDirection: 'row', bottom: hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
+                            <Text>Admin</Text>
+                            <Image
+                                resizeMode={'center'}
+                                style={{
+                                    width: hp('8%'),
+                                    height: hp('10%'), marginRight: hp('1')
+                                }}
+                                source={require('../../../icons/OyespaceSafe.png')}
+                            />
+                        </View>
+                    </TouchableHighlight>
+                </View>
+                <View style={{marginTop:hp('5')}}>
+                    {this.renderSearch()}
+                {this.renderComponent()}
+                </View>
+            </ImageBackground>
+        )
+    }
+
+    searchText(text){
+        this.setState({searchKeyWord:text},()=>{
+            this.filterNotificationList(text)
+        })
+    }
+
+
+    filterNotificationList(text){
+        let selectedView = this.state.selectedView;
+        let notificationList = selectedView===0?this.state.unitNotification:this.state.adminNotification;
+        let newArr = [];
+
+        let formattedText = text.toLowerCase();
+        
+        for(let i in notificationList){
+            console.log("============================================:",notificationList[i].asAsnName,formattedText);
+            if((notificationList[i].asAsnName.toLowerCase()).includes(formattedText) || (notificationList[i].unUniName.toLowerCase()).includes(formattedText)){
+                console.log("KLNVKGDVJHBD<CNJDVBV<NVNBJDBC<JCHJKRHE<JHJKR:",notificationList[i])
+                newArr.push(notificationList[i])
+            }
+        }
+
+        if(selectedView===0){
+            this.setState({
+                unitNotification:newArr
+            })
+        }else{
+            this.setState({
+                adminNotification:newArr
+            })
+        }
+
+    }
+
+    renderSearch(){
+        let value = 'dnjnd'
+        return(
+            <View style={{height: hp('3'),flexDirection:'row',width:wp('90'),alignSelf:'center', borderColor: 'gray', borderBottomWidth: 1}}>
+            <TextInput
+            placeholder={"Search"}
+      style={{ height: hp('3'),width:wp('80'),alignSelf:'center' }}
+      onChangeText={text => this.searchText(text)}
+      value={this.state.searchKeyWord}
+    />
+    <Image
+                                resizeMode={'center'}
+                                style={{
+                                    width: hp('6%'),
+                                    height: hp('6%'), marginRight: hp('2'),bottom:hp('2')
+                                }}
+                                source={require('../../../icons/search.png')}
+                            />
+                            </View>
+
+        )
+    }
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -1059,7 +1273,8 @@ const mapStateToProps = state => {
         refresh: state.NotificationReducer.refresh,
         page: state.NotificationReducer.page,
         footerLoading: state.NotificationReducer.footerLoading,
-        userReducer: state.UserReducer
+        userReducer: state.UserReducer,
+        dashBoardReducer: state.DashboardReducer
     };
 };
 

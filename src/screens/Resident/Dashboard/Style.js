@@ -38,7 +38,7 @@ const Style = StyleSheet.create({
     backgroundColor: base.theme.colors.white,
     borderColor: base.theme.colors.primary,
     borderWidth: 1,
-    marginTop: hp('5'),
+    bottom: hp('4'),
     justifyContent: 'center',
     flexDirection: 'row'
   },
@@ -62,12 +62,13 @@ const Style = StyleSheet.create({
     alignSelf: 'center'
   },
   mainElevatedView: {
-    height: '70%',
+    alignSelf:'center',
+    height: '50%',
     width: '95%',
     borderRadius: 25,
     paddingHorizontal: 8,
     paddingVertical: 15,
-    backgroundColor: base.theme.colors.white
+    backgroundColor: base.theme.colors.transparent
   },
   invoiceCardView: {
     height: '45%',

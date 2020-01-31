@@ -89,7 +89,7 @@ import StaffLeaveWithVendor from '../src/screens/Resident/Visitors/Staff/staffLe
 
 import DrawerMenu from './DrawerMenu'
 import SettingsScreen from "./SettingsScreen";
-import Dashboard_1 from '../src/screens/Resident/Dashboard/Dashboard_1';
+import Notification_1 from '../src/screens/NotificationScreen/Notification_1';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -101,6 +101,7 @@ const instructions = Platform.select({
 const NotificationStack = createStackNavigator({
   NotificationScreen: {
     screen: NotificationScreen,
+    //screen:Notification_1,
     navigationOptions: {
       title: 'Notifications',
       header: null
