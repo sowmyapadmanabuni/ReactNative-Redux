@@ -1223,10 +1223,20 @@ export const createUserNotification = (
   };
 };
 
-export const toggleCollapsible = (prevData, value, index) => {
+export const toggleCollapsible = (prevData, value, index,item) => {
   return dispatch => {
     let newVal = prevData;
-    newVal[index].open = !value;
+    console.log("sfsfgs:",prevData, value, index,item)
+    for (let i in prevData){
+      if(item.ntid === prevData[i].ntid){
+        newVal[i].open = !value;
+      }
+      else{
+        newVal[i].open = true;
+      }
+    }
+    
+    console.log("New Value:",...newVal,index,value);
     dispatch({
       type: TOGGLE_COLLAPSIBLE,
       payload: [...newVal]

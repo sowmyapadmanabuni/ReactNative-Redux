@@ -55,12 +55,12 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		901C36D877D94F1C89E7C19B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 42ADC5C735BF4620B8B82E63 /* FontAwesome5_Solid.ttf */; };
 		930F1F01B8FD42468E78DF39 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 441D6DC191CD45E0BF4AE4F9 /* FontAwesome5_Regular.ttf */; };
+		930F54AF23E7FEE300035E60 /* Oyespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930F54AE23E7FEE300035E60 /* Oyespace.swift */; };
 		967B8AB0A6A94F16A283D204 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D8FED1A448A4B69B4222891 /* MaterialIcons.ttf */; };
 		9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9332DBD6EE4F83BBCE6AFB /* RNHTMLtoPDFTests.xctest */; };
 		9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */; };
 		9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06026B22C4FF5200DA17C8 /* MapKit.framework */; };
 		9F675E6E22E5C99500D175F9 /* libRCTContactsWrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F675E3A22E5C98800D175F9 /* libRCTContactsWrapper.a */; };
-		9F69818423B1DC11009D1E50 /* OyeSoace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F69818323B1DC11009D1E50 /* OyeSoace.swift */; };
 		9F69818623B1DC25009D1E50 /* oye_msg_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9F69818523B1DC25009D1E50 /* oye_msg_tone.mp3 */; };
 		9FB793932355CA3700D8145E /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9FB793922355CA3700D8145E /* sound_1.mp3 */; };
 		9FCBB88422FB063300C2E0AF /* libRNShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB87E22FB060100C2E0AF /* libRNShare.a */; };
@@ -177,13 +177,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
-		};
-		1E44730D23AA3353008CAFCE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 573B9CE314274CAAAE767D60 /* RNHTMLtoPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 117405FA1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDFTests;
 		};
 		2D16E6711FA4F8DC00B85C8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -593,12 +586,12 @@
 		8AD047C5D38B43898404DC1A /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		92A6A3934A9C4F1B9F512202 /* libRCTRestart.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTRestart.a; sourceTree = "<group>"; };
 		92FFB1D38E4C7094907CF41B /* libPods-OyeSpace-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OyeSpace-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		930F54AE23E7FEE300035E60 /* Oyespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Oyespace.swift; sourceTree = "<group>"; };
 		94DEC93270D64A4FADE3CBA7 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		962DB82BDD1249AB8E425B06 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		9829F0B4AFED38BA79B920FC /* Pods-OyeSpaceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OyeSpaceTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OyeSpaceTests/Pods-OyeSpaceTests.release.xcconfig"; sourceTree = "<group>"; };
 		9F06026B22C4FF5200DA17C8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		9F675E3322E5C98700D175F9 /* ContactsWrapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ContactsWrapper.xcodeproj; path = "../node_modules/react-native-contacts-wrapper/ios/ContactsWrapper.xcodeproj"; sourceTree = "<group>"; };
-		9F69818323B1DC11009D1E50 /* OyeSoace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OyeSoace.swift; sourceTree = "<group>"; };
 		9F69818523B1DC25009D1E50 /* oye_msg_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = oye_msg_tone.mp3; sourceTree = "<group>"; };
 		9F69818723B1DDDA009D1E50 /* OyeSpace-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OyeSpace-Bridging-Header.h"; path = "../../../../../../Downloads/OyeSpace-Bridging-Header.h"; sourceTree = "<group>"; };
 		9FB793922355CA3700D8145E /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_1.mp3; sourceTree = "<group>"; };
@@ -995,9 +988,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				930F54AE23E7FEE300035E60 /* Oyespace.swift */,
 				9F69818723B1DDDA009D1E50 /* OyeSpace-Bridging-Header.h */,
 				9F69818523B1DC25009D1E50 /* oye_msg_tone.mp3 */,
-				9F69818323B1DC11009D1E50 /* OyeSoace.swift */,
 				9FB793922355CA3700D8145E /* sound_1.mp3 */,
 				13B07FAE1A68108700A75B9A /* OyeSpace */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -1120,7 +1113,6 @@
 			isa = PBXGroup;
 			children = (
 				FD2B2A53223F82850061AB68 /* libRNHTMLtoPDF.a */,
-				1E44730E23AA3353008CAFCE /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1445,13 +1437,6 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		1E44730E23AA3353008CAFCE /* RNHTMLtoPDFTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = 1E44730D23AA3353008CAFCE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */ = {
@@ -1957,9 +1942,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F69818423B1DC11009D1E50 /* OyeSoace.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				930F54AF23E7FEE300035E60 /* Oyespace.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2028,7 +2013,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
 				PRODUCT_NAME = OyeSpace;
-				PROVISIONING_PROFILE_SPECIFIER = "Anooj's_Mac_Dev";
+				PROVISIONING_PROFILE_SPECIFIER = Sarthak_mac_oyesociety_dev;
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -2044,7 +2029,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OyeSpace/OyeSpace.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K5NJYU4T6K;
@@ -2085,7 +2070,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
 				PRODUCT_NAME = OyeSpace;
-				PROVISIONING_PROFILE_SPECIFIER = "Anooj's_Mac_Dev";
+				PROVISIONING_PROFILE_SPECIFIER = sarthak_mac_oyesociety_prov;
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";

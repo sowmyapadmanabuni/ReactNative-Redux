@@ -110,6 +110,8 @@ class NotificationAnnouncementDetailScreen extends Component {
 
       isPause: true,
     };
+
+    console.log("Props:",props);
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
