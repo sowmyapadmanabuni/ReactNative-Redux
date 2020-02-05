@@ -533,6 +533,7 @@ class NotificationScreen extends PureComponent {
                             this.props.onNotificationOpen(notifications, index, oyeURL);
                         }
                         this.props.toggleCollapsible(notifications, item.open, index, item)
+                        this.expandAdminNotification(notifications, index, item)
                     }}>
 
 
@@ -564,7 +565,7 @@ class NotificationScreen extends PureComponent {
                         <View style={{hp:hp('15'),position:'relative',flexDirection:"row",justifyContent:'space-around',width:wp('80'),alignSelf:'center'}}>
                         <Text style={{width:wp('33'),alignSelf:'center'}}>{item.mrRolName}</Text>
                         <View style={{width:wp('33'),alignSelf:'center'}}>
-                        {item.ntType === 'Join_Status' ? null : this.renderButton(item)}
+                        {item.ntType !== 'Join_Status' && item.ntType !== "Join" ? null : this.renderButton(item)}
                         </View>
                         <Text onPress={()=>{
                             Platform.OS === 'android'
@@ -601,10 +602,12 @@ class NotificationScreen extends PureComponent {
                             alignSelf: 'center', top: hp('2'), width: '100%',
                            alignItems: 'center', justifyContent: 'center',borderWidth:0
                         }} onPress={() => {
+                            this.expandAdminNotification(notifications, index, item);
+                            this.props.toggleCollapsible(notifications, item.open, index, item)
                             if (item.ntIsActive) {
                                 this.props.onNotificationOpen(notifications, index, oyeURL);
                             }
-                            this.expandAdminNotification(notifications, index, item)
+                            
                         }}>
                             <View style={{
                                 width: 45,
@@ -693,7 +696,7 @@ class NotificationScreen extends PureComponent {
                             flexDirection: 'row', backgroundColor: base.theme.colors.greyCard, alignItems: 'center',
                             justifyContent: 'space-between', height: 70,
                         }}>
-                            <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: 160, }}
+                            <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'),borderWidth:0 }}
                                 numberOfLines={3}>{item.vlComName}
                                 <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.vlVisType == "Delivery" ? item.vlVisType : ""}</Text>
                             </Text>
@@ -994,6 +997,7 @@ class NotificationScreen extends PureComponent {
             </View>
             <FlatList
               data={this.state.dataSource2.reverse()}
+              keyExtractor={(item,index)=>index.toString()}
               renderItem={({ item }) => (
                 <View
                   style={{ flex: 1, marginLeft: hp('2%'), marginTop: hp('1%')}}
@@ -1769,27 +1773,30 @@ class NotificationScreen extends PureComponent {
         return (
             (isAdmin) ?
                 <ImageBackground
-                    style={{ width: wp('100'), height: hp('105') }}
+                    resizeMode={'stretch'}
+                    style={{ width: wp('110'), height: hp('100'),alignSelf:'center' }}
                     source={selectedView === 0 ? require('../../../icons/myunit_notifn.png') : require('../../../icons/admin_notifn.png')}>
                     <View style={{ flexDirection: 'row', top: hp('5'), justifyContent: 'space-between', width: wp('78'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', height: hp('10'), borderWidth: 0 }}>
                         <TouchableHighlight
                             underlayColor={'transparent'}
+                            style={{borderWidth:0,bottom:hp('2.5'),height:hp('10')}}
                             onPress={() => this.setView(0)}>
-                            <View style={{ flexDirection: 'row', bottom: hp('2'), justifyContent: 'flex-start', right: hp('0'), width: wp('35'), alignSelf: 'flex-start', borderWidth: 0, alignItems: 'flex-start' }}>
+                            <View style={{ flexDirection: 'row', top: hp('3'), justifyContent: 'center', right: hp('2'), width: wp('35'), alignSelf: 'flex-start', borderWidth: 0, alignItems: 'center' }}>
                                 <Text allowFontScaling={false} style={{ top: hp('0.5'), fontSize: hp('2') }}>My Unit(s)</Text>
                                 {this.renderUnitBadge()}
                             </View>
                         </TouchableHighlight>
                         <TouchableHighlight
                             underlayColor={'transparent'}
+                            style={{borderWidth:0,bottom:hp('2.5'),height:hp('10')}}
                             onPress={() => this.setView(1)}>
-                            <View style={{ flexDirection: 'row', bottom: hp('2'), justifyContent: 'flex-start', width: wp('35'), alignSelf: 'flex-start', borderWidth: 0, alignItems: 'flex-start', left: hp('4') }}>
+                            <View style={{ flexDirection: 'row', top: hp('3'), justifyContent: 'flex-start', width: wp('35'), alignSelf: 'flex-start', borderWidth: 0, alignItems: 'flex-start', left: hp('5') }}>
                                 <Text allowFontScaling={false} style={{ top: hp('0.5'), fontSize: hp('2') }}>Admin</Text>
                                 {this.renderAdminBadge()}
                             </View>
                         </TouchableHighlight>
                     </View>
-                    <View style={{ marginTop: hp('5') }}>
+                    <View style={{ marginTop: hp('5'),width: wp('100'),alignSelf:'center'}}>
                         {this.renderSearch()}
                         {this.renderComponent()}
                     </View>
@@ -1798,7 +1805,6 @@ class NotificationScreen extends PureComponent {
                     elevation={10}
                     style={{
                         width: wp('100'), height: hp('105'), backgroundColor: 'white', borderTopLeftRadius: hp('7'), borderTopRightRadius: hp('7'),
-                        //shadowOffset:{  width: 15,  height: 15,  },
                         shadowColor: 'black',
                         shadowOpacity: 1.0,
                     }}
@@ -1941,7 +1947,7 @@ class NotificationScreen extends PureComponent {
     renderSearch() {
         let value = 'dnjnd'
         return (
-            <View style={{ height: hp('3'), flexDirection: 'row', width: wp('90'), alignSelf: 'center', borderColor: 'gray', borderBottomWidth: 1 }}>
+            <View style={{ height: hp('3.5'), flexDirection: 'row', width: wp('95'), alignSelf: 'center', borderColor: 'gray', borderBottomWidth: 1 }}>
                 <TextInput
                     placeholder={"Search"}
                     style={{ height: Platform.OS === "ios"?hp('3'):hp('5'), width: wp('80'), alignSelf: 'center' }}
@@ -1952,7 +1958,7 @@ class NotificationScreen extends PureComponent {
                     resizeMode={'center'}
                     style={{
                         width: hp('6%'),
-                        height: hp('6%'), marginRight: hp('2'), bottom: hp('2')
+                        height: hp('6%'), marginRight: hp('0'), bottom: hp('2')
                     }}
                     source={require('../../../icons/search.png')}
                 />
@@ -1974,7 +1980,7 @@ class NotificationScreen extends PureComponent {
         // let status = _.includes(approvedAdmins, subId);
         // let status = false;
         let val = details.ntDesc.split(' ')
-        console.log('DETAILS########', details)
+        console.log('DETAILS########', details.userImage)
         let status;
 
         if (loading || adminStatLoading) {
@@ -1986,9 +1992,7 @@ class NotificationScreen extends PureComponent {
                 </View>
             );
         } else {
-            if (details.ntType === 'Join_Status') {
-                return null;
-            } else if (details.ntType === 'gate_app') {
+             if (details.ntType === 'gate_app') {
                 return null;
             } 
             else{
@@ -2036,7 +2040,7 @@ class NotificationScreen extends PureComponent {
     expandAdminNotification(notifications, index, details){
         const { navigation, champBaseURL } = this.props;
         //const details = navigation.getParam('details', 'NO-ID');
-        console.log(details, 'detailssss');
+        console.log(details, 'detailssss hitting here');
     
         let roleId;
     
@@ -2186,10 +2190,10 @@ class NotificationScreen extends PureComponent {
 
             console.log('ARARARARRARA:',arr1,arr2)
             self.setState({
-              dataSource2: [...arr1, ...arr2],
+              dataSource2: [arr1[0]],
               dataSource3: responseJson.data.unit.unOcStat
             },()=>{
-                this.props.toggleCollapsible(notifications, details.open, index, details)
+              //  this.props.toggleCollapsible(notifications, details.open, index, details)
             });
             console.log('DataSource2', this.state.dataSource2);
           })

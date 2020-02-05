@@ -1603,6 +1603,9 @@ class Dashboard extends PureComponent {
 
     console.log("vehiclesCount ", this.props.dashBoardReducer.role, dropdown1.length);
 
+    let isAdmin = this.props.dashBoardReducer.role === 1?true:false
+
+
     //console.log("RENDER_ALLASSOC_0",allAssociations)
 
 
@@ -1733,6 +1736,7 @@ class Dashboard extends PureComponent {
                     )}
                 </View>
               </View>
+              {isAdmin?
               <ImageBackground
                 resizeMode={'stretch'}
                 source={selectedView === 0 ? require('../../../../icons/myunit_dashboard.png') : require("../../../../icons/admin_dashboard.png")}
@@ -1749,7 +1753,7 @@ class Dashboard extends PureComponent {
                   <TouchableHighlight
                     underlayColor={'transparent'}
                     onPress={() => this.setView(0)}>
-                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('0'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
                       <Image
                         resizeMode={'contain'}
                         style={{
@@ -1758,14 +1762,14 @@ class Dashboard extends PureComponent {
                         }}
                         source={require('../../../../icons/my_unit.png')}
                       />
-                      <Text>My Unit</Text>
+                      <Text allowFontScaling={false}>My Unit</Text>
 
                     </View>
                   </TouchableHighlight>
                   <TouchableHighlight
                     underlayColor={'transparent'}
                     onPress={() => this.setView(1)}>
-                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('0'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
+                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
                       <Image
                         resizeMode={'contain'}
                         style={{
@@ -1774,60 +1778,49 @@ class Dashboard extends PureComponent {
                         }}
                         source={require('../../../../icons/user.png')}
                       />
-                      <Text>Admin</Text>
+                      <Text allowFontScaling={false}>Admin</Text>
 
                     </View>
                   </TouchableHighlight>
                 </View>
-
-                {/* <View style={{ flexDirection: 'row', alignSelf: 'flex-end', borderWidth: 0, alignItems: 'flex-end',backgroundColor:'transparent' }}>
-                  <TouchableHighlight
-                    underlayColor={'transparent'}
-                    onPress={() => this.setView(0)}>
-                    <View style={{
-                      height: hp(10), elevation: selectedView === 0 ? 0 : 0, shadowColor: selectedView != 0 ? "#ffffff" : '#f5f5f5',
-                      shadowOffset: { width: 0, height: Platform.OS === 'ios' ? 3 : 2 },
-                      shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                      shadowRadius: 2,
-                      borderBottomLeftRadius: hp(5), borderBottomRightRadius: hp(5),
-                      width: this.props.dashBoardReducer.role !== 1 &&
-                      dropdown1.length === 0?wp('90'):wp('45'), alignSelf: 'center', backgroundColor: selectedView === 0 ? "#ffffff" : "#f5f5f5", justifyContent: 'center', alignItems: 'center'
-                    }}>
-
+              </ImageBackground>:
+              <ElevatedView
+                    elevation={10}
+                    style={{
+                        width: wp('90'), height: hp('65'), backgroundColor: 'white', borderRadius: hp('4'),top:hp('1'),
+                        shadowColor: 'grey',
+                        shadowOpacity: 1.0,
+                    }}
+                >
+                  {this.myUnitCard()}
+                {this.renderSOS()}
+                <View style={{ flexDirection: 'row', marginTop: hp('25'), justifyContent: 'center', width: wp('65'), alignSelf: 'center', borderWidth: 0, alignItems: 'flex-end' }}>
+                  
+                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
                       <Image
                         resizeMode={'contain'}
-                        style={{ height: hp('4'), width: hp('4') }}
+                        style={{
+                          width: hp('4%'),
+                          height: hp('4%'),
+                        }}
                         source={require('../../../../icons/my_unit.png')}
                       />
-                      <Text allowFontScaling={false} style={{ fontSize: hp('2'), fontFamily: base.theme.fonts.medium, color: '#666666',textAlign:'center' }}>My Unit</Text>
+                      <Text allowFontScaling={false}>My Unit</Text>
+
                     </View>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    underlayColor={'transparent'}
-                    onPress={() => this.setView(1)}>
-                    <View style={{
-                      elevation: selectedView == 1 ? 0 : 0, height: hp(10), 
-                      width:this.props.dashBoardReducer.role !== 1 &&
-                      dropdown1.length === 0?0:wp('45'), borderBottomLeftRadius: hp(5),
-                      shadowColor: selectedView != 0 ? "#ffffff" : '#f5f5f5',
-                      shadowOffset: { width: 0, height: Platform.OS === 'ios' ? 3 : 2 },
-                      shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.8,
-                      shadowRadius: 2,
-                      borderBottomRightRadius: hp(5), alignSelf: 'center', backgroundColor: selectedView !== 0 ? "#ffffff" : "#f5f5f5", justifyContent: 'center', alignItems: 'center'
-                    }}>
-                      {this.props.dashBoardReducer.role === 1 &&
-                    dropdown1.length !== 0?
-                      <Image
-                        resizeMode={'contain'}
-                        style={{ height: hp('3'), width: hp('3') }}
-                        source={require('../../../../icons/user.png')}
-                      />:null}
-                      <Text allowFontScaling={false} style={{ fontSize: hp('2'), fontFamily: base.theme.fonts.medium, color: '#666666',textAlign:'center' }}>Admin</Text>
-                    </View>
-                  </TouchableHighlight>
-                </View> */}
-              </ImageBackground>
-              <View style={Style.supportContainer}>
+                </View>
+              </ElevatedView>}
+              <View style={{height: '6%',
+                            width: '90%',
+                            alignItems: 'center',
+                            backgroundColor: base.theme.colors.white,
+                            borderColor: base.theme.colors.primary,
+                            borderWidth: 1,
+                            position:'absolute',
+                            marginBottom: hp('5'),
+                            justifyContent: 'center',
+                            top:hp('78'),
+                            flexDirection: 'row'}}>
                 <View style={Style.subSupportView}>
                   <TouchableOpacity
                     onPress={() => {

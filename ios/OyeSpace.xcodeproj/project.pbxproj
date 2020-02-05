@@ -2005,7 +2005,7 @@
 					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
-				MARKETING_VERSION = 10.19;
+				MARKETING_VERSION = 10.20;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2062,7 +2062,7 @@
 					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
-				MARKETING_VERSION = 10.19;
+				MARKETING_VERSION = 10.20;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
