@@ -1856,38 +1856,19 @@ class Dashboard extends PureComponent {
                   //    style={Style.supportIcon}
                       source={require('../../../../icons/call1.png')}
                     />
-                    {/* <Icon
-                      color="#38bcdb"
-                      size={hp('2.2%')}
-                      // style={Style.supportIcon }
-                      name="call1"
-                    /> */}
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => {
-                      {
-                        Platform.OS === 'android'
-                          ? Linking.openURL(`tel:9343121121`)
-                          : Linking.openURL(`tel:9343121121`);
-                      }
-                    }}
+                    
                   >
                     <Image
                     resizeMode={'cover'}
                      // style={Style.supportIcon}
                       source={require('../../../../icons/chat_1.png')}
                     />
-                    {/* <Icon
-                      color="#38bcdb"
-                      size={hp('2.2%')}
-                      // style={Style.supportIcon }
-                      name="call1"
-                    /> */}
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
-                  //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
                   >
                     <Image
                     resizeMode={'cover'}
