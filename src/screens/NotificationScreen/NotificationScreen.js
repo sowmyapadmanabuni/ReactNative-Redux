@@ -26,6 +26,7 @@ import {
     toggleCollapsible,
     onGateApp,
     createUserNotification,
+    toggleAllCollapsible
 } from '../../actions';
 import _ from 'lodash';
 import { NavigationEvents } from 'react-navigation';
@@ -37,7 +38,7 @@ import {
 } from 'react-native-responsive-screen';
 import axios from 'axios';
 import moment from 'moment';
-import firebase from 'react-native-firebase';
+import firebase, { notifications } from 'react-native-firebase';
 import base from '../../base';
 import gateFirebase from 'firebase';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
@@ -174,6 +175,7 @@ class NotificationScreen extends PureComponent {
     }
 
     handleBackButtonClick() {
+        this.props.toggleAllCollapsible(this.props.notifications);
         this.props.navigation.goBack(null);
         return true;
     }
@@ -587,7 +589,7 @@ class NotificationScreen extends PureComponent {
                                             backgroundColor: 'white'
                                         }}
                                     >
-                                       <View>{this.renderDetails(item)}</View>
+                                       <View>{this.renderDetails(item,notifications, index, oyeURL)}</View>
                                         <View
                                             style={{
                                                 borderWidth: 1,
@@ -976,7 +978,7 @@ class NotificationScreen extends PureComponent {
         }
     };
 
-    renderDetails = (details) => {
+    renderDetails = (details,notifications, index, oyeURL) => {
         const { navigation } = this.props;
         //const details = navigation.getParam('details', 'NO-ID');
     
@@ -1035,7 +1037,7 @@ class NotificationScreen extends PureComponent {
             {details.ntJoinStat === ""?
              <View style={{flexDirection:'row',alignItems:'flex-end',alignSelf:'flex-end',marginTop:hp('2')}}>
                       <TouchableOpacity onPress={() => {
-                          this.approve(details)
+                          this.approve(details,notifications, index, oyeURL)
                       }}
                                         style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
                           <Image
@@ -1044,7 +1046,7 @@ class NotificationScreen extends PureComponent {
                           />
                           <Text style={{fontSize:16,color:base.theme.colors.primary,}}>Approve</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => this.rejectModal(details)
+                      <TouchableOpacity onPress={() => this.rejectModal(details,notifications, index, oyeURL)
                       }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
                           <Image
                               style={{width:30,height:30}}
@@ -1136,16 +1138,16 @@ class NotificationScreen extends PureComponent {
         )
     }
 
-      approve = (item, status) => {
+      approve(item, status,notifications, index){
         const { oyeURL,champBaseURL } = this.props;
-        if (status) {
-          Alert.alert(
-            'Oyespace',
-            'You have already responded to this request!',
-            [{ text: 'Ok', onPress: () => {} }],
-            { cancelable: false }
-          );
-        } else {
+        // if (status) {
+        //   Alert.alert(
+        //     'Oyespace',
+        //     'You have already responded to this request!',
+        //     [{ text: 'Ok', onPress: () => {} }],
+        //     { cancelable: false }
+        //   );
+        // } else {
           let MemberID = global.MyOYEMemberID;
           this.setState({ loading: true });
           console.log("Approval:",item,oyeURL,champBaseURL);
@@ -1163,6 +1165,17 @@ class NotificationScreen extends PureComponent {
             },
             'body_memberROle'
           );
+          axios
+            .get(
+              `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
+              {
+                headers: {
+                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                  'Content-Type': 'application/json'
+                }
+              }
+            )
+            .then(() => {
           axios
             .post(
                 champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate',
@@ -1361,7 +1374,11 @@ class NotificationScreen extends PureComponent {
               Alert.alert('MemberRoleChange', error.message);
               this.setState({ loading: false });
             });
-        }
+        }).catch(error=>{
+            console.log("Error:",error);
+            
+        })
+       // }
       };
     
       reject = (item, status) => {
@@ -1576,7 +1593,7 @@ class NotificationScreen extends PureComponent {
                         flex: 1,
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: '#fff'
+                        backgroundColor: '#fff',alignSelf:'center',alignItems:'center',justifyContent:'center',top:hp('20')
                     }}
                 >
                     <ActivityIndicator />
@@ -1726,6 +1743,7 @@ class NotificationScreen extends PureComponent {
                     <View style={styles.viewDetails1}>
                         <TouchableOpacity
                             onPress={() => {
+                                this.props.toggleAllCollapsible(this.props.notifications);
                                 this.props.navigation.navigate('ResDashBoard');
                             }}
                         >
@@ -1845,14 +1863,13 @@ class NotificationScreen extends PureComponent {
                     if(selectedView === 0){
                         let associationName = notificationList[i].asAsnName;
                         let unitName = notificationList[i].unUniName;
-                        console.log("DJNVKJVB:",notificationList[i],associationName,unitName);
+                        let ntType = notificationList[i].ntType;
+                        console.log("DJNVKJVB:",ntType);
                         
-                            if ((associationName.toLowerCase()).includes(formattedText)) {
+                            if ((associationName.toLowerCase()).includes(formattedText) || ntType.toLowerCase().includes(formattedText) || notificationList[i].ntDesc.toLowerCase().includes(formattedText) ) {
                                 console.log("KLNVKGDVJHBD<CNJDVBV<NVNBJDBC<JCHJKRHE<JHJKR:", notificationList[i])
                                 newArr.push(notificationList[i])
                             }
-                        
-                        
                     }else{
                         if ((notificationList[i].asAsnName.toLowerCase()).includes(formattedText) || (notificationList[i].mrRolName.toLowerCase()).includes(formattedText)  || (notificationList[i].ntDesc.toLowerCase()).includes(formattedText)) {
                             console.log("KLNVKGDVJHBD<CNJDVBV<NVNBJDBC<JCHJKRHE<JHJKR:", notificationList[i])
@@ -1886,7 +1903,7 @@ class NotificationScreen extends PureComponent {
         console.log("Selected View:", this.state.selectedView, notifications);
 
         notifications.map((data, index) => {
-            if (data.ntIsActive) {
+            if (data.ntIsActive && (data.ntType !== "joinrequest" && data.ntType !== "Join" && data.ntType !== "Join_Status")) {
                 count += 1;
             }
         });
@@ -1950,7 +1967,7 @@ class NotificationScreen extends PureComponent {
             <View style={{ height: hp('3.5'), flexDirection: 'row', width: wp('95'), alignSelf: 'center', borderColor: 'gray', borderBottomWidth: 1 }}>
                 <TextInput
                     placeholder={"Search"}
-                    style={{ height: Platform.OS === "ios"?hp('3'):hp('5'), width: wp('80'), alignSelf: 'center' }}
+                    style={{ height: Platform.OS === "ios"?hp('3'):hp('6'), width: wp('80'), alignSelf: 'center' }}
                     onChangeText={text => this.searchText(text)}
                     value={this.state.searchKeyWord}
                 />
@@ -2190,7 +2207,7 @@ class NotificationScreen extends PureComponent {
 
             console.log('ARARARARRARA:',arr1,arr2)
             self.setState({
-              dataSource2: [arr1[0]],
+              dataSource2: [arr1,arr2],
               dataSource3: responseJson.data.unit.unOcStat
             },()=>{
               //  this.props.toggleCollapsible(notifications, details.open, index, details)
@@ -2292,5 +2309,6 @@ export default connect(
         onEndReached,
         onGateApp,
         createUserNotification,
+        toggleAllCollapsible
     }
 )(NotificationScreen);

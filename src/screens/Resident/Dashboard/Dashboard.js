@@ -34,6 +34,8 @@ import {
 import * as fb from 'firebase';
 import CountdownCircle from 'react-native-countdown-circle';
 import * as Animatable from 'react-native-animatable';
+import BackgroundTimer from 'react-native-background-timer';
+
 
 import {
   createNotification,
@@ -842,18 +844,55 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
+    // BackgroundTimer.runBackgroundTimer(()=>{
+    //   console.log('----------------------------------------------------------------------------------------')
+    //   this.syncData()
+    // },5000)
 
-    /*timer.setInterval(
+    if(Platform.OS !== "ios"){
+      const intervalId = BackgroundTimer.setInterval(() => {
+        console.log('----------------------------------------------------------------------------------------');
+        async()=>{
+          this.syncData();
+        }
+      }, 5000);
+    }
+    else if(Platform.OS === "ios"){
+      timer.setInterval(
+                 this,
+                 'syncData',
+                 async () => {
+                   console.log("I am Timer");
+                   this.syncData();
+                     // alert("hererereerrrereer");
+                 },
+                 5000
+             );
+    }
+    
 
-             this,
-             'syncData',
-             async () => {
-               console.log("I am Timer");
-               this.syncData();
-                 // alert("hererereerrrereer");
-             },
-             5000
-         );*/
+    // BackgroundTimer.runBackgroundTimer(() => { 
+    //   this,
+    //          'syncData',
+    //          async () => {
+    //            console.log("I am Timer");
+    //            this.syncData();
+    //              // alert("hererereerrrereer");
+    //          }
+    //   }, 
+    //   5000);
+
+    // timer.setInterval(
+
+    //          this,
+    //          'syncData',
+    //          async () => {
+    //            console.log("I am Timer");
+    //            this.syncData();
+    //              // alert("hererereerrrereer");
+    //          },
+    //          15000
+    //      );
   }
 
   handleConnectivityChange = isConnected => {
@@ -2031,12 +2070,11 @@ class Dashboard extends PureComponent {
             textFontSize={Platform.OS === 'ios' ? 8 : 12}
 
             onCardClick={() =>
-              this.getPaymentGateWay()
-              /* dropdown.length === 0
+               dropdown.length === 0
                    ? this.props.navigation.navigate('CreateOrJoinScreen')
                    : dropdown1.length === 0
                    ? alert('Unit is not available')
-                   : this.props.navigation.navigate('MyFamilyList')*/
+                   : this.props.navigation.navigate('MyFamilyList')
             }
 
             backgroundColor={base.theme.colors.cardBackground}

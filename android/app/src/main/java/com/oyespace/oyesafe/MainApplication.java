@@ -32,6 +32,7 @@ import com.airbnb.android.react.lottie.LottiePackage;
 import com.ninty.system.setting.SystemSettingPackage;
 import com.horcrux.svg.SvgPackage;
 import com.anyline.RNImageToPDF.RNImageToPdfPackage;
+import com.ocetnik.timer.BackgroundTimerPackage;
 
 import com.rnfs.RNFSPackage;
 import cl.json.RNSharePackage;
@@ -105,7 +106,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new SvgPackage(),
                     new GeolocationPackage(),
                     new RNImageToPdfPackage(),
-                    new RNLocationSatellitesPackage()
+                    new RNLocationSatellitesPackage(),
+                    new BackgroundTimerPackage()
 
             );
         }
