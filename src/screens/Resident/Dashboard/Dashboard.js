@@ -844,11 +844,6 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    // BackgroundTimer.runBackgroundTimer(()=>{
-    //   console.log('----------------------------------------------------------------------------------------')
-    //   this.syncData()
-    // },5000)
-
     if(Platform.OS !== "ios"){
       const intervalId = BackgroundTimer.setInterval(() => {
         console.log('----------------------------------------------------------------------------------------');
@@ -864,35 +859,10 @@ class Dashboard extends PureComponent {
                  async () => {
                    console.log("I am Timer");
                    this.syncData();
-                     // alert("hererereerrrereer");
                  },
                  5000
              );
     }
-    
-
-    // BackgroundTimer.runBackgroundTimer(() => { 
-    //   this,
-    //          'syncData',
-    //          async () => {
-    //            console.log("I am Timer");
-    //            this.syncData();
-    //              // alert("hererereerrrereer");
-    //          }
-    //   }, 
-    //   5000);
-
-    // timer.setInterval(
-
-    //          this,
-    //          'syncData',
-    //          async () => {
-    //            console.log("I am Timer");
-    //            this.syncData();
-    //              // alert("hererereerrrereer");
-    //          },
-    //          15000
-    //      );
   }
 
   handleConnectivityChange = isConnected => {
@@ -1850,16 +1820,27 @@ class Dashboard extends PureComponent {
                 </View>
               </ElevatedView>}
               <View style={{height: '6%',
-                            width: '90%',
+                            width: '100%',
                             alignItems: 'center',
                             backgroundColor: base.theme.colors.white,
                             borderColor: base.theme.colors.primary,
-                            borderWidth: 1,
+                            borderWidth: 0,
                             position:'absolute',
                             marginBottom: hp('5'),
-                            justifyContent: 'center',
+                            justifyContent: 'flex-start',
                             top:hp('78'),
                             flexDirection: 'row'}}>
+                              <View style={{borderWidth:0}}>
+                              <Image
+                    resizeMode={'cover'}
+                      style={{height: hp('10'),
+                        width: wp('55'),
+                        alignSelf:'flex-start',
+                        borderWidth:0
+                       }}
+                      source={require('../../../../icons/bottomImg.png')}
+                    />
+                              </View>
                 <View style={Style.subSupportView}>
                   <TouchableOpacity
                     onPress={() => {
@@ -1870,12 +1851,38 @@ class Dashboard extends PureComponent {
                       }
                     }}
                   >
-                    <Icon
+                    <Image
+                    resizeMode={'cover'}
+                  //    style={Style.supportIcon}
+                      source={require('../../../../icons/call1.png')}
+                    />
+                    {/* <Icon
                       color="#38bcdb"
                       size={hp('2.2%')}
                       // style={Style.supportIcon }
                       name="call1"
+                    /> */}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      {
+                        Platform.OS === 'android'
+                          ? Linking.openURL(`tel:9343121121`)
+                          : Linking.openURL(`tel:9343121121`);
+                      }
+                    }}
+                  >
+                    <Image
+                    resizeMode={'cover'}
+                     // style={Style.supportIcon}
+                      source={require('../../../../icons/chat_1.png')}
                     />
+                    {/* <Icon
+                      color="#38bcdb"
+                      size={hp('2.2%')}
+                      // style={Style.supportIcon }
+                      name="call1"
+                    /> */}
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -1883,8 +1890,9 @@ class Dashboard extends PureComponent {
                   //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
                   >
                     <Image
-                      style={Style.supportIcon}
-                      source={require('../../../../icons/Group771.png')}
+                    resizeMode={'cover'}
+                     // style={Style.supportIcon}
+                      source={require('../../../../icons/email1.png')}
                     />
                   </TouchableOpacity>
                 </View>
