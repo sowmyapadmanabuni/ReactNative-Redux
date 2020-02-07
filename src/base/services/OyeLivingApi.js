@@ -198,6 +198,13 @@ export default class OyeLivingApi {
         return await instance.post('Unit/UpdateExpenseUnitDetails',input);
     }
 
+    static async getTheInvoicesOfResident(assId,unitId,accountId){
+        return await instance.get('InvoiceListByAssocUnitAndAccountID' + assId + '/'+unitId+'/'+accountId);
+    }
+    static async getTheInvoicesByDateSelection(input){
+        return await instance.post('invoice/InvoiceListByDatesAndID',input);
+    }
+
 
 
 

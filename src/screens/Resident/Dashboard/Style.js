@@ -24,7 +24,7 @@ const Style = StyleSheet.create({
   bottomCards: {
     height: '13%',
     width: '95%',
-    borderRadius:10,  
+    borderRadius:10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 0,
@@ -71,10 +71,11 @@ const Style = StyleSheet.create({
     backgroundColor: base.theme.colors.transparent
   },
   invoiceCardView: {
-    height: '45%',
+    height: '95%',
     width: '95%',
     borderRadius: 5,
     margin: 10,
+    marginTop:'10%',
     backgroundColor: base.theme.colors.white,
     alignItems: 'center',
     borderWidth: 1,
@@ -99,7 +100,7 @@ const Style = StyleSheet.create({
   invoiceView: {
     width: '100%',
     height: 70,
-    backgroundColor: base.theme.colors.invoiceList,
+    backgroundColor: base.theme.colors.cardBackground,
     marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'center',

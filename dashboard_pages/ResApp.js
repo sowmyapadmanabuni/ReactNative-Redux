@@ -89,6 +89,9 @@ import StaffLeaveWithVendor from '../src/screens/Resident/Visitors/Staff/staffLe
 
 import DrawerMenu from './DrawerMenu'
 import SettingsScreen from "./SettingsScreen";
+import ViewInvoice from "../src/screens/OyeLiving/ViewInvoice";
+import ViewInvoiceList from "../src/screens/OyeLiving/ViewInvoiceList";
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -186,6 +189,22 @@ const ResApp = createStackNavigator({
       header: props => <OyeLivingHeader isVisitors={true} isSub={true} {...props} />
     })
   },
+
+  ViewInvoice: {
+    screen: ViewInvoice,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    })
+  },
+
+  ViewInvoiceList: {
+    screen: ViewInvoiceList,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+    })
+  },
+
+
 
   //reportsTab
   reportsTab: {
