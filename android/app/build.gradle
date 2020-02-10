@@ -207,6 +207,7 @@ dependencies {
     implementation project(':react-native-geolocation-service')
     implementation project(':react-native-system-setting')
     implementation project(':react-native-image-to-pdf')
+    implementation project(':react-native-background-timer')
 
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.1.0"

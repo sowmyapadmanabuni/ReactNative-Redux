@@ -35,6 +35,8 @@ import {
 import * as fb from 'firebase';
 import CountdownCircle from 'react-native-countdown-circle';
 import * as Animatable from 'react-native-animatable';
+import BackgroundTimer from 'react-native-background-timer';
+
 
 import {
   createNotification,
@@ -636,8 +638,8 @@ class Dashboard extends PureComponent {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-          this.props.refreshNotifications(oyeURL, MyAccountID);
-          //this.props.getNotifications(oyeURL, MyAccountID);
+          //this.props.refreshNotifications(oyeURL, MyAccountID);
+          this.props.getNotifications(oyeURL, MyAccountID);
 
 
           this.showLocalNotification(notification);
@@ -845,18 +847,25 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-
-    /*timer.setInterval(
-
-             this,
-             'syncData',
-             async () => {
-               console.log("I am Timer");
-               this.syncData();
-                 // alert("hererereerrrereer");
-             },
-             5000
-         );*/
+    if(Platform.OS !== "ios"){
+      const intervalId = BackgroundTimer.setInterval(() => {
+        console.log('----------------------------------------------------------------------------------------');
+        async()=>{
+          this.syncData();
+        }
+      }, 5000);
+    }
+    else if(Platform.OS === "ios"){
+      timer.setInterval(
+                 this,
+                 'syncData',
+                 async () => {
+                   console.log("I am Timer");
+                   this.syncData();
+                 },
+                 5000
+             );
+    }
   }
 
   handleConnectivityChange = isConnected => {
@@ -1816,16 +1825,28 @@ class Dashboard extends PureComponent {
                 </View>
               </ElevatedView>}
               <View style={{height: '6%',
-                            width: '90%',
+                            width: '100%',
                             alignItems: 'center',
                             backgroundColor: base.theme.colors.white,
                             borderColor: base.theme.colors.primary,
-                            borderWidth: 1,
+                            borderWidth: 0,
                             position:'absolute',
-                            marginBottom: hp('5'),
-                            justifyContent: 'center',
-                            top:hp('78'),
-                            flexDirection: 'row'}}>
+                           // marginBottom: hp('5'),
+                            justifyContent: 'flex-start',
+                            top:hp('82'),
+                            flexDirection: 'row'
+              }}>
+                              <View style={{borderWidth:0}}>
+                              <Image
+                    resizeMode={'cover'}
+                      style={{height: hp('10'),
+                        width: wp('55'),
+                        alignSelf:'flex-start',
+                        borderWidth:0
+                       }}
+                      source={require('../../../../icons/bottomImg.png')}
+                    />
+                              </View>
                 <View style={Style.subSupportView}>
                   <TouchableOpacity
                     onPress={() => {
@@ -1836,21 +1857,29 @@ class Dashboard extends PureComponent {
                       }
                     }}
                   >
-                    <Icon
-                      color="#38bcdb"
-                      size={hp('2.2%')}
-                      // style={Style.supportIcon }
-                      name="call1"
+                    <Image
+                    resizeMode={'cover'}
+                  //    style={Style.supportIcon}
+                      source={require('../../../../icons/call1.png')}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+
+                  >
+                    <Image
+                    resizeMode={'cover'}
+                     // style={Style.supportIcon}
+                      source={require('../../../../icons/chat_1.png')}
                     />
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
-                  //onPress={()=>this.props.navigation.navigate("schedulePatrolling")}
                   >
                     <Image
-                      style={Style.supportIcon}
-                      source={require('../../../../icons/Group771.png')}
+                    resizeMode={'cover'}
+                     // style={Style.supportIcon}
+                      source={require('../../../../icons/email1.png')}
                     />
                   </TouchableOpacity>
                 </View>
@@ -2024,8 +2053,8 @@ class Dashboard extends PureComponent {
             textFontSize={Platform.OS === 'ios' ? 8 : 12}
 
             onCardClick={() =>
-              //this.getPaymentGateWay()
-              dropdown.length === 0
+
+               dropdown.length === 0
                    ? this.props.navigation.navigate('CreateOrJoinScreen')
                    : dropdown1.length === 0
                    ? alert('Unit is not available')

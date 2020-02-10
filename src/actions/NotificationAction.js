@@ -527,6 +527,7 @@ export const newNotifInstance = data => {
 };
 
 export const onNotificationOpen = (notif, index, oyeURL) => {
+  console.log("Notification to be read:",notif,index,oyeURL);
   return dispatch => {
     let newNotif = Object.assign([], notif);
     newNotif[index].read = true;
@@ -1236,6 +1237,7 @@ export const toggleCollapsible = (prevData, value, index,item) => {
       }
     }
     
+    
     console.log("New Value:",...newVal,index,value);
     dispatch({
       type: TOGGLE_COLLAPSIBLE,
@@ -1243,6 +1245,22 @@ export const toggleCollapsible = (prevData, value, index,item) => {
     });
   };
 };
+
+
+export const toggleAllCollapsible = (prevData) => {
+  console.log("prev data to be closed:",prevData);
+  return dispatch => {
+    let newVal = prevData;
+    for (let i in prevData){
+      prevData[i].open = true
+    }
+  
+  dispatch({
+    type:TOGGLE_COLLAPSIBLE,
+    payload:[...newVal]
+  })
+}
+}
 
 export const onEndReached = (
   oyeURL,

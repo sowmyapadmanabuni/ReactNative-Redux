@@ -98,7 +98,9 @@ class ViewInvoiceList extends React.Component {
     async getInvoiceMethodsList() {
         //this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,
         //         this.props.userReducer.MyAccountID
-        let stat = await base.services.OyeLivingApi.getTheInvoicesOfResident(14956,42167,14883)
+        //14956,42167,14883
+        let stat = await base.services.OyeLivingApi.getTheInvoicesOfResident(this.props.dashBoardReducer.assId,
+            this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
         console.log('RESPONSE_INVOICES_RESIDENT',stat)
         try {
             if (stat.success) {
@@ -115,11 +117,13 @@ class ViewInvoiceList extends React.Component {
     async getTheInvoicesByDates() {
         //this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,
         //         this.props.userReducer.MyAccountID
+
         let data={
             "FromDate"   : this.state.selectedInitialDate,
             "ToDate"     : this.state.selectedEndDate,
             "ASAssnID"     : this.props.SelectedAssociationID,
-            "BLBlockID"  : 14651
+            "UNUnitID"   : this.props.dashBoardReducer.uniID,
+            "ACAccntID"  :  this.props.userReducer.MyAccountID
         }
         let stat = await base.services.OyeLivingApi.getTheInvoicesByDateSelection(data)
         console.log('RESPONSE_INVOICES_RESIDENT',stat,data)
@@ -130,7 +134,12 @@ class ViewInvoiceList extends React.Component {
                     invoicesList:invoicesList
                 })
 
-            }} catch (error) {
+            } else if (stat.error.message){
+                this.setState({
+                    invoicesList:[]
+                })
+            }
+        } catch (error) {
 
             console.log('error', error)
         }

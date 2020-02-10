@@ -38,6 +38,7 @@ class DashBoardHeader extends React.Component {
     });
 
     const BadgedIcon = withBadge(count)(Icon);
+    console.log("COunt in Notification:",notifications,count);
 
     console.log(count, 'count');
     if (count >= 1) {

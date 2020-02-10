@@ -391,8 +391,8 @@ class Staff extends React.Component {
         updateStaffInfo({prop: "staffId", value: self.state.visitorId});
         updateStaffInfo({prop: "staffProfilePic", value: self.state.staffPic});
         updateStaffInfo({prop: "staffDesignation", value: self.state.departmentName});
-        this.props.navigation.navigate('StaffLeaveWithVendor')
-        //this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId,workerId:this.state.workId, Pic: this.state.staffPic, DeptName:this.state.departmentName}
+      //  this.props.navigation.navigate('StaffLeaveWithVendor')
+        this.props.navigation.navigate('StaffLeaveWithVendor',{StaffName:this.state.staffName, StaffId: this.state.staffId,workerId:this.state.workId, Pic: this.state.staffPic, DeptName:this.state.departmentName})
     }
 
     setDateInCalendar(value, index) {
