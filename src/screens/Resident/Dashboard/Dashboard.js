@@ -66,6 +66,7 @@ import moment from 'moment';
 import strings from "../../../base/utils/strings";
 import DeviceInfo from 'react-native-device-info';
 import announcement from "../../../../assocition_pages/announcement";
+import NotificationScreen from '../../NotificationScreen/NotificationScreen';
 
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -635,8 +636,8 @@ class Dashboard extends PureComponent {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-          this.props.refreshNotifications(oyeURL, MyAccountID);
-          //this.props.getNotifications(oyeURL, MyAccountID);
+          //this.props.refreshNotifications(oyeURL, MyAccountID);
+          this.props.getNotifications(oyeURL, MyAccountID);
 
 
           this.showLocalNotification(notification);
@@ -844,25 +845,20 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    if(Platform.OS !== "ios"){
-      const intervalId = BackgroundTimer.setInterval(() => {
-        console.log('----------------------------------------------------------------------------------------');
-        async()=>{
-          this.syncData();
-        }
-      }, 5000);
-    }
-    else if(Platform.OS === "ios"){
+   
+    // BackgroundTimer.runBackgroundTimer(()=>{
+    //   console.log("---------------------------------------")
+    //   this.syncData()
+    // },5000)
       timer.setInterval(
                  this,
                  'syncData',
                  async () => {
-                   console.log("I am Timer");
+                  
                    this.syncData();
                  },
                  5000
              );
-    }
   }
 
   handleConnectivityChange = isConnected => {
@@ -1828,7 +1824,7 @@ class Dashboard extends PureComponent {
                             position:'absolute',
                             marginBottom: hp('5'),
                             justifyContent: 'flex-start',
-                            top:hp('78'),
+                            top:hp('80'),
                             flexDirection: 'row'}}>
                               <View style={{borderWidth:0}}>
                               <Image

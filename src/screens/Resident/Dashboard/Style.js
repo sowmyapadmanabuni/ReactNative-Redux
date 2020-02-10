@@ -117,6 +117,7 @@ const Style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
+    top:hp('2')
   },
   invoiceNumberText: {
     fontSize: 14,

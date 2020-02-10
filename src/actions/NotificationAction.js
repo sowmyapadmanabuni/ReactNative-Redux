@@ -75,6 +75,9 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           } else if (data.ntType === 'Join') {
             joinNotif.push(data);
           } else if (data.ntType === 'Announcement') {
+            data.vlfName = "Announcement";
+            data.unUniName = "Announcement";
+            data.vlMobile = "Announcement"
             announcement.push(data);
           }
         });
