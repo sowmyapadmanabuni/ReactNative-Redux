@@ -39,6 +39,7 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 import firebase, { notifications } from 'react-native-firebase';
+import * as fb from 'firebase';
 import base from '../../base';
 import gateFirebase from 'firebase';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
@@ -106,12 +107,13 @@ class NotificationScreen extends PureComponent {
         this.setState({
             isModalOpen:false
         })
+        this.segregateNotification();
     }
 
 
     componentDidMount() {
 
-        console.log("USer Reducer Data:", this.props.dashBoardReducer);
+        console.log("USer Reducer Data:", this.props.getNotifications);
         this.setState({
             userRole: this.props.dashBoardReducer.role
         })
@@ -119,8 +121,8 @@ class NotificationScreen extends PureComponent {
         if (Platform.OS != 'ios') {
             BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
-        this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
-        firebase.notifications().removeAllDeliveredNotifications();
+
+
 
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
@@ -131,17 +133,23 @@ class NotificationScreen extends PureComponent {
             })
             .then(res => {
                 this.setState({ currentTime: res.data.data.currentDateTime }, () => {
-                    this.segregateNotification()
+
+                        this.segregateNotification();
+
+
                 });
             })
             .catch(error => {
                 this.setState({ currentTime: 'failed' }, () => {
-                    this.segregateNotification()
+
+                        this.segregateNotification();
+
                 });
             });
     }
 
     segregateNotification() {
+
         let notificationList = this.props.notifications;
         console.log('Calling this function',notificationList)
         let unitNotification = [];
@@ -166,6 +174,7 @@ class NotificationScreen extends PureComponent {
 
 
     componentWillUnmount() {
+
         if (Platform.OS != 'ios') {
             BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
@@ -342,9 +351,9 @@ class NotificationScreen extends PureComponent {
             });
     };
 
-    declinegateVisitor = (visitorId, index, associationid, visitorStatus, approvedBy) => {
+    declinegateVisitor = (visitorId, index, associationid, visitorStatus,notifiId, approvedBy) => {
         console.log('SENDING STATUS TO ACCEPT NOTIFICATION!!!!!',visitorId, index, associationid, visitorStatus, notifiId, approvedBy)
-
+          //visitorId, index, associationid, visitorStatus, notifiId, approvedBy
         let oldNotif = [...this.props.notifications];
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
@@ -540,9 +549,14 @@ class NotificationScreen extends PureComponent {
                     onPress={() => {
                         if (item.ntIsActive) {
                             this.props.onNotificationOpen(notifications, index, oyeURL);
-                        }
-                        this.props.toggleCollapsible(notifications, item.open, index, item)
+                            this.props.toggleCollapsible(notifications, item.open, index, item)
                         this.expandAdminNotification(notifications, index, item)
+                        }
+                        else{
+                            this.props.toggleCollapsible(notifications, item.open, index, item)
+                            this.expandAdminNotification(notifications, index, item)
+                        }
+
                     }}>
 
 
@@ -661,18 +675,9 @@ class NotificationScreen extends PureComponent {
                             }
                         }
                         else {
-                            this.props.navigation.navigate('NotificationAnnouncementDetailScreen', {
-                                notifyid: item.acNotifyID,
-                                associationid: item.asAssnID,
-                                accountid: item.acAccntID,
-                                index,
-                                notifications,
-                                oyeURL,
-                                savedNoifId,
-                                ntid: item.ntid
-                            });
+                            this.props.toggleCollapsible(notifications, item.open, index, item)
                         }
-                        this.props.toggleCollapsible(notifications, item.open, index, item)
+
                     }}>
 
 
@@ -801,6 +806,7 @@ class NotificationScreen extends PureComponent {
                                                     item.asAssnID,
                                                     "EntryApproved",
                                                     item.ntid,
+                                                    item.vlApprdBy
                                                 );
                                             }} style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
@@ -816,6 +822,7 @@ class NotificationScreen extends PureComponent {
                                                     item.asAssnID,
                                                     "EntryRejected",
                                                     item.ntid,
+                                                    item.vlApprdBy
 
                                                 )
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1871,7 +1878,9 @@ class NotificationScreen extends PureComponent {
                         let ntType = notificationList[i].ntType;
                         console.log("DJNVKJVB:",ntType);
 
-                            if ((associationName.toLowerCase()).includes(formattedText) || ntType.toLowerCase().includes(formattedText) || notificationList[i].ntDesc.toLowerCase().includes(formattedText) ) {
+                            if ((associationName.toLowerCase()).includes(formattedText) || (unitName.toLowerCase()).includes(formattedText)
+                            || ntType.toLowerCase().includes(formattedText) || notificationList[i].ntDesc.toLowerCase().includes(formattedText) || notificationList[i].vlfName.toLowerCase().includes(formattedText)
+                     || notificationList[i].vlMobile.toLowerCase().includes(formattedText) ) {
                                 console.log("KLNVKGDVJHBD<CNJDVBV<NVNBJDBC<JCHJKRHE<JHJKR:", notificationList[i])
                                 newArr.push(notificationList[i])
                             }

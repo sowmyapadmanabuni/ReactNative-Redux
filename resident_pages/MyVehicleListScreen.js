@@ -46,11 +46,12 @@ class VehicleList extends Component {
     componentDidMount() {
         let self = this;
         setTimeout(() => {
-            self.getVehicleList();
+
             this.setState({
                 isLoading: false
             });
         }, 1500);
+        self.getVehicleList();
         base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
@@ -77,7 +78,7 @@ class VehicleList extends Component {
         return true;
     }
 
-    
+
     processBackPress() {
         console.log("Part");
         const {goBack} = this.props.navigation;
@@ -115,7 +116,7 @@ class VehicleList extends Component {
             })
 
             .catch(error => {
-                this.setState({loading: false});
+                this.setState({loading: false,dataSource:[]});
                 console.log(error);
             });
         const {updateIdDashboard} = this.props;
@@ -333,7 +334,7 @@ class VehicleList extends Component {
     }
 
     render() {
-        console.log('The Unit Id is coming?', this.props.dashBoardReducer.uniID);
+        console.log('RENDER THE DATA SOURCE', this.state.dataSource);
         if (this.state.isLoading) {
             return (
                 <View style={styles.container}>
@@ -389,117 +390,106 @@ class VehicleList extends Component {
                     </View>
                 </View>
             );
-        }
-        return (
-            <View style={styles.container}>
-                {/* <Header/> */}
+        }else{
+            return (
+                <View style={styles.container}>
+                    {/* <Header/> */}
 
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                    <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
-                        <View style={styles.viewDetails1}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.goBack();
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        height: hp('4%'),
-                                        width: wp('15%'),
-                                        alignItems: 'flex-start',
-                                        justifyContent: 'center'
+                    <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
+                        <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
+                            <View style={styles.viewDetails1}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.props.navigation.goBack();
                                     }}
                                 >
-                                    <Image
-                                        resizeMode="contain"
-                                        source={require('../icons/back.png')}
-                                        style={styles.viewDetails2}
-                                    />
-                                </View>
-                            </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            height: hp('4%'),
+                                            width: wp('15%'),
+                                            alignItems: 'flex-start',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <Image
+                                            resizeMode="contain"
+                                            source={require('../icons/back.png')}
+                                            style={styles.viewDetails2}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Image
+                                    style={[styles.image1]}
+                                    source={require('../icons/OyespaceSafe.png')}
+                                />
+                            </View>
+                            <View style={{flex: 0.2}}>
+                                {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
+                            </View>
                         </View>
+                        <View style={{borderWidth: 1, borderColor: 'orange'}}/>
+                    </SafeAreaView>
+
+                    <NavigationEvents
+                        onDidFocus={payload => this.getVehicleList()}
+                        onWillBlur={payload => this.getVehicleList()}
+                    />
+                    <Text style={styles.titleOfScreen}>Vehicles</Text>
+                    {this.state.dataSource.length !== 0 ?
+                        <FlatList
+                            contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
+                            style={{marginTop: 15,}}
+                            data={this.state.dataSource}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => item.veid.toString()}
+
+                        />
+                        :
                         <View
                             style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <Image
-                                style={[styles.image1]}
-                                source={require('../icons/OyespaceSafe.png')}
-                            />
-                        </View>
-                        <View style={{flex: 0.2}}>
-                            {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
-                        </View>
-                    </View>
-                    <View style={{borderWidth: 1, borderColor: 'orange'}}/>
-                </SafeAreaView>
 
-                <NavigationEvents
-                    onDidFocus={payload => this.getVehicleList()}
-                    onWillBlur={payload => this.getVehicleList()}
-                />
-                <Text style={styles.titleOfScreen}>Vehicles</Text>
-
-                    <FlatList
-                    contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
-                        style={{marginTop: 15,}}
-                        data={this.state.dataSource}
-                        renderItem={this.renderItem}
-                        keyExtractor={(item, index) => item.veid.toString()}
-                        ListEmptyComponent={
-                            <View
-                        style={{
-                            
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            
-                        }}
-                    >
-                        <Icon size={hp('10%')} name="wheeler1"/>
-                        <Text
-                            style={{
-                                backgroundColor: 'white',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                fontSize: hp('1.6%')
+
                             }}
                         >
-                            Add your vehicle details
-                        </Text>
+                            <Icon size={hp('10%')} name="wheeler1"/>
+                            <Text
+                                style={{
+                                    backgroundColor: 'white',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: hp('1.6%')
+                                }}
+                            >
+                                Add your vehicle details
+                            </Text>
+                        </View>
+                    }
+                    <View style={{height: hp('7%')}}></View>
+
+                    <View style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'absolute',
+                        bottom: hp('5%'),
+                        right: hp('3.5%'),
+                        height: hp('6.5%'),
+                    }}>
+                        <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
                     </View>
-                        }
-                    />
-               
-                <View style={{height: hp('7%')}}></View>
-
-                <View style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'absolute',
-                    bottom: hp('5%'),
-                    right: hp('3.5%'),
-                    height: hp('6.5%'),
-                }}>
-                    <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
                 </View>
+            );
+        }
 
-                {/*<TouchableOpacity
-                    style={styles.floatButton}
-                    onPress={() => this.props.navigation.navigate('AddVehiclesScreen')}
-                >
-                    <Text
-                        style={styles.plusTextStyle}
-                    >
-                        +
-                    </Text>
-                </TouchableOpacity>*/}
-
-                
-            </View>
-        );
     }
     changePage(){
         this.props.navigation.navigate('AddVehiclesScreen')
@@ -602,7 +592,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         shadowOpacity: 0.6
       },
-     
+
       plusTextStyle: {
         fontSize: hp('4%'),
         color: '#fff',

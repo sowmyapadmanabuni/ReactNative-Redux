@@ -76,6 +76,24 @@ class QRCodeGeneration extends Component {
   qrGeneration = () => {
     const { params } = this.props.navigation.state;
     console.log('Params@!@#!@#!@#', params);
+    /*{"infName":"Vinay",
+    "inMobile":"7975536425",
+    "inInvtID":4261,"unUnitID":40851,
+    "insDate":"2020-02-05T06:22:04",
+    "ineDate":"2020-02-19T06:22:04",
+    "inVisCnt":2,"asAssnID":14948,
+    "inIsActive":true*/
+    let input={
+      "infName":params.value.infName,
+      "inMobile":params.value.inMobile.substring(3, 13),
+      "inInvtID":params.value.inInvtID,
+      "unUnitID":params.value.unUnitID,
+      "insDate":params.value.insDate.substring(0, 10),
+      "ineDate":params.value.ineDate.substring(0, 10),
+      "inVisCnt":params.value.inVisCnt,
+      "asAssnID":params.value.asAssnID,
+      "inIsActive":params.value.inMultiEy
+    }
     // let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
     //   +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inpOfInv +params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
     let txt =
@@ -100,10 +118,9 @@ class QRCodeGeneration extends Component {
       ',' +
       params.value.asAssnID +
       ',' +
-      params.value.inMultiEy; //For time being we are not sending as shalini needs to change from gate app @jyothi // let txt1 = "You are invited to " + params.value.infName + "'s home @ " + params.value.unUnitID + " " + params.value.insDate;
+      params.value.inMultiEy;
 
-    /*  params.value.ineDate.substring(11, 16) +
-        "," +*/ let txt1 =
+    let txt1 =
       params.value.infName +
       ',' +
       params.value.inMobile.substring(0, 3) +
@@ -126,9 +143,10 @@ class QRCodeGeneration extends Component {
       params.value.asAssnID +
       ',' +
       params.value.inMultiEy;
+    console.log('Share QR code',txt,txt1,input,JSON.stringify(input))
     this.setState({
-      qrText: txt,
-      qrShare: txt1
+      qrText: JSON.stringify(input),
+      qrShare: JSON.stringify(input)
     });
     console.log(txt);
   };

@@ -239,6 +239,7 @@ class MyFamily extends Component {
                                             console.log('GET THE VALUE #####',value)
                                             this.setState({
                                                 isMinorSelected: value,
+                                                isMinor:value===0?true:false
                                             })
                                         };
                                         return (
@@ -639,7 +640,7 @@ class MyFamily extends Component {
             "FMRltn": self.state.relationName,
             "ASAssnID": self.props.dashBoardReducer.assId,
             "FMImgName": self.state.imageUrl,
-            "FMMinor": self.state.isMinorSelected==0 ?true:false,
+            "FMMinor": self.state.isMinor,
             "FMLName": self.state.lastName,
             "FMGurName": self.state.guardianName,
             "PAccntID": self.props.userReducer.MyAccountID

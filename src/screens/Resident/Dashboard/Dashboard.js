@@ -67,6 +67,7 @@ import moment from 'moment';
 import strings from "../../../base/utils/strings";
 import DeviceInfo from 'react-native-device-info';
 import announcement from "../../../../assocition_pages/announcement";
+import NotificationScreen from '../../NotificationScreen/NotificationScreen';
 
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -1130,8 +1131,9 @@ class Dashboard extends PureComponent {
       notifications,
       dropdown,
       updateSelectedDropDown,
-      dropdown1
+      dropdown1,
     } = this.props;
+
     console.log('Ass index', value, index, dropdown[index]);
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
@@ -1153,6 +1155,14 @@ class Dashboard extends PureComponent {
       prop: 'assId',
       value: dropdown[index].associationId
     });
+    updateIdDashboard({
+      prop: 'familyMemberCount',
+      value: ""
+    });
+    updateIdDashboard({
+      prop: 'vehiclesCount',
+      value: ""
+    });
 
     updateUserInfo({
       prop: 'SelectedAssociationID',
@@ -1168,6 +1178,7 @@ class Dashboard extends PureComponent {
       prop: 'assId',
       value: dropdown[index].associationId
     });
+
 
     base.utils.validate.checkSubscription(dropdown[index].associationId);
 
@@ -1256,6 +1267,7 @@ class Dashboard extends PureComponent {
         //     value: unitList[0].details.unUnitID
         // });
         self.roleCheckForAdmin(this.state.assocId);
+        self.getInvoiceMethodsList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -1750,7 +1762,7 @@ class Dashboard extends PureComponent {
                     )}
                 </View>
               </View>
-              {isAdmin?
+
               <ImageBackground
                 resizeMode={'stretch'}
                 source={selectedView === 0 ? require('../../../../icons/myunit_dashboard.png') : require("../../../../icons/admin_dashboard.png")}
@@ -1782,7 +1794,7 @@ class Dashboard extends PureComponent {
                   </TouchableHighlight>
                   <TouchableHighlight
                     underlayColor={'transparent'}
-                    onPress={() => this.setView(1)}>
+                    onPress={() => isAdmin? this.setView(1) :Alert.alert('Sorry','You are not an admin !!!')}>
                     <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
                       <Image
                         resizeMode={'contain'}
@@ -1797,33 +1809,8 @@ class Dashboard extends PureComponent {
                     </View>
                   </TouchableHighlight>
                 </View>
-              </ImageBackground>:
-              <ElevatedView
-                    elevation={10}
-                    style={{
-                        width: wp('90'), height: hp('65'), backgroundColor: 'white', borderRadius: hp('4'),top:hp('1'),
-                        shadowColor: 'grey',
-                        shadowOpacity: 1.0,
-                    }}
-                >
-                  {this.myUnitCard()}
-                {this.renderSOS()}
-                <View style={{ flexDirection: 'row', marginTop: hp('25'), justifyContent: 'center', width: wp('65'), alignSelf: 'center', borderWidth: 0, alignItems: 'flex-end' }}>
+              </ImageBackground>
 
-                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
-                      <Image
-                        resizeMode={'contain'}
-                        style={{
-                          width: hp('4%'),
-                          height: hp('4%'),
-                        }}
-                        source={require('../../../../icons/my_unit.png')}
-                      />
-                      <Text allowFontScaling={false}>My Unit</Text>
-
-                    </View>
-                </View>
-              </ElevatedView>}
               <View style={{height: '6%',
                             width: '100%',
                             alignItems: 'center',
@@ -1836,6 +1823,7 @@ class Dashboard extends PureComponent {
                             top:hp('82'),
                             flexDirection: 'row'
               }}>
+
                               <View style={{borderWidth:0}}>
                               <Image
                     resizeMode={'cover'}
