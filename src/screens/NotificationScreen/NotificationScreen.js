@@ -91,7 +91,8 @@ class NotificationScreen extends PureComponent {
       dataSource2: [],
       dataSource3: '',
       isModalOpen1: false,
-      detailsToReject:{}
+      detailsToReject:{},
+      allNotifications:[]
         };
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -99,10 +100,12 @@ class NotificationScreen extends PureComponent {
     //  #ff0000-ExitRejected
 
     componentWillMount() {
-        this.segregateNotification();
+       
 
     }
 
+
+    
     componentWillReceiveProps(props){
         this.setState({
             isModalOpen:false
@@ -134,7 +137,9 @@ class NotificationScreen extends PureComponent {
             .then(res => {
                 this.setState({ currentTime: res.data.data.currentDateTime }, () => {
 
-                        this.segregateNotification();
+                        setInterval(()=>{
+                            this.segregateNotification();
+                        },5000)
                     
                     
                 });
@@ -541,11 +546,14 @@ class NotificationScreen extends PureComponent {
                 }}
                     onPress={() => {
                         if (item.ntIsActive) {
-                            this.props.onNotificationOpen(notifications, index, oyeURL);
+                            //this.openNotification(notifications,index,oyeURL)
+                            this.props.onNotificationOpen(notifications, index, oyeURL,item.ntid);
+                          //  this.toggledCollapsible(notifications, item.open, index, item);
                             this.props.toggleCollapsible(notifications, item.open, index, item)
                         this.expandAdminNotification(notifications, index, item)
                         }
                         else{
+                            //this.toggledCollapsible(notifications, item.open, index, item)
                             this.props.toggleCollapsible(notifications, item.open, index, item)
                             this.expandAdminNotification(notifications, index, item)
                         }
@@ -619,9 +627,11 @@ class NotificationScreen extends PureComponent {
                            alignItems: 'center', justifyContent: 'center',borderWidth:0
                         }} onPress={() => {
                             this.expandAdminNotification(notifications, index, item);
+                            //this.toggledCollapsible(notifications, item.open, index, item)
                             this.props.toggleCollapsible(notifications, item.open, index, item)
                             if (item.ntIsActive) {
-                                this.props.onNotificationOpen(notifications, index, oyeURL);
+                                //this.openNotification(notifications, index, oyeURL);
+                                this.props.onNotificationOpen(notifications, index, oyeURL,item.ntid);
                             }
                             
                         }}>
@@ -652,8 +662,12 @@ class NotificationScreen extends PureComponent {
                     marginBottom: this.props.notifications.length - 1 == index ? 100 : 0
                 }}
                     onPress={() => {
+                        this.props.toggleCollapsible(notifications, item.open, index, item)
                         if (item.ntIsActive) {
-                            this.props.onNotificationOpen(notifications, index, oyeURL);
+                            //this.openNotification(notifications, index, oyeURL);
+                            this.props.onNotificationOpen(notifications, index, oyeURL,item.ntid);
+                            //this.toggledCollapsible(notifications, item.open, index, item)
+                            // this.props.toggleCollapsible(notifications, item.open, index, item)
                             if (item.ntType === "Announcement") {
                                 this.props.navigation.navigate('NotificationAnnouncementDetailScreen', {
                                     notifyid: item.acNotifyID,
@@ -668,7 +682,8 @@ class NotificationScreen extends PureComponent {
                             }
                         }
                         else {
-                            this.props.toggleCollapsible(notifications, item.open, index, item)
+                            //this.toggledCollapsible(notifications, item.open, index, item)
+                           // this.props.toggleCollapsible(notifications, item.open, index, item)
                         }
                         
                     }}>
@@ -927,8 +942,12 @@ class NotificationScreen extends PureComponent {
                             height: 20, alignItems: 'center', justifyContent: 'center'
                         }} onPress={() => {
                             if (item.ntIsActive) {
-                                this.props.onNotificationOpen(notifications, index, oyeURL);
+                                //this.openNotification(notifications, index, oyeURL);
+                                this.props.onNotificationOpen(notifications, index, oyeURL,item.ntid);
+                                //this.toggledCollapsible(notifications, item.open, index, item)
+                                this.props.toggleCollapsible(notifications, item.open, index, item)
                             }
+                            //this.toggledCollapsible(notifications, item.open, index, item)
                             this.props.toggleCollapsible(notifications, item.open, index, item)
                         }}>
                             <View style={{
@@ -1650,7 +1669,6 @@ class NotificationScreen extends PureComponent {
                                                 null,
                                                 notifications
                                             );
-                                            //this.doNetwork(null, this.props.notifications)
                                         }}
                                         progressBackgroundColor="#fff"
                                         tintColor="#ED8A19"
@@ -1722,6 +1740,7 @@ class NotificationScreen extends PureComponent {
         // const refresh = navigation.getParam("refresh", "NO-ID");
         // console.log(this.state.gateDetails, "gateDetails");
         // console.log("rendered");
+        console.log('All Notification:',this.state.allNotifications)
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
@@ -1823,7 +1842,8 @@ class NotificationScreen extends PureComponent {
                         {this.renderSearch()}
                         {this.renderComponent()}
                     </View>
-                </ImageBackground> :
+                </ImageBackground> 
+                :
                 <ElevatedView
                     elevation={10}
                     style={{
@@ -2007,15 +2027,7 @@ class NotificationScreen extends PureComponent {
         console.log('DETAILS########', details.userImage)
         let status;
 
-        if (loading || adminStatLoading) {
-            return (
-                <View
-                    style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}
-                >
-                    <ActivityIndicator />
-                </View>
-            );
-        } else {
+        
              if (details.ntType === 'gate_app') {
                 return null;
             } 
@@ -2041,7 +2053,6 @@ class NotificationScreen extends PureComponent {
                                             source={{ uri: "https://mediaupload.oyespace.com/" + details.userImage }}
                                         />
                                         :
-
                                         <Image
                                             style={{
                                                 width: 80,
@@ -2050,11 +2061,9 @@ class NotificationScreen extends PureComponent {
                                             }}
                                             source={{ uri: 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder }}
                                         />}
-
                                 </TouchableOpacity>                                
                     );
                 }        
-            }
             }
             return status;
         

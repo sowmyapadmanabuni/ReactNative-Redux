@@ -847,7 +847,7 @@ class Dashboard extends PureComponent {
 
    
     // BackgroundTimer.runBackgroundTimer(()=>{
-    //   console.log("---------------------------------------")
+    //   console.log()
     //   this.syncData()
     // },5000)
       timer.setInterval(
