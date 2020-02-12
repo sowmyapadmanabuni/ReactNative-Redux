@@ -9,7 +9,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View
+    View,
+    ActivityIndicator
 } from "react-native";
 import moment from "moment";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
@@ -20,6 +21,7 @@ import {Button} from "native-base";
 import {connect} from "react-redux";
 import {updateUserInfo} from "../src/actions";
 import base from "../src/base";
+import ProgressLoader from 'rn-progress-loader';
 
 class OTPVerification extends Component {
     static navigationOptions = {
@@ -82,12 +84,26 @@ class OTPVerification extends Component {
 
     verifyOTP = otp_number1 => {
         let otp_number = this.state.OTPNumber;
+        this.setState({
+            isLoading:true
+        })
 
         //const reg = /^[0]?[789]\d{9}$/;
         if (otp_number == 0) {
-            Alert.alert("OTP Number cannot be Empty");
+            this.setState({
+                isLoading:false
+            })
+            setTimeout(()=>{
+                Alert.alert("OTP Number cannot be Empty");
+            },1000) 
+            
         } else if (otp_number.length < 6) {
-            Alert.alert("Enter 6 digit OTP Number");
+            this.setState({
+                isLoading:false
+            })
+            setTimeout(()=>{
+                alert("Enter 6 digit OTP Number");
+            },1000) 
             return false;
         } else {
             let anu = {
@@ -112,6 +128,9 @@ class OTPVerification extends Component {
                 .then(responseJson => {
                     console.log("ravii", responseJson);
                     if (responseJson.success) {
+                        this.setState({
+                            isLoading:false
+                        })
                         if (responseJson.data == null) {
                             this.props.navigation.navigate("RegistrationPageScreen");
                         } else {
@@ -163,16 +182,26 @@ class OTPVerification extends Component {
                            this.props.navigation.navigate("ResDashBoard");
                         }
                     } else {
+                        this.setState({
+                            isLoading:false
+                        })
                         console.log("hiii", "failed" + anu);
-                        alert("Invalid OTP, check Mobile Number and try again");
+                        setTimeout(()=>{
+                            alert("Invalid OTP, check Mobile Number and try again");
+                        },1000)
                     }
 
                     console.log("suvarna", "hi");
                 })
                 .catch(error => {
+                    this.setState({
+                        isLoading:false
+                    })
                    // console.error("err " + error);
                     console.log("Verification", "error " + error);
-                    alert("OTP Verification failed");
+                    setTimeout(()=>{
+                        alert("OTP Verification failed");
+                    },1000)
                 });
         }
     };
@@ -316,30 +345,10 @@ class OTPVerification extends Component {
     render() {
         console.log('Count', this.state.count);
         return (
+            <View style={{flex: 1, flexDirection: "column", backgroundColor: "#fff"}}>
             <View
                 style={{flex: 1, flexDirection: "column", backgroundColor: "#fff"}}
             >
-                {/* <TouchableOpacity
-          style={{backgroundColor: "white",paddingTop: 2,paddingRight: 2,paddingLeft: 2,alignItems: "center",flexDirection: "row",paddingBottom: 2,borderColor: "#FF8C00",borderRadius: 4,borderWidth: 1,textAlign: "center",marginTop: 30}}
-          onPress={()=> this.props.navigation.goBack()} >
-          <Image
-            source={require("../img/back.png")}
-            style={{flex: 1,height: 25,width: 25,margin: 5,alignSelf: "center"}}
-          />
-          <Text style={{flex: 3,fontSize: 12,paddingLeft: 5,fontSize: 14,color: "black",alignContent: "flex-start",alignSelf: "center"}}>
-            Back
-          </Text>
-          <Text
-            style={{flex: 4,fontSize: 12,paddingLeft: 15,fontSize: 14,color: "black",alignSelf: "center",backgroundColor: "white"}}>
-            OTP Verification
-          </Text>
-          <Text
-            style={{flex: 4,fontSize: 12,paddingLeft: 15,fontSize: 14,color: "black",alignSelf: "center"}}/>
-        </TouchableOpacity>
-        <View style={{backgroundColor: "lightgrey",flexDirection: "row",height: 1,width: "100%"}}/> */}
-
-                {/* <Header /> */}
-
                 <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
                     <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
                         <View style={styles.viewDetails1}>
@@ -514,8 +523,17 @@ class OTPVerification extends Component {
                     </View>
                 </KeyboardAwareScrollView>
             </View>
+            <ProgressLoader
+                                    isHUD={true}
+                                    isModal={true}
+                                    visible={this.state.isLoading}
+                                    color={base.theme.colors.primary}
+                                    hudColor={"#FFFFFF"}
+                                />
+            </View>
         );
-    }
+    
+}
 }
 
 const styles = StyleSheet.create({

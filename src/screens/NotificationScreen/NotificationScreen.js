@@ -51,6 +51,8 @@ import CreateSOSStyles from "../SOS/CreateSOSStyles";
 import ElevatedView from 'react-native-elevated-view';
 import { CLOUD_FUNCTION_URL } from '../../../constant';
 import OSButton from "../../components/osButton/OSButton";
+import ProgressLoader from 'rn-progress-loader';
+
 
 
 
@@ -92,7 +94,8 @@ class NotificationScreen extends PureComponent {
       dataSource3: '',
       isModalOpen1: false,
       detailsToReject:{},
-      allNotifications:[]
+      allNotifications:[],
+      isLoading:false
         };
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -118,7 +121,8 @@ class NotificationScreen extends PureComponent {
 
         console.log("USer Reducer Data:", this.props.getNotifications);
         this.setState({
-            userRole: this.props.dashBoardReducer.role
+            userRole: this.props.dashBoardReducer.role,
+            isLoading:true
         })
 
         if (Platform.OS != 'ios') {
@@ -155,7 +159,7 @@ class NotificationScreen extends PureComponent {
     }
 
     segregateNotification() {
-
+        
         let notificationList = this.props.notifications;
         console.log('Calling this function',notificationList)
         let unitNotification = [];
@@ -173,7 +177,8 @@ class NotificationScreen extends PureComponent {
             adminNotification: adminNotification,
             unitNotification: unitNotification,
             unitNotificationCopy: unitNotification,
-            adminNotificationCopy: adminNotification
+            adminNotificationCopy: adminNotification,
+            isLoading:false
         })
 
     }
@@ -1753,11 +1758,11 @@ class NotificationScreen extends PureComponent {
     }
 
     render() {
-        const { navigation, notifications, oyeURL, MyAccountID } = this.props;
+        const { navigation, notifications, oyeURL, MyAccountID,loading } = this.props;
         // const refresh = navigation.getParam("refresh", "NO-ID");
         // console.log(this.state.gateDetails, "gateDetails");
         // console.log("rendered");
-        console.log('All Notification:',this.state.allNotifications)
+        console.log('All Notification:',loading)
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
@@ -1771,6 +1776,13 @@ class NotificationScreen extends PureComponent {
                 <KeyboardAvoidingView>
                     {this.state.isModalOpen1?
           this.renderRejectModal():null}
+          <ProgressLoader
+                                    isHUD={true}
+                                    isModal={true}
+                                    visible={this.state.isLoading}
+                                    color={base.theme.colors.primary}
+                                    hudColor={"#FFFFFF"}
+                                />
         </KeyboardAvoidingView>
 
             </View>
