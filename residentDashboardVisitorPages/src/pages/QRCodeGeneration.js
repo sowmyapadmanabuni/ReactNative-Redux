@@ -102,8 +102,8 @@ class QRCodeGeneration extends Component {
         "inMobile"+":"+ params.value.inMobile.substring(3, 13) + ',' +
         "inInvtID"+":"+params.value.inInvtID + ',' +
         "unUnitID"+":"+params.value.unUnitID + ',' +
-        "insDate"+":" + params.value.insDate.substring(0, 10) + ',' +
-        "ineDate"+":"+params.value.ineDate.substring(0, 10) + ',' +
+        "insDate"+":" + params.value.insDate + ',' +
+        "ineDate"+":"+params.value.ineDate + ',' +
         "inVisCnt"+":"+params.value.inVisCnt + ',' +
         "asAssnID"+":"+ params.value.asAssnID + ',' +
         "inIsActive"+":"+params.value.inMultiEy+"}";
@@ -133,8 +133,8 @@ class QRCodeGeneration extends Component {
       params.value.inMultiEy;
     console.log('Share QR code',txt,txt1)
     this.setState({
-      qrText: stringyfiedJSON,
-      qrShare: stringyfiedJSON
+      qrText: JSON.stringify(txt),
+      qrShare: JSON.stringify(txt)
     });
     console.log(txt);
   };

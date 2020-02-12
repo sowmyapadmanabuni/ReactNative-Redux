@@ -629,7 +629,7 @@ class Dashboard extends PureComponent {
 
 
           console.log('___________');
-          console.log(notification);
+          console.log("NOTIFICATION@@@@",notification);
           console.log('____________');
 
           if (notification._data.associationID) {
@@ -854,7 +854,7 @@ class Dashboard extends PureComponent {
     //   console.log()
     //   this.syncData()
     // },5000)
-     /* timer.setInterval(
+      timer.setInterval(
                  this,
                  'syncData',
                  async () => {
@@ -863,7 +863,7 @@ class Dashboard extends PureComponent {
                  },
                  5000
              );
-    }*/}
+    }
 
 
   handleConnectivityChange = isConnected => {
@@ -1120,6 +1120,7 @@ class Dashboard extends PureComponent {
   }
 
   onAssociationChange = (value, index) => {
+
     const {
       associationid,
       getDashUnits,
@@ -1193,6 +1194,7 @@ class Dashboard extends PureComponent {
     });
     this.roleCheckForAdmin(dropdown[index].associationId);
     this.getUnitListByAssoc();
+    this.setView(0)
     // this.setState({ role:dropdown[index].roleId });
   };
 
@@ -1624,10 +1626,10 @@ class Dashboard extends PureComponent {
       this.props
     );
 
-    console.log("vehiclesCount ", this.props.dashBoardReducer.role, dropdown1.length);
+    console.log("vehiclesCount ", this.props.dashBoardReducer.role, dropdown1.length,selectedView);
 
     let isAdmin = this.props.dashBoardReducer.role === 1?true:false
-
+       //selectedView=isAdmin?1:0
 
     //console.log("RENDER_ALLASSOC_0",allAssociations)
 
@@ -1789,9 +1791,10 @@ class Dashboard extends PureComponent {
 
                     </View>
                   </TouchableHighlight>
+                  {isAdmin?
                   <TouchableHighlight
                     underlayColor={'transparent'}
-                    onPress={() => isAdmin? this.setView(1) :Alert.alert('Sorry','You are not an admin !!!')}>
+                    onPress={() =>  this.setView(1)}>
                     <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
                       <Image
                         resizeMode={'contain'}
@@ -1805,6 +1808,8 @@ class Dashboard extends PureComponent {
 
                     </View>
                   </TouchableHighlight>
+                      :
+                      <View/>}
                 </View>
               </ImageBackground>
 
