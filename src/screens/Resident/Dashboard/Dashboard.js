@@ -850,15 +850,15 @@ class Dashboard extends PureComponent {
     //   console.log()
     //   this.syncData()
     // },5000)
-      timer.setInterval(
-                 this,
-                 'syncData',
-                 async () => {
+      // timer.setInterval(
+      //            this,
+      //            'syncData',
+      //            async () => {
                   
-                   this.syncData();
-                 },
-                 5000
-             );
+      //              this.syncData();
+      //            },
+      //            5000
+      //        );
   }
 
   handleConnectivityChange = isConnected => {
