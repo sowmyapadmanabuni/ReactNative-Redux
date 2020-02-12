@@ -848,16 +848,13 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-    if(Platform.OS !== "ios"){
-      const intervalId = BackgroundTimer.setInterval(() => {
-        console.log('----------------------------------------------------------------------------------------');
-        async()=>{
-          this.syncData();
-        }
-      }, 5000);
-    }
-    else if(Platform.OS === "ios"){
-      timer.setInterval(
+
+
+    // BackgroundTimer.runBackgroundTimer(()=>{
+    //   console.log()
+    //   this.syncData()
+    // },5000)
+     /* timer.setInterval(
                  this,
                  'syncData',
                  async () => {
@@ -866,8 +863,8 @@ class Dashboard extends PureComponent {
                  },
                  5000
              );
-    }
-  }
+    }*/}
+
 
   handleConnectivityChange = isConnected => {
     console.log('CONNECTION DATA', isConnected)

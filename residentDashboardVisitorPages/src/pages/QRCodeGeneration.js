@@ -84,41 +84,29 @@ class QRCodeGeneration extends Component {
     "inVisCnt":2,"asAssnID":14948,
     "inIsActive":true*/
     let input={
-      "infName":params.value.infName,
-      "inMobile":params.value.inMobile.substring(3, 13),
-      "inInvtID":params.value.inInvtID,
-      "unUnitID":params.value.unUnitID,
-      "insDate":params.value.insDate.substring(0, 10),
-      "ineDate":params.value.ineDate.substring(0, 10),
-      "inVisCnt":params.value.inVisCnt,
-      "asAssnID":params.value.asAssnID,
-      "inIsActive":params.value.inMultiEy
-    }
+      infName:params.value.infName,
+      inMobile:params.value.inMobile.substring(3, 13),
+      inInvtID:params.value.inInvtID,
+      unUnitID:params.value.unUnitID,
+      insDate:params.value.insDate.substring(0, 10),
+      ineDate:params.value.ineDate.substring(0, 10),
+      inVisCnt:params.value.inVisCnt,
+      asAssnID:params.value.asAssnID,
+      inIsActive:params.value.inMultiEy
+    };
+
+    let stringyfiedJSON = JSON.stringify(input);
     // let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
     //   +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inpOfInv +params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
-    let txt =
-      params.value.infName +
-      ',' +
-      params.value.inMobile.substring(0, 3) +
-      ',' +
-      params.value.inMobile.substring(3, 13) +
-      ',' +
-      params.value.inInvtID +
-      ',' +
-      params.value.unUnitID +
-      ',' +
-      ',' +
-      params.value.insDate.substring(0, 10) +
-      ',' +
-      params.value.insDate.substring(11, 16) +
-      ',,' +
-      params.value.inVisCnt +
-      ',' +
-      params.value.ineDate.substring(0, 10) +
-      ',' +
-      params.value.asAssnID +
-      ',' +
-      params.value.inMultiEy;
+    let txt ="{"+ "infName"+":"+ params.value.infName + ',' +
+        "inMobile"+":"+ params.value.inMobile.substring(3, 13) + ',' +
+        "inInvtID"+":"+params.value.inInvtID + ',' +
+        "unUnitID"+":"+params.value.unUnitID + ',' +
+        "insDate"+":" + params.value.insDate.substring(0, 10) + ',' +
+        "ineDate"+":"+params.value.ineDate.substring(0, 10) + ',' +
+        "inVisCnt"+":"+params.value.inVisCnt + ',' +
+        "asAssnID"+":"+ params.value.asAssnID + ',' +
+        "inIsActive"+":"+params.value.inMultiEy+"}";
 
     let txt1 =
       params.value.infName +
@@ -143,10 +131,10 @@ class QRCodeGeneration extends Component {
       params.value.asAssnID +
       ',' +
       params.value.inMultiEy;
-    console.log('Share QR code',txt,txt1,input,JSON.stringify(input))
+    console.log('Share QR code',txt,txt1)
     this.setState({
-      qrText: JSON.stringify(input),
-      qrShare: JSON.stringify(input)
+      qrText: stringyfiedJSON,
+      qrShare: stringyfiedJSON
     });
     console.log(txt);
   };

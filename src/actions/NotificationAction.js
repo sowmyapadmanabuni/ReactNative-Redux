@@ -24,15 +24,7 @@ import firebase from 'firebase';
 export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
   return dispatch => {
     let page = 1;
-    // console.log("Notification_URLS", oyeURL, MyAccountID);
-    // console.log(
-    //   "http://" +
-    //     oyeURL +
-    //     "/oyesafe/api/v1/Notification/GetNotificationListByAccntID/" +
-    //     MyAccountID +
-    //     "/" +
-    //     page
-    // );
+    
     dispatch({ type: GET_NOTIFICATIONS });
     fetch(
       'http://' +
@@ -51,17 +43,13 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
     )
       .then(response => response.json())
       .then(responseJson => {
-        //console.log('Check list', responseJson);
         let resData = responseJson.data.notificationListByAcctID;
         let userImage=responseJson.data.accountImage.acImgName;
-       // console.log('resData', resData,userImage);
         let activeNotifications = [];
 
         _.forEach(resData, function(value) {
           activeNotifications.push({ ...value, read: false });
         });
-
-       // console.log("GET_INITIAL_NOTIF", activeNotifications);
         let joinNotif = [];
         let joinStatNotif = [];
         let gateAppNotif = [];
@@ -171,14 +159,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             return dbRef.once('value').then(snapshot => {
 
               let val = snapshot.val();
-             // console.log('DARALoad', val);
               firebaseNoti.push({ ...data, ...val });
-              // return firebaseNoti;
-              // console.log(snapshot.val(), 'value_firebase');
-              // dispatch({
-              //   type: GET_NOTIFICATIONS_SUCCESS,
-              //   payload: [...firebaseNoti]
-              // });
             });
           }
         });
@@ -529,13 +510,12 @@ export const newNotifInstance = data => {
   };
 };
 
-export const onNotificationOpen = (notif, index, oyeURL) => {
+export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
   console.log("Notification to be read:",notif,index,oyeURL);
   return dispatch => {
     let newNotif = Object.assign([], notif);
     newNotif[index].read = true;
-    newNotif[index].read = true;
-    newNotif[index].ntIsActive = false;
+  
     newNotif[index].ntIsActive = false;
 
     let headers = {
@@ -547,13 +527,13 @@ export const onNotificationOpen = (notif, index, oyeURL) => {
 
     axios
       .get(
-        `http://${oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${newNotif[index].ntid}`,
+        `http://${oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${ntid}`,
         {
           headers: headers
         }
       )
       .then(res => {
-        console.log(res.data);
+        console.log("On Notification Open:",res.data);
       })
       .catch(error => {
         console.log(error);
