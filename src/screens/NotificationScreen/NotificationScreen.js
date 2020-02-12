@@ -1614,7 +1614,7 @@ class NotificationScreen extends PureComponent {
             page
         } = this.props;
         // console.log(loading)
-        console.log('Data in notification', this.state.adminNotification, this.state.unitNotification);
+        console.log('Data in notification', this.props,this.state.adminNotification, this.state.unitNotification);
         let unitNotification = this.state.unitNotification;
         let adminNotification = this.state.adminNotification;
         let selectedView = this.state.selectedView;
@@ -1684,7 +1684,6 @@ class NotificationScreen extends PureComponent {
                                     />
                                 }
                             /></View> : <View style={{ height: hp('30'), width: wp('95'), alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}><Text allowFontScaling={false} style={{ color: base.theme.colors.primary, fontFamily: base.theme.fonts.bold, fontSize: hp('2.5') }}>No Unit Notifications To Display</Text></View> :
-                        adminNotification.length !== 0 ?
                         <View style={{height:hp('64'),marginBottom:hp('10')}}>
                             <FlatList
                                 keyExtractor={this.keyExtractor}
@@ -1733,7 +1732,17 @@ class NotificationScreen extends PureComponent {
                                         colors={['#ED8A19']}
                                     />
                                 }
-                            /></View> : <View style={{ height: hp('30'), width: wp('95'), alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}><Text allowFontScaling={false} style={{ color: base.theme.colors.primary, fontFamily: base.theme.fonts.bold, fontSize: hp('2.5') }}>No Admin Notifications To Display</Text></View>}
+                                ListEmptyComponent={
+                                    <View style={{ height: hp('30'), width: wp('95'), alignSelf: 'center',
+                                        justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text allowFontScaling={false}
+                                              style={{ color: base.theme.colors.primary, fontFamily: base.theme.fonts.bold,
+                                                  fontSize: hp('2.5') }}>No Admin Notifications To Display</Text>
+                                    </View>
+                                }
+                            />
+                        </View>
+                           }
                 </Fragment>
             );
         }

@@ -630,7 +630,8 @@ class Dashboard extends PureComponent {
 
           console.log('___________');
           console.log("NOTIFICATION@@@@",notification);
-          console.log('____________');
+          console.log('NOTIFICATION@@@@____________', notification.data.unitName,notification.data.associationID,notification.data.associationName);
+         this.changeTheAssociation(notification.data.associationName,notification.data.associationID)
 
           if (notification._data.associationID) {
             // this.props.createNotification(notification._data, navigationInstance, false)
@@ -1118,6 +1119,62 @@ class Dashboard extends PureComponent {
         );*/
       });
   }
+
+
+  changeTheAssociation = (value, assId) => {
+
+    const {
+      associationid,
+      getDashUnits,
+      updateUserInfo,
+      memberList,
+      notifications,
+      dropdown,
+      updateSelectedDropDown,
+      dropdown1,
+    } = this.props;
+
+    console.log('Ass index', value, assId,dropdown1,dropdown);
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+    this.setState({ assocId: assId});
+
+    getDashUnits(
+        assId,
+        oyeURL,
+        MyAccountID,
+        dropdown,
+        assId,
+        dropdown1
+    );
+
+    const { updateIdDashboard } = this.props;
+    console.log('updateIdDashboard1', this.props);
+    updateIdDashboard({
+      prop: 'assId',
+      value: assId
+    });
+
+    updateUserInfo({
+      prop: 'SelectedAssociationID',
+      value: assId
+    });
+
+    updateSelectedDropDown({
+      prop: 'selectedDropdown',
+      value: value
+    });
+
+    updateSelectedDropDown({
+      prop: 'assId',
+      value: assId
+    });
+
+    this.roleCheckForAdmin(assId);
+    this.getUnitListByAssoc();
+    this.setView(0)
+    // this.setState({ role:dropdown[index].roleId });
+  };
 
   onAssociationChange = (value, index) => {
 
