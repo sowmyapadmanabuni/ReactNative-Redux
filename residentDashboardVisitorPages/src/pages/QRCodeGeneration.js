@@ -76,28 +76,8 @@ class QRCodeGeneration extends Component {
   qrGeneration = () => {
     const { params } = this.props.navigation.state;
     console.log('Params@!@#!@#!@#', params);
-    /*{"infName":"Vinay",
-    "inMobile":"7975536425",
-    "inInvtID":4261,"unUnitID":40851,
-    "insDate":"2020-02-05T06:22:04",
-    "ineDate":"2020-02-19T06:22:04",
-    "inVisCnt":2,"asAssnID":14948,
-    "inIsActive":true*/
-    let input={
-      infName:params.value.infName,
-      inMobile:params.value.inMobile.substring(3, 13),
-      inInvtID:params.value.inInvtID,
-      unUnitID:params.value.unUnitID,
-      insDate:params.value.insDate.substring(0, 10),
-      ineDate:params.value.ineDate.substring(0, 10),
-      inVisCnt:params.value.inVisCnt,
-      asAssnID:params.value.asAssnID,
-      inIsActive:params.value.inMultiEy
-    };
+  
 
-    let stringyfiedJSON = JSON.stringify(input);
-    // let txt = params.value.inInvtID + params.value.meMemID + params.value.unUnitID+params.value.infName+params.value.inlName+params.value.asAssnID
-    //   +params.value.inEmail+params.value.inMobile+params.value.inMultiEy+params.value.inpOfInv +params.value.inVchlNo+params.value.inVisCnt+params.value.insDate+params.value.ineDate;
     let txt ="{"+ "infName"+":"+ params.value.infName + ',' +
         "inMobile"+":"+ params.value.inMobile.substring(3, 13) + ',' +
         "inInvtID"+":"+params.value.inInvtID + ',' +
@@ -108,35 +88,11 @@ class QRCodeGeneration extends Component {
         "asAssnID"+":"+ params.value.asAssnID + ',' +
         "inIsActive"+":"+params.value.inMultiEy+"}";
 
-    let txt1 =
-      params.value.infName +
-      ',' +
-      params.value.inMobile.substring(0, 3) +
-      ',' +
-      params.value.inMobile.substring(3, 13) +
-      ',' +
-      params.value.inInvtID;
-    ',' +
-      params.value.unUnitID +
-      ',' +
-      ',' +
-      params.value.insDate.substring(0, 10) +
-      ',' +
-      params.value.insDate.substring(11, 16) +
-      ',,' +
-      params.value.inVisCnt +
-      ',' +
-      params.value.ineDate.substring(0, 10) +
-      ',' +
-      params.value.asAssnID +
-      ',' +
-      params.value.inMultiEy;
-    console.log('Share QR code',txt,txt1)
+    console.log('Share QR code',JSON.stringify(txt))
     this.setState({
       qrText: JSON.stringify(txt),
       qrShare: JSON.stringify(txt)
     });
-    console.log(txt);
   };
 
   takeScreenShot = () => {
@@ -266,6 +222,7 @@ class QRCodeGeneration extends Component {
 
   render() {
     const { params } = this.props.navigation.state;
+    console.log("QR Content:",this.state.qrText)
     let shareOptions = {
       title: 'Invitation',
       message: this.state.qrShare,
