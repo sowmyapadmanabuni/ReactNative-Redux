@@ -645,7 +645,10 @@ class Expenses extends React.Component {
         let input = {
             "EXID": expenseId
         };
+        console.log('Delete issue ',input)
         let stat = await base.services.OyeLivingApi.deleteInvoice(input)
+        console.log('Delete Invoice Working ',stat)
+
         try {
             if (stat.success) {
                 await self.getTheExpenseList(self.state.selectedBlock, self.state.getIndex)

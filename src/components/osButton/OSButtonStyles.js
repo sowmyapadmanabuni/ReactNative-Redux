@@ -14,7 +14,6 @@ const OSButtonStyles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         alignSelf: 'center',
-        fontSize: 14,
         fontWeight: 'bold'
     },
     customBtn: {

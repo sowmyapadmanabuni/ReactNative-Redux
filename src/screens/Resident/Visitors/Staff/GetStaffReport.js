@@ -183,7 +183,7 @@ class GetStaffReport extends React.Component {
 
         self.setState({isLoading: false});
 
-        console.log("GetStaffData", stat);
+        console.log("GetStaffData", stat,input);
 
 
         let initialDate = input.FromDate;

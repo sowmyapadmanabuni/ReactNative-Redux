@@ -236,8 +236,10 @@ class MyFamily extends Component {
                                 <RadioForm formHorizontal={true} animation={true}>
                                     {this.state.minorProps.map((obj, i) => {
                                         let onPress = (value, index) => {
+                                            console.log('GET THE VALUE #####',value)
                                             this.setState({
                                                 isMinorSelected: value,
+                                                isMinor:value===0?true:false
                                             })
                                         };
                                         return (
@@ -581,7 +583,10 @@ class MyFamily extends Component {
             return false
         } else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
-        } else if (self.props.dashBoardReducer.uniID === null) {
+        } else if (self.state.mobileNumber.length <10 ) {
+            alert('Please enter valid mobile number')
+        }
+        else if (self.props.dashBoardReducer.uniID === null) {
             alert('Unit id is null')
         } else if (self.props.dashBoardReducer.assId === null) {
             alert('Association id is null')
@@ -640,7 +645,7 @@ class MyFamily extends Component {
             "FMGurName": self.state.guardianName,
             "PAccntID": self.props.userReducer.MyAccountID
         };
-        console.log('MyFam', input);
+        console.log('MyFam', input,self.state.isMinorSelected);
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input);
         console.log('Stat in Add family', stat);
         console.log("full stat",input, stat);

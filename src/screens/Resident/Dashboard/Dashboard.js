@@ -14,6 +14,7 @@ import {
   ToastAndroid,
   NetInfo,
   ImageBackground,
+    ScrollView,FlatList
 } from 'react-native';
 import base from '../../../base';
 import { connect } from 'react-redux';
@@ -110,7 +111,8 @@ class Dashboard extends PureComponent {
       myUnitIconHeight: Platform.OS === 'ios' ? 30 : 20,
       myAdminIconWidth: Platform.OS === 'ios' ? 20 : 20,
       myAdminIconHeight: Platform.OS === 'ios' ? 20 : 20,
-      selectedView: 0
+      selectedView: 0,
+      invoicesList:[]
 
 
     };
@@ -139,6 +141,7 @@ class Dashboard extends PureComponent {
     this.getListOfAssociation();
     this.myProfileNet();
     this.listenRoleChange();
+    this.getInvoiceMethodsList();
 
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
@@ -845,21 +848,23 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-   
+
+
     // BackgroundTimer.runBackgroundTimer(()=>{
     //   console.log()
     //   this.syncData()
     // },5000)
-      // timer.setInterval(
-      //            this,
-      //            'syncData',
-      //            async () => {
-                  
-      //              this.syncData();
-      //            },
-      //            5000
-      //        );
-  }
+     /* timer.setInterval(
+                 this,
+                 'syncData',
+                 async () => {
+                   console.log("I am Timer");
+                   this.syncData();
+                 },
+                 5000
+             );
+    }*/}
+
 
   handleConnectivityChange = isConnected => {
     console.log('CONNECTION DATA', isConnected)
@@ -1123,8 +1128,9 @@ class Dashboard extends PureComponent {
       notifications,
       dropdown,
       updateSelectedDropDown,
-      dropdown1
+      dropdown1,
     } = this.props;
+
     console.log('Ass index', value, index, dropdown[index]);
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
@@ -1146,6 +1152,14 @@ class Dashboard extends PureComponent {
       prop: 'assId',
       value: dropdown[index].associationId
     });
+    updateIdDashboard({
+      prop: 'familyMemberCount',
+      value: ""
+    });
+    updateIdDashboard({
+      prop: 'vehiclesCount',
+      value: ""
+    });
 
     updateUserInfo({
       prop: 'SelectedAssociationID',
@@ -1161,6 +1175,7 @@ class Dashboard extends PureComponent {
       prop: 'assId',
       value: dropdown[index].associationId
     });
+
 
     base.utils.validate.checkSubscription(dropdown[index].associationId);
 
@@ -1249,6 +1264,7 @@ class Dashboard extends PureComponent {
         //     value: unitList[0].details.unUnitID
         // });
         self.roleCheckForAdmin(this.state.assocId);
+        self.getInvoiceMethodsList();
       }
     } catch (error) {
       base.utils.logger.log(error);
@@ -1344,6 +1360,7 @@ class Dashboard extends PureComponent {
       value: response.data.account[0].acImgName
     });
   };
+
 
   async myFamilyListGetData() {
     this.setState({ loading: true });
@@ -1503,9 +1520,10 @@ class Dashboard extends PureComponent {
             height: 50,
             width: 50,
             justifyContent: 'center',
-            marginTop: hp('47%'),
+            marginTop: hp('52%'),
             position: 'absolute',
-            right: Platform.OS === 'ios'? hp('1'):hp('2.5')
+            right: Platform.OS === 'ios'? hp('1'):hp('2.5'),
+           // backgroundColor:'pink'
           }}
         >
           {!this.state.isSOSSelected ? (
@@ -1741,7 +1759,7 @@ class Dashboard extends PureComponent {
                     )}
                 </View>
               </View>
-              {isAdmin?
+
               <ImageBackground
                 resizeMode={'stretch'}
                 source={selectedView === 0 ? require('../../../../icons/myunit_dashboard.png') : require("../../../../icons/admin_dashboard.png")}
@@ -1773,7 +1791,7 @@ class Dashboard extends PureComponent {
                   </TouchableHighlight>
                   <TouchableHighlight
                     underlayColor={'transparent'}
-                    onPress={() => this.setView(1)}>
+                    onPress={() => isAdmin? this.setView(1) :Alert.alert('Sorry','You are not an admin !!!')}>
                     <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
                       <Image
                         resizeMode={'contain'}
@@ -1788,33 +1806,8 @@ class Dashboard extends PureComponent {
                     </View>
                   </TouchableHighlight>
                 </View>
-              </ImageBackground>:
-              <ElevatedView
-                    elevation={10}
-                    style={{
-                        width: wp('90'), height: hp('65'), backgroundColor: 'white', borderRadius: hp('4'),top:hp('1'),
-                        shadowColor: 'grey',
-                        shadowOpacity: 1.0,
-                    }}
-                >
-                  {this.myUnitCard()}
-                {this.renderSOS()}
-                <View style={{ flexDirection: 'row', marginTop: hp('25'), justifyContent: 'center', width: wp('65'), alignSelf: 'center', borderWidth: 0, alignItems: 'flex-end' }}>
-                  
-                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
-                      <Image
-                        resizeMode={'contain'}
-                        style={{
-                          width: hp('4%'),
-                          height: hp('4%'),
-                        }}
-                        source={require('../../../../icons/my_unit.png')}
-                      />
-                      <Text allowFontScaling={false}>My Unit</Text>
+              </ImageBackground>
 
-                    </View>
-                </View>
-              </ElevatedView>}
               <View style={{height: '6%',
                             width: '100%',
                             alignItems: 'center',
@@ -1822,10 +1815,12 @@ class Dashboard extends PureComponent {
                             borderColor: base.theme.colors.primary,
                             borderWidth: 0,
                             position:'absolute',
-                            marginBottom: hp('5'),
+                           // marginBottom: hp('5'),
                             justifyContent: 'flex-start',
-                            top:hp('80'),
-                            flexDirection: 'row'}}>
+                            top:hp('82'),
+                            flexDirection: 'row'
+              }}>
+
                               <View style={{borderWidth:0}}>
                               <Image
                     resizeMode={'cover'}
@@ -1854,7 +1849,7 @@ class Dashboard extends PureComponent {
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
-                    
+
                   >
                     <Image
                     resizeMode={'cover'}
@@ -2025,20 +2020,8 @@ class Dashboard extends PureComponent {
 
   myUnitCard() {
     const { dropdown, dropdown1 } = this.props;
-    let invoiceList = [
-      {
-        invoiceNumber: 528,
-        bill: '12,300',
-        dueDate: '11-May-2019',
-        status: 'NOT PAID'
-      },
-      {
-        invoiceNumber: 527,
-        bill: '12,800',
-        dueDate: '8-May-2019',
-        status: 'PAID'
-      }
-    ];
+    //this.state.invoicesList
+    let invoiceList =this.state.invoicesList;
     console.log('FamilyList count', this.props.dashBoardReducer);
     return (
       <View style={Style.mainElevatedView}>
@@ -2055,6 +2038,7 @@ class Dashboard extends PureComponent {
             textFontSize={Platform.OS === 'ios' ? 8 : 12}
 
             onCardClick={() =>
+
                dropdown.length === 0
                    ? this.props.navigation.navigate('CreateOrJoinScreen')
                    : dropdown1.length === 0
@@ -2100,8 +2084,8 @@ class Dashboard extends PureComponent {
             onCardClick={() => this.goToFirstTab()}
           />
         </View>
-        <View style={Style.elevatedViewSub}>
-          {/* <CardView
+        {/*<View style={Style.elevatedViewSub}>
+           <CardView
                         height={"100%"}
                         width={"39%"} cardText={'Documents'}
                         cardIcon={require("../../../../icons/report.png")}
@@ -2114,14 +2098,19 @@ class Dashboard extends PureComponent {
                         cardIcon={require("../../../../icons/tickets.png")}
                         cardCount={2}
                         backgroundColor={base.theme.colors.shadedWhite}
-                    /> */}
-        </View>
-        {/* <ElevatedView elevation={0} style={Style.invoiceCardView}>
+                    />
+        </View>*/}
+        <ElevatedView elevation={5} style={Style.invoiceCardView}>
                     <View style={Style.invoiceHeadingView}>
                         <Text style={Style.invoiceText}>Invoices</Text>
-                        <TouchableOpacity>
-                            <Text style={Style.viewMoreText}>View more</Text>
+                      {invoiceList.length > 0?
+                        <TouchableOpacity style={{}} onPress={()=>this.props.navigation.navigate('ViewInvoiceList')}>
+
+                          <Text style={Style.viewMoreText}>View more</Text>
+
                         </TouchableOpacity>
+                          :
+                          <View/>}
                     </View>
                     {invoiceList.length > 0 ?
                         <ScrollView style={Style.scrollView}>
@@ -2139,10 +2128,65 @@ class Dashboard extends PureComponent {
                         </View>
                     }
                 </ElevatedView>
-            */}
+
 
 
       </View>
+    );
+  }
+
+  async getInvoiceMethodsList() {
+
+    let stat = await base.services.OyeLivingApi.getTheInvoicesOfResident(this.props.dashBoardReducer.assId,
+        this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
+    console.log('RESPONSE_INVOICES_RESIDENT',stat)
+    try {
+      if (stat.success) {
+        let invoicesList=stat.data.invoices;
+        this.setState({
+          invoicesList:invoicesList
+        })
+
+    }} catch (error) {
+
+      console.log('error', error)
+    }
+  }
+
+  listOfInvoices(item) {
+    console.log('FLATLIST_ITEM_INVOICES',item)
+    return (
+        <TouchableHighlight underlayColor={'transparent'} onPress={()=>this.props.navigation.navigate('ViewInvoice',{item:item})}>
+          <View style={Style.invoiceView}>
+            <View style={Style.invoiceSubView}>
+              <Text style={Style.invoiceNumberText}>
+                Invoice No. {item.item.inNumber}
+              </Text>
+              <Text style={Style.billText}>
+                <Text style={Style.rupeeIcon}>{'\u20B9'}</Text>
+                {item.item.inTotVal}
+              </Text>
+            </View>
+            <View style={Style.invoiceSubView}>
+              <Text style={Style.dueDate}>Invoice Date {moment(item.item.inGenDate,'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
+{/*
+              <Text style={Style.dueDate}>Due on. {moment(item.item.inGenDate,'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
+*/}
+              <OSButton
+                  height={'80%'}
+                  width={'25%'}
+                  borderRadius={15}
+                  oSBBackground={
+                    item.item.inPaid === 'Yes'
+                        ? base.theme.colors.grey
+                        : base.theme.colors.primary
+                  }
+                  oSBText={item.item.inPaid === 'Yes' ? 'Paid' : 'Pay Now'}
+                  oSBTextSize={11}
+              />
+            </View>
+          </View>
+        </TouchableHighlight>
     );
   }
 
@@ -2433,38 +2477,7 @@ class Dashboard extends PureComponent {
     );
   }
 
-  listOfInvoices(item) {
-    base.utils.logger.log(item);
-    return (
-      <TouchableHighlight underlayColor={'transparent'}>
-        <View style={Style.invoiceView}>
-          <View style={Style.invoiceSubView}>
-            <Text style={Style.invoiceNumberText}>
-              Invoice No. {item.item.invoiceNumber}
-            </Text>
-            <Text style={Style.billText}>
-              <Text style={Style.rupeeIcon}>{'\u20B9'}</Text>
-              {item.item.bill}
-            </Text>
-          </View>
-          <View style={Style.invoiceSubView}>
-            <Text style={Style.dueDate}>Due No. {item.item.dueDate}</Text>
-            <OSButton
-              height={'80%'}
-              width={'25%'}
-              borderRadius={15}
-              oSBBackground={
-                item.item.status === 'PAID'
-                  ? base.theme.colors.grey
-                  : base.theme.colors.primary
-              }
-              oSBText={item.item.status === 'PAID' ? 'Paid' : 'Pay Now'}
-            />
-          </View>
-        </View>
-      </TouchableHighlight>
-    );
-  }
+
 
   myUnit() { }
 

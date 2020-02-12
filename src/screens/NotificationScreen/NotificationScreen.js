@@ -100,12 +100,12 @@ class NotificationScreen extends PureComponent {
     //  #ff0000-ExitRejected
 
     componentWillMount() {
-       
+
 
     }
 
 
-    
+
     componentWillReceiveProps(props){
         this.setState({
             isModalOpen:false
@@ -124,8 +124,8 @@ class NotificationScreen extends PureComponent {
         if (Platform.OS != 'ios') {
             BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
-        
-        
+
+
 
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
@@ -137,11 +137,12 @@ class NotificationScreen extends PureComponent {
             .then(res => {
                 this.setState({ currentTime: res.data.data.currentDateTime }, () => {
 
+
                         setInterval(()=>{
                             this.segregateNotification();
                         },5000)
-                    
-                    
+
+
                 });
             })
             .catch(error => {
@@ -156,6 +157,7 @@ class NotificationScreen extends PureComponent {
     segregateNotification() {
 
         let notificationList = this.props.notifications;
+        console.log('Calling this function',notificationList)
         let unitNotification = [];
         let adminNotification = [];
 
@@ -178,7 +180,7 @@ class NotificationScreen extends PureComponent {
 
 
     componentWillUnmount() {
-        
+
         if (Platform.OS != 'ios') {
             BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
@@ -237,7 +239,7 @@ class NotificationScreen extends PureComponent {
     acceptgateVisitor = (visitorId, index, associationid, visitorStatus, notifiId, approvedBy) => {
 
 
-
+        console.log('SENDING STATUS TO ACCEPT NOTIFICATION',visitorId, index, associationid, visitorStatus, notifiId, approvedBy)
         let oldNotif = [...this.props.notifications];
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
@@ -252,6 +254,8 @@ class NotificationScreen extends PureComponent {
                 }
             }
         }
+        console.log('DELETE ARRAY NOTIFICATION',delArray)
+
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
                 headers: {
@@ -353,7 +357,9 @@ class NotificationScreen extends PureComponent {
             });
     };
 
-    declinegateVisitor = (visitorId, index, associationid, visitorStatus, approvedBy) => {
+    declinegateVisitor = (visitorId, index, associationid, visitorStatus,notifiId, approvedBy) => {
+        console.log('SENDING STATUS TO ACCEPT NOTIFICATION!!!!!',visitorId, index, associationid, visitorStatus, notifiId, approvedBy)
+          //visitorId, index, associationid, visitorStatus, notifiId, approvedBy
         let oldNotif = [...this.props.notifications];
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
@@ -368,6 +374,8 @@ class NotificationScreen extends PureComponent {
                 }
             }
         }
+        console.log('DELETE ARRAY NOTIFICATION!!!!!!',delArray)
+
 
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
@@ -600,7 +608,7 @@ class NotificationScreen extends PureComponent {
                     </View>
                     <View style={{ backgroundColor: base.theme.colors.white,top:hp('6') }}>
                         <Collapsible duration={100} collapsed={item.open}
-                       
+
                         >
                         <View
                                         style={{
@@ -633,7 +641,7 @@ class NotificationScreen extends PureComponent {
                                 //this.openNotification(notifications, index, oyeURL);
                                 this.props.onNotificationOpen(notifications, index, oyeURL,item.ntid);
                             }
-                            
+
                         }}>
                             <View style={{
                                 width: 45,
@@ -644,7 +652,7 @@ class NotificationScreen extends PureComponent {
                             }} >
                             </View>
                         </TouchableOpacity>
-                        
+
                     </View>
                 </TouchableOpacity>
             )
@@ -685,7 +693,7 @@ class NotificationScreen extends PureComponent {
                             //this.toggledCollapsible(notifications, item.open, index, item)
                            // this.props.toggleCollapsible(notifications, item.open, index, item)
                         }
-                        
+
                     }}>
 
 
@@ -814,6 +822,7 @@ class NotificationScreen extends PureComponent {
                                                     item.asAssnID,
                                                     "EntryApproved",
                                                     item.ntid,
+                                                    item.vlApprdBy
                                                 );
                                             }} style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
@@ -829,6 +838,7 @@ class NotificationScreen extends PureComponent {
                                                     item.asAssnID,
                                                     "EntryRejected",
                                                     item.ntid,
+                                                    item.vlApprdBy
 
                                                 )
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1005,7 +1015,7 @@ class NotificationScreen extends PureComponent {
     renderDetails = (details,notifications, index, oyeURL) => {
         const { navigation } = this.props;
         //const details = navigation.getParam('details', 'NO-ID');
-    
+
         console.log('DETAILS', details);
         return (
           <View >
@@ -1042,7 +1052,7 @@ class NotificationScreen extends PureComponent {
                         <Text>Mobile</Text>
                       </View>
                     <View style={{ flex: 5, zIndex: 100 }}>
-    
+
                           <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => {
                               {
                                   Platform.OS === 'android'
@@ -1089,10 +1099,10 @@ class NotificationScreen extends PureComponent {
                       borderBottomWidth: 0,
                       borderColor:base.theme.colors.greyCard,
                       marginTop:10
-    
+
                   }}
               />
-    
+
           </View>
         );
       };
@@ -1103,7 +1113,7 @@ class NotificationScreen extends PureComponent {
             isModalOpen1:true,
             detailsToReject:details
         })
-  
+
     }
     renderRejectModal(){
         console.log('REJECT MODAL BOX',this.state.isModalOpen1)
@@ -1175,12 +1185,12 @@ class NotificationScreen extends PureComponent {
           let MemberID = global.MyOYEMemberID;
           this.setState({ loading: true });
           console.log("Approval:",item,oyeURL,champBaseURL);
-    
+
           const headers = {
             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
             'Content-Type': 'application/json'
           };
-    
+
           console.log(
             {
               MRMRoleID: item.sbRoleID,
@@ -1214,7 +1224,7 @@ class NotificationScreen extends PureComponent {
             )
             .then(response => {
               let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
-    
+
               axios
                 .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
                   sbSubID: item.sbSubID,
@@ -1239,13 +1249,13 @@ class NotificationScreen extends PureComponent {
                     UNSldDate: item.unSldDate,
                     UNOcSDate: item.unOcSDate
                   };
-    
+
                  let UpdateTenant = {
                     MEMemID: item.sbMemID,
                     UNUnitID: item.sbUnitID,
                     MRMRoleID: item.sbRoleID
                   };
-    
+
                   this.props.createUserNotification(
                     'Join_Status',
                     this.props.oyeURL,
@@ -1270,7 +1280,7 @@ class NotificationScreen extends PureComponent {
                     false,
                     this.props.MyAccountID
                   );
-    
+
                   fetch(
                     `${champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
                     {
@@ -1300,13 +1310,13 @@ class NotificationScreen extends PureComponent {
                         .then(responseJson_2 => {
                           console.log(JSON.stringify(UpdateTenant));
                           console.log(responseJson_2);
-    
+
                          let StatusUpdate = {
                             NTID: item.ntid,
                             NTStatDesc: 'Request Sent'
                             //NTStatDesc: responseJson_2.data.string
                           };
-    
+
                           fetch(
                             `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
                             {
@@ -1351,7 +1361,7 @@ class NotificationScreen extends PureComponent {
                                     loading: false,
                                     date: StatusUpdate.NTStatDesc
                                   });
-    
+
                                   setTimeout(() => {
                                     this.props.navigation.navigate('ResDashBoard');
                                   }, 300);
@@ -1363,7 +1373,7 @@ class NotificationScreen extends PureComponent {
                                     loading: false
                                   });
                                 });
-    
+
                               // this.props.updateApproveAdmin(
                               //   this.props.approvedAdmins,
                               //   item.sbSubID
@@ -1400,11 +1410,11 @@ class NotificationScreen extends PureComponent {
             });
         }).catch(error=>{
             console.log("Error:",error);
-            
+
         })
        // }
       };
-    
+
       reject = (item, status) => {
           this.setState({
               isModalOpen1:false
@@ -1420,7 +1430,7 @@ class NotificationScreen extends PureComponent {
           );
         } else {
           this.setState({ loading: true });
-    
+
           const headers = {
             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
             'Content-Type': 'application/json'
@@ -1490,7 +1500,7 @@ class NotificationScreen extends PureComponent {
                         false,
                         this.props.MyAccountID
                       );
-    
+
                       axios
                         .post(
                           `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
@@ -1511,7 +1521,7 @@ class NotificationScreen extends PureComponent {
                             this.props.oyeURL,
                             this.props.MyAccountID
                           );
-    
+
                           this.setState({ loading: false });
                           // this.props.updateApproveAdmin(
                           //   this.props.approvedAdmins,
@@ -1615,8 +1625,6 @@ class NotificationScreen extends PureComponent {
                 <View
                     style={{
                         flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
                         backgroundColor: '#fff',alignSelf:'center',alignItems:'center',justifyContent:'center',top:hp('20')
                     }}
                 >
@@ -1818,7 +1826,7 @@ class NotificationScreen extends PureComponent {
                     resizeMode={'stretch'}
                     style={{ width: wp('110'), height: hp('100'),alignSelf:'center' }}
                     source={selectedView === 0 ? require('../../../icons/myunit_notifn.png') : require('../../../icons/admin_notifn.png')}>
-                    <View style={{ flexDirection: 'row', top: hp('5'), justifyContent: 'space-between', width: wp('78'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', height: hp('10'), borderWidth: 0 }}>
+                    <View style={{ flexDirection: 'row', top: hp('5'), justifyContent: 'space-between', width: wp('78'), alignSelf: 'center',  alignItems: 'center', height: hp('10'), borderWidth: 0 }}>
                         <TouchableHighlight
                             underlayColor={'transparent'}
                             style={{borderWidth:0,bottom:hp('2.5'),height:hp('10')}}
@@ -1842,7 +1850,7 @@ class NotificationScreen extends PureComponent {
                         {this.renderSearch()}
                         {this.renderComponent()}
                     </View>
-                </ImageBackground> 
+                </ImageBackground>
                 :
                 <ElevatedView
                     elevation={10}
@@ -1884,14 +1892,14 @@ class NotificationScreen extends PureComponent {
 
             if(notificationList.length !== 0){
                 for (let i in notificationList) {
-                    
+
                     if(selectedView === 0){
                         let associationName = notificationList[i].asAsnName;
                         let unitName = notificationList[i].unUniName;
                         let ntType = notificationList[i].ntType;
                         console.log("DJNVKJVB:",ntType);
-                        
-                            if ((associationName.toLowerCase()).includes(formattedText) || (unitName.toLowerCase()).includes(formattedText) 
+
+                            if ((associationName.toLowerCase()).includes(formattedText) || (unitName.toLowerCase()).includes(formattedText)
                             || ntType.toLowerCase().includes(formattedText) || notificationList[i].ntDesc.toLowerCase().includes(formattedText) || notificationList[i].vlfName.toLowerCase().includes(formattedText)
                      || notificationList[i].vlMobile.toLowerCase().includes(formattedText) ) {
                                 console.log("KLNVKGDVJHBD<CNJDVBV<NVNBJDBC<JCHJKRHE<JHJKR:", notificationList[i])
@@ -1902,7 +1910,7 @@ class NotificationScreen extends PureComponent {
                             console.log("KLNVKGDVJHBD<CNJDVBV<NVNBJDBC<JCHJKRHE<JHJKR:", notificationList[i])
                             newArr.push(notificationList[i])
                         }
-                    }       
+                    }
                 }
             }
         }
@@ -2027,17 +2035,17 @@ class NotificationScreen extends PureComponent {
         console.log('DETAILS########', details.userImage)
         let status;
 
-        
+
              if (details.ntType === 'gate_app') {
                 return null;
-            } 
+            }
             else{
                 {
                     status = (
                                 <TouchableOpacity style={{
                                     width: wp('10%'),
                                     height: hp('10%'),
-                                    justifyContent: 'center', alignSelf: 'center', alignSelf: 'center', borderWidth: 0,
+                                    justifyContent: 'center',  alignSelf: 'center', borderWidth: 0,
                                     alignItems: 'center', marginLeft: 0,position: 'relative', top: hp('3')
                                 }}
                                     onPress={() => this._enlargeImage(details.userImage != "" ? "https://mediaupload.oyespace.com/" + details.userImage : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
@@ -2061,12 +2069,12 @@ class NotificationScreen extends PureComponent {
                                             }}
                                             source={{ uri: 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder }}
                                         />}
-                                </TouchableOpacity>                                
+                                </TouchableOpacity>
                     );
-                }        
+                }
             }
             return status;
-        
+
     };
 
 
@@ -2074,15 +2082,15 @@ class NotificationScreen extends PureComponent {
         const { navigation, champBaseURL } = this.props;
         //const details = navigation.getParam('details', 'NO-ID');
         console.log(details, 'detailssss hitting here');
-    
+
         let roleId;
-    
+
         if (parseInt(details.sbRoleID) === 2) {
           roleId = 6;
         } else {
           roleId = 7;
         }
-    
+
         axios
           .post(
             `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
@@ -2101,7 +2109,7 @@ class NotificationScreen extends PureComponent {
           .then(res => {
             this.setState({ adminStatLoading: false });
             let data = res.data.data;
-    
+
             console.log(data, res, 'adminData');
             if (data) {
               if (
@@ -2123,7 +2131,7 @@ class NotificationScreen extends PureComponent {
             console.log(error, 'adminDataError');
             this.setState({ adminStatLoading: false });
           });
-    
+
         fetch(
           `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
           {
@@ -2173,7 +2181,7 @@ class NotificationScreen extends PureComponent {
           .catch(error => {
             console.log(error);
           });
-    
+
         fetch(
           //http://api.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/35894
           `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${details.sbUnitID}`,
@@ -2213,7 +2221,7 @@ class NotificationScreen extends PureComponent {
                     responseJson.data.unit.tenant[j].utlName,
                   number: responseJson.data.unit.tenant[j].utMobile
                 });
-    
+
                 // arr2.push(responseJson.data.unit.tenant[j])
               }
             }

@@ -15,7 +15,9 @@ class OSButton extends React.Component {
         oSBTextColor: PropTypes.string,
         onButtonClick: PropTypes.func,
         oSBType: PropTypes.oneOf(['normal', 'custom']).isRequired,
-        disabled:PropTypes.bool
+        disabled:PropTypes.bool,
+        oSBTextSize: PropTypes.number
+
     };
     static defaultProps = {
         height: '30%',
@@ -25,6 +27,7 @@ class OSButton extends React.Component {
         oSBBackground: base.theme.colors.primary,
         oSBType: 'normal',
         oSBTextColor: base.theme.colors.white,
+        oSBTextSize:14,
         disabled:false
 
     };
@@ -59,7 +62,7 @@ class OSButton extends React.Component {
                                   ...this.props.style
                               }]}>
                 <Text style={[OSButtonStyles.confirmText, {
-                    color: this.props.oSBTextColor
+                    color: this.props.oSBTextColor,fontSize:this.props.oSBTextSize,...this.props.style
                 }]}>{this.props.oSBText}</Text>
             </TouchableOpacity>
 

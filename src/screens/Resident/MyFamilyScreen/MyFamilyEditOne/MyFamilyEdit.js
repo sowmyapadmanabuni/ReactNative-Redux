@@ -386,8 +386,14 @@ class MyFamilyEdit extends Component {
         let self = this;
         ImagePicker.showImagePicker(options, (response) => {
             if (response.didCancel) {
+                console.log('ImagePicker1111 : ', response);
+
             } else if (response.error) {
+                console.log('ImagePicker22222 : ', response);
+
             } else if (response.customButton) {
+                console.log('ImagePicker3333 : ', response);
+
             } else {
                 console.log('ImagePicker : ', response);
                 console.log('response', response);
@@ -559,6 +565,8 @@ class MyFamilyEdit extends Component {
             alert('Guardian name is Mandatory')
         } else if (self.state.mobileNumber === "") {
             alert('Please enter mobile number')
+        }else if (self.state.mobileNumber.length<10) {
+            alert('Please enter valid mobile number')
         } else if (self.props.dashBoardReducer.uniID === null) {
             alert('Unit id is null')
         } else if (self.props.dashBoardReducer.assId === null) {

@@ -113,6 +113,7 @@ export const getDashAssoSync = (
     )
       .then(response => response.json())
       .then(responseJson => {
+        console.log('GET THE REPSONCE',responseJson)
         if (responseJson.success) {
           let associations = responseJson.data.memberListByAccount;
 
