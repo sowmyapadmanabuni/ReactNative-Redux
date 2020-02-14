@@ -149,51 +149,8 @@ class Dashboard extends PureComponent {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     console.log('API LEVEL#######', DeviceInfo.getAPILevel())
     console.log('API LEVEL#######1111111', DeviceInfo.getBaseOS())
-    console.log('API LEVEL#######444444', DeviceInfo.getSystemVersion())
+    console.log('API LEVEL#######444444', DeviceInfo.getSystemVersion())  
   }
-
-  /*componentDidUpdate() {
-    if (Platform.OS === 'android') {
-      setTimeout(() => {
-        this.backButtonListener = BackHandler.addEventListener(
-            'hardwareBackPress',
-            () => {
-              console.log("this.props.navigation.state.routeName", this.props.navigation.state.routeName);
-              if (this.currentRouteName !== 'Main') {
-                console.log("<< 1 >>");
-                this.props.navigation.goBack(null);
-                //return false;
-              }
-              if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-                console.log("<< 2 >>");
-                this.props.navigation.goBack(null);
-                this.showExitAlert();
-                // BackHandler.exitApp();
-                return true;
-              }
-              if (this.state.isSelectedCard === 'UNIT') {
-                //this.props.navigation.goBack(null);
-                console.log("<< 3 >>");
-                this.showExitAlert();
-
-                //this.props.navigation.goBack(null);
-                //BackHandler.exitApp();
-              } else if(this.state.isSelectedCard !== 'UNIT'){
-                console.log("<< else >>")
-                this.changeCardStatus('UNIT');
-              }
-              else{
-                this.props.navigation.goBack(null);
-              }
-
-              this.lastBackButtonPress = new Date().getTime();
-              console.log("return true;");
-              return true;
-            }
-        );
-      }, 100);
-    }
-  }*/
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -205,7 +162,6 @@ class Dashboard extends PureComponent {
   handleBackButtonClick() {
     if (Platform.OS === 'android') {
       if (this.state.isSelectedCard === 'UNIT') {
-        //this.props.navigation.goBack(null);
         ToastAndroid.show('Press again to exit app', ToastAndroid.SHORT);
 
         var doubleClick = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -217,8 +173,6 @@ class Dashboard extends PureComponent {
           },
           1500
         );
-        //console.log("TIME: ",new Date().getTime())
-        //this.showExitAlert();
       } else if (this.state.isSelectedCard !== 'UNIT') {
         this.changeCardStatus('UNIT');
       }
@@ -625,9 +579,6 @@ class Dashboard extends PureComponent {
       this.notificationListener = firebase
         .notifications()
         .onNotification(notification => {
-
-
-
           console.log('___________');
           console.log("NOTIFICATION@@@@",notification);
           console.log('NOTIFICATION@@@@____________', notification.data.unitName,notification.data.associationID,notification.data.associationName);

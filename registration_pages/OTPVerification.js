@@ -95,7 +95,7 @@ class OTPVerification extends Component {
             })
             setTimeout(()=>{
                 Alert.alert("OTP Number cannot be Empty");
-            },1000) 
+            },500) 
             
         } else if (otp_number.length < 6) {
             this.setState({
@@ -103,7 +103,7 @@ class OTPVerification extends Component {
             })
             setTimeout(()=>{
                 alert("Enter 6 digit OTP Number");
-            },1000) 
+            },500) 
             return false;
         } else {
             let anu = {
@@ -188,7 +188,7 @@ class OTPVerification extends Component {
                         console.log("hiii", "failed" + anu);
                         setTimeout(()=>{
                             alert("Invalid OTP, check Mobile Number and try again");
-                        },1000)
+                        },500)
                     }
 
                     console.log("suvarna", "hi");

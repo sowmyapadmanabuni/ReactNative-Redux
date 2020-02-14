@@ -100,8 +100,6 @@ class NotificationScreen extends PureComponent {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
-    //  #ff0000-ExitRejected
-
     componentWillMount() {
 
 
@@ -141,19 +139,14 @@ class NotificationScreen extends PureComponent {
             .then(res => {
                 this.setState({ currentTime: res.data.data.currentDateTime }, () => {
 
-
                         setInterval(()=>{
                             this.segregateNotification();
                         },5000)
-
-
                 });
             })
             .catch(error => {
                 this.setState({ currentTime: 'failed' }, () => {
-
                         this.segregateNotification();
-
                 });
             });
     }
