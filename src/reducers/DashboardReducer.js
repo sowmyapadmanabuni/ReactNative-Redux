@@ -38,8 +38,8 @@ const INITIAL_STATE = {
     selectedDropdown1: "",
     called: false,
     role: "",
-    familyMemberCount: 0,
-    vehiclesCount: 0,
+    familyMemberCount: "",
+    vehiclesCount: "",
     roleId: null,
     isInternetConnected:true
 };

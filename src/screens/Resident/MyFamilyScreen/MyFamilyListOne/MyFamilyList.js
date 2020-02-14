@@ -125,20 +125,32 @@ class MyFamilyList extends React.Component {
         );
         //console.log("Get Family Data", myFamilyList); //this.props.userReducer.MyAccountID
         this.setState({isLoading: false, loading: false});
+        console.log('GET THE FAMILY MEMBER DATA',myFamilyList)
         try {
             if (myFamilyList.success && myFamilyList.data) {
+
+                let familyData=myFamilyList.data.familyMembers
+                let reqData=[]
+                for(let i=0;i<familyData.length;i++){
+                    if(familyData[i].acAccntID!==this.props.userReducer.MyAccountID){
+                        reqData.push(familyData[i])
+                    }
+
+                }
+                console.log('REQDATA',reqData)
+
                 this.setState({
-                    myfamily11: myFamilyList.data.familyMembers.sort((a, b) =>
+                    myfamily11: reqData.sort((a, b) =>
                         a.fmName > b.fmName ? 1 : -1
                     ),
-                    clonedList: myFamilyList.data.familyMembers.sort((a, b) =>
+                    clonedList:reqData.sort((a, b) =>
                         a.fmName > b.fmName ? 1 : -1
                     )
                 });
                 const {updateIdDashboard} = this.props;
                 updateIdDashboard({
                     prop: 'familyMemberCount',
-                    value: myFamilyList.data.familyMembers.length
+                    value: reqData.length
                 });
                 this.setState({familyData: myFamilyList});
             } else {
@@ -203,7 +215,7 @@ class MyFamilyList extends React.Component {
 
     renderItem = ({item, index}) => {
         let itemID = item.id;
-        console.log('ITEM', item, index);
+        console.log('ITEM>>>>>>>>>>>>>', item, index,this.props.MyAccountID);
         return (
             <View
                 style={[
@@ -259,6 +271,7 @@ class MyFamilyList extends React.Component {
                     </View>
                     <View style={Style.editAndCallIconsFlexStyle}>
                         <View style={Style.threeBtnStyle}>
+
                             <TouchableOpacity
                                 onPress={() => {
                                     this.props.navigation.navigate('MyFamilyEdit', {
@@ -276,11 +289,18 @@ class MyFamilyList extends React.Component {
                                         fmisdCode: item.fmisdCode,
                                         fmlName: item.fmlName,
                                         meMemID: item.meMemID,
-                                        unUnitID: item.unUnitID
+                                        unUnitID: item.unUnitID,
+                                        isView:item.pAccntID !== this.props.MyAccountID
                                     });
                                 }}
                             >
+                                {item.pAccntID===this.props.MyAccountID ?
                                 <Icon color="#ff8c00" size={wp('5%')} name="edit"/>
+                                :
+                                    <Image
+                                        style={Style.editAndCallButtonIconImageStyle}
+                                        source={require("../../../../../icons/eye.png")}
+                                    /> }
                                 {/* <Image
                   style={Style.editAndCallButtonIconImageStyle}
                   source={require("../../../../../icons/edit.png")}
@@ -307,6 +327,8 @@ class MyFamilyList extends React.Component {
                         </View>
 
                         <View style={Style.threeBtnStyle}>
+                            {item.pAccntID===this.props.MyAccountID ?
+
                             <TouchableOpacity onPress={() => this.deleteData(item.fmid)}>
                                 <Icon color="#ff8c00" size={wp('5%')} name="delete"/>
                                 {/* <Image
@@ -314,6 +336,9 @@ class MyFamilyList extends React.Component {
                   source={require("../../../../../icons/delete.png")}
                 /> */}
                             </TouchableOpacity>
+                                :
+                                <View/>
+                            }
                         </View>
                     </View>
                 </View>
@@ -478,7 +503,7 @@ class MyFamilyList extends React.Component {
                         </Item>
                     </View>
 
-                    
+
                         <FlatList
                             contentContainerStyle={this.state.myfamily11.length === 0 && Style.centerEmptySet}
                             style={{marginTop: hp('2%')}}
@@ -498,6 +523,7 @@ class MyFamilyList extends React.Component {
                                 backgroundColor: 'white'
                             }}
                         >
+
                             <Icon
                                 size={hp('10%')}
                                 style={{margin: hp('1%')}}
@@ -527,6 +553,7 @@ class MyFamilyList extends React.Component {
                         height: hp('6.5%'),
                     }}>
                         <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
+
                     </View>
                     {/*<TouchableOpacity
                     style={Style.floatButton}
@@ -555,7 +582,9 @@ const mapStateToProps = state => {
         oyeURL: state.OyespaceReducer.oyeURL,
         mediaupload: state.OyespaceReducer.mediaupload,
         dashBoardReducer: state.DashboardReducer,
-        userReducer: state.UserReducer
+        userReducer: state.UserReducer,
+        MyAccountID: state.UserReducer.MyAccountID,
+
     };
 };
 

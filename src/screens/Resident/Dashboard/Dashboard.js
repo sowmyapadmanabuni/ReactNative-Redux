@@ -255,6 +255,7 @@ class Dashboard extends PureComponent {
     }
 
     if (count === 0 && isNotificationClicked) {
+      console.log("COMING HERE")
       this.props.navigation.navigate('NotificationScreen');
     }
   }
@@ -631,7 +632,8 @@ class Dashboard extends PureComponent {
           console.log('___________');
           console.log("NOTIFICATION@@@@",notification);
           console.log('NOTIFICATION@@@@____________', notification.data.unitName,notification.data.associationID,notification.data.associationName);
-         this.changeTheAssociation(notification.data.associationName,notification.data.associationID)
+
+           //  this.changeTheAssociation(notification.data.associationName,notification.data.associationID,)
 
           if (notification._data.associationID) {
             // this.props.createNotification(notification._data, navigationInstance, false)
@@ -747,6 +749,12 @@ class Dashboard extends PureComponent {
 
         //     }
         // });
+       // ntType
+        if(notificationOpen.notification.data.ntType==="Join"){
+          this.changeTheAssociation(notificationOpen.notification.data.associationName,notificationOpen.notification.data.associationID,
+              notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.mrRolName)
+        }
+
         this.readFBRTB(true);
         //this.props.navigation.navigate('NotificationScreen');
       });
@@ -1121,7 +1129,7 @@ class Dashboard extends PureComponent {
   }
 
 
-  changeTheAssociation = (value, assId) => {
+  changeTheAssociation = (value, assId,unitId,unitName) => {
 
     const {
       associationid,
@@ -1168,6 +1176,22 @@ class Dashboard extends PureComponent {
     updateSelectedDropDown({
       prop: 'assId',
       value: assId
+    });
+    updateUserInfo({
+      prop: 'SelectedUnitID',
+      value: unitId
+    });
+    updateIdDashboard({
+      prop: 'uniID',
+      value:unitId
+    });
+    updateSelectedDropDown({
+      prop: 'uniID',
+      value: unitId
+    });
+    updateSelectedDropDown({
+      prop: 'selectedDropdown1',
+      value:unitName
     });
 
     this.roleCheckForAdmin(assId);
@@ -1440,14 +1464,21 @@ class Dashboard extends PureComponent {
     this.setState({ isLoading: false, loading: false });
     try {
       if (myFamilyList.success && myFamilyList.data) {
+        let familyData=myFamilyList.data.familyMembers
+        let reqData=[]
+        for(let i=0;i<familyData.length;i++){
+          if(familyData[i].acAccntID !== this.props.userReducer.MyAccountID){
+            reqData.push(familyData[i])
+          }
+        }
         this.setState({
-          falmilyMemebCount: myFamilyList.data.familyMembers.length
+          falmilyMemebCount: reqData.length
         });
         const { updateIdDashboard } = this.props;
         console.log('updateIdDashboard1', this.props);
         updateIdDashboard({
           prop: 'familyMemberCount',
-          value: myFamilyList.data.familyMembers.length
+          value: reqData.length
         });
       }
     } catch (error) {

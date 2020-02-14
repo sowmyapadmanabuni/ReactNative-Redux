@@ -159,14 +159,14 @@ class NotificationScreen extends PureComponent {
     }
 
     segregateNotification() {
-        
+
         let notificationList = this.props.notifications;
         console.log('Calling this function',notificationList)
         let unitNotification = [];
         let adminNotification = [];
 
         for (let i in notificationList) {
-            if (notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join" || notificationList[i].ntType === "Join_Status") {
+            if (notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join" ) {
                 adminNotification.push(notificationList[i])
             } else {
                 unitNotification.push(notificationList[i])
@@ -1073,7 +1073,7 @@ class NotificationScreen extends PureComponent {
                 </View>
               )}
             />
-            {details.ntJoinStat === ""?
+            {details.ntJoinStat === "" && details.ntType !=="Join_Status"?
              <View style={{flexDirection:'row',alignItems:'flex-end',alignSelf:'flex-end',marginTop:hp('2')}}>
                       <TouchableOpacity onPress={() => {
                           this.approve(details,notifications, index, oyeURL)

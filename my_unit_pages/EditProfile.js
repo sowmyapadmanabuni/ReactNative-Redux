@@ -81,8 +81,10 @@ class EditProfile extends Component {
             alterCName: this.props.navigation.state.params.alterCName == "+91" ? 'IN' : this.props.navigation.state.params.alterCName,
             primaryEmail: this.props.navigation.state.params.primaryEmail,
             alterEmail: this.props.navigation.state.params.alterEmail,
-            myProfileImage: this.props.navigation.state.params.myProfileImage !== "" ?
-                "https://mediaupload.oyespace.com/" + this.props.navigation.state.params.myProfileImage : "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
+            myProfileImage: this.props.navigation.state.params.myProfileImage !== "" ||
+            this.props.navigation.state.params.myProfileImage !== "null" ?
+                "https://mediaupload.oyespace.com/" + this.props.navigation.state.params.myProfileImage
+                : "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
             imageUrl: this.props.navigation.state.params.myProfileImage,
             alterCca: this.props.navigation.state.params.alterCca,
             primeCca: this.props.navigation.state.params.primeCca,

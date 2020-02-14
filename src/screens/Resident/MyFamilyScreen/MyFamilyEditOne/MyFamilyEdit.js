@@ -65,6 +65,7 @@ class MyFamilyEdit extends Component {
             photoDetails: null,
             isPhotoAvailable: false,
             filePath: '',
+            isView:false
         }
         this.processBackPress = this.processBackPress.bind(this);
     }
@@ -84,7 +85,9 @@ class MyFamilyEdit extends Component {
             guardianName: this.props.navigation.state.params.fmGurName,
             cCode: this.props.navigation.state.params.fmisdCode,
             isMinorSelected: this.props.navigation.state.params.fmMinor ? 0 : 1,
-            imageUrl: this.props.navigation.state.params.fmImgName
+            imageUrl: this.props.navigation.state.params.fmImgName,
+            isView:this.props.navigation.state.params.isView
+
 
         })
     }
@@ -168,12 +171,14 @@ class MyFamilyEdit extends Component {
                 </SafeAreaView>
 
 
-                <Text style={Style.titleOfScreen}>Edit Family Member</Text>
+                <Text style={Style.titleOfScreen}>{this.state.isView ? "View Family Member":"Edit Family Member"}</Text>
 
 
                 <KeyboardAwareScrollView>
                     <View style={Style.subContainer}>
-                        <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}>
+                        <TouchableOpacity style={Style.relativeImgView} onPress={() => this.setImage()}
+                                          disabled={this.state.isView}
+                        >
                             <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
                                    source={{uri: this.state.relativeImage}}/>
 
@@ -202,31 +207,37 @@ class MyFamilyEdit extends Component {
                             dropdownOffset={{top: 0, left: 0,}}
                             style={{fontSize: hp("2.2%")}}
                             onChangeText={(value, index) => this.changeFamilyMember(value, index)}
+                            disabled={this.state.isView}
+
                         />
                         <View style={Style.textInputView}>
                             <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>First Name
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
-                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
+                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,
+                                color:base.theme.colors.black}}
                                 onChangeText={(text) => this.setState({firstName: text})}
                                 value={this.state.firstName}
                                 placeholder="First Name"
                                 placeholderTextColor={base.theme.colors.grey}
+                                editable={!this.state.isView}
                             />
                         </View>
                         <View style={Style.textInputView}>
                             <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Last Name
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <TextInput
-                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
+                                style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,
+                                    color:base.theme.colors.black}}
                                 onChangeText={(text) => this.setState({lastName: text})}
                                 value={this.state.lastName}
                                 placeholder="Last Name"
                                 placeholderTextColor={base.theme.colors.grey}
                                 keyboardType={'default'}
+                                editable={!this.state.isView}
                             />
                         </View>
-                        {this.state.relationName === 'Child' ?
+                        {this.state.relationName === 'Child' && !this.state.isView?
                             <View style={{
                                 flexDirection: 'row',
                                 height: '6%',
@@ -277,12 +288,13 @@ class MyFamilyEdit extends Component {
                                     Name
                                     <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                                 <TextInput
-                                    style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
+                                    style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey,color:base.theme.colors.black}}
                                     onChangeText={(text) => this.setState({guardianName: text})}
                                     value={this.state.guardianName}
                                     placeholder="Guardian's Name"
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'default'}
+                                    editable={!this.state.isView}
                                 />
                             </View>
                             : <View/>}
@@ -298,13 +310,14 @@ class MyFamilyEdit extends Component {
                                 <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
                             <View style={Style.mobNumView}>
                                 <TextInput
-                                    style={{height: 50, width: '80%',}}
+                                    style={{height: 50, width: '80%',color:base.theme.colors.black}}
                                     onChangeText={(text) => this.mobileNumberInputCheck(text)}
                                     value={this.state.mobileNumber}
                                     placeholder={mobPlaceHolder}
                                     maxLength={13}
                                     placeholderTextColor={base.theme.colors.grey}
                                     keyboardType={'phone-pad'}
+                                    editable={!this.state.isView}
                                 />
                                 <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
@@ -312,58 +325,61 @@ class MyFamilyEdit extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={{
-                            flexDirection: "row",
-                            justifyContent: "space-around",
-                            marginTop: hp("4%"),
-                            marginBottom: hp("2%"),
-                            marginHorizontal: hp("2%")
-                        }}>
-                            <TouchableOpacity
-                                bordered
-                                dark
-                                style={{
-                                    width: wp("22%"),
-                                    height: hp("4%"),
-                                    borderRadius: hp("2.5%"),
-                                    borderWidth: hp("0.2%"),
-                                    borderColor: "#EF3939",
-                                    backgroundColor: "#EF3939",
-                                    alignItems: 'center',
-                                    justifyContent: "center"
-                                }}
-                                onPress={() => {
-                                    this.resetAllFields()
-                                }}
-                            >
-                                <Text style={{
-                                    color: "white",
-                                    fontWeight: "600",
-                                    fontSize: hp("2%")
-                                }}>Reset</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                bordered
-                                dark
-                                style={{
-                                    width: wp("22%"),
-                                    height: hp("4%"),
-                                    borderRadius: hp("2.5%"),
-                                    borderWidth: hp("0.2%"),
-                                    borderColor: "orange",
-                                    backgroundColor: "orange",
-                                    alignItems: 'center',
-                                    justifyContent: "center", marginLeft: 20
-                                }}
-                                onPress={() => this.validation()}
-                            >
-                                <Text style={{
-                                    color: "white",
-                                    fontWeight: "600",
-                                    fontSize: hp("2%")
-                                }}>Update</Text>
-                            </TouchableOpacity>
-                        </View>
+                        {this.state.isView ?
+                            <View/> :
+                            <View style={{
+                                flexDirection: "row",
+                                justifyContent: "space-around",
+                                marginTop: hp("4%"),
+                                marginBottom: hp("2%"),
+                                marginHorizontal: hp("2%")
+                            }}>
+                                <TouchableOpacity
+                                    bordered
+                                    dark
+                                    style={{
+                                        width: wp("22%"),
+                                        height: hp("4%"),
+                                        borderRadius: hp("2.5%"),
+                                        borderWidth: hp("0.2%"),
+                                        borderColor: "#EF3939",
+                                        backgroundColor: "#EF3939",
+                                        alignItems: 'center',
+                                        justifyContent: "center"
+                                    }}
+                                    onPress={() => {
+                                        this.resetAllFields()
+                                    }}
+                                >
+                                    <Text style={{
+                                        color: "white",
+                                        fontWeight: "600",
+                                        fontSize: hp("2%")
+                                    }}>Reset</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    bordered
+                                    dark
+                                    style={{
+                                        width: wp("22%"),
+                                        height: hp("4%"),
+                                        borderRadius: hp("2.5%"),
+                                        borderWidth: hp("0.2%"),
+                                        borderColor: "orange",
+                                        backgroundColor: "orange",
+                                        alignItems: 'center',
+                                        justifyContent: "center", marginLeft: 20
+                                    }}
+                                    onPress={() => this.validation()}
+                                >
+                                    <Text style={{
+                                        color: "white",
+                                        fontWeight: "600",
+                                        fontSize: hp("2%")
+                                    }}>Update</Text>
+                                </TouchableOpacity>
+                            </View>
+                        }
                     </View>
                 </KeyboardAwareScrollView>
 

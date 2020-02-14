@@ -71,7 +71,8 @@ class MyProfile extends Component {
         this.setState({
           isLoading: false,
           datasource: responseJson,
-          ImageSource: responseJson.data.account[0].acImgName,
+          ImageSource: responseJson.data.account[0].acImgName ==null ||responseJson.data.account[0].acImgName=="null"
+              ? '' :responseJson.data.account[0].acImgName,
           number:
             responseJson.data.account[0].acisdCode +
             responseJson.data.account[0].acMobile +
