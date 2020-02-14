@@ -176,7 +176,7 @@ class UnitList extends Component {
                 .then(response => {
                     // console.log("*******");
                     // console.log("here_1 ");
-                    // console.log("*******");
+                     console.log("here_1",response);
                     let responseData_1 = response.data;
                     if (responseData_1.success) {
                         let headers_2 = {
@@ -262,6 +262,9 @@ class UnitList extends Component {
                                             occupancyDate: occupancyDate
                                         })
                                         .then(response_3 => {
+                                            console.log("here_3 ", response_3);
+
+
                                             this.setState({loading: false});
 
                                             axios

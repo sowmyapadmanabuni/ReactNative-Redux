@@ -1214,8 +1214,10 @@ class NotificationScreen extends PureComponent {
                 }
               }
             )
-            .then(() => {
-          axios
+            .then((response) => {
+                console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@',response);
+
+                axios
             .post(
                 champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate',
               {
@@ -1227,8 +1229,9 @@ class NotificationScreen extends PureComponent {
                 headers: headers
               }
             )
-            .then(response => {
-              let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
+            .then(() => {
+
+                let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
 
               axios
                 .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
@@ -1299,7 +1302,9 @@ class NotificationScreen extends PureComponent {
                   )
                     .then(response => response.json())
                     .then(responseJson => {
-                      fetch(
+                        console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@222222',responseJson)
+
+                        fetch(
                         `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
                         {
                           method: 'POST',
@@ -1313,7 +1318,9 @@ class NotificationScreen extends PureComponent {
                       )
                         .then(response => response.json())
                         .then(responseJson_2 => {
-                          console.log(JSON.stringify(UpdateTenant));
+                            console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@3333',responseJson_2)
+
+                            console.log(JSON.stringify(UpdateTenant));
                           console.log(responseJson_2);
 
                          let StatusUpdate = {
@@ -1336,7 +1343,9 @@ class NotificationScreen extends PureComponent {
                           )
                             .then(response => {
                               response.json();
-                              console.log('Response', response);
+                                console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@44444',response)
+
+                                console.log('Response', response);
                             })
                             .then(responseJson_3 => {
                               console.log(item.ntid, 'ntid');

@@ -750,9 +750,11 @@ class Dashboard extends PureComponent {
         //     }
         // });
        // ntType
+
+        console.log('GET THE NOTIFICATION DATA',notificationOpen.notification.data)
         if(notificationOpen.notification.data.ntType==="Join"){
           this.changeTheAssociation(notificationOpen.notification.data.associationName,notificationOpen.notification.data.associationID,
-              notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.mrRolName)
+              notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
 
         this.readFBRTB(true);
@@ -870,7 +872,7 @@ class Dashboard extends PureComponent {
                    console.log("I am Timer");
                    this.syncData();
                  },
-                 5000
+                 15000
              );
     }
 
@@ -1194,9 +1196,11 @@ class Dashboard extends PureComponent {
       value:unitName
     });
 
+    console.log('THISPOPPPPPPPP',this.props)
+
     this.roleCheckForAdmin(assId);
-    this.getUnitListByAssoc();
-    this.setView(0)
+   // this.getUnitListByAssoc();
+    //this.setView(0)
     // this.setState({ role:dropdown[index].roleId });
   };
 
@@ -1296,11 +1300,11 @@ class Dashboard extends PureComponent {
       const { updateIdDashboard } = this.props;
       updateIdDashboard({
         prop: 'familyMemberCount',
-        value: 0
+        value: ""
       });
       updateIdDashboard({
         prop: 'vehiclesCount',
-        value: 0
+        value: ""
       });
     } else {
       console.log("<< INSIDE >>");

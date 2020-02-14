@@ -256,7 +256,7 @@ class InviteGuests extends Component {
         } else if (oyeNonSpecialRegex.test(vehNo) === true) {
             Alert.alert("Vehicle Number cannot contain special characters.")
         } else if (mobNum.length == 0) {
-            //Alert.alert('Enter Mobile Number')
+            Alert.alert('Enter Mobile Number')
             return false
         } else if (mobNum.length < 10) {
             Alert.alert('Mobile number should not be less than 10 digits');
