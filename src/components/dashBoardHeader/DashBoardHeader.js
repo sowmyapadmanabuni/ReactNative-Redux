@@ -149,7 +149,7 @@ class DashBoardHeader extends React.Component {
                       ? this.props.userReducer.userData.data.account[0].acfName
                       : null}
                   </MarqueeText>
-                  
+
                 </TouchableOpacity>
                 {this.props.userReducer.SelectedAssociationID != null ? (
                   <Text style={HeaderStyles.statusText} numberOfLines={1}>
@@ -175,22 +175,28 @@ class DashBoardHeader extends React.Component {
               </View>
             </TouchableOpacity>
           */}
-          </View> 
+          </View>
           <View style={HeaderStyles.subContainerRight}>
             <Image
               style={HeaderStyles.appLogoStyles}
               source={require('../../../icons/OyespaceSafe.png')}
             />
           </View>
-          <View style={HeaderStyles.subContainerRight}>
-            <TouchableOpacity
+          {/*<View style={{height: 60,
+            width: '20%',
+            backgroundColor: "pink",//base.theme.colors.white,
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            marginRight: 20}}>*/}
+            <TouchableOpacity style={{height: 60,
+              width: '20%',justifyContent: 'center',alignItems:'center',
+             }}
               onPress={() =>
                 this.props.navigation.navigate('NotificationScreen')
               }
-            >            
+            >
               {this.renderBadge()}
             </TouchableOpacity>
-          </View>
         </View>
       </SafeAreaView>
     );

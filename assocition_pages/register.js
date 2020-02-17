@@ -10,6 +10,7 @@ import {createUserNotification, getAssoMembers, updateJoinedAssociation} from '.
 import _ from 'lodash';
 import {CLOUD_FUNCTION_URL} from '../constant';
 import firebase from 'react-native-firebase';
+import * as fb from 'firebase';
 
 class RegisterMe extends Component {
     static navigationOptions = {
@@ -135,6 +136,15 @@ class RegisterMe extends Component {
                     // console.log("*******");
                     let responseData_1 = response.data;
                     if (responseData_1.success) {
+                        let isAssocNotificationUpdating = 0;
+                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}`;
+                        fb.database().ref(associationPath).set({
+                            isAssocNotificationUpdating
+                        }).then((data) => {
+                            console.log('Data added to FRTDB:', data);
+                        }).catch(error => {
+                            console.log("Error:", error);
+                        })
                         let headers_2 = {
                             'Content-Type': 'application/json',
                             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
@@ -284,7 +294,8 @@ class RegisterMe extends Component {
                                                             {
                                                                 text: 'Ok',
                                                                 onPress: () =>
-                                                                    this.props.navigation.navigate('ResDashBoard')
+                                                                this.props.navigation.navigate('NotificationScreen')
+                                                                    //this.props.navigation.navigate('ResDashBoard')
                                                             }
                                                         ],
                                                         {
@@ -451,6 +462,15 @@ class RegisterMe extends Component {
                     console.log('*******');
                     let responseData_1 = response.data;
                     if (responseData_1.success) {
+                        let isAssocNotificationUpdating = 0;
+                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}`;
+                        fb.database().ref(associationPath).set({
+                            isAssocNotificationUpdating
+                        }).then((data) => {
+                            console.log('Data added to FRTDB:', data);
+                        }).catch(error => {
+                            console.log("Error:", error);
+                        })
                         let headers_2 = {
                             'Content-Type': 'application/json',
                             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'

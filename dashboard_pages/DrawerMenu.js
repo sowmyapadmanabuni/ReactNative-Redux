@@ -7,7 +7,7 @@ import { Icon, withBadge } from 'react-native-elements';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MarqueeText from 'react-native-marquee';
 import SettingsScreen from "./SettingsScreen";
- 
+
 class DrawerMenu extends Component {
     constructor(props) {
         super(props);
@@ -111,16 +111,17 @@ class DrawerMenu extends Component {
             <View style={{
                 width: '100%',
                 height: '100%',
-                backgroundColor: '#fff', flexDirection:'column',               
+                backgroundColor: '#fff', flexDirection:'column',
                 paddingTop: 0,paddingHorizontal:8,borderLeftWidth:0,borderLeftColor:'orange'
-              }}>   
+              }}>
               <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center', height:64,borderBottomWidth:1,borderBottomColor:'orange'}}>
                   <View style={{flexDirection:'row',alignItems:'center'}}>
                 <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('MyProfileScreen')}
                 >
               {this.props.userReducer.userProfilePic === null ||
-              this.props.userReducer.userProfilePic === '' ? (
+              this.props.userReducer.userProfilePic === ''  ||
+              this.props.userReducer.userProfilePic === "null" ? (
                 <Image
                   style={[HeaderStyles.imageStyles,{height:42,width:42,borderRadius:42/2}]}
                   source={{
@@ -160,7 +161,7 @@ class DrawerMenu extends Component {
                       ? this.props.userReducer.userData.data.account[0].acfName
                       : null}
                   </MarqueeText>
-                  
+
                 </TouchableOpacity>
                 {this.props.userReducer.SelectedAssociationID != null ? (
                     role!=''?
@@ -189,16 +190,16 @@ class DrawerMenu extends Component {
               </View>
             </TouchableOpacity>
             </View>
-         
+
             </View>
-            
+
             <FlatList
                     style={{marginTop:32}}
                             keyExtractor={(item, index) => index.toString()}
-                            data={this.state.menu}                            
+                            data={this.state.menu}
                             renderItem={(item, index) => this.renderMenuItems(item.item, index)}
                             />
-              
+
               <View style={{position:'absolute',bottom:0,paddingHorizontal:8,paddingVertical:8,justifyContent:'center',witdh:'100%'}}>
                     <Text style={{color:'orange',alignSelf:'center',fontSize:12}}>Version 10.19</Text>
               </View>
@@ -219,5 +220,5 @@ const mapStateToProps = state => {
       dashboardReducer: state.DashboardReducer
     };
   };
-  
+
   export default connect(mapStateToProps)(DrawerMenu);

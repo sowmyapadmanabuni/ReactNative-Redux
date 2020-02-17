@@ -96,7 +96,7 @@ class AddRegularVisitor extends Component {
             ACISDCode4: "",
             ACImgName:img //this.state.urlToServer
         };
-        console.log('DATA TO REGISTER USER',member)
+        console.log('DATA TO REGISTER USER',member, this.props.champBaseURL)
         const url = this.props.champBaseURL + "account/signup";
 
         fetch(url, {
@@ -161,6 +161,7 @@ class AddRegularVisitor extends Component {
                 self.setState({
                    urlToServer:stat
                 })
+
                 this.sendRegData(stat)
             } catch (err) {
                 console.log('err', err)

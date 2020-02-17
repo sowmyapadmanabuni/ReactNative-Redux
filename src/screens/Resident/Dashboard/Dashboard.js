@@ -209,6 +209,7 @@ class Dashboard extends PureComponent {
     }
 
     if (count === 0 && isNotificationClicked) {
+      console.log("COMING HERE")
       this.props.navigation.navigate('NotificationScreen');
     }
   }
@@ -319,7 +320,7 @@ class Dashboard extends PureComponent {
       receiveNotifications,
       oyeURL
     } = this.props;
-
+    console.log("Dashborad reducer Data in Request Notification Permission:",this.props.dashBoardReducer);
     firebase
       .messaging()
       .hasPermission()
@@ -582,7 +583,8 @@ class Dashboard extends PureComponent {
           console.log('___________');
           console.log("NOTIFICATION@@@@",notification);
           console.log('NOTIFICATION@@@@____________', notification.data.unitName,notification.data.associationID,notification.data.associationName);
-         this.changeTheAssociation(notification.data.associationName,notification.data.associationID)
+
+           //  this.changeTheAssociation(notification.data.associationName,notification.data.associationID,)
 
           if (notification._data.associationID) {
             // this.props.createNotification(notification._data, navigationInstance, false)
@@ -682,22 +684,13 @@ class Dashboard extends PureComponent {
         console.log(
           '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
         );
-        // let self = this;
-        // // const { MyAccountID, SelectedAssociationID } = self.props.userReducer;
+      
+       // ntType
+        if(notificationOpen.notification.data.ntType==="Join"){
+          this.changeTheAssociation(notificationOpen.notification.data.associationName,notificationOpen.notification.data.associationID,
+              notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.mrRolName)
+        }
 
-        // fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
-        // let receivedData = snapshot.val();
-        // console.log("ReceiveddataDash", snapshot.val());
-        // if (receivedData !== null) {
-        //   if(receivedData.isActive && receivedData.userId){
-        //    //self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
-        //   }
-        //   else{
-        //     self.props.navigation.navigate('NotificationScreen');
-        //   }
-
-        //     }
-        // });
         this.readFBRTB(true);
         //this.props.navigation.navigate('NotificationScreen');
       });
@@ -715,6 +708,7 @@ class Dashboard extends PureComponent {
     getDashAssociation(oyeURL, MyAccountID);
     getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
+    
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
   };
@@ -800,21 +794,21 @@ class Dashboard extends PureComponent {
       this.didMount();
     }
 
-
+    this.syncData();
 
     // BackgroundTimer.runBackgroundTimer(()=>{
     //   console.log()
     //   this.syncData()
     // },5000)
-      timer.setInterval(
-                 this,
-                 'syncData',
-                 async () => {
-                   console.log("I am Timer");
-                   this.syncData();
-                 },
-                 5000
-             );
+      // timer.setInterval(
+      //            this,
+      //            'syncData',
+      //            async () => {
+      //              console.log("I am Timer");
+      //              this.syncData();
+      //            },
+      //            5000
+      //        );
     }
 
 
@@ -921,11 +915,40 @@ class Dashboard extends PureComponent {
       // })
       // .catch(error => {
       //   this.setState({ error, loading: false });
+      let userAssociation = this.props.dashBoardReducer.dropdown;
+     // this.listenToFirebase(userAssociation);
       // });
       this.checkUnitIsThere();
     } catch (err) {
       //alert(err)
       console.log('ROLECHECK_ERROR', err);
+    }
+  }
+
+  listenToFirebase(userAssociation){
+    
+    for (let i in userAssociation){
+      let associationId = userAssociation[i].associationId;
+      let associationPath = `syncdashboard/isAssociationRefreshing/${associationId}`;
+      fb.database().ref(associationPath).on('value',function(snapshot){
+        let receivedData = snapshot.val();
+        console.log("Received Data:",receivedData);
+        if(receivedData !== null){
+          if(receivedData.isAssocNotificationUpdating>0){
+            console.log("Update Notification List Now")
+            let self = this;
+            //self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
+          //   firebase.database().ref(associationPath).remove().then((response)=>{
+          //     let receivedData = response.val();
+          //     console.log("Response!!!!!!!",receivedData)
+
+          // }).catch((error)=>{
+          //     console.log('Response!!!!!!!',error.response)
+          // });
+          }
+        }
+        
+    })
     }
   }
 
@@ -1072,7 +1095,7 @@ class Dashboard extends PureComponent {
   }
 
 
-  changeTheAssociation = (value, assId) => {
+  changeTheAssociation = (value, assId,unitId,unitName) => {
 
     const {
       associationid,
@@ -1119,6 +1142,22 @@ class Dashboard extends PureComponent {
     updateSelectedDropDown({
       prop: 'assId',
       value: assId
+    });
+    updateUserInfo({
+      prop: 'SelectedUnitID',
+      value: unitId
+    });
+    updateIdDashboard({
+      prop: 'uniID',
+      value:unitId
+    });
+    updateSelectedDropDown({
+      prop: 'uniID',
+      value: unitId
+    });
+    updateSelectedDropDown({
+      prop: 'selectedDropdown1',
+      value:unitName
     });
 
     this.roleCheckForAdmin(assId);
@@ -1391,14 +1430,21 @@ class Dashboard extends PureComponent {
     this.setState({ isLoading: false, loading: false });
     try {
       if (myFamilyList.success && myFamilyList.data) {
+        let familyData=myFamilyList.data.familyMembers
+        let reqData=[]
+        for(let i=0;i<familyData.length;i++){
+          if(familyData[i].acAccntID !== this.props.userReducer.MyAccountID){
+            reqData.push(familyData[i])
+          }
+        }
         this.setState({
-          falmilyMemebCount: myFamilyList.data.familyMembers.length
+          falmilyMemebCount: reqData.length
         });
         const { updateIdDashboard } = this.props;
         console.log('updateIdDashboard1', this.props);
         updateIdDashboard({
           prop: 'familyMemberCount',
-          value: myFamilyList.data.familyMembers.length
+          value: reqData.length
         });
       }
     } catch (error) {

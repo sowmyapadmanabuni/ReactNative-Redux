@@ -22,6 +22,7 @@ import {connect} from "react-redux";
 import {updateUserInfo} from "../src/actions";
 import base from "../src/base";
 import ProgressLoader from 'rn-progress-loader';
+import {NavigationActions, StackActions} from "react-navigation";
 
 class OTPVerification extends Component {
     static navigationOptions = {
@@ -41,39 +42,44 @@ class OTPVerification extends Component {
             isCallLimit: true,
             isSmsLimit: true,
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 
         this.getOTP = this.getOTP.bind(this);
     }
 
+    async componentDidMount() {
+        this.interval = setInterval(
+            () => this.setState(prevState => ({timer: prevState.timer - 1})),
+            1000
+        );
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+
+
+    handleBackButtonClick() {
+        console.log("this.props.navigation ", this.props.navigation, );
+
+        this.props.navigation.goBack(null);
+
+
+        return true;
+    }
 
     componentDidUpdate() {
-        setTimeout(() => {
-            BackHandler.addEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 100);
+
         if (this.state.timer === 1) {
             clearInterval(this.interval);
         }
     }
 
-    componentWillUnmount() {
-        setTimeout(() => {
-            BackHandler.removeEventListener('hardwareBackPress', () => this.processBackPress())
-        }, 0)
 
-    }
 
-    processBackPress() {
-        console.log("Part");
-        const {goBack} = this.props.navigation;
-        goBack(null);
-    }
-
-    componentDidMount() {
-        this.interval = setInterval(
-            () => this.setState(prevState => ({timer: prevState.timer - 1})),
-            1000
-        );
-    }
 
     handleMobile = mobilenumber => {
         this.setState({Mobilenumber: mobilenumber});
@@ -95,15 +101,15 @@ class OTPVerification extends Component {
             })
             setTimeout(()=>{
                 Alert.alert("OTP Number cannot be Empty");
-            },500) 
-            
+            },500)
+
         } else if (otp_number.length < 6) {
             this.setState({
                 isLoading:false
             })
             setTimeout(()=>{
                 alert("Enter 6 digit OTP Number");
-            },500) 
+            },500)
             return false;
         } else {
             let anu = {
@@ -201,7 +207,7 @@ class OTPVerification extends Component {
                     console.log("Verification", "error " + error);
                     setTimeout(()=>{
                         alert("OTP Verification failed");
-                    },1000)
+                    },500)
                 });
         }
     };
@@ -532,14 +538,14 @@ class OTPVerification extends Component {
                                 />
             </View>
         );
-    
+
 }
 }
 
 const styles = StyleSheet.create({
-    container: {
+   /* container: {
         paddingTop: 23
-    },
+    },*/
     input: {
         margin: 15,
         height: 40,

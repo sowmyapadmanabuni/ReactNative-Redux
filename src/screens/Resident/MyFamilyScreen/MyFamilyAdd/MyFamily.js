@@ -590,7 +590,10 @@ class MyFamily extends Component {
             alert('Unit id is null')
         } else if (self.props.dashBoardReducer.assId === null) {
             alert('Association id is null')
-        } else {
+        } else if (self.state.mobileNumber === self.props.userReducer.MyMobileNumber) {
+            alert("Can not add family member with user mobile number")
+        }
+        else {
             self.addRelativeDetails()
 
         }
@@ -628,6 +631,7 @@ class MyFamily extends Component {
         let mobNum = self.state.sendNum;
         let cCode = self.state.cCode;
         console.log("associantion id",self.props.dashBoardReducer);
+
         if (cCode === "") {
             cCode = "+91";
             mobNum = self.state.mobileNumber

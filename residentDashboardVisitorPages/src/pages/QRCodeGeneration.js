@@ -223,40 +223,7 @@ class QRCodeGeneration extends Component {
   render() {
     const { params } = this.props.navigation.state;
     console.log("QR Content:",this.state.qrText)
-    let shareOptions = {
-      title: 'Invitation',
-      message: this.state.qrShare,
-      // url: "http://facebook.github.io/react-native/",
-      subject: 'Welcome' //  for email
-    };
-
-    let wholeData =
-      params.value.infName +
-      ' invites you to ' + //global.AssociationUnitName + ' in ' +
-      params.value.asAssnID +
-      ' for ' +
-      params.value.inpOfInv +
-      ' on ' +
-      params.value.insDate.substring(0, 10) +
-      ' at ' +
-      params.value.insDate.substring(11, 16);
-    // this.setState({dataBase64: wholeData})
-    let shareImageBase64 = {
-      title: 'Invitation',
-      message:
-        params.value.infName +
-        ' invites you to ' + //global.AssociationUnitName + ' in ' +
-        params.value.asAssnID +
-        ' for ' +
-        params.value.inpOfInv +
-        ' on ' +
-        params.value.insDate.substring(0, 10) +
-        ' at ' +
-        params.value.insDate.substring(11, 16) +
-        '  ',
-      url: 'data:image/png;base64,' + '',
-      subject: 'Share Invitation' //  for email
-    };
+    
 
     if (this.state.isLoading) {
       return (
