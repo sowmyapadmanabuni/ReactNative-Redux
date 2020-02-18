@@ -147,23 +147,23 @@ class NotificationScreen extends PureComponent {
 
     listenToFirebase() {
         let self = this;
-        let associatonList = self.props.dashBoardReducer.dropdown;
+        let associationList = self.props.dashBoardReducer.dropdown;
 
-        for (let i in associatonList) {
-            let associationId = associatonList[i].associationId;
-            console.log("Association List:", associationId);
+        for (let i in associationList) {
+            let associationId = associationList[i].associationId;
+            console.log("Association List:", associationList[i]);
             let associationPath = `syncdashboard/isAssociationRefreshing/${associationId}`;
-            fb.database().ref(associationPath).on('value', function (snapshot) {
-                let receivedData = snapshot.val();
-                console.log("Received Data while listening to notification:", receivedData);
-                if(receivedData !== null){
-                    self.props.getNotifications(self.props.oyeURL,self.props.MyAccountID);
-                    self.segregateNotification();
-                }
-            })
-
+            if(associationList[i].roleId === 1){
+                fb.database().ref(associationPath).on('value', function (snapshot) {
+                    let receivedData = snapshot.val();
+                    console.log("Received Data while listening to notification:", receivedData,associationId);
+                    if(receivedData !== null){
+                        self.props.getNotifications(self.props.oyeURL,self.props.MyAccountID);
+                        self.segregateNotification()
+                    }
+                })
+            }
         }
-
     }
 
     segregateNotification() {
@@ -174,7 +174,7 @@ class NotificationScreen extends PureComponent {
         let adminNotification = [];
 
         for (let i in notificationList) {
-            if (notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join") {
+            if (notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join" || notificationList[i].ntType === "Join_Status") {
                 adminNotification.push(notificationList[i])
             } else {
                 unitNotification.push(notificationList[i])
@@ -1583,10 +1583,20 @@ class NotificationScreen extends PureComponent {
                                             }
                                         )
                                         .then(() => {
-                                            this.props.getNotifications(
-                                                this.props.oyeURL,
-                                                this.props.MyAccountID
-                                            );
+                                            let path = `syncdashboard/isAssociationRefreshing/${item.asAssnID}/${item.sbUnitID}`;
+                                            //asAssnID
+                                            fb.database().ref(path).remove().then((response)=>{
+                                                let receivedData = response.val();
+                                                console.log("Response!!!!!!!",receivedData)
+                        
+                                            }).catch((error)=>{
+                                                console.log('Response!!!!!!!',error.response)
+                                            });
+
+                                            // this.props.getNotifications(
+                                            //     this.props.oyeURL,
+                                            //     this.props.MyAccountID
+                                            // );
 
                                             this.setState({ loading: false });
                                             // this.props.updateApproveAdmin(

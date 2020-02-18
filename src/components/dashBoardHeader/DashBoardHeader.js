@@ -92,6 +92,7 @@ class DashBoardHeader extends React.Component {
   }
 
   openDrawer(){
+    console.log('HITTING DRAWER')
     this.props.navigation.dispatch(DrawerActions.toggleDrawer());
   }
 

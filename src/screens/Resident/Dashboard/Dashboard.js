@@ -686,9 +686,11 @@ class Dashboard extends PureComponent {
         );
       
        // ntType
+
+        console.log('GET THE NOTIFICATION DATA',notificationOpen.notification.data)
         if(notificationOpen.notification.data.ntType==="Join"){
           this.changeTheAssociation(notificationOpen.notification.data.associationName,notificationOpen.notification.data.associationID,
-              notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.mrRolName)
+              notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
 
         this.readFBRTB(true);
@@ -937,7 +939,7 @@ class Dashboard extends PureComponent {
           if(receivedData.isAssocNotificationUpdating>0){
             console.log("Update Notification List Now")
             let self = this;
-            //self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
+            self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
           //   firebase.database().ref(associationPath).remove().then((response)=>{
           //     let receivedData = response.val();
           //     console.log("Response!!!!!!!",receivedData)
@@ -1160,9 +1162,11 @@ class Dashboard extends PureComponent {
       value:unitName
     });
 
+    console.log('THISPOPPPPPPPP',this.props)
+
     this.roleCheckForAdmin(assId);
-    this.getUnitListByAssoc();
-    this.setView(0)
+   // this.getUnitListByAssoc();
+    //this.setView(0)
     // this.setState({ role:dropdown[index].roleId });
   };
 
@@ -1262,11 +1266,11 @@ class Dashboard extends PureComponent {
       const { updateIdDashboard } = this.props;
       updateIdDashboard({
         prop: 'familyMemberCount',
-        value: 0
+        value: ""
       });
       updateIdDashboard({
         prop: 'vehiclesCount',
-        value: 0
+        value: ""
       });
     } else {
       console.log("<< INSIDE >>");

@@ -131,13 +131,10 @@ class RegisterMe extends Component {
                     }
                 )
                 .then(response => {
-                    // console.log("*******");
-                    // console.log("here_1 ");
-                    // console.log("*******");
                     let responseData_1 = response.data;
                     if (responseData_1.success) {
                         let isAssocNotificationUpdating = 0;
-                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}`;
+                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
                         fb.database().ref(associationPath).set({
                             isAssocNotificationUpdating
                         }).then((data) => {

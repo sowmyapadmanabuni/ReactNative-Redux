@@ -197,6 +197,7 @@ class Resident extends React.Component {
         // console.log("notificationResp",notification);
     }
 
+    //For updating the role if the user as in ADMIN or OWNER
     changeRole = (title, message) => {
         try {
             const {getDashUnits, selectedAssociation} = this.props;
