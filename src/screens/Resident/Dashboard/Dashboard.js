@@ -918,7 +918,23 @@ class Dashboard extends PureComponent {
       // .catch(error => {
       //   this.setState({ error, loading: false });
       let userAssociation = this.props.dashBoardReducer.dropdown;
-     // this.listenToFirebase(userAssociation);
+      fetch(
+        `http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+          }
+        }
+      ).then(response => response.json())
+      .then(responseJson => {
+        console.log("res in data receving: ", responseJson);
+        })
+        .catch(error=>{
+        console.log("Error:",error)
+      })
+      this.listenToFirebase(userAssociation);
       // });
       this.checkUnitIsThere();
     } catch (err) {
@@ -927,19 +943,21 @@ class Dashboard extends PureComponent {
     }
   }
 
+  
+
   listenToFirebase(userAssociation){
-    
+    let self = this;
     for (let i in userAssociation){
       let associationId = userAssociation[i].associationId;
       let associationPath = `syncdashboard/isAssociationRefreshing/${associationId}`;
       fb.database().ref(associationPath).on('value',function(snapshot){
         let receivedData = snapshot.val();
-        console.log("Received Data:",receivedData);
+        console.log("Received Data in dashboard:",receivedData);
         if(receivedData !== null){
-          if(receivedData.isAssocNotificationUpdating>0){
+        //  if(receivedData.isAssocNotificationUpdating>0){
             console.log("Update Notification List Now")
-            let self = this;
-            self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
+            self.updateDashboard();
+            
           //   firebase.database().ref(associationPath).remove().then((response)=>{
           //     let receivedData = response.val();
           //     console.log("Response!!!!!!!",receivedData)
@@ -947,11 +965,17 @@ class Dashboard extends PureComponent {
           // }).catch((error)=>{
           //     console.log('Response!!!!!!!',error.response)
           // });
-          }
+         // }
         }
         
     })
     }
+  }
+
+  updateDashboard(){
+    let self = this;
+    console.log("Update Dashboard Changes if any------------------------------------>>>>>>>>>>>")
+    self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
   }
 
   static getAssociationList() {

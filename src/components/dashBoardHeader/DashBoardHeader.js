@@ -27,14 +27,24 @@ class DashBoardHeader extends React.Component {
   }
 
   renderBadge = () => {
-    const { notifications } = this.props;
-
+    const { notifications,dashboardReducer } = this.props;
+    let selectedAssociation = dashboardReducer.assId;
+    let role = dashboardReducer.role;
     let count = 0;
 
     notifications.map((data, index) => {
-      if (data.ntIsActive) {
+      console.log("data.ntIsActive:",data.ntIsActive,data.asAssnID,selectedAssociation)
+      if(role !== 1){
+        if(data.asAssnID == selectedAssociation){
+          if (data.ntIsActive ) {
+            count += 1;
+          }
+        }
+      }else
+      {
         count += 1;
       }
+      
     });
 
     const BadgedIcon = withBadge(count)(Icon);
@@ -69,6 +79,7 @@ class DashBoardHeader extends React.Component {
       this.props.dashboardReducer.selectedDropdown1
     );
     let dropDown = this.props.dashboardReducer.dropdown1;
+
     let myRole = roleId;
     for (let i = 0; i < dropDown.length; i++) {
       if (this.props.dashboardReducer.selectedDropdown1 === dropDown[i].name) {

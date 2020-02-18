@@ -29,6 +29,7 @@ import StaffStyle from "../src/screens/Resident/Visitors/Staff/StaffStyle";
 
 import {createIconSetFromIcoMoon} from "react-native-vector-icons"
 import IcoMoonConfig from '../src/assets/selection.json';
+import * as fb from 'firebase';
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
 
@@ -235,7 +236,6 @@ class Resident extends React.Component {
             })
                 .then(response => response.json())
                 .then(responseJson => {
-                    console.log("%%%%%%%%%%", responseJson, requestBody);
                     this.updateRolesFRTDB(this.state.selectedUser, this.state.selectedRoleData.selRolId);
                     this.props.navigation.goBack();
                 })

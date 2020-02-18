@@ -34,6 +34,8 @@ import ZoomImage from 'react-native-zoom-image';
 import { Easing } from 'react-native';
 import axios from 'axios';
 
+import * as fb from 'firebase';
+
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions';
@@ -698,6 +700,20 @@ class Announcement extends Component {
         }
       )
       .then(response => {
+
+        let associationPath = `syncdashboard/isAssociationRefreshing/${assocID}`;
+        let isAssocNotificationUpdating = 0;
+
+        
+
+        fb.database().ref(associationPath).set({
+          isAssocNotificationUpdating
+        }).then((response)=>{
+          console.log("Updated response:",response)
+        }).catch(error=>{
+          console.log("error while updating:",error)
+        })
+
         console.log(
           'Respo1111:',
           response,
@@ -821,6 +837,10 @@ class Announcement extends Component {
                 if(!this.state.paused){
                   this.pause();
                 }
+                fb.database().ref(associationPath).on('value',function(snapshot){
+                  let receivedData = snapshot.val();
+                   isAssocNotificationUpdating = receivedData !== null?receivedData.isAssocNotificationUpdating + 1:0
+                })
                 this.props.navigation.goBack();
                 // getAssoMembers(oyeURL, MyAccountID);
 
