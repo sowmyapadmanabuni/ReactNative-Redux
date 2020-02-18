@@ -118,12 +118,13 @@ class VehicleList extends Component {
             .catch(error => {
                 this.setState({loading: false,dataSource:[]});
                 console.log(error);
+                const {updateIdDashboard} = this.props;
+                updateIdDashboard({
+                    prop: 'vehiclesCount',
+                    value: 0
+                });
             });
-        const {updateIdDashboard} = this.props;
-        updateIdDashboard({
-            prop: 'vehiclesCount',
-            value: 0
-        });
+
     };
 
     renderItem = ({item, index}) => {

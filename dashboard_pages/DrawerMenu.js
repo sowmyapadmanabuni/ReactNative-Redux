@@ -99,7 +99,7 @@ class DrawerMenu extends Component {
       }
 
     render(){
-        console.log("MENU_IMG",this.props.userReducer.userProfilePic)
+        console.log("MENU_IMG",this.props.dashboardReducer.role,this.props)
         console.log('https://mediaupload.oyespace.com/' +
         base.utils.strings.noImageCapturedPlaceholder)
         console.log(this.props.userReducer.SelectedAssociationID)
@@ -134,9 +134,7 @@ class DrawerMenu extends Component {
                 <Image
                 style={[HeaderStyles.imageStyles,{height:42,width:42,borderRadius:42/2}]}
                   source={{
-                    uri:
-                      'http://mediaupload.oyespace.com/' +
-                      this.props.userReducer.userProfilePic
+                    uri: 'data:image/png;base64,'+this.props.userReducer.userProfilePic
                   }}
                 />
               )}

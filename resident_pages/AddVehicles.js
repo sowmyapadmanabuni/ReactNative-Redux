@@ -186,8 +186,11 @@ class AddVehicle extends Component {
                 UNUnitID: this.props.dashBoardReducer.uniID,
                 UPID: this.state.parkingLotDetail.length !== 0 ? upID : null,
                 UPLNum: parkingSlotNum,
-                ASAssnID: this.props.dashBoardReducer.assId
+                ASAssnID: this.props.dashBoardReducer.assId,
+                PAccntID:this.props.MyAccountID
             };
+
+
 
             this.setState({
                 isLoading: true
@@ -522,7 +525,8 @@ const mapStateToProps = state => {
     return {
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
-        oyeURL: state.OyespaceReducer.oyeURL
+        oyeURL: state.OyespaceReducer.oyeURL,
+        MyAccountID: state.UserReducer.MyAccountID,
     };
 };
 

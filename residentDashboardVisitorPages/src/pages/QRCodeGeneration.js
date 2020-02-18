@@ -16,7 +16,9 @@ import {
   TouchableHighlight
 } from 'react-native';
 // import Header from './src/components/common/Header'
-import { QRCode } from 'react-native-custom-qr-codes';
+//import { QRCode } from 'react-native-custom-qr-codes';
+import QRCode from 'react-native-qrcode-svg';
+
 import { NavigationEvents } from 'react-navigation';
 import Share, { ShareSheet, Button } from 'react-native-share';
 import {
@@ -62,7 +64,7 @@ class QRCodeGeneration extends Component {
   componentDidMount() {
     base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
     this.associationName();
-    this.qrGeneration();
+   // this.qrGeneration();
   }
   onCancel() {
     console.log('CANCEL');
@@ -73,10 +75,10 @@ class QRCodeGeneration extends Component {
     this.setState({ visible: true });
   }
 
-  qrGeneration = () => {
+  /*qrGeneration = () => {
     const { params } = this.props.navigation.state;
     console.log('Params@!@#!@#!@#', params);
-  
+
 
     let txt ="{"+ "infName"+":"+ params.value.infName + ',' +
         "inMobile"+":"+ params.value.inMobile.substring(3, 13) + ',' +
@@ -93,7 +95,7 @@ class QRCodeGeneration extends Component {
       qrText: JSON.stringify(txt),
       qrShare: JSON.stringify(txt)
     });
-  };
+  };*/
 
   takeScreenShot = () => {
     const { params } = this.props.navigation.state;
@@ -222,41 +224,9 @@ class QRCodeGeneration extends Component {
 
   render() {
     const { params } = this.props.navigation.state;
-    console.log("QR Content:",this.state.qrText)
-    let shareOptions = {
-      title: 'Invitation',
-      message: this.state.qrShare,
-      // url: "http://facebook.github.io/react-native/",
-      subject: 'Welcome' //  for email
-    };
+    console.log("QR Content:!!!!!", typeof (params.shareCode),params)
 
-    let wholeData =
-      params.value.infName +
-      ' invites you to ' + //global.AssociationUnitName + ' in ' +
-      params.value.asAssnID +
-      ' for ' +
-      params.value.inpOfInv +
-      ' on ' +
-      params.value.insDate.substring(0, 10) +
-      ' at ' +
-      params.value.insDate.substring(11, 16);
-    // this.setState({dataBase64: wholeData})
-    let shareImageBase64 = {
-      title: 'Invitation',
-      message:
-        params.value.infName +
-        ' invites you to ' + //global.AssociationUnitName + ' in ' +
-        params.value.asAssnID +
-        ' for ' +
-        params.value.inpOfInv +
-        ' on ' +
-        params.value.insDate.substring(0, 10) +
-        ' at ' +
-        params.value.insDate.substring(11, 16) +
-        '  ',
-      url: 'data:image/png;base64,' + '',
-      subject: 'Share Invitation' //  for email
-    };
+
 
     if (this.state.isLoading) {
       return (
@@ -359,7 +329,7 @@ class QRCodeGeneration extends Component {
             </SafeAreaView> */}
 
           <NavigationEvents
-            onWillFocus={payload => this.qrGeneration()}
+           // onWillFocus={payload => this.qrGeneration()}
             // onWillBlur={payload => this.getInvitationList()}
           />
           <Text style={styles.titleOfScreen}>Share QR Code</Text>
@@ -476,14 +446,23 @@ class QRCodeGeneration extends Component {
                 marginTop: hp('3%')
               }}
             >
-              <QRCode
+              {/*<QRCode
                 logo={require('../../../icons/oyesafe_qr_logo.png')}
                 logoSize={hp('8%')}
                 size={hp('20%')}
-                content={this.state.qrText}
+                content={params.shareCode}
                 codeStyle="square"
                 outerEyeStyle="square"
                 innerEyeStyle="square"
+              />*/}
+              <QRCode
+                  logo={require('../../../icons/oyesafe_qr_logo.png')}
+                  logoSize={hp('5%')}
+                  size={hp('20%')}
+                  value={params.shareCode}
+                  codeStyle="square"
+                  outerEyeStyle="square"
+                  innerEyeStyle="square"
               />
             </View>
             <View

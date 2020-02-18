@@ -403,9 +403,9 @@ class MyFamily extends Component {
                     photo: response.uri,
                     photoDetails: response,
                     isPhotoAvailable: true,
-                    imagePath: response.path
-                }, () => self.uploadImage(response));
-
+                    imagePath: response.path,
+                    relativeImage: 'data:image/png;base64,'+response.data,
+                });
             }
         });
 
@@ -442,7 +442,7 @@ class MyFamily extends Component {
         if (stat) {
             try {
                 self.setState({
-                    relativeImage: response.uri,
+                    relativeImage: 'data:image/png;base64,'+response.data,
                     imageUrl: stat
                 })
             } catch (err) {
@@ -643,7 +643,7 @@ class MyFamily extends Component {
             "UNUnitID": self.props.dashBoardReducer.uniID,
             "FMRltn": self.state.relationName,
             "ASAssnID": self.props.dashBoardReducer.assId,
-            "FMImgName": self.state.imageUrl,
+            "FMImgName": self.state.relativeImage,
             "FMMinor": self.state.isMinor,
             "FMLName": self.state.lastName,
             "FMGurName": self.state.guardianName,
