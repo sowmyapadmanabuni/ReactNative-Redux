@@ -917,23 +917,23 @@ class Dashboard extends PureComponent {
       // })
       // .catch(error => {
       //   this.setState({ error, loading: false });
-      let userAssociation = this.props.dashBoardReducer.dropdown;
-      fetch(
-        `http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-          }
-        }
-      ).then(response => response.json())
-      .then(responseJson => {
-        console.log("res in data receving: ", responseJson);
-        })
-        .catch(error=>{
-        console.log("Error:",error)
-      })
+      // let userAssociation = this.props.dashBoardReducer.dropdown;
+      // fetch(
+      //   `http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
+      //   {
+      //     method: 'GET',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+      //     }
+      //   }
+      // ).then(response => response.json())
+      // .then(responseJson => {
+      //   console.log("res in data receving: ", responseJson);
+      //   })
+      //   .catch(error=>{
+      //   console.log("Error:",error)
+      // })
       this.listenToFirebase(userAssociation);
       // });
       this.checkUnitIsThere();
