@@ -759,18 +759,6 @@ class Dashboard extends PureComponent {
     //   console.log()
     //   this.syncData()
     // },5000)
-<<<<<<< HEAD
-    // timer.setInterval(
-    //            this,
-    //            'syncData',
-    //            async () => {
-    //              console.log("I am Timer");
-    //              this.syncData();
-    //            },
-    //            5000
-    //        );
-  }
-=======
      /* timer.setInterval(
                  this,
                  'syncData',
@@ -781,7 +769,6 @@ class Dashboard extends PureComponent {
                  10000
              );*/
     }
->>>>>>> 8972f68eb7095719e32301041ee16edccfe34350
 
 
   handleConnectivityChange = isConnected => {
@@ -2018,19 +2005,11 @@ class Dashboard extends PureComponent {
 
             onCardClick={() =>
 
-<<<<<<< HEAD
-              dropdown.length === 0
-                ? this.props.navigation.navigate('CreateOrJoinScreen')
-                : dropdown1.length === 0
-                  ? alert('Unit is not available')
-                  : this.props.navigation.navigate('MyFamilyList')
-=======
                dropdown.length === 0
                    ? this.props.navigation.navigate('CreateOrJoinScreen')
                    : dropdown1.length === 0
                    ? alert('Unit is not available')
                    :   this.props.navigation.navigate('MyFamilyList')
->>>>>>> 8972f68eb7095719e32301041ee16edccfe34350
             }
 
             backgroundColor={base.theme.colors.cardBackground}
