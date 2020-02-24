@@ -16,10 +16,55 @@ import {
   REFRESH_NOTIFICATION_SUCCESS,
   TOGGLE_ADMIN_NOTIFICATION,
   TOGGLE_COLLAPSIBLE,
-  ON_GATE_OPEN
+  ON_GATE_OPEN,
+  SEGREGATE_UNIT_NOTIFICATION,
+  SEGREGATE_ADMIN_NOTIFICATION,
+  SEGREGATE_DUMMY_UNIT_NOTIFICATION,
+  SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
+  TOGGLE_UNIT_COLLAPSIBLE,
+  TOGGLE_ADMIN_COLLAPSIBLE
 } from './types';
 import _ from 'lodash';
 import firebase from 'firebase';
+import { notifications } from 'react-native-firebase';
+
+export const segregateUnitNotification = (notification) => {
+  console.log('Notification in Unit reducer:',notification)
+  return dispatch => {
+    dispatch({
+      type:SEGREGATE_UNIT_NOTIFICATION,
+      payload:notification
+    })
+  }
+}
+
+export const segregateAdminNotification = (notification) => {
+  return dispatch => {
+    dispatch({
+      type:SEGREGATE_ADMIN_NOTIFICATION,
+      payload:notification
+    })
+  }
+}
+
+export const segregateDummyUnitNotification = (notification) => {
+  console.log('Notification in Unit reducer:',notification)
+  return dispatch => {
+    dispatch({
+      type:SEGREGATE_DUMMY_UNIT_NOTIFICATION,
+      payload:notification
+    })
+  }
+}
+
+export const segregateDummyAdminNotification = (notification) => {
+  return dispatch => {
+    dispatch({
+      type:SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
+      payload:notification
+    })
+  }
+}
 
 export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
   return dispatch => {
@@ -69,6 +114,8 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             announcement.push(data);
           }
         });
+        console.log('Notification@@@@@@:1111', responseJson.data);
+
           for(let i=0;i<joinNotif.length;i++){
               joinNotif[i].userImage=userImage
           }
@@ -142,8 +189,9 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
                           console.log(error, 'error while fetching networks');
                       });
               }
-             // console.log('Props  notifications~~~~~', allNotifs);
           });
+
+
 
         let firebaseNoti = [];
 
@@ -163,6 +211,40 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             });
           }
         });
+
+        let unitNotification = [];
+        let adminNotification = [];
+        for(let i in resData){
+          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
+            adminNotification.push(resData[i])
+          }else{
+            unitNotification.push(resData[i])
+          }
+        }
+
+        //segregateUnitNotification(unitNotification);
+        
+          dispatch({
+            type:SEGREGATE_UNIT_NOTIFICATION,
+            payload:unitNotification
+          })
+        
+        
+          dispatch({
+            type:SEGREGATE_DUMMY_UNIT_NOTIFICATION,
+            payload:unitNotification
+          })
+
+          dispatch({
+            type:SEGREGATE_ADMIN_NOTIFICATION,
+            payload:adminNotification
+          })
+        
+        
+          dispatch({
+            type:SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
+            payload:adminNotification
+          })
 
         Promise.all(promises).then(function(results) {
           let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
@@ -638,6 +720,16 @@ export const refreshNotifications = (
           ...announcement
         ];
 
+        let unitNotification = [];
+        let adminNotification = [];
+        for(let i in resData){
+          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
+            adminNotification.push(resData[i])
+          }else{
+            unitNotification.push(resData[i])
+          }
+        }
+
         // const sorted = _.sortBy(allNotifs, [
         //   "ntdCreated",
         //   "ntdUpdated"
@@ -734,6 +826,11 @@ export const refreshNotifications = (
         //     payload: [...firebaseNoti]
         //   });
         // });
+
+        segregateUnitNotification(unitNotification);
+        segregateAdminNotification(adminNotification);
+        segregateDummyAdminNotification(adminNotification);
+        segregateDummyUnitNotification(unitNotification);
 
         Promise.all(promises).then(function(results) {
           let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
@@ -1219,11 +1316,49 @@ export const toggleCollapsible = (prevData, value, index,item) => {
         newVal[i].open = true;
       }
     }
-    
-    
     console.log("New Value:",...newVal,index,value);
     dispatch({
       type: TOGGLE_COLLAPSIBLE,
+      payload: [...newVal]
+    });
+  };
+};
+
+export const toggleUnitCollapsible = (prevData, value, index,item) => {
+  return dispatch => {
+    let newVal = prevData;
+    console.log("sfsfgs:",prevData, value, index,item)
+    for (let i in prevData){
+      if(item.ntid === prevData[i].ntid){
+        newVal[i].open = !value;
+      }
+      else{
+        newVal[i].open = true;
+      }
+    }
+    console.log("New Value:",...newVal,index,value);
+    dispatch({
+      type: TOGGLE_UNIT_COLLAPSIBLE,
+      payload: [...newVal]
+    });
+  };
+};
+
+export const toggleAdminCollapsible = (prevData, value, index,item) => {
+  return dispatch => {
+    let newVal = prevData;
+    console.log("sfsfgs:",prevData, value, index,item)
+    for (let i in prevData){
+      if(item.ntid === prevData[i].ntid){
+        newVal[i].open = !value;
+      }
+      else{
+        newVal[i].open = true;
+      }
+    }
+    console.log("New Value:",...newVal,index,value);
+    dispatch({
+      type: TOGGLE_ADMIN_COLLAPSIBLE,
       payload: [...newVal]
     });
   };

@@ -28,24 +28,33 @@ class DashBoardHeader extends React.Component {
 
   renderBadge = () => {
     const { notifications,dashboardReducer } = this.props;
-    let selectedAssociation = dashboardReducer.assId;
     let role = dashboardReducer.role;
     let count = 0;
+    let adminNotification = [];
+    let unitNotification = [];
 
-    notifications.map((data, index) => {
-      console.log("data.ntIsActive:",data.ntIsActive,data.asAssnID,selectedAssociation)
-      if(role !== 1){
-        if(data.asAssnID == selectedAssociation){
-          if (data.ntIsActive ) {
-            count += 1;
-          }
+    for(let i in notifications){
+      let notificationList = notifications;
+      if(notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join" || notificationList[i].ntType === "Join_Status"){
+        if(notificationList[i].ntIsActive){
+          adminNotification.push(notificationList[i])
         }
-      }else
-      {
-        count += 1;
       }
-      
-    });
+      else{
+        if(notificationList[i].ntIsActive){
+        unitNotification.push(notificationList[i])
+        }
+      }
+    }
+
+    let adminNotificationCount = adminNotification.length;
+    let unitNotificationCount = unitNotification.length;
+
+    if(role === 1){
+      count = adminNotificationCount + unitNotificationCount;
+    }else{
+      count = unitNotificationCount;
+    }
 
     const BadgedIcon = withBadge(count)(Icon);
     console.log("COunt in Notification:",notifications,count);

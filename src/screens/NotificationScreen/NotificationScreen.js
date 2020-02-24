@@ -26,7 +26,13 @@ import {
     toggleCollapsible,
     onGateApp,
     createUserNotification,
-    toggleAllCollapsible
+    toggleAllCollapsible,
+    segregateUnitNotification,
+    segregateAdminNotification,
+    segregateDummyUnitNotification,
+    segregateDummyAdminNotification,
+    toggleUnitCollapsible,
+    toggleAdminCollapsible
 } from '../../actions';
 import _ from 'lodash';
 import { NavigationEvents } from 'react-navigation';
@@ -104,7 +110,7 @@ class NotificationScreen extends PureComponent {
         this.setState({
             isModalOpen: false
         })
-        this.segregateNotification();
+       // this.segregateNotification();
     }
 
 
@@ -121,6 +127,8 @@ class NotificationScreen extends PureComponent {
             BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
 
+        this.props.getNotifications(this.props.oyeURL,this.props.MyAccountID)
+
 
 
         axios
@@ -131,16 +139,16 @@ class NotificationScreen extends PureComponent {
                 }
             })
             .then(res => {
-                this.setState({ currentTime: res.data.data.currentDateTime }, () => {
+                this.setState({ currentTime: res.data.data.currentDateTime,isLoading:false }, () => {
 
 
-                    this.segregateNotification();
+                  //  this.segregateNotification();
 
                 });
             })
             .catch(error => {
                 this.setState({ currentTime: 'failed' }, () => {
-                    this.segregateNotification();
+                 //   this.segregateNotification();
                 });
             });
     }
@@ -153,17 +161,33 @@ class NotificationScreen extends PureComponent {
             let associationId = associationList[i].associationId;
             console.log("Association List:", associationList[i]);
             let associationPath = `syncdashboard/isAssociationRefreshing/${associationId}`;
+            let announcementPath = `syncdashboard/isAnnouncementRefreshing/${associationId}`;
+            fb.database().ref(announcementPath).on('value', function (snapshot) {
+                let receivedData = snapshot.val();
+                console.log("Received Data while listening to notification:", receivedData,associationId);
+                //if(receivedData !== null){
+                    
+                    self.refreshNotification();
+                //}
+            })
+
             if(associationList[i].roleId === 1){
                 fb.database().ref(associationPath).on('value', function (snapshot) {
                     let receivedData = snapshot.val();
                     console.log("Received Data while listening to notification:", receivedData,associationId);
                     if(receivedData !== null){
-                        self.props.getNotifications(self.props.oyeURL,self.props.MyAccountID);
-                        self.segregateNotification()
+
+                        self.refreshNotification();
                     }
                 })
             }
         }
+    }
+
+   refreshNotification(){
+        const {getNotifications} = this.props;
+        getNotifications(this.props.oyeURL,this.props.MyAccountID,1,this.props.notifications);
+        
     }
 
     segregateNotification() {
@@ -181,9 +205,12 @@ class NotificationScreen extends PureComponent {
             }
         }
 
+        this.props.segregateUnitNotification(unitNotification);
+        this.props.segregateAdminNotification(adminNotification);
+        this.props.segregateDummyUnitNotification(unitNotification);
+        this.props.segregateDummyAdminNotification(adminNotification);
+
         this.setState({
-            adminNotification: adminNotification,
-            unitNotification: unitNotification,
             unitNotificationCopy: unitNotification,
             adminNotificationCopy: adminNotification,
             isLoading: false
@@ -197,10 +224,6 @@ class NotificationScreen extends PureComponent {
         if (Platform.OS != 'ios') {
             BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
-    }
-
-    componentWillReceiveProps(props) {
-        this.segregateNotification();
     }
 
     handleBackButtonClick() {
@@ -569,13 +592,13 @@ class NotificationScreen extends PureComponent {
                             //this.openNotification(notifications,index,oyeURL)
                             this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
                             //  this.toggledCollapsible(notifications, item.open, index, item);
-                            this.props.toggleCollapsible(notifications, item.open, index, item)
-                            this.expandAdminNotification(notifications, index, item)
+                            this.props.toggleAdminCollapsible(this.props.adminNotification, item.open, index, item)
+                            this.expandAdminNotification(this.props.adminNotification, index, item)
                         }
                         else {
                             //this.toggledCollapsible(notifications, item.open, index, item)
-                            this.props.toggleCollapsible(notifications, item.open, index, item)
-                            this.expandAdminNotification(notifications, index, item)
+                            this.props.toggleAdminCollapsible(this.props.adminNotification, item.open, index, item)
+                            this.expandAdminNotification(this.props.adminNotifications, index, item)
                         }
 
                     }}>
@@ -679,10 +702,10 @@ class NotificationScreen extends PureComponent {
                     shadowRadius: 0.5, elevation: 3, borderBottomWidth: 0.5,
                     width: '100%',
                     marginTop: 10,
-                    marginBottom: this.props.notifications.length - 1 == index ? 100 : 0
+                    marginBottom: this.props.unitNotification.length - 1 == index ? 100 : 0
                 }}
                     onPress={() => {
-                        this.props.toggleCollapsible(notifications, item.open, index, item)
+                        this.props.toggleUnitCollapsible(this.props.unitNotification, item.open, index, item)
                         if (item.ntIsActive) {
                             //this.openNotification(notifications, index, oyeURL);
                             this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
@@ -1213,14 +1236,6 @@ class NotificationScreen extends PureComponent {
             isMemberRefreshing = receivedData === null ? 0 : receivedData.isMemberRefreshing + 1;
         })
 
-        // fb.database().ref(unitPath).set({
-        //     isUnitNotificationUpdating
-        // }).then((data)=>{
-        //     console.log('Data:',data);
-        // }).catch(error=>{
-        //     console.log("Error:",error);
-        // })
-
         fb.database().ref(associationPath).set({
             isAssocNotificationUpdating
         }).then((data) => {
@@ -1236,9 +1251,11 @@ class NotificationScreen extends PureComponent {
         }).catch(error => {
             console.log("Error:", error);
         })
+
+        this.approve1(item)
     }
 
-    approve1(item, status, notifications, index) {
+    approve1(item) {
         const { oyeURL, champBaseURL } = this.props;
         // if (status) {
         //   Alert.alert(
@@ -1690,9 +1707,9 @@ class NotificationScreen extends PureComponent {
             page
         } = this.props;
         // console.log(loading)
-        console.log('Data in notification', this.props, this.state.adminNotification, this.state.unitNotification);
-        let unitNotification = this.state.unitNotification;
-        let adminNotification = this.state.adminNotification;
+        console.log('Data in notification', this.props);
+        let unitNotification = this.props.unitNotification;
+        let adminNotification = this.props.adminNotification;
         let selectedView = this.state.selectedView;
         // this.segregateNotification()
 
@@ -1736,7 +1753,7 @@ class NotificationScreen extends PureComponent {
                                         ) : null
                                     }
                                     renderItem={this.renderItem}
-                                    extraData={this.props.notifications}
+                                    extraData={this.props.unitNotification}
                                     onEndReachedThreshold={0.5}
                                     onEndReached={() => {
                                         // console.log("End Reached");
@@ -1747,6 +1764,7 @@ class NotificationScreen extends PureComponent {
                                         <RefreshControl
                                             refreshing={refresh}
                                             onRefresh={() => {
+                                                
                                                 getNotifications(
                                                     oyeURL,
                                                     MyAccountID,
@@ -1784,7 +1802,7 @@ class NotificationScreen extends PureComponent {
                                     ) : null
                                 }
                                 renderItem={this.renderItem}
-                                extraData={this.props.notifications}
+                                extraData={this.props.adminNotification}
                                 onEndReachedThreshold={0.5}
                                 onEndReached={() => {
                                     // console.log("End Reached");
@@ -1979,7 +1997,7 @@ class NotificationScreen extends PureComponent {
 
     filterNotificationList(text) {
         let selectedView = this.state.selectedView;
-        let notificationList = selectedView === 0 ? this.state.unitNotificationCopy : this.state.adminNotificationCopy;
+        let notificationList = selectedView === 0 ? this.props.unitDummyNotification : this.props.adminDummyNotification;
         let newArr = [];
 
         let formattedText = text.toLowerCase();
@@ -2017,13 +2035,9 @@ class NotificationScreen extends PureComponent {
         console.log("Notitification after search:", notificationList)
 
         if (selectedView === 0) {
-            this.setState({
-                unitNotification: newArr
-            })
+            this.props.segregateUnitNotification(newArr)
         } else {
-            this.setState({
-                adminNotification: newArr
-            })
+            this.props.segregateAdminNotification(newArr);
         }
 
     }
@@ -2329,7 +2343,7 @@ class NotificationScreen extends PureComponent {
                     dataSource2: [arr1, arr2],
                     dataSource3: responseJson.data.unit.unOcStat
                 }, () => {
-                    //  this.props.toggleCollapsible(notifications, details.open, index, details)
+                      this.props.toggleAdminCollapsible(this.props.adminNotification, details.open, index, details)
                 });
                 console.log('DataSource2', this.state.dataSource2);
             })
@@ -2414,7 +2428,12 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         dashBoardReducer: state.DashboardReducer,
         champBaseURL: state.OyespaceReducer.champBaseURL,
+        unitNotification: state.NotificationReducer.unitNotification,
+        adminNotification: state.NotificationReducer.adminNotification,
+        unitDummyNotification:state.NotificationReducer.unitDummyNotification,
+        adminDummyNotification: state.NotificationReducer.adminDummyNotification,
     };
+
 };
 
 export default connect(
@@ -2428,6 +2447,12 @@ export default connect(
         onEndReached,
         onGateApp,
         createUserNotification,
-        toggleAllCollapsible
+        toggleAllCollapsible,
+        segregateUnitNotification,
+        segregateAdminNotification,
+        segregateDummyUnitNotification,
+        segregateDummyAdminNotification,
+        toggleUnitCollapsible,
+        toggleAdminCollapsible
     }
 )(NotificationScreen);

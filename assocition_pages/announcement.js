@@ -701,17 +701,21 @@ class Announcement extends Component {
       )
       .then(response => {
 
-        let associationPath = `syncdashboard/isAssociationRefreshing/${assocID}`;
-        let isAssocNotificationUpdating = 0;
+        let announcementPath = `syncdashboard/isAnnouncementRefreshing/${assocID}`;
+        let isAnnouncementNotificationUpdating = 0;
 
         
 
-        fb.database().ref(associationPath).set({
-          isAssocNotificationUpdating
+        fb.database().ref(announcementPath).set({
+          isAnnouncementNotificationUpdating
         }).then((response)=>{
           console.log("Updated response:",response)
         }).catch(error=>{
           console.log("error while updating:",error)
+        })
+
+        fb.database().ref(announcementPath).remove().then((response)=>{
+          console.log("Response Removed:",response)
         })
 
         console.log(
@@ -837,9 +841,15 @@ class Announcement extends Component {
                 if(!this.state.paused){
                   this.pause();
                 }
-                fb.database().ref(associationPath).on('value',function(snapshot){
+                fb.database().ref(announcementPath).on('value',function(snapshot){
                   let receivedData = snapshot.val();
-                   isAssocNotificationUpdating = receivedData !== null?receivedData.isAssocNotificationUpdating + 1:0
+                   isAnnouncementNotificationUpdating = receivedData !== null?receivedData.isAnnouncementNotificationUpdating + 1:0
+                })
+
+                fb.database().ref(announcementPath).remove().then((response)=>{
+                  console.log('Response:',response)
+                }).catch(error=>{
+                  console.log("Error:",error);
                 })
                 this.props.navigation.goBack();
                 // getAssoMembers(oyeURL, MyAccountID);

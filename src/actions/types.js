@@ -52,3 +52,10 @@ export const UPDATE_QR_BASE64 = 'update_qr_bas64';
 export const UPDATE_STAFF_INFO = 'update_staff_info';
 
 export const UPDATE_SUBSCRIPTION = 'update_subscription';
+
+export const SEGREGATE_UNIT_NOTIFICATION = 'segregate_unit_notification';
+export const SEGREGATE_ADMIN_NOTIFICATION = 'segregate_admin_notification';
+export const SEGREGATE_DUMMY_UNIT_NOTIFICATION = 'segregate_dummy_unit_notification';
+export const SEGREGATE_DUMMY_ADMIN_NOTIFICATION = 'segregate_dummy_admin_notification';
+export const TOGGLE_UNIT_COLLAPSIBLE = 'toggle_unit_collapsible';
+export const TOGGLE_ADMIN_COLLAPSIBLE = 'toggle_admin_collapsible';
