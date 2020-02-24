@@ -214,11 +214,12 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
         let unitNotification = [];
         let adminNotification = [];
-        for(let i in resData){
-          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
-            adminNotification.push(resData[i])
+        //for(let i in resData){
+          for(let i in allNotifs){
+          if(allNotifs[i].ntType === "joinrequest" || allNotifs[i].ntType === "Join" || allNotifs[i].ntType === "Join_Status"){
+            adminNotification.push(allNotifs[i])
           }else{
-            unitNotification.push(resData[i])
+            unitNotification.push(allNotifs[i])
           }
         }
 
