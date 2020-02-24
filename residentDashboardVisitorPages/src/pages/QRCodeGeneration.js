@@ -16,7 +16,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 // import Header from './src/components/common/Header'
-import { QRCode } from 'react-native-custom-qr-codes';
+import  QRCode  from 'react-native-qrcode-svg';
 import { NavigationEvents } from 'react-navigation';
 import Share, { ShareSheet, Button } from 'react-native-share';
 import {
@@ -444,8 +444,8 @@ class QRCodeGeneration extends Component {
               }}
             >
               <QRCode
-                logo={require('../../../icons/oyesafe_qr_logo.png')}
-                logoSize={hp('8%')}
+                // logo={require('../../../icons/oyesafe_qr_logo.png')}
+                // logoSize={hp('8%')}
                 size={hp('20%')}
                 content={this.state.qrText}
                 codeStyle="square"
