@@ -69,14 +69,12 @@ class AddRegularVisitor extends Component {
         }else if (base.utils.validate.isBlank(self.state.profileUrl)) {
             Alert.alert('Profile Picture is mandatory', message)
         }else{
-            //this.uploadImage(self.state.urlToServer)
-            this.sendRegData()
-
+            this.uploadImage(self.state.urlToServer)
         }
 
     }
 
-    sendRegData(){
+    sendRegData(img){
         let self =this;
         let member = {
             ACFName: self.state.firstName,
@@ -96,7 +94,7 @@ class AddRegularVisitor extends Component {
             ACISDCode2: "",
             ACISDCode3: "",
             ACISDCode4: "",
-            ACImgName:this.state.profileUrl
+            ACImgName:img //this.state.urlToServer
         };
         console.log('DATA TO REGISTER USER',member, this.props.champBaseURL)
         const url = this.props.champBaseURL + "account/signup";
@@ -195,7 +193,7 @@ class AddRegularVisitor extends Component {
                 console.log('Response',response)
                 this.setState({
                     urlToServer:response,
-                    profileUrl:response.data
+                    profileUrl:response.uri
                 })
             }
         })
@@ -246,8 +244,7 @@ class AddRegularVisitor extends Component {
                             width: '100%',
                             alignItems: 'center', }}>
                             <TouchableOpacity style={Style.relativeImgView} onPress={() => this.selectPhotoTapped()}>
-                                {this.state.profileUrl === '' || this.state.profileUrl==undefined || this.state.profileUrl==null
-                                    || this.state.profileUrl=="null" ?
+                                {this.state.profileUrl === '' ?
                                     <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
                                            source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                     />

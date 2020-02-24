@@ -134,7 +134,7 @@ class DrawerMenu extends Component {
                 <Image
                 style={[HeaderStyles.imageStyles,{height:42,width:42,borderRadius:42/2}]}
                   source={{
-                    uri: 'data:image/png;base64,'+this.props.userReducer.userProfilePic
+                    uri: 'https://mediaupload.oyespace.com/' +this.props.userReducer.userProfilePic
                   }}
                 />
               )}
