@@ -148,10 +148,10 @@ class MyFamilyList extends React.Component {
                     )
                 });
                 const {updateIdDashboard} = this.props;
-                updateIdDashboard({
-                    prop: 'familyMemberCount',
-                    value: reqData.length
-                });
+                // updateIdDashboard({
+                //     prop: 'familyMemberCount',
+                //     value: reqData.length
+                // });
                 this.setState({familyData: myFamilyList});
             } else {
                 this.showAlert(stat.error.message, true);

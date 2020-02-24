@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import {Alert, Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Card} from 'native-base';
+import React, { Component } from 'react';
+import { Alert, Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Card } from 'native-base';
 import moment from 'moment';
-import {DatePickerDialog} from 'react-native-datepicker-dialog';
+import { DatePickerDialog } from 'react-native-datepicker-dialog';
 import axios from 'axios';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {connect} from 'react-redux';
-import {createUserNotification, getAssoMembers, updateJoinedAssociation} from '../src/actions';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { connect } from 'react-redux';
+import { createUserNotification, getAssoMembers, updateJoinedAssociation } from '../src/actions';
 import _ from 'lodash';
-import {CLOUD_FUNCTION_URL} from '../constant';
+import { CLOUD_FUNCTION_URL } from '../constant';
 import firebase from 'react-native-firebase';
 import * as fb from 'firebase';
 
@@ -31,7 +31,7 @@ class RegisterMe extends Component {
     }
 
     componentDidMount() {
-        const {getAssoMembers, oyeURL, MyAccountID} = this.props;
+        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
         getAssoMembers(oyeURL, MyAccountID);
     }
 
@@ -63,7 +63,7 @@ class RegisterMe extends Component {
             unitList
         } = this.props.navigation.state.params;
 
-        const {getAssoMembers, oyeURL, MyAccountID} = this.props;
+        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
 
         /*
         else if (this.checkForOwner()) {
@@ -105,7 +105,7 @@ class RegisterMe extends Component {
             console.log('ANU', anu);
             console.log(this.props);
             let champBaseURL = this.props.champBaseURL;
-            this.setState({sent: true, loading: true});
+            this.setState({ sent: true, loading: true });
 
             axios
                 .post(
@@ -133,15 +133,7 @@ class RegisterMe extends Component {
                 .then(response => {
                     let responseData_1 = response.data;
                     if (responseData_1.success) {
-                        let isAssocNotificationUpdating = 0;
-                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
-                        fb.database().ref(associationPath).set({
-                            isAssocNotificationUpdating
-                        }).then((data) => {
-                            console.log('Data added to FRTDB:', data);
-                        }).catch(error => {
-                            console.log("Error:", error);
-                        })
+
                         let headers_2 = {
                             'Content-Type': 'application/json',
                             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
@@ -231,7 +223,7 @@ class RegisterMe extends Component {
                                             occupancyDate: occupancyDate
                                         })
                                         .then(response_3 => {
-                                            this.setState({loading: false});
+                                            this.setState({ loading: false });
 
                                             axios
                                                 .get(
@@ -284,6 +276,17 @@ class RegisterMe extends Component {
                                                         this.props.joinedAssociations,
                                                         unitList.unUnitID
                                                     );
+                                                    setTimeout(()=>{
+                                                        let isAssocNotificationUpdating = 0;
+                                                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
+                                                        fb.database().ref(associationPath).set({
+                                                            isAssocNotificationUpdating
+                                                        }).then((data) => {
+                                                            console.log('Data added to FRTDB:', data);
+                                                        }).catch(error => {
+                                                            console.log("Error:", error);
+                                                    })
+                                                    },2000)
                                                     Alert.alert(
                                                         'Oyespace',
                                                         'Request sent to Admin',
@@ -291,8 +294,7 @@ class RegisterMe extends Component {
                                                             {
                                                                 text: 'Ok',
                                                                 onPress: () =>
-                                                                this.props.navigation.navigate('NotificationScreen')
-                                                                    //this.props.navigation.navigate('ResDashBoard')
+                                                                    this.props.navigation.navigate('ResDashBoard')
                                                             }
                                                         ],
                                                         {
@@ -336,7 +338,7 @@ class RegisterMe extends Component {
                                             text: 'Ok', onPress: () => {
                                             }
                                         }],
-                                        {cancelable: false}
+                                        { cancelable: false }
                                     );
                                 }
                             })
@@ -348,10 +350,10 @@ class RegisterMe extends Component {
                                 console.log('********');
                                 console.log(error);
                                 console.log('********');
-                                this.setState({sent: false});
+                                this.setState({ sent: false });
                             });
                     } else {
-                        this.setState({loading: false, sent: false});
+                        this.setState({ loading: false, sent: false });
                         Alert.alert(
                             'Alert',
                             'Request not sent..!',
@@ -359,14 +361,14 @@ class RegisterMe extends Component {
                                 text: 'Ok', onPress: () => {
                                 }
                             }],
-                            {cancelable: false}
+                            { cancelable: false }
                         );
-                        this.setState({sent: false});
+                        this.setState({ sent: false });
                     }
                 })
                 .catch(error => {
                     console.log('second error', error);
-                    this.setState({loading: false, sent: false});
+                    this.setState({ loading: false, sent: false });
                     Alert.alert(
                         'Alert',
                         'Request not sent..!',
@@ -374,7 +376,7 @@ class RegisterMe extends Component {
                             text: 'Ok', onPress: () => {
                             }
                         }],
-                        {cancelable: false}
+                        { cancelable: false }
                     );
                 });
         }
@@ -387,7 +389,7 @@ class RegisterMe extends Component {
             unitList
         } = this.props.navigation.state.params;
 
-        const {getAssoMembers, oyeURL, MyAccountID} = this.props;
+        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
         /**
          else if (this.state.sent) {
       alert("Request already sent");
@@ -428,7 +430,7 @@ class RegisterMe extends Component {
 
             let champBaseURL = this.props.champBaseURL;
             console.log(champBaseURL);
-            this.setState({sent: true});
+            this.setState({ sent: true });
 
             axios
                 .post(
@@ -459,15 +461,15 @@ class RegisterMe extends Component {
                     console.log('*******');
                     let responseData_1 = response.data;
                     if (responseData_1.success) {
-                        let isAssocNotificationUpdating = 0;
-                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}`;
-                        fb.database().ref(associationPath).set({
-                            isAssocNotificationUpdating
-                        }).then((data) => {
-                            console.log('Data added to FRTDB:', data);
-                        }).catch(error => {
-                            console.log("Error:", error);
-                        })
+                        // let isAssocNotificationUpdating = 0;
+                        // let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}`;
+                        // fb.database().ref(associationPath).set({
+                        //     isAssocNotificationUpdating
+                        // }).then((data) => {
+                        //     console.log('Data added to FRTDB:', data);
+                        // }).catch(error => {
+                        //     console.log("Error:", error);
+                        // })
                         let headers_2 = {
                             'Content-Type': 'application/json',
                             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
@@ -556,7 +558,7 @@ class RegisterMe extends Component {
                                             occupancyDate: occupancyDate
                                         })
                                         .then(response_3 => {
-                                            this.setState({loading: false});
+                                            this.setState({ loading: false });
 
                                             axios
                                                 .get(
@@ -609,6 +611,16 @@ class RegisterMe extends Component {
                                                         this.props.joinedAssociations,
                                                         unitList.unUnitID
                                                     );
+                                                    let isAssocNotificationUpdating = 0;
+                                                    let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
+                                                    fb.database().ref(associationPath).set({
+                                                        isAssocNotificationUpdating
+                                                    }).then((data) => {
+                                                        console.log('Data added to FRTDB:', data);
+                                                    }).catch(error => {
+                                                        console.log("Error:", error);
+                                                    })
+                                                    
                                                     Alert.alert(
                                                         'Oyespace',
                                                         'Request sent to Admin',
@@ -660,7 +672,7 @@ class RegisterMe extends Component {
                                             text: 'Ok', onPress: () => {
                                             }
                                         }],
-                                        {cancelable: false}
+                                        { cancelable: false }
                                     );
                                 }
                             })
@@ -674,7 +686,7 @@ class RegisterMe extends Component {
                                 console.log('********');
                             });
                     } else {
-                        this.setState({loading: false, sent: false});
+                        this.setState({ loading: false, sent: false });
                         Alert.alert(
                             'Alert',
                             'Request not sent..!',
@@ -682,13 +694,13 @@ class RegisterMe extends Component {
                                 text: 'Ok', onPress: () => {
                                 }
                             }],
-                            {cancelable: false}
+                            { cancelable: false }
                         );
                     }
                 })
                 .catch(error => {
                     console.log('second error', error);
-                    this.setState({loading: false, sent: false});
+                    this.setState({ loading: false, sent: false });
                     Alert.alert(
                         'Alert',
                         'Request not sent..!',
@@ -696,15 +708,15 @@ class RegisterMe extends Component {
                             text: 'Ok', onPress: () => {
                             }
                         }],
-                        {cancelable: false}
+                        { cancelable: false }
                     );
                 });
         }
     };
 
     checkStatus = () => {
-        const {unitList, AssnId} = this.props.navigation.state.params;
-        const {joinedAssociations, memberList} = this.props;
+        const { unitList, AssnId } = this.props.navigation.state.params;
+        const { joinedAssociations, memberList } = this.props;
         let unitID = unitList.unUnitID;
 
         let joinStat = _.includes(joinedAssociations, unitID);
@@ -722,7 +734,7 @@ class RegisterMe extends Component {
             if (
                 // matchUnit.meJoinStat === 'Approved' ||
                 matchUnit.meJoinStat === 'Requested'
-            // (matchUnit.meJoinStat === 'Accepted' && matchUnit.meIsActive)
+                // (matchUnit.meJoinStat === 'Accepted' && matchUnit.meIsActive)
             ) {
                 status = true;
             } else {
@@ -738,8 +750,8 @@ class RegisterMe extends Component {
     };
 
     checkForOwner = () => {
-        const {memberList} = this.props;
-        const {unitList} = this.props.navigation.state.params;
+        const { memberList } = this.props;
+        const { unitList } = this.props.navigation.state.params;
 
         let unitID = unitList.unUnitID;
         let status;
@@ -757,28 +769,28 @@ class RegisterMe extends Component {
 
         if (matchUnit) {
             if (
-              (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive)
-               ||
-              (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
+                (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive)
+                ||
+                (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
             ) {
-              status = { stat: true, admin: false };
-              // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-              //   status = true;
+                status = { stat: true, admin: false };
+                // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+                //   status = true;
             } else if (matchUnit.mrmRoleID === 1) {
-              status = { stat: false, admin: true };
+                status = { stat: false, admin: true };
             } else {
-              status = { stat: false, admin: false };
+                status = { stat: false, admin: false };
             }
         } else {
-            status = {stat: false, admin: false};
+            status = { stat: false, admin: false };
         }
 
         return status;
     };
 
-     checkFamily = () => {
-        const {memberList} = this.props;
-        const {unitList} = this.props.navigation.state.params;
+    checkFamily = () => {
+        const { memberList } = this.props;
+        const { unitList } = this.props.navigation.state.params;
 
         let unitID = unitList.unUnitID;
         let status;
@@ -796,24 +808,24 @@ class RegisterMe extends Component {
 
         if (matchUnit) {
             if (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive) {
-                status = {stat: true, admin: false};
+                status = { stat: true, admin: false };
                 // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
                 //   status = true;
             } else if (matchUnit.mrmRoleID === 1) {
-                status = {stat: false, admin: true};
+                status = { stat: false, admin: true };
             } else {
-                status = {stat: false, admin: false};
+                status = { stat: false, admin: false };
             }
         } else {
-            status = {stat: false, admin: false};
+            status = { stat: false, admin: false };
         }
 
         return status;
     };
 
     checkTenant = () => {
-        const {memberList} = this.props;
-        const {unitList} = this.props.navigation.state.params;
+        const { memberList } = this.props;
+        const { unitList } = this.props.navigation.state.params;
 
         let unitID = unitList.unUnitID;
         let status;
@@ -830,20 +842,20 @@ class RegisterMe extends Component {
 
         if (matchUnit) {
             if (
-              (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) ||
-              (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
+                (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) ||
+                (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
             ) {
-              console.log('In_Here');
-              status = { stat: true, admin: false };
-              // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
-              //   status = true;
+                console.log('In_Here');
+                status = { stat: true, admin: false };
+                // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
+                //   status = true;
             } else if (matchUnit.mrmRoleID === 1) {
-              status = { stat: false, admin: true };
+                status = { stat: false, admin: true };
             } else {
-              status = { stat: false, admin: false };
+                status = { stat: false, admin: false };
             }
         } else {
-            status = {stat: false, admin: false};
+            status = { stat: false, admin: false };
         }
 
         return status;
@@ -852,7 +864,7 @@ class RegisterMe extends Component {
     checkCommon = () => {
         let status;
 
-        const {unUniName} = this.props.navigation.state.params.unitList;
+        const { unUniName } = this.props.navigation.state.params.unitList;
 
         if (unUniName === 'Common' || unUniName === 'common') {
             status = true;
@@ -866,7 +878,7 @@ class RegisterMe extends Component {
     renderButton = () => {
         let status;
 
-        const {unUniName} = this.props.navigation.state.params.unitList;
+        const { unUniName } = this.props.navigation.state.params.unitList;
 
         let lowerCaseName = unUniName.toLowerCase();
 
@@ -880,12 +892,12 @@ class RegisterMe extends Component {
     };
 
     render() {
-        const {unitList, AssnId} = this.props.navigation.state.params;
+        const { unitList, AssnId } = this.props.navigation.state.params;
         // console.log('unitList', unitList);
         return (
             <View style={styles.container}>
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                    <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
+                <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                    <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -920,16 +932,16 @@ class RegisterMe extends Component {
                                 source={require('../icons/OyespaceSafe.png')}
                             />
                         </View>
-                        <View style={{flex: 0.2}}>
+                        <View style={{ flex: 0.2 }}>
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
+                    <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
                 </SafeAreaView>
 
                 <Text style={styles.titleOfScreen}>Register Me</Text>
                 {/* {unitList.owner.length > 0 ? ( */}
-                <View style={{flexDirection: 'column'}}>
+                <View style={{ flexDirection: 'column' }}>
                     {/* <View style={styles.box}>
                         <Text style={{ color: "#fff", fontSize: hp("2.2%") }}>Join Us</Text>
                     </View>*/}
@@ -963,7 +975,7 @@ class RegisterMe extends Component {
                         </Card>
                     </View>
 
-                    <View style={{flexDirection: 'column', marginTop: hp('3%')}}>
+                    <View style={{ flexDirection: 'column', marginTop: hp('3%') }}>
                         <View style={styles.View}>
                             {this.renderButton() ? null : (
                                 <TouchableOpacity onPress={() => this.submitForOwnwer()}>
@@ -974,7 +986,7 @@ class RegisterMe extends Component {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            <Text style={{fontSize: hp('2%')}}>Join As Owner</Text>
+                                            <Text style={{ fontSize: hp('2%') }}>Join As Owner</Text>
                                         </View>
                                     </Card>
                                 </TouchableOpacity>
@@ -990,7 +1002,7 @@ class RegisterMe extends Component {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            <Text style={{fontSize: hp('2%')}}>Join As Tenant</Text>
+                                            <Text style={{ fontSize: hp('2%') }}>Join As Tenant</Text>
                                         </View>
                                     </Card>
                                 </TouchableOpacity>
@@ -1026,7 +1038,7 @@ const styles = StyleSheet.create({
         height: hp('7%'),
         width: Dimensions.get('screen').width,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         elevation: 2,
         position: 'relative'
@@ -1113,10 +1125,10 @@ const mapStateToProps = state => {
     let userdata = state.UserReducer.userData;
     const user =
         userdata != undefined &&
-        userdata.data != undefined &&
-        userdata.data.account != undefined &&
-        userdata.data.account.length != undefined &&
-        userdata.data.account.length > 0
+            userdata.data != undefined &&
+            userdata.data.account != undefined &&
+            userdata.data.account.length != undefined &&
+            userdata.data.account.length > 0
             ? userdata.data.account[0]
             : null;
     return {
@@ -1138,6 +1150,6 @@ const mapStateToProps = state => {
 
 export default connect(
     mapStateToProps,
-    {updateJoinedAssociation, createUserNotification, getAssoMembers}
+    { updateJoinedAssociation, createUserNotification, getAssoMembers }
 )(RegisterMe);
 

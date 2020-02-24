@@ -1,73 +1,29 @@
-import React, { PureComponent } from 'react';
-import {
-  Alert,
-  Dimensions,
-  Image,
-  Linking,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-  BackHandler,
-  ToastAndroid,
-  NetInfo,
-  ImageBackground,
-    ScrollView,FlatList
-} from 'react-native';
-import base from '../../../base';
-import { connect } from 'react-redux';
-import CardView from '../../../components/cardView/CardView';
-import { Dropdown } from 'react-native-material-dropdown';
-import ElevatedView from 'react-native-elevated-view';
-import OSButton from '../../../components/osButton/OSButton';
-import { showMessage, hideMessage } from 'react-native-flash-message';
-import Style from './Style';
 import axios from 'axios';
-import firebase, { Firebase } from 'react-native-firebase';
-import { Button } from 'native-base';
-import _ from 'lodash';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp
-} from 'react-native-responsive-screen';
 import * as fb from 'firebase';
-import CountdownCircle from 'react-native-countdown-circle';
-import * as Animatable from 'react-native-animatable';
-import BackgroundTimer from 'react-native-background-timer';
-
-
-import {
-  createNotification,
-  createUserNotification,
-  getAssoMembers,
-  getDashAssociation,
-  getDashSub,
-  getDashUnits,
-  getNotifications,
-  newNotifInstance,
-  refreshNotifications,
-  updateApproveAdmin,
-  updateDropDownIndex,
-  updateIdDashboard,
-  updateJoinedAssociation,
-  updateSelectedDropDown,
-  updateUserInfo,
-  updateuserRole,
-  getDashAssoSync
-} from '../../../actions';
-import ProgressLoader from 'rn-progress-loader';
-import { NavigationEvents } from 'react-navigation';
-import timer from 'react-native-timer';
-
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import IcoMoonConfig from '../../../assets/selection.json';
+import _ from 'lodash';
 import moment from 'moment';
-import strings from "../../../base/utils/strings";
+import React, { PureComponent } from 'react';
+import { Alert, BackHandler, Dimensions, FlatList, Image, ImageBackground, Linking, NetInfo, Platform, ScrollView, StyleSheet, Text, ToastAndroid, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import CountdownCircle from 'react-native-countdown-circle';
 import DeviceInfo from 'react-native-device-info';
-import announcement from "../../../../assocition_pages/announcement";
-import NotificationScreen from '../../NotificationScreen/NotificationScreen';
+import ElevatedView from 'react-native-elevated-view';
+import firebase from 'react-native-firebase';
+import { Dropdown } from 'react-native-material-dropdown';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import { NavigationEvents } from 'react-navigation';
+import { connect } from 'react-redux';
+import ProgressLoader from 'rn-progress-loader';
+import { createNotification, createUserNotification, getAssoMembers, getDashAssociation, getDashAssoSync, getDashSub, getDashUnits, getNotifications, newNotifInstance, refreshNotifications, updateApproveAdmin, updateDropDownIndex, updateIdDashboard, updateJoinedAssociation, updateSelectedDropDown, updateUserInfo, updateuserRole } from '../../../actions';
+import IcoMoonConfig from '../../../assets/selection.json';
+import base from '../../../base';
+import CardView from '../../../components/cardView/CardView';
+import OSButton from '../../../components/osButton/OSButton';
+import Style from './Style';
+
+
+
 
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -112,7 +68,7 @@ class Dashboard extends PureComponent {
       myAdminIconWidth: Platform.OS === 'ios' ? 20 : 20,
       myAdminIconHeight: Platform.OS === 'ios' ? 20 : 20,
       selectedView: 0,
-      invoicesList:[]
+      invoicesList: []
 
 
     };
@@ -149,7 +105,7 @@ class Dashboard extends PureComponent {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     console.log('API LEVEL#######', DeviceInfo.getAPILevel())
     console.log('API LEVEL#######1111111', DeviceInfo.getBaseOS())
-    console.log('API LEVEL#######444444', DeviceInfo.getSystemVersion())  
+    console.log('API LEVEL#######444444', DeviceInfo.getSystemVersion())
   }
 
   componentWillUnmount() {
@@ -320,7 +276,7 @@ class Dashboard extends PureComponent {
       receiveNotifications,
       oyeURL
     } = this.props;
-    console.log("Dashborad reducer Data in Request Notification Permission:",this.props.dashBoardReducer);
+    console.log("Dashborad reducer Data in Request Notification Permission:", this.props.dashBoardReducer);
     firebase
       .messaging()
       .hasPermission()
@@ -581,10 +537,10 @@ class Dashboard extends PureComponent {
         .notifications()
         .onNotification(notification => {
           console.log('___________');
-          console.log("NOTIFICATION@@@@",notification);
-          console.log('NOTIFICATION@@@@____________', notification.data.unitName,notification.data.associationID,notification.data.associationName);
+          console.log("NOTIFICATION@@@@", notification);
+          console.log('NOTIFICATION@@@@____________', notification.data.unitName, notification.data.associationID, notification.data.associationName);
 
-           //  this.changeTheAssociation(notification.data.associationName,notification.data.associationID,)
+          //  this.changeTheAssociation(notification.data.associationName,notification.data.associationID,)
 
           if (notification._data.associationID) {
             // this.props.createNotification(notification._data, navigationInstance, false)
@@ -684,13 +640,13 @@ class Dashboard extends PureComponent {
         console.log(
           '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
         );
-      
-       // ntType
 
-        console.log('GET THE NOTIFICATION DATA',notificationOpen.notification.data)
-        if(notificationOpen.notification.data.ntType==="Join"){
-          this.changeTheAssociation(notificationOpen.notification.data.associationName,notificationOpen.notification.data.associationID,
-              notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
+        // ntType
+
+        console.log('GET THE NOTIFICATION DATA', notificationOpen.notification.data)
+        if (notificationOpen.notification.data.ntType === "Join") {
+          this.changeTheAssociation(notificationOpen.notification.data.associationName, notificationOpen.notification.data.associationID,
+            notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
 
         this.readFBRTB(true);
@@ -710,7 +666,7 @@ class Dashboard extends PureComponent {
     getDashAssociation(oyeURL, MyAccountID);
     getAssoMembers(oyeURL, MyAccountID);
     this.requestNotifPermission();
-    
+
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
   };
@@ -777,6 +733,7 @@ class Dashboard extends PureComponent {
     this.requestNotifPermission();
     // this.getBlockList();
     this.props.getNotifications(oyeURL, MyAccountID);
+
     // let self = this;
     //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
     //     let receivedData = snapshot.val();
@@ -802,16 +759,16 @@ class Dashboard extends PureComponent {
     //   console.log()
     //   this.syncData()
     // },5000)
-      // timer.setInterval(
-      //            this,
-      //            'syncData',
-      //            async () => {
-      //              console.log("I am Timer");
-      //              this.syncData();
-      //            },
-      //            5000
-      //        );
-    }
+    // timer.setInterval(
+    //            this,
+    //            'syncData',
+    //            async () => {
+    //              console.log("I am Timer");
+    //              this.syncData();
+    //            },
+    //            5000
+    //        );
+  }
 
 
   handleConnectivityChange = isConnected => {
@@ -827,6 +784,7 @@ class Dashboard extends PureComponent {
     const { dropdown, dropdown1 } = this.props;
     console.log("this.state.assocId ", this.state.assocId);
     console.log('Check unit and Association available@@@', dropdown, dropdown1);
+    //this.listenToFirebase(dropdown);
     try {
       let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
         this.state.assocId
@@ -934,48 +892,93 @@ class Dashboard extends PureComponent {
       //   .catch(error=>{
       //   console.log("Error:",error)
       // })
-      this.listenToFirebase(userAssociation);
+
       // });
       this.checkUnitIsThere();
+
     } catch (err) {
       //alert(err)
       console.log('ROLECHECK_ERROR', err);
     }
   }
 
-  
 
-  listenToFirebase(userAssociation){
+
+  listenToFirebase(userAssociation) {
+    console.log("User Association", userAssociation)
     let self = this;
-    for (let i in userAssociation){
+    for (let i in userAssociation) {
       let associationId = userAssociation[i].associationId;
       let associationPath = `syncdashboard/isAssociationRefreshing/${associationId}`;
-      fb.database().ref(associationPath).on('value',function(snapshot){
+      let countPath = `syncdashboard/isCountRefreshing/${associationId}`
+      console.log("Log of association listener:", associationId)
+      fb.database().ref(associationPath).on('value', function (snapshot) {
         let receivedData = snapshot.val();
-        console.log("Received Data in dashboard:",receivedData);
-        if(receivedData !== null){
-        //  if(receivedData.isAssocNotificationUpdating>0){
-            console.log("Update Notification List Now")
-            self.updateDashboard();
-            
-          //   firebase.database().ref(associationPath).remove().then((response)=>{
-          //     let receivedData = response.val();
-          //     console.log("Response!!!!!!!",receivedData)
-
-          // }).catch((error)=>{
-          //     console.log('Response!!!!!!!',error.response)
-          // });
-         // }
+        console.log("Received Data in dashboard:", receivedData);
+        if (receivedData !== null) {
+          console.log("Update Notification List Now")
+          self.updateDashboard();
         }
-        
-    })
+      })
+      fb.database().ref(countPath).on('value', function (snapshot) {
+        let receivedData = snapshot.val();
+        console.log("Received Data in dashboard:", receivedData);
+        if (receivedData !== null) {
+          console.log("Update Notification List Now")
+          self.updateDashboardCount();
+        }
+      })
     }
   }
 
-  updateDashboard(){
+
+  updateDashboardCount() {
+    console.log("HItting Here ______________________________________IN dashboard count")
+    this.getVehicleList()
+  }
+
+  updateDashboard() {
     let self = this;
     console.log("Update Dashboard Changes if any------------------------------------>>>>>>>>>>>")
     self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
+  }
+
+  async getVehicleList() {
+    let self = this;
+    let associationId = self.props.dashBoardReducer.selectedAssociation;
+    let accountId = self.props.userReducer.MyAccountID;
+    let unitId = self.props.dashBoardReducer.uniID;
+    console.log('HItting Here ______________________________________IN dashboard count', associationId, accountId, unitId, self.props.oyeURL)
+    fetch(
+      `http://${self.props.oyeURL}/oyesafe/api/v1/GetFamilyMemberVehicleCountByAssocAcntUnitID/${associationId}/${accountId}/${unitId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        }
+      }
+    ).then(response => response.json())
+      .then((responseJson) => {
+        console.log("HItting Here ______________________________________IN dashboard count123:", responseJson)
+        self.setState({
+          vehiclesCount: responseJson.data.vehicleCount,
+          falmilyMemebCount: responseJson.data.familyMemberCount
+        });
+        const { updateIdDashboard } = this.props;
+        updateIdDashboard({
+          prop: 'vehiclesCount',
+          value: responseJson.data.vehicleCount
+        });
+        updateIdDashboard({
+          prop: 'familyMemberCount',
+          value: responseJson.data.familyMemberCount
+        });
+      })
+      .catch(error => {
+        console.log("HItting Here ______________________________________IN dashboard count1234:", error)
+      })
+
   }
 
   static getAssociationList() {
@@ -1121,7 +1124,7 @@ class Dashboard extends PureComponent {
   }
 
 
-  changeTheAssociation = (value, assId,unitId,unitName) => {
+  changeTheAssociation = (value, assId, unitId, unitName) => {
 
     const {
       associationid,
@@ -1134,18 +1137,18 @@ class Dashboard extends PureComponent {
       dropdown1,
     } = this.props;
 
-    console.log('Ass index', value, assId,dropdown1,dropdown);
+    console.log('Ass index', value, assId, dropdown1, dropdown);
     const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    this.setState({ assocId: assId});
+    this.setState({ assocId: assId });
 
     getDashUnits(
-        assId,
-        oyeURL,
-        MyAccountID,
-        dropdown,
-        assId,
-        dropdown1
+      assId,
+      oyeURL,
+      MyAccountID,
+      dropdown,
+      assId,
+      dropdown1
     );
 
     const { updateIdDashboard } = this.props;
@@ -1175,7 +1178,7 @@ class Dashboard extends PureComponent {
     });
     updateIdDashboard({
       prop: 'uniID',
-      value:unitId
+      value: unitId
     });
     updateSelectedDropDown({
       prop: 'uniID',
@@ -1183,13 +1186,13 @@ class Dashboard extends PureComponent {
     });
     updateSelectedDropDown({
       prop: 'selectedDropdown1',
-      value:unitName
+      value: unitName
     });
 
-    console.log('THISPOPPPPPPPP',this.props)
+    console.log('THISPOPPPPPPPP', this.props)
 
     this.roleCheckForAdmin(assId);
-   // this.getUnitListByAssoc();
+    // this.getUnitListByAssoc();
     //this.setView(0)
     // this.setState({ role:dropdown[index].roleId });
   };
@@ -1298,8 +1301,9 @@ class Dashboard extends PureComponent {
       });
     } else {
       console.log("<< INSIDE >>");
+      this.listenToFirebase(this.props.dropdown);
       this.getVehicleList();
-      this.myFamilyListGetData();
+      // this.myFamilyListGetData();
     }
   }
 
@@ -1371,56 +1375,6 @@ class Dashboard extends PureComponent {
     //self.getVehicleList();
   }
 
-  getVehicleList = unitId => {
-    console.log('Get ID for vehicle', this.props.dashBoardReducer.uniID);
-
-    fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-        }
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("res: ", responseJson);
-        console.log(
-          'VehicleRespponse####',
-          this.props.dashBoardReducer.uniID,
-          responseJson
-        );
-
-        console.log("vehicle count: ", responseJson.data.vehicleListByUnitID.length);
-        this.setState({
-          //Object.keys(responseJson.data.unitsByBlockID).length
-          vehiclesCount: responseJson.data.vehicleListByUnitID.length
-        });
-        const { updateIdDashboard } = this.props;
-        updateIdDashboard({
-          prop: 'vehiclesCount',
-          value: responseJson.data.vehicleListByUnitID.length
-        });
-        console.log("res>> ", responseJson.data.vehicleListByUnitID.length)
-      })
-      .catch(error => {
-        console.log("catch ", error);
-        this.setState({ loading: false });
-        this.setState({
-          //Object.keys(responseJson.data.unitsByBlockID).length
-          vehiclesCount: 0
-        });
-        const { updateIdDashboard } = this.props;
-        updateIdDashboard({
-          prop: 'vehiclesCount',
-          value: 0
-        });
-        console.log('error in net call', error);
-      });
-  };
-
   myProfileNet = async () => {
     console.log('AccId@@@@@', this.props);
     let response = await base.services.OyeLivingApi.getProfileFromAccount(
@@ -1437,84 +1391,6 @@ class Dashboard extends PureComponent {
       value: response.data.account[0].acImgName
     });
   };
-
-
-  async myFamilyListGetData() {
-    this.setState({ loading: true });
-    console.log(
-      'Data sending to get family',
-      this.props,
-      this.props.dashBoardReducer.assId,
-      this.props.dashBoardReducer.uniID,
-      this.props.userReducer.MyAccountID
-    );
-    let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
-      this.props.dashBoardReducer.uniID,
-      this.props.dashBoardReducer.assId,
-      this.props.userReducer.MyAccountID
-    );
-    console.log('Get Family Data', myFamilyList);
-
-    this.setState({ isLoading: false, loading: false });
-    try {
-      if (myFamilyList.success && myFamilyList.data) {
-        let familyData=myFamilyList.data.familyMembers
-        let reqData=[]
-        for(let i=0;i<familyData.length;i++){
-          if(familyData[i].acAccntID !== this.props.userReducer.MyAccountID){
-            reqData.push(familyData[i])
-          }
-        }
-        this.setState({
-          falmilyMemebCount: reqData.length
-        });
-        const { updateIdDashboard } = this.props;
-        console.log('updateIdDashboard1', this.props);
-        updateIdDashboard({
-          prop: 'familyMemberCount',
-          value: reqData.length
-        });
-      }
-    } catch (error) {
-      this.setState({
-        falmilyMemebCount: 0,
-        loading: false
-      });
-      const { updateIdDashboard } = this.props;
-      console.log('updateIdDashboard1', this.props);
-      updateIdDashboard({
-        prop: 'familyMemberCount',
-        value: 0
-      });
-    }
-  }
-
-  getVisitorList = () => {
-    fetch(
-      `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByMemID/${this.props.dashBoardReducer.assId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-        }
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log('Manas', responseJson);
-        this.setState({
-          //Object.keys(responseJson.data.unitsByBlockID).length
-          vechiclesCount: Object.keys(responseJson.data.vehicleListByMemID)
-            .length
-        });
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-        console.log(error);
-      });
-  };
-
   logMeasurement = async (id, phase, actualDuration, baseDuration) => {
     // see output during DEV
     if (__DEV__) console.log({ id, phase, actualDuration, baseDuration });
@@ -1606,8 +1482,8 @@ class Dashboard extends PureComponent {
             justifyContent: 'center',
             marginTop: hp('52%'),
             position: 'absolute',
-            right: Platform.OS === 'ios'? hp('1'):hp('2.5'),
-           // backgroundColor:'pink'
+            right: Platform.OS === 'ios' ? hp('1') : hp('2.5'),
+            // backgroundColor:'pink'
           }}
         >
           {!this.state.isSOSSelected ? (
@@ -1708,10 +1584,10 @@ class Dashboard extends PureComponent {
       this.props
     );
 
-    console.log("vehiclesCount ", this.props.dashBoardReducer.role, dropdown1.length,selectedView);
+    console.log("vehiclesCount ", this.props.dashBoardReducer.role, dropdown1.length, selectedView);
 
-    let isAdmin = this.props.dashBoardReducer.role === 1?true:false
-       //selectedView=isAdmin?1:0
+    let isAdmin = this.props.dashBoardReducer.role === 1 ? true : false
+    //selectedView=isAdmin?1:0
 
     //console.log("RENDER_ALLASSOC_0",allAssociations)
 
@@ -1860,7 +1736,7 @@ class Dashboard extends PureComponent {
                   <TouchableHighlight
                     underlayColor={'transparent'}
                     onPress={() => this.setView(0)}>
-                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios' ? hp('2') : hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
                       <Image
                         resizeMode={'contain'}
                         style={{
@@ -1873,52 +1749,54 @@ class Dashboard extends PureComponent {
 
                     </View>
                   </TouchableHighlight>
-                  {isAdmin?
-                  <TouchableHighlight
-                    underlayColor={'transparent'}
-                    onPress={() =>  this.setView(1)}>
-                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios'? hp('2'):hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
-                      <Image
-                        resizeMode={'contain'}
-                        style={{
-                          width: hp('3%'),
-                          height: hp('3%'),
-                        }}
-                        source={require('../../../../icons/user.png')}
-                      />
-                      <Text allowFontScaling={false}>Admin</Text>
+                  {isAdmin ?
+                    <TouchableHighlight
+                      underlayColor={'transparent'}
+                      onPress={() => this.setView(1)}>
+                      <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios' ? hp('2') : hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
+                        <Image
+                          resizeMode={'contain'}
+                          style={{
+                            width: hp('3%'),
+                            height: hp('3%'),
+                          }}
+                          source={require('../../../../icons/user.png')}
+                        />
+                        <Text allowFontScaling={false}>Admin</Text>
 
-                    </View>
-                  </TouchableHighlight>
-                      :
-                      <View/>}
+                      </View>
+                    </TouchableHighlight>
+                    :
+                    <View />}
                 </View>
               </ImageBackground>
 
-              <View style={{height: '6%',
-                            width: '100%',
-                            alignItems: 'center',
-                            backgroundColor: base.theme.colors.white,
-                            borderColor: base.theme.colors.primary,
-                            borderWidth: 0,
-                            position:'absolute',
-                           // marginBottom: hp('5'),
-                            justifyContent: 'flex-start',
-                            top:hp('82'),
-                            flexDirection: 'row'
+              <View style={{
+                height: '6%',
+                width: '100%',
+                alignItems: 'center',
+                backgroundColor: base.theme.colors.white,
+                borderColor: base.theme.colors.primary,
+                borderWidth: 0,
+                position: 'absolute',
+                // marginBottom: hp('5'),
+                justifyContent: 'flex-start',
+                top: hp('82'),
+                flexDirection: 'row'
               }}>
 
-                              <View style={{borderWidth:0}}>
-                              <Image
+                <View style={{ borderWidth: 0 }}>
+                  <Image
                     resizeMode={'cover'}
-                      style={{height: hp('10'),
-                        width: wp('55'),
-                        alignSelf:'flex-start',
-                        borderWidth:0
-                       }}
-                      source={require('../../../../icons/bottomImg.png')}
-                    />
-                              </View>
+                    style={{
+                      height: hp('10'),
+                      width: wp('55'),
+                      alignSelf: 'flex-start',
+                      borderWidth: 0
+                    }}
+                    source={require('../../../../icons/bottomImg.png')}
+                  />
+                </View>
                 <View style={Style.subSupportView}>
                   <TouchableOpacity
                     onPress={() => {
@@ -1930,8 +1808,8 @@ class Dashboard extends PureComponent {
                     }}
                   >
                     <Image
-                    resizeMode={'cover'}
-                  //    style={Style.supportIcon}
+                      resizeMode={'cover'}
+                      //    style={Style.supportIcon}
                       source={require('../../../../icons/call1.png')}
                     />
                   </TouchableOpacity>
@@ -1939,8 +1817,8 @@ class Dashboard extends PureComponent {
 
                   >
                     <Image
-                    resizeMode={'cover'}
-                     // style={Style.supportIcon}
+                      resizeMode={'cover'}
+                      // style={Style.supportIcon}
                       source={require('../../../../icons/chat_1.png')}
                     />
                   </TouchableOpacity>
@@ -1949,8 +1827,8 @@ class Dashboard extends PureComponent {
                     onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
                   >
                     <Image
-                    resizeMode={'cover'}
-                     // style={Style.supportIcon}
+                      resizeMode={'cover'}
+                      // style={Style.supportIcon}
                       source={require('../../../../icons/email1.png')}
                     />
                   </TouchableOpacity>
@@ -2108,7 +1986,7 @@ class Dashboard extends PureComponent {
   myUnitCard() {
     const { dropdown, dropdown1 } = this.props;
     //this.state.invoicesList
-    let invoiceList =this.state.invoicesList;
+    let invoiceList = this.state.invoicesList;
     console.log('FamilyList count', this.props.dashBoardReducer);
     return (
       <View style={Style.mainElevatedView}>
@@ -2126,11 +2004,11 @@ class Dashboard extends PureComponent {
 
             onCardClick={() =>
 
-               dropdown.length === 0
-                   ? this.props.navigation.navigate('CreateOrJoinScreen')
-                   : dropdown1.length === 0
-                   ? alert('Unit is not available')
-                   : this.props.navigation.navigate('MyFamilyList')
+              dropdown.length === 0
+                ? this.props.navigation.navigate('CreateOrJoinScreen')
+                : dropdown1.length === 0
+                  ? alert('Unit is not available')
+                  : this.props.navigation.navigate('MyFamilyList')
             }
 
             backgroundColor={base.theme.colors.cardBackground}
@@ -2188,33 +2066,33 @@ class Dashboard extends PureComponent {
                     />
         </View>*/}
         <ElevatedView elevation={5} style={Style.invoiceCardView}>
-                    <View style={Style.invoiceHeadingView}>
-                        <Text style={Style.invoiceText}>Invoices</Text>
-                      {invoiceList.length > 0?
-                        <TouchableOpacity style={{}} onPress={()=>this.props.navigation.navigate('ViewInvoiceList')}>
+          <View style={Style.invoiceHeadingView}>
+            <Text style={Style.invoiceText}>Invoices</Text>
+            {invoiceList.length > 0 ?
+              <TouchableOpacity style={{}} onPress={() => this.props.navigation.navigate('ViewInvoiceList')}>
 
-                          <Text style={Style.viewMoreText}>View more</Text>
+                <Text style={Style.viewMoreText}>View more</Text>
 
-                        </TouchableOpacity>
-                          :
-                          <View/>}
-                    </View>
-                    {invoiceList.length > 0 ?
-                        <ScrollView style={Style.scrollView}>
-                            <FlatList
-                                data={invoiceList}
-                                extraData={this.state}
-                                style={Style.inVoiceFlatList}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={(item) => this.listOfInvoices(item)}
-                            />
-                        </ScrollView>
-                        :
-                        <View style={Style.noDataView}>
-                            <Text style={Style.noDataMsg}>No Invoices</Text>
-                        </View>
-                    }
-                </ElevatedView>
+              </TouchableOpacity>
+              :
+              <View />}
+          </View>
+          {invoiceList.length > 0 ?
+            <ScrollView style={Style.scrollView}>
+              <FlatList
+                data={invoiceList}
+                extraData={this.state}
+                style={Style.inVoiceFlatList}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={(item) => this.listOfInvoices(item)}
+              />
+            </ScrollView>
+            :
+            <View style={Style.noDataView}>
+              <Text style={Style.noDataMsg}>No Invoices</Text>
+            </View>
+          }
+        </ElevatedView>
 
 
 
@@ -2225,55 +2103,56 @@ class Dashboard extends PureComponent {
   async getInvoiceMethodsList() {
 
     let stat = await base.services.OyeLivingApi.getTheInvoicesOfResident(this.props.dashBoardReducer.assId,
-        this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
-    console.log('RESPONSE_INVOICES_RESIDENT',stat)
+      this.props.dashBoardReducer.uniID, this.props.userReducer.MyAccountID)
+    console.log('RESPONSE_INVOICES_RESIDENT', stat)
     try {
       if (stat.success) {
-        let invoicesList=stat.data.invoices;
+        let invoicesList = stat.data.invoices;
         this.setState({
-          invoicesList:invoicesList
+          invoicesList: invoicesList
         })
 
-    }} catch (error) {
+      }
+    } catch (error) {
 
       console.log('error', error)
     }
   }
 
   listOfInvoices(item) {
-    console.log('FLATLIST_ITEM_INVOICES',item)
+    console.log('FLATLIST_ITEM_INVOICES', item)
     return (
-        <TouchableHighlight underlayColor={'transparent'} onPress={()=>this.props.navigation.navigate('ViewInvoice',{item:item})}>
-          <View style={Style.invoiceView}>
-            <View style={Style.invoiceSubView}>
-              <Text style={Style.invoiceNumberText}>
-                Invoice No. {item.item.inNumber}
-              </Text>
-              <Text style={Style.billText}>
-                <Text style={Style.rupeeIcon}>{'\u20B9'}</Text>
-                {item.item.inTotVal}
-              </Text>
-            </View>
-            <View style={Style.invoiceSubView}>
-              <Text style={Style.dueDate}>Invoice Date {moment(item.item.inGenDate,'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
-{/*
+      <TouchableHighlight underlayColor={'transparent'} onPress={() => this.props.navigation.navigate('ViewInvoice', { item: item })}>
+        <View style={Style.invoiceView}>
+          <View style={Style.invoiceSubView}>
+            <Text style={Style.invoiceNumberText}>
+              Invoice No. {item.item.inNumber}
+            </Text>
+            <Text style={Style.billText}>
+              <Text style={Style.rupeeIcon}>{'\u20B9'}</Text>
+              {item.item.inTotVal}
+            </Text>
+          </View>
+          <View style={Style.invoiceSubView}>
+            <Text style={Style.dueDate}>Invoice Date {moment(item.item.inGenDate, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
+            {/*
               <Text style={Style.dueDate}>Due on. {moment(item.item.inGenDate,'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
 */}
-              <OSButton
-                  height={'80%'}
-                  width={'25%'}
-                  borderRadius={15}
-                  oSBBackground={
-                    item.item.inPaid === 'Yes'
-                        ? base.theme.colors.grey
-                        : base.theme.colors.primary
-                  }
-                  oSBText={item.item.inPaid === 'Yes' ? 'Paid' : 'Pay Now'}
-                  oSBTextSize={11}
-              />
-            </View>
+            <OSButton
+              height={'80%'}
+              width={'25%'}
+              borderRadius={15}
+              oSBBackground={
+                item.item.inPaid === 'Yes'
+                  ? base.theme.colors.grey
+                  : base.theme.colors.primary
+              }
+              oSBText={item.item.inPaid === 'Yes' ? 'Paid' : 'Pay Now'}
+              oSBTextSize={11}
+            />
           </View>
-        </TouchableHighlight>
+        </View>
+      </TouchableHighlight>
     );
   }
 

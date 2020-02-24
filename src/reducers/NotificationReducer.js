@@ -14,7 +14,13 @@ import {
   REFRESH_NOTIFICATION_SUCCESS,
   TOGGLE_ADMIN_NOTIFICATION,
   TOGGLE_COLLAPSIBLE,
-  ON_GATE_OPEN
+  ON_GATE_OPEN,
+  SEGREGATE_UNIT_NOTIFICATION,
+  SEGREGATE_ADMIN_NOTIFICATION,
+  SEGREGATE_DUMMY_UNIT_NOTIFICATION,
+  SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
+  TOGGLE_UNIT_COLLAPSIBLE,
+  TOGGLE_ADMIN_COLLAPSIBLE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -27,11 +33,28 @@ const INITIAL_STATE = {
   receiveNotifications: true,
   refresh: false,
   page: 1,
-  footerLoading: false
+  footerLoading: false,
+  unitNotification:[],
+  adminNotification:[],
+  unitDummyNotification:[],
+  adminDummyNotification:[]
 };
 
 export default (state = INITIAL_STATE, action) => {
+  console.log("Notification in reducer:",action)
   switch (action.type) {
+    case SEGREGATE_UNIT_NOTIFICATION:
+      return {...state,unitNotification:action.payload}
+      
+    case SEGREGATE_ADMIN_NOTIFICATION:
+      return {...state,adminNotification:action.payload}
+
+      case SEGREGATE_DUMMY_UNIT_NOTIFICATION:
+      return {...state,unitDummyNotification:action.payload}
+      
+    case SEGREGATE_DUMMY_ADMIN_NOTIFICATION:
+      return {...state,adminDummyNotification:action.payload}
+
     case NEW_NOTIF_INSTANCE:
       return { ...state, newNotifInstance: action.payload };
 
@@ -75,6 +98,12 @@ export default (state = INITIAL_STATE, action) => {
 
     case TOGGLE_COLLAPSIBLE:
       return { ...state, notifications: action.payload };
+
+      case TOGGLE_UNIT_COLLAPSIBLE:
+        return {...state,unitNotification:action.payload}
+
+        case TOGGLE_ADMIN_COLLAPSIBLE:
+          return {...state,adminNotification:action.payload}
 
     case ON_END_START:
       return { ...state, footerLoading: true };
