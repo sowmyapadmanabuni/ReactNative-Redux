@@ -67,7 +67,7 @@ class MyProfile extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log('My profile', responseJson);
+        console.log('My profile#######', responseJson);
         this.setState({
           isLoading: false,
           datasource: responseJson,
@@ -291,7 +291,8 @@ class MyProfile extends Component {
                 </View>
                 <View style={styles.containerView_ForProfilePicViewStyle}>
                   <View style={styles.viewForProfilePicImageStyle}>
-                    {this.state.ImageSource == '' ? (
+                    {this.state.ImageSource == '' || this.state.ImageSource==undefined || this.state.ImageSource==null
+                    || this.state.ImageSource=="null"  ? (
                       <Image
                         style={{
                           ...styles.profilePicImageStyle,
@@ -310,9 +311,7 @@ class MyProfile extends Component {
                           position: 'relative'
                         }}
                         source={{
-                          uri:
-                            'https://mediaupload.oyespace.com/' +
-                            this.state.ImageSource
+                          uri: 'data:image/png;base64,'+this.state.ImageSource
                         }}
                       />
                     )}

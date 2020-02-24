@@ -693,6 +693,7 @@ class NotificationScreen extends PureComponent {
             )
         }
         else {
+            console.log("GET THE DETAILS GET THE DETAILS", item)
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -1011,7 +1012,7 @@ class NotificationScreen extends PureComponent {
                         justifyContent: 'center', alignSelf: 'center',
                         alignItems: 'center', position: 'absolute', marginTop: 80
                     }}
-                        onPress={() => this._enlargeImage(item.vlEntryImg != "" ? `${this.props.mediaupload}` + item.vlEntryImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                        onPress={() => this._enlargeImage(item.vlEntryImg != "" ? 'data:image/png;base64,'+item.vlEntryImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
                     >
                         {item.vlEntryImg != "" ?
 
@@ -1022,10 +1023,7 @@ class NotificationScreen extends PureComponent {
                                     height: 80,
                                     borderRadius: 40, position: 'relative'
                                 }}
-                                source={{
-                                    uri: `${this.props.mediaupload}` + item.vlEntryImg
-
-                                }}
+                                source={{uri: 'data:image/png;base64,'+item.vlEntryImg}}
                             />
                             :
                             <Image
