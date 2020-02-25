@@ -611,15 +611,17 @@ class RegisterMe extends Component {
                                                         this.props.joinedAssociations,
                                                         unitList.unUnitID
                                                     );
-                                                    let isAssocNotificationUpdating = 0;
-                                                    let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
-                                                    fb.database().ref(associationPath).set({
-                                                        isAssocNotificationUpdating
-                                                    }).then((data) => {
-                                                        console.log('Data added to FRTDB:', data);
-                                                    }).catch(error => {
-                                                        console.log("Error:", error);
+                                                    setTimeout(()=>{
+                                                        let isAssocNotificationUpdating = 0;
+                                                        let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
+                                                        fb.database().ref(associationPath).set({
+                                                            isAssocNotificationUpdating
+                                                        }).then((data) => {
+                                                            console.log('Data added to FRTDB:', data);
+                                                        }).catch(error => {
+                                                            console.log("Error:", error);
                                                     })
+                                                    },2000)
                                                     
                                                     Alert.alert(
                                                         'Oyespace',

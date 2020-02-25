@@ -356,7 +356,6 @@ class EditProfile extends Component {
         };
         //showImagePicker
         ImagePicker.showImagePicker(options, response => {
-            //console.log("Response = ", response)
             if (response.didCancel) {
                 console.log("User cancelled photo picker")
             } else if (response.error) {
@@ -364,7 +363,11 @@ class EditProfile extends Component {
             } else if (response.customButton) {
                 console.log("User tapped custom button: ", response.customButton)
             } else {
-                this.uploadImage(response)
+                console.log("Response = ", response)
+
+                this.setState({
+                    imageUrl:response.data
+                })
             }
         })
     }
@@ -459,11 +462,25 @@ class EditProfile extends Component {
                                     >
                                         <View style={styles.containerView_ForProfilePicViewStyle}>
                                             <View style={styles.viewForProfilePicImageStyle}>
+                                                {this.state.imageUrl==undefined || this.state.imageUrl==null
+                                                || this.state.imageUrl=='' || this.state.imageUrl=="null" ?
+
                                                 <Image
                                                     style={styles.profilePicImageStyle}
-                                                    source={{uri: this.state.myProfileImage}}
+                                                    source={{
+                                                        uri:
+                                                            'https://mediaupload.oyespace.com/' +
+                                                            base.utils.strings.noImageCapturedPlaceholder
+                                                    }}
                                                 />
-                                            </View>
+                                                :
+                                                    <Image
+                                                        style={styles.profilePicImageStyle}
+                                                        source={{uri:'data:image/png;base64,'+this.state.imageUrl}}
+                                                    />
+                                                }
+
+                                                    </View>
 
                                             <View style={styles.imagesmallCircle}>
                                                 {/*<Image

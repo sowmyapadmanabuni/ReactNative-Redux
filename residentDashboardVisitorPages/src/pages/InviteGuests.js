@@ -257,7 +257,7 @@ class InviteGuests extends Component {
             Alert.alert("Vehicle Number cannot contain special characters.")
         } else if (mobNum.length == 0) {
             Alert.alert('Enter Mobile Number')
-            return false
+           // return false
         } else if (mobNum.length < 10) {
             Alert.alert('Mobile number should not be less than 10 digits');
             //return false;
@@ -275,44 +275,47 @@ class InviteGuests extends Component {
         } else if (time == time1 && dobDate == dobDate1) {
             Alert.alert('Enter valid start time to Till time');
             //return false;
-        } else
-        {
+        } else {
 //http://apidev.oyespace.com/oye247/api/v1/Invitation/create
             console.log('Dates', dobDate + ' ' + time, dobDate1 + ' ' + time1);
 
-            fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
-                },
-                body: JSON.stringify(
-                    {
-                        //"MeMemID"   :  4,
-                        "UnUnitID": this.props.dashBoardReducer.uniID,
-                        "INFName": fname,
-                        "INLName": lname,
-                        "INMobile": "+" + callingCode + mobNum,
-                        "INEmail": emailId,
-                        "INVchlNo": vehNo,
-                        "INVisCnt": count,
-                        "INPhoto": "SD",
-                        "INSDate": startDate,
-                        "INEDate": endDate,
-                        "INPOfInv": purpose,
-                        "INMultiEy": this.state.switch,
-                        "ASAssnID": this.props.dashBoardReducer.assId,
-                        "INQRCode": 1,
-                        "ACAccntID": this.props.userReducer.MyAccountID
-                    })
-            })
-                .then(response => response.json())
-                .then(responseJson => {
-                    console.log('Response JSON', responseJson);
-                    Alert.alert("","Invitation created, please share the invitation using the share button");
-                    this.props.navigation.goBack()
+           fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE",
+                    },
+                    body: JSON.stringify(
+                        {
+                            //"MeMemID"   :  4,
+                            "UnUnitID": this.props.dashBoardReducer.uniID,
+                            "INFName": fname,
+                            "INLName": lname,
+                            "INMobile": "+" + callingCode + mobNum,
+                            "INEmail": emailId,
+                            "INVchlNo": vehNo,
+                            "INVisCnt": count,
+                            "INPhoto": "SD",
+                            "INSDate": startDate,
+                            "INEDate": endDate,
+                            "INPOfInv": purpose,
+                            "INMultiEy": this.state.switch,
+                            "ASAssnID": this.props.dashBoardReducer.assId,
+                            "INQRCode": 1,
+                            "ACAccntID": this.props.userReducer.MyAccountID
+                        })
                 })
-                .catch(error => console.log(error))
+                    .then(response => response.json())
+                    .then(responseJson => {
+                        console.log('Response JSON', responseJson);
+                        Alert.alert("","Invitation created, please share the invitation using the share button");
+                        this.props.navigation.goBack()
+                    })
+                    .catch(error => {
+                        console.log('GET THE INVITE GUEST ERROR',error)
+                        alert('Issue in Inviting guest')
+                        console.log(error)})
+
         }
         this.setState({
             isLoading:false,
@@ -329,7 +332,6 @@ class InviteGuests extends Component {
     }
 
     render() {
-        console.log("My Account Id -", this.props.accountId);
         return (
             <View style={styles.container}>
                 {/* <Header/> */}

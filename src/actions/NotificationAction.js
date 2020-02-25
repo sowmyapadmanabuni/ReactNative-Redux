@@ -114,6 +114,10 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             announcement.push(data);
           }
         });
+
+        
+        console.log('Notification@@@@@@:1111', resData);
+       
         console.log('Notification@@@@@@:1111', responseJson.data);
 
           for(let i=0;i<joinNotif.length;i++){
@@ -212,17 +216,28 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           }
         });
 
+        // let unitNotification = [];
+        // let adminNotification = [];
+        // for(let i in resData){
+        //   if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
+        //     adminNotification.push(resData[i])
+        //   }else{
+        //     unitNotification.push(resData[i])
+        //   }
+        // }
+
+        //segregateUnitNotification(unitNotification);
         let unitNotification = [];
         let adminNotification = [];
-        for(let i in resData){
-          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
-            adminNotification.push(resData[i])
+        for(let i in allNotifs){
+          if(allNotifs[i].ntType === "joinrequest" || allNotifs[i].ntType === "Join" || allNotifs[i].ntType === "Join_Status"){
+            adminNotification.push(allNotifs[i])
           }else{
-            unitNotification.push(resData[i])
+            unitNotification.push(allNotifs[i])
           }
         }
 
-        //segregateUnitNotification(unitNotification);
+        console.log("Unit Notification in reducer::::::",unitNotification,adminNotification)
         
           dispatch({
             type:SEGREGATE_UNIT_NOTIFICATION,

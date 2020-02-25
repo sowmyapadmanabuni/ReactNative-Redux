@@ -759,16 +759,16 @@ class Dashboard extends PureComponent {
     //   console.log()
     //   this.syncData()
     // },5000)
-    // timer.setInterval(
-    //            this,
-    //            'syncData',
-    //            async () => {
-    //              console.log("I am Timer");
-    //              this.syncData();
-    //            },
-    //            5000
-    //        );
-  }
+     /* timer.setInterval(
+                 this,
+                 'syncData',
+                 async () => {
+                   console.log("I am Timer");
+                   this.syncData();
+                 },
+                 10000
+             );*/
+    }
 
 
   handleConnectivityChange = isConnected => {
@@ -1985,6 +1985,7 @@ class Dashboard extends PureComponent {
 
   myUnitCard() {
     const { dropdown, dropdown1 } = this.props;
+    const { updateIdDashboard } = this.props;
     //this.state.invoicesList
     let invoiceList = this.state.invoicesList;
     console.log('FamilyList count', this.props.dashBoardReducer);
@@ -2031,7 +2032,7 @@ class Dashboard extends PureComponent {
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
                   ? alert('Unit is not available')
-                  : this.props.navigation.navigate('MyVehicleListScreen')
+                  :  this.props.navigation.navigate('MyVehicleListScreen')
             }
           />
           <CardView

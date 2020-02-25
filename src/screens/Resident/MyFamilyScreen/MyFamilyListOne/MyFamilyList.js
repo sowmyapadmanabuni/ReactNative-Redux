@@ -117,7 +117,7 @@ class MyFamilyList extends React.Component {
 
     async myFamilyListGetData() {
         this.setState({loading: true});
-        //console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
+        console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
         let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
             this.props.dashBoardReducer.uniID,
             this.props.dashBoardReducer.assId,
@@ -240,7 +240,7 @@ class MyFamilyList extends React.Component {
                         ) : (
                             <ZoomImage
                                 source={{
-                                    uri: 'https://mediaupload.oyespace.com/' + item.fmImgName
+                                    uri:'data:image/png;base64,'+item.fmImgName
                                 }}
                                 imgStyle={Style.placeholderImage}
                                 duration={300}
