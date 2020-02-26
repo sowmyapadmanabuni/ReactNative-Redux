@@ -341,7 +341,6 @@ class MyProfile extends Component {
                     size={hp('2.8%')}
                     name="call"
                   />
-
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
                       ? ' ' +
@@ -367,7 +366,6 @@ class MyProfile extends Component {
                     size={hp('2.8%')}
                     name="mail"
                   />
-
                   <Text style={styles.itemTextValues}>
                     {this.state.datasource
                       ? '  ' + this.state.datasource.data.account[0].acEmail

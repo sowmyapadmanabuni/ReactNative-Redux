@@ -563,7 +563,6 @@ class EditProfile extends Component {
                                                 *
                                             </Text>
                                         </View>
-
                                         <View style={styles.number}>
                                             <View
                                                 style={{
@@ -588,7 +587,6 @@ class EditProfile extends Component {
                                                     translation="eng"
                                                 />
                                             </View>
-
                                             <View
                                                 style={{
                                                     flex: 0.15,
@@ -602,7 +600,6 @@ class EditProfile extends Component {
                                                     {this.state.primeCCode}
                                                 </Text>
                                             </View>
-
                                             <Item style={[styles.inputItem1,{ flexDirection:'row'}]} stackedLabel>
                                                 {this.state.primaryMobNum === '' &&
                                                     <View style={{
@@ -626,7 +623,6 @@ class EditProfile extends Component {
                                                         </Text>
                                                     </View>
                                                 }
-
                                                 <Input
                                                     style={{alignSelf:'center'}}
                                                     marginBottom={hp("-1%")}
@@ -636,20 +632,15 @@ class EditProfile extends Component {
                                                     maxLength={10}
                                                     onChangeText={(value) =>
                                                         this.mobileNumberInputCheck(value)
-
                                                     }
                                                     //value={this.state.primaryMobNum}
                                                 />
-
                                                 <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
                                                     <Image source={require("../icons/phone-book.png")}
                                                            style={{width: 25, height: 25,}}/>
                                                 </TouchableOpacity>
-
                                             </Item>
-
                                         </View>
-
                                         {/--------------------------------------------------------------------------------------*/}
 
                                         <View style={styles.number}>

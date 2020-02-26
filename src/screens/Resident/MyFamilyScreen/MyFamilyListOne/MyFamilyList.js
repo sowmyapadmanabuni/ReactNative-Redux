@@ -148,10 +148,10 @@ class MyFamilyList extends React.Component {
                     )
                 });
                 const {updateIdDashboard} = this.props;
-                // updateIdDashboard({
-                //     prop: 'familyMemberCount',
-                //     value: reqData.length
-                // });
+                updateIdDashboard({
+                    prop: 'familyMemberCount',
+                    value: reqData.length
+                });
                 this.setState({familyData: myFamilyList});
             } else {
                 this.showAlert(stat.error.message, true);
@@ -592,33 +592,3 @@ export default connect(
     mapStateToProps,
     {updateIdDashboard}
 )(MyFamilyList);
-
-// createIdsForData = () => {
-//   // returns a new array with ids from index
-//   let dataWithIds = this.state.myfamily11.map((item, index) => {
-//     item.id = index
-//   })
-
-//   this.setState({
-//     myfamily11: dataWithIds
-//   })
-// }
-
-// removeHandler = id => {
-//   // returns new array with item filtered out
-//   this.setState({
-//     myfamily11: this.state.myfamily11.filter(item => item.id === id)
-//   })
-// }
-
-// deleteItemById = id => {
-//   this.setState({
-//     value: id
-//   })
-//   const filteredData = this.state.myfamily11.filter(item => {
-//     item.id === myFamilyList.data.familyMembers.fmid
-
-//     return myFamilyList.data.familyMembers.fmid
-//   })
-//   this.setState({ myfamily11: filteredData })
-// }

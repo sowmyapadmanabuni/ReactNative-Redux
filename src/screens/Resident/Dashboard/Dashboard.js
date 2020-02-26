@@ -464,7 +464,75 @@ class Dashboard extends PureComponent {
     }
   };
 
-  
+  async componentDidMount() {
+    const {
+      getDashSub,
+      getDashAssociation,
+      getAssoMembers,
+      receiveNotifications,
+      dropdown, allAssociations
+    } = this.props;
+
+    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
+    console.log('Props in dashboard did mount ####', this.props)
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+
+    console.log("allAssociations_DIDM", allAssociations)
+
+    //    const fcmToken = await firebase.messaging().getToken();
+    // if (fcmToken) {
+    //     // user has a device token
+    //     console.log("FCM_TOKEN:",fcmToken)
+    //     let tok = await firebase.messaging().unsubscribeFromTopic("14948_STAFFENTRY_40858");
+    //     console.log("FCM_TOKEN:",tok)
+    // } else {
+    //     // user doesn't have a device token yet
+    //     console.log("FCM_TOKEN: NOT AVAILABLE")
+    // }
+
+    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
+    // getAssoMembers(oyeURL, MyAccountID);
+    this.requestNotifPermission();
+    // this.getBlockList();
+    this.props.getNotifications(oyeURL, MyAccountID);
+
+    // let self = this;
+    //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
+    //     let receivedData = snapshot.val();
+    //     console.log("ReceiveddataDash", snapshot.val());
+    //     if (receivedData !== null) {
+    //       if(receivedData.isActive && receivedData.userId){
+    //        self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
+    //       }
+
+    //         }
+    //     });
+
+    //Adding an event listner on focus
+    //So whenever the screen will have focus it will set the state to zero
+
+    if (!this.props.called) {
+      this.didMount();
+    }
+
+    this.syncData();
+
+    // BackgroundTimer.runBackgroundTimer(()=>{
+    //   console.log()
+    //   this.syncData()
+    // },5000)
+     /* timer.setInterval(
+                 this,
+                 'syncData',
+                 async () => {
+                   console.log("I am Timer");
+                   this.syncData();
+                 },
+                 10000
+             );*/
+    }
 
 
   handleConnectivityChange = isConnected => {
@@ -1512,6 +1580,7 @@ class Dashboard extends PureComponent {
 
   myUnitCard() {
     const { dropdown, dropdown1 } = this.props;
+    const { updateIdDashboard } = this.props;
     //this.state.invoicesList
     let invoiceList = this.state.invoicesList;
     return (
@@ -1530,11 +1599,11 @@ class Dashboard extends PureComponent {
 
             onCardClick={() =>
 
-              dropdown.length === 0
-                ? this.props.navigation.navigate('CreateOrJoinScreen')
-                : dropdown1.length === 0
-                  ? alert('Unit is not available')
-                  : this.props.navigation.navigate('MyFamilyList')
+               dropdown.length === 0
+                   ? this.props.navigation.navigate('CreateOrJoinScreen')
+                   : dropdown1.length === 0
+                   ? alert('Unit is not available')
+                   :   this.props.navigation.navigate('MyFamilyList')
             }
 
             backgroundColor={base.theme.colors.cardBackground}
@@ -1556,7 +1625,7 @@ class Dashboard extends PureComponent {
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
                   ? alert('Unit is not available')
-                  : this.props.navigation.navigate('MyVehicleListScreen')
+                  :  this.props.navigation.navigate('MyVehicleListScreen')
             }
           />
           <CardView
