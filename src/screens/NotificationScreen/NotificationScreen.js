@@ -165,10 +165,10 @@ class NotificationScreen extends PureComponent {
             fb.database().ref(announcementPath).on('value', function (snapshot) {
                 let receivedData = snapshot.val();
                 console.log("Received Data while listening to notification:", receivedData,associationId);
-                //if(receivedData !== null){
+                if(receivedData !== null){
                     
                     self.refreshNotification();
-                //}
+                }
             })
 
             if(associationList[i].roleId === 1){
@@ -1847,7 +1847,14 @@ class NotificationScreen extends PureComponent {
     };
 
     setView(param) {
-        this.setState({ selectedView: param })
+        const {unitDummyNotification,adminDummyNotification,segregateUnitNotification,segregateAdminNotification} = this.props;
+        this.setState({ selectedView: param,searchKeyWord:"" },()=>{
+            if(param === 0){
+                segregateUnitNotification(unitDummyNotification)
+            }else{
+                segregateAdminNotification(adminDummyNotification)
+            }
+        })
     }
 
     render() {
@@ -2043,11 +2050,11 @@ class NotificationScreen extends PureComponent {
     }
 
     renderUnitBadge() {
-        const { notifications } = this.props;
+        const { notifications,unitNotification,unitDummyNotification } = this.props;
         let count = 0;
         console.log("Selected View:", this.state.selectedView, notifications);
 
-        notifications.map((data, index) => {
+        unitDummyNotification.map((data, index) => {
             if (data.ntIsActive && (data.ntType !== "joinrequest" && data.ntType !== "Join" && data.ntType !== "Join_Status")) {
                 count += 1;
             }
@@ -2075,11 +2082,11 @@ class NotificationScreen extends PureComponent {
     }
 
     renderAdminBadge() {
-        const { notifications } = this.props;
+        const { notifications,adminNotification,adminDummyNotification } = this.props;
         let count = 0;
         console.log("Selected View:", this.state.selectedView, notifications);
 
-        notifications.map((data, index) => {
+        adminDummyNotification.map((data, index) => {
             if (data.ntIsActive && (data.ntType === "joinrequest" || data.ntType === "Join" || data.ntType === "Join_Status")) {
                 count += 1;
             }
