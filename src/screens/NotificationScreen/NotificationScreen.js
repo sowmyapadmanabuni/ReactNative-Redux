@@ -198,7 +198,7 @@ class NotificationScreen extends PureComponent {
         let adminNotification = [];
 
         for (let i in notificationList) {
-            if (notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join" || notificationList[i].ntType === "Join_Status") {
+            if (notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join") {
                 adminNotification.push(notificationList[i])
             } else {
                 unitNotification.push(notificationList[i])
@@ -2053,7 +2053,7 @@ class NotificationScreen extends PureComponent {
         console.log("Selected View:", this.state.selectedView, notifications);
 
         unitDummyNotification.map((data, index) => {
-            if (data.ntIsActive && (data.ntType !== "joinrequest" && data.ntType !== "Join" && data.ntType !== "Join_Status")) {
+            if (data.ntIsActive && (data.ntType !== "joinrequest" && data.ntType !== "Join" )) {
                 count += 1;
             }
         });
@@ -2085,7 +2085,7 @@ class NotificationScreen extends PureComponent {
         console.log("Selected View:", this.state.selectedView, notifications);
 
         adminDummyNotification.map((data, index) => {
-            if (data.ntIsActive && (data.ntType === "joinrequest" || data.ntType === "Join" || data.ntType === "Join_Status")) {
+            if (data.ntIsActive && (data.ntType === "joinrequest" || data.ntType === "Join")) {
                 count += 1;
             }
         });

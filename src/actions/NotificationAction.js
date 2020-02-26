@@ -218,7 +218,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         let adminNotification = [];
         let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
         for(let i in succ){
-          if(succ[i].ntType === "joinrequest" || succ[i].ntType === "Join" || succ[i].ntType === "Join_Status"){
+          if(succ[i].ntType === "joinrequest" || succ[i].ntType === "Join"){
             adminNotification.push(succ[i])
           }else{
             unitNotification.push(succ[i])
@@ -729,7 +729,7 @@ export const refreshNotifications = (
         let unitNotification = [];
         let adminNotification = [];
         for(let i in resData){
-          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
+          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join"){
             adminNotification.push(resData[i])
           }else{
             unitNotification.push(resData[i])
