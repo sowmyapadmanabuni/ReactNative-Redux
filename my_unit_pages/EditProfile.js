@@ -356,6 +356,7 @@ class EditProfile extends Component {
         };
         //showImagePicker
         ImagePicker.showImagePicker(options, response => {
+            //console.log("Response = ", response)
             if (response.didCancel) {
                 console.log("User cancelled photo picker")
             } else if (response.error) {
@@ -363,11 +364,7 @@ class EditProfile extends Component {
             } else if (response.customButton) {
                 console.log("User tapped custom button: ", response.customButton)
             } else {
-                console.log("Response = ", response)
-
-                this.setState({
-                    imageUrl:response.data
-                })
+                this.uploadImage(response)
             }
         })
     }
@@ -462,25 +459,11 @@ class EditProfile extends Component {
                                     >
                                         <View style={styles.containerView_ForProfilePicViewStyle}>
                                             <View style={styles.viewForProfilePicImageStyle}>
-                                                {this.state.imageUrl==undefined || this.state.imageUrl==null
-                                                || this.state.imageUrl=='' || this.state.imageUrl=="null" ?
-
                                                 <Image
                                                     style={styles.profilePicImageStyle}
-                                                    source={{
-                                                        uri:
-                                                            'https://mediaupload.oyespace.com/' +
-                                                            base.utils.strings.noImageCapturedPlaceholder
-                                                    }}
+                                                    source={{uri: this.state.myProfileImage}}
                                                 />
-                                                :
-                                                    <Image
-                                                        style={styles.profilePicImageStyle}
-                                                        source={{uri:'data:image/png;base64,'+this.state.imageUrl}}
-                                                    />
-                                                }
-
-                                                    </View>
+                                            </View>
 
                                             <View style={styles.imagesmallCircle}>
                                                 {/*<Image
@@ -580,7 +563,6 @@ class EditProfile extends Component {
                                                 *
                                             </Text>
                                         </View>
-
                                         <View style={styles.number}>
                                             <View
                                                 style={{
@@ -605,7 +587,6 @@ class EditProfile extends Component {
                                                     translation="eng"
                                                 />
                                             </View>
-
                                             <View
                                                 style={{
                                                     flex: 0.15,
@@ -619,7 +600,6 @@ class EditProfile extends Component {
                                                     {this.state.primeCCode}
                                                 </Text>
                                             </View>
-
                                             <Item style={[styles.inputItem1,{ flexDirection:'row'}]} stackedLabel>
                                                 {this.state.primaryMobNum === '' &&
                                                     <View style={{
@@ -643,7 +623,6 @@ class EditProfile extends Component {
                                                         </Text>
                                                     </View>
                                                 }
-
                                                 <Input
                                                     style={{alignSelf:'center'}}
                                                     marginBottom={hp("-1%")}
@@ -653,20 +632,15 @@ class EditProfile extends Component {
                                                     maxLength={10}
                                                     onChangeText={(value) =>
                                                         this.mobileNumberInputCheck(value)
-
                                                     }
                                                     //value={this.state.primaryMobNum}
                                                 />
-
                                                 <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
                                                     <Image source={require("../icons/phone-book.png")}
                                                            style={{width: 25, height: 25,}}/>
                                                 </TouchableOpacity>
-
                                             </Item>
-
                                         </View>
-
                                         {/--------------------------------------------------------------------------------------*/}
 
                                         <View style={styles.number}>

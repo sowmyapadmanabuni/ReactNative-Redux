@@ -113,7 +113,7 @@ export const getDashAssoSync = (
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log('GET THE REPSONCE',responseJson)
+        console.log('GET THE REPSONSE',responseJson)
         if (responseJson.success) {
           let associations = responseJson.data.memberListByAccount;
 
@@ -231,7 +231,7 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
   return dispatch => {
     //  ("http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/1");
     fetch(
-      `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID//${MyAccountID}`,
+      `https://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}/`,
       {
         method: 'GET',
         headers: {
@@ -243,10 +243,10 @@ export const getDashAssociation = (oyeURL, MyAccountID) => {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.success) {
+          console.log("Association in Dashboard:",)
           let associations = responseJson.data.memberListByAccount;
 
-          console.log(associations, 'associations');
-
+          console.log("Association in Dashboard:",responseJson);
           let associationIds = [];
           let drop_down_data = [];
 

@@ -992,7 +992,7 @@ class Dashboard extends PureComponent {
 
     axios
       .get(
-        `${this.props.champBaseURL}/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
+        `${this.props.champBaseURL}/Member/GetMemberListByAccountID//${this.props.userReducer.MyAccountID}`,
         {
           headers: {
             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
@@ -2005,11 +2005,11 @@ class Dashboard extends PureComponent {
 
             onCardClick={() =>
 
-              dropdown.length === 0
-                ? this.props.navigation.navigate('CreateOrJoinScreen')
-                : dropdown1.length === 0
-                  ? alert('Unit is not available')
-                  : this.props.navigation.navigate('MyFamilyList')
+               dropdown.length === 0
+                   ? this.props.navigation.navigate('CreateOrJoinScreen')
+                   : dropdown1.length === 0
+                   ? alert('Unit is not available')
+                   :   this.props.navigation.navigate('MyFamilyList')
             }
 
             backgroundColor={base.theme.colors.cardBackground}

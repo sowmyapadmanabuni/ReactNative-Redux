@@ -180,7 +180,7 @@ class MyFamilyEdit extends Component {
                                           disabled={this.state.isView}
                         >
                             <Image style={{height: 90, width: 90, borderRadius: 45, alignSelf: 'center'}}
-                                   source={{uri:'data:image/png;base64,'+ this.state.imageUrl}}/>
+                                   source={{uri: this.state.relativeImage}}/>
 
                         </TouchableOpacity>
                     </View>
@@ -417,10 +417,8 @@ class MyFamilyEdit extends Component {
                     photo: response.uri,
                     photoDetails: response,
                     isPhotoAvailable: true,
-                    imagePath: response.path,
-                    imageUrl:response.data
-
-                } );
+                    imagePath: response.path
+                }, () => self.uploadImage(response));
             }
         });
 
@@ -682,4 +680,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(MyFamilyEdit);
-
