@@ -191,7 +191,7 @@ class OTPVerification extends Component {
                         this.setState({
                             isLoading:false
                         })
-                        console.log("hiii", "failed" + anu);
+                        console.log("hi", "failed" + anu);
                         setTimeout(()=>{
                             alert("Invalid OTP, check Mobile Number and try again");
                         },500)

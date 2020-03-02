@@ -105,7 +105,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             gateAppNotif.push({ open: true, ...data });
           } else if (data.ntType === 'Join_Status') {
             joinStatNotif.push(data);
-          } else if (data.ntType === 'Join') {
+          } else if (data.ntType === 'Join' || data.ntType === 'joinrequest') {
             joinNotif.push(data);
           } else if (data.ntType === 'Announcement') {
             data.vlfName = "Announcement";
@@ -114,11 +114,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             announcement.push(data);
           }
         });
-
-        
-        console.log('Notification@@@@@@:1111', resData);
-       
-        console.log('Notification@@@@@@:1111', responseJson.data);
+        console.log('Notification@@@@@@:1111', responseJson.data,joinNotif,joinStatNotif,gateAppNotif,announcement);
 
           for(let i=0;i<joinNotif.length;i++){
               joinNotif[i].userImage=userImage
@@ -133,8 +129,10 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           ...gateAppNotif,
           ...uniqueJoinStat,
           ...uniqueJoin,
-          ...announcement
+          ...announcement,
         ];
+
+        console.log('Notification@@@@@@:1111', allNotifs,allNotifs.length);
 
         // const sorted = _.sortBy(allNotifs, [
         //   "ntdCreated",
@@ -229,11 +227,12 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         //segregateUnitNotification(unitNotification);
         let unitNotification = [];
         let adminNotification = [];
-        for(let i in allNotifs){
-          if(allNotifs[i].ntType === "joinrequest" || allNotifs[i].ntType === "Join" || allNotifs[i].ntType === "Join_Status"){
-            adminNotification.push(allNotifs[i])
+        let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+        for(let i in succ){
+          if(succ[i].ntType === "joinrequest" || succ[i].ntType === "Join"){
+            adminNotification.push(succ[i])
           }else{
-            unitNotification.push(allNotifs[i])
+            unitNotification.push(succ[i])
           }
         }
 
@@ -260,6 +259,8 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             type:SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
             payload:adminNotification
           })
+
+          console.log("Notification@@@@@@:1111 COunt:",allNotifs,unitNotification,adminNotification);
 
         Promise.all(promises).then(function(results) {
           let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
@@ -399,6 +400,7 @@ export const createNotification = (
 
                 // console.log(sorted)
                 // console.log(unique)
+                
 
                 dispatch({
                   type: GET_NOTIFICATIONS_SUCCESS,
@@ -738,7 +740,7 @@ export const refreshNotifications = (
         let unitNotification = [];
         let adminNotification = [];
         for(let i in resData){
-          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
+          if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join"){
             adminNotification.push(resData[i])
           }else{
             unitNotification.push(resData[i])

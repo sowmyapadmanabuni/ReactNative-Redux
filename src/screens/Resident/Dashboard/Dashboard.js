@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as fb from 'firebase';
 import _ from 'lodash';
 import moment from 'moment';
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Alert, BackHandler, Dimensions, FlatList, Image, ImageBackground, Linking, NetInfo, Platform, ScrollView, StyleSheet, Text, ToastAndroid, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import CountdownCircle from 'react-native-countdown-circle';
@@ -15,23 +15,16 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import ProgressLoader from 'rn-progress-loader';
-import { createNotification, createUserNotification, getAssoMembers, getDashAssociation, getDashAssoSync, getDashSub, getDashUnits, getNotifications, newNotifInstance, refreshNotifications, updateApproveAdmin, updateDropDownIndex, updateIdDashboard, updateJoinedAssociation, updateSelectedDropDown, updateUserInfo, updateuserRole } from '../../../actions';
+import { fetchAssociationByAccountId, updateUnitDropdown, createNotification, createUserNotification, getAssoMembers, getDashAssociation, getDashAssoSync, getDashSub, getDashUnits, getNotifications, newNotifInstance, refreshNotifications, updateApproveAdmin, updateDropDownIndex, updateIdDashboard, updateJoinedAssociation, updateSelectedDropDown, updateUserInfo, updateuserRole } from '../../../actions';
 import IcoMoonConfig from '../../../assets/selection.json';
 import base from '../../../base';
 import CardView from '../../../components/cardView/CardView';
 import OSButton from '../../../components/osButton/OSButton';
 import Style from './Style';
 
-
-
-
-
-const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
-
-const Profiler = React.unstable_Profiler;
 let counter = 0;
 var associationLoaded = false;
-class Dashboard extends PureComponent {
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
@@ -89,24 +82,63 @@ class Dashboard extends PureComponent {
     ),
   };
 
-  componentWillMount() {
+  async componentWillMount() {
+    // this.setState({
+    //   isDataLoading: true,
+    //   isDataVisible: true,
+    // });
+
+    const { MyAccountID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+    //const {fetchAssociationByAccountId}=this.props
+    this.setState({isLoading:true})
+    await this.props.fetchAssociationByAccountId(oyeURL, MyAccountID);
     this.setState({
-      isDataLoading: true,
-      isDataVisible: true,
-    });
-    this.getListOfAssociation();
-    this.myProfileNet();
-    this.listenRoleChange();
-    this.getInvoiceMethodsList();
+      isLoading:false
+    })
+
+    console.log("this.props.dropdown.length:111111111",this.props.dropdown.length,this.props.dropdown)
 
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-    console.log('API LEVEL#######', DeviceInfo.getAPILevel())
-    console.log('API LEVEL#######1111111', DeviceInfo.getBaseOS())
-    console.log('API LEVEL#######444444', DeviceInfo.getSystemVersion())
   }
+
+  async componentDidMount() {
+
+    const { MyAccountID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+    this.myProfileNet();
+  
+    //this.listenRoleChange();
+    //this.props.fetchAssociationByAccountId(oyeURL, MyAccountID)
+
+    //this.props.getNotifications(oyeURL, MyAccountID);
+      // console.log("this.props.dropdown.length:",this.props.dropdown.length,this.props.dropdown)
+      
+      // let self=this
+      // setTimeout(function(){
+      //   console.log("this.props.dropdown.length:",self.props,self.props.dropdown)
+      //   self.getVehicleList();
+
+      //   if(self.props.dropdown.length===0){
+      //     self.props.navigation.navigate('CreateOrJoinScreen');
+      //   }
+
+      //   self.requestNotifPermission();
+      //   self.listenToFirebase(self.props.dropdown);
+ 
+   
+      // }, 9000);
+     //  this.requestNotifPermission();
+         this.getVehicleList();
+      //   this.listenToFirebase(this.props.dropdown);
+   
+      NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+  }
+
+  
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -170,15 +202,13 @@ class Dashboard extends PureComponent {
     }
   }
 
-  navigateToNotificationScreen() { }
-
   listenRoleChange() {
     const { MyAccountID, dropdown } = this.props;
     let path = 'rolechange/' + MyAccountID;
     let roleRef = base.services.frtdbservice.ref(path);
-    //roleRef.off(path);
     let self = this;
     roleRef.on('value', async function (snapshot) {
+      
       try {
         if (counter != 0) {
           console.log(JSON.stringify(snapshot.val()));
@@ -191,7 +221,11 @@ class Dashboard extends PureComponent {
           let firebaseMessaging = firebase.messaging();
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
-          self.roleCheckForAdmin(self.state.assocId);
+          //self.roleCheckForAdmin(self.state.assocId);
+          self.props.fetchAssociationByAccountId(MyAccountID,()=>{
+            self.checkUserRole();
+          });
+          
         } else {
           counter = 1;
         }
@@ -202,50 +236,10 @@ class Dashboard extends PureComponent {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // return (
     return (
       !_.isEqual(nextProps, this.props) || !_.isEqual(nextState, this.state)
     );
-    // );
   }
-
-  /*componentDidUpdate() {
-    if (Platform.OS === 'android') {
-      setTimeout(() => {
-        this.backButtonListener = BackHandler.addEventListener(
-            'hardwareBackPress',
-            () => {
-              if (this.currentRouteName !== 'Main') {
-                console.log("<< 1 >>");
-                this.props.navigation.goBack(null);
-                //return false;
-              }
-              if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
-                console.log("<< 2 >>");
-                this.props.navigation.goBack(null);
-                this.showExitAlert();
-                // BackHandler.exitApp();
-                return true;
-              }
-              if (this.state.isSelectedCard === 'UNIT') {
-                //this.props.navigation.goBack(null);
-                console.log("<< 3 >>");
-                this.showExitAlert();
-                //this.props.navigation.goBack(null);
-                BackHandler.exitApp();
-              } else {
-                console.log("<< else >>")
-                this.changeCardStatus('UNIT');
-              }
-
-              this.lastBackButtonPress = new Date().getTime();
-
-              return true;
-            }
-        );
-      }, 100);
-    }
-  }*/
 
   showExitAlert() {
     Alert.alert(
@@ -274,7 +268,8 @@ class Dashboard extends PureComponent {
       MyAccountID,
       champBaseURL,
       receiveNotifications,
-      oyeURL
+      oyeURL,
+      dropdown
     } = this.props;
     console.log("Dashborad reducer Data in Request Notification Permission:", this.props.dashBoardReducer);
     firebase
@@ -285,7 +280,6 @@ class Dashboard extends PureComponent {
           if (receiveNotifications) {
             this.listenForNotif();
           }
-          // user has permissions
         } else {
           firebase
             .messaging()
@@ -294,45 +288,25 @@ class Dashboard extends PureComponent {
               if (receiveNotifications) {
                 this.listenForNotif();
               }
-              // User has authorised
             })
             .catch(error => {
-              // User has rejected permissions
             });
-          // user doesn't have permission
         }
       });
 
-    var headers = {
-      'Content-Type': 'application/json',
-      'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-    };
-
-    axios
-      .get(
-        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${MyAccountID}`,
-        {
-          headers: headers
-        }
-      )
-      .then(response => {
-        console.log("respons ", response);
-        let data = response.data.data.memberListByAccount;
-        console.log(data, 'memList');
-
-        //UNCOMMENT_IF_ROLLBACK///////************************///////////
-        firebase.messaging().subscribeToTopic('' + MyAccountID + 'admin');
-        //************************///////////
-        data.map(units => {
+          dropdown.map(units => {
           if (receiveNotifications) {
-            //alert(MyAccountID + "admin");
-            firebase
+            console.log("Listening to firebase:",units)
+            let unitArr = units.unit;
+            for(let i in unitArr){
+              console.log("Listening to firebase Unit:",unitArr[i]);
+              firebase
               .messaging()
               .subscribeToTopic(
-                '' + MyAccountID + units.unUnitID + 'usernotif'
+                '' + MyAccountID + unitArr[i].unUnitID + 'usernotif'
               );
-            console.log('date_asAssnID', units.asAssnID);
-            //alert(""+MyAccountID+units.unUnitID+"usernotif")
+            }
+            console.log('date_asAssnID', units.associationId);
             console.log("UNSUBSCRIBING_FROM: " + MyAccountID + 'admin')
             firebase
               .messaging()
@@ -340,81 +314,40 @@ class Dashboard extends PureComponent {
             firebase
               .messaging()
               .unsubscribeFromTopic('14948admin');
-            //UNCOMMENT_IF_ROLLBACK///////************************///////////
             firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
-            //************************///////////
-
-            // firebase.messaging().sendMessage("topic here")
-            // firebase.messaging().subscribeToTopic( + 'admin');
-            // alert(MyAccountID + 'admin');
-            // firebase.messaging().subscribeToTopic('7548admin');
 
             firebase
               .messaging()
-              .subscribeToTopic(units.asAssnID + 'Announcement');
+              .subscribeToTopic(units.associationId + 'Announcement');
 
-            if (units.mrmRoleID === 2 || units.mrmRoleID === 3) {
-              // console.log(units, 'units');
-              // firebase.messaging().subscribeToTopic(units.unUnitID + 'admin');
-              // alert(units.unUnitID + 'admin');
+            if (units.roleId === 2 || units.roleId === 3) {;
             } else if (units.mrmRoleID === 1) {
-              // console.log(units, 'unitsadmin');
-
-              //UNCOMMENT_IF_ROLLBACK///////************************///////////
-              firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
-              //************************///////////
-
-              // console.log(units.asAssnID + 'admin', 'subadmin');
-              // if (units.asAssnID + 'admin' === '7548admin') {
-              //   alert('Accepted');
-              // }
-              if (units.meIsActive) {
-                //firebase.messaging().unsubscribeFromTopic(units.asAssnID+ "admin");
-                //UNCOMMENT_IF_ROLLBACK///////************************///////////
-                firebase.messaging().subscribeToTopic(units.asAssnID + 'admin');
-                //************************///////////
-
-              } else {
-                firebase
-                  .messaging()
-                  .unsubscribeFromTopic(units.asAssnID + 'admin');
-              }
+              firebase.messaging().subscribeToTopic(units.associationId + 'admin');
             }
           } else if (!receiveNotifications) {
-            // firebase.messaging().unsubscribeFromTopic(units.unUnitID + "admin");
             firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
-            firebase.messaging().unsubscribeFromTopic(units.asAssnID + 'admin');
+            firebase.messaging().unsubscribeFromTopic(units.associationId + 'admin');
           }
         });
-        this.roleCheckForAdmin();
-      });
   };
 
   showLocalNotification = notification => {
     try {
-
-      // console.log(notification);
       const channel = new firebase.notifications.Android.Channel(
         'channel_id',
         'Oyespace',
-        //firebase.notifications.Android.Importance.High
         firebase.notifications.Android.Importance.Max
 
 
       ).setDescription('Oyespace channel')
         .setSound('oye_msg_tone.mp3');
-      //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
       channel.enableLights(true);
-      // channel.enableVibration(true);
-      // channel.vibrationPattern([500]);
       firebase.notifications().android.createChannel(channel);
 
 
 
 
       const notificationBuild = new firebase.notifications.Notification({
-        //sound: 'default',
-        //sound: 'oye_sms.mp3',
         show_in_foreground: true,
         show_in_background: true,
       });
@@ -423,10 +356,7 @@ class Dashboard extends PureComponent {
         .setTitle(notification._title)
         .setBody(notification._body)
         .setNotificationId(notification._notificationId)
-        //.setSound(channel.sound)
         .setSound('oye_msg_tone.mp3')
-        // .setSound('oye_msg_tone')
-        //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
         .setData({
           ...notification._data,
           foreground: true
@@ -437,11 +367,6 @@ class Dashboard extends PureComponent {
         .android.setSmallIcon('ic_stat_ic_notification')
         .android.setChannelId('channel_id')
         .android.setVibrate([1000, 1000])
-        //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
-
-
-
-        // .android.setChannelId('notification-action')
         .android.setPriority(firebase.notifications.Android.Priority.Max);
 
       firebase.notifications().displayNotification(notificationBuild);
@@ -450,70 +375,7 @@ class Dashboard extends PureComponent {
       console.log('FAILED_NOTIF');
     }
   };
-  // showLocalNotification = notification => {
-  //   try {
 
-  //      console.log("showLocalNotification",notification);
-  //     const channel = new firebase.notifications.Android.Channel(
-  //       'Oyespace',
-  //       'Oyespace',
-  //       firebase.notifications.Android.Importance.High
-  //     ).setDescription('Oyespace')
-  //         .setSound('oye_msg_tone');
-  //   //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-  //     channel.enableLights(true);
-  //     // channel.enableVibration(true);
-  //     // channel.vibrationPattern([500]);
-  //     firebase.notifications().android.createChannel(channel);
-
-
-  //     const channel_for = new firebase.notifications.Android.Channel(
-  //       'oye_channel',
-  //       'oye_channel',
-  //       firebase.notifications.Android.Importance.High
-  //     ).setDescription('oye_channel')
-  //         .setSound('oye_msg_tone');
-  //         channel_for.enableLights(true);
-  //         channel_for.enableVibration(true);
-  //         channel_for.vibrationPattern([500]);
-  //     firebase.notifications().android.createChannel(channel_for);
-
-  //     const notificationBuild = new firebase.notifications.Notification({
-  //       //sound: 'default',
-  //       //sound: 'oye_msg_tone',
-  //       show_in_foreground: true,
-  //       show_in_background: true,
-  //     })
-  //       .setTitle(notification._title)
-  //       .setBody(notification._body)
-  //       .setNotificationId(notification._notificationId)
-  //         //.setSound(channel.sound)
-  //         .setSound('oye_msg_tone')
-  //         //.setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
-  //       .setData({
-  //         ...notification._data,
-  //         foreground: true
-  //       })
-  //       .android.setAutoCancel(true)
-  //       .android.setColor('#FF9100')
-  //       .android.setLargeIcon('ic_notif')
-  //       .android.setSmallIcon('ic_stat_ic_notification')
-  //       .android.setChannelId('Oyespace')
-  //       .android.setVibrate([1000,1000])
-  //       .setSound('oye_msg_tone')
-
-  //         //setSound('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
-
-
-  //       // .android.setChannelId('notification-action')
-  //       .android.setPriority(firebase.notifications.Android.Priority.High);
-  //       console.log("DISPLAY")
-  //     firebase.notifications().displayNotification(notificationBuild);
-  //     this.setState({ foregroundNotif: notification._data });
-  //   } catch (e) {
-  //     console.log('FAILED_NOTIF',e);
-  //   }
-  // };
 
   listenForNotif = () => {
     console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222')
@@ -550,20 +412,8 @@ class Dashboard extends PureComponent {
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
           //this.props.refreshNotifications(oyeURL, MyAccountID);
-          this.props.getNotifications(oyeURL, MyAccountID);
-
-
+       //   this.props.getNotifications(oyeURL, MyAccountID);
           this.showLocalNotification(notification);
-
-          // showMessage({
-          //   message: notification.title,
-          //   description: notification.body,
-          //   type: "default",
-          //   backgroundColor: "#FF9100",
-          //   onPress: () => {
-          //     this.props.navigation.navigate("NotificationScreen");
-          //   }
-          // });
         });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {
@@ -572,204 +422,27 @@ class Dashboard extends PureComponent {
         let details = notificationOpen.notification._data;
         if (notificationOpen.notification._data.admin === 'true') {
           if (notificationOpen.action) {
-            // this.props.newNotifInstance(notificationOpen.notification);
-            // this.props.createNotification(
-            //   notificationOpen.notification._data,
-            //   navigationInstance,
-            //   true,
-            //   "true",
-            //   this.props.oyeURL,
-            //   this.props.MyAccountID
-            // );
-            // this.props.createNotification(notificationOpen.notification)
           }
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
         } else if (notificationOpen.notification._data.admin === 'false') {
           this.props.refreshNotifications(oyeURL, MyAccountID);
-          // this.props.createUserNotification(
-          //     "Join_Status",
-          //     oyeURL,
-          //     MyAccountID,
-          //     1,
-          //     details.ntDesc,
-          //     "resident_user",
-          //     "resident_user",
-          //     details.sbSubID,
-          //     "resident_user",
-          //     "resident_user",
-          //     "resident_user",
-          //     "resident_user",
-          //     "resident_user",
-          //     true
-          // );
-          // this.props.navigation.navigate("NotificationScreen");
         }
 
         if (notificationOpen.notification._data.admin === 'true') {
           this.props.refreshNotifications(oyeURL, MyAccountID);
           if (notificationOpen.notification._data.foreground) {
-            // this.props.newNotifInstance(notificationOpen.notification);
-            // this.props.createNotification(
-            //   notificationOpen.notification._data,
-            //   navigationInstance,
-            //   true,
-            //   "true",
-            //   this.props.oyeURL,
-            //   this.props.MyAccountID
-            // );
           }
         } else if (notificationOpen.notification._data.admin === 'gate_app') {
-          //  this.props.getNotifications(oyeURL, MyAccountID);
-
           this.props.refreshNotifications(oyeURL, MyAccountID);
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(
-          //   notificationOpen.notification._data,
-          //   navigationInstance,
-          //   true,
-          //   "gate_app",
-          //   this.props.oyeURL,
-          //   this.props.MyAccountID
-          // );
-          // this.props.newNotifInstance(notificationOpen.notification);
-          // this.props.createNotification(notificationOpen.notification._data, navigationInstance, true, false)
         } else if (notificationOpen.notification._data.admin === 'false') {
         }
-        // this.props.getNotifications(oyeURL, MyAccountID);
-        console.log(
-          '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-        );
-
-        // ntType
-
-        console.log('GET THE NOTIFICATION DATA', notificationOpen.notification.data)
         if (notificationOpen.notification.data.ntType === "Join") {
           this.changeTheAssociation(notificationOpen.notification.data.associationName, notificationOpen.notification.data.associationID,
             notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
-
         this.readFBRTB(true);
-        //this.props.navigation.navigate('NotificationScreen');
       });
     }
   };
-
-  onChangeText = () => { };
-
-  didMount = () => {
-    const { getDashSub, getDashAssociation, getAssoMembers } = this.props;
-    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
-
-    getDashSub(oyeURL, SelectedAssociationID);
-    getDashAssociation(oyeURL, MyAccountID);
-    getAssoMembers(oyeURL, MyAccountID);
-    this.requestNotifPermission();
-
-    // this.getBlockList();
-    this.props.getNotifications(oyeURL, MyAccountID);
-  };
-
-  syncData = () => {
-    console.log("")
-    const {
-      getDashAssociation,
-      getAssoMembers,
-      getDashSub,
-      allAssociations,
-      getDashAssoSync
-    } = this.props;
-    console.log('SYNC_FUNCTION@@@@@');
-    console.log("userReducer>> ", this.props.userReducer);
-    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
-
-    this.requestNotifPermission();
-
-    if (allAssociations != undefined && allAssociations.length > 0 && !associationLoaded) {
-      console.log("RENDER_ALLASSOC", allAssociations)
-      associationLoaded = true;
-      this.createTopicListener(allAssociations, true)
-    }
-
-    // this.props.getNotifications(oyeURL, MyAccountID);
-
-    // getDashSub(oyeURL, SelectedAssociationID);
-    getDashAssoSync(oyeURL, MyAccountID);
-    // getAssoMembers(oyeURL, MyAccountID);
-  };
-
-  async componentDidMount() {
-    const {
-      getDashSub,
-      getDashAssociation,
-      getAssoMembers,
-      receiveNotifications,
-      dropdown, allAssociations
-    } = this.props;
-
-    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
-
-    console.log('Props in dashboard did mount ####', this.props)
-    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
-
-    console.log("allAssociations_DIDM", allAssociations)
-
-    //    const fcmToken = await firebase.messaging().getToken();
-    // if (fcmToken) {
-    //     // user has a device token
-    //     console.log("FCM_TOKEN:",fcmToken)
-    //     let tok = await firebase.messaging().unsubscribeFromTopic("14948_STAFFENTRY_40858");
-    //     console.log("FCM_TOKEN:",tok)
-    // } else {
-    //     // user doesn't have a device token yet
-    //     console.log("FCM_TOKEN: NOT AVAILABLE")
-    // }
-
-    this.roleCheckForAdmin = this.roleCheckForAdmin.bind(this);
-    // getAssoMembers(oyeURL, MyAccountID);
-    this.requestNotifPermission();
-    // this.getBlockList();
-    this.props.getNotifications(oyeURL, MyAccountID);
-
-    // let self = this;
-    //   fb.database().ref('SOS/' + SelectedAssociationID + "/" + MyAccountID + "/").on('value', function (snapshot) {
-    //     let receivedData = snapshot.val();
-    //     console.log("ReceiveddataDash", snapshot.val());
-    //     if (receivedData !== null) {
-    //       if(receivedData.isActive && receivedData.userId){
-    //        self.props.navigation.navigate("sosScreen",{isActive:true,images:receivedData.emergencyImages===undefined?[]:receivedData.emergencyImages})
-    //       }
-
-    //         }
-    //     });
-
-    //Adding an event listner on focus
-    //So whenever the screen will have focus it will set the state to zero
-
-    if (!this.props.called) {
-      this.didMount();
-    }
-
-    this.syncData();
-
-    // BackgroundTimer.runBackgroundTimer(()=>{
-    //   console.log()
-    //   this.syncData()
-    // },5000)
-     /* timer.setInterval(
-                 this,
-                 'syncData',
-                 async () => {
-                   console.log("I am Timer");
-                   this.syncData();
-                 },
-                 10000
-             );*/
-    }
-
 
   handleConnectivityChange = isConnected => {
     console.log('CONNECTION DATA', isConnected)
@@ -781,125 +454,79 @@ class Dashboard extends PureComponent {
   };
 
   async roleCheckForAdmin(index) {
-    const { dropdown, dropdown1 } = this.props;
-    console.log("this.state.assocId ", this.state.assocId);
-    console.log('Check unit and Association available@@@', dropdown, dropdown1);
-    //this.listenToFirebase(dropdown);
-    try {
-      let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
-        this.state.assocId
-      );
-      let role = '';
-      let isAdminFound = false;
-      console.log('roleCheckForAdmin_', responseJson);
-      //responseJson.data.members.splice(0,1);
+    this.checkUserRole();
+    // const { dropdown, dropdown1 } = this.props;
+    // console.log("this.state.assocId ", this.state.assocId);
+    // console.log('Check unit and Association available@@@', dropdown, dropdown1);
+    // try {
+    //   let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
+    //     this.state.assocId
+    //   );
+    //   let role = '';
+    //   let isAdminFound = false;
+    //   console.log('roleCheckForAdmin_', responseJson);
 
-      for (let i = 0; i < responseJson.data.members.length; i++) {
-        //alert(responseJson.data.members[i].mrmRoleID)
-        let assnId = '' + responseJson.data.members[i].asAssnID;
-        assnId = assnId.trim() + 'admin';
+    //   for (let i = 0; i < responseJson.data.members.length; i++) {
+    //     let assnId = '' + responseJson.data.members[i].asAssnID;
+    //     assnId = assnId.trim() + 'admin';
 
-        if (
-          responseJson.data.members[i].meIsActive &&
-          this.props.userReducer.MyAccountID ===
-          responseJson.data.members[i].acAccntID &&
-          parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
-        ) {
-          console.log(
-            'Id_eq',
-            this.props.userReducer.MyAccountID,
-            responseJson.data.members[i].acAccntID,
-            responseJson.data.members[i].mrmRoleID
-          );
-          role = responseJson.data.members[i].mrmRoleID;
-          if (role === 1) {
-            isAdminFound = true;
-          }
-          // else{
-          //   console.log("UNSUBSCRIBED_FROM_",assnId)
-          //   //await base.utils.storage.removeData('ADMIN_NOTIF'+assnId);
-          //   //firebase.messaging().unsubscribeFromTopic(assnId)
-          // }
-        } else {
-          //console.log("UNSUBSCRIBED_USER_FROM_",assnId)
-          //firebase.messaging().unsubscribeFromTopic(assnId)
-        }
-      }
+    //     if (
+    //       responseJson.data.members[i].meIsActive &&
+    //       this.props.userReducer.MyAccountID ===
+    //       responseJson.data.members[i].acAccntID &&
+    //       parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
+    //     ) {
+    //       console.log(
+    //         'Id_eq',
+    //         this.props.userReducer.MyAccountID,
+    //         responseJson.data.members[i].acAccntID,
+    //         responseJson.data.members[i].mrmRoleID
+    //       );
+    //       role = responseJson.data.members[i].mrmRoleID;
+    //       if (role === 1) {
+    //         isAdminFound = true;
+    //       }
+    //     }
+    //   }
+    //   let assnId = '' + this.state.assocId + 'admin';
+    //   if (isAdminFound) {
+    //     role = 1;
+    //     console.log(assnId);
+    //     console.log('SUBSCRIBED_TO_', assnId);
 
-      let assnId = '' + this.state.assocId + 'admin';
-      if (isAdminFound) {
-        role = 1;
-        console.log(assnId);
-        //let subscription = await base.utils.storage.retrieveData('ADMIN_NOTIF'+assnId);
-        console.log('SUBSCRIBED_TO_', assnId);
-        // if(subscription == null || subscription == undefined){
+    //     await base.utils.storage.storeData('ADMIN_NOTIF' + assnId, assnId);
+    //     firebase.messaging().subscribeToTopic(assnId);
+    //   } else {
+    //     console.log('UNSUBSCRIBED_FROM_', assnId);
+    //     await base.utils.storage.removeData('ADMIN_NOTIF' + assnId);
+    //     firebase.messaging().unsubscribeFromTopic(assnId);
+    //   }
 
-        await base.utils.storage.storeData('ADMIN_NOTIF' + assnId, assnId);
-        ///ROLLBACK///////
-        firebase.messaging().subscribeToTopic(assnId);
-        //************************///////////
+    //   console.log(role, 'role');
+    //   this.setState(
+    //     {
+    //       role: role
+    //     },
+    //     () => {
+    //       const { updateuserRole } = this.props;
+    //       console.log('Role123456:', updateuserRole);
+    //       updateuserRole({
+    //         prop: 'role',
+    //         value: role
+    //       });
+    //       const { updateIdDashboard } = this.props;
+    //       updateIdDashboard({
+    //         prop: 'roleId',
+    //         value: role
+    //       });
+    //       console.log('ROLE_UPDATE', role);
+    //     }
+    //   );
+    //   this.checkUnitIsThere();
 
-        // if (assnId === '7548admin') {
-        //   // alert('Sub');
-        // }
-        // }
-      } else {
-        console.log('UNSUBSCRIBED_FROM_', assnId);
-        await base.utils.storage.removeData('ADMIN_NOTIF' + assnId);
-        /* if (assnId === '7548admin') {
-         // alert('Unsub');
-        }*/
-        firebase.messaging().unsubscribeFromTopic(assnId);
-      }
-
-      console.log(role, 'role');
-      this.setState(
-        {
-          role: role
-        },
-        () => {
-          const { updateuserRole } = this.props;
-          console.log('Role123456:', updateuserRole);
-          updateuserRole({
-            prop: 'role',
-            value: role
-          });
-          const { updateIdDashboard } = this.props;
-          updateIdDashboard({
-            prop: 'roleId',
-            value: role
-          });
-          console.log('ROLE_UPDATE', role);
-        }
-      );
-      // })
-      // .catch(error => {
-      //   this.setState({ error, loading: false });
-      // let userAssociation = this.props.dashBoardReducer.dropdown;
-      // fetch(
-      //   `http://apidev.oyespace.com/oyeliving/api/v1/Member/GetMemberListByAccountID/${this.props.userReducer.MyAccountID}`,
-      //   {
-      //     method: 'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-      //     }
-      //   }
-      // ).then(response => response.json())
-      // .then(responseJson => {
-      //   console.log("res in data receving: ", responseJson);
-      //   })
-      //   .catch(error=>{
-      //   console.log("Error:",error)
-      // })
-
-      // });
-      this.checkUnitIsThere();
-
-    } catch (err) {
-      //alert(err)
-      console.log('ROLECHECK_ERROR', err);
-    }
+    // } catch (err) {
+    //   console.log('ROLECHECK_ERROR', err);
+    // }
   }
 
 
@@ -945,10 +572,10 @@ class Dashboard extends PureComponent {
 
   async getVehicleList() {
     let self = this;
-    let associationId = self.props.dashBoardReducer.selectedAssociation;
+    let associationId = self.props.userReducer.SelectedAssociationID;
     let accountId = self.props.userReducer.MyAccountID;
-    let unitId = self.props.dashBoardReducer.uniID;
-    console.log('HItting Here ______________________________________IN dashboard count', associationId, accountId, unitId, self.props.oyeURL)
+    let unitId = self.props.userReducer.SelectedUnitID;
+    console.log('HItting Here ______________________________________IN dashboard count', self.props,associationId, accountId, unitId, self.props.oyeURL)
     fetch(
       `http://${self.props.oyeURL}/oyesafe/api/v1/GetFamilyMemberVehicleCountByAssocAcntUnitID/${associationId}/${accountId}/${unitId}`,
       {
@@ -958,7 +585,9 @@ class Dashboard extends PureComponent {
           'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
         }
       }
-    ).then(response => response.json())
+    ).then(response => 
+      console.log("",response.json(),()=>{response.json()})
+      )
       .then((responseJson) => {
         console.log("HItting Here ______________________________________IN dashboard count123:", responseJson)
         self.setState({
@@ -977,18 +606,22 @@ class Dashboard extends PureComponent {
       })
       .catch(error => {
         console.log("HItting Here ______________________________________IN dashboard count1234:", error)
+        updateIdDashboard({
+          prop: 'vehiclesCount',
+          value: 0
+        });
+        updateIdDashboard({
+          prop: 'familyMemberCount',
+          value: 0
+        });
       })
 
-  }
-
-  static getAssociationList() {
-    this.getAssociationList();
   }
 
   async getListOfAssociation() {
     let self = this;
     let oyeURL = this.props.oyeURL;
-    self.setState({ isLoading: true });
+    //self.setState({ isLoading: true });
 
     axios
       .get(
@@ -1047,7 +680,6 @@ class Dashboard extends PureComponent {
               prop: 'assId',
               value: sortedArr[0].details.asAssnID
             });
-            // updateIdDashboard({ prop: "memberList", value: sortedArr });
             const { updateUserInfo } = this.props;
             updateUserInfo({
               prop: 'SelectedAssociationID',
@@ -1056,47 +688,19 @@ class Dashboard extends PureComponent {
             base.utils.validate.checkSubscription(
               this.props.userReducer.SelectedAssociationID
             );
-            self.getUnitListByAssoc();
+      //      self.getUnitListByAssoc();
           } else if (!stat.data.success) {
             this.setState({
               isNoAssJoin: true
             });
-            this.props.navigation.navigate('CreateOrJoinScreen')
-
-            /* Alert.alert(
-               'Join association',
-
-               'Please join in any association to access Data  ?',
-               [
-                 {
-                   text: 'Yes',
-                   onPress: () =>
-                     this.props.navigation.navigate('CreateOrJoinScreen')
-                 },
-                 { text: 'No', style: 'cancel' }
-               ]
-             );*/
+            //this.props.navigation.navigate('CreateOrJoinScreen');
           }
         } catch (error) {
           console.log('Error details', error);
           this.setState({
             isNoAssJoin: true
           });
-          this.props.navigation.navigate('CreateOrJoinScreen')
-
-          /*Alert.alert(
-            'Join association',
-
-            'Please join in any association to access Data  ?',
-            [
-              {
-                text: 'Yes',
-                onPress: () =>
-                  this.props.navigation.navigate('CreateOrJoinScreen')
-              },
-              { text: 'No', style: 'cancel' }
-            ]
-          );*/
+         // this.props.navigation.navigate('CreateOrJoinScreen');
         }
       })
       .catch(error => {
@@ -1105,21 +709,7 @@ class Dashboard extends PureComponent {
           isNoAssJoin: true
         });
 
-        this.props.navigation.navigate('CreateOrJoinScreen')
-
-        /*Alert.alert(
-          'Join association',
-
-          'Please join in any association to access Data  ?',
-          [
-            {
-              text: 'Yes',
-              onPress: () =>
-                this.props.navigation.navigate('CreateOrJoinScreen')
-            },
-            { text: 'No', style: 'cancel' }
-          ]
-        );*/
+      //  this.props.navigation.navigate('CreateOrJoinScreen');
       });
   }
 
@@ -1192,52 +782,20 @@ class Dashboard extends PureComponent {
     console.log('THISPOPPPPPPPP', this.props)
 
     this.roleCheckForAdmin(assId);
-    // this.getUnitListByAssoc();
-    //this.setView(0)
-    // this.setState({ role:dropdown[index].roleId });
   };
 
   onAssociationChange = (value, index) => {
 
-    const {
-      associationid,
-      getDashUnits,
-      updateUserInfo,
-      memberList,
-      notifications,
-      dropdown,
-      updateSelectedDropDown,
-      dropdown1,
-    } = this.props;
+    console.log('GettheselectedAssocitation', value, index, this.props.dropdown)
 
-    console.log('Ass index', value, index, dropdown[index]);
-    const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
+    const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = this.props;
+
     this.setState({ assocId: dropdown[index].associationId });
 
-    // console.log(value, "Valuessss");
-    getDashUnits(
-      dropdown[index].associationId,
-      oyeURL,
-      MyAccountID,
-      dropdown,
-      dropdown[index].associationId,
-      dropdown1
-    );
-
-    const { updateIdDashboard } = this.props;
     console.log('updateIdDashboard1', this.props);
     updateIdDashboard({
       prop: 'assId',
       value: dropdown[index].associationId
-    });
-    updateIdDashboard({
-      prop: 'familyMemberCount',
-      value: ""
-    });
-    updateIdDashboard({
-      prop: 'vehiclesCount',
-      value: ""
     });
 
     updateUserInfo({
@@ -1255,13 +813,32 @@ class Dashboard extends PureComponent {
       value: dropdown[index].associationId
     });
 
+    updateSelectedDropDown({
+      prop: "selectedDropdown1",
+      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].value
+    });
+
+    updateSelectedDropDown({
+      prop: "unitID",
+      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
+    });
+
+    updateUnitDropdown({
+      value: dropdown[index].unit,
+      associationId: dropdown[index].associationId
+    })
+
+    updateIdDashboard({
+      prop: 'assId',
+      value: dropdown[index].associationId
+    });
+    updateUserInfo({
+      prop: 'SelectedAssociationID',
+      value: dropdown[index].associationId
+    });
+
 
     base.utils.validate.checkSubscription(dropdown[index].associationId);
-
-    // let memId = _.find(memberList, function(o) {
-    //   return o.asAssnID === dropdown[index].associationId;
-    // });
-
     updateUserInfo({
       prop: 'MyOYEMemberID',
       value: dropdown[index].memberId
@@ -1270,11 +847,42 @@ class Dashboard extends PureComponent {
       prop: 'SelectedMemberID',
       value: dropdown[index].memberId
     });
-    this.roleCheckForAdmin(dropdown[index].associationId);
-    this.getUnitListByAssoc();
+    //this.roleCheckForAdmin(dropdown[index].associationId);
+    dropdown[index].unit.length === 0 ? "" : this.getVehicleList()
+    this.checkUserRole(dropdown[index])
     this.setView(0)
-    // this.setState({ role:dropdown[index].roleId });
   };
+
+
+  async checkUserRole(data) {
+    const { updateuserRole, updateIdDashboard } = this.props;
+    console.log("GettheselectedAssocitation1", data);
+    let assId = (data.associationId).toString();
+    if (data.roleId === 1) {
+      let assId = (data.associationId).toString();
+      await base.utils.storage.storeData('ADMIN_NOTIF' + assId, assId);
+      firebase.messaging().subscribeToTopic(assId)
+    } else {
+      await base.utils.storage.removeData('ADMIN_NOTIF' + assId);
+      firebase.messaging().unsubscribeFromTopic(assId)
+    }
+    this.setState({
+      role: data.roleId
+    })
+
+    updateuserRole({
+      prop: "role",
+      value: data.roleId
+    })
+
+    updateIdDashboard({
+      prop: "roleId",
+      value: data.roleId
+    })
+
+
+
+  }
 
   checkUnitIsThere() {
     const { dropdown1 } = this.props;
@@ -1303,14 +911,11 @@ class Dashboard extends PureComponent {
       console.log("<< INSIDE >>");
       this.listenToFirebase(this.props.dropdown);
       this.getVehicleList();
-      // this.myFamilyListGetData();
     }
   }
 
   async getUnitListByAssoc() {
     let self = this;
-    //self.setState({isLoading: true})
-    const { updateIdDashboard } = this.props;
 
     console.log('APi1233', self.state.assocId);
     let stat = await base.services.OyeLivingApi.getUnitListByAssoc(
@@ -1335,44 +940,15 @@ class Dashboard extends PureComponent {
         self.setState({
           unitList: unitList,
           unitName: unitList[0].value,
-          // unitId: unitList[0].details.unUnitID,
           isDataVisible: true
         });
         self.readFBRTB(false);
         console.log('updateIdDashboard3', this.props);
-        // updateIdDashboard({
-        //     prop: "uniID",
-        //     value: unitList[0].details.unUnitID
-        // });
         self.roleCheckForAdmin(this.state.assocId);
-        self.getInvoiceMethodsList();
       }
     } catch (error) {
       base.utils.logger.log(error);
     }
-  }
-
-  updateUnit(value, index) {
-    console.log("updateUnit: ", value, index);
-    let self = this;
-    let unitList = self.state.unitList;
-    let unitName, unitId;
-    console.log('DKVMKODVND:', unitList, value, index);
-    for (let i = 0; i < unitList.length; i++) {
-      if (value === unitList[i].value) {
-        unitName = unitList[i].details.asAsnName;
-        unitId = unitList[i].details.unUnitID;
-      }
-    }
-    console.log('DKVMhghgghhgh', value, unitId);
-    self.setState({
-      unitName: value,
-      unitId: unitId
-    });
-    //  const {updateIdDashboard} = this.props;
-    // updateIdDashboard({prop: "uniID", value: unitId});
-    self.checkUnitIsThere();
-    //self.getVehicleList();
   }
 
   myProfileNet = async () => {
@@ -1399,17 +975,7 @@ class Dashboard extends PureComponent {
 
   createTopicListener(associationList, _switch) {
     if (associationList != undefined && associationList.length > 0) {
-
-
       try {
-        // const fcmToken_ = firebase.messaging().getToken();
-        console.log("STARTE ROVEKING")
-        // firebase.messaging().getToken().then(s=>{
-        //   console.log("STARTE ROVEKING_TOK",s)
-        // })
-
-
-
         firebase.messaging().hasPermission().
           then((enabled) => {
             if (enabled) {
@@ -1423,21 +989,8 @@ class Dashboard extends PureComponent {
             }
           })
           .catch(error => { console.log("FCMTOKE::NOPERMISSION_CATCH") });
-
-
-        // let resp =  firebase.messaging().deleteToken().then((st)=>{
-        //   console.log("DELETE_TOK",st)
-        // });
-        //       firebase.initializeApp(base.utils.strings.firebaseconfig);
-        // console.log("REVOKING",resp)
-
-        console.log("createTopicListener", associationList)
         let assnList = _.filter(associationList, item => item.unUniName != "");
-        console.log("createTopicListener_2", assnList)
         for (unit of assnList) {
-          console.log("createTopicListener_3", unit)
-
-
           if (_switch) {
             console.log("SUBSCRIBING_TOPIS", unit.asAssnID + "_STAFFENTRY_" + unit.unUnitID)
             firebase.messaging().subscribeToTopic(unit.asAssnID + "_STAFFENTRY_" + unit.unUnitID).then((s) => {
@@ -1558,13 +1111,6 @@ class Dashboard extends PureComponent {
     const {
       dropdown,
       dropdown1,
-      allAssociations,
-      residentList,
-      sold,
-      unsold,
-      isLoading,
-      sold2,
-      unsold2,
       updateUserInfo,
       updateDropDownIndex,
       selectedDropdown,
@@ -1572,17 +1118,8 @@ class Dashboard extends PureComponent {
       updateSelectedDropDown,
       updateIdDashboard
     } = this.props;
-    let associationList = this.state.assocList;
-    let unitList = this.state.unitList;
     let maxLen = 23;
     let maxLenUnit = 10;
-    let text = 'ALL THE GLITTERS IS NOT GOLD';
-    console.log(
-      'To check the @@@@@@',
-      dropdown.length,
-      dropdown1.length,
-      this.props
-    );
 
     console.log("vehiclesCount ", this.props.dashBoardReducer.role, dropdown1.length, selectedView);
 
@@ -1615,8 +1152,8 @@ class Dashboard extends PureComponent {
 
       return (
         <View style={{ height: '100%', width: '100%' }}>
-          <NavigationEvents onDidFocus={() => this.requestNotifPermission()} />
-          {!this.props.isLoading ? (
+          {/* <NavigationEvents onDidFocus={() => this.requestNotifPermission()} /> */}
+          {!this.state.isLoading?
             <View style={Style.container}>
               <View style={Style.dropDownContainer}>
                 <View style={Style.leftDropDown}>
@@ -1710,7 +1247,8 @@ class Dashboard extends PureComponent {
                           prop: 'selectedDropdown1',
                           value: dropdown1[index].value
                         });
-                        this.updateUnit(value, index);
+                        this.getVehicleList();
+                        //    this.updateUnit(value, index);
                       }}
                     // itemTextStyle={{}}
                     />
@@ -1835,9 +1373,7 @@ class Dashboard extends PureComponent {
                 </View>
               </View>
             </View>
-          ) : (
-              <View />
-            )}
+          :<View/>}
           <ProgressLoader
             isHUD={true}
             isModal={true}
@@ -1906,7 +1442,6 @@ class Dashboard extends PureComponent {
   }
 
   getPaymentGateWay() {
-    //   console.log('GET THE PROPS DATA',this.props,this.props.navigation.state.params.htmlCode)
     axios
       .post(
         `http://${this.props.oyeURL}/oyeliving/api/v1/PaymentICICI/Create`,
@@ -1932,19 +1467,6 @@ class Dashboard extends PureComponent {
     let paymentData = response.data.data.paymentICICI;
     console.log('RESPONSE !!!!!!', paymentData)
     const reqData = new FormData();
-    // reqData.append('txntype',paymentData.txntype)
-    // reqData.append('timezone',paymentData.timezone)
-    // reqData.append('txndatetime',paymentData.txndatetime)
-    // reqData.append('hash_algorithm',paymentData.hash_algorithm)
-    // reqData.append('hash',paymentData.response_hash)
-    // reqData.append('storename',paymentData.storename)
-    // reqData.append('mode',paymentData.mode)
-    // reqData.append('currency',paymentData.currency)
-    // reqData.append('responseSuccessURL',paymentData.pgStatURL)
-    // reqData.append('responseFailURL',paymentData.pgStatURL)
-    // reqData.append('language',paymentData.language)
-    // reqData.append('chargetotal',paymentData.chargetotal)
-    // reqData.append('oid',paymentData.oid);
 
 
     let iciciForm = {
@@ -1988,7 +1510,6 @@ class Dashboard extends PureComponent {
     const { updateIdDashboard } = this.props;
     //this.state.invoicesList
     let invoiceList = this.state.invoicesList;
-    console.log('FamilyList count', this.props.dashBoardReducer);
     return (
       <View style={Style.mainElevatedView}>
         <View style={Style.elevatedView}>
@@ -2005,11 +1526,11 @@ class Dashboard extends PureComponent {
 
             onCardClick={() =>
 
-               dropdown.length === 0
-                   ? this.props.navigation.navigate('CreateOrJoinScreen')
-                   : dropdown1.length === 0
-                   ? alert('Unit is not available')
-                   :   this.props.navigation.navigate('MyFamilyList')
+              dropdown.length === 0
+                ? this.props.navigation.navigate('CreateOrJoinScreen')
+                : dropdown1.length === 0
+                  ? alert('Unit is not available')
+                  : this.props.navigation.navigate('MyFamilyList')
             }
 
             backgroundColor={base.theme.colors.cardBackground}
@@ -2022,7 +1543,6 @@ class Dashboard extends PureComponent {
             iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
             cardIcon={require('../../../../icons/vehicle.png')}
             cardCount={this.props.dashBoardReducer.vehiclesCount}
-            //cardCount={this.state.vehiclesCount}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             textFontSize={Platform.OS === 'ios' ? 8 : 12}
@@ -2032,7 +1552,7 @@ class Dashboard extends PureComponent {
                 ? this.props.navigation.navigate('CreateOrJoinScreen')
                 : dropdown1.length === 0
                   ? alert('Unit is not available')
-                  :  this.props.navigation.navigate('MyVehicleListScreen')
+                  : this.props.navigation.navigate('MyVehicleListScreen')
             }
           />
           <CardView
@@ -2050,22 +1570,7 @@ class Dashboard extends PureComponent {
             onCardClick={() => this.goToFirstTab()}
           />
         </View>
-        {/*<View style={Style.elevatedViewSub}>
-           <CardView
-                        height={"100%"}
-                        width={"39%"} cardText={'Documents'}
-                        cardIcon={require("../../../../icons/report.png")}
-                        cardCount={0}
-                        backgroundColor={base.theme.colors.shadedWhite}
-                    />
-                    <CardView
-                        height={"100%"}
-                        width={"39%"} cardText={'Tickets'}
-                        cardIcon={require("../../../../icons/tickets.png")}
-                        cardCount={2}
-                        backgroundColor={base.theme.colors.shadedWhite}
-                    />
-        </View>*/}
+
         <ElevatedView elevation={5} style={Style.invoiceCardView}>
           <View style={Style.invoiceHeadingView}>
             <Text style={Style.invoiceText}>Invoices</Text>
@@ -2136,9 +1641,6 @@ class Dashboard extends PureComponent {
           </View>
           <View style={Style.invoiceSubView}>
             <Text style={Style.dueDate}>Invoice Date {moment(item.item.inGenDate, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
-            {/*
-              <Text style={Style.dueDate}>Due on. {moment(item.item.inGenDate,'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
-*/}
             <OSButton
               height={'80%'}
               width={'25%'}
@@ -2192,85 +1694,6 @@ class Dashboard extends PureComponent {
             {/*  */}
           </View>
         </AnimatedTouchable>
-        {/* <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <TouchableOpacity>
-            <Text>Roll Management</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("ViewAlllVisitorsPage");
-            }}
-          >
-            <Text>View All Visitors</Text>
-          </TouchableOpacity>
-        </View> */}
-
-        {/* <View style={{ flexDirection: "row", height: hp("32%") }}>
-                  <Card style={{ flex: 0.5 }}>
-                    <CardItem style={{ height: hp("27%") }}>
-                      <View style={{ flexDirection: "column" }}>
-                        <View style={{ flexDirection: "row" }}>
-                          <Text style={styles.text1}>Occupied</Text>
-                          <Text style={styles.text2}>{sold2}</Text>
-                          <Image
-                            style={styles.image2}
-                            source={require("../../../../icons/ww.png")}
-                          />
-                        </View>
-                        <View>
-                          <VictoryPie
-                            colorScale={["#ff8c00", "#D0D0D0"]}
-                            innerRadius={hp("6.5%")}
-                            radius={hp("8.5%")}
-                            data={[sold, unsold]}
-                            width={wp("39%")}
-                            height={hp("22%")}
-                            labels={() => null}
-                          />
-                          <View style={styles.gauge}>
-                            <Text
-                              style={[styles.gaugeText, { color: "#FF8C00" }]}
-                            >
-                              {sold}%
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
-                    </CardItem>
-                  </Card>
-                  <Card style={{ flex: 0.5 }}>
-                    <CardItem style={{ height: hp("27%") }}>
-                      <View style={{ flexDirection: "column" }}>
-                        <View style={{ flexDirection: "row" }}>
-                          <Text style={styles.text3}>Vacant</Text>
-                          <Text style={styles.text4}>{unsold2}</Text>
-                          <Image
-                            style={styles.image3}
-                            source={require("../../../../icons/hhhh.png")}
-                          />
-                        </View>
-                        <View>
-                          <VictoryPie
-                            colorScale={["#45B591", "#D0D0D0"]}
-                            innerRadius={hp("6.5%")}
-                            radius={hp("8.5%")}
-                            data={[sold, unsold]}
-                            width={wp("39%")}
-                            height={hp("22%")}
-                            labels={() => null}
-                          />
-                          <View style={styles.gauge}>
-                            <Text
-                              style={[styles.gaugeText, { color: "#45B591" }]}
-                            >
-                              {unsold}%
-                            </Text>
-                          </View>
-                        </View>
-                      </View>
-                    </CardItem>
-                  </Card>
-                </View> */}
 
         <View style={{ ...Style.elevatedView, marginTop: hp('3%') }}>
           <CardView
@@ -2328,46 +1751,8 @@ class Dashboard extends PureComponent {
             cardIcon={require('../../../../icons/vehicle.png')}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
-            // onCardClick={() => this.props.navigation.navigate('oyeLiving')}
             onCardClick={() => this.props.navigation.navigate('Accounting')}
           />
-          {/* <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'Subscription'}
-            cardIcon={require('../../../../icons/subscription_management.png')}
-            marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS == = 'ios' ? 40 : 20}
-            onCardClick={() =>
-              this.props.navigation.navigate('subscriptionManagement')
-            }
-            backgroundColor={base.theme.colors.cardBackground}
-          />
-           <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'Accounting'}
-            iconWidth={Platform.OS === 'ios' ? 40 : 25}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            cardIcon={require('../../../../icons/vehicle.png')}
-            marginTop={20}
-            backgroundColor={base.theme.colors.cardBackground}
-            onCardClick={() => this.props.navigation.navigate('oyeLiving')}
-           // onCardClick={() => this.props.navigation.navigate('Accounting')}
-          />
-            {/* <CardView
-            height={'100%'}
-            width={'25%'}
-            cardText={'Reports'}
-            cardIcon={require('../../../../icons/reports.png')}
-            marginTop={20}
-            iconWidth={Platform.OS === 'ios' ? 40 : 35}
-            iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            iconBorderRadius={0}
-            backgroundColor={base.theme.colors.cardBackground}
-            onCardClick={() => this.props.navigation.navigate('reportsTab')}
-          /> */}
         </View>
         <View
           style={{
@@ -2377,60 +1762,6 @@ class Dashboard extends PureComponent {
             alignSelf: 'center'
           }}
         >
-          {/* <Button
-                bordered
-                style={styles.button1}
-                onPress={() => this.props.navigation.navigate('ViewmembersScreen')}
-            >
-              <Text>Role Management</Text>
-            </Button> */}
-
-          {/* <Button
-                bordered
-                style={styles.button1}
-                onPress={() =>
-                    this.props.navigation.navigate('ViewAlllVisitorsPage')
-                }
-            >
-              <Text>View All Visitors</Text>
-            </Button> */}
-          {/* <Button
-                bordered
-                style={styles.button1}
-                onPress={() => this.props.navigation.navigate('schedulePatrolling')}
-            >
-              <Text>Patrolling</Text>
-            </Button> */}
-          {/* <Button
-                bordered
-                style={styles.button1}
-                onPress={() =>
-                    this.props.navigation.navigate('subscriptionManagement')
-                }
-            >
-              <Text>Subscription</Text>
-            </Button> */}
-          {/* <Button
-                bordered
-                style={styles.button1}
-                onPress={() => this.props.navigation.navigate("oyeLiving")}
-            >
-              <Text>Accounting</Text>
-            </Button> */}
-          {/* <Button
-              bordered
-              style={styles.button1}
-              onPress={() => this.props.navigation.navigate("reportsTab")}
-          >
-            <Text>Reports</Text>
-          </Button> */}
-
-          {/* <AnimatedTouchable
-            animation={'swing'}
-            onPress={() => this.props.navigation.navigate('Announcement')}
-          >
-          <Image source={require('../../../../icons/add.png')}/>
-          </AnimatedTouchable> */}
         </View>
       </ElevatedView>
     );
@@ -2643,6 +1974,8 @@ export default connect(
     updateIdDashboard,
     updateSelectedDropDown,
     updateuserRole,
-    getDashAssoSync
+    getDashAssoSync,
+    fetchAssociationByAccountId,
+    updateUnitDropdown
   }
 )(Dashboard);
