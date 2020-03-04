@@ -209,7 +209,7 @@ class MobileValid extends Component {
                                                         callingCode: value.callingCode
                                                     });
                                                 }}
-                                                cca2={this.state.cca2}
+                                                countryCode={this.state.cca2}
                                                 translation="eng"
                                             />
                                         </View>
