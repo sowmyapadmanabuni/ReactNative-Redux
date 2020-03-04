@@ -313,11 +313,11 @@ class Resident extends React.Component {
     render() {
         // console.log('Data inside####', this.state.residentData)
         let residentList = this.props.dashBoardReducer.residentList;
-        const {params} = this.props.navigation.state;
+       // const {params} = this.props.navigation.state;
         let currentUserID = this.props.userReducer.MyAccountID;
         return (
             <View style={{flex: 1, flexDirection: "column"}}>
-                <NavigationEvents
+                {/* <NavigationEvents
                     onDidFocus={payload => {
                         residentList = params.data;
                         this.setState({
@@ -328,7 +328,7 @@ class Resident extends React.Component {
                         residentList.sort((a, b) => a.unit.localeCompare(b.unit));
                         this.setState({units: residentList});
                     }}
-                />
+                /> */}
                 <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
                     <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
                         <View style={styles.viewDetails1}>
@@ -483,7 +483,7 @@ class Resident extends React.Component {
 const mapStateToProps = state => {
     return {
         associationid: state.DashboardReducer.associationid,
-        selectedAssociation: state.DashboardReducer.selectedAssociation,
+        selectedAssociation: state.DashboardReducer.SelectedAssociationID,
         oyeURL: state.OyespaceReducer.oyeURL,
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer
