@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -90,6 +91,8 @@
 		FD735809232914EC005D887E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD7357D0232914AB005D887E /* icomoon.ttf */; };
 		FDA79208233B71720034094B /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDA79203233B715D0034094B /* libRNSound.a */; };
 		FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */; };
+		EDA0820BCA2C442A85303D55 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1126B33B2B4F4DB0A2A77D1C /* icomoon.ttf */; };
+		5B061DF624764648A1D9A622 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35C1AD10E80D426DB7D02652 /* Fontisto.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -644,6 +647,8 @@
 		FDA791C9233B715D0034094B /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FDDD9F7D233B36C700F1EBCE /* libRNAudioRecorderPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAudioRecorderPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1126B33B2B4F4DB0A2A77D1C /* icomoon.ttf */ = {isa = PBXFileReference; name = "icomoon.ttf"; path = "../fonts/icomoon.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		35C1AD10E80D426DB7D02652 /* Fontisto.ttf */ = {isa = PBXFileReference; name = "Fontisto.ttf"; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -802,6 +807,8 @@
 				00B61C2974B040ECA252A754 /* HelveticaNeueLt.ttf */,
 				F0B2FCB7F1B84CCA869C108E /* HelveticaNeueMed.ttf */,
 				F29A1B3442204F989EB56B28 /* Fontisto.ttf */,
+				1126B33B2B4F4DB0A2A77D1C /* icomoon.ttf */,
+				35C1AD10E80D426DB7D02652 /* Fontisto.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1819,6 +1826,8 @@
 				58775470DA684F92AE55A9AD /* HelveticaNeueLt.ttf in Resources */,
 				EF564E8C5B354C6AA75BA602 /* HelveticaNeueMed.ttf in Resources */,
 				3695FCCD4F73492FBF5E2A69 /* Fontisto.ttf in Resources */,
+				EDA0820BCA2C442A85303D55 /* icomoon.ttf in Resources */,
+				5B061DF624764648A1D9A622 /* Fontisto.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

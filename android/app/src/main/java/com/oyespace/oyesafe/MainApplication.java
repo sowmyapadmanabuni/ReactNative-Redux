@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import com.dooboolab.RNAudioRecorderPlayerPackage;
@@ -25,7 +27,7 @@ import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 import cl.json.ShareApplication;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
-import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage; // <-- Add this line
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -73,6 +75,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+                    new NetInfoPackage(),
                     new RNScreensPackage(),
                     new ReanimatedPackage(),
                     new RNAudioRecorderPlayerPackage(),
@@ -107,7 +110,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new GeolocationPackage(),
                     new RNImageToPdfPackage(),
                     new RNLocationSatellitesPackage(),
-                    new BackgroundTimerPackage()
+                    new BackgroundTimerPackage(),
+                    new SafeAreaContextPackage()
 
             );
         }
@@ -126,48 +130,9 @@ public class MainApplication extends Application implements ShareApplication, Re
     @Override
     public void onCreate() {
         super.onCreate();
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-                                      @Override
-                                      public void run() {
-                                          deleteCache(getApplicationContext());
-                                      }
-                                  },
-                0, 20000);
-
         SoLoader.init(this, /* native exopackage */ false);
         Fabric.with(this, new Crashlytics());
 
-        //deleteCache(getApplicationContext());
     }
 
-    //----------------------------------------------------------------------------------------------
-
-
-    public static void deleteCache(Context context) {
-        try {
-            File dir = context.getCacheDir();
-            deleteDir(dir);
-        } catch (Exception e) { e.printStackTrace();}
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
-        }
-    }
-
-
-    //----------------------------------------------------------------------------------------------
 }

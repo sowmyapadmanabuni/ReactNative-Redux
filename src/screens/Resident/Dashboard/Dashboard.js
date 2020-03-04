@@ -3,7 +3,8 @@ import * as fb from 'firebase';
 import _ from 'lodash';
 import moment from 'moment';
 import React, { Component } from 'react';
-import { Alert, BackHandler, Dimensions, FlatList, Image, ImageBackground, Linking, NetInfo, Platform, ScrollView, StyleSheet, Text, ToastAndroid, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, Dimensions, FlatList, Image, ImageBackground, Linking, Platform, ScrollView, StyleSheet, Text, ToastAndroid, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import * as Animatable from 'react-native-animatable';
 import CountdownCircle from 'react-native-countdown-circle';
 import DeviceInfo from 'react-native-device-info';
@@ -82,19 +83,26 @@ class Dashboard extends React.Component {
     ),
   };
 
-  async componentWillMount() {
-    // this.setState({
-    //   isDataLoading: true,
-    //   isDataVisible: true,
-    // });
+  // async componentWillMount() {
+  //   const { MyAccountID } = this.props.userReducer;
+  //   const { oyeURL } = this.props.oyespaceReducer;
+  // }
+
+  async componentDidMount() {
 
     const { MyAccountID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    //const {fetchAssociationByAccountId}=this.props
-    this.setState({isLoading:true})
-    await this.props.fetchAssociationByAccountId(oyeURL, MyAccountID);
-    this.setState({
-      isLoading:false
+
+    let self = this;
+    self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
+      if(data){
+        self.myProfileNet();
+        self.listenRoleChange();
+        self.props.getNotifications(oyeURL, MyAccountID);
+        self.getVehicleList();
+        self.requestNotifPermission();
+        self.listenToFirebase(self.props.dropdown);
+      }
     })
 
     console.log("this.props.dropdown.length:111111111",this.props.dropdown.length,this.props.dropdown)
@@ -103,46 +111,123 @@ class Dashboard extends React.Component {
       this.setState({ isSOSSelected: false });
     });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+   
+      const unsubscribe = NetInfo.addEventListener(state => {
+        console.log("Connection type", state.type);
+        console.log("Is connected?", state.isConnected);
+        this.setState({
+            isConnected:state.isConnected
+        })
+    });
   }
 
-  async componentDidMount() {
 
-    const { MyAccountID } = this.props.userReducer;
-    const { oyeURL } = this.props.oyespaceReducer;
-    this.myProfileNet();
-  
-    //this.listenRoleChange();
-    //this.props.fetchAssociationByAccountId(oyeURL, MyAccountID)
 
-    //this.props.getNotifications(oyeURL, MyAccountID);
-      // console.log("this.props.dropdown.length:",this.props.dropdown.length,this.props.dropdown)
-      
-      // let self=this
-      // setTimeout(function(){
-      //   console.log("this.props.dropdown.length:",self.props,self.props.dropdown)
-      //   self.getVehicleList();
+  async fetchAssociationByAccountId(oyeURL,accountId){
+    let self = this;
+    const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = self.props;
+    let options = {
+      method:'get',
+      url:`https://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${accountId}`,
+      headers:{
+            'Content-Type': 'application/json',
+            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+      }
+    };
 
-      //   if(self.props.dropdown.length===0){
-      //     self.props.navigation.navigate('CreateOrJoinScreen');
-      //   }
+    axios(options).then((response)=>{
+      console.log('Data received in data association fetch:',response)
+      let data = response.data.data.memberListByAccount;
+        //alert("kkk")
+        console.log("IN New API Response>>>>>>>>>>>>>>>>>>>>>>:1:",data)
+        let associationArray = [];
+        let associationIdArray = [];
+        for (let i in data) {
+          let associationDetail = data[i].association[0];
+          
+          let unitArray = associationDetail.unit;
+          let units = [];
+          unitArray.map((mappedData)=>{
+            units.push({
+            value:mappedData.unUniName,
+            name:mappedData.unUniName,
+            unitId:mappedData.unUnitID,
+            myRoleId:data[i].mrmRoleID,
+            })
+          })
+          let associationData = {
+            value:associationDetail.asAsnName,
+            name:associationDetail.asAsnName,
+            id:i,
+            associationId:associationDetail.asAssnID,
+            roleId:data[i].mrmRoleID,
+            unit:units
+          }
 
-      //   self.requestNotifPermission();
-      //   self.listenToFirebase(self.props.dropdown);
- 
-   
-      // }, 9000);
-     //  this.requestNotifPermission();
-         this.getVehicleList();
-      //   this.listenToFirebase(this.props.dropdown);
-   
-      NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+          associationArray.push(associationData)
+          associationIdArray.push({id:associationDetail.asAssnID})
+        }
+
+        let sortedAssociationData = associationArray.sort(base.utils.validate.compareAssociationNames);
+        console.log("sortedAssociationData",sortedAssociationData);
+        
+        updateIdDashboard({
+      prop: 'assId',
+      value: sortedAssociationData[0].associationId
+    });
+
+    updateUserInfo({
+      prop: 'SelectedAssociationID',
+      value: sortedAssociationData[0].associationId
+    });
+
+    updateSelectedDropDown({
+      prop: 'selectedDropdown',
+      value: sortedAssociationData[0].value
+    });
+
+    updateSelectedDropDown({
+      prop: 'assId',
+      value: sortedAssociationData[0].associationId
+    });
+
+    updateSelectedDropDown({
+      prop: "selectedDropdown1",
+      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].value
+    });
+
+    updateSelectedDropDown({
+      prop: "unitID",
+      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].unitId
+    });
+
+    updateUnitDropdown({
+      value: dropdown[0].unit,
+      associationId: sortedAssociationData[0].associationId
+    })
+
+    updateIdDashboard({
+      prop: 'assId',
+      value: sortedAssociationData[0].associationId
+    });
+    updateUserInfo({
+      prop: 'SelectedAssociationID',
+      value: sortedAssociationData[0].associationId
+    });
+
+    }
+    )
+    .catch(error=>{
+      console.log('Error:',error)
+    })
   }
 
   
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+    //NetInfo.removeEventListener(this.state, this.handleConnectivityChange);
     this.backButtonListener.remove();
     this.focusListener.remove();
   }
@@ -577,7 +662,7 @@ class Dashboard extends React.Component {
     let unitId = self.props.userReducer.SelectedUnitID;
     console.log('HItting Here ______________________________________IN dashboard count', self.props,associationId, accountId, unitId, self.props.oyeURL)
     fetch(
-      `http://${self.props.oyeURL}/oyesafe/api/v1/GetFamilyMemberVehicleCountByAssocAcntUnitID/${associationId}/${accountId}/${unitId}`,
+      `https://${self.props.oyeURL}/oyesafe/api/v1/GetFamilyMemberVehicleCountByAssocAcntUnitID/${associationId}/${accountId}/${unitId}`,
       {
         method: 'GET',
         headers: {
@@ -586,8 +671,7 @@ class Dashboard extends React.Component {
         }
       }
     ).then(response => 
-      console.log("",response.json(),()=>{response.json()})
-      )
+      response.json())
       .then((responseJson) => {
         console.log("HItting Here ______________________________________IN dashboard count123:", responseJson)
         self.setState({
@@ -785,7 +869,7 @@ class Dashboard extends React.Component {
   };
 
   onAssociationChange = (value, index) => {
-
+try{
     console.log('GettheselectedAssocitation', value, index, this.props.dropdown)
 
     const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = this.props;
@@ -851,6 +935,9 @@ class Dashboard extends React.Component {
     dropdown[index].unit.length === 0 ? "" : this.getVehicleList()
     this.checkUserRole(dropdown[index])
     this.setView(0)
+  }catch(e){
+    alert("err")
+  }
   };
 
 
@@ -1153,7 +1240,7 @@ class Dashboard extends React.Component {
       return (
         <View style={{ height: '100%', width: '100%' }}>
           {/* <NavigationEvents onDidFocus={() => this.requestNotifPermission()} /> */}
-          {!this.state.isLoading?
+          {/* {!this.state.isLoading? */}
             <View style={Style.container}>
               <View style={Style.dropDownContainer}>
                 <View style={Style.leftDropDown}>
@@ -1373,14 +1460,14 @@ class Dashboard extends React.Component {
                 </View>
               </View>
             </View>
-          :<View/>}
+          {/* :<View/>}
           <ProgressLoader
             isHUD={true}
             isModal={true}
             visible={this.props.isLoading}
             color={base.theme.colors.primary}
             hudColor={'#FFFFFF'}
-          />
+          /> */}
         </View>
       );
     }

@@ -58,6 +58,13 @@ export default (state = INITIAL_STATE, action) => {
                 dropdown: action.payload.dropdown,
                 associationid: action.payload.associationid,
                 allAssociations:action.payload.allAssociations,
+                selectedDropdown:action.payload.allAssociations[0].value,
+                assId:action.payload.allAssociations[0].associationId,
+                SelectedAssociationID:action.payload.allAssociations[0].associationId,
+                selectedDropdown1:action.payload.allAssociations[0].unit.length>0?action.payload.allAssociations[0].unit[0].value:"",
+                SelectedUnitID:action.payload.allAssociations[0].unit.length>0?action.payload.allAssociations[0].unit[0].value:"",
+                unitID:action.payload.allAssociations[0].unit.length>0?action.payload.allAssociations[0].unit[0].value:"",
+                role:action.payload.allAssociations[0].roleId,
                 isLoading: false,
                 called: true
             };

@@ -33,7 +33,8 @@ const Style = StyleSheet.create({
   },
   containerViewStyle: {
     height: hp('90%'),
-    width: wp('100%')
+    width: wp('100%'),
+    backgroundColor:'#ffffff'
   },
 
   titleOfScreenStyle: {

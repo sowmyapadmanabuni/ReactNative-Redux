@@ -15,8 +15,9 @@ import {
     TouchableHighlight,
     TouchableOpacity,
     View,
-    ScrollView,NetInfo,AsyncStorage
+    ScrollView,AsyncStorage
 } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import firebase from 'firebase';
 import CreateSOSStyles from "./CreateSOSStyles";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
@@ -845,7 +846,7 @@ class CreateSOS extends React.Component {
             });
             AsyncStorage.removeItem("isSOSUpdatePending");
 
-            NetInfo.isConnected.fetch().then(isConnected => {
+            NetInfo.fetch().then(isConnected => {
 
                 if(isConnected){
                     firebase.database().ref('SOS/' + associationID + "/" + userId + "/").remove().then((response)=>{

@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
-import {Dimensions, NetInfo, Platform, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Platform, StyleSheet, Text, View} from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import base from "../index";
 import {updateIdDashboard} from "../../actions";
 import {connect} from "react-redux";
@@ -20,11 +21,23 @@ class CheckInternet extends PureComponent {
     };
 
     componentDidMount() {
-        NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        //NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+        const unsubscribe = NetInfo.addEventListener(state => {
+            console.log("Connection type", state.type);
+            console.log("Is connected?", state.isConnected);
+            this.setState({
+                isConnected:state.isConnected
+            })
+            const { updateIdDashboard } = this.props;
+        updateIdDashboard({
+            prop: 'isInternetConnected',
+            value: state.isConnected
+        });
+        });
     }
 
     componentWillUnmount() {
-        NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+        NetInfo.removeEventListener(state);
     }
 
     handleConnectivityChange = isConnected => {

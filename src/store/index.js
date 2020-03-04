@@ -2,8 +2,9 @@ import {applyMiddleware, createStore} from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
 import FilesystemStorage from 'redux-persist-filesystem-storage';
 import reducers from '../reducers';
-import logger from 'redux-logger';
+//import logger from 'redux-logger';
 import thunk from 'redux-thunk';
+
 
 const persistConfig = {
     key: 'root',
@@ -17,7 +18,7 @@ const persistConfig = {
 const persistReducers = persistReducer(persistConfig, reducers);
 
 const store = createStore(
-    persistReducers, {}, applyMiddleware(thunk, logger)
+    persistReducers, {}, applyMiddleware(thunk)
 );
 
 persistStore(store);
