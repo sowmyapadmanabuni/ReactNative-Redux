@@ -665,8 +665,8 @@ class EditProfile extends Component {
                                                     countryCode={this.state.cca2}
 
                                                     //cca2={this.state.cca2}
-                                                    // cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                    // flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    countryCode={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
                                                     translation="eng"
                                                 />
                                             </View>

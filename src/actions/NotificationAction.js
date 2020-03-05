@@ -102,6 +102,9 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
         activeNotifications.map((data, index) => {
           if (data.ntType === 'gate_app') {
+            data.vlfName = data.visitorlog[0].vlfName;
+            data.unUniName = data.visitorlog[0].vlfName;
+            data.vlMobile = data.visitorlog[0].vlfName;
             gateAppNotif.push({ open: true, ...data });
           } else if (data.ntType === 'Join_Status') {
             joinStatNotif.push(data);
@@ -110,7 +113,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           } else if (data.ntType === 'Announcement') {
             data.vlfName = "Announcement";
             data.unUniName = "Announcement";
-            data.vlMobile = "Announcement"
+            data.vlMobile = "Announcement";
             announcement.push(data);
           }
         });
@@ -142,56 +145,56 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
        // console.log('allNotifs', allNotifs);
         const sorted = [...allNotifs];
 
-          allNotifs.map((data, index) => {
-              if (data.ntType === 'gate_app') {
-                  axios
-                      .get(
-                          `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
-                          //data.sbMemID`,
-                          {
-                              headers: {
-                                  'Content-Type': 'application/json',
-                                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                              }
-                          }
-                      )
-                      .then(res => {
-                          let responseData = res.data.data;
-                          for (let i = 0; i < allNotifs.length; i++) {
-                              if (
-                                  allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
-                              ) {
+          // allNotifs.map((data, index) => {
+          //     if (data.ntType === 'gate_app') {
+          //         axios
+          //             .get(
+          //                 `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
+          //                 //data.sbMemID`,
+          //                 {
+          //                     headers: {
+          //                         'Content-Type': 'application/json',
+          //                         'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+          //                     }
+          //                 }
+          //             )
+          //             .then(res => {
+          //                 let responseData = res.data.data;
+          //                 for (let i = 0; i < allNotifs.length; i++) {
+          //                     if (
+          //                         allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
+          //                     ) {
 
-                                  allNotifs[i].vlEntryImg =
-                                      responseData.visitorLog.vlEntryImg;
-                                  allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
-                                  allNotifs[i].vlfName = responseData.visitorLog.vlfName;
-                                  allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
-                                  allNotifs[i].vlComName = responseData.visitorLog.vlComName;
-                                  allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
-                                  allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
-                                  allNotifs[i].vldCreated =
-                                      responseData.visitorLog.vldCreated;
-                                  allNotifs[i].vlengName = responseData.visitorLog.vlengName;
-                                  allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
-                                  allNotifs[i].vldUpdated =responseData.visitorLog.vldUpdated; //date
-                                  allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
-                                  allNotifs[i].vlVisLgID = responseData.visitorLog.vlVisLgID;
-                                  allNotifs[i].unUnitID = responseData.visitorLog.unUnitID;
-                                  allNotifs[i].unUniName = responseData.visitorLog.unUniName;
-                                  allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
-                                  allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
-                                  allNotifs[i].vlSelfImg = responseData.visitorLog.vlSelfImg;
-                                  allNotifs[i].vlExAprdBy = responseData.visitorLog.vlExAprdBy;
-                                 // allNotifs[i].residentImage = userImage;//vlExAprdBy userImage
-                              }
-                          }
-                      })
-                      .catch(error => {
-                          console.log(error, 'error while fetching networks');
-                      });
-              }
-          });
+          //                         allNotifs[i].vlEntryImg =
+          //                             responseData.visitorLog.vlEntryImg;
+          //                         allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
+          //                         allNotifs[i].vlfName = responseData.visitorLog.vlfName;
+          //                         allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
+          //                         allNotifs[i].vlComName = responseData.visitorLog.vlComName;
+          //                         allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
+          //                         allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
+          //                         allNotifs[i].vldCreated =
+          //                             responseData.visitorLog.vldCreated;
+          //                         allNotifs[i].vlengName = responseData.visitorLog.vlengName;
+          //                         allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
+          //                         allNotifs[i].vldUpdated =responseData.visitorLog.vldUpdated; //date
+          //                         allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
+          //                         allNotifs[i].vlVisLgID = responseData.visitorLog.vlVisLgID;
+          //                         allNotifs[i].unUnitID = responseData.visitorLog.unUnitID;
+          //                         allNotifs[i].unUniName = responseData.visitorLog.unUniName;
+          //                         allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
+          //                         allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
+          //                         allNotifs[i].vlSelfImg = responseData.visitorLog.vlSelfImg;
+          //                         allNotifs[i].vlExAprdBy = responseData.visitorLog.vlExAprdBy;
+          //                        // allNotifs[i].residentImage = userImage;//vlExAprdBy userImage
+          //                     }
+          //                 }
+          //             })
+          //             .catch(error => {
+          //                 console.log(error, 'error while fetching networks');
+          //             });
+          //     }
+          // });
 
 
 

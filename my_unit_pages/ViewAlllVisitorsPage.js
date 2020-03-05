@@ -198,7 +198,7 @@ class App extends React.Component {
                     //var count = Object.keys(responseJson.data.visitorlogbydate).length;
                     //console.log("fsbkfh", count);
 
-                    console.log("View Alll Visitors ",responseJson.data.visitorlog);
+                    console.log("View Alll Visitors ",responseJson);
                     this.setState({
                         isLoading: false,
                         dataSource: responseJson.data.visitorlog,
