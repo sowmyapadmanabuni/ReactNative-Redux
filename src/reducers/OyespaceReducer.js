@@ -7,7 +7,7 @@
     4. staging --- For Staging server //For staging server Media upload url same as uat
 */
 
-let urlType = 'apiuat';
+let urlType = 'apidev';
 
 const oyeURL = `${urlType}.oyespace.com`; //Validation/
 //Image Domains
