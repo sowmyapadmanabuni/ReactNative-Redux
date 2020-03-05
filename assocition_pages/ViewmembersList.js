@@ -101,11 +101,10 @@ class Resident extends React.Component {
 
     async getMemberList() {
         let self = this;
-        let associationId = self.props.selectedAssociation;
+        let associationId = self.props.userReducer.SelectedAssociationID;
 
         console.log('get association', associationId);
 
-        //console.log( base.services.OyeLivingApi.getUnitListByAssoc(associationId) );
         let stat = await base.services.OyeLivingApi.getUnitListByAssoc(associationId);
         console.log('getMemberList####', stat);
 
@@ -422,7 +421,7 @@ class Resident extends React.Component {
                     </View>
                     {!this.state.isLoading ?
                         <View style={styles.viewDetails}>
-                            {this.state.residentData.length !== 0 ?
+                            {this.state.residentData !== undefined && this.state.residentData.length !== 0 ?
                                 <View style={{flex: 1,}}>
                                     <Text style={{color: base.theme.colors.black, margin: 20}}>* You can update only one
                                         at
