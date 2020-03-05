@@ -662,7 +662,7 @@ class EditProfile extends Component {
                                                         })
                                                     }}
                                                     //cca2={this.state.cca2}
-                                                    cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    countryCode={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
                                                     flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
                                                     translation="eng"
                                                 />
@@ -728,7 +728,7 @@ class EditProfile extends Component {
                                                             alterCName: value.cca2
                                                         })
                                                     }}
-                                                    cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
+                                                    countryCode={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
                                                     flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
                                                     translation="eng"
                                                 />

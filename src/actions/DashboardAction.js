@@ -888,7 +888,7 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
             type:USER_ROLE,
             payload:{
               prop:"role",
-              value:sortedAssociationData[0].roleId
+              value:sortedAssociationData[0].unit.length===0 ?5:sortedAssociationData[0].roleId
             }
           })
   
@@ -896,7 +896,7 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
             type:UPDATE_ID_DASHBOARD,
             payload:{
               prop:"roleId",
-              value:sortedAssociationData[0].roleId
+              value:sortedAssociationData[0].unit.length===0 ?5:sortedAssociationData[0].roleId
             }
           })
   

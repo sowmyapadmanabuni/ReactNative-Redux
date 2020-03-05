@@ -947,7 +947,7 @@ try{
     const { updateuserRole, updateIdDashboard } = this.props;
     console.log("GettheselectedAssocitation1", data);
     let assId = (data.associationId).toString();
-    if (data.roleId === 1) {
+    if (data.roleId === 1 && data.unit.length !==0) {
       let assId = (data.associationId).toString();
       await base.utils.storage.storeData('ADMIN_NOTIF' + assId, assId);
       firebase.messaging().subscribeToTopic(assId)
@@ -961,12 +961,12 @@ try{
 
     updateuserRole({
       prop: "role",
-      value: data.roleId
+      value:data.unit.length === 0?5: data.roleId
     })
 
     updateIdDashboard({
       prop: "roleId",
-      value: data.roleId
+      value:data.unit.length === 0?5: data.roleId
     })
 
 

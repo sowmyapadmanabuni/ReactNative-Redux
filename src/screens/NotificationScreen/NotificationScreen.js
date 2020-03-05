@@ -737,7 +737,7 @@ class NotificationScreen extends PureComponent {
                         backgroundColor: base.theme.colors.greyCard,
                     }}>
                         <View style={{
-                            flexDirection: 'row', backgroundColor: item.vlVisType == "Delivery" && item.vlApprStat == "Entry Pending" && item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
+                            flexDirection: 'row', backgroundColor: item.visitorlog[0].vlVisType == "Delivery" && item.visitorlog[0].vlApprStat == "Entry Pending" && item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
                             alignItems: 'center', justifyContent: 'space-between',
                             borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.greyHead, height: 50
                         }}>
@@ -763,20 +763,20 @@ class NotificationScreen extends PureComponent {
                             justifyContent: 'space-between', height: 70,
                         }}>
                             <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'), borderWidth: 0 }}
-                                numberOfLines={3}>{item.vlComName}
-                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.vlVisType == "Delivery" ? item.vlVisType : ""}</Text>
+                                numberOfLines={3}>{item.visitorlog[0].vlComName}
+                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.visitorlog[0].vlVisType == "Delivery" ? item.visitorlog[0].vlVisType : ""}</Text>
                             </Text>
                             {item.unUniName !== "" ?
                                 <View style={{ flexDirection: 'row', width: '40%' }}>
                                     <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'right', marginRight: 10, }}>Visiting</Text>
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.blue, width: 100, }} numberOfLines={3}>{item.unUniName}</Text>
+                                    <Text style={{ fontSize: 14, color: base.theme.colors.blue, width: 100, }} numberOfLines={3}>{item.visitorlog[0].unUniName}</Text>
                                 </View> :
                                 <View />}
                         </View>
                     </View>
                     <View style={{ backgroundColor: base.theme.colors.white }}>
                         <View style={{ alignItems: 'center', justifyContent: 'flex-end', height: 60 }}>
-                            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginTop: 30 }}>{item.vlfName}</Text>
+                            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginTop: 30 }}>{item.visitorlog[0].vlfName}</Text>
 
                         </View>
                         {/*{ item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive ?
@@ -789,48 +789,48 @@ class NotificationScreen extends PureComponent {
                             <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }} onPress={() => {
                                 {
                                     Platform.OS === 'android'
-                                        ? Linking.openURL(`tel:${item.vlMobile}`)
-                                        : Linking.openURL(`telprompt:${item.vlMobile}`);
+                                        ? Linking.openURL(`tel:${item.visitorlog[0].vlMobile}`)
+                                        : Linking.openURL(`telprompt:${item.visitorlog[0].vlMobile}`);
                                 }
                             }}>
-                                <Text style={{ fontSize: 16, color: base.theme.colors.primary, paddingBottom: 10 }}>{item.vlMobile}</Text>
+                                <Text style={{ fontSize: 16, color: base.theme.colors.primary, paddingBottom: 10 }}>{item.visitorlog[0].vlMobile}</Text>
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>{item.vlVisType == "Kid Exit" ? "Exit on" : "Entry on :"}
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.ntdCreated).format('DD-MM-YYYY')} {'    '} {moment(item.vlEntryT).format('hh:mm A')}
+                                <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>{item.visitorlog[0].vlVisType == "Kid Exit" ? "Exit on" : "Entry on :"}
+                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.ntdCreated).format('DD-MM-YYYY')} {'    '} {moment(item.visitorlog[0].vlEntryT).format('hh:mm A')}
                                     </Text>
                                 </Text>
                                 <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginRight: 15 }}>From:
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.vlengName}</Text>
+                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlengName}</Text>
                                 </Text>
                             </View>
                             {item.vlApprdBy != "" ?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.vlApprStat == "Rejected" ? "Entry Rejected by :" : "Entry Approved by :"}
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.vlApprdBy}</Text>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Entry Rejected by :" : "Entry Approved by :"}
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprdBy}</Text>
                                     </Text>
                                 </View>
                                 :
                                 <View />}
 
-                            {item.vlexgName != "" && item.vlApprStat != "Expired" ?
+                            {item.visitorlog[0].vlexgName != "" && item.visitorlog[0].vlApprStat != "Expired" ?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>Exit on   :
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.vldUpdated, 'YYYY-MM-DD').format(
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.visitorlog[0].vldUpdated, 'YYYY-MM-DD').format(
                                         'DD-MM-YYYY'
-                                    )}{'    '}  {moment(item.vlExitT).format('hh:mm A')}</Text>
+                                    )}{'    '}  {moment(item.visitorlog[0].vlExitT).format('hh:mm A')}</Text>
                                     </Text>
                                     <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginRight: 15 }}>From:
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.vlexgName}</Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlexgName}</Text>
                                     </Text>
                                 </View>
                                 :
                                 <View />}
 
-                            {item.vlExAprdBy != "" ?
+                            {item.visitorlog[0].vlExAprdBy != "" ?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.vlApprStat == "Rejected" ? "Exit Rejected by :" : "Exit Approved by :"}
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.vlExAprdBy}</Text>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Exit Rejected by :" : "Exit Approved by :"}
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlExAprdBy}</Text>
                                     </Text>
                                 </View>
                                 :
@@ -838,13 +838,13 @@ class NotificationScreen extends PureComponent {
                             {item.vlApprStat == "Expired" ?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>Status  :
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.vlApprStat}</Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprStat}</Text>
                                     </Text>
                                 </View> :
                                 <View />}
 
                             {
-                                item.vlVisType === "Delivery" && item.vlApprStat === "Entry Pending" ?
+                                item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "Entry Pending" ?
                                     <View style={{
                                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                         marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
@@ -853,12 +853,12 @@ class NotificationScreen extends PureComponent {
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity onPress={() => {
                                                 this.acceptgateVisitor(
-                                                    item.vlVisLgID,
+                                                    item.visitorlog[0].vlVisLgID,
                                                     index,
                                                     item.asAssnID,
                                                     "EntryApproved",
                                                     item.ntid,
-                                                    item.vlApprdBy
+                                                    item.visitorlog[0].vlApprdBy
                                                 );
                                             }} style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
@@ -869,12 +869,12 @@ class NotificationScreen extends PureComponent {
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() =>
                                                 this.declinegateVisitor(
-                                                    item.vlVisLgID,
+                                                    item.visitorlog[0].vlVisLgID,
                                                     index,
                                                     item.asAssnID,
                                                     "EntryRejected",
                                                     item.ntid,
-                                                    item.vlApprdBy
+                                                    item.visitorlog[0].vlApprdBy
 
                                                 )
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -891,7 +891,7 @@ class NotificationScreen extends PureComponent {
                             }
 
                             {
-                                item.vlVisType === "Delivery" && item.vlApprStat === "ExitPending" ?
+                                item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "ExitPending" ?
                                     <View style={{
                                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                         marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
@@ -900,12 +900,12 @@ class NotificationScreen extends PureComponent {
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity onPress={() => {
                                                 this.acceptgateVisitor(
-                                                    item.vlVisLgID,
+                                                    item.visitorlog[0].vlVisLgID,
                                                     index,
                                                     item.asAssnID,
                                                     "ExitApproved",
                                                     item.ntid,
-                                                    item.vlApprdBy
+                                                    item.visitorlog[0].vlApprdBy
 
                                                 );
                                             }}
@@ -918,11 +918,11 @@ class NotificationScreen extends PureComponent {
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() =>
                                                 this.declinegateVisitor(
-                                                    item.vlVisLgID,
+                                                    item.visitorlog[0].vlVisLgID,
                                                     index,
                                                     item.asAssnID,
                                                     "ExitRejected",
-                                                    item.vlApprdBy
+                                                    item.visitorlog[0].vlApprdBy
                                                 )
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
@@ -937,7 +937,7 @@ class NotificationScreen extends PureComponent {
                                     <View />
                             }
                             {
-                                item.vlVisType === "Kid Exit" && item.vlApprStat === "Entry Pending" ?
+                                item.visitorlog[0].vlVisType === "Kid Exit" && item.visitorlog[0].vlApprStat === "Entry Pending" ?
                                     <View style={{
                                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                         marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
@@ -946,7 +946,7 @@ class NotificationScreen extends PureComponent {
                                         <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity onPress={() => {
                                                 this.acceptgateVisitor(
-                                                    item.vlVisLgID,
+                                                    item.visitorlog[0].vlVisLgID,
                                                     index,
                                                     item.asAssnID,
                                                     "ExitApproved",
@@ -962,7 +962,7 @@ class NotificationScreen extends PureComponent {
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() =>
                                                 this.declinegateVisitor(
-                                                    item.vlVisLgID,
+                                                    item.visitorlog[0].vlVisLgID,
                                                     index,
                                                     item.asAssnID,
                                                     "ExitRejected",
