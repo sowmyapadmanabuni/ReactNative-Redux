@@ -651,7 +651,8 @@ class EditProfile extends Component {
                                                     alignItems: "center"
                                                 }}
                                             >
-                                                <CountryPicker
+                                            
+                                           <CountryPicker
                                                     hideAlphabetFilter={true}
                                                     onChange={value => {
                                                         console.log("CCA:", value);
@@ -661,9 +662,11 @@ class EditProfile extends Component {
                                                             primeCName: value.cca2,
                                                         })
                                                     }}
+                                                    countryCode={this.state.cca2}
+
                                                     //cca2={this.state.cca2}
-                                                    cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                    flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    // cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
+                                                    // flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
                                                     translation="eng"
                                                 />
                                             </View>
@@ -728,8 +731,10 @@ class EditProfile extends Component {
                                                             alterCName: value.cca2
                                                         })
                                                     }}
-                                                    cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
+                                                    countryCode={this.state.cca2}
+
+                                                    // cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
+                                                    // flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
                                                     translation="eng"
                                                 />
                                             </View>
