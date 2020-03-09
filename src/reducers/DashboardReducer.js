@@ -41,7 +41,8 @@ const INITIAL_STATE = {
     familyMemberCount: "",
     vehiclesCount: "",
     roleId: null,
-    isInternetConnected:true
+    isInternetConnected:true,
+    userQRCode:""
 };
 
 export default (state = INITIAL_STATE, action) => {

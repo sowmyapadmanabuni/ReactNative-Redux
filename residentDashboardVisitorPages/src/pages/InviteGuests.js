@@ -277,7 +277,24 @@ class InviteGuests extends Component {
             //return false;
         } else {
 //http://apidev.oyespace.com/oye247/api/v1/Invitation/create
-            console.log('Dates', dobDate + ' ' + time, dobDate1 + ' ' + time1);
+let dummyData={
+    "UnUnitID": this.props.dashBoardReducer.uniID,
+                            "INFName": fname,
+                            "INLName": lname,
+                            "INMobile": "+" + callingCode + mobNum,
+                            "INEmail": emailId,
+                            "INVchlNo": vehNo,
+                            "INVisCnt": count,
+                            "INPhoto": "SD",
+                            "INSDate": startDate,
+                            "INEDate": endDate,
+                            "INPOfInv": purpose,
+                            "INMultiEy": this.state.switch,
+                            "ASAssnID": this.props.dashBoardReducer.assId,
+                            "INQRCode": 1,
+                            "ACAccntID": this.props.userReducer.MyAccountID
+}
+            console.log('DatesDDDDDD##################',dummyData);
 
            fetch(`http://${this.props.oyeURL}/oye247/api/v1/Invitation/create`, {
                     method: 'POST',
@@ -380,8 +397,9 @@ class InviteGuests extends Component {
                                     onChange={value => {
                                         this.setState({cca2: value.cca2, callingCode: value.callingCode})
                                     }}
-                                    cca2={this.state.cca2}
+                                    //cca2={this.state.cca2}
                                     translation="eng"
+                                    countryCode={this.state.cca2}
                                 ></CountryPicker>
                                 <View style={{marginLeft: hp('1%'), justifyContent: 'center', alignItems: 'center'}}>
                                     <Text style={{

@@ -94,6 +94,7 @@ class Dashboard extends React.Component {
     const { oyeURL } = this.props.oyespaceReducer;
 
     let self = this;
+    self.setState({isLoading:true})
     self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
       if(data){
         self.myProfileNet();
@@ -102,6 +103,7 @@ class Dashboard extends React.Component {
         self.getVehicleList();
         self.requestNotifPermission();
         self.listenToFirebase(self.props.dropdown);
+        self.setState({isLoading:false})
       }
     })
 
@@ -1053,6 +1055,13 @@ try{
       prop: 'userProfilePic',
       value: response.data.account[0].acImgName
     });
+    updateUserInfo({
+      prop: 'userQRCode',
+      value: response.data.account[0].acisdCode +
+      response.data.account[0].acMobile +
+      ';'
+    });
+    
   };
   logMeasurement = async (id, phase, actualDuration, baseDuration) => {
     // see output during DEV
@@ -1240,7 +1249,7 @@ try{
       return (
         <View style={{ height: '100%', width: '100%' }}>
           {/* <NavigationEvents onDidFocus={() => this.requestNotifPermission()} /> */}
-          {/* {!this.state.isLoading? */}
+          {!this.state.isLoading?
             <View style={Style.container}>
               <View style={Style.dropDownContainer}>
                 <View style={Style.leftDropDown}>
@@ -1460,14 +1469,14 @@ try{
                 </View>
               </View>
             </View>
-          {/* :<View/>}
+           :<View/>}
           <ProgressLoader
             isHUD={true}
             isModal={true}
-            visible={this.props.isLoading}
+            visible={this.state.isLoading}
             color={base.theme.colors.primary}
             hudColor={'#FFFFFF'}
-          /> */}
+          />
         </View>
       );
     }
