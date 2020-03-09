@@ -92,6 +92,8 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         let userImage=responseJson.data.accountImage.acImgName;
         let activeNotifications = [];
 
+        console.log('Notification@@@@@@:1111', resData);
+
         _.forEach(resData, function(value) {
           activeNotifications.push({ ...value, read: false });
         });
