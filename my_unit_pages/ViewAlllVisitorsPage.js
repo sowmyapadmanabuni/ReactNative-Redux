@@ -138,7 +138,7 @@ class App extends React.Component {
             this.setState({
                 isLoading: false
             });
-        }, 5000);
+        }, 2000);
         console.log("Association Id", this.props.dashBoardReducer.assId);
 
     }
@@ -167,7 +167,9 @@ class App extends React.Component {
         this.setState({
             isLoading: true
         });
-        console.log("SCNJDH:", this.state.dobDate, this.state.dobDate1);
+
+        
+ console.log("SCNJDH:", this.state.dobDate, this.state.dobDate1);
         if (moment(this.state.dobDate).format("YYYY-MM-DD") > moment(this.state.dobDate1).format("YYYY-MM-DD")) {
             Alert.alert("From Date should be less than To Date.");
             this.setState({

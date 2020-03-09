@@ -41,7 +41,7 @@ class MyProfile extends Component {
       ImageSource: null,
       datasource: null,
       number: '',
-      isLoading: true
+     // isLoading: true
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.backButtonListener = null;
@@ -69,30 +69,32 @@ class MyProfile extends Component {
       .then(responseJson => {
         console.log('My profile', responseJson);
         this.setState({
-          isLoading: false,
-          datasource: responseJson,
-          ImageSource: responseJson.data.account[0].acImgName ==null ||responseJson.data.account[0].acImgName=="null"
-              ? '' :responseJson.data.account[0].acImgName,
+          
+          datasource: this.props.dashBoardReducer.userData,
+          ImageSource: this.props.dashBoardReducer.userProfilePic,
           number:
-            responseJson.data.account[0].acisdCode +
-            responseJson.data.account[0].acMobile +
-            ';' +
+          this.props.dashBoardReducer.userQRCode +
             this.props.dashBoardReducer.assId
         });
-        const { updateUserInfo } = this.props;
+       // const { updateUserInfo } = this.props;
         console.log(
           'Image at the second open',
           this.state.ImageSource,
           this.state.number
         );
-        updateUserInfo({
-          prop: 'userData',
-          value: responseJson
-        });
-        updateUserInfo({
-          prop: 'userProfilePic',
-          value: responseJson.data.account[0].acImgName
-        });
+        // updateUserInfo({
+        //   prop: 'userData',
+        //   value: responseJson
+        // });
+        // updateUserInfo({
+        //   prop: 'userProfilePic',
+        //   value: responseJson.data.account[0].acImgName
+        // });
+        this.setState({
+          isLoading: false,
+        })
+          
+       
       })
       .catch(error => console.log(error));
   };
@@ -101,12 +103,12 @@ class MyProfile extends Component {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     console.log('Unit ID', this.props.dashBoardReducer.uniID);
     let self = this;
-    setTimeout(() => {
-      self.myProfile();
-      self.setState({
-        isLoading: false
-      });
-    }, 1500);
+    // setTimeout(() => {
+    //  // self.myProfile();
+    //   self.setState({
+    //     isLoading: false
+    //   });
+    // }, 1500);
     base.utils.validate.checkSubscription(
       this.props.userReducer.SelectedAssociationID
     );
@@ -142,12 +144,11 @@ class MyProfile extends Component {
 
 
   render() {
-    console.log(
-      'State in My Profile:',
-      this.state.ImageSource,
-      this.props.dashBoardReducer.dropdown
-    );
+    console.log( 'State in My Profile:',this.props);
     const { navigate } = this.props.navigation;
+
+    let userData= this.props.userReducer.userData;
+    let userQR=this.props.userReducer.userQRCode +this.props.dashBoardReducer.assId
     console.log('Mobile number', this.state.number);
     return (
       <View style={styles.mainViewStyle}>
@@ -220,26 +221,26 @@ class MyProfile extends Component {
                   <TouchableOpacity
                     onPress={() => {
                       navigate('EditProfileScreen', {
-                        firstName: this.state.datasource.data.account[0]
+                        firstName: userData.data.account[0]
                           .acfName,
-                        lastName: this.state.datasource.data.account[0].aclName,
-                        primaryMobNum: this.state.datasource.data.account[0]
+                        lastName: userData.data.account[0].aclName,
+                        primaryMobNum: userData.data.account[0]
                           .acMobile,
-                        primeCCode: this.state.datasource.data.account[0]
+                        primeCCode: userData.data.account[0]
                           .acisdCode,
-                        primeCName: this.state.datasource.data.account[0]
+                        primeCName: userData.data.account[0]
                           .acCrtyCode,
-                        alterMobNum: this.state.datasource.data.account[0]
+                        alterMobNum: userData.data.account[0]
                           .acMobile1,
-                        alterCCode: this.state.datasource.data.account[0]
+                        alterCCode: userData.data.account[0]
                           .acisdCode1,
-                        alterCName: this.state.datasource.data.account[0]
+                        alterCName: userData.data.account[0]
                           .acCrtyCode1,
-                        primaryEmail: this.state.datasource.data.account[0]
+                        primaryEmail: userData.data.account[0]
                           .acEmail,
-                        alterEmail: this.state.datasource.data.account[0]
+                        alterEmail: userData.data.account[0]
                           .acEmail1,
-                        myProfileImage: this.state.datasource.data.account[0]
+                        myProfileImage: userData.data.account[0]
                           .acImgName
                       });
                     }}
@@ -291,7 +292,7 @@ class MyProfile extends Component {
                 </View>
                 <View style={styles.containerView_ForProfilePicViewStyle}>
                   <View style={styles.viewForProfilePicImageStyle}>
-                    {this.state.ImageSource == '' ? (
+                    {this.props.userReducer.userProfilePic == '' ? (
                       <Image
                         style={{
                           ...styles.profilePicImageStyle,
@@ -312,7 +313,7 @@ class MyProfile extends Component {
                         source={{
                           uri:
                             'https://mediaupload.oyespace.com/' +
-                            this.state.ImageSource
+                            this.props.userReducer.userProfilePic
                         }}
                       />
                     )}
@@ -321,59 +322,14 @@ class MyProfile extends Component {
 
                 <View style={{ marginTop:hp('2%'),alignItems: 'center', marginBottom: hp('4%') }}>
                   <Text style={styles.itemTextValues1}>
-                    {this.state.datasource
-                      ? this.state.datasource.data.account[0].acfName +
+                    {userData
+                      ? userData.data.account[0].acfName +
                         ' ' +
-                        this.state.datasource.data.account[0].aclName
+                        userData.data.account[0].aclName
                       : null}
                   </Text>
                 </View>
-                {/* <View
-                  style={{
-                    marginLeft: hp('2%'),
-                    marginBottom: hp('0.5%'),
-                    flexDirection: 'row'
-                  }}
-                >
-                  <Icon
-                    color={base.theme.colors.primary}
-                    style={styles.editButtonImageStyle1}
-                    size={hp('2.8%')}
-                    name="call"
-                  />
-                  <Text style={styles.itemTextValues}>
-                    {this.state.datasource
-                      ? ' ' +
-                        this.state.datasource.data.account[0].acisdCode.substring(
-                          0,
-                          this.state.datasource.data.account[0].acisdCode.length
-                        ) +
-                        ' ' +
-                        this.state.datasource.data.account[0].acMobile
-                      : null}
-                  </Text>
-                </View> */}
-                {/* <View
-                  style={{
-                    marginLeft: hp('2%'),
-                    marginBottom: hp('1%'),
-                    flexDirection: 'row'
-                  }}
-                >
-                  <Icon
-                    color={base.theme.colors.primary}
-                    style={styles.editButtonImageStyle1}
-                    size={hp('2.8%')}
-                    name="mail"
-                  />
-                  <Text style={styles.itemTextValues}>
-                    {this.state.datasource
-                      ? '  ' + this.state.datasource.data.account[0].acEmail
-                      : null}
-                  </Text>
-                </View> */}
-
-                {this.state.number !== '' &&
+                 {userQR!== '' &&
                 this.props.dashBoardReducer.dropdown.length !== 0 ? (
                   <View
                     style={{
@@ -387,7 +343,7 @@ class MyProfile extends Component {
                       logo={require('../icons/logo_QR.png')}
                       logoSize={hp('6%')}
                       size={hp('20%')}
-                      content={this.state.number}
+                      content={userQR}
                       codeStyle="square"
                       outerEyeStyle="square"
                       innerEyeStyle="square"

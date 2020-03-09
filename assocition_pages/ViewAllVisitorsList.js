@@ -126,7 +126,12 @@ class ViewAllVisitorsList extends Component {
     }
 
     myVisitorsGetList(){
-        console.log("AAAAAAAAAAA");
+        let dataSent={
+            "StartDate": this.state.dobText,
+            "EndDate": this.state.dobText1,
+            "ASAssnID": this.props.SelectedAssociationID,
+        }
+        console.log("AAAAAAAAAAA>>>>>>>>",dataSent);
         console.log("---------- Call -------------"); //2019/05/02
         if (this.state.dobText1 < this.state.dobText) {
             Alert.alert("From Date should be less than To Date");

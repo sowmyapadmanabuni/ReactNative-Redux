@@ -1055,6 +1055,13 @@ try{
       prop: 'userProfilePic',
       value: response.data.account[0].acImgName
     });
+    updateUserInfo({
+      prop: 'userQRCode',
+      value: response.data.account[0].acisdCode +
+      response.data.account[0].acMobile +
+      ';'
+    });
+    
   };
   logMeasurement = async (id, phase, actualDuration, baseDuration) => {
     // see output during DEV
@@ -1466,7 +1473,7 @@ try{
           <ProgressLoader
             isHUD={true}
             isModal={true}
-            visible={this.props.isLoading}
+            visible={this.state.isLoading}
             color={base.theme.colors.primary}
             hudColor={'#FFFFFF'}
           />

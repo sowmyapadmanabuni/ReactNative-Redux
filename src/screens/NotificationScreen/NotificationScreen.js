@@ -2162,7 +2162,7 @@ class NotificationScreen extends PureComponent {
                         justifyContent: 'center', alignSelf: 'center', borderWidth: 0,
                         alignItems: 'center', marginLeft: 0, position: 'relative', top: hp('3')
                     }}
-                        onPress={() => this._enlargeImage(details.userImage != "" ? "https://mediaupload.oyespace.com/" + details.userImage : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                        onPress={() => this._enlargeImage(details.userImage != "" ? 'data:image/png;base64,' + details.userImage : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
                     >
                         {details.userImage != "" ?
 
@@ -2172,7 +2172,7 @@ class NotificationScreen extends PureComponent {
                                     height: 100 - 20,
                                     borderRadius: 50 - 10, position: 'absolute'
                                 }}
-                                source={{ uri: "https://mediaupload.oyespace.com/" + details.userImage }}
+                                source={{ uri: 'data:image/png;base64,' + details.userImage }}
                             />
                             :
                             <Image

@@ -45,7 +45,6 @@ import OSButton from "../../components/osButton/OSButton";
 import DatePicker from "react-native-datepicker";
 import axios from "axios";
 import Style from "../Resident/Dashboard/Style";
-import StaffStyle from "../Resident/Visitors/Staff/StaffStyle";
 
 
 var radio_props1 = [

@@ -88,6 +88,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
     )
       .then(response => response.json())
       .then(responseJson => {
+        console.log('GET THE NOTIFICATIONS PLZ',responseJson,oyeURL, MyAccountID)
         let resData = responseJson.data.notificationListByAcctID;
         let userImage=responseJson.data.accountImage.acImgName;
         let activeNotifications = [];
