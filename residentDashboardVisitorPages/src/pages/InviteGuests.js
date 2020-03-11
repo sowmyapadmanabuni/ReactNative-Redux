@@ -53,7 +53,7 @@ class InviteGuests extends Component {
             dobDate1: "",
 
             isDateTimePickerVisible: false,
-            isDateTimePickerVisible1: false,
+            isDateTimePickerVisible1: true,
             datetime: moment(new Date()).format('HH:mm:ss'),
             datetime1: moment(new Date()).format('HH:mm:ss'),
             datetimeString: new Date(),

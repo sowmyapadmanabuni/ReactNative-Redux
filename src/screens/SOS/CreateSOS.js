@@ -188,7 +188,7 @@ class CreateSOS extends React.Component {
 
 
                     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                        navigator.geolocation.getCurrentPosition(
+                        Geolocation.getCurrentPosition(
                             (position) => {
                                 this.getCurrentLocation()
 

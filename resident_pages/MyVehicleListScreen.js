@@ -87,13 +87,10 @@ class VehicleList extends Component {
     }
 
     getVehicleList = () => {
-        console.log('props in vehicle list:', this.props); 
-              //`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
-
-              
+        console.log('props in vehicle list:', this.props);
         fetch(
-            'http://${this.props.oyeURL}/oyeliving/api/v1/GetVehicleListByAssocUnitAndAcctID/${this.props.dashBoardReducer.assId}/${this.props.dashBoardReducer.unitID}/${this.props.userReducer.MyAccountID} ',
-      {
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
+            {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

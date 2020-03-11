@@ -196,10 +196,10 @@ class MyProfile extends Component {
           <View style={{ borderWidth: 1, borderColor: 'orange' }} />
         </SafeAreaView>
 
-        <NavigationEvents
+        {/* <NavigationEvents
           onDidFocus={payload => this.myProfile()}
           onWillBlur={payload => this.myProfile()}
-        />
+        /> */}
 
         <View style={styles.mainContainer}>
           <View style={styles.textWrapper}>
@@ -342,7 +342,7 @@ class MyProfile extends Component {
                     <QRCode
                       logo={require('../icons/logo_QR.png')}
                       logoSize={hp('6%')}
-                      size={hp('20%')}
+                      size={hp('25%')}
                       content={userQR}
                       codeStyle="square"
                       outerEyeStyle="square"
