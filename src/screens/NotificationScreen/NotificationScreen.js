@@ -520,7 +520,7 @@ class NotificationScreen extends PureComponent {
                     console.log('__OPEN__', opens);
                 }
             });
-        let inDate = moment()._d
+        let inDate = moment()._d 
         let enDate = moment(item.ntdCreated)._d
         let duration = Math.abs(inDate - enDate);
         //let duration2=Math.ceil(duration / (1000 * 60 * 60 * 24));
@@ -694,6 +694,15 @@ class NotificationScreen extends PureComponent {
         }
         else {
             console.log("GET THE DETAILS GET THE DETAILS", item)
+            let inDate = moment()._d 
+            let enDate = moment(item.visitorlog[0].vlEntryT)._d
+            let duration = Math.abs(inDate - enDate);
+            //let duration2=Math.ceil(duration / (1000 * 60 * 60 * 24));
+            let days = Math.floor(duration / (1000 * 60 * 60 * 24));
+            let hours = Math.floor(duration / (1000 * 60 * 60));
+            let mins = Math.floor(duration / (1000 * 60));
+            let valueDis = days > 1 ? moment(item.visitorlog[0].vlEntryT).format('DD MMM YYYY') : days == 1 ? "Yesterday" : mins >= 120 ? hours + " hours ago" : (mins < 120 && mins >= 60) ? hours + " hour ago"
+                : mins == 0 ? "Just now" : mins + " mins ago";
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -1068,7 +1077,7 @@ class NotificationScreen extends PureComponent {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
                         <View
-                            style={{ flex: 1, marginLeft: hp('2%'), marginTop: hp('1%') }}
+                            style={{ flex: 1, marginLeft: hp('2%'), marginTop: hp('1%') ,marginBottom:hp('1%')}}
                         >
                             <View style={{ flexDirection: 'column' }}>
                                 <View style={{ flexDirection: 'row' }}>

@@ -44,16 +44,16 @@ export default (state = INITIAL_STATE, action) => {
   console.log("Notification in reducer:",action)
   switch (action.type) {
     case SEGREGATE_UNIT_NOTIFICATION:
-      return {...state,unitNotification:action.payload}
+      return {...state,unitNotification:action.payload,loading:false}
       
     case SEGREGATE_ADMIN_NOTIFICATION:
-      return {...state,adminNotification:action.payload}
+      return {...state,adminNotification:action.payload,loading:false}
 
       case SEGREGATE_DUMMY_UNIT_NOTIFICATION:
-      return {...state,unitDummyNotification:action.payload}
+      return {...state,unitDummyNotification:action.payload,loading:false}
       
     case SEGREGATE_DUMMY_ADMIN_NOTIFICATION:
-      return {...state,adminDummyNotification:action.payload}
+      return {...state,adminDummyNotification:action.payload,loading:false}
 
     case NEW_NOTIF_INSTANCE:
       return { ...state, newNotifInstance: action.payload };
