@@ -14,7 +14,8 @@ import {
     UPDATE_DROPDOWN_INDEX,
     UPDATE_ID_DASHBOARD,
     UPDATE_SELECTED_DROPDOWN,
-    USER_ROLE
+    USER_ROLE,
+    IS_NOTIFICATION
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -42,7 +43,8 @@ const INITIAL_STATE = {
     vehiclesCount: "",
     roleId: null,
     isInternetConnected:true,
-    userQRCode:""
+    userQRCode:"",
+    isNotification:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -125,6 +127,9 @@ export default (state = INITIAL_STATE, action) => {
         case USER_ROLE:
             //return { ...state, userRole: action.payload };
             return {...state, [action.payload.prop]: action.payload.value};
+
+        case IS_NOTIFICATION:
+            return {...state,isNotification:action.payload}
 
         case DASHBOARD_ASSOCIATION_SYNC:
             return {

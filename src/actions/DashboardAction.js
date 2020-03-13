@@ -15,7 +15,8 @@ import {
   DASHBOARD_NO_UNITS,
   UPDATE_USER_INFO,
   USER_ROLE,
-  DASHBOARD_ASSOCIATION_SYNC
+  DASHBOARD_ASSOCIATION_SYNC,
+  IS_NOTIFICATION
 } from './types';
 import axios from 'axios';
 import _ from 'lodash';
@@ -765,20 +766,6 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
         }
       )
       .then(responseJson => {
-
-
-    // fetch(
-    //   `https://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${accountId}`,
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-    //     }
-    //   }
-    // )
-    //   .then(response => response.json())
-    //   .then(responseJson => {
       console.log("API__&&RESP",responseJson)
         let data = responseJson.data.data.memberListByAccount;
         //alert("kkk")
@@ -924,6 +911,16 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
       })
   }
 };
+
+
+export const updateNotificationData = (payload) => {
+  return (dispatch) => {
+    dispatch({
+      type:IS_NOTIFICATION,
+      payload:payload
+    })
+  }
+}
 
 
 // value: data.asAsnName,

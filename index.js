@@ -9,6 +9,7 @@ import $ from 'logdecor';
 import CheckInternet from './src/base/services/CheckInternet';
 //firebase.initializeApp(config);
 import { StatusBarPlaceHolder } from './src/components/StatusBar';
+import NotificationPopUp from './src/base/services/NotificationPopUp';
 // import firebase from 'firebase';
 // import {firebaseDetails} from './constant';
 
@@ -44,6 +45,7 @@ class RootApp extends Component {
     return (
       <Provider store={store}>
         <CheckInternet />
+        <NotificationPopUp/>
         <StatusBarPlaceHolder />
         <App />
         {/*

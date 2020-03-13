@@ -170,7 +170,7 @@ class Resident extends React.Component {
     }
 
     async updateRolesFRTDB(user, roleId) {
-
+        console.log("KSKLSLJC:",user,roleId)
         var dbref = base.services.frtdbservice.ref('rolechange/' + user.acAccntID);
         dbref.set({
             associationID: user.asAssnID,
@@ -235,6 +235,7 @@ class Resident extends React.Component {
             })
                 .then(response => response.json())
                 .then(responseJson => {
+                    console.log("Resposne JSON:",responseJson);
                     this.updateRolesFRTDB(this.state.selectedUser, this.state.selectedRoleData.selRolId);
                     this.props.navigation.goBack();
                 })
@@ -482,7 +483,7 @@ class Resident extends React.Component {
 const mapStateToProps = state => {
     return {
         associationid: state.DashboardReducer.associationid,
-        selectedAssociation: state.DashboardReducer.SelectedAssociationID,
+        selectedAssociation: state.DashboardReducer.assId,
         oyeURL: state.OyespaceReducer.oyeURL,
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer

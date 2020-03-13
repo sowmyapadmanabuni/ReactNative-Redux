@@ -37,7 +37,7 @@ class CheckInternet extends PureComponent {
     }
 
     componentWillUnmount() {
-        NetInfo.removeEventListener(state);
+        //NetInfo.removeEventListener(state);
     }
 
     handleConnectivityChange = isConnected => {

@@ -16,7 +16,26 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import ProgressLoader from 'rn-progress-loader';
-import { fetchAssociationByAccountId, updateUnitDropdown, createNotification, createUserNotification, getAssoMembers, getDashAssociation, getDashAssoSync, getDashSub, getDashUnits, getNotifications, newNotifInstance, refreshNotifications, updateApproveAdmin, updateDropDownIndex, updateIdDashboard, updateJoinedAssociation, updateSelectedDropDown, updateUserInfo, updateuserRole } from '../../../actions';
+import {fetchAssociationByAccountId,
+        updateNotificationData,
+        updateUnitDropdown, 
+        createNotification, 
+        createUserNotification,
+        getAssoMembers, 
+        getDashAssociation,
+        getDashAssoSync, 
+        getDashSub, 
+        getDashUnits,
+        getNotifications, 
+        newNotifInstance, 
+        refreshNotifications, 
+        updateApproveAdmin, 
+        updateDropDownIndex, 
+        updateIdDashboard, 
+        updateJoinedAssociation, 
+        updateSelectedDropDown, 
+        updateUserInfo, 
+        updateuserRole } from '../../../actions';
 import IcoMoonConfig from '../../../assets/selection.json';
 import base from '../../../base';
 import CardView from '../../../components/cardView/CardView';
@@ -63,8 +82,6 @@ class Dashboard extends React.Component {
       myAdminIconHeight: Platform.OS === 'ios' ? 20 : 20,
       selectedView: 0,
       invoicesList: []
-
-
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.backButtonListener = null;
@@ -83,11 +100,6 @@ class Dashboard extends React.Component {
     ),
   };
 
-  // async componentWillMount() {
-  //   const { MyAccountID } = this.props.userReducer;
-  //   const { oyeURL } = this.props.oyespaceReducer;
-  // }
-
   async componentDidMount() {
 
     const { MyAccountID } = this.props.userReducer;
@@ -97,139 +109,36 @@ class Dashboard extends React.Component {
     self.setState({isLoading:true})
     self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
       if(data){
+        self.requestNotifPermission();
         self.myProfileNet();
         self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
         self.getVehicleList();
-        self.requestNotifPermission();
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false})
       }
     })
 
-    console.log("this.props.dropdown.length:111111111",this.props.dropdown.length,this.props.dropdown)
+    console.log("this.props.dropdown.length:111111111",self.props.dropdown.length,self.props.dropdown)
 
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = self.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-
-   
       const unsubscribe = NetInfo.addEventListener(state => {
         console.log("Connection type", state.type);
         console.log("Is connected?", state.isConnected);
-        this.setState({
+        self.setState({
             isConnected:state.isConnected
         })
     });
   }
 
 
-
-  async fetchAssociationByAccountId(oyeURL,accountId){
-    let self = this;
-    const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = self.props;
-    let options = {
-      method:'get',
-      url:`https://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${accountId}`,
-      headers:{
-            'Content-Type': 'application/json',
-            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-      }
-    };
-
-    axios(options).then((response)=>{
-      console.log('Data received in data association fetch:',response)
-      let data = response.data.data.memberListByAccount;
-        //alert("kkk")
-        console.log("IN New API Response>>>>>>>>>>>>>>>>>>>>>>:1:",data)
-        let associationArray = [];
-        let associationIdArray = [];
-        for (let i in data) {
-          let associationDetail = data[i].association[0];
-          
-          let unitArray = associationDetail.unit;
-          let units = [];
-          unitArray.map((mappedData)=>{
-            units.push({
-            value:mappedData.unUniName,
-            name:mappedData.unUniName,
-            unitId:mappedData.unUnitID,
-            myRoleId:data[i].mrmRoleID,
-            })
-          })
-          let associationData = {
-            value:associationDetail.asAsnName,
-            name:associationDetail.asAsnName,
-            id:i,
-            associationId:associationDetail.asAssnID,
-            roleId:data[i].mrmRoleID,
-            unit:units
-          }
-
-          associationArray.push(associationData)
-          associationIdArray.push({id:associationDetail.asAssnID})
-        }
-
-        let sortedAssociationData = associationArray.sort(base.utils.validate.compareAssociationNames);
-        console.log("sortedAssociationData",sortedAssociationData);
-        
-        updateIdDashboard({
-      prop: 'assId',
-      value: sortedAssociationData[0].associationId
-    });
-
-    updateUserInfo({
-      prop: 'SelectedAssociationID',
-      value: sortedAssociationData[0].associationId
-    });
-
-    updateSelectedDropDown({
-      prop: 'selectedDropdown',
-      value: sortedAssociationData[0].value
-    });
-
-    updateSelectedDropDown({
-      prop: 'assId',
-      value: sortedAssociationData[0].associationId
-    });
-
-    updateSelectedDropDown({
-      prop: "selectedDropdown1",
-      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].value
-    });
-
-    updateSelectedDropDown({
-      prop: "unitID",
-      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].unitId
-    });
-
-    updateUnitDropdown({
-      value: dropdown[0].unit,
-      associationId: sortedAssociationData[0].associationId
-    })
-
-    updateIdDashboard({
-      prop: 'assId',
-      value: sortedAssociationData[0].associationId
-    });
-    updateUserInfo({
-      prop: 'SelectedAssociationID',
-      value: sortedAssociationData[0].associationId
-    });
-
-    }
-    )
-    .catch(error=>{
-      console.log('Error:',error)
-    })
-  }
-
   
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    //NetInfo.removeEventListener(this.state, this.handleConnectivityChange);
     this.backButtonListener.remove();
     this.focusListener.remove();
   }
@@ -285,12 +194,14 @@ class Dashboard extends React.Component {
 
     if (count === 0 && isNotificationClicked) {
       console.log("COMING HERE")
-      this.props.navigation.navigate('NotificationScreen');
+      const {updateNotificationData} = this.props;
+      updateNotificationData(true);
     }
   }
 
   listenRoleChange() {
     const { MyAccountID, dropdown } = this.props;
+    const { oyeURL } = this.props.oyespaceReducer;
     let path = 'rolechange/' + MyAccountID;
     let roleRef = base.services.frtdbservice.ref(path);
     let self = this;
@@ -308,11 +219,9 @@ class Dashboard extends React.Component {
           let firebaseMessaging = firebase.messaging();
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
-          //self.roleCheckForAdmin(self.state.assocId);
-          self.props.fetchAssociationByAccountId(MyAccountID,()=>{
+          self.props.fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
             self.checkUserRole();
           });
-          
         } else {
           counter = 1;
         }
@@ -358,12 +267,15 @@ class Dashboard extends React.Component {
       oyeURL,
       dropdown
     } = this.props;
-    console.log("Dashborad reducer Data in Request Notification Permission:", this.props.dashBoardReducer);
+    console.log("Dashboard reducer Data in Request Notification Permission:", this.props.dashBoardReducer, firebase
+    .messaging()
+    .hasPermission());
     firebase
       .messaging()
       .hasPermission()
       .then(enabled => {
         if (enabled) {
+          console.log("Listening to firebase:Listening to firebase:",enabled,receiveNotifications)
           if (receiveNotifications) {
             this.listenForNotif();
           }
@@ -457,6 +369,8 @@ class Dashboard extends React.Component {
         .android.setPriority(firebase.notifications.Android.Priority.Max);
 
       firebase.notifications().displayNotification(notificationBuild);
+      // const {updateNotificationData} = this.props;
+      // updateNotificationData(true);
       this.setState({ foregroundNotif: notification._data });
     } catch (e) {
       console.log('FAILED_NOTIF');
@@ -464,7 +378,7 @@ class Dashboard extends React.Component {
   };
 
 
-  listenForNotif = () => {
+  listenForNotif = async () => {
     console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222')
 
     if (
@@ -503,10 +417,27 @@ class Dashboard extends React.Component {
           this.showLocalNotification(notification);
         });
 
+        let data  = await firebase.notifications().getAllDeliveredNotifications()
+          console.log("Data in notification Tray:",data,JSON.stringify(data[0].notifications[0]));
+
+          let receivedData = data[0].notifications;
+//let removedData = firebase.notifications().removeDeliveredNotification(""+data.id).then((response)=>{
+          receivedData.map((data)=>{
+            console.log('Data:',data);
+            
+            firebase.notifications().removeAllDeliveredNotifications().then((response)=>{
+              console.log('Removed Data:',JSON.parse(response));
+            });
+            
+          })
+
+          
+
       firebase.notifications().onNotificationOpened(notificationOpen => {
         const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
         const { oyeURL } = this.props.oyespaceReducer;
         let details = notificationOpen.notification._data;
+        console.log("NOTIFICATION@@@@_______12344", notificationOpen);
         if (notificationOpen.notification._data.admin === 'true') {
           if (notificationOpen.action) {
           }
@@ -1047,6 +978,8 @@ try{
     );
     console.log('Joe', response);
     const { updateUserInfo } = this.props;
+    
+
     updateUserInfo({
       prop: 'userData',
       value: response
@@ -1063,6 +996,8 @@ try{
     });
     
   };
+
+
   logMeasurement = async (id, phase, actualDuration, baseDuration) => {
     // see output during DEV
     if (__DEV__) console.log({ id, phase, actualDuration, baseDuration });
@@ -2072,6 +2007,7 @@ export default connect(
     updateuserRole,
     getDashAssoSync,
     fetchAssociationByAccountId,
-    updateUnitDropdown
+    updateUnitDropdown,
+    updateNotificationData
   }
 )(Dashboard);

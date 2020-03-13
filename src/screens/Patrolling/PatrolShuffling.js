@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-09-30 11:29:48 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-18 15:52:14
+ * @Last Modified time: 2020-03-09 13:08:11
  */
 
 
@@ -223,7 +223,7 @@ class PatrolShuffling extends React.Component {
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     scrollPercent={15}
-                    onMoveEnd={({ data }) => this.setState({ data }, () => this.updateStore())}
+                    onDragEnd={({ data }) => this.setState({ data }, () => this.updateStore())}
                 />
                 {this.openMapModal()}
                 {this.openLottieModal()}
