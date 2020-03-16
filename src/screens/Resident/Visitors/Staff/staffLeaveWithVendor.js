@@ -724,6 +724,8 @@ const mapStateToProps = state => {
     dashboardReducer: state.DashboardReducer,
     userReducer: state.UserReducer,
     staffReducer: state.StaffReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
   };
 };

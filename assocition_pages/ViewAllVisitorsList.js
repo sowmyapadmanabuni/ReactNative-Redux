@@ -120,7 +120,7 @@ class ViewAllVisitorsList extends Component {
     };
 
     componentDidMount() {
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.SelectedAssociationID)
 
         this.myVisitorsGetList();
     }
@@ -651,9 +651,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         oyeURL: state.OyespaceReducer.oyeURL,
-        associationid: state.DashboardReducer.associationid,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        associationid: state.DashboardReducer.assId,
+        SelectedAssociationID: state.DashboardReducer.assId,
         userReducer: state.UserReducer,
+    
 
     }
 };

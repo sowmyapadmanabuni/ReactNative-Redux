@@ -139,7 +139,7 @@ const DashStack = createStackNavigator(
         headerStyle: { backgroundColor: '#f05555' },
         headerTintColor: '#ffffff'
       }
-    },
+    }, 
 
     ResDashBoard: {
       screen: ResApp,
@@ -151,12 +151,12 @@ const DashStack = createStackNavigator(
       }
     },
 
-    CreateOrJoinScreen: {
-      screen: CreateOrJoin,
-      navigationOptions: {
-        title: 'Association'
-      }
-    }
+    // CreateOrJoinScreen: {
+    //   screen: CreateOrJoin,
+    //   navigationOptions: {
+    //     title: 'Association'
+    //   }
+    // }
   },
   {
     headerMode: 'none',

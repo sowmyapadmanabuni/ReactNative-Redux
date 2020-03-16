@@ -369,7 +369,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         selectedCheckPoints: state.PatrollingReducer,
-        dashboardReducer: state.DashboardReducer
+        dashboardReducer: state.DashboardReducer,
+       
     }
 };
 

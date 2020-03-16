@@ -57,6 +57,7 @@ import io.fabric.sdk.android.Fabric;
 
 
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 
 public class MainApplication extends Application implements ShareApplication, ReactApplication {
 
@@ -111,7 +112,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new RNImageToPdfPackage(),
                     new RNLocationSatellitesPackage(),
                     new BackgroundTimerPackage(),
-                    new SafeAreaContextPackage()
+                    new SafeAreaContextPackage(),
+                    new RNDateTimePickerPackage()
 
             );
         }

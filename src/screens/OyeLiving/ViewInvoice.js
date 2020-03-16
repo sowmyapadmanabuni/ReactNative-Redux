@@ -137,7 +137,7 @@ class ViewInvoice extends React.Component {
 
     async getAssiciationDetail() {
         let self = this;
-        let assId = self.props.userReducer.SelectedAssociationID;
+        let assId = self.props.assId;
         let stat = await base.services.OyeLivingApi.getAssDetail(assId);
         console.log("Stat in ass Deyai:", stat)
         try {
@@ -894,6 +894,8 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         SelectedAssociationID: state.DashboardReducer.assId,
         dashBoardReducer: state.DashboardReducer,
+        assId:state.DashboardReducer.assId ,
+         uniID: state.DashboardReducer.uniID,
 
     }
 };

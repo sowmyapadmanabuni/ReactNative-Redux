@@ -1371,7 +1371,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        
+        SelectedAssociationID: state.DashboardReducer.assId,
 
         MyFirstName: state.UserReducer.MyFirstName,
         MyLastName: state.UserReducer.MyLastName,

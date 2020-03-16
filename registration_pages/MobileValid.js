@@ -203,7 +203,7 @@ class MobileValid extends Component {
                                         >
                                             <CountryPicker
                                                 hideAlphabetFilter={true}
-                                                onChange={value => {
+                                                onSelect={value => {
                                                     this.setState({
                                                         cca2: value.cca2,
                                                         callingCode: value.callingCode

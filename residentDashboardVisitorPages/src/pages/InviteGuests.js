@@ -14,7 +14,7 @@ import CountryPicker from 'react-native-country-picker-modal';
 import {DatePickerDialog} from 'react-native-datepicker-dialog';
 import moment from 'moment';
 import Switch from '../../src/components/common/Switch.js'
-import DateTimePicker from 'react-native-modal-datetime-picker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import {connect} from "react-redux";
@@ -53,7 +53,7 @@ class InviteGuests extends Component {
             dobDate1: "",
 
             isDateTimePickerVisible: false,
-            isDateTimePickerVisible1: true,
+            isDateTimePickerVisible1: false,
             datetime: moment(new Date()).format('HH:mm:ss'),
             datetime1: moment(new Date()).format('HH:mm:ss'),
             datetimeString: new Date(),
@@ -67,7 +67,7 @@ class InviteGuests extends Component {
     }
 
     componentDidMount() {
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.assId)
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             console.log("Back KSCNJND");
             this.props.navigation.goBack(null); // works best when the goBack is async
@@ -394,7 +394,7 @@ let dummyData={
                             }}>
                                 <CountryPicker
                                     hideAlphabetFilter={true}
-                                    onChange={value => {
+                                    onSelect={value => {
                                         this.setState({cca2: value.cca2, callingCode: value.callingCode})
                                     }}
                                     //cca2={this.state.cca2}
@@ -473,9 +473,9 @@ let dummyData={
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this._showDateTimePicker}>
-                                    <View style={styles.datePickerBox}>
+                                    <View style={[styles.datePickerBox,{marginLeft:13}]}>
                                         <Text style={styles.subtext1}>{this.state.datetime}</Text>
-                                        <DateTimePicker
+                                        <DateTimePickerModal
                                             isVisible={this.state.isDateTimePickerVisible}
                                             onConfirm={this._handleDatePicked}
                                             mode='time'
@@ -499,14 +499,14 @@ let dummyData={
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={this._showDateTimePicker1}>
-                                    <DateTimePicker
+                                    <DateTimePickerModal
                                         isVisible={this.state.isDateTimePickerVisible1}
                                         onConfirm={this._handleDatePicked1}
                                         mode='time'
                                         is24Hour={false}
                                         onCancel={this._hideDateTimePicker1}
                                     />
-                                    <View style={styles.datePickerBox}>
+                                    <View style={[styles.datePickerBox,{marginLeft:13}]}>
                                         <Text style={styles.subtext1}>{this.state.datetime1}</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -644,9 +644,8 @@ const styles = StyleSheet.create({
         margin: hp('0.2%'),
         borderColor: '#ABABAB',
         borderBottomWidth: hp('0.1%'),
-        justifyContent: 'center'
-
-    },
+        justifyContent: 'center',
+ },
     datePickerText: {fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212',},
     subtext1: {fontSize: hp('1.8%'), marginLeft: hp('0.2%'), marginRight: hp('0.2%'), color: '#121212'}
 });
@@ -658,10 +657,12 @@ const mapStateToProps = state => {
         MyLastName: state.UserReducer.MyLastName,
         MyMobileNumber: state.UserReducer.MyMobileNumber,
         viewImageURL: state.OyespaceReducer.viewImageURL,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-        SelectedUnitID: state.UserReducer.SelectedUnitID,
+        SelectedAssociationID: state.DashboardReducer.assId,
+        SelectedUnitID: state.DashboardReducer.uniID,
         dashBoardReducer: state.DashboardReducer,
-        userReducer: state.UserReducer
+        userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 };
 

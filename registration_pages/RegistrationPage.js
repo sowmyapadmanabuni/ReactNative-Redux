@@ -129,8 +129,7 @@ class AddRegularVisitor extends Component {
                     updateUserInfo({prop: "MyLastName", value: aclName});
                     updateUserInfo({prop: "MyISDCode", value: acisdCode});
                     updateUserInfo({prop: "signedIn", value: true});
-
-                    console.log('Association check', responseJson.success);
+                        console.log('Association check', responseJson.success);
 
                     this.props.navigation.navigate('CreateOrJoinScreen')
                 } else {
@@ -228,7 +227,7 @@ class AddRegularVisitor extends Component {
 
     render() {
         return (
-            <View style={{height:'100%',width:'100%'}}>
+            <View style={{height:'100%',width:'100%',backgroundColor:base.theme.colors.white}}>
                 <ScrollView>
                     <View style={{height:200}}>
                         <Image

@@ -80,7 +80,7 @@ class NotificationDetailScreen extends PureComponent {
 
   componentDidMount() {
     base.utils.validate.checkSubscription(
-      this.props.userReducer.SelectedAssociationID
+      this.props.assId
     );
     const { navigation } = this.props;
     // const details = navigation.getParam("details", "NO-ID");
@@ -97,7 +97,7 @@ class NotificationDetailScreen extends PureComponent {
       return true;
     });
 
-    this.manageJoinRequest();
+   // this.manageJoinRequest();
     this.checkAdminNotifStatus();
   }
 
@@ -670,7 +670,7 @@ class NotificationDetailScreen extends PureComponent {
                       `http://${oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
                       {
                         NTID: item.ntid,
-                        NTJoinStat: 'Rejected'
+                        NTJoinStat: 'Rejected' 
                       },
                       {
                         headers: {
@@ -1239,6 +1239,8 @@ const mapStateToProps = state => {
     page: state.NotificationReducer.page,
     userReducer: state.UserReducer,
       mediaupload: state.OyespaceReducer.mediaupload,
+      assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
   };
 };

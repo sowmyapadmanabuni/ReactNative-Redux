@@ -160,7 +160,7 @@ class Receipts extends React.Component {
     }*/
 
    async getAssociationName(){
-       let stat = await base.services.OyeLivingApi.getAssociationNameById(this.props.userReducer.SelectedAssociationID)
+       let stat = await base.services.OyeLivingApi.getAssociationNameById(this.props.assId)
 
        this.setState({
            isLoading:false
@@ -178,7 +178,7 @@ class Receipts extends React.Component {
    }
 
     async getTheBlockList() {
-        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.assId)
         console.log('Get the blocks data',stat)
         try {
             if (stat.success && stat.data.blocksByAssoc.length !== 0) {
@@ -206,7 +206,7 @@ class Receipts extends React.Component {
     }
 
     async getPaymentMethodsList() {
-        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.assId)
         try {
             if (stat.success && stat.data.paymentMethod.length !== 0) {
                 let paymentList = [];
@@ -287,7 +287,7 @@ class Receipts extends React.Component {
         self.setState({isLoading:true})
         let input = {
             "UNUnitID" :self.props.dashBoardReducer.uniID,
-            "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
+            "ASAssnID"    : self.props.assId,
             "BLBlockID"    : self.state.blockId,
             "FromDate"    :moment(self.state.fromDate).format('YYYY-MM-DD'),
             "ToDate"    :moment(self.state.toDate).format('YYYY-MM-DD')
@@ -1166,7 +1166,7 @@ class Receipts extends React.Component {
             "PYAmtPaid": self.state.amountPaid,
             "INNumber" : self.state.invoiceNumber,
             "UNUnitID" : self.state.unitId,
-            "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
+            "ASAssnID"    : self.props.assId,
             "PYTax"    : "",
             "PMID" : self.state.payMethodId,
             "PYDesc"  : self.state.paymentDesc
@@ -1433,6 +1433,8 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         SelectedAssociationID: state.DashboardReducer.assId,
         dashBoardReducer: state.DashboardReducer,
+        assId:state.DashboardReducer.assId ,
+      uniID: state.DashboardReducer.uniID,
 
     }
 };

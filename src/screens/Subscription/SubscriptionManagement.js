@@ -38,7 +38,7 @@ class SubscriptionManagement extends React.Component {
 
     async getLatestSubscription() {
         // 8 212
-        let stat = await base.services.OyeSafeApiFamily.getLatestSubscriptionDetailsByAssId(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeSafeApiFamily.getLatestSubscriptionDetailsByAssId(this.props.assId)
         try {
             if (stat.success && stat.data.subscription !== null) {
                 let data = stat.data.subscription;
@@ -164,7 +164,7 @@ class SubscriptionManagement extends React.Component {
 
 
     async getPricingDetails() {
-        let stat = await base.services.OyeSafeApiFamily.getPricingData(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeSafeApiFamily.getPricingData(this.props.assId)
         try {
             if (stat.success && stat.data.pricing.length !== 0) {
 
@@ -189,7 +189,7 @@ class SubscriptionManagement extends React.Component {
 
     async getDiscountingDetails() {
 
-        let stat = await base.services.OyeSafeApiFamily.getDiscountingData(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeSafeApiFamily.getDiscountingData(this.props.assId)
         try {
             const {updateSubscription} = this.props;
             if (stat.success && stat.data.discounting.length !== 0) {
@@ -221,7 +221,7 @@ class SubscriptionManagement extends React.Component {
     }
 
     async getDiscountingDetailsByAssociationId() {
-        let stat = await base.services.OyeSafeApiFamily.getDiscountingDataByAssId(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeSafeApiFamily.getDiscountingDataByAssId(this.props.assId)
         try {
             console.log('Status in Discounting Details by AssId', stat)
         } catch (error) {
@@ -864,6 +864,8 @@ const mapStateToProps = state => {
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
         subscriptionReducer: state.SubscriptionReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 };
 

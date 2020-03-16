@@ -11,6 +11,7 @@ import _ from 'lodash';
 import { CLOUD_FUNCTION_URL } from '../constant';
 import firebase from 'react-native-firebase';
 import * as fb from 'firebase';
+import base from '../src/base';
 
 class RegisterMe extends Component {
     static navigationOptions = {
@@ -1025,7 +1026,7 @@ class RegisterMe extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: base.theme.colors.white
     },
     titleOfScreen: {
         marginTop: hp('1.6%'),

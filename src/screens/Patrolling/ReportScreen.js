@@ -518,6 +518,8 @@ class ReportScreen extends React.Component {
 const mapStateToProps = state => {
     return {
         SelectedAssociationID: state.DashboardReducer.assId,
+        assId:state.DashboardReducer.assId ,
+       uniID: state.DashboardReducer.uniID,
     }
 };
 

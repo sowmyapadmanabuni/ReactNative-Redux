@@ -853,7 +853,9 @@ const mapStateToProps = state => {
         oyeBaseURL: state.OyespaceReducer.oyeBaseURL,
         userReducer: state.UserReducer,
         SelectedAssociationID: state.DashboardReducer.assId,
-        dashBoardReducer: state.DashboardReducer
+        dashBoardReducer: state.DashboardReducer,
+        assId:state.DashboardReducer.assId ,
+       uniID: state.DashboardReducer.uniID,
 
     }
 };

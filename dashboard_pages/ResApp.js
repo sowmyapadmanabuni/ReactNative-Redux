@@ -138,6 +138,18 @@ const dashStack = createStackNavigator({
   }
   }
 })
+const dashStackJoin = createStackNavigator({
+  ResDashBoard:{
+    screen: CreateOrJoin,
+    //screen:Dashboard_1,
+    headerMode: 'float',
+      navigationOptions: {
+        headerMode: 'float',
+    title: 'Dashboard',
+    header: props => <DashBoardHeader {...props} />
+  }
+  }
+})
 
 const drawerDashboard = createDrawerNavigator({
   ResDashBoard:{
@@ -153,16 +165,31 @@ const drawerDashboard = createDrawerNavigator({
   //Sidebar width
   drawerWidth: '65%'//Dimensions.get('window').width - 130,
 })
-// {
-//   screen: Dashboard,
-//   navigationOptions: {
-//     title: 'Dashboard',
-//     header: props => <DashBoardHeader {...props} />
-//   }
-// }
+const drawerDashboardJoin = createDrawerNavigator({
+  ResDashBoard:{
+    screen:dashStackJoin,
+    navigationOptions: () => ({
+      header: null
+    })
+  }
+},{
+  //For the Custom sidebar menu we have to provide our CustomSidebarMenu
+  contentComponent: DrawerMenu,
+  overlayColor: '#00000050',
+  //Sidebar width
+  drawerWidth: '65%'//Dimensions.get('window').width - 130,
+})
+
 const ResApp = createStackNavigator({
+  
   ResDashBoard: {
     screen:drawerDashboard,
+    navigationOptions: () => ({
+      header: null
+    })
+  },
+  CreateOrJoinScreen: {
+    screen:drawerDashboardJoin ,
     navigationOptions: () => ({
       header: null
     })
@@ -299,17 +326,6 @@ const ResApp = createStackNavigator({
       header: null,
       headerStyle: { backgroundColor: '#FA9917' },
       headerTintColor: '#ffffff'
-    }
-  },
-
-  CreateOrJoinScreen: {
-    screen: CreateOrJoin,
-    navigationOptions: {
-      title: 'Association',
-      header: props => <DashBoardHeader {...props} />
-
-      // headerStyle: { backgroundColor: '#FA9917' },
-      // headerTintColor: '#ffffff',
     }
   },
 

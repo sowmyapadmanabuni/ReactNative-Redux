@@ -150,7 +150,7 @@ class MyGuests extends Component {
         console.log(
           'responseJson and some more-> ',
           responseJson,
-          this.props.userReducer.SelectedAssociationID,
+          this.props.dashBoardReducer.assId,
           this.props.dashBoardReducer.uniID,
           this.props.userReducer.MyAccountID
         );
@@ -877,7 +877,9 @@ const mapStateToProps = state => {
     dashBoardReducer: state.DashboardReducer,
     mediaupload: state.OyespaceReducer.mediaupload,
     noImage: state.OyespaceReducer.noImage,
-    userReducer: state.UserReducer
+    userReducer: state.UserReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
   };
 };
 

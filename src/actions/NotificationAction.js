@@ -104,13 +104,13 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         activeNotifications.map((data, index) => {
           if (data.ntType === 'gate_app') {
             data.vlfName = data.visitorlog[0].vlfName;
-            data.unUniName = data.visitorlog[0].vlfName;
-            data.vlMobile = data.visitorlog[0].vlfName;
-            gateAppNotif.push({ open: true, ...data });
+            data.unUniName = data.visitorlog[0].unUniName;
+            data.vlMobile = data.visitorlog[0].vlMobile;
+            gateAppNotif.push({ open:true, ...data });
           } else if (data.ntType === 'Join_Status') {
-            joinStatNotif.push(data);
+            joinStatNotif.push({open:true, ...data});
           } else if (data.ntType === 'Join' || data.ntType === 'joinrequest') {
-            joinNotif.push(data);
+            joinNotif.push({open:true, ...data});
           } else if (data.ntType === 'Announcement') {
             data.vlfName = "Announcement";
             data.unUniName = "Announcement";
@@ -138,64 +138,10 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
         console.log('Notification@@@@@@:1111', allNotifs,allNotifs.length);
 
-        // const sorted = _.sortBy(allNotifs, [
-        //   "ntdCreated",
-        //   "ntdUpdated"
-        // ]).reverse();
-
-       // console.log('allNotifs', allNotifs);
+       
         const sorted = [...allNotifs];
 
-          // allNotifs.map((data, index) => {
-          //     if (data.ntType === 'gate_app') {
-          //         axios
-          //             .get(
-          //                 `http://${oyeURL}/oyesafe/api/v1/VisitorLog/GetVisitorLogListByVisLogID/${data.sbMemID}`,
-          //                 //data.sbMemID`,
-          //                 {
-          //                     headers: {
-          //                         'Content-Type': 'application/json',
-          //                         'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-          //                     }
-          //                 }
-          //             )
-          //             .then(res => {
-          //                 let responseData = res.data.data;
-          //                 for (let i = 0; i < allNotifs.length; i++) {
-          //                     if (
-          //                         allNotifs[i].sbMemID === responseData.visitorLog.vlVisLgID
-          //                     ) {
-
-          //                         allNotifs[i].vlEntryImg =
-          //                             responseData.visitorLog.vlEntryImg;
-          //                         allNotifs[i].vlGtName = responseData.visitorLog.vlGtName;
-          //                         allNotifs[i].vlfName = responseData.visitorLog.vlfName;
-          //                         allNotifs[i].vlVisType = responseData.visitorLog.vlVisType;
-          //                         allNotifs[i].vlComName = responseData.visitorLog.vlComName;
-          //                         allNotifs[i].vlMobile = responseData.visitorLog.vlMobile;
-          //                         allNotifs[i].vlEntryT = responseData.visitorLog.vlEntryT;
-          //                         allNotifs[i].vldCreated =
-          //                             responseData.visitorLog.vldCreated;
-          //                         allNotifs[i].vlengName = responseData.visitorLog.vlengName;
-          //                         allNotifs[i].vlexgName = responseData.visitorLog.vlexgName;
-          //                         allNotifs[i].vldUpdated =responseData.visitorLog.vldUpdated; //date
-          //                         allNotifs[i].vlExitT = responseData.visitorLog.vlExitT; //time
-          //                         allNotifs[i].vlVisLgID = responseData.visitorLog.vlVisLgID;
-          //                         allNotifs[i].unUnitID = responseData.visitorLog.unUnitID;
-          //                         allNotifs[i].unUniName = responseData.visitorLog.unUniName;
-          //                         allNotifs[i].vlApprStat = responseData.visitorLog.vlApprStat;
-          //                         allNotifs[i].vlApprdBy = responseData.visitorLog.vlApprdBy;
-          //                         allNotifs[i].vlSelfImg = responseData.visitorLog.vlSelfImg;
-          //                         allNotifs[i].vlExAprdBy = responseData.visitorLog.vlExAprdBy;
-          //                        // allNotifs[i].residentImage = userImage;//vlExAprdBy userImage
-          //                     }
-          //                 }
-          //             })
-          //             .catch(error => {
-          //                 console.log(error, 'error while fetching networks');
-          //             });
-          //     }
-          // });
+         
 
 
 
@@ -218,24 +164,19 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           }
         });
 
-        // let unitNotification = [];
-        // let adminNotification = [];
-        // for(let i in resData){
-        //   if(resData[i].ntType === "joinrequest" || resData[i].ntType === "Join" || resData[i].ntType === "Join_Status"){
-        //     adminNotification.push(resData[i])
-        //   }else{
-        //     unitNotification.push(resData[i])
-        //   }
-        // }
-
-        //segregateUnitNotification(unitNotification);
+       
         let unitNotification = [];
         let adminNotification = [];
         let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
+        let j=0 ; let k=0;
         for(let i in succ){
           if(succ[i].ntType === "joinrequest" || succ[i].ntType === "Join"){
+            succ[i].notifIndex=j
+            j=j+1;
             adminNotification.push(succ[i])
           }else{
+            succ[i].notifIndex=k
+            k=k+1;
             unitNotification.push(succ[i])
           }
         }
@@ -1325,25 +1266,25 @@ export const createUserNotification = (
   };
 };
 
-export const toggleCollapsible = (prevData, value, index,item) => {
-  return dispatch => {
-    let newVal = prevData;
-    console.log("sfsfgs:",prevData, value, index,item)
-    for (let i in prevData){
-      if(item.ntid === prevData[i].ntid){
-        newVal[i].open = !value;
-      }
-      else{
-        newVal[i].open = true;
-      }
-    }
-    console.log("New Value:",...newVal,index,value);
-    dispatch({
-      type: TOGGLE_COLLAPSIBLE,
-      payload: [...newVal]
-    });
-  };
-};
+// export const toggleCollapsible = (prevData, value, index,item) => {
+//   return dispatch => {
+//     let newVal = prevData;
+//     console.log("sfsfgs:",prevData, value, index,item)
+//     for (let i in prevData){
+//       if(item.ntid === prevData[i].ntid){
+//         newVal[i].open = !value;
+//       }
+//       else{
+//         newVal[i].open = true;
+//       }
+//     }
+//     console.log("New Value:",...newVal,index,value);
+//     dispatch({
+//       type: TOGGLE_COLLAPSIBLE,
+//       payload: [...newVal]
+//     });
+//   };
+// };
 
 export const toggleUnitCollapsible = (prevData, value, index,item) => {
   return dispatch => {
@@ -1489,6 +1430,18 @@ export const onGateApp = notifications => {
     dispatch({
       type: ON_GATE_OPEN,
       payload: notifications
+    });
+  };
+};
+
+export const toggleCollapsible = (prevData, value, index) => {
+  console.log('GETTHEDATAOFNOTFICATION',prevData,value,index)
+  return dispatch => {
+    let newVal = prevData;
+    newVal[index].open = !value;
+    dispatch({
+      type: TOGGLE_COLLAPSIBLE,
+      payload: [...newVal]
     });
   };
 };

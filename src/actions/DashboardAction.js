@@ -765,161 +765,166 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
         }
       )
       .then(responseJson => {
-
-
-    // fetch(
-    //   `https://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${accountId}`,
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-    //     }
-    //   }
-    // )
-    //   .then(response => response.json())
-    //   .then(responseJson => {
-      console.log("API__&&RESP",responseJson)
+        console.log("API__&&RESP",responseJson)
         let data = responseJson.data.data.memberListByAccount;
-        //alert("kkk")
         console.log("IN New API Response>>>>>>>>>>>>>>>>>>>>>>:1:",data)
-        let associationArray = [];
-        let associationIdArray = [];
-        for (let i in data) {
-          let associationDetail = data[i].association[0];
-          
-          let unitArray = associationDetail.unit;
-          let units = [];
-          unitArray.map((mappedData)=>{
-            units.push({
-            value:mappedData.unUniName,
-            name:mappedData.unUniName,
-            unitId:mappedData.unUnitID,
-            myRoleId:data[i].mrmRoleID,
+        if(data.length !==0){
+          let associationArray = [];
+          let associationIdArray = [];
+          for (let i in data) {
+            let associationDetail = data[i].association[0];
+            
+            let unitArray = associationDetail.unit;
+            let units = [];
+  
+            console.log('GET ALL THE UNITS DATA TO SEGRIGATE',unitArray)
+            console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',unitArray.length)
+            //  if(unitArray.length !==0){
+            //   let pushedArray=[]
+            //   let j=0
+            //   for(let i=0; i<unitArray.length;i++){
+                   
+  
+            //     if(unitArray[i].owner.length!==0){
+            //       if(unitArray[i].owner[0].acAccntID ===accountId){
+            //         pushedArray[j]=unitArray[i].owner[0]
+            //         j=j+1
+            //               }
+            //         }
+  
+  
+            //         if(unitArray[i].tenant.length!==0){
+            //           if(unitArray[i].tenant[0].acAccntID ===accountId){
+            //             pushedArray[j]=unitArray[i].tenant[0]
+            //             j=j+1
+            //           }
+            //       }
+  
+            //        }
+            //        pushedArray.map((mappedData)=>{
+            //   units.push({
+            //   value:"Unit"+mappedData.unUnitID,
+            //   name:"Unit"+mappedData.unUnitID,
+            //   unitId:mappedData.unUnitID,
+            //   myRoleId:mappedData.uoRoleID,
+            //   })
+            //      }) 
+  
+                 
+            //      console.log('GET ALL THE UNITS DATA TO SEGRIGATE6666666666',pushedArray)
+  
+  
+            // }
+           
+            console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',unitArray)
+            
+            unitArray.map((mappedData)=>{
+              units.push({
+              value:mappedData.unUniName,
+              name:mappedData.unUniName,
+              unitId:mappedData.unUnitID,
+              myRoleId:data[i].mrmRoleID,
+              })
             })
-          })
-          let associationData = {
-            value:associationDetail.asAsnName,
-            name:associationDetail.asAsnName,
-            id:i,
-            associationId:associationDetail.asAssnID,
-            roleId:data[i].mrmRoleID,
-            unit:units
-          }
-
-          associationArray.push(associationData)
-          associationIdArray.push({id:associationDetail.asAssnID})
-        }
-
-        let sortedAssociationData = associationArray.sort(base.utils.validate.compareAssociationNames);
-        console.log("sortedAssociationData",sortedAssociationData)
-
-          dispatch({
-            type:DASHBOARD_ASSOCIATION,
-            payload:{
-              dropdown:sortedAssociationData,
-              allAssociations:sortedAssociationData,
-              associationId:associationIdArray,
-            }
-          })
-  
-          dispatch({
-            type:UPDATE_SELECTED_DROPDOWN,
-            payload:{
-              prop:"selectedDropdown",
-              value:sortedAssociationData[0].value
-            }
-          })
-          
-          dispatch({
-            type:UPDATE_ID_DASHBOARD,
-            payload:{
-              prop:"assId",
-              value:sortedAssociationData[0].associationId
-            }
-          })
-  
-          dispatch({
-            type:UPDATE_USER_INFO,
-            payload:{
-              prop:"SelectedAssociationID",
-              value:sortedAssociationData[0].associationId
-            }
-          });
-  
-          dispatch({
-            type:UPDATE_SELECTED_DROPDOWN,
-            payload:{
-              prop:"selectedDropdown1",
-              value:sortedAssociationData[0].unit.length===0 ?"":sortedAssociationData[0].unit[0].value
-            }
-          }); 
-          
-          dispatch({
-            type:UPDATE_USER_INFO,
-            payload:{
-              prop:"SelectedUnitID",
-              value:sortedAssociationData[0].unit.length===0 ?"":sortedAssociationData[0].unit[0].unitId
-            }
-          });
-  
-          dispatch({
-            type:UPDATE_SELECTED_DROPDOWN,
-            payload:{
-              prop:"unitID",
-              value:sortedAssociationData[0].unit.length===0 ?"":sortedAssociationData[0].unit[0].unitId
-            }
-          });
-  
-          dispatch({
-            type:UPDATE_SELECTED_DROPDOWN,
-            payload:{
-              prop:"uniID",
-              value:sortedAssociationData[0].unit.length===0 ?"":sortedAssociationData[0].unit[0].unitId
-            }
-          });
-  
-          dispatch({
-            type:DASHBOARD_UNITS,
-            payload:sortedAssociationData[0].unit
-          })
-  
-          dispatch({
-            type:USER_ROLE,
-            payload:{
-              prop:"role",
-              value:sortedAssociationData[0].unit.length===0 ?5:sortedAssociationData[0].roleId
-            }
-          })
-  
-          dispatch({
-            type:UPDATE_ID_DASHBOARD,
-            payload:{
-              prop:"roleId",
-              value:sortedAssociationData[0].unit.length===0 ?5:sortedAssociationData[0].roleId
-            }
-          })
-  
-           dispatch({
-            type:UPDATE_ID_DASHBOARD,
-            payload:{
-              prop:"uniID",
-              value:sortedAssociationData[0].unit.length===0 ?"":sortedAssociationData[0].unit[0].unitId
-            }
-          })
          
-
-        //alert("kk")
-        callBack(true);
-
+            
+           
+           // console.log('GET ALL THE UNITS DATA TO SEGRIGATE@@@@@@@@@@@@@@@',filteredData)
+  
+            let associationData = {
+              value:associationDetail.asAsnName,
+              name:associationDetail.asAsnName,
+              id:i,
+              associationId:associationDetail.asAssnID,
+              roleId:data[i].mrmRoleID,
+              unit:units
+            }
+  
+            associationArray.push(associationData)
+            associationIdArray.push({id:associationDetail.asAssnID})
+          }
+  
+          let sortedAssociationData = associationArray.sort(base.utils.validate.compareAssociationNames);
+          console.log("sortedAssociationData",sortedAssociationData)
+  
+            dispatch({
+              type:DASHBOARD_ASSOCIATION,
+              payload:{
+                dropdown:sortedAssociationData,
+                allAssociations:sortedAssociationData,
+                associationId:associationIdArray,
+              }
+            })
+    
+            dispatch({
+              type:UPDATE_SELECTED_DROPDOWN,
+              payload:{
+                prop:"selectedDropdown",
+                value:sortedAssociationData[0].value
+              }
+            })
+            
+            dispatch({
+              type:UPDATE_ID_DASHBOARD,
+              payload:{
+                prop:"assId",
+                value:sortedAssociationData[0].associationId
+              }
+            })
+    
+          dispatch({
+              type:UPDATE_SELECTED_DROPDOWN,
+              payload:{
+                prop:"selectedDropdown1",
+                value:sortedAssociationData[0].unit.length===0 ?"":sortedAssociationData[0].unit[0].value
+              }
+            }); 
+            
+            dispatch({
+              type:DASHBOARD_UNITS,
+              payload:sortedAssociationData[0].unit
+            })
+    
+            dispatch({
+              type:USER_ROLE,
+              payload:{
+                prop:"role",
+                value:sortedAssociationData[0].unit.length===0 ?5:sortedAssociationData[0].roleId
+              }
+            })
+    
+            dispatch({
+              type:UPDATE_ID_DASHBOARD,
+              payload:{
+                prop:"roleId",
+                value:sortedAssociationData[0].unit.length===0 ?5:sortedAssociationData[0].roleId
+              }
+            })
+    
+             dispatch({
+              type:UPDATE_ID_DASHBOARD,
+              payload:{
+                prop:"uniID",
+                value:sortedAssociationData[0].unit.length===0 ?"":sortedAssociationData[0].unit[0].unitId
+              }
+            })
+            callBack(true);
+        }
+        else{
+          callBack(false);
+          dispatch({
+            type:DASHBOARD_ASSOC_STOP
+          });
+        }
         
+          
 
-        
-      })
+          })
       .catch(error => {
         dispatch({
           type:DASHBOARD_ASSOC_STOP
         });
+        callBack(false);
         console.log(error);
       })
   }

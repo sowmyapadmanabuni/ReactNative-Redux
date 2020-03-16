@@ -61,10 +61,6 @@ import ProgressLoader from 'rn-progress-loader';
 
 
 
-
-//const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
-
-
 class NotificationScreen extends PureComponent {
     constructor(props) {
         super(props);
@@ -110,7 +106,7 @@ class NotificationScreen extends PureComponent {
         this.setState({
             isModalOpen: false
         })
-       // this.segregateNotification();
+       
     }
 
 
@@ -120,37 +116,14 @@ class NotificationScreen extends PureComponent {
         this.listenToFirebase()
         this.setState({
             userRole: this.props.dashBoardReducer.role,
-            isLoading: true
+           // isLoading: true
         })
 
         if (Platform.OS != 'ios') {
             BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
 
-        this.props.getNotifications(this.props.oyeURL,this.props.MyAccountID)
-
-
-
-        axios
-            .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                }
-            })
-            .then(res => {
-                this.setState({ currentTime: res.data.data.currentDateTime,isLoading:false }, () => {
-
-
-                  //  this.segregateNotification();
-
-                });
-            })
-            .catch(error => {
-                this.setState({ currentTime: 'failed' }, () => {
-                 //   this.segregateNotification();
-                });
-            });
+       
     }
 
     listenToFirebase() {
@@ -176,8 +149,7 @@ class NotificationScreen extends PureComponent {
                     let receivedData = snapshot.val();
                     console.log("Received Data while listening to notification:", receivedData,associationId);
                     if(receivedData !== null){
-
-                        self.refreshNotification();
+                         self.refreshNotification();
                     }
                 })
             }
@@ -190,38 +162,11 @@ class NotificationScreen extends PureComponent {
         
     }
 
-    segregateNotification() {
-
-        let notificationList = this.props.notifications;
-        console.log('Calling this function', notificationList)
-        let unitNotification = [];
-        let adminNotification = [];
-
-        for (let i in notificationList) {
-            if (notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join") {
-                adminNotification.push(notificationList[i])
-            } else {
-                unitNotification.push(notificationList[i])
-            }
-        }
-
-        this.props.segregateUnitNotification(unitNotification);
-        this.props.segregateAdminNotification(adminNotification);
-        this.props.segregateDummyUnitNotification(unitNotification);
-        this.props.segregateDummyAdminNotification(adminNotification);
-
-        this.setState({
-            unitNotificationCopy: unitNotification,
-            adminNotificationCopy: adminNotification,
-            isLoading: false
-        })
-
-    }
+ 
 
 
     componentWillUnmount() {
-
-        if (Platform.OS != 'ios') {
+         if (Platform.OS != 'ios') {
             BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
     }
@@ -239,26 +184,9 @@ class NotificationScreen extends PureComponent {
 
     keyExtractor = (item, index) => index.toString();
 
-    onPress = (item, index) => {
-        const { notifications, savedNoifId, oyeURL } = this.props;
-        if (
-            item.ntType === 'Join' ||
-            item.ntType === 'Join_Status'
-
-            // item.ntType === "gate_app"
-        ) {
-            this.props.navigation.navigate('NotificationDetailScreen', {
-                details: item,
-                index,
-                notifications,
-                oyeURL,
-                savedNoifId,
-                ntid: item.ntid
-            });
-            // this.props.onNotificationOpen(notifications, index, oyeURL);
-            // this.props.storeOpenedNotif(savedNoifId, item.ntid);
-        } else if (item.ntType === 'Announcement') {
-            //Seperate Page i'll write
+    onPressAnnouncement = (item, index) => {
+        const {notifications, savedNoifId, oyeURL} = this.props;
+        
             this.props.navigation.navigate('NotificationAnnouncementDetailScreen', {
                 notifyid: item.acNotifyID,
                 associationid: item.asAssnID,
@@ -269,7 +197,7 @@ class NotificationScreen extends PureComponent {
                 savedNoifId,
                 ntid: item.ntid
             });
-        }
+        
     };
 
     acceptgateVisitor = (visitorId, index, associationid, visitorStatus, notifiId, approvedBy) => {
@@ -529,7 +457,6 @@ class NotificationScreen extends PureComponent {
         let mins = Math.floor(duration / (1000 * 60));
         let valueDis = days > 1 ? moment(item.ntdCreated).format('DD MMM YYYY') : days == 1 ? "Yesterday" : mins >= 120 ? hours + " hours ago" : (mins < 120 && mins >= 60) ? hours + " hour ago"
             : mins == 0 ? "Just now" : mins + " mins ago";
-        //if(item.ntType !== 'gate_app'){
         if (item.ntType === 'Announcement') {
             return (
                 <TouchableOpacity style={{
@@ -542,7 +469,7 @@ class NotificationScreen extends PureComponent {
                     height: 80,
                     marginTop: 10,
                     marginBottom: this.props.notifications.length - 1 == index ? 100 : 0
-                }} onPress={() => this.onPress(item, index)}>
+                }} onPress={() => this.onPressAnnouncement(item, index)}>
                     <View style={{ flexDirection: 'row', width: '100%', height: 80, backgroundColor: base.theme.colors.shadedWhite }}>
                         <View style={{ width: '15%', }}>
                             {item.ntType == "Announcement" ?
@@ -575,6 +502,7 @@ class NotificationScreen extends PureComponent {
             )
         }
         else if (item.ntType !== 'gate_app') {
+            console.log('GET THE DETAILS GET THE DETAILS*********',item)
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -584,35 +512,29 @@ class NotificationScreen extends PureComponent {
                     shadowRadius: 0.5, elevation: 3, borderBottomWidth: 0.5,
                     width: '100%',
                     marginTop: 10,
-                    marginBottom: this.props.notifications.length - 1 == index ? 100 : 0,
-                    height: item.open === undefined || item.open ? hp('30') : hp('48')
+                    marginBottom: this.props.adminNotification.length - 1 == index ? 100 : 0
                 }}
-                    onPress={() => {
-                        if (item.ntIsActive) {
-                            //this.openNotification(notifications,index,oyeURL)
-                            this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
-                            //  this.toggledCollapsible(notifications, item.open, index, item);
-                            this.props.toggleAdminCollapsible(this.props.adminNotification, item.open, index, item)
-                            this.expandAdminNotification(this.props.adminNotification, index, item)
-                        }
-                        else {
-                            //this.toggledCollapsible(notifications, item.open, index, item)
-                            this.props.toggleAdminCollapsible(this.props.adminNotification, item.open, index, item)
-                            this.expandAdminNotification(this.props.adminNotifications, index, item)
-                        }
+                onPress={() => {
+                    if (item.ntIsActive) {
+                        this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
+                        this.openTheSelNotification(item)
+                    }
+                    else {
+                         this.openTheSelNotification(item)
+                     }
 
-                    }}>
+                }}>
 
 
                     <View style={{
-                        backgroundColor: base.theme.colors.greyCard
+                        backgroundColor: base.theme.colors.greyCard,
                     }}>
                         <View style={{
-                            flexDirection: 'row', backgroundColor: item.vlVisType == "Delivery" && item.vlApprStat == "Entry Pending" && item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
+                            flexDirection: 'row', backgroundColor:item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
                             alignItems: 'center', justifyContent: 'space-between',
                             borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.greyHead, height: 50
                         }}>
-                            {item.ntIsActive ? //item.read -->Not updating
+                            {item.ntIsActive ? 
                                 <Image
                                     resizeMode={'center'}
                                     style={{ width: 50, height: 50, }}
@@ -625,58 +547,147 @@ class NotificationScreen extends PureComponent {
                                     source={require('../../../icons/notification1.png')}
                                 />
                             }
-                            <Text style={{ fontSize: 16, color: base.theme.colors.black }}>{item.asAsnName}</Text>
+                             { item.ntType !=="Join_Status"?
+                            <Text style={{ fontSize: 16, color: base.theme.colors.black }}>{item.asAsnName} </Text>
+                            :
+                            <Text style={{ fontSize: 16, color: base.theme.colors.black }}>{item.ntDesc !== undefined
+                          ? item.ntDesc.split(' ')[8].trim()+' '+item.ntDesc.split(' ')[9].trim()
+                          : ''}{' '} </Text>
+                            }
+
                             <Text style={{ fontSize: 14, color: base.theme.colors.grey, marginRight: 5 }}>{valueDis}</Text>
 
                         </View>
-                        <View style={{ hp: hp('15'), position: 'relative', flexDirection: "row", justifyContent: 'space-around', width: wp('80'), alignSelf: 'center' }}>
-                            <Text style={{ width: wp('33'), alignSelf: 'center' }}>{item.mrRolName}</Text>
-                            <View style={{ width: wp('33'), alignSelf: 'center' }}>
-                                {item.ntType !== 'Join_Status' && item.ntType !== "Join" ? null : this.renderButton(item)}
-                            </View>
+                        <View style={{
+                            flexDirection: 'row', backgroundColor: base.theme.colors.greyCard, alignItems: 'center',
+                            justifyContent: 'space-between', height: 70,
+                        }}>
+                            <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'), borderWidth: 0 }}
+                                numberOfLines={3}>Unit
+                                 { item.ntType !=="Join_Status"?
+                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.mrRolName}</Text>
+                                :
+                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '} {item.ntDesc !== undefined
+                          ? item.ntDesc.split(' ')[4].trim()
+                          : ''}{' '}</Text>
+                                }
+
+                               
+                            </Text>
+                            { item.ntType !=="Join_Status"?
                             <Text onPress={() => {
                                 Platform.OS === 'android'
-                                    ? Linking.openURL(`tel:${this.state.requestorMob1}`)
-                                    : Linking.openURL(`telprompt:${this.state.requestorMob1}`);
-                            }} style={{ width: wp('33'), alignSelf: 'center', borderWidth: 0, textAlign: 'center' }}>{this.state.requestorMob1}</Text>
+                                    ? Linking.openURL(`tel:${item.mobileNumber}`)
+                                    : Linking.openURL(`telprompt:${item.mobileNumber}`);
+                            }} style={{ width: wp('33'), alignSelf: 'center', borderWidth: 0, textAlign: 'center' }}>{item.ntMobile}</Text>
+                            :
+                            <Text onPress={() => {
+                                Platform.OS === 'android'
+                                    ? Linking.openURL(`tel:${item.mobileNumber}`)
+                                    : Linking.openURL(`telprompt:${item.mobileNumber}`);
+                            }} style={{ width: wp('33'), alignSelf: 'center', borderWidth: 0, textAlign: 'center' }}>{item.ntMobile}</Text>
+                        }
                         </View>
                     </View>
-                    <View style={{ backgroundColor: base.theme.colors.white, top: hp('6') }}>
-                        <Collapsible duration={100} collapsed={item.open}
+                    <View style={{ backgroundColor: base.theme.colors.white }}>
+                         <View style={{ alignItems: 'center', justifyContent: 'flex-end', height: 60 }}>
+                            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginTop: 30 }}>{item.ntDesc.substr(0,item.ntDesc.indexOf(' '))=="Your" ? this.props.userReducer.MyFirstName:item.ntDesc.substr(0,item.ntDesc.indexOf(' '))}</Text>
 
-                        >
-                            <View
-                                style={{
-                                    width: '100%',
-                                    flexDirection: 'column',
-                                    //marginTop: hp('5%'),
-                                    marginLeft: hp('2%'),
-                                    backgroundColor: 'white'
-                                }}
-                            >
-                                <View>{this.renderDetails(item, notifications, index, oyeURL)}</View>
-                                <View
-                                    style={{
-                                        borderWidth: 1,
-                                        borderColor: base.theme.colors.greyCard,
-                                        marginTop: hp('1%'),
-                                        marginBottom: hp('3%')
-                                    }}
-                                />
-                            </View>
+                        </View>
+     
+                        <Collapsible duration={100} collapsed={item.open}>
+                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>Current Status
+                                </Text>
+                                </View>
+                            
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupancy
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                    </Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupaied by
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                    </Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Owner Name
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                    </Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Mobile
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                    </Text>
+                                </View>
+                               { item.ntType !=="Join_Status"?
+                                    <View style={{
+                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                        marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
+                                    }}>
+                                        
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <TouchableOpacity onPress={() => {
+                                                this.approve(item);
+                                            }}
+                                                style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <Image
+                                                    style={{ width: 30, height: 30 }}
+                                                    source={require('../../../icons/allow.png')}
+                                                />
+                                                <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Approve</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() =>
+                                                this.approve(item)
+                                            } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <Image
+                                                    style={{ width: 30, height: 30 }}
+                                                    source={require('../../../icons/deny.png')}
+                                                />
+                                                <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Reject</Text>
+                                            </TouchableOpacity>
+                                        </View>
+
+                                    </View> :
+                                    <View />
+                            }
+                            { item.ntJoinStat == 'Accepted'  ?
+                                    <View style={{
+                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                        marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
+                                    }}>
+                                        
+                                            <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Request Approve</Text>
+                                     </View> :
+                                    <View />
+                            }
+                            { item.ntJoinStat == 'Rejected'  ?
+                                    <View style={{
+                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                        marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
+                                    }}>
+                                        
+                                            <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Request Rejected</Text>
+                                     </View> :
+                                    <View />
+                            }
+                            
+
                         </Collapsible>
                         <TouchableOpacity style={{
-                            alignSelf: 'center', top: hp('2'), width: '100%',
-                            alignItems: 'center', justifyContent: 'center', borderWidth: 0
+                            alignSelf: 'center', marginBottom: 10, width: '100%',
+                            height: 20, alignItems: 'center', justifyContent: 'center'
                         }} onPress={() => {
-                            this.expandAdminNotification(notifications, index, item);
-                            //this.toggledCollapsible(notifications, item.open, index, item)
-                            this.props.toggleCollapsible(notifications, item.open, index, item)
                             if (item.ntIsActive) {
-                                //this.openNotification(notifications, index, oyeURL);
                                 this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
+                                this.openTheSelNotification(item)
                             }
-
+                            else {
+                                this.openTheSelNotification(item)
+        
+                            }
+    
                         }}>
                             <View style={{
                                 width: 45,
@@ -687,22 +698,46 @@ class NotificationScreen extends PureComponent {
                             }} >
                             </View>
                         </TouchableOpacity>
-
                     </View>
+                    <TouchableOpacity style={{
+                        width: wp('10%'),
+                        height: hp('10%'),
+                        justifyContent: 'center', alignSelf: 'center',
+                        alignItems: 'center', position: 'absolute', marginTop: 80
+                    }}
+                        onPress={() => this._enlargeImage(item.userImage != "" ? 'data:image/png;base64,'+item.userImage : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                    >
+                        {item.userImage != "" ?
+
+                            <Image
+                                //resizeMode={'center'}
+                                style={{
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 40, position: 'relative'
+                                }}
+                                source={{uri: 'data:image/png;base64,'+item.userImage}}
+                            />
+                            :
+                            <Image
+                                //resizeMode={'center'}
+                                style={{
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 40, position: 'relative'
+                                }}
+                                source={{ uri: 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder }}
+                            />}
+
+                    </TouchableOpacity>
+
+
                 </TouchableOpacity>
             )
         }
         else {
             console.log("GET THE DETAILS GET THE DETAILS", item)
-            let inDate = moment()._d 
-            let enDate = moment(item.visitorlog[0].vlEntryT)._d
-            let duration = Math.abs(inDate - enDate);
-            //let duration2=Math.ceil(duration / (1000 * 60 * 60 * 24));
-            let days = Math.floor(duration / (1000 * 60 * 60 * 24));
-            let hours = Math.floor(duration / (1000 * 60 * 60));
-            let mins = Math.floor(duration / (1000 * 60));
-            let valueDis = days > 1 ? moment(item.visitorlog[0].vlEntryT).format('DD MMM YYYY') : days == 1 ? "Yesterday" : mins >= 120 ? hours + " hours ago" : (mins < 120 && mins >= 60) ? hours + " hour ago"
-                : mins == 0 ? "Just now" : mins + " mins ago";
+        
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -715,31 +750,15 @@ class NotificationScreen extends PureComponent {
                     marginBottom: this.props.unitNotification.length - 1 == index ? 100 : 0
                 }}
                     onPress={() => {
-                        this.props.toggleUnitCollapsible(this.props.unitNotification, item.open, index, item)
                         if (item.ntIsActive) {
-                            //this.openNotification(notifications, index, oyeURL);
                             this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
-                            //this.toggledCollapsible(notifications, item.open, index, item)
-                            // this.props.toggleCollapsible(notifications, item.open, index, item)
-                            if (item.ntType === "Announcement") {
-                                this.props.navigation.navigate('NotificationAnnouncementDetailScreen', {
-                                    notifyid: item.acNotifyID,
-                                    associationid: item.asAssnID,
-                                    accountid: item.acAccntID,
-                                    index,
-                                    notifications,
-                                    oyeURL,
-                                    savedNoifId,
-                                    ntid: item.ntid
-                                });
-                            }
+                            this.openTheSelNotification(item)
                         }
                         else {
-                            //this.toggledCollapsible(notifications, item.open, index, item)
-                            // this.props.toggleCollapsible(notifications, item.open, index, item)
-                        }
-
-                    }}>
+                            
+                            this.openTheSelNotification(item)
+    
+                        } }}>
 
 
                     <View style={{
@@ -750,7 +769,7 @@ class NotificationScreen extends PureComponent {
                             alignItems: 'center', justifyContent: 'space-between',
                             borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.greyHead, height: 50
                         }}>
-                            {item.ntIsActive ? //item.read -->Not updating
+                            {item.ntIsActive ? 
                                 <Image
                                     resizeMode={'center'}
                                     style={{ width: 50, height: 50, }}
@@ -788,12 +807,7 @@ class NotificationScreen extends PureComponent {
                             <Text style={{ fontSize: 16, color: base.theme.colors.black, marginTop: 30 }}>{item.visitorlog[0].vlfName}</Text>
 
                         </View>
-                        {/*{ item.vlVisType =="Delivery" && item.vlApprStat=="Pending" && item.ntIsActive ?
-                        <View style={{width:'100%',alignItems:'center',justifyContent:'center'}}>
-                            <LottieView style={{width:'30%',}} source={require('../../assets/swipe_arrow.json')} autoPlay loop />
-                        </View>
-                            :
-                            <View/>}*/}
+
                         <Collapsible duration={100} collapsed={item.open}>
                             <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }} onPress={() => {
                                 {
@@ -813,7 +827,7 @@ class NotificationScreen extends PureComponent {
                                     <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlengName}</Text>
                                 </Text>
                             </View>
-                            {item.vlApprdBy != "" ?
+                            {item.visitorlog[0].vlApprdBy != "" ?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Entry Rejected by :" : "Entry Approved by :"}
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprdBy}</Text>
@@ -822,7 +836,7 @@ class NotificationScreen extends PureComponent {
                                 :
                                 <View />}
 
-                            {item.visitorlog[0].vlexgName != "" && item.visitorlog[0].vlApprStat != "Expired" ?
+                            {item.visitorlog[0].vlexgName != "" && (item.visitorlog[0].vlApprStat != "Expired" || item.visitorlog[0].vlApprStat !="EntryExpired" ||  item.visitorlog[0].vlApprStat !="ExitExpired")?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>Exit on   :
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.visitorlog[0].vldUpdated, 'YYYY-MM-DD').format(
@@ -844,7 +858,7 @@ class NotificationScreen extends PureComponent {
                                 </View>
                                 :
                                 <View />}
-                            {item.vlApprStat == "Expired" ?
+                            {item.visitorlog[0].vlApprStat == "Expired"  || item.visitorlog[0].vlApprStat !="EntryExpired" || item.visitorlog[0].vlApprStat !="ExitExpired"?
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>Status  :
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprStat}</Text>
@@ -884,8 +898,7 @@ class NotificationScreen extends PureComponent {
                                                     "EntryRejected",
                                                     item.ntid,
                                                     item.visitorlog[0].vlApprdBy
-
-                                                )
+                                             )
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
                                                     style={{ width: 30, height: 30 }}
@@ -997,13 +1010,9 @@ class NotificationScreen extends PureComponent {
                             height: 20, alignItems: 'center', justifyContent: 'center'
                         }} onPress={() => {
                             if (item.ntIsActive) {
-                                //this.openNotification(notifications, index, oyeURL);
                                 this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
-                                //this.toggledCollapsible(notifications, item.open, index, item)
-                                this.props.toggleCollapsible(notifications, item.open, index, item)
-                            }
-                            //this.toggledCollapsible(notifications, item.open, index, item)
-                            this.props.toggleCollapsible(notifications, item.open, index, item)
+                                }
+                           this.openTheSelNotification(item)
                         }}>
                             <View style={{
                                 width: 45,
@@ -1021,7 +1030,7 @@ class NotificationScreen extends PureComponent {
                         justifyContent: 'center', alignSelf: 'center',
                         alignItems: 'center', position: 'absolute', marginTop: 80
                     }}
-                        onPress={() => this._enlargeImage(item.vlEntryImg != "" ? 'data:image/png;base64,'+item.vlEntryImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                        onPress={() => this._enlargeImage(item.visitorlog[0].vlEntryImg != "" ? 'data:image/png;base64,'+item.visitorlog[0].vlEntryImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
                     >
                         {item.vlEntryImg != "" ?
 
@@ -1032,7 +1041,7 @@ class NotificationScreen extends PureComponent {
                                     height: 80,
                                     borderRadius: 40, position: 'relative'
                                 }}
-                                source={{uri: 'data:image/png;base64,'+item.vlEntryImg}}
+                                source={{uri: 'data:image/png;base64,'+item.visitorlog[0].vlEntryImg}}
                             />
                             :
                             <Image
@@ -1054,100 +1063,7 @@ class NotificationScreen extends PureComponent {
         }
     };
 
-    renderDetails = (details, notifications, index, oyeURL) => {
-        const { navigation } = this.props;
-        //const details = navigation.getParam('details', 'NO-ID');
-
-        return (
-            <View >
-                <View style={{ marginLeft: hp('2%') }}>
-                    <Text style={{ color: '#ff8c00' }}>Current Status</Text>
-                </View>
-                <View style={{ flexDirection: 'row', marginLeft: hp('2%') }}>
-                    <View style={{ flex: 1 }}>
-                        <Text>Occupancy</Text>
-                    </View>
-                    <View style={{ flex: 2 }}>
-                        <Text style={{ color: base.theme.colors.black }}>
-                            {this.state.dataSource3} </Text>
-                    </View>
-                </View>
-                <FlatList
-                    data={this.state.dataSource2.reverse()}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                        <View
-                            style={{ flex: 1, marginLeft: hp('2%'), marginTop: hp('1%') ,marginBottom:hp('1%')}}
-                        >
-                            <View style={{ flexDirection: 'column' }}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flex: 1 }}>
-                                        <Text>Resident Name</Text>
-                                    </View>
-                                    <View style={{ flex: 2 }}>
-                                        <Text>  {item.name} </Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flex: 2.5 }}>
-                                        <Text>Mobile</Text>
-                                    </View>
-                                    <View style={{ flex: 5, zIndex: 100 }}>
-
-                                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => {
-                                            {
-                                                Platform.OS === 'android'
-                                                    ? Linking.openURL(`tel:${item.number}`)
-                                                    : Linking.openURL(`telprompt:${item.number}`);
-                                            }
-                                        }}>
-                                            <Text style={{ color: base.theme.colors.black }}>
-                                                {item.number ? item.number : ''}</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    )}
-                />
-                {details.ntJoinStat === "" && details.ntType !== "Join_Status" ?
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', alignSelf: 'flex-end', marginTop: hp('2') }}>
-                        <TouchableOpacity onPress={() => {
-                            this.approve(details, notifications, index, oyeURL)
-                        }}
-                            style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Image
-                                style={{ width: 30, height: 30 }}
-                                source={require('../../../icons/allow.png')}
-                            />
-                            <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Approve</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.rejectModal(details, notifications, index, oyeURL)
-                        } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Image
-                                style={{ width: 30, height: 30 }}
-                                source={require('../../../icons/deny.png')}
-                            />
-                            <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Reject</Text>
-                        </TouchableOpacity>
-                    </View> :
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', alignSelf: 'flex-end', marginTop: hp('2') }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>{details.ntJoinStat}</Text>
-                        </TouchableOpacity>
-                    </View>}
-                <View
-                    style={{
-                        borderBottomWidth: 0,
-                        borderColor: base.theme.colors.greyCard,
-                        marginTop: 10
-
-                    }}
-                />
-
-            </View>
-        );
-    };
+   
 
     rejectModal(details) {
         console.log('DETAILS@@@@@@@@@@@', details)
@@ -1225,25 +1141,7 @@ class NotificationScreen extends PureComponent {
         let isAssocNotificationUpdating = 0;
         let isMemberRefreshing = 0;
 
-        // fb.database().ref(unitPath).on('value',function(snapshot){
-        //     let receivedData = snapshot.val();
-        //     console.log("Received Data in unit path:",receivedData);
-        //     isUnitNotificationUpdating = receivedData===null?0: receivedData.isUnitNotificationUpdating + 1;
-        // })
-
-        // fb.database().ref(associationPath).on('value', function (snapshot) {
-        //     let receivedData = snapshot.val();
-        //     console.log("Received Data:", receivedData);
-        //     isAssocNotificationUpdating = receivedData === null ? 0 : receivedData.isAssocNotificationUpdating + 1;
-        // })
-
-        // fb.database().ref(requesterPath).on('value', function (snapshot) {
-        //     let receivedData = snapshot.val();
-        //     console.log("Received Data:", receivedData);
-        //     isMemberRefreshing = receivedData === null ? 0 : receivedData.isMemberRefreshing + 1;
-        // })
-
-        fb.database().ref(associationPath).set({
+         fb.database().ref(associationPath).set({
             isAssocNotificationUpdating
         }).then((data) => {
             console.log('Data:', data);
@@ -1280,15 +1178,6 @@ class NotificationScreen extends PureComponent {
             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
             'Content-Type': 'application/json'
         };
-
-        console.log(
-            {
-                MRMRoleID: item.sbRoleID,
-                MEMemID: item.sbMemID,
-                UNUnitID: item.sbUnitID
-            },
-            'body_memberROle'
-        );
         axios
             .get(
                 `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
@@ -1299,7 +1188,8 @@ class NotificationScreen extends PureComponent {
                     }
                 }
             )
-            .then(() => {
+            .then((response) => {
+                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE',response)
                 axios
                     .post(
                         champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate',
@@ -1313,6 +1203,7 @@ class NotificationScreen extends PureComponent {
                         }
                     )
                     .then(response => {
+                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_Changerole',response)
                         let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
 
                         axios
@@ -1331,7 +1222,8 @@ class NotificationScreen extends PureComponent {
                                 ntType: 'Join_Status',
                                 associationID: item.asAssnID
                             })
-                            .then(() => {
+                            .then((response) => {
+                                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_CloudResponse',response)
                                 let DateUnit = {
                                     MemberID: item.sbMemID,
                                     UnitID: item.sbUnitID,
@@ -1384,6 +1276,7 @@ class NotificationScreen extends PureComponent {
                                 )
                                     .then(response => response.json())
                                     .then(responseJson => {
+                                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_RoleStatusUpdate',responseJson,UpdateTenant)
                                         fetch(
                                             `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
                                             {
@@ -1398,15 +1291,13 @@ class NotificationScreen extends PureComponent {
                                         )
                                             .then(response => response.json())
                                             .then(responseJson_2 => {
-                                                console.log(JSON.stringify(UpdateTenant));
-                                                console.log(responseJson_2);
 
                                                 let StatusUpdate = {
                                                     NTID: item.ntid,
                                                     NTStatDesc: 'Request Sent'
                                                     //NTStatDesc: responseJson_2.data.string
                                                 };
-
+                                                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_MemberActivestate',responseJson_2,StatusUpdate )                                               
                                                 fetch(
                                                     `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
                                                     {
@@ -1421,11 +1312,11 @@ class NotificationScreen extends PureComponent {
                                                 )
                                                     .then(response => {
                                                         response.json();
-                                                        console.log('Response', response);
+                                                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_NotifiStatusupdate', response);
                                                     })
                                                     .then(responseJson_3 => {
-                                                        console.log(item.ntid, 'ntid');
-                                                        console.log('NTJoinStat');
+                                                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_NotifiStatusupdate', responseJson_3);
+
                                                         axios
                                                             .post(
                                                                 `http://${this.props.oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
@@ -1441,8 +1332,8 @@ class NotificationScreen extends PureComponent {
                                                                     }
                                                                 }
                                                             )
-                                                            .then(() => {
-                                                                console.log('updated suc');
+                                                            .then((response) => {
+                                                                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_FinalStatus', response);
                                                                 this.props.getNotifications(
                                                                     this.props.oyeURL,
                                                                     this.props.MyAccountID
@@ -1463,11 +1354,6 @@ class NotificationScreen extends PureComponent {
                                                                     loading: false
                                                                 });
                                                             });
-
-                                                        // this.props.updateApproveAdmin(
-                                                        //   this.props.approvedAdmins,
-                                                        //   item.sbSubID
-                                                        // );
                                                     })
                                                     .catch(error => {
                                                         console.log('StatusUpdate', error);
@@ -1713,12 +1599,10 @@ class NotificationScreen extends PureComponent {
             getNotifications,
             page
         } = this.props;
-        // console.log(loading)
         console.log('Data in notification', this.props);
         let unitNotification = this.props.unitNotification;
         let adminNotification = this.props.adminNotification;
         let selectedView = this.state.selectedView;
-        // this.segregateNotification()
 
         if (loading) {
             return (
@@ -1850,7 +1734,7 @@ class NotificationScreen extends PureComponent {
                     }
                 </Fragment>
             );
-        }
+       }
     };
 
     setView(param) {
@@ -1865,10 +1749,7 @@ class NotificationScreen extends PureComponent {
     }
 
     render() {
-        const { navigation, notifications, oyeURL, MyAccountID, loading } = this.props;
-        // const refresh = navigation.getParam("refresh", "NO-ID");
-        // console.log(this.state.gateDetails, "gateDetails");
-        // console.log("rendered");
+        const { loading } = this.props;
         console.log('All Notification:', loading)
         return (
             <View style={styles.container}>
@@ -2366,10 +2247,194 @@ class NotificationScreen extends PureComponent {
             });
 
 
-    }
+    } 
+
+
+    checkAdminNotifStatus() {
+        const { navigation, champBaseURL } = this.props;
+        const details = navigation.getParam('details', 'NO-ID');
+        console.log(details, 'detailssss');
+    
+        let roleId;
+    
+        if (parseInt(details.sbRoleID) === 2) {
+          roleId = 6;
+        } else {
+          roleId = 7;
+        }
+    
+        axios
+          .post(
+            `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
+            {
+              ACAccntID: details.acNotifyID,
+              UNUnitID: details.sbUnitID,
+              ASAssnID: details.asAssnID
+            },
+            {
+              headers: {
+                'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                'Content-Type': 'application/json'
+              }
+            }
+          )
+          .then(res => {
+            this.setState({ adminStatLoading: false });
+            let data = res.data.data;
+    
+            console.log(data, res, 'adminData');
+            if (data) {
+              if (
+                data.member.meJoinStat === 'Accepted' &&
+                data.member.mrmRoleID === details.sbRoleID &&
+                data.member.meIsActive
+              ) {
+                this.setState({ adminStat: 'Accepted' });
+              } else if (
+                data.member.meJoinStat === 'Rejected' &&
+                parseInt(data.member.mrmRoleID) === roleId
+                //  data.member.meIsActive
+              ) {
+                this.setState({ adminStat: 'Rejected' });
+              }
+            }
+          })
+          .catch(error => {
+            console.log(error, 'adminDataError');
+            this.setState({ adminStatLoading: false });
+          });
+    
+        fetch(
+          `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log('Response Json', responseJson);
+            this.setState({
+              dataSource1: responseJson.data.account,
+              requestorMob1: responseJson.data.account[0].acMobile
+            });
+            console.log(
+              'Mobile Number1:',
+              this.state.dataSource,
+              this.state.requestorMob1
+            );
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        fetch(
+          `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log('Response Json', responseJson);
+            this.setState({
+              data: responseJson.data.unitsByUnitID,
+              dataSource: responseJson.data.unitsByUnitID[0],
+              requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
+            });
+            console.log('Mobile Number:', this.state.dataSource);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    
+        fetch(
+          //http://api.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/35894
+          `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${details.sbUnitID}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+            }
+          }
+        )
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log('Response Json', responseJson);
+            console.log(
+              'Owner Tenant length',
+              responseJson.data.unit.owner.length,
+              responseJson.data.unit.tenant.length
+            );
+            let arr1 = [];
+            let self = this;
+            let arr2 = [];
+            for (let i = 0; i < responseJson.data.unit.owner.length; i++) {
+              for (let j = 0; j < responseJson.data.unit.tenant.length; j++) {
+                arr1.push({
+                  name:
+                    responseJson.data.unit.owner[i].uofName +
+                    ' ' +
+                    responseJson.data.unit.owner[i].uolName,
+                  number: responseJson.data.unit.owner[i].uoMobile
+                });
+                // arr1.push(responseJson.data.unit.owner[i])
+                arr2.push({
+                  name:
+                    responseJson.data.unit.tenant[j].utfName +
+                    ' ' +
+                    responseJson.data.unit.tenant[j].utlName,
+                  number: responseJson.data.unit.tenant[j].utMobile
+                });
+    
+                // arr2.push(responseJson.data.unit.tenant[j])
+              }
+            }
+            self.setState({
+              dataSource2: [...arr1, ...arr2],
+              dataSource3: responseJson.data.unit.unOcStat
+            });
+            console.log('DataSource2', this.state.dataSource2);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
 
 
 
+      openTheSelNotification(selectednotification){
+        let unitNotification = this.props.unitNotification;
+        let adminNotification = this.props.adminNotification;
+        //ntType "Join" -Admin "gate_app"  "Join_Status"
+        const{toggleCollapsible}=this.props
+
+        console.log('CHANGE THE SELECTION CHANGE THE SELECTION',selectednotification,)
+         console.log('CHANGE THE SELECTION CHANGE THE SELECTION###########',selectednotification,
+        selectednotification.open)
+        
+
+        if(selectednotification.ntType=="gate_app" || selectednotification.ntType =="Join_Status"){
+            toggleCollapsible(unitNotification, selectednotification.open, selectednotification.notifIndex)
+            //unitNotification[selectednotification.notifIndex].open=!selectednotification.open
+          //  console.log("CHANGE THE SELECTION BASED ON ITEM ********@@@@@@",selectednotification,unitNotification,adminNotification)
+
+        }
+        else if(selectednotification.ntType== "Join" ){
+            toggleCollapsible(adminNotification, selectednotification.open, selectednotification.notifIndex)
+           // adminNotification[selectednotification.notifIndex].open=!selectednotification.open
+            console.log("CHANGE THE SELECTION BASED ON ITEM ********",selectednotification,unitNotification,adminNotification)
+
+        }
+
+      }
 
 
 
@@ -2446,6 +2511,8 @@ const mapStateToProps = state => {
         adminNotification: state.NotificationReducer.adminNotification,
         unitDummyNotification:state.NotificationReducer.unitDummyNotification,
         adminDummyNotification: state.NotificationReducer.adminDummyNotification,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 
 };

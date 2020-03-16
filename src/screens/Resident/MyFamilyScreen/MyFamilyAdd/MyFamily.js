@@ -89,7 +89,7 @@ class MyFamily extends Component {
     }
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.processBackPress);
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.assId)
     }
 
     processBackPress() {
@@ -696,10 +696,12 @@ class MyFamily extends Component {
 
 const mapStateToProps = state => {
     return {
-        selectedAssociation: state.DashboardReducer.selectedAssociation,
+        selectedAssociation: state.DashboardReducer.assId,
         oyeURL: state.OyespaceReducer.oyeURL,
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 };
 export default connect(mapStateToProps)(MyFamily);

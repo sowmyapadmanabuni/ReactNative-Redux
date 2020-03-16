@@ -62,7 +62,8 @@ class Dashboard extends React.Component {
       myAdminIconWidth: Platform.OS === 'ios' ? 20 : 20,
       myAdminIconHeight: Platform.OS === 'ios' ? 20 : 20,
       selectedView: 0,
-      invoicesList: []
+      invoicesList: [],
+      dropdownIndex:0
 
 
     };
@@ -83,10 +84,7 @@ class Dashboard extends React.Component {
     ),
   };
 
-  // async componentWillMount() {
-  //   const { MyAccountID } = this.props.userReducer;
-  //   const { oyeURL } = this.props.oyespaceReducer;
-  // }
+  
 
   async componentDidMount() {
 
@@ -96,6 +94,7 @@ class Dashboard extends React.Component {
     let self = this;
     self.setState({isLoading:true})
     self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
+      console.log('HERE DATA TO DISPLAY',data)
       if(data){
         self.myProfileNet();
         self.listenRoleChange();
@@ -104,6 +103,12 @@ class Dashboard extends React.Component {
         self.requestNotifPermission();
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false})
+      }
+      else{
+        self.myProfileNet();
+        self.setState({isLoading:false})
+        self.props.navigation.navigate('CreateOrJoinScreen');
+      
       }
     })
 
@@ -174,24 +179,33 @@ class Dashboard extends React.Component {
         let sortedAssociationData = associationArray.sort(base.utils.validate.compareAssociationNames);
         console.log("sortedAssociationData",sortedAssociationData);
         
-        updateIdDashboard({
-      prop: 'assId',
-      value: sortedAssociationData[0].associationId
-    });
+       
 
-    updateUserInfo({
-      prop: 'SelectedAssociationID',
-      value: sortedAssociationData[0].associationId
-    });
+    // updateUserInfo({
+    //   prop: 'SelectedAssociationID',
+    //   value: sortedAssociationData[0].associationId
+    // });
+
+   // assId: null,
+    //uniID: null,
 
     updateSelectedDropDown({
       prop: 'selectedDropdown',
       value: sortedAssociationData[0].value
     });
-
-    updateSelectedDropDown({
+    updateIdDashboard({
       prop: 'assId',
       value: sortedAssociationData[0].associationId
+    });
+
+    // updateSelectedDropDown({
+    //   prop: 'assId',
+    //   value: sortedAssociationData[0].associationId
+    // });
+
+    updateIdDashboard({
+      prop: 'uniID',
+      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].unitId
     });
 
     updateSelectedDropDown({
@@ -199,24 +213,24 @@ class Dashboard extends React.Component {
       value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].value
     });
 
-    updateSelectedDropDown({
-      prop: "unitID",
-      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].unitId
-    });
+    // updateSelectedDropDown({
+    //   prop: "unitID",
+    //   value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].unitId
+    // });
 
     updateUnitDropdown({
       value: dropdown[0].unit,
       associationId: sortedAssociationData[0].associationId
     })
 
-    updateIdDashboard({
-      prop: 'assId',
-      value: sortedAssociationData[0].associationId
-    });
-    updateUserInfo({
-      prop: 'SelectedAssociationID',
-      value: sortedAssociationData[0].associationId
-    });
+    // updateIdDashboard({
+    //   prop: 'assId',
+    //   value: sortedAssociationData[0].associationId
+    // });
+    // updateUserInfo({
+    //   prop: 'SelectedAssociationID',
+    //   value: sortedAssociationData[0].associationId
+    // });
 
     }
     )
@@ -291,6 +305,7 @@ class Dashboard extends React.Component {
 
   listenRoleChange() {
     const { MyAccountID, dropdown } = this.props;
+    const {oyeURL} = this.props.oyespaceReducer;
     let path = 'rolechange/' + MyAccountID;
     let roleRef = base.services.frtdbservice.ref(path);
     let self = this;
@@ -309,8 +324,8 @@ class Dashboard extends React.Component {
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
           //self.roleCheckForAdmin(self.state.assocId);
-          self.props.fetchAssociationByAccountId(MyAccountID,()=>{
-            self.checkUserRole();
+          self.props.fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
+            self.onAssociationChange(self.state.dropdownIndex);
           });
           
         } else {
@@ -499,7 +514,7 @@ class Dashboard extends React.Component {
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
           //this.props.refreshNotifications(oyeURL, MyAccountID);
-       //   this.props.getNotifications(oyeURL, MyAccountID);
+          this.props.getNotifications(oyeURL, MyAccountID);
           this.showLocalNotification(notification);
         });
 
@@ -659,9 +674,11 @@ class Dashboard extends React.Component {
 
   async getVehicleList() {
     let self = this;
-    let associationId = self.props.userReducer.SelectedAssociationID;
+    // assId:state.DashboardReducer.assId ,
+    //uniID: state.DashboardReducer.uniID,
+    let associationId = self.props.assId;
     let accountId = self.props.userReducer.MyAccountID;
-    let unitId = self.props.userReducer.SelectedUnitID;
+    let unitId = self.props.uniID;
     console.log('HItting Here ______________________________________IN dashboard count', self.props,associationId, accountId, unitId, self.props.oyeURL)
     fetch(
       `https://${self.props.oyeURL}/oyesafe/api/v1/GetFamilyMemberVehicleCountByAssocAcntUnitID/${associationId}/${accountId}/${unitId}`,
@@ -704,100 +721,7 @@ class Dashboard extends React.Component {
 
   }
 
-  async getListOfAssociation() {
-    let self = this;
-    let oyeURL = this.props.oyeURL;
-    //self.setState({ isLoading: true });
-
-    axios
-      .get(
-        `${this.props.champBaseURL}/Member/GetMemberListByAccountID//${this.props.userReducer.MyAccountID}`,
-        {
-          headers: {
-            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      .then(stat => {
-        console.log(
-          'API data for association list',
-          this.props.userReducer,
-          this.props.userReducer.MyAccountID,
-          this.props.oyeURL
-        );
-
-        console.log('Response_Association: ', stat);
-
-        try {
-          if (stat && stat.data.success) {
-            this.setState({
-              isNoAssJoin: false
-            });
-            let assocList = [];
-            for (
-              let i = 0;
-              i < stat.data.data.memberListByAccount.length;
-              i++
-            ) {
-              if (stat.data.data.memberListByAccount[i].asAsnName !== '') {
-                assocList.push({
-                  value: stat.data.data.memberListByAccount[i].asAsnName,
-                  details: stat.data.data.memberListByAccount[i]
-                });
-              }
-            }
-            let sortedArr = assocList.sort(
-              base.utils.validate.compareAssociationNames
-            ); //open chrome
-            console.log('Sorted and All Asc List', sortedArr, assocList);
-
-            let removedDuplicates = _.uniqBy(sortedArr, 'value');
-            console.log('Removed duplicates', sortedArr, assocList);
-
-            self.setState({
-              assocList: removedDuplicates,
-              assocName: sortedArr[0].details.asAsnName,
-              assocId: sortedArr[0].details.asAssnID
-            });
-            const { updateIdDashboard } = this.props;
-            console.log('updateIdDashboard1', this.props);
-            updateIdDashboard({
-              prop: 'assId',
-              value: sortedArr[0].details.asAssnID
-            });
-            const { updateUserInfo } = this.props;
-            updateUserInfo({
-              prop: 'SelectedAssociationID',
-              value: sortedArr[0].details.asAssnID
-            });
-            base.utils.validate.checkSubscription(
-              this.props.userReducer.SelectedAssociationID
-            );
-      //      self.getUnitListByAssoc();
-          } else if (!stat.data.success) {
-            this.setState({
-              isNoAssJoin: true
-            });
-            //this.props.navigation.navigate('CreateOrJoinScreen');
-          }
-        } catch (error) {
-          console.log('Error details', error);
-          this.setState({
-            isNoAssJoin: true
-          });
-         // this.props.navigation.navigate('CreateOrJoinScreen');
-        }
-      })
-      .catch(error => {
-        console.log('Error in list of Association', error);
-        this.setState({
-          isNoAssJoin: true
-        });
-
-      //  this.props.navigation.navigate('CreateOrJoinScreen');
-      });
-  }
+ 
 
 
   changeTheAssociation = (value, assId, unitId, unitName) => {
@@ -811,6 +735,7 @@ class Dashboard extends React.Component {
       dropdown,
       updateSelectedDropDown,
       dropdown1,
+
     } = this.props;
 
     console.log('Ass index', value, assId, dropdown1, dropdown);
@@ -818,48 +743,57 @@ class Dashboard extends React.Component {
     const { oyeURL } = this.props.oyespaceReducer;
     this.setState({ assocId: assId });
 
-    getDashUnits(
-      assId,
-      oyeURL,
-      MyAccountID,
-      dropdown,
-      assId,
-      dropdown1
-    );
+    // getDashUnits(
+    //   assId,
+    //   oyeURL,
+    //   MyAccountID,
+    //   dropdown,
+    //   assId,
+    //   dropdown1,
+    // );
 
     const { updateIdDashboard } = this.props;
     console.log('updateIdDashboard1', this.props);
+    
+
+  
+
+    updateIdDashboard({
+      prop: 'uniID',
+      value: unitId
+    });
     updateIdDashboard({
       prop: 'assId',
       value: assId
     });
 
-    updateUserInfo({
-      prop: 'SelectedAssociationID',
-      value: assId
-    });
+    // updateUserInfo({
+    //   prop: 'SelectedAssociationID',
+    //   value: assId
+    // });
 
     updateSelectedDropDown({
       prop: 'selectedDropdown',
       value: value
     });
 
-    updateSelectedDropDown({
-      prop: 'assId',
-      value: assId
-    });
-    updateUserInfo({
-      prop: 'SelectedUnitID',
-      value: unitId
-    });
-    updateIdDashboard({
-      prop: 'uniID',
-      value: unitId
-    });
-    updateSelectedDropDown({
-      prop: 'uniID',
-      value: unitId
-    });
+    // updateSelectedDropDown({
+    //   prop: 'assId',
+    //   value: assId
+    // });
+    // updateUserInfo({
+    //   prop: 'SelectedUnitID',
+    //   value: unitId
+    // });
+    // updateIdDashboard({
+    //   prop: 'uniID',
+    //   value: unitId
+    // });
+    // updateSelectedDropDown({
+    //   prop: 'uniID',
+    //   value: unitId
+    // });
+
     updateSelectedDropDown({
       prop: 'selectedDropdown1',
       value: unitName
@@ -870,62 +804,57 @@ class Dashboard extends React.Component {
     this.roleCheckForAdmin(assId);
   };
 
-  onAssociationChange = (value, index) => {
+  onAssociationChange = (index) => {
 try{
-    console.log('GettheselectedAssocitation', value, index, this.props.dropdown)
+    console.log('GettheselectedAssocitation',  index, this.props.dropdown)
 
     const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = this.props;
 
-    this.setState({ assocId: dropdown[index].associationId });
+    this.setState({ assocId: dropdown[index].associationId,dropdownIndex:index });
 
     console.log('updateIdDashboard1', this.props);
     updateIdDashboard({
       prop: 'assId',
       value: dropdown[index].associationId
     });
-
-    updateUserInfo({
-      prop: 'SelectedAssociationID',
-      value: dropdown[index].associationId
+    updateIdDashboard({
+      prop: 'uniID',
+      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
     });
+  
+
+    // updateUserInfo({
+    //   prop: 'SelectedAssociationID',
+    //   value: dropdown[index].associationId
+    // });
 
     updateSelectedDropDown({
       prop: 'selectedDropdown',
       value: dropdown[index].value
     });
 
-    updateSelectedDropDown({
-      prop: 'assId',
-      value: dropdown[index].associationId
-    });
+    // updateSelectedDropDown({
+    //   prop: 'assId',
+    //   value: dropdown[index].associationId
+    // });
 
     updateSelectedDropDown({
       prop: "selectedDropdown1",
       value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].value
     });
 
-    updateSelectedDropDown({
-      prop: "unitID",
-      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
-    });
+    // updateSelectedDropDown({
+    //   prop: "unitID",
+    //   value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
+    // });
 
     updateUnitDropdown({
       value: dropdown[index].unit,
       associationId: dropdown[index].associationId
     })
-
-    updateIdDashboard({
-      prop: 'assId',
-      value: dropdown[index].associationId
-    });
-    updateUserInfo({
-      prop: 'SelectedAssociationID',
-      value: dropdown[index].associationId
-    });
-
-
-    base.utils.validate.checkSubscription(dropdown[index].associationId);
-    updateUserInfo({
+  base.utils.validate.checkSubscription(dropdown[index].associationId);
+    
+  updateUserInfo({
       prop: 'MyOYEMemberID',
       value: dropdown[index].memberId
     });
@@ -933,7 +862,7 @@ try{
       prop: 'SelectedMemberID',
       value: dropdown[index].memberId
     });
-    //this.roleCheckForAdmin(dropdown[index].associationId);
+
     dropdown[index].unit.length === 0 ? "" : this.getVehicleList()
     this.checkUserRole(dropdown[index])
     this.setView(0)
@@ -1045,7 +974,7 @@ try{
     let response = await base.services.OyeLivingApi.getProfileFromAccount(
       this.props.userReducer.MyAccountID
     );
-    console.log('Joe', response);
+    console.log('COMINGHERE_FirstCall', response);
     const { updateUserInfo } = this.props;
     updateUserInfo({
       prop: 'userData',
@@ -1247,9 +1176,9 @@ try{
       console.log('CHECK NET!!!!!!@@@@@', this.state.isConnected);
 
       return (
-        <View style={{ height: '100%', width: '100%' }}>
+        <View style={{ height: '100%', width: '100%' ,backgroundColor:'white'}}>
           {/* <NavigationEvents onDidFocus={() => this.requestNotifPermission()} /> */}
-          {!this.state.isLoading?
+          {!this.props.isLoading?
             <View style={Style.container}>
               <View style={Style.dropDownContainer}>
                 <View style={Style.leftDropDown}>
@@ -1273,22 +1202,13 @@ try{
                       dropdownOffset={{ top: 10, left: 0 }}
                       dropdownPosition={dropdown.length > 2 ? -5 : -2}
                       rippleOpacity={0}
-                      // onChangeText={(value, index) =>
-                      //   this.onAssociationChange(value, index)
-                      // }
                       onChangeText={(value, index) => {
-                        this.onAssociationChange(value, index);
-
+                        this.onAssociationChange(index);
                         this.props.updateuserRole({
                           prop: 'role',
                           value: dropdown[index].roleId
                         });
-                        updateDropDownIndex(index);
-
-                        this.setState({
-                          associationSelected: true
-                        });
-                      }}
+                       }}
                     />
                   ) : (
                       <View />
@@ -1327,15 +1247,8 @@ try{
                       //   this.updateUnit(value, index);
                       // }}
                       onChangeText={(value, index) => {
-                        updateUserInfo({
-                          prop: 'SelectedUnitID',
-                          value: dropdown1[index].unitId
-                        });
+                       
                         updateIdDashboard({
-                          prop: 'uniID',
-                          value: dropdown1[index].unitId
-                        });
-                        updateSelectedDropDown({
                           prop: 'uniID',
                           value: dropdown1[index].unitId
                         });
@@ -1413,9 +1326,9 @@ try{
                 borderColor: base.theme.colors.primary,
                 borderWidth: 0,
                 position: 'absolute',
-                // marginBottom: hp('5'),
+                 //marginBottom: hp('5'),
                 justifyContent: 'flex-start',
-                top: hp('82'),
+                top: hp('77'),
                 flexDirection: 'row'
               }}>
 
@@ -1473,7 +1386,7 @@ try{
           <ProgressLoader
             isHUD={true}
             isModal={true}
-            visible={this.state.isLoading}
+            visible={this.props.isLoading}
             color={base.theme.colors.primary}
             hudColor={'#FFFFFF'}
           />
@@ -1601,6 +1514,13 @@ try{
     }, 1000)
   }
 
+  changeToUnit(){
+    this.setState({
+      isLoading:false
+    })
+    this.props.navigation.navigate('CreateOrJoinScreen')
+  }
+
   myUnitCard() {
     const { dropdown, dropdown1 } = this.props;
     const { updateIdDashboard } = this.props;
@@ -1623,7 +1543,7 @@ try{
             onCardClick={() =>
 
               dropdown.length === 0
-                ? this.props.navigation.navigate('CreateOrJoinScreen')
+                ? this.changeToNewUnit()
                 : dropdown1.length === 0
                   ? alert('Unit is not available')
                   : this.props.navigation.navigate('MyFamilyList')
@@ -1645,7 +1565,7 @@ try{
 
             onCardClick={() =>
               dropdown.length === 0
-                ? this.props.navigation.navigate('CreateOrJoinScreen')
+                ? this.changeToNewUnit()
                 : dropdown1.length === 0
                   ? alert('Unit is not available')
                   : this.props.navigation.navigate('MyVehicleListScreen')
@@ -2035,6 +1955,7 @@ const mapStateToProps = state => {
     isLoading: state.DashboardReducer.isLoading,
     memberList: state.DashboardReducer.memberList,
     called: state.DashboardReducer.called,
+    
 
     // Oyespace variables and user variables
     MyFirstName: state.UserReducer.MyFirstName,
@@ -2047,7 +1968,9 @@ const mapStateToProps = state => {
     champBaseURL: state.OyespaceReducer.champBaseURL,
     oyespaceReducer: state.OyespaceReducer,
     receiveNotifications: state.NotificationReducer.receiveNotifications,
-    dashBoardReducer: state.DashboardReducer
+    dashBoardReducer: state.DashboardReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
   };
 };
 

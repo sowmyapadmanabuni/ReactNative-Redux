@@ -779,6 +779,8 @@ const mapStateToProps = state => {
         SelectedAssociationID: state.DashboardReducer.assId,
         selectedCheckPoints: state.PatrollingReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
 
     }
 };

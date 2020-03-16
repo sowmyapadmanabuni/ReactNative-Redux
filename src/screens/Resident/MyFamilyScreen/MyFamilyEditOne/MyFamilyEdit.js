@@ -73,7 +73,7 @@ class MyFamilyEdit extends Component {
     componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.processBackPress);
         console.log('Props in Edit Family', this.props.navigation.state.params);
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.assId)
 
         this.setState({
             firstName: this.props.navigation.state.params.fmName,
@@ -670,11 +670,13 @@ class MyFamilyEdit extends Component {
 
 const mapStateToProps = state => {
     return {
-        associationid: state.DashboardReducer.associationid,
-        selectedAssociation: state.DashboardReducer.selectedAssociation,
+        associationid: state.DashboardReducer.assId,
+        selectedAssociation: state.DashboardReducer.assId,
         oyeURL: state.OyespaceReducer.oyeURL,
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
     };
 };
