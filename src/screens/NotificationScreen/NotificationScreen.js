@@ -1283,9 +1283,9 @@ class NotificationScreen extends PureComponent {
                       console.log(responseJson_2);
 
                      let StatusUpdate = {
-                        NTID: item.ntid,
-                        NTStatDesc: 'Request Sent'
-                      };
+                        NTID      : item.ntid,
+                        NTStatDesc : "Request Sent"
+                    };
 
                       fetch(
                         `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
