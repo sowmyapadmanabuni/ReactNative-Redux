@@ -110,7 +110,7 @@ class MyProfile extends Component {
     //   });
     // }, 1500);
     base.utils.validate.checkSubscription(
-      this.props.userReducer.SelectedAssociationID
+      this.props.SelectedAssociationID
     );
   }
 
@@ -320,7 +320,7 @@ class MyProfile extends Component {
                   </View>
                 </View>
 
-                <View style={{ marginTop:hp('2%'),alignItems: 'center', marginBottom: hp('4%') }}>
+                <View style={{ marginTop:hp('2%'),alignItems: 'center', marginBottom: hp('2%') }}>
                   <Text style={styles.itemTextValues1}>
                     {userData
                       ? userData.data.account[0].acfName +
@@ -335,7 +335,7 @@ class MyProfile extends Component {
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
-                      marginTop: hp('1%'),
+                      //marginTop: hp('1%'),
                       marginBottom: hp('2%')
                     }}
                   >
@@ -399,8 +399,8 @@ class MyProfile extends Component {
           </View>
           <View
             style={{
-              marginTop:hp('1%'),
-              bottom: hp('3%'),
+              marginTop:hp('2%'),
+              bottom: hp('2%'),
               alignItems: 'flex-end',
               right: hp('3%')
             }}
@@ -553,10 +553,12 @@ const mapStateToProps = state => {
     MyAccountID: state.UserReducer.MyAccountID,
     viewImageURL: state.OyespaceReducer.viewImageURL,
     imageUrl: state.OyespaceReducer.imageUrl,
-    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+    SelectedAssociationID: state.DashboardReducer.assId ,
     dashBoardReducer: state.DashboardReducer,
     mediaupload: state.OyespaceReducer.mediaupload,
-    userReducer: state.UserReducer
+    userReducer: state.UserReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
   };
 };
 

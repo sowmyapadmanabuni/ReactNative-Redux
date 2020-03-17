@@ -135,7 +135,7 @@ class EditExpense extends Component {
     }
 
     async getTheBlockList(){
-        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.assId)
         console.log('Get the block list',stat)
         try{
             if(stat.success && stat.data.blocksByAssoc.length!==0){
@@ -156,7 +156,7 @@ class EditExpense extends Component {
 
     }
     async getExpenseRecurrenceType(){
-        let stat = await base.services.OyeLivingApi.getExpenseRecTypeList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getExpenseRecTypeList(this.props.assId)
         console.log('Get the block list1',stat)
         try{
             if(stat.success && stat.data.expenseReccurrance.length!==0){
@@ -178,7 +178,7 @@ class EditExpense extends Component {
 
     }
     async getExpenseApplicableUnitList(){
-        let stat = await base.services.OyeLivingApi.getExpenseApplicabilityList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getExpenseApplicabilityList(this.props.assId)
         console.log('Get the block list2',stat)
         try{
             if(stat.success && stat.data.expenseApplicabilites.length!==0){
@@ -200,7 +200,7 @@ class EditExpense extends Component {
 
     }
     async getPaymentMethodsList(){
-        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.assId)
         console.log('Get the block list3',stat)
         try{
             if(stat.success && stat.data.paymentMethod.length!==0){
@@ -241,7 +241,7 @@ class EditExpense extends Component {
             "EXDisType" : this.state.selDistribution,
             "UNUnitID"  : this.props.dashboardReducer.uniID,
             "BLBlockID" : this.state.blockId,
-            "ASAssnID"  : this.props.userReducer.SelectedAssociationID,
+            "ASAssnID"  : this.props.assId,
             "EXID"      : this.state.expenseId
         };
         let stat = await base.services.OyeLivingApi.updateExpense(input)
@@ -946,6 +946,8 @@ const mapStateToProps = state => {
     return {
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
     };
 };
 export default connect(mapStateToProps)(EditExpense)

@@ -66,7 +66,7 @@ class MyGuests extends Component {
 
     componentDidMount() {
         let self = this;
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.SelectedAssociationID)
         let newDataSource = [];
         this.state.dataSource.map(data => {
             newDataSource.push({ ...data, open: false });
@@ -159,7 +159,7 @@ class MyGuests extends Component {
             )
                 .then(response => response.json())
                 .then(responseJson => {
-                    console.log('Response Json', responseJson);
+                    console.log('Response Json#################', responseJson);
                     this.setState({
                         isLoading: false,
                         dataSource: responseJson.data.invitation,
@@ -515,7 +515,7 @@ class MyGuests extends Component {
                                     </Text>
                                 </View>
                                 <View>
-                                    <Text style={{ fontSize: hp('1.4%') }}>
+                                    <Text style={{ fontSize: hp('1.4%') ,marginLeft:10}}>
                                         Entry Time:{' '}
                                         {item.insDate.substring(11, 16)}
                                     </Text>
@@ -1025,10 +1025,12 @@ const mapStateToProps = state => {
         MyLastName: state.UserReducer.MyLastName,
         MyMobileNumber: state.UserReducer.MyMobileNumber,
         viewImageURL: state.OyespaceReducer.viewImageURL,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-        SelectedUnitID: state.UserReducer.SelectedUnitID,
+        SelectedAssociationID: state.DashboardReducer.assId,
+        SelectedUnitID: state.DashboardReducer.uniID,
         dashBoardReducer: state.DashboardReducer,
-        userReducer: state.UserReducer
+        userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 };
 

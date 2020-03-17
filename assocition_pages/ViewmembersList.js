@@ -76,7 +76,7 @@ class Resident extends React.Component {
     }
 
     componentWillMount() {
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.associationid)
         this.getMemberList();
     }
 
@@ -101,7 +101,7 @@ class Resident extends React.Component {
 
     async getMemberList() {
         let self = this;
-        let associationId = self.props.userReducer.SelectedAssociationID;
+        let associationId = self.props.associationid;
 
         console.log('get association', associationId);
 
@@ -179,7 +179,7 @@ class Resident extends React.Component {
             user: user.acAccntID
         }).then((data) => {
             //success callback
-            console.log('data ', data)
+            console.log('data ', data,user,roleId)
         }).catch((error) => {
             //error callback
             console.log('error ', error)
@@ -221,9 +221,9 @@ class Resident extends React.Component {
                 ACMobile: mobNumber,
                 UNUnitID: this.state.selectedUser.unUnitID,
                 MRMRoleID: this.state.selectedRoleData.selRolId,
-                ASAssnID: this.props.selectedAssociation
+                ASAssnID: this.props.associationid
             };
-            console.log('reqBody role managment', requestBody);
+            console.log('reqBody role managment', requestBody,this.state.selectedUser, this.state.selectedRoleData.selRolId);
 
             fetch(url, {
                 method: "POST",
@@ -235,7 +235,7 @@ class Resident extends React.Component {
             })
                 .then(response => response.json())
                 .then(responseJson => {
-                    console.log("Resposne JSON:",responseJson);
+                    console.log('reqBody role managment', responseJson);
                     this.updateRolesFRTDB(this.state.selectedUser, this.state.selectedRoleData.selRolId);
                     this.props.navigation.goBack();
                 })
@@ -482,11 +482,12 @@ class Resident extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        associationid: state.DashboardReducer.associationid,
-        selectedAssociation: state.DashboardReducer.assId,
+        associationid: state.DashboardReducer.assId,
+        selectedAssociation:  state.DashboardReducer.assId,
         oyeURL: state.OyespaceReducer.oyeURL,
         dashBoardReducer: state.DashboardReducer,
-        userReducer: state.UserReducer
+        userReducer: state.UserReducer,
+    
     };
 };
 

@@ -53,7 +53,7 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, datasource: action.payload};
 
         case DASHBOARD_ASSOC_STOP:
-            return {...state, isLoading: false};
+            return {...state, isLoading:false};
 
         case DASHBOARD_ASSOCIATION:
             return {
@@ -102,10 +102,10 @@ export default (state = INITIAL_STATE, action) => {
             };
 
         case DASHBOARD_RESIDENT_LIST:
-            return {...state, residentList: action.payload};
+            return {...state, residentList: action.payload,isLoading:false};
 
         case DASHBOARD_PIE:
-            return {...state, [action.payload.prop]: action.payload.value};
+            return {...state, [action.payload.prop]: action.payload.value,isLoading:false};
 
         case GET_MEMBERLIST_SUCCESS:
             return {...state, memberList: action.payload};
@@ -135,7 +135,7 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 dropdown: action.payload.dropdown,
-                associationid: action.payload.associationid
+                associationid: action.payload.associationid,isLoading:false
             };
 
         default:

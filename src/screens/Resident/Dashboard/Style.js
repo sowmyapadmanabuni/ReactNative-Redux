@@ -6,7 +6,8 @@ const Style = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: hp('2.8%')
+    marginTop: hp('2.8%'),
+    backgroundColor:'white'
   },
   dropDownContainer: {
     // flex:1,

@@ -117,13 +117,11 @@ class MyFamilyList extends React.Component {
 
     async myFamilyListGetData() {
         this.setState({loading: true});
-        //console.log("Data sending to get family",this.props, this.props.dashBoardReducer.assId, this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
         let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
             this.props.dashBoardReducer.uniID,
             this.props.dashBoardReducer.assId,
             this.props.userReducer.MyAccountID
         );
-        //console.log("Get Family Data", myFamilyList); //this.props.userReducer.MyAccountID
         this.setState({isLoading: false, loading: false});
         console.log('GET THE FAMILY MEMBER DATA',myFamilyList)
         try {
@@ -193,7 +191,7 @@ class MyFamilyList extends React.Component {
                 isLoading: false
             });
         }, 1500);
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.assId)
         this.myFamilyListGetData();
         BackHandler.addEventListener('hardwareBackPress', this.processBackPress);
     }
@@ -326,21 +324,17 @@ class MyFamilyList extends React.Component {
                             </TouchableOpacity>
                         </View>
 
-                        <View style={Style.threeBtnStyle}>
+                        
                             {item.pAccntID===this.props.MyAccountID ?
 
-                            <TouchableOpacity onPress={() => this.deleteData(item.fmid)}>
+                            <TouchableOpacity style={[Style.threeBtnStyle]} onPress={() => this.deleteData(item.fmid)}>
                                 <Icon color="#ff8c00" size={wp('5%')} name="delete"/>
-                                {/* <Image
-                  style={Style.editAndCallButtonIconImageStyle}
-                  source={require("../../../../../icons/delete.png")}
-                /> */}
+                               
                             </TouchableOpacity>
                                 :
                                 <View/>
                             }
-                        </View>
-                    </View>
+                     </View>
                 </View>
                 <View style={Style.lineAboveAndBelowFlatList}/>
             </View>
@@ -577,13 +571,15 @@ class MyFamilyList extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        associationid: state.DashboardReducer.associationid,
-        selectedAssociation: state.DashboardReducer.selectedAssociation,
+        associationid: state.DashboardReducer.assId,
+        selectedAssociation: state.DashboardReducer.assId,
         oyeURL: state.OyespaceReducer.oyeURL,
         mediaupload: state.OyespaceReducer.mediaupload,
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
         MyAccountID: state.UserReducer.MyAccountID,
+        assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
     };
 };

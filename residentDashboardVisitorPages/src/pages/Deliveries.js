@@ -72,7 +72,7 @@ class App extends React.Component {
   componentDidMount() {
     let self = this;
     base.utils.validate.checkSubscription(
-      this.props.userReducer.SelectedAssociationID
+      this.props.assId
     );
     let newDataSource = [];
     this.state.dataSource.map(data => {
@@ -940,7 +940,9 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     mediaupload: state.OyespaceReducer.mediaupload,
     noImage: state.OyespaceReducer.noImage,
-    userReducer: state.UserReducer
+    userReducer: state.UserReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
   };
 };
 

@@ -76,7 +76,7 @@ class EditVehicle extends Component {
                 this.props.navigation.state.params.VehParkingSlotNum
                 : ""
         })
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+        base.utils.validate.checkSubscription(this.props.assId);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -179,7 +179,7 @@ class EditVehicle extends Component {
                 VEStickNo: vehStickerNum.length <= 0 ? VehStickerNum : vehStickerNum.toString(),
                 UPLNum: parkingSlotNum.length <= 0 ? VehParkingSlotNum : parkingSlotNum.toString(),
                 VEID: this.props.navigation.state.params.Veid,
-                ASAssnID: this.props.dashBoardReducer.selectedAssociation
+                ASAssnID: this.props.dashBoardReducer.assId
             });
             fetch(
                 `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/VehicleUpdate`,
@@ -539,6 +539,8 @@ const mapStateToProps = state => {
         dashBoardReducer: state.DashboardReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
         userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
 
 

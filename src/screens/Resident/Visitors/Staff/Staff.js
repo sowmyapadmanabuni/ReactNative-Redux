@@ -41,7 +41,7 @@ class Staff extends React.Component {
     }
 
     componentWillMount() {
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.assId)
         this.getListOfStaff();
     }
 
@@ -113,8 +113,7 @@ class Staff extends React.Component {
 
     async getListOfStaff() {
         let self = this; //dashboardReducer.uniID
-        console.log("StaffList Input@#@#@#@#", self.props.dashboardReducer.uniID, self.props.userReducer.SelectedAssociationID, self.props.userReducer.MyAccountID);
-        let stat = await base.services.OyeSafeApi.getStaffListByAssociationIdAndUnitId(self.props.userReducer.SelectedAssociationID, self.props.userReducer.MyAccountID, self.props.dashboardReducer.uniID);// 1
+        let stat = await base.services.OyeSafeApi.getStaffListByAssociationIdAndUnitId(self.props.assId, self.props.userReducer.MyAccountID, self.props.dashboardReducer.uniID);// 1
         self.setState({isLoading: false});
         console.log("Check Data", stat);
         try {
@@ -513,6 +512,8 @@ const mapStateToProps = state => {
         staffReducer: state.StaffReducer,
         dashboardReducer: state.DashboardReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
 
     };
 };

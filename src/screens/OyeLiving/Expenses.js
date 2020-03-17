@@ -203,7 +203,7 @@ class Expenses extends React.Component {
     };
 
     async getTheBlockList() {
-        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.assId)
         console.log('data@@@@@@', stat)
 
         try {
@@ -267,7 +267,7 @@ class Expenses extends React.Component {
     }
 
     async getExpenseRecurrenceType() {
-        let stat = await base.services.OyeLivingApi.getExpenseRecTypeList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getExpenseRecTypeList(this.props.assId)
         try {
             if (stat.success && stat.data.expenseReccurrance.length !== 0) {
                 let expRecurrence = [];
@@ -294,7 +294,7 @@ class Expenses extends React.Component {
     }
 
     async getExpenseApplicableUnitList() {
-        let stat = await base.services.OyeLivingApi.getExpenseApplicabilityList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getExpenseApplicabilityList(this.props.assId)
         console.log('jhjhjhjkkhkhk',stat)
         try {
             if (stat.success && stat.data.expenseApplicabilites.length !== 0) {
@@ -322,7 +322,7 @@ class Expenses extends React.Component {
     }
 
     async getPaymentMethodsList() {
-        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.assId)
         console.log('Pay list',stat)
         this.setState({
             isLoading:false
@@ -403,7 +403,7 @@ class Expenses extends React.Component {
             "EXDisType": this.state.selDistribution,
             "UNUnitID": this.state.unitId,
             "BLBlockID": this.state.blockIdAdd,
-            "ASAssnID": this.props.userReducer.SelectedAssociationID,
+            "ASAssnID": this.props.assId,
             "INNumber": this.state.invoiceNum,
             "EXID":this.state.isEditExpense?this.state.selExpenseId:'',
             "UnUniIden":this.state.isExpDisable?this.state.unitName:'',
@@ -589,7 +589,7 @@ class Expenses extends React.Component {
         if(moment(self.state.fromDate).format('YYYY-MM-DD') !="Invalid date" && moment(self.state.toDate).format('YYYY-MM-DD') !="Invalid date"){
             self.setState({isLoading:true})
             let input = {
-                "ASAssnID"    : self.props.userReducer.SelectedAssociationID,
+                "ASAssnID"    : self.props.assId,
                 "BLBlockID"    : self.state.blockId,
                 "startdate"    :moment(self.state.fromDate).format('YYYY-MM-DD'),
                 "enddate"    :moment(self.state.toDate).format('YYYY-MM-DD')
@@ -684,7 +684,7 @@ class Expenses extends React.Component {
 
     async generateInvoices(){
         let self = this;
-        let associationId = self.props.userReducer.SelectedAssociationID;
+        let associationId = self.props.assId;
         console.log('Get the Details for generate invoice', self.props,associationId,self.state.blockId)
         let stat = await base.services.OyeLivingApi.getInvoices(associationId,self.state.blockId); // 1, 4
         console.log("Stat in generate invoices:",stat)
@@ -703,7 +703,7 @@ class Expenses extends React.Component {
     }
     async generateInvoicesByExpIds(){
         let self = this;
-        let associationId = self.props.userReducer.SelectedAssociationID;
+        let associationId = self.props.assId;
         console.log('Get the Details for generate invoice', self.props,associationId,self.state.blockId)
        let input={
             "ASAssnID" : associationId ,
@@ -2969,6 +2969,8 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         SelectedAssociationID: state.DashboardReducer.assId,
         dashBoardReducer: state.DashboardReducer,
+        assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
     }
 };

@@ -162,10 +162,10 @@ class OTPVerification extends Component {
                                 value: acAccntID
                             });
                             updateUserInfo({prop: "MyEmail", value: acEmail});
-                            updateUserInfo({
-                                prop: "MyMobileNumber",
-                                value: MyMobileNumber
-                            });
+                            // updateUserInfo({
+                            //     prop: "MyMobileNumber",
+                            //     value: MyMobileNumber
+                            // });
                             updateUserInfo({
                                 prop: "MyFirstName",
                                 value: acfName
@@ -174,10 +174,10 @@ class OTPVerification extends Component {
                                 prop: "MyLastName",
                                 value: aclName
                             });
-                            updateUserInfo({
-                                prop: "MyISDCode",
-                                value: MyISDCode
-                            });
+                            // updateUserInfo({
+                            //     prop: "MyISDCode",
+                            //     value: MyISDCode
+                            // });
                             updateUserInfo({prop: "signedIn", value: true});
 
                             // AsyncStorage.setItem("userId", login);

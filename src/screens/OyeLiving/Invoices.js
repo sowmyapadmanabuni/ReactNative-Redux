@@ -233,7 +233,7 @@ class Invoices extends React.Component {
         );
     }
     async getPaymentMethodsList() {
-        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getPaymentMethodList(this.props.SelectedAssociationID)
         try {
             if (stat.success && stat.data.paymentMethod.length !== 0) {
                 let paymentList = [];
@@ -301,7 +301,7 @@ class Invoices extends React.Component {
 
     async getAssiciationDetail(){
         let self = this;
-        let assId = self.props.userReducer.SelectedAssociationID;
+        let assId = self.props.SelectedAssociationID;
         let stat = await base.services.OyeLivingApi.getAssDetail(assId);
         console.log("Stat in ass Deyai:",stat)
         try{
@@ -317,7 +317,7 @@ class Invoices extends React.Component {
 
     async getBlockList() {
         let self = this;
-        let associationId = self.props.userReducer.SelectedAssociationID;
+        let associationId = self.props.SelectedAssociationID;
 
         let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(associationId);
         console.log("Stat:", stat);
@@ -352,7 +352,7 @@ class Invoices extends React.Component {
     async getInvoiceList(val, index) {
         let self = this;
         let blockId = self.state.blockList[index].details.blBlockID;
-        let associationId = self.props.userReducer.SelectedAssociationID;
+        let associationId = self.props.SelectedAssociationID;
         self.setState({
             isLoading: true,
             selectedBlock: val,
@@ -774,7 +774,7 @@ class Invoices extends React.Component {
     }
 
     async getAssociationName(){
-        let stat = await base.services.OyeLivingApi.getAssociationNameById(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getAssociationNameById(this.props.SelectedAssociationID)
 
         this.setState({
             isLoading:false
@@ -1991,7 +1991,7 @@ class Invoices extends React.Component {
         let detail = {
             "FromDate"   : moment(self.state.fromDate).format('YYYY-MM-DD'),
             "ToDate"     :  moment(self.state.toDate).format('YYYY-MM-DD'),
-            "ASAssnID" : self.props.userReducer.SelectedAssociationID,
+            "ASAssnID" : self.props.SelectedAssociationID,
             "BLBlockID"  : self.state.blockId
         }
         console.log("Invoice Id@@@@@:", detail);
@@ -2248,6 +2248,8 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         SelectedAssociationID: state.DashboardReducer.assId,
         dashBoardReducer: state.DashboardReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
 
     }
 };

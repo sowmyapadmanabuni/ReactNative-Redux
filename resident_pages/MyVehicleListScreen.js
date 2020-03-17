@@ -52,7 +52,7 @@ class VehicleList extends Component {
             });
         }, 1500);
         self.getVehicleList();
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+        base.utils.validate.checkSubscription(this.props.assId);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -89,7 +89,7 @@ class VehicleList extends Component {
     getVehicleList = () => {
         console.log('props in vehicle list:', this.props);
         fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByUnitID/${this.props.dashBoardReducer.uniID}`,
+            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByAssocUnitAndAcctID/${this.props.dashBoardReducer.assId}/${this.props.dashBoardReducer.unitID}/${this.props.userReducer.MyAccountID}`,
             {
                 method: 'GET',
                 headers: {
@@ -641,6 +641,8 @@ const mapStateToProps = state => {
         dashBoardReducer: state.DashboardReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
         userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
 
     };
 };

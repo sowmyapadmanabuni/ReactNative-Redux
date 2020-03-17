@@ -51,8 +51,8 @@ class EditProfile extends Component {
             alterEmail: "",
             myProfileImage: "",
             imageUrl: "",
-            primeCca: "",
-            alterCca: "",
+            primeCca: 'IN',
+            alterCca: 'IN',
             alterCName: "",
             alterMobNum: "",
             alterCCode: "",
@@ -66,7 +66,7 @@ class EditProfile extends Component {
     componentWillMount(){
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+        base.utils.validate.checkSubscription(this.props.SelectedAssociationID);
 
 
         console.log("Data in the myProfile@@@@@###", this.props.navigation.state.params, this.props.navigation.state.params.primeCName, this.props.navigation.state.params.alterCName);
@@ -86,8 +86,8 @@ class EditProfile extends Component {
                 "https://mediaupload.oyespace.com/" + this.props.navigation.state.params.myProfileImage
                 : "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
             imageUrl: this.props.navigation.state.params.myProfileImage,
-            alterCca: this.props.navigation.state.params.alterCca,
-            primeCca: this.props.navigation.state.params.primeCca,
+            alterCca: this.props.navigation.state.params.alterCName == "+91" || this.props.navigation.state.params.alterCName == ""  ? 'IN' : this.props.navigation.state.params.alterCName,
+            primeCca:this.props.navigation.state.params.primeCName == "+91"  ? 'IN' :  this.props.navigation.state.params.primeCName,
             profileName: this.props.navigation.state.params.firstName,
         })
     }
@@ -238,27 +238,7 @@ class EditProfile extends Component {
 
             .then(response => {
                 console.log("Respo1111:", response);
-
-                if (this.state.isPhotoAvailable) {
-                    if (Platform.OS === 'android') {
-                        // this.deleteImage();
-                    }
-                }
-                updateUserInfo({prop: "MyEmail", value: this.state.primaryEmail});
-                updateUserInfo({
-                    prop: "MyMobileNumber",
-                    value: this.state.primaryMobNum
-                });
-                updateUserInfo({
-                    prop: "MyFirstName",
-                    value: this.state.firstName
-                });
-                updateUserInfo({
-                    prop: "MyLastName",
-                    value: this.state.lastName
-                });
-
-                this.props.navigation.goBack();
+                this.getProfile()
             })
             .catch(error => {
                 console.log("Crash in profile", error);
@@ -268,6 +248,27 @@ class EditProfile extends Component {
             })
 
     }
+    async  getProfile(){
+        
+            let  responseProfile = await base.services.OyeLivingApi.getProfileFromAccount(
+                this.props.userReducer.MyAccountID
+              );
+              console.log('GET THE DATA IN PROFILE #####',responseProfile)
+    
+        
+            const { updateUserInfo } = this.props;
+                    updateUserInfo({
+                    prop: 'userData',
+                    value: responseProfile
+                    });
+                    updateUserInfo({
+                    prop: 'userProfilePic',
+                    value: responseProfile.data.account[0].acImgName
+                    });
+    
+            this.props.navigation.goBack();
+        
+          }
 
     deleteImage() {
         let file = this.state.myProfileImage.split('///').pop();
@@ -380,8 +381,8 @@ class EditProfile extends Component {
             alterEmail: "",
             myProfileImage: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
             imageUrl: "",
-            primeCca: "",
-            alterCca: "",
+            primeCca: "IN",
+            alterCca: "IN",
             alterCName: "",
             alterMobNum: "",
             alterCCode: "",
@@ -543,27 +544,7 @@ class EditProfile extends Component {
                                         </Item>
 
 
-                                        {/*--------------------------------------------------------------------------------------*}
-                                        <View style={{
-                                            flexDirection:'row',
-                                            backgroundColor:'yellow',
-                                            //position:'absolute',
-                                        }}>
-                                            <Text style={{
-                                                fontSize:18
-                                            }}>
-                                                Hello
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    fontSize: hp("2.2%"),
-                                                    color: "red"
-                                                }}
-                                            >
-                                                *
-                                            </Text>
-                                        </View>
-                                        <View style={styles.number}>
+                                         <View style={styles.number}>
                                             <View
                                                 style={{
                                                     flex: 0.1,
@@ -571,105 +552,21 @@ class EditProfile extends Component {
                                                     alignItems: "center"
                                                 }}
                                             >
-                                                <CountryPicker
-                                                    hideAlphabetFilter={true}
-                                                    onChange={value => {
-                                                        console.log("CCA:", value);
-                                                        this.setState({
-                                                            primeCca: value.cca2,
-                                                            primeCCode: "+" + value.callingCode,
-                                                            primeCName: value.cca2,
-                                                        })
-                                                    }}
-                                                    //cca2={this.state.cca2}
-                                                    cca2={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                    flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                    translation="eng"
-                                                />
-                                            </View>
-                                            <View
-                                                style={{
-                                                    flex: 0.15,
-                                                    flexDirection: "row",
-                                                    marginLeft: hp("0.5%"),
-                                                    alignItems: "center",
-                                                    marginBottom: hp("-0.8%")
-                                                }}
-                                            >
-                                                <Text style={{color: "black", fontSize: hp("2%")}}>
-                                                    {this.state.primeCCode}
-                                                </Text>
-                                            </View>
-                                            <Item style={[styles.inputItem1,{ flexDirection:'row'}]} stackedLabel>
-                                                {this.state.primaryMobNum === '' &&
-                                                    <View style={{
-                                                        paddingLeft: wp(2),
-                                                        flexDirection: 'row',
-                                                        alignSelf: 'center',
-                                                        //position:'absolute',
-                                                    }}>
-                                                        <Text style={{
-                                                            fontSize: 18
-                                                        }}>
-                                                            Hello
-                                                        </Text>
-                                                        <Text
-                                                            style={{
-                                                                fontSize: hp("2.2%"),
-                                                                color: "red"
-                                                            }}
-                                                        >
-                                                            *
-                                                        </Text>
-                                                    </View>
-                                                }
-                                                <Input
-                                                    style={{alignSelf:'center'}}
-                                                    marginBottom={hp("-1%")}
-                                                    //placeholder={"Mobile Number"}
-                                                    autoCorrect={false}
-                                                    keyboardType="phone-pad"
-                                                    maxLength={10}
-                                                    onChangeText={(value) =>
-                                                        this.mobileNumberInputCheck(value)
-                                                    }
-                                                    //value={this.state.primaryMobNum}
-                                                />
-                                                <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
-                                                    <Image source={require("../icons/phone-book.png")}
-                                                           style={{width: 25, height: 25,}}/>
-                                                </TouchableOpacity>
-                                            </Item>
-                                        </View>
-                                        {/--------------------------------------------------------------------------------------*/}
-
-                                        <View style={styles.number}>
-                                            <View
-                                                style={{
-                                                    flex: 0.1,
-                                                    flexDirection: "row",
-                                                    alignItems: "center"
-                                                }}
-                                            >
-                                                
-                                             <CountryPicker
-                                                    hideAlphabetFilter={true}
-                                                    onChange={value => {
-                                                        console.log("CCA:", value);
-                                                        this.setState({
-                                                            primeCca: value.cca2,
-                                                            primeCCode: "+" + value.callingCode,
-                                                            primeCName: value.cca2,
-                                                        })
-                                                    }}
-                                                    countryCode={this.state.cca2}
-
-                                                    //cca2={this.state.cca2}
-                                                   // countryCode={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                   // flag={this.state.primeCName === "" ? 'IN' : this.state.primeCName}
-                                                    translation="eng"
-                                                />
-                                            </View>
+                                                  <CountryPicker
+                                    hideAlphabetFilter={true}
+                                    onSelect={value => {
+                                        console.log('GET THE VALUES',value)
+                                        this.setState({
+                                            primeCca: value.cca2,
+                                            primeCCode: "+" + value.callingCode,
+                                            primeCName: value.cca2,
+                                        })                                   
+                                     }}
+                                     countryCode={this.state.primeCca}
+                                     translation="eng"
+                                    
+                                > </CountryPicker>
+                                                 </View>
 
                                             <View
                                                 style={{
@@ -721,42 +618,20 @@ class EditProfile extends Component {
                                                     alignItems: "center"
                                                 }}
                                             >
-                                                <CountryPicker
-                                                    hideAlphabetFilter={true}
-                                                    onChange={value => {
-                                                        console.log("CCA11:", value);
-                                                        this.setState({
-                                                            alterCca: value.cca2,
-                                                            alterCCode: "+" + value.callingCode,
-                                                            alterCName: value.cca2
-                                                        })
-                                                    }}
-                                                    countryCode={this.state.cca2}
-
-                                                    // cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    // flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    translation="eng"
-                                                />
-                                                {/* <CountryPicker
-                                                
-                                                    
-                                                    onChange={value => {
-                                                        console.log("CCA11:", value);
-                                                        this.setState({
-                                                            alterCca: value.cca2,
-                                                            alterCCode: "+" + value.callingCode,
-                                                            alterCName: value.cca2
-                                                        })
-                                                    }}
-                                                   // countryCode={this.state.cca2}
-                                                    hideAlphabetFilter={true}
-                                                     countryCode={this.state.cca2}
-
-                                                    // cca2={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    // flag={this.state.alterCName === "" ? 'IN' : this.state.alterCName}
-                                                    translation="eng"
-                                                /> */}
-                                            </View>
+                                                 <CountryPicker
+                                    hideAlphabetFilter={true}
+                                    onSelect={value => {
+                                        this.setState({
+                                            alterCca: value.cca2,
+                                            alterCCode: "+" + value.callingCode,
+                                            alterCName: value.cca2
+                                        })                                 
+                                     }}
+                                     countryCode={this.state.alterCca}
+                                     translation="eng"
+                                    
+                                > </CountryPicker>
+                                               </View>
 
                                             <View
                                                 style={{
@@ -1058,11 +933,13 @@ const mapStateToProps = state => {
         MyAccountID: state.UserReducer.MyAccountID,
         viewImageURL: state.OyespaceReducer.viewImageURL,
         imageUrl: state.OyespaceReducer.imageUrl,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        SelectedAssociationID: state.DashboardReducer.assId,
         mediaupload: state.OyespaceReducer.mediaupload,
         userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
 
     }
 };
-export default connect(mapStateToProps)(EditProfile);
+export default connect(mapStateToProps,{updateUserInfo})(EditProfile);

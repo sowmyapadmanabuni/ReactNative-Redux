@@ -35,7 +35,7 @@ class DashBoardHeader extends React.Component {
 
     for(let i in notifications){
       let notificationList = notifications;
-      if(notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join" || notificationList[i].ntType === "Join_Status"){
+      if(notificationList[i].ntType === "joinrequest" || notificationList[i].ntType === "Join"){
         if(notificationList[i].ntIsActive){
           adminNotification.push(notificationList[i])
         }
@@ -233,7 +233,9 @@ const mapStateToProps = state => {
     viewImageURL: state.OyespaceReducer.viewImageURL,
     notifications: state.NotificationReducer.notifications,
     userReducer: state.UserReducer,
-    dashboardReducer: state.DashboardReducer
+    dashboardReducer: state.DashboardReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
   };
 };
 

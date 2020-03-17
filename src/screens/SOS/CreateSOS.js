@@ -924,9 +924,11 @@ class CreateSOS extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        associationID: state.UserReducer.SelectedAssociationID,
+        associationID: state.DashboardReducer.assId,
         userReducer: state.UserReducer,
-        dashBoardReducer: state.DashboardReducer
+        dashBoardReducer: state.DashboardReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     }
 };
 

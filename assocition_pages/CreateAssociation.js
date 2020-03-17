@@ -1731,9 +1731,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         champBaseURL: state.OyespaceReducer.champBaseURL,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        SelectedAssociationID: state.DashboardReducer.assId,
         MyAccountID: state.UserReducer.MyAccountID,
-        oyeURL: state.OyespaceReducer.oyeURL
+        oyeURL: state.OyespaceReducer.oyeURL,
+        // assId:state.DashboardReducer.assId ,
+   // uniID: state.DashboardReducer.uniID,
     };
 };
 

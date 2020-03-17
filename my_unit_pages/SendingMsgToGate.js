@@ -1553,7 +1553,9 @@ const mapStateToProps = state => {
   return {
     oyeURL: state.OyespaceReducer.oyeURL,
     dashboardReducer: state.DashboardReducer,
-    userReducer: state.UserReducer
+    userReducer: state.UserReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
   };
 };
 export default connect(mapStateToProps)(SendingMsgToGate);

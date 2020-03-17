@@ -62,7 +62,7 @@ class QRCodeGeneration extends Component {
   }
 
   componentDidMount() {
-    base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+    base.utils.validate.checkSubscription(this.props.SelectedAssociationID)
     this.associationName();
    // this.qrGeneration();
   }
@@ -524,12 +524,14 @@ class QRCodeGeneration extends Component {
 const mapStateToProps = state => {
   return {
     oyeURL: state.OyespaceReducer.oyeURL,
-    SelectedAssociationID: state.UserReducer.SelectedAssociationID,
-    SelectedUnitID: state.UserReducer.SelectedUnitID,
+    SelectedAssociationID: state.DashboardReducer.assId,
+    SelectedUnitID: state.DashboardReducer.uniID,
     MyOYEMemberID: state.UserReducer.MyOYEMemberID,
     SelectedMemberID: state.UserReducer.SelectedMemberID,
     dashBoardReducer: state.DashboardReducer,
-    userReducer: state.UserReducer
+    userReducer: state.UserReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
 
   };
 };

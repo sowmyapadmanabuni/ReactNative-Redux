@@ -93,7 +93,7 @@ class Accounting extends Component {
     }
 
     async getExpenseRecurrenceType(){
-        let stat = await base.services.OyeLivingApi.getExpenseRecTypeList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getExpenseRecTypeList(this.props.assId)
         console.log('Get the block list1',stat)
         try{
             if(stat.success && stat.data.expenseReccurrance.length!==0){
@@ -116,7 +116,7 @@ class Accounting extends Component {
     }
 
     async getTheBlockList(){
-        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getTheListOfBlocksByAssociation(this.props.assId)
         console.log('Get the block list',stat)
         try{
             if(stat.success && stat.data.blocksByAssoc.length!==0){
@@ -174,7 +174,7 @@ class Accounting extends Component {
     }
 
     async getExpenseApplicableUnitList() {
-        let stat = await base.services.OyeLivingApi.getExpenseApplicabilityList(this.props.userReducer.SelectedAssociationID)
+        let stat = await base.services.OyeLivingApi.getExpenseApplicabilityList(this.props.assId)
         console.log('jhjhjhjkkhkhk',stat)
         try {
             if (stat.success && stat.data.expenseApplicabilites.length !== 0) {
@@ -756,6 +756,8 @@ const mapStateToProps = state => {
   return {
     dashBoardReducer: state.DashboardReducer,
     userReducer: state.UserReducer,
+    assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
   };
 };
 export default connect(mapStateToProps)(Accounting)

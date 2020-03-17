@@ -16,9 +16,15 @@ function MiniOfflineSign() {
 }
 
 class CheckInternet extends PureComponent {
-    state = {
-        isConnected: true
-    };
+    constructor(props) {
+        super(props);
+        this.props = props;
+    
+        this.state = {
+            isConnected: true
+        }
+    }
+    
 
     componentDidMount() {
         //NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);

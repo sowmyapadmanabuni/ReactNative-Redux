@@ -102,8 +102,7 @@ class DrawerMenu extends Component {
         console.log("MENU_IMG",this.props.dashboardReducer.role,this.props)
         console.log('https://mediaupload.oyespace.com/' +
         base.utils.strings.noImageCapturedPlaceholder)
-        console.log(this.props.userReducer.SelectedAssociationID)
-        let role = this.props.userReducer.SelectedAssociationID != null
+        let role = this.props.assId != null
         ? this.getRoleName(this.props.dashboardReducer.role)
         : '';
         console.log("ROLE_STATE",role)
@@ -161,10 +160,10 @@ class DrawerMenu extends Component {
                   </MarqueeText>
 
                 </TouchableOpacity>
-                {this.props.userReducer.SelectedAssociationID != null ? (
+                {this.props.assId != null ? (
                     role!=''?
                   <Text style={[HeaderStyles.statusText,{alignSelf:'flex-start',marginLeft:2}]} numberOfLines={1}>
-                    {this.props.userReducer.SelectedAssociationID != null
+                    {this.props.assId != null
                       ? this.getRoleName(this.props.dashboardReducer.role)
                       : ''}
                   </Text>:<View/>
@@ -215,7 +214,9 @@ const mapStateToProps = state => {
       viewImageURL: state.OyespaceReducer.viewImageURL,
       notifications: state.NotificationReducer.notifications,
       userReducer: state.UserReducer,
-      dashboardReducer: state.DashboardReducer
+      dashboardReducer: state.DashboardReducer,
+      assId:state.DashboardReducer.assId ,
+    uniID: state.DashboardReducer.uniID,
     };
   };
 

@@ -306,7 +306,8 @@ class Dashboard extends React.Component {
 
     didMount = () => {
         const {getDashSub, getDashAssociation, getAssoMembers} = this.props;
-        const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
+        const {MyAccountID} = this.props.userReducer;
+        let SelectedAssociationID=this.props.assId
         const {oyeURL} = this.props.oyespaceReducer;
         // this.props.updateApproveAdmin([]);
 
@@ -329,6 +330,7 @@ class Dashboard extends React.Component {
         } = this.props;
         const {MyAccountID, SelectedAssociationID} = this.props.userReducer;
         const {oyeURL} = this.props.oyespaceReducer;
+    
 
         getDashUnits(associationid[index].id, oyeURL, notifications, MyAccountID);
 
@@ -859,7 +861,7 @@ const mapStateToProps = state => {
         datasource: state.DashboardReducer.datasource,
         dropdown: state.DashboardReducer.dropdown,
         dropdown1: state.DashboardReducer.dropdown1,
-        associationid: state.DashboardReducer.associationid,
+        associationid: state.DashboardReducer.assId,
         residentList: state.DashboardReducer.residentList,
         sold: state.DashboardReducer.sold,
         unsold: state.DashboardReducer.unsold,
@@ -871,8 +873,11 @@ const mapStateToProps = state => {
         // Oyespace variables and user variables
         MyFirstName: state.UserReducer.MyFirstName,
         MyAccountID: state.UserReducer.MyAccountID,
-        SelectedAssociationID: state.UserReducer.SelectedAssociationID,
+        SelectedAssociationID: state.DashboardReducer.assId,
         userReducer: state.UserReducer,
+
+        // assId:state.DashboardReducer.assId ,
+   // uniID: state.DashboardReducer.uniID,
 
         // Oyespace urls
         oyeURL: state.OyespaceReducer.oyeURL,

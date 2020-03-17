@@ -187,8 +187,8 @@ const Style = StyleSheet.create({
   threeBtnStyle: {
     // borderColor: "gray",
     // borderWidth: hp("0.03%"),
-    width: hp('3%'),
-    height: hp('3%'),
+    width: hp('5%'),
+    height: hp('5%'),
     justifyContent: 'center',
     marginVertical:Platform.OS==='ios'?4:1,
     alignItems: 'center'

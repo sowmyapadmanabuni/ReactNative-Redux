@@ -60,7 +60,7 @@ class AddVehicle extends Component {
 
     componentWillMount() {
         this.getUnitDetail();
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID);
+        base.utils.validate.checkSubscription(this.props.assId);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -542,6 +542,8 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 };
 

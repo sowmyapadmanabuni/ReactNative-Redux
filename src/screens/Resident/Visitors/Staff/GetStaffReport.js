@@ -65,7 +65,7 @@ class GetStaffReport extends React.Component {
     }
 
     componentWillMount() {
-        base.utils.validate.checkSubscription(this.props.userReducer.SelectedAssociationID)
+        base.utils.validate.checkSubscription(this.props.assId)
         this.getTheReport(0, this.props);
 
         if (Platform.OS === 'android') {
@@ -170,7 +170,7 @@ class GetStaffReport extends React.Component {
         let self = this;
         console.log('Get Date', this.props.staffReducer, this.props.userReducer);
         let input = {
-            "ASAssnID": this.props.userReducer.SelectedAssociationID,
+            "ASAssnID": this.props.assId,
             "WKWorkID": this.props.staffReducer.staffId.toString(),
             "FromDate": this.props.staffReducer.startDate,
             "ToDate": this.props.staffReducer.endDate,
@@ -457,7 +457,9 @@ const mapStateToProps = state => {
         userReducer: state.UserReducer,
         staffReducer: state.StaffReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
-        dashBoardReducer: state.DashboardReducer
+        dashBoardReducer: state.DashboardReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 };
 
