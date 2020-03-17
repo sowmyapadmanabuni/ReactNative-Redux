@@ -1191,7 +1191,6 @@ class NotificationScreen extends PureComponent {
           }
         )
         .then(response => {
-            console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@',response)
           let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
 
           axios
@@ -1263,7 +1262,6 @@ class NotificationScreen extends PureComponent {
                 }
               )
                 .then(response => response.json())
-                console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@111111',response)
                 .then(responseJson => {
                   fetch(
                     `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
@@ -1278,7 +1276,6 @@ class NotificationScreen extends PureComponent {
                     }
                   )
                     .then(response => response.json())
-                    console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@22222',response)
                     .then(responseJson_2 => {
                       console.log(JSON.stringify(UpdateTenant));
                       console.log(responseJson_2);
@@ -1302,13 +1299,11 @@ class NotificationScreen extends PureComponent {
                       )
                         .then(response => {
                           response.json();
-                            console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@33333',response)
-                          console.log('Response', response);
+                                  console.log('Response', response);
                         })
                         .then(responseJson_3 => {
                           console.log(item.ntid, 'ntid');
                           console.log('NTJoinStat');
-                            console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@44444',response)
                           axios
                             .post(
                               `http://${this.props.oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,

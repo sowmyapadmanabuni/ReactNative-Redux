@@ -605,7 +605,7 @@ class Dashboard extends React.Component {
         let receivedData = snapshot.val();
         console.log("Received Data in dashboard:", receivedData);
         if (receivedData !== null) {
-          console.log("Update Notification List Now")
+          console.log("Update Notification List Now1111")
           self.updateDashboard();
         }
       })
@@ -627,10 +627,15 @@ class Dashboard extends React.Component {
   }
 
   updateDashboard() {
-    let self = this;
+   
     console.log("Update Dashboard Changes if any------------------------------------>>>>>>>>>>>")
+    const { fetchAssociationByAccountId }=this.props
+    fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
+      this.onAssociationChange(this.state.dropdownIndex);
+    });
+    let self = this;
     self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
-  }
+     }
 
   async getVehicleList() {
     let self = this;
