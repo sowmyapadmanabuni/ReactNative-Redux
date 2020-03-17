@@ -120,37 +120,37 @@ class NotificationScreen extends PureComponent {
         this.listenToFirebase()
         this.setState({
             userRole: this.props.dashBoardReducer.role,
-            isLoading: true
+            isLoading: false
         })
 
         if (Platform.OS != 'ios') {
             BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         }
 
-        this.props.getNotifications(this.props.oyeURL,this.props.MyAccountID)
+       // this.props.getNotifications(this.props.oyeURL,this.props.MyAccountID)
 
 
 
-        axios
-            .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-                }
-            })
-            .then(res => {
-                this.setState({ currentTime: res.data.data.currentDateTime,isLoading:false }, () => {
+        // axios
+        //     .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+        //         }
+        //     })
+        //     .then(res => {
+        //         this.setState({ currentTime: res.data.data.currentDateTime,isLoading:false }, () => {
 
 
-                  //  this.segregateNotification();
+        //           //  this.segregateNotification();
 
-                });
-            })
-            .catch(error => {
-                this.setState({ currentTime: 'failed' }, () => {
-                 //   this.segregateNotification();
-                });
-            });
+        //         });
+        //     })
+        //     .catch(error => {
+        //         this.setState({ currentTime: 'failed' }, () => {
+        //          //   this.segregateNotification();
+        //         });
+        //     });
     }
 
     listenToFirebase() {
@@ -1150,7 +1150,7 @@ class NotificationScreen extends PureComponent {
     };
 
     rejectModal(details) {
-        console.log('DETAILS@@@@@@@@@@@', details)
+        console.log('DETAILS details');
         this.setState({
             isModalOpen1: true,
             detailsToReject: details

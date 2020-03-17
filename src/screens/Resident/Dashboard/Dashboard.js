@@ -115,7 +115,8 @@ class Dashboard extends React.Component {
         self.props.getNotifications(oyeURL, MyAccountID);
         self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
-        self.setState({isLoading:false})
+        self.setState({isLoading:false});
+        self.getPopUpNotifications()
       }
     })
 
@@ -135,12 +136,30 @@ class Dashboard extends React.Component {
   }
 
 
+  async getPopUpNotifications(){
+    let self = this;
+    const { MyAccountID } = self.props.userReducer;
+
+    let options = {
+      method:"get",
+      url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
+      headers:{
+        "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
+      }
+    }
+
+    let responseData = await axios(options);
+
+    console.log("Received Data:",responseData);
+  }
+
+
   
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     this.backButtonListener.remove();
-    this.focusListener.remove();
+   // this.focusListener.remove();
   }
 
   handleBackButtonClick() {
@@ -426,7 +445,7 @@ class Dashboard extends React.Component {
             console.log('Data:',data);
             
             firebase.notifications().removeAllDeliveredNotifications().then((response)=>{
-              console.log('Removed Data:',JSON.parse(response));
+              console.log('Removed 7Data:',JSON.parse(response));
             });
             
           })

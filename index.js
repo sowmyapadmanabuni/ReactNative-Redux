@@ -1,6 +1,6 @@
 /** @format */
 import React, { Component } from 'react';
-import { AppRegistry, AsyncStorage } from 'react-native';
+import { AppRegistry, AsyncStorage, AppState } from 'react-native';
 import { Provider } from 'react-redux';
 import App from './App';
 import store from './src/store';
@@ -35,17 +35,44 @@ Crashlytics.setString("version", "Production");
 
 
 class RootApp extends Component {
-  async componentWillUpdate() {
-    let data = await JSON.parse(AsyncStorage.getItem('isSOSUpdatePending'));
-    console.log('isSOSUpdatePending:', data);
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      appState: AppState.currentState,
+    }
   }
+
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _handleAppStateChange = (nextAppState) => {
+    console.log('App has come to the:',nextAppState);
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      console.log('App has come to the foreground!');
+    }else{
+      console.log('App has come to the background!');
+    }
+    this.setState({appState: nextAppState});
+  };
+
+  // async componentWillUpdate() {
+  //   try{}
+  //   let data = await JSON.parse(AsyncStorage.getItem('isSOSUpdatePending'));
+  //   console.log('isSOSUpdatePending:', data);
+  // }
 
   render() {
     $.logTitle('O Y E S P A C E - R E S I D E N T');
     return (
       <Provider store={store}>
         <CheckInternet />
-        <NotificationPopUp/>
+        {/* <NotificationPopUp /> */}
         <StatusBarPlaceHolder />
         <App />
         {/*
