@@ -1133,29 +1133,29 @@ class NotificationScreen extends PureComponent {
     approve(item) {
         const { oyeURL, champBaseURL } = this.props;
         console.log('Item in approve:', item);
-        let unitPath = `syncdashboard/isUnitRefreshing/${item.asAssnID}/${item.sbUnitID}`;
-        let associationPath = `syncdashboard/isAssociationRefreshing/${item.asAssnID}`;
-        let requesterPath = `syncdashboard/isMemberRefreshing/${item.sbMemID}`;
+        // let unitPath = `syncdashboard/isUnitRefreshing/${item.asAssnID}/${item.sbUnitID}`;
+        // let associationPath = `syncdashboard/isAssociationRefreshing/${item.asAssnID}`;
+        // let requesterPath = `syncdashboard/isMemberRefreshing/${item.sbMemID}`;
 
-        let isUnitNotificationUpdating = 0;
-        let isAssocNotificationUpdating = 0;
-        let isMemberRefreshing = 0;
+        // let isUnitNotificationUpdating = 0;
+        // let isAssocNotificationUpdating = 0;
+        // let isMemberRefreshing = 0;
 
-         fb.database().ref(associationPath).set({
-            isAssocNotificationUpdating
-        }).then((data) => {
-            console.log('Data:', data);
-        }).catch(error => {
-            console.log("Error:", error);
-        })
+        //  fb.database().ref(associationPath).set({
+        //     isAssocNotificationUpdating
+        // }).then((data) => {
+        //     console.log('Data:', data);
+        // }).catch(error => {
+        //     console.log("Error:", error);
+        // })
 
-        fb.database().ref(requesterPath).set({
-            isMemberRefreshing
-        }).then((data) => {
-            console.log('Data:', data);
-        }).catch(error => {
-            console.log("Error:", error);
-        })
+        // fb.database().ref(requesterPath).set({
+        //     isMemberRefreshing
+        // }).then((data) => {
+        //     console.log('Data:', data);
+        // }).catch(error => {
+        //     console.log("Error:", error);
+        // })
 
         this.approve1(item)
     }
@@ -1263,7 +1263,6 @@ class NotificationScreen extends PureComponent {
                 }
               )
                 .then(response => response.json())
-                console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@111111',response)
                 .then(responseJson => {
                   fetch(
                     `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
@@ -1278,7 +1277,6 @@ class NotificationScreen extends PureComponent {
                     }
                   )
                     .then(response => response.json())
-                    console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@22222',response)
                     .then(responseJson_2 => {
                       console.log(JSON.stringify(UpdateTenant));
                       console.log(responseJson_2);
@@ -1334,7 +1332,29 @@ class NotificationScreen extends PureComponent {
                                 loading: false,
                                 date: StatusUpdate.NTStatDesc
                               });
-
+                              let unitPath = `syncdashboard/isUnitRefreshing/${item.asAssnID}/${item.sbUnitID}`;
+                              let associationPath = `syncdashboard/isAssociationRefreshing/${item.asAssnID}`;
+                              let requesterPath = `syncdashboard/isMemberRefreshing/${item.sbMemID}`;
+                      
+                              let isUnitNotificationUpdating = 0;
+                              let isAssocNotificationUpdating = 0;
+                              let isMemberRefreshing = 0;
+                      
+                               fb.database().ref(associationPath).set({
+                                  isAssocNotificationUpdating
+                              }).then((data) => {
+                                  console.log('Data:', data);
+                              }).catch(error => {
+                                  console.log("Error:", error);
+                              })
+                      
+                              fb.database().ref(requesterPath).set({
+                                  isMemberRefreshing
+                              }).then((data) => {
+                                  console.log('Data:', data);
+                              }).catch(error => {
+                                  console.log("Error:", error);
+                              })
                               setTimeout(() => {
                                 this.props.navigation.navigate('ResDashBoard');
                               }, 300);

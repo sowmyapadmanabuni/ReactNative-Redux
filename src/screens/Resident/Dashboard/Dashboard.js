@@ -629,6 +629,7 @@ class Dashboard extends React.Component {
   updateDashboard() {
     let self = this;
     console.log("Update Dashboard Changes if any------------------------------------>>>>>>>>>>>")
+    self.props.fetchAssociationByAccountId(self.props.oyeURL,self.props.MyAccountID)
     self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
   }
 
