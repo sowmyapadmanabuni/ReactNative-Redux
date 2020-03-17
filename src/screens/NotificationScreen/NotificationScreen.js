@@ -1238,17 +1238,18 @@ class NotificationScreen extends PureComponent {
                   ' association as ' +
                   roleName +
                   ' has been approved',
-                'resident_user',
-                'resident_user',
+                  item.sbUnitID,
+                  item.sbMemID,
                 item.sbSubID,
-                'resident_user',
-                'resident_user',
-                'resident_user',
+                item.sbRoleID,
+                item.asAsnName,
+                item.mrRolName,
                 'resident_user',
                 'resident_user',
                 false,
-                this.props.MyAccountID
-              );
+                this.props.MyAccountID,
+                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber
+               );
 
               fetch(
                 `${this.props.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
@@ -1451,17 +1452,18 @@ class NotificationScreen extends PureComponent {
                                         ' association as ' +
                                         roleName +
                                         ' has been declined',
-                                        'resident_user',
-                                        'resident_user',
-                                        item.sbSubID,
-                                        'resident_user',
-                                        'resident_user',
-                                        'resident_user',
-                                        'resident_user',
-                                        'resident_user',
+                                        item.sbUnitID,
+                                        item.sbMemID,
+                                      item.sbSubID,
+                                      item.sbRoleID,
+                                      item.asAsnName,
+                                      item.mrRolName, 
+                                        'resident_user', 
+                                        'resident_user', 
                                         false,
-                                        this.props.MyAccountID
-                                    );
+                                        this.props.MyAccountID,
+                                        this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber
+                                         );
 
                                     axios
                                         .post(

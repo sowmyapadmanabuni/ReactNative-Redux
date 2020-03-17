@@ -303,7 +303,8 @@ class UnitList extends Component {
                                                                 occupancyDate,
                                                                 soldDate,
                                                                 false,
-                                                                this.props.MyAccountID
+                                                                this.props.MyAccountID,
+                                                                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber
                                                             );
                                                         }
                                                     });
@@ -1384,7 +1385,8 @@ const mapStateToProps = state => {
         champBaseURL: state.OyespaceReducer.champBaseURL,
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,
-        memberList: state.DashboardReducer.memberList
+        memberList: state.DashboardReducer.memberList,
+        userReducer:state.UserReducer
     };
 };
 

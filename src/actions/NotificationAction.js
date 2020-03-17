@@ -999,6 +999,7 @@ export const createUserNotification = (
   soldDate,
   refresh,
   senderId,
+  mobileNumber,
   announcement
 ) => {
   return dispatch => {
@@ -1029,7 +1030,8 @@ export const createUserNotification = (
           NTDUpdated: formatdate,
           UNOcSDate: occupancyDate,
           UNSldDate: soldDate,
-          ACNotifyID: senderId
+          ACNotifyID: senderId,
+          NTMobile :mobileNumber
         },
         'join_request_body'
       );
@@ -1099,7 +1101,8 @@ export const createUserNotification = (
             NTDUpdated: formatdate,
             UNOcSDate: occupancyDate,
             UNSldDate: soldDate,
-            ACNotifyID: senderId
+            ACNotifyID: senderId,
+            NTMobile :mobileNumber
           },
           {
             headers: headers

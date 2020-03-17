@@ -780,8 +780,9 @@ class Announcement extends Component {
                     'announcment',
                     false,
                     this.props.userReducer.MyAccountID,
-                    announcement
-                  );
+                    this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber,
+                    announcement, 
+                    );
                 });
                 this.state = {
                   relativeImage1: '',
