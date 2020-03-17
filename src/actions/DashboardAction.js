@@ -15,7 +15,8 @@ import {
   DASHBOARD_NO_UNITS,
   UPDATE_USER_INFO,
   USER_ROLE,
-  DASHBOARD_ASSOCIATION_SYNC
+  DASHBOARD_ASSOCIATION_SYNC,
+  IS_NOTIFICATION
 } from './types';
 import axios from 'axios';
 import _ from 'lodash';
@@ -929,6 +930,16 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
       })
   }
 };
+
+
+export const updateNotificationData = (payload) => {
+  return (dispatch) => {
+    dispatch({
+      type:IS_NOTIFICATION,
+      payload:payload
+    })
+  }
+}
 
 
 // value: data.asAsnName,

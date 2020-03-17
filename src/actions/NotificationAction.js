@@ -93,6 +93,8 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         let userImage=responseJson.data.accountImage.acImgName;
         let activeNotifications = [];
 
+        
+
         _.forEach(resData, function(value) {
           activeNotifications.push({ ...value, read: false });
         });
@@ -118,7 +120,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             announcement.push(data);
           }
         });
-        console.log('Notification@@@@@@:1111', responseJson.data,joinNotif,joinStatNotif,gateAppNotif,announcement);
+        
 
           for(let i=0;i<joinNotif.length;i++){
               joinNotif[i].userImage=userImage
@@ -136,7 +138,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
           ...announcement,
         ];
 
-        console.log('Notification@@@@@@:1111', allNotifs,allNotifs.length);
+        
 
        
         const sorted = [...allNotifs];
@@ -205,7 +207,7 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
             payload:adminNotification
           })
 
-          console.log("Notification@@@@@@:1111 COunt:",allNotifs,unitNotification,adminNotification);
+          
 
         Promise.all(promises).then(function(results) {
           let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();

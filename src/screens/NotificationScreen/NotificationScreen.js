@@ -1066,7 +1066,7 @@ class NotificationScreen extends PureComponent {
    
 
     rejectModal(details) {
-        console.log('DETAILS@@@@@@@@@@@', details)
+        console.log('DETAILS details');
         this.setState({
             isModalOpen1: true,
             detailsToReject: details

@@ -118,6 +118,8 @@ target 'OyeSpace' do
 
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
 end
   
 post_install do |installer|

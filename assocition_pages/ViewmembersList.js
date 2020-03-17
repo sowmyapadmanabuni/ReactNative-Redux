@@ -170,7 +170,7 @@ class Resident extends React.Component {
     }
 
     async updateRolesFRTDB(user, roleId) {
-
+        console.log("KSKLSLJC:",user,roleId)
         var dbref = base.services.frtdbservice.ref('rolechange/' + user.acAccntID);
         dbref.set({
             associationID: user.asAssnID,

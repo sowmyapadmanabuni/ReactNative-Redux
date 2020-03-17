@@ -16,7 +16,26 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import ProgressLoader from 'rn-progress-loader';
-import { fetchAssociationByAccountId, updateUnitDropdown, createNotification, createUserNotification, getAssoMembers, getDashAssociation, getDashAssoSync, getDashSub, getDashUnits, getNotifications, newNotifInstance, refreshNotifications, updateApproveAdmin, updateDropDownIndex, updateIdDashboard, updateJoinedAssociation, updateSelectedDropDown, updateUserInfo, updateuserRole } from '../../../actions';
+import {fetchAssociationByAccountId,
+        updateNotificationData,
+        updateUnitDropdown, 
+        createNotification, 
+        createUserNotification,
+        getAssoMembers, 
+        getDashAssociation,
+        getDashAssoSync, 
+        getDashSub, 
+        getDashUnits,
+        getNotifications, 
+        newNotifInstance, 
+        refreshNotifications, 
+        updateApproveAdmin, 
+        updateDropDownIndex, 
+        updateIdDashboard, 
+        updateJoinedAssociation, 
+        updateSelectedDropDown, 
+        updateUserInfo, 
+        updateuserRole } from '../../../actions';
 import IcoMoonConfig from '../../../assets/selection.json';
 import base from '../../../base';
 import CardView from '../../../components/cardView/CardView';
@@ -94,15 +113,17 @@ class Dashboard extends React.Component {
     let self = this;
     self.setState({isLoading:true})
     self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
-      console.log('HERE DATA TO DISPLAY',data)
+      console.log('HERE DATA TO DISPLAY',data,self.props)
       if(data){
+        self.requestNotifPermission();
         self.myProfileNet();
         self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
         self.getVehicleList();
-        self.requestNotifPermission();
         self.listenToFirebase(self.props.dropdown);
-        self.setState({isLoading:false})
+        self.setState({isLoading:false});
+        self.getPopUpNotifications();
+        self.createTopicListener(self.props.dropdown,true)
       }
       else{
         self.myProfileNet();
@@ -112,34 +133,31 @@ class Dashboard extends React.Component {
       }
     })
 
-    console.log("this.props.dropdown.length:111111111",this.props.dropdown.length,this.props.dropdown)
+    console.log("this.props.dropdown.length:111111111",self.props.dropdown.length,self.props.dropdown)
 
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = self.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-
-   
       const unsubscribe = NetInfo.addEventListener(state => {
         console.log("Connection type", state.type);
         console.log("Is connected?", state.isConnected);
-        this.setState({
+        self.setState({
             isConnected:state.isConnected
         })
     });
   }
 
 
-
-  async fetchAssociationByAccountId(oyeURL,accountId){
+  async getPopUpNotifications(){
     let self = this;
-    const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = self.props;
+    const { MyAccountID } = self.props.userReducer;
+
     let options = {
-      method:'get',
-      url:`https://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${accountId}`,
+      method:"get",
+      url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
       headers:{
-            'Content-Type': 'application/json',
-            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+        "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
     };
 
@@ -232,20 +250,17 @@ class Dashboard extends React.Component {
     //   value: sortedAssociationData[0].associationId
     // });
 
-    }
-    )
-    .catch(error=>{
-      console.log('Error:',error)
-    })
-  }
+    console.log("Received Data:",responseData);
+  })
+}
+
 
   
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    //NetInfo.removeEventListener(this.state, this.handleConnectivityChange);
     this.backButtonListener.remove();
-    this.focusListener.remove();
+   // this.focusListener.remove();
   }
 
   handleBackButtonClick() {
@@ -299,7 +314,8 @@ class Dashboard extends React.Component {
 
     if (count === 0 && isNotificationClicked) {
       console.log("COMING HERE")
-      this.props.navigation.navigate('NotificationScreen');
+      const {updateNotificationData} = this.props;
+      updateNotificationData(true);
     }
   }
 
@@ -327,7 +343,6 @@ class Dashboard extends React.Component {
           self.props.fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
             self.onAssociationChange(self.state.dropdownIndex);
           });
-          
         } else {
           counter = 1;
         }
@@ -373,12 +388,53 @@ class Dashboard extends React.Component {
       oyeURL,
       dropdown
     } = this.props;
-    console.log("Dashborad reducer Data in Request Notification Permission:", this.props.dashBoardReducer);
+    console.log("Dashboard reducer Data in Request Notification Permission:", this.props.dashBoardReducer, receiveNotifications);
+    dropdown.map(units => {
+      if (receiveNotifications) {
+        console.log("Listening to firebase:",units)
+        let unitArr = units.unit;
+        for(let i in unitArr){
+          console.log("Listening to firebase Unit:",unitArr[i]);
+          firebase
+          .messaging()
+          .subscribeToTopic(
+            '' + MyAccountID + unitArr[i].unUnitID + 'usernotif'
+          );
+        }
+        console.log('date_asAssnID', units.associationId);
+        console.log("UNSUBSCRIBING_FROM: " + MyAccountID + 'admin')
+        firebase
+          .messaging()
+          .unsubscribeFromTopic(MyAccountID + 'admin');
+        firebase
+          .messaging()
+          .unsubscribeFromTopic('14948admin');
+        firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
+
+        firebase
+          .messaging()
+          .subscribeToTopic(units.associationId + 'Announcement');
+
+        if (units.roleId === 2 || units.roleId === 3) {
+        } else if (units.roleId === 1) {
+          console.log("Listening to firebase Subscribing to:",units.associationId+'admin')
+          firebase.messaging().subscribeToTopic(units.associationId + 'admin');
+          // if (units.meIsActive) {
+            
+          //   firebase.messaging().subscribeToTopic(units.associationId + 'admin');
+          //  }
+        }
+      } else if (!receiveNotifications) {
+        firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
+        firebase.messaging().unsubscribeFromTopic(units.associationId + 'admin');
+      }
+    });
     firebase
       .messaging()
       .hasPermission()
       .then(enabled => {
         if (enabled) {
+          console.log("Listening to firebase:Listening to firebase:",enabled,receiveNotifications)
           if (receiveNotifications) {
             this.listenForNotif();
           }
@@ -396,49 +452,7 @@ class Dashboard extends React.Component {
         }
       });
 
-          dropdown.map(units => {
-          if (receiveNotifications) {
-            console.log("Listening to firebase:",units)
-            let unitArr = units.unit;
-            for(let i in unitArr){
-              console.log("Listening to firebase Unit:",unitArr[i]);
-              firebase
-              .messaging()
-              .subscribeToTopic(
-                '' + MyAccountID + unitArr[i].unUnitID + 'usernotif'
-              );
-            }
-            console.log('date_asAssnID', units.associationId);
-            console.log("UNSUBSCRIBING_FROM: " + MyAccountID + 'admin')
-            firebase
-              .messaging()
-              .unsubscribeFromTopic(MyAccountID + 'admin');
-            firebase
-              .messaging()
-              .unsubscribeFromTopic('14948admin');
-            firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
-
-            firebase
-              .messaging()
-              .subscribeToTopic(units.associationId + 'Announcement');
-
-            if (units.roleId === 2 || units.roleId === 3) {
-            } else if (units.mrmRoleID === 1) {
-              firebase.messaging().subscribeToTopic(units.associationId + 'admin');
-              if (units.meIsActive) {
-                
-                firebase.messaging().subscribeToTopic(units.associationId + 'admin');
-               } else {
-                firebase
-                    .messaging()
-                    .unsubscribeFromTopic(units.associationId + 'admin');
-              }
-            }
-          } else if (!receiveNotifications) {
-            firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
-            firebase.messaging().unsubscribeFromTopic(units.associationId + 'admin');
-          }
-        });
+         
         this.roleCheckForAdmin()
   };
 
@@ -481,6 +495,8 @@ class Dashboard extends React.Component {
         .android.setPriority(firebase.notifications.Android.Priority.Max);
 
       firebase.notifications().displayNotification(notificationBuild);
+      // const {updateNotificationData} = this.props;
+      // updateNotificationData(true);
       this.setState({ foregroundNotif: notification._data });
     } catch (e) {
       console.log('FAILED_NOTIF');
@@ -488,8 +504,8 @@ class Dashboard extends React.Component {
   };
 
 
-  listenForNotif = () => {
-    console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222')
+  listenForNotif = async () => {
+    console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222',Notification.permission,this.notificationDisplayedListener);
 
     if (
       this.notificationDisplayedListener == undefined ||
@@ -500,11 +516,13 @@ class Dashboard extends React.Component {
       this.notificationDisplayedListener = firebase
         .notifications()
         .onNotificationDisplayed(notification => {
-          // console.log(notification)
+           console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222",notification);
           // console.log('____________')
           // Process your notification as required
           // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
         });
+
+        console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222:",this.notificationDisplayedListener);
 
       this.notificationListener = firebase
         .notifications()
@@ -525,12 +543,13 @@ class Dashboard extends React.Component {
           //this.props.refreshNotifications(oyeURL, MyAccountID);
           this.props.getNotifications(oyeURL, MyAccountID);
           this.showLocalNotification(notification);
-        });
+        });  
 
       firebase.notifications().onNotificationOpened(notificationOpen => {
         const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
         const { oyeURL } = this.props.oyespaceReducer;
         let details = notificationOpen.notification._data;
+        console.log("NOTIFICATION@@@@_______12344", notificationOpen);
         if (notificationOpen.notification._data.admin === 'true') {
           if (notificationOpen.action) {
           }
@@ -565,7 +584,10 @@ class Dashboard extends React.Component {
   };
 
   async roleCheckForAdmin(index) {
-    this.checkUserRole();
+    let self = this;
+    console.log("Data:",self.props,self.props.dropdown)
+    let data = self.props.dropdown[0];
+    self.checkUserRole(data);
     
   }
 
@@ -914,6 +936,8 @@ try{
     );
     console.log('COMINGHERE_FirstCall', response);
     const { updateUserInfo } = this.props;
+    
+
     updateUserInfo({
       prop: 'userData',
       value: response
@@ -930,6 +954,8 @@ try{
     });
     
   };
+
+
   logMeasurement = async (id, phase, actualDuration, baseDuration) => {
     // see output during DEV
     if (__DEV__) console.log({ id, phase, actualDuration, baseDuration });
@@ -937,6 +963,7 @@ try{
 
 
   createTopicListener(associationList, _switch) {
+    console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222:",associationList,_switch,firebase.messaging().hasPermission())
     if (associationList != undefined && associationList.length > 0) {
       try {
         firebase.messaging().hasPermission().
@@ -1933,6 +1960,7 @@ export default connect(
     updateuserRole,
     getDashAssoSync,
     fetchAssociationByAccountId,
-    updateUnitDropdown
+    updateUnitDropdown,
+    updateNotificationData
   }
 )(Dashboard);
