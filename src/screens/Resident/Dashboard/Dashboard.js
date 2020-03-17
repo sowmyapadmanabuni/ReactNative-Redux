@@ -422,15 +422,24 @@ class Dashboard extends React.Component {
               .messaging()
               .subscribeToTopic(units.associationId + 'Announcement');
 
-            if (units.roleId === 2 || units.roleId === 3) {;
+            if (units.roleId === 2 || units.roleId === 3) {
             } else if (units.mrmRoleID === 1) {
               firebase.messaging().subscribeToTopic(units.associationId + 'admin');
+              if (units.meIsActive) {
+                
+                firebase.messaging().subscribeToTopic(units.associationId + 'admin');
+               } else {
+                firebase
+                    .messaging()
+                    .unsubscribeFromTopic(units.associationId + 'admin');
+              }
             }
           } else if (!receiveNotifications) {
             firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
             firebase.messaging().unsubscribeFromTopic(units.associationId + 'admin');
           }
         });
+        this.roleCheckForAdmin()
   };
 
   showLocalNotification = notification => {
@@ -557,78 +566,7 @@ class Dashboard extends React.Component {
 
   async roleCheckForAdmin(index) {
     this.checkUserRole();
-    // const { dropdown, dropdown1 } = this.props;
-    // console.log("this.state.assocId ", this.state.assocId);
-    // console.log('Check unit and Association available@@@', dropdown, dropdown1);
-    // try {
-    //   let responseJson = await base.services.OyeLivingApi.getUnitListByAssoc(
-    //     this.state.assocId
-    //   );
-    //   let role = '';
-    //   let isAdminFound = false;
-    //   console.log('roleCheckForAdmin_', responseJson);
-
-    //   for (let i = 0; i < responseJson.data.members.length; i++) {
-    //     let assnId = '' + responseJson.data.members[i].asAssnID;
-    //     assnId = assnId.trim() + 'admin';
-
-    //     if (
-    //       responseJson.data.members[i].meIsActive &&
-    //       this.props.userReducer.MyAccountID ===
-    //       responseJson.data.members[i].acAccntID &&
-    //       parseInt(this.state.assocId) === responseJson.data.members[i].asAssnID
-    //     ) {
-    //       console.log(
-    //         'Id_eq',
-    //         this.props.userReducer.MyAccountID,
-    //         responseJson.data.members[i].acAccntID,
-    //         responseJson.data.members[i].mrmRoleID
-    //       );
-    //       role = responseJson.data.members[i].mrmRoleID;
-    //       if (role === 1) {
-    //         isAdminFound = true;
-    //       }
-    //     }
-    //   }
-    //   let assnId = '' + this.state.assocId + 'admin';
-    //   if (isAdminFound) {
-    //     role = 1;
-    //     console.log(assnId);
-    //     console.log('SUBSCRIBED_TO_', assnId);
-
-    //     await base.utils.storage.storeData('ADMIN_NOTIF' + assnId, assnId);
-    //     firebase.messaging().subscribeToTopic(assnId);
-    //   } else {
-    //     console.log('UNSUBSCRIBED_FROM_', assnId);
-    //     await base.utils.storage.removeData('ADMIN_NOTIF' + assnId);
-    //     firebase.messaging().unsubscribeFromTopic(assnId);
-    //   }
-
-    //   console.log(role, 'role');
-    //   this.setState(
-    //     {
-    //       role: role
-    //     },
-    //     () => {
-    //       const { updateuserRole } = this.props;
-    //       console.log('Role123456:', updateuserRole);
-    //       updateuserRole({
-    //         prop: 'role',
-    //         value: role
-    //       });
-    //       const { updateIdDashboard } = this.props;
-    //       updateIdDashboard({
-    //         prop: 'roleId',
-    //         value: role
-    //       });
-    //       console.log('ROLE_UPDATE', role);
-    //     }
-    //   );
-    //   this.checkUnitIsThere();
-
-    // } catch (err) {
-    //   console.log('ROLECHECK_ERROR', err);
-    // }
+    
   }
 
 

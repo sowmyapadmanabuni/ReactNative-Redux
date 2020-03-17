@@ -621,7 +621,7 @@ class NotificationScreen extends PureComponent {
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
                                     </Text>
                                 </View>
-                               { item.ntType !=="Join_Status"?
+                               { item.ntJoinStat !== 'Accepted' ||  item.ntJoinStat !== 'Rejected'?
                                     <View style={{
                                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                         marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
@@ -639,7 +639,7 @@ class NotificationScreen extends PureComponent {
                                                 <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Approve</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() =>
-                                                this.approve(item)
+                                                this.reject(item)
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
                                                     style={{ width: 30, height: 30 }}
@@ -1179,216 +1179,202 @@ class NotificationScreen extends PureComponent {
             'Content-Type': 'application/json'
         };
         axios
-            .get(
-                `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${item.ntid}`,
+        .post(
+          this.props.champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate',
+          {
+            MRMRoleID: item.sbRoleID,
+            MEMemID: item.sbMemID,
+            UNUnitID: item.sbUnitID
+          },
+          {
+            headers: headers
+          }
+        )
+        .then(response => {
+            console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@',response)
+          let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
+
+          axios
+            .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
+              sbSubID: item.sbSubID,
+              ntTitle: 'Request Approved',
+              ntDesc:
+                'Your request to join ' +
+                item.mrRolName +
+                ' ' +
+                ' unit in ' +
+                item.asAsnName +
+                ' association as ' +
+                roleName +
+                ' has been approved',
+              ntType: 'Join_Status',
+              associationID: item.asAssnID
+            })
+            .then(() => {
+             let DateUnit = {
+                MemberID: item.sbMemID,
+                UnitID: item.sbUnitID,
+                MemberRoleID: item.sbRoleID,
+                UNSldDate: item.unSldDate,
+                UNOcSDate: item.unOcSDate
+              };
+
+             let UpdateTenant = {
+                MEMemID: item.sbMemID,
+                UNUnitID: item.sbUnitID,
+                MRMRoleID: item.sbRoleID
+              };
+
+              this.props.createUserNotification(
+                'Join_Status',
+                this.props.oyeURL,
+                item.acNotifyID,
+                1,
+                'Your request to join ' +
+                  item.mrRolName +
+                  ' ' +
+                  ' unit in ' +
+                  item.asAsnName +
+                  ' association as ' +
+                  roleName +
+                  ' has been approved',
+                'resident_user',
+                'resident_user',
+                item.sbSubID,
+                'resident_user',
+                'resident_user',
+                'resident_user',
+                'resident_user',
+                'resident_user',
+                false,
+                this.props.MyAccountID
+              );
+
+              fetch(
+                `${this.props.champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
                 {
-                    headers: {
-                        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                        'Content-Type': 'application/json'
-                    }
+                  method: 'POST',
+                  headers: {
+                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(DateUnit)
                 }
-            )
-            .then((response) => {
-                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE',response)
-                axios
-                    .post(
-                        champBaseURL + 'MemberRoleChangeToAdminOwnerUpdate',
+              )
+                .then(response => response.json())
+                console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@111111',response)
+                .then(responseJson => {
+                  fetch(
+                    `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
+                    {
+                      method: 'POST',
+                      headers: {
+                        'X-Champ-APIKey':
+                          '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(UpdateTenant)
+                    }
+                  )
+                    .then(response => response.json())
+                    console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@22222',response)
+                    .then(responseJson_2 => {
+                      console.log(JSON.stringify(UpdateTenant));
+                      console.log(responseJson_2);
+
+                     let StatusUpdate = {
+                        NTID: item.ntid,
+                        NTStatDesc: 'Request Sent'
+                      };
+
+                      fetch(
+                        `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
                         {
-                            MRMRoleID: item.sbRoleID,
-                            MEMemID: item.sbMemID,
-                            UNUnitID: item.sbUnitID
-                        },
-                        {
-                            headers: headers
+                          method: 'POST',
+                          headers: {
+                            'X-OYE247-APIKey':
+                              '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify(StatusUpdate)
                         }
-                    )
-                    .then(response => {
-                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_Changerole',response)
-                        let roleName = item.sbRoleID === 2 ? 'Owner' : 'Tenant';
+                      )
+                        .then(response => {
+                          response.json();
+                            console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@33333',response)
+                          console.log('Response', response);
+                        })
+                        .then(responseJson_3 => {
+                          console.log(item.ntid, 'ntid');
+                          console.log('NTJoinStat');
+                            console.log('JOINREQ_NOTIFI_RESPONSE@@@@@@44444',response)
+                          axios
+                            .post(
+                              `http://${this.props.oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
+                              {
+                                NTID: item.ntid,
+                                NTJoinStat: 'Accepted'
+                              },
+                              {
+                                headers: {
+                                  'X-OYE247-APIKey':
+                                    '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                  'Content-Type': 'application/json'
+                                }
+                              }
+                            )
+                            .then(() => {
+                              console.log('updated suc');
+                              this.props.getNotifications(
+                                this.props.oyeURL,
+                                this.props.MyAccountID
+                              );
+                              this.setState({
+                                loading: false,
+                                date: StatusUpdate.NTStatDesc
+                              });
 
-                        axios
-                            .post(`${CLOUD_FUNCTION_URL}/sendUserNotification`, {
-                                sbSubID: item.sbSubID,
-                                ntTitle: 'Request Approved',
-                                ntDesc:
-                                    'Your request to join ' +
-                                    item.mrRolName +
-                                    ' ' +
-                                    ' unit in ' +
-                                    item.asAsnName +
-                                    ' association as ' +
-                                    roleName +
-                                    ' has been approved',
-                                ntType: 'Join_Status',
-                                associationID: item.asAssnID
-                            })
-                            .then((response) => {
-                                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_CloudResponse',response)
-                                let DateUnit = {
-                                    MemberID: item.sbMemID,
-                                    UnitID: item.sbUnitID,
-                                    MemberRoleID: item.sbRoleID,
-                                    UNSldDate: item.unSldDate,
-                                    UNOcSDate: item.unOcSDate
-                                };
-
-                                let UpdateTenant = {
-                                    MEMemID: item.sbMemID,
-                                    UNUnitID: item.sbUnitID,
-                                    MRMRoleID: item.sbRoleID
-                                };
-
-                                this.props.createUserNotification(
-                                    'Join_Status',
-                                    this.props.oyeURL,
-                                    item.acNotifyID,
-                                    1,
-                                    'Your request to join ' +
-                                    item.mrRolName +
-                                    ' ' +
-                                    ' unit in ' +
-                                    item.asAsnName +
-                                    ' association as ' +
-                                    roleName +
-                                    ' has been approved',
-                                    'resident_user',
-                                    'resident_user',
-                                    item.sbSubID,
-                                    'resident_user',
-                                    'resident_user',
-                                    'resident_user',
-                                    'resident_user',
-                                    'resident_user',
-                                    false,
-                                    this.props.MyAccountID
-                                );
-
-                                fetch(
-                                    `${champBaseURL}Unit/UpdateUnitRoleStatusAndDate`,
-                                    {
-                                        method: 'POST',
-                                        headers: {
-                                            'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body: JSON.stringify(DateUnit)
-                                    }
-                                )
-                                    .then(response => response.json())
-                                    .then(responseJson => {
-                                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_RoleStatusUpdate',responseJson,UpdateTenant)
-                                        fetch(
-                                            `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
-                                            {
-                                                method: 'POST',
-                                                headers: {
-                                                    'X-Champ-APIKey':
-                                                        '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                body: JSON.stringify(UpdateTenant)
-                                            }
-                                        )
-                                            .then(response => response.json())
-                                            .then(responseJson_2 => {
-
-                                                let StatusUpdate = {
-                                                    NTID: item.ntid,
-                                                    NTStatDesc: 'Request Sent'
-                                                    //NTStatDesc: responseJson_2.data.string
-                                                };
-                                                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_MemberActivestate',responseJson_2,StatusUpdate )                                               
-                                                fetch(
-                                                    `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationAcceptanceRejectStatusUpdate`,
-                                                    {
-                                                        method: 'POST',
-                                                        headers: {
-                                                            'X-OYE247-APIKey':
-                                                                '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                                                            'Content-Type': 'application/json'
-                                                        },
-                                                        body: JSON.stringify(StatusUpdate)
-                                                    }
-                                                )
-                                                    .then(response => {
-                                                        response.json();
-                                                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_NotifiStatusupdate', response);
-                                                    })
-                                                    .then(responseJson_3 => {
-                                                        console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_NotifiStatusupdate', responseJson_3);
-
-                                                        axios
-                                                            .post(
-                                                                `http://${this.props.oyeURL}/oyesafe/api/v1/Notification/NotificationJoinStatusUpdate`,
-                                                                {
-                                                                    NTID: item.ntid,
-                                                                    NTJoinStat: 'Accepted'
-                                                                },
-                                                                {
-                                                                    headers: {
-                                                                        'X-OYE247-APIKey':
-                                                                            '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                                                                        'Content-Type': 'application/json'
-                                                                    }
-                                                                }
-                                                            )
-                                                            .then((response) => {
-                                                                console.log('GET THE STATUS OF THE NOTIFICATION ACTIVE_FinalStatus', response);
-                                                                this.props.getNotifications(
-                                                                    this.props.oyeURL,
-                                                                    this.props.MyAccountID
-                                                                );
-                                                                this.setState({
-                                                                    loading: false,
-                                                                    date: StatusUpdate.NTStatDesc
-                                                                });
-
-                                                                setTimeout(() => {
-                                                                    this.props.navigation.navigate('ResDashBoard');
-                                                                }, 300);
-                                                            })
-                                                            .catch(error => {
-                                                                console.log('Join Status', error);
-                                                                Alert.alert('Join Status', error.message);
-                                                                this.setState({
-                                                                    loading: false
-                                                                });
-                                                            });
-                                                    })
-                                                    .catch(error => {
-                                                        console.log('StatusUpdate', error);
-                                                        Alert.alert('StatusUpdate', error.message);
-                                                        this.setState({ loading: false });
-                                                    });
-                                            })
-                                            .catch(error => {
-                                                console.log('Update', error);
-                                                Alert.alert('Update', error.message);
-                                                this.setState({ loading: false });
-                                            });
-                                    })
-                                    .catch(error => {
-                                        console.log('DateUnit', error);
-                                        Alert.alert('DateUnit', error.message);
-                                        this.setState({ loading: false });
-                                    });
+                              setTimeout(() => {
+                                this.props.navigation.navigate('ResDashBoard');
+                              }, 300);
                             })
                             .catch(error => {
-                                console.log('firebase', error);
-                                Alert.alert('firebase', error.message);
-                                this.setState({ loading: false });
+                              console.log('Join Status', error);
+                              Alert.alert('Join Status', error.message);
+                              this.setState({
+                                loading: false
+                              });
                             });
+                        })
+                        .catch(error => {
+                          console.log('StatusUpdate', error);
+                          Alert.alert('StatusUpdate', error.message);
+                          this.setState({ loading: false });
+                        });
                     })
                     .catch(error => {
-                        console.log('MemberRoleChange', error);
-                        Alert.alert('MemberRoleChange', error.message);
-                        this.setState({ loading: false });
+                      console.log('Update', error);
+                      Alert.alert('Update', error.message);
+                      this.setState({ loading: false });
                     });
-            }).catch(error => {
-                console.log("Error:", error);
-
+                })
+                .catch(error => {
+                  console.log('DateUnit', error);
+                  Alert.alert('DateUnit', error.message);
+                  this.setState({ loading: false });
+                });
             })
-        // }
+            .catch(error => {
+              console.log('firebase', error);
+              Alert.alert('firebase', error.message);
+              this.setState({ loading: false });
+            });
+        })
+        .catch(error => {
+          console.log('MemberRoleChange', error);
+          Alert.alert('MemberRoleChange', error.message);
+          this.setState({ loading: false });
+        });
     };
 
     reject = (item, status) => {
