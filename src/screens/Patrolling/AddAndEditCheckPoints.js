@@ -220,7 +220,7 @@ class AddAndEditCheckPoints extends React.Component {
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                navigator.geolocation.getCurrentPosition(
+                Geolocation.getCurrentPosition(
                     (position) => {
                         console.log("Honor ", params);
                         this.getUserLocation(params)

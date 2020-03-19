@@ -17,6 +17,7 @@ import {NavigationEvents} from 'react-navigation';
 import {connect} from 'react-redux';
 import base from '../src/base';
 import {updateIdDashboard} from '../src/actions';
+import axios from 'axios';
 
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../src/assets/selection.json';
@@ -86,6 +87,22 @@ class VehicleList extends Component {
         return true;
     }
 
+     getVehicleList1 = async ()=> {
+        let self = this;
+        console.log('props in vehicle list:', `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByAssocUnitAndAcctID/${this.props.dashBoardReducer.assId}/${this.props.dashBoardReducer.unitID}/${this.props.userReducer.MyAccountID}`);
+        let options = {
+            url:`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByAssocUnitAndAcctID/${this.props.dashBoardReducer.assId}/${this.props.dashBoardReducer.unitID}/${this.props.userReducer.MyAccountID}`,
+            method:'get',
+            headers:{
+                'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
+            }
+        };
+
+        let dataReceived = await axios(options);
+
+        console.log("Data recieved:",dataReceived,`http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByAssocUnitAndAcctID/${this.props.dashBoardReducer.assId}/${this.props.dashBoardReducer.unitID}/${this.props.userReducer.MyAccountID}`);
+    }
+
     getVehicleList = () => {
         console.log('props in vehicle list:', this.props);
         fetch(
@@ -98,7 +115,7 @@ class VehicleList extends Component {
                 }
             }
         )
-            .then(response => response.json())
+            .then(response => {console.log("Respoense:",JSON.parse(response.json())),()=>response.json()})
             .then(responseJson => {
                 console.log('Vehicle List ------', responseJson);
                 this.setState({

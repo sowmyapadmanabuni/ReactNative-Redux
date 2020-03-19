@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-09-30 11:29:48 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-03-09 13:08:11
+ * @Last Modified time: 2020-03-18 12:51:31
  */
 
 
@@ -70,7 +70,7 @@ class PatrolShuffling extends React.Component {
         })
     }
 
-    renderItem = ({ item, index, move, moveEnd, isActive }) => {
+    renderItem = ({ item, index, drag, moveEnd, isActive }) => {
         console.log("SKJCKJDC:", item);
         let data = item;
         console.log("Item:", item.item);
@@ -79,7 +79,7 @@ class PatrolShuffling extends React.Component {
             <TouchableHighlight
                 underlayColor={base.theme.colors.transparent}
                 style={[PatrollingCheckPointsStyles.checkBoxView, { backgroundColor: isActive ? base.theme.colors.primary : base.theme.colors.white }]}
-                onLongPress={move}
+                onLongPress={drag}
                 onPressOut={moveEnd}
             >
                 <View style={PatrollingCheckPointsStyles.checkBoxView}>
@@ -112,13 +112,13 @@ class PatrolShuffling extends React.Component {
                                 style={PatrollingCheckPointsStyles.locationText}>{data.cpgpsPnt}</Text>
                         </View>
                         <View style={PatrollingCheckPointsStyles.locationView}>
-                    <Image
-                            resizeMode={'center'}
-                            style={PatrollingCheckPointsStyles.locationImageStyle}
-                            source={require('../../../icons/checkpoint.png')}
-                        />
-                        <Text style={PatrollingCheckPointsStyles.locationText}>{data.cpcPntAt}</Text>
-                    </View>
+                            <Image
+                                resizeMode={'center'}
+                                style={PatrollingCheckPointsStyles.locationImageStyle}
+                                source={require('../../../icons/checkpoint.png')}
+                            />
+                            <Text style={PatrollingCheckPointsStyles.locationText}>{data.cpcPntAt}</Text>
+                        </View>
                     </View>
                 </View>
 
@@ -250,9 +250,9 @@ class PatrolShuffling extends React.Component {
                     width: hp('15%')
                 }}
                     source={require('../../../icons/swipe.png')} />
-                <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('75'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: 'rgba(192, 192, 192, 0.3)', justifyContent: 'center',alignItem:'center' }}>
-                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white,fontSize: hp('1.8'), }}>You can change the patrolling path by swiping </Text>
-                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white,fontSize: hp('1.8') }}>the checkpoints up and down.</Text>
+                <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('75'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: 'rgba(192, 192, 192, 0.3)', justifyContent: 'center', alignItem: 'center' }}>
+                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white, fontSize: hp('1.8'), }}>You can change the patrolling path by swiping </Text>
+                    <Text style={{ marginTop: hp('0'), alignSelf: 'center', justifySelf: 'center', color: base.theme.colors.white, fontSize: hp('1.8') }}>the checkpoints up and down.</Text>
                 </View>
                 <View style={{ marginTop: hp('2'), height: hp('10'), width: wp('80'), alignSelf: 'center', borderRadius: hp('5'), backgroundColor: '#1AFF0000', justifyContent: 'center', borderColor: "#000000", alignItems: 'center' }}>
                     <Text style={{
@@ -260,7 +260,7 @@ class PatrolShuffling extends React.Component {
                         alignSelf: 'center',
                         justifySelf: 'center',
                         color: base.theme.colors.primary,
-                        fontFamily: base.theme.fonts.medium,fontSize: hp('1.8')
+                        fontFamily: base.theme.fonts.medium, fontSize: hp('1.8')
                     }}>Please make sure that the starting point of patrolling </Text>
                     <Text style={{
                         marginTop: hp('0'),
@@ -269,7 +269,7 @@ class PatrolShuffling extends React.Component {
                         color: base.theme.colors.primary, fontSize: hp('1.8'),
                         fontFamily: base.theme.fonts.medium,
                     }}>is at first and End point of patrolling is at last position in the list </Text>
-                    
+
                 </View>
                 <TouchableHighlight
                     underlayColor={base.theme.colors.transparent}
