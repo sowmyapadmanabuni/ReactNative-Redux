@@ -170,17 +170,21 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         let unitNotification = [];
         let adminNotification = [];
         let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
-        let j=0 ; let k=0;
+        let j=0 ; let k=0; let l=0;
         for(let i in succ){
           if(succ[i].ntType === "joinrequest" || succ[i].ntType === "Join"){
             succ[i].notifIndex=j
+            succ[i].acNoIndex=l
             j=j+1;
+          
             adminNotification.push(succ[i])
           }else{
             succ[i].notifIndex=k
+            succ[i].acNoIndex=l
             k=k+1;
             unitNotification.push(succ[i])
           }
+          l=l+1
         }
 
         console.log("Unit Notification in reducer::::::",unitNotification,adminNotification)
@@ -557,7 +561,7 @@ export const newNotifInstance = data => {
 };
 
 export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
-  console.log("Notification to be read:",notif,index,oyeURL);
+  console.log("Notification to be read:",notif,index,oyeURL,ntid);
   return dispatch => {
     let newNotif = Object.assign([], notif);
     newNotif[index].read = true;
@@ -585,7 +589,8 @@ export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
         console.log(error);
       });
 
-    console.log(newNotif[index].ntid);
+    console.log("NEWNOTIFICATIONLIST",newNotif);
+
     dispatch({
       type: ON_NOTIFICATION_OPEN,
       payload: newNotif
@@ -1440,14 +1445,37 @@ export const onGateApp = notifications => {
   };
 };
 
-export const toggleCollapsible = (prevData, value, index) => {
+export const toggleCollapsible = (prevData, value, index,status) => {
   console.log('GETTHEDATAOFNOTFICATION',prevData,value,index)
   return dispatch => {
     let newVal = prevData;
     newVal[index].open = !value;
-    dispatch({
-      type: TOGGLE_COLLAPSIBLE,
-      payload: [...newVal]
-    });
-  };
+
+    if(status==="unit"){
+
+      dispatch({
+        type: TOGGLE_UNIT_COLLAPSIBLE,
+        payload: [...newVal]
+      });
+    }
+    if(status==="admin"){
+      dispatch({
+        type: TOGGLE_ADMIN_COLLAPSIBLE,
+        payload: [...newVal]
+      });
+    }
+
+   
+
+    // dispatch({
+    //   type: TOGGLE_COLLAPSIBLE,
+    //   payload: [...newVal]
+    // });
+
+  
+  
+    }
+   
+   
+  
 };

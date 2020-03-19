@@ -502,7 +502,7 @@ class NotificationScreen extends PureComponent {
             )
         }
         else if (item.ntType !== 'gate_app') {
-            console.log('GET THE DETAILS GET THE DETAILS*********',item)
+            console.log('GET THE DETAILS GET THE DETAILS*********',item,index)
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -515,8 +515,8 @@ class NotificationScreen extends PureComponent {
                     marginBottom: this.props.adminNotification.length - 1 == index ? 100 : 0
                 }}
                 onPress={() => {
-                    if (item.ntIsActive) {
-                        this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
+                    if (item.ntIsActive) { 
+                        this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid,);
                         this.openTheSelNotification(item)
                     }
                     else {
@@ -663,7 +663,7 @@ class NotificationScreen extends PureComponent {
                             height: 20, alignItems: 'center', justifyContent: 'center'
                         }} onPress={() => {
                             if (item.ntIsActive) {
-                                this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
+                                this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid);
                                 this.openTheSelNotification(item)
                             }
                             else {
@@ -737,7 +737,7 @@ class NotificationScreen extends PureComponent {
                     }}
                         onPress={() => {
                             if (item.ntIsActive) {
-                                this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
+                                this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid);
                                 this.openTheSelNotification(item)
                             }
                             else {
@@ -996,7 +996,7 @@ class NotificationScreen extends PureComponent {
                                 height: 20, alignItems: 'center', justifyContent: 'center'
                             }} onPress={() => {
                                 if (item.ntIsActive) {
-                                    this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
+                                    this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid);
                                     }
                                this.openTheSelNotification(item)
                             }}>
@@ -2416,13 +2416,13 @@ class NotificationScreen extends PureComponent {
         
 
         if(selectednotification.ntType=="gate_app" || selectednotification.ntType =="Join_Status"){
-            toggleCollapsible(unitNotification, selectednotification.open, selectednotification.notifIndex)
+            toggleCollapsible(unitNotification, selectednotification.open, selectednotification.notifIndex,"unit")
             //unitNotification[selectednotification.notifIndex].open=!selectednotification.open
           //  console.log("CHANGE THE SELECTION BASED ON ITEM ********@@@@@@",selectednotification,unitNotification,adminNotification)
 
         }
         else if(selectednotification.ntType== "Join" ){
-            toggleCollapsible(adminNotification, selectednotification.open, selectednotification.notifIndex)
+            toggleCollapsible(adminNotification, selectednotification.open, selectednotification.notifIndex,"admin")
            // adminNotification[selectednotification.notifIndex].open=!selectednotification.open
             console.log("CHANGE THE SELECTION BASED ON ITEM ********",selectednotification,unitNotification,adminNotification)
 
