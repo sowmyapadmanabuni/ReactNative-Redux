@@ -105,9 +105,9 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
         activeNotifications.map((data, index) => {
           if (data.ntType === 'gate_app') {
-            data.vlfName = data.visitorlog[0].vlfName;
-            data.unUniName = data.visitorlog[0].unUniName;
-            data.vlMobile = data.visitorlog[0].vlMobile;
+            data.vlfName = data.visitorlog.length ===0?"" : data.visitorlog[0].vlfName;
+            data.unUniName = data.visitorlog.length ===0?"" :data.visitorlog[0].unUniName;
+            data.vlMobile = data.visitorlog.length ===0?"" :data.visitorlog[0].vlMobile;
             gateAppNotif.push({ open:true, ...data });
           } else if (data.ntType === 'Join_Status') {
             joinStatNotif.push({open:true, ...data});
@@ -1053,7 +1053,8 @@ export const createUserNotification = (
             NTDUpdated: formatdate,
             UNOcSDate: occupancyDate,
             UNSldDate: soldDate,
-            ACNotifyID: senderId
+            ACNotifyID: senderId,
+            NTMobile :mobileNumber
           },
           {
             headers: headers

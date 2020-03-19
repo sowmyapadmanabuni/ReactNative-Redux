@@ -547,15 +547,9 @@ class NotificationScreen extends PureComponent {
                                     source={require('../../../icons/notification1.png')}
                                 />
                             }
-                             { item.ntType !=="Join_Status"?
+                             
                             <Text style={{ fontSize: 16, color: base.theme.colors.black }}>{item.asAsnName} </Text>
-                            :
-                            <Text style={{ fontSize: 16, color: base.theme.colors.black }}>{item.ntDesc !== undefined
-                          ? item.ntDesc.split(' ')[8].trim()+' '+item.ntDesc.split(' ')[9].trim()
-                          : ''}{' '} </Text>
-                            }
-
-                            <Text style={{ fontSize: 14, color: base.theme.colors.grey, marginRight: 5 }}>{valueDis}</Text>
+                          <Text style={{ fontSize: 14, color: base.theme.colors.grey, marginRight: 5 }}>{valueDis}</Text>
 
                         </View>
                         <View style={{
@@ -564,29 +558,16 @@ class NotificationScreen extends PureComponent {
                         }}>
                             <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'), borderWidth: 0 }}
                                 numberOfLines={3}>Unit
-                                 { item.ntType !=="Join_Status"?
+                                
                                 <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.mrRolName}</Text>
-                                :
-                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '} {item.ntDesc !== undefined
-                          ? item.ntDesc.split(' ')[4].trim()
-                          : ''}{' '}</Text>
-                                }
-
-                               
-                            </Text>
-                            { item.ntType !=="Join_Status"?
+                                 </Text>
+                          
                             <Text onPress={() => {
                                 Platform.OS === 'android'
                                     ? Linking.openURL(`tel:${item.mobileNumber}`)
                                     : Linking.openURL(`telprompt:${item.mobileNumber}`);
                             }} style={{ width: wp('33'), alignSelf: 'center', borderWidth: 0, textAlign: 'center' }}>{item.ntMobile}</Text>
-                            :
-                            <Text onPress={() => {
-                                Platform.OS === 'android'
-                                    ? Linking.openURL(`tel:${item.mobileNumber}`)
-                                    : Linking.openURL(`telprompt:${item.mobileNumber}`);
-                            }} style={{ width: wp('33'), alignSelf: 'center', borderWidth: 0, textAlign: 'center' }}>{item.ntMobile}</Text>
-                        }
+                            
                         </View>
                     </View>
                     <View style={{ backgroundColor: base.theme.colors.white }}>
@@ -621,7 +602,9 @@ class NotificationScreen extends PureComponent {
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
                                     </Text>
                                 </View>
-                               { item.ntJoinStat !== 'Accepted' ||  item.ntJoinStat !== 'Rejected'?
+                               { (item.ntType !== "Join_Status") ?
+                                (item.ntJoinStat === "Accepted" || item.ntJoinStat === "Rejected") ?
+                                <View/>: 
                                     <View style={{
                                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                         marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
@@ -652,17 +635,17 @@ class NotificationScreen extends PureComponent {
                                     </View> :
                                     <View />
                             }
-                            { item.ntJoinStat == 'Accepted'  ?
+                            { item.ntJoinStat === "Accepted"  ?
                                     <View style={{
                                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                         marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
                                     }}>
                                         
-                                            <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Request Approve</Text>
+                                            <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Request Approved</Text>
                                      </View> :
                                     <View />
                             }
-                            { item.ntJoinStat == 'Rejected'  ?
+                            { item.ntJoinStat === "Rejected" ?
                                     <View style={{
                                         flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                         marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
@@ -737,329 +720,335 @@ class NotificationScreen extends PureComponent {
         }
         else {
             console.log("GET THE DETAILS GET THE DETAILS", item)
-        
-            return (
-                <TouchableOpacity activeOpacity={0.7} style={{
-                    borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
-                    shadowColor: base.theme.colors.greyHead,
-                    shadowOffset: { width: 0, height: Platform.OS === 'ios' ? 3 : 0.5 },
-                    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
-                    shadowRadius: 0.5, elevation: 3, borderBottomWidth: 0.5,
-                    width: '100%',
-                    marginTop: 10,
-                    marginBottom: this.props.unitNotification.length - 1 == index ? 100 : 0
-                }}
-                    onPress={() => {
-                        if (item.ntIsActive) {
-                            this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
-                            this.openTheSelNotification(item)
-                        }
-                        else {
-                            
-                            this.openTheSelNotification(item)
-    
-                        } }}>
-
-
-                    <View style={{
-                        backgroundColor: base.theme.colors.greyCard,
-                    }}>
-                        <View style={{
-                            flexDirection: 'row', backgroundColor: item.visitorlog[0].vlVisType == "Delivery" && item.visitorlog[0].vlApprStat == "Entry Pending" && item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
-                            alignItems: 'center', justifyContent: 'space-between',
-                            borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.greyHead, height: 50
-                        }}>
-                            {item.ntIsActive ? 
-                                <Image
-                                    resizeMode={'center'}
-                                    style={{ width: 50, height: 50, }}
-                                    source={require('../../../icons/notification2.png')}
-                                />
-                                :
-                                <Image
-                                    resizeMode={'center'}
-                                    style={{ width: 50, height: 50, }}
-                                    source={require('../../../icons/notification1.png')}
-                                />
-                            }
-                            <Text style={{ fontSize: 16, color: base.theme.colors.black }}>{item.asAsnName}</Text>
-                            <Text style={{ fontSize: 14, color: base.theme.colors.grey, marginRight: 5 }}>{valueDis}</Text>
-
-                        </View>
-                        <View style={{
-                            flexDirection: 'row', backgroundColor: base.theme.colors.greyCard, alignItems: 'center',
-                            justifyContent: 'space-between', height: 70,
-                        }}>
-                            <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'), borderWidth: 0 }}
-                                numberOfLines={3}>{item.visitorlog[0].vlComName}
-                                <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.visitorlog[0].vlVisType == "Delivery" ? item.visitorlog[0].vlVisType : ""}</Text>
-                            </Text>
-                            {item.unUniName !== "" ?
-                                <View style={{ flexDirection: 'row', width: '40%' }}>
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'right', marginRight: 10, }}>Visiting</Text>
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.blue, width: 100, }} numberOfLines={3}>{item.visitorlog[0].unUniName}</Text>
-                                </View> :
-                                <View />}
-                        </View>
-                    </View>
-                    <View style={{ backgroundColor: base.theme.colors.white }}>
-                        <View style={{ alignItems: 'center', justifyContent: 'flex-end', height: 60 }}>
-                            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginTop: 30 }}>{item.visitorlog[0].vlfName}</Text>
-
-                        </View>
-
-                        <Collapsible duration={100} collapsed={item.open}>
-                            <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }} onPress={() => {
-                                {
-                                    Platform.OS === 'android'
-                                        ? Linking.openURL(`tel:${item.visitorlog[0].vlMobile}`)
-                                        : Linking.openURL(`telprompt:${item.visitorlog[0].vlMobile}`);
-                                }
-                            }}>
-                                <Text style={{ fontSize: 16, color: base.theme.colors.primary, paddingBottom: 10 }}>{item.visitorlog[0].vlMobile}</Text>
-                            </TouchableOpacity>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>{item.visitorlog[0].vlVisType == "Kid Exit" ? "Exit on" : "Entry on :"}
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.ntdCreated).format('DD-MM-YYYY')} {'    '} {moment(item.visitorlog[0].vlEntryT).format('hh:mm A')}
-                                    </Text>
-                                </Text>
-                                <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginRight: 15 }}>From:
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlengName}</Text>
-                                </Text>
-                            </View>
-                            {item.visitorlog[0].vlApprdBy != "" ?
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Entry Rejected by :" : "Entry Approved by :"}
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprdBy}</Text>
-                                    </Text>
-                                </View>
-                                :
-                                <View />}
-
-                            {item.visitorlog[0].vlexgName != "" && (item.visitorlog[0].vlApprStat != "Expired" || item.visitorlog[0].vlApprStat !="EntryExpired" ||  item.visitorlog[0].vlApprStat !="ExitExpired")?
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>Exit on   :
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.visitorlog[0].vldUpdated, 'YYYY-MM-DD').format(
-                                        'DD-MM-YYYY'
-                                    )}{'    '}  {moment(item.visitorlog[0].vlExitT).format('hh:mm A')}</Text>
-                                    </Text>
-                                    <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginRight: 15 }}>From:
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlexgName}</Text>
-                                    </Text>
-                                </View>
-                                :
-                                <View />}
-
-                            {item.visitorlog[0].vlExAprdBy != "" ?
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Exit Rejected by :" : "Exit Approved by :"}
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlExAprdBy}</Text>
-                                    </Text>
-                                </View>
-                                :
-                                <View />}
-                            {item.visitorlog[0].vlApprStat == "Expired"  || item.visitorlog[0].vlApprStat !="EntryExpired" || item.visitorlog[0].vlApprStat !="ExitExpired"?
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>Status  :
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprStat}</Text>
-                                    </Text>
-                                </View> :
-                                <View />}
-
-                            {
-                                item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "Entry Pending" ?
-                                    <View style={{
-                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                                        marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
-                                    }}>
-                                        <Text style={{ fontSize: 16, color: base.theme.colors.black, marginLeft: 20 }}>Approve Entry</Text>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <TouchableOpacity onPress={() => {
-                                                this.acceptgateVisitor(
-                                                    item.visitorlog[0].vlVisLgID,
-                                                    index,
-                                                    item.asAssnID,
-                                                    "EntryApproved",
-                                                    item.ntid,
-                                                    item.visitorlog[0].vlApprdBy
-                                                );
-                                            }} style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Image
-                                                    style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/allow.png')}
-                                                />
-                                                <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Allow</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() =>
-                                                this.declinegateVisitor(
-                                                    item.visitorlog[0].vlVisLgID,
-                                                    index,
-                                                    item.asAssnID,
-                                                    "EntryRejected",
-                                                    item.ntid,
-                                                    item.visitorlog[0].vlApprdBy
-                                             )
-                                            } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Image
-                                                    style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/deny.png')}
-                                                />
-                                                <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Deny</Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                    </View> :
-                                    <View />
-                            }
-
-                            {
-                                item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "ExitPending" ?
-                                    <View style={{
-                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                                        marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
-                                    }}>
-                                        <Text style={{ fontSize: 16, color: base.theme.colors.black, marginLeft: 20 }}>Approve Exit</Text>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <TouchableOpacity onPress={() => {
-                                                this.acceptgateVisitor(
-                                                    item.visitorlog[0].vlVisLgID,
-                                                    index,
-                                                    item.asAssnID,
-                                                    "ExitApproved",
-                                                    item.ntid,
-                                                    item.visitorlog[0].vlApprdBy
-
-                                                );
-                                            }}
-                                                style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Image
-                                                    style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/allow.png')}
-                                                />
-                                                <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Allow</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() =>
-                                                this.declinegateVisitor(
-                                                    item.visitorlog[0].vlVisLgID,
-                                                    index,
-                                                    item.asAssnID,
-                                                    "ExitRejected",
-                                                    item.visitorlog[0].vlApprdBy
-                                                )
-                                            } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Image
-                                                    style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/deny.png')}
-                                                />
-                                                <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Deny</Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                    </View> :
-                                    <View />
-                            }
-                            {
-                                item.visitorlog[0].vlVisType === "Kid Exit" && item.visitorlog[0].vlApprStat === "Entry Pending" ?
-                                    <View style={{
-                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                                        marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
-                                    }}>
-                                        <Text style={{ fontSize: 16, color: base.theme.colors.black, marginLeft: 20 }}>Approve Exit</Text>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <TouchableOpacity onPress={() => {
-                                                this.acceptgateVisitor(
-                                                    item.visitorlog[0].vlVisLgID,
-                                                    index,
-                                                    item.asAssnID,
-                                                    "ExitApproved",
-                                                    item.ntid,
-                                                );
-                                            }}
-                                                style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Image
-                                                    style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/allow.png')}
-                                                />
-                                                <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Allow</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() =>
-                                                this.declinegateVisitor(
-                                                    item.visitorlog[0].vlVisLgID,
-                                                    index,
-                                                    item.asAssnID,
-                                                    "ExitRejected",
-                                                    item.ntid,
-
-                                                )
-                                            } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Image
-                                                    style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/deny.png')}
-                                                />
-                                                <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Deny</Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                    </View> :
-                                    <View />
-                            }
-
-                        </Collapsible>
-                        <TouchableOpacity style={{
-                            alignSelf: 'center', marginBottom: 10, width: '100%',
-                            height: 20, alignItems: 'center', justifyContent: 'center'
-                        }} onPress={() => {
+            if(item.visitorlog.length===0){
+                return null
+            }
+            else{
+                return (
+                    <TouchableOpacity activeOpacity={0.7} style={{
+                        borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
+                        shadowColor: base.theme.colors.greyHead,
+                        shadowOffset: { width: 0, height: Platform.OS === 'ios' ? 3 : 0.5 },
+                        shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.2,
+                        shadowRadius: 0.5, elevation: 3, borderBottomWidth: 0.5,
+                        width: '100%',
+                        marginTop: 10,
+                        marginBottom: this.props.unitNotification.length - 1 == index ? 100 : 0
+                    }}
+                        onPress={() => {
                             if (item.ntIsActive) {
                                 this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
-                                }
-                           this.openTheSelNotification(item)
+                                this.openTheSelNotification(item)
+                            }
+                            else {
+                                
+                                this.openTheSelNotification(item)
+        
+                            } }}>
+    
+    
+                        <View style={{
+                            backgroundColor: base.theme.colors.greyCard,
                         }}>
                             <View style={{
-                                width: 45,
-                                borderRadius: 15,
-                                height: 4,
-                                backgroundColor: base.theme.colors.lightgrey,
-                                alignSelf: 'center'
-                            }} >
+                                flexDirection: 'row', backgroundColor: item.visitorlog[0].vlVisType == "Delivery" && item.visitorlog[0].vlApprStat == "Entry Pending" && item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
+                                alignItems: 'center', justifyContent: 'space-between',
+                                borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.greyHead, height: 50
+                            }}>
+                                {item.ntIsActive ? 
+                                    <Image
+                                        resizeMode={'center'}
+                                        style={{ width: 50, height: 50, }}
+                                        source={require('../../../icons/notification2.png')}
+                                    />
+                                    :
+                                    <Image
+                                        resizeMode={'center'}
+                                        style={{ width: 50, height: 50, }}
+                                        source={require('../../../icons/notification1.png')}
+                                    />
+                                }
+                                <Text style={{ fontSize: 16, color: base.theme.colors.black }}>{item.asAsnName}</Text>
+                                <Text style={{ fontSize: 14, color: base.theme.colors.grey, marginRight: 5 }}>{valueDis}</Text>
+    
                             </View>
+                            <View style={{
+                                flexDirection: 'row', backgroundColor: base.theme.colors.greyCard, alignItems: 'center',
+                                justifyContent: 'space-between', height: 70,
+                            }}>
+                                <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'), borderWidth: 0 }}
+                                    numberOfLines={3}>{item.visitorlog[0].vlComName}
+                                    <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.visitorlog[0].vlVisType == "Delivery" ? item.visitorlog[0].vlVisType : ""}</Text>
+                                </Text>
+                                {item.unUniName !== "" ?
+                                    <View style={{ flexDirection: 'row', width: '40%' }}>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'right', marginRight: 10, }}>Visiting</Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.blue, width: 100, }} numberOfLines={3}>{item.visitorlog[0].unUniName}</Text>
+                                    </View> :
+                                    <View />}
+                            </View>
+                        </View>
+                        <View style={{ backgroundColor: base.theme.colors.white }}>
+                            <View style={{ alignItems: 'center', justifyContent: 'flex-end', height: 60 }}>
+                                <Text style={{ fontSize: 16, color: base.theme.colors.black, marginTop: 30 }}>{item.visitorlog[0].vlfName}</Text>
+    
+                            </View>
+    
+                            <Collapsible duration={100} collapsed={item.open}>
+                                <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }} onPress={() => {
+                                    {
+                                        Platform.OS === 'android'
+                                            ? Linking.openURL(`tel:${item.visitorlog[0].vlMobile}`)
+                                            : Linking.openURL(`telprompt:${item.visitorlog[0].vlMobile}`);
+                                    }
+                                }}>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, paddingBottom: 10 }}>{item.visitorlog[0].vlMobile}</Text>
+                                </TouchableOpacity>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>{item.visitorlog[0].vlVisType == "Kid Exit" ? "Exit on" : "Entry on :"}
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.ntdCreated).format('DD-MM-YYYY')} {'    '} {moment(item.visitorlog[0].vlEntryT).format('hh:mm A')}
+                                        </Text>
+                                    </Text>
+                                    <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginRight: 15 }}>From:
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlengName}</Text>
+                                    </Text>
+                                </View>
+                                {item.visitorlog[0].vlApprdBy != "" ?
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                        <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Entry Rejected by :" : "Entry Approved by :"}
+                                            <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprdBy}</Text>
+                                        </Text>
+                                    </View>
+                                    :
+                                    <View />}
+    
+                                {item.visitorlog[0].vlexgName != "" && (item.visitorlog[0].vlApprStat != "Expired" || item.visitorlog[0].vlApprStat !="EntryExpired" ||  item.visitorlog[0].vlApprStat !="ExitExpired")?
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>Exit on   :
+                                            <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.visitorlog[0].vldUpdated, 'YYYY-MM-DD').format(
+                                            'DD-MM-YYYY'
+                                        )}{'    '}  {moment(item.visitorlog[0].vlExitT).format('hh:mm A')}</Text>
+                                        </Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginRight: 15 }}>From:
+                                            <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlexgName}</Text>
+                                        </Text>
+                                    </View>
+                                    :
+                                    <View />}
+    
+                                {item.visitorlog[0].vlExAprdBy != "" ?
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                        <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Exit Rejected by :" : "Exit Approved by :"}
+                                            <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlExAprdBy}</Text>
+                                        </Text>
+                                    </View>
+                                    :
+                                    <View />}
+                                {item.visitorlog[0].vlApprStat == "Expired"  || item.visitorlog[0].vlApprStat !="EntryExpired" || item.visitorlog[0].vlApprStat !="ExitExpired"?
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                        <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>Status  :
+                                            <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprStat}</Text>
+                                        </Text>
+                                    </View> :
+                                    <View />}
+    
+                                {
+                                    item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "Entry Pending" ?
+                                        <View style={{
+                                            flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                            marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
+                                        }}>
+                                            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginLeft: 20 }}>Approve Entry</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <TouchableOpacity onPress={() => {
+                                                    this.acceptgateVisitor(
+                                                        item.visitorlog[0].vlVisLgID,
+                                                        index,
+                                                        item.asAssnID,
+                                                        "EntryApproved",
+                                                        item.ntid,
+                                                        item.visitorlog[0].vlApprdBy
+                                                    );
+                                                }} style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <Image
+                                                        style={{ width: 30, height: 30 }}
+                                                        source={require('../../../icons/allow.png')}
+                                                    />
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Allow</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() =>
+                                                    this.declinegateVisitor(
+                                                        item.visitorlog[0].vlVisLgID,
+                                                        index,
+                                                        item.asAssnID,
+                                                        "EntryRejected",
+                                                        item.ntid,
+                                                        item.visitorlog[0].vlApprdBy
+                                                 )
+                                                } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <Image
+                                                        style={{ width: 30, height: 30 }}
+                                                        source={require('../../../icons/deny.png')}
+                                                    />
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Deny</Text>
+                                                </TouchableOpacity>
+                                            </View>
+    
+                                        </View> :
+                                        <View />
+                                }
+    
+                                {
+                                    item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "ExitPending" ?
+                                        <View style={{
+                                            flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                            marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
+                                        }}>
+                                            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginLeft: 20 }}>Approve Exit</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <TouchableOpacity onPress={() => {
+                                                    this.acceptgateVisitor(
+                                                        item.visitorlog[0].vlVisLgID,
+                                                        index,
+                                                        item.asAssnID,
+                                                        "ExitApproved",
+                                                        item.ntid,
+                                                        item.visitorlog[0].vlApprdBy
+    
+                                                    );
+                                                }}
+                                                    style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <Image
+                                                        style={{ width: 30, height: 30 }}
+                                                        source={require('../../../icons/allow.png')}
+                                                    />
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Allow</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() =>
+                                                    this.declinegateVisitor(
+                                                        item.visitorlog[0].vlVisLgID,
+                                                        index,
+                                                        item.asAssnID,
+                                                        "ExitRejected",
+                                                        item.visitorlog[0].vlApprdBy
+                                                    )
+                                                } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <Image
+                                                        style={{ width: 30, height: 30 }}
+                                                        source={require('../../../icons/deny.png')}
+                                                    />
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Deny</Text>
+                                                </TouchableOpacity>
+                                            </View>
+    
+                                        </View> :
+                                        <View />
+                                }
+                                {
+                                    item.visitorlog[0].vlVisType === "Kid Exit" && item.visitorlog[0].vlApprStat === "Entry Pending" ?
+                                        <View style={{
+                                            flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                            marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
+                                        }}>
+                                            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginLeft: 20 }}>Approve Exit</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <TouchableOpacity onPress={() => {
+                                                    this.acceptgateVisitor(
+                                                        item.visitorlog[0].vlVisLgID,
+                                                        index,
+                                                        item.asAssnID,
+                                                        "ExitApproved",
+                                                        item.ntid,
+                                                    );
+                                                }}
+                                                    style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <Image
+                                                        style={{ width: 30, height: 30 }}
+                                                        source={require('../../../icons/allow.png')}
+                                                    />
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.primary, }}>Allow</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() =>
+                                                    this.declinegateVisitor(
+                                                        item.visitorlog[0].vlVisLgID,
+                                                        index,
+                                                        item.asAssnID,
+                                                        "ExitRejected",
+                                                        item.ntid,
+    
+                                                    )
+                                                } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <Image
+                                                        style={{ width: 30, height: 30 }}
+                                                        source={require('../../../icons/deny.png')}
+                                                    />
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Deny</Text>
+                                                </TouchableOpacity>
+                                            </View>
+    
+                                        </View> :
+                                        <View />
+                                }
+    
+                            </Collapsible>
+                            <TouchableOpacity style={{
+                                alignSelf: 'center', marginBottom: 10, width: '100%',
+                                height: 20, alignItems: 'center', justifyContent: 'center'
+                            }} onPress={() => {
+                                if (item.ntIsActive) {
+                                    this.props.onNotificationOpen(notifications, index, oyeURL, item.ntid);
+                                    }
+                               this.openTheSelNotification(item)
+                            }}>
+                                <View style={{
+                                    width: 45,
+                                    borderRadius: 15,
+                                    height: 4,
+                                    backgroundColor: base.theme.colors.lightgrey,
+                                    alignSelf: 'center'
+                                }} >
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity style={{
+                            width: wp('10%'),
+                            height: hp('10%'),
+                            justifyContent: 'center', alignSelf: 'center',
+                            alignItems: 'center', position: 'absolute', marginTop: 80
+                        }}
+                            onPress={() => this._enlargeImage(item.visitorlog[0].vlEntryImg != "" ? 'data:image/png;base64,'+item.visitorlog[0].vlEntryImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                        >
+                            {item.vlEntryImg != "" ?
+    
+                                <Image
+                                    //resizeMode={'center'}
+                                    style={{
+                                        width: 80,
+                                        height: 80,
+                                        borderRadius: 40, position: 'relative'
+                                    }}
+                                    source={{uri: 'data:image/png;base64,'+item.visitorlog[0].vlEntryImg}}
+                                />
+                                :
+                                <Image
+                                    //resizeMode={'center'}
+                                    style={{
+                                        width: 80,
+                                        height: 80,
+                                        borderRadius: 40, position: 'relative'
+                                    }}
+                                    source={{ uri: 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder }}
+                                />}
+    
                         </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity style={{
-                        width: wp('10%'),
-                        height: hp('10%'),
-                        justifyContent: 'center', alignSelf: 'center',
-                        alignItems: 'center', position: 'absolute', marginTop: 80
-                    }}
-                        onPress={() => this._enlargeImage(item.visitorlog[0].vlEntryImg != "" ? 'data:image/png;base64,'+item.visitorlog[0].vlEntryImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
-                    >
-                        {item.vlEntryImg != "" ?
-
-                            <Image
-                                //resizeMode={'center'}
-                                style={{
-                                    width: 80,
-                                    height: 80,
-                                    borderRadius: 40, position: 'relative'
-                                }}
-                                source={{uri: 'data:image/png;base64,'+item.visitorlog[0].vlEntryImg}}
-                            />
-                            :
-                            <Image
-                                //resizeMode={'center'}
-                                style={{
-                                    width: 80,
-                                    height: 80,
-                                    borderRadius: 40, position: 'relative'
-                                }}
-                                source={{ uri: 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder }}
-                            />}
-
+    
+    
                     </TouchableOpacity>
-
-
-                </TouchableOpacity>
-
-            );
+    
+                );
+            }
+        
+            
         }
     };
 
@@ -1133,29 +1122,29 @@ class NotificationScreen extends PureComponent {
     approve(item) {
         const { oyeURL, champBaseURL } = this.props;
         console.log('Item in approve:', item);
-        let unitPath = `syncdashboard/isUnitRefreshing/${item.asAssnID}/${item.sbUnitID}`;
-        let associationPath = `syncdashboard/isAssociationRefreshing/${item.asAssnID}`;
-        let requesterPath = `syncdashboard/isMemberRefreshing/${item.sbMemID}`;
+        // let unitPath = `syncdashboard/isUnitRefreshing/${item.asAssnID}/${item.sbUnitID}`;
+        // let associationPath = `syncdashboard/isAssociationRefreshing/${item.asAssnID}`;
+        // let requesterPath = `syncdashboard/isMemberRefreshing/${item.sbMemID}`;
 
-        let isUnitNotificationUpdating = 0;
-        let isAssocNotificationUpdating = 0;
-        let isMemberRefreshing = 0;
+        // let isUnitNotificationUpdating = 0;
+        // let isAssocNotificationUpdating = 0;
+        // let isMemberRefreshing = 0;
 
-         fb.database().ref(associationPath).set({
-            isAssocNotificationUpdating
-        }).then((data) => {
-            console.log('Data:', data);
-        }).catch(error => {
-            console.log("Error:", error);
-        })
+        //  fb.database().ref(associationPath).set({
+        //     isAssocNotificationUpdating
+        // }).then((data) => {
+        //     console.log('Data:', data);
+        // }).catch(error => {
+        //     console.log("Error:", error);
+        // })
 
-        fb.database().ref(requesterPath).set({
-            isMemberRefreshing
-        }).then((data) => {
-            console.log('Data:', data);
-        }).catch(error => {
-            console.log("Error:", error);
-        })
+        // fb.database().ref(requesterPath).set({
+        //     isMemberRefreshing
+        // }).then((data) => {
+        //     console.log('Data:', data);
+        // }).catch(error => {
+        //     console.log("Error:", error);
+        // })
 
         this.approve1(item)
     }
@@ -1327,9 +1316,30 @@ class NotificationScreen extends PureComponent {
                               );
                               this.setState({
                                 loading: false,
-                                date: StatusUpdate.NTStatDesc
                               });
-
+                              let unitPath = `syncdashboard/isUnitRefreshing/${item.asAssnID}/${item.sbUnitID}`;
+                              let associationPath = `syncdashboard/isAssociationRefreshing/${item.asAssnID}`;
+                              let requesterPath = `syncdashboard/isMemberRefreshing/${item.sbMemID}`;
+                      
+                              let isUnitNotificationUpdating = 0;
+                              let isAssocNotificationUpdating = 0;
+                              let isMemberRefreshing = 0;
+                      
+                               fb.database().ref(associationPath).set({
+                                  isAssocNotificationUpdating
+                              }).then((data) => {
+                                  console.log('Data:', data);
+                              }).catch(error => {
+                                  console.log("Error:", error);
+                              })
+                      
+                              fb.database().ref(requesterPath).set({
+                                  isMemberRefreshing
+                              }).then((data) => {
+                                  console.log('Data:', data);
+                              }).catch(error => {
+                                  console.log("Error:", error);
+                              })
                               setTimeout(() => {
                                 this.props.navigation.navigate('ResDashBoard');
                               }, 300);
@@ -1586,8 +1596,9 @@ class NotificationScreen extends PureComponent {
         let unitNotification = this.props.unitNotification;
         let adminNotification = this.props.adminNotification;
         let selectedView = this.state.selectedView;
+        
 
-        if (loading) {
+        if (loading && (this.props.notifications.length !==0)) {
             return (
                 <View
                     style={{

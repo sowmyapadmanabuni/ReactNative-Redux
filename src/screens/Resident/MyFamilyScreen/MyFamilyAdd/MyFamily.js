@@ -170,7 +170,7 @@ class MyFamily extends Component {
                                 />
                                 :
                                 <Image style={{height: 85, width: 85, borderRadius: 85 / 2, alignSelf: 'center'}}
-                                       source={{uri: this.state.relativeImage}}/>
+                                       source={{uri: 'data:image/png;base64,'+ this.state.relativeImage}}/>
                             }
                         </TouchableOpacity>
                     </View>
@@ -403,8 +403,10 @@ class MyFamily extends Component {
                     photo: response.uri,
                     photoDetails: response,
                     isPhotoAvailable: true,
-                    imagePath: response.path
-                }, () => self.uploadImage(response));
+                    imagePath: response.path,
+                    relativeImage: response.data,
+                
+                });
 
             }
         });
@@ -643,7 +645,7 @@ class MyFamily extends Component {
             "UNUnitID": self.props.dashBoardReducer.uniID,
             "FMRltn": self.state.relationName,
             "ASAssnID": self.props.dashBoardReducer.assId,
-            "FMImgName": self.state.imageUrl,
+            "FMImgName":self.state.relativeImage,
             "FMMinor": self.state.isMinor,
             "FMLName": self.state.lastName,
             "FMGurName": self.state.guardianName,
@@ -652,9 +654,9 @@ class MyFamily extends Component {
         console.log('MyFam', input,self.state.isMinorSelected);
         let stat = await base.services.OyeSafeApiFamily.myFamilyAddMember(input);
         console.log('Stat in Add family', stat);
-        console.log("full stat",input, stat);
+        console.log("full stat",input, stat); 
         this.setState({
-            isLoading: true
+            isLoading: true 
         });
         if (stat) {
             try {

@@ -199,12 +199,15 @@ export default class OyeLivingApi {
     }
 
     static async getTheInvoicesOfResident(assId,unitId,accountId){
-        return await instance.get('InvoiceListByAssocUnitAndAccountID' + assId + '/'+unitId+'/'+accountId);
+        return await instance.get('InvoiceListByAssocUnitAndAccountID/' + assId + '/'+unitId+'/'+accountId);
     }
     static async getTheInvoicesByDateSelection(input){
         return await instance.post('invoice/InvoiceListByDatesAndID',input);
     }
 
+ static async myVehicleListAPI(assId,unitId,accountId){
+        return await instance.get('GetVehicleListByAssocUnitAndAcctID/' + assId + '/'+unitId+'/'+accountId);
+    }
 
 
 

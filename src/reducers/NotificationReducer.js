@@ -71,7 +71,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
 
     case GET_NOTIFICATIONS_FAILED:
-      return { ...state, loading: false, notifications: action.payload };
+      return { ...state, loading:false, notifications: action.payload };
 
     case GET_NOTIFICATIONS_SUCCESS:
       return {

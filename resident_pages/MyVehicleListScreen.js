@@ -45,12 +45,12 @@ class VehicleList extends Component {
 
     componentDidMount() {
         let self = this;
-        setTimeout(() => {
+        // setTimeout(() => {
 
-            this.setState({
-                isLoading: false
-            });
-        }, 1500);
+        //     this.setState({
+        //         isLoading: false
+        //     });
+        // }, 1500);
         self.getVehicleList();
         base.utils.validate.checkSubscription(this.props.assId);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -86,46 +86,49 @@ class VehicleList extends Component {
         return true;
     }
 
-    getVehicleList = () => {
-        console.log('props in vehicle list:', this.props);
-        fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/Vehicle/GetVehicleListByAssocUnitAndAcctID/${this.props.dashBoardReducer.assId}/${this.props.dashBoardReducer.unitID}/${this.props.userReducer.MyAccountID}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log('Vehicle List ------', responseJson);
-                this.setState({
-                    isLoading: false,
-                    dataSource: responseJson.data.vehicleListByUnitID,
-                    listLength: responseJson.data.vehicleListByUnitID.length,
-                });
-                console.log("dataSource ",this.state.dataSource);
-                const {updateIdDashboard} = this.props;
-                updateIdDashboard({
-                    prop: 'vehiclesCount',
-                    value: responseJson.data.vehicleListByUnitID.length
-                });
-                console.log("responseJson.data ",responseJson.data);
-            })
+   async getVehicleList () {
+        console.log('props in vehicle list:', this.props,this.props.assId,this.props.uniID,this.props.userReducer.MyAccountID);
+        let myVehicleList = await base.services.OyeLivingApi.myVehicleListAPI(
+            this.props.dashBoardReducer.assId,
+            this.props.dashBoardReducer.uniID,
+            this.props.userReducer.MyAccountID
+        );
+       console.log('GETTING DATA IN VEHICLES',myVehicleList)
+       this.setState({
+           isLoading:false
+       })
+       if(myVehicleList.success && myVehicleList.data.vehicleListByUnitID.length !==0){
 
-            .catch(error => {
-                this.setState({loading: false,dataSource:[]});
-                console.log(error);
-                const {updateIdDashboard} = this.props;
-                updateIdDashboard({
-                    prop: 'vehiclesCount',
-                    value: 0
-                });
-            });
+        let vehicleList=myVehicleList.data.vehicleListByUnitID
+        console.log('GETTING DATA IN VEHICLES111111',myVehicleList,vehicleList)
 
-    };
+        this.setState({
+            isLoading: false,
+            dataSource: vehicleList,
+            listLength: vehicleList.length,
+        });
+       
+        const {updateIdDashboard} = this.props;
+        updateIdDashboard({
+            prop: 'vehiclesCount',
+            value: vehicleList.length
+        });
+        console.log("responseJson.data ",responseJson.data)
+       }
+       else{
+        console.log('GETTING DATA IN VEHICLES111111',myVehicleList)
+        this.setState({dataSource:[]});
+        const {updateIdDashboard} = this.props;
+        updateIdDashboard({
+            prop: 'vehiclesCount',
+            value: 0
+        });
+       }
+    }
+    
+    
+
+        
 
     renderItem = ({item, index}) => {
         const swipeSettings = {

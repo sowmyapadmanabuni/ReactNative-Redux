@@ -30,7 +30,7 @@ import EmptyView from "../../components/common/EmptyView";
 import { updateSelectedCheckPoints } from '../../../src/actions';
 import Modal from "react-native-modal";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist'
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
 const { height, width } = Dimensions.get('screen');
 import Toast, { DURATION } from 'react-native-easy-toast';
@@ -63,7 +63,7 @@ class PatrolShuffling extends React.Component {
     }
 
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.setState({
             data: this.props.selectedCheckPoints.selectedCheckPoints,
             isLottieModalOpen: true

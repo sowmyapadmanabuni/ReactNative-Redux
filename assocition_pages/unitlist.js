@@ -780,6 +780,7 @@ class UnitList extends Component {
         } else {
             status = false;
         }
+    console.log('TOCHECKTHEELIGIBILITYOFTHEUSERTOSENDNOTIF@@@@',matchUnit)
 
         return status;
     };

@@ -455,18 +455,21 @@ class MyGuests extends Component {
     renderItem2 = ({ item, index }) => {
         console.log('Item  Index', item, index);
 
-        let txt ="{"+ "infName"+":"+ item.infName + ',' +
-            "inMobile"+":"+ item.inMobile.substring(3, 13) + ',' +
-            "inInvtID"+":"+item.inInvtID + ',' +
-            "unUnitID"+":"+item.unUnitID + ',' +
-            "insDate"+":" + item.insDate + ',' +
-            "ineDate"+":"+item.ineDate + ',' +
-            "inVisCnt"+":"+item.inVisCnt + ',' +
-            "asAssnID"+":"+ item.asAssnID + ',' +
-            "inIsActive"+":"+item.inMultiEy+"}";
-        let shareQRValue=JSON.stringify(txt)
+     let txt1={
+            "infName":item.infName,
+            "inMobile":item.inMobile.substring(3, 13),
+            "inInvtID":item.inInvtID,
+            "unUnitID":item.unUnitID,
+            "insDate":item.insDate,
+            "ineDate":item.ineDate,
+            "inVisCnt":item.inVisCnt,
+            "asAssnID":item.asAssnID,
+            "inIsActive":item.inMultiEy
+            }
+            let shareQRValue=JSON.stringify(txt1)
+            
 
-        console.log('ShareQRvalueININVITED@@@@@',shareQRValue,txt)
+        console.log('ShareQRvalueININVITED@@@@@',shareQRValue,txt1)
         return (
             <View
                 style={{

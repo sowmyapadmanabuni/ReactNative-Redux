@@ -82,7 +82,8 @@ class Dashboard extends React.Component {
       myAdminIconHeight: Platform.OS === 'ios' ? 20 : 20,
       selectedView: 0,
       invoicesList: [],
-      dropdownIndex:0
+      dropdownIndex:0,
+      unitDropdownIndex:0
 
 
     };
@@ -119,7 +120,7 @@ class Dashboard extends React.Component {
         self.myProfileNet();
         self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
-        self.getVehicleList();
+        self.getVehicleList(); 
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false});
         self.getPopUpNotifications();
@@ -339,9 +340,9 @@ class Dashboard extends React.Component {
           let firebaseMessaging = firebase.messaging();
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
-          //self.roleCheckForAdmin(self.state.assocId);
+          //self.roleCheckForAdmin(self.state.assocId)
           self.props.fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
-            self.onAssociationChange(self.state.dropdownIndex);
+            self.onAssociationChange(self.state.dropdownIndex,self.state.unitDropdownIndex);
           });
         } else {
           counter = 1;
@@ -540,7 +541,10 @@ class Dashboard extends React.Component {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-          //this.props.refreshNotifications(oyeURL, MyAccountID);
+          const { fetchAssociationByAccountId }= this.props;
+          fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
+            this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);
+          });
           this.props.getNotifications(oyeURL, MyAccountID);
           this.showLocalNotification(notification);
         });  
@@ -627,14 +631,14 @@ class Dashboard extends React.Component {
   }
 
   updateDashboard() {
-   
     console.log("Update Dashboard Changes if any------------------------------------>>>>>>>>>>>")
-    const { fetchAssociationByAccountId }=this.props
+    const{ fetchAssociationByAccountId } =this.props
     fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
-      this.onAssociationChange(this.state.dropdownIndex);
+      this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);
     });
-    let self = this;
+    let self=this;
     self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
+   
      }
 
   async getVehicleList() {
@@ -769,9 +773,9 @@ class Dashboard extends React.Component {
     this.roleCheckForAdmin(assId);
   };
 
-  onAssociationChange = (index) => {
+  onAssociationChange = (index,unitIndex) => {
 try{
-    console.log('GettheselectedAssocitation',  index, this.props.dropdown)
+    console.log('GettheselectedAssocitation',  index, this.props.dropdown,unitIndex)
 
     const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = this.props;
 
@@ -784,7 +788,7 @@ try{
     });
     updateIdDashboard({
       prop: 'uniID',
-      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
+      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[unitIndex].unitId
     });
   
 
@@ -1173,7 +1177,7 @@ try{
                       dropdownPosition={dropdown.length > 2 ? -5 : -2}
                       rippleOpacity={0}
                       onChangeText={(value, index) => {
-                        this.onAssociationChange(index);
+                        this.onAssociationChange(index,this.state.unitDropdownIndex);
                         this.props.updateuserRole({
                           prop: 'role',
                           value: dropdown[index].roleId
@@ -1226,6 +1230,9 @@ try{
                           prop: 'selectedDropdown1',
                           value: dropdown1[index].value
                         });
+                        this.setState({
+                          unitDropdownIndex:index
+                        })
                         this.getVehicleList();
                         //    this.updateUnit(value, index);
                       }}
