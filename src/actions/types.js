@@ -8,6 +8,8 @@ export const CREATE_NEW_NOTIFICATION_FAILED = 'create_new_notification_failed';
 export const CREATE_NEW_NOTIFICATION_SUCCESS =
   'create_new_notification_success';
 export const ON_NOTIFICATION_OPEN = 'on_notification_open';
+export const ON_UNIT_NOTIFICATION_OPEN = 'on_unit_notification_open';
+export const ON_ADMIN_NOTIFICATION_OPEN = 'on_admin_notification_open';
 export const TOGGLE_ADMIN_NOTIFICATION = 'toggle_admin_notification';
 export const REFRESH_NOTIFICATION_START = 'refresh_notification_start';
 export const REFRESH_NOTIFICATION_SUCCESS = 'refresh_notification_success';

@@ -9,8 +9,8 @@ import thunk from 'redux-thunk';
 const persistConfig = {
     key: 'root',
     storage: FilesystemStorage,
-    whitelist: ['AppReducer', 'UserReducer','DashboardReducer']
-    //blacklist: ['DashboardReducer']
+    whitelist: ['AppReducer', 'UserReducer'],
+    blacklist: ['DashboardReducer']
 };
 
 //const newReducer = combineReducers(reducers,appReducer);

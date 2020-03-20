@@ -113,7 +113,8 @@ class Dashboard extends React.Component {
 
     let self = this;
     self.setState({isLoading:true})
-    self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
+    const { fetchAssociationByAccountId }=self.props
+    fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
       console.log('HERE DATA TO DISPLAY',data,self.props)
       if(data){
         self.requestNotifPermission();
@@ -341,7 +342,8 @@ class Dashboard extends React.Component {
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
           //self.roleCheckForAdmin(self.state.assocId)
-          self.props.fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
+          const { fetchAssociationByAccountId }=self.props
+    fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
             self.onAssociationChange(self.state.dropdownIndex,self.state.unitDropdownIndex);
           });
         } else {

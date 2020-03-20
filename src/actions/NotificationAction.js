@@ -105,11 +105,14 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
         activeNotifications.map((data, index) => {
           if (data.ntType === 'gate_app') {
-            data.vlfName = data.visitorlog.length ===0?"" : data.visitorlog[0].vlfName;
-            data.unUniName = data.visitorlog.length ===0?"" :data.visitorlog[0].unUniName;
-            data.vlMobile = data.visitorlog.length ===0?"" :data.visitorlog[0].vlMobile;
+            data.vlfName = data.visitorlog.length ===0?"gate_app" : data.visitorlog[0].vlfName;
+            data.unUniName = data.visitorlog.length ===0?"gate_app" :data.visitorlog[0].unUniName;
+            data.vlMobile = data.visitorlog.length ===0?"gate_app" :data.visitorlog[0].vlMobile;
             gateAppNotif.push({ open:true, ...data });
           } else if (data.ntType === 'Join_Status') {
+            data.vlfName = data.vlfName =="" || data.vlfName ==undefined?"join_status":data.vlfName;
+            data.unUniName = data.unUniName =="" || data.unUniName ==undefined?"join_status":data.unUniName;
+            data.vlMobile = data.vlMobile =="" || data.vlMobile ==undefined?"join_status":data.vlMobile;
             joinStatNotif.push({open:true, ...data});
           } else if (data.ntType === 'Join' || data.ntType === 'joinrequest') {
             joinNotif.push({open:true, ...data});
@@ -560,15 +563,19 @@ export const newNotifInstance = data => {
   };
 };
 
-export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
-  console.log("Notification to be read:",notif,index,oyeURL,ntid);
+export const onNotificationOpen = (notif, index, oyeURL,ntid,status) => {
+  
   return dispatch => {
+    console.log("Notification to be read:",notif,index,oyeURL,ntid);
+
     let newNotif = Object.assign([], notif);
+
     newNotif[index].read = true;
   
     newNotif[index].ntIsActive = false;
 
-    let headers = {
+
+   let headers = {
       'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
       'Content-Type': 'application/json'
     };
@@ -591,11 +598,20 @@ export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
 
     console.log("NEWNOTIFICATIONLIST",newNotif);
 
-    dispatch({
-      type: ON_NOTIFICATION_OPEN,
-      payload: newNotif
-    });
-  };
+    if(status==="unit"){
+      dispatch({
+        type: ON_UNIT_NOTIFICATION_OPEN,
+        payload: newNotif
+      });
+    }
+    if(status==="admin"){
+      dispatch({
+        type: ON_ADMIN_NOTIFICATION_OPEN,
+        payload: newNotif
+      });
+    }
+
+     };
 };
 
 export const reverseNotification = notification => {

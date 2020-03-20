@@ -516,7 +516,8 @@ class NotificationScreen extends PureComponent {
                 }}
                 onPress={() => {
                     if (item.ntIsActive) { 
-                        this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid,);
+                        this.readTheSelectedNotification(item)
+                       // this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid,);
                         this.openTheSelNotification(item)
                     }
                     else {
@@ -996,6 +997,7 @@ class NotificationScreen extends PureComponent {
                                 height: 20, alignItems: 'center', justifyContent: 'center'
                             }} onPress={() => {
                                 if (item.ntIsActive) {
+
                                     this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid);
                                     }
                                this.openTheSelNotification(item)
@@ -1888,7 +1890,7 @@ class NotificationScreen extends PureComponent {
         let selectedView = this.state.selectedView;
         let notificationList = selectedView === 0 ? this.props.unitDummyNotification : this.props.adminDummyNotification;
         let newArr = [];
-        console.log("Text_______:",text);
+        console.log("Text_______:",text,notificationList);
         let formattedText = text.toLowerCase();
         console.log("============================================:", notificationList, formattedText);
         if (text.length !== 0 || text.length !== null) {
@@ -2430,6 +2432,31 @@ class NotificationScreen extends PureComponent {
 
       }
 
+
+      readTheSelectedNotification(selectedNotiifcation){
+        let unitNotification = this.props.unitNotification;
+        let adminNotification = this.props.adminNotification;
+        //ntType "Join" -Admin "gate_app"  "Join_Status"
+        const{ onNotificationOpen }=this.props
+
+    
+        
+
+        if(selectednotification.ntType=="gate_app" || selectednotification.ntType =="Join_Status"){
+            onNotificationOpen(unitNotification, selectednotification.notifIndex,this.props.oyeURL, selectedNotiifcation.ntid,"unit")
+           
+
+        }
+        else if(selectednotification.ntType== "Join" ){
+            onNotificationOpen(adminNotification,  selectednotification.notifIndex,this.props.oyeURL,selectedNotiifcation.ntid,"admin")
+      
+
+        }
+      }
+
+
+
+    
 
 
 
