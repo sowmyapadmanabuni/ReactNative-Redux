@@ -17,6 +17,7 @@ import {NavigationEvents} from 'react-navigation';
 import {connect} from 'react-redux';
 import base from '../src/base';
 import {updateIdDashboard} from '../src/actions';
+import axios from 'axios';
 
 import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
 import IcoMoonConfig from '../src/assets/selection.json';

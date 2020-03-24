@@ -318,7 +318,8 @@ class RegisterMe extends Component {
                                                             {
                                                                 text: 'Ok',
                                                                 onPress: () =>
-                                                                    this.props.navigation.navigate('ResDashBoard')
+                                                                this.listenToFirebase(unitList.unUnitID)
+                                                                    //this.props.navigation.navigate('ResDashBoard')
                                                             }
                                                         ],
                                                         {
@@ -671,7 +672,8 @@ class RegisterMe extends Component {
                                                             {
                                                                 text: 'Ok',
                                                                 onPress: () =>
-                                                                    this.props.navigation.navigate('ResDashBoard')
+                                                                    this.listenToFirebase(unitList.unUnitID)
+                                                                   //this.props.navigation.navigate('ResDashBoard')
                                                             }
                                                         ],
                                                         {
@@ -756,6 +758,17 @@ class RegisterMe extends Component {
                 });
         }
     };
+
+
+    listenToFirebase(unitId){
+     //   console.log("Data on listen:",anu,this.props);
+        //const {MyAccountID} = this.props;
+       // firebase.messaging().subscribeToTopic('' + MyAccountID + unitId + 'usernotif').then((data)=>{
+         //   console.log("Data:",data,'' + MyAccountID + unitId + 'usernotif')
+            this.props.navigation.navigate('ResDashBoard')
+        //});
+        //  
+    }
 
     checkStatus = () => {
         const { unitList, AssnId } = this.props.navigation.state.params;

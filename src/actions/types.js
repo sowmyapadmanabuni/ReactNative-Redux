@@ -62,3 +62,4 @@ export const SEGREGATE_DUMMY_UNIT_NOTIFICATION = 'segregate_dummy_unit_notificat
 export const SEGREGATE_DUMMY_ADMIN_NOTIFICATION = 'segregate_dummy_admin_notification';
 export const TOGGLE_UNIT_COLLAPSIBLE = 'toggle_unit_collapsible';
 export const TOGGLE_ADMIN_COLLAPSIBLE = 'toggle_admin_collapsible';
+export const UPDATE_NOTIFICATION_POP_UP = 'update_notification_pop_up';

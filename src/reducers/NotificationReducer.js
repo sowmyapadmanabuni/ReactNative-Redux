@@ -21,6 +21,7 @@ import {
   SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
   TOGGLE_UNIT_COLLAPSIBLE,
   TOGGLE_ADMIN_COLLAPSIBLE,
+  UPDATE_NOTIFICATION_POP_UP,
   ON_UNIT_NOTIFICATION_OPEN,
   ON_ADMIN_NOTIFICATION_OPEN
 } from '../actions/types';
@@ -39,7 +40,8 @@ const INITIAL_STATE = {
   unitNotification:[],
   adminNotification:[],
   unitDummyNotification:[],
-  adminDummyNotification:[]
+  adminDummyNotification:[],
+  popUpNotification:[]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -125,6 +127,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case ON_GATE_OPEN:
       return { ...state, notifications: action.payload };
+
+      case UPDATE_NOTIFICATION_POP_UP:
+        return{...state,popUpNotification:action.payload};
 
     default:
       return state;

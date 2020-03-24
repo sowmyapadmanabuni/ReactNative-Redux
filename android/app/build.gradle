@@ -20,6 +20,7 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+
 import com.android.build.OutputFile
 
 /**
@@ -196,6 +197,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-linear-gradient')
     implementation project(':@react-native-community_datetimepicker')
     implementation project(':react-native-safe-area-context')
     implementation project(':@react-native-community_netinfo')

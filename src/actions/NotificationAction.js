@@ -22,7 +22,8 @@ import {
   SEGREGATE_DUMMY_UNIT_NOTIFICATION,
   SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
   TOGGLE_UNIT_COLLAPSIBLE,
-  TOGGLE_ADMIN_COLLAPSIBLE
+  TOGGLE_ADMIN_COLLAPSIBLE,
+  UPDATE_NOTIFICATION_POP_UP
 } from './types';
 import _ from 'lodash';
 import firebase from 'firebase';
@@ -598,6 +599,7 @@ export const newNotifInstance = data => {
 export const onNotificationOpen = (notif, index, oyeURL,ntid,status) => {
   return dispatch => {
     let newNotif = Object.assign([], notif);
+    
     newNotif[index].read = true;
   
     newNotif[index].ntIsActive = false;
@@ -1378,19 +1380,20 @@ export const createUserNotification = (
 //   };
 // };
 
-export const toggleUnitCollapsible = (prevData, value, index,item) => {
+export const toggleUnitCollapsible = (prevData, value,item) => {
   return dispatch => {
     let newVal = prevData;
     console.log("sfsfgs:",prevData, value, index,item)
+   // newVal[index].open = !value
     for (let i in prevData){
-      if(item.ntid === prevData[i].ntid){
+      if(item === prevData[i].ntid){
         newVal[i].open = !value;
       }
       else{
         newVal[i].open = true;
       }
     }
-    console.log("New Value:",...newVal,index,value);
+    console.log("New Value:",...newVal,value);
     dispatch({
       type: TOGGLE_UNIT_COLLAPSIBLE,
       payload: [...newVal]
@@ -1398,19 +1401,20 @@ export const toggleUnitCollapsible = (prevData, value, index,item) => {
   };
 };
 
-export const toggleAdminCollapsible = (prevData, value, index,item) => {
+export const toggleAdminCollapsible = (prevData, value,item) => {
   return dispatch => {
     let newVal = prevData;
-    console.log("sfsfgs:",prevData, value, index,item)
+    console.log("sfsfgs:",prevData, value,item)
+    //newVal[index].open = !value
     for (let i in prevData){
-      if(item.ntid === prevData[i].ntid){
+     if(item === prevData[i].ntid){
         newVal[i].open = !value;
       }
       else{
         newVal[i].open = true;
       }
     }
-    console.log("New Value:",...newVal,index,value);
+    console.log("New Value:",...newVal,value);
     dispatch({
       type: TOGGLE_ADMIN_COLLAPSIBLE,
       payload: [...newVal]
@@ -1530,6 +1534,14 @@ export const toggleCollapsible = (prevData, value, index,status) => {
   console.log('GETTHEDATAOFNOTFICATION',prevData,value,index)
   return dispatch => {
     let newVal = prevData;
+    // for (let i in prevData){
+    //   if(item === prevData[i].ntid){
+    //      newVal[i].open = !value;
+    //    }
+    //    else{
+    //      newVal[i].open = true;
+    //    }
+    //   }
     newVal[index].open = !value;
 
     if(status==="unit"){
@@ -1560,3 +1572,13 @@ export const toggleCollapsible = (prevData, value, index,status) => {
    
   
 };
+
+
+export const updatePopUpNotification = (notification) => {
+  return dispatch => {
+    dispatch({
+      type:UPDATE_NOTIFICATION_POP_UP,
+      payload:notification
+    })
+  }
+}

@@ -250,6 +250,15 @@ class CreateSOS extends React.Component {
     }
 
     navigateToSettings() {
+        this.sound.stop((success) => {
+
+            console.log("Sucuuu:",success);
+            if (success) {
+                console.log('successfully finished playing');
+            } else {
+                console.log('playback failed due to audio decoding errors');
+            }
+        });
         if (Platform.OS === 'ios') {
             Linking.openURL('app-settings:');
         } else {
