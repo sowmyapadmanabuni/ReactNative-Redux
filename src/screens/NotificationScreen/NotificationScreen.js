@@ -114,6 +114,7 @@ class NotificationScreen extends PureComponent {
     componentDidMount() {
 
         console.log("USer Reducer Data:", this.props.getNotifications);
+       // this.mergeUnitData()
         this.listenToFirebase()
         this.setState({
             userRole: this.props.dashBoardReducer.role,
@@ -126,7 +127,7 @@ class NotificationScreen extends PureComponent {
 
        
     }
-
+   
     listenToFirebase() {
         let self = this;
         let associationList = self.props.dashBoardReducer.dropdown;
@@ -586,22 +587,23 @@ class NotificationScreen extends PureComponent {
                             
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupancy
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>SoldOwner Occupaied</Text>
                                     </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupaied by
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>Owner
+                                   </Text>
                                     </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Owner Name
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.ntDesc.substr(0,item.ntDesc.indexOf(' '))=="Your" ? this.props.userReducer.MyFirstName:item.ntDesc.substr(0,item.ntDesc.indexOf(' '))}</Text>
                                     </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Mobile
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}></Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.ntMobile}</Text>
                                     </Text>
                                 </View>
                                { (item.ntType !== "Join_Status") ?

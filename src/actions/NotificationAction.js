@@ -67,7 +67,7 @@ export const segregateDummyAdminNotification = (notification) => {
   }
 }
 
- export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
+export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
   return dispatch => {
     let page = 1;
     
@@ -106,15 +106,7 @@ export const segregateDummyAdminNotification = (notification) => {
 
         activeNotifications.map((data, index) => {
 
-          //let previousUserData={};
-
-         
-          // let stat = await base.services.OyeLivingApi.myUnitOwnerDetails(data.sbUnitID);
-          // console.log('datatatattatatat',stat)
-
-          // let respData=stat.responseJson.data.unit
-
-          if (data.ntType === 'gate_app') {
+           if (data.ntType === 'gate_app') {
            
             data.vlfName = data.visitorlog.length ===0?"gate_app" : data.visitorlog[0].vlfName;
             data.unUniName = data.visitorlog.length ===0?"gate_app" :data.visitorlog[0].unUniName;
@@ -122,13 +114,11 @@ export const segregateDummyAdminNotification = (notification) => {
             gateAppNotif.push({ open:true, ...data });
           } else if (data.ntType === 'Join_Status') { 
             
-           // data.prevData=respData
             data.vlfName = data.vlfName =="" || data.vlfName ==undefined?"join_status":data.vlfName;
             data.unUniName = data.unUniName =="" || data.unUniName ==undefined?"join_status":data.unUniName;
             data.vlMobile = data.vlMobile =="" || data.vlMobile ==undefined?"join_status":data.vlMobile;
             joinStatNotif.push({open:true, ...data});
           } else if (data.ntType === 'Join' || data.ntType === 'joinrequest') {
-            //data.prevData=respData
            joinNotif.push({open:true, ...data});
           } else if (data.ntType === 'Announcement') {
             data.vlfName = "Announcement";
@@ -140,12 +130,59 @@ export const segregateDummyAdminNotification = (notification) => {
         
 
           for(let i=0;i<joinNotif.length;i++){
-              joinNotif[i].userImage=userImage
+            // axios
+            // .get(
+            //   `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${joinNotif[i].sbUnitID}`,
+            // {
+            //     headers: {
+            //       'Content-Type': 'application/json',
+            //       'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+            //       'Authorization': 'my-auth-token'
+            //     }
+            //   }
+            // )
+            // .then(response => {
+            //   console.log('RESPONSE >>>>>@@@@@@@@@@@@', response,response.data.data.unit);
+            //  if(response.data.success){
+            //   let data=response.data.data.unit
+            //   joinNotif[i].userImage=userImage
+            //   joinNotif[i].userData=data
+            //  }
+            //  else{
+            //   joinNotif[i].userImage=userImage
+            //  }
+              
+            // }).catch(error => console.log("ERROR", error))
+            joinNotif[i].userImage=userImage
+              
           }
           for(let i=0;i<joinStatNotif.length;i++){
-              joinStatNotif[i].userImage=userImage
+            // axios
+            // .get(
+            //   `http://${oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${joinStatNotif[i].sbUnitID}`,
+            // {
+            //     headers: {
+            //       'Content-Type': 'application/json',
+            //       'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+            //       'Authorization': 'my-auth-token'
+            //     }
+            //   }
+            // )
+            // .then(response => {
+            //   console.log('RESPONSE >>>>>@@@@@@@@@@@@', response,response.data.data.unit);
+            //  if(response.data.success){
+            //   let data=response.data.data.unit
+            //   joinStatNotif[i].userImage=userImage
+            //   joinStatNotif[i].userData=data
+            //  }
+            //  else{
+            //   joinStatNotif[i].userImage=userImage
+            //  }
+            // }).catch(error => console.log("ERROR", error))
+             joinStatNotif[i].userImage=userImage
           }
-         // console.log('JOIN NOTIFICATIONS#####',joinNotif,joinStatNotif)
+  
+          console.log('JOIN NOTIFICATIONS#####',joinNotif,joinStatNotif)
           const uniqueJoinStat = _.uniqBy(joinStatNotif, 'sbSubID');
         const uniqueJoin = _.uniqBy(joinNotif, 'sbSubID');
         let allNotifs = [
@@ -237,25 +274,6 @@ export const segregateDummyAdminNotification = (notification) => {
             payload: [...succ]
           });
         });
-
-        // sorted.map((data, index) => {
-        //   if (data.ntType !== 'gate_app') {
-        //     firebaseNoti.push({ ...data });
-        //   } else {
-        //     firebase
-        //       .database()
-        //       .ref(`NotificationSync/A_${data.asAssnID}/${data.sbMemID}`)
-        //       .on('value', snapshot => {
-        //         let val = snapshot.val();
-        //         firebaseNoti.push({ ...data, ...val });
-        //         // console.log(snapshot.val(), 'value_firebase');
-        //         dispatch({
-        //           type: GET_NOTIFICATIONS_SUCCESS,
-        //           payload: [...firebaseNoti]
-        //         });
-        //       });
-        //   }
-        // });
       })
       .catch(error => {
         console.log(error, 'error fetching notifications');

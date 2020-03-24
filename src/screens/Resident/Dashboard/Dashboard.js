@@ -116,9 +116,9 @@ class Dashboard extends React.Component {
       if(data){
         self.requestNotifPermission();
         self.myProfileNet();
-        self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
-        self.getVehicleList(); 
+        self.listenRoleChange();
+         self.getVehicleList(); 
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false});
         self.getPopUpNotifications();
