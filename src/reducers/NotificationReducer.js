@@ -20,7 +20,8 @@ import {
   SEGREGATE_DUMMY_UNIT_NOTIFICATION,
   SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
   TOGGLE_UNIT_COLLAPSIBLE,
-  TOGGLE_ADMIN_COLLAPSIBLE
+  TOGGLE_ADMIN_COLLAPSIBLE,
+  UPDATE_NOTIFICATION_POP_UP
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -37,7 +38,8 @@ const INITIAL_STATE = {
   unitNotification:[],
   adminNotification:[],
   unitDummyNotification:[],
-  adminDummyNotification:[]
+  adminDummyNotification:[],
+  popUpNotification:[]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -71,7 +73,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
 
     case GET_NOTIFICATIONS_FAILED:
-      return { ...state, loading: false, notifications: action.payload };
+      return { ...state, loading:false, notifications: action.payload };
 
     case GET_NOTIFICATIONS_SUCCESS:
       return {
@@ -118,6 +120,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case ON_GATE_OPEN:
       return { ...state, notifications: action.payload };
+
+      case UPDATE_NOTIFICATION_POP_UP:
+        return{...state,popUpNotification:action.payload};
 
     default:
       return state;

@@ -68,6 +68,7 @@ export default (state = INITIAL_STATE, action) => {
                 SelectedUnitID:action.payload.allAssociations[0].unit.length>0?action.payload.allAssociations[0].unit[0].value:"",
                 unitID:action.payload.allAssociations[0].unit.length>0?action.payload.allAssociations[0].unit[0].value:"",
                 role:action.payload.allAssociations[0].roleId,
+                memberList:action.payload.memberList,
                 isLoading: false,
                 called: true
             };

@@ -35,7 +35,9 @@ import {fetchAssociationByAccountId,
         updateJoinedAssociation, 
         updateSelectedDropDown, 
         updateUserInfo, 
-        updateuserRole } from '../../../actions';
+        updateuserRole ,
+        updatePopUpNotification
+      } from '../../../actions';
 import IcoMoonConfig from '../../../assets/selection.json';
 import base from '../../../base';
 import CardView from '../../../components/cardView/CardView';
@@ -82,7 +84,8 @@ class Dashboard extends React.Component {
       myAdminIconHeight: Platform.OS === 'ios' ? 20 : 20,
       selectedView: 0,
       invoicesList: [],
-      dropdownIndex:0
+      dropdownIndex:0,
+      unitDropdownIndex:0
 
 
     };
@@ -109,9 +112,11 @@ class Dashboard extends React.Component {
 
     const { MyAccountID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
+    const {updateNotificationData} = this.props;
 
     let self = this;
-    self.setState({isLoading:true})
+    self.setState({isLoading:true});
+    updateNotificationData(false);
     self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
       console.log('HERE DATA TO DISPLAY',data,self.props)
       if(data){
@@ -119,10 +124,10 @@ class Dashboard extends React.Component {
         self.myProfileNet();
         self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
-        self.getVehicleList();
+        self.getVehicleList(); 
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false});
-        self.getPopUpNotifications();
+     //   self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown,true)
       }
       else{
@@ -152,105 +157,33 @@ class Dashboard extends React.Component {
   async getPopUpNotifications(){
     let self = this;
     const { MyAccountID } = self.props.userReducer;
+    const {updatePopUpNotification,updateNotificationData} = self.props;
 
     let options = {
       method:"get",
       url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
+      //url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/39`,
       headers:{
         "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
     };
 
     axios(options).then((response)=>{
-      console.log('Data received in data association fetch:',response)
-      let data = response.data.data.memberListByAccount;
-        //alert("kkk")
-        console.log("IN New API Response>>>>>>>>>>>>>>>>>>>>>>:1:",data)
-        let associationArray = [];
-        let associationIdArray = [];
-        for (let i in data) {
-          let associationDetail = data[i].association[0];
-          
-          let unitArray = associationDetail.unit;
-          let units = [];
-          unitArray.map((mappedData)=>{
-            units.push({
-            value:mappedData.unUniName,
-            name:mappedData.unUniName,
-            unitId:mappedData.unUnitID,
-            myRoleId:data[i].mrmRoleID,
-            })
-          })
-          let associationData = {
-            value:associationDetail.asAsnName,
-            name:associationDetail.asAsnName,
-            id:i,
-            associationId:associationDetail.asAssnID,
-            roleId:data[i].mrmRoleID,
-            unit:units
-          }
-
-          associationArray.push(associationData)
-          associationIdArray.push({id:associationDetail.asAssnID})
-        }
-
-        let sortedAssociationData = associationArray.sort(base.utils.validate.compareAssociationNames);
-        console.log("sortedAssociationData",sortedAssociationData);
-        
-       
-
-    // updateUserInfo({
-    //   prop: 'SelectedAssociationID',
-    //   value: sortedAssociationData[0].associationId
-    // });
-
-   // assId: null,
-    //uniID: null,
-
-    updateSelectedDropDown({
-      prop: 'selectedDropdown',
-      value: sortedAssociationData[0].value
-    });
-    updateIdDashboard({
-      prop: 'assId',
-      value: sortedAssociationData[0].associationId
-    });
-
-    // updateSelectedDropDown({
-    //   prop: 'assId',
-    //   value: sortedAssociationData[0].associationId
-    // });
-
-    updateIdDashboard({
-      prop: 'uniID',
-      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].unitId
-    });
-
-    updateSelectedDropDown({
-      prop: "selectedDropdown1",
-      value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].value
-    });
-
-    // updateSelectedDropDown({
-    //   prop: "unitID",
-    //   value: sortedAssociationData[0].unit.length === 0 ? "" : sortedAssociationData[0].unit[0].unitId
-    // });
-
-    updateUnitDropdown({
-      value: dropdown[0].unit,
-      associationId: sortedAssociationData[0].associationId
-    })
-
-    // updateIdDashboard({
-    //   prop: 'assId',
-    //   value: sortedAssociationData[0].associationId
-    // });
-    // updateUserInfo({
-    //   prop: 'SelectedAssociationID',
-    //   value: sortedAssociationData[0].associationId
-    // });
-
-    console.log("Received Data:",responseData);
+      try{
+        let sResp = response.data.data.popupNotifications;
+        console.log('Data received in data notification pop up fetch:',sResp);
+      if(sResp.length !== 0){
+        updatePopUpNotification(sResp);
+        updateNotificationData(true);
+      }else{
+        updatePopUpNotification([]);
+        updateNotificationData(false);
+      }
+      }catch(e){
+        console.log(e)
+      }
+      
+      
   })
 }
 
@@ -315,7 +248,6 @@ class Dashboard extends React.Component {
     if (count === 0 && isNotificationClicked) {
       console.log("COMING HERE")
       const {updateNotificationData} = this.props;
-      updateNotificationData(true);
     }
   }
 
@@ -339,9 +271,9 @@ class Dashboard extends React.Component {
           let firebaseMessaging = firebase.messaging();
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
-          //self.roleCheckForAdmin(self.state.assocId);
+          //self.roleCheckForAdmin(self.state.assocId)
           self.props.fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
-            self.onAssociationChange(self.state.dropdownIndex);
+            self.onAssociationChange(self.state.dropdownIndex,self.state.unitDropdownIndex);
           });
         } else {
           counter = 1;
@@ -540,7 +472,10 @@ class Dashboard extends React.Component {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-          //this.props.refreshNotifications(oyeURL, MyAccountID);
+          const { fetchAssociationByAccountId }= this.props;
+          fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
+            this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);
+          });
           this.props.getNotifications(oyeURL, MyAccountID);
           this.showLocalNotification(notification);
         });  
@@ -570,6 +505,8 @@ class Dashboard extends React.Component {
             notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
         this.readFBRTB(true);
+        this.getPopUpNotifications();
+        //this.no
       });
     }
   };
@@ -605,7 +542,7 @@ class Dashboard extends React.Component {
         let receivedData = snapshot.val();
         console.log("Received Data in dashboard:", receivedData);
         if (receivedData !== null) {
-          console.log("Update Notification List Now")
+          console.log("Update Notification List Now1111")
           self.updateDashboard();
         }
       })
@@ -627,11 +564,15 @@ class Dashboard extends React.Component {
   }
 
   updateDashboard() {
-    let self = this;
     console.log("Update Dashboard Changes if any------------------------------------>>>>>>>>>>>")
-    self.props.fetchAssociationByAccountId(self.props.oyeURL,self.props.MyAccountID)
+    const{ fetchAssociationByAccountId } =this.props
+    fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
+      this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);
+    });
+    let self=this;
     self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
-  }
+   
+     }
 
   async getVehicleList() {
     let self = this;
@@ -765,9 +706,9 @@ class Dashboard extends React.Component {
     this.roleCheckForAdmin(assId);
   };
 
-  onAssociationChange = (index) => {
+  onAssociationChange = (index,unitIndex) => {
 try{
-    console.log('GettheselectedAssocitation',  index, this.props.dropdown)
+    console.log('GettheselectedAssocitation',  index, this.props.dropdown,unitIndex)
 
     const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = this.props;
 
@@ -780,7 +721,7 @@ try{
     });
     updateIdDashboard({
       prop: 'uniID',
-      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
+      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[unitIndex].unitId
     });
   
 
@@ -1169,7 +1110,7 @@ try{
                       dropdownPosition={dropdown.length > 2 ? -5 : -2}
                       rippleOpacity={0}
                       onChangeText={(value, index) => {
-                        this.onAssociationChange(index);
+                        this.onAssociationChange(index,this.state.unitDropdownIndex);
                         this.props.updateuserRole({
                           prop: 'role',
                           value: dropdown[index].roleId
@@ -1222,6 +1163,9 @@ try{
                           prop: 'selectedDropdown1',
                           value: dropdown1[index].value
                         });
+                        this.setState({
+                          unitDropdownIndex:index
+                        })
                         this.getVehicleList();
                         //    this.updateUnit(value, index);
                       }}
@@ -1962,6 +1906,7 @@ export default connect(
     getDashAssoSync,
     fetchAssociationByAccountId,
     updateUnitDropdown,
-    updateNotificationData
+    updateNotificationData,
+    updatePopUpNotification
   }
 )(Dashboard);

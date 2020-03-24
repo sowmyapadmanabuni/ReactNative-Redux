@@ -117,6 +117,8 @@ class MyFamilyList extends React.Component {
 
     async myFamilyListGetData() {
         this.setState({loading: true});
+        console.log('GET THE FAMILY MEMBER DATA',this.props)
+
         let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
             this.props.dashBoardReducer.uniID,
             this.props.dashBoardReducer.assId,
@@ -150,9 +152,9 @@ class MyFamilyList extends React.Component {
                     prop: 'familyMemberCount',
                     value: reqData.length
                 });
-                this.setState({familyData: myFamilyList});
+                this.setState({familyData: reqData});
             } else {
-                this.showAlert(stat.error.message, true);
+               // this.showAlert(myFamilyList.error.message, true);
             }
         } catch (error) {
             base.utils.logger.log(error);
@@ -186,11 +188,11 @@ class MyFamilyList extends React.Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            this.setState({
-                isLoading: false
-            });
-        }, 1500);
+        // setTimeout(() => {
+        //     this.setState({
+        //         isLoading: false
+        //     });
+        // }, 1500);
         base.utils.validate.checkSubscription(this.props.assId)
         this.myFamilyListGetData();
         BackHandler.addEventListener('hardwareBackPress', this.processBackPress);
@@ -226,6 +228,7 @@ class MyFamilyList extends React.Component {
                         {item.fmImgName == '' ? (
                             <ZoomImage
                                 source={{
+                                    
                                     uri:
                                         'https://mediaupload.oyespace.com/' +
                                         base.utils.strings.noImageCapturedPlaceholder
@@ -238,7 +241,8 @@ class MyFamilyList extends React.Component {
                         ) : (
                             <ZoomImage
                                 source={{
-                                    uri: 'https://mediaupload.oyespace.com/' + item.fmImgName
+                                    uri:'data:image/png;base64,'+item.fmImgName
+                                   // uri: 'https://mediaupload.oyespace.com/' + item.fmImgName
                                 }}
                                 imgStyle={Style.placeholderImage}
                                 duration={300}
@@ -419,7 +423,7 @@ class MyFamilyList extends React.Component {
                     </SafeAreaView>
 
                     <View style={Style.progressViewStyle}>
-                        <ActivityIndicator size="large" color="#01CBC6"/>
+                        <ActivityIndicator size="large" color="#F3B431" />
                     </View>
                 </View>
             );

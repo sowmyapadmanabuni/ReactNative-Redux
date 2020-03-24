@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2019-09-30 11:29:48 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-03-18 12:51:31
+ * @Last Modified time: 2020-03-19 16:15:35
  */
 
 
@@ -30,7 +30,7 @@ import EmptyView from "../../components/common/EmptyView";
 import { updateSelectedCheckPoints } from '../../../src/actions';
 import Modal from "react-native-modal";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist'
 import PatrollingCheckPointsStyles from "./PatrollingCheckPointsStyles";
 const { height, width } = Dimensions.get('screen');
 import Toast, { DURATION } from 'react-native-easy-toast';
@@ -63,7 +63,7 @@ class PatrolShuffling extends React.Component {
     }
 
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.setState({
             data: this.props.selectedCheckPoints.selectedCheckPoints,
             isLottieModalOpen: true
@@ -71,7 +71,7 @@ class PatrolShuffling extends React.Component {
     }
 
     renderItem = ({ item, index, drag, moveEnd, isActive }) => {
-        console.log("SKJCKJDC:", item);
+        console.log("SKJCKJDC:", item, drag, moveEnd, isActive);
         let data = item;
         console.log("Item:", item.item);
         return (
@@ -81,6 +81,7 @@ class PatrolShuffling extends React.Component {
                 style={[PatrollingCheckPointsStyles.checkBoxView, { backgroundColor: isActive ? base.theme.colors.primary : base.theme.colors.white }]}
                 onLongPress={drag}
                 onPressOut={moveEnd}
+                onPressIn={drag}
             >
                 <View style={PatrollingCheckPointsStyles.checkBoxView}>
                     <TouchableHighlight onPress={() => this.mapModal(data)}
@@ -222,7 +223,8 @@ class PatrolShuffling extends React.Component {
                     data={this.state.data}
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => index.toString()}
-                    scrollPercent={15}
+                  //  scrollPercent={15}
+                    horizontal={false}
                     onDragEnd={({ data }) => this.setState({ data }, () => this.updateStore())}
                 />
                 {this.openMapModal()}

@@ -22,7 +22,8 @@ import {
   SEGREGATE_DUMMY_UNIT_NOTIFICATION,
   SEGREGATE_DUMMY_ADMIN_NOTIFICATION,
   TOGGLE_UNIT_COLLAPSIBLE,
-  TOGGLE_ADMIN_COLLAPSIBLE
+  TOGGLE_ADMIN_COLLAPSIBLE,
+  UPDATE_NOTIFICATION_POP_UP
 } from './types';
 import _ from 'lodash';
 import firebase from 'firebase';
@@ -105,9 +106,9 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
 
         activeNotifications.map((data, index) => {
           if (data.ntType === 'gate_app') {
-            data.vlfName = data.visitorlog[0].vlfName;
-            data.unUniName = data.visitorlog[0].unUniName;
-            data.vlMobile = data.visitorlog[0].vlMobile;
+            data.vlfName = data.visitorlog.length ===0?"" : data.visitorlog[0].vlfName;
+            data.unUniName = data.visitorlog.length ===0?"" :data.visitorlog[0].unUniName;
+            data.vlMobile = data.visitorlog.length ===0?"" :data.visitorlog[0].vlMobile;
             gateAppNotif.push({ open:true, ...data });
           } else if (data.ntType === 'Join_Status') {
             joinStatNotif.push({open:true, ...data});
@@ -560,6 +561,7 @@ export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
   console.log("Notification to be read:",notif,index,oyeURL);
   return dispatch => {
     let newNotif = Object.assign([], notif);
+    
     newNotif[index].read = true;
   
     newNotif[index].ntIsActive = false;
@@ -1053,7 +1055,8 @@ export const createUserNotification = (
             NTDUpdated: formatdate,
             UNOcSDate: occupancyDate,
             UNSldDate: soldDate,
-            ACNotifyID: senderId
+            ACNotifyID: senderId,
+            NTMobile :mobileNumber
           },
           {
             headers: headers
@@ -1291,19 +1294,20 @@ export const createUserNotification = (
 //   };
 // };
 
-export const toggleUnitCollapsible = (prevData, value, index,item) => {
+export const toggleUnitCollapsible = (prevData, value,item) => {
   return dispatch => {
     let newVal = prevData;
     console.log("sfsfgs:",prevData, value, index,item)
+   // newVal[index].open = !value
     for (let i in prevData){
-      if(item.ntid === prevData[i].ntid){
+      if(item === prevData[i].ntid){
         newVal[i].open = !value;
       }
       else{
         newVal[i].open = true;
       }
     }
-    console.log("New Value:",...newVal,index,value);
+    console.log("New Value:",...newVal,value);
     dispatch({
       type: TOGGLE_UNIT_COLLAPSIBLE,
       payload: [...newVal]
@@ -1311,19 +1315,20 @@ export const toggleUnitCollapsible = (prevData, value, index,item) => {
   };
 };
 
-export const toggleAdminCollapsible = (prevData, value, index,item) => {
+export const toggleAdminCollapsible = (prevData, value,item) => {
   return dispatch => {
     let newVal = prevData;
-    console.log("sfsfgs:",prevData, value, index,item)
+    console.log("sfsfgs:",prevData, value,item)
+    //newVal[index].open = !value
     for (let i in prevData){
-      if(item.ntid === prevData[i].ntid){
+     if(item === prevData[i].ntid){
         newVal[i].open = !value;
       }
       else{
         newVal[i].open = true;
       }
     }
-    console.log("New Value:",...newVal,index,value);
+    console.log("New Value:",...newVal,value);
     dispatch({
       type: TOGGLE_ADMIN_COLLAPSIBLE,
       payload: [...newVal]
@@ -1439,10 +1444,18 @@ export const onGateApp = notifications => {
   };
 };
 
-export const toggleCollapsible = (prevData, value, index) => {
-  console.log('GETTHEDATAOFNOTFICATION',prevData,value,index)
+export const toggleCollapsible = (prevData, value,item) => {
+  console.log('GETTHEDATAOFNOTFICATION',prevData,value,item)
   return dispatch => {
     let newVal = prevData;
+    // for (let i in prevData){
+    //   if(item === prevData[i].ntid){
+    //      newVal[i].open = !value;
+    //    }
+    //    else{
+    //      newVal[i].open = true;
+    //    }
+    //   }
     newVal[index].open = !value;
     dispatch({
       type: TOGGLE_COLLAPSIBLE,
@@ -1450,3 +1463,13 @@ export const toggleCollapsible = (prevData, value, index) => {
     });
   };
 };
+
+
+export const updatePopUpNotification = (notification) => {
+  return dispatch => {
+    dispatch({
+      type:UPDATE_NOTIFICATION_POP_UP,
+      payload:notification
+    })
+  }
+}

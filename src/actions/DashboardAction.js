@@ -687,7 +687,7 @@ export const getAssoMembers = (oyeURL, id) => {
       )
       .then(response => {
         let resData = response.data.data.memberListByAccount;
-
+        console.log('Datacoming in this place',resData,response)
         resData.map((data, index) => {
           // console.log(data.meJoinStat + index);
         });
@@ -697,6 +697,7 @@ export const getAssoMembers = (oyeURL, id) => {
           type: GET_MEMBERLIST_SUCCESS,
           payload: resData
         });
+
       })
       .catch(error => {
         dispatch({
@@ -780,42 +781,7 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
   
             console.log('GET ALL THE UNITS DATA TO SEGRIGATE',unitArray)
             console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',unitArray.length)
-            //  if(unitArray.length !==0){
-            //   let pushedArray=[]
-            //   let j=0
-            //   for(let i=0; i<unitArray.length;i++){
-                   
-  
-            //     if(unitArray[i].owner.length!==0){
-            //       if(unitArray[i].owner[0].acAccntID ===accountId){
-            //         pushedArray[j]=unitArray[i].owner[0]
-            //         j=j+1
-            //               }
-            //         }
-  
-  
-            //         if(unitArray[i].tenant.length!==0){
-            //           if(unitArray[i].tenant[0].acAccntID ===accountId){
-            //             pushedArray[j]=unitArray[i].tenant[0]
-            //             j=j+1
-            //           }
-            //       }
-  
-            //        }
-            //        pushedArray.map((mappedData)=>{
-            //   units.push({
-            //   value:"Unit"+mappedData.unUnitID,
-            //   name:"Unit"+mappedData.unUnitID,
-            //   unitId:mappedData.unUnitID,
-            //   myRoleId:mappedData.uoRoleID,
-            //   })
-            //      }) 
-  
-                 
-            //      console.log('GET ALL THE UNITS DATA TO SEGRIGATE6666666666',pushedArray)
-  
-  
-            // }
+           
            
             console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',unitArray)
             
@@ -830,7 +796,7 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
          
             
            
-           // console.log('GET ALL THE UNITS DATA TO SEGRIGATE@@@@@@@@@@@@@@@',filteredData)
+          
   
             let associationData = {
               value:associationDetail.asAsnName,
@@ -854,6 +820,7 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
                 dropdown:sortedAssociationData,
                 allAssociations:sortedAssociationData,
                 associationId:associationIdArray,
+                memberList:data
               }
             })
     

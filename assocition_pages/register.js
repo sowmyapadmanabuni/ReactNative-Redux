@@ -90,14 +90,14 @@ class RegisterMe extends Component {
             alert('Request already sent');
 
         } else {
-            anu = {
+           let anu = {
                 ASAssnID: unitList.asAssnID,
                 BLBlockID: unitList.blBlockID,
                 UNUnitID: unitList.unUnitID,
                 MRMRoleID: parseInt('6'),
                 FirstName: this.props.MyFirstName,
-                MobileNumber: this.props.MyMobileNumber,
-                ISDCode: this.props.MyISDCode,
+                MobileNumber: this.props.userReducer.MyMobileNumber,
+                ISDCode: this.props.userReducer.MyISDCode,
                 LastName: this.props.MyLastName,
                 Email: this.props.MyEmail,
                 SoldDate: this.state.dobText,
@@ -117,8 +117,8 @@ class RegisterMe extends Component {
                         UNUnitID: unitList.unUnitID,
                         MRMRoleID: parseInt('6'),
                         FirstName: this.props.MyFirstName,
-                        MobileNumber: this.props.MyMobileNumber,
-                        ISDCode: this.props.MyISDCode,
+                        MobileNumber: this.props.userReducer.MyMobileNumber,
+                        ISDCode: this.props.userReducer.MyISDCode,
                         LastName: this.props.MyLastName,
                         Email: this.props.MyEmail,
                         SoldDate: this.state.dobText,
@@ -139,8 +139,7 @@ class RegisterMe extends Component {
                             'Content-Type': 'application/json',
                             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
                         };
-                        let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
-                        // console.log(mobileNo);
+                        let mobileNo = this.props.userReducer.MyISDCode + this.props.userReducer.MyMobileNumber;
                         axios
                             .post(
                                 'http://' +
@@ -266,12 +265,13 @@ class RegisterMe extends Component {
                                                                 occupancyDate,
                                                                 soldDate,
                                                                 false,
-                                                                this.props.MyAccountID
+                                                                this.props.MyAccountID,
+                                                                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber
                                                             );
                                                         }
                                                     });
 
-                                                    getAssoMembers(oyeURL, MyAccountID);
+                                                   
 
                                                     this.props.updateJoinedAssociation(
                                                         this.props.joinedAssociations,
@@ -295,7 +295,8 @@ class RegisterMe extends Component {
                                                             {
                                                                 text: 'Ok',
                                                                 onPress: () =>
-                                                                    this.props.navigation.navigate('ResDashBoard')
+                                                                this.listenToFirebase(unitList.unUnitID)
+                                                                    //this.props.navigation.navigate('ResDashBoard')
                                                             }
                                                         ],
                                                         {
@@ -415,7 +416,7 @@ class RegisterMe extends Component {
             alert('You already requested to join this unit');
 
         } else {
-            anu = {
+           let anu = {
                 ASAssnID: unitList.asAssnID,
                 BLBlockID: unitList.blBlockID,
                 UNUnitID: unitList.unUnitID,
@@ -462,22 +463,14 @@ class RegisterMe extends Component {
                     console.log('*******');
                     let responseData_1 = response.data;
                     if (responseData_1.success) {
-                        // let isAssocNotificationUpdating = 0;
-                        // let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}`;
-                        // fb.database().ref(associationPath).set({
-                        //     isAssocNotificationUpdating
-                        // }).then((data) => {
-                        //     console.log('Data added to FRTDB:', data);
-                        // }).catch(error => {
-                        //     console.log("Error:", error);
-                        // })
+                        
                         let headers_2 = {
                             'Content-Type': 'application/json',
                             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
                         };
 
-                        let mobileNo = this.props.MyISDCode + this.props.MyMobileNumber;
-                        console.log(mobileNo);
+                        let mobileNo = this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber;
+                        console.log("GEMOBNUM",mobileNo);
                         axios
                             .post(
                                 'http://' +
@@ -631,7 +624,8 @@ class RegisterMe extends Component {
                                                             {
                                                                 text: 'Ok',
                                                                 onPress: () =>
-                                                                    this.props.navigation.navigate('ResDashBoard')
+                                                                    this.listenToFirebase(unitList.unUnitID)
+                                                                   //this.props.navigation.navigate('ResDashBoard')
                                                             }
                                                         ],
                                                         {
@@ -716,6 +710,17 @@ class RegisterMe extends Component {
                 });
         }
     };
+
+
+    listenToFirebase(unitId){
+     //   console.log("Data on listen:",anu,this.props);
+        //const {MyAccountID} = this.props;
+       // firebase.messaging().subscribeToTopic('' + MyAccountID + unitId + 'usernotif').then((data)=>{
+         //   console.log("Data:",data,'' + MyAccountID + unitId + 'usernotif')
+            this.props.navigation.navigate('ResDashBoard')
+        //});
+        //  
+    }
 
     checkStatus = () => {
         const { unitList, AssnId } = this.props.navigation.state.params;
@@ -1142,12 +1147,12 @@ const mapStateToProps = state => {
             user != null ? user.acMobile : state.UserReducer.MyMobileNumber,
         MyISDCode: user != null ? user.acisdCode : state.UserReducer.MyISDCode,
         userData: state.UserReducer,
-
-        joinedAssociations: state.JoinAssociationReducer.joinedAssociations,
+       joinedAssociations: state.JoinAssociationReducer.joinedAssociations,
         champBaseURL: state.OyespaceReducer.champBaseURL,
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,
-        memberList: state.DashboardReducer.memberList
+        memberList: state.DashboardReducer.memberList,
+        userReducer:state.UserReducer
     };
 };
 

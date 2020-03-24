@@ -44,11 +44,11 @@ class RootApp extends Component {
   }
 
   componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
+   // AppState.addEventListener('change', this._handleAppStateChange);
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
+   // AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   _handleAppStateChange = (nextAppState) => {
@@ -72,12 +72,9 @@ class RootApp extends Component {
     return (
       <Provider store={store}>
         <CheckInternet />
-        {/* <NotificationPopUp /> */}
+        <NotificationPopUp />
         <StatusBarPlaceHolder />
         <App />
-        {/*
-        <FlashMessage position="top" duration={5000} />
-*/}
       </Provider>
     );
   }

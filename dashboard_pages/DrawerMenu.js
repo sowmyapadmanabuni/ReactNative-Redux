@@ -133,7 +133,8 @@ class DrawerMenu extends Component {
                 <Image
                 style={[HeaderStyles.imageStyles,{height:42,width:42,borderRadius:42/2}]}
                   source={{
-                    uri: 'https://mediaupload.oyespace.com/' +this.props.userReducer.userProfilePic
+                    uri: 'data:image/png;base64,'+this.props.userReducer.userProfilePic
+                   // uri: 'https://mediaupload.oyespace.com/' +this.props.userReducer.userProfilePic
                   }}
                 />
               )}
@@ -168,7 +169,7 @@ class DrawerMenu extends Component {
                       : ''}
                   </Text>:<View/>
                 ) : (
-                  <View style={{width:4,height:4,backgroundColor:'#000'}} />
+                  <View style={{width:4,height:4,}} />
                 )}
               </View>
             </TouchableOpacity>
@@ -180,10 +181,14 @@ class DrawerMenu extends Component {
               }}
             >
               <View style={[HeaderStyles.qrcode]}>
+              {this.props.assId != null ?
                 <Image
                   style={[HeaderStyles.qrcodeStyles]}
                   source={require('../icons/qr_profile.png')}
                 />
+                :
+                <View/>
+                }
               </View>
             </TouchableOpacity>
             </View>

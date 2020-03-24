@@ -69,7 +69,8 @@ class AddRegularVisitor extends Component {
         }else if (base.utils.validate.isBlank(self.state.profileUrl)) {
             Alert.alert('Profile Picture is mandatory', message)
         }else{
-            this.uploadImage(self.state.urlToServer)
+            this.sendRegData()
+           // this.uploadImage(self.state.urlToServer)
         }
 
     }
@@ -94,7 +95,8 @@ class AddRegularVisitor extends Component {
             ACISDCode2: "",
             ACISDCode3: "",
             ACISDCode4: "",
-            ACImgName:img //this.state.urlToServer
+            ACImgName:this.state.profileUrl
+           // ACImgName:img //this.state.urlToServer
         };
         console.log('DATA TO REGISTER USER',member, this.props.champBaseURL)
         const url = this.props.champBaseURL + "account/signup";
@@ -190,9 +192,13 @@ class AddRegularVisitor extends Component {
                 console.log("User tapped custom button: ", response.customButton)
             } else {
                 console.log('Response',response)
+                // this.setState({
+                //     urlToServer:response,
+                //     profileUrl:response.uri
+                // })
                 this.setState({
                     urlToServer:response,
-                    profileUrl:response.uri
+                    profileUrl:response.data
                 })
             }
         })
@@ -249,7 +255,7 @@ class AddRegularVisitor extends Component {
                                     />
                                     :
                                     <Image style={{height: 85, width: 85, borderRadius: 85 / 2, alignSelf: 'center'}}
-                                           source={{uri: this.state.profileUrl}}/>
+                                           source={{uri:'data:image/png;base64,'+ this.state.profileUrl}}/>
                                 }
                             </TouchableOpacity>
 

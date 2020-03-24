@@ -87,7 +87,7 @@ class EditProfile extends Component {
                 : "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
             imageUrl: this.props.navigation.state.params.myProfileImage,
             alterCca: this.props.navigation.state.params.alterCName == "+91" || this.props.navigation.state.params.alterCName == ""  ? 'IN' : this.props.navigation.state.params.alterCName,
-            primeCca:this.props.navigation.state.params.primeCName == "+91"  ? 'IN' :  this.props.navigation.state.params.primeCName,
+            primeCca:this.props.navigation.state.params.primeCName == "+91" || this.props.navigation.state.params.alterCName == "" ? 'IN' :  this.props.navigation.state.params.primeCName,
             profileName: this.props.navigation.state.params.firstName,
         })
     }
@@ -164,7 +164,11 @@ class EditProfile extends Component {
             Alert.alert("Please Enter a Valid Email Id")
         } else if (!base.utils.validate.isBlank(this.state.alterEmail) && !base.utils.validate.validateEmailId(this.state.alterEmail)) {
             Alert.alert("Please Enter a Valid alternate Email Id")
-        } else {
+         } 
+         else if (base.utils.validate.isBlank(this.state.imageUrl)) {
+             Alert.alert('Profile Picture is mandatory')
+        }
+        else {
             this.updateProfile()
         }
     };
@@ -365,7 +369,10 @@ class EditProfile extends Component {
             } else if (response.customButton) {
                 console.log("User tapped custom button: ", response.customButton)
             } else {
-                this.uploadImage(response)
+                this.setState({
+                    imageUrl:response.data
+                })
+              //  this.uploadImage(response)
             }
         })
     }
@@ -460,11 +467,25 @@ class EditProfile extends Component {
                                     >
                                         <View style={styles.containerView_ForProfilePicViewStyle}>
                                             <View style={styles.viewForProfilePicImageStyle}>
+                                                {this.state.imageUrl==undefined || this.state.imageUrl==null
+                                                || this.state.imageUrl=='' || this.state.imageUrl=="null" ?
+
                                                 <Image
                                                     style={styles.profilePicImageStyle}
-                                                    source={{uri: this.state.myProfileImage}}
+                                                    source={{
+                                                        uri:
+                                                            'https://mediaupload.oyespace.com/' +
+                                                            base.utils.strings.noImageCapturedPlaceholder
+                                                    }}
                                                 />
-                                            </View>
+                                                :
+                                                    <Image
+                                                        style={styles.profilePicImageStyle}
+                                                        source={{uri:'data:image/png;base64,'+this.state.imageUrl}}
+                                                    />
+                                                }
+
+                                                    </View>
 
                                             <View style={styles.imagesmallCircle}>
                                                 {/*<Image
@@ -478,6 +499,7 @@ class EditProfile extends Component {
                                             </View>
 
                                         </View>
+
                                     </TouchableOpacity>
 
                                     <View
@@ -578,7 +600,7 @@ class EditProfile extends Component {
                                                 }}
                                             >
                                                 <Text style={{color: "black", fontSize: hp("2%")}}>
-                                                    {this.state.primeCCode}
+                                                    {this.state.primeCName === "" ? "+91" : this.state.primeCCode}
                                                 </Text>
                                             </View>
 

@@ -292,7 +292,8 @@ class MyProfile extends Component {
                 </View>
                 <View style={styles.containerView_ForProfilePicViewStyle}>
                   <View style={styles.viewForProfilePicImageStyle}>
-                    {this.props.userReducer.userProfilePic == '' ? (
+                  {this.props.userReducer.userProfilePic == '' || this.props.userReducer.userProfilePic==undefined || this.props.userReducer.userProfilePic==null
+                    || this.props.userReducer.userProfilePic=="null"  ? (
                       <Image
                         style={{
                           ...styles.profilePicImageStyle,
@@ -311,9 +312,7 @@ class MyProfile extends Component {
                           position: 'relative'
                         }}
                         source={{
-                          uri:
-                            'https://mediaupload.oyespace.com/' +
-                            this.props.userReducer.userProfilePic
+                          uri: 'data:image/png;base64,'+this.props.userReducer.userProfilePic
                         }}
                       />
                     )}
