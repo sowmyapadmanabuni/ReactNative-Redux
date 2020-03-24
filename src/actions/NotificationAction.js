@@ -28,6 +28,7 @@ import {
 import _ from 'lodash';
 import firebase from 'firebase';
 import { notifications } from 'react-native-firebase';
+import base from '../base';
 
 export const segregateUnitNotification = (notification) => {
   console.log('Notification in Unit reducer:',notification)
@@ -67,7 +68,7 @@ export const segregateDummyAdminNotification = (notification) => {
   }
 }
 
-export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
+ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
   return dispatch => {
     let page = 1;
     
@@ -105,15 +106,31 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         let announcement = [];
 
         activeNotifications.map((data, index) => {
+
+          //let previousUserData={};
+
+         
+          // let stat = await base.services.OyeLivingApi.myUnitOwnerDetails(data.sbUnitID);
+          // console.log('datatatattatatat',stat)
+
+          // let respData=stat.responseJson.data.unit
+
           if (data.ntType === 'gate_app') {
-            data.vlfName = data.visitorlog.length ===0?"" : data.visitorlog[0].vlfName;
-            data.unUniName = data.visitorlog.length ===0?"" :data.visitorlog[0].unUniName;
-            data.vlMobile = data.visitorlog.length ===0?"" :data.visitorlog[0].vlMobile;
+           
+            data.vlfName = data.visitorlog.length ===0?"gate_app" : data.visitorlog[0].vlfName;
+            data.unUniName = data.visitorlog.length ===0?"gate_app" :data.visitorlog[0].unUniName;
+            data.vlMobile = data.visitorlog.length ===0?"gate_app" :data.visitorlog[0].vlMobile;
             gateAppNotif.push({ open:true, ...data });
-          } else if (data.ntType === 'Join_Status') {
+          } else if (data.ntType === 'Join_Status') { 
+            
+           // data.prevData=respData
+            data.vlfName = data.vlfName =="" || data.vlfName ==undefined?"join_status":data.vlfName;
+            data.unUniName = data.unUniName =="" || data.unUniName ==undefined?"join_status":data.unUniName;
+            data.vlMobile = data.vlMobile =="" || data.vlMobile ==undefined?"join_status":data.vlMobile;
             joinStatNotif.push({open:true, ...data});
           } else if (data.ntType === 'Join' || data.ntType === 'joinrequest') {
-            joinNotif.push({open:true, ...data});
+            //data.prevData=respData
+           joinNotif.push({open:true, ...data});
           } else if (data.ntType === 'Announcement') {
             data.vlfName = "Announcement";
             data.unUniName = "Announcement";
@@ -171,17 +188,21 @@ export const getNotifications = (oyeURL, MyAccountID, page, notifications) => {
         let unitNotification = [];
         let adminNotification = [];
         let succ = _.sortBy(allNotifs, ['ntdCreated']).reverse();
-        let j=0 ; let k=0;
+        let j=0 ; let k=0; let l=0;
         for(let i in succ){
           if(succ[i].ntType === "joinrequest" || succ[i].ntType === "Join"){
             succ[i].notifIndex=j
+            succ[i].acNoIndex=l
             j=j+1;
+          
             adminNotification.push(succ[i])
           }else{
             succ[i].notifIndex=k
+            succ[i].acNoIndex=l
             k=k+1;
             unitNotification.push(succ[i])
           }
+          l=l+1
         }
 
         console.log("Unit Notification in reducer::::::",unitNotification,adminNotification)
@@ -557,8 +578,7 @@ export const newNotifInstance = data => {
   };
 };
 
-export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
-  console.log("Notification to be read:",notif,index,oyeURL);
+export const onNotificationOpen = (notif, index, oyeURL,ntid,status) => {
   return dispatch => {
     let newNotif = Object.assign([], notif);
     
@@ -593,6 +613,54 @@ export const onNotificationOpen = (notif, index, oyeURL,ntid) => {
       payload: newNotif
     });
   };
+  
+  // return dispatch => {
+  //   console.log("Notification to be read:",notif,index,oyeURL,ntid);
+
+  //   let newNotif = Object.assign([], notif);
+
+  //   newNotif[index].read = true;
+  
+  //   newNotif[index].ntIsActive = false;
+
+
+  //  let headers = {
+  //     'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+  //     'Content-Type': 'application/json'
+  //   };
+
+  //   console.log("NOTIFICATION READ",newNotif[index]);
+
+  //   axios
+  //     .get(
+  //       `http://${oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${ntid}`,
+  //       {
+  //         headers: headers
+  //       }
+  //     )
+  //     .then(res => {
+  //       console.log("On Notification Open:",res.data);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+
+  //   console.log("NEWNOTIFICATIONLIST",newNotif);
+
+  //   if(status==="unit"){
+  //     dispatch({
+  //       type: ON_UNIT_NOTIFICATION_OPEN,
+  //       payload: newNotif
+  //     });
+  //   }
+  //   if(status==="admin"){
+  //     dispatch({
+  //       type: ON_ADMIN_NOTIFICATION_OPEN,
+  //       payload: newNotif
+  //     });
+  //   }
+
+  //    };
 };
 
 export const reverseNotification = notification => {
@@ -1444,8 +1512,8 @@ export const onGateApp = notifications => {
   };
 };
 
-export const toggleCollapsible = (prevData, value,item) => {
-  console.log('GETTHEDATAOFNOTFICATION',prevData,value,item)
+export const toggleCollapsible = (prevData, value, index,status) => {
+  console.log('GETTHEDATAOFNOTFICATION',prevData,value,index)
   return dispatch => {
     let newVal = prevData;
     // for (let i in prevData){
@@ -1457,11 +1525,34 @@ export const toggleCollapsible = (prevData, value,item) => {
     //    }
     //   }
     newVal[index].open = !value;
-    dispatch({
-      type: TOGGLE_COLLAPSIBLE,
-      payload: [...newVal]
-    });
-  };
+
+    if(status==="unit"){
+
+      dispatch({
+        type: TOGGLE_UNIT_COLLAPSIBLE,
+        payload: [...newVal]
+      });
+    }
+    if(status==="admin"){
+      dispatch({
+        type: TOGGLE_ADMIN_COLLAPSIBLE,
+        payload: [...newVal]
+      });
+    }
+
+   
+
+    // dispatch({
+    //   type: TOGGLE_COLLAPSIBLE,
+    //   payload: [...newVal]
+    // });
+
+  
+  
+    }
+   
+   
+  
 };
 
 

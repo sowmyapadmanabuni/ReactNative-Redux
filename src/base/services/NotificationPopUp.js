@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-03-24 17:03:12
+ * @Last Modified time: 2020-03-24 20:09:44
  */
 
 
@@ -10,12 +10,12 @@ import axios from 'axios';
 import gateFirebase from 'firebase';
 import moment from 'moment';
 import React from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableHighlight, View, Platform, Linking } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Modal from 'react-native-modal';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
 import { updateNotificationData, updatePopUpNotification } from '../../actions';
-import Modal from 'react-native-modal';
 
 
 let key = 0;
@@ -44,14 +44,7 @@ class NotificationPopUp extends React.Component {
         console.log('In Notification Pop Up main render:', isNotification, notificationArray, this.state.key);
         return (
             <View key={this.state.key} style={{ flex: 1, position: 'absolute' }}>
-
-                <FlatList
-                    data={notificationArray}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={(item, index) => this._renderPopUp(item, index)}
-                    extraData={notificationArray}
-                />
-
+                {notificationArray.length !== 0 ? this._renderPopUp(notificationArray[0]) : null}
             </View>
         )
     }
@@ -59,7 +52,7 @@ class NotificationPopUp extends React.Component {
 
     _renderPopUp(item, index) {
         const { isNotificationUnRead } = this.props;
-        let notificationData = item.item;
+        let notificationData = item;
         let inDate = moment()._d
         let enDate = moment(notificationData.ntdCreated)._d
         let duration = Math.abs(inDate - enDate);
@@ -68,7 +61,7 @@ class NotificationPopUp extends React.Component {
         let mins = Math.floor(duration / (1000 * 60));
         let notificationTime = days > 1 ? moment(notificationData.ntdCreated).format('DD MMM YYYY') : days == 1 ? "Yesterday" : mins >= 120 ? hours + " hours ago" : (mins < 120 && mins >= 60) ? hours + " hour ago"
             : mins == 0 ? "Just now" : mins + " mins ago";
-        console.log('In Notification Pop Up:', isNotificationUnRead, item, item.item, notificationTime);
+        console.log('In Notification Pop Up:', isNotificationUnRead, item, item, notificationTime);
 
         return (
             <View key={this.state.key} style={{ justifyContent: 'center', alignItems: 'center', height: hp('100'), width: wp('90') }}>
@@ -143,7 +136,7 @@ class NotificationPopUp extends React.Component {
                                 />
                                 <View style={{ width: wp('50'), height: hp('0'), borderWidth: 0, alignSelf: 'center', left: hp('1'), alignItems: 'center', justifyContent: 'center', top: hp('3') }}>
                                     <Text numberOfLines={1} style={{ color: '#333333', textAlign: 'center' }}>{notificationData.visitorlog[0].vlfName}</Text>
-                                    <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('1.5') }}>{notificationData.visitorlog[0].vlMobile}</Text>
+                                    <Text onPress={() => this.initiateCall(notificationData.visitorlog[0].vlMobile)} style={{ color: '#B51414', textAlign: 'center', fontSize: hp('1.5') }}>{notificationData.visitorlog[0].vlMobile}</Text>
                                 </View>
                             </View>
                         </View>
@@ -169,7 +162,7 @@ class NotificationPopUp extends React.Component {
                                     underlayColor={'transparent'}
                                     onPress={() => this.acceptGateVisitor(
                                         notificationData.visitorlog[0].vlVisLgID,
-                                        item.index,
+                                        0,
                                         notificationData.asAssnID,
                                         "EntryApproved",
                                         notificationData.ntid,
@@ -230,162 +223,183 @@ class NotificationPopUp extends React.Component {
         updateNotificationData(false);
     }
 
-
-    async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy) {
-
-
-        console.log('SENDING STATUS TO ACCEPT NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy);
-
-        const headers = {
-            'Content-Type': 'application/json',
-            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+    initiateCall(number) {
+        let phoneNumber = number;
+        if (Platform.OS === 'ios') {
+            phoneNumber = `telprompt:${number}`;
+        } else {
+            phoneNumber = `tel:${number}`;
         }
 
-        let currentDateOption = {
-            method: 'get',
-            url: `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
-            headers: headers
-        };
+        console.log('Making Call Now:',phoneNumber)
 
-        let currentDate = await axios(currentDateOption);
-
-        console.log("Current Time:", currentDate);
-
-        let currentTime = currentDate.data.data.currentDateTime;
-
-        let approvalOptions = {
-            method: 'post',
-            url: `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
-            data: {
-                VLApprStat: visitorStatus,
-                VLVisLgID: visitorId,
-                VLApprdBy: visitorStatus == "EntryApproved" ? this.props.userReducer.MyFirstName : approvedBy,
-                VLExAprdBy: visitorStatus == "ExitApproved" ? this.props.userReducer.MyFirstName : "",
-            },
-            headers: headers
-        }
-
-        let approvalResponse = await axios(approvalOptions);
-
-        console.log("Approval Stat:", approvalResponse);
-
-        try {
-            if (approvalResponse.status === 200) {
-                gateFirebase
-                    .database()
-                    .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                    .set({
-                        buttonColor: '#75be6f',
-                        opened: true,
-                        newAttachment: false,
-                        visitorlogId: visitorId,
-                        updatedTime: currentTime,
-                        status: visitorStatus,
-                    });
-                this.removeNotificationData()
-            }
-        } catch (error) {
-            console.log('error:', error);
-            gateFirebase
-                .database()
-                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                .set({
-                    buttonColor: '#75be6f',
-                    opened: true,
-                    newAttachment: false,
-                    visitorlogId: visitorId,
-                    updatedTime: null,
-                    status: visitorStatus
-                })
-        }
+        Linking.canOpenURL(phoneNumber)
+            .then(supported => {
+                if (!supported) {
+                    Alert.alert('Phone number is not available');
+                } else {
+                    return Linking.openURL(phoneNumber);
+                }
+            })
+            .catch(err => console.log(err));
     };
 
 
-    async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy) {
+async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy) {
 
 
-        console.log('SENDING STATUS TO DENY NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy);
+    console.log('SENDING STATUS TO ACCEPT NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy);
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-        }
-
-        let currentDateOption = {
-            method: 'get',
-            url: `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
-            headers: headers
-        };
-
-        let currentDate = await axios(currentDateOption);
-
-        console.log("Current Time:", currentDate);
-
-        let currentTime = currentDate.data.data.currentDateTime;
-
-        let approvalOptions = {
-            method: 'post',
-            url: `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
-            data: {
-                VLApprStat: visitorStatus,
-                VLVisLgID: visitorId,
-                VLApprdBy: visitorStatus == "EntryRejected" ? this.props.userReducer.MyFirstName : approvedBy,
-                VLExAprdBy: visitorStatus == "ExitRejected" ? this.props.userReducer.MyFirstName : "",
-            },
-            headers: headers
-        }
-
-        let approvalResponse = await axios(approvalOptions);
-
-        console.log("Rejection Stat:", approvalResponse);
-
-        try {
-            if (approvalResponse.status === 200) {
-                gateFirebase
-                    .database()
-                    .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                    .set({
-                        buttonColor: '#75be6f',
-                        opened: true,
-                        newAttachment: false,
-                        visitorlogId: visitorId,
-                        updatedTime: currentTime,
-                        status: visitorStatus,
-                    });
-                this.removeNotificationData()
-            }
-        } catch (error) {
-            console.log('error:', error);
-            gateFirebase
-                .database()
-                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                .set({
-                    buttonColor: '#75be6f',
-                    opened: true,
-                    newAttachment: false,
-                    visitorlogId: visitorId,
-                    updatedTime: null,
-                    status: visitorStatus
-                })
-        }
-    };
-
-
-    removeNotificationData() {
-        const { notificationArray, updatePopUpNotification } = this.props;
-        console.log("Notification before splicing:", notificationArray)
-        notificationArray.splice(0, 1);
-        console.log("Notification after splicing:", notificationArray)
-        updatePopUpNotification(notificationArray);
-        this.forceUpdate();
-        if (notificationArray.length === 0) {
-            this.closeModal()
-        }
-        this.setState({
-            key: Math.random()
-        })
-
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
     }
+
+    let currentDateOption = {
+        method: 'get',
+        url: `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
+        headers: headers
+    };
+
+    let currentDate = await axios(currentDateOption);
+
+    console.log("Current Time:", currentDate);
+
+    let currentTime = currentDate.data.data.currentDateTime;
+
+    let approvalOptions = {
+        method: 'post',
+        url: `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+        data: {
+            VLApprStat: visitorStatus,
+            VLVisLgID: visitorId,
+            VLApprdBy: visitorStatus == "EntryApproved" ? this.props.userReducer.MyFirstName : approvedBy,
+            VLExAprdBy: visitorStatus == "ExitApproved" ? this.props.userReducer.MyFirstName : "",
+        },
+        headers: headers
+    }
+
+    let approvalResponse = await axios(approvalOptions);
+
+    console.log("Approval Stat:", approvalResponse);
+
+    try {
+        if (approvalResponse.status === 200) {
+            gateFirebase
+                .database()
+                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+                .set({
+                    buttonColor: '#75be6f',
+                    opened: true,
+                    newAttachment: false,
+                    visitorlogId: visitorId,
+                    updatedTime: currentTime,
+                    status: visitorStatus,
+                });
+            this.removeNotificationData()
+        }
+    } catch (error) {
+        console.log('error:', error);
+        gateFirebase
+            .database()
+            .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+            .set({
+                buttonColor: '#75be6f',
+                opened: true,
+                newAttachment: false,
+                visitorlogId: visitorId,
+                updatedTime: null,
+                status: visitorStatus
+            })
+    }
+};
+
+
+async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy) {
+
+
+    console.log('SENDING STATUS TO DENY NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy);
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+    }
+
+    let currentDateOption = {
+        method: 'get',
+        url: `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
+        headers: headers
+    };
+
+    let currentDate = await axios(currentDateOption);
+
+    console.log("Current Time:", currentDate);
+
+    let currentTime = currentDate.data.data.currentDateTime;
+
+    let approvalOptions = {
+        method: 'post',
+        url: `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateApprovalStatus`,
+        data: {
+            VLApprStat: visitorStatus,
+            VLVisLgID: visitorId,
+            VLApprdBy: visitorStatus == "EntryRejected" ? this.props.userReducer.MyFirstName : approvedBy,
+            VLExAprdBy: visitorStatus == "ExitRejected" ? this.props.userReducer.MyFirstName : "",
+        },
+        headers: headers
+    }
+
+    let approvalResponse = await axios(approvalOptions);
+
+    console.log("Rejection Stat:", approvalResponse);
+
+    try {
+        if (approvalResponse.status === 200) {
+            gateFirebase
+                .database()
+                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+                .set({
+                    buttonColor: '#75be6f',
+                    opened: true,
+                    newAttachment: false,
+                    visitorlogId: visitorId,
+                    updatedTime: currentTime,
+                    status: visitorStatus,
+                });
+            this.removeNotificationData()
+        }
+    } catch (error) {
+        console.log('error:', error);
+        gateFirebase
+            .database()
+            .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+            .set({
+                buttonColor: '#75be6f',
+                opened: true,
+                newAttachment: false,
+                visitorlogId: visitorId,
+                updatedTime: null,
+                status: visitorStatus
+            })
+    }
+};
+
+
+removeNotificationData() {
+    const { notificationArray, updatePopUpNotification } = this.props;
+    console.log("Notification before splicing:", notificationArray)
+    notificationArray.splice(0, 1);
+    console.log("Notification after splicing:", notificationArray)
+    updatePopUpNotification(notificationArray);
+    this.forceUpdate();
+    if (notificationArray.length === 0) {
+        this.closeModal()
+    }
+    this.setState({
+        key: Math.random()
+    })
+
+}
 
 
 }

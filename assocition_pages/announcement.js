@@ -10,7 +10,7 @@ import {
   PermissionsAndroid,
   Platform,
   BackHandler,
-  Alert
+  Alert,TextInput
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -125,6 +125,7 @@ class Announcement extends Component {
       timestamp: '',
 
       isPause: true,
+      isLoading:false
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
@@ -679,9 +680,7 @@ class Announcement extends Component {
 
     console.log('INPUT FOR ANN@@@@@',image,ntDesc,accountId,assocID,mp3)
 
-    this.setState({
-      isLoading: true
-    });
+   
     axios
       .post(
         `http://${this.props.oyeURL}/oyesafe/api/v1/Announcement/Announcementcreate`,
@@ -724,9 +723,7 @@ class Announcement extends Component {
           response.data.data.announcement.anid
         );
 
-        this.setState({
-          isLoading: false
-        });
+        
         axios
           .post(`${CLOUD_FUNCTION_URL}/sendAllUserNotification`, {
             admin: 'false',
@@ -752,9 +749,7 @@ class Announcement extends Component {
                 let memberList = res.data.data.memberListByAssociation;
                 let announcement = response.data.data.announcement.anid;
                 console.log('RESPONSE', res);
-                this.setState({
-                  isLoading: false
-                });
+                
                 let removedDuplicates = _.uniqBy(memberList, 'acAccntID');
                 console.log(
                   'memberList1111',
@@ -818,7 +813,7 @@ class Announcement extends Component {
                   playTime: '00:00:00',
                   duration: '00:00:00',
 
-                  isLoading: false,
+                 // isLoading: false,
 
                   datasource: [],
 
@@ -840,6 +835,7 @@ class Announcement extends Component {
                   loading: false
                 };
                 if(!this.state.paused){
+                  
                   this.pause();
                 }
                 fb.database().ref(announcementPath).on('value',function(snapshot){
@@ -850,8 +846,14 @@ class Announcement extends Component {
                 fb.database().ref(announcementPath).remove().then((response)=>{
                   console.log('Response:',response)
                 }).catch(error=>{
+                  this.setState({
+                    isLoading: false
+                  });
                   console.log("Error:",error);
                 })
+                this.setState({
+                  isLoading: false
+                });
                 this.props.navigation.goBack();
                 // getAssoMembers(oyeURL, MyAccountID);
 
@@ -923,17 +925,28 @@ class Announcement extends Component {
           });
       })
       .catch(error => {
+        this.setState({
+          isLoading: false
+        });
         console.log('Crash in Announcement', error);
       });
   };
 
   validateAnnouncement(){
-    if(this.state.comment.length === 0)
+    this.setState({
+      isLoading:true
+    })
+    if(this.state.comment.length === 0){
+    this.setState({
+      isLoading:false
+    })
       Alert.alert("", "Message cannot be empty");
+  }
     /*else if (!this.state.audioFile)
       Alert.alert("","Audio cannot be empty");*/
-    else
+    else{
       this.datasend()
+    }
   }
 
   render() {
@@ -1700,7 +1713,7 @@ class Announcement extends Component {
                   marginBottom: hp('3%')
                 }}
               >
-                <Input
+                <TextInput
                   multiline={true}
                   numberOfLines={4}
                   style={{ fontSize: hp('1.8%') }}
@@ -1712,31 +1725,33 @@ class Announcement extends Component {
                 />
               </Item>
             </View>
-            <View
+            <TouchableOpacity
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginVertical: hp('2%')
+                marginVertical: hp('2%'),
+                marginTop:'10%'
               }}
+              onPress={() =>  {  this.validateAnnouncement()}}
             >
-              <Button
-                bordered
-                warning
+              <View
+                
                 style={styles.button}
                 //disabled={this.state.comment.length === 0}
-                onPress={() => this.validateAnnouncement()}
+               // onPress={() => this.validateAnnouncement()}
               >
                 <Text
                   style={{
                     color: 'white',
                     fontSize: hp('2%'),
-                    fontWeight: '500'
+                    fontWeight: '500',
+                    alignSelf:'center'
                   }}
                 >
                   Send
                 </Text>
-              </Button>
-            </View>
+              </View>
+            </TouchableOpacity>
           </View>
         </KeyboardAwareScrollView>
         <ProgressLoader

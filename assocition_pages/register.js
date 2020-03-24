@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View,ActivityIndicator } from 'react-native';
 import { Card } from 'native-base';
 import moment from 'moment';
 import { DatePickerDialog } from 'react-native-datepicker-dialog';
@@ -27,7 +27,8 @@ class RegisterMe extends Component {
             dobDate: '',
             unitofperson: false,
             unitofperson1: false,
-            sent: false
+            sent: false,
+            isLoading:false
         };
     }
 
@@ -75,18 +76,33 @@ class RegisterMe extends Component {
           alert("Request already sent");
         }
         */
+       this.setState({
+        isLoading:true
+    })
         let checkOwner = this.checkForOwner();
-
+          
         if (this.state.dobText == 'Select Date of Occupancy') {
+            this.setState({
+                isLoading:false
+            })
             alert('Select Date of Occupancy');
 
         } else if (checkOwner.stat) {
+            this.setState({
+                isLoading:false
+            })
             alert("You are an active member and can't join");
 
         } else if (this.checkStatus()) {
+            this.setState({
+                isLoading:false
+            })
             alert('You already requested to join this unit');
 
         } else if (this.state.sent) {
+            this.setState({
+                isLoading:false
+            })
             alert('Request already sent');
 
         } else {
@@ -288,6 +304,9 @@ class RegisterMe extends Component {
                                                             console.log("Error:", error);
                                                     })
                                                     },2000)
+                                                    this.setState({
+                                                        isLoading:false
+                                                    })
                                                     Alert.alert(
                                                         'Oyespace',
                                                         'Request sent to Admin',
@@ -346,6 +365,7 @@ class RegisterMe extends Component {
                             })
                             .catch(error => {
                                 this.setState({
+                                    isLoading:false,
                                     loading: false,
                                     sent: false
                                 });
@@ -355,7 +375,7 @@ class RegisterMe extends Component {
                                 this.setState({ sent: false });
                             });
                     } else {
-                        this.setState({ loading: false, sent: false });
+                        this.setState({ isLoading:false,loading: false, sent: false });
                         Alert.alert(
                             'Alert',
                             'Request not sent..!',
@@ -370,7 +390,7 @@ class RegisterMe extends Component {
                 })
                 .catch(error => {
                     console.log('second error', error);
-                    this.setState({ loading: false, sent: false });
+                    this.setState({ isLoading:false,loading: false, sent: false });
                     Alert.alert(
                         'Alert',
                         'Request not sent..!',
@@ -401,18 +421,34 @@ class RegisterMe extends Component {
       alert("You already requested to join this unit");
     }
          */
+        this.setState({
+            isLoading:true
+        })
+
         let checkTenant = this.checkTenant();
         console.log(checkTenant, 'checkTenant');
         if (this.state.dobText == 'Select Date of Occupancy') {
-            alert('Select Date of Occupancy');
+            this.setState({
+                isLoading:false
+            })
+            alert('Select Date of Occupancy'); 
 
         } else if (this.state.sent) {
+            this.setState({
+                isLoading:false
+            })
             alert('Request already sent');
 
         } else if (checkTenant.stat) {
+            this.setState({
+                isLoading:false
+            })
             alert("You are an active member and can't join");
 
         } else if (this.checkStatus()) {
+            this.setState({
+                isLoading:false
+            })
             alert('You already requested to join this unit');
 
         } else {
@@ -616,7 +652,9 @@ class RegisterMe extends Component {
                                                             console.log("Error:", error);
                                                     })
                                                     },2000)
-                                                    
+                                                    this.setState({
+                                                        isLoading:false
+                                                    })
                                                     Alert.alert(
                                                         'Oyespace',
                                                         'Request sent to Admin',
@@ -635,7 +673,7 @@ class RegisterMe extends Component {
                                                 })
                                                 .catch(error => {
                                                     getAssoMembers(oyeURL, MyAccountID);
-                                                    this.setState({
+                                                    this.setState({isLoading:false,
                                                         loading: false
                                                     });
                                                     Alert.alert(
@@ -658,7 +696,7 @@ class RegisterMe extends Component {
                                             // this.props.navigation.navigate("SplashScreen");
                                         });
                                 } else {
-                                    this.setState({
+                                    this.setState({isLoading:false,
                                         loading: false,
                                         sent: true
                                     });
@@ -674,7 +712,7 @@ class RegisterMe extends Component {
                                 }
                             })
                             .catch(error => {
-                                this.setState({
+                                this.setState({isLoading:false,
                                     loading: false,
                                     sent: false
                                 });
@@ -683,7 +721,7 @@ class RegisterMe extends Component {
                                 console.log('********');
                             });
                     } else {
-                        this.setState({ loading: false, sent: false });
+                        this.setState({ isLoading:false,loading: false, sent: false });
                         Alert.alert(
                             'Alert',
                             'Request not sent..!',
@@ -697,7 +735,7 @@ class RegisterMe extends Component {
                 })
                 .catch(error => {
                     console.log('second error', error);
-                    this.setState({ loading: false, sent: false });
+                    this.setState({ isLoading:false,loading: false, sent: false });
                     Alert.alert(
                         'Alert',
                         'Request not sent..!',
@@ -902,7 +940,10 @@ class RegisterMe extends Component {
     render() {
         const { unitList, AssnId } = this.props.navigation.state.params;
         // console.log('unitList', unitList);
+        console.log('GET THE VALUE OF LOADER *****',this.state.isLoading)
+
         return (
+               !this.state.isLoading ?
             <View style={styles.container}>
                 <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
                     <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
@@ -1018,12 +1059,24 @@ class RegisterMe extends Component {
                         </View>
                     </View>
 
-                    {/* <Text>{unitList.owner[0].uofName}</Text> */}
+                   {/* {this.state.isLoading ?      
+                    <View style={styles.container2}>
+                <ActivityIndicator size="large" color="#F3B431" />
                 </View>
-                {/* ) : (
-          <View />
-        )} */}
+                :
+                <View/>
+                   } */}
+
+                   
+                </View> 
+                
             </View>
+             :
+             <View style={styles.container2}>
+                <ActivityIndicator size="large" color="#F3B431" />
+                </View>
+                                        
+               
         );
     }
 }
@@ -1032,6 +1085,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: base.theme.colors.white
+    },
+    container2: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: base.theme.colors.transparent
     },
     titleOfScreen: {
         marginTop: hp('1.6%'),

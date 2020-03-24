@@ -28,6 +28,8 @@ class DashBoardHeader extends React.Component {
 
   renderBadge = () => {
     const { notifications,dashboardReducer } = this.props;
+
+    console.log('Get the list of the notification',notifications)
     let role = dashboardReducer.role;
     let count = 0;
     let adminNotification = [];

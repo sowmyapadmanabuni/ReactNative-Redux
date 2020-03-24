@@ -106,6 +106,35 @@ class Dashboard extends React.Component {
     ),
   };
 
+
+  updateAllTheData(){
+    const { MyAccountID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
+    let self = this;
+    const { fetchAssociationByAccountId }=self.props
+    fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
+      console.log('HERE DATA TO DISPLAY',data,self.props)
+      if(data){
+        self.requestNotifPermission();
+        self.myProfileNet();
+        self.listenRoleChange();
+        self.props.getNotifications(oyeURL, MyAccountID);
+        self.getVehicleList(); 
+        self.listenToFirebase(self.props.dropdown);
+        self.setState({isLoading:false});
+      //  self.getPopUpNotifications();
+        self.createTopicListener(self.props.dropdown,true)
+      }
+      else{
+        self.myProfileNet();
+        self.setState({isLoading:false})
+        self.props.navigation.navigate('CreateOrJoinScreen');
+      
+      }
+    })
+  }
+
   
 
   async componentDidMount() {
@@ -127,7 +156,7 @@ class Dashboard extends React.Component {
         self.getVehicleList(); 
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false});
-     //   self.getPopUpNotifications();
+       // self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown,true)
       }
       else{
@@ -175,9 +204,11 @@ class Dashboard extends React.Component {
       if(sResp.length !== 0){
         updatePopUpNotification(sResp);
         updateNotificationData(true);
+        firebase.notifications().removeAllDeliveredNotifications()
       }else{
         updatePopUpNotification([]);
         updateNotificationData(false);
+        firebase.notifications().removeAllDeliveredNotifications()
       }
       }catch(e){
         console.log(e)
@@ -272,7 +303,8 @@ class Dashboard extends React.Component {
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
           //self.roleCheckForAdmin(self.state.assocId)
-          self.props.fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
+          const { fetchAssociationByAccountId }=self.props
+          fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
             self.onAssociationChange(self.state.dropdownIndex,self.state.unitDropdownIndex);
           });
         } else {
@@ -472,6 +504,7 @@ class Dashboard extends React.Component {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
+         // this.updateAllTheData()
           const { fetchAssociationByAccountId }= this.props;
           fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
             this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);
@@ -505,7 +538,7 @@ class Dashboard extends React.Component {
             notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
         this.readFBRTB(true);
-        this.getPopUpNotifications();
+        //this.getPopUpNotifications();
         //this.no
       });
     }

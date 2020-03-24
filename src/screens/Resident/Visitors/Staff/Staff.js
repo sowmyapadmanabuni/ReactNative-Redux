@@ -181,13 +181,13 @@ class Staff extends React.Component {
                     {this.state.staffList.length !== 0 ?
                         <View style={StaffStyle.detailsMainView}>
                             <View style={StaffStyle.detailsLeftView}>
-                                {this.state.staffPic === '' ?
+                                {this.state.staffPic === '' || this.state.staffPic === null?
                                     <Image style={StaffStyle.staffImg}
                                            source={{uri: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder}}
                                     />
                                     :
                                     <Image style={StaffStyle.staffImg}
-                                           source={{uri: base.utils.strings.imageUrl + this.state.staffPic}}
+                                           source={{uri: 'data:image/png;base64,'+ this.state.staffPic}}
                                     />
                                 }
                                 <View style={StaffStyle.textView}>
