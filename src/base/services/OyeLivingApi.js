@@ -209,6 +209,10 @@ export default class OyeLivingApi {
         return await instance.get('GetVehicleListByAssocUnitAndAcctID/' + assId + '/'+unitId+'/'+accountId);
     }
 
+    static async myUnitOwnerDetails(unitId){
+        return await instance.get('Unit/GetUnitListByUnitID/' +unitId);
+    }
+
 
 
 

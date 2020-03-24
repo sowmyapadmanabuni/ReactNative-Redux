@@ -338,7 +338,7 @@ class BlockDetail extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    console.log('I is......', this.props.navigation.state.params.name);
+    console.log('I is......@@@@@@@', this.props);
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>

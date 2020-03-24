@@ -97,7 +97,8 @@ class NotificationScreen extends PureComponent {
             isModalOpen1: false,
             detailsToReject: {},
             allNotifications: [],
-            isLoading: false
+            isLoading: false,
+            userDetails:[]
         };
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -516,8 +517,8 @@ class NotificationScreen extends PureComponent {
                 }}
                 onPress={() => {
                     if (item.ntIsActive) { 
-                        this.readTheSelectedNotification(item)
-                       // this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid,);
+                        //this.readTheSelectedNotification(item)
+                        this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid,);
                         this.openTheSelNotification(item)
                     }
                     else {
@@ -665,10 +666,13 @@ class NotificationScreen extends PureComponent {
                         }} onPress={() => {
                             if (item.ntIsActive) {
                                 this.props.onNotificationOpen(notifications, item.acNoIndex, oyeURL, item.ntid);
+                               // this.getTheUserDataAvailable(item)
                                 this.openTheSelNotification(item)
                             }
                             else {
+                               // this.getTheUserDataAvailable(item)
                                 this.openTheSelNotification(item)
+                                
         
                             }
     
@@ -845,7 +849,7 @@ class NotificationScreen extends PureComponent {
                                     </View>
                                     :
                                     <View />}
-                                {item.visitorlog[0].vlApprStat == "Expired"  || item.visitorlog[0].vlApprStat !="EntryExpired" || item.visitorlog[0].vlApprStat !="ExitExpired"?
+                                {item.visitorlog[0].vlVisType === "Delivery" && (item.visitorlog[0].vlApprStat == "Expired"  || item.visitorlog[0].vlApprStat !="EntryExpired" || item.visitorlog[0].vlApprStat !="ExitExpired" )?
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                         <Text style={{ fontSize: 16, color: base.theme.colors.primary, alignSelf: 'flex-start', marginLeft: 15 }}>Status  :
                                             <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprStat}</Text>
@@ -2024,389 +2028,7 @@ class NotificationScreen extends PureComponent {
 
 
 
-    renderButton = (item) => {
-        const { loading, adminStatLoading, adminStat } = this.state;
-        const { navigation } = this.props;
-        const details = item
-
-        let subId = details.sbSubID;
-        // let status = _.includes(approvedAdmins, subId);
-        // let status = false;
-        let val = details.ntDesc.split(' ')
-        let status;
-
-
-        if (details.ntType === 'gate_app') {
-            return null;
-        }
-        else {
-            {
-                status = (
-                    <TouchableOpacity style={{
-                        width: wp('10%'),
-                        height: hp('10%'),
-                        justifyContent: 'center', alignSelf: 'center', borderWidth: 0,
-                        alignItems: 'center', marginLeft: 0, position: 'relative', top: hp('3')
-                    }}
-                        onPress={() => this._enlargeImage(details.userImage != "" ? 'data:image/png;base64,' + details.userImage : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
-                    >
-                        {details.userImage != "" ?
-
-                            <Image
-                                style={{
-                                    width: 100 - 20,
-                                    height: 100 - 20,
-                                    borderRadius: 50 - 10, position: 'absolute'
-                                }}
-                                source={{ uri: 'data:image/png;base64,' + details.userImage }}
-                            />
-                            :
-                            <Image
-                                style={{
-                                    width: 80,
-                                    height: 80,
-                                    borderRadius: 40, position: 'absolute'
-                                }}
-                                source={{ uri: 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder }}
-                            />}
-                    </TouchableOpacity>
-                );
-            }
-        }
-        return status;
-
-    };
-
-
-    expandAdminNotification(notifications, index, details) {
-        const { navigation, champBaseURL } = this.props;
-        //const details = navigation.getParam('details', 'NO-ID');
-        console.log(details, 'detailssss hitting here');
-
-        let roleId;
-
-        if (parseInt(details.sbRoleID) === 2) {
-            roleId = 6;
-        } else {
-            roleId = 7;
-        }
-
-        axios
-            .post(
-                `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
-                {
-                    ACAccntID: details.acNotifyID,
-                    UNUnitID: details.sbUnitID,
-                    ASAssnID: details.asAssnID
-                },
-                {
-                    headers: {
-                        'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-                        'Content-Type': 'application/json'
-                    }
-                }
-            )
-            .then(res => {
-                this.setState({ adminStatLoading: false });
-                let data = res.data.data;
-
-                console.log(data, res, 'adminData');
-                if (data) {
-                    if (
-                        data.member.meJoinStat === 'Accepted' &&
-                        data.member.mrmRoleID === details.sbRoleID &&
-                        data.member.meIsActive
-                    ) {
-                        this.setState({ adminStat: 'Accepted' });
-                    } else if (
-                        data.member.meJoinStat === 'Rejected' &&
-                        parseInt(data.member.mrmRoleID) === roleId
-                        //  data.member.meIsActive
-                    ) {
-                        this.setState({ adminStat: 'Rejected' });
-                    }
-                }
-            })
-            .catch(error => {
-                console.log(error, 'adminDataError');
-                this.setState({ adminStatLoading: false });
-            });
-
-        fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log('Response Json', responseJson);
-                this.setState({
-                    dataSource1: responseJson.data.account,
-                    requestorMob1: responseJson.data.account[0].acMobile
-                });
-                console.log(
-                    'Mobile Number1:',
-                    this.state.dataSource,
-                    this.state.requestorMob1
-                );
-            })
-            .catch(error => {
-                console.log(error);
-            });
-        fetch(
-            `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log('Response Json', responseJson);
-                this.setState({
-                    data: responseJson.data.unitsByUnitID,
-                    dataSource: responseJson.data.unitsByUnitID[0],
-                    requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
-                });
-                console.log('Mobile Number:', this.state.dataSource);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
-        fetch(
-            //http://api.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/35894
-            `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${details.sbUnitID}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-                }
-            }
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log('Response Json', responseJson);
-                console.log(
-                    'Owner Tenant length',
-                    responseJson.data.unit.owner.length,
-                    responseJson.data.unit.tenant.length
-                );
-                let arr1 = [];
-                let self = this;
-                let arr2 = [];
-                for (let i = 0; i < responseJson.data.unit.owner.length; i++) {
-                    for (let j = 0; j < responseJson.data.unit.tenant.length; j++) {
-                        arr1.push({
-                            name:
-                                responseJson.data.unit.owner[i].uofName +
-                                ' ' +
-                                responseJson.data.unit.owner[i].uolName,
-                            number: responseJson.data.unit.owner[i].uoMobile
-                        });
-                        // arr1.push(responseJson.data.unit.owner[i])
-                        arr2.push({
-                            name:
-                                responseJson.data.unit.tenant[j].utfName +
-                                ' ' +
-                                responseJson.data.unit.tenant[j].utlName,
-                            number: responseJson.data.unit.tenant[j].utMobile
-                        });
-
-                        // arr2.push(responseJson.data.unit.tenant[j])
-                    }
-                }
-
-                let dArr1 = arr1[0];
-                let dArr2 = arr2[0];
-
-                console.log('ARARARARRARA:', arr1, arr2)
-                self.setState({
-                    dataSource2: [arr1, arr2],
-                    dataSource3: responseJson.data.unit.unOcStat
-                }, () => {
-                      this.props.toggleAdminCollapsible(this.props.adminNotification, details.open, index, details)
-                });
-                console.log('DataSource2', this.state.dataSource2);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
-
-    } 
-
-
-    checkAdminNotifStatus() {
-        const { navigation, champBaseURL } = this.props;
-        const details = navigation.getParam('details', 'NO-ID');
-        console.log(details, 'detailssss');
-    
-        let roleId;
-    
-        if (parseInt(details.sbRoleID) === 2) {
-          roleId = 6;
-        } else {
-          roleId = 7;
-        }
-    
-        axios
-          .post(
-            `${this.props.champBaseURL}/Member/GetMemberJoinStatus`,
-            {
-              ACAccntID: details.acNotifyID,
-              UNUnitID: details.sbUnitID,
-              ASAssnID: details.asAssnID
-            },
-            {
-              headers: {
-                'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
-                'Content-Type': 'application/json'
-              }
-            }
-          )
-          .then(res => {
-            this.setState({ adminStatLoading: false });
-            let data = res.data.data;
-    
-            console.log(data, res, 'adminData');
-            if (data) {
-              if (
-                data.member.meJoinStat === 'Accepted' &&
-                data.member.mrmRoleID === details.sbRoleID &&
-                data.member.meIsActive
-              ) {
-                this.setState({ adminStat: 'Accepted' });
-              } else if (
-                data.member.meJoinStat === 'Rejected' &&
-                parseInt(data.member.mrmRoleID) === roleId
-                //  data.member.meIsActive
-              ) {
-                this.setState({ adminStat: 'Rejected' });
-              }
-            }
-          })
-          .catch(error => {
-            console.log(error, 'adminDataError');
-            this.setState({ adminStatLoading: false });
-          });
-    
-        fetch(
-          `http://${this.props.oyeURL}/oyeliving/api/v1/GetAccountListByAccountID/${details.acNotifyID}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-            }
-          }
-        )
-          .then(response => response.json())
-          .then(responseJson => {
-            console.log('Response Json', responseJson);
-            this.setState({
-              dataSource1: responseJson.data.account,
-              requestorMob1: responseJson.data.account[0].acMobile
-            });
-            console.log(
-              'Mobile Number1:',
-              this.state.dataSource,
-              this.state.requestorMob1
-            );
-          })
-          .catch(error => {
-            console.log(error);
-          });
-        fetch(
-          `http://${this.props.oyeURL}/oyeliving/api/v1/UnitOwner/GetUnitOwnerListByUnitID/${details.sbUnitID}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-            }
-          }
-        )
-          .then(response => response.json())
-          .then(responseJson => {
-            console.log('Response Json', responseJson);
-            this.setState({
-              data: responseJson.data.unitsByUnitID,
-              dataSource: responseJson.data.unitsByUnitID[0],
-              requestorMob: responseJson.data.unitsByUnitID[0].uoMobile
-            });
-            console.log('Mobile Number:', this.state.dataSource);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    
-        fetch(
-          //http://api.oyespace.com/oyeliving/api/v1/Unit/GetUnitListByUnitID/35894
-          `http://${this.props.oyeURL}/oyeliving/api/v1/Unit/GetUnitListByUnitID/${details.sbUnitID}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
-            }
-          }
-        )
-          .then(response => response.json())
-          .then(responseJson => {
-            console.log('Response Json', responseJson);
-            console.log(
-              'Owner Tenant length',
-              responseJson.data.unit.owner.length,
-              responseJson.data.unit.tenant.length
-            );
-            let arr1 = [];
-            let self = this;
-            let arr2 = [];
-            for (let i = 0; i < responseJson.data.unit.owner.length; i++) {
-              for (let j = 0; j < responseJson.data.unit.tenant.length; j++) {
-                arr1.push({
-                  name:
-                    responseJson.data.unit.owner[i].uofName +
-                    ' ' +
-                    responseJson.data.unit.owner[i].uolName,
-                  number: responseJson.data.unit.owner[i].uoMobile
-                });
-                // arr1.push(responseJson.data.unit.owner[i])
-                arr2.push({
-                  name:
-                    responseJson.data.unit.tenant[j].utfName +
-                    ' ' +
-                    responseJson.data.unit.tenant[j].utlName,
-                  number: responseJson.data.unit.tenant[j].utMobile
-                });
-    
-                // arr2.push(responseJson.data.unit.tenant[j])
-              }
-            }
-            self.setState({
-              dataSource2: [...arr1, ...arr2],
-              dataSource3: responseJson.data.unit.unOcStat
-            });
-            console.log('DataSource2', this.state.dataSource2);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }
-
-
-
-      openTheSelNotification(selectednotification){
+    openTheSelNotification(selectednotification){
         let unitNotification = this.props.unitNotification;
         let adminNotification = this.props.adminNotification;
         //ntType "Join" -Admin "gate_app"  "Join_Status"
@@ -2453,6 +2075,11 @@ class NotificationScreen extends PureComponent {
 
         }
       }
+
+
+
+
+     
 
 
 

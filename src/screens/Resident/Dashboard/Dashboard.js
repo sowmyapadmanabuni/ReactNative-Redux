@@ -104,6 +104,35 @@ class Dashboard extends React.Component {
     ),
   };
 
+
+  updateAllTheData(){
+    const { MyAccountID } = this.props.userReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
+
+    let self = this;
+    const { fetchAssociationByAccountId }=self.props
+    fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
+      console.log('HERE DATA TO DISPLAY',data,self.props)
+      if(data){
+        self.requestNotifPermission();
+        self.myProfileNet();
+        self.listenRoleChange();
+        self.props.getNotifications(oyeURL, MyAccountID);
+        self.getVehicleList(); 
+        self.listenToFirebase(self.props.dropdown);
+        self.setState({isLoading:false});
+        self.getPopUpNotifications();
+        self.createTopicListener(self.props.dropdown,true)
+      }
+      else{
+        self.myProfileNet();
+        self.setState({isLoading:false})
+        self.props.navigation.navigate('CreateOrJoinScreen');
+      
+      }
+    })
+  }
+
   
 
   async componentDidMount() {
@@ -343,7 +372,7 @@ class Dashboard extends React.Component {
           self.requestNotifPermission();
           //self.roleCheckForAdmin(self.state.assocId)
           const { fetchAssociationByAccountId }=self.props
-    fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
+          fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
             self.onAssociationChange(self.state.dropdownIndex,self.state.unitDropdownIndex);
           });
         } else {
@@ -543,6 +572,7 @@ class Dashboard extends React.Component {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
+         // this.updateAllTheData()
           const { fetchAssociationByAccountId }= this.props;
           fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
             this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);

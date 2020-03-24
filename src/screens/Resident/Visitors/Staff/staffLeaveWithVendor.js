@@ -188,7 +188,7 @@ class StaffLeaveWithVendor extends Component {
 
   render() {
     return(
-    <View style={{height:'100%',width:'100%'}}>
+    <View style={{height:'100%',width:'100%',backgroundColor:base.theme.colors.white}}>
       <KeyboardAwareScrollView>
         <View style={{
           height:'100%',
@@ -205,7 +205,8 @@ class StaffLeaveWithVendor extends Component {
                 />
                 :
                 <Image style={StaffStyle.staffImg}
-                       source={{uri: base.utils.strings.imageUrl + this.props.staffReducer.staffProfilePic}}/>
+                       source={{uri: 'data:image/png;base64,'+this.props.staffReducer.staffProfilePic}}
+                       />
             }
             <View style={{ marginLeft: 10,height:'100%',
               width: '80%',flexDirection:'row',alignItems:'center',justifyContent:'flex-start'}}>
@@ -354,7 +355,7 @@ class StaffLeaveWithVendor extends Component {
             </View>*/}
             <View style={{width:'100%',alignItems:'center',justifyContent:'center',marginTop:10,marginBottom:30}}>
               <OSButton
-                  height={'35%'}
+                  height={'50%'}
                   width={'30%'}
                   borderRadius={25}
                   oSBText={'Submit'}
