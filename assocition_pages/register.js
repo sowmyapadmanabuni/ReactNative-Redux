@@ -305,9 +305,6 @@ class RegisterMe extends Component {
                                                             console.log("Error:", error);
                                                     })
                                                     },2000)
-                                                    fetchAssociationByAccountId(oyeURL, MyAccountID,function(){
-
-                                                    });
                                                     this.setState({
                                                         isLoading:false
                                                     })
@@ -658,9 +655,7 @@ class RegisterMe extends Component {
                                                             console.log("Error:", error);
                                                     })
                                                     },2000)
-                                                    fetchAssociationByAccountId(oyeURL, MyAccountID,function(){
-
-                                                    });
+                                                   
                                                     this.setState({
                                                         isLoading:false
                                                     })
