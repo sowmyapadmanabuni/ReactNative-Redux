@@ -16,7 +16,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		16D3D1D203884931A6E621BF /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 770012F8ADA04B0C8F48E788 /* Zocial.ttf */; };
 		179FDCDC0E1645AE8B76B3F3 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D465E8C2E0234F4389F8685B /* AntDesign.ttf */; };
-		1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA53C5321BB40CCA9D694E0 /* libRNHTMLtoPDF.a */; };
 		1E43B78323A8B7550034BB1C /* oye_msg_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E43B78223A8B7550034BB1C /* oye_msg_tone.mp3 */; };
 		1EB458D80BAA45129F1275C1 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8BAB1885F524E67B6415E52 /* rubicon-icon-font.ttf */; };
 		240306F65F3D4FAD950C1D2A /* HelveticaNeueHv.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 598D334FA25C41B08E24DE69 /* HelveticaNeueHv.ttf */; };
@@ -44,8 +43,8 @@
 		88305F283D3446768C4E5EEB /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D38559AC8C4E410B80C49269 /* Fontisto.ttf */; };
 		901C36D877D94F1C89E7C19B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 42ADC5C735BF4620B8B82E63 /* FontAwesome5_Solid.ttf */; };
 		930F1F01B8FD42468E78DF39 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 441D6DC191CD45E0BF4AE4F9 /* FontAwesome5_Regular.ttf */; };
+		93B2C390242A931E00AF3788 /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B2C38D242A930D00AF3788 /* libRNHTMLtoPDF.a */; };
 		967B8AB0A6A94F16A283D204 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D8FED1A448A4B69B4222891 /* MaterialIcons.ttf */; };
-		9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9332DBD6EE4F83BBCE6AFB /* RNHTMLtoPDFTests.xctest */; };
 		9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */; };
 		9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06026B22C4FF5200DA17C8 /* MapKit.framework */; };
 		9F69818423B1DC11009D1E50 /* OyeSoace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F69818323B1DC11009D1E50 /* OyeSoace.swift */; };
@@ -77,12 +76,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		933D32A1240FD61F00924188 /* PBXContainerItemProxy */ = {
+		93B2C38C242A930D00AF3788 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 933D329D240FD61F00924188 /* RNHTMLtoPDF.xcodeproj */;
+			containerPortal = 93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 117405EF1B9954BF004425E1;
 			remoteInfo = RNHTMLtoPDF;
+		};
+		93B2C38E242A930D00AF3788 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 117405FA1B9954BF004425E1;
+			remoteInfo = RNHTMLtoPDFTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -155,7 +161,7 @@
 		8AD047C5D38B43898404DC1A /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		92A6A3934A9C4F1B9F512202 /* libRCTRestart.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTRestart.a; sourceTree = "<group>"; };
 		92FFB1D38E4C7094907CF41B /* libPods-OyeSpace-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OyeSpace-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		933D329D240FD61F00924188 /* RNHTMLtoPDF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNHTMLtoPDF.xcodeproj; path = "../node_modules/react-native-html-to-pdf/ios/RNHTMLtoPDF.xcodeproj"; sourceTree = "<group>"; };
+		93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNHTMLtoPDF.xcodeproj; path = "../node_modules/react-native-html-to-pdf/ios/RNHTMLtoPDF.xcodeproj"; sourceTree = "<group>"; };
 		94DEC93270D64A4FADE3CBA7 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		962DB82BDD1249AB8E425B06 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		9829F0B4AFED38BA79B920FC /* Pods-OyeSpaceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OyeSpaceTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OyeSpaceTests/Pods-OyeSpaceTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -210,6 +216,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93B2C390242A931E00AF3788 /* libRNHTMLtoPDF.a in Frameworks */,
 				9FCBB88822FB068F00C2E0AF /* MessageUI.framework in Frameworks */,
 				9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */,
 				FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */,
@@ -217,8 +224,6 @@
 				A1E6D75E21DF2328006FE22F /* libsqlite3.tbd in Frameworks */,
 				9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */,
 				F0D76AD689F1208DBD46DFD1 /* libPods-OyeSpace.a in Frameworks */,
-				1B1CFF31C61B4FBDB993A43E /* libRNHTMLtoPDF.a in Frameworks */,
-				9A46C6FB585F49E092F7DEA0 /* RNHTMLtoPDFTests.xctest in Frameworks */,
 				0BDB4F93EFAC4269A833DD35 /* libRNImageToPdf.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,7 +362,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				933D329D240FD61F00924188 /* RNHTMLtoPDF.xcodeproj */,
+				93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -391,10 +396,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		933D329E240FD61F00924188 /* Products */ = {
+		93B2C388242A930D00AF3788 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				933D32A2240FD61F00924188 /* libRNHTMLtoPDF.a */,
+				93B2C38D242A930D00AF3788 /* libRNHTMLtoPDF.a */,
+				93B2C38F242A930D00AF3788 /* RNHTMLtoPDFTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -491,8 +497,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 933D329E240FD61F00924188 /* Products */;
-					ProjectRef = 933D329D240FD61F00924188 /* RNHTMLtoPDF.xcodeproj */;
+					ProductGroup = 93B2C388242A930D00AF3788 /* Products */;
+					ProjectRef = 93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -503,11 +509,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		933D32A2240FD61F00924188 /* libRNHTMLtoPDF.a */ = {
+		93B2C38D242A930D00AF3788 /* libRNHTMLtoPDF.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNHTMLtoPDF.a;
-			remoteRef = 933D32A1240FD61F00924188 /* PBXContainerItemProxy */;
+			remoteRef = 93B2C38C242A930D00AF3788 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		93B2C38F242A930D00AF3788 /* RNHTMLtoPDFTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNHTMLtoPDFTests.xctest;
+			remoteRef = 93B2C38E242A930D00AF3788 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -718,7 +731,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CDF46F7A870F1EAA27BB110B /* Pods-OyeSpace.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OyeSpace/OyeSpace.entitlements;
@@ -776,7 +788,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E3C61E8A44A1803A4D79F740 /* Pods-OyeSpace.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OyeSpace/OyeSpace.entitlements;

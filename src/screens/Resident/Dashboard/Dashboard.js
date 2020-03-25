@@ -123,7 +123,7 @@ class Dashboard extends React.Component {
         self.getVehicleList(); 
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false});
-      //  self.getPopUpNotifications();
+       // self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown,true)
       }
       else{
@@ -156,7 +156,7 @@ class Dashboard extends React.Component {
         self.getVehicleList(); 
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false});
-       // self.getPopUpNotifications();
+        self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown,true)
       }
       else{
@@ -190,8 +190,8 @@ class Dashboard extends React.Component {
 
     let options = {
       method:"get",
-      url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
-      //url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/39`,
+      //url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
+      url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/6437`,
       headers:{
         "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
@@ -538,8 +538,8 @@ class Dashboard extends React.Component {
             notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
         this.readFBRTB(true);
-        //this.getPopUpNotifications();
-        //this.no
+        this.getPopUpNotifications();
+        firebase.notifications().removeAllDeliveredNotifications();
       });
     }
   };
