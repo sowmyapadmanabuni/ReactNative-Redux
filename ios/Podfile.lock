@@ -1,5 +1,7 @@
 PODS:
   - boost-for-react-native (1.63.0)
+  - BVLinearGradient (2.5.6):
+    - React
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
   - DoubleConversion (1.1.6)
@@ -280,9 +282,9 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-background-timer (2.1.1):
+  - react-native-background-timer (2.2.0):
     - React
-  - react-native-document-picker (3.2.4):
+  - react-native-document-picker (3.3.0):
     - React
   - react-native-geolocation (2.0.2):
     - React
@@ -290,7 +292,7 @@ PODS:
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.2.0)
     - React
-  - react-native-image-picker (0.28.0):
+  - react-native-image-picker (2.3.1):
     - React
   - react-native-maps (0.26.1):
     - React
@@ -353,15 +355,16 @@ PODS:
     - React
   - RNReanimated (1.7.0):
     - React
-  - RNScreens (2.2.0):
+  - RNScreens (2.3.0):
     - React
-  - RNSVG (11.0.1):
+  - RNSVG (12.0.3):
     - React
   - RNVectorIcons (6.6.0):
     - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - Crashlytics
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Fabric
@@ -442,6 +445,8 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
+  BVLinearGradient:
+    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -547,6 +552,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
@@ -581,11 +587,11 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-background-timer: 0d34748e53a972507c66963490c775321a88f6f2
-  react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
+  react-native-background-timer: 53c0e028a95d58b1f4498ef7ce152b6c6b337595
+  react-native-document-picker: 0573c02d742d4bef38a5d16b5f039754cfa69888
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 2e2e697dab576abd5809d78cd74e775865b62bf7
-  react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
+  react-native-image-picker: 668e72d0277dc8c12ae90e835507c1eddd2e4f85
   react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
   react-native-version-number: 15563dc4145a94aabfc1faab2a9af10174a4204e
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
@@ -608,11 +614,11 @@ SPEC CHECKSUMS:
   RNPDF: 8a40fafbed2714e7e8fe4e7c9f6f9815f52a939c
   RNPermissions: 6db7e0a4d94c9c02390d11020b1d3d187aaf77e5
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: 812b79d384e2bea7eebc4ec981469160d4948fd5
-  RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
+  RNScreens: 03bf608b92ac0acf323f47d8f5b63a8f829340c8
+  RNSVG: 7e16ddfc6e00d5aa69c9eb83e699bcce5dcb85d4
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: f1ea0611f222513d7bcd7f121ae163c3d387c8af
+PODFILE CHECKSUM: 950c5087fe2aa1a49988c099deaedbdf2cef6f28
 
 COCOAPODS: 1.8.4

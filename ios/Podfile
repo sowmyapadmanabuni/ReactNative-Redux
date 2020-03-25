@@ -120,6 +120,8 @@ target 'OyeSpace' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  #pod 'react-native-html-to-pdf', :path => '../node_modules/react-native-html-to-pdf'
+
 end
   
 post_install do |installer|

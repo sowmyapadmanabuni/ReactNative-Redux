@@ -72,7 +72,7 @@ class RootApp extends Component {
     return (
       <Provider store={store}>
         <CheckInternet />
-        {/* <NotificationPopUp /> */}
+        <NotificationPopUp />
         <StatusBarPlaceHolder />
         <App />
       </Provider>
