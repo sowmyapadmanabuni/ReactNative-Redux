@@ -16,28 +16,29 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import ProgressLoader from 'rn-progress-loader';
-import {fetchAssociationByAccountId,
-        updateNotificationData,
-        updateUnitDropdown, 
-        createNotification, 
-        createUserNotification,
-        getAssoMembers, 
-        getDashAssociation,
-        getDashAssoSync, 
-        getDashSub, 
-        getDashUnits,
-        getNotifications, 
-        newNotifInstance, 
-        refreshNotifications, 
-        updateApproveAdmin, 
-        updateDropDownIndex, 
-        updateIdDashboard, 
-        updateJoinedAssociation, 
-        updateSelectedDropDown, 
-        updateUserInfo, 
-        updateuserRole ,
-        updatePopUpNotification
-      } from '../../../actions';
+import {
+  fetchAssociationByAccountId,
+  updateNotificationData,
+  updateUnitDropdown,
+  createNotification,
+  createUserNotification,
+  getAssoMembers,
+  getDashAssociation,
+  getDashAssoSync,
+  getDashSub,
+  getDashUnits,
+  getNotifications,
+  newNotifInstance,
+  refreshNotifications,
+  updateApproveAdmin,
+  updateDropDownIndex,
+  updateIdDashboard,
+  updateJoinedAssociation,
+  updateSelectedDropDown,
+  updateUserInfo,
+  updateuserRole,
+  updatePopUpNotification
+} from '../../../actions';
 import IcoMoonConfig from '../../../assets/selection.json';
 import base from '../../../base';
 import CardView from '../../../components/cardView/CardView';
@@ -84,8 +85,8 @@ class Dashboard extends React.Component {
       myAdminIconHeight: Platform.OS === 'ios' ? 20 : 20,
       selectedView: 0,
       invoicesList: [],
-      dropdownIndex:0,
-      unitDropdownIndex:0
+      dropdownIndex: 0,
+      unitDropdownIndex: 0
 
 
     };
@@ -107,124 +108,145 @@ class Dashboard extends React.Component {
   };
 
 
-  updateAllTheData(){
+  updateAllTheData() {
     const { MyAccountID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
 
     let self = this;
-    const { fetchAssociationByAccountId }=self.props
-    fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
-      console.log('HERE DATA TO DISPLAY',data,self.props)
-      if(data){
+    const { fetchAssociationByAccountId } = self.props
+    fetchAssociationByAccountId(oyeURL, MyAccountID, function (data) {
+      console.log('HERE DATA TO DISPLAY111', data, self.props)
+      if (data) {
+
         self.requestNotifPermission();
         self.myProfileNet();
         self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
-        self.getVehicleList(); 
+        self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
-        self.setState({isLoading:false});
-       // self.getPopUpNotifications();
-        self.createTopicListener(self.props.dropdown,true)
+        self.setState({ isLoading: false });
+        // self.getPopUpNotifications();
+        self.createTopicListener(self.props.dropdown, true)
       }
-      else{
+      else {
         self.myProfileNet();
-        self.setState({isLoading:false})
-        self.props.navigation.navigate('CreateOrJoinScreen');
-      
+        self.setState({ isLoading: false })
+       // self.props.navigation.navigate('CreateOrJoinScreen');
+
       }
     })
   }
 
-  
+
 
   async componentDidMount() {
 
     const { MyAccountID } = this.props.userReducer;
     const { oyeURL } = this.props.oyespaceReducer;
-    const {updateNotificationData} = this.props;
+    const { updateNotificationData } = this.props;
 
     let self = this;
-    self.setState({isLoading:true});
+    self.setState({ isLoading: true });
     updateNotificationData(false);
-    self.props.fetchAssociationByAccountId(oyeURL, MyAccountID,function(data){
-      console.log('HERE DATA TO DISPLAY',data,self.props)
-      if(data){
+    self.props.fetchAssociationByAccountId(oyeURL, MyAccountID, function (data) {
+      console.log('HERE DATA TO DISPLAY', data, self.props)
+      if (data) {
         self.requestNotifPermission();
         self.myProfileNet();
         self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
-        self.getVehicleList(); 
+        self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
-        self.setState({isLoading:false});
+        self.setState({ isLoading: false });
         //self.getPopUpNotifications();
-        self.createTopicListener(self.props.dropdown,true)
+        self.createTopicListener(self.props.dropdown, true)
       }
-      else{
+      else {
+        const { MyAccountID } = self.props;
+        console.log("User Association", MyAccountID, `syncdashboard/isMemberRefreshing/${MyAccountID}`);
+        let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
+        fb.database().ref(requesterPath).on('value', function (snapshot) {
+          let receivedData = snapshot.val();
+          console.log("Received Data in dashboard:", receivedData);
+          if (receivedData !== null) {
+            console.log("Update Notification List Now1111")
+            self.updateDashboard();
+          }
+        })
         self.myProfileNet();
-        self.setState({isLoading:false})
-        self.props.navigation.navigate('CreateOrJoinScreen');
-      
+        self.listenRoleChange();
+        self.setState({ isLoading: false })
+       // self.props.navigation.navigate('CreateOrJoinScreen');
+
       }
     })
 
-    console.log("this.props.dropdown.length:111111111",self.props.dropdown.length,self.props.dropdown)
+    console.log("this.props.dropdown.length:111111111", self.props.dropdown.length, self.props.dropdown)
 
     this.focusListener = self.props.navigation.addListener('didFocus', () => {
       this.setState({ isSOSSelected: false });
     });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-      const unsubscribe = NetInfo.addEventListener(state => {
-        console.log("Connection type", state.type);
-        console.log("Is connected?", state.isConnected);
-        self.setState({
-            isConnected:state.isConnected
-        })
+    const unsubscribe = NetInfo.addEventListener(state => {
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+      self.setState({
+        isConnected: state.isConnected
+      })
     });
   }
 
 
-  async getPopUpNotifications(){
+  async getPopUpNotifications() {
     let self = this;
     const { MyAccountID } = self.props.userReducer;
-    const {updatePopUpNotification,updateNotificationData} = self.props;
+    const { updatePopUpNotification, updateNotificationData } = self.props;
 
     let options = {
-      method:"get",
-      url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
+      method: "get",
+      url: ` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
       //url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/6437`,
-      headers:{
-        "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
+      headers: {
+        "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
     };
 
-    axios(options).then((response)=>{
-      try{
+    axios(options).then((response) => {
+      try {
         let sResp = response.data.data.popupNotifications;
-        console.log('Data received in data notification pop up fetch:',sResp);
-      if(sResp.length !== 0){
-        updatePopUpNotification(sResp);
-        updateNotificationData(true);
-        firebase.notifications().removeAllDeliveredNotifications()
-      }else{
-        updatePopUpNotification([]);
-        updateNotificationData(false);
-        firebase.notifications().removeAllDeliveredNotifications()
-      }
-      }catch(e){
+        console.log('Data received in data notification pop up fetch:', sResp);
+        if (sResp.length !== 0) {
+          updatePopUpNotification(sResp);
+          updateNotificationData(true);
+          firebase.notifications().removeAllDeliveredNotifications()
+        } else {
+          updatePopUpNotification([]);
+          updateNotificationData(false);
+          firebase.notifications().removeAllDeliveredNotifications()
+        }
+      } catch (e) {
         console.log(e)
       }
-      
-      
-  })
-}
 
 
-  
+    })
+  }
+
+
+  componentWillReceiveProps(props) {
+    console.log("Prop in recived:", props.isRefreshingDashboard);
+    if (props.isRefreshingDashboard) {
+      this.updateAllTheData();
+    }
+
+  }
+
+
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    this.backButtonListener.remove();
-   // this.focusListener.remove();
+    //  this.backButtonListener.remove();
+    // this.focusListener.remove();
   }
 
   handleBackButtonClick() {
@@ -278,18 +300,18 @@ class Dashboard extends React.Component {
 
     if (count === 0 && isNotificationClicked) {
       console.log("COMING HERE")
-      const {updateNotificationData} = this.props;
+      const { updateNotificationData } = this.props;
     }
   }
 
   listenRoleChange() {
     const { MyAccountID, dropdown } = this.props;
-    const {oyeURL} = this.props.oyespaceReducer;
+    const { oyeURL } = this.props.oyespaceReducer;
     let path = 'rolechange/' + MyAccountID;
     let roleRef = base.services.frtdbservice.ref(path);
     let self = this;
     roleRef.on('value', async function (snapshot) {
-      
+
       try {
         if (counter != 0) {
           console.log(JSON.stringify(snapshot.val()));
@@ -303,9 +325,9 @@ class Dashboard extends React.Component {
           let tok = await firebaseMessaging.getToken();
           self.requestNotifPermission();
           //self.roleCheckForAdmin(self.state.assocId)
-          const { fetchAssociationByAccountId }=self.props
-          fetchAssociationByAccountId(oyeURL,MyAccountID,()=>{
-            self.onAssociationChange(self.state.dropdownIndex,self.state.unitDropdownIndex);
+          const { fetchAssociationByAccountId } = self.props
+          fetchAssociationByAccountId(oyeURL, MyAccountID, () => {
+            self.onAssociationChange(self.state.dropdownIndex, self.state.unitDropdownIndex);
           });
         } else {
           counter = 1;
@@ -355,15 +377,15 @@ class Dashboard extends React.Component {
     console.log("Dashboard reducer Data in Request Notification Permission:", this.props.dashBoardReducer, receiveNotifications);
     dropdown.map(units => {
       if (receiveNotifications) {
-        console.log("Listening to firebase:",units)
+        console.log("Listening to firebase:", units)
         let unitArr = units.unit;
-        for(let i in unitArr){
-          console.log("Listening to firebase Unit:",unitArr[i]);
+        for (let i in unitArr) {
+          console.log("Listening to firebase Unit:", unitArr[i]);
           firebase
-          .messaging()
-          .subscribeToTopic(
-            '' + MyAccountID + unitArr[i].unUnitID + 'usernotif'
-          );
+            .messaging()
+            .subscribeToTopic(
+              '' + MyAccountID + unitArr[i].unUnitID + 'usernotif'
+            );
         }
         console.log('date_asAssnID', units.associationId);
         console.log("UNSUBSCRIBING_FROM: " + MyAccountID + 'admin')
@@ -381,10 +403,10 @@ class Dashboard extends React.Component {
 
         if (units.roleId === 2 || units.roleId === 3) {
         } else if (units.roleId === 1) {
-          console.log("Listening to firebase Subscribing to:",units.associationId+'admin')
+          console.log("Listening to firebase Subscribing to:", units.associationId + 'admin')
           firebase.messaging().subscribeToTopic(units.associationId + 'admin');
           // if (units.meIsActive) {
-            
+
           //   firebase.messaging().subscribeToTopic(units.associationId + 'admin');
           //  }
         }
@@ -398,7 +420,7 @@ class Dashboard extends React.Component {
       .hasPermission()
       .then(enabled => {
         if (enabled) {
-          console.log("Listening to firebase:Listening to firebase:",enabled,receiveNotifications)
+          console.log("Listening to firebase:Listening to firebase:", enabled, receiveNotifications)
           if (receiveNotifications) {
             this.listenForNotif();
           }
@@ -416,8 +438,8 @@ class Dashboard extends React.Component {
         }
       });
 
-         
-        this.roleCheckForAdmin()
+
+    this.roleCheckForAdmin()
   };
 
   showLocalNotification = notification => {
@@ -469,7 +491,7 @@ class Dashboard extends React.Component {
 
 
   listenForNotif = async () => {
-    console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222',Notification.permission,this.notificationDisplayedListener);
+    console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222', Notification.permission, this.notificationDisplayedListener);
 
     if (
       this.notificationDisplayedListener == undefined ||
@@ -480,13 +502,13 @@ class Dashboard extends React.Component {
       this.notificationDisplayedListener = firebase
         .notifications()
         .onNotificationDisplayed(notification => {
-           console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222",notification);
+          console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222", notification);
           // console.log('____________')
           // Process your notification as required
           // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
         });
 
-        console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222:",this.notificationDisplayedListener);
+      console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222:", this.notificationDisplayedListener);
 
       this.notificationListener = firebase
         .notifications()
@@ -504,14 +526,14 @@ class Dashboard extends React.Component {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-         // this.updateAllTheData()
-          const { fetchAssociationByAccountId }= this.props;
-          fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
-            this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);
+          // this.updateAllTheData()
+          const { fetchAssociationByAccountId } = this.props;
+          fetchAssociationByAccountId(this.props.oyeURL, this.props.MyAccountID, () => {
+            this.onAssociationChange(this.state.dropdownIndex, this.state.unitDropdownIndex);
           });
           this.props.getNotifications(oyeURL, MyAccountID);
           this.showLocalNotification(notification);
-        });  
+        });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {
         const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
@@ -555,33 +577,34 @@ class Dashboard extends React.Component {
 
   async roleCheckForAdmin(index) {
     let self = this;
-    console.log("Data:",self.props,self.props.dropdown)
+    console.log("Data:", self.props, self.props.dropdown)
     let data = self.props.dropdown[0];
     self.checkUserRole(data);
-    
+
   }
 
 
 
   listenToFirebase(userAssociation) {
-    console.log("User Association", userAssociation);
-    const {MyAccountID} = this.props;
-    let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
-      fb.database().ref(requesterPath).on('value', function (snapshot) {
-        let receivedData = snapshot.val();
-        console.log("Received Data in dashboard:", receivedData);
-        if (receivedData !== null) {
-          console.log("Update Notification List Now1111")
-          self.updateDashboard();
-        }
-      })
-
     let self = this;
+    const { MyAccountID } = this.props;
+    console.log("User Association", userAssociation, MyAccountID, `syncdashboard/isMemberRefreshing/${MyAccountID}`);
+    let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
+    fb.database().ref(requesterPath).on('value', function (snapshot) {
+      let receivedData = snapshot.val();
+      console.log("Received Data in dashboard:", receivedData);
+      if (receivedData !== null) {
+        console.log("Update Notification List Now1111")
+        self.updateDashboard();
+       // self.props.navigation.navigate('ResDashBoard');
+      }
+    })
+
     for (let i in userAssociation) {
       let associationId = userAssociation[i].associationId;
       let associationPath = `syncdashboard/isAssociationRefreshing/${associationId}`;
       let countPath = `syncdashboard/isCountRefreshing/${associationId}`;
-      
+
       console.log("Log of association listener:", associationId)
       fb.database().ref(associationPath).on('value', function (snapshot) {
         let receivedData = snapshot.val();
@@ -610,14 +633,14 @@ class Dashboard extends React.Component {
 
   updateDashboard() {
     console.log("Update Dashboard Changes if any------------------------------------>>>>>>>>>>>")
-    const{ fetchAssociationByAccountId } =this.props
-    fetchAssociationByAccountId(this.props.oyeURL,this.props.MyAccountID,()=>{
-      this.onAssociationChange(this.state.dropdownIndex,this.state.unitDropdownIndex);
+    const { fetchAssociationByAccountId } = this.props
+    fetchAssociationByAccountId(this.props.oyeURL, this.props.MyAccountID, () => {
+      this.onAssociationChange(this.state.dropdownIndex, this.state.unitDropdownIndex);
     });
-    let self=this;
+    let self = this;
     self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
-   
-     }
+
+  }
 
   async getVehicleList() {
     let self = this;
@@ -626,7 +649,7 @@ class Dashboard extends React.Component {
     let associationId = self.props.assId;
     let accountId = self.props.userReducer.MyAccountID;
     let unitId = self.props.uniID;
-    console.log('HItting Here ______________________________________IN dashboard count', self.props,associationId, accountId, unitId, self.props.oyeURL)
+    console.log('HItting Here ______________________________________IN dashboard count', self.props, associationId, accountId, unitId, self.props.oyeURL)
     fetch(
       `https://${self.props.oyeURL}/oyesafe/api/v1/GetFamilyMemberVehicleCountByAssocAcntUnitID/${associationId}/${accountId}/${unitId}`,
       {
@@ -636,7 +659,7 @@ class Dashboard extends React.Component {
           'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
         }
       }
-    ).then(response => 
+    ).then(response =>
       response.json())
       .then((responseJson) => {
         console.log("HItting Here ______________________________________IN dashboard count123:", responseJson)
@@ -668,7 +691,7 @@ class Dashboard extends React.Component {
 
   }
 
- 
+
 
 
   changeTheAssociation = (value, assId, unitId, unitName) => {
@@ -701,9 +724,9 @@ class Dashboard extends React.Component {
 
     const { updateIdDashboard } = this.props;
     console.log('updateIdDashboard1', this.props);
-    
 
-  
+
+
 
     updateIdDashboard({
       prop: 'uniID',
@@ -751,71 +774,71 @@ class Dashboard extends React.Component {
     this.roleCheckForAdmin(assId);
   };
 
-  onAssociationChange = (index,unitIndex) => {
-try{
-    console.log('GettheselectedAssocitation',  index, this.props.dropdown,unitIndex)
+  onAssociationChange = (index, unitIndex) => {
+    try {
+      console.log('GettheselectedAssocitation', index, this.props.dropdown, unitIndex)
 
-    const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = this.props;
+      const { updateUserInfo, dropdown, updateSelectedDropDown, updateUnitDropdown, updateIdDashboard } = this.props;
 
-    this.setState({ assocId: dropdown[index].associationId,dropdownIndex:index });
+      this.setState({ assocId: dropdown[index].associationId, dropdownIndex: index });
 
-    console.log('updateIdDashboard1', this.props);
-    updateIdDashboard({
-      prop: 'assId',
-      value: dropdown[index].associationId
-    });
-    updateIdDashboard({
-      prop: 'uniID',
-      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[unitIndex].unitId
-    });
-  
+      console.log('updateIdDashboard1', this.props);
+      updateIdDashboard({
+        prop: 'assId',
+        value: dropdown[index].associationId
+      });
+      updateIdDashboard({
+        prop: 'uniID',
+        value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[unitIndex].unitId
+      });
 
-    // updateUserInfo({
-    //   prop: 'SelectedAssociationID',
-    //   value: dropdown[index].associationId
-    // });
 
-    updateSelectedDropDown({
-      prop: 'selectedDropdown',
-      value: dropdown[index].value
-    });
+      // updateUserInfo({
+      //   prop: 'SelectedAssociationID',
+      //   value: dropdown[index].associationId
+      // });
 
-    // updateSelectedDropDown({
-    //   prop: 'assId',
-    //   value: dropdown[index].associationId
-    // });
+      updateSelectedDropDown({
+        prop: 'selectedDropdown',
+        value: dropdown[index].value
+      });
 
-    updateSelectedDropDown({
-      prop: "selectedDropdown1",
-      value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].value
-    });
+      // updateSelectedDropDown({
+      //   prop: 'assId',
+      //   value: dropdown[index].associationId
+      // });
 
-    // updateSelectedDropDown({
-    //   prop: "unitID",
-    //   value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
-    // });
+      updateSelectedDropDown({
+        prop: "selectedDropdown1",
+        value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].value
+      });
 
-    updateUnitDropdown({
-      value: dropdown[index].unit,
-      associationId: dropdown[index].associationId
-    })
-  base.utils.validate.checkSubscription(dropdown[index].associationId);
-    
-  updateUserInfo({
-      prop: 'MyOYEMemberID',
-      value: dropdown[index].memberId
-    });
-    updateUserInfo({
-      prop: 'SelectedMemberID',
-      value: dropdown[index].memberId
-    });
+      // updateSelectedDropDown({
+      //   prop: "unitID",
+      //   value: dropdown[index].unit.length === 0 ? "" : dropdown[index].unit[0].unitId
+      // });
 
-    dropdown[index].unit.length === 0 ? "" : this.getVehicleList()
-    this.checkUserRole(dropdown[index])
-    this.setView(0)
-  }catch(e){
-    alert("err")
-  }
+      updateUnitDropdown({
+        value: dropdown[index].unit,
+        associationId: dropdown[index].associationId
+      })
+      base.utils.validate.checkSubscription(dropdown[index].associationId);
+
+      updateUserInfo({
+        prop: 'MyOYEMemberID',
+        value: dropdown[index].memberId
+      });
+      updateUserInfo({
+        prop: 'SelectedMemberID',
+        value: dropdown[index].memberId
+      });
+
+      dropdown[index].unit.length === 0 ? "" : this.getVehicleList()
+      this.checkUserRole(dropdown[index])
+      this.setView(0)
+    } catch (e) {
+      alert("err")
+    }
   };
 
 
@@ -823,7 +846,7 @@ try{
     const { updateuserRole, updateIdDashboard } = this.props;
     console.log("GettheselectedAssocitation1", data);
     let assId = (data.associationId).toString();
-    if (data.roleId === 1 && data.unit.length !==0) {
+    if (data.roleId === 1 && data.unit.length !== 0) {
       let assId = (data.associationId).toString();
       await base.utils.storage.storeData('ADMIN_NOTIF' + assId, assId);
       firebase.messaging().subscribeToTopic(assId)
@@ -837,12 +860,12 @@ try{
 
     updateuserRole({
       prop: "role",
-      value:data.unit.length === 0?5: data.roleId
+      value: data.unit.length === 0 ? 5 : data.roleId
     })
 
     updateIdDashboard({
       prop: "roleId",
-      value:data.unit.length === 0?5: data.roleId
+      value: data.unit.length === 0 ? 5 : data.roleId
     })
 
 
@@ -923,7 +946,7 @@ try{
     );
     console.log('COMINGHERE_FirstCall', response);
     const { updateUserInfo } = this.props;
-    
+
 
     updateUserInfo({
       prop: 'userData',
@@ -936,10 +959,10 @@ try{
     updateUserInfo({
       prop: 'userQRCode',
       value: response.data.account[0].acisdCode +
-      response.data.account[0].acMobile +
-      ';'
+        response.data.account[0].acMobile +
+        ';'
     });
-    
+
   };
 
 
@@ -950,7 +973,7 @@ try{
 
 
   createTopicListener(associationList, _switch) {
-    console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222:",associationList,_switch,firebase.messaging().hasPermission())
+    console.log("HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222:", associationList, _switch, firebase.messaging().hasPermission())
     if (associationList != undefined && associationList.length > 0) {
       try {
         firebase.messaging().hasPermission().
@@ -1106,6 +1129,7 @@ try{
     //console.log("RENDER_ALLASSOC_0",allAssociations)
 
 
+
     if (!this.state.isConnected) {
       console.log('CHECK NET!!!!!!', this.state.isConnected)
 
@@ -1127,229 +1151,260 @@ try{
     else {
       console.log('CHECK NET!!!!!!@@@@@', this.state.isConnected);
 
-      return (
-        <View style={{ height: '100%', width: '100%' ,backgroundColor:'white'}}>
-          {/* <NavigationEvents onDidFocus={() => this.requestNotifPermission()} /> */}
-          {!this.props.isLoading?
-            <View style={Style.container}>
-              <View style={Style.dropDownContainer}>
-                <View style={Style.leftDropDown}>
-                  {this.state.assdNameHide === false ? (
-                    <Dropdown
-                      value={
-                        selectedDropdown.length > maxLen
-                          ? selectedDropdown.substring(0, maxLen - 2) + '...'
-                          : selectedDropdown
-                      }
-                      label="Association Name"
-                      baseColor="rgba(0, 0, 0, 1)"
-                      data={dropdown}
-                      containerStyle={{
-                        width: '100%'
-                      }}
-                      textColor={base.theme.colors.black}
-                      inputContainerStyle={{
-                        borderBottomColor: 'transparent'
-                      }}
-                      dropdownOffset={{ top: 10, left: 0 }}
-                      dropdownPosition={dropdown.length > 2 ? -5 : -2}
-                      rippleOpacity={0}
-                      onChangeText={(value, index) => {
-                        this.onAssociationChange(index,this.state.unitDropdownIndex);
-                        this.props.updateuserRole({
-                          prop: 'role',
-                          value: dropdown[index].roleId
-                        });
-                       }}
-                    />
-                  ) : (
-                      <View />
-                    )}
-                </View>
-                <View style={Style.rightDropDown}>
-                  {this.state.unitNameHide === false ? (
-                    <Dropdown
-                      // value={this.state.unitName}
-                      value={
-                        selectedDropdown1.length > maxLenUnit
-                          ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
-                          : selectedDropdown1
-                      }
-                      containerStyle={{
-                        width: '95%'
-                        /*width: "70%",
-                                marginLeft: "30%",
-                                borderBottomWidth: hp("0.05%"),
-                                borderBottomColor: "#474749"*/
-                      }}
-                      label="Unit"
-                      baseColor="rgba(0, 0, 0, 1)"
-                      data={dropdown1}
-                      inputContainerStyle={{
-                        borderBottomColor: 'transparent'
-                      }}
-                      textColor="#000"
-                      dropdownOffset={{ top: 10, left: 0 }}
-                      dropdownPosition={
-                        dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
-                      }
-                      rippleOpacity={0}
-                      // onChangeText={(value, index) => {
-                      //   console.log("value/index ",value, index);
-                      //   this.updateUnit(value, index);
-                      // }}
-                      onChangeText={(value, index) => {
-                       
-                        updateIdDashboard({
-                          prop: 'uniID',
-                          value: dropdown1[index].unitId
-                        });
-                        updateSelectedDropDown({
-                          prop: 'selectedDropdown1',
-                          value: dropdown1[index].value
-                        });
-                        this.setState({
-                          unitDropdownIndex:index
-                        })
-                        this.getVehicleList();
-                        //    this.updateUnit(value, index);
-                      }}
-                    // itemTextStyle={{}}
-                    />
-                  ) : (
-                      <View />
-                    )}
-                </View>
-              </View>
+      if(!this.props.isLoading){
+      if (dropdown.length === 0) {
+        return (
+          <View style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'flex-start', }}>
+            <Image
+              resizeMode={'center'}
+              style={{ height: '40%', width: '100%', marginTop: 20, }}
+              source={require('../../../../icons/apartment.png')}
+            />
+            <Text style={{ fontSize: 16, color: base.theme.colors.black, marginBottom: 40 }}>Do you want to join association?</Text>
+            <OSButton
+              height={'5%'}
+              width={'20%'}
+              borderRadius={20}
+              oSBText={'Yes'}
+              onButtonClick={() => this.props.navigation.navigate('City')} />
+          </View>
+        )
+      }
+      else {
 
-              <ImageBackground
-                resizeMode={'stretch'}
-                source={selectedView === 0 ? require('../../../../icons/myunit_dashboard.png') : require("../../../../icons/admin_dashboard.png")}
-                style={{ height: ('90%'), marginTop: hp('0'), width: ('100%'), alignSelf: 'center' }}>
-
-                {this.state.selectedView === 0
-                  ? this.myUnitCard()
-                  : this.state.selectedView === 1
-                    ? this.adminCard()
-                    : this.offersZoneCard()}
-                {this.renderSOS()}
-
-                <View style={{ flexDirection: 'row', top: hp('23'), justifyContent: 'space-between', width: wp('65'), alignSelf: 'center', borderWidth: 0, alignItems: 'flex-end' }}>
-                  <TouchableHighlight
-                    underlayColor={'transparent'}
-                    onPress={() => this.setView(0)}>
-                    <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios' ? hp('2') : hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
-                      <Image
-                        resizeMode={'contain'}
-                        style={{
-                          width: hp('4%'),
-                          height: hp('4%'),
+        return (
+          <View style={{ height: '100%', width: '100%', backgroundColor: 'white' }}>
+            <NavigationEvents onDidFocus={() => this.updateAllTheData()} />
+            {!this.props.isLoading ?
+              <View style={Style.container}>
+                <View style={Style.dropDownContainer}>
+                  <View style={Style.leftDropDown}>
+                    {this.state.assdNameHide === false ? (
+                      <Dropdown
+                        value={
+                          selectedDropdown.length > maxLen
+                            ? selectedDropdown.substring(0, maxLen - 2) + '...'
+                            : selectedDropdown
+                        }
+                        label="Association Name"
+                        baseColor="rgba(0, 0, 0, 1)"
+                        data={dropdown}
+                        containerStyle={{
+                          width: '100%'
                         }}
-                        source={require('../../../../icons/my_unit.png')}
+                        textColor={base.theme.colors.black}
+                        inputContainerStyle={{
+                          borderBottomColor: 'transparent'
+                        }}
+                        dropdownOffset={{ top: 10, left: 0 }}
+                        dropdownPosition={dropdown.length > 2 ? -5 : -2}
+                        rippleOpacity={0}
+                        onChangeText={(value, index) => {
+                          this.onAssociationChange(index, this.state.unitDropdownIndex);
+                          this.props.updateuserRole({
+                            prop: 'role',
+                            value: dropdown[index].roleId
+                          });
+                        }}
                       />
-                      <Text allowFontScaling={false}>My Unit</Text>
+                    ) : (
+                        <View />
+                      )}
+                  </View>
+                  <View style={Style.rightDropDown}>
+                    {this.state.unitNameHide === false ? (
+                      <Dropdown
+                        // value={this.state.unitName}
+                        value={
+                          selectedDropdown1.length > maxLenUnit
+                            ? selectedDropdown1.substring(0, maxLenUnit - 3) + '...'
+                            : selectedDropdown1
+                        }
+                        containerStyle={{
+                          width: '95%'
+                          /*width: "70%",
+                                  marginLeft: "30%",
+                                  borderBottomWidth: hp("0.05%"),
+                                  borderBottomColor: "#474749"*/
+                        }}
+                        label="Unit"
+                        baseColor="rgba(0, 0, 0, 1)"
+                        data={dropdown1}
+                        inputContainerStyle={{
+                          borderBottomColor: 'transparent'
+                        }}
+                        textColor="#000"
+                        dropdownOffset={{ top: 10, left: 0 }}
+                        dropdownPosition={
+                          dropdown1.length > 2 ? -4 : dropdown1.length < 2 ? -2 : -3
+                        }
+                        rippleOpacity={0}
+                        // onChangeText={(value, index) => {
+                        //   console.log("value/index ",value, index);
+                        //   this.updateUnit(value, index);
+                        // }}
+                        onChangeText={(value, index) => {
 
-                    </View>
-                  </TouchableHighlight>
-                  {isAdmin ?
+                          updateIdDashboard({
+                            prop: 'uniID',
+                            value: dropdown1[index].unitId
+                          });
+                          updateSelectedDropDown({
+                            prop: 'selectedDropdown1',
+                            value: dropdown1[index].value
+                          });
+                          this.setState({
+                            unitDropdownIndex: index
+                          })
+                          this.getVehicleList();
+                          //    this.updateUnit(value, index);
+                        }}
+                      // itemTextStyle={{}}
+                      />
+                    ) : (
+                        <View />
+                      )}
+                  </View>
+                </View>
+
+                <ImageBackground
+                  resizeMode={'stretch'}
+                  source={selectedView === 0 ? require('../../../../icons/myunit_dashboard.png') : require("../../../../icons/admin_dashboard.png")}
+                  style={{ height: ('90%'), marginTop: hp('0'), width: ('100%'), alignSelf: 'center' }}>
+
+                  {this.state.selectedView === 0
+                    ? this.myUnitCard()
+                    : this.state.selectedView === 1
+                      ? this.adminCard()
+                      : this.offersZoneCard()}
+                  {this.renderSOS()}
+
+                  <View style={{ flexDirection: 'row', top: hp('23'), justifyContent: 'space-between', width: wp('65'), alignSelf: 'center', borderWidth: 0, alignItems: 'flex-end' }}>
                     <TouchableHighlight
                       underlayColor={'transparent'}
-                      onPress={() => this.setView(1)}>
-                      <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios' ? hp('2') : hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
+                      onPress={() => this.setView(0)}>
+                      <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios' ? hp('2') : hp('2'), justifyContent: 'center', width: wp('25'), alignSelf: 'center', borderWidth: 0, alignItems: 'center' }}>
                         <Image
                           resizeMode={'contain'}
                           style={{
-                            width: hp('3%'),
-                            height: hp('3%'),
+                            width: hp('4%'),
+                            height: hp('4%'),
                           }}
-                          source={require('../../../../icons/user.png')}
+                          source={require('../../../../icons/my_unit.png')}
                         />
-                        <Text allowFontScaling={false}>Admin</Text>
+                        <Text allowFontScaling={false}>My Unit</Text>
 
                       </View>
                     </TouchableHighlight>
-                    :
-                    <View />}
-                </View>
-              </ImageBackground>
+                    {isAdmin ?
+                      <TouchableHighlight
+                        underlayColor={'transparent'}
+                        onPress={() => this.setView(1)}>
+                        <View style={{ flexDirection: 'column', bottom: Platform.OS === 'ios' ? hp('2') : hp('2'), justifyContent: 'center', width: wp('35'), alignSelf: 'center', borderWidth: 0, alignItems: 'center', left: hp('5') }}>
+                          <Image
+                            resizeMode={'contain'}
+                            style={{
+                              width: hp('3%'),
+                              height: hp('3%'),
+                            }}
+                            source={require('../../../../icons/user.png')}
+                          />
+                          <Text allowFontScaling={false}>Admin</Text>
 
-              <View style={{
-                height: '6%',
-                width: '100%',
-                alignItems: 'center',
-                backgroundColor: base.theme.colors.white,
-                borderColor: base.theme.colors.primary,
-                borderWidth: 0,
-                position: 'absolute',
-                 //marginBottom: hp('5'),
-                justifyContent: 'flex-start',
-                top: hp('77'),
-                flexDirection: 'row'
-              }}>
+                        </View>
+                      </TouchableHighlight>
+                      :
+                      <View />}
+                  </View>
+                </ImageBackground>
 
-                <View style={{ borderWidth: 0 }}>
-                  <Image
-                    resizeMode={'cover'}
-                    style={{
-                      height: hp('10'),
-                      width: wp('55'),
-                      alignSelf: 'flex-start',
-                      borderWidth: 0
-                    }}
-                    source={require('../../../../icons/bottomImg.png')}
-                  />
-                </View>
-                <View style={Style.subSupportView}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      {
-                        Platform.OS === 'android'
-                          ? Linking.openURL(`tel:9343121121`)
-                          : Linking.openURL(`tel:9343121121`);
-                      }
-                    }}
-                  >
+                <View style={{
+                  height: '6%',
+                  width: '100%',
+                  alignItems: 'center',
+                  backgroundColor: base.theme.colors.white,
+                  borderColor: base.theme.colors.primary,
+                  borderWidth: 0,
+                  position: 'absolute',
+                  //marginBottom: hp('5'),
+                  justifyContent: 'flex-start',
+                  top: hp('77'),
+                  flexDirection: 'row'
+                }}>
+
+                  <View style={{ borderWidth: 0 }}>
                     <Image
                       resizeMode={'cover'}
-                      //    style={Style.supportIcon}
-                      source={require('../../../../icons/call1.png')}
+                      style={{
+                        height: hp('10'),
+                        width: wp('55'),
+                        alignSelf: 'flex-start',
+                        borderWidth: 0
+                      }}
+                      source={require('../../../../icons/bottomImg.png')}
                     />
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  </View>
+                  <View style={Style.subSupportView}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        {
+                          Platform.OS === 'android'
+                            ? Linking.openURL(`tel:9343121121`)
+                            : Linking.openURL(`tel:9343121121`);
+                        }
+                      }}
+                    >
+                      <Image
+                        resizeMode={'cover'}
+                        //    style={Style.supportIcon}
+                        source={require('../../../../icons/call1.png')}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
 
-                  >
-                    <Image
-                      resizeMode={'cover'}
-                      // style={Style.supportIcon}
-                      source={require('../../../../icons/chat_1.png')}
-                    />
-                  </TouchableOpacity>
+                    >
+                      <Image
+                        resizeMode={'cover'}
+                        // style={Style.supportIcon}
+                        source={require('../../../../icons/chat_1.png')}
+                      />
+                    </TouchableOpacity>
 
-                  <TouchableOpacity
-                    onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
-                  >
-                    <Image
-                      resizeMode={'cover'}
-                      // style={Style.supportIcon}
-                      source={require('../../../../icons/email1.png')}
-                    />
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => Linking.openURL('mailto:happy@oyespace.com')}
+                    >
+                      <Image
+                        resizeMode={'cover'}
+                        // style={Style.supportIcon}
+                        source={require('../../../../icons/email1.png')}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-           :<View/>}
-          <ProgressLoader
-            isHUD={true}
-            isModal={true}
-            visible={this.props.isLoading}
-            color={base.theme.colors.primary}
-            hudColor={'#FFFFFF'}
-          />
-        </View>
-      );
+              : <View />}
+            <ProgressLoader
+              isHUD={true}
+              isModal={true}
+              visible={this.props.isLoading}
+              color={base.theme.colors.primary}
+              hudColor={'#FFFFFF'}
+            />
+          </View>
+        );
+      }
+    }else{
+      return(
+        <ProgressLoader
+              isHUD={true}
+              isModal={true}
+              visible={this.props.isLoading}
+              color={base.theme.colors.primary}
+              hudColor={'#FFFFFF'}
+            />
+      )
     }
-
-
+    }
   }
 
   changeCardStatus(status) {
@@ -1469,11 +1524,11 @@ try{
     }, 1000)
   }
 
-  changeToUnit(){
+  changeToUnit() {
     this.setState({
-      isLoading:false
+      isLoading: false
     })
-    this.props.navigation.navigate('CreateOrJoinScreen')
+    //this.props.navigation.navigate('CreateOrJoinScreen')
   }
 
   myUnitCard() {
@@ -1910,7 +1965,7 @@ const mapStateToProps = state => {
     isLoading: state.DashboardReducer.isLoading,
     memberList: state.DashboardReducer.memberList,
     called: state.DashboardReducer.called,
-    
+
 
     // Oyespace variables and user variables
     MyFirstName: state.UserReducer.MyFirstName,
@@ -1924,7 +1979,7 @@ const mapStateToProps = state => {
     oyespaceReducer: state.OyespaceReducer,
     receiveNotifications: state.NotificationReducer.receiveNotifications,
     dashBoardReducer: state.DashboardReducer,
-    assId:state.DashboardReducer.assId ,
+    assId: state.DashboardReducer.assId,
     uniID: state.DashboardReducer.uniID,
   };
 };

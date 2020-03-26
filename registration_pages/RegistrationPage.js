@@ -133,7 +133,9 @@ class AddRegularVisitor extends Component {
                     updateUserInfo({prop: "signedIn", value: true});
                         console.log('Association check', responseJson.success);
 
-                    this.props.navigation.navigate('CreateOrJoinScreen')
+                    //this.props.navigation.navigate('CreateOrJoinScreen')
+                    this.props.navigation.navigate('ResDashBoard');
+
                 } else {
                     alert("failed to add user !");
                 }
