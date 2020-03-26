@@ -1327,7 +1327,7 @@ class NotificationScreen extends PureComponent {
                               });
                               let unitPath = `syncdashboard/isUnitRefreshing/${item.asAssnID}/${item.sbUnitID}`;
                               let associationPath = `syncdashboard/isAssociationRefreshing/${item.asAssnID}`;
-                              let requesterPath = `syncdashboard/isMemberRefreshing/${item.sbMemID}`;
+                              let requesterPath = `syncdashboard/isMemberRefreshing/${item.acNotifyID}`;
                       
                               let isUnitNotificationUpdating = 0;
                               let isAssocNotificationUpdating = 0;

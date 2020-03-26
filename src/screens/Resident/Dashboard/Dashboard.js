@@ -156,7 +156,7 @@ class Dashboard extends React.Component {
         self.getVehicleList(); 
         self.listenToFirebase(self.props.dropdown);
         self.setState({isLoading:false});
-        self.getPopUpNotifications();
+        //self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown,true)
       }
       else{
@@ -190,8 +190,8 @@ class Dashboard extends React.Component {
 
     let options = {
       method:"get",
-      //url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
-      url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/6437`,
+      url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
+      //url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/6437`,
       headers:{
         "X-OYE247-APIKey":"7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
@@ -564,12 +564,24 @@ class Dashboard extends React.Component {
 
 
   listenToFirebase(userAssociation) {
-    console.log("User Association", userAssociation)
+    console.log("User Association", userAssociation);
+    const {MyAccountID} = this.props;
+    let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
+      fb.database().ref(requesterPath).on('value', function (snapshot) {
+        let receivedData = snapshot.val();
+        console.log("Received Data in dashboard:", receivedData);
+        if (receivedData !== null) {
+          console.log("Update Notification List Now1111")
+          self.updateDashboard();
+        }
+      })
+
     let self = this;
     for (let i in userAssociation) {
       let associationId = userAssociation[i].associationId;
       let associationPath = `syncdashboard/isAssociationRefreshing/${associationId}`;
-      let countPath = `syncdashboard/isCountRefreshing/${associationId}`
+      let countPath = `syncdashboard/isCountRefreshing/${associationId}`;
+      
       console.log("Log of association listener:", associationId)
       fb.database().ref(associationPath).on('value', function (snapshot) {
         let receivedData = snapshot.val();
