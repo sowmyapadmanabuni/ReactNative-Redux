@@ -629,8 +629,8 @@ class Dashboard extends React.Component {
       .then((responseJson) => {
         console.log("HItting Here ______________________________________IN dashboard count123:", responseJson)
         self.setState({
-          vehiclesCount: responseJson.data.vehicleCount,
-          falmilyMemebCount: responseJson.data.familyMemberCount
+          vehiclesCount: responseJson.data.vehicleCount+1,
+          falmilyMemebCount: responseJson.data.familyMemberCount+1
         });
         const { updateIdDashboard } = this.props;
         updateIdDashboard({

@@ -150,7 +150,7 @@ class MyFamilyList extends React.Component {
                 const {updateIdDashboard} = this.props;
                 updateIdDashboard({
                     prop: 'familyMemberCount',
-                    value: reqData.length
+                    value: familyData.length
                 });
                 this.setState({familyData: reqData});
             } else {
