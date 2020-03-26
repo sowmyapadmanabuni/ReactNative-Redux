@@ -66,6 +66,7 @@ class RegisterMe extends Component {
         } = this.props.navigation.state.params;
 
         const { getAssoMembers, oyeURL, MyAccountID } = this.props;
+        const { fetchAssociationByAccountId } =this.props;
 
         /*
         else if (this.checkForOwner()) {
@@ -412,6 +413,8 @@ class RegisterMe extends Component {
         } = this.props.navigation.state.params;
 
         const { getAssoMembers, oyeURL, MyAccountID } = this.props;
+        const { fetchAssociationByAccountId}=this.props;
+        
         /**
          else if (this.state.sent) {
       alert("Request already sent");
@@ -652,9 +655,11 @@ class RegisterMe extends Component {
                                                             console.log("Error:", error);
                                                     })
                                                     },2000)
+                                                   
                                                     this.setState({
                                                         isLoading:false
                                                     })
+ 
                                                     Alert.alert(
                                                         'Oyespace',
                                                         'Request sent to Admin',

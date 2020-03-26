@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.ReactApplication;
-import com.BV.LinearGradient.LinearGradientPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
@@ -60,6 +59,8 @@ import io.fabric.sdk.android.Fabric;
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 
+import com.BV.LinearGradient.LinearGradientPackage;
+
 public class MainApplication extends Application implements ShareApplication, ReactApplication {
 
     @Override
@@ -77,7 +78,6 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new LinearGradientPackage(),
                     new NetInfoPackage(),
                     new RNScreensPackage(),
                     new ReanimatedPackage(),
@@ -115,7 +115,8 @@ public class MainApplication extends Application implements ShareApplication, Re
                     new RNLocationSatellitesPackage(),
                     new BackgroundTimerPackage(),
                     new SafeAreaContextPackage(),
-                    new RNDateTimePickerPackage()
+                    new RNDateTimePickerPackage(),
+                    new LinearGradientPackage()
 
             );
         }

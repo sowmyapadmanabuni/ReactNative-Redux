@@ -120,7 +120,6 @@ class Dashboard extends React.Component {
 
         self.requestNotifPermission();
         self.myProfileNet();
-        self.listenRoleChange();
         self.props.getNotifications(oyeURL, MyAccountID);
         self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
@@ -129,9 +128,20 @@ class Dashboard extends React.Component {
         self.createTopicListener(self.props.dropdown, true)
       }
       else {
+        const { MyAccountID } = self.props;
+        console.log("User Association", MyAccountID, `syncdashboard/isMemberRefreshing/${MyAccountID}`);
+        let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
+        fb.database().ref(requesterPath).on('value', function (snapshot) {
+          let receivedData = snapshot.val();
+          console.log("Received Data in dashboard:", receivedData);
+          if (receivedData !== null) {
+            console.log("Update Notification List Now1111")
+            self.updateDashboard();
+          }
+        })
         self.myProfileNet();
+        self.listenRoleChange();
         self.setState({ isLoading: false })
-       // self.props.navigation.navigate('CreateOrJoinScreen');
 
       }
     })
@@ -664,8 +674,8 @@ class Dashboard extends React.Component {
       .then((responseJson) => {
         console.log("HItting Here ______________________________________IN dashboard count123:", responseJson)
         self.setState({
-          vehiclesCount: responseJson.data.vehicleCount,
-          falmilyMemebCount: responseJson.data.familyMemberCount
+          vehiclesCount: responseJson.data.vehicleCount+1,
+          falmilyMemebCount: responseJson.data.familyMemberCount+1
         });
         const { updateIdDashboard } = this.props;
         updateIdDashboard({
