@@ -124,7 +124,7 @@ class Dashboard extends React.Component {
         self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
         self.setState({ isLoading: false });
-        // self.getPopUpNotifications();
+       //  self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown, true)
       }
       else {
@@ -168,8 +168,14 @@ class Dashboard extends React.Component {
         self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
         self.setState({ isLoading: false });
-        //self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown, true)
+        firebase.notifications().getInitialNotification().then((notificationOpen: NotificationOpen) => {
+          console.log("self.getPopUpNotifications();self.getPopUpNotifications();:",notificationOpen);
+          if(notificationOpen){
+            self.getPopUpNotifications();
+          }
+        })
+
       }
       else {
         const { MyAccountID } = self.props;
@@ -211,6 +217,8 @@ class Dashboard extends React.Component {
     let self = this;
     const { MyAccountID } = self.props.userReducer;
     const { updatePopUpNotification, updateNotificationData } = self.props;
+
+    console.log('Data received in data notification pop up fetch:', MyAccountID);
 
     let options = {
       method: "get",
@@ -453,6 +461,7 @@ class Dashboard extends React.Component {
   };
 
   showLocalNotification = notification => {
+    console.log("Show Local Notification:",notification);
     try {
       const channel = new firebase.notifications.Android.Channel(
         'channel_id',
@@ -471,9 +480,7 @@ class Dashboard extends React.Component {
       const notificationBuild = new firebase.notifications.Notification({
         show_in_foreground: true,
         show_in_background: true,
-      });
-
-      notificationBuild
+      })
         .setTitle(notification._title)
         .setBody(notification._body)
         .setNotificationId(notification._notificationId)
@@ -486,7 +493,7 @@ class Dashboard extends React.Component {
         .android.setColor('#FF9100')
         .android.setLargeIcon('ic_notif')
         .android.setSmallIcon('ic_stat_ic_notification')
-        .android.setChannelId('channel_id')
+        .android.setChannelId(channel.channelId)
         .android.setVibrate([1000, 1000])
         .android.setPriority(firebase.notifications.Android.Priority.Max);
 
@@ -526,6 +533,7 @@ class Dashboard extends React.Component {
           console.log('___________');
           console.log("NOTIFICATION@@@@", notification);
           console.log('NOTIFICATION@@@@____________', notification.data.unitName, notification.data.associationID, notification.data.associationName);
+          
 
           //  this.changeTheAssociation(notification.data.associationName,notification.data.associationID,)
 
@@ -542,6 +550,7 @@ class Dashboard extends React.Component {
             this.onAssociationChange(this.state.dropdownIndex, this.state.unitDropdownIndex);
           });
           this.props.getNotifications(oyeURL, MyAccountID);
+          this.getPopUpNotifications();
           this.showLocalNotification(notification);
         });
 

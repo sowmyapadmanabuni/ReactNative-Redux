@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-03-24 20:09:44
+ * @Last Modified time: 2020-03-30 11:54:25
  */
 
 
@@ -82,7 +82,7 @@ class NotificationPopUp extends React.Component {
                             <Text allowFontScaling={false} style={styles.headerText}> {notificationData.visitorlog[0].vlVisType} delivery waiting at {notificationData.visitorlog[0].vlengName}</Text>
 
                         </LinearGradient>
-                        <TouchableHighlight
+                        {/* <TouchableHighlight
                             underlayColor={'transparent'}
                             onPress={() => this.closeModal()}
                             style={{
@@ -99,7 +99,7 @@ class NotificationPopUp extends React.Component {
                                 }}
                                 source={require('../../../icons/new_cross.png')}
                             />
-                        </TouchableHighlight>
+                        </TouchableHighlight> */}
 
                         <View style={styles.contentArea}>
                             <View style={styles.associationView}>
