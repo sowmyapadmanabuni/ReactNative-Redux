@@ -333,12 +333,14 @@ class Dashboard extends React.Component {
 
           let firebaseMessaging = firebase.messaging();
           let tok = await firebaseMessaging.getToken();
-          self.requestNotifPermission();
+          
           //self.roleCheckForAdmin(self.state.assocId)
           const { fetchAssociationByAccountId } = self.props
           fetchAssociationByAccountId(oyeURL, MyAccountID, () => {
             self.onAssociationChange(self.state.dropdownIndex, self.state.unitDropdownIndex);
           });
+          self.requestNotifPermission();
+          
         } else {
           counter = 1;
         }
@@ -527,7 +529,6 @@ class Dashboard extends React.Component {
           console.log("NOTIFICATION@@@@", notification);
           console.log('NOTIFICATION@@@@____________', notification.data.unitName, notification.data.associationID, notification.data.associationName);
 
-          //  this.changeTheAssociation(notification.data.associationName,notification.data.associationID,)
 
           if (notification._data.associationID) {
             // this.props.createNotification(notification._data, navigationInstance, false)
@@ -536,7 +537,7 @@ class Dashboard extends React.Component {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-          // this.updateAllTheData()
+          
           const { fetchAssociationByAccountId } = this.props;
           fetchAssociationByAccountId(this.props.oyeURL, this.props.MyAccountID, () => {
             this.onAssociationChange(this.state.dropdownIndex, this.state.unitDropdownIndex);
@@ -554,15 +555,18 @@ class Dashboard extends React.Component {
           if (notificationOpen.action) {
           }
         } else if (notificationOpen.notification._data.admin === 'false') {
-          this.props.refreshNotifications(oyeURL, MyAccountID);
+          this.props.getNotifications(oyeURL, MyAccountID);
+         // this.props.refreshNotifications(oyeURL, MyAccountID);
         }
 
         if (notificationOpen.notification._data.admin === 'true') {
-          this.props.refreshNotifications(oyeURL, MyAccountID);
+          this.props.getNotifications(oyeURL, MyAccountID);
+         //  this.props.refreshNotifications(oyeURL, MyAccountID);
           if (notificationOpen.notification._data.foreground) {
           }
         } else if (notificationOpen.notification._data.admin === 'gate_app') {
-          this.props.refreshNotifications(oyeURL, MyAccountID);
+          this.props.getNotifications(oyeURL, MyAccountID);
+          //this.props.refreshNotifications(oyeURL, MyAccountID);
         } else if (notificationOpen.notification._data.admin === 'false') {
         }
         if (notificationOpen.notification.data.ntType === "Join") {
@@ -606,7 +610,7 @@ class Dashboard extends React.Component {
       if (receivedData !== null) {
         console.log("Update Notification List Now1111")
         self.updateDashboard();
-       // self.props.navigation.navigate('ResDashBoard');
+       
       }
     })
 
@@ -648,6 +652,7 @@ class Dashboard extends React.Component {
       this.onAssociationChange(this.state.dropdownIndex, this.state.unitDropdownIndex);
     });
     let self = this;
+   // self.requestNotifPermission();
     self.props.getNotifications(self.props.oyeURL, self.props.MyAccountID);
 
   }
@@ -723,14 +728,7 @@ class Dashboard extends React.Component {
     const { oyeURL } = this.props.oyespaceReducer;
     this.setState({ assocId: assId });
 
-    // getDashUnits(
-    //   assId,
-    //   oyeURL,
-    //   MyAccountID,
-    //   dropdown,
-    //   assId,
-    //   dropdown1,
-    // );
+   
 
     const { updateIdDashboard } = this.props;
     console.log('updateIdDashboard1', this.props);
@@ -747,32 +745,13 @@ class Dashboard extends React.Component {
       value: assId
     });
 
-    // updateUserInfo({
-    //   prop: 'SelectedAssociationID',
-    //   value: assId
-    // });
+  
 
     updateSelectedDropDown({
       prop: 'selectedDropdown',
       value: value
     });
 
-    // updateSelectedDropDown({
-    //   prop: 'assId',
-    //   value: assId
-    // });
-    // updateUserInfo({
-    //   prop: 'SelectedUnitID',
-    //   value: unitId
-    // });
-    // updateIdDashboard({
-    //   prop: 'uniID',
-    //   value: unitId
-    // });
-    // updateSelectedDropDown({
-    //   prop: 'uniID',
-    //   value: unitId
-    // });
 
     updateSelectedDropDown({
       prop: 'selectedDropdown1',
@@ -803,20 +782,14 @@ class Dashboard extends React.Component {
       });
 
 
-      // updateUserInfo({
-      //   prop: 'SelectedAssociationID',
-      //   value: dropdown[index].associationId
-      // });
+    
 
       updateSelectedDropDown({
         prop: 'selectedDropdown',
         value: dropdown[index].value
       });
 
-      // updateSelectedDropDown({
-      //   prop: 'assId',
-      //   value: dropdown[index].associationId
-      // });
+     
 
       updateSelectedDropDown({
         prop: "selectedDropdown1",
@@ -847,7 +820,7 @@ class Dashboard extends React.Component {
       this.checkUserRole(dropdown[index])
       this.setView(0)
     } catch (e) {
-      alert("err")
+      //alert("err")
     }
   };
 

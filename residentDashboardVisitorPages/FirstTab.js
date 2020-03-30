@@ -61,18 +61,19 @@ class FirstTab extends Component {
             title: 'Staff Report'
           }
         },
+        StaffLeaveWithVendor: {
+          screen: StaffLeaveWithVendor,
+          navigationOptions: {
+            title: 'StaffLeaveWithVendor'
+          }
+        },
         SendingMsgToGate: {
           screen: SendingMsgToGate,
           navigationOptions: {
             title: 'SendingMsgToGate'
           }
         },
-        StaffLeaveWithVendor: {
-          screen: StaffLeaveWithVendor,
-          navigationOptions: {
-            title: 'StaffLeaveWithVendor'
-          }
-        }
+        
       },
       {
         initialRouteName: 'MyGuests',
