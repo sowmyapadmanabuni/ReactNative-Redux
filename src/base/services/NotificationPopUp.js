@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-03-31 13:06:17
+ * @Last Modified time: 2020-03-31 13:56:58
  */
 
 
@@ -166,7 +166,8 @@ class NotificationPopUp extends React.Component {
                                         notificationData.asAssnID,
                                         notificationData.visitorlog[0].vlApprStat === "ExitPending"?"ExitApproved":"EntryApproved",
                                         notificationData.ntid,
-                                        notificationData.visitorlog[0].vlApprdBy
+                                        notificationData.visitorlog[0].vlApprdBy,
+                                        notificationData.visitorlog[0].vlApprStat
                                     )}
                                     style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
                                     <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
@@ -191,7 +192,8 @@ class NotificationPopUp extends React.Component {
                                         notificationData.asAssnID,
                                         notificationData.visitorlog[0].vlApprStat === "ExitPending"?"ExitRejected":"EntryRejected",
                                         notificationData.ntid,
-                                        notificationData.visitorlog[0].vlApprdBy
+                                        notificationData.visitorlog[0].vlApprdBy,
+                                        notificationData.visitorlog[0].vlApprStat
                                     )}
                                     style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
                                     <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
@@ -245,7 +247,7 @@ class NotificationPopUp extends React.Component {
     };
 
 
-async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy) {
+async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy,approvalStatus) {
 
 
     console.log('SENDING STATUS TO ACCEPT NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy);
@@ -296,7 +298,7 @@ async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId
                     updatedTime: currentTime,
                     status: visitorStatus,
                 });
-            this.removeNotificationData()
+            this.removeNotificationData();
         }
     } catch (error) {
         console.log('error:', error);
@@ -315,7 +317,7 @@ async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId
 };
 
 
-async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy) {
+async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy,approvalStatus) {
 
 
     console.log('SENDING STATUS TO DENY NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy);
@@ -366,7 +368,7 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
                     updatedTime: currentTime,
                     status: visitorStatus,
                 });
-            this.removeNotificationData()
+                this.removeNotificationData()
         }
     } catch (error) {
         console.log('error:', error);
@@ -384,41 +386,6 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
     }
 };
 
-// async removeNotificationData1(visitorStatus,notificationId){
-//     let self = this;
-//     console.log("Notification Id:",notificationId);
-
-//     let delArray = [];
-//     if(visitorStatus === "ExitApproved" || visitorStatus === "ExitRejected" ){
-//         delArray.push({ "NTID": notificationId })
-//     }
-    
-
-//     const headers = {
-//         'Content-Type': 'application/json',
-//         'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
-//     }
-
-//     let deleteOptions = {
-//         method: 'delete',
-//         url: `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
-//         data: delArray,
-//         headers: headers
-//     };
-
-//     console.log("Notification Data:",delArray,deleteOptions);
-
-//     let deleteResponse = await axios(deleteOptions);
-
-//     console.log("Rejection Stat:", deleteResponse);
-//     try {
-//         if (deleteResponse.status === 200){
-//             self.removeNotificationData1()
-//         }
-//     } catch (error) {
-//         console.log("error:",error);
-//     }
-// }
 
 
 removeNotificationData() {

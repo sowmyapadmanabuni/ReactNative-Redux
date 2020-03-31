@@ -220,7 +220,8 @@ class NotificationScreen extends PureComponent {
                 }
             }
         }
-        console.log('DELETE ARRAY NOTIFICATION', delArray)
+        let data = delArray.push({ "NTID": oldNotif[0].ntid })
+        console.log('DELETE ARRAY NOTIFICATION', delArray,data)
 
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
@@ -340,7 +341,7 @@ class NotificationScreen extends PureComponent {
                 }
             }
         }
-        console.log('DELETE ARRAY NOTIFICATION!!!!!!', delArray)
+        console.log('DELETE ARRAY NOTIFICATION!!!!!!', delArray, delArray.push({ "NTID": oldNotif[0].ntid }))
 
 
         axios
