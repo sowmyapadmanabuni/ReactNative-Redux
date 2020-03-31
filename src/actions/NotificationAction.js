@@ -301,6 +301,7 @@ export const createNotification = (
       'Content-Type': 'application/json',
       'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
     };
+    console.log('GET THE DATA TO CREATENOTIFICATION',data,navigation,navigate,admin,oyeURL,MyAccountID)
 
     let date = moment();
     let formatdate = date._d;
@@ -1088,6 +1089,8 @@ export const createUserNotification = (
   refresh,
   senderId,
   mobileNumber,
+  userImage,
+  joinStat,
   announcement
 ) => {
   return dispatch => {
@@ -1101,6 +1104,26 @@ export const createUserNotification = (
     // let formatdate = date._d;
     // alert(refresh);
     // console.log(notifType);
+    console.log('GETTHEDETAILSOFCREATENOTIFICATION@@@@@@@@@@',notifType,
+    oyeURL,
+    accountID,
+    associationID,
+    ntDesc,
+    sbUnitID,
+    sbMemID,
+    sbSubID,
+    sbRoleId,
+    associationName,
+    unitName,
+    occupancyDate,
+    soldDate,
+    refresh,
+    senderId,
+    mobileNumber,
+    userImage,
+    joinStat,
+    announcement)
+
     if (notifType === 'Join') {
       console.log(
         {
@@ -1119,7 +1142,8 @@ export const createUserNotification = (
           UNOcSDate: occupancyDate,
           UNSldDate: soldDate,
           ACNotifyID: senderId,
-          NTMobile :mobileNumber
+          NTMobile :mobileNumber,
+          NTUsrImg:userImage
         },
         'join_request_body'
       );
@@ -1142,7 +1166,9 @@ export const createUserNotification = (
             UNOcSDate: occupancyDate,
             UNSldDate: soldDate,
             ACNotifyID: senderId,
-            NTMobile :mobileNumber
+            NTMobile :mobileNumber,
+            NTUsrImg:userImage,
+          
           },
           {
             headers: headers
@@ -1170,7 +1196,8 @@ export const createUserNotification = (
         occupancyDate,
         soldDate,
         refresh,
-        senderId
+        senderId,
+        userImage
       );
       axios
         .post(
@@ -1191,7 +1218,9 @@ export const createUserNotification = (
             UNOcSDate: occupancyDate,
             UNSldDate: soldDate,
             ACNotifyID: senderId,
-            NTMobile :mobileNumber
+            NTMobile :mobileNumber,
+            NTUsrImg:userImage,
+            NTJoinStat:joinStat
           },
           {
             headers: headers

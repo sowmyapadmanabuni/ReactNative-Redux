@@ -58,6 +58,7 @@ class RegisterMe extends Component {
         });
     };
 
+
     submitForOwnwer = () => {
         const {
             AssnId,
@@ -68,15 +69,7 @@ class RegisterMe extends Component {
         const { getAssoMembers, oyeURL, MyAccountID } = this.props;
         const { fetchAssociationByAccountId } =this.props;
 
-        /*
-        else if (this.checkForOwner()) {
-          alert("You are an active member and can't join");
-        } else if (this.checkStatus()) {
-          alert("You already requested to join this unit");
-        }else if (this.state.sent) {
-          alert("Request already sent");
-        }
-        */
+    
        this.setState({
         isLoading:true
     })
@@ -150,13 +143,16 @@ class RegisterMe extends Component {
                 )
                 .then(response => {
                     let responseData_1 = response.data;
+                    let mobileNo = this.props.userReducer.MyISDCode + this.props.userReducer.MyMobileNumber;
+                    console.log('GET THE DETAILS@@@@@@@@@',responseData_1,mobileNo,unitList.asAssnID,unitList.unUnitID)
                     if (responseData_1.success) {
 
                         let headers_2 = {
                             'Content-Type': 'application/json',
                             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1'
                         };
-                        let mobileNo = this.props.userReducer.MyISDCode + this.props.userReducer.MyMobileNumber;
+
+                        
                         axios
                             .post(
                                 'http://' +
@@ -283,17 +279,14 @@ class RegisterMe extends Component {
                                                                 soldDate,
                                                                 false,
                                                                 this.props.MyAccountID,
-                                                                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber
+                                                                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber,
+                                                                this.props.userReducer.userProfilePic
                                                             );
                                                         }
                                                     });
 
-                                                   
+                                                    //ass members list 
 
-                                                    this.props.updateJoinedAssociation(
-                                                        this.props.joinedAssociations,
-                                                        unitList.unUnitID
-                                                    );
                                                     setTimeout(()=>{
                                                         let isAssocNotificationUpdating = 0;
                                                         let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
@@ -325,7 +318,7 @@ class RegisterMe extends Component {
                                                     );
                                                 })
                                                 .catch(error => {
-                                                    getAssoMembers(oyeURL, MyAccountID);
+                                                   // getAssoMembers(oyeURL, MyAccountID);
                                                     this.setState({
                                                         loading: false
                                                     });
@@ -405,6 +398,7 @@ class RegisterMe extends Component {
         }
     };
 
+   
     submitForTenant = () => {
         const {
             AssnId,
@@ -633,17 +627,14 @@ class RegisterMe extends Component {
                                                                 occupancyDate,
                                                                 soldDate,
                                                                 false,
-                                                                this.props.MyAccountID
+                                                                this.props.MyAccountID,
+                                                                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber,
+                                                                this.props.userReducer.userProfilePic
                                                             );
                                                         }
                                                     });
 
                                                     getAssoMembers(oyeURL, MyAccountID);
-
-                                                    this.props.updateJoinedAssociation(
-                                                        this.props.joinedAssociations,
-                                                        unitList.unUnitID
-                                                    );
                                                     setTimeout(()=>{
                                                         let isAssocNotificationUpdating = 0;
                                                         let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
@@ -1215,7 +1206,9 @@ const mapStateToProps = state => {
         oyeURL: state.OyespaceReducer.oyeURL,
         MyAccountID: state.UserReducer.MyAccountID,
         memberList: state.DashboardReducer.memberList,
-        userReducer:state.UserReducer
+        userReducer:state.UserReducer,
+        userImage:state.UserReducer.userProfilePic,
+        userReducer: state.UserReducer,
     };
 };
 

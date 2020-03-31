@@ -506,6 +506,9 @@ class NotificationScreen extends PureComponent {
         }
         else if (item.ntType !== 'gate_app') {
             console.log('GET THE DETAILS GET THE DETAILS*********',item,index)
+            let description= item.unit.owner.length !==0 ? this.props.MyAccountID==item.unit.owner[0].acAccntID ? "Accepted" : item.unit.tenant.length !==0 ?this.props.MyAccountID==item.unit.tenant[0].acAccntID ? "Accepted":"Rejected":"Rejected"
+             :"Rejected"
+             console.log('DESCRIPTION TO BE DISPALY',description)
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -581,32 +584,45 @@ class NotificationScreen extends PureComponent {
                         </View>
      
                         <Collapsible duration={100} collapsed={item.open}>
-                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            {item.ntType=="Join" ? 
+                            <View>
+                               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>Current Status
                                 </Text>
                                 </View>
                             
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupancy
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>SoldOwner Occupaied</Text>
+                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.unOcStat}</Text>
                                     </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupaied by
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>Owner
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unOcStat}
                                    </Text>
                                     </Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}> 
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Owner Name
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.ntDesc.substr(0,item.ntDesc.indexOf(' '))=="Your" ? this.props.userReducer.MyFirstName:item.ntDesc.substr(0,item.ntDesc.indexOf(' '))}</Text>
+                                    <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.owner.length !==0 ? item.unit.owner[0].uofName+' '+ item.unit.owner[0].uolName : item.unit.tenant.length !==0 ?item.unit.tenant[0].utfName+' '+item.unit.tenant[0].utlName:""}</Text>
                                     </Text>
+                                   
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Mobile
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.ntMobile}</Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.owner.length !==0 ? item.unit.owner[0].uoMobile : item.unit.tenant.length !==0 ? item.unit.tenant[0].utMobile :""}</Text>
                                     </Text>
                                 </View>
+                                </View>
+                                :
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>
+                             Your request to join in {item.asAsnName} in unit {item.mrRolName} has been {description}  
+                                    </Text>
+                                </View>
+               }
+        
+
                                { (item.ntType !== "Join_Status") ?
                                 (item.ntJoinStat === "Accepted" || item.ntJoinStat === "Rejected") ?
                                 <View/>: 
@@ -690,6 +706,39 @@ class NotificationScreen extends PureComponent {
                             </View>
                         </TouchableOpacity>
                     </View>
+                    {item.ntUsrImg !==null || item.ntUsrImg !=="" || item.ntUsrImg !==undefined ?
+                    <TouchableOpacity style={{
+                        width: wp('10%'),
+                        height: hp('10%'),
+                        justifyContent: 'center', alignSelf: 'center',
+                        alignItems: 'center', position: 'absolute', marginTop: 80
+                    }}
+                        onPress={() => this._enlargeImage(item.ntUsrImg != "" ? 'data:image/png;base64,'+item.ntUsrImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
+                    >
+                        {item.ntUsrImg != "" ?
+
+                            <Image
+                                //resizeMode={'center'}
+                                style={{
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 40, position: 'relative'
+                                }}
+                                source={{uri: 'data:image/png;base64,'+item.ntUsrImg}}
+                            />
+                            :
+                            <Image
+                                //resizeMode={'center'}
+                                style={{
+                                    width: 80,
+                                    height: 80,
+                                    borderRadius: 40, position: 'relative'
+                                }}
+                                source={{ uri: 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder }}
+                            />}
+
+                    </TouchableOpacity> 
+                    :
                     <TouchableOpacity style={{
                         width: wp('10%'),
                         height: hp('10%'),
@@ -721,6 +770,7 @@ class NotificationScreen extends PureComponent {
                             />}
 
                     </TouchableOpacity>
+                    }
 
 
                 </TouchableOpacity>
@@ -1245,7 +1295,9 @@ class NotificationScreen extends PureComponent {
                 'resident_user',
                 false,
                 this.props.MyAccountID,
-                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber
+                this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber,
+                this.props.userReducer.userProfilePic,
+                "Accepted"
                );
 
               fetch(
@@ -1476,7 +1528,8 @@ class NotificationScreen extends PureComponent {
                                         'resident_user', 
                                         false,
                                         this.props.MyAccountID,
-                                        this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber
+                                        this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber,
+                                        "Rejected"
                                          );
 
                                     axios
