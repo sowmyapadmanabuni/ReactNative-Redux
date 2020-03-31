@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-03-30 11:54:25
+ * @Last Modified time: 2020-03-31 13:06:17
  */
 
 
@@ -79,7 +79,7 @@ class NotificationPopUp extends React.Component {
                         <LinearGradient
                             colors={['#581113', '#971510']}
                             style={styles.gradientHeader}>
-                            <Text allowFontScaling={false} style={styles.headerText}> {notificationData.visitorlog[0].vlVisType} delivery waiting at {notificationData.visitorlog[0].vlengName}</Text>
+                            <Text allowFontScaling={false} style={styles.headerText}> {notificationData.visitorlog[0].vlComName} delivery {notificationData.visitorlog[0].vlApprStat==="ExitPending"?"exiting":"waiting"} at {notificationData.visitorlog[0].vlengName}</Text>
 
                         </LinearGradient>
                         {/* <TouchableHighlight
@@ -117,7 +117,7 @@ class NotificationPopUp extends React.Component {
                                     <Text allowFontScaling={false} style={{ fontSize: hp('1.5'), color: '#000', textAlign: 'center' }}> {notificationTime}</Text>
                                 </View>
                             </View>
-                            <View style={{ borderWidth: 1, width: hp('45.5'), borderColor: '#e2e2e2' }} />
+                            <View style={{ borderWidth: 1, width: hp('54'), borderColor: '#e2e2e2',alignSelf:'center' }} />
                             <View style={{
                                 width: wp('10%'),
                                 height: hp('12%'),
@@ -145,7 +145,7 @@ class NotificationPopUp extends React.Component {
 
                         <View style={{ height: hp('8'), width: wp('90'), backgroundColor: '#F0F0F0', bottom: hp('0'), borderTopRightRadius: hp('2'), borderTopLeftRadius: hp('2'), borderRadius: hp('2'), flexDirection: 'row' }}>
                             <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), flexDirection: 'row', alignSelf: 'center', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                <Image
+                                {/* <Image
                                     resizeMode={'center'}
                                     style={{
                                         borderWidth: 0,
@@ -154,8 +154,8 @@ class NotificationPopUp extends React.Component {
                                         marginLeft: hp('2')
                                     }}
                                     source={require('../../../icons/police.png')}
-                                />
-                                <Text style={{ color: '#14C8E5', textAlign: 'center', fontSize: hp('1.5') }}> Leave With Guard</Text>
+                                /> */}
+                                <Text style={{ color: '#14C8E5', textAlign: 'center', fontSize: hp('1.5') }}> </Text>
                             </View>
                             <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <TouchableHighlight
@@ -164,7 +164,7 @@ class NotificationPopUp extends React.Component {
                                         notificationData.visitorlog[0].vlVisLgID,
                                         0,
                                         notificationData.asAssnID,
-                                        "EntryApproved",
+                                        notificationData.visitorlog[0].vlApprStat === "ExitPending"?"ExitApproved":"EntryApproved",
                                         notificationData.ntid,
                                         notificationData.visitorlog[0].vlApprdBy
                                     )}
@@ -189,7 +189,7 @@ class NotificationPopUp extends React.Component {
                                         notificationData.visitorlog[0].vlVisLgID,
                                         item.index,
                                         notificationData.asAssnID,
-                                        "EntryRejected",
+                                        notificationData.visitorlog[0].vlApprStat === "ExitPending"?"ExitRejected":"EntryRejected",
                                         notificationData.ntid,
                                         notificationData.visitorlog[0].vlApprdBy
                                     )}
@@ -359,7 +359,7 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
                 .database()
                 .ref(`NotificationSync/A_${associationid}/${visitorId}`)
                 .set({
-                    buttonColor: '#75be6f',
+                    buttonColor: '#ff0000',
                     opened: true,
                     newAttachment: false,
                     visitorlogId: visitorId,
@@ -374,7 +374,7 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
             .database()
             .ref(`NotificationSync/A_${associationid}/${visitorId}`)
             .set({
-                buttonColor: '#75be6f',
+                buttonColor: '#ff0000',
                 opened: true,
                 newAttachment: false,
                 visitorlogId: visitorId,
@@ -383,6 +383,42 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
             })
     }
 };
+
+// async removeNotificationData1(visitorStatus,notificationId){
+//     let self = this;
+//     console.log("Notification Id:",notificationId);
+
+//     let delArray = [];
+//     if(visitorStatus === "ExitApproved" || visitorStatus === "ExitRejected" ){
+//         delArray.push({ "NTID": notificationId })
+//     }
+    
+
+//     const headers = {
+//         'Content-Type': 'application/json',
+//         'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE'
+//     }
+
+//     let deleteOptions = {
+//         method: 'delete',
+//         url: `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+//         data: delArray,
+//         headers: headers
+//     };
+
+//     console.log("Notification Data:",delArray,deleteOptions);
+
+//     let deleteResponse = await axios(deleteOptions);
+
+//     console.log("Rejection Stat:", deleteResponse);
+//     try {
+//         if (deleteResponse.status === 200){
+//             self.removeNotificationData1()
+//         }
+//     } catch (error) {
+//         console.log("error:",error);
+//     }
+// }
 
 
 removeNotificationData() {
