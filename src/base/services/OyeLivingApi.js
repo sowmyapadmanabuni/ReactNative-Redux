@@ -213,6 +213,20 @@ export default class OyeLivingApi {
         return await instance.get('Unit/GetUnitListByUnitID/' +unitId);
     }
 
+    static async sentJoinRequest(input){
+        return await instance.post('association/join',input);
+    }
+    static async getRequesterDetails(input){
+        return await instance.post('Member/GetRequestorDetails',input);
+    }
+
+    static async memberListByAssociationId(assId){
+        return await instance.get('Member/GetMemberListByAssocID/' +assId);
+    }
+
+
+  
+
 
 
 
