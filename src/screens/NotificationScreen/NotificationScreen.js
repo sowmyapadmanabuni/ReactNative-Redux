@@ -506,9 +506,7 @@ class NotificationScreen extends PureComponent {
         }
         else if (item.ntType !== 'gate_app') {
             console.log('GET THE DETAILS GET THE DETAILS*********',item,index)
-            let description= item.unit.owner.length !==0 ? this.props.MyAccountID==item.unit.owner[0].acAccntID ? "Accepted" : item.unit.tenant.length !==0 ?this.props.MyAccountID==item.unit.tenant[0].acAccntID ? "Accepted":"Rejected":"Rejected"
-             :"Rejected"
-             console.log('DESCRIPTION TO BE DISPALY',description)
+           
             return (
                 <TouchableOpacity activeOpacity={0.7} style={{
                     borderRadius: 5, borderColor: base.theme.colors.lightgrey, backgroundColor: base.theme.colors.white,
@@ -585,39 +583,56 @@ class NotificationScreen extends PureComponent {
      
                         <Collapsible duration={100} collapsed={item.open}>
                             {item.ntType=="Join" ? 
-                            <View>
+                            
                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <Text style={{ fontSize: 14, color: base.theme.colors.primary, marginLeft: 15 }}>Current Status
                                 </Text>
                                 </View>
+                                :
+                                <View/>
+                                }
+                              {item.ntType=="Join" ? 
                             
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupancy
                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.unOcStat}</Text>
                                     </Text>
                                 </View>
+                                :
+                                <View/>
+                                }
+                                 {item.ntType=="Join" ? 
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupaied by
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unOcStat}
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.unOcStat}
                                    </Text>
                                     </Text>
                                 </View>
+                                  :
+                                  <View/>
+                                  }
+                                   {item.ntType=="Join" ? 
+
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}> 
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Owner Name
                                     <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.owner.length !==0 ? item.unit.owner[0].uofName+' '+ item.unit.owner[0].uolName : item.unit.tenant.length !==0 ?item.unit.tenant[0].utfName+' '+item.unit.tenant[0].utlName:""}</Text>
                                     </Text>
                                    
                                 </View>
+                                :
+                                <View/>
+                                }
+                                 {item.ntType=="Join" ? 
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Mobile
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.owner.length !==0 ? item.unit.owner[0].uoMobile : item.unit.tenant.length !==0 ? item.unit.tenant[0].utMobile :""}</Text>
                                     </Text>
                                 </View>
-                                </View>
+                               
                                 :
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>
-                             Your request to join in {item.asAsnName} in unit {item.mrRolName} has been {description}  
+                             Your request to join in {item.asAsnName} in unit {item.mrRolName} has been Accepted  
                                     </Text>
                                 </View>
                }
@@ -706,7 +721,7 @@ class NotificationScreen extends PureComponent {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    {item.ntUsrImg !==null || item.ntUsrImg !=="" || item.ntUsrImg !==undefined ?
+                    {item.ntType=="Join" ?
                     <TouchableOpacity style={{
                         width: wp('10%'),
                         height: hp('10%'),
@@ -715,7 +730,7 @@ class NotificationScreen extends PureComponent {
                     }}
                         onPress={() => this._enlargeImage(item.ntUsrImg != "" ? 'data:image/png;base64,'+item.ntUsrImg : 'https://mediaupload.oyespace.com/' + base.utils.strings.noImageCapturedPlaceholder)}
                     >
-                        {item.ntUsrImg != "" ?
+                        { item.ntUsrImg !==""?
 
                             <Image
                                 //resizeMode={'center'}

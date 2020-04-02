@@ -1166,7 +1166,7 @@ class Dashboard extends React.Component {
 
         return (
           <View style={{ height: '100%', width: '100%', backgroundColor: 'white' }}>
-            <NavigationEvents onDidFocus={() => this.updateAllTheData()} />
+            {/* <NavigationEvents onDidFocus={() => this.updateAllTheData()} /> */}
             {!this.props.isLoading ?
               <View style={Style.container}>
                 <View style={Style.dropDownContainer}>
