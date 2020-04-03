@@ -637,7 +637,13 @@ class MyFamily extends Component {
          fb.database().ref(mobilePath).set({
             isMobUpdating
         }).then((data) => {
-            console.log('Data:', data);
+            fb.database().ref(mobilePath).remove().then((response)=>{
+                let receivedData = response.val();
+                console.log("Response!!!!!!!",receivedData)
+
+            }).catch((error)=>{
+                console.log('Response!!!!!!!',error.response)
+            });
         }).catch(error => {
             console.log("Error:", error);
         })

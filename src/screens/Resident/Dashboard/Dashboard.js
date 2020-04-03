@@ -129,7 +129,6 @@ class Dashboard extends React.Component {
       }
       else {
         const { MyAccountID } = self.props;
-        console.log("User Association", MyAccountID, `syncdashboard/isMemberRefreshing/${MyAccountID}`);
         let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
         fb.database().ref(requesterPath).on('value', function (snapshot) {
           let receivedData = snapshot.val();
@@ -180,7 +179,6 @@ class Dashboard extends React.Component {
       }
       else {
         const { MyAccountID } = self.props;
-        console.log("User Association", MyAccountID, `syncdashboard/isMemberRefreshing/${MyAccountID}`);
         let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
         fb.database().ref(requesterPath).on('value', function (snapshot) {
           let receivedData = snapshot.val();
@@ -610,12 +608,15 @@ class Dashboard extends React.Component {
 
 
   listenToFirebase(userAssociation) {
-    let self = this;
-    const { MyAccountID } = this.props;
-    const MyMobileNumber = this.props.UserReducer.MyMobileNumber;
-    console.log("User Association", userAssociation, MyAccountID, `syncdashboard/isMemberRefreshing/${MyAccountID}`);
+      let self = this;
+      const { MyAccountID } = self.props;
+      console.log("User Association:",self.props)
+      const MyMobileNumber = self.props.userReducer.MyMobileNumber;
+      
+    
     let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
     let mobilePath = `syncdashboard/isMemberRefreshing/${MyMobileNumber}`;
+    console.log("User Association", userAssociation, MyAccountID, `syncdashboard/isMemberRefreshing/${MyMobileNumber}`);
     fb.database().ref(requesterPath).on('value', function (snapshot) {
       let receivedData = snapshot.val();
       console.log("Received Data in dashboard:", receivedData);
