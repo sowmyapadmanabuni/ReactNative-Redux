@@ -79,15 +79,16 @@ class GetStaffReport extends React.Component {
     }
 
     componentWillUnmount() {
-        this.backHandler.remove();
+        //this.backHandler.remove();
     }
 
     componentDidMount() {
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            console.log("Staff Report");
-            this.props.navigation.goBack(null);
-            return true;
-        });
+        
+        // this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        //     console.log("Staff Report");
+        //     this.props.navigation.goBack(null);
+        //     return true;
+        // });
     }
 
     getAndroidPermissions() {
@@ -294,7 +295,7 @@ class GetStaffReport extends React.Component {
                                 />
                                 :
                                 <Image style={StaffStyle.staffImg}
-                                       source={{uri: base.utils.strings.imageUrl + this.props.staffReducer.staffProfilePic}}
+                                       source={{uri: 'data:image/png;base64,'+ + this.props.staffReducer.staffProfilePic}}
                                 />
                             }
                             <View style={StaffStyle.textView}>

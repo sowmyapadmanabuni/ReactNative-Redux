@@ -203,7 +203,7 @@ class ViewAllVisitorsList extends Component {
                             <ZoomImage
                                 source={{
                                     uri:
-                                        "http://mediaupload.oyespace.com/Images/" + item.vlEntryImg
+                                    'data:image/png;base64,' + item.vlEntryImg
                                 }}
                                 imgStyle={styles.mainCardItemImage}
                                 duration={300}
