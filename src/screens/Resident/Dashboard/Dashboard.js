@@ -611,16 +611,27 @@ class Dashboard extends React.Component {
 
   listenToFirebase(userAssociation) {
     let self = this;
-    const { MyAccountID } = this.props;
+    const { MyAccountID } = self.props;
+    console.log("User Association:",self.props)
+    const MyMobileNumber = self.props.userReducer.MyMobileNumber;
     console.log("User Association", userAssociation, MyAccountID, `syncdashboard/isMemberRefreshing/${MyAccountID}`);
     let requesterPath = `syncdashboard/isMemberRefreshing/${MyAccountID}`;
+    let mobilePath = `syncdashboard/isMemberRefreshing/${MyMobileNumber}`;
     fb.database().ref(requesterPath).on('value', function (snapshot) {
       let receivedData = snapshot.val();
       console.log("Received Data in dashboard:", receivedData);
       if (receivedData !== null) {
         console.log("Update Notification List Now1111")
         self.updateDashboard();
-       
+      }
+    })
+
+    fb.database().ref(mobilePath).on('value', function (snapshot) {
+      let receivedData = snapshot.val();
+      console.log("Received Data in dashboard:", receivedData);
+      if (receivedData !== null) {
+        console.log("Update Notification List Now1111")
+        self.updateDashboard();
       }
     })
 
