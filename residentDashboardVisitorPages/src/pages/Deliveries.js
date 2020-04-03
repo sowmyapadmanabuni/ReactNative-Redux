@@ -81,7 +81,7 @@ class App extends React.Component {
     setTimeout(() => {
       self.myVisitorsGetList();
       this.setState({
-        isLoading: false,
+       // isLoading: false,
         dataSource: newDataSource
       });
       console.log("newDataSource ",newDataSource);
@@ -184,10 +184,11 @@ class App extends React.Component {
       moment(this.state.dobDate).format('YYYY-MM-DD') >
       moment(this.state.dobDate1).format('YYYY-MM-DD')
     ) {
-      Alert.alert('From date should be less than to date.');
       this.setState({
         isLoading: false
       });
+      Alert.alert('From date should be less than to date.');
+      
       return false;
     } else {
       //http://apiuat.oyespace.com/oyesafe/api/v1/VisitorLog/GetVisitorLogByDatesAssocAndUnitID
@@ -224,7 +225,7 @@ class App extends React.Component {
           if (responseJson.success) {
             this.setState({
               isLoading: false,
-              dataSource: responseJson.data.visitorlog.filter(
+              dataSource:responseJson.data.visitorlog.filter(
                 x => x.vlVisType === 'Delivery'
               ),
               error: responseJson.error || null,
@@ -246,7 +247,7 @@ class App extends React.Component {
         })
 
         .catch(error => {
-          this.setState({ error, loading: false });
+          this.setState({ error, loading: false, isLoading: false, });
           console.log(error, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
         });
     }
@@ -330,9 +331,10 @@ class App extends React.Component {
             ) : (
               <Image
                 style={styles.profilePicImageStyle}
-                source={{
-                  uri: `${this.props.mediaupload}` + item.vlEntryImg
-                }}
+                source={{uri: 'data:image/png;base64,'+ item.vlEntryImg}}
+                // source={{
+                //   uri: `${this.props.mediaupload}` + item.vlEntryImg
+                // }}
               />
             )}
           </View>

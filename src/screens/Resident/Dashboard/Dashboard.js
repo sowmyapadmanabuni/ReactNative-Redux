@@ -168,8 +168,9 @@ class Dashboard extends React.Component {
         self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
         self.setState({ isLoading: false });
-        self.createTopicListener(self.props.dropdown, true)
-        firebase.notifications().getInitialNotification().then((notificationOpen: NotificationOpen) => {
+        self.createTopicListener(self.props.dropdown, true);
+        self.readFBRTB(true);
+         firebase.notifications().getInitialNotification().then((notificationOpen: NotificationOpen) => {
           console.log("self.getPopUpNotifications();self.getPopUpNotifications();:",notificationOpen);
           if(notificationOpen){
             self.getPopUpNotifications();
@@ -582,7 +583,7 @@ class Dashboard extends React.Component {
           this.changeTheAssociation(notificationOpen.notification.data.associationName, notificationOpen.notification.data.associationID,
             notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
-        this.readFBRTB(true);
+       // this.readFBRTB(true);
         this.getPopUpNotifications();
         firebase.notifications().removeAllDeliveredNotifications();
       });
@@ -688,8 +689,8 @@ class Dashboard extends React.Component {
       .then((responseJson) => {
         console.log("HItting Here ______________________________________IN dashboard count123:", responseJson)
         self.setState({
-          vehiclesCount: responseJson.data.vehicleCount+1,
-          falmilyMemebCount: responseJson.data.familyMemberCount+1
+          vehiclesCount: responseJson.data.vehicleCount,
+          falmilyMemebCount: responseJson.data.familyMemberCount
         });
         const { updateIdDashboard } = this.props;
         updateIdDashboard({
@@ -922,7 +923,7 @@ class Dashboard extends React.Component {
           unitName: unitList[0].value,
           isDataVisible: true
         });
-        self.readFBRTB(false);
+       // self.readFBRTB(false);
         console.log('updateIdDashboard3', this.props);
         self.roleCheckForAdmin(this.state.assocId);
       }
@@ -1166,7 +1167,7 @@ class Dashboard extends React.Component {
 
         return (
           <View style={{ height: '100%', width: '100%', backgroundColor: 'white' }}>
-            <NavigationEvents onDidFocus={() => this.updateAllTheData()} />
+            {/* <NavigationEvents onDidFocus={() => this.updateAllTheData()} /> */}
             {!this.props.isLoading ?
               <View style={Style.container}>
                 <View style={Style.dropDownContainer}>

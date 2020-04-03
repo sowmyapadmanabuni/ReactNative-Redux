@@ -780,11 +780,7 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
             let units = [];
   
             console.log('GET ALL THE UNITS DATA TO SEGRIGATE',unitArray)
-            console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',unitArray.length)
-           
-           
-            console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',unitArray)
-            
+
             unitArray.map((mappedData)=>{
               units.push({
               value:mappedData.unUniName,
@@ -793,10 +789,76 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
               myRoleId:data[i].mrmRoleID,
               })
             })
+
+            //   if(unitArray.length !==0){
+            //   let pushedArray=[]
+            //   let j=0;
+            //   let dropDownName=[]; 
+
+            //   for(let i=0; i<unitArray.length;i++){
+                   
+            //        dropDownName[i]=unitArray[i].unUniName; 
+            //     if(unitArray[i].owner.length!==0){
+            //       if(unitArray[i].owner[0].acAccntID ===accountId){
+            //         pushedArray[j]=unitArray[i].owner[0]
+            //         j=j+1
+            //               }
+            //         }
+  
+  
+            //         if(unitArray[i].tenant.length!==0){
+            //           if(unitArray[i].tenant[0].acAccntID ===accountId){
+            //             pushedArray[j]=unitArray[i].tenant[0]
+            //             j=j+1
+            //           }
+            //       }
+  
+            //        }
+            //        console.log('PUSHED UNIT NAMES TO AN ARRRYA',dropDownName,pushedArray)
+            //        pushedArray.map((mappedData)=>{
+            //   units.push({
+            //   value:"Unit"+mappedData.unUnitID,
+            //   name:"Unit"+mappedData.unUnitID,
+            //   unitId:mappedData.unUnitID,
+            //   myRoleId:mappedData.uoRoleID,
+            //   })
+            //      }) 
+  
+                 
+            //      console.log('GET ALL THE UNITS DATA TO SEGRIGATE6666666666',pushedArray)
+  
+  
+            // }
+           
+           
+            
+            
+          //   unitArray.map((mappedData)=>{
+          //     let roleId=5 ;
+          //     if(mappedData.owner.length !==0){
+
+
+          //       if(mappedData.owner[0].acAccntID==accountId){
+          //        // console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',mappedData,mappedData.owner.length,mappedData.owner[0].acAccntID,accountId)
+
+          //          roleId=mappedData.owner[0].uoRoleID
+          //       }
+          //     }
+          // //   console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111@@@@@@@@########',roleId)
+             
+          //     units.push({
+          //     value:mappedData.unUniName,
+          //     name:mappedData.unUniName,
+          //     unitId:mappedData.unUnitID,
+          //     myRoleId: roleId,
+          //     })
+          //   })
+           // console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111@@@@@@@@',unitArray)
          
             
            
-          
+           console.log('GET ALL THE UNITS DATA TO SEGRIGATE111111111111',units)
+
   
             let associationData = {
               value:associationDetail.asAsnName,
