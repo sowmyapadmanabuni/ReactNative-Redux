@@ -629,7 +629,7 @@ class MyFamily extends Component {
 
     updateFirebase(mobNum){
         let self = this;
-        let mobilePath = 'syncdashboard/isMemberRefreshing/${mobNum}';
+        let mobilePath = `syncdashboard/isMemberRefreshing/${mobNum}`;
         console.log('GETTHEDETAILS',mobilePath)
         let isMobUpdating = 0;
 
@@ -685,7 +685,7 @@ class MyFamily extends Component {
                     }
 
                     Alert.alert('Family member added to your list');
-                    self.updateFirebase(mobNum)
+                   // self.updateFirebase(mobNum)
                    // self.updateFirebase(self.props.dashBoardReducer.assId)
                     self.props.navigation.navigate('MyFamilyList');
                     this.setState({
