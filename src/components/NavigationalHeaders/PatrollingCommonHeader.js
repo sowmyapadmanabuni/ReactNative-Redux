@@ -313,10 +313,10 @@ const styles = StyleSheet.create({
         //marginRight: widthPercentageToDP('35%'),
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: 'orange'
+        borderColor: '#B51414'
       },
       scheduleTextStyle: {
-        color: 'orange',
+        color: '#B51414',
         textAlign: 'center',
         width: widthPercentageToDP('20%'),
         fontFamily: base.theme.fonts.medium

@@ -274,7 +274,7 @@ class EditVehicle extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#FFFFFF"}}/>
                 </SafeAreaView>
 
 
@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#ff8c00',
+        // color: '#ff8c00',
         marginBottom: hp("1.6%"),
     },
     inputItem: {
@@ -527,7 +527,7 @@ const styles = StyleSheet.create({
         height: hp("5%"),
         borderRadius: hp("2.5%"),
         borderWidth: hp("0.2%"),
-        borderColor: "orange",
+        borderColor: "#B51414",
         backgroundColor: "orange",
         justifyContent: "center"
     }

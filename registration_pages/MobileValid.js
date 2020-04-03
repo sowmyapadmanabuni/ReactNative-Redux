@@ -187,7 +187,7 @@ class MobileValid extends Component {
                                     <View style={styles.mobilenumberverification}>
                                         <Text style={{fontSize: hp("2%")}}>
                                             Enter your mobile number to get{" "}
-                                            <Text style={{fontSize: hp("2%"), color: "#ff8c00"}}>
+                                            <Text style={{fontSize: hp("2%")}}>
                                                 OTP
                                             </Text>
                                         </Text>
@@ -291,7 +291,7 @@ class MobileValid extends Component {
                                             >
                                                 I have read and accepted the{" "}
                                                 <Text
-                                                    style={{fontSize: hp("1.45%"), color: "#ff8c00"}}
+                                                    style={{fontSize: hp("1.45%")}}
                                                     onPress={() => {
                                                         this.props.navigation.navigate("privacyPolicy")
                                                         /*Linking.openURL(
@@ -303,7 +303,7 @@ class MobileValid extends Component {
                                                 </Text>
                                                 and
                                                 <Text
-                                                    style={{fontSize: hp("1.45%"), color: "#ff8c00"}}
+                                                    style={{fontSize: hp("1.45%")}}
                                                     onPress={() => {
                                                         this.props.navigation.navigate("termsAndConditions")
 
@@ -330,7 +330,7 @@ class MobileValid extends Component {
                                             }}
                                             rounded
                                         >
-                                            <Text style={{color: "white", fontSize: hp("2%")}}>
+                                            <Text style={{color: "#B51414", fontSize: hp("2%")}}>
                                                 Get OTP
                                             </Text>
                                         </Button>

@@ -43,7 +43,7 @@ const Style = StyleSheet.create({
     textAlign: 'center',
     fontSize: hp('2.3%'),
     fontWeight: '500',
-    color: '#FF8C00'
+    // color: '#FF8C00'
   },
   searchTextStyle: {
     height: hp('5.5%'),

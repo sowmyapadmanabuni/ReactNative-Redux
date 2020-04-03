@@ -492,7 +492,7 @@ class Invoices extends React.Component {
                                     underlayColor={base.theme.colors.transparent}
                                     onPress={() => this.clearTheFilters(this.state.isTabSelected, this.state.expensesAllList)}
                                 >
-                                    <Text style={{ color: base.theme.colors.blue }}>Clear All</Text>
+                                    <Text style={{ color: base.theme.colors.green }}>Clear All</Text>
                                 </TouchableHighlight>
                                 <TouchableHighlight
                                     underlayColor={base.theme.colors.transparent}
@@ -1345,14 +1345,14 @@ class Invoices extends React.Component {
                                         height={30}
                                         width={'45%'}
                                         borderRadius={20}
-                                        oSBBackground={base.theme.colors.red}
+                                        oSBBackground={base.theme.colors.grey}
                                         oSBText={'Cancel'}
                                         onButtonClick={() => this.clearAllFields()}/>
                                     <OSButton
                                         height={30}
                                         width={'45%'}
                                         borderRadius={20}
-                                        oSBBackground={base.theme.colors.primary}
+                                        oSBBackground={base.theme.colors.themeColor}
                                         oSBText={'Submit'}
                                         onButtonClick={() => this.createExpenseValidation()}/>
                                 </View>
@@ -1551,7 +1551,7 @@ class Invoices extends React.Component {
                         <Text
                             style={{
                                 fontSize: 18,
-                                color: base.theme.colors.primary
+                                color: base.theme.colors.black
                             }}>View Invoice</Text>
                     </View>
                         <ScrollView >
@@ -1566,14 +1566,14 @@ class Invoices extends React.Component {
                             color: base.theme.colors.black
                         }}>{this.state.unitName}</Text>
                     </View>
-                    <View style={{ height: hp('5'), width: wp('100'), justifyContent: 'center', alignItems: 'center', backgroundColor: base.theme.colors.primary, marginTop: 10 }}>
+                    <View style={{ height: hp('5'), width: wp('100'), justifyContent: 'center', alignItems: 'center', backgroundColor: base.theme.colors.themeColor, marginTop: 10 }}>
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.white }}>Invoice</Text>
                     </View>
                     <View style={{ height: hp('5'), width: wp('100'), justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', backgroundColor: base.theme.colors.white, marginTop: 10, borderBottomWidth: 1, borderBottomColor: base.theme.colors.primary }}>
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.7'), color: base.theme.colors.black,paddingLeft:10 }}>Invoice Date: <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black }}>{moment(invoiceData.inGenDate).format("DD-MM-YYYY")}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.7'), color: base.theme.colors.black ,paddingRight:10}}>Invoice No. <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), color: base.theme.colors.black }}>{(invoiceData.inNumber)}</Text></Text>
                     </View>
-                    <View style={{ height: hp('9'), width: wp('100'), borderBottomWidth: 0, borderBottomColor: base.theme.colors.primary }}>
+                    <View style={{ height: hp('9'), width: wp('100'), borderBottomWidth: 0, borderBottomColor: base.theme.colors.themeColor }}>
                         <View style={{ height: hp('3'), width: wp('95'), justifyContent: 'space-between', flexDirection: 'row', alignSelf: 'center', alignItems: 'center', backgroundColor: base.theme.colors.white, marginTop: 10, borderBottomWidth: 0, borderBottomColor: base.theme.colors.primary }}>
                             <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.black }}>To:{' '}
                                 <Text style={{fontFamily: base.theme.fonts.light,color:base.theme.colors.black}}> {(userDetail.utfName==null || userDetail.utfName==undefined)? userDetail.uofName:userDetail.utfName} {(userDetail.utlName==null || userDetail.utlName==undefined)?userDetail.uolName:userDetail.utlName}</Text>
@@ -1612,21 +1612,21 @@ class Invoices extends React.Component {
                         <View style={{ alignItems: 'flex-end',height:hp('5'), width: wp('50')}}>
                             <View style={{ width: wp('50'), borderWidth: 0, justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center',
                                 right: hp('2'),height:hp('5')}}>
-                                <Text style={{ color: base.theme.colors.primary }}>Sub Total </Text>
+                                <Text style={{ color: base.theme.colors.themeColor }}>Sub Total </Text>
                                 <Text style={{ color: base.theme.colors.black }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal}</Text>
                             </View>
                         </View>
                         <View style={{ alignItems: 'flex-end', width: wp('50'),
                             borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.grey, height: hp('4.5') }}>
                             <View style={{ width: wp('45'), borderWidth: 0, height: hp('4.5'),justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', right: hp('2') }}>
-                                <Text style={{ color: base.theme.colors.primary }}>Tax </Text>
+                                <Text style={{ color: base.theme.colors.themeColor }}>Tax </Text>
                                 <Text style={{ color: base.theme.colors.black }}>₹0</Text>
                             </View>
                         </View>
                         <View style={{ alignItems: 'flex-end', width: wp('50'), borderBottomWidth: 0, borderBottomColor: base.theme.colors.grey,
                             height: hp('5') }}>
                             <View style={{ width: wp('53'), height: hp('5'),borderWidth: 0, justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center', right: hp('2') }}>
-                                <Text style={{ color: base.theme.colors.primary }}>Total Due </Text>
+                                <Text style={{ color: base.theme.colors.themeColor }}>Total Due </Text>
                                 <Text style={{ color: base.theme.colors.black }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal}</Text>
                             </View>
                         </View>
@@ -1646,7 +1646,7 @@ class Invoices extends React.Component {
                                 height: hp('4'),
                                 borderRadius: hp('2'),
                                 width: wp('20'),
-                                backgroundColor: base.theme.colors.primary,
+                                backgroundColor: base.theme.colors.themeColor,
                                 right: hp('5'),
                                 justifyContent: 'center',
                                 alignItems: 'center'
@@ -1686,7 +1686,7 @@ class Invoices extends React.Component {
                                 :
                                 <TouchableHighlight underlayColor={base.theme.colors.transparent}  onPress={()=>this.bindComponent(invoiceData)} style={{ height: hp('4.5'),
                                     borderRadius: hp('5'), width: wp('33'),
-                                    backgroundColor: base.theme.colors.primary, justifyContent: 'center',alignItems:'center', }}>
+                                    backgroundColor: base.theme.colors.themeColor, justifyContent: 'center',alignItems:'center', }}>
                                     <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('1.9'), color: base.theme.colors.white, }}>Generate Receipt</Text>
                                 </TouchableHighlight>
 
@@ -1780,9 +1780,9 @@ class Invoices extends React.Component {
                 </TouchableHighlight>
 
                 <View style={{ height: hp('5'), width: wp('80'), justifyContent: 'flex-start', alignItems: 'center' }}>
-                    <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.primary }}>Discount Value</Text>
+                    <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.themeColor }}>Discount Value</Text>
                 </View>
-                <View style={{ height: hp('5'), width: wp('80'), justifyContent: 'center', alignItems: 'center', backgroundColor: base.theme.colors.primary }}>
+                <View style={{ height: hp('5'), width: wp('80'), justifyContent: 'center', alignItems: 'center', backgroundColor: base.theme.colors.themeColor }}>
                     <Text style={{ fontFamily: base.theme.fonts.medium, fontSize: hp('2'), color: base.theme.colors.white }}>Invoice Details</Text>
                 </View>
                 <View style={{width:wp('70'),alignSelf:'center',borderWidth:0,alignItems:'center'}}>
@@ -1791,8 +1791,8 @@ class Invoices extends React.Component {
                         initial={0}
                         formHorizontal={true}
                         labelHorizontal={true}
-                        buttonColor={base.theme.colors.primary}
-                        selectedButtonColor={base.theme.colors.primary}
+                        buttonColor={base.theme.colors.themeColor}
+                        selectedButtonColor={base.theme.colors.themeColor}
                         radioStyle={{ paddingRight: 20,marginTop:5 }}
                         animation={true}
                         onPress={(value) => {this.setVal(value)}}
@@ -1800,9 +1800,9 @@ class Invoices extends React.Component {
                     </View>
                 <EmptyView height={hp('2')} />
                 <View style={{ height: hp('30'), width: wp('70'), alignSelf: 'center', borderWidth: 0 }}>
-                    <Text>Invoice Number<Text style={{ color: base.theme.colors.primary }}>*</Text></Text>
+                    <Text>Invoice Number<Text style={{ color: base.theme.colors.themeColor }}>*</Text></Text>
                     <Text style={{ width: wp('70'), borderBottomWidth: 0.5, height: hp('3'), marginTop: 10, color: base.theme.colors.black }}>{invoiceDetail.inNumber}</Text>
-                    <Text style={{ marginTop: hp('2') }}>Discounted Amount<Text style={{ color: base.theme.colors.primary }}>*</Text></Text>
+                    <Text style={{ marginTop: hp('2') }}>Discounted Amount<Text style={{ color: base.theme.colors.themeColor }}>*</Text></Text>
                     <TextInput
                         placeholder={`${invoiceDetail.inDsCVal}`}
                         onChangeText={(text) => this.onChangeText(0, text)}
@@ -1810,7 +1810,7 @@ class Invoices extends React.Component {
                         style={{ borderBottomWidth: 0.4 }}
                         keyboardType={'numeric'}
                     />
-                    <Text style={{ marginTop: hp('2') }}>Discounted Reason<Text style={{ color: base.theme.colors.primary }}>*</Text></Text>
+                    <Text style={{ marginTop: hp('2') }}>Discounted Reason<Text style={{ color: base.theme.colors.themeColor }}>*</Text></Text>
                     <TextInput
                         placeholder={"Type a reason here"}
                         onChangeText={(text) => this.onChangeText(1, text)}
@@ -1823,13 +1823,13 @@ class Invoices extends React.Component {
                     <TouchableHighlight
                         underlayColor={base.theme.colors.transparent}
                         onPress={() => this.setState({ isDiscountModalOpen: false })}
-                        style={{ height: hp('5'), width: wp('25'), backgroundColor: base.theme.colors.red, borderRadius: hp('5'), justifyContent: 'center', alignItems: 'center' }}>
+                        style={{ height: hp('5'), width: wp('25'), backgroundColor: base.theme.colors.grey, borderRadius: hp('5'), justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ color: base.theme.colors.white }}>Cancel</Text>
                     </TouchableHighlight>
                     <TouchableHighlight
                         underlayColor={base.theme.colors.transparent}
                         onPress={() => this.setState({ isDiscountModalOpen: false }, () => this.updateDiscVal())}
-                        style={{ height: hp('5'), width: wp('25'), backgroundColor: base.theme.colors.primary, borderRadius: hp('5'), justifyContent: 'center', alignItems: 'center' }}>
+                        style={{ height: hp('5'), width: wp('25'), backgroundColor: base.theme.colors.themeColor, borderRadius: hp('5'), justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ color: base.theme.colors.white }}>Save</Text>
                     </TouchableHighlight>
                 </View>

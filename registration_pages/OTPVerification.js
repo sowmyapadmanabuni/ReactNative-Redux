@@ -447,7 +447,7 @@ class OTPVerification extends Component {
                                         height: hp("4.8%"),
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        backgroundColor: "#ff8c00"
+                                        backgroundColor: "#B51414"
                                     }}
                                     rounded
                                 >

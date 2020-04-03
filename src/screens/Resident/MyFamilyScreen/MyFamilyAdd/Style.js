@@ -102,7 +102,7 @@ const Style = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#ff8c00',
+        color: '#B51414',
         marginBottom: hp('1.6%')
     },
     viewStyle1: {

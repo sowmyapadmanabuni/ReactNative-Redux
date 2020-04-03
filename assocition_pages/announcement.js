@@ -999,7 +999,7 @@ class Announcement extends Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
+          <View style={{ borderWidth: 1, borderColor: base.theme.colors.grey }} />
         </SafeAreaView>
 
         <View style={styles.viewForMyProfileText}>
@@ -1696,7 +1696,7 @@ class Announcement extends Component {
             </View>
             <View
               style={{
-                borderColor: base.theme.colors.primary,
+                borderColor: base.theme.colors.themeColor,
                 borderWidth: hp('0.1%'),
                 borderRadius: hp('1%'),
                 height: hp('12%'),
@@ -1888,12 +1888,11 @@ const styles = StyleSheet.create({
     height: hp('5%'),
     borderRadius: 25,
     borderWidth: 2,
-    //backgroundColor: base.theme.colors.white,
+    backgroundColor: base.theme.colors.themeColor,
     justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,
-    borderColor: base.theme.colors.white,
+    borderColor: base.theme.colors.themeColor,
     marginBottom: hp('2%'),
-    backgroundColor: base.theme.colors.primary
   }
 });

@@ -296,7 +296,7 @@ class AddVehicle extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: 'orange'}}/>
+                    <View style={{borderWidth: 1, borderColor: '#FFFFFF'}}/>
                 </SafeAreaView>
 
                 <Text style={styles.titleOfScreen}>Add Vehicle</Text>
@@ -478,7 +478,7 @@ const styles = StyleSheet.create({
         marginTop: hp('1.6%'),
         textAlign: 'center',
         fontSize: 18,
-        color: '#ff8c00',
+        // color: '#ff8c00',
         marginBottom: hp('4%')
     },
     inputItem: {
@@ -498,8 +498,8 @@ const styles = StyleSheet.create({
         height: hp('5%'),
         borderRadius: hp('2.5%'),
         borderWidth: hp('0.2%'),
-        borderColor: '#EF3939',
-        backgroundColor: '#EF3939',
+        borderColor: '#909091',
+        backgroundColor: '#909091',
         justifyContent: 'center'
     },
     textFamilyVehicle: {
@@ -512,8 +512,8 @@ const styles = StyleSheet.create({
         height: hp('5%'),
         borderRadius: hp('2.5%'),
         borderWidth: hp('0.2%'),
-        borderColor: 'orange',
-        backgroundColor: 'orange',
+        borderColor: '#B51414',
+        backgroundColor: '#B51414',
         justifyContent: 'center'
     },
     box1: {

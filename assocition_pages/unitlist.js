@@ -987,7 +987,7 @@ class UnitList extends Component {
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                        <View style={{borderWidth: 1, borderColor: "#FFFFFF"}}/>
                     </SafeAreaView>
 
                     <Text style={styles.titleOfScreen}>Unit List</Text>
@@ -1280,7 +1280,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: hp("2%"),
         fontWeight: "bold",
-        color: "#ff8c00",
+        // color: "#ff8c00",
         marginBottom: hp("1.6%")
     },
     button: {
@@ -1360,12 +1360,12 @@ const styles = StyleSheet.create({
         height: Platform.OS === 'ios' ?hp('4.2%'):hp('3.6%'),
         borderRadius: hp("2%"),
         //borderWidth: hp("0.2%"),
-        borderColor: "#ff8c00",
-        backgroundColor: "#ff8c00",
+        borderColor: "#B51414",
+        // backgroundColor: "#ff8c00",
         justifyContent: "center"
     },
     addUnitText: {
-        color: "white",
+        color: "#B51414",
         fontWeight: "700",
         fontSize: hp("1.6%")
     }

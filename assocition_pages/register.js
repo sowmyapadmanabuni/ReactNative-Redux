@@ -1031,7 +1031,7 @@ class RegisterMe extends Component {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            <Text style={{ fontSize: hp('2%') }}>Join As Owner</Text>
+                                            <Text style={{ fontSize: hp('2%'),color:'white' }}>Join As Owner</Text>
                                         </View>
                                     </Card>
                                 </TouchableOpacity>
@@ -1047,7 +1047,7 @@ class RegisterMe extends Component {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            <Text style={{ fontSize: hp('2%') }}>Join As Tenant</Text>
+                                            <Text style={{ fontSize: hp('2%'),color:'white' }}>Join As Tenant</Text>
                                         </View>
                                     </Card>
                                 </TouchableOpacity>
@@ -1142,7 +1142,7 @@ const styles = StyleSheet.create({
     Card: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#B51414',
         width: hp('30%'),
         height: hp('6%'),
         borderRadius: hp('2%'),

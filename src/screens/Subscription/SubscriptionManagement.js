@@ -659,7 +659,7 @@ class SubscriptionManagement extends React.Component {
                                   style={{
                                       height: 70,
                                       width: '100%',
-                                      backgroundColor: this.props.subscriptionReducer.isOyeSafe && this.state.enablePayment ? base.theme.colors.primary : base.theme.colors.lightgrey,
+                                      backgroundColor: this.props.subscriptionReducer.isOyeSafe && this.state.enablePayment ? base.theme.colors.themeColor : base.theme.colors.lightgrey,
                                       alignItems: 'center',
                                       justifyContent: 'center',
                                       marginTop: 20,

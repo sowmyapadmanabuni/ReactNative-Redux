@@ -713,7 +713,7 @@ class MyGuests extends Component {
                         }}
                     >
                         <View>
-                            <Text style={{ color: '#38BCDB' }}>From</Text>
+                            <Text>From</Text>
                         </View>
                         {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                         <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
@@ -739,7 +739,7 @@ class MyGuests extends Component {
 
                         {/* </View> */}
                         <View>
-                            <Text style={{ color: '#38BCDB' }}> To </Text>
+                            <Text> To </Text>
                         </View>
                         {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                         <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
@@ -911,8 +911,8 @@ const styles = StyleSheet.create({
         borderWidth: wp('2%'),
         height: hp('5%'),
         marginRight: hp('1%'),
-        backgroundColor: 'orange',
-        borderColor: 'orange'
+        backgroundColor: '#B51414',
+        borderColor: '#B51414'
     },
     listItem: {
         //paddingRight: hp('1.6%'),

@@ -24,7 +24,7 @@ class OSButton extends React.Component {
         width: '35%',
         borderRadius: 5,
         oSBText: "Confirm",
-        oSBBackground: base.theme.colors.primary,
+        oSBBackground: base.theme.colors.themeColor,
         oSBType: 'normal',
         oSBTextColor: base.theme.colors.white,
         oSBTextSize:14,

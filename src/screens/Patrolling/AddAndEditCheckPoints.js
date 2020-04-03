@@ -776,7 +776,7 @@ class AddAndEditCheckPoints extends React.Component {
  index={i}
  buttonSize={10}
  labelHorizontal={true}
- buttonColor={base.theme.colors.primary}
+ buttonColor={base.theme.colors.themeColor}
  labelColor={base.theme.colors.black}
  style={[i !== this.state.types2.length - 1 && AddAndEditCheckPointStyles.radioStyle]}
  onPress={(value, index) => {
@@ -792,13 +792,13 @@ class AddAndEditCheckPoints extends React.Component {
  <View style={[AddAndEditCheckPointStyles.buttonView,{marginBottom:0}]}>
  <OSButton onButtonClick={() => this.props.navigation.goBack(null)} oSBText={"Cancel"}
  oSBType={"custom"}
- oSBBackground={base.theme.colors.red}
+ oSBBackground={base.theme.colors.grey}
  height={30} borderRadius={10}/>
  {/* <OSButton onButtonClick={() => this.validateFields()} */}
  <OSButton onButtonClick={() => this.checkCount("by click")}
  oSBText={this.state.isEditing ? "Edit" : "Add"} oSBType={"custom"}
  //oSBBackground={this.state.satelliteCount < 4 ? base.theme.colors.grey : base.theme.colors.primary}
- oSBBackground={base.theme.colors.primary}
+ oSBBackground={base.theme.colors.themeColor}
  height={30} borderRadius={10}/>
  </View>
 

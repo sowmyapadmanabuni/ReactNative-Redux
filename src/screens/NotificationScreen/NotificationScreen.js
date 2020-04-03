@@ -537,7 +537,7 @@ class NotificationScreen extends PureComponent {
                         backgroundColor: base.theme.colors.greyCard,
                     }}>
                         <View style={{
-                            flexDirection: 'row', backgroundColor:item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
+                            flexDirection: 'row', backgroundColor:item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCgeard,
                             alignItems: 'center', justifyContent: 'space-between',
                             borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.greyHead, height: 50
                         }}>
@@ -563,7 +563,7 @@ class NotificationScreen extends PureComponent {
                             flexDirection: 'row', backgroundColor: base.theme.colors.greyCard, alignItems: 'center',
                             justifyContent: 'space-between', height: 70,
                         }}>
-                            <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'), borderWidth: 0 }}
+                            <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.green, width: wp('35'), borderWidth: 0 }}
                                 numberOfLines={3}>Unit
                                 
                                 <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.mrRolName}</Text>
@@ -834,14 +834,14 @@ class NotificationScreen extends PureComponent {
                                 flexDirection: 'row', backgroundColor: base.theme.colors.greyCard, alignItems: 'center',
                                 justifyContent: 'space-between', height: 70,
                             }}>
-                                <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.blue, width: wp('35'), borderWidth: 0 }}
+                                <Text style={{ marginLeft: 10, fontSize: 14, color: base.theme.colors.green, width: wp('35'), borderWidth: 0 }}
                                     numberOfLines={3}>{item.visitorlog[0].vlComName}
                                     <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.visitorlog[0].vlVisType == "Delivery" ? item.visitorlog[0].vlVisType : ""}</Text>
                                 </Text>
                                 {item.unUniName !== "" ?
                                     <View style={{ flexDirection: 'row', width: '40%' }}>
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, textAlign: 'right', marginRight: 10, }}>Visiting</Text>
-                                        <Text style={{ fontSize: 14, color: base.theme.colors.blue, width: 100, }} numberOfLines={3}>{item.visitorlog[0].unUniName}</Text>
+                                        <Text style={{ fontSize: 14, color: base.theme.colors.green, width: 100, }} numberOfLines={3}>{item.visitorlog[0].unUniName}</Text>
                                     </View> :
                                     <View />}
                             </View>
@@ -1811,7 +1811,7 @@ class NotificationScreen extends PureComponent {
             <View style={styles.container}>
                 {this.renderHeader()}
                 <View style={{ height: hp('7'), width: wp('100'), alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text allowFontScaling={false} style={{ fontFamily: base.theme.fonts.bold, color: base.theme.colors.primary }}>{this.state.headerText}</Text>
+                    <Text allowFontScaling={false} style={{ fontFamily: base.theme.fonts.bold, color: base.theme.colors.black }}>{this.state.headerText}</Text>
                 </View>
                 {this.renderAdminView()}
 

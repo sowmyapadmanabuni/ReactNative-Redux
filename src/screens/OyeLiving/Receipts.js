@@ -849,7 +849,7 @@ class Receipts extends React.Component {
                         <View style={{flexDirection:'row',width:'100%',height:'20%',}}>
                             <View style={{width:'100%',height:'100%',alignItems:'center',justifyContent:'flex-end',paddingBottom:15,}}>
                                 <TouchableOpacity style={{width:'30%',height:'35%',borderRadius:20,
-                                    backgroundColor:base.theme.colors.primary,alignItems:'center',justifyContent:'center'}}
+                                    backgroundColor:base.theme.colors.themeColor,alignItems:'center',justifyContent:'center'}}
                                                   onPress={this.snapshot("View")}
                                 >
                                     <Text style={{fontSize:14,color:base.theme.colors.white}}>Print Receipt</Text>

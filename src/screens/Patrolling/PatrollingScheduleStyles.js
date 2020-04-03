@@ -12,7 +12,7 @@ const PatrollingScheduleStyles = StyleSheet.create({
         backgroundColor: "white"
     },
     subtitle: {
-        color: 'orange', fontSize: 20,marginVertical:8
+        color: 'black', fontSize: 20,marginVertical:8
     },
     childView: {
         justifyContent: 'center',

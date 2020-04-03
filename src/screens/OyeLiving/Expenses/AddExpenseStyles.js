@@ -29,13 +29,13 @@ const AddExpenseStyles = StyleSheet.create({
     },
     headerText:{
         fontSize:16,
-        color:base.theme.colors.primary,
+        color:base.theme.colors.black,
        // fontFamily:base.theme.fonts.medium
     },
     subHeadView:{
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:base.theme.colors.primary,
+        backgroundColor:base.theme.colors.themeColor,
         paddingTop:10,
         paddingBottom:10,
         width:'95%',

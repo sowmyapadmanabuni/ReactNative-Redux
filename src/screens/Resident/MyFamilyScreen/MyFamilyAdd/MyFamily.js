@@ -156,7 +156,7 @@ class MyFamily extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#FFFFFF"}}/>
                 </SafeAreaView>
 
                 <Text style={Style.titleOfScreen}>Add Family Member</Text>
@@ -328,8 +328,8 @@ class MyFamily extends Component {
                                     height: hp("4%"),
                                     borderRadius: hp("2.5%"),
                                     borderWidth: hp("0.2%"),
-                                    borderColor: "#EF3939",
-                                    backgroundColor: "#EF3939",
+                                    borderColor: "#909091",
+                                    backgroundColor: "#909091",
                                     alignItems: 'center',
                                     justifyContent: "center"
                                 }}
@@ -351,8 +351,8 @@ class MyFamily extends Component {
                                     height: hp("4%"),
                                     borderRadius: hp("2.5%"),
                                     borderWidth: hp("0.2%"),
-                                    borderColor: "orange",
-                                    backgroundColor: "orange",
+                                    borderColor: "#B51414",
+                                    backgroundColor: "#B51414",
                                     alignItems: 'center',
                                     justifyContent: "center", marginLeft: 20
                                 }}

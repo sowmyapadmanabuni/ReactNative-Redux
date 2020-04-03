@@ -3,12 +3,13 @@
  */
 
 const colors = {
-  primary: '#ff8c00',
+  themeColor:'#B51414',
+  primary: '#EBECED',
   white: '#ffffff',
   black: '#000000',
   lavender: '#E6E6FA',
-  blue: '#38bcdb',
-  grey: '#bfbfbf',
+  blue: '#38BCDB',
+  grey: '#9D9D9E',
   shadedWhite: '#F5F5F5',
   rosePink: '#FFC6C0',
   transparent: 'transparent',
@@ -18,7 +19,7 @@ const colors = {
   lightgrey: '#d3d3d3',
   invoiceList: '#f4f4f4',
   cardBackground: '#fafafa',
-  green: '#32CD32',
+  green: '#32A76D',
   hyperLink: '#2D13F4',
   greyHead: '#E0E0E0',
   greyCard: '#EDEDED',
