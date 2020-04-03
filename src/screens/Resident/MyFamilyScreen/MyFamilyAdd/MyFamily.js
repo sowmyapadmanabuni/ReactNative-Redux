@@ -629,16 +629,17 @@ class MyFamily extends Component {
 
     updateFirebase(mobNum){
         let self = this;
-        let mobilePath = `syncdashboard/isMemberRefreshing/${mobNum}`;
+        let num="9652269067"
+        let mobilePath = `syncdashboard/isMemberRefreshing/${num}`;
         console.log('GETTHEDETAILS',mobilePath)
         let isMobUpdating = 0;
 
          fb.database().ref(mobilePath).set({
             isMobUpdating
         }).then((data) => {
-            console.log('Data:', data);
+            console.log('Data:########', data);
         }).catch(error => {
-            console.log("Error:", error);
+            console.log("Error@@@@@:", error);
         })
     }
 
@@ -685,7 +686,7 @@ class MyFamily extends Component {
                     }
 
                     Alert.alert('Family member added to your list');
-                   // self.updateFirebase(mobNum)
+                    self.updateFirebase(mobNum)
                    // self.updateFirebase(self.props.dashBoardReducer.assId)
                     self.props.navigation.navigate('MyFamilyList');
                     this.setState({
