@@ -1,16 +1,17 @@
-import React, {Component, Fragment} from "react";
-import {Dimensions, Image, SafeAreaView, StyleSheet, Text, View} from "react-native";
+import React, { Component, Fragment } from "react";
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import ProgressLoader from "rn-progress-loader";
 import base from "../src/base";
 import CheckBox from "react-native-check-box";
-import {TextField} from "react-native-material-textfield";
+import { TextField } from "react-native-material-textfield";
 import CountryPicker from "react-native-country-picker-modal";
 import Header from "./Header.js";
-import {Button} from "native-base";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import {connect} from "react-redux";
-import {updateUserInfo} from "../src/actions";
+import { Button } from "native-base";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { connect } from "react-redux";
+import { updateUserInfo } from "../src/actions";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 class MobileValid extends Component {
     static navigationOptions = {
@@ -45,7 +46,7 @@ class MobileValid extends Component {
         if (isNaN(num)) {
             // Its not a number
         } else {
-            this.setState({Mobilenumber: mobilenumber});
+            this.setState({ Mobilenumber: mobilenumber });
         }
     };
 
@@ -54,8 +55,8 @@ class MobileValid extends Component {
         if (check.test(text[text.length - 1]) || text.length === 0) {
             //console.log("text ",text)
             this.setState({ Mobilenumber: text })
-        }else{
-            this.setState({ Mobilenumber: this.state.Mobilenumber.replace(text,'')})
+        } else {
+            this.setState({ Mobilenumber: this.state.Mobilenumber.replace(text, '') })
         }
     }
 
@@ -90,7 +91,7 @@ class MobileValid extends Component {
                 isLoading: true
             });
 
-            const {updateUserInfo} = this.props;
+            const { updateUserInfo } = this.props;
 
             fetch(url, {
                 method: "POST",
@@ -105,8 +106,8 @@ class MobileValid extends Component {
                     if (responseJson.success) {
                         console.log("responseJson Account if", responseJson, responseJson.data);
                         // this.insert_OTP(mobilenumber, countryCode);
-                        updateUserInfo({prop: "MyMobileNumber", value: mobilenumber});
-                        updateUserInfo({prop: "MyISDCode", value: countryCode});
+                        updateUserInfo({ prop: "MyMobileNumber", value: mobilenumber });
+                        updateUserInfo({ prop: "MyISDCode", value: countryCode });
                         // global.MyMobileNumber = mobilenumber;
                         // global.MyISDCode = countryCode;
                         this.setState({
@@ -131,15 +132,15 @@ class MobileValid extends Component {
     render() {
         return (
             <Fragment>
-                <SafeAreaView style={{flex: 0, backgroundColor: "#ff8c00"}}/>
-                <SafeAreaView style={{flex: 1, backgroundColor: "white"}}>
+                <SafeAreaView style={{ flex: 0, backgroundColor: "#ff8c00" }} />
+                <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
                     {/* {this.state.isLoading1 ? (
             <SplashScreen />
           ) : ( */}
                     <View style={styles.container}>
-                        <View style={{flex: 1}}>
+                        <View style={{ flex: 1 }}>
                             <View>
-                                <Header/>
+                                <Header />
                             </View>
                             <KeyboardAwareScrollView>
                                 <View
@@ -149,9 +150,9 @@ class MobileValid extends Component {
                                         backgroundColor: "#fff"
                                     }}
                                 >
-                                    <View style={{flexDirection: "column"}}>
+                                    <View style={{ flexDirection: "column" }}>
                                         <View
-                                            style={{justifyContent: "center", alignItems: "center"}}
+                                            style={{ justifyContent: "center", alignItems: "center" }}
                                         >
                                             <Text
                                                 style={{
@@ -165,7 +166,7 @@ class MobileValid extends Component {
                                             </Text>
                                         </View>
                                         <View
-                                            style={{justifyContent: "center", alignItems: "center"}}
+                                            style={{ justifyContent: "center", alignItems: "center" }}
                                         >
                                             <Image
                                                 source={require("../icons/workstation-illustration-pack_2x.png")}
@@ -185,9 +186,9 @@ class MobileValid extends Component {
                                             <Text style={{ height: hp("5%") }}> </Text>
                                         )} */}
                                     <View style={styles.mobilenumberverification}>
-                                        <Text style={{fontSize: hp("2%")}}>
+                                        <Text style={{ fontSize: hp("2%") }}>
                                             Enter your mobile number to get{" "}
-                                            <Text style={{fontSize: hp("2%")}}>
+                                            <Text style={{ fontSize: hp("2%") }}>
                                                 OTP
                                             </Text>
                                         </Text>
@@ -222,12 +223,12 @@ class MobileValid extends Component {
                                                 alignItems: "center"
                                             }}
                                         >
-                                            <Text style={{color: "black", fontSize: hp("1.8%")}}>
+                                            <Text style={{ color: "black", fontSize: hp("1.8%") }}>
                                                 +{this.state.callingCode}
                                             </Text>
                                         </View>
 
-                                        <View style={{flex: 0.5, marginTop: hp("2%")}}>
+                                        <View style={{ flex: 0.5, marginTop: hp("2%") }}>
                                             <TextField
                                                 label="Mobile Number"
                                                 fontSize={16}
@@ -238,7 +239,7 @@ class MobileValid extends Component {
                                                 returnKeyType="done"
                                                 maxLength={10}
                                                 //onChangeText={this.handleMobile}
-                                                onChangeText={(val)=> this.mobileNumberInputCheck(val)}
+                                                onChangeText={(val) => this.mobileNumberInputCheck(val)}
                                                 value={this.state.Mobilenumber}
 
                                             />
@@ -271,13 +272,13 @@ class MobileValid extends Component {
                                                 checkedImage={
                                                     <Image
                                                         source={require("../icons/tick.png")}
-                                                        style={{width: 20, height: 20}}
+                                                        style={{ width: 20, height: 20 }}
                                                     />
                                                 }
                                                 unCheckedImage={
                                                     <Image
                                                         source={require("../icons/box.png")}
-                                                        style={{width: 20, height: 20}}
+                                                        style={{ width: 20, height: 20 }}
                                                     />
                                                 }
                                             />
@@ -291,7 +292,7 @@ class MobileValid extends Component {
                                             >
                                                 I have read and accepted the{" "}
                                                 <Text
-                                                    style={{fontSize: hp("1.45%")}}
+                                                    style={{ fontSize: hp("1.45%") }}
                                                     onPress={() => {
                                                         this.props.navigation.navigate("privacyPolicy")
                                                         /*Linking.openURL(
@@ -303,7 +304,7 @@ class MobileValid extends Component {
                                                 </Text>
                                                 and
                                                 <Text
-                                                    style={{fontSize: hp("1.45%")}}
+                                                    style={{ fontSize: hp("1.45%") }}
                                                     onPress={() => {
                                                         this.props.navigation.navigate("termsAndConditions")
 
@@ -318,8 +319,21 @@ class MobileValid extends Component {
                                             </Text>
                                         </View>
                                     </View>
-                                    <View style={{alignSelf: "center", marginTop: hp("10%")}}>
-                                        <Button
+                                    <View style={{ alignSelf: "center", marginTop: hp("10%") }}>
+                                        <TouchableOpacity
+                                            onPress={this.getOtp.bind(this, this.state.Mobilenumber)}
+                                            style={{
+                                                width: wp("30%"),
+                                                height: hp("4.8%"),
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <Text style={{ color: "#B51414", fontSize: hp("2%") }}>
+                                                Get OTP
+                                            </Text>
+                                        </TouchableOpacity>
+                                        {/* <Button
                                             onPress={this.getOtp.bind(this, this.state.Mobilenumber)}
                                             style={{
                                                 width: wp("30%"),
@@ -333,7 +347,7 @@ class MobileValid extends Component {
                                             <Text style={{color: "#B51414", fontSize: hp("2%")}}>
                                                 Get OTP
                                             </Text>
-                                        </Button>
+                                        </Button> */}
                                     </View>
                                 </View>
                                 <ProgressLoader
@@ -391,4 +405,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, {updateUserInfo})(MobileValid);
+export default connect(mapStateToProps, { updateUserInfo })(MobileValid);
